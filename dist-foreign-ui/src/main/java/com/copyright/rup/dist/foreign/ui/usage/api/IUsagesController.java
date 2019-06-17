@@ -138,6 +138,14 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     List<String> getScenariosNamesAssociatedWithUsageBatch(String batchId);
 
     /**
+     * Gets {@link Scenario} name associated with Pre-Service fee fund identifier.
+     *
+     * @param fundId Pre-Service fee fund identifier
+     * @return {@link Scenario} name
+     */
+    String getScenarioNameAssociatedWithPreServiceFeeFund(String fundId);
+
+    /**
      * Inserts usage batch and it's usages.
      *
      * @param usageBatch {@link UsageBatch} instance

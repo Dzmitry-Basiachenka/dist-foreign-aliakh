@@ -217,6 +217,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public String getScenarioNameAssociatedWithPreServiceFeeFund(String fundId) {
+        return scenarioService.getScenarioNameByPreServiceFeeFundId(fundId);
+    }
+
+    @Override
     public List<UsageBatch> getUsageBatches(String productFamily) {
         return usageBatchService.getUsageBatches(productFamily);
     }

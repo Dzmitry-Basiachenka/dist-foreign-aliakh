@@ -232,6 +232,12 @@
         )
     </select>
 
+    <select id="findNameByPreServiceFeeFundId" parameterType="string" resultType="string">
+        select name
+        from ${schema}.df_scenario
+        where nts_fields->>'pre_service_fee_fund_uid' = #{df_fund_pool_uid}
+    </select>
+
     <delete id="remove" parameterType="string">
         delete from ${schema}.df_scenario
         where df_scenario_uid = #{scenarioId}

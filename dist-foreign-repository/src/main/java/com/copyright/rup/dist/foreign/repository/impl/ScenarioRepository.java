@@ -74,6 +74,12 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
+    public String findNameByPreServiceFeeFundId(String fundId) {
+        checkArgument(StringUtils.isNotBlank(fundId));
+        return selectOne("IScenarioMapper.findNameByPreServiceFeeFundId", fundId);
+    }
+
+    @Override
     public void remove(String scenarioId) {
         checkArgument(StringUtils.isNotBlank(scenarioId));
         delete("IScenarioMapper.remove", scenarioId);

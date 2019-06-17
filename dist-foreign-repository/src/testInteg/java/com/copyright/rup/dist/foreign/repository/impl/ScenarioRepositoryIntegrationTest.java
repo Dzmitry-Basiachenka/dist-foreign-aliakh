@@ -181,6 +181,13 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindNameByPreServiceFeeFundId() {
+        assertEquals("Scenario name 5",
+            scenarioRepository.findNameByPreServiceFeeFundId("5210b859-1239-4a60-9fab-999b84199321"));
+        assertNull(scenarioRepository.findNameByPreServiceFeeFundId(RupPersistUtils.generateUuid()));
+    }
+
+    @Test
     public void testRemove() {
         scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
         assertEquals(1, scenarioRepository.findCountByName(SCENARIO_NAME));

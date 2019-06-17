@@ -109,6 +109,11 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
+    public String getScenarioNameByPreServiceFeeFundId(String fundId) {
+        return scenarioRepository.findNameByPreServiceFeeFundId(fundId);
+    }
+
+    @Override
     @Transactional
     public Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter) {
         LOGGER.info("Insert scenario. Started. Name={}, Description={}, UsageFilter={}",

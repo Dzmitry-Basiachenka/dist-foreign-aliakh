@@ -21,6 +21,8 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 /**
  * Modal window that provides functionality for deleting {@link PreServiceFeeFund}s.
  * <p/>
@@ -91,9 +93,16 @@ class DeleteAdditionalFundsWindow extends Window {
     }
 
     private void deleteFund(PreServiceFeeFund fundPool) {
-        Windows.showConfirmDialog(
-            ForeignUi.getMessage("message.confirm.delete_action", fundPool.getName(), "additional fund"),
-            () -> performDelete(fundPool));
+        String scenarioName = controller.getScenarioNameAssociatedWithPreServiceFeeFund(fundPool.getId());
+        if (Objects.nonNull(scenarioName)) {
+            Windows.showNotificationWindow(
+                ForeignUi.getMessage("message.error.delete_action", "Pre-Service Fee Fund", "scenario",
+                    " " + scenarioName));
+        } else {
+            Windows.showConfirmDialog(
+                ForeignUi.getMessage("message.confirm.delete_action", fundPool.getName(), "additional fund"),
+                () -> performDelete(fundPool));
+        }
     }
 
     private void performDelete(PreServiceFeeFund fundPool) {

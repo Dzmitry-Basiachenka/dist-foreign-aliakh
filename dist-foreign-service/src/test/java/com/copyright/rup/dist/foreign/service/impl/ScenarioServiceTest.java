@@ -113,6 +113,15 @@ public class ScenarioServiceTest {
     }
 
     @Test
+    public void testGetScenarioNameByPreServiceFeeFundId() {
+        String fundId = RupPersistUtils.generateUuid();
+        expect(scenarioRepository.findNameByPreServiceFeeFundId(fundId)).andReturn(SCENARIO_NAME).once();
+        replay(scenarioRepository);
+        assertEquals(SCENARIO_NAME, scenarioService.getScenarioNameByPreServiceFeeFundId(fundId));
+        verify(scenarioRepository);
+    }
+
+    @Test
     public void testGetScenarioWithAmountsAndLastAction() {
         expect(scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID)).andReturn(scenario).once();
         expect(scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID)).andReturn(scenario).times(2);
