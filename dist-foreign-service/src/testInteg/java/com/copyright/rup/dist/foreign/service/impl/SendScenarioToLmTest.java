@@ -63,11 +63,10 @@ public class SendScenarioToLmTest {
         assertTrue(CollectionUtils.isEmpty(findUsageDtos()));
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
-        scenario.setProductFamily("FAS");
         scenarioService.sendToLm(scenario);
         sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm.json")),
-            Collections.emptyList(), ImmutableMap.of("source", "FDA"));
+            Collections.EMPTY_LIST, ImmutableMap.of("source", "FDA"));
         List<UsageDto> usageDtos = findUsageDtos();
         List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/archived_usage_dtos.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
