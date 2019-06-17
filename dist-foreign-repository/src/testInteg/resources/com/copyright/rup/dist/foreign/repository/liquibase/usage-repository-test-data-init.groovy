@@ -2018,4 +2018,109 @@ databaseChangeLog {
             column(name: 'classification', value: 'STM')
         }
     }
+
+    changeSet(id: '2019-06-12-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment('Inserting test data for testFindGroupedByRhAndScenarioId')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'ecd5b740-0489-4f63-b6d7-945fc306fd4c')
+            column(name: 'name', value: 'NTS batch for grouping usages to send to LM')
+            column(name: 'rro_account_number', value: '1000000001')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'payment_date', value: '2022-02-12')
+            column(name: 'fiscal_year', value: '2022')
+            column(name: 'gross_amount', value: '300.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '759b9f67-193c-4f4d-93f8-7257be629172')
+            column(name: 'name', value: 'NTS Scenario to send to LM')
+            column(name: 'status_ind', value: 'APPROVED')
+            column(name: 'description', value: 'Approved NTS scenario')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '74b46212-cf12-48b1-b7cc-697e6be24e23')
+            column(name: 'df_usage_batch_uid', value: 'ecd5b740-0489-4f63-b6d7-945fc306fd4c')
+            column(name: 'df_scenario_uid', value: '759b9f67-193c-4f4d-93f8-7257be629172')
+            column(name: 'wr_wrk_inst', value: '569526592')
+            column(name: 'work_title', value: 'Cell Biology')
+            column(name: 'system_title', value: 'Cell Biology')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '0804709114')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '15000.00')
+            column(name: 'gross_amount', value: '6509.31')
+            column(name: 'service_fee_amount', value: '2082.98')
+            column(name: 'net_amount', value: '4426.33')
+            column(name: 'service_fee', value: '0.32')
+            column(name: 'is_rh_participating_flag', value: 'false')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '34a3a2ed-a0d8-4974-b05d-9a7f002e3bd4')
+            column(name: 'df_usage_batch_uid', value: 'ecd5b740-0489-4f63-b6d7-945fc306fd4c')
+            column(name: 'df_scenario_uid', value: '759b9f67-193c-4f4d-93f8-7257be629172')
+            column(name: 'wr_wrk_inst', value: '146547417')
+            column(name: 'work_title', value: 'Test de aptitudes profesionales')
+            column(name: 'system_title', value: 'Test de aptitudes profesionales')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '0804709114')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '6000.00')
+            column(name: 'gross_amount', value: '6000.00')
+            column(name: 'net_amount', value: '4080.00')
+            column(name: 'service_fee_amount', value: '1920.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'is_rh_participating_flag', value: 'false')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'a66da5a5-f91b-4f71-8595-5a72c5359d55')
+            column(name: 'name', value: 'NTS batch for grouping usages to send to LM')
+            column(name: 'rro_account_number', value: '1000000001')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'payment_date', value: '2022-02-12')
+            column(name: 'fiscal_year', value: '2022')
+            column(name: 'gross_amount', value: '300.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'e4054f84-31f5-4c41-99b8-072725463239')
+            column(name: 'df_usage_batch_uid', value: 'a66da5a5-f91b-4f71-8595-5a72c5359d55')
+            column(name: 'df_scenario_uid', value: '759b9f67-193c-4f4d-93f8-7257be629172')
+            column(name: 'wr_wrk_inst', value: '569526592')
+            column(name: 'work_title', value: 'Cell Biology')
+            column(name: 'system_title', value: 'Cell Biology')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '0804709114')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '15000.00')
+            column(name: 'gross_amount', value: '6509.31')
+            column(name: 'service_fee_amount', value: '2082.98')
+            column(name: 'net_amount', value: '4426.33')
+            column(name: 'service_fee', value: '0.32')
+            column(name: 'is_rh_participating_flag', value: 'false')
+        }
+    }
 }
