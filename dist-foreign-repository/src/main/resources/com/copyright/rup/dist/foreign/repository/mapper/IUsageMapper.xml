@@ -605,6 +605,28 @@
         where df_scenario_uid = #{scenarioId}
     </select>
 
+    <select id="findNtsGroupedByRhAndScenarioId" resultMap="usageResultMap" parameterType="string">
+        select
+            u.rh_account_number,
+            rh.df_rightsholder_uid rh_id,
+            u.payee_account_number,
+            u.product_family,
+            151811999 wr_wrk_inst,
+            'NON-TITLE NTS' work_title,
+            'NON-TITLE NTS' system_title,
+            sum(u.gross_amount) gross_amount,
+            u.service_fee,
+            sum(u.service_fee_amount) service_fee_amount,
+            sum(u.net_amount) net_amount,
+            u.is_rh_participating_flag,
+            u.df_scenario_uid
+        from ${schema}.df_usage u
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where u.df_scenario_uid = #{scenarioId}
+        group by rh.df_rightsholder_uid, u.rh_account_number, u.product_family, u.payee_account_number,
+            u.service_fee, u.is_rh_participating_flag, df_scenario_uid
+    </select>
+
     <select id="findForReconcile" resultMap="usageResultMap" parameterType="string">
         select
             u.df_usage_uid,

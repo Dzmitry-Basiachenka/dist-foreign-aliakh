@@ -325,14 +325,23 @@ public class UsageService implements IUsageService {
     @Override
     public List<Usage> moveToArchive(Scenario scenario) {
         LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
-        List<Usage> usages = usageRepository.findByScenarioId(scenario.getId());
-        usages.forEach(usage -> {
-            usage.setStatus(UsageStatusEnum.SENT_TO_LM);
-            usageArchiveRepository.insert(usage);
-        });
+        List<Usage> usages = Collections.emptyList();
+        if (FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(scenario.getProductFamily())) {
+            usages = usageRepository.findByScenarioId(scenario.getId());
+            usages.forEach(this::markAsSentToLmAndMoveToArchive);
+        } else if (FdaConstants.NTS_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
+            usages = usageRepository.findNtsGroupedByRhAndScenarioId(scenario.getId());
+            usages.forEach(usage -> {
+                usage.setId(RupPersistUtils.generateUuid());
+                markAsSentToLmAndMoveToArchive(usage);
+                //for NTS usages System should not send work information to LM
+                usage.setWrWrkInst(null);
+                usage.setSystemTitle(null);
+            });
+        }
         usageRepository.deleteByScenarioId(scenario.getId());
         LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
-            usages.size());
+            LogUtils.size(usages));
         return usages;
     }
 
@@ -639,6 +648,11 @@ public class UsageService implements IUsageService {
                 && FdaConstants.CLA_FAS_PRODUCT_FAMILY.equals(usage.getProductFamily())
                 ? claPayeeServiceFee
                 : prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
+    }
+
+    private void markAsSentToLmAndMoveToArchive(Usage usage) {
+        usage.setStatus(UsageStatusEnum.SENT_TO_LM);
+        usageArchiveRepository.insert(usage);
     }
 
     private PaidUsage buildPaidUsage(Usage originalUsage, PaidUsage paidUsage) {

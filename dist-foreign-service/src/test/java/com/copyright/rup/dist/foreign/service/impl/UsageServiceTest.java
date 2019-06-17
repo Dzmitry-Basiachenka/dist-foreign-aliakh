@@ -117,6 +117,7 @@ public class UsageServiceTest {
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setCreateUser(USER_NAME);
+        scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         usageRepository = createMock(IUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
@@ -459,7 +460,7 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testMoveToArchived() {
+    public void testMoveToArchivedFas() {
         Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
         Usage usage2 = buildUsage(RupPersistUtils.generateUuid());
         List<Usage> usages = Lists.newArrayList(usage1, usage2);
@@ -467,6 +468,21 @@ public class UsageServiceTest {
         usageArchiveRepository.insert(usage1);
         expectLastCall().once();
         usageArchiveRepository.insert(usage2);
+        expectLastCall().once();
+        usageRepository.deleteByScenarioId(SCENARIO_ID);
+        expectLastCall().once();
+        replay(usageRepository, usageArchiveRepository);
+        usageService.moveToArchive(scenario);
+        verify(usageRepository, usageArchiveRepository);
+    }
+
+    @Test
+    public void testMoveToArchivedNts() {
+        scenario.setProductFamily("NTS");
+        Usage usage = buildUsage(RupPersistUtils.generateUuid());
+        List<Usage> usages = Lists.newArrayList(usage);
+        expect(usageRepository.findNtsGroupedByRhAndScenarioId(scenario.getId())).andReturn(usages).once();
+        usageArchiveRepository.insert(usage);
         expectLastCall().once();
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         expectLastCall().once();
