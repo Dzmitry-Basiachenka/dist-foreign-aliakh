@@ -1,3 +1,6 @@
+6.0.0
+-
+
 5.1.44
 -
 * CDP-766 FDA: Works Classification window: System doesn't apply 'Select All' works selection after clearing search
