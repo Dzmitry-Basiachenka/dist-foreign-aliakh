@@ -460,17 +460,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindGroupedByRhAndScenarioId() {
-        List<Usage> usages = usageRepository.findNtsGroupedByRhAndScenarioId("759b9f67-193c-4f4d-93f8-7257be629172");
-        assertEquals(2, usages.size());
-        usages.sort(Comparator.comparing(Usage::getRightsholder));
-        verifyGroupedByRhNtsUsage(usages.get(0), "5bcf2c37-2f32-48e9-90fe-c9d75298eeed", 1000002859L,
-            new BigDecimal("4080.0000000000"), new BigDecimal("1920.0000000000"), new BigDecimal("6000.0000000000"));
-        verifyGroupedByRhNtsUsage(usages.get(1), "9905f006-a3e1-4061-b3d4-e7ece191103f", 1000009997L,
-            new BigDecimal("8852.6600000000"), new BigDecimal("4165.9600000000"), new BigDecimal("13018.6200000000"));
-    }
-
-    @Test
     public void testFindForReconcile() {
         List<Usage> usages = usageRepository.findForReconcile(SCENARIO_ID);
         assertEquals(2, usages.size());
@@ -1170,35 +1159,6 @@ public class UsageRepositoryIntegrationTest {
         researchedUsage.setStandardNumber(standardNumber);
         researchedUsage.setStandardNumberType(standardNumberType);
         return researchedUsage;
-    }
-
-    private void verifyGroupedByRhNtsUsage(Usage usage, String rhId, Long rhAccountNumber, BigDecimal netAmount,
-                                           BigDecimal serviceFeeAmount, BigDecimal grossAmount) {
-        assertEquals(rhId, usage.getRightsholder().getId());
-        assertEquals(rhAccountNumber, usage.getRightsholder().getAccountNumber());
-        assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
-        assertEquals("759b9f67-193c-4f4d-93f8-7257be629172", usage.getScenarioId());
-        assertEquals(Long.valueOf(151811999), usage.getWrWrkInst());
-        assertEquals("NON-TITLE NTS", usage.getWorkTitle());
-        assertEquals("NON-TITLE NTS", usage.getSystemTitle());
-        assertEquals(netAmount, usage.getNetAmount());
-        assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
-        assertEquals(new BigDecimal("0.32000"), usage.getServiceFee());
-        assertEquals(grossAmount, usage.getGrossAmount());
-        assertEquals(Long.valueOf(1000002859), usage.getPayee().getAccountNumber());
-        assertEquals(BigDecimal.ZERO, usage.getReportedValue());
-        assertNull(usage.getId());
-        assertNull(usage.getBatchId());
-        assertNull(usage.getStandardNumber());
-        assertNull(usage.getStandardNumberType());
-        assertNull(usage.getArticle());
-        assertNull(usage.getAuthor());
-        assertNull(usage.getPublisher());
-        assertNull(usage.getNumberOfCopies());
-        assertNull(usage.getMarket());
-        assertNull(usage.getMarketPeriodFrom());
-        assertNull(usage.getMarketPeriodTo());
-        assertNull(usage.getComment());
     }
 
     private void verifyFasUsage(String usageId, String title, Long wrWrkInst, String standardNumber,

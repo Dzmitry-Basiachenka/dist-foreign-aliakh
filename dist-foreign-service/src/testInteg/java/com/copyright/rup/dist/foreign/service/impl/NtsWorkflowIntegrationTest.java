@@ -143,7 +143,7 @@ public class NtsWorkflowIntegrationTest {
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
             .expectLmDetails("details/nts_details_to_lm.json")
-            .expectUsage(buildGroupedUsage())
+            .expectUsage(buildUsage("Edu", UsageStatusEnum.SENT_TO_LM, 658824345L, new BigDecimal("400.4400000000")))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
@@ -193,18 +193,6 @@ public class NtsWorkflowIntegrationTest {
         usage.setMarketPeriodTo(2017);
         usage.setGrossAmount(grossAmount);
         usage.setReportedValue(new BigDecimal("1176.92"));
-        return usage;
-    }
-
-    private Usage buildGroupedUsage() {
-        Usage usage = new Usage();
-        usage.setWrWrkInst(151811999L);
-        usage.setWorkTitle("NON-TITLE NTS");
-        usage.setRightsholder(buildRightsholder(1000023401L, "American College of Physicians - Journals"));
-        usage.setStatus(UsageStatusEnum.SENT_TO_LM);
-        usage.setProductFamily("NTS");
-        usage.setGrossAmount(new BigDecimal("400.4400000000"));
-        usage.setReportedValue(new BigDecimal("0.00"));
         return usage;
     }
 

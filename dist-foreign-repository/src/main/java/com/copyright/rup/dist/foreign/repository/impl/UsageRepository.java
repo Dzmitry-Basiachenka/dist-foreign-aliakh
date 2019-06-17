@@ -121,11 +121,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<Usage> findNtsGroupedByRhAndScenarioId(String scenarioId) {
-        return selectList("IUsageMapper.findNtsGroupedByRhAndScenarioId", Objects.requireNonNull(scenarioId));
-    }
-
-    @Override
     public List<Usage> findByIds(List<String> usageIds) {
         List<Usage> result = new ArrayList<>();
         Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT)
