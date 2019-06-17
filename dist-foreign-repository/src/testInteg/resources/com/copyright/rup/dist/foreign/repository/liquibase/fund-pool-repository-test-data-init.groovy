@@ -10,7 +10,7 @@ databaseChangeLog {
             column(name: 'name', value: 'FAS Q1 2019')
             column(name: 'comment', value: 'some comment')
             column(name: 'withdrawn_amount', value: '50.00')
-            column(name: 'updated_datetime',  value: '2019-03-27 16:35:52.735531+03')
+            column(name: 'updated_datetime', value: '2019-03-27 16:35:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
@@ -18,7 +18,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Test fund')
             column(name: 'comment', value: 'test comment')
             column(name: 'withdrawn_amount', value: '10.00')
-            column(name: 'updated_datetime',  value: '2019-03-26 16:35:52.735531+03')
+            column(name: 'updated_datetime', value: '2019-03-26 16:35:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -49,6 +49,17 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '25')
             column(name: 'reported_value', value: '10')
             column(name: 'gross_amount', value: '10.00')
+        }
+    }
+
+    changeSet(id: '2019-06-17-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("Inserting test data for findNotAttachedToScenario")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '62760b59-40af-461d-b145-5536e6ef481b')
+            column(name: 'name', value: 'FAS Distribution 2019')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'nts_fields', value: '{"rh_minimum_amount": 300.00, "pre_service_fee_fund_uid": "b5b64c3a-55d2-462e-b169-362dca6a4dd7"}')
         }
     }
 }

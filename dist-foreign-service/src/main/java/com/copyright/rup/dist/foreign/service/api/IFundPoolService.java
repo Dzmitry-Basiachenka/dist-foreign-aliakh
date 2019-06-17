@@ -25,11 +25,18 @@ public interface IFundPoolService {
     void create(PreServiceFeeFund fundPool, Set<String> batchIds);
 
     /**
-     * Gets all Pre-Service fee funds.
+     * Gets all {@link PreServiceFeeFund}s.
      *
      * @return list of {@link PreServiceFeeFund}s
      */
     List<PreServiceFeeFund> getPreServiceFeeFunds();
+
+    /**
+     * Gets {@link PreServiceFeeFund}s not attached to scenario.
+     *
+     * @return list of {@link PreServiceFeeFund}s
+     */
+    List<PreServiceFeeFund> getPreServiceFeeFundsNotAttachedToScenario();
 
     /**
      * Deletes Pre-Service fee fund.

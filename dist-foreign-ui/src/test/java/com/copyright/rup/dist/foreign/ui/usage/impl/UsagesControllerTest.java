@@ -370,6 +370,15 @@ public class UsagesControllerTest {
     }
 
     @Test
+    public void testGetPreServiceFeeFundsNotAttachedToScenario() {
+        List<PreServiceFeeFund> additionalFunds = Collections.singletonList(new PreServiceFeeFund());
+        expect(fundPoolService.getPreServiceFeeFundsNotAttachedToScenario()).andReturn(additionalFunds).once();
+        replay(fundPoolService);
+        assertEquals(additionalFunds, controller.getPreServiceFeeFundsNotAttachedToScenario());
+        verify(fundPoolService);
+    }
+
+    @Test
     public void testDeleteAdditionalFund() {
         PreServiceFeeFund fund = new PreServiceFeeFund();
         fundPoolService.deletePreServiceFeeFund(fund);

@@ -171,11 +171,18 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     int loadNtsBatch(UsageBatch usageBatch);
 
     /**
-     * Gets all Pre-Service fee funds.
+     * Gets all {@link PreServiceFeeFund}s.
      *
      * @return list of {@link PreServiceFeeFund}s
      */
     List<PreServiceFeeFund> getPreServiceSeeFunds();
+
+    /**
+     * Gets {@link PreServiceFeeFund}s not attached to scenario.
+     *
+     * @return list of {@link PreServiceFeeFund}s
+     */
+    List<PreServiceFeeFund> getPreServiceFeeFundsNotAttachedToScenario();
 
     /**
      * Deletes Pre-Service fee fund.

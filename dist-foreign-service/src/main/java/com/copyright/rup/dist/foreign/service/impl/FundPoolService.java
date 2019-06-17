@@ -57,6 +57,11 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    public List<PreServiceFeeFund> getPreServiceFeeFundsNotAttachedToScenario() {
+        return fundPoolRepository.findNotAttachedToScenario();
+    }
+
+    @Override
     @Transactional
     public void deletePreServiceFeeFund(PreServiceFeeFund fund) {
         String userName = RupContextUtils.getUserName();

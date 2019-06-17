@@ -72,7 +72,8 @@ public class CreateNtsScenarioWindowTest {
         preServiceFeeFund.setName("Pre-Service Fee Fund 1");
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).anyTimes();
         expect(controller.getScenarioService()).andReturn(scenarioService).anyTimes();
-        expect(controller.getPreServiceSeeFunds()).andReturn(Collections.singletonList(preServiceFeeFund)).once();
+        expect(controller.getPreServiceFeeFundsNotAttachedToScenario())
+            .andReturn(Collections.singletonList(preServiceFeeFund)).once();
     }
 
     @Test

@@ -46,6 +46,13 @@ public interface IFundPoolRepository {
     List<PreServiceFeeFund> findAll();
 
     /**
+     * Finds {@link PreServiceFeeFund}s not attached to scenario.
+     *
+     * @return list of {@link PreServiceFeeFund}s
+     */
+    List<PreServiceFeeFund> findNotAttachedToScenario();
+
+    /**
      * Find Pre-Service fee fund names associated with batch identifier.
      *
      * @param batchId batch identifier
