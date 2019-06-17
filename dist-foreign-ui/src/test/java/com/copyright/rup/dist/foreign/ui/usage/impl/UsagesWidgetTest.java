@@ -302,6 +302,7 @@ public class UsagesWidgetTest {
             .andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", Collections.emptyList(), "NON-STM", Collections.emptyList())).once();
+        expect(controller.getPreServiceSeeFunds()).andReturn(Collections.emptyList()).once();
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateNtsScenarioWindow.class));
         expectLastCall().once();

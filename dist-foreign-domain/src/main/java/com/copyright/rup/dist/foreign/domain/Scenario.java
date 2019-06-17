@@ -174,7 +174,12 @@ public class Scenario extends StoredEntity<String> {
      */
     public static class NtsFields {
 
-        private BigDecimal rhMinimumAmount = BigDecimal.ZERO;
+        private BigDecimal rhMinimumAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+        private BigDecimal preServiceFeeAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+        private BigDecimal postServiceFeeAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+        private BigDecimal preServiceFeeFundTotal = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+        private String preServiceFeeFundId;
+        private String preServiceFeeFundName;
 
         public BigDecimal getRhMinimumAmount() {
             return rhMinimumAmount;
@@ -182,6 +187,46 @@ public class Scenario extends StoredEntity<String> {
 
         public void setRhMinimumAmount(BigDecimal rhMinimumAmount) {
             this.rhMinimumAmount = rhMinimumAmount;
+        }
+
+        public BigDecimal getPreServiceFeeAmount() {
+            return preServiceFeeAmount;
+        }
+
+        public void setPreServiceFeeAmount(BigDecimal preServiceFeeAmount) {
+            this.preServiceFeeAmount = preServiceFeeAmount;
+        }
+
+        public BigDecimal getPostServiceFeeAmount() {
+            return postServiceFeeAmount;
+        }
+
+        public void setPostServiceFeeAmount(BigDecimal postServiceFeeAmount) {
+            this.postServiceFeeAmount = postServiceFeeAmount;
+        }
+
+        public String getPreServiceFeeFundId() {
+            return preServiceFeeFundId;
+        }
+
+        public void setPreServiceFeeFundId(String preServiceFeeFundId) {
+            this.preServiceFeeFundId = preServiceFeeFundId;
+        }
+
+        public String getPreServiceFeeFundName() {
+            return preServiceFeeFundName;
+        }
+
+        public void setPreServiceFeeFundName(String preServiceFeeFundName) {
+            this.preServiceFeeFundName = preServiceFeeFundName;
+        }
+
+        public BigDecimal getPreServiceFeeFundTotal() {
+            return preServiceFeeFundTotal;
+        }
+
+        public void setPreServiceFeeFundTotal(BigDecimal preServiceFeeFundTotal) {
+            this.preServiceFeeFundTotal = preServiceFeeFundTotal;
         }
 
         @Override
@@ -195,6 +240,11 @@ public class Scenario extends StoredEntity<String> {
             NtsFields that = (NtsFields) obj;
             return new EqualsBuilder()
                 .append(this.rhMinimumAmount, that.rhMinimumAmount)
+                .append(this.preServiceFeeAmount, that.preServiceFeeAmount)
+                .append(this.postServiceFeeAmount, that.postServiceFeeAmount)
+                .append(this.preServiceFeeFundId, that.preServiceFeeFundId)
+                .append(this.preServiceFeeFundName, that.preServiceFeeFundName)
+                .append(this.preServiceFeeFundTotal, that.preServiceFeeFundTotal)
                 .isEquals();
         }
 
@@ -202,6 +252,11 @@ public class Scenario extends StoredEntity<String> {
         public int hashCode() {
             return new HashCodeBuilder()
                 .append(rhMinimumAmount)
+                .append(preServiceFeeAmount)
+                .append(postServiceFeeAmount)
+                .append(preServiceFeeFundId)
+                .append(preServiceFeeFundName)
+                .append(preServiceFeeFundTotal)
                 .toHashCode();
         }
 
@@ -209,6 +264,11 @@ public class Scenario extends StoredEntity<String> {
         public String toString() {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("rhMinimumAmount", rhMinimumAmount)
+                .append("preServiceFeeAmount", preServiceFeeAmount)
+                .append("postServiceFeeAmount", postServiceFeeAmount)
+                .append("preServiceFeeFundId", preServiceFeeFundId)
+                .append("preServiceFeeFundName", preServiceFeeFundName)
+                .append("preServiceFeeFundTotal", preServiceFeeFundTotal)
                 .toString();
         }
     }

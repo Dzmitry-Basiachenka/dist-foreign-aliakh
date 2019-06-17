@@ -15,6 +15,8 @@
         <result property="reportedTotal" column="reported_total"/>
         <result property="description" column="description"/>
         <result property="ntsFields" column="nts_fields" typeHandler="NtsFieldsTypeHandler"/>
+        <result property="ntsFields.preServiceFeeFundName" column="pre_service_fee_fund_name"/>
+        <result property="ntsFields.preServiceFeeFundTotal" column="pre_service_fee_fund_total"/>
         <association property="auditItem" resultMap="IScenarioAuditMapper.scenarioAuditItemResultMap" columnPrefix="action_"/>
     </resultMap>
 
@@ -44,6 +46,8 @@
         coalesce(sum(u.net_amount), 0) net_total,
         s.description,
         s.nts_fields,
+        fund.name pre_service_fee_fund_name,
+        fund.withdrawn_amount pre_service_fee_fund_total,
         a1.df_scenario_audit_uid action_df_scenario_audit_uid,
         a1.df_scenario_uid action_df_scenario_uid,
         a1.action_type_ind action_action_type_ind,
@@ -67,6 +71,15 @@
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
+
+    <sql id="selectAmountTable">
+        <if test="null != scenario.ntsFields.preServiceFeeFundId or scenario.ntsFields.preServiceFeeAmount > 0">
+            recalculated_usage_amounts
+        </if>
+        <if test="null == scenario.ntsFields.preServiceFeeFundId and scenario.ntsFields.preServiceFeeAmount == 0">
+            usage_amounts
+        </if>
+    </sql>
 
     <insert id="insertNtsScenarioAndAddUsages" parameterType="map">
         with result as (
@@ -114,12 +127,30 @@
             from numerator n
             join denominator d on n.classification = d.classification and n.df_usage_batch_uid = d.df_usage_batch_uid
         ),
+        <if test="null != scenario.ntsFields.preServiceFeeFundId || scenario.ntsFields.preServiceFeeAmount > 0">
+            <!-- Calculates Pre-Service fee factor-->
+            pre_service_fee_factor as (
+                select
+                    (sum(gross_amount) + #{scenario.ntsFields.preServiceFeeAmount}
+                        + coalesce((select withdrawn_amount from ${schema}.df_fund_pool where df_fund_pool_uid = #{scenario.ntsFields.preServiceFeeFundId}), 0))
+                        / sum(gross_amount)  as factor
+                from usage_amounts
+            ),
+            <!-- Recalculates gross_amount based on Pre-Service fee factor -->
+            recalculated_usage_amounts as (
+                select
+                    df_usage_uid,
+                    rh_account_number,
+                    gross_amount * (select factor from pre_service_fee_factor) gross_amount
+                from usage_amounts
+            ),
+        </if>
         <!-- Calculates amount for each rightsholder under minimum -->
         under_minimum_rh_totals as (
             select
                 rh_account_number,
                 sum(gross_amount) rh_total
-            from usage_amounts
+            from <include refid="selectAmountTable"/>
             group by rh_account_number
             having sum(gross_amount) &lt; #{scenario.ntsFields.rhMinimumAmount}
         ),
@@ -129,7 +160,7 @@
             from (
                 select coalesce(sum(rh_total), 0) under_minimum_total
                 from under_minimum_rh_totals
-            ) under_minimum, usage_amounts
+            ) under_minimum, <include refid="selectAmountTable"/>
             group by under_minimum_total
         )
         <!-- Update usages based on rh account numbers -->
@@ -140,7 +171,7 @@
             df_scenario_uid = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then null else #{scenario.id} end,
             gross_amount = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then 0.00 else amounts.gross_amount * (select factor from gt_factor) end,
             <include refid="StoredEntityMapper.update"/>
-        from usage_amounts amounts
+        from <include refid="selectAmountTable"/> amounts
         where amounts.df_usage_uid = u.df_usage_uid
     </insert>
 
@@ -201,6 +232,12 @@
         )
     </select>
 
+    <select id="findNameByPreServiceFeeFundId" parameterType="string" resultType="string">
+        select name
+        from ${schema}.df_scenario
+        where nts_fields->>'pre_service_fee_fund_uid' = #{df_fund_pool_uid}
+    </select>
+
     <delete id="remove" parameterType="string">
         delete from ${schema}.df_scenario
         where df_scenario_uid = #{scenarioId}
@@ -223,6 +260,7 @@
             <include refid="fullScenarioInformation"/>
         from ${schema}.df_scenario s
         left join ${schema}.df_usage u on u.df_scenario_uid = s.df_scenario_uid
+        left join ${schema}.df_fund_pool fund on (s.nts_fields->>'pre_service_fee_fund_uid') = fund.df_fund_pool_uid
         left join ${schema}.df_scenario_audit a1 on s.df_scenario_uid = a1.df_scenario_uid
         left join ${schema}.df_scenario_audit a2 on s.df_scenario_uid = a2.df_scenario_uid
             <![CDATA[and a1.created_datetime < a2.created_datetime]]>
@@ -231,7 +269,9 @@
         group by
             s.df_scenario_uid,
             s.name,
-            a1.df_scenario_audit_uid
+            a1.df_scenario_audit_uid,
+            fund.name,
+            fund.withdrawn_amount
     </select>
 
     <select id="findArchivedWithAmountsAndLastAction" parameterType="string" resultMap="scenarioResultMap">
@@ -239,6 +279,7 @@
             <include refid="fullScenarioInformation"/>
         from ${schema}.df_scenario s
         left join ${schema}.df_usage_archive u on u.df_scenario_uid = s.df_scenario_uid
+        left join ${schema}.df_fund_pool fund on (s.nts_fields->>'pre_service_fee_fund_uid') = fund.df_fund_pool_uid
         left join ${schema}.df_scenario_audit a1 on s.df_scenario_uid = a1.df_scenario_uid
         left join ${schema}.df_scenario_audit a2 on s.df_scenario_uid = a2.df_scenario_uid
             <![CDATA[and a1.created_datetime < a2.created_datetime]]>
@@ -247,7 +288,9 @@
         group by
             s.df_scenario_uid,
             s.name,
-            a1.df_scenario_audit_uid
+            a1.df_scenario_audit_uid,
+            fund.name,
+            fund.withdrawn_amount
     </select>
 
     <select id="findRightsholdersByScenarioIdAndSourceRro" parameterType="map" resultMap="rightsholderPayeePairResultMap">

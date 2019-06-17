@@ -523,4 +523,23 @@ public interface IUsageRepository {
      * @return map where key - Wr Wrk Inst, value - set of usage ids related to Wr Wrk Inst
      */
     Map<Long, Set<String>> findWrWrkInstToUsageIdsByBatchNameAndUsageStatus(String batchName, UsageStatusEnum status);
+
+    /**
+     * Calculates service fee and net amounts for usages with given RH account number and scenario uid.
+     *
+     * @param accountNUmber     rightsholder account number
+     * @param scenarioId        identifier of scenario
+     * @param serviceFee        service fee
+     * @param participatingFlag participating flag
+     * @param userName          user name
+     */
+    void calculateAmountsByAccountNumber(Long accountNUmber, String scenarioId, BigDecimal serviceFee,
+                                         boolean participatingFlag, String userName);
+
+    /**
+     * Proportionally distributes Post Service Fee Amount among scenario usages above minimum.
+     *
+     * @param scenarioId identifier of scenario
+     */
+    void applyPostServiceFeeAmount(String scenarioId);
 }

@@ -109,6 +109,11 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
+    public String getScenarioNameByPreServiceFeeFundId(String fundId) {
+        return scenarioRepository.findNameByPreServiceFeeFundId(fundId);
+    }
+
+    @Override
     @Transactional
     public Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter) {
         LOGGER.info("Insert scenario. Started. Name={}, Description={}, UsageFilter={}",
@@ -132,6 +137,7 @@ public class ScenarioService implements IScenarioService {
             scenarioName, ntsFields, description, usageFilter);
         Scenario scenario = buildNtsScenario(scenarioName, ntsFields, description, usageFilter);
         scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
+        usageService.calculateAmountsForNtsScenario(scenario);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         LOGGER.info("Insert NTS scenario. Finished. Name={}, NtsFields={}, Description={}, UsageFilter={}",

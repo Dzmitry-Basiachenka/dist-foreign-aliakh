@@ -4,15 +4,17 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.DeleteAdditionalFundsWindow.SearchController;
@@ -62,14 +64,18 @@ import java.util.stream.Collectors;
 @PrepareForTest(Windows.class)
 public class DeleteAdditionalFundsWindowTest {
 
+    private static final String FUND_ID = RupPersistUtils.generateUuid();
+
     private DeleteAdditionalFundsWindow deleteWindow;
     private PreServiceFeeFund fundPool;
+    private IUsagesController controller;
 
     @Before
     public void setUp() {
         fundPool = new PreServiceFeeFund();
         fundPool.setName("Test Fund");
-        IUsagesController controller = createMock(IUsagesController.class);
+        fundPool.setId(FUND_ID);
+        controller = createMock(IUsagesController.class);
         expect(controller.getPreServiceSeeFunds()).andReturn(Collections.singletonList(fundPool)).once();
         replay(controller);
         deleteWindow = new DeleteAdditionalFundsWindow(controller);
@@ -104,16 +110,36 @@ public class DeleteAdditionalFundsWindowTest {
         Window confirmWindowCapture = PowerMock.createMock(Window.class);
         VerticalLayout content = (VerticalLayout) deleteWindow.getContent();
         Grid grid = (Grid) content.getComponent(1);
-        Button button = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
-        Collection<?> listeners = button.getListeners(ClickEvent.class);
+        Button deleteButton = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
+        Collection<?> listeners = deleteButton.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
-        ClickListener listener = (ClickListener) listeners.iterator().next();
+        expect(controller.getScenarioNameAssociatedWithPreServiceFeeFund(FUND_ID)).andReturn(null).once();
         expect(
             Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'Test Fund'</b></i> additional fund?"),
                 capture(listenerCapture))).andReturn(confirmWindowCapture).once();
-        PowerMock.replay(confirmWindowCapture, Windows.class);
-        listener.buttonClick(null);
-        PowerMock.verify(confirmWindowCapture, Windows.class);
+        replay(controller, confirmWindowCapture, Windows.class);
+        ClickListener deleteButtonListener = (ClickListener) listeners.iterator().next();
+        deleteButtonListener.buttonClick(null);
+        verify(controller, confirmWindowCapture, Windows.class);
+    }
+
+    @Test
+    public void testDeleteClickListenerAssociatedWithScenario() {
+        mockStatic(Windows.class);
+        VerticalLayout content = (VerticalLayout) deleteWindow.getContent();
+        Grid grid = (Grid) content.getComponent(1);
+        Button deleteButton = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
+        Collection<?> listeners = deleteButton.getListeners(ClickEvent.class);
+        assertEquals(1, listeners.size());
+        expect(controller.getScenarioNameAssociatedWithPreServiceFeeFund(FUND_ID))
+            .andReturn("FAS Distribution 2019").once();
+        Windows.showNotificationWindow("Pre-Service Fee Fund cannot be deleted because it is associated with " +
+            "the following scenario: FAS Distribution 2019");
+        expectLastCall().once();
+        replay(controller, Windows.class);
+        ClickListener deleteButtonListener = (ClickListener) listeners.iterator().next();
+        deleteButtonListener.buttonClick(null);
+        verify(controller, Windows.class);
     }
 
     @Test

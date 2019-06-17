@@ -138,7 +138,7 @@ public class UsagesControllerTest {
         filterWidgetMock.clearFilter();
         expectLastCall().once();
         replay(filterController, filterWidgetMock, scenarioService);
-        assertEquals(scenario, controller.createNtsScenario(SCENARIO_NAME, RH_MINIMUM_AMOUNT, DESCRIPTION));
+        assertEquals(scenario, controller.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION));
         verify(filterController, filterWidgetMock, scenarioService);
     }
 
@@ -262,10 +262,20 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetScenariosNamesAssociatedWithUsageBatch() {
+        List<String> names = Collections.singletonList(SCENARIO_NAME);
         expect(scenarioService.getScenariosNamesByUsageBatchId(USAGE_BATCH_ID))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(names).once();
         replay(scenarioService);
-        controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID);
+        assertSame(names, controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID));
+        verify(scenarioService);
+    }
+
+    @Test
+    public void testGetScenarioNameAssociatedWithPreServiceFeeFund() {
+        expect(scenarioService.getScenarioNameByPreServiceFeeFundId(USAGE_BATCH_ID))
+            .andReturn(SCENARIO_NAME).once();
+        replay(scenarioService);
+        assertEquals(SCENARIO_NAME, controller.getScenarioNameAssociatedWithPreServiceFeeFund(USAGE_BATCH_ID));
         verify(scenarioService);
     }
 

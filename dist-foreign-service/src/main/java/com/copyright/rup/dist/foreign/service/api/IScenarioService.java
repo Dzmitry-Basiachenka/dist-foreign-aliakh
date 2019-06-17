@@ -44,6 +44,14 @@ public interface IScenarioService {
     List<String> getScenariosNamesByUsageBatchId(String usageBatchId);
 
     /**
+     * Gets {@link Scenario} name based on fund pool identifier.
+     *
+     * @param fundId fund pool identifier
+     * @return {@link Scenario} name
+     */
+    String getScenarioNameByPreServiceFeeFundId(String fundId);
+
+    /**
      * Creates {@link Scenario}. Also calculates gross total and reported total for {@link Scenario}.
      *
      * @param scenarioName name of scenario

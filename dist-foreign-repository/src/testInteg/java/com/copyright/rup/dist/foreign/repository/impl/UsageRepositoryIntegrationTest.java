@@ -488,9 +488,9 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(2, usageRepository.findByScenarioId(SCENARIO_ID).size());
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         assertTrue(usageRepository.findByScenarioId(SCENARIO_ID).isEmpty());
-        assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
+        assertEquals(2, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
         usageRepository.deleteByScenarioId(NTS_SCENARIO_ID);
-        assertTrue(usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).isEmpty());
+        assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
     }
 
     @Test
@@ -646,18 +646,20 @@ public class UsageRepositoryIntegrationTest {
         List<Usage> usages = usageRepository.findByIds(
             Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", "45445974-5bee-477a-858b-e9e8c1a642b8"));
         assertEquals(2, CollectionUtils.size(usages));
-        BigDecimal aboveMinimumAmount = new BigDecimal("900.00");
+        BigDecimal reportedValue = new BigDecimal("900.00");
         verifyNtsUsage(usages.get(0), UsageStatusEnum.NTS_EXCLUDED, null, StoredEntity.DEFAULT_USER,
-            DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT);
+            DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT, null, DEFAULT_ZERO_AMOUNT, DEFAULT_ZERO_AMOUNT);
         verifyNtsUsage(usages.get(1), UsageStatusEnum.LOCKED, NTS_SCENARIO_ID, StoredEntity.DEFAULT_USER,
-            aboveMinimumAmount, aboveMinimumAmount);
+            new BigDecimal("900.0000000000"), reportedValue, SERVICE_FEE, new BigDecimal("288.0000000000"),
+            new BigDecimal("612.0000000000"));
         usageRepository.deleteFromNtsScenario(NTS_SCENARIO_ID, USER_NAME);
         usages = usageRepository.findByIds(
             Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", "45445974-5bee-477a-858b-e9e8c1a642b8"));
         assertEquals(2, CollectionUtils.size(usages));
-        verifyNtsUsage(usages.get(0), UsageStatusEnum.ELIGIBLE, null, USER_NAME, DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT);
+        verifyNtsUsage(usages.get(0), UsageStatusEnum.ELIGIBLE, null, USER_NAME, DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT,
+            null, DEFAULT_ZERO_AMOUNT, DEFAULT_ZERO_AMOUNT);
         verifyNtsUsage(usages.get(1), UsageStatusEnum.UNCLASSIFIED, null, USER_NAME, DEFAULT_ZERO_AMOUNT,
-            aboveMinimumAmount);
+            reportedValue, null, DEFAULT_ZERO_AMOUNT, DEFAULT_ZERO_AMOUNT);
     }
 
     @Test
@@ -1138,6 +1140,47 @@ public class UsageRepositoryIntegrationTest {
             usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus("JAACC_11Dec16", UsageStatusEnum.LOCKED));
     }
 
+    @Test
+    public void testCalculateAmountsByAccountNumber() {
+        usageRepository.calculateAmountsByAccountNumber(1000002859L, "d7e9bae8-6b10-4675-9668-8e3605a47dad",
+            SERVICE_FEE, true, "SYSTEM");
+        assertNtsUsageAmounts("8a80a2e7-4758-4e43-ae42-e8b29802a210", new BigDecimal("256.0000000000"),
+            new BigDecimal("174.0800000000"), SERVICE_FEE, new BigDecimal("81.9200000000"), new BigDecimal("296.72"));
+        assertNtsUsageAmounts("bfc9e375-c489-4600-9308-daa101eed97c", new BigDecimal("145.2000000000"),
+            new BigDecimal("98.7360000000"), SERVICE_FEE, new BigDecimal("46.4640000000"), new BigDecimal("16.24"));
+        assertNtsUsageAmounts("085268cd-7a0c-414e-8b28-2acb299d9698", new BigDecimal("1452.0000000000"),
+            DEFAULT_ZERO_AMOUNT, null, DEFAULT_ZERO_AMOUNT, new BigDecimal("162.41"));
+    }
+
+    @Test
+    public void testApplyPostServiceFeeAmount() {
+        // Post Service Fee Amount = 100
+        usageRepository.applyPostServiceFeeAmount("c4bc09c1-eb9b-41f3-ac93-9cd088dff408");
+        assertNtsUsageAmounts("7778a37d-6184-42c1-8e23-5841837c5411", new BigDecimal("71.1818181818"),
+            new BigDecimal("65.9018181818"), new BigDecimal("0.16000"), new BigDecimal("5.2800000000"),
+            new BigDecimal("33.00"));
+        assertNtsUsageAmounts("54247c55-bf6b-4ad6-9369-fb4baea6b19b", new BigDecimal("127.8181818182"),
+            new BigDecimal("106.6981818182"), new BigDecimal("0.32000"), new BigDecimal("21.1200000000"),
+            new BigDecimal("66.00"));
+        assertNtsUsageAmounts("ade68eac-0d79-4d23-861b-499a0c6e91d3", new BigDecimal("11.0000000000"),
+            DEFAULT_ZERO_AMOUNT, null, DEFAULT_ZERO_AMOUNT, new BigDecimal("11.00"));
+    }
+
+    private void assertNtsUsageAmounts(String usageId, BigDecimal grossAmount, BigDecimal netAmount,
+                                       BigDecimal serviceFee, BigDecimal serviceFeeAmount, BigDecimal reportedValue) {
+        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
+    }
+
+    private void assertAmounts(Usage usage, BigDecimal grossAmount, BigDecimal netAmount, BigDecimal serviceFee,
+                               BigDecimal serviceFeeAmount, BigDecimal reportedValue) {
+        assertEquals(reportedValue, usage.getReportedValue());
+        assertEquals(grossAmount, usage.getGrossAmount());
+        assertEquals(netAmount, usage.getNetAmount());
+        assertEquals(serviceFee, usage.getServiceFee());
+        assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
+    }
+
     private FundPool buildNtsFundPool(BigDecimal nonStmAmount) {
         FundPool fundPool = new FundPool();
         fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));
@@ -1214,11 +1257,11 @@ public class UsageRepositoryIntegrationTest {
     }
 
     private void verifyNtsUsage(Usage usage, UsageStatusEnum status, String scenarioId, String username,
-                                BigDecimal grossAmount, BigDecimal reportedValue) {
+                                BigDecimal grossAmount, BigDecimal reportedValue, BigDecimal serviceFee,
+                                BigDecimal serviceFeeAmount, BigDecimal netAmount) {
         verifyUsage(usage, status, scenarioId, username, null);
         assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
-        assertEquals(0, grossAmount.compareTo(usage.getGrossAmount()));
-        assertEquals(0, reportedValue.compareTo(usage.getReportedValue()));
+        assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
     }
 
     private void verifyInsertedFundPoolUsage(Long wrWrkInst, String workTitle, String market, Integer marketPeriodFrom,

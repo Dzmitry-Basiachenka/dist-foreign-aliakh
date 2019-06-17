@@ -625,6 +625,23 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return handler.getWrWrkInstToUsageIdsMap();
     }
 
+    @Override
+    public void calculateAmountsByAccountNumber(Long accountNumber, String scenarioId, BigDecimal serviceFee,
+                                                boolean participatingFlag, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(RH_ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
+        params.put("serviceFee", Objects.requireNonNull(serviceFee));
+        params.put("participatingFlag", participatingFlag);
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        update("IUsageMapper.calculateAmountsByAccountNumber", params);
+    }
+
+    @Override
+    public void applyPostServiceFeeAmount(String scenarioId) {
+        update("IUsageMapper.applyPostServiceFeeAmount", Objects.requireNonNull(scenarioId));
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));

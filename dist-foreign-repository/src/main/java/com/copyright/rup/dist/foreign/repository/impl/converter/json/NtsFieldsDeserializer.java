@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 public class NtsFieldsDeserializer extends StdDeserializer<NtsFields> {
 
-    private static final String RH_MINIMUM_AMOUNT = "rh_minimum_amount";
+    private static final String PRE_SERVICE_FEE_FUND_UID = "pre_service_fee_fund_uid";
 
     /**
      * Constructor.
@@ -34,11 +34,28 @@ public class NtsFieldsDeserializer extends StdDeserializer<NtsFields> {
         NtsFields ntsFields = new NtsFields();
         JsonToken currentToken;
         while (null != (currentToken = jp.nextValue())) {
-            if ((JsonToken.VALUE_NUMBER_INT == currentToken || JsonToken.VALUE_NUMBER_FLOAT == currentToken)
-                && RH_MINIMUM_AMOUNT.equals(jp.getCurrentName())) {
-                ntsFields.setRhMinimumAmount(jp.getDecimalValue());
+            if (JsonToken.VALUE_NUMBER_INT == currentToken || JsonToken.VALUE_NUMBER_FLOAT == currentToken) {
+                readAmounts(jp, ntsFields);
+            } else if (JsonToken.VALUE_STRING == currentToken && PRE_SERVICE_FEE_FUND_UID.equals(jp.getCurrentName())) {
+                ntsFields.setPreServiceFeeFundId(jp.getValueAsString());
             }
         }
         return ntsFields;
+    }
+
+    private void readAmounts(JsonParser jp, NtsFields ntsFields) throws IOException {
+        switch (jp.getCurrentName()) {
+            case "rh_minimum_amount":
+                ntsFields.setRhMinimumAmount(jp.getDecimalValue());
+                break;
+            case "pre_service_fee_amount":
+                ntsFields.setPreServiceFeeAmount(jp.getDecimalValue());
+                break;
+            case "post_service_fee_amount":
+                ntsFields.setPostServiceFeeAmount(jp.getDecimalValue());
+                break;
+            default:
+                break;
+        }
     }
 }

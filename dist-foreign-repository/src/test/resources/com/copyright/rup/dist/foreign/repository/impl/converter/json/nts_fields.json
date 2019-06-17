@@ -1,3 +1,6 @@
 {
-  "rh_minimum_amount": 300.00
+  "rh_minimum_amount": 300.00,
+  "pre_service_fee_amount": 500.00,
+  "post_service_fee_amount": 1000.00,
+  "pre_service_fee_fund_uid": "3d34ebf4-7b39-4477-be8d-515a53dd59c1"
 }

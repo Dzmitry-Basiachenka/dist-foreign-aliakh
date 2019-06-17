@@ -830,7 +830,11 @@
         set
             status_ind = case when usage_with_classification.classification is not null then #{eligibleStatus} else #{unclassifiedStatus} end,
             df_scenario_uid = null,
+            service_fee = null,
+            service_fee_amount = 0,
+            net_amount = 0,
             gross_amount = 0,
+            is_rh_participating_flag = false,
             <include refid="StoredEntityMapper.update"/>
         from (
             select
@@ -1624,6 +1628,18 @@
         returning df_usage_uid
     </select>
 
+    <update id="calculateAmountsByAccountNumber" parameterType="map">
+        update ${schema}.df_usage
+        set
+            is_rh_participating_flag = #{participatingFlag},
+            service_fee = #{serviceFee},
+            service_fee_amount = gross_amount * #{serviceFee},
+            net_amount = gross_amount - (gross_amount * #{serviceFee}),
+            <include refid="StoredEntityMapper.update"/>
+        where rh_account_number = #{rhAccountNumber}
+            and df_scenario_uid = #{scenarioId}
+    </update>
+
     <update id="addWithdrawnUsagesToPreServiceFeeFund" parameterType="map">
         update ${schema}.df_usage
         set
@@ -1658,4 +1674,29 @@
         where ub.name = #{batchName} and u.status_ind = #{status}
             and u.wr_wrk_inst is not null
     </select>
+
+    <update id="applyPostServiceFeeAmount" parameterType="string">
+        <!-- Calculates scenario net amount totals-->
+        with net_amount_totals as (
+            select sum(net_amount) net_amount_total
+            from ${schema}.df_usage u
+            where df_scenario_uid = #{scenarioId}
+        ),
+        <!-- Calculate GT factor based on scenario net totals and Post Service Fee Amount -->
+        gt_factor as (
+            select
+                ((select net_amount_total from net_amount_totals) + (s.nts_fields->>'post_service_fee_amount')::numeric)
+                    / (select net_amount_total from net_amount_totals) net_amount_gt_factor
+            from ${schema}.df_scenario s
+            where df_scenario_uid = #{scenarioId}
+        )
+        <!-- Proportionally distributes Post Service Fee Amount among scenario usages -->
+        update
+            ${schema}.df_usage u
+        set
+            net_amount = u.net_amount * net_amount_gt_factor,
+            gross_amount = u.net_amount * net_amount_gt_factor + u.service_fee_amount
+        from gt_factor
+        where u.df_scenario_uid = #{scenarioId}
+    </update>
 </mapper>

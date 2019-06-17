@@ -16,6 +16,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
@@ -24,6 +25,7 @@ import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -32,6 +34,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
+import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
@@ -81,9 +84,10 @@ import java.util.Set;
  * @author Mikalai Bezmen
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({RupContextUtils.class, RupPersistUtils.class})
+@PrepareForTest({RupContextUtils.class, RupPersistUtils.class, CalculationUtils.class})
 public class UsageServiceTest {
 
+    private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final String USAGE_ID_2 = "Usage id 2";
@@ -820,6 +824,34 @@ public class UsageServiceTest {
         verify(usageRepository);
     }
 
+    @Test
+    public void testCalculateAmountsForNtsScenario() {
+        mockStatic(RupContextUtils.class);
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setPostServiceFeeAmount(new BigDecimal("100.500"));
+        scenario.setNtsFields(ntsFields);
+        Rightsholder rightsholder1 = buildRightsholder(1000009522L);
+        Rightsholder rightsholder2 = buildRightsholder(2000009522L);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(rightsholderService.getByScenarioId(SCENARIO_ID))
+            .andReturn(Arrays.asList(rightsholder1, rightsholder2)).once();
+        expect(prmIntegrationService.isRightsholderParticipating(rightsholder1.getId(), "NTS")).andReturn(true).once();
+        expect(prmIntegrationService.isRightsholderParticipating(rightsholder2.getId(), "NTS")).andReturn(true).once();
+        expect(prmIntegrationService.getRhParticipatingServiceFee(true)).
+            andReturn(SERVICE_FEE).times(2);
+        usageRepository.calculateAmountsByAccountNumber(rightsholder1.getAccountNumber(), SCENARIO_ID, SERVICE_FEE,
+            true, USER_NAME);
+        expectLastCall().once();
+        usageRepository.calculateAmountsByAccountNumber(rightsholder2.getAccountNumber(), SCENARIO_ID, SERVICE_FEE,
+            true, USER_NAME);
+        expectLastCall().once();
+        usageRepository.applyPostServiceFeeAmount(scenario.getId());
+        expectLastCall().once();
+        replay(usageRepository, prmIntegrationService, rightsholderService, RupContextUtils.class);
+        usageService.calculateAmountsForNtsScenario(scenario);
+        verify(usageRepository, prmIntegrationService, rightsholderService, RupContextUtils.class);
+    }
+
     private Work buildWork(String standardNumberType) {
         Work work = new Work();
         work.setMainIdnoType(standardNumberType);
@@ -908,5 +940,12 @@ public class UsageServiceTest {
         paidUsage.setGrossAmount(usageFromLm.getGrossAmount());
         paidUsage.setServiceFeeAmount(usageFromLm.getServiceFeeAmount());
         return paidUsage;
+    }
+
+    private Rightsholder buildRightsholder(Long accountNUmber) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId(RupPersistUtils.generateUuid());
+        rightsholder.setAccountNumber(accountNUmber);
+        return rightsholder;
     }
 }

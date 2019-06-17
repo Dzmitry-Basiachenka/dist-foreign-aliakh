@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -137,6 +138,14 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     List<String> getScenariosNamesAssociatedWithUsageBatch(String batchId);
 
     /**
+     * Gets {@link Scenario} name associated with Pre-Service fee fund identifier.
+     *
+     * @param fundId Pre-Service fee fund identifier
+     * @return {@link Scenario} name
+     */
+    String getScenarioNameAssociatedWithPreServiceFeeFund(String fundId);
+
+    /**
      * Inserts usage batch and it's usages.
      *
      * @param usageBatch {@link UsageBatch} instance
@@ -202,12 +211,12 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     /**
      * Creates a {@link Scenario} by entered scenario name, rightholder's minimum amount and description.
      *
-     * @param scenarioName    name of scenario
-     * @param rhMinimumAmount rightholder's minimum amount
-     * @param description     description for creating scenario
+     * @param scenarioName name of scenario
+     * @param ntsFields    NTS scenario specific fields
+     * @param description  description for creating scenario
      * @return created scenario
      */
-    Scenario createNtsScenario(String scenarioName, BigDecimal rhMinimumAmount, String description);
+    Scenario createNtsScenario(String scenarioName, NtsFields ntsFields, String description);
 
     /**
      * @return instance of {@link IScenarioService}.

@@ -262,7 +262,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-03-29-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
-        comment('Inserting data for testNtsBatchWorkflowWithUsageUnderMinimun')
+        comment('Inserting data for testNtsBatchWorkflowWithUsageUnderMinimum')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
             column(name: 'df_work_classification_uid', value: 'ab848f01-6203-4146-945c-6376706f8a03')
