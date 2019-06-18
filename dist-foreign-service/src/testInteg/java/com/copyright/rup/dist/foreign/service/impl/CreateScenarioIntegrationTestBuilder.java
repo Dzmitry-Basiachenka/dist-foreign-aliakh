@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -23,15 +22,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
-import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -65,14 +56,8 @@ class CreateScenarioIntegrationTestBuilder {
     @Autowired
     private IScenarioUsageFilterService scenarioUsageFilterService;
     @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
-    private AsyncRestTemplate asyncRestTemplate;
-    @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
-    private boolean prmRollUpAsync;
+    private ServiceTestHelper testHelper;
 
-    private MockRestServiceServer mockServer;
-    private MockRestServiceServer asyncMockServer;
     private String expectedRollupsJson;
     private List<String> expectedRollupsRightholderIds;
     private String expectedPreferencesJson;
@@ -152,16 +137,15 @@ class CreateScenarioIntegrationTestBuilder {
         }
 
         void run() {
-            createRestServer();
+            testHelper.createRestServer();
             if (Objects.nonNull(expectedRollupsRightholderIds)) {
-                expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
+                testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
             }
             if (Objects.nonNull(expectedPreferencesRightholderIds)) {
-                expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
+                testHelper.expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
             }
             createScenario();
-            mockServer.verify();
-            asyncMockServer.verify();
+            testHelper.verifyRestServer();
             assertScenario();
             assertUsages();
             assertScenarioActions();
@@ -200,13 +184,6 @@ class CreateScenarioIntegrationTestBuilder {
             assertEquals("SYSTEM", scenario.getCreateUser());
             assertEquals("SYSTEM", scenario.getUpdateUser());
             assertEquals(1, scenario.getVersion());
-        }
-
-        private void assertScenarioActions() {
-            List<ScenarioAuditItem> actions = scenarioAuditService.getActions(scenarioId);
-            assertTrue(CollectionUtils.isNotEmpty(actions));
-            assertEquals(1, CollectionUtils.size(actions));
-            assertEquals(ScenarioActionTypeEnum.ADDED_USAGES, actions.get(0).getActionType());
         }
 
         private void assertScenarioUsageFilter() {
@@ -273,32 +250,11 @@ class CreateScenarioIntegrationTestBuilder {
             });
         }
 
-        private void createRestServer() {
-            mockServer = MockRestServiceServer.createServer(restTemplate);
-            asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        }
-
-        private void expectGetPreferences(String fileName, List<String> rightholderIds) {
-            rightholderIds.forEach(rightholderId ->
-                mockServer.expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
-                        + rightholderId
-                        + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
-                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON))
-            );
-        }
-
-        private void expectGetRollups(String fileName, List<String> rightsholdersIds) {
-            rightsholdersIds.forEach(rightsholdersId ->
-                (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollupv2?orgIds=" +
-                        rightsholdersId + "&relationshipCode=PARENT&prefCodes=payee"))
-                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON))
-            );
+        private void assertScenarioActions() {
+            List<ScenarioAuditItem> actions = scenarioAuditService.getActions(scenarioId);
+            assertTrue(CollectionUtils.isNotEmpty(actions));
+            assertEquals(1, CollectionUtils.size(actions));
+            assertEquals(ScenarioActionTypeEnum.ADDED_USAGES, actions.get(0).getActionType());
         }
     }
 }

@@ -3,8 +3,6 @@ package com.copyright.rup.dist.foreign.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.copyright.rup.dist.common.test.JsonMatcher;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -15,19 +13,9 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
-import com.google.common.collect.Lists;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
-import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +48,7 @@ class ReconcileRightsholdersTestBuilder {
     private String expectedRollupsJson;
     private List<String> expectedRollupsRightholderIds;
     private String expectedPrmResponse;
+    private Long expectedPrmAccountNumber;
     private Set<RightsholderDiscrepancy> expectedDiscrepancies = new HashSet<>();
     private List<Usage> expectedUsages = new ArrayList<>();
     private Map<String, List<UsageAuditItem>> usageIdToAuditItemsMap;
@@ -73,13 +62,7 @@ class ReconcileRightsholdersTestBuilder {
     @Autowired
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
     @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
-    private AsyncRestTemplate asyncRestTemplate;
-    @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
-    private boolean prmRollUpAsync;
-    @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
-    private boolean prmRightsholderAsync;
+    private ServiceTestHelper testHelper;
 
     Runner build() {
         return new Runner();
@@ -96,7 +79,8 @@ class ReconcileRightsholdersTestBuilder {
         return this;
     }
 
-    ReconcileRightsholdersTestBuilder expectPrmCall(String expectedResponse) {
+    ReconcileRightsholdersTestBuilder expectPrmCall(Long accountNumber, String expectedResponse) {
+        this.expectedPrmAccountNumber = accountNumber;
         this.expectedPrmResponse = expectedResponse;
         return this;
     }
@@ -139,75 +123,21 @@ class ReconcileRightsholdersTestBuilder {
      */
     class Runner {
 
-        private final MockRestServiceServer mockServer;
-        private final MockRestServiceServer asyncMockServer;
-
-        Runner() {
-            this.mockServer = MockRestServiceServer.createServer(restTemplate);
-            this.asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        }
-
         void run() {
-            prepareRmsExpectations();
+            testHelper.createRestServer();
+            testHelper.expectGetRmsRights(rmsRequest, rmsResponse);
             if (Objects.nonNull(expectedPrmResponse)) {
-                expectPrmCall();
+                testHelper.expectPrmCall(expectedPrmResponse, expectedPrmAccountNumber);
             }
             if (Objects.nonNull(expectedRollupsJson)) {
-                expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
+                testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
             }
-            expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
+            testHelper.expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
             scenarioService.reconcileRightsholders(expectedScenario);
             assertDiscrepancies();
             scenarioService.approveOwnershipChanges(expectedScenario);
             assertUsages();
-            mockServer.verify();
-            asyncMockServer.verify();
-        }
-
-        private void prepareRmsExpectations() {
-            mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:9051/rms-rights-rest/rights/"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-                .andExpect(MockRestRequestMatchers.content()
-                    .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), rmsRequest),
-                        Lists.newArrayList("period_end_date"))))
-                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), rmsResponse),
-                    MediaType.APPLICATION_JSON));
-        }
-
-        private void expectGetRollups(String fileName, List<String> rightsholdersIds) {
-            rightsholdersIds.forEach(rightsholdersId -> {
-                (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollupv2?orgIds=" +
-                        rightsholdersId + "&relationshipCode=PARENT&prefCodes=payee"))
-                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                    .andRespond(
-                        MockRestResponseCreators.withSuccess(
-                            TestUtils.fileToString(this.getClass(), fileName),
-                            MediaType.APPLICATION_JSON));
-            });
-        }
-
-        private void expectPrmCall() {
-            (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                .requestTo(
-                    "http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=1000002137"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(
-                    MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), expectedPrmResponse),
-                        MediaType.APPLICATION_JSON));
-        }
-
-        private void expectGetPreferences(String fileName, List<String> rightholderIds) {
-            rightholderIds.forEach(rightholderId -> {
-                mockServer.expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
-                        + rightholderId
-                        + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
-                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON));
-            });
+            testHelper.verifyRestServer();
         }
 
         private void assertDiscrepancies() {

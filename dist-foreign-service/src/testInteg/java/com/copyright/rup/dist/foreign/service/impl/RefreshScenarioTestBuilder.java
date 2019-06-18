@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
@@ -17,15 +16,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
-import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -44,8 +35,6 @@ import java.util.stream.IntStream;
 @Component
 class RefreshScenarioTestBuilder {
 
-    private MockRestServiceServer mockServer;
-    private MockRestServiceServer asyncMockServer;
     private String expectedRollupsJson;
     private List<String> expectedRollupsRightholderIds;
     private String expectedPreferencesJson;
@@ -57,17 +46,13 @@ class RefreshScenarioTestBuilder {
     @Autowired
     private IScenarioService scenarioService;
     @Autowired
+    private IScenarioAuditService scenarioAuditService;
+    @Autowired
     private IScenarioRepository scenarioRepository;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
-    private IScenarioAuditService scenarioAuditService;
-    @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
-    private AsyncRestTemplate asyncRestTemplate;
-    @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
-    private boolean prmRollUpAsync;
+    private ServiceTestHelper testHelper;
 
     RefreshScenarioTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
@@ -106,20 +91,19 @@ class RefreshScenarioTestBuilder {
     class Runner {
 
         void run() {
-            createRestServer();
-            expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
-            expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
+            testHelper.createRestServer();
+            testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
+            testHelper.expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
             Scenario scenario = scenarioRepository.findAll()
                 .stream()
                 .filter(s -> s.getId().equals(expectedScenarioId))
                 .findFirst()
                 .orElse(null);
             scenarioService.refreshScenario(scenario);
-            mockServer.verify();
-            asyncMockServer.verify();
+            testHelper.verifyRestServer();
             assertScenario();
             assertUsages();
-            assertScenarioActions();
+            assertScenarioActions(expectedScenarioId);
         }
 
         private void assertScenario() {
@@ -139,13 +123,6 @@ class RefreshScenarioTestBuilder {
             assertEquals(1, scenario.getVersion());
         }
 
-        private void assertScenarioActions() {
-            List<ScenarioAuditItem> actions = scenarioAuditService.getActions(expectedScenarioId);
-            assertTrue(CollectionUtils.isNotEmpty(actions));
-            assertEquals(1, CollectionUtils.size(actions));
-            assertEquals(ScenarioActionTypeEnum.ADDED_USAGES, actions.get(0).getActionType());
-        }
-
         private void assertUsages() {
             List<Usage> usages = usageRepository.findByScenarioId(expectedScenarioId);
             usages.sort(Comparator.comparing(Usage::getId));
@@ -162,32 +139,11 @@ class RefreshScenarioTestBuilder {
             });
         }
 
-        private void createRestServer() {
-            mockServer = MockRestServiceServer.createServer(restTemplate);
-            asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        }
-
-        private void expectGetPreferences(String fileName, List<String> rightholderIds) {
-            rightholderIds.forEach(rightholderId -> {
-                mockServer.expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
-                        + rightholderId
-                        + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
-                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON));
-            });
-        }
-
-        private void expectGetRollups(String fileName, List<String> rightsholdersIds) {
-            rightsholdersIds.forEach(ightsholdersId -> {
-                (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollupv2?orgIds=" +
-                        ightsholdersId + "&relationshipCode=PARENT&prefCodes=payee"))
-                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON));
-            });
+        private void assertScenarioActions(String scenarioId) {
+            List<ScenarioAuditItem> actions = scenarioAuditService.getActions(scenarioId);
+            assertTrue(CollectionUtils.isNotEmpty(actions));
+            assertEquals(1, CollectionUtils.size(actions));
+            assertEquals(ScenarioActionTypeEnum.ADDED_USAGES, actions.get(0).getActionType());
         }
     }
 }
