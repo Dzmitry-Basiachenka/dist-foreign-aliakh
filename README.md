@@ -1,5 +1,15 @@
 6.0.0
 -
+* B-23118 FDA: Calculate the service fee for NTS details for each RH: Implement query to retrieve usages for NTS scenario service fee calculation
+* B-23118 FDA: Calculate the service fee for NTS details for each RH: Implement service logic to calculate service fee for NTS details
+* B-23118 FDA: Calculate the service fee for NTS details for each RH: Implement service logic to calculate service fee for NTS details
+* B-23120 FDA: Apply additional preservice fee funds: add Pre/Post Service fee amounts and Pre Service fee fund fields on create NTS scenario window
+* B-23120 FDA: Apply additional preservice fee funds: add verification for NTS fields
+* B-23120 FDA: Apply additional preservice fee funds: apply pre serivce fee calculation for NTS scenarios creation process
+* B-23120 FDA: Apply additional preservice fee funds: prevent deleting of Fund pool associated with scenarios
+* B-48867 FDA: Apply additional post-service fee funds: Adjust service logic to distribute Post Service Fee Amount
+* B-48867 FDA: Apply additional post-service fee funds: refactor CreateScenarioIntegrationTest to be able to assert usages amounts
+* B-48867 FDA: Apply additional post-service fee funds: split NtsWorkflowIntegrationTest into CreateNtsBatchIntegrationTest and NtsScenarioWorkflowIntegrationTest
 
 5.1.44
 -
