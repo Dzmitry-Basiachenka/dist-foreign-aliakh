@@ -119,18 +119,13 @@ public class NtsScenarioWorkflowIntegrationTest {
 
     private Usage buildUsage() {
         Usage usage = new Usage();
-        usage.setWrWrkInst(658824345L);
-        usage.setWorkTitle("100 ROAD MOVIES");
+        usage.setWrWrkInst(151811999L);
+        usage.setWorkTitle("NON-TITLE NTS");
         usage.setRightsholder(buildRightsholder(1000023401L, "American College of Physicians - Journals"));
         usage.setStatus(UsageStatusEnum.SENT_TO_LM);
         usage.setProductFamily("NTS");
-        usage.setStandardNumber("1008902112317555XX");
-        usage.setStandardNumberType("VALISBN13");
-        usage.setMarket(BUS_MARKET);
-        usage.setMarketPeriodFrom(2013);
-        usage.setMarketPeriodTo(2017);
         usage.setGrossAmount(new BigDecimal("400.4400000000"));
-        usage.setReportedValue(new BigDecimal("1176.92"));
+        usage.setReportedValue(new BigDecimal("0.00"));
         usage.setNetAmount(new BigDecimal("272.2992000000"));
         usage.setServiceFee(new BigDecimal("0.32000"));
         usage.setServiceFeeAmount(new BigDecimal("128.1408000000"));

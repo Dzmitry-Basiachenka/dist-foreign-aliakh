@@ -242,11 +242,11 @@ public class NtsScenarioWorkflowIntegrationTestBuilder implements Builder<Runner
             assertEquals(expectedUsage.getMarketPeriodFrom(), actualUsage.getMarketPeriodFrom());
             assertEquals(expectedUsage.getMarketPeriodTo(), actualUsage.getMarketPeriodTo());
             assertEquals(expectedUsage.getAuthor(), actualUsage.getAuthor());
-            assertEquals(0, expectedUsage.getGrossAmount().compareTo(actualUsage.getGrossAmount()));
-            assertEquals(0, expectedUsage.getNetAmount().compareTo(actualUsage.getNetAmount()));
-            assertEquals(0, expectedUsage.getServiceFee().compareTo(actualUsage.getServiceFee()));
-            assertEquals(0, expectedUsage.getServiceFeeAmount().compareTo(actualUsage.getServiceFeeAmount()));
-            assertEquals(0, expectedUsage.getReportedValue().compareTo(actualUsage.getReportedValue()));
+            assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+            assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+            assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
+            assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
+            assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
             assertEquals(expectedUsage.getRightsholder().getAccountNumber(), actualUsage.getRhAccountNumber());
         }
 
