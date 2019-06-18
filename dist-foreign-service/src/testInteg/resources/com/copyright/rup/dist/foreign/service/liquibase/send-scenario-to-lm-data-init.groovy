@@ -2,18 +2,18 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2018-01-12-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for send Scenario to LM test')
+        comment('Inserting test data for sending FAS Scenario to LM test')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
-            column(name: 'name', value: 'Test Scenario for exclude')
+            column(name: 'name', value: 'FAS Scenario for sending to LM')
             column(name: 'status_ind', value: 'APPROVED')
             column(name: 'description', value: 'Scenario description')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
-            column(name: 'name', value: 'CADRA_27Oct17')
+            column(name: 'name', value: 'FasOct17')
             column(name: 'rro_account_number', value: '1000002562')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
@@ -165,5 +165,108 @@ databaseChangeLog {
         }
 
         rollback ""
+    }
+
+    changeSet(id: '2019-06-17-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment('Inserting test data for sending NTS Scenario to LM test')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '67027e15-17c6-4b9b-b7f0-12ec414ad344')
+            column(name: 'name', value: 'NTS Scenario for sending to LM')
+            column(name: 'status_ind', value: 'APPROVED')
+            column(name: 'description', value: 'Scenario description')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'fd0554ff-f19c-48f4-82ce-b6e6539f6134')
+            column(name: 'name', value: 'NtsOct17')
+            column(name: 'rro_account_number', value: '1000002562')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'payment_date', value: '2017-01-11')
+            column(name: 'fiscal_year', value: '2017')
+            column(name: 'gross_amount', value: '30000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '73c8a661-a729-4494-b287-bbacc7e6459a')
+            column(name: 'df_usage_batch_uid', value: 'fd0554ff-f19c-48f4-82ce-b6e6539f6134')
+            column(name: 'df_scenario_uid', value: '67027e15-17c6-4b9b-b7f0-12ec414ad344')
+            column(name: 'wr_wrk_inst', value: '471137470')
+            column(name: 'work_title', value: 'Sunbeams')
+            column(name: 'system_title', value: 'Sunbeams')
+            column(name: 'rh_account_number', value: '1000003821')
+            column(name: 'payee_account_number', value: '1000003821')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '452365874521235XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00')
+            column(name: 'gross_amount', value: '90.63')
+            column(name: 'service_fee_amount', value: '29.00')
+            column(name: 'net_amount', value: '61.63')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '9ee73b05-7c75-4cca-ab2d-b5369fcbd183')
+            column(name: 'df_usage_batch_uid', value: 'fd0554ff-f19c-48f4-82ce-b6e6539f6134')
+            column(name: 'df_scenario_uid', value: '67027e15-17c6-4b9b-b7f0-12ec414ad344')
+            column(name: 'wr_wrk_inst', value: '122235134')
+            column(name: 'work_title', value: '"CHICKEN BREAST ON GRILL WITH FLAMES"')
+            column(name: 'system_title', value: '"CHICKEN BREAST ON GRILL WITH FLAMES"')
+            column(name: 'rh_account_number', value: '7000429266')
+            column(name: 'payee_account_number', value: '7000429266')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '2558902245377325XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Nanette M. Schwann')
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '9900.00')
+            column(name: 'gross_amount', value: '8972.04')
+            column(name: 'net_amount', value: '2871.05')
+            column(name: 'service_fee_amount', value: '6100.98')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'c6e658f1-556e-47d3-9071-2d5365c63ead')
+            column(name: 'df_usage_batch_uid', value: 'fd0554ff-f19c-48f4-82ce-b6e6539f6134')
+            column(name: 'df_scenario_uid', value: '67027e15-17c6-4b9b-b7f0-12ec414ad344')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'system_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '7000429266')
+            column(name: 'payee_account_number', value: '7000429266')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'standard_number_type', value: 'VALISBN13')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '25')
+            column(name: 'reported_value', value: '5000.00')
+            column(name: 'gross_amount', value: '4531.33')
+            column(name: 'net_amount', value: '1450.02')
+            column(name: 'service_fee_amount', value: '3081.30')
+            column(name: 'service_fee', value: '0.32000')
+        }
     }
 }

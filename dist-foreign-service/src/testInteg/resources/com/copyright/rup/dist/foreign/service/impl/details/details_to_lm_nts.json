@@ -1,0 +1,20 @@
+{
+  "details": [
+    {
+      "rh_uid": "05dc9217-26d4-46ca-aa6e-18572591f3c8",
+      "product_family": "NTS",
+      "royalty_amount": 61.63,
+      "service_fee_amount": 29.00,
+      "collected_amount": 90.63,
+      "detail_id": "a7abd79f-5777-4397-b769-f3129c3488f0"
+    },
+    {
+      "rh_uid": "756299b5-02ce-4f76-b0bc-ee2571cf906e",
+      "product_family": "NTS",
+      "royalty_amount": 4321.07,
+      "service_fee_amount": 9182.28,
+      "collected_amount": 13503.37,
+      "detail_id": "ec4158c4-daae-4e66-87f8-9da9b90556dd"
+    }
+  ]
+}
