@@ -1,0 +1,40 @@
+[
+  {
+    "version":1,
+    "createUser":"SYSTEM",
+    "updateUser":"SYSTEM",
+    "wrWrkInst":151811999,
+    "workTitle":"NON-TITLE NTS",
+    "systemTitle":"NON-TITLE NTS",
+    "rhAccountNumber":1000003821,
+    "rhName":"Abbey Publications, Inc. [L]",
+    "payeeAccountNumber":1000003821,
+    "payeeName":"Abbey Publications, Inc. [L]",
+    "grossAmount":90.6300000000,
+    "reportedValue":0.00,
+    "netAmount":61.6300000000,
+    "serviceFee":0.32000,
+    "serviceFeeAmount":29.0000000000,
+    "status":"SENT_TO_LM",
+    "productFamily":"NTS"
+  },
+  {
+    "version":1,
+    "createUser":"SYSTEM",
+    "updateUser":"SYSTEM",
+    "wrWrkInst":151811999,
+    "workTitle":"NON-TITLE NTS",
+    "systemTitle":"NON-TITLE NTS",
+    "rhAccountNumber":7000429266,
+    "rhName":"INSTITUTE OF FILM & TELEVISION STUDIES",
+    "payeeAccountNumber":7000429266,
+    "payeeName":"INSTITUTE OF FILM & TELEVISION STUDIES",
+    "grossAmount":13503.3700000000,
+    "reportedValue":0.00,
+    "netAmount":4321.0700000000,
+    "serviceFee":0.32000,
+    "serviceFeeAmount":9182.2800000000,
+    "status":"SENT_TO_LM",
+    "productFamily":"NTS"
+  }
+]

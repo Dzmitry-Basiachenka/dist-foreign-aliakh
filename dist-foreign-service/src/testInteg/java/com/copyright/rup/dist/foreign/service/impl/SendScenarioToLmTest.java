@@ -51,7 +51,8 @@ public class SendScenarioToLmTest {
     @Autowired
     private SqsClientMock sqsClientMock;
 
-    private static final String SCENARIO_ID = "4c014547-06f3-4840-94ff-6249730d537d";
+    private static final String FAS_SCENARIO_ID = "4c014547-06f3-4840-94ff-6249730d537d";
+    private static final String NTS_SCENARIO_ID = "67027e15-17c6-4b9b-b7f0-12ec414ad344";
 
     @Before
     public void setUp() {
@@ -59,28 +60,47 @@ public class SendScenarioToLmTest {
     }
 
     @Test
-    public void testSendToLm() throws IOException {
-        assertTrue(CollectionUtils.isEmpty(findUsageDtos()));
+    public void testSendToLmFas() throws IOException {
+        assertTrue(CollectionUtils.isEmpty(findUsageDtos(FAS_SCENARIO_ID)));
         Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
+        scenario.setId(FAS_SCENARIO_ID);
         scenario.setProductFamily("FAS");
         scenarioService.sendToLm(scenario);
         sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
-            Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm.json")),
+            Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_fas.json")),
             Collections.emptyList(), ImmutableMap.of("source", "FDA"));
-        List<UsageDto> usageDtos = findUsageDtos();
-        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/archived_usage_dtos.json");
+        List<UsageDto> usageDtos = findUsageDtos(FAS_SCENARIO_ID);
+        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/archived_usage_dtos_fas.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
         IntStream.range(0, usageDtos.size())
-            .forEach(index -> assertUsageDto(expectedUsageDtos.get(index), usageDtos.get(index)));
+            .forEach(index -> assertUsageDto(expectedUsageDtos.get(index), usageDtos.get(index), true));
     }
 
-    private List<UsageDto> findUsageDtos() {
-        return sqlSessionTemplate.selectList("IUsageArchiveMapper.findDtoByScenarioId", SCENARIO_ID);
+    @Test
+    public void testSendToLmNts() throws IOException {
+        assertTrue(CollectionUtils.isEmpty(findUsageDtos(NTS_SCENARIO_ID)));
+        Scenario scenario = new Scenario();
+        scenario.setId(NTS_SCENARIO_ID);
+        scenario.setProductFamily("NTS");
+        scenarioService.sendToLm(scenario);
+        sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
+            Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_nts.json")),
+            Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
+        List<UsageDto> usageDtos = findUsageDtos(NTS_SCENARIO_ID);
+        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/archived_usage_dtos_nts.json");
+        assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
+        IntStream.range(0, usageDtos.size())
+            .forEach(index -> assertUsageDto(expectedUsageDtos.get(index), usageDtos.get(index), false));
     }
 
-    private void assertUsageDto(UsageDto expected, UsageDto actual) {
-        assertEquals(expected.getId(), actual.getId());
+    private List<UsageDto> findUsageDtos(String scenarioId) {
+        return sqlSessionTemplate.selectList("IUsageArchiveMapper.findDtoByScenarioId", scenarioId);
+    }
+
+    private void assertUsageDto(UsageDto expected, UsageDto actual, boolean isFas) {
+        if (isFas) {
+            assertEquals(expected.getId(), actual.getId());
+        }
         assertEquals(expected.getBatchName(), actual.getBatchName());
         assertEquals(expected.getFiscalYear(), actual.getFiscalYear());
         assertEquals(expected.getRroName(), actual.getRroName());
