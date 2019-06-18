@@ -176,6 +176,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public List<PreServiceFeeFund> getPreServiceFeeFundsNotAttachedToScenario() {
+        return fundPoolService.getPreServiceFeeFundsNotAttachedToScenario();
+    }
+
+    @Override
     public void deletePreServiceFeeFund(PreServiceFeeFund fundPool) {
         fundPoolService.deletePreServiceFeeFund(fundPool);
     }

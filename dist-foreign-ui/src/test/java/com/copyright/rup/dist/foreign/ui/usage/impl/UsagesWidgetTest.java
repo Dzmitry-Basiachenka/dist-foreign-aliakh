@@ -155,10 +155,10 @@ public class UsagesWidgetTest {
     @Test
     public void testSelectAdditionalFundsMenuItems() {
         mockStatic(Windows.class);
-        expect(controller.getUsageBatchesForPreServiceFeeFunds()).andReturn(Collections.emptyList()).once();
+        expect(controller.getPreServiceSeeFunds()).andReturn(Collections.emptyList()).once();
         Windows.showModalWindow(anyObject(PreServiceFeeFundBatchesFilterWindow.class));
         expectLastCall().once();
-        expect(controller.getPreServiceSeeFunds()).andReturn(Collections.emptyList()).once();
+        expect(controller.getUsageBatchesForPreServiceFeeFunds()).andReturn(Collections.emptyList()).once();
         Windows.showModalWindow(anyObject(DeleteAdditionalFundsWindow.class));
         expectLastCall().once();
         replay(controller, Windows.class);
@@ -302,7 +302,7 @@ public class UsagesWidgetTest {
             .andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", Collections.emptyList(), "NON-STM", Collections.emptyList())).once();
-        expect(controller.getPreServiceSeeFunds()).andReturn(Collections.emptyList()).once();
+        expect(controller.getPreServiceFeeFundsNotAttachedToScenario()).andReturn(Collections.emptyList()).once();
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateNtsScenarioWindow.class));
         expectLastCall().once();

@@ -60,6 +60,16 @@
         )
     </select>
 
+    <select id="findNotAttachedToScenario" resultMap="preServiceFeeFundResultMap">
+        select
+            fund.df_fund_pool_uid,
+            fund.name
+        from ${schema}.df_fund_pool fund
+        left join ${schema}.df_scenario s on (s.nts_fields->>'pre_service_fee_fund_uid') = fund.df_fund_pool_uid
+        where s.nts_fields->>'pre_service_fee_fund_uid' is null
+        order by fund.updated_datetime desc
+    </select>
+
     <select id="findCountByName" parameterType="string" resultType="int">
         select count(name)
         from ${schema}.df_fund_pool

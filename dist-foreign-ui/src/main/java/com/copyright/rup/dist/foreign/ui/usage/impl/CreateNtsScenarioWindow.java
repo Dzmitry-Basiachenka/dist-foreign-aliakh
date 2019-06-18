@@ -148,7 +148,7 @@ public class CreateNtsScenarioWindow extends Window {
 
     private void initPreServiceFeeFundsCombobox() {
         fundsComboBox = new ComboBox<>(ForeignUi.getMessage("label.pre_service_fee_funds"));
-        fundsComboBox.setItems(controller.getPreServiceSeeFunds());
+        fundsComboBox.setItems(controller.getPreServiceFeeFundsNotAttachedToScenario());
         fundsComboBox.setItemCaptionGenerator(PreServiceFeeFund::getName);
         VaadinUtils.setMaxComponentsWidth(fundsComboBox);
         VaadinUtils.addComponentStyle(fundsComboBox, "pre-service-fee-funds-filter");
@@ -180,6 +180,7 @@ public class CreateNtsScenarioWindow extends Window {
             PreServiceFeeFund selectedFund = fundsComboBox.getValue();
             if (Objects.nonNull(selectedFund)) {
                 ntsFields.setPreServiceFeeFundId(selectedFund.getId());
+                ntsFields.setPreServiceFeeFundName(selectedFund.getName());
             }
             fireEvent(new ScenarioCreateEvent(this,
                 controller.createNtsScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()),

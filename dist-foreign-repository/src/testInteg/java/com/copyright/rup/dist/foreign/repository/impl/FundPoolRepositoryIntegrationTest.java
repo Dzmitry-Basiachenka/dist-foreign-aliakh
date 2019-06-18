@@ -79,6 +79,13 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindNotAttachedToScenario() {
+        List<PreServiceFeeFund> fundPools = fundPoolRepository.findNotAttachedToScenario();
+        assertEquals(1, fundPools.size());
+        assertEquals(fundPools.get(0).getId(), "49060c9b-9cc2-4b93-b701-fffc82eb28b0");
+    }
+
+    @Test
     public void testFindNamesByUsageBatchId() {
         List<String> names =
             fundPoolRepository.findNamesByUsageBatchId("a163cca7-8eeb-449c-8a3c-29ff3ec82e58");

@@ -83,6 +83,15 @@ public class FundPoolServiceTest {
     }
 
     @Test
+    public void testGetPreServiceFeeFundsNotAttachedToScenario() {
+        List<PreServiceFeeFund> funds = Collections.singletonList(buildPreServiceFeeFund());
+        expect(fundPoolRepository.findNotAttachedToScenario()).andReturn(funds).once();
+        replay(fundPoolRepository);
+        assertEquals(funds, fundPoolService.getPreServiceFeeFundsNotAttachedToScenario());
+        verify(fundPoolRepository);
+    }
+
+    @Test
     public void testDeleteAdditionalFund() {
         usageService.deleteFromPreServiceFeeFund(FUND_UID);
         expectLastCall().once();

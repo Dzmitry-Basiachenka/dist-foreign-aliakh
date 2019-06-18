@@ -53,6 +53,11 @@ public class FundPoolRepository extends BaseRepository implements IFundPoolRepos
     }
 
     @Override
+    public List<PreServiceFeeFund> findNotAttachedToScenario() {
+        return selectList("IFundPoolMapper.findNotAttachedToScenario");
+    }
+
+    @Override
     public int findCountByName(String fundPoolName) {
         checkArgument(StringUtils.isNotBlank(fundPoolName));
         return selectOne("IFundPoolMapper.findCountByName", fundPoolName);
