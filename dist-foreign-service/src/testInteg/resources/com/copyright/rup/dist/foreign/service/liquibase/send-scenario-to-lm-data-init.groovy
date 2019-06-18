@@ -175,6 +175,63 @@ databaseChangeLog {
             column(name: 'name', value: 'NTS Scenario for sending to LM')
             column(name: 'status_ind', value: 'APPROVED')
             column(name: 'description', value: 'Scenario description')
+            column(name: 'nts_fields', value: '{"rh_minimum_amount": 300.00, "pre_service_fee_fund_uid": "f2d19889-b6f6-4f8e-a89d-2ed757d6b883"}')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'a3af8396-acf3-432b-9f23-7554e3d8f50d')
+            column(name: 'name', value: 'FAS_22Nov87')
+            column(name: 'rro_account_number', value: '7000800832')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'payment_date', value: '2017-01-11')
+            column(name: 'fiscal_year', value: '2017')
+            column(name: 'gross_amount', value: '199.98')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: 'f2d19889-b6f6-4f8e-a89d-2ed757d6b883')
+            column(name: 'name', value: 'Pre-Service Fee Additional Fund')
+            column(name: 'withdrawn_amount', value: '199.98')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '91b5539e-68e2-440c-8993-538eadd1c847')
+            column(name: 'df_usage_batch_uid', value: 'a3af8396-acf3-432b-9f23-7554e3d8f50d')
+            column(name: 'df_fund_pool_uid', value: 'f2d19889-b6f6-4f8e-a89d-2ed757d6b883')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '99.99')
+            column(name: 'gross_amount', value: '99.99')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '27d7eb01-45e2-474e-b715-5d90597b7fb0')
+            column(name: 'df_usage_batch_uid', value: 'a3af8396-acf3-432b-9f23-7554e3d8f50d')
+            column(name: 'df_fund_pool_uid', value: 'f2d19889-b6f6-4f8e-a89d-2ed757d6b883')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317623XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '99.99')
+            column(name: 'gross_amount', value: '99.99')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {

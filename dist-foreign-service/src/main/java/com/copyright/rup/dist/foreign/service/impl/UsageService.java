@@ -354,6 +354,7 @@ public class UsageService implements IUsageService {
                 usage.setWrWrkInst(null);
                 usage.setSystemTitle(null);
             });
+            usageArchiveRepository.moveFundToArchive(scenario.getId());
         }
         usageRepository.deleteByScenarioId(scenario.getId());
         LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),

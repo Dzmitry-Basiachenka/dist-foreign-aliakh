@@ -157,6 +157,14 @@ public interface IUsageArchiveRepository {
     void insertPaid(PaidUsage paidUsage);
 
     /**
+     * Moves usages from {@link com.copyright.rup.dist.foreign.domain.PreServiceFeeFund} related to selected
+     * {@link com.copyright.rup.dist.foreign.domain.Scenario} to archive table.
+     *
+     * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     */
+    void moveFundToArchive(String scenarioId);
+
+    /**
      * Finds usage information by provided ids.
      *
      * @param usageIds list of usage ids
