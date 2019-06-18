@@ -12,8 +12,8 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.common.ExportStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.report.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
@@ -57,6 +57,8 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     @Autowired
     private IReportService reportService;
     @Autowired
+    private IStreamSourceHandler streamSourceHandler;
+    @Autowired
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
 
     @Override
@@ -87,14 +89,14 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Override
     public IStreamSource getExportScenarioUsagesStreamSource() {
-        return new ExportStreamSource(scenario.getName() + "_Details_",
-            pipedStream -> reportService.writeScenarioUsagesCsvReport(scenario, pipedStream));
+        return streamSourceHandler.getCsvStreamSource(() -> scenario.getName() + "_Details_",
+            pos -> reportService.writeScenarioUsagesCsvReport(scenario, pos));
     }
 
     @Override
     public IStreamSource getExportScenarioRightsholderTotalsStreamSource() {
-        return new ExportStreamSource(scenario.getName() + "_",
-            pipedStream -> reportService.writeScenarioRightsholderTotalsCsvReport(scenario, pipedStream));
+        return streamSourceHandler.getCsvStreamSource(() -> scenario.getName() + "_",
+            pos -> reportService.writeScenarioRightsholderTotalsCsvReport(scenario, pos));
     }
 
     @Override

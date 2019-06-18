@@ -33,10 +33,13 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.ui.report.api.IStreamSourceHandler;
+import com.copyright.rup.dist.foreign.ui.report.impl.StreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
@@ -48,6 +51,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 import com.google.common.collect.Lists;
 import com.vaadin.ui.HorizontalLayout;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -57,15 +61,19 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link UsagesController}.
@@ -100,6 +108,8 @@ public class UsagesControllerTest {
     private IScenarioService scenarioService;
     private IResearchService researchService;
     private IFundPoolService fundPoolService;
+    private IReportService reportService;
+    private IStreamSourceHandler streamSourceHandler;
     private UsageFilter usageFilter;
 
     @Before
@@ -114,6 +124,8 @@ public class UsagesControllerTest {
         researchService = createMock(IResearchService.class);
         filterWidgetMock = createMock(IUsagesFilterWidget.class);
         fundPoolService = createMock(IFundPoolService.class);
+        reportService = createMock(IReportService.class);
+        streamSourceHandler = createMock(IStreamSourceHandler.class);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, usageBatchService);
@@ -123,6 +135,8 @@ public class UsagesControllerTest {
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, researchService);
         Whitebox.setInternalState(controller, fundPoolService);
+        Whitebox.setInternalState(controller, reportService);
+        Whitebox.setInternalState(controller, streamSourceHandler);
         usageFilter = new UsageFilter();
     }
 
@@ -212,23 +226,6 @@ public class UsagesControllerTest {
     }
 
     @Test
-    public void testGetExportStream() {
-        IStreamSource exportStreamSource = controller.getExportUsagesStreamSource();
-        ExecutorService executorService = createMock(ExecutorService.class);
-        Whitebox.setInternalState(exportStreamSource, executorService);
-        Capture<Runnable> captureRunnable = new Capture<>();
-        executorService.execute(capture(captureRunnable));
-        expectLastCall().once();
-        replay(usageService, filterController, executorService);
-        assertNotNull(exportStreamSource.getStream());
-        Runnable runnable = captureRunnable.getValue();
-        assertNotNull(runnable);
-        assertSame(exportStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
-        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
-        verify(usageService, filterController, executorService);
-    }
-
-    @Test
     public void testGetErrorsStream() {
         ProcessingResult csvProcessingResult = Whitebox.newInstance(ProcessingResult.class);
         IStreamSource errorStreamSource =
@@ -248,9 +245,28 @@ public class UsagesControllerTest {
     }
 
     @Test
-    public void testGetExportFileName() {
-        assertEquals("export_usage_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            controller.getExportUsagesStreamSource().getFileName());
+    public void testGetExportUsagesStreamSource() {
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        String fileName = "export_usage_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        reportService.writeUsageCsvReport(usageFilter, pos);
+        expectLastCall().once();
+        replay(filterWidgetMock, filterController, streamSourceHandler, reportService);
+        IStreamSource streamSource = controller.getExportUsagesStreamSource();
+        assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+            streamSource.getFileName());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        assertNotNull(posConsumer);
+        verify(filterWidgetMock, filterController, streamSourceHandler, reportService);
     }
 
     @Test
@@ -468,21 +484,27 @@ public class UsagesControllerTest {
     }
 
     @Test
-    public void testGetPreServiceFeeFundFilteredBatchesStreamSource() {
+    public void testGetPreServiceFeeFundBatchesStreamSource() {
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        String fileName = "pre_service_fee_fund_batches_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        PipedOutputStream pos = new PipedOutputStream();
+        reportService.writePreServiceFeeFundBatchesCsvReport(
+            Collections.singletonList(new UsageBatch()), BigDecimal.ONE, pos);
+        expectLastCall().once();
+        replay(streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getPreServiceFeeFundBatchesStreamSource(
             Collections.singletonList(new UsageBatch()), BigDecimal.ONE);
-        ExecutorService executorService = createMock(ExecutorService.class);
-        Whitebox.setInternalState(streamSource, executorService);
-        Capture<Runnable> captureRunnable = new Capture<>();
-        executorService.execute(capture(captureRunnable));
-        expectLastCall().once();
-        replay(usageService, executorService);
-        assertNotNull(streamSource.getStream());
-        Runnable runnable = captureRunnable.getValue();
-        assertNotNull(runnable);
-        assertSame(streamSource, Whitebox.getInternalState(runnable, "arg$1"));
-        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
-        verify(usageService, executorService);
+        assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+            streamSource.getFileName());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        verify(streamSourceHandler, reportService);
     }
 
     @Test

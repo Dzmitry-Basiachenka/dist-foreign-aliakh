@@ -33,7 +33,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersCon
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -166,8 +165,6 @@ public class ScenariosControllerTest {
             createMock(IReconcileRightsholdersController.class);
         Whitebox.setInternalState(scenariosController, "reconcileRightsholdersController",
             reconcileRightsholdersController);
-        expect(reconcileRightsholdersController.getOwnershipAdjustmentReportStreamSource())
-            .andReturn(createMock(IStreamSource.class)).once();
         IRightsholderDiscrepancyService rightsholderDiscrepancyService =
             createMock(IRightsholderDiscrepancyService.class);
         Whitebox.setInternalState(scenariosController, rightsholderDiscrepancyService);

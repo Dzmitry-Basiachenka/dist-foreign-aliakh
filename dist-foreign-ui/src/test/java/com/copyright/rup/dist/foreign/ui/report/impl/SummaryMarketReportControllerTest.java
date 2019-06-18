@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
-import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -10,10 +10,12 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
-import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportWidget;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -21,6 +23,7 @@ import org.powermock.reflect.Whitebox;
 import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link SummaryMarketReportController}.
@@ -34,16 +37,13 @@ import java.util.Collections;
 public class SummaryMarketReportControllerTest {
 
     private IReportService reportService;
-    private IUsageBatchService usageBatchService;
     private SummaryMarketReportController controller;
 
     @Before
     public void setUp() {
         controller = new SummaryMarketReportController();
         reportService = createMock(IReportService.class);
-        usageBatchService = createMock(IUsageBatchService.class);
         Whitebox.setInternalState(controller, reportService);
-        Whitebox.setInternalState(controller, usageBatchService);
     }
 
     @Test
@@ -54,20 +54,23 @@ public class SummaryMarketReportControllerTest {
     }
 
     @Test
-    public void testSendForResearchUsagesStreamSourceFileName() {
-        assertEquals(
-            "summary_of_market_report_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            controller.getSummaryMarketReportStreamSource().getFileName());
-    }
-
-    @Test
-    public void testGetSummaryMarketReportStreamSource() {
-        reportService.writeSummaryMarkerCsvReport(anyObject(), anyObject(OutputStream.class));
+    public void testGetCsvStreamSource() {
+        List<UsageBatch> batches = Collections.emptyList();
+        ISummaryMarketReportWidget widget = createMock(ISummaryMarketReportWidget.class);
+        Whitebox.setInternalState(controller, widget);
+        String fileName = "summary_of_market_report_";
+        Capture<List<UsageBatch>> batchesCapture = new Capture<>();
+        Capture<OutputStream> osCapture = new Capture<>();
+        expect(widget.getBatches()).andReturn(batches).once();
+        reportService.writeSummaryMarkerCsvReport(capture(batchesCapture), capture(osCapture));
         expectLastCall().once();
-        expect(usageBatchService.getUsageBatches()).andReturn(Collections.emptyList()).once();
-        replay(reportService, usageBatchService);
-        controller.initWidget();
-        assertNotNull(controller.getSummaryMarketReportStreamSource().getStream());
-        verify(reportService, usageBatchService);
+        replay(widget, reportService);
+        IStreamSource streamSource = controller.getCsvStreamSource();
+        assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+            streamSource.getFileName());
+        assertNotNull(streamSource.getStream());
+        assertEquals(batches, batchesCapture.getValue());
+        assertNotNull(osCapture.getValue());
+        verify(widget, reportService);
     }
 }

@@ -30,9 +30,9 @@ public class UndistributedLiabilitiesReportController extends CommonController<I
     private IReportService reportService;
 
     @Override
-    public IStreamSource getUndistributedLiabilitiesReportStreamSource() {
-        return new ByteArrayStreamSource("undistributed_liabilities_", outputStream ->
-            reportService.writeUndistributedLiabilitiesCsvReport(getWidget().getPaymentDate(), outputStream));
+    public IStreamSource getCsvStreamSource() {
+        return new ByteArrayStreamSource("undistributed_liabilities_",
+            os -> reportService.writeUndistributedLiabilitiesCsvReport(getWidget().getPaymentDate(), os));
     }
 
     @Override

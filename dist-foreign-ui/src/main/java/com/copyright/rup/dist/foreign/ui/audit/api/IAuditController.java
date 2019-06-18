@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.audit.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.api.ICsvReportProvider;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author Aliaksandr Radkevich
  */
-public interface IAuditController extends IController<IAuditWidget> {
+public interface IAuditController extends IController<IAuditWidget>, ICsvReportProvider {
 
     /**
      * {@link #onFilterChanged()}.
@@ -43,11 +43,6 @@ public interface IAuditController extends IController<IAuditWidget> {
      * @param detailId detail id
      */
     void showUsageHistory(String usageId, String detailId);
-
-    /**
-     * @return instance of {@link IStreamSource} for export.
-     */
-    IStreamSource getExportUsagesStreamSource();
 
     /**
      * @return number of items.

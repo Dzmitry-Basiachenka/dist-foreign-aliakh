@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.api;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.api.ICsvReportProvider;
 
 import com.vaadin.data.provider.QuerySortOrder;
 
@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Ihar Suvorau
  */
-public interface IReconcileRightsholdersController {
+public interface IReconcileRightsholdersController extends ICsvReportProvider {
 
     /**
      * Approves reconciliation of rightsholders.
@@ -55,11 +55,4 @@ public interface IReconcileRightsholdersController {
      * @return list of old rightsholder account numbers where new account number is empty.
      */
     List<Long> getProhibitedAccountNumbers();
-
-    /**
-     * Gets instance of {@link IStreamSource} to export Ownership Adjustment Report.
-     *
-     * @return instance of {@link IStreamSource} for export
-     */
-    IStreamSource getOwnershipAdjustmentReportStreamSource();
 }

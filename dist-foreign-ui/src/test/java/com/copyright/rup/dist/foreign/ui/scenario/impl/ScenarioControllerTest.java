@@ -1,7 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import static junit.framework.TestCase.assertTrue;
-
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.capture;
@@ -12,7 +10,6 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -25,11 +22,15 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.ScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.report.api.IStreamSourceHandler;
+import com.copyright.rup.dist.foreign.ui.report.impl.StreamSource;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -38,6 +39,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -47,12 +49,15 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.InputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link ScenarioController}.
@@ -69,9 +74,11 @@ public class ScenarioControllerTest {
 
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
 
-    private IUsageService usageService;
     private ScenarioController controller;
-    private ScenarioService scenarioService;
+    private IUsageService usageService;
+    private IScenarioService scenarioService;
+    private IReportService reportService;
+    private IStreamSourceHandler streamSourceHandler;
     private Scenario scenario;
 
     @Before
@@ -87,9 +94,13 @@ public class ScenarioControllerTest {
         controller.setScenario(buildScenario());
         usageService = createMock(UsageService.class);
         scenarioService = createMock(ScenarioService.class);
+        reportService = createMock(IReportService.class);
+        streamSourceHandler = createMock(IStreamSourceHandler.class);
         mockStatic(ForeignSecurityUtils.class);
-        Whitebox.setInternalState(controller, "usageService", usageService);
-        Whitebox.setInternalState(controller, "scenarioService", scenarioService);
+        Whitebox.setInternalState(controller, usageService);
+        Whitebox.setInternalState(controller, scenarioService);
+        Whitebox.setInternalState(controller, reportService);
+        Whitebox.setInternalState(controller, streamSourceHandler);
     }
 
     @Test
@@ -98,8 +109,12 @@ public class ScenarioControllerTest {
         expect(usageService.getRightsholderTotalsHoldersByScenario(eq(scenario), anyString(),
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
         expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(createMock(IStreamSource.class)).times(2);
         expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
-        replay(usageService, scenarioService, ForeignSecurityUtils.class);
+        replay(usageService, scenarioService, streamSourceHandler, ForeignSecurityUtils.class);
         controller.initWidget();
         List<RightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
@@ -107,7 +122,9 @@ public class ScenarioControllerTest {
         assertEquals(150, pageable.getLimit());
         assertNotNull(result);
         assertEquals(0, result.size());
-        verify(usageService, scenarioService, ForeignSecurityUtils.class);
+        assertNotNull(fileNameSupplierCapture.getValue());
+        assertNotNull(posConsumerCapture.getValue());
+        verify(usageService, scenarioService, streamSourceHandler, ForeignSecurityUtils.class);
     }
 
     @Test
@@ -115,11 +132,17 @@ public class ScenarioControllerTest {
         expect(usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY)).andReturn(1)
             .once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(createMock(IStreamSource.class)).times(2);
         expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
-        replay(usageService, scenarioService, ForeignSecurityUtils.class);
+        replay(usageService, scenarioService, streamSourceHandler, ForeignSecurityUtils.class);
         controller.initWidget();
         assertEquals(1, controller.getSize());
-        verify(usageService, scenarioService, ForeignSecurityUtils.class);
+        assertNotNull(fileNameSupplierCapture.getValue());
+        assertNotNull(posConsumerCapture.getValue());
+        verify(usageService, scenarioService, streamSourceHandler, ForeignSecurityUtils.class);
     }
 
     @Test
@@ -150,59 +173,48 @@ public class ScenarioControllerTest {
     }
 
     @Test
-    public void testGetScenarioUsagesExportStream() {
-        IStreamSource exportScenarioUsagesStreamSource = controller.getExportScenarioUsagesStreamSource();
-        ExecutorService executorService = createMock(ExecutorService.class);
-        Whitebox.setInternalState(exportScenarioUsagesStreamSource, executorService);
-        Capture<Runnable> captureRunnable = new Capture<>();
-        executorService.execute(capture(captureRunnable));
+    public void testGetExportScenarioUsagesStreamSource() {
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        String fileName = scenario.getName() + "_Details_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        reportService.writeScenarioUsagesCsvReport(scenario, pos);
         expectLastCall().once();
-        expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
-        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
-        replay(usageService, executorService, scenarioService, ForeignSecurityUtils.class);
-        controller.initWidget();
-        assertNotNull(exportScenarioUsagesStreamSource.getStream());
-        Runnable runnable = captureRunnable.getValue();
-        assertNotNull(runnable);
-        assertSame(exportScenarioUsagesStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
-        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
-        verify(usageService, executorService, scenarioService, ForeignSecurityUtils.class);
+        replay(streamSourceHandler, reportService);
+        IStreamSource streamSource = controller.getExportScenarioUsagesStreamSource();
+        assertEquals("Scenario_name_Details_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm")
+            + ".csv", streamSource.getFileName());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        verify(streamSourceHandler, reportService);
     }
 
     @Test
-    public void testGetScenarioUsagesExportFileName() {
-        assertEquals(
-            "Scenario_name_Details_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            controller.getExportScenarioUsagesStreamSource().getFileName());
-    }
-
-    @Test
-    public void testGetScenarioRightsholderTotalsExportStream() {
-        IStreamSource exportScenarioUsagesStreamSource = controller.getExportScenarioRightsholderTotalsStreamSource();
-        ExecutorService executorService = createMock(ExecutorService.class);
-        Whitebox.setInternalState(exportScenarioUsagesStreamSource, executorService);
-        Capture<Runnable> captureRunnable = new Capture<>();
-        executorService.execute(capture(captureRunnable));
+    public void testGetExportScenarioRightsholderTotalsStreamSource() {
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        String fileName = scenario.getName() + "_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        reportService.writeScenarioRightsholderTotalsCsvReport(scenario, pos);
         expectLastCall().once();
-        expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
-        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
-        replay(usageService, executorService, scenarioService, ForeignSecurityUtils.class);
-        controller.initWidget();
-        assertNotNull(exportScenarioUsagesStreamSource.getStream());
-        Runnable runnable = captureRunnable.getValue();
-        assertNotNull(runnable);
-        assertSame(exportScenarioUsagesStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
-        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
-        verify(usageService, executorService, scenarioService, ForeignSecurityUtils.class);
+        replay(streamSourceHandler, reportService);
+        IStreamSource streamSource = controller.getExportScenarioRightsholderTotalsStreamSource();
+        assertEquals("Scenario_name_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm")
+            + ".csv", streamSource.getFileName());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        verify(streamSourceHandler, reportService);
     }
-
-    @Test
-    public void testGetScenarioRightsholderTotalsExportFileName() {
-        assertEquals(
-            "Scenario_name_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            controller.getExportScenarioRightsholderTotalsStreamSource().getFileName());
-    }
-
 
     @Test
     public void testOnExcludeDetailsClickedWithDiscrepancies() {

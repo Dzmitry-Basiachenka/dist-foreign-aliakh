@@ -9,30 +9,38 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.same;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.ui.report.api.IStreamSourceHandler;
+import com.copyright.rup.dist.foreign.ui.report.impl.StreamSource;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.io.InputStream;
 import java.io.PipedOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link ReconcileRightsholdersController}.
@@ -48,6 +56,8 @@ public class ReconcileRightsholdersControllerTest {
     private IReconcileRightsholdersController controller;
     private IScenarioService scenarioService;
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
+    private IReportService reportService;
+    private IStreamSourceHandler streamSourceHandler;
     private Scenario scenario;
 
     @Before
@@ -58,9 +68,13 @@ public class ReconcileRightsholdersControllerTest {
         scenario.setName("Test scenario name");
         controller.setScenario(scenario);
         scenarioService = createMock(IScenarioService.class);
-        Whitebox.setInternalState(controller, scenarioService);
         rightsholderDiscrepancyService = createMock(IRightsholderDiscrepancyService.class);
+        reportService = createMock(IReportService.class);
+        streamSourceHandler = createMock(IStreamSourceHandler.class);
+        Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, rightsholderDiscrepancyService);
+        Whitebox.setInternalState(controller, reportService);
+        Whitebox.setInternalState(controller, streamSourceHandler);
     }
 
     @Test
@@ -108,19 +122,25 @@ public class ReconcileRightsholdersControllerTest {
     }
 
     @Test
-    public void testGetOwnershipAdjustmentReportStreamSource() {
-        IStreamSource streamSource = controller.getOwnershipAdjustmentReportStreamSource();
-        ExecutorService executorService = createMock(ExecutorService.class);
-        Whitebox.setInternalState(streamSource, executorService);
-        Capture<Runnable> captureRunnable = new Capture<>();
-        executorService.execute(capture(captureRunnable));
+    public void testGetCsvStreamSource() {
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        String fileName = String.format("ownership_adjustment_report_%s_", scenario.getName());
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        reportService.writeOwnershipAdjustmentCsvReport(scenario.getId(),
+            Collections.singleton(RightsholderDiscrepancyStatusEnum.DRAFT), pos);
         expectLastCall().once();
-        replay(rightsholderDiscrepancyService, executorService);
-        assertNotNull(streamSource.getStream());
-        Runnable runnable = captureRunnable.getValue();
-        assertNotNull(runnable);
-        assertSame(streamSource, Whitebox.getInternalState(runnable, "arg$1"));
-        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
-        verify(rightsholderDiscrepancyService, executorService);
+        replay(streamSourceHandler, reportService);
+        IStreamSource streamSource = controller.getCsvStreamSource();
+        assertEquals("ownership_adjustment_report_Test_scenario_name_" +
+            CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv", streamSource.getFileName());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        verify(streamSourceHandler, reportService);
     }
 }

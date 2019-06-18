@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.ui.common.component.CsvStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportWidget;
@@ -108,7 +109,7 @@ public class SummaryMarketReportWidget extends Window implements ISummaryMarketR
         clearButton.addClickListener(event -> checkBoxGroup.clear());
         exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         exportButton.setEnabled(false);
-        OnDemandFileDownloader downloader = new OnDemandFileDownloader(controller.getSummaryMarketReportStreamSource());
+        OnDemandFileDownloader downloader = new OnDemandFileDownloader(new CsvStreamSource(controller));
         downloader.extend(exportButton);
         HorizontalLayout layout = new HorizontalLayout(exportButton, clearButton, closeButton);
         layout.setMargin(new MarginInfo(false, false, false, false));
