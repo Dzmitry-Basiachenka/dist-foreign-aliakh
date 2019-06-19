@@ -7,7 +7,10 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +53,8 @@ public class SendScenarioToLmTest {
     private SqlSessionTemplate sqlSessionTemplate;
     @Autowired
     private SqsClientMock sqsClientMock;
+    @Autowired
+    private IUsageService usageService;
 
     private static final String FAS_SCENARIO_ID = "4c014547-06f3-4840-94ff-6249730d537d";
     private static final String NTS_SCENARIO_ID = "67027e15-17c6-4b9b-b7f0-12ec414ad344";
@@ -79,6 +84,7 @@ public class SendScenarioToLmTest {
     @Test
     public void testSendToLmNts() throws IOException {
         assertTrue(CollectionUtils.isEmpty(findUsageDtos(NTS_SCENARIO_ID)));
+        assertPreServiceFeeFundUsages(UsageStatusEnum.TO_BE_DISTRIBUTED);
         Scenario scenario = new Scenario();
         scenario.setId(NTS_SCENARIO_ID);
         scenario.setProductFamily("NTS");
@@ -91,6 +97,15 @@ public class SendScenarioToLmTest {
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
         IntStream.range(0, usageDtos.size())
             .forEach(index -> assertUsageDto(expectedUsageDtos.get(index), usageDtos.get(index), false));
+        assertPreServiceFeeFundUsages(UsageStatusEnum.ARCHIVED);
+    }
+
+    private void assertPreServiceFeeFundUsages(UsageStatusEnum status) {
+        AuditFilter filter = new AuditFilter();
+        filter.setBatchesIds(Collections.singleton("a3af8396-acf3-432b-9f23-7554e3d8f50d"));
+        List<UsageDto> usages = usageService.getForAudit(filter, null, null);
+        assertEquals(2, usages.size());
+        usages.forEach(usage -> assertEquals(status, usage.getStatus()));
     }
 
     private List<UsageDto> findUsageDtos(String scenarioId) {

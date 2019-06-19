@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -16,6 +17,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
@@ -93,6 +95,8 @@ public class UsageArchiveRepositoryIntegrationTest {
     private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_EXPECTED_REPORTS);
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
+    @Autowired
+    private IUsageRepository usageRepository;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
@@ -390,6 +394,32 @@ public class UsageArchiveRepositoryIntegrationTest {
         PaidUsage paidUsage = buildPaidUsage();
         usageArchiveRepository.insertPaid(paidUsage);
         assertUsagePaidInformation(paidUsage);
+    }
+
+    @Test
+    public void testMoveFundToArchive() {
+        List<String> usageIds = Arrays.asList("677e1740-c791-4929-87f9-e7fc68dd4699",
+            "2a868c86-a639-400f-b407-0602dd7ec8df", "9abfd0a0-2779-4321-af07-ebabe22627a0");
+        assertEquals(0, usageArchiveRepository.findUsageInformationById(usageIds).size());
+        assertEquals(3, usageRepository.findByIds(usageIds).size());
+        usageArchiveRepository.moveFundToArchive("79d47e6e-2e84-4e9a-b92c-ab8d745935ef");
+        assertEquals(1, usageRepository.findByIds(usageIds).size());
+        List<Usage> archivedUsages = usageArchiveRepository.findUsageInformationById(usageIds);
+        assertEquals(2, usageArchiveRepository.findUsageInformationById(usageIds).size());
+        archivedUsages.forEach(usage -> {
+            assertNull(usage.getScenarioId());
+            assertNull(usage.getRightsholder().getAccountNumber());
+            assertNull(usage.getPayee().getAccountNumber());
+            assertNull(usage.getWrWrkInst());
+            assertEquals(UsageStatusEnum.ARCHIVED, usage.getStatus());
+            assertEquals("NTS", usage.getProductFamily());
+            assertEquals("Doc Del", usage.getMarket());
+            assertEquals(Integer.valueOf(2013), usage.getMarketPeriodFrom());
+            assertEquals(Integer.valueOf(2017), usage.getMarketPeriodTo());
+            assertEquals(new BigDecimal("0.0000000000"), usage.getNetAmount());
+            assertEquals(new BigDecimal("0.0000000000"), usage.getServiceFeeAmount());
+            assertEquals(new BigDecimal("99.9900000000"), usage.getGrossAmount());
+        });
     }
 
     @Test

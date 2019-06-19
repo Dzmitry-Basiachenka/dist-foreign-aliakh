@@ -490,6 +490,8 @@ public class UsageServiceTest {
         expectLastCall().once();
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         expectLastCall().once();
+        usageArchiveRepository.moveFundToArchive(SCENARIO_ID);
+        expectLastCall().once();
         replay(usageRepository, usageArchiveRepository);
         usageService.moveToArchive(scenario);
         verify(usageRepository, usageArchiveRepository);

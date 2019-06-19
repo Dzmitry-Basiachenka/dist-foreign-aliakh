@@ -22,6 +22,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.io.PipedOutputStream;
@@ -173,6 +174,12 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     @Override
     public void insertPaid(PaidUsage paidUsage) {
         insert("IUsageArchiveMapper.insertPaid", Objects.requireNonNull(paidUsage));
+    }
+
+    @Override
+    public void moveFundToArchive(String scenarioId) {
+        checkArgument(StringUtils.isNotBlank(scenarioId));
+        insert("IUsageArchiveMapper.moveFundToArchive", scenarioId);
     }
 
     @Override
