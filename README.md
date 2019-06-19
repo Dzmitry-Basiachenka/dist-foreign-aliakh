@@ -1,3 +1,13 @@
+6.0.1
+-
+* B-23120 FDA: Apply additional preservice fee funds: implement functionality to display only available for attaching to scenario Pre Service fee funds
+* B-23120 FDA: Apply additional preservice fee funds: implement logic for moving TO_BE_DISTRIBUTED usage to archive table during sending scenario to LM
+* B-51661 Tech Debt: FDA: create ServiceTestHelper and move REST-expectation methods
+* B-51661 Tech Debt: FDA: introduce common approach for generating CSV reports
+* B-52145 FDA: Send NTS details to LM: implement integration test for sending NTS scenario to LM
+* B-52145 FDA: Send NTS detals to LM: implement service logic for grouping NTS usages by RH and sending to LM
+* CDP-769 FDA: Delete batch/fundpool functionality is available for Manager and View Only roles
+
 6.0.0
 -
 * B-23118 FDA: Calculate the service fee for NTS details for each RH: Implement query to retrieve usages for NTS scenario service fee calculation
