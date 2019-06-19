@@ -5,9 +5,9 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
-
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 
@@ -81,7 +81,7 @@ public class ReconcileRightsholdersTest {
             .forScenario(buildScenario("04263c90-cb54-44f0-b354-a901586e5801", "Test Reconcile rightsholders 2"))
             .expectRmsCall("reconcileRightsholders/rms_with_discrepancies_request.json",
                 "reconcileRightsholders/rms_with_discrepancies_response.json")
-            .expectPrmCall("reconcileRightsholders/prm_with_discrepancies_response.json")
+            .expectPrmCall(1000002137L, "reconcileRightsholders/prm_with_discrepancies_response.json")
             .expectRollups("reconcileRightsholders/rollups_with_discrepancies_response.json",
                 "f0ba198d-14fd-49c9-a2c3-ffc65b2f14af", "cd1d10f8-c625-4634-afee-9b983071e725")
             .expectPreferences("reconcileRightsholders/preferences_with_discrepancies_response.json",

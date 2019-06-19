@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -26,15 +25,7 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
-import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -55,22 +46,17 @@ import java.util.Objects;
 public class NtsScenarioWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     @Autowired
+    private IScenarioService scenarioService;
+    @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
-    private IScenarioService scenarioService;
-    @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
-    private AsyncRestTemplate asyncRestTemplate;
-    @Autowired
     private SqsClientMock sqsClientMock;
-
-    @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
-    private boolean prmRightsholderAsync;
+    @Autowired
+    private ServiceTestHelper testHelper;
 
     private String expectedRmsRequest;
     private String expectedRmsResponse;
@@ -161,22 +147,21 @@ public class NtsScenarioWorkflowIntegrationTestBuilder implements Builder<Runner
      */
     public class Runner {
 
-        private MockRestServiceServer mockServer;
-        private MockRestServiceServer asyncMockServer;
         private List<String> actualUsageIds;
         private Scenario actualScenario;
 
         public void run() {
-            createRestServer();
-            expectGetRmsRights();
+            testHelper.createRestServer();
+            testHelper.expectGetRmsRights(expectedRmsRequest, expectedRmsResponse);
             if (Objects.nonNull(expectedPrmResponse)) {
-                expectPrmCall();
+                testHelper.expectPrmCall(expectedPrmResponse, expectedPrmAccountNumber);
             }
             if (Objects.nonNull(expectedOracleAccountNumber)) {
-                expectOracleCall();
+                testHelper.expectOracleCall(expectedOracleResponse, expectedOracleAccountNumber);
+
             }
             if (Objects.nonNull(expectedPreferencesResponse)) {
-                expectGetPreferences();
+                testHelper.expectGetPreferences(expectedPreferencesRightsholderId, expectedPreferencesResponse);
             }
             loadNtsBatch();
             createScenario();
@@ -186,7 +171,7 @@ public class NtsScenarioWorkflowIntegrationTestBuilder implements Builder<Runner
             assertScenario();
             assertArchivedUsages();
             assertAudit();
-            verifyRestServer();
+            testHelper.verifyRestServer();
         }
 
         private void loadNtsBatch() {
@@ -220,6 +205,20 @@ public class NtsScenarioWorkflowIntegrationTestBuilder implements Builder<Runner
             assertEquals(expectedScenario.getStatus(), actualScenario.getStatus());
         }
 
+        private void assertAudit() {
+            actualUsageIds.forEach(Objects.isNull(expectedAudit)
+                ? usageId -> assertTrue(CollectionUtils.isEmpty(usageAuditService.getUsageAudit(usageId)))
+                : this::assertAudit);
+        }
+
+        private void assertAudit(String usageId) {
+            List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
+            assertEquals(1, CollectionUtils.size(auditItems));
+            UsageAuditItem auditItem = auditItems.get(0);
+            assertEquals(expectedAudit.getActionType(), auditItem.getActionType());
+            assertEquals(expectedAudit.getActionReason(), auditItem.getActionReason());
+        }
+
         private void assertArchivedUsages() {
             List<UsageDto> actualUsages =
                 usageArchiveRepository.findByScenarioIdAndRhAccountNumber(actualScenario.getId(),
@@ -248,70 +247,6 @@ public class NtsScenarioWorkflowIntegrationTestBuilder implements Builder<Runner
             assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
             assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
             assertEquals(expectedUsage.getRightsholder().getAccountNumber(), actualUsage.getRhAccountNumber());
-        }
-
-        private void assertAudit() {
-            actualUsageIds.forEach(Objects.isNull(expectedAudit)
-                ? usageId -> assertTrue(CollectionUtils.isEmpty(usageAuditService.getUsageAudit(usageId)))
-                : this::assertAudit);
-        }
-
-        private void assertAudit(String usageId) {
-            List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
-            assertEquals(1, CollectionUtils.size(auditItems));
-            UsageAuditItem auditItem = auditItems.get(0);
-            assertEquals(expectedAudit.getActionType(), auditItem.getActionType());
-            assertEquals(expectedAudit.getActionReason(), auditItem.getActionReason());
-        }
-
-        private void createRestServer() {
-            mockServer = MockRestServiceServer.createServer(restTemplate);
-            asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        }
-
-        private void verifyRestServer() {
-            mockServer.verify();
-            asyncMockServer.verify();
-        }
-
-        private void expectGetRmsRights() {
-            mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:9051/rms-rights-rest/rights/"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-                .andExpect(MockRestRequestMatchers.content()
-                    .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedRmsRequest),
-                        Collections.singletonList("period_end_date"))))
-                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
-                    expectedRmsResponse), MediaType.APPLICATION_JSON));
-        }
-
-        private void expectPrmCall() {
-            (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=" +
-                    expectedPrmAccountNumber))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
-                    expectedPrmResponse), MediaType.APPLICATION_JSON));
-        }
-
-        private void expectOracleCall() {
-            mockServer.expect(MockRestRequestMatchers
-                .requestTo(
-                    "http://localhost:8080/oracle-ap-rest/getRightsholderDataInfo?rightsholderAccountNumbers=" +
-                        expectedOracleAccountNumber))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
-                    expectedOracleResponse), MediaType.APPLICATION_JSON));
-        }
-
-        private void expectGetPreferences() {
-            mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
-                    + expectedPreferencesRightsholderId
-                    + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
-                    expectedPreferencesResponse), MediaType.APPLICATION_JSON));
         }
     }
 }

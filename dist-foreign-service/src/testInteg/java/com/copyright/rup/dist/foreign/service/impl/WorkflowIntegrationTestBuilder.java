@@ -37,7 +37,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -46,14 +45,12 @@ import org.apache.commons.lang3.builder.Builder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
-import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
@@ -97,10 +94,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
-    private AsyncRestTemplate asyncRestTemplate;
-    @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
-    private boolean prmRollUpAsync;
-    @Autowired
     @Qualifier("df.service.paidUsageConsumer")
     private PaidUsageConsumerMock paidUsageConsumer;
     @Autowired
@@ -111,6 +104,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IUsageAuditService usageAuditService;
     @Autowired
     private SqsClientMock sqsClientMock;
+    @Autowired
+    private ServiceTestHelper testHelper;
 
     private String usagesCsvFile;
     private List<String> predefinedUsageIds;
@@ -221,19 +216,18 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     public class Runner {
 
         private MockRestServiceServer mockServer;
-        private MockRestServiceServer asyncMockServer;
         private List<PaidUsage> archiveUsages;
 
         private Scenario scenario;
 
         public void run() throws IOException, InterruptedException {
-            createRestServer();
-            expectGetRmsRights();
-            expectGetRollups(expectedRollupsJson, expectedRollupsRightsholdersIds);
-            expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
+            testHelper.createRestServer();
+            testHelper.expectGetRmsRights(expectedRmsRequestsToResponses);
+            testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightsholdersIds);
+            testHelper.expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
             loadUsageBatch();
             addToScenario();
-            verifyRestServer();
+            testHelper.verifyRestServer();
             scenarioService.submit(scenario, "Submitting scenario for testing purposes");
             scenarioService.approve(scenario, "Approving scenario for testing purposes");
             sendScenarioToLm();
@@ -277,46 +271,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void createRestServer() {
             mockServer = MockRestServiceServer.createServer(restTemplate);
-            asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        }
-
-        private void verifyRestServer() {
-            mockServer.verify();
-            asyncMockServer.verify();
-        }
-
-        private void expectGetRmsRights() {
-            expectedRmsRequestsToResponses.forEach((expectedRmsRequest, expectedRmsResponse)
-                -> mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:9051/rms-rights-rest/rights/"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-                .andExpect(MockRestRequestMatchers.content()
-                    .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedRmsRequest),
-                        Lists.newArrayList("period_end_date"))))
-                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
-                    expectedRmsResponse),
-                    MediaType.APPLICATION_JSON)));
-        }
-
-        private void expectGetPreferences(String fileName, List<String> rightsholderIds) {
-            rightsholderIds.forEach(rightsholderId ->
-                mockServer.expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
-                        + rightsholderId
-                        + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
-                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON)));
-        }
-
-        private void expectGetRollups(String fileName, List<String> rightsholdersIds) {
-            rightsholdersIds.forEach(rightsholdersId ->
-                (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollupv2?orgIds=" +
-                        rightsholdersId + "&relationshipCode=PARENT&prefCodes=payee"))
-                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON)));
         }
 
         void sendScenarioToLm() {
