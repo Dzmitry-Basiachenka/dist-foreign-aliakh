@@ -16,6 +16,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -52,7 +53,7 @@ import java.util.stream.Collectors;
  * @author Uladzislau Shalamitski
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Windows.class)
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class ViewUsageBatchWindowTest {
 
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
@@ -62,13 +63,15 @@ public class ViewUsageBatchWindowTest {
 
     @Before
     public void setUp() {
+        mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IUsagesController.class);
+        expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
         expect(controller.getUsageBatches("FAS")).andReturn(Collections.singletonList(new UsageBatch())).once();
-        replay(controller);
+        replay(controller, ForeignSecurityUtils.class);
         viewUsageBatchWindow = new ViewUsageBatchWindow(controller);
-        verify(controller);
-        reset(controller);
+        verify(controller, ForeignSecurityUtils.class);
+        reset(controller, ForeignSecurityUtils.class);
     }
 
     @Test

@@ -141,6 +141,7 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
     private HorizontalLayout initButtonsLayout() {
         applyButton = Buttons.createButton(ForeignUi.getMessage("button.apply"));
         applyButton.addClickListener(event -> trimFilterValues());
+        applyButton.setEnabled(false);
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilter());
         HorizontalLayout layout = new HorizontalLayout(applyButton, clearButton);

@@ -17,6 +17,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -64,7 +65,7 @@ import java.util.stream.IntStream;
  * @author Aliaksandr Radkevich
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({UsagesWidget.class, Windows.class})
+@PrepareForTest({UsagesWidget.class, Windows.class, ForeignSecurityUtils.class})
 public class UsagesWidgetTest {
 
     private static final String FAS_PRODUCT_FAMILY = "FAS";
@@ -115,41 +116,45 @@ public class UsagesWidgetTest {
     @Test
     public void testSelectUsageBatchMenuItems() {
         mockStatic(Windows.class);
+        mockStatic(ForeignSecurityUtils.class);
         Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
         expectLastCall().once();
+        expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(new UsageBatch())).once();
         Windows.showModalWindow(anyObject(ViewUsageBatchWindow.class));
         expectLastCall().once();
-        replay(controller, Windows.class);
+        replay(controller, Windows.class, ForeignSecurityUtils.class);
         List<MenuItem> menuItems = getMenuBarItems(0);
         assertEquals(2, CollectionUtils.size(menuItems));
         MenuItem menuItemLoad = menuItems.get(0);
         MenuItem menuItemView = menuItems.get(1);
         menuItemLoad.getCommand().menuSelected(menuItemLoad);
         menuItemView.getCommand().menuSelected(menuItemView);
-        verify(controller, Windows.class);
+        verify(controller, Windows.class, ForeignSecurityUtils.class);
     }
 
     @Test
     public void testSelectFundPoolMenuItems() {
         mockStatic(Windows.class);
+        mockStatic(ForeignSecurityUtils.class);
         Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
         expectLastCall().once();
+        expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
         expect(controller.getUsageBatches(NTS_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(new UsageBatch())).once();
         Windows.showModalWindow(anyObject(ViewFundPoolWindow.class));
         expectLastCall().once();
-        replay(controller, Windows.class);
+        replay(controller, Windows.class, ForeignSecurityUtils.class);
         List<MenuItem> menuItems = getMenuBarItems(1);
         assertEquals(2, CollectionUtils.size(menuItems));
         MenuItem menuItemLoad = menuItems.get(0);
         MenuItem menuItemView = menuItems.get(1);
         menuItemLoad.getCommand().menuSelected(menuItemLoad);
         menuItemView.getCommand().menuSelected(menuItemView);
-        verify(controller, Windows.class);
+        verify(controller, Windows.class, ForeignSecurityUtils.class);
     }
 
     @Test

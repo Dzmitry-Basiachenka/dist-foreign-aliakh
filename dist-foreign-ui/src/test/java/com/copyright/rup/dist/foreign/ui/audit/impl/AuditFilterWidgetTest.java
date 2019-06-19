@@ -103,15 +103,16 @@ public class AuditFilterWidgetTest {
         assertEquals(2, layout.getComponentCount());
         Component component = layout.getComponent(0);
         assertTrue(component instanceof Button);
-        verifyButton((Button) component, "Apply");
+        verifyButton((Button) component, "Apply", false);
         component = layout.getComponent(1);
         assertTrue(component instanceof Button);
-        verifyButton((Button) component, "Clear");
+        verifyButton((Button) component, "Clear", true);
     }
 
-    private void verifyButton(Button button, String caption) {
+    private void verifyButton(Button button, String caption, boolean enabled) {
         assertEquals(caption, button.getCaption());
         assertEquals(1, button.getListeners(ClickEvent.class).size());
+        assertEquals(enabled, button.isEnabled());
     }
 
     private void verifySize(Component component, Unit widthUnit, float width, Unit heightUnit, float height) {

@@ -8,8 +8,6 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
-import com.copyright.rup.vaadin.widget.api.IMediator;
-import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.ListDataProvider;
@@ -39,8 +37,7 @@ import java.util.Objects;
  *
  * @author Uladzislau Shalamitski
  */
-public abstract class AbstractViewUsageBatchWindow extends Window
-    implements SearchWidget.ISearchController, IMediatorProvider {
+public abstract class AbstractViewUsageBatchWindow extends Window implements SearchWidget.ISearchController {
 
     private final SearchWidget searchWidget;
     private final IUsagesController controller;
@@ -60,6 +57,7 @@ public abstract class AbstractViewUsageBatchWindow extends Window
         searchWidget.setPrompt(getSearchMessage());
         initUsageBatchesGrid();
         HorizontalLayout buttonsLayout = initButtons();
+        initMediator();
         VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
@@ -67,13 +65,6 @@ public abstract class AbstractViewUsageBatchWindow extends Window
         setContent(layout);
         setCaption(getCaptionMessage());
         VaadinUtils.addComponentStyle(this, "view-batch-window");
-    }
-
-    @Override
-    public IMediator initMediator() {
-        ViewUsageBatchMediator mediator = new ViewUsageBatchMediator();
-        mediator.setDeleteButton(deleteButton);
-        return mediator;
     }
 
     @Override
@@ -165,6 +156,12 @@ public abstract class AbstractViewUsageBatchWindow extends Window
      * @param dataGrid instance of {@link Grid}
      */
     abstract void addGridColumns(Grid<UsageBatch> dataGrid);
+
+    private void initMediator() {
+        ViewUsageBatchMediator mediator = new ViewUsageBatchMediator();
+        mediator.setDeleteButton(deleteButton);
+        mediator.applyPermissions();
+    }
 
     private HorizontalLayout initButtons() {
         Button closeButton = Buttons.createCloseButton(this);
