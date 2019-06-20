@@ -2,39 +2,32 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.dist.common.test.JsonMatcher;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableMap;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Map;
 
 /**
  * Verifies functionality for loading researched usages.
@@ -63,17 +56,21 @@ public class LoadResearchedUsagesIntegrationTest {
     private IUsageRepository usageRepository;
     @Autowired
     private IUsageAuditService usageAuditService;
+    @Autowired
+    private ServiceTestHelper testHelper;
 
-    private MockRestServiceServer mockServer;
-    private MockRestServiceServer asyncMockServer;
+    private static final String USAGE_ID_1 = "c219108e-f319-4636-b837-b71bccb29b76";
+    private static final String USAGE_ID_2 = "54580cd4-33b5-4079-bfc7-5c35bf9c5c9e";
+    private static final String USAGE_ID_3 = "644cb9ba-396d-4844-ac83-8053412b7cea";
 
     @Test
     public void testLoadResearchedUsages() {
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json");
-        expectRmsCall("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json");
-        expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json");
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/rms_grants_854030732_request.json",
+            "rights/rms_grants_empty_response.json");
+        testHelper.expectGetRmsRights("rights/rms_grants_658824345_request.json",
+            "rights/rms_grants_658824345_response.json");
+        testHelper.expectPrmCall("prm/rightsholder_1000023401_response.json", 1000023401L);
         usageService.loadResearchedUsages(Arrays.asList(
             buildResearchedUsage("c219108e-f319-4636-b837-b71bccb29b76", 658824345L, "Medical Journal"),
             buildResearchedUsage("54580cd4-33b5-4079-bfc7-5c35bf9c5c9e", 854030732L, "Technical Journal")));
@@ -83,12 +80,15 @@ public class LoadResearchedUsagesIntegrationTest {
             "Technical Journal", "2998622115929154XX", "VALISSN");
         assertUsage("644cb9ba-396d-4844-ac83-8053412b7cea", UsageStatusEnum.WORK_RESEARCH, null, null, null, null,
             null);
-        assertAudit("c219108e-f319-4636-b837-b71bccb29b76", "Usage has become eligible",
-            "Rightsholder account 1000023401 was found in RMS", "Wr Wrk Inst 658824345 was added based on research");
-        assertAudit("54580cd4-33b5-4079-bfc7-5c35bf9c5c9e", "Rightsholder account for 854030732 was not found in RMS",
-            "Wr Wrk Inst 854030732 was added based on research");
-        assertAudit("644cb9ba-396d-4844-ac83-8053412b7cea");
-        mockServer.verify();
+        testHelper.assertAudit(USAGE_ID_1, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
+            UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible",
+            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000023401 was found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 658824345 was added based on research")));
+        testHelper.assertAudit(USAGE_ID_2, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
+            UsageActionTypeEnum.RH_NOT_FOUND, "Rightsholder account for 854030732 was not found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 854030732 was added based on research")));
+        testHelper.assertAudit(USAGE_ID_3, buildUsageAuditItems(USAGE_ID_3, ImmutableMap.of()));
+        testHelper.verifyRestServer();
     }
 
     private void assertUsage(String usageId, UsageStatusEnum status, Long wrWrkInst, Long rhAccounNumber,
@@ -102,33 +102,6 @@ public class LoadResearchedUsagesIntegrationTest {
         assertEquals(standardNumberType, usage.getStandardNumberType());
     }
 
-    private void assertAudit(String usageId, String... reasons) {
-        List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
-        assertEquals(CollectionUtils.size(auditItems), ArrayUtils.getLength(reasons));
-        IntStream.range(0, reasons.length)
-            .forEach(index -> assertEquals(reasons[index], auditItems.get(index).getActionReason()));
-    }
-
-    private void expectRmsCall(String rmsRequestFileName, String rmsResponseFileName) {
-        mockServer
-            .expect(MockRestRequestMatchers.requestTo("http://localhost:9051/rms-rights-rest/rights/"))
-            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-            .andExpect(MockRestRequestMatchers.content()
-                .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), rmsRequestFileName),
-                    Lists.newArrayList("period_end_date"))))
-            .andRespond(
-                MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), rmsResponseFileName),
-                    MediaType.APPLICATION_JSON));
-    }
-
-    private void expectPrmCall(Long accountNumber, String prmResponseFileName) {
-        (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-            .requestTo("http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=" + accountNumber))
-            .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-            .andRespond(MockRestResponseCreators.withSuccess(
-                TestUtils.fileToString(RightsholderService.class, prmResponseFileName), MediaType.APPLICATION_JSON));
-    }
-
     private ResearchedUsage buildResearchedUsage(String usageId, Long wrWrkInst, String systemTitle) {
         ResearchedUsage researchedUsage = new ResearchedUsage();
         researchedUsage.setStandardNumber("1008902112377654XX");
@@ -136,5 +109,16 @@ public class LoadResearchedUsagesIntegrationTest {
         researchedUsage.setUsageId(usageId);
         researchedUsage.setWrWrkInst(wrWrkInst);
         return researchedUsage;
+    }
+
+    private List<UsageAuditItem> buildUsageAuditItems(String usageId, Map<UsageActionTypeEnum, String> map) {
+        List<UsageAuditItem> usageAuditItems = new ArrayList<>();
+        UsageAuditItem usageAuditItem = new UsageAuditItem();
+        usageAuditItem.setUsageId(usageId);
+        map.forEach((actionTypeEnum, detail) -> {
+            usageAuditItem.setActionType(actionTypeEnum);
+            usageAuditItem.setActionReason(detail);
+        });
+        return usageAuditItems;
     }
 }

@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -69,8 +70,8 @@ public class NtsScenarioWorkflowIntegrationTestBuilder implements Builder<Runner
     private Long expectedPrmAccountNumber;
     private UsageBatch usageBatch;
     private List<Usage> expectedUsages;
-    private UsageAuditItem expectedAudit;
     private Scenario expectedScenario;
+    private UsageAuditItem expectedAudit;
 
     NtsScenarioWorkflowIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
         this.usageBatch = batch;
@@ -208,15 +209,7 @@ public class NtsScenarioWorkflowIntegrationTestBuilder implements Builder<Runner
         private void assertAudit() {
             actualUsageIds.forEach(Objects.isNull(expectedAudit)
                 ? usageId -> assertTrue(CollectionUtils.isEmpty(usageAuditService.getUsageAudit(usageId)))
-                : this::assertAudit);
-        }
-
-        private void assertAudit(String usageId) {
-            List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
-            assertEquals(1, CollectionUtils.size(auditItems));
-            UsageAuditItem auditItem = auditItems.get(0);
-            assertEquals(expectedAudit.getActionType(), auditItem.getActionType());
-            assertEquals(expectedAudit.getActionReason(), auditItem.getActionReason());
+                : usageId -> testHelper.assertAudit(usageId, Collections.singletonList(expectedAudit)));
         }
 
         private void assertArchivedUsages() {

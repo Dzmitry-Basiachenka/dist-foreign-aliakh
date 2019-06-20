@@ -20,6 +20,7 @@ import org.apache.commons.lang3.builder.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -199,15 +200,7 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
         private void assertAudit() {
             actualUsageIds.forEach(Objects.isNull(expectedAudit)
                 ? usageId -> assertTrue(CollectionUtils.isEmpty(usageAuditService.getUsageAudit(usageId)))
-                : this::assertAudit);
-        }
-
-        private void assertAudit(String usageId) {
-            List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
-            assertEquals(1, CollectionUtils.size(auditItems));
-            UsageAuditItem auditItem = auditItems.get(0);
-            assertEquals(expectedAudit.getActionType(), auditItem.getActionType());
-            assertEquals(expectedAudit.getActionReason(), auditItem.getActionReason());
+                : usageId -> testHelper.assertAudit(usageId, Collections.singletonList(expectedAudit)));
         }
     }
 }
