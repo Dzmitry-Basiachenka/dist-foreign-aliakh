@@ -65,7 +65,7 @@
         )
     </insert>
 
-    <insert id="moveFundToArchive" parameterType="string">
+    <insert id="moveFundUsagesToArchive" parameterType="string">
         with fund_pool_id as (
             select
                 nts_fields->>'pre_service_fee_fund_uid' fund_id

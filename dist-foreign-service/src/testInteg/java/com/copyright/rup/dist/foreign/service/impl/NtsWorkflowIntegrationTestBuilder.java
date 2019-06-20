@@ -18,7 +18,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.service.impl.NtsScenarioWorkflowIntegrationTestBuilder.Runner;
+import com.copyright.rup.dist.foreign.service.impl.NtsWorkflowIntegrationTestBuilder.Runner;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Builder for {@link NtsScenarioWorkflowIntegrationTest}.
+ * Builder for {@link NtsWorkflowIntegrationTest}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -44,7 +44,7 @@ import java.util.Objects;
  * @author Pavel Liakh
  */
 @Component
-public class NtsScenarioWorkflowIntegrationTestBuilder implements Builder<Runner> {
+public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     @Autowired
     private IScenarioService scenarioService;
@@ -73,51 +73,51 @@ public class NtsScenarioWorkflowIntegrationTestBuilder implements Builder<Runner
     private Scenario expectedScenario;
     private UsageAuditItem expectedAudit;
 
-    NtsScenarioWorkflowIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
+    NtsWorkflowIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
         this.usageBatch = batch;
         return this;
     }
 
-    NtsScenarioWorkflowIntegrationTestBuilder expectUsage(Usage... usages) {
+    NtsWorkflowIntegrationTestBuilder expectUsage(Usage... usages) {
         this.expectedUsages = Arrays.asList(usages);
         return this;
     }
 
-    NtsScenarioWorkflowIntegrationTestBuilder expectAudit(UsageAuditItem audit) {
+    NtsWorkflowIntegrationTestBuilder expectAudit(UsageAuditItem audit) {
         this.expectedAudit = audit;
         return this;
     }
 
-    NtsScenarioWorkflowIntegrationTestBuilder expectRmsRights(String request, String response) {
+    NtsWorkflowIntegrationTestBuilder expectRmsRights(String request, String response) {
         this.expectedRmsRequest = request;
         this.expectedRmsResponse = response;
         return this;
     }
 
-    NtsScenarioWorkflowIntegrationTestBuilder expectOracleCall(Long accountNumber, String response) {
+    NtsWorkflowIntegrationTestBuilder expectOracleCall(Long accountNumber, String response) {
         this.expectedOracleAccountNumber = accountNumber;
         this.expectedOracleResponse = response;
         return this;
     }
 
-    NtsScenarioWorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, String rightsholderId) {
+    NtsWorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, String rightsholderId) {
         this.expectedPreferencesResponse = preferencesJson;
         this.expectedPreferencesRightsholderId = rightsholderId;
         return this;
     }
 
-    NtsScenarioWorkflowIntegrationTestBuilder expectPrmCall(Long accountNumber, String expectedResponse) {
+    NtsWorkflowIntegrationTestBuilder expectPrmCall(Long accountNumber, String expectedResponse) {
         this.expectedPrmAccountNumber = accountNumber;
         this.expectedPrmResponse = expectedResponse;
         return this;
     }
 
-    NtsScenarioWorkflowIntegrationTestBuilder expectLmDetails(String jsonFile) {
+    NtsWorkflowIntegrationTestBuilder expectLmDetails(String jsonFile) {
         this.expectedLmDetailsJsonFile = jsonFile;
         return this;
     }
 
-    NtsScenarioWorkflowIntegrationTestBuilder expectScenario(Scenario scenario) {
+    NtsWorkflowIntegrationTestBuilder expectScenario(Scenario scenario) {
         this.expectedScenario = scenario;
         return this;
     }

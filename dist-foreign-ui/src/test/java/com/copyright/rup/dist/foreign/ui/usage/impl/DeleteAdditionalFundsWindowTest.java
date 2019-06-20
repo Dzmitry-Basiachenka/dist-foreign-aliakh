@@ -124,7 +124,7 @@ public class DeleteAdditionalFundsWindowTest {
     }
 
     @Test
-    public void testDeleteClickListenerAssociatedWithScenario() {
+    public void testDeleteClickListenerFundAssociatedWithScenario() {
         mockStatic(Windows.class);
         VerticalLayout content = (VerticalLayout) deleteWindow.getContent();
         Grid grid = (Grid) content.getComponent(1);

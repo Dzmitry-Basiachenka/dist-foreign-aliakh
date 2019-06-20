@@ -28,7 +28,7 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '35000')
         }
 
-        // usage will stay in existing scenario after test run
+        // usage won't be added to new scenario during test run
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'fcdaea01-2439-4c51-b3e2-23649cf710c7')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')

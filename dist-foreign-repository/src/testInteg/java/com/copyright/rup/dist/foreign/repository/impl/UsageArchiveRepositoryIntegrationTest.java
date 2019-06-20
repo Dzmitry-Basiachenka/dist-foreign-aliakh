@@ -397,15 +397,15 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    public void testMoveFundToArchive() {
+    public void testMoveFundUsagesToArchive() {
         List<String> usageIds = Arrays.asList("677e1740-c791-4929-87f9-e7fc68dd4699",
             "2a868c86-a639-400f-b407-0602dd7ec8df", "9abfd0a0-2779-4321-af07-ebabe22627a0");
         assertEquals(0, usageArchiveRepository.findUsageInformationById(usageIds).size());
         assertEquals(3, usageRepository.findByIds(usageIds).size());
-        usageArchiveRepository.moveFundToArchive("79d47e6e-2e84-4e9a-b92c-ab8d745935ef");
+        usageArchiveRepository.moveFundUsagesToArchive("79d47e6e-2e84-4e9a-b92c-ab8d745935ef");
         assertEquals(1, usageRepository.findByIds(usageIds).size());
         List<Usage> archivedUsages = usageArchiveRepository.findUsageInformationById(usageIds);
-        assertEquals(2, usageArchiveRepository.findUsageInformationById(usageIds).size());
+        assertEquals(2, archivedUsages.size());
         archivedUsages.forEach(usage -> {
             assertNull(usage.getScenarioId());
             assertNull(usage.getRightsholder().getAccountNumber());

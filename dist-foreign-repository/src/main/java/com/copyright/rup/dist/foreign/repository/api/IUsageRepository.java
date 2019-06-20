@@ -536,13 +536,13 @@ public interface IUsageRepository {
     /**
      * Calculates service fee and net amounts for usages with given RH account number and scenario uid.
      *
-     * @param accountNUmber     rightsholder account number
+     * @param accountNumber     rightsholder account number
      * @param scenarioId        identifier of scenario
      * @param serviceFee        service fee
      * @param participatingFlag participating flag
      * @param userName          user name
      */
-    void calculateAmountsByAccountNumber(Long accountNUmber, String scenarioId, BigDecimal serviceFee,
+    void calculateAmountsByAccountNumber(Long accountNumber, String scenarioId, BigDecimal serviceFee,
                                          boolean participatingFlag, String userName);
 
     /**
