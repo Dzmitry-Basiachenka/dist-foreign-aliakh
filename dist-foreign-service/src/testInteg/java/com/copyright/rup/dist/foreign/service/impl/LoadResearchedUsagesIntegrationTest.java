@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.google.common.collect.ImmutableMap;
@@ -16,12 +15,9 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,18 +40,10 @@ import java.util.Map;
 @TestPropertySource(properties = {"test.liquibase.changelog=load-researched-usages-data-init.groovy"})
 public class LoadResearchedUsagesIntegrationTest {
 
-    @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
-    private boolean prmRightsholderAsync;
-    @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
-    private AsyncRestTemplate asyncRestTemplate;
     @Autowired
     private IUsageService usageService;
     @Autowired
     private IUsageRepository usageRepository;
-    @Autowired
-    private IUsageAuditService usageAuditService;
     @Autowired
     private ServiceTestHelper testHelper;
 
