@@ -5,9 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -17,21 +17,16 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 
-import org.apache.commons.collections4.CollectionUtils;
+import com.google.common.collect.ImmutableMap;
+
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
@@ -40,11 +35,12 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.IntStream;
 
 /**
  * Verifies functionality for loading researched usages.
@@ -65,7 +61,7 @@ public class LoadUsagesIntegrationTest {
     private static final String USAGE_ID_2 = "5ae4880e-0955-4518-8681-2aeeda667474";
     private static final String USAGE_ID_3 = "afef95d3-d525-49ec-91fe-79fdced6830f";
     private static final String USAGE_ID_4 = "ddc1672e-ef63-4965-a6bc-1d299272c953";
-    private static final List<String> IDS = Arrays.asList(USAGE_ID_1, USAGE_ID_2,  USAGE_ID_3, USAGE_ID_4);
+    private static final List<String> IDS = Arrays.asList(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4);
     private static final String TITLE =
         "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )";
     private static final String UPLOADED_REASON = "Uploaded in 'Test_Batch' Batch";
@@ -84,42 +80,40 @@ public class LoadUsagesIntegrationTest {
     private IUsageRepository usageRepository;
     @Autowired
     private IUsageAuditService usageAuditService;
-
-    private MockRestServiceServer mockServer;
-    private MockRestServiceServer asyncMockServer;
+    @Autowired
+    private ServiceTestHelper testHelper;
 
     @Test
     public void testLoadUsages() throws Exception {
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("rights/rms_grants_123059057_request.json", "rights/rms_grants_empty_response.json");
-        expectRmsCall("rights/rms_grants_100011725_request.json", "rights/rms_grants_100011725_response.json");
-        expectPrmCall(1000024950L, "prm/rightsholder_1000024950_response.json");
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/rms_grants_123059057_request.json",
+            "rights/rms_grants_empty_response.json");
+        testHelper.expectGetRmsRights("rights/rms_grants_100011725_request.json",
+            "rights/rms_grants_100011725_response.json");
+        testHelper.expectPrmCall("prm/rightsholder_1000024950_response.json", 1000024950L);
         loadUsageBatch();
         assertUsage(USAGE_ID_1, UsageStatusEnum.NTS_WITHDRAWN, null, null, TITLE, "12345XX-79068", null);
-        assertAudit(USAGE_ID_1,
-            "Detail was made eligible for NTS because sum of gross amounts, grouped by standard number, " +
-                "is less than $100",
-            UPLOADED_REASON);
         assertUsage(USAGE_ID_2, UsageStatusEnum.WORK_NOT_FOUND, null, null,
             "Reclaiming youth at risk : our hope for the future", "12345XX-123117", null);
-        assertAudit(USAGE_ID_2,
-            "Wr Wrk Inst was not found by standard number 12345XX-123117",
-            UPLOADED_REASON);
         assertUsage(USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, 123059057L, null,
             "True directions : living your sacred instructions", null, "VALISBN10");
-        assertAudit(USAGE_ID_3,
-            "Rightsholder account for 123059057 was not found in RMS",
-            "Wr Wrk Inst 123059057 was found by title \"True directions : living your sacred instructions\"",
-            UPLOADED_REASON);
         assertUsage(USAGE_ID_4, UsageStatusEnum.ELIGIBLE, 100011725L, 1000024950L, TITLE, "12345XX-79069", "VALISBN10");
-        assertAudit(USAGE_ID_4,
-            "Usage has become eligible",
-            "Rightsholder account 1000024950 was found in RMS",
-            "Usage was uploaded with Wr Wrk Inst",
-            UPLOADED_REASON);
-        mockServer.verify();
-        asyncMockServer.verify();
+        testHelper.assertAudit(USAGE_ID_1, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
+            UsageActionTypeEnum.ELIGIBLE_FOR_NTS, "Detail was made eligible for NTS because sum of gross amounts, grouped by standard number, " +
+                "is less than $100",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(USAGE_ID_2, buildUsageAuditItems(USAGE_ID_2, ImmutableMap.of(
+            UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst was not found by standard number 12345XX-123117",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(USAGE_ID_3, buildUsageAuditItems(USAGE_ID_3, ImmutableMap.of(
+            UsageActionTypeEnum.RH_NOT_FOUND, "Rightsholder account for 123059057 was not found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 123059057 was found by title \"True directions : living your sacred instructions\"",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(USAGE_ID_4, buildUsageAuditItems(USAGE_ID_4, ImmutableMap.of(
+            UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible",
+            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.verifyRestServer();
     }
 
     private void loadUsageBatch() throws IOException {
@@ -178,30 +172,14 @@ public class LoadUsagesIntegrationTest {
         assertEquals(standardNumberType, usage.getStandardNumberType());
     }
 
-    private void assertAudit(String usageId, String... reasons) {
-        List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
-        assertEquals(CollectionUtils.size(auditItems), ArrayUtils.getLength(reasons));
-        IntStream.range(0, reasons.length)
-            .forEach(index -> assertEquals(reasons[index], auditItems.get(index).getActionReason()));
-    }
-
-    private void expectRmsCall(String rmsRequestFileName, String rmsResponseFileName) {
-        mockServer
-            .expect(MockRestRequestMatchers.requestTo("http://localhost:9051/rms-rights-rest/rights/"))
-            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-            .andExpect(MockRestRequestMatchers.content()
-                .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), rmsRequestFileName),
-                    Collections.singletonList("period_end_date"))))
-            .andRespond(
-                MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), rmsResponseFileName),
-                    MediaType.APPLICATION_JSON));
-    }
-
-    private void expectPrmCall(Long accountNumber, String prmResponseFileName) {
-        (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-            .requestTo("http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=" + accountNumber))
-            .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-            .andRespond(MockRestResponseCreators.withSuccess(
-                TestUtils.fileToString(RightsholderService.class, prmResponseFileName), MediaType.APPLICATION_JSON));
+    private List<UsageAuditItem> buildUsageAuditItems(String usageId, Map<UsageActionTypeEnum, String> map) {
+        List<UsageAuditItem> usageAuditItems = new ArrayList<>();
+        UsageAuditItem usageAuditItem = new UsageAuditItem();
+        usageAuditItem.setUsageId(usageId);
+        map.forEach((actionTypeEnum, detail) -> {
+            usageAuditItem.setActionType(actionTypeEnum);
+            usageAuditItem.setActionReason(detail);
+        });
+        return usageAuditItems;
     }
 }
