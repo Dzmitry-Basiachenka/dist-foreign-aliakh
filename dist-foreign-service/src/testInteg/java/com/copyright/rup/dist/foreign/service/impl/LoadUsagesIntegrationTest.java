@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
@@ -23,12 +22,9 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -66,20 +62,12 @@ public class LoadUsagesIntegrationTest {
         "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )";
     private static final String UPLOADED_REASON = "Uploaded in 'Test_Batch' Batch";
 
-    @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
-    private boolean prmRightsholderAsync;
-    @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
-    private AsyncRestTemplate asyncRestTemplate;
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
     private IUsageRepository usageRepository;
-    @Autowired
-    private IUsageAuditService usageAuditService;
     @Autowired
     private ServiceTestHelper testHelper;
 
@@ -99,7 +87,8 @@ public class LoadUsagesIntegrationTest {
             "True directions : living your sacred instructions", null, "VALISBN10");
         assertUsage(USAGE_ID_4, UsageStatusEnum.ELIGIBLE, 100011725L, 1000024950L, TITLE, "12345XX-79069", "VALISBN10");
         testHelper.assertAudit(USAGE_ID_1, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
-            UsageActionTypeEnum.ELIGIBLE_FOR_NTS, "Detail was made eligible for NTS because sum of gross amounts, grouped by standard number, " +
+            UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
+            "Detail was made eligible for NTS because sum of gross amounts, grouped by standard number, " +
                 "is less than $100",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.assertAudit(USAGE_ID_2, buildUsageAuditItems(USAGE_ID_2, ImmutableMap.of(
@@ -107,7 +96,8 @@ public class LoadUsagesIntegrationTest {
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.assertAudit(USAGE_ID_3, buildUsageAuditItems(USAGE_ID_3, ImmutableMap.of(
             UsageActionTypeEnum.RH_NOT_FOUND, "Rightsholder account for 123059057 was not found in RMS",
-            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 123059057 was found by title \"True directions : living your sacred instructions\"",
+            UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 123059057 was found by title \"True directions : living your sacred instructions\"",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.assertAudit(USAGE_ID_4, buildUsageAuditItems(USAGE_ID_4, ImmutableMap.of(
             UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible",
