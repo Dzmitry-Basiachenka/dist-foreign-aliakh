@@ -566,7 +566,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-06-18-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for testMoveFundToArchive')
+        comment('Inserting test data for testMoveFundUsagesToArchive')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '3d587554-7564-4db9-a67a-8f2b35fa673d')

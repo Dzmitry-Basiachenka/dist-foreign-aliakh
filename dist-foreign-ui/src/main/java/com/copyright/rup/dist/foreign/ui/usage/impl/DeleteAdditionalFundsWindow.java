@@ -97,7 +97,7 @@ class DeleteAdditionalFundsWindow extends Window {
         if (Objects.nonNull(scenarioName)) {
             Windows.showNotificationWindow(
                 ForeignUi.getMessage("message.error.delete_action", "Pre-Service Fee Fund", "scenario",
-                    " " + scenarioName));
+                    ' ' + scenarioName));
         } else {
             Windows.showConfirmDialog(
                 ForeignUi.getMessage("message.confirm.delete_action", fundPool.getName(), "additional fund"),

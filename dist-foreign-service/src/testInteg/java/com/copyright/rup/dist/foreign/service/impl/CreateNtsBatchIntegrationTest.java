@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,7 +70,7 @@ public class CreateNtsBatchIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L))
+            .expectUsages(Collections.singletonList(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L)))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
@@ -83,7 +84,7 @@ public class CreateNtsBatchIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage("Gov", UsageStatusEnum.UNCLASSIFIED, 576324545L))
+            .expectUsages(Collections.singletonList(buildUsage("Gov", UsageStatusEnum.UNCLASSIFIED, 576324545L)))
             .build()
             .run();
     }
@@ -128,7 +129,7 @@ public class CreateNtsBatchIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage("Lib", UsageStatusEnum.ELIGIBLE, 658824345L))
+            .expectUsages(Collections.singletonList(buildUsage("Lib", UsageStatusEnum.ELIGIBLE, 658824345L)))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
@@ -142,7 +143,7 @@ public class CreateNtsBatchIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage("Edu", UsageStatusEnum.ELIGIBLE, 658824345L))
+            .expectUsages(Collections.singletonList(buildUsage("Edu", UsageStatusEnum.ELIGIBLE, 658824345L)))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();

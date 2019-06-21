@@ -72,9 +72,9 @@
         )
     </insert>
 
-    <sql id="selectAmountTable">
+    <sql id="selectUsageAmountsTable">
         <if test="null != scenario.ntsFields.preServiceFeeFundId or scenario.ntsFields.preServiceFeeAmount > 0">
-            recalculated_usage_amounts
+            usage_amounts_with_pre_service_fee
         </if>
         <if test="null == scenario.ntsFields.preServiceFeeFundId and scenario.ntsFields.preServiceFeeAmount == 0">
             usage_amounts
@@ -137,7 +137,7 @@
                 from usage_amounts
             ),
             <!-- Recalculates gross_amount based on Pre-Service fee factor -->
-            recalculated_usage_amounts as (
+            usage_amounts_with_pre_service_fee as (
                 select
                     df_usage_uid,
                     rh_account_number,
@@ -150,7 +150,7 @@
             select
                 rh_account_number,
                 sum(gross_amount) rh_total
-            from <include refid="selectAmountTable"/>
+            from <include refid="selectUsageAmountsTable"/>
             group by rh_account_number
             having sum(gross_amount) &lt; #{scenario.ntsFields.rhMinimumAmount}
         ),
@@ -160,7 +160,7 @@
             from (
                 select coalesce(sum(rh_total), 0) under_minimum_total
                 from under_minimum_rh_totals
-            ) under_minimum, <include refid="selectAmountTable"/>
+            ) under_minimum, <include refid="selectUsageAmountsTable"/>
             group by under_minimum_total
         )
         <!-- Update usages based on rh account numbers -->
@@ -171,7 +171,7 @@
             df_scenario_uid = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then null else #{scenario.id} end,
             gross_amount = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then 0.00 else amounts.gross_amount * (select factor from gt_factor) end,
             <include refid="StoredEntityMapper.update"/>
-        from <include refid="selectAmountTable"/> amounts
+        from <include refid="selectUsageAmountsTable"/> amounts
         where amounts.df_usage_uid = u.df_usage_uid
     </insert>
 

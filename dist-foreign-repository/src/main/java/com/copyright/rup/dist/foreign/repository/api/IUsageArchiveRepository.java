@@ -162,7 +162,7 @@ public interface IUsageArchiveRepository {
      *
      * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
      */
-    void moveFundToArchive(String scenarioId);
+    void moveFundUsagesToArchive(String scenarioId);
 
     /**
      * Finds usage information by provided ids.

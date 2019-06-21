@@ -59,8 +59,7 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
     private String expectedPreferencesRightsholderId;
     private Long expectedPrmAccountNumber;
     private UsageBatch usageBatch;
-    // TODO {pliakh} allow to assert multiple usages
-    private Usage expectedUsages;
+    private List<Usage> expectedUsages;
     private UsageAuditItem expectedAudit;
 
     CreateNtsBatchIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
@@ -68,8 +67,8 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    CreateNtsBatchIntegrationTestBuilder expectUsage(Usage usage) {
-        this.expectedUsages = usage;
+    CreateNtsBatchIntegrationTestBuilder expectUsages(List<Usage> usages) {
+        this.expectedUsages = usages;
         return this;
     }
 
@@ -172,12 +171,17 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
                 assertTrue(CollectionUtils.isEmpty(usageRepository.findByIds(actualUsageIds)));
             } else {
                 List<Usage> actualUsages = usageRepository.findByIds(actualUsageIds);
-                assertEquals(1, actualUsages.size());
-                assertUsage(expectedUsages, actualUsages.get(0));
+                assertEquals(expectedUsages.size(), actualUsages.size());
+                assertUsage(actualUsages.get(0));
             }
         }
 
-        private void assertUsage(Usage expectedUsage, Usage actualUsage) {
+        private void assertUsage(Usage actualUsage) {
+            Usage expectedUsage = expectedUsages.stream()
+                .filter(expected -> expected.getReportedValue().equals(actualUsage.getReportedValue()))
+                .findFirst()
+                .orElse(null);
+            assertNotNull(expectedUsage);
             assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
             assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
             assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());

@@ -40,7 +40,7 @@ import java.util.List;
 @ContextConfiguration("classpath:com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
 @TestPropertySource(properties = {"test.liquibase.changelog=nts-scenario-workflow-data-init.groovy"})
 @Transactional
-public class NtsScenarioWorkflowIntegrationTest {
+public class NtsWorkflowIntegrationTest {
 
     private static final LocalDate DATE = LocalDate.of(2017, 2, 1);
     private static final String BUS_MARKET = "Bus";
@@ -54,7 +54,7 @@ public class NtsScenarioWorkflowIntegrationTest {
     @Autowired
     private List<ICacheService<?, ?>> cacheServices;
     @Autowired
-    private NtsScenarioWorkflowIntegrationTestBuilder testBuilder;
+    private NtsWorkflowIntegrationTestBuilder testBuilder;
 
     @Before
     public void setUp() {
@@ -63,7 +63,7 @@ public class NtsScenarioWorkflowIntegrationTest {
     }
 
     @Test
-    public void testNtsScenarioWorkflow() {
+    public void testNtsWorkflow() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool()))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, "rights/rms_grants_658824345_response.json")

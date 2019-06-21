@@ -490,7 +490,7 @@ public class UsageServiceTest {
         expectLastCall().once();
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         expectLastCall().once();
-        usageArchiveRepository.moveFundToArchive(SCENARIO_ID);
+        usageArchiveRepository.moveFundUsagesToArchive(SCENARIO_ID);
         expectLastCall().once();
         replay(usageRepository, usageArchiveRepository);
         usageService.moveToArchive(scenario);
@@ -854,14 +854,14 @@ public class UsageServiceTest {
         expect(rightsholderService.getByScenarioId(SCENARIO_ID))
             .andReturn(Arrays.asList(rightsholder1, rightsholder2)).once();
         expect(prmIntegrationService.isRightsholderParticipating(rightsholder1.getId(), "NTS")).andReturn(true).once();
-        expect(prmIntegrationService.isRightsholderParticipating(rightsholder2.getId(), "NTS")).andReturn(true).once();
-        expect(prmIntegrationService.getRhParticipatingServiceFee(true)).
-            andReturn(SERVICE_FEE).times(2);
+        expect(prmIntegrationService.isRightsholderParticipating(rightsholder2.getId(), "NTS")).andReturn(false).once();
+        expect(prmIntegrationService.getRhParticipatingServiceFee(true)).andReturn(SERVICE_FEE).once();
+        expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(SERVICE_FEE).once();
         usageRepository.calculateAmountsByAccountNumber(rightsholder1.getAccountNumber(), SCENARIO_ID, SERVICE_FEE,
             true, USER_NAME);
         expectLastCall().once();
         usageRepository.calculateAmountsByAccountNumber(rightsholder2.getAccountNumber(), SCENARIO_ID, SERVICE_FEE,
-            true, USER_NAME);
+            false, USER_NAME);
         expectLastCall().once();
         usageRepository.applyPostServiceFeeAmount(scenario.getId());
         expectLastCall().once();

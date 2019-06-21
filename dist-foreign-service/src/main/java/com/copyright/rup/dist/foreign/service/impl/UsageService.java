@@ -339,6 +339,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Transactional
     public List<Usage> moveToArchive(Scenario scenario) {
         LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
         List<Usage> usages = Collections.emptyList();
@@ -354,7 +355,7 @@ public class UsageService implements IUsageService {
                 usage.setWrWrkInst(null);
                 usage.setSystemTitle(null);
             });
-            usageArchiveRepository.moveFundToArchive(scenario.getId());
+            usageArchiveRepository.moveFundUsagesToArchive(scenario.getId());
         }
         usageRepository.deleteByScenarioId(scenario.getId());
         LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
