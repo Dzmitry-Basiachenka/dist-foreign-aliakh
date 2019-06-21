@@ -97,7 +97,7 @@ public class StatisticUsageRestTest {
             .andReturn(null).once();
         expect(usageRepository.findByIds(Collections.singletonList(TEST_USAGE_ID)))
             .andReturn(null).once();
-        expect(usageArchiveRepository.findUsageInformationById(Collections.singletonList(TEST_USAGE_ID)))
+        expect(usageArchiveRepository.findByIds(Collections.singletonList(TEST_USAGE_ID)))
             .andReturn(null).once();
         replay(usageAuditRepository);
         mockMvc.perform(MockMvcRequestBuilders.get(PATH + TEST_USAGE_ID)

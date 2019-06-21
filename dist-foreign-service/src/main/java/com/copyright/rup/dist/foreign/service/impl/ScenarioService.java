@@ -72,6 +72,8 @@ public class ScenarioService implements IScenarioService {
 
     @Value("$RUP{dist.foreign.discrepancy.partition_size}")
     private int discrepancyPartitionSize;
+    @Value("$RUP{dist.foreign.usages.batch_size}")
+    private int batchSize;
     @Autowired
     private IScenarioRepository scenarioRepository;
     @Autowired
@@ -218,11 +220,22 @@ public class ScenarioService implements IScenarioService {
     public void sendToLm(Scenario scenario) {
         LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
             RupContextUtils.getUserName());
-        List<Usage> usages = usageService.moveToArchive(scenario);
-        if (CollectionUtils.isNotEmpty(usages)) {
+        List<String> usageIds = usageService.moveToArchive(scenario);
+        if (CollectionUtils.isNotEmpty(usageIds)) {
+            Iterables.partition(usageIds, batchSize)
+                .forEach(partition -> {
+                    List<Usage> usages = usageService.getArchivedUsagesByIds(usageIds);
+                    if (FdaConstants.NTS_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
+                        usages.forEach(usage -> {
+                            //for NTS usages System should not send work information to LM
+                            usage.setWrWrkInst(null);
+                            usage.setSystemTitle(null);
+                        });
+                    }
+                    lmIntegrationService.sendToLm(usages.stream().map(ExternalUsage::new).collect(Collectors.toList()));
+                });
             changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
                 StringUtils.EMPTY);
-            lmIntegrationService.sendToLm(usages.stream().map(ExternalUsage::new).collect(Collectors.toList()));
             LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
                 RupContextUtils.getUserName());
         } else {

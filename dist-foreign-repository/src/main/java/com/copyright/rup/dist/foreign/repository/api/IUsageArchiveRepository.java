@@ -165,10 +165,30 @@ public interface IUsageArchiveRepository {
     void moveFundUsagesToArchive(String scenarioId);
 
     /**
-     * Finds usage information by provided ids.
+     * Copies usages related to specified scenario to archive table with {@link UsageStatusEnum#SENT_TO_LM} status.
+     *
+     * @param scenarioId  {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param userName    name of user who peforms action
+     * @return list of moved usage ids
+     */
+    List<String> copyToArchiveByScenarioId(String scenarioId, String userName);
+
+    /**
+     * Copies NTS usages grouped by RH and related to specified scenario to archive table
+     * with {@link UsageStatusEnum#SENT_TO_LM} status.
+     * Generates new UUID for usage and sets Wr Wrk Inst and Work Title predefined for NTS.
+     *
+     * @param scenarioId  {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param userName    name of user who peforms action
+     * @return list of moved usage ids
+     */
+    List<String> copyNtsToArchiveByScenarioId(String scenarioId, String userName);
+
+    /**
+     * Finds {@link Usage}s with populated RH uid information by specified ids.
      *
      * @param usageIds list of usage ids
-     * @return list of found usages
+     * @return list of found {@link Usage}s
      */
-    List<Usage> findUsageInformationById(List<String> usageIds);
+    List<Usage> findByIds(List<String> usageIds);
 }

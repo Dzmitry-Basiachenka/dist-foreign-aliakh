@@ -465,36 +465,34 @@ public class UsageServiceTest {
 
     @Test
     public void testMoveToArchivedFas() {
-        Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
-        Usage usage2 = buildUsage(RupPersistUtils.generateUuid());
-        List<Usage> usages = Lists.newArrayList(usage1, usage2);
-        expect(usageRepository.findByScenarioId(scenario.getId())).andReturn(usages).once();
-        usageArchiveRepository.insert(usage1);
-        expectLastCall().once();
-        usageArchiveRepository.insert(usage2);
-        expectLastCall().once();
+        mockStatic(RupContextUtils.class);
+        scenario.setProductFamily("FAS");
+        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(usageArchiveRepository.copyToArchiveByScenarioId(scenario.getId(), USER_NAME))
+            .andReturn(usageIds).once();
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         expectLastCall().once();
-        replay(usageRepository, usageArchiveRepository);
+        replay(usageRepository, usageArchiveRepository, RupContextUtils.class);
         usageService.moveToArchive(scenario);
-        verify(usageRepository, usageArchiveRepository);
+        verify(usageRepository, usageArchiveRepository, RupContextUtils.class);
     }
 
     @Test
     public void testMoveToArchivedNts() {
+        mockStatic(RupContextUtils.class);
         scenario.setProductFamily("NTS");
-        Usage usage = buildUsage(RupPersistUtils.generateUuid());
-        List<Usage> usages = Lists.newArrayList(usage);
-        expect(usageRepository.findNtsGroupedByRhAndScenarioId(scenario.getId())).andReturn(usages).once();
-        usageArchiveRepository.insert(usage);
-        expectLastCall().once();
+        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(usageArchiveRepository.copyNtsToArchiveByScenarioId(scenario.getId(), USER_NAME))
+            .andReturn(usageIds).once();
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         expectLastCall().once();
         usageArchiveRepository.moveFundUsagesToArchive(SCENARIO_ID);
         expectLastCall().once();
-        replay(usageRepository, usageArchiveRepository);
+        replay(usageRepository, usageArchiveRepository, RupContextUtils.class);
         usageService.moveToArchive(scenario);
-        verify(usageRepository, usageArchiveRepository);
+        verify(usageRepository, usageArchiveRepository, RupContextUtils.class);
     }
 
     @Test
@@ -545,7 +543,7 @@ public class UsageServiceTest {
         PaidUsage usageInPaidStatus = buildPaidUsage(UsageStatusEnum.PAID, false, null);
         expect(rightsholderService.findAccountNumbersByRightsholderIds(RH_IDS))
             .andReturn(IDS_TO_ACCOUNT_NUMBER_MAP).once();
-        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+        expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
             .andReturn(ImmutableList.of(usage))
             .once();
         usageInPaidStatus.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
@@ -566,7 +564,7 @@ public class UsageServiceTest {
         PaidUsage usageInPaidStatus = buildPaidUsage(UsageStatusEnum.PAID, false, true);
         expect(rightsholderService.findAccountNumbersByRightsholderIds(RH_IDS))
             .andReturn(IDS_TO_ACCOUNT_NUMBER_MAP).once();
-        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+        expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
             .andReturn(ImmutableList.of(usage))
             .once();
         usageInPaidStatus.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
@@ -591,7 +589,7 @@ public class UsageServiceTest {
         Usage storedUsage = buildUsage(USAGE_ID_1);
         expect(rightsholderService.findAccountNumbersByRightsholderIds(RH_IDS))
             .andReturn(IDS_TO_ACCOUNT_NUMBER_MAP).once();
-        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+        expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
             .andReturn(ImmutableList.of(storedUsage))
             .once();
         String newUsageId = "93c24edf-bc4d-406e-bd54-9a7379a6e532";
@@ -617,7 +615,7 @@ public class UsageServiceTest {
         Usage storedUsage = buildUsage(USAGE_ID_1);
         expect(rightsholderService.findAccountNumbersByRightsholderIds(RH_IDS))
             .andReturn(IDS_TO_ACCOUNT_NUMBER_MAP).once();
-        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+        expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
             .andReturn(ImmutableList.of(storedUsage))
             .once();
         String newUsageId = "2a1aa09c-0de7-49f7-a41e-f2a05c7bb43f";
@@ -643,7 +641,7 @@ public class UsageServiceTest {
         Usage storedUsage = buildUsage(USAGE_ID_1);
         expect(rightsholderService.findAccountNumbersByRightsholderIds(RH_IDS))
             .andReturn(IDS_TO_ACCOUNT_NUMBER_MAP).once();
-        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+        expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
             .andReturn(ImmutableList.of(storedUsage))
             .once();
         String newUsageId = "93c24edf-bc4d-406e-bd54-9a7379a6e532";
@@ -669,7 +667,7 @@ public class UsageServiceTest {
         Usage storedUsage = buildUsage(USAGE_ID_1);
         expect(rightsholderService.findAccountNumbersByRightsholderIds(RH_IDS))
             .andReturn(IDS_TO_ACCOUNT_NUMBER_MAP).once();
-        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+        expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
             .andReturn(ImmutableList.of(storedUsage))
             .once();
         String newUsageId = "ef671fd5-6610-450e-9326-255a48230e3b";
@@ -692,7 +690,7 @@ public class UsageServiceTest {
     public void testUpdatePaidInfoNotFoundUsage() {
         PaidUsage paidUsage = new PaidUsage();
         paidUsage.setId(USAGE_ID_1);
-        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+        expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
             .andReturn(Lists.newArrayList()).once();
         replay(usageArchiveRepository, rightsholderService);
         usageService.updatePaidInfo(Collections.singletonList(paidUsage));

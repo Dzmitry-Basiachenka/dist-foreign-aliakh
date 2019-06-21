@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -77,6 +78,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
     private static final String PUBLISHER = "Publisher";
     private static final String MARKET = "Market";
+    private static final String USER = "user@copyright.com";
     private static final Integer MARKED_PERIOD_FROM = 2015;
     private static final Integer MARKED_PERIOD_TO = 2017;
     private static final String AUTHOR = "Author";
@@ -86,6 +88,8 @@ public class UsageArchiveRepositoryIntegrationTest {
         LocalDate.of(2016, 11, 3).atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime();
     private static final Integer NUMBER_OF_COPIES = 155;
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
+    private static final String FAS_SCENARIO_ID = "5f7c87e7-34d9-4548-8b85-97e405235f4a";
+    private static final String NTS_SCENARIO_ID = "e65833c8-3a40-47ba-98fe-21aba07ef11e";
     private static final String PAID_USAGE_ID = "3f8ce825-6514-4307-a118-3ec89187bef3";
     private static final String LM_DETAIL_ID = "5963a9c2-b639-468c-a4c1-02101a4597c6";
     private static final String PATH_TO_EXPECTED_REPORTS =
@@ -400,11 +404,11 @@ public class UsageArchiveRepositoryIntegrationTest {
     public void testMoveFundUsagesToArchive() {
         List<String> usageIds = Arrays.asList("677e1740-c791-4929-87f9-e7fc68dd4699",
             "2a868c86-a639-400f-b407-0602dd7ec8df", "9abfd0a0-2779-4321-af07-ebabe22627a0");
-        assertEquals(0, usageArchiveRepository.findUsageInformationById(usageIds).size());
+        assertEquals(0, usageArchiveRepository.findByIds(usageIds).size());
         assertEquals(3, usageRepository.findByIds(usageIds).size());
         usageArchiveRepository.moveFundUsagesToArchive("79d47e6e-2e84-4e9a-b92c-ab8d745935ef");
         assertEquals(1, usageRepository.findByIds(usageIds).size());
-        List<Usage> archivedUsages = usageArchiveRepository.findUsageInformationById(usageIds);
+        List<Usage> archivedUsages = usageArchiveRepository.findByIds(usageIds);
         assertEquals(2, archivedUsages.size());
         archivedUsages.forEach(usage -> {
             assertNull(usage.getScenarioId());
@@ -423,19 +427,37 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    public void testCopyNtsToArchiveByScenarioId() {
+        List<String> archivedIds = usageArchiveRepository.copyNtsToArchiveByScenarioId(NTS_SCENARIO_ID, USER);
+        assertEquals(1, archivedIds.size());
+        assertEquals(2, usageRepository.findByScenarioId(NTS_SCENARIO_ID).size());
+        List<Usage> archivedUsages = usageArchiveRepository.findByIds(archivedIds);
+        assertEquals(1, archivedUsages.size());
+        verifyNtsCopiedUsage(archivedUsages.get(0));
+    }
+
+    @Test
+    public void testCopyFasToArchiveByScenarioId() {
+        List<String> archivedIds = usageArchiveRepository.copyToArchiveByScenarioId(FAS_SCENARIO_ID, USER);
+        assertEquals(1, archivedIds.size());
+        assertEquals(1, usageRepository.findByScenarioId(FAS_SCENARIO_ID).size());
+        List<Usage> archivedUsages = usageArchiveRepository.findByIds(archivedIds);
+        assertEquals(1, archivedUsages.size());
+        verifyFasCopiedUsage(archivedUsages.get(0));
+    }
+
+    @Test
     public void testFindUsageInformationById() {
         Usage expectedUsage = buildUsage(RupPersistUtils.generateUuid(), "56282dbc-2468-48d4-b926-93d3458a656a");
         usageArchiveRepository.insert(expectedUsage);
-        List<Usage> actualUsages =
-            usageArchiveRepository.findUsageInformationById(ImmutableList.of(expectedUsage.getId()));
+        List<Usage> actualUsages = usageArchiveRepository.findByIds(ImmutableList.of(expectedUsage.getId()));
         assertTrue(CollectionUtils.isNotEmpty(actualUsages));
         assertEquals(1, CollectionUtils.size(actualUsages));
         assertUsage(expectedUsage, actualUsages.get(0));
     }
 
     private void assertUsagePaidInformation(PaidUsage expectedPaidUsage) {
-        List<Usage> usages =
-            usageArchiveRepository.findUsageInformationById(ImmutableList.of(expectedPaidUsage.getId()));
+        List<Usage> usages = usageArchiveRepository.findByIds(ImmutableList.of(expectedPaidUsage.getId()));
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(1, CollectionUtils.size(usages));
         assertUsage(expectedPaidUsage, usages.get(0));
@@ -578,5 +600,64 @@ public class UsageArchiveRepositoryIntegrationTest {
         usage.setGrossAmount(GROSS_AMOUNT);
         usage.setNetAmount(new BigDecimal("25.1500000000"));
         usage.setComment("usage from usages.csv");
+    }
+
+    private void verifyCommonArchivedUsageFields(Usage usage, BigDecimal reportedValue, BigDecimal netAmount,
+                                                 BigDecimal serviceFeeAmount, BigDecimal grossAmount) {
+        assertEquals("5bcf2c37-2f32-48e9-90fe-c9d75298eeed", usage.getRightsholder().getId());
+        assertEquals(Long.valueOf(1000002859), usage.getRightsholder().getAccountNumber());
+        assertEquals(reportedValue, usage.getReportedValue());
+        assertEquals(netAmount, usage.getNetAmount());
+        assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
+        assertEquals(new BigDecimal("0.32000"), usage.getServiceFee());
+        assertEquals(grossAmount, usage.getGrossAmount());
+        assertEquals(Long.valueOf(1000002859), usage.getPayee().getAccountNumber());
+        assertFalse(usage.isRhParticipating());
+        assertEquals(USER, usage.getCreateUser());
+        assertEquals(USER, usage.getUpdateUser());
+        assertNull(usage.getStandardNumberType());
+        assertNull(usage.getAuthor());
+        assertNull(usage.getPublisher());
+        assertNull(usage.getNumberOfCopies());
+        assertNull(usage.getComment());
+    }
+
+    private void verifyFasCopiedUsage(Usage usage) {
+        verifyCommonArchivedUsageFields(usage, new BigDecimal("15000.00"), new BigDecimal("4426.3300000000"),
+            new BigDecimal("2082.9800000000"), new BigDecimal("6509.3100000000"));
+        assertEquals("82dff947-9fa8-4aae-9d42-1453c7d56fed", usage.getId());
+        assertEquals("83eef503-0f35-44fc-8b0a-9b6bf6a7f41d", usage.getBatchId());
+        assertEquals("FAS", usage.getProductFamily());
+        assertEquals(FAS_SCENARIO_ID, usage.getScenarioId());
+        assertEquals(Long.valueOf(569526592), usage.getWrWrkInst());
+        assertEquals("Cell Biology", usage.getWorkTitle());
+        assertEquals("Cell Biology", usage.getSystemTitle());
+        assertEquals("0804709114", usage.getStandardNumber());
+        assertEquals("DIN EN 779:2012", usage.getArticle());
+        assertEquals("Univ", usage.getMarket());
+        assertEquals(Integer.valueOf(2013), usage.getMarketPeriodFrom());
+        assertEquals(Integer.valueOf(2017), usage.getMarketPeriodTo());
+    }
+
+    private void verifyNtsCopiedUsage(Usage usage) {
+        verifyCommonArchivedUsageFields(usage, new BigDecimal("0.00"), new BigDecimal("8506.3300000000"),
+            new BigDecimal("4002.9800000000"), new BigDecimal("12509.3100000000"));
+        assertEquals("NTS", usage.getProductFamily());
+        assertEquals("e65833c8-3a40-47ba-98fe-21aba07ef11e", usage.getScenarioId());
+        assertEquals(Long.valueOf(151811999), usage.getWrWrkInst());
+        assertEquals("NON-TITLE NTS", usage.getWorkTitle());
+        assertEquals("NON-TITLE NTS", usage.getSystemTitle());
+        assertNotNull(usage.getId());
+        assertNull(usage.getBatchId());
+        assertNull(usage.getStandardNumber());
+        assertNull(usage.getStandardNumberType());
+        assertNull(usage.getArticle());
+        assertNull(usage.getAuthor());
+        assertNull(usage.getPublisher());
+        assertNull(usage.getNumberOfCopies());
+        assertNull(usage.getMarket());
+        assertNull(usage.getMarketPeriodFrom());
+        assertNull(usage.getMarketPeriodTo());
+        assertNull(usage.getComment());
     }
 }

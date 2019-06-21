@@ -49,7 +49,7 @@ public class StatisticUsageRest implements StatisticUsageApiDelegate {
             if (CollectionUtils.isNotEmpty(usages)) {
                 return new ResponseEntity<>(buildResponse(usages.get(0)), HttpStatus.OK);
             }
-            usages = usageArchiveRepository.findUsageInformationById(Collections.singletonList(usageId));
+            usages = usageArchiveRepository.findByIds(Collections.singletonList(usageId));
             if (CollectionUtils.isNotEmpty(usages)) {
                 return new ResponseEntity<>(buildResponse(usages.get(0)), HttpStatus.OK);
             }
