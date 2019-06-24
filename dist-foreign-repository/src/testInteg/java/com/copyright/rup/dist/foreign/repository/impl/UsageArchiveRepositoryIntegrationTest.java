@@ -233,6 +233,8 @@ public class UsageArchiveRepositoryIntegrationTest {
     public void testFindCountByScenarioIdAndRhAccountNumberNullSearchValue() {
         assertEquals(1, usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009997L, null));
         assertEquals(1, usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000002859L, null));
+        assertEquals(1, usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(
+            "e19570d3-e9a0-4805-90ed-bd5dbcfcf803", 1000002859L, null));
     }
 
     @Test

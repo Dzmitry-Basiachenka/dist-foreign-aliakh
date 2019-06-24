@@ -94,7 +94,8 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
         addColumn(UsageDto::getId, "table.column.detail_id", "detailId", false, 130);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", true, 145);
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", true, 125);
-        addColumn(usageDto -> "FY" + usageDto.getFiscalYear(), "table.column.fiscal_year", "fiscalYear", true, 105);
+        addColumn(usageDto -> Objects.nonNull(usageDto.getFiscalYear()) ? "FY" + usageDto.getFiscalYear() : null,
+            "table.column.fiscal_year", "fiscalYear", true, 105);
         addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber", true, 125);
         addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", true, 135);
         addColumn(usageDto ->
@@ -116,7 +117,8 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
             "reportedValue", STYLE_ALIGN_RIGHT, 130);
         addColumn(usageDto -> CurrencyUtils.format(usageDto.getGrossAmount(), null), "table.column.gross_amount",
             "grossAmount", STYLE_ALIGN_RIGHT, 110);
-        addColumn(usageDto -> CurrencyUtils.format(usageDto.getBatchGrossAmount(), null),
+        addColumn(usageDto -> 0 < BigDecimal.ZERO.compareTo(usageDto.getBatchGrossAmount())
+                ? CurrencyUtils.format(usageDto.getBatchGrossAmount(), null) : null,
             "table.column.batch_gross_amount", "batchGrossAmount", STYLE_ALIGN_RIGHT, 135);
         addColumn(usageDto -> CurrencyUtils.format(usageDto.getServiceFeeAmount(), null),
             "table.column.service_fee_amount", "serviceFeeAmount", STYLE_ALIGN_RIGHT, 150);

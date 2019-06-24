@@ -210,7 +210,7 @@
     <select id="findCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
         select count(1)
         from ${schema}.df_usage_archive u
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rro on ub.rro_account_number = rro.rh_account_number
         where df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
         <if test="null != searchValue">
