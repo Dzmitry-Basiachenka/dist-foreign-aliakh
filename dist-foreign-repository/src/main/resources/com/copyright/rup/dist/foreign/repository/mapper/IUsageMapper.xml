@@ -1628,9 +1628,10 @@
         returning df_usage_uid
     </select>
 
-    <update id="calculateAmountsByAccountNumber" parameterType="map">
+    <update id="calculateAmountsAndUpdatePayeeByAccountNumber" parameterType="map">
         update ${schema}.df_usage
         set
+            payee_account_number = #{payeeAccountNumber},
             is_rh_participating_flag = #{participatingFlag},
             service_fee = #{serviceFee},
             service_fee_amount = gross_amount * #{serviceFee},

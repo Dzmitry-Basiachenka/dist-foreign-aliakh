@@ -139,7 +139,7 @@ public class ScenarioService implements IScenarioService {
             scenarioName, ntsFields, description, usageFilter);
         Scenario scenario = buildNtsScenario(scenarioName, ntsFields, description, usageFilter);
         scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
-        usageService.calculateAmountsForNtsScenario(scenario);
+        usageService.populatePayeeAndCalculateAmountsForNtsScenarioUsages(scenario);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         LOGGER.info("Insert NTS scenario. Finished. Name={}, NtsFields={}, Description={}, UsageFilter={}",

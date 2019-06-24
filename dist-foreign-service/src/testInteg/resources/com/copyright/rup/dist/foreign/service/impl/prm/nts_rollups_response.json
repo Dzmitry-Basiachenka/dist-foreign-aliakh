@@ -1,0 +1,33 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "756299b5-02ce-4f76-b0bc-ee2571cf906e",
+          "relatedExternalOrganizationKey": "7000429266",
+          "pmLicenseProductUid": "NTS",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+          "rollupExternalOrganizationKey": "1000009997"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "85f864f2-30a5-4215-ac4f-f1f541901218",
+          "relatedExternalOrganizationKey": "1000023401",
+          "pmLicenseProductUid": "NTS",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "671b8b20-7335-4938-988e-1da803efa6e3",
+          "rollupExternalOrganizationKey": "1000010029"
+        }
+      ]
+    ]
+  }
+}

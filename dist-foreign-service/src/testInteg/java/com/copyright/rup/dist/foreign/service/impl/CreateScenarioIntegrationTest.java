@@ -149,11 +149,12 @@ public class CreateScenarioIntegrationTest {
     public void testCreateNtsScenario() {
         testBuilder
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
+            .expectRollups("prm/nts_rollups_response.json", RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectPreferences("prm/preferences_response.json", RIGHTSHOLDER_ID_2, RIGHTSHOLDER_ID_5)
             .expectUsages(Arrays.asList(
-                buildUsage("3d921c9c-8036-421a-ab05-39cc4d3c3b68", 7000429266L, null, SERVICE_FEE_32,
+                buildUsage("3d921c9c-8036-421a-ab05-39cc4d3c3b68", 7000429266L, 1000009997L, SERVICE_FEE_32,
                     "83.3578205256", "177.1353686169", "260.4931891425"),
-                buildUsage("91813777-3dd4-4f5f-bb83-ca145866317d", 1000024497L, null, SERVICE_FEE_32,
+                buildUsage("91813777-3dd4-4f5f-bb83-ca145866317d", 1000024497L, 1000024497L, SERVICE_FEE_32,
                     "68.6421794744", "145.8646313831", "214.5068108575")))
             .expectNtsExcludedUsages(Arrays.asList(
                 buildNtsExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),
@@ -170,11 +171,12 @@ public class CreateScenarioIntegrationTest {
     public void testCreateNtsScenarioWithPostServiceFeeAmount() {
         testBuilder
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
+            .expectRollups("prm/nts_rollups_response.json", RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectPreferences("prm/preferences_response.json", RIGHTSHOLDER_ID_2, RIGHTSHOLDER_ID_5)
             .expectUsages(Arrays.asList(
-                buildUsage("3d921c9c-8036-421a-ab05-39cc4d3c3b68", 7000429266L, null, SERVICE_FEE_32,
+                buildUsage("3d921c9c-8036-421a-ab05-39cc4d3c3b68", 7000429266L, 1000009997L, SERVICE_FEE_32,
                     "5.2647044542", "559.8684143076", "565.1331187618"),
-                buildUsage("91813777-3dd4-4f5f-bb83-ca145866317d", 1000024497L, null, SERVICE_FEE_32,
+                buildUsage("91813777-3dd4-4f5f-bb83-ca145866317d", 1000024497L, 1000024497L, SERVICE_FEE_32,
                     "4.3352955458", "461.0315856924", "465.3668812382")))
             .expectNtsExcludedUsages(Arrays.asList(
                 buildNtsExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),

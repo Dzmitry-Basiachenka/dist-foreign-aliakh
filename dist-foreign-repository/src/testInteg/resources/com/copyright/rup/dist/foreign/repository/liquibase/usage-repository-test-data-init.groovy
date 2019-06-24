@@ -1826,7 +1826,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-06-12-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
-        comment('Inserting test data for testCalculateAmountsByAccountNumber')
+        comment('Inserting test data for testCalculateAmountsAndUpdatePayeeByAccountNumber')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: 'd7e9bae8-6b10-4675-9668-8e3605a47dad')

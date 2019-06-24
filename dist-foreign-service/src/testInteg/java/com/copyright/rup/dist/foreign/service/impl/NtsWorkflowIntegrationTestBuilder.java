@@ -58,6 +58,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private ServiceTestHelper testHelper;
 
+    private String expectedRollupsJson;
+    private String expectedRollupsRightholderId;
     private String expectedRmsRequest;
     private String expectedRmsResponse;
     private String expectedOracleResponse;
@@ -71,6 +73,12 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<Usage> expectedUsages;
     private Scenario expectedScenario;
     private UsageAuditItem expectedAudit;
+
+    NtsWorkflowIntegrationTestBuilder expectRollups(String rollupsJson, String rollupsRightsholdersIds) {
+        this.expectedRollupsJson = rollupsJson;
+        this.expectedRollupsRightholderId = rollupsRightsholdersIds;
+        return this;
+    }
 
     NtsWorkflowIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
         this.usageBatch = batch;
@@ -139,6 +147,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         expectedPreferencesResponse = null;
         expectedPreferencesRightsholderId = null;
         expectedLmDetailsJsonFile = null;
+        expectedRollupsJson = null;
+        expectedRollupsRightholderId = null;
         this.sqsClientMock.reset();
     }
 
@@ -158,10 +168,13 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             }
             if (Objects.nonNull(expectedOracleAccountNumber)) {
                 testHelper.expectOracleCall(expectedOracleResponse, expectedOracleAccountNumber);
-
             }
             if (Objects.nonNull(expectedPreferencesResponse)) {
                 testHelper.expectGetPreferences(expectedPreferencesRightsholderId, expectedPreferencesResponse);
+            }
+            if (Objects.nonNull(expectedRollupsJson)) {
+                testHelper.expectGetRollups(expectedRollupsJson,
+                    Collections.singletonList(expectedRollupsRightholderId));
             }
             loadNtsBatch();
             createScenario();
@@ -239,6 +252,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
             assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
             assertEquals(expectedUsage.getRightsholder().getAccountNumber(), actualUsage.getRhAccountNumber());
+            assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayeeAccountNumber());
         }
     }
 }

@@ -66,6 +66,7 @@ public class NtsWorkflowIntegrationTest {
     public void testNtsWorkflow() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool()))
+            .expectRollups("prm/nts_rollups_response.json", RH_ID)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, "rights/rms_grants_658824345_response.json")
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
@@ -122,6 +123,7 @@ public class NtsWorkflowIntegrationTest {
         usage.setWrWrkInst(151811999L);
         usage.setWorkTitle("NON-TITLE NTS");
         usage.setRightsholder(buildRightsholder(1000023401L, "American College of Physicians - Journals"));
+        usage.setPayee(buildRightsholder(1000010029L, "Georg Thieme Verlag KG"));
         usage.setStatus(UsageStatusEnum.SENT_TO_LM);
         usage.setProductFamily("NTS");
         usage.setGrossAmount(new BigDecimal("400.4400000000"));
