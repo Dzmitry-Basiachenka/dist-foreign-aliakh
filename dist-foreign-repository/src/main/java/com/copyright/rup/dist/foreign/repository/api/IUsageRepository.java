@@ -86,15 +86,6 @@ public interface IUsageRepository {
     List<Usage> findByScenarioId(String scenarioId);
 
     /**
-     * Finds {@link Usage}s with defined Wr Wrk Inst and Title specific for NTS
-     * grouped by RH and related to specified scenario id.
-     *
-     * @param scenarioId scenario id
-     * @return list of grouped {@link Usage}s
-     */
-    List<Usage> findNtsGroupedByRhAndScenarioId(String scenarioId);
-
-    /**
      * Finds list of {@link Usage}s by their ids.
      *
      * @param usageIds list of {@link Usage}s identifiers

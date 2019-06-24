@@ -85,6 +85,7 @@ public class ScenarioServiceTest {
         Whitebox.setInternalState(scenarioService, "lmIntegrationService", lmIntegrationService);
         Whitebox.setInternalState(scenarioService, "scenarioUsageFilterService", scenarioUsageFilterService);
         Whitebox.setInternalState(scenarioService, "rightsholderDiscrepancyService", rightsholderDiscrepancyService);
+        Whitebox.setInternalState(scenarioService, "batchSize", 1);
     }
 
     @Test
@@ -220,12 +221,15 @@ public class ScenarioServiceTest {
 
     @Test
     public void testSendToLm() {
+        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
+        Usage usage = new Usage();
+        expect(usageService.moveToArchive(scenario)).andReturn(usageIds).once();
+        expect(usageService.getArchivedUsagesByIds(usageIds)).andReturn(Collections.singletonList(usage));
+        lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(usage)));
+        expectLastCall().once();
         scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
         scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
-        expectLastCall().once();
-        expect(usageService.moveToArchive(scenario)).andReturn(Collections.singletonList(new Usage())).once();
-        lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(new Usage())));
         expectLastCall().once();
         replay(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService);
         scenarioService.sendToLm(scenario);

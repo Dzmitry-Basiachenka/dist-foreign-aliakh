@@ -240,9 +240,9 @@ public interface IUsageService {
      * Moves {@link Usage}s to the archive for given {@link Scenario}.
      *
      * @param scenario {@link Scenario}
-     * @return list of moved to archived {@link Usage}s
+     * @return list of moved to archive {@link Usage}s ids
      */
-    List<Usage> moveToArchive(Scenario scenario);
+    List<String> moveToArchive(Scenario scenario);
 
     /**
      * Gets {@link RightsholderTotalsHolder}s based on {@link Scenario}.
@@ -382,6 +382,14 @@ public interface IUsageService {
      * @return list of {@link Usage}s
      */
     List<Usage> getUsagesByIds(List<String> usageIds);
+
+    /**
+     * Gets list of archived {@link Usage}s by specified {@link Usage} ids.
+     *
+     * @param usageIds list of {@link Usage} ids
+     * @return list of {@link Usage}s
+     */
+    List<Usage> getArchivedUsagesByIds(List<String> usageIds);
 
     /**
      * Gets list of {@link Usage} ids by specified {@link UsageStatusEnum} and product family.

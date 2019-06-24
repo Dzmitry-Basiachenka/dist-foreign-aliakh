@@ -17,7 +17,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
@@ -25,6 +24,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.io.PipedOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -181,7 +181,28 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     }
 
     @Override
-    public List<Usage> findUsageInformationById(List<String> usageIds) {
-        return selectList("IUsageArchiveMapper.findUsageInformationById", ImmutableMap.of("usageIds", usageIds));
+    public List<String> copyToArchiveByScenarioId(String scenarioId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put("createUser", Objects.requireNonNull(userName));
+        params.put("updateUser", userName);
+        return selectList("IUsageArchiveMapper.copyToArchiveByScenarioId", params);
+    }
+
+    @Override
+    public List<String> copyNtsToArchiveByScenarioId(String scenarioId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put("createUser", Objects.requireNonNull(userName));
+        params.put("updateUser", userName);
+        return selectList("IUsageArchiveMapper.copyNtsToArchiveByScenarioId", params);
+    }
+
+    @Override
+    public List<Usage> findByIds(List<String> usageIds) {
+        List<Usage> result = new ArrayList<>();
+        Iterables.partition(Objects.requireNonNull(usageIds), BATCH_SIZE)
+            .forEach(partition -> result.addAll(selectList("IUsageArchiveMapper.findByIds", partition)));
+        return result;
     }
 }

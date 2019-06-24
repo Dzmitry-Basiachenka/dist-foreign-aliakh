@@ -337,14 +337,47 @@
         where status_ind = #{status}
     </select>
 
-    <select id="findUsageInformationById" resultMap="archivedUsageResultMap" parameterType="map">
+    <select id="findByIds" resultMap="archivedUsageResultMap">
         select
-            df_usage_archive_uid,
-            <include refid="IUsageMapper.usageColumns"/>,
-            <include refid="payeeColumns"/>
+            u.df_usage_archive_uid,
+            u.df_usage_batch_uid,
+            u.df_fund_pool_uid,
+            u.df_scenario_uid,
+            u.wr_wrk_inst,
+            u.work_title,
+            u.system_title,
+            u.rh_account_number,
+            rh.df_rightsholder_uid rh_id,
+            rh.name rh_name,
+            u.status_ind,
+            u.product_family,
+            u.article,
+            u.standard_number,
+            u.standard_number_type,
+            u.publisher,
+            u.publication_date,
+            u.market,
+            u.market_period_from,
+            u.market_period_to,
+            u.author,
+            u.number_of_copies,
+            u.reported_value,
+            u.gross_amount,
+            u.service_fee,
+            u.service_fee_amount,
+            u.net_amount,
+            u.payee_account_number,
+            u.is_rh_participating_flag,
+            u.comment,
+            u.created_datetime,
+            u.updated_datetime,
+            u.created_by_user,
+            u.updated_by_user,
+            u.record_version
         from ${schema}.df_usage_archive u
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         where u.df_usage_archive_uid in
-            <foreach collection="usageIds" item="usageId" separator="," open="(" close=")">
+            <foreach collection="list" item="usageId" open="(" separator="," close=")">
                 #{usageId}
             </foreach>
     </select>
@@ -400,4 +433,83 @@
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
+
+    <select id="copyToArchiveByScenarioId" parameterType="map" resultType="string">
+        insert into ${schema}.df_usage_archive (
+            df_usage_archive_uid,
+            <include refid="IUsageMapper.usageColumns"/>,
+            <include refid="payeeColumns"/>,
+            <include refid="StoredEntityMapper.additionalColumns"/>)
+        select
+            df_usage_uid,
+            df_usage_batch_uid,
+            df_scenario_uid,
+            wr_wrk_inst,
+            work_title,
+            system_title,
+            rh_account_number,
+            'SENT_TO_LM',
+            product_family,
+            article,
+            standard_number,
+            standard_number_type,
+            publisher,
+            publication_date,
+            market,
+            market_period_from,
+            market_period_to,
+            author,
+            number_of_copies,
+            reported_value,
+            gross_amount,
+            comment,
+            service_fee,
+            service_fee_amount,
+            net_amount,
+            payee_account_number,
+            is_rh_participating_flag,
+            <include refid="StoredEntityMapper.insert"/>
+        from ${schema}.df_usage
+        where df_scenario_uid = #{scenarioId}
+        returning df_usage_archive_uid
+    </select>
+
+    <select id="copyNtsToArchiveByScenarioId" parameterType="map" resultType="string">
+        insert into ${schema}.df_usage_archive (
+            df_usage_archive_uid,
+            df_scenario_uid,
+            status_ind,
+            rh_account_number,
+            payee_account_number,
+            product_family,
+            wr_wrk_inst,
+            work_title,
+            system_title,
+            gross_amount,
+            service_fee,
+            service_fee_amount,
+            net_amount,
+            is_rh_participating_flag,
+            <include refid="StoredEntityMapper.additionalColumns"/>)
+        select
+            uuid_generate_v4(),
+            df_scenario_uid,
+            'SENT_TO_LM',
+            rh_account_number,
+            payee_account_number,
+            product_family,
+            151811999,
+            'NON-TITLE NTS',
+            'NON-TITLE NTS',
+            sum(gross_amount),
+            service_fee,
+            sum(service_fee_amount),
+            sum(net_amount),
+            is_rh_participating_flag,
+            <include refid="StoredEntityMapper.insert"/>
+            from ${schema}.df_usage
+        where df_scenario_uid = #{scenarioId}
+        group by rh_account_number, product_family, payee_account_number, service_fee, is_rh_participating_flag, df_scenario_uid
+        returning df_usage_archive_uid
+    </select>
 </mapper>
