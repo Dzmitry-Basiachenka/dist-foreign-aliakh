@@ -179,14 +179,14 @@ public interface IUsageService {
     void addUsagesToScenario(List<Usage> usages, Scenario scenario);
 
     /**
-     * Calculates scenario usages amounts by NTS calculation rules.
+     * Populates payee and calculates amounts for usages of given NTS scenario.
      * Calculates service fee and service fee amount based on RHs participation status,
      * proportionally distributes Post Service Fee Amount among usages and updates gross and net amounts,
      * sets participation status.
      *
      * @param scenario scenario
      */
-    void calculateAmountsForNtsScenario(Scenario scenario);
+    void populatePayeeAndCalculateAmountsForNtsScenarioUsages(Scenario scenario);
 
     /**
      * Updates RH account number, payee account number, net amount, service fee amount and RH participating flag

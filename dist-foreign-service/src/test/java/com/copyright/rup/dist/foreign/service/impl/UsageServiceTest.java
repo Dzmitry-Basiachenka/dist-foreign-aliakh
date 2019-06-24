@@ -89,6 +89,7 @@ public class UsageServiceTest {
 
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final String USAGE_ID_2 = "Usage id 2";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
@@ -481,7 +482,7 @@ public class UsageServiceTest {
     @Test
     public void testMoveToArchivedNts() {
         mockStatic(RupContextUtils.class);
-        scenario.setProductFamily("NTS");
+        scenario.setProductFamily(NTS_PRODUCT_FAMILY);
         List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(usageArchiveRepository.copyNtsToArchiveByScenarioId(scenario.getId(), USER_NAME))
@@ -841,30 +842,39 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testCalculateAmountsForNtsScenario() {
+    public void testPopulatePayeeAndCalculateAmountsForNtsScenarioUsages() {
         mockStatic(RupContextUtils.class);
         NtsFields ntsFields = new NtsFields();
         ntsFields.setPostServiceFeeAmount(new BigDecimal("100.500"));
         scenario.setNtsFields(ntsFields);
         Rightsholder rightsholder1 = buildRightsholder(1000009522L);
         Rightsholder rightsholder2 = buildRightsholder(2000009522L);
+        Table<String, String, Long> rollUps = HashBasedTable.create();
+        rollUps.put(rightsholder1.getId(), NTS_PRODUCT_FAMILY, 1000004422L);
+        rollUps.put(rightsholder2.getId(), NTS_PRODUCT_FAMILY, 2000004422L);
+        expect(prmIntegrationService.getRollUps(Sets.newHashSet(rightsholder2.getId(), rightsholder1.getId())))
+            .andReturn(rollUps).once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(rightsholderService.getByScenarioId(SCENARIO_ID))
             .andReturn(Arrays.asList(rightsholder1, rightsholder2)).once();
-        expect(prmIntegrationService.isRightsholderParticipating(rightsholder1.getId(), "NTS")).andReturn(true).once();
-        expect(prmIntegrationService.isRightsholderParticipating(rightsholder2.getId(), "NTS")).andReturn(false).once();
+        expect(prmIntegrationService.isRightsholderParticipating(rightsholder1.getId(), NTS_PRODUCT_FAMILY))
+            .andReturn(true).once();
+        expect(prmIntegrationService.isRightsholderParticipating(rightsholder2.getId(), NTS_PRODUCT_FAMILY))
+            .andReturn(false).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(true)).andReturn(SERVICE_FEE).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(SERVICE_FEE).once();
-        usageRepository.calculateAmountsByAccountNumber(rightsholder1.getAccountNumber(), SCENARIO_ID, SERVICE_FEE,
-            true, USER_NAME);
+        usageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(rightsholder1.getAccountNumber(), SCENARIO_ID,
+            SERVICE_FEE, true, 1000004422L, USER_NAME);
         expectLastCall().once();
-        usageRepository.calculateAmountsByAccountNumber(rightsholder2.getAccountNumber(), SCENARIO_ID, SERVICE_FEE,
-            false, USER_NAME);
+        usageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(rightsholder2.getAccountNumber(), SCENARIO_ID,
+            SERVICE_FEE, false, 2000004422L, USER_NAME);
         expectLastCall().once();
         usageRepository.applyPostServiceFeeAmount(scenario.getId());
         expectLastCall().once();
+        rightsholderService.updateRighstholdersAsync(Sets.newHashSet(2000004422L, 1000004422L));
+        expectLastCall().once();
         replay(usageRepository, prmIntegrationService, rightsholderService, RupContextUtils.class);
-        usageService.calculateAmountsForNtsScenario(scenario);
+        usageService.populatePayeeAndCalculateAmountsForNtsScenarioUsages(scenario);
         verify(usageRepository, prmIntegrationService, rightsholderService, RupContextUtils.class);
     }
 

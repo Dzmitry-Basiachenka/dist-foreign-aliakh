@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
@@ -60,6 +62,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -286,18 +289,26 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
-    public void calculateAmountsForNtsScenario(Scenario scenario) {
+    public void populatePayeeAndCalculateAmountsForNtsScenarioUsages(Scenario scenario) {
         String userName = RupContextUtils.getUserName();
-        rightsholderService.getByScenarioId(scenario.getId()).forEach(rightsholder -> {
+        Set<Long> payeeAccountNumbers = new HashSet<>();
+        List<Rightsholder> rightsholders = rightsholderService.getByScenarioId(scenario.getId());
+        Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(
+            rightsholders.stream().map(BaseEntity::getId).collect(Collectors.toSet()));
+        rightsholders.forEach(rightsholder -> {
+            Long payeeAccountNumber =
+                PrmRollUpService.getPayeeAccountNumber(rollUps, rightsholder, FdaConstants.NTS_PRODUCT_FAMILY);
+            payeeAccountNumbers.add(payeeAccountNumber);
             boolean participationFlag = prmIntegrationService.
                 isRightsholderParticipating(rightsholder.getId(), FdaConstants.NTS_PRODUCT_FAMILY);
             BigDecimal serviceFee = prmIntegrationService.getRhParticipatingServiceFee(participationFlag);
-            usageRepository.calculateAmountsByAccountNumber(rightsholder.getAccountNumber(), scenario.getId(),
-                serviceFee, participationFlag, userName);
+            usageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(rightsholder.getAccountNumber(),
+                scenario.getId(), serviceFee, participationFlag, payeeAccountNumber, userName);
         });
         if (0 != BigDecimal.ZERO.compareTo(scenario.getNtsFields().getPostServiceFeeAmount())) {
             usageRepository.applyPostServiceFeeAmount(scenario.getId());
         }
+        rightsholderService.updateRighstholdersAsync(payeeAccountNumbers);
     }
 
     @Override

@@ -526,15 +526,18 @@ public interface IUsageRepository {
 
     /**
      * Calculates service fee and net amounts for usages with given RH account number and scenario uid.
+     * Sets payee account number, participating flag and service fee percent.
      *
-     * @param accountNumber     rightsholder account number
-     * @param scenarioId        identifier of scenario
-     * @param serviceFee        service fee
-     * @param participatingFlag participating flag
-     * @param userName          user name
+     * @param rhAccountNumber    rightsholder account number
+     * @param scenarioId         identifier of scenario
+     * @param serviceFee         service fee
+     * @param participatingFlag  participating flag
+     * @param payeeAccountNumber payee account number
+     * @param userName           user name
      */
-    void calculateAmountsByAccountNumber(Long accountNumber, String scenarioId, BigDecimal serviceFee,
-                                         boolean participatingFlag, String userName);
+    void calculateAmountsAndUpdatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, BigDecimal serviceFee,
+                                                       boolean participatingFlag, Long payeeAccountNumber,
+                                                       String userName);
 
     /**
      * Proportionally distributes Post Service Fee Amount among scenario usages above minimum.
