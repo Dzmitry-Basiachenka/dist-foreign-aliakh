@@ -12,4 +12,6 @@
     <import resource="classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-rest-context.xml" />
     <import resource="classpath:/com/copyright/rup/common/config/rup-properties-config.xml"/>
     <context:component-scan base-package="com.copyright.rup.dist.foreign.ui"/>
+
+    <bean id="streamSourceHandler" class="com.copyright.rup.dist.common.reporting.impl.StreamSourceHandler"/>
 </beans>

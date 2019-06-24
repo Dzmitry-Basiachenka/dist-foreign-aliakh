@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
-import com.copyright.rup.dist.foreign.ui.common.component.CsvStreamSource;
+import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportWidget;

@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
+import com.copyright.rup.dist.common.reporting.api.ICsvReportProvider;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.ui.report.api.ICsvReportProvider;
 
 import com.vaadin.data.provider.QuerySortOrder;
 
