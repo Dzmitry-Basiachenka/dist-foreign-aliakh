@@ -72,10 +72,12 @@ public class FundPoolRepositoryIntegrationTest {
     @Test
     public void testFindAll() {
         List<PreServiceFeeFund> fundPools = fundPoolRepository.findAll();
-        assertEquals(2, fundPools.size());
+        assertEquals(3, fundPools.size());
         assertFundPool(fundPools.get(0), ID_1, "FAS Q1 2019", new BigDecimal("50.00"), "some comment");
         assertFundPool(fundPools.get(1), "49060c9b-9cc2-4b93-b701-fffc82eb28b0", "Test fund", new BigDecimal("10.00"),
             "test comment");
+        assertFundPool(fundPools.get(2), "a40132c0-d724-4450-81d2-456e67ff6f64", "Archived Pre-Service fee fund",
+            new BigDecimal("99.00"), null);
     }
 
     @Test
@@ -88,9 +90,16 @@ public class FundPoolRepositoryIntegrationTest {
     @Test
     public void testFindNamesByUsageBatchId() {
         List<String> names =
+            fundPoolRepository.findNamesByUsageBatchId("63b45167-a6ce-4cd5-84c6-5167916aee98");
+        assertEquals(0, names.size());
+        names =
             fundPoolRepository.findNamesByUsageBatchId("a163cca7-8eeb-449c-8a3c-29ff3ec82e58");
         assertEquals(1, names.size());
         assertEquals("Test fund", names.get(0));
+        names =
+            fundPoolRepository.findNamesByUsageBatchId("1a615c47-531a-4a27-a4f3-a5bd3d5a4b1c");
+        assertEquals(1, names.size());
+        assertEquals("Archived Pre-Service fee fund", names.get(0));
     }
 
     @Test
@@ -107,9 +116,9 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     private void assertFundPool(PreServiceFeeFund fundPool, String id, String name, BigDecimal amount, String comment) {
-        assertEquals(fundPool.getId(), id);
-        assertEquals(fundPool.getName(), name);
-        assertEquals(fundPool.getAmount(), amount);
-        assertEquals(fundPool.getComment(), comment);
+        assertEquals(id, fundPool.getId());
+        assertEquals(name, fundPool.getName());
+        assertEquals(amount, fundPool.getAmount());
+        assertEquals(comment, fundPool.getComment());
     }
 }
