@@ -1,3 +1,14 @@
+6.0.2
+-
+* B-23120 FDA: Apply additional Pre Service fee funds: make changes based on comments in CR-DIST-FOREIGN-116
+* B-51661 Tech Debt: FDA: Move assertion methods to service test helper
+* B-51661 Tech Debt: FDA: fix checkstyle issue
+* B-51661 Tech Debt: FDA: reuse components for generating reports from Common
+* B-52145 FDA: Send NTS details to LM: make changes based on comments in CR-DIST-FOREIGN-118
+* CDP-773 FDA: Send NTS scenario to LM: Newly created usages aren't displayed on Rightsholder drill-down after NTS scenario is sent to LM
+* CDP-774 FDA: Create NTS scenario: Payee is not received from PRM for NTS scenario
+* CDP-775 FDA: Exception occurs when user tries to delete batch associated with additional funds, after scenario containing these funds is sent to LM
+
 6.0.1
 -
 * B-23120 FDA: Apply additional preservice fee funds: implement functionality to display only available for attaching to scenario Pre Service fee funds
