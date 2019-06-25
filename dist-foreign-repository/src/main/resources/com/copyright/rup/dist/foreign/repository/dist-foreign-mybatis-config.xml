@@ -70,5 +70,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IRightsholderDiscrepancyMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IWorkClassificationMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IFundPoolMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IReportMapper.xml"/>
     </mappers>
 </configuration>

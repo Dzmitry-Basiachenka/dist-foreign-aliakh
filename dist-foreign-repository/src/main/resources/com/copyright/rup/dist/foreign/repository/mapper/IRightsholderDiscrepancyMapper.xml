@@ -18,36 +18,25 @@
         <result property="newRightsholder.name" column="new_rh_name"/>
     </resultMap>
 
-    <sql id="direction">
-        <choose>
-            <when test="sort.direction == 'asc'">
-                asc
-            </when>
-            <otherwise>
-                desc
-            </otherwise>
-        </choose>
-    </sql>
-
     <sql id="chooseSortProperty">
         <choose>
             <when test="sort.property == 'wrWrkInst'">
-                d.wr_wrk_inst <include refid="direction"/>
+                d.wr_wrk_inst <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'workTitle'">
-                d.work_title <include refid="direction"/>
+                d.work_title <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'oldRightsholder.rhName'">
-                old_rh.name <include refid="direction"/>
+                old_rh.name <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'oldRightsholder.rhAccountNumber'">
-                d.old_rh_account_number <include refid="direction"/>
+                d.old_rh_account_number <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'newRightsholder.rhName'">
-                new_rh.name <include refid="direction"/>
+                new_rh.name <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'newRightsholder.rhAccountNumber'">
-                d.new_rh_account_number <include refid="direction"/>
+                d.new_rh_account_number <include refid="IUsageMapper.direction"/>
             </when>
         </choose>
     </sql>
@@ -102,7 +91,7 @@
         ) discrepancies
     </select>
 
-    <select id="findByScenarioIdAndStatuses" parameterType="map" resultMap="rightsholderDiscrepancyResultMap">
+    <sql id="selectRightsholderDiscrepancies">
         select distinct
             d.old_rh_account_number,
             old_rh.name old_rh_name,
@@ -125,7 +114,7 @@
         order by
         <choose>
             <when test="null != sort">
-                <include refid="chooseSortProperty"/>
+                <include refid="IRightsholderDiscrepancyMapper.chooseSortProperty"/>
             </when>
             <otherwise>
                 d.old_rh_account_number asc
@@ -135,6 +124,10 @@
             limit #{pageable.limit}
             offset #{pageable.offset}
         </if>
+    </sql>
+
+    <select id="findByScenarioIdAndStatuses" parameterType="map" resultMap="rightsholderDiscrepancyResultMap">
+        <include refid="selectRightsholderDiscrepancies"/>
     </select>
 
     <delete id="deleteByScenarioIdAndStatus" parameterType="map">

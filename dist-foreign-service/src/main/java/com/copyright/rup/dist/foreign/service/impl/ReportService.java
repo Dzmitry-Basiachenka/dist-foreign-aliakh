@@ -6,7 +6,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRepository;
+import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
@@ -41,11 +41,11 @@ public class ReportService implements IReportService {
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
+    private IReportRepository reportRepository;
+    @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private IUsageService usageService;
-    @Autowired
-    private IRightsholderDiscrepancyRepository rightsholderDiscrepancyRepository;
 
     @Value("$RUP{dist.foreign.rro.default_estimated_service_fee}")
     private BigDecimal defaultEstimatedServiceFee;
@@ -80,29 +80,29 @@ public class ReportService implements IReportService {
 
     @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream) {
-        usageRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, defaultEstimatedServiceFee);
+        reportRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, defaultEstimatedServiceFee);
     }
 
     @Override
     public void writeFasBatchSummaryCsvReport(OutputStream outputStream) {
-        usageRepository.writeFasBatchSummaryCsvReport(outputStream);
+        reportRepository.writeFasBatchSummaryCsvReport(outputStream);
     }
 
     @Override
     public void writeResearchStatusCsvReport(OutputStream outputStream) {
-        usageRepository.writeResearchStatusCsvReport(outputStream);
+        reportRepository.writeResearchStatusCsvReport(outputStream);
     }
 
     @Override
     public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
                                                OutputStream outputStream) {
-        usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream,
+        reportRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream,
             usageService.getClaAccountNumber(), defaultEstimatedServiceFee);
     }
 
     @Override
     public void writeSummaryMarkerCsvReport(List<UsageBatch> batches, OutputStream outputStream) {
-        usageRepository.writeSummaryMarketCsvReport(
+        reportRepository.writeSummaryMarketCsvReport(
             batches.stream().map(UsageBatch::getId).collect(Collectors.toList()), outputStream);
     }
 
@@ -111,9 +111,7 @@ public class ReportService implements IReportService {
                                                        OutputStream outputStream) {
         try (PreServiceFeeFundBatchesCsvReportHandler handler =
                  new PreServiceFeeFundBatchesCsvReportHandler(outputStream)) {
-            batches.forEach(usageBatch -> {
-                handleUsageBatch(handler, usageBatch);
-            });
+            batches.forEach(usageBatch -> handleUsageBatch(handler, usageBatch));
             UsageBatch usageBatch = new UsageBatch();
             usageBatch.setName("Total");
             usageBatch.setGrossAmount(totalGrossAmount);
@@ -124,7 +122,7 @@ public class ReportService implements IReportService {
     @Override
     public void writeOwnershipAdjustmentCsvReport(String scenarioId, Set<RightsholderDiscrepancyStatusEnum> statuses,
                                                   OutputStream outputStream) {
-        rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
+        reportRepository.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
     }
 
     private void handleUsageBatch(PreServiceFeeFundBatchesCsvReportHandler handler, UsageBatch usageBatch) {

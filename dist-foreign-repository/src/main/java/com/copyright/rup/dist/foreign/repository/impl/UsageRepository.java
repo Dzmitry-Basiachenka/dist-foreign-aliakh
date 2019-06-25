@@ -10,7 +10,6 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
-import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -19,14 +18,9 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.AuditCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.FasBatchSummaryReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.ResearchStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.SendForResearchCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.ServiceFeeTrueUpReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.SummaryMarketReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.UndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.UsageCsvReportHandler;
 
 import com.google.common.collect.ImmutableMap;
@@ -43,9 +37,7 @@ import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -504,63 +496,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             parameters.put("usage", researchedUsage);
             update("IUsageMapper.updateResearchedUsage", parameters);
         });
-    }
-
-    @Override
-    public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
-                                                       BigDecimal defaultEstimatedServiceFee) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("paymentDate", Objects.requireNonNull(paymentDate));
-        parameters.put("withdrawnStatuses",
-            Arrays.asList(UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED));
-        parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
-        try (UndistributedLiabilitiesReportHandler handler =
-                 new UndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IUsageMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);
-        }
-    }
-
-    @Override
-    public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
-                                               OutputStream outputStream, Long claAccountNumber,
-                                               BigDecimal defaultEstimatedServiceFee) {
-        try (ServiceFeeTrueUpReportHandler handler =
-                 new ServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
-            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(8);
-            parameters.put("paymentDateTo", Objects.requireNonNull(paymentDateTo));
-            parameters.put("fromDate", Objects.requireNonNull(fromDate));
-            parameters.put("toDate", Objects.requireNonNull(toDate));
-            parameters.put("productFamilyClaFas", FdaConstants.CLA_FAS_PRODUCT_FAMILY);
-            parameters.put("accountNumberClaFas", claAccountNumber);
-            parameters.put("action", ScenarioActionTypeEnum.SENT_TO_LM);
-            parameters.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
-            parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
-            getTemplate().select("IUsageMapper.findServiceFeeTrueUpReportDtos", parameters, handler);
-        }
-    }
-
-    @Override
-    public void writeSummaryMarketCsvReport(List<String> batchIds, OutputStream outputStream) {
-        try (SummaryMarketReportHandler handler = new SummaryMarketReportHandler(
-            Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IUsageMapper.findSummaryMarketReportDtos", Objects.requireNonNull(batchIds), handler);
-        }
-    }
-
-    @Override
-    public void writeFasBatchSummaryCsvReport(OutputStream outputStream) {
-        try (FasBatchSummaryReportHandler handler = new FasBatchSummaryReportHandler(
-            Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IUsageMapper.findFasBatchSummaryReportDtos", handler);
-        }
-    }
-
-    @Override
-    public void writeResearchStatusCsvReport(OutputStream outputStream) {
-        try (ResearchStatusReportHandler handler = new ResearchStatusReportHandler(
-            Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IUsageMapper.findResearchStatusReportDtos", handler);
-        }
     }
 
     @Override
