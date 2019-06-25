@@ -182,8 +182,9 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
 
     @Override
     public List<String> copyToArchiveByScenarioId(String scenarioId, String userName) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
         params.put("createUser", Objects.requireNonNull(userName));
         params.put("updateUser", userName);
         return selectList("IUsageArchiveMapper.copyToArchiveByScenarioId", params);
@@ -191,8 +192,9 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
 
     @Override
     public List<String> copyNtsToArchiveByScenarioId(String scenarioId, String userName) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
         params.put("createUser", Objects.requireNonNull(userName));
         params.put("updateUser", userName);
         return selectList("IUsageArchiveMapper.copyNtsToArchiveByScenarioId", params);

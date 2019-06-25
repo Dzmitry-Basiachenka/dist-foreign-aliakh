@@ -97,6 +97,17 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
+    public void testDeleteByScenarioId() {
+        assertEquals(1,
+            CollectionUtils.size(usageAuditRepository.findByUsageId("ea85a226-8a4b-45e3-82f8-1233a9cd7ecb")));
+        assertEquals(2,
+            CollectionUtils.size(usageAuditRepository.findByUsageId("4b5751aa-6258-44c6-b839-a1ec0edfcf4d")));
+        usageAuditRepository.deleteByScenarioId("fccc8c31-5259-472a-a9ca-508a8ed1cbc0");
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("ea85a226-8a4b-45e3-82f8-1233a9cd7ecb")));
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("4b5751aa-6258-44c6-b839-a1ec0edfcf4d")));
+    }
+
+    @Test
     public void testFindFasBatchStatisticByBatchName() {
         List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
             "FAS batch statistic", null);

@@ -60,6 +60,15 @@ public interface IUsageAuditService {
     void deleteActionsByUsageId(String usageId);
 
     /**
+     * Deletes usage actions by scenario id.
+     * Audit records for {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_EXCLUDED} usages
+     * that were excluded from specified scenario also will be deleted.
+     *
+     * @param scenarioId scenario id
+     */
+    void deleteActionsByScenarioId(String scenarioId);
+
+    /**
      * Gets all actions for usage with given id.
      *
      * @param usageId usage id

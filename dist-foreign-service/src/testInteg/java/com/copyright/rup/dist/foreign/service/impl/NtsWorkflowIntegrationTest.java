@@ -7,8 +7,6 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
@@ -73,7 +71,6 @@ public class NtsWorkflowIntegrationTest {
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
             .expectUsage(buildUsage())
             .expectLmDetails("details/nts_details_to_lm.json")
-            .expectAudit(getEligibleUsageAuditItem())
             .expectScenario(buildScenario())
             .build()
             .run();
@@ -132,12 +129,5 @@ public class NtsWorkflowIntegrationTest {
         usage.setServiceFee(new BigDecimal("0.32000"));
         usage.setServiceFeeAmount(new BigDecimal("128.1408000000"));
         return usage;
-    }
-
-    private UsageAuditItem getEligibleUsageAuditItem() {
-        UsageAuditItem auditItem = new UsageAuditItem();
-        auditItem.setActionType(UsageActionTypeEnum.ELIGIBLE);
-        auditItem.setActionReason("Usage has become eligible");
-        return auditItem;
     }
 }
