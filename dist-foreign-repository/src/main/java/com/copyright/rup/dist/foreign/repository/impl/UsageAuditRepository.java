@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.UsageStatistic;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
@@ -48,6 +49,14 @@ public class UsageAuditRepository extends BaseRepository implements IUsageAuditR
     @Override
     public void deleteByUsageId(String usageId) {
         delete("IUsageAuditMapper.deleteByUsageId", Objects.requireNonNull(usageId));
+    }
+
+    @Override
+    public void deleteByScenarioId(String scenarioId) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put("status", UsageStatusEnum.NTS_EXCLUDED);
+        delete("IUsageAuditMapper.deleteByScenarioId", params);
     }
 
     @Override

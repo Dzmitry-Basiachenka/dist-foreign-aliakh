@@ -358,6 +358,7 @@ public class UsageService implements IUsageService {
             usageIds =
                 usageArchiveRepository.copyNtsToArchiveByScenarioId(scenario.getId(), RupContextUtils.getUserName());
             usageArchiveRepository.moveFundUsagesToArchive(scenario.getId());
+            usageAuditService.deleteActionsByScenarioId(scenario.getId());
         } else {
             usageIds =
                 usageArchiveRepository.copyToArchiveByScenarioId(scenario.getId(), RupContextUtils.getUserName());

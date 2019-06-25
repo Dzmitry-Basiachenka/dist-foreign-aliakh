@@ -43,6 +43,7 @@ public class UsageAuditServiceTest {
     private static final String USAGE_UID = "4eef3a40-b274-11e7-abc4-cec278b6b50a";
     private static final String USAGE_UID_2 = "5eef3a40-b274-11e7-abc4-cec278b6b50a";
     private static final String BATCH_UID = "f2104232-b274-11e7-abc4-cec278b6b50a";
+    private static final String SCENARIO_UID = RupPersistUtils.generateUuid();
     private static final String REASON = "Uploaded in 'ABC' Batch";
     private static final String BATCH_NAME = "Test Batch Name";
     private static final BigDecimal AMOUNT_ZERO = new BigDecimal("0.00");
@@ -99,6 +100,15 @@ public class UsageAuditServiceTest {
         expectLastCall().once();
         replay(usageAuditRepository);
         usageAuditService.deleteActionsByUsageId(USAGE_UID);
+        verify(usageAuditRepository);
+    }
+
+    @Test
+    public void testDeleteActionsByScenarioId() {
+        usageAuditRepository.deleteByScenarioId(SCENARIO_UID);
+        expectLastCall().once();
+        replay(usageAuditRepository);
+        usageAuditService.deleteActionsByScenarioId(SCENARIO_UID);
         verify(usageAuditRepository);
     }
 

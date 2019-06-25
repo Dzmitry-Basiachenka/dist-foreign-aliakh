@@ -448,7 +448,7 @@
             work_title,
             system_title,
             rh_account_number,
-            'SENT_TO_LM',
+            #{status},
             product_family,
             article,
             standard_number,
@@ -494,7 +494,7 @@
         select
             uuid_generate_v4(),
             df_scenario_uid,
-            'SENT_TO_LM',
+            #{status},
             rh_account_number,
             payee_account_number,
             product_family,

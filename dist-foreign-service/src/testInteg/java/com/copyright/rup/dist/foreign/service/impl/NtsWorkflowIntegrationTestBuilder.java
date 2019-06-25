@@ -10,7 +10,6 @@ import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -72,7 +71,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private UsageBatch usageBatch;
     private List<Usage> expectedUsages;
     private Scenario expectedScenario;
-    private UsageAuditItem expectedAudit;
 
     NtsWorkflowIntegrationTestBuilder expectRollups(String rollupsJson, String rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
@@ -87,11 +85,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     NtsWorkflowIntegrationTestBuilder expectUsage(Usage... usages) {
         this.expectedUsages = Arrays.asList(usages);
-        return this;
-    }
-
-    NtsWorkflowIntegrationTestBuilder expectAudit(UsageAuditItem audit) {
-        this.expectedAudit = audit;
         return this;
     }
 
@@ -136,7 +129,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     void reset() {
         usageBatch = null;
-        expectedAudit = null;
         expectedUsages = null;
         expectedPrmAccountNumber = null;
         expectedOracleAccountNumber = null;
@@ -219,9 +211,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void assertAudit() {
-            actualUsageIds.forEach(Objects.isNull(expectedAudit)
-                ? usageId -> assertTrue(CollectionUtils.isEmpty(usageAuditService.getUsageAudit(usageId)))
-                : usageId -> testHelper.assertAudit(usageId, Collections.singletonList(expectedAudit)));
+            actualUsageIds.forEach(
+                usageId -> assertTrue(CollectionUtils.isEmpty(usageAuditService.getUsageAudit(usageId))));
         }
 
         private void assertArchivedUsages() {

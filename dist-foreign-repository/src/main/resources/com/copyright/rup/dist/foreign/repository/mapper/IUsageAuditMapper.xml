@@ -92,6 +92,16 @@
             where df_usage_batch_uid = #{batchId})
     </delete>
 
+    <delete id="deleteByScenarioId" parameterType="map">
+        delete from ${schema}.df_usage_audit
+        where df_usage_uid in (
+            select df_usage_uid
+            from ${schema}.df_usage
+            where df_scenario_uid = #{scenarioId}
+                or (<include refid="IUsageMapper.scenarioBatchesFilter"/>
+                    and status_ind = #{status}))
+    </delete>
+
     <delete id="deleteByUsageId" parameterType="string">
         delete from ${schema}.df_usage_audit
         where df_usage_uid = #{usageId}

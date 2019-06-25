@@ -46,6 +46,13 @@ public interface IUsageAuditRepository {
     void deleteByUsageId(String usageId);
 
     /**
+     * Deletes {@link UsageAuditItem}s by scenario id.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteByScenarioId(String scenarioId);
+
+    /**
      * Retrieves list of {@link UsageAuditItem}s by {@link com.copyright.rup.dist.foreign.domain.Usage} identifier.
      *
      * @param usageId usage identifier

@@ -487,13 +487,15 @@ public class UsageServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(usageArchiveRepository.copyNtsToArchiveByScenarioId(scenario.getId(), USER_NAME))
             .andReturn(usageIds).once();
+        usageAuditService.deleteActionsByScenarioId(scenario.getId());
+        expectLastCall().once();
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         expectLastCall().once();
         usageArchiveRepository.moveFundUsagesToArchive(SCENARIO_ID);
         expectLastCall().once();
-        replay(usageRepository, usageArchiveRepository, RupContextUtils.class);
+        replay(usageRepository, usageArchiveRepository, usageAuditService, RupContextUtils.class);
         usageService.moveToArchive(scenario);
-        verify(usageRepository, usageArchiveRepository, RupContextUtils.class);
+        verify(usageRepository, usageArchiveRepository, usageAuditService, RupContextUtils.class);
     }
 
     @Test
