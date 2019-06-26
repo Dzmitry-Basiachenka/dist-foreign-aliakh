@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
@@ -10,23 +9,18 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.IntStream;
 
 /**
  * Builder for {@link ReconcileRightsholdersTest}.
@@ -50,15 +44,11 @@ class ReconcileRightsholdersTestBuilder {
     private String expectedPrmResponse;
     private Long expectedPrmAccountNumber;
     private Set<RightsholderDiscrepancy> expectedDiscrepancies = new HashSet<>();
-    private List<Usage> expectedUsages = new ArrayList<>();
+    private List<Usage> expectedUsages;
     private Map<String, List<UsageAuditItem>> usageIdToAuditItemsMap;
 
     @Autowired
-    private IUsageAuditService usageAuditService;
-    @Autowired
     private IScenarioService scenarioService;
-    @Autowired
-    private IUsageService usageService;
     @Autowired
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
     @Autowired
@@ -136,7 +126,8 @@ class ReconcileRightsholdersTestBuilder {
             scenarioService.reconcileRightsholders(expectedScenario);
             assertDiscrepancies();
             scenarioService.approveOwnershipChanges(expectedScenario);
-            assertUsages();
+            testHelper.assertUsages(expectedUsages);
+            assertAudit();
             testHelper.verifyRestServer();
         }
 
@@ -155,37 +146,8 @@ class ReconcileRightsholdersTestBuilder {
             });
         }
 
-        private void assertUsages() {
-            List<Usage> usages = usageService.getUsagesByScenarioId(expectedScenario.getId());
-            usages.sort(Comparator.comparing(Usage::getId));
-            assertEquals(expectedUsages.size(), CollectionUtils.size(usages));
-            IntStream.range(0, usages.size()).forEach(i -> {
-                assertUsage(expectedUsages.get(i), usages.get(i));
-                assertAudit(usages.get(i).getId());
-            });
-        }
-
-        private void assertAudit(String usageId) {
-            List<UsageAuditItem> items = usageAuditService.getUsageAudit(usageId);
-            assertEquals(CollectionUtils.size(usageIdToAuditItemsMap.get(usageId)), CollectionUtils.size(items));
-            IntStream.range(0, items.size()).forEach(index -> {
-                UsageAuditItem expectedAuditItem = usageIdToAuditItemsMap.get(usageId).get(index);
-                UsageAuditItem actualAuditItem = items.get(index);
-                assertEquals(expectedAuditItem.getActionType(), actualAuditItem.getActionType());
-                assertEquals(expectedAuditItem.getActionReason(), actualAuditItem.getActionReason());
-            });
-        }
-
-        private void assertUsage(Usage expected, Usage actual) {
-            assertNotNull(actual.getRightsholder().getId());
-            assertNotNull(actual.getPayee().getId());
-            assertEquals(expected.getRightsholder().getAccountNumber(), actual.getRightsholder().getAccountNumber());
-            assertEquals(expected.getPayee().getAccountNumber(), actual.getPayee().getAccountNumber());
-            assertEquals(expected.getWrWrkInst(), actual.getWrWrkInst());
-            assertEquals(0, expected.getGrossAmount().compareTo(actual.getGrossAmount()));
-            assertEquals(0, expected.getNetAmount().compareTo(actual.getNetAmount()));
-            assertEquals(0, expected.getServiceFeeAmount().compareTo(actual.getServiceFeeAmount()));
-            assertEquals(0, expected.getServiceFee().compareTo(actual.getServiceFee()));
+        private void assertAudit() {
+            usageIdToAuditItemsMap.forEach((usageId, usageAuditItems) -> testHelper.assertAudit(usageId, usageAuditItems));
         }
     }
 }

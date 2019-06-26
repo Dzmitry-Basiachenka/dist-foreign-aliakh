@@ -28,7 +28,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -199,33 +198,13 @@ class CreateScenarioIntegrationTestBuilder {
         }
 
         private void assertUsages() {
-            List<Usage> actualUsages = usageRepository.findByScenarioId(scenarioId);
-            assertEquals(expectedUsages.size(), actualUsages.size());
-            Map<String, Usage> expectedIdToUsageMap =
-                expectedUsages.stream().collect(Collectors.toMap(Usage::getId, usage -> usage));
-            Map<String, Usage> actualIdToUsageMap =
-                actualUsages.stream().collect(Collectors.toMap(Usage::getId, usage -> usage));
-            expectedIdToUsageMap.keySet().forEach(id ->
-                assertUsage(expectedIdToUsageMap.get(id), actualIdToUsageMap.get(id)));
+            testHelper.assertUsages(expectedUsages);
             if (Objects.nonNull(expectedNtsExcludedUsages)) {
                 assertNtsExcludedUsages();
             }
             if (Objects.nonNull(expectedAlreadyInScenarioUsages)) {
                 assertAlreadyInScenarioUsages();
             }
-        }
-
-        private void assertUsage(Usage expectedUsage, Usage actualUsage) {
-            assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
-            assertEquals(productFamily, actualUsage.getProductFamily());
-            assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
-            assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
-            assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
-            assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
-            assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
-            assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
-                actualUsage.getRightsholder().getAccountNumber());
-            assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber());
         }
 
         private void assertAlreadyInScenarioUsages() {
