@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.PreServiceFeeFundBatchesCsvReportHandler;
@@ -39,8 +38,6 @@ import java.util.stream.Collectors;
 public class ReportService implements IReportService {
 
     @Autowired
-    private IUsageRepository usageRepository;
-    @Autowired
     private IReportRepository reportRepository;
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
@@ -52,7 +49,7 @@ public class ReportService implements IReportService {
 
     @Override
     public void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
-        usageRepository.writeUsagesCsvReport(filter, pipedOutputStream);
+        reportRepository.writeUsagesCsvReport(filter, pipedOutputStream);
     }
 
     @Override
@@ -60,7 +57,7 @@ public class ReportService implements IReportService {
         if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
             usageArchiveRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
         } else {
-            usageRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
+            reportRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
         }
     }
 
@@ -69,13 +66,13 @@ public class ReportService implements IReportService {
         if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
             usageArchiveRepository.writeScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
         } else {
-            usageRepository.writeScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
+            reportRepository.writeScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
         }
     }
 
     @Override
     public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
-        usageRepository.writeAuditCsvReport(filter, pipedOutputStream);
+        reportRepository.writeAuditCsvReport(filter, pipedOutputStream);
     }
 
     @Override

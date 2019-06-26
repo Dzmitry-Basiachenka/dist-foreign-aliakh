@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
@@ -53,16 +52,13 @@ public class ReportServiceTest {
 
     private IReportService reportService;
     private IUsageArchiveRepository usageArchiveRepository;
-    private IUsageRepository usageRepository;
     private IReportRepository reportRepository;
 
     @Before
     public void setUp() {
         reportService = new ReportService();
-        usageRepository = createMock(IUsageRepository.class);
         reportRepository = createMock(IReportRepository.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
-        Whitebox.setInternalState(reportService, usageRepository);
         Whitebox.setInternalState(reportService, reportRepository);
         Whitebox.setInternalState(reportService, usageArchiveRepository);
         Whitebox.setInternalState(reportService, "defaultEstimatedServiceFee", DEFAULT_ESTIMATED_SERVICE_FEE);
@@ -75,9 +71,9 @@ public class ReportServiceTest {
         reportRepository
             .writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, DEFAULT_ESTIMATED_SERVICE_FEE);
         expectLastCall().once();
-        replay(usageRepository);
+        replay(reportRepository);
         reportService.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream);
-        verify(usageRepository);
+        verify(reportRepository);
     }
 
     @Test
@@ -92,31 +88,31 @@ public class ReportServiceTest {
         reportRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream, 2000017000L,
             DEFAULT_ESTIMATED_SERVICE_FEE);
         expectLastCall().once();
-        replay(usageRepository, usageService);
+        replay(reportRepository, usageService);
         reportService.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);
-        verify(usageRepository, usageService);
+        verify(reportRepository, usageService);
     }
 
     @Test
     public void testWriteUsageCsvReport() {
         UsageFilter filter = createMock(UsageFilter.class);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        usageRepository.writeUsagesCsvReport(filter, outputStream);
+        reportRepository.writeUsagesCsvReport(filter, outputStream);
         expectLastCall().once();
-        replay(usageRepository);
+        replay(reportRepository);
         reportService.writeUsageCsvReport(filter, outputStream);
-        verify(usageRepository);
+        verify(reportRepository);
     }
 
     @Test
     public void testWriteAuditCsvReport() {
         AuditFilter filter = createMock(AuditFilter.class);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        usageRepository.writeAuditCsvReport(filter, outputStream);
+        reportRepository.writeAuditCsvReport(filter, outputStream);
         expectLastCall().once();
-        replay(usageRepository);
+        replay(reportRepository);
         reportService.writeAuditCsvReport(filter, outputStream);
-        verify(usageRepository);
+        verify(reportRepository);
     }
 
     @Test
@@ -145,11 +141,11 @@ public class ReportServiceTest {
     public void testWriteScenarioUsagesCsvReportStatusInProgress() {
         Scenario scenario = buildScenario(ScenarioStatusEnum.IN_PROGRESS);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        usageRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        reportRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
         expectLastCall().once();
-        replay(usageRepository);
+        replay(reportRepository);
         reportService.writeScenarioUsagesCsvReport(scenario, outputStream);
-        verify(usageRepository);
+        verify(reportRepository);
     }
 
     @Test
@@ -167,33 +163,33 @@ public class ReportServiceTest {
     public void testWriteScenarioRightsholderTotalsCsvReportStatusInProgress() {
         Scenario scenario = buildScenario(ScenarioStatusEnum.IN_PROGRESS);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        usageRepository.writeScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
+        reportRepository.writeScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
         expectLastCall().once();
-        replay(usageRepository);
+        replay(reportRepository);
         reportService.writeScenarioRightsholderTotalsCsvReport(scenario, outputStream);
-        verify(usageRepository);
+        verify(reportRepository);
     }
 
     @Test
     public void testWriteScenarioUsagesCsvReportStatusApproved() {
         Scenario scenario = buildScenario(ScenarioStatusEnum.APPROVED);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        usageRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        reportRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
         expectLastCall().once();
-        replay(usageRepository);
+        replay(reportRepository);
         reportService.writeScenarioUsagesCsvReport(scenario, outputStream);
-        verify(usageRepository);
+        verify(reportRepository);
     }
 
     @Test
     public void testWriteScenarioUsagesCsvReportStatusSubmitted() {
         Scenario scenario = buildScenario(ScenarioStatusEnum.SUBMITTED);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        usageRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        reportRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
         expectLastCall().once();
-        replay(usageRepository);
+        replay(reportRepository);
         reportService.writeScenarioUsagesCsvReport(scenario, outputStream);
-        verify(usageRepository);
+        verify(reportRepository);
     }
 
     @Test

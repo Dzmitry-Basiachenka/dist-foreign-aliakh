@@ -3,27 +3,40 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
+import com.copyright.rup.dist.foreign.repository.impl.csv.AuditCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.FasBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.OwnershipAdjustmentReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ResearchStatusReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.SendForResearchCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ServiceFeeTrueUpReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.SummaryMarketReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.UndistributedLiabilitiesReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.UsageCsvReportHandler;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.io.OutputStream;
+import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -40,6 +53,10 @@ import java.util.Set;
  */
 @Repository
 public class ReportRepository extends BaseRepository implements IReportRepository {
+
+    private static final int REPORT_BATCH_SIZE = 100000;
+    private static final String FILTER_KEY = "filter";
+    private static final String PAGEABLE_KEY = "pageable";
 
     @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
@@ -110,5 +127,83 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             Objects.requireNonNull(outputStream))) {
             getTemplate().select("IReportMapper.findOwnershipAdjustmentReportDtos", parameters, handler);
         }
+    }
+
+    @Override
+    public void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
+        try (ScenarioUsagesCsvReportHandler handler = new ScenarioUsagesCsvReportHandler(pipedOutputStream)) {
+            int size = selectOne("IReportMapper.findScenarioUsageDtosCount", parameters);
+            for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
+                parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
+                getTemplate().select("IReportMapper.findScenarioUsageReportDtos", parameters, handler);
+            }
+        }
+    }
+
+    @Override
+    public void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
+        parameters.put("sort", new Sort("rightsholder.accountNumber", Direction.ASC));
+        try (ScenarioRightsholderTotalsCsvReportHandler handler
+                 = new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
+            getTemplate().select("IReportMapper.findRightsholderTotalsHoldersReportDtos", parameters, handler);
+        }
+    }
+
+    @Override
+    public void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        try (UsageCsvReportHandler handler = new UsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
+            if (!filter.isEmpty()) {
+                int size = selectOne("IReportMapper.findUsagesCountByFilter", ImmutableMap.of(FILTER_KEY, filter));
+                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
+                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
+                    getTemplate().select("IReportMapper.findUsageReportDtos", parameters, handler);
+                }
+            }
+        }
+    }
+
+    @Override
+    public Set<String> writeUsagesForResearchAndFindIds(UsageFilter filter, OutputStream outputStream) {
+        Set<String> usageIds = new HashSet<>();
+        try (SendForResearchCsvReportHandler handler =
+                 new SendForResearchCsvReportHandler(Objects.requireNonNull(outputStream))) {
+            if (!Objects.requireNonNull(filter).isEmpty()) {
+                getTemplate().select("IReportMapper.findUsageReportDtos", ImmutableMap.of(FILTER_KEY, filter),
+                    handler);
+                usageIds = handler.getUsagesIds();
+            }
+        }
+        return usageIds;
+    }
+
+    @Override
+    public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        try (AuditCsvReportHandler handler = new AuditCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
+            if (!Objects.requireNonNull(filter).isEmpty()) {
+                int size = selectOne("IReportMapper.findUsagesCountForAudit", ImmutableMap.of(FILTER_KEY, filter));
+                parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
+                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
+                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
+                    getTemplate().select("IReportMapper.findAuditReportDtos", parameters, handler);
+                }
+            }
+        }
+    }
+
+    private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
+        AuditFilter filterCopy = new AuditFilter(auditFilter);
+        filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
+        filterCopy.setDistributionName(escapeSqlLikePattern(filterCopy.getDistributionName()));
+        filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
+        return filterCopy;
     }
 }

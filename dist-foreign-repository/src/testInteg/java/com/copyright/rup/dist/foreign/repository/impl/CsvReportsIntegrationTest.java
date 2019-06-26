@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import com.google.common.collect.Sets;
 
@@ -54,8 +53,6 @@ public class CsvReportsIntegrationTest {
     private static final BigDecimal DEFAULT_ESTIMATED_SERVICE_FEE = new BigDecimal("0.18500");
 
     @Autowired
-    private IUsageRepository usageRepository;
-    @Autowired
     private IReportRepository reportRepository;
 
     private final ReportTestUtils reportTestUtils =
@@ -72,7 +69,7 @@ public class CsvReportsIntegrationTest {
         auditFilter.setBatchesIds(Sets.newHashSet("e855bf85-236c-42e7-9b12-8d68dd747bbe",
             "034873b3-97fa-475a-9a2a-191e8ec988b3", "02a09322-5f0f-4cae-888c-73127050dc98",
             "d016d9c2-5460-41bf-837c-8598cf00b654", "acae006c-a4fe-45f0-a0cc-098e12db00c5"));
-        assertFilesWithExecutor(outputStream -> usageRepository.writeAuditCsvReport(auditFilter, outputStream),
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditCsvReport(auditFilter, outputStream),
             "audit_usages_report.csv");
     }
 
@@ -80,7 +77,7 @@ public class CsvReportsIntegrationTest {
     public void testWriteAuditCsvReportForPostDistribution() throws Exception {
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setSearchValue("75693c90-d6f5-401a-8c26-134adc9745c5");
-        assertFilesWithExecutor(outputStream -> usageRepository.writeAuditCsvReport(auditFilter, outputStream),
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditCsvReport(auditFilter, outputStream),
             "audit_usages_report_post_distribution.csv");
     }
 
@@ -114,27 +111,27 @@ public class CsvReportsIntegrationTest {
         usageFilter.setUsageBatchesIds(Sets.newHashSet("e855bf85-236c-42e7-9b12-8d68dd747bbe",
             "034873b3-97fa-475a-9a2a-191e8ec988b3", "02a09322-5f0f-4cae-888c-73127050dc98",
             "d016d9c2-5460-41bf-837c-8598cf00b654", "acae006c-a4fe-45f0-a0cc-098e12db00c5"));
-        assertFilesWithExecutor(outputStream -> usageRepository.writeUsagesCsvReport(usageFilter, outputStream),
+        assertFilesWithExecutor(outputStream -> reportRepository.writeUsagesCsvReport(usageFilter, outputStream),
             "usages_report.csv");
     }
 
     @Test
     public void testWriteUsagesEmptyCsvReport() throws IOException {
-        assertFilesWithExecutor(outputStream -> usageRepository.writeUsagesCsvReport(new UsageFilter(), outputStream),
+        assertFilesWithExecutor(outputStream -> reportRepository.writeUsagesCsvReport(new UsageFilter(), outputStream),
             "usages_report_empty.csv");
     }
 
     @Test
     public void testExportScenarioUsagesCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
-            usageRepository.writeScenarioUsagesCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",
+            reportRepository.writeScenarioUsagesCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",
                 outputStream), "scenario_usages_report.csv");
     }
 
     @Test
     public void testExportScenarioRightsholderTotalsCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
-            usageRepository.writeScenarioRightsholderTotalsCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",
+            reportRepository.writeScenarioRightsholderTotalsCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",
                 outputStream), "scenario_rightsholder_totals_report.csv");
     }
 
@@ -142,13 +139,13 @@ public class CsvReportsIntegrationTest {
     public void testWriteUsagesForResearchAndFindIds() throws IOException {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        assertFiles(outputStream -> usageRepository.writeUsagesForResearchAndFindIds(usageFilter, outputStream),
+        assertFiles(outputStream -> reportRepository.writeUsagesForResearchAndFindIds(usageFilter, outputStream),
             "usages_for_research.csv");
     }
 
     @Test
     public void testWriteUsagesForResearchAndFindIdsEmptyReport() throws IOException {
-        assertFiles(outputStream -> usageRepository.writeUsagesForResearchAndFindIds(new UsageFilter(), outputStream),
+        assertFiles(outputStream -> reportRepository.writeUsagesForResearchAndFindIds(new UsageFilter(), outputStream),
             "usages_for_research_empty.csv");
     }
 
@@ -228,7 +225,7 @@ public class CsvReportsIntegrationTest {
     }
 
     private void assertEmptyAuditReport(AuditFilter filter) throws IOException {
-        assertFilesWithExecutor(outputStream -> usageRepository.writeAuditCsvReport(filter, outputStream),
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditCsvReport(filter, outputStream),
             "audit_usages_report_empty.csv");
     }
 }

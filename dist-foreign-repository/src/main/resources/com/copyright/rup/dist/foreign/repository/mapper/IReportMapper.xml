@@ -254,4 +254,34 @@
     <select id="findOwnershipAdjustmentReportDtos" parameterType="map" resultMap="IRightsholderDiscrepancyMapper.rightsholderDiscrepancyResultMap">
         <include refid="IRightsholderDiscrepancyMapper.selectRightsholderDiscrepancies"/>
     </select>
+
+    <select id="findScenarioUsageDtosCount" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage u
+        where df_scenario_uid = #{scenarioId}
+    </select>
+
+    <select id="findScenarioUsageReportDtos" resultMap="IUsageMapper.usageDtoResultMap">
+        <include refid="IUsageMapper.selectDtoByScenarioIdSql"/>
+    </select>
+
+    <select id="findRightsholderTotalsHoldersReportDtos" parameterType="map" resultMap="IUsageMapper.rightsholderTotalsHolderResultMap">
+        <include refid="IUsageMapper.selectRightsholderTotalsHoldersByScenarioIdSql"/>
+    </select>
+
+    <select id="findUsagesCountByFilter" parameterType="map" resultType="int">
+        <include refid="IUsageMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findUsageReportDtos" resultMap="IUsageMapper.usageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IUsageMapper.selectDtosByFilterSql"/>
+    </select>
+
+    <select id="findUsagesCountForAudit" resultType="int" parameterType="map">
+        <include refid="IUsageMapper.selectCountForAuditSql"/>
+    </select>
+
+    <select id="findAuditReportDtos" resultMap="IUsageMapper.usageDtoResultMap" parameterType="map">
+        <include refid="IUsageMapper.selectForAuditSql"/>
+    </select>
 </mapper>
