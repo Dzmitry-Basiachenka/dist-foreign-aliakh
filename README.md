@@ -1,3 +1,9 @@
+6.0.3
+-
+* B-51661 Tech Debt: FDA: add environment, host, IP for notification for Scheduled jobs
+* B-51661 Tech Debt: FDA: introduce separate mapper and repository for report generation
+* CDP-776 FDA: Send NTS scenario to LM: Audit records for NTS usages deleted after sending NTS scenario to LM are still presented in df_usage_audit table
+
 6.0.2
 -
 * B-23120 FDA: Apply additional Pre Service fee funds: make changes based on comments in CR-DIST-FOREIGN-116
