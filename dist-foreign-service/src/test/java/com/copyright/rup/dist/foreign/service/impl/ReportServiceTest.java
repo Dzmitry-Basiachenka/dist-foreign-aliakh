@@ -14,7 +14,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRepository;
+import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
@@ -53,18 +53,18 @@ public class ReportServiceTest {
 
     private IReportService reportService;
     private IUsageArchiveRepository usageArchiveRepository;
-    private IRightsholderDiscrepancyRepository rightsholderDiscrepancyRepository;
     private IUsageRepository usageRepository;
+    private IReportRepository reportRepository;
 
     @Before
     public void setUp() {
         reportService = new ReportService();
         usageRepository = createMock(IUsageRepository.class);
+        reportRepository = createMock(IReportRepository.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
-        rightsholderDiscrepancyRepository = createMock(IRightsholderDiscrepancyRepository.class);
         Whitebox.setInternalState(reportService, usageRepository);
+        Whitebox.setInternalState(reportService, reportRepository);
         Whitebox.setInternalState(reportService, usageArchiveRepository);
-        Whitebox.setInternalState(reportService, rightsholderDiscrepancyRepository);
         Whitebox.setInternalState(reportService, "defaultEstimatedServiceFee", DEFAULT_ESTIMATED_SERVICE_FEE);
     }
 
@@ -72,7 +72,7 @@ public class ReportServiceTest {
     public void testWriteUndistributedLiabilitiesCsvReport() {
         LocalDate paymentDate = LocalDate.now();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        usageRepository
+        reportRepository
             .writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, DEFAULT_ESTIMATED_SERVICE_FEE);
         expectLastCall().once();
         replay(usageRepository);
@@ -89,7 +89,7 @@ public class ReportServiceTest {
         Whitebox.setInternalState(reportService, usageService);
         expect(usageService.getClaAccountNumber()).andReturn(2000017000L).once();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream, 2000017000L,
+        reportRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream, 2000017000L,
             DEFAULT_ESTIMATED_SERVICE_FEE);
         expectLastCall().once();
         replay(usageRepository, usageService);
@@ -199,30 +199,31 @@ public class ReportServiceTest {
     @Test
     public void testWriteFasBatchSummaryCsvReport() {
         ByteArrayOutputStream outputStream = createMock(ByteArrayOutputStream.class);
-        usageRepository.writeFasBatchSummaryCsvReport(outputStream);
+        reportRepository.writeFasBatchSummaryCsvReport(outputStream);
         expectLastCall().once();
-        replay(usageRepository);
+        replay(reportRepository);
         reportService.writeFasBatchSummaryCsvReport(outputStream);
+        verify(reportRepository);
     }
 
     @Test
     public void testWriteResearchStatusCsvReport() {
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        usageRepository.writeResearchStatusCsvReport(outputStream);
+        reportRepository.writeResearchStatusCsvReport(outputStream);
         expectLastCall().once();
-        replay(usageRepository);
+        replay(reportRepository);
         reportService.writeResearchStatusCsvReport(outputStream);
-        verify(usageRepository);
+        verify(reportRepository);
     }
 
     @Test
     public void testWriteSummaryMarketCsvReport() {
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        usageRepository.writeSummaryMarketCsvReport(Collections.emptyList(), outputStream);
+        reportRepository.writeSummaryMarketCsvReport(Collections.emptyList(), outputStream);
         expectLastCall().once();
-        replay(usageRepository);
+        replay(reportRepository);
         reportService.writeSummaryMarkerCsvReport(Collections.emptyList(), outputStream);
-        verify(usageRepository);
+        verify(reportRepository);
     }
 
     @Test
@@ -240,11 +241,11 @@ public class ReportServiceTest {
         Set<RightsholderDiscrepancyStatusEnum> statuses =
             Collections.singleton(RightsholderDiscrepancyStatusEnum.APPROVED);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
+        reportRepository.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
         expectLastCall().once();
-        replay(rightsholderDiscrepancyRepository);
+        replay(reportRepository);
         reportService.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
-        verify(rightsholderDiscrepancyRepository);
+        verify(reportRepository);
     }
 
     private Scenario buildScenario(ScenarioStatusEnum status) {

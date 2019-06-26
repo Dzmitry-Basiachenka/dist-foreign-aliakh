@@ -5,7 +5,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRepository;
+import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import com.google.common.collect.Sets;
@@ -55,9 +55,8 @@ public class CsvReportsIntegrationTest {
 
     @Autowired
     private IUsageRepository usageRepository;
-
     @Autowired
-    private IRightsholderDiscrepancyRepository rightsholderDiscrepancyRepository;
+    private IReportRepository reportRepository;
 
     private final ReportTestUtils reportTestUtils =
         new ReportTestUtils("src/testInteg/resources/com/copyright/rup/dist/foreign/repository/impl/csv");
@@ -155,25 +154,25 @@ public class CsvReportsIntegrationTest {
 
     @Test
     public void testWriteUndistributedLiabilitiesCsvReport() throws Exception {
-        assertFiles(outputStream -> usageRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2011, 5, 5),
+        assertFiles(outputStream -> reportRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2011, 5, 5),
             outputStream, DEFAULT_ESTIMATED_SERVICE_FEE), "undistributed_liabilities_report.csv");
     }
 
     @Test
     public void testWriteUndistributedLiabilitiesCsvEmptyReport() throws IOException {
-        assertFiles(outputStream -> usageRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2001, 5, 5),
+        assertFiles(outputStream -> reportRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2001, 5, 5),
             outputStream, DEFAULT_ESTIMATED_SERVICE_FEE), "undistributed_liabilities_report_empty.csv");
     }
 
     @Test
     public void testWriteResearchStatusCsvReport() throws IOException {
-        assertFiles(outputStream -> usageRepository.writeResearchStatusCsvReport(outputStream),
+        assertFiles(outputStream -> reportRepository.writeResearchStatusCsvReport(outputStream),
             "research_status_report.csv");
     }
 
     @Test
     public void testWriteSummaryMarketCsvReport() throws IOException {
-        assertFiles(outputStream -> usageRepository.writeSummaryMarketCsvReport(
+        assertFiles(outputStream -> reportRepository.writeSummaryMarketCsvReport(
             Arrays.asList("d016d9c2-5460-41bf-837c-8598cf00b651", "d016d9c2-5460-41bf-837c-8598cf00b652",
                 "f1a40b56-54f1-4a46-90fa-77946c2f7805", "d016d9c2-5460-41bf-837c-8598cf00b658"), outputStream),
             "summary_of_market_report.csv");
@@ -182,26 +181,26 @@ public class CsvReportsIntegrationTest {
     @Test
     public void testWriteFasBatchSummaryCsvReport() throws IOException {
         assertFiles(outputStream ->
-            usageRepository.writeFasBatchSummaryCsvReport(outputStream), "fas_batch_summary_report.csv");
+            reportRepository.writeFasBatchSummaryCsvReport(outputStream), "fas_batch_summary_report.csv");
     }
 
     @Test
     public void testWriteServiceFeeTrueUpCsvReport() throws IOException {
-        assertFiles(outputStream -> usageRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2012, 1, 1),
+        assertFiles(outputStream -> reportRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2012, 1, 1),
             LocalDate.of(2012, 3, 15), LocalDate.of(2014, 5, 5), outputStream, 2000017000L,
             DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report.csv");
     }
 
     @Test
     public void testWriteServiceFeeTrueUpCsvEmptyReport() throws IOException {
-        assertFiles(outputStream -> usageRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2013, 1, 1),
+        assertFiles(outputStream -> reportRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2013, 1, 1),
             LocalDate.of(2012, 1, 1), LocalDate.of(2014, 5, 5), outputStream, 2000017000L,
             DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_empty_report.csv");
     }
 
     @Test
     public void testWriteOwnershipAdjustmentCsvReport() throws Exception {
-        assertFiles(outputStream -> rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(
+        assertFiles(outputStream -> reportRepository.writeOwnershipAdjustmentCsvReport(
             "3210b236-1239-4a60-9fab-888b84199321",
             Collections.singleton(RightsholderDiscrepancyStatusEnum.APPROVED), outputStream),
             "ownership_adjustment_report.csv");
@@ -209,7 +208,7 @@ public class CsvReportsIntegrationTest {
 
     @Test
     public void testWriteOwnershipAdjustmentCsvEmptyReport() throws IOException {
-        assertFiles(outputStream -> rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(
+        assertFiles(outputStream -> reportRepository.writeOwnershipAdjustmentCsvReport(
             "3210b236-1239-4a60-9fab-888b84199321",
             Collections.singleton(RightsholderDiscrepancyStatusEnum.DRAFT), outputStream),
             "ownership_adjustment_report_empty.csv");

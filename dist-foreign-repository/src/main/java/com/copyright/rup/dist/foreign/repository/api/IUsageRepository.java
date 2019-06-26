@@ -15,7 +15,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -430,52 +429,6 @@ public interface IUsageRepository {
      * @param researchedUsages collection of {@link ResearchedUsage}s
      */
     void updateResearchedUsages(Collection<ResearchedUsage> researchedUsages);
-
-    /**
-     * Writes Undistributed Liabilities Reconciliation Report into the output stream in csv format.
-     *
-     * @param paymentDate                payment date
-     * @param outputStream               instance of {@link OutputStream}
-     * @param defaultEstimatedServiceFee default estimated service fee
-     */
-    void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
-                                                BigDecimal defaultEstimatedServiceFee);
-
-    /**
-     * Writes Service Fee True-up Report into the output stream in csv format.
-     *
-     * @param fromDate                   from date
-     * @param toDate                     to date
-     * @param paymentDateTo              payment date to
-     * @param outputStream               instance of {@link OutputStream}
-     * @param claAccountNumber           CLA account number
-     * @param defaultEstimatedServiceFee default estimated service fee
-     */
-    void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
-                                        OutputStream outputStream, Long claAccountNumber,
-                                        BigDecimal defaultEstimatedServiceFee);
-
-    /**
-     * Writes Summary of Market Report into the output stream in csv format based on batch ids.
-     *
-     * @param batchIds     list of batch ids
-     * @param outputStream instance of {@link OutputStream}
-     */
-    void writeSummaryMarketCsvReport(List<String> batchIds, OutputStream outputStream);
-
-    /**
-     * Writes FAS/FAS2 Batch Summary Report into the output stream in csv format.
-     *
-     * @param outputStream instance of {@link OutputStream}
-     */
-    void writeFasBatchSummaryCsvReport(OutputStream outputStream);
-
-    /**
-     * Writes Research Status Report into the output stream in csv format.
-     *
-     * @param outputStream instance of {@link OutputStream}
-     */
-    void writeResearchStatusCsvReport(OutputStream outputStream);
 
     /**
      * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.
