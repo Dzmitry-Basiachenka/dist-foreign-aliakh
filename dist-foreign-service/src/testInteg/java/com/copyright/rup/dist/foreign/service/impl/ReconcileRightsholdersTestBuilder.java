@@ -147,7 +147,8 @@ class ReconcileRightsholdersTestBuilder {
         }
 
         private void assertAudit() {
-            usageIdToAuditItemsMap.forEach((usageId, usageAuditItems) -> testHelper.assertAudit(usageId, usageAuditItems));
+            usageIdToAuditItemsMap.forEach(
+                (usageId, usageAuditItems) -> testHelper.assertAudit(usageId, usageAuditItems));
         }
     }
 }
