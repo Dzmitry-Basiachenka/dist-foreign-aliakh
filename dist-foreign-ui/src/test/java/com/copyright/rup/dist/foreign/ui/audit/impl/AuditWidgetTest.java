@@ -12,11 +12,11 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Lists;
@@ -42,9 +42,11 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,7 +67,6 @@ public class AuditWidgetTest {
     private IAuditController controller;
     private IAuditFilterWidget filterWidget;
     private IAuditFilterController filterController;
-    private IStreamSource streamSource;
 
     @Before
     public void setUp() {
@@ -75,7 +76,6 @@ public class AuditWidgetTest {
         filterController = createMock(IAuditFilterController.class);
         filterWidget = new AuditFilterWidget();
         filterWidget.setController(filterController);
-        streamSource = createMock(IStreamSource.class);
     }
 
     @Test
@@ -180,6 +180,10 @@ public class AuditWidgetTest {
     }
 
     private void initWidget() {
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
+        expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
         expect(controller.getAuditFilterController()).andReturn(filterController).once();
         expect(filterController.initWidget()).andReturn(filterWidget).once();
         replay(controller, filterController, streamSource);

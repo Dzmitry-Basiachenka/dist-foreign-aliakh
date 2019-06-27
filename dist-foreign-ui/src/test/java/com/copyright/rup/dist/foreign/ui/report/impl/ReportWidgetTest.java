@@ -11,11 +11,11 @@ import static org.powermock.api.easymock.PowerMock.replayAll;
 import static org.powermock.api.easymock.PowerMock.verify;
 import static org.powermock.api.easymock.PowerMock.verifyAll;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.ReportWidget.ReportStreamSource;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -38,7 +38,10 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link ReportWidget}.
@@ -158,20 +161,22 @@ public class ReportWidgetTest {
 
     @Test
     public void testReportStreamSource() {
+        String fileName = "batch_summary_05_30_2018_12_30.csv";
+        InputStream is = createMock(InputStream.class);
         IStreamSource streamSource = createMock(IStreamSource.class);
-        InputStream inputStream = createMock(InputStream.class);
-        expect(streamSource.getFileName()).andReturn("batch_summary_05_30_2018_12_30.csv").once();
-        expect(streamSource.getStream()).andReturn(inputStream).once();
-        replay(streamSource, inputStream);
+        Map.Entry<Supplier<String>, Supplier<InputStream>> source =
+            new SimpleImmutableEntry<>(() -> fileName, () -> is);
+        expect(streamSource.getSource()).andReturn(source).times(2);
+        replay(streamSource, is);
         ReportStreamSource reportStreamSource = new ReportStreamSource(streamSource);
         DownloadStream stream = reportStreamSource.getStream();
         assertEquals(0, stream.getCacheTime());
-        assertEquals("batch_summary_05_30_2018_12_30.csv", stream.getFileName());
+        assertEquals(fileName, stream.getFileName());
         assertEquals(MediaType.OCTET_STREAM.withCharset(StandardCharsets.UTF_8).toString(), stream.getContentType());
         assertEquals("private,no-cache,no-store", stream.getParameter(HttpHeaders.CACHE_CONTROL));
-        assertEquals("attachment; filename=\"batch_summary_05_30_2018_12_30.csv\"",
+        assertEquals(String.format("attachment; filename=\"%s\"", fileName),
             stream.getParameter(HttpHeaders.CONTENT_DISPOSITION));
-        verify(streamSource, inputStream);
+        verify(streamSource, is);
     }
 
     private void selectMenuItem(int index) {

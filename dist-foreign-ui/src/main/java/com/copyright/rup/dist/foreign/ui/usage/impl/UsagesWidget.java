@@ -214,7 +214,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(event -> onAddToScenarioClicked());
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource());
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
         fileDownloader.extend(exportButton);
         sendForResearchButton = Buttons.createButton(ForeignUi.getMessage("button.send_for_research"));
         SendForResearchFileDownloader sendForResearchDownloader = new SendForResearchFileDownloader(controller);
@@ -407,7 +408,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
          * @param controller instance of {@link IUsagesController}
          */
         SendForResearchFileDownloader(IUsagesController controller) {
-            super(controller.getSendForResearchUsagesStreamSource());
+            super(controller.getSendForResearchUsagesStreamSource().getSource());
             this.controller = controller;
         }
 

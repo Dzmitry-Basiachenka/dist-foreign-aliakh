@@ -9,10 +9,10 @@ import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportWidget;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -72,8 +72,8 @@ public class ServiceFeeTrueUpReportControllerTest {
         replay(widget, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
         assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            streamSource.getFileName());
-        assertNotNull(streamSource.getStream());
+            streamSource.getSource().getKey().get());
+        assertNotNull(streamSource.getSource().getValue().get());
         assertEquals(fromDate, fromDateCapture.getValue());
         assertEquals(toDate, toDateCapture.getValue());
         assertEquals(paymentDateTo, paymentDateToCapture.getValue());

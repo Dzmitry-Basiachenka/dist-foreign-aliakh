@@ -70,7 +70,7 @@ class RightsholderDiscrepanciesWindow extends Window {
     private HorizontalLayout initButtons() {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(new CsvStreamSource(controller));
+        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(new CsvStreamSource(controller).getSource());
         fileDownloader.extend(exportButton);
         Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
         approveButton.addClickListener(event -> {

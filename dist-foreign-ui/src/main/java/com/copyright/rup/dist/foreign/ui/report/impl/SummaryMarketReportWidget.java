@@ -108,7 +108,7 @@ public class SummaryMarketReportWidget extends Window implements ISummaryMarketR
         clearButton.addClickListener(event -> checkBoxGroup.clear());
         exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         exportButton.setEnabled(false);
-        OnDemandFileDownloader downloader = new OnDemandFileDownloader(new CsvStreamSource(controller));
+        OnDemandFileDownloader downloader = new OnDemandFileDownloader(new CsvStreamSource(controller).getSource());
         downloader.extend(exportButton);
         HorizontalLayout layout = new HorizontalLayout(exportButton, clearButton, closeButton);
         layout.setMargin(new MarginInfo(false, false, false, false));

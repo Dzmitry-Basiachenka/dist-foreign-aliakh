@@ -15,11 +15,11 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
@@ -48,10 +48,12 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -84,12 +86,15 @@ public class UsagesWidgetTest {
         usagesWidget = new UsagesWidget();
         usagesWidget.setController(controller);
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
-        expect(controller.getExportUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
-        expect(controller.getSendForResearchUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
-        replay(controller);
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).times(2);
+        expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
+        expect(controller.getSendForResearchUsagesStreamSource()).andReturn(streamSource).once();
+        replay(controller, streamSource);
         usagesWidget.init();
         verify(controller);
-        reset(controller);
+        reset(controller, streamSource);
     }
 
     @Test

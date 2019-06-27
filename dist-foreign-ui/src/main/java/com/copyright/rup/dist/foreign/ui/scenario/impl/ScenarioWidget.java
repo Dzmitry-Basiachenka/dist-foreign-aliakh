@@ -250,11 +250,11 @@ public class ScenarioWidget extends Window implements IScenarioWidget, IMediator
     private HorizontalLayout initButtons() {
         exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
         OnDemandFileDownloader exportDetailsFileDownloader =
-            new OnDemandFileDownloader(controller.getExportScenarioUsagesStreamSource());
+            new OnDemandFileDownloader(controller.getExportScenarioUsagesStreamSource().getSource());
         exportDetailsFileDownloader.extend(exportDetailsButton);
         exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader exportScenarioFileDownloader =
-            new OnDemandFileDownloader(controller.getExportScenarioRightsholderTotalsStreamSource());
+            new OnDemandFileDownloader(controller.getExportScenarioRightsholderTotalsStreamSource().getSource());
         exportScenarioFileDownloader.extend(exportButton);
         excludeButton = new Button(ForeignUi.getMessage("button.exclude.details"));
         excludeButton.addClickListener(event -> controller.onExcludeDetailsClicked());
