@@ -117,7 +117,7 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
             "reportedValue", STYLE_ALIGN_RIGHT, 130);
         addColumn(usageDto -> CurrencyUtils.format(usageDto.getGrossAmount(), null), "table.column.gross_amount",
             "grossAmount", STYLE_ALIGN_RIGHT, 110);
-        addColumn(usageDto -> 0 < BigDecimal.ZERO.compareTo(usageDto.getBatchGrossAmount())
+        addColumn(usageDto -> 0 != BigDecimal.ZERO.compareTo(usageDto.getBatchGrossAmount())
                 ? CurrencyUtils.format(usageDto.getBatchGrossAmount(), null) : null,
             "table.column.batch_gross_amount", "batchGrossAmount", STYLE_ALIGN_RIGHT, 135);
         addColumn(usageDto -> CurrencyUtils.format(usageDto.getServiceFeeAmount(), null),

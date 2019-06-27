@@ -5,11 +5,13 @@ import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.ValueProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -22,6 +24,9 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Verifies {@link DrillDownByRightsholderWidget}.
@@ -79,7 +84,8 @@ public class DrillDownByRightsholderWidgetTest {
         Grid<UsageDto> grid = (Grid<UsageDto>) component;
         assertTrue(grid.getStyleName().contains("drill-down-by-rightsholder-table"));
         verifySize(grid);
-        grid.getColumns().forEach(column -> {
+        List<Grid.Column<UsageDto, ?>> columns = grid.getColumns();
+        columns.forEach(column -> {
             assertTrue(column.isSortable());
             assertTrue(column.isResizable());
         });
@@ -89,6 +95,17 @@ public class DrillDownByRightsholderWidgetTest {
                 "Reported Value", "Amt in USD", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD",
                 "Service Fee %", "Market", "Market Period From", "Market Period To", "Author", "Comment"},
             grid.getColumns().stream().map(Column::getCaption).toArray());
+        verifyGrossAmountInUsdDataProvider(columns.get(18));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void verifyGrossAmountInUsdDataProvider(Column grossAmountInUsdColumn) {
+        assertEquals("Gross Amt in USD", grossAmountInUsdColumn.getCaption());
+        UsageDto usage = new UsageDto();
+        ValueProvider<UsageDto, String> provider = grossAmountInUsdColumn.getValueProvider();
+        assertNull(provider.apply(usage));
+        usage.setBatchGrossAmount(new BigDecimal("100.00"));
+        assertEquals("100.00", provider.apply(usage));
     }
 
     private void verifyButtonsLayout(Component component) {
