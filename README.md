@@ -1,3 +1,11 @@
+6.0.4
+-
+* B-51661 Tech Debt: FDA: fix issue
+* B-51661 Tech Debt: FDA: move common assert usage methods to service tеst helper
+* B-51661 Tech Debt: FDA: move repository logic related to exporting usages to report repository and mapper
+* B-51661 Tech Debt: FDA: rename all methods in CreateNtsBatchIntegrationTest
+* CDP-777 FDA: Drill-down by Rightsholder on Scenario View: Gross Amt in USD column is not populated for FAS/FAS2 scenarios
+
 6.0.3
 -
 * B-51661 Tech Debt: FDA: add environment, host, IP for notification for Scheduled jobs
