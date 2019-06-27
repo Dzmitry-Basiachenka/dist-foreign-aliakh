@@ -63,7 +63,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
-    public void testNtsBatchWorkflow() {
+    public void testCreateNtsBatch() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET, STM_AMOUNT)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, "rights/rms_grants_658824345_response.json")
@@ -77,7 +77,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
-    public void testNtsBatchWorkflowWithUnclassified() {
+    public void testCreateNtsBatchWithUnclassified() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool("Gov", STM_AMOUNT)))
             .expectRmsRights("rights/rms_grants_576324545_request.json", "rights/rms_grants_576324545_response.json")
@@ -90,7 +90,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
-    public void testNtsBatchWorkflowWithIneligibleRh() {
+    public void testCreateNtsBatchWithIneligibleRh() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET, STM_AMOUNT)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
@@ -102,7 +102,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
-    public void testNtsBatchWorkflowWithNonUsRhTaxCountry() {
+    public void testCreateNtsBatchWithNonUsRhTaxCountry() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET, STM_AMOUNT)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
@@ -113,7 +113,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
-    public void testNtsBatchWorkflowWithRhNotFound() {
+    public void testCreateNtsBatchWithRhNotFound() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool("Univ", STM_AMOUNT)))
             .expectRmsRights("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json")
@@ -122,7 +122,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
-    public void testNtsBatchWorkflowWithUsageUnderMinimum() {
+    public void testCreateNtsBatchWithUsageUnderMinimum() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool("Lib", STM_AMOUNT)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
@@ -136,7 +136,7 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
-    public void testNtsBatchWorkflowZeroStmAmount() {
+    public void testCreateNtsBatchZeroStmAmount() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool("Edu", new BigDecimal("0.000"))))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
