@@ -6,7 +6,6 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -17,11 +16,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.repository.impl.csv.AuditCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.SendForResearchCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.UsageCsvReportHandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
@@ -33,13 +27,10 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import java.io.OutputStream;
-import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -75,7 +66,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String RH_ACCOUNT_NUMBER_KEY = "rhAccountNumber";
     private static final String PRODUCT_FAMILY_KEY = "productFamily";
     private static final String BATCH_ID_KEY = "batchId";
-    private static final int REPORT_BATCH_SIZE = 100000;
 
     @Override
     public void insert(Usage usage) {
@@ -159,60 +149,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public int findCountByFilter(UsageFilter filter) {
         return selectOne("IUsageMapper.findCountByFilter", ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
-    }
-
-    @Override
-    public void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
-        Objects.requireNonNull(pipedOutputStream);
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
-        try (ScenarioUsagesCsvReportHandler handler = new ScenarioUsagesCsvReportHandler(pipedOutputStream)) {
-            int size = selectOne("IUsageMapper.findCountByScenarioId", parameters);
-            for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
-                parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
-                getTemplate().select("IUsageMapper.findDtoByScenarioId", parameters, handler);
-            }
-        }
-    }
-
-    @Override
-    public void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
-        Objects.requireNonNull(pipedOutputStream);
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SORT_KEY, new Sort("rightsholder.accountNumber", Direction.ASC));
-        try (ScenarioRightsholderTotalsCsvReportHandler handler
-                 = new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
-            getTemplate().select("IUsageMapper.findRightsholderTotalsHoldersByScenarioId", parameters, handler);
-        }
-    }
-
-    @Override
-    public void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        try (UsageCsvReportHandler handler = new UsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
-            if (!filter.isEmpty()) {
-                int size = findCountByFilter(filter);
-                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
-                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
-                    getTemplate().select("IUsageMapper.findDtosByFilter", parameters, handler);
-                }
-            }
-        }
-    }
-
-    @Override
-    public Set<String> writeUsagesForResearchAndFindIds(UsageFilter filter, OutputStream outputStream) {
-        Set<String> usageIds = new HashSet<>();
-        try (SendForResearchCsvReportHandler handler =
-                 new SendForResearchCsvReportHandler(Objects.requireNonNull(outputStream))) {
-            if (!Objects.requireNonNull(filter).isEmpty()) {
-                getTemplate().select("IUsageMapper.findDtosByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
-                usageIds = handler.getUsagesIds();
-            }
-        }
-        return usageIds;
     }
 
     @Override
@@ -423,21 +359,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         params.put("pageable", pageable);
         params.put("sort", sort);
         return selectList("IUsageMapper.findForAudit", params);
-    }
-
-    @Override
-    public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        try (AuditCsvReportHandler handler = new AuditCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
-            if (!Objects.requireNonNull(filter).isEmpty()) {
-                int size = findCountForAudit(filter);
-                parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
-                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
-                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
-                    getTemplate().select("IUsageMapper.findForAudit", parameters, handler);
-                }
-            }
-        }
     }
 
     @Override

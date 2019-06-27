@@ -164,7 +164,7 @@
     <sql id="selectUsageDtos">
         select
             u.df_usage_uid,
-            <include refid="usageDtoColumns"/>
+            <include refid="IUsageMapper.usageDtoColumns"/>
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
@@ -425,14 +425,14 @@
         )
     </insert>
 
-    <select id="findDtosByFilter" resultMap="usageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
-        <include refid="selectUsageDtos"/>
-        <include refid="usageFilter"/>
+    <sql id="selectDtosByFilterSql">
+        <include refid="IUsageMapper.selectUsageDtos"/>
+        <include refid="IUsageMapper.usageFilter"/>
         and u.df_scenario_uid is null
         order by
         <choose>
             <when test="null != sort">
-                <include refid="chooseSortProperty">
+                <include refid="IUsageMapper.chooseSortProperty">
                     <property name="detail_uid" value="u.df_usage_uid"/>
                 </include>
             </when>
@@ -440,7 +440,11 @@
                 updated_datetime desc, df_usage_uid
             </otherwise>
         </choose>
-        <include refid="ifPageable"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <select id="findDtosByFilter" resultMap="usageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IUsageMapper.selectDtosByFilterSql"/>
     </select>
 
     <select id="findIdsByStatusAndProductFamily" resultType="string" parameterType="map">
@@ -484,12 +488,6 @@
             u.status_ind = #{status} and
             u.product_family = #{productFamily}
         order by u.df_usage_uid
-    </select>
-
-    <select id="findCountByScenarioId" parameterType="map" resultType="int">
-        select count(1)
-        from ${schema}.df_usage u
-        where df_scenario_uid = #{scenarioId}
     </select>
 
     <select id="findByScenarioId" resultMap="usageResultMap" parameterType="string">
@@ -566,21 +564,29 @@
         where df_scenario_uid = #{scenarioId}
     </select>
 
-    <select id="findDtoByScenarioId" resultMap="usageDtoResultMap">
-        <include refid="selectUsageDtos"/>
+    <sql id="selectDtoByScenarioIdSql">
+        <include refid="IUsageMapper.selectUsageDtos"/>
         where df_scenario_uid = #{scenarioId}
         order by u.rh_account_number
-        <include refid="ifPageable"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <select id="findDtoByScenarioId" resultMap="usageDtoResultMap">
+        <include refid="IUsageMapper.selectDtoByScenarioIdSql"/>
     </select>
 
-    <select id="findCountByFilter" parameterType="map" resultType="int">
+    <sql id="selectCountByFilterSql">
         select count(1)
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
-        <include refid="usageFilter"/>
-        and u.df_scenario_uid is null
+        <include refid="IUsageMapper.usageFilter"/>
+            and u.df_scenario_uid is null
+    </sql>
+
+    <select id="findCountByFilter" parameterType="map" resultType="int">
+        <include refid="IUsageMapper.selectCountByFilterSql"/>
     </select>
 
     <select id="findByIds" resultMap="usageResultMap">
@@ -792,7 +798,7 @@
             ) as usage_uid;
     </select>
 
-    <select id="findRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="rightsholderTotalsHolderResultMap">
+    <sql id="selectRightsholderTotalsHoldersByScenarioIdSql">
         select
             r.name rh_name,
             u.rh_account_number,
@@ -812,17 +818,19 @@
                 service_fee
             from ${schema}.df_usage
             where df_scenario_uid = #{scenarioId}
-            group by rh_account_number, payee_account_number, service_fee) u
+            group by rh_account_number, payee_account_number, service_fee
+        ) u
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
         left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
         <if test="null != searchValue">
-            where <include refid="searchWhereClause"/>
+            where <include refid="IUsageMapper.searchWhereClause"/>
         </if>
-        <include refid="rightsholderTotalHoldersOrderBy"/>
-        <if test="null != pageable">
-            limit #{pageable.limit}
-            offset #{pageable.offset}
-        </if>
+        <include refid="IUsageMapper.rightsholderTotalHoldersOrderBy"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <select id="findRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="rightsholderTotalsHolderResultMap">
+        <include refid="IUsageMapper.selectRightsholderTotalsHoldersByScenarioIdSql"/>
     </select>
 
     <select id="getTotalAmountByStandardNumberAndBatchId" parameterType="map" resultType="BigDecimal">
@@ -945,14 +953,14 @@
         from ${schema}.df_usage_archive u
         left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
-        <include refid="archivedAuditFilterWhereClause"/>)
+        <include refid="IUsageMapper.archivedAuditFilterWhereClause"/>)
     </sql>
 
-    <select id="findCountForAudit" resultType="int" parameterType="map">
+    <sql id="selectCountForAuditSql">
         select
         <choose>
             <when test="null != filter.cccEventId || null != filter.distributionName">
-                 <include refid="selectArchivedCountForAuditSql"/>
+                <include refid="IUsageMapper.selectArchivedCountForAuditSql"/>
             </when>
             <otherwise>
                 (select count(1) usage_count
@@ -960,19 +968,23 @@
                 join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
                 left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
                 <where>
-                    <include refid="commonAuditFilterWhereClause">
+                    <include refid="IUsageMapper.commonAuditFilterWhereClause">
                         <property name="detail_uid" value="u.df_usage_uid"/>
                     </include>
                 </where>) +
-                <include refid="selectArchivedCountForAuditSql"/>
+                <include refid="IUsageMapper.selectArchivedCountForAuditSql"/>
             </otherwise>
         </choose>
+    </sql>
+
+    <select id="findCountForAudit" resultType="int" parameterType="map">
+        <include refid="IUsageMapper.selectCountForAuditSql"/>
     </select>
 
-    <select id="findForAudit" resultMap="usageDtoResultMap" parameterType="map">
+    <sql id="selectForAuditSql">
         <choose>
             <when test="null != filter.cccEventId || null != filter.distributionName">
-                <include refid="selectArchivedUsagesForAuditSql"/>
+                <include refid="IUsageMapper.selectArchivedUsagesForAuditSql"/>
             </when>
             <otherwise>
                 select
@@ -1008,12 +1020,12 @@
                 left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
                 left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
                 <where>
-                    <include refid="commonAuditFilterWhereClause">
+                    <include refid="IUsageMapper.commonAuditFilterWhereClause">
                         <property name="detail_uid" value="u.df_usage_uid"/>
                     </include>
                 </where>
                 union
-                <include refid="selectArchivedUsagesForAuditSql"/>
+                <include refid="IUsageMapper.selectArchivedUsagesForAuditSql"/>
             </otherwise>
         </choose>
         order by
@@ -1099,7 +1111,11 @@
                 df_usage_uid asc
             </otherwise>
         </choose>
-        <include refid="ifPageable"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <select id="findForAudit" resultMap="usageDtoResultMap" parameterType="map">
+        <include refid="IUsageMapper.selectForAuditSql"/>
     </select>
 
     <sql id="selectArchivedUsagesForAuditSql">
@@ -1135,12 +1151,12 @@
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
         left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
-        <include refid="archivedAuditFilterWhereClause"/>
+        <include refid="IUsageMapper.archivedAuditFilterWhereClause"/>
     </sql>
 
     <sql id="archivedAuditFilterWhereClause">
         <where>
-            <include refid="commonAuditFilterWhereClause">
+            <include refid="IUsageMapper.commonAuditFilterWhereClause">
                 <property name="detail_uid" value="u.df_usage_archive_uid"/>
             </include>
             <if test="null != filter.cccEventId">

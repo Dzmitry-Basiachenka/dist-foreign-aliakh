@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
@@ -12,8 +11,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
-import java.io.OutputStream;
-import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
@@ -125,40 +122,6 @@ public interface IUsageRepository {
      * status and payee account number
      */
     Map<Long, Usage> findRightsholdersInformation(String scenarioId);
-
-    /**
-     * Finds usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.
-     *
-     * @param filter            instance of {@link UsageFilter}
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
-     */
-    void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
-
-    /**
-     * Writes usages found by filter into the output stream in CSV format
-     * and returns identifiers of those usages.
-     *
-     * @param filter       instance of {@link UsageFilter}
-     * @param outputStream instance of {@link OutputStream}
-     * @return identifiers of usages written into CSV report
-     */
-    Set<String> writeUsagesForResearchAndFindIds(UsageFilter filter, OutputStream outputStream);
-
-    /**
-     * Finds usages by scenario id and writes them into the output stream in CSV format.
-     *
-     * @param scenarioId        scenario id
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
-     */
-    void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
-
-    /**
-     * Finds {@link RightsholderTotalsHolder}s based on scenario id and writes them to the output stream in CSV format.
-     *
-     * @param scenarioId        scenario id
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
-     */
-    void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
      * Deletes all {@link Usage}s from the batch with given id.
@@ -372,15 +335,6 @@ public interface IUsageRepository {
      * @return list of {@link UsageDto}s
      */
     List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort);
-
-    /**
-     * Finds usages by given {@link AuditFilter} and writes them to the given {@link PipedOutputStream}.
-     *
-     * @param filter            filter
-     * @param pipedOutputStream stream
-     * @throws RupRuntimeException in case when IOException appears during writing report
-     */
-    void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
 
     /**
      * Finds list of {@link Usage}s by array of {@link UsageStatusEnum} items.
