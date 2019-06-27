@@ -8,9 +8,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 
@@ -19,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.IntStream;
 
 /**
  * Builder for {@link RefreshScenarioTest}.
@@ -39,7 +35,7 @@ class RefreshScenarioTestBuilder {
     private List<String> expectedRollupsRightholderIds;
     private String expectedPreferencesJson;
     private List<String> expectedPreferencesRightholderIds;
-    private String expectedScenarioId;
+    private String scenarioId;
     private List<Usage> expectedUsages;
     private Scenario expectedScenario;
 
@@ -49,8 +45,6 @@ class RefreshScenarioTestBuilder {
     private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IScenarioRepository scenarioRepository;
-    @Autowired
-    private IUsageRepository usageRepository;
     @Autowired
     private ServiceTestHelper testHelper;
 
@@ -66,8 +60,8 @@ class RefreshScenarioTestBuilder {
         return this;
     }
 
-    RefreshScenarioTestBuilder withScenario(String scenarioId) {
-        this.expectedScenarioId = scenarioId;
+    RefreshScenarioTestBuilder withScenario(String id) {
+        this.scenarioId = id;
         return this;
     }
 
@@ -96,19 +90,19 @@ class RefreshScenarioTestBuilder {
             testHelper.expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
             Scenario scenario = scenarioRepository.findAll()
                 .stream()
-                .filter(s -> s.getId().equals(expectedScenarioId))
+                .filter(s -> s.getId().equals(scenarioId))
                 .findFirst()
                 .orElse(null);
             scenarioService.refreshScenario(scenario);
             testHelper.verifyRestServer();
             assertScenario();
-            assertUsages();
-            assertScenarioActions(expectedScenarioId);
+            testHelper.assertUsages(expectedUsages);
+            assertScenarioActions(scenarioId);
         }
 
         private void assertScenario() {
             assertEquals(2, scenarioService.getScenarios().size());
-            expectedScenario.setId(expectedScenarioId);
+            expectedScenario.setId(scenarioId);
             Scenario scenario = scenarioService.getScenarioWithAmountsAndLastAction(expectedScenario);
             assertEquals(expectedScenario.getId(), scenario.getId());
             assertEquals(expectedScenario.getName(), scenario.getName());
@@ -123,24 +117,8 @@ class RefreshScenarioTestBuilder {
             assertEquals(1, scenario.getVersion());
         }
 
-        private void assertUsages() {
-            List<Usage> usages = usageRepository.findByScenarioId(expectedScenarioId);
-            usages.sort(Comparator.comparing(Usage::getId));
-            IntStream.range(0, expectedUsages.size()).forEach(i -> {
-                Usage actualUsage = usages.get(i);
-                Usage expectedUsage = expectedUsages.get(i);
-                assertEquals(expectedUsage.getId(), actualUsage.getId());
-                assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber(), 0);
-                assertEquals(UsageStatusEnum.LOCKED, actualUsage.getStatus());
-                assertEquals("SYSTEM", actualUsage.getUpdateUser());
-                assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
-                assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
-                assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-            });
-        }
-
-        private void assertScenarioActions(String scenarioId) {
-            List<ScenarioAuditItem> actions = scenarioAuditService.getActions(scenarioId);
+        private void assertScenarioActions(String entityId) {
+            List<ScenarioAuditItem> actions = scenarioAuditService.getActions(entityId);
             assertTrue(CollectionUtils.isNotEmpty(actions));
             assertEquals(1, CollectionUtils.size(actions));
             assertEquals(ScenarioActionTypeEnum.ADDED_USAGES, actions.get(0).getActionType());

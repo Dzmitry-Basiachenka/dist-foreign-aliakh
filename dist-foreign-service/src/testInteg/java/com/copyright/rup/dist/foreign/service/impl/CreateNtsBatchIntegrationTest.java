@@ -194,6 +194,8 @@ public class CreateNtsBatchIntegrationTest {
         usage.setMarketPeriodTo(2017);
         usage.setGrossAmount(DEFAULT_GROSS_AMOUNT);
         usage.setReportedValue(new BigDecimal("1176.92"));
+        usage.setNetAmount(new BigDecimal("0.0000000000"));
+        usage.setServiceFeeAmount(new BigDecimal("0.0000000000"));
         return usage;
     }
 

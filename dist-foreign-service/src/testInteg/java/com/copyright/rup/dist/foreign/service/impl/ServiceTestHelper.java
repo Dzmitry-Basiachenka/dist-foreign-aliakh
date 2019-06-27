@@ -4,7 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import com.google.common.collect.Lists;
@@ -42,6 +44,8 @@ public class ServiceTestHelper {
     private RestTemplate restTemplate;
     @Autowired
     private IUsageAuditService usageAuditService;
+    @Autowired
+    private IUsageRepository usageRepository;
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
     @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
@@ -144,5 +148,26 @@ public class ServiceTestHelper {
                 assertEquals(actualAuditItems.get(index).getActionReason(), auditItems.get(index).getActionReason());
                 assertEquals(actualAuditItems.get(index).getActionType(), auditItems.get(index).getActionType());
             });
+    }
+
+    public void assertUsages(List<Usage> expectedUsages) {
+        expectedUsages.forEach(usage -> {
+            List<Usage> actualUsages = usageRepository.findByIds(Collections.singletonList(usage.getId()));
+            assertUsage(actualUsages.get(0), usage);
+        });
+    }
+
+    private void assertUsage(Usage actualUsage, Usage expectedUsage) {
+        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
+            actualUsage.getRightsholder().getAccountNumber());
+        assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber());
+        assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
+        assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+        assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+        assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
+        assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
     }
 }

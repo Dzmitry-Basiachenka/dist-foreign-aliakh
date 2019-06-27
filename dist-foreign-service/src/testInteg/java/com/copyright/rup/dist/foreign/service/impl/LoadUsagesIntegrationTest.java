@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
@@ -33,7 +32,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -58,16 +56,13 @@ public class LoadUsagesIntegrationTest {
     private static final String USAGE_ID_3 = "afef95d3-d525-49ec-91fe-79fdced6830f";
     private static final String USAGE_ID_4 = "ddc1672e-ef63-4965-a6bc-1d299272c953";
     private static final List<String> IDS = Arrays.asList(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4);
-    private static final String TITLE =
-        "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )";
     private static final String UPLOADED_REASON = "Uploaded in 'Test_Batch' Batch";
+    private static final String FAS2_PRODUCT_FAMILY = "FAS2";
 
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
     private IUsageBatchService usageBatchService;
-    @Autowired
-    private IUsageRepository usageRepository;
     @Autowired
     private ServiceTestHelper testHelper;
 
@@ -80,12 +75,16 @@ public class LoadUsagesIntegrationTest {
             "rights/rms_grants_100011725_response.json");
         testHelper.expectPrmCall("prm/rightsholder_1000024950_response.json", 1000024950L);
         loadUsageBatch();
-        assertUsage(USAGE_ID_1, UsageStatusEnum.NTS_WITHDRAWN, null, null, TITLE, "12345XX-79068", null);
-        assertUsage(USAGE_ID_2, UsageStatusEnum.WORK_NOT_FOUND, null, null,
-            "Reclaiming youth at risk : our hope for the future", "12345XX-123117", null);
-        assertUsage(USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, 123059057L, null,
-            "True directions : living your sacred instructions", null, "VALISBN10");
-        assertUsage(USAGE_ID_4, UsageStatusEnum.ELIGIBLE, 100011725L, 1000024950L, TITLE, "12345XX-79069", "VALISBN10");
+        testHelper.assertUsages(Arrays.asList(
+            buildUsage(USAGE_ID_1, UsageStatusEnum.NTS_WITHDRAWN, null, null, "NTS",
+                new BigDecimal("55.0000000000"), new BigDecimal("50.00")),
+            buildUsage(USAGE_ID_2, UsageStatusEnum.WORK_NOT_FOUND,
+                null, null, FAS2_PRODUCT_FAMILY, new BigDecimal("165.0000000000"), new BigDecimal("150.00")),
+            buildUsage(USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, 123059057L,
+                null, FAS2_PRODUCT_FAMILY, new BigDecimal("220.0000000000"), new BigDecimal("200.00")),
+            buildUsage(USAGE_ID_4, UsageStatusEnum.ELIGIBLE, 100011725L,
+                1000024950L, FAS2_PRODUCT_FAMILY, new BigDecimal("110.0000000000"), new BigDecimal("100.00"))
+        ));
         testHelper.assertAudit(USAGE_ID_1, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
             UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
             "Detail was made eligible for NTS because sum of gross amounts, grouped by standard number, " +
@@ -151,15 +150,21 @@ public class LoadUsagesIntegrationTest {
         return out;
     }
 
-    private void assertUsage(String usageId, UsageStatusEnum status, Long wrWrkInst, Long rhAccountNumber,
-                             String systemTitle, String standardNumber, String standardNumberType) {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
-        assertEquals(status, usage.getStatus());
-        assertEquals(wrWrkInst, usage.getWrWrkInst());
-        assertEquals(rhAccountNumber, usage.getRightsholder().getAccountNumber());
-        assertEquals(systemTitle, usage.getSystemTitle());
-        assertEquals(standardNumber, usage.getStandardNumber());
-        assertEquals(standardNumberType, usage.getStandardNumberType());
+    private Usage buildUsage(String usageId, UsageStatusEnum status, Long wrWrkInst, Long rhAccounNumber,
+                             String productFamily, BigDecimal grossAmount, BigDecimal reportedValue) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(rhAccounNumber);
+        Usage usage = new Usage();
+        usage.setId(usageId);
+        usage.setStatus(status);
+        usage.setWrWrkInst(wrWrkInst);
+        usage.setRightsholder(rightsholder);
+        usage.setProductFamily(productFamily);
+        usage.setReportedValue(reportedValue);
+        usage.setGrossAmount(grossAmount);
+        usage.setNetAmount(new BigDecimal("0.0000000000"));
+        usage.setServiceFeeAmount(new BigDecimal("0.0000000000"));
+        return usage;
     }
 
     private List<UsageAuditItem> buildUsageAuditItems(String usageId, Map<UsageActionTypeEnum, String> map) {
