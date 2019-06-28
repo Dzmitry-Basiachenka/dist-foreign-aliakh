@@ -18,10 +18,10 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
@@ -45,7 +45,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import com.google.common.collect.Lists;
@@ -71,7 +70,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -215,33 +213,14 @@ public class UsagesControllerTest {
         researchService.sendForResearch(anyObject(UsageFilter.class), anyObject(OutputStream.class));
         expectLastCall().once();
         replay(usageService, filterWidgetMock, filterController);
-        assertNotNull(controller.getSendForResearchUsagesStreamSource().getStream());
+        assertNotNull(controller.getSendForResearchUsagesStreamSource().getSource().getValue().get());
         verify(usageService, filterWidgetMock, filterController);
     }
 
     @Test
     public void testSendForResearchUsagesStreamSourceFileName() {
         assertEquals("send_for_research_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            controller.getSendForResearchUsagesStreamSource().getFileName());
-    }
-
-    @Test
-    public void testGetErrorsStream() {
-        ProcessingResult csvProcessingResult = Whitebox.newInstance(ProcessingResult.class);
-        IStreamSource errorStreamSource =
-            controller.getErrorResultStreamSource(StringUtils.EMPTY, csvProcessingResult);
-        ExecutorService executorService = createMock(ExecutorService.class);
-        Whitebox.setInternalState(errorStreamSource, executorService);
-        Capture<Runnable> captureRunnable = new Capture<>();
-        executorService.execute(capture(captureRunnable));
-        expectLastCall().once();
-        replay(usageService, filterController, executorService);
-        assertNotNull(errorStreamSource.getStream());
-        Runnable runnable = captureRunnable.getValue();
-        assertNotNull(runnable);
-        assertSame(errorStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
-        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
-        verify(usageService, filterController, executorService);
+            controller.getSendForResearchUsagesStreamSource().getSource().getKey().get());
     }
 
     @Test
@@ -261,19 +240,12 @@ public class UsagesControllerTest {
         replay(filterWidgetMock, filterController, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getExportUsagesStreamSource();
         assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            streamSource.getFileName());
+            streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
         assertNotNull(posConsumer);
         verify(filterWidgetMock, filterController, streamSourceHandler, reportService);
-    }
-
-    @Test
-    public void testGetErrorsFileName() {
-        ProcessingResult csvProcessingResult = Whitebox.newInstance(ProcessingResult.class);
-        assertEquals("Error_for_fileName.csv",
-            controller.getErrorResultStreamSource("fileName.csv", csvProcessingResult).getFileName());
     }
 
     @Test
@@ -509,7 +481,7 @@ public class UsagesControllerTest {
         IStreamSource streamSource = controller.getPreServiceFeeFundBatchesStreamSource(
             Collections.singletonList(new UsageBatch()), BigDecimal.ONE);
         assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            streamSource.getFileName());
+            streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);

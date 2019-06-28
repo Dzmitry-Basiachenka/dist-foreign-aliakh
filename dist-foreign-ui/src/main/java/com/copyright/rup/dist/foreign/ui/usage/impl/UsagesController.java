@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -35,8 +35,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IWorkClassificationController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
-import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.base.MoreObjects;
@@ -52,18 +50,12 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Controller for {@link UsagesWidget}.
@@ -278,7 +270,9 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult processingResult) {
-        return new ErrorResultStreamSource(fileName, processingResult);
+        return streamSourceHandler.getCsvStreamSource(
+            () -> String.format("Error_for_%s", Files.getNameWithoutExtension(fileName)), null,
+            processingResult::writeToFile);
     }
 
     @Override
@@ -346,35 +340,5 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     protected IUsagesWidget instantiateWidget() {
         return new UsagesWidget();
-    }
-
-    private static class ErrorResultStreamSource implements IStreamSource {
-
-        private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-        private final ProcessingResult processingResult;
-        private final String fileName;
-
-        ErrorResultStreamSource(String fileName, ProcessingResult processingResult) {
-            this.fileName = fileName;
-            this.processingResult = processingResult;
-        }
-
-        @Override
-        public String getFileName() {
-            return VaadinUtils.encodeAndBuildFileName(
-                String.format("Error_for_%s", Files.getNameWithoutExtension(fileName)), "csv");
-        }
-
-        @Override
-        public InputStream getStream() {
-            try {
-                PipedOutputStream outputStream = new PipedOutputStream();
-                PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
-                executorService.execute(() -> processingResult.writeToFile(outputStream));
-                return pipedInputStream;
-            } catch (IOException e) {
-                throw new RupRuntimeException(e);
-            }
-        }
     }
 }

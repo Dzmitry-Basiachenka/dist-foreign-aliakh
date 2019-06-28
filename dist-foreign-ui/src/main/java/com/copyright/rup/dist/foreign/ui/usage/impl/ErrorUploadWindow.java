@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -48,7 +48,7 @@ public class ErrorUploadWindow extends Window {
 
     private HorizontalLayout buildButtonsLayout(IStreamSource streamSource) {
         Button downloadButton = Buttons.createButton(ForeignUi.getMessage("button.download"));
-        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(streamSource);
+        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(streamSource.getSource());
         fileDownloader.extend(downloadButton);
         Button closeButton = Buttons.createCloseButton(this);
         HorizontalLayout buttonsLayout = new HorizontalLayout();

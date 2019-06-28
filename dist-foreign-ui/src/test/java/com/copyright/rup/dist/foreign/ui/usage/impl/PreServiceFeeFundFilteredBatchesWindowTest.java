@@ -9,9 +9,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -27,9 +27,11 @@ import com.vaadin.ui.components.grid.FooterRow;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -51,13 +53,16 @@ public class PreServiceFeeFundFilteredBatchesWindowTest {
     public void testConstructor() {
         IUsagesController controller = createMock(IUsagesController.class);
         List<UsageBatch> batches = Collections.singletonList(buildUsageBatch());
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
         expect(controller.getPreServiceFeeFundBatchesStreamSource(batches, USAGE_BATCH_GROSS_AMOUNT))
-            .andReturn(createMock(IStreamSource.class)).once();
-        replay(controller);
+            .andReturn(streamSource).once();
+        replay(controller, streamSource);
         PreServiceFeeFundFilteredBatchesWindow
             window = new PreServiceFeeFundFilteredBatchesWindow(controller, batches,
             createMock(PreServiceFeeFundBatchesFilterWindow.class));
-        verify(controller);
+        verify(controller, streamSource);
         assertEquals("Filtered batches", window.getCaption());
         verifySize(window, Unit.PIXELS, 700, Unit.PIXELS, 400);
         assertEquals("batches-filter-window", window.getStyleName());

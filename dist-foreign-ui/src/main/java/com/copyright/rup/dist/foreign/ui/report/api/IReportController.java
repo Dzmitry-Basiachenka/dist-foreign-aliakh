@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.api;
 
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 /**

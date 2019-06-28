@@ -12,10 +12,10 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -38,8 +38,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -73,14 +75,16 @@ public class ScenarioWidgetTest {
         scenario.setGrossTotal(new BigDecimal("20000.00"));
         scenario.setServiceFeeTotal(new BigDecimal("6400.00"));
         scenario.setNetTotal(new BigDecimal("13600.00"));
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).times(2);
+        expect(controller.getExportScenarioUsagesStreamSource()).andReturn(streamSource).once();
+        expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenario()).andReturn(scenario).once();
-        expect(controller.getExportScenarioUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
-        expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(createMock(IStreamSource.class))
-            .once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
-        replay(controller, ForeignSecurityUtils.class, mediator);
+        replay(controller, streamSource, ForeignSecurityUtils.class, mediator);
         scenarioWidget.init();
-        verify(controller, ForeignSecurityUtils.class);
+        verify(controller, streamSource, ForeignSecurityUtils.class);
         reset(controller, mediator);
     }
 

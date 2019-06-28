@@ -69,7 +69,7 @@ public class UndistributedLiabilitiesReportWidget extends Window implements IUnd
         Button closeButton = Buttons.createCloseButton((Window) controller.getWidget());
         exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         exportButton.setEnabled(false);
-        OnDemandFileDownloader downloader = new OnDemandFileDownloader(new CsvStreamSource(controller));
+        OnDemandFileDownloader downloader = new OnDemandFileDownloader(new CsvStreamSource(controller).getSource());
         downloader.extend(exportButton);
         HorizontalLayout layout = new HorizontalLayout(exportButton, closeButton);
         layout.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);

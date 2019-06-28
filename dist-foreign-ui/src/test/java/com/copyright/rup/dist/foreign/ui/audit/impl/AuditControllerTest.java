@@ -12,6 +12,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
@@ -24,7 +25,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import org.apache.commons.io.IOUtils;
@@ -181,7 +181,7 @@ public class AuditControllerTest {
         replay(auditFilterController, filterWidget, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
         assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            streamSource.getFileName());
+            streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);

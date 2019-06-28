@@ -104,7 +104,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         searchWidget.setPrompt(ForeignUi.getMessage("prompt.audit_search"));
         searchWidget.setWidth(75, Unit.PERCENTAGE);
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(new CsvStreamSource(controller));
+        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(new CsvStreamSource(controller).getSource());
         fileDownloader.extend(exportButton);
         HorizontalLayout toolbar = new HorizontalLayout(exportButton, searchWidget);
         VaadinUtils.setMaxComponentsWidth(toolbar);

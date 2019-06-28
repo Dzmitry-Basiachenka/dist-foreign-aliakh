@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -23,9 +25,11 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -44,11 +48,15 @@ public class RightsholderDiscrepanciesWindowTest {
         IReconcileRightsholdersController reconcileRightsholdersController =
             createMock(IReconcileRightsholdersController.class);
         IScenariosController scenariosController = createMock(IScenariosController.class);
-        replay(reconcileRightsholdersController);
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
+        expect(reconcileRightsholdersController.getCsvStreamSource()).andReturn(streamSource).once();
+        replay(reconcileRightsholdersController, streamSource);
         RightsholderDiscrepanciesWindow window =
             new RightsholderDiscrepanciesWindow(reconcileRightsholdersController, scenariosController);
         assertEquals("Reconcile Rightsholders", window.getCaption());
-        verify(reconcileRightsholdersController);
+        verify(reconcileRightsholdersController, streamSource);
         assertEquals(900, window.getWidth(), 0);
         assertEquals(530, window.getHeight(), 0);
         VerticalLayout content = (VerticalLayout) window.getContent();

@@ -15,6 +15,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -51,7 +52,9 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collections;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link ScenariosController}.
@@ -168,6 +171,10 @@ public class ScenariosControllerTest {
         IRightsholderDiscrepancyService rightsholderDiscrepancyService =
             createMock(IRightsholderDiscrepancyService.class);
         Whitebox.setInternalState(scenariosController, rightsholderDiscrepancyService);
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(
+            new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
+        expect(reconcileRightsholdersController.getCsvStreamSource()).andReturn(streamSource).once();
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         scenarioService.reconcileRightsholders(scenario);
         expectLastCall().once();
@@ -178,10 +185,10 @@ public class ScenariosControllerTest {
         reconcileRightsholdersController.setScenario(scenario);
         expectLastCall().once();
         replay(scenariosWidget, scenarioService, reconcileRightsholdersController, rightsholderDiscrepancyService,
-            Windows.class);
+            Windows.class, streamSource);
         scenariosController.onReconcileRightsholdersButtonClicked();
         verify(scenariosWidget, scenarioService, reconcileRightsholdersController, rightsholderDiscrepancyService,
-            Windows.class);
+            Windows.class, streamSource);
     }
 
     @Test

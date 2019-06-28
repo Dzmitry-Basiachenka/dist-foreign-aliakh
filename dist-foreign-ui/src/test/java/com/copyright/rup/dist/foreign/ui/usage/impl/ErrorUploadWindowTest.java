@@ -8,9 +8,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 
 import com.vaadin.server.Extension;
@@ -28,7 +28,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link ErrorUploadWindow}.
@@ -46,13 +48,16 @@ public class ErrorUploadWindowTest {
     public void testComponentStructure() {
         IUsagesController controller = createMock(IUsagesController.class);
         ProcessingResult processingResult = Whitebox.newInstance(ProcessingResult.class);
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
         expect(controller.getErrorResultStreamSource(StringUtils.EMPTY, processingResult))
-            .andReturn(createMock(IStreamSource.class)).once();
-        replay(controller);
+            .andReturn(streamSource).once();
+        replay(controller, streamSource);
         ErrorUploadWindow errorUploadWindow =
             new ErrorUploadWindow(controller.getErrorResultStreamSource(StringUtils.EMPTY, processingResult),
                 "The file could not be uploaded.<br>Press Download button to see detailed list of errors");
-        verify(controller);
+        verify(controller, streamSource);
         assertFalse(errorUploadWindow.isResizable());
         assertEquals("upload-error-window", errorUploadWindow.getId());
         assertEquals("Error", errorUploadWindow.getCaption());

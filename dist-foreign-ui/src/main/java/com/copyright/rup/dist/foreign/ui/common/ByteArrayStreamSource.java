@@ -1,14 +1,17 @@
 package com.copyright.rup.dist.foreign.ui.common;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
-import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.dist.common.util.FileNameUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.OffsetDateTime;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Map.Entry;
+import java.util.function.Supplier;
 
 /**
  * An implementation of {@link com.vaadin.server.StreamResource.StreamSource}.
@@ -37,16 +40,16 @@ public class ByteArrayStreamSource implements IStreamSource {
     }
 
     @Override
-    public InputStream getStream() {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        reportWriter.writeReport(byteArrayOutputStream);
-        return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-    }
-
-    @Override
-    public String getFileName() {
-        return VaadinUtils.encodeAndBuildFileName(fileNamePrefix +
-            CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm"), "csv");
+    public Entry<Supplier<String>, Supplier<InputStream>> getSource() {
+        return new SimpleImmutableEntry<>(
+            () -> FileNameUtils.encodeAndBuildFileName(fileNamePrefix +
+                CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm"), "csv"),
+            () -> {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                reportWriter.writeReport(baos);
+                return new ByteArrayInputStream(baos.toByteArray());
+            }
+        );
     }
 
     /**

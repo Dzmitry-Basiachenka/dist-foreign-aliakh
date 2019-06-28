@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -97,10 +97,10 @@ public class ReportWidget extends MenuBar implements IReportWidget {
         /**
          * Creates a new stream resource for downloading from stream.
          *
-         * @param streamSource the source Stream.
+         * @param streamSource instance of {@link IStreamSource}.
          */
         ReportStreamSource(IStreamSource streamSource) {
-            super(streamSource, streamSource.getFileName());
+            super((StreamSource) streamSource.getSource().getValue()::get, streamSource.getSource().getKey().get());
         }
 
         @Override

@@ -102,7 +102,7 @@ class PreServiceFeeFundFilteredBatchesWindow extends Window {
     private HorizontalLayout createButtonsLayout(List<UsageBatch> batches, BigDecimal grossAmount) {
         Button exportButton = Buttons.createButton("Export");
         OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(
-            controller.getPreServiceFeeFundBatchesStreamSource(batches, grossAmount));
+            controller.getPreServiceFeeFundBatchesStreamSource(batches, grossAmount).getSource());
         fileDownloader.extend(exportButton);
         Button continueButton = Buttons.createButton("Continue");
         continueButton.addClickListener((ClickListener) event ->

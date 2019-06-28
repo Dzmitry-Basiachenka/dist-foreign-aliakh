@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -9,6 +10,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -27,8 +30,10 @@ import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link OwnershipAdjustmentReportWidget}.
@@ -50,9 +55,15 @@ public class OwnershipAdjustmentReportWidgetTest {
         scenario.setName("Test scenario name");
         expect(scenarioService.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         Whitebox.setInternalState(controller, scenarioService);
-        replay(scenarioService);
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(
+            new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
+        IStreamSourceHandler streamSourceHandler = createMock(IStreamSourceHandler.class);
+        expect(streamSourceHandler.getCsvStreamSource(anyObject(), anyObject())).andReturn(streamSource).once();
+        Whitebox.setInternalState(controller, streamSourceHandler);
+        replay(scenarioService, streamSourceHandler, streamSource);
         OwnershipAdjustmentReportWidget widget = (OwnershipAdjustmentReportWidget) controller.initWidget();
-        verify(scenarioService);
+        verify(scenarioService, streamSourceHandler, streamSource);
         verifySize(widget);
         verifyContent(widget.getContent(), scenario);
     }

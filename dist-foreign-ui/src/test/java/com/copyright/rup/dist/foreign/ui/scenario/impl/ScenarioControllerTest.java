@@ -16,6 +16,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
@@ -32,7 +33,6 @@ import com.copyright.rup.dist.foreign.service.impl.ScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -54,6 +54,7 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -111,10 +112,13 @@ public class ScenarioControllerTest {
         expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(createMock(IStreamSource.class)).times(2);
+            .andReturn(streamSource).times(2);
         expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
-        replay(usageService, scenarioService, streamSourceHandler, ForeignSecurityUtils.class);
+        replay(usageService, scenarioService, streamSourceHandler, streamSource, ForeignSecurityUtils.class);
         controller.initWidget();
         List<RightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
@@ -124,7 +128,7 @@ public class ScenarioControllerTest {
         assertEquals(0, result.size());
         assertNotNull(fileNameSupplierCapture.getValue());
         assertNotNull(posConsumerCapture.getValue());
-        verify(usageService, scenarioService, streamSourceHandler, ForeignSecurityUtils.class);
+        verify(usageService, scenarioService, streamSourceHandler, streamSource, ForeignSecurityUtils.class);
     }
 
     @Test
@@ -134,15 +138,18 @@ public class ScenarioControllerTest {
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(createMock(IStreamSource.class)).times(2);
+            .andReturn(streamSource).times(2);
         expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
-        replay(usageService, scenarioService, streamSourceHandler, ForeignSecurityUtils.class);
+        replay(usageService, scenarioService, streamSourceHandler, streamSource, ForeignSecurityUtils.class);
         controller.initWidget();
         assertEquals(1, controller.getSize());
         assertNotNull(fileNameSupplierCapture.getValue());
         assertNotNull(posConsumerCapture.getValue());
-        verify(usageService, scenarioService, streamSourceHandler, ForeignSecurityUtils.class);
+        verify(usageService, scenarioService, streamSourceHandler, streamSource, ForeignSecurityUtils.class);
     }
 
     @Test
@@ -187,7 +194,7 @@ public class ScenarioControllerTest {
         replay(streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getExportScenarioUsagesStreamSource();
         assertEquals("Scenario_name_Details_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm")
-            + ".csv", streamSource.getFileName());
+            + ".csv", streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
@@ -209,7 +216,7 @@ public class ScenarioControllerTest {
         replay(streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getExportScenarioRightsholderTotalsStreamSource();
         assertEquals("Scenario_name_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm")
-            + ".csv", streamSource.getFileName());
+            + ".csv", streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
