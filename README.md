@@ -1,3 +1,7 @@
+6.0.5
+-
+* B-51661 Tech Debt: FDA: refactoring reports to use OnDemandFileDownloader constructor with arguments without Vaadin dependencies
+
 6.0.4
 -
 * B-51661 Tech Debt: FDA: fix issue
