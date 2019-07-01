@@ -153,7 +153,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '1445.1632')
             column(name: 'service_fee_amount', value: '680.0768')
             column(name: 'service_fee', value: '0.32000')
-            column(name: 'standard_number_type', value: 'VALISBN10');
+            column(name: 'standard_number_type', value: 'VALISBN10')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
