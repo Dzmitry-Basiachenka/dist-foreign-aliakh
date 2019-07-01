@@ -83,6 +83,7 @@ public class FundPoolLoadWindowTest {
     private static final String STM_MIN_FIELD = "stmMinAmountField";
     private static final String NON_STM_MIN_FIELD = "nonStmMinAmountField";
     private static final String INVALID_PERIOD_ERROR_MESSAGE = "Field value should be in range from 1950 to 2099";
+    private static final LocalDate PAYMENT_DATA_WIDGET = LocalDate.of(2019, 6, 20);
     private FundPoolLoadWindow window;
     private IUsagesController usagesController;
 
@@ -243,7 +244,7 @@ public class FundPoolLoadWindowTest {
         rro.setName(RRO_NAME);
         rro.setId(RupPersistUtils.generateUuid());
         LocalDateWidget paymentDateWidget = new LocalDateWidget("Payment Date");
-        paymentDateWidget.setValue(LocalDate.now());
+        paymentDateWidget.setValue(PAYMENT_DATA_WIDGET);
         Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
         Whitebox.setInternalState(window, "rro", rro);
         setTextField("usageBatchNameField", USAGE_BATCH_NAME);
