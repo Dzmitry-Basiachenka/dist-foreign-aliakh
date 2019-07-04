@@ -1,9 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkClassificationService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IWorkClassificationController;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +42,10 @@ public class WorkClassificationController implements IWorkClassificationControll
     private IWorkClassificationService workClassificationService;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IReportService reportService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public int getClassificationCount(Set<String> batchesIds, String searchValue) {
@@ -70,5 +78,12 @@ public class WorkClassificationController implements IWorkClassificationControll
     public int getCountToUpdate(Set<WorkClassification> classifications) {
         return usageService.getUnclassifiedUsagesCount(
             classifications.stream().map(WorkClassification::getWrWrkInst).collect(Collectors.toSet()));
+    }
+
+    @Override
+    public IStreamSource getExportWorkClassificationStreamSource(Set<String> batchesIds,
+                                                                 Supplier<String> searchValueSupplier) {
+        return streamSourceHandler.getCsvStreamSource(() -> "work_classification_", "MM_dd_YYYY_HH_mm",
+            pos -> reportService.writeWorkClassificationCsvReport(batchesIds, searchValueSupplier.get(), pos));
     }
 }

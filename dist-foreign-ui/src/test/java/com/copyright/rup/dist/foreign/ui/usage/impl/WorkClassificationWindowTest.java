@@ -10,16 +10,20 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.ui.usage.api.IWorkClassificationController;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Sets;
+import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -33,16 +37,20 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -65,7 +73,15 @@ public class WorkClassificationWindowTest {
     @Before
     public void setUp() {
         workClassificationController = createMock(IWorkClassificationController.class);
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(workClassificationController.getExportWorkClassificationStreamSource(
+            anyObject(Set.class), anyObject(Supplier.class))).andReturn(streamSource).once();
+        expect(streamSource.getSource())
+            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
+        replay(workClassificationController, streamSource);
         window = new WorkClassificationWindow(batchesIds, workClassificationController);
+        verify(workClassificationController, streamSource);
+        reset(workClassificationController);
     }
 
     @Test
@@ -77,15 +93,20 @@ public class WorkClassificationWindowTest {
         assertTrue(content.isSpacing());
         verifySize(content, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
         assertEquals(4, content.getComponentCount());
-        assertEquals(SearchWidget.class, content.getComponent(1).getClass());
-        Component component = content.getComponent(2);
-        assertEquals(Grid.class, component.getClass());
-        verifyGrid((Grid) component);
-        assertEquals(1, content.getExpandRatio(component), 0);
-        component = content.getComponent(3);
-        assertEquals(HorizontalLayout.class, component.getClass());
-        verifyButtonsLayout((HorizontalLayout) component);
-        assertEquals(Alignment.BOTTOM_RIGHT, content.getComponentAlignment(component));
+        Component toolbarComponent = content.getComponent(1);
+        assertEquals(HorizontalLayout.class, toolbarComponent.getClass());
+        HorizontalLayout toolbar = (HorizontalLayout) toolbarComponent;
+        verifyExportButton(toolbar.getComponent(0));
+        Component searchWidgetComponent = toolbar.getComponent(1);
+        assertEquals(SearchWidget.class, searchWidgetComponent.getClass());
+        Component gridComponent = content.getComponent(2);
+        assertEquals(Grid.class, gridComponent.getClass());
+        verifyGrid((Grid) gridComponent);
+        assertEquals(1, content.getExpandRatio(gridComponent), 0);
+        Component buttonsLayoutComponent = content.getComponent(3);
+        assertEquals(HorizontalLayout.class, buttonsLayoutComponent.getClass());
+        verifyButtonsLayout((HorizontalLayout) buttonsLayoutComponent);
+        assertEquals(Alignment.BOTTOM_RIGHT, content.getComponentAlignment(buttonsLayoutComponent));
     }
 
     @Test
@@ -138,6 +159,16 @@ public class WorkClassificationWindowTest {
         replay(workClassificationController, confirmWindowCapture, Windows.class);
         listener.buttonClick(null);
         verify(workClassificationController, confirmWindowCapture, Windows.class);
+    }
+
+    private void verifyExportButton(Component exportButtonComponent) {
+        assertEquals(Button.class, exportButtonComponent.getClass());
+        Button exportButton = (Button) exportButtonComponent;
+        assertEquals("Export", exportButton.getCaption());
+        Collection<Extension> extensions = exportButton.getExtensions();
+        assertTrue(CollectionUtils.isNotEmpty(extensions));
+        assertEquals(1, extensions.size());
+        assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
     }
 
     private void verifySize(Component component, float width, Unit widthUnit, float height, Unit heightUnit) {

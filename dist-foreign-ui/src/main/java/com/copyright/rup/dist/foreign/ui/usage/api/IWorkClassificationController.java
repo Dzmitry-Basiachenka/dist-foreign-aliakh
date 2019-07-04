@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 
 import com.vaadin.data.provider.QuerySortOrder;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Controller for works classification.
@@ -62,4 +64,13 @@ public interface IWorkClassificationController {
      * @return count of usages
      */
     int getCountToUpdate(Set<WorkClassification> classifications);
+
+    /**
+     * Returns instance of {@link IStreamSource} with works classification.
+     *
+     * @param batchesIds          set of batches ids
+     * @param searchValueSupplier search value supplier
+     * @return instance of {@link IStreamSource}
+     */
+    IStreamSource getExportWorkClassificationStreamSource(Set<String> batchesIds, Supplier<String> searchValueSupplier);
 }
