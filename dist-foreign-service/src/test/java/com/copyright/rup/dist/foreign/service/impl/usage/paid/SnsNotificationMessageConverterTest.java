@@ -41,8 +41,9 @@ public class SnsNotificationMessageConverterTest {
 
     @Test
     public void testConvert() throws IOException {
-        Exchange exchange = new DefaultExchange(new SpringCamelContext());
-        Message in = new DefaultMessage();
+        SpringCamelContext camelContext = new SpringCamelContext();
+        Exchange exchange = new DefaultExchange(camelContext);
+        Message in = new DefaultMessage(camelContext);
         in.setBody(snsNotificationBody);
         exchange.setIn(in);
         assertNotSame(in, exchange.getOut());

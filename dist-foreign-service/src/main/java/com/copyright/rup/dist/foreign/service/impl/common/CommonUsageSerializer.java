@@ -6,7 +6,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
-import com.fasterxml.jackson.databind.type.SimpleType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -29,7 +30,8 @@ public class CommonUsageSerializer extends StdSerializer<Usage> {
      * Constructor.
      */
     public CommonUsageSerializer() {
-        super(CollectionLikeType.construct(Usage.class, SimpleType.construct(CommonUsageSerializer.class)));
+        super(CollectionLikeType.upgradeFrom(TypeFactory.defaultInstance().constructType(Usage.class),
+            TypeFactory.defaultInstance().constructType(CommonUsageSerializer.class)));
     }
 
     @Override
