@@ -90,7 +90,7 @@
         </choose>
     </sql>
 
-    <select id="findByBatchIds" resultMap="workClassificationResultMap" parameterType="map">
+    <sql id="findByBatchIdsSql">
         select
             wc.df_work_classification_uid,
             wc.classification,
@@ -119,18 +119,22 @@
                 </foreach>
                 <if test="null != searchValue">
                     and
-                        <include refid="searchClause">
+                        <include refid="IWorkClassificationMapper.searchClause">
                             <property name="wr_wrk_inst" value="u.wr_wrk_inst"/>
                         </include>
                 </if>
             order by u.wr_wrk_inst, u.updated_datetime desc
             ) internal
         left join ${schema}.df_work_classification wc on wc.wr_wrk_inst = internal.wr_wrk_inst
-        <include refid="classificationOrderByClause"/>
+        <include refid="IWorkClassificationMapper.classificationOrderByClause"/>
         <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <select id="findByBatchIds" resultMap="workClassificationResultMap" parameterType="map">
+        <include refid="findByBatchIdsSql" />
     </select>
 
-    <select id="findBySearch" resultMap="workClassificationResultMap">
+    <sql id="findBySearchSql" >
         select
             wc.df_work_classification_uid,
             wc.classification,
@@ -155,15 +159,19 @@
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         <if test="null != searchValue">
             where
-                <include refid="searchClause">
+                <include refid="IWorkClassificationMapper.searchClause">
                     <property name="wr_wrk_inst" value="wc.wr_wrk_inst"/>
                 </include>
         </if>
-        <include refid="classificationOrderByClause"/>
+        <include refid="IWorkClassificationMapper.classificationOrderByClause"/>
         <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <select id="findBySearch" resultMap="workClassificationResultMap">
+        <include refid="findBySearchSql" />
     </select>
 
-    <select id="findCountByBatchIds" parameterType="map" resultType="int">
+    <sql id="findCountByBatchIdsSql">
         select count(distinct wr_wrk_inst)
         from ${schema}.df_usage u
         left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
@@ -175,13 +183,17 @@
             </foreach>
         <if test="null != searchValue">
             and
-                <include refid="searchClause">
+                <include refid="IWorkClassificationMapper.searchClause">
                     <property name="wr_wrk_inst" value="u.wr_wrk_inst"/>
                 </include>
         </if>
+    </sql>
+
+    <select id="findCountByBatchIds" parameterType="map" resultType="int">
+        <include refid="findCountByBatchIdsSql" />
     </select>
 
-    <select id="findCountBySearch" parameterType="map" resultType="int">
+    <sql id="findCountBySearchSql" >
         select count(1)
         from ${schema}.df_work_classification wc
         left join lateral (
@@ -197,9 +209,13 @@
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         <if test="null != searchValue">
             where
-                <include refid="searchClause">
+                <include refid="IWorkClassificationMapper.searchClause">
                     <property name="wr_wrk_inst" value="wc.wr_wrk_inst"/>
                 </include>
         </if>
+    </sql>
+
+    <select id="findCountBySearch" parameterType="map" resultType="int">
+        <include refid="findCountBySearchSql" />
     </select>
 </mapper>

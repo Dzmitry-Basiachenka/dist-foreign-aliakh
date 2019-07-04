@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.ServiceFeeTrueUpReport
 import com.copyright.rup.dist.foreign.repository.impl.csv.SummaryMarketReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.UndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.UsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.WorkClassificationCsvReportHandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -57,6 +58,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     private static final int REPORT_BATCH_SIZE = 100000;
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
+    private static final String SEARCH_VALUE_KEY = "searchValue";
 
     @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
@@ -194,6 +196,43 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
                 for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
                     parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
                     getTemplate().select("IReportMapper.findAuditReportDtos", parameters, handler);
+                }
+            }
+        }
+    }
+
+    @Override
+    // TODO {pliakh} generalize partitioning logic for writeAuditCsvReport, writeUsagesCsvReport,
+    //  writeScenarioUsagesCsvReport, writeScenarioUsagesCsvReport, writeWorkClassificationCsvReportBySearch
+    public void writeWorkClassificationCsvReportByBatchIds(Set<String> batchesIds, String searchValue,
+                                                           PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("batchesIds", Objects.requireNonNull(batchesIds));
+        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        int size = selectOne("IReportMapper.findCountByBatchIds", parameters);
+        try (WorkClassificationCsvReportHandler handler =
+                 new WorkClassificationCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
+            if (0 < size) {
+                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
+                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
+                    getTemplate().select("IReportMapper.findByBatchIds", parameters, handler);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void writeWorkClassificationCsvReportBySearch(String searchValue,
+                                                         PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        int size = selectOne("IReportMapper.findCountBySearch", parameters);
+        try (WorkClassificationCsvReportHandler handler =
+                 new WorkClassificationCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
+            if (0 < size) {
+                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
+                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
+                    getTemplate().select("IReportMapper.findBySearch", parameters, handler);
                 }
             }
         }

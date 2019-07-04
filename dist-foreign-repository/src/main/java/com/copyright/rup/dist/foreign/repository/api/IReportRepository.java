@@ -122,4 +122,22 @@ public interface IReportRepository {
      * @throws RupRuntimeException in case when IOException appears during writing report
      */
     void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
+
+    /**
+     * Writes {@link com.copyright.rup.dist.foreign.domain.WorkClassification}s by batches ids and search value.
+     *
+     * @param batchesIds        set of batches ids
+     * @param searchValue       search value
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeWorkClassificationCsvReportByBatchIds(Set<String> batchesIds, String searchValue,
+                                                    PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes {@link com.copyright.rup.dist.foreign.domain.WorkClassification}s by search value.
+     *
+     * @param searchValue       search value
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeWorkClassificationCsvReportBySearch(String searchValue, PipedOutputStream pipedOutputStream);
 }
