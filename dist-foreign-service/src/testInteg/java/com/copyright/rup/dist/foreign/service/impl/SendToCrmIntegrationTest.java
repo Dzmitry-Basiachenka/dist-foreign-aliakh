@@ -38,6 +38,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Verifies logic for sending {@link com.copyright.rup.dist.foreign.domain.PaidUsage}s to CRM.
@@ -81,14 +82,18 @@ public class SendToCrmIntegrationTest {
                 MediaType.APPLICATION_JSON));
         JobInfo jobInfo = usageService.sendToCrm();
         assertEquals(JobStatusEnum.FINISHED, jobInfo.getStatus());
-        assertEquals("PaidUsagesCount=5, ArchivedUsagesCount=3, NotReportedUsagesCount=2, ArchivedScenariosCount=1",
+        assertEquals("PaidUsagesCount=7, ArchivedUsagesCount=5, NotReportedUsagesCount=2, ArchivedScenariosCount=2",
             jobInfo.getResult());
         verifyUsages("0d1829eb-de35-4f93-bb36-2a7435263051", UsageStatusEnum.ARCHIVED);
         verifyUsages("9e356e22-57b3-49b3-af99-155093a9dc0a", UsageStatusEnum.PAID);
         verifyUsages("53496a2f-fb52-4b5b-9f60-9034cceb69b9", UsageStatusEnum.PAID);
         verifyUsages("feefdfd2-71fe-4c0a-a701-9dacffa9bccb", UsageStatusEnum.SENT_TO_LM);
         verifyUsages("48189e92-b9d2-46be-94a4-c2adf83f21ce", UsageStatusEnum.ARCHIVED);
-        verifyScenarios();
+        verifyUsages("adcd15c4-eb44-4e67-847a-7f386082646a", UsageStatusEnum.ARCHIVED);
+        verifyUsages("6fa92092-5cd3-4a12-bbf4-762f7ff6f815", UsageStatusEnum.ARCHIVED);
+        verifyScenario("cb7e3237-50c3-46a5-938e-46afd8c1e0bf", ScenarioStatusEnum.ARCHIVED);
+        verifyScenario("221c5a30-1937-4bf6-977f-93741f9b20f1", ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario("67027e15-17c6-4b9b-b7f0-12ec414ad344", ScenarioStatusEnum.ARCHIVED);
         mockServer.verify();
     }
 
@@ -109,20 +114,18 @@ public class SendToCrmIntegrationTest {
         }
     }
 
-    private void verifyScenarios() {
-        List<Scenario> scenarios = scenarioService.getScenarios();
-        assertTrue(CollectionUtils.isNotEmpty(scenarios));
-        assertEquals(2, scenarios.size());
-        Scenario scenario = scenarios.get(0);
-        assertEquals("cb7e3237-50c3-46a5-938e-46afd8c1e0bf", scenario.getId());
-        assertEquals(ScenarioStatusEnum.ARCHIVED, scenario.getStatus());
-        List<ScenarioAuditItem> auditItems = scenarioAuditService.getActions(scenario.getId());
-        assertTrue(CollectionUtils.isNotEmpty(auditItems));
-        assertEquals(1, auditItems.size());
-        assertEquals("All usages from scenario have been sent to CRM", auditItems.get(0).getActionReason());
-        scenario = scenarios.get(1);
-        assertEquals("221c5a30-1937-4bf6-977f-93741f9b20f1", scenario.getId());
-        assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
+    private void verifyScenario(String scenarioId, ScenarioStatusEnum expectedStatus) {
+        Scenario actualScenario = scenarioService.getScenarios().stream()
+            .filter(scenario -> Objects.equals(scenarioId, scenario.getId()))
+            .findFirst()
+            .orElseThrow(() -> new AssertionError(String.format("Scenario must exists. ScenarioId=%s", scenarioId)));
+        assertEquals(expectedStatus, actualScenario.getStatus());
+        if (ScenarioStatusEnum.ARCHIVED == expectedStatus) {
+            List<ScenarioAuditItem> auditItems = scenarioAuditService.getActions(scenarioId);
+            assertTrue(CollectionUtils.isNotEmpty(auditItems));
+            assertEquals(1, auditItems.size());
+            assertEquals("All usages from scenario have been sent to CRM", auditItems.get(0).getActionReason());
+        }
     }
 
     private String formatJson(Object objectToFormat) throws IOException {
