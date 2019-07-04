@@ -244,6 +244,30 @@ public class ReportServiceTest {
         verify(reportRepository);
     }
 
+    @Test
+    public void testWriteWorkClassificationCsvReportWithBatchIds() {
+        Set<String> batchIds = Collections.singleton("batch-uid-1293213");
+        String search = "search";
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeWorkClassificationCsvReportByBatchIds(batchIds, search, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeWorkClassificationCsvReport(batchIds, search, outputStream);
+        verify(reportRepository);
+    }
+
+
+    @Test
+    public void testWriteWorkClassificationCsvReportWithSearch() {
+        String search = "search";
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeWorkClassificationCsvReportBySearch(search, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeWorkClassificationCsvReport(Collections.EMPTY_SET, search, outputStream);
+        verify(reportRepository);
+    }
+
     private Scenario buildScenario(ScenarioStatusEnum status) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());

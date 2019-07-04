@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.PreServiceFeeFundBatchesCsvReportHandler;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.ibatis.executor.result.DefaultResultContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -120,6 +121,16 @@ public class ReportService implements IReportService {
     public void writeOwnershipAdjustmentCsvReport(String scenarioId, Set<RightsholderDiscrepancyStatusEnum> statuses,
                                                   OutputStream outputStream) {
         reportRepository.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
+    }
+
+    @Override
+    public void writeWorkClassificationCsvReport(Set<String> batchesIds, String searchValue,
+                                                 PipedOutputStream pipedOutputStream) {
+        if (CollectionUtils.isNotEmpty(batchesIds)) {
+            reportRepository.writeWorkClassificationCsvReportByBatchIds(batchesIds, searchValue, pipedOutputStream);
+        } else {
+            reportRepository.writeWorkClassificationCsvReportBySearch(searchValue, pipedOutputStream);
+        }
     }
 
     private void handleUsageBatch(PreServiceFeeFundBatchesCsvReportHandler handler, UsageBatch usageBatch) {

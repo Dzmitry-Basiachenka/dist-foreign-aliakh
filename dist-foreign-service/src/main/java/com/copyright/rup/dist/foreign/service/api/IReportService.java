@@ -116,4 +116,14 @@ public interface IReportService {
      */
     void writeOwnershipAdjustmentCsvReport(String scenarioId, Set<RightsholderDiscrepancyStatusEnum> statuses,
                                            OutputStream outputStream);
+
+    /**
+     * Writes {@link com.copyright.rup.dist.foreign.domain.WorkClassification}s by batches ids and search value.
+     *
+     * @param batchesIds        set of batches ids
+     * @param searchValue       search value
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeWorkClassificationCsvReport(Set<String> batchesIds, String searchValue,
+                                          PipedOutputStream pipedOutputStream);
 }

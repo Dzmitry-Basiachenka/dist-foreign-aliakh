@@ -284,4 +284,20 @@
     <select id="findAuditReportDtos" resultMap="IUsageMapper.usageDtoResultMap" parameterType="map">
         <include refid="IUsageMapper.selectForAuditSql"/>
     </select>
+
+    <select id="findCountByBatchIds" resultType="int" parameterType="map">
+        <include refid="IWorkClassificationMapper.findCountByBatchIdsSql"/>
+    </select>
+
+    <select id="findByBatchIds" resultMap="IWorkClassificationMapper.workClassificationResultMap" parameterType="map">
+        <include refid="IWorkClassificationMapper.findByBatchIdsSql"/>
+    </select>
+
+    <select id="findCountBySearch" resultType="int" parameterType="map">
+        <include refid="IWorkClassificationMapper.findCountBySearchSql"/>
+    </select>
+
+    <select id="findBySearch" resultMap="IWorkClassificationMapper.workClassificationResultMap" parameterType="map">
+        <include refid="IWorkClassificationMapper.findBySearchSql"/>
+    </select>
 </mapper>
