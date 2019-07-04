@@ -96,14 +96,13 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
         return appliedFilter;
     }
 
-    private HorizontalLayout initProductFamiliesFilter() {
+    private void initProductFamiliesFilter() {
         productFamilyFilterWidget = new ProductFamilyFilterWidget(() -> controller.getProductFamilies());
         productFamilyFilterWidget.addFilterSaveListener(saveEvent -> {
             filter.setProductFamilies(saveEvent.getSelectedItemsIds());
             filterChanged();
         });
         VaadinUtils.addComponentStyle(productFamilyFilterWidget, "product-families-filter");
-        return productFamilyFilterWidget;
     }
 
     private void initUsageBatchesFilter() {

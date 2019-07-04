@@ -131,7 +131,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         return verticalLayout;
     }
 
-    private ComboBox initProductFamilyCombobox() {
+    private void initProductFamilyCombobox() {
         productFamilyCombobox =
             new ComboBox<>(ForeignUi.getMessage("label.product_family"), controller.getProductFamilies());
         productFamilyCombobox.setSelectedItem("FAS");
@@ -140,7 +140,6 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         productFamilyCombobox.addValueChangeListener(event -> clearFilter());
         VaadinUtils.setMaxComponentsWidth(productFamilyCombobox);
         VaadinUtils.addComponentStyle(productFamilyCombobox, "product-family-combo-box");
-        return productFamilyCombobox;
     }
 
     private HorizontalLayout buildUsageBatchFilter() {
