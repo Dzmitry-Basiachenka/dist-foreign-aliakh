@@ -8,7 +8,10 @@ dependencies {
     compile project(':dist-foreign-integration')
 
     compile("com.copyright.rup.dist.common:dist-common-service:${distCommonVersion}")
-    compile("org.quartz-scheduler:quartz:${quartzVersion}")
+    compile("org.quartz-scheduler:quartz:${quartzVersion}") {
+        exclude group: 'c3p0'
+    }
+    compile("com.mchange:c3p0:${c3p0Version}")
     compile("org.springframework:spring-context-support:${rupJava.standardDependencies.spring.version}")
 
     runtime("commons-jexl:commons-jexl:${jexlVersion}")
