@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.crm.api;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -109,7 +110,7 @@ public class CrmRightsDistributionRequest {
     private Long arAccountNumber;
 
     @JsonProperty(value = "serviceNameReporting")
-    private String serviceNameReporting  = "FAS";
+    private String serviceNameReporting;
 
     @JsonProperty(value = "createUser")
     private String createUser = "FDA Distribution";
@@ -145,6 +146,9 @@ public class CrmRightsDistributionRequest {
         this.marketPeriodFrom = usage.getMarketPeriodFrom();
         this.marketPeriodTo = usage.getMarketPeriodTo();
         this.arAccountNumber = usage.getRroAccountNumber();
+        if (!FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+            this.serviceNameReporting = "FAS";
+        }
     }
 
     public String getCccEventId() {
