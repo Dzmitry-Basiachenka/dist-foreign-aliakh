@@ -19,7 +19,7 @@ public interface IUsagesWidget extends IWidget<IUsagesController>, IRefreshable,
      * Fires {@link com.vaadin.ui.Component.Event}.
      *
      * @param event an {@link com.vaadin.ui.Component.Event} to be fired
-     * @see com.vaadin.server.AbstractClientConnector#fireEvent(EventObject)
+     * @see com.vaadin.server.AbstractClientConnector#fireEvent(java.util.EventObject)
      */
     void fireWidgetEvent(Event event);
 }
