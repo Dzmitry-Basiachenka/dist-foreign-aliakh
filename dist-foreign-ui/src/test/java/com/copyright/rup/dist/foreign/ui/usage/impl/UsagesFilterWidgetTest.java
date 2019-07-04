@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -113,7 +114,7 @@ public class UsagesFilterWidgetTest {
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
         widget.getFilter().setRhAccountNumbers(accountNumbers);
-        assertFalse(widget.getFilter().equals(widget.getAppliedFilter()));
+        assertNotEquals(widget.getFilter(), widget.getAppliedFilter());
         applyButton.setEnabled(true);
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
         assertFalse(widget.getFilter().getRhAccountNumbers().isEmpty());

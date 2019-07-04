@@ -172,7 +172,7 @@ public class ScenariosWidgetTest {
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
         expect(grid.getSelectedItems()).andReturn(Collections.EMPTY_SET).once();
         replay(grid);
-        assertEquals(null, scenariosWidget.getSelectedScenario());
+        assertNull(scenariosWidget.getSelectedScenario());
         verify(grid);
     }
 
