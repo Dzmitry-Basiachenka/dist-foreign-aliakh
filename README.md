@@ -1,3 +1,14 @@
+6.0.6
+-
+* B-50690 FDA: Report NTS distributions to RC: Avoid sending serviceNameReporting field for NTS, adjust SendToCrmIntegrationTest to cover NTS case
+* B-51660 Tech Debt: FDA: eliminated deprecated API usage
+* B-51660 Tech Debt: FDA: resolve JUnit warnings
+* B-51660 Tech Debt: FDA: resolve Security Vulnerability issue with com.mchange:c3p0 dependency
+* B-51660 Tech Debt: FDA: resolve declaration redundancy warnings in audit and usage filter widgets
+* B-51660 Tech Debt: FDA: resolve javadoc errors
+* B-51661 Tech Debt: FDA: resolve groovy style warnings
+* B-52269 FDA: Allow users to export list of NTS eligible works with classifications: implement service logic to export works classification
+
 6.0.5
 -
 * B-51661 Tech Debt: FDA: refactoring reports to use OnDemandFileDownloader constructor with arguments without Vaadin dependencies
