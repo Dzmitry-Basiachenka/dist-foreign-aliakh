@@ -39,12 +39,12 @@ public class LazyRightsholderFilterWidgetTest {
     private LazyRightsholderFilterWidget itemsFilterWidget;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         itemsFilterWidget = new LazyRightsholderFilterWidget(CAPTION, createMock(IAuditFilterController.class));
     }
 
     @Test
-    public void testConstructor() throws Exception {
+    public void testConstructor() {
         verifyLabel(itemsFilterWidget.getComponent(0));
         verifyButton(itemsFilterWidget.getComponent(1));
         assertTrue(itemsFilterWidget.isSpacing());

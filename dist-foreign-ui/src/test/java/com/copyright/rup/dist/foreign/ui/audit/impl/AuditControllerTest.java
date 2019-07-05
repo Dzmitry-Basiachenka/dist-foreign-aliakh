@@ -118,7 +118,7 @@ public class AuditControllerTest {
         controller.onFilterChanged();
         verify(auditWidget);
     }
-
+    // TODO those methods should be implemented
 /*    @Test
     public void testLoadBeans() {
         Capture<Pageable> pageableCapture = new Capture<>();
@@ -148,7 +148,7 @@ public class AuditControllerTest {
     }*/
 
     @Test
-    public void testShowUsageHistory() throws Exception {
+    public void testShowUsageHistory() {
         mockStatic(Windows.class);
         Capture<UsageHistoryWindow> windowCapture = new Capture<>();
         String usageId = RupPersistUtils.generateUuid();

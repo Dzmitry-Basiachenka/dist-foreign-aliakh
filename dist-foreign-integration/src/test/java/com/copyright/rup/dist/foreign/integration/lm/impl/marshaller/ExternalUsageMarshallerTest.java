@@ -35,7 +35,7 @@ public class ExternalUsageMarshallerTest {
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testUnmarshal() throws Exception {
+    public void testUnmarshal() {
         externalUsageMarshaller.unmarshal(null, null);
     }
 }
