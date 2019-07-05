@@ -1,0 +1,25 @@
+{
+  "list": {
+    "rightsDistribution": [
+      {
+        "cccEventId": "53256",
+        "product": "NTS",
+        "rorAccountNumber": "1000023401",
+        "payeeAccountNumber": "1000010029",
+        "royaltyAmount": 272.3000000000,
+        "currency": "USD",
+        "licenseCreateDate": "03-12-2016T12:00:00 AM",
+        "serviceFeeAmount": 128.1400000000,
+        "wrWrkInst": "151811999",
+        "publicationName": "NON-TITLE NTS",
+        "omOrderDetailNumber": "047e7337-382a-43fd-9804-9453ef700254",
+        "totalAmount": 400.4400000000,
+        "periodEndDate": "12/12/2019",
+        "adjustmentFlag": false,
+        "passThroughFlag": true,
+        "createUser": "FDA Distribution",
+        "status": "D - Distributed"
+      }
+    ]
+  }
+}

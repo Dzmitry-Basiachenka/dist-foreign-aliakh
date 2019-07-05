@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -138,6 +139,17 @@ public class ServiceTestHelper {
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                 .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
                     MediaType.APPLICATION_JSON)));
+    }
+
+    public void expectCrmCall(String expectedRequestFileName, String responseFileName) {
+        String expectedRequestBody = TestUtils.fileToString(this.getClass(), expectedRequestFileName);
+        String responseBody = TestUtils.fileToString(this.getClass(), responseFileName);
+        List<String> excludedFields = ImmutableList.of("licenseCreateDate", "omOrderDetailNumber");
+        mockServer.expect(MockRestRequestMatchers.requestTo(
+            "http://localhost:9061/legacy-integration-rest/insertCCCRightsDistribution"))
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
+            .andExpect(MockRestRequestMatchers.content().string(new JsonMatcher(expectedRequestBody, excludedFields)))
+            .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
     }
 
     public void assertAudit(String entityId, List<UsageAuditItem> auditItems) {
