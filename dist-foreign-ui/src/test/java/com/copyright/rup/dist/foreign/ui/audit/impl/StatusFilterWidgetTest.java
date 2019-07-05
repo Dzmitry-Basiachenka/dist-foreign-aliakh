@@ -22,6 +22,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -76,7 +77,7 @@ public class StatusFilterWidgetTest {
         mockStatic(Windows.class);
         FilterWindow filterWindow = createMock(FilterWindow.class);
         expect(Windows.showFilterWindow("Status filter", widget)).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(new HashSet());
+        filterWindow.setSelectedItemsIds(EnumSet.noneOf(UsageStatusEnum.class));
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn(null).once();
         filterWindow.setId("status-filter-window");
@@ -90,7 +91,7 @@ public class StatusFilterWidgetTest {
 
     @Test
     public void testReset() {
-        Whitebox.setInternalState(widget, SELECTED_ITEMS_IDS, Sets.newHashSet(UsageStatusEnum.ELIGIBLE));
+        Whitebox.setInternalState(widget, SELECTED_ITEMS_IDS, EnumSet.of(UsageStatusEnum.ELIGIBLE));
         widget.reset();
         assertEquals(new HashSet<>(), Whitebox.getInternalState(widget, SELECTED_ITEMS_IDS));
     }

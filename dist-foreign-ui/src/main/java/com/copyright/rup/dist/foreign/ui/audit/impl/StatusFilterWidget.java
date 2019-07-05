@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +30,7 @@ import java.util.Set;
 class StatusFilterWidget extends BaseItemsFilterWidget<UsageStatusEnum>
     implements IFilterWindowController<UsageStatusEnum> {
 
-    private final Set<UsageStatusEnum> selectedItemsIds = new HashSet<>();
+    private final EnumSet<UsageStatusEnum> selectedItemsIds = EnumSet.noneOf(UsageStatusEnum.class);
 
     /**
      * Constructor.
