@@ -297,9 +297,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.usage.batches.empty"));
                 }
             });
-        window.addListener(FilterSaveEvent.class,
-            (IFilterSaveListener) widget::onSave,
-            IFilterSaveListener.SAVE_HANDLER);
+        window.addListener(FilterSaveEvent.class, widget, IFilterSaveListener.SAVE_HANDLER);
         return window;
     }
 
