@@ -104,7 +104,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         AUTHOR("Author"),
         COMMENT("Comment");
 
-        private String columnName;
+        private final String columnName;
 
         BasicHeader(String columnName) {
             this.columnName = columnName;
@@ -148,7 +148,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         AUTHOR("Author"),
         COMMENT("Comment");
 
-        private String columnName;
+        private final String columnName;
 
         ExportedHeader(String columnName) {
             this.columnName = columnName;

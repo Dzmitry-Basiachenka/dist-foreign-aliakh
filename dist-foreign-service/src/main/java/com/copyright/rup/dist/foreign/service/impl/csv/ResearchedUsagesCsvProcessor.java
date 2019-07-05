@@ -85,7 +85,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         AUTHOR("Author"),
         COMMENT("Comment");
 
-        private String columnName;
+        private final String columnName;
 
         Header(String columnName) {
             this.columnName = columnName;
