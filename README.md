@@ -1,3 +1,12 @@
+6.0.7
+-
+* B-51660 Tech Debt: FDA: resolve final modifier declaration warnings
+* B-51660 Tech Debt: FDA: resolve functional expression warning
+* B-51660 Tech Debt: FDA: resolve redundant throws warnings
+* B-52269 FDA: Allow users to export list of NTS eligible works with
+classifications: add Export button to Work Classification window, allow
+to export works classification
+
 6.0.6
 -
 * B-50690 FDA: Report NTS distributions to RC: Avoid sending serviceNameReporting field for NTS, adjust SendToCrmIntegrationTest to cover NTS case
