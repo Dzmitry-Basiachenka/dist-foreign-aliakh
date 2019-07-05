@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
@@ -35,7 +34,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
@@ -45,13 +43,7 @@ import org.apache.commons.lang3.builder.Builder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -91,8 +83,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IScenarioService scenarioService;
     @Autowired
     private IUsageService usageService;
-    @Autowired
-    private RestTemplate restTemplate;
     @Autowired
     @Qualifier("df.service.paidUsageConsumer")
     private PaidUsageConsumerMock paidUsageConsumer;
@@ -215,7 +205,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
      */
     public class Runner {
 
-        private MockRestServiceServer mockServer;
         private List<PaidUsage> archiveUsages;
 
         private Scenario scenario;
@@ -225,9 +214,9 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             testHelper.expectGetRmsRights(expectedRmsRequestsToResponses);
             testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightsholdersIds);
             testHelper.expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
+            testHelper.expectCrmCall(expectedCrmRequestJsonFile, expectedCrmResponseJsonFile);
             loadUsageBatch();
             addToScenario();
-            testHelper.verifyRestServer();
             scenarioService.submit(scenario, "Submitting scenario for testing purposes");
             scenarioService.approve(scenario, "Approving scenario for testing purposes");
             sendScenarioToLm();
@@ -236,6 +225,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             verifyUsages();
             verifyScenarioAudit();
             verifyUsagesAudit();
+            testHelper.verifyRestServer();
         }
 
         private void loadUsageBatch() throws IOException {
@@ -269,10 +259,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedInsertedUsagesCount, usages.size());
         }
 
-        private void createRestServer() {
-            mockServer = MockRestServiceServer.createServer(restTemplate);
-        }
-
         void sendScenarioToLm() {
             scenarioService.sendToLm(scenario);
             sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
@@ -295,22 +281,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void sendUsagesToCrm() {
-            createRestServer();
-            expectSendToCrm();
             usageService.sendToCrm();
-            mockServer.verify();
             assertArchivedUsagesCount();
-        }
-
-        private void expectSendToCrm() {
-            String requestBody = TestUtils.fileToString(this.getClass(), expectedCrmRequestJsonFile);
-            String responseBody = TestUtils.fileToString(this.getClass(), expectedCrmResponseJsonFile);
-            List<String> excludedFields = ImmutableList.of("licenseCreateDate", "omOrderDetailNumber");
-            mockServer.expect(MockRestRequestMatchers.requestTo(
-                "http://localhost:9061/legacy-integration-rest/insertCCCRightsDistribution"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-                .andExpect(MockRestRequestMatchers.content().string(new JsonMatcher(requestBody, excludedFields)))
-                .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
         }
 
         private void assertPaidUsagesCountByLmDetailIds() {

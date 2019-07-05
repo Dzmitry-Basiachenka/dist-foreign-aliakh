@@ -296,6 +296,7 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA October 17')
             column(name: 'distribution_date', value: '2017-11-11')
             column(name: 'lm_detail_id', value: 'c4232309-d890-489d-b99e-ca96c8e7e473')
+            column(name: 'period_end_date', value: '2018-03-11')
             column(name: 'created_datetime', value: '2016-03-12')
         }
 
@@ -320,6 +321,7 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA October 17')
             column(name: 'distribution_date', value: '2017-11-11')
             column(name: 'lm_detail_id', value: '13f6c68e-9000-465d-8db0-fe03deeebe01')
+            column(name: 'period_end_date', value: '2018-03-11')
             column(name: 'created_datetime', value: '2016-03-12')
         }
     }

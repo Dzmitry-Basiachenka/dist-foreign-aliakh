@@ -1,0 +1,20 @@
+{
+  "details": [
+    {
+      "rh_uid": "85f864f2-30a5-4215-ac4f-f1f541901218",
+      "rollup_uid": "671b8b20-7335-4938-988e-1da803efa6e3",
+      "detail_id": "%s",
+      "distribution_name": "FDA July 19",
+      "distribution_date": "2019-07-09T00:00-04:00",
+      "ccc_event_id": "53256",
+      "check_number": "578945",
+      "check_date": "2019-07-10T00:00-04:00",
+      "period_end_date": "2019-12-12T00:00-05:00",
+      "lm_detail_id": "2672f512-b688-4bef-a1b0-72fe243dde46",
+      "royalty_amount": 272.30,
+      "service_fee_amount": 128.14,
+      "collected_amount": 400.44,
+      "post_distribution_flag": false
+    }
+  ]
+}
