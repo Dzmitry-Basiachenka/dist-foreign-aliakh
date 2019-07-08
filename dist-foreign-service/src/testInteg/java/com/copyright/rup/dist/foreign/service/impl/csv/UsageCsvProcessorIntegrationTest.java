@@ -72,7 +72,7 @@ public class UsageCsvProcessorIntegrationTest {
         ProcessingResult<Usage> result = processFile("usages.csv");
         assertNotNull(result);
         List<Usage> actualUsages = result.get();
-        List<Usage> expectedUsages = loadExpectedUsages("usages.json");
+        List<Usage> expectedUsages = loadExpectedUsages();
         int expectedSize = 5;
         assertEquals(expectedSize, actualUsages.size());
         assertEquals(expectedSize, expectedUsages.size());
@@ -86,7 +86,7 @@ public class UsageCsvProcessorIntegrationTest {
         ProcessingResult<Usage> result = processFile("exported_usages.csv");
         assertNotNull(result);
         List<Usage> actualUsages = result.get();
-        List<Usage> expectedUsages = loadExpectedUsages("usages.json");
+        List<Usage> expectedUsages = loadExpectedUsages();
         int expectedSize = 5;
         assertEquals(expectedSize, actualUsages.size());
         assertEquals(expectedSize, expectedUsages.size());
@@ -271,8 +271,8 @@ public class UsageCsvProcessorIntegrationTest {
         assertFalse(usage.isRhParticipating());
     }
 
-    private List<Usage> loadExpectedUsages(String fileName) throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), BASE_PATH + fileName);
+    private List<Usage> loadExpectedUsages() throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), BASE_PATH + "usages.json");
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         return mapper.readValue(content, new TypeReference<List<Usage>>() {

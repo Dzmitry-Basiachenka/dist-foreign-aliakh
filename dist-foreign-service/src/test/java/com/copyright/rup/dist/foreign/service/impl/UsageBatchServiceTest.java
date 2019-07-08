@@ -168,7 +168,7 @@ public class UsageBatchServiceTest {
         expectLastCall().once();
         rightsholderService.updateRighstholdersAsync(Sets.newHashSet(1000001534L, 1000009522L, 1000009535L));
         expectLastCall().once();
-        expect(piIntegrationService.findWorkByWrWrkInst(5498456456L)).andReturn(buildWork("VALISBN10")).once();
+        expect(piIntegrationService.findWorkByWrWrkInst(5498456456L)).andReturn(buildWork()).once();
         expect(piIntegrationService.findWorkByWrWrkInst(7974545646L)).andReturn(new Work()).once();
         expect(usageService.insertUsages(usageBatch, usages)).andReturn(3).once();
         replayAll();
@@ -315,9 +315,9 @@ public class UsageBatchServiceTest {
         return usage;
     }
 
-    private Work buildWork(String standardNumberType) {
+    private Work buildWork() {
         Work work = new Work();
-        work.setMainIdnoType(standardNumberType);
+        work.setMainIdnoType("VALISBN10");
         return work;
     }
 }
