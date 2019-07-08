@@ -56,7 +56,7 @@ public class ExternalUsageSerializerTest {
             jsonGenerator, new DefaultSerializerProvider.Impl());
         jsonGenerator.close();
         assertNotNull(stringWriter);
-        assertEquals(getFileAsString("external_usage_message.json"), stringWriter.toString());
+        assertEquals(getFileAsString(), stringWriter.toString());
     }
 
     @Test
@@ -70,10 +70,10 @@ public class ExternalUsageSerializerTest {
         assertEquals("{\"details\":[]}", stringWriter.toString());
     }
 
-    private String getFileAsString(String resourceName) {
+    private String getFileAsString() {
         String result = null;
         try {
-            result = Resources.toString(ExternalUsageSerializerTest.class.getResource(resourceName),
+            result = Resources.toString(ExternalUsageSerializerTest.class.getResource("external_usage_message.json"),
                 StandardCharsets.UTF_8);
         } catch (IOException e) {
             fail();

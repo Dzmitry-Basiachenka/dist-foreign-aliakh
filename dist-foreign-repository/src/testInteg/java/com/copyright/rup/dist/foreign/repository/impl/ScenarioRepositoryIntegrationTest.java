@@ -79,7 +79,7 @@ public class ScenarioRepositoryIntegrationTest {
     @Test
     public void testFindCountByName() {
         assertEquals(0, scenarioRepository.findCountByName(SCENARIO_NAME));
-        scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
+        scenarioRepository.insert(buildScenario());
         assertEquals(1, scenarioRepository.findCountByName(SCENARIO_NAME));
     }
 
@@ -154,7 +154,7 @@ public class ScenarioRepositoryIntegrationTest {
         List<String> scenariosNames = scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID);
         assertNotNull(scenariosNames);
         assertEquals(1, scenariosNames.size());
-        Scenario scenario = buildScenario(SCENARIO_ID, SCENARIO_NAME);
+        Scenario scenario = buildScenario();
         scenarioRepository.insert(scenario);
         usageRepository.insert(buildUsage());
         scenariosNames = scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID);
@@ -189,7 +189,7 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testRemove() {
-        scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
+        scenarioRepository.insert(buildScenario());
         assertEquals(1, scenarioRepository.findCountByName(SCENARIO_NAME));
         scenarioRepository.remove(SCENARIO_ID);
         assertEquals(0, scenarioRepository.findCountByName(SCENARIO_NAME));
@@ -214,15 +214,15 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindSourceRros() {
-        scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
+        scenarioRepository.insert(buildScenario());
         usageRepository.insert(buildUsage());
-        UsageBatch batch = buildBatch(2000017000L);
+        UsageBatch batch = buildBatch();
         batchRepository.insert(batch);
         Usage usage = buildUsage();
         usage.setBatchId(batch.getId());
         usageRepository.insert(usage);
         // inserting different batch with the same RRO to verify that it will be returned only once
-        batch = buildBatch(2000017000L);
+        batch = buildBatch();
         batchRepository.insert(batch);
         usage = buildUsage();
         usage.setBatchId(batch.getId());
@@ -235,7 +235,7 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindRightsholdersByScenarioIdAndSourceRro() {
-        scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
+        scenarioRepository.insert(buildScenario());
         // build one usage with different pair of rh and payee
         Usage usage1 = buildUsage();
         usage1.setRightsholder(buildRightsholder(2000017004L,
@@ -276,7 +276,7 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testInsertNtsScenarioAndAddUsages() {
-        Scenario scenario = buildScenario(SCENARIO_ID, SCENARIO_NAME);
+        Scenario scenario = buildScenario();
         NtsFields ntsFields = new NtsFields();
         ntsFields.setRhMinimumAmount(new BigDecimal("700.00"));
         ntsFields.setPreServiceFeeAmount(new BigDecimal("3250.00"));
@@ -306,7 +306,7 @@ public class ScenarioRepositoryIntegrationTest {
             .forEach(index -> verifyUsage(expected.get(index), actual.get(index)));
     }
 
-    private UsageBatch buildBatch(Long rroAccountNumber) {
+    private UsageBatch buildBatch() {
         UsageBatch batch = new UsageBatch();
         batch.setId(RupPersistUtils.generateUuid());
         batch.setProductFamily(FAS_PRODUCT_FAMILY);
@@ -315,7 +315,7 @@ public class ScenarioRepositoryIntegrationTest {
         batch.setFiscalYear(2017);
         batch.setName("Batch name");
         Rightsholder rro = new Rightsholder();
-        rro.setAccountNumber(rroAccountNumber);
+        rro.setAccountNumber(2000017000L);
         batch.setRro(rro);
         return batch;
     }
@@ -346,10 +346,10 @@ public class ScenarioRepositoryIntegrationTest {
         return usage;
     }
 
-    private Scenario buildScenario(String id, String name) {
+    private Scenario buildScenario() {
         Scenario scenario = new Scenario();
-        scenario.setId(id);
-        scenario.setName(name);
+        scenario.setId(SCENARIO_ID);
+        scenario.setName(SCENARIO_NAME);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenario.setDescription(DESCRIPTION);
         scenario.setCreateUser(USER);

@@ -149,7 +149,7 @@ public class UsageAuditRepositoryIntegrationTest {
             LocalDate.of(2013, 1, 1), LocalDate.of(2050, 1, 1));
         assertNotNull(actualStatistics);
         assertEquals(4, actualStatistics.size());
-        assertEquals(loadExpectedBatchStatisticsList("json/batch_statistics_by_datefrom_dateto.json"),
+        assertEquals(loadExpectedBatchStatisticsList(),
             actualStatistics);
     }
 
@@ -172,8 +172,8 @@ public class UsageAuditRepositoryIntegrationTest {
         return usageAuditItem;
     }
 
-    private List<BatchStatistic> loadExpectedBatchStatisticsList(String fileName) throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), fileName);
+    private List<BatchStatistic> loadExpectedBatchStatisticsList() throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), "json/batch_statistics_by_datefrom_dateto.json");
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         return mapper.readValue(content, new TypeReference<List<BatchStatistic>>() {
