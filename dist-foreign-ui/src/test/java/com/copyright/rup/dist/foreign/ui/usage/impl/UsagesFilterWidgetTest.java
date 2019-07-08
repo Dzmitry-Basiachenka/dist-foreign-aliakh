@@ -235,12 +235,12 @@ public class UsagesFilterWidgetTest {
         assertTrue(layout instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(7, verticalLayout.getComponentCount());
-        verifyProductFamilyComboboxComponent(verticalLayout.getComponent(0), PRODUCT_FAMILIES);
+        verifyProductFamilyComboboxComponent(verticalLayout.getComponent(0));
         verifyFiltersLabel(verticalLayout.getComponent(1));
         verifyItemsFilterLayout(verticalLayout.getComponent(2), "Batches");
         verifyItemsFilterLayout(verticalLayout.getComponent(3), "RROs");
         verifyDateWidget(verticalLayout.getComponent(4));
-        verifyStatusComboboxComponent(verticalLayout.getComponent(5), FAS_FAS2_STATUSES);
+        verifyStatusComboboxComponent(verticalLayout.getComponent(5));
         verifyFiscalYearComboboxComponent(verticalLayout.getComponent(6), Collections.singletonList(FISCAL_YEAR));
     }
 
@@ -265,7 +265,7 @@ public class UsagesFilterWidgetTest {
         assertFalse(iterator.hasNext());
     }
 
-    private void verifyStatusComboboxComponent(Component component, Set<UsageStatusEnum> expectedStatuses) {
+    private void verifyStatusComboboxComponent(Component component) {
         assertTrue(component instanceof ComboBox);
         ComboBox comboBox = (ComboBox) component;
         assertEquals("Status", comboBox.getCaption());
@@ -275,7 +275,7 @@ public class UsagesFilterWidgetTest {
             (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
         Collection<?> actualStatuses = listDataProvider.getItems();
         assertEquals(8, actualStatuses.size());
-        assertEquals(expectedStatuses, actualStatuses);
+        assertEquals(FAS_FAS2_STATUSES, actualStatuses);
     }
 
     private void verifyFiscalYearComboboxComponent(Component component, List<Integer> values) {
@@ -287,12 +287,12 @@ public class UsagesFilterWidgetTest {
         assertEquals(values, ((ListDataProvider<Integer>) comboBox.getDataProvider()).getItems());
     }
 
-    private void verifyProductFamilyComboboxComponent(Component component, List<String> values) {
+    private void verifyProductFamilyComboboxComponent(Component component) {
         assertTrue(component instanceof ComboBox);
         ComboBox comboBox = (ComboBox) component;
         assertEquals("Product Family", comboBox.getCaption());
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        assertEquals(values, ((ListDataProvider<String>) comboBox.getDataProvider()).getItems());
+        assertEquals(PRODUCT_FAMILIES, ((ListDataProvider<String>) comboBox.getDataProvider()).getItems());
     }
 
     private void verifyDateWidget(Component component) {

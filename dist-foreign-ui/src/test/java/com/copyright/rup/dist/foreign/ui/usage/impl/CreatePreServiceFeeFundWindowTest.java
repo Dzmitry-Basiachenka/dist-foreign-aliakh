@@ -40,7 +40,7 @@ public class CreatePreServiceFeeFundWindowTest {
             Collections.emptySet(), BigDecimal.ONE, createMock(PreServiceFeeFundBatchesFilterWindow.class),
             createMock(PreServiceFeeFundFilteredBatchesWindow.class));
         assertEquals("Create NTS Pre-Service Fee Funds", window.getCaption());
-        verifySize(window, Unit.PIXELS, 320, Unit.PIXELS, -1);
+        verifySize(window);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertNotNull(content);
         assertTrue(content.isSpacing());
@@ -82,10 +82,10 @@ public class CreatePreServiceFeeFundWindowTest {
         return (Button) component;
     }
 
-    private void verifySize(Component component, Unit widthUnit, float width, Unit heightUnit, float height) {
-        assertEquals(width, component.getWidth(), 0);
-        assertEquals(height, component.getHeight(), 0);
-        assertEquals(heightUnit, component.getHeightUnits());
-        assertEquals(widthUnit, component.getWidthUnits());
+    private void verifySize(Component component) {
+        assertEquals(320, component.getWidth(), 0);
+        assertEquals(-1, component.getHeight(), 0);
+        assertEquals(Unit.PIXELS, component.getHeightUnits());
+        assertEquals(Unit.PIXELS, component.getWidthUnits());
     }
 }

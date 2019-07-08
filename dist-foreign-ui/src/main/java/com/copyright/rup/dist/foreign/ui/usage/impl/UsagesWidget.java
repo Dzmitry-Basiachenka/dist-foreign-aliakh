@@ -175,12 +175,12 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
                 CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.publication_date", "publicationDate", true, 90);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
-        addColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
-            "reportedValue", "v-align-right", 130);
-        addColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount",
-            "grossAmount", "v-align-right", 110);
-        addColumn(usage -> CurrencyUtils.format(usage.getBatchGrossAmount(), null), "table.column.batch_gross_amount",
-            "batchGrossAmount", "v-align-right", 135);
+        addAmountColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
+            "reportedValue", 130);
+        addAmountColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount",
+            "grossAmount", 110);
+        addAmountColumn(usage -> CurrencyUtils.format(usage.getBatchGrossAmount(), null),
+            "table.column.batch_gross_amount", "batchGrossAmount", 135);
         addColumn(UsageDto::getMarket, "table.column.market", "market", true, 115);
         addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", true, 150);
         addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", true, 145);
@@ -197,13 +197,13 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             .setWidth(width);
     }
 
-    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, String style,
-                           double width) {
+    private void addAmountColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
+                                 double width) {
         usagesGrid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setHidable(true)
-            .setStyleGenerator(item -> style)
+            .setStyleGenerator(item -> "v-align-right")
             .setWidth(width);
     }
 

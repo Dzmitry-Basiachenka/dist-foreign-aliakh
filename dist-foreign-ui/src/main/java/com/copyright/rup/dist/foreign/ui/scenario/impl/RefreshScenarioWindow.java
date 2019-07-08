@@ -129,12 +129,12 @@ public class RefreshScenarioWindow extends Window {
                 CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.publication_date", "publicationDate", true, 80);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies");
-        addColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
-            "reportedValue", "v-align-right", 113);
-        addColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount",
-            "grossAmount", "v-align-right", 120);
-        addColumn(usage -> CurrencyUtils.format(usage.getBatchGrossAmount(), null), "table.column.batch_gross_amount",
-            "batchGrossAmount", "v-align-right", 120);
+        addAmountColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
+            "reportedValue", 113);
+        addAmountColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount",
+            "grossAmount", 120);
+        addAmountColumn(usage -> CurrencyUtils.format(usage.getBatchGrossAmount(), null),
+            "table.column.batch_gross_amount", "batchGrossAmount", 120);
         addColumn(UsageDto::getMarket, "table.column.market", "market", true, 135);
         addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom");
         addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo");
@@ -160,14 +160,14 @@ public class RefreshScenarioWindow extends Window {
             .setWidth(width);
     }
 
-    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, String style,
-                           double width) {
+    private void addAmountColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
+                                 double width) {
         grid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setHidable(true)
             .setSortable(true)
-            .setStyleGenerator(item -> style)
+            .setStyleGenerator(item -> "v-align-right")
             .setWidth(width);
     }
 }
