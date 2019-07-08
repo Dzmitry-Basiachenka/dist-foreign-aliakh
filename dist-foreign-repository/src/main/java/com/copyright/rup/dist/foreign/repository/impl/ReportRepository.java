@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -42,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Implementation of {@link IReportRepository}.
@@ -136,13 +138,8 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
-        try (ScenarioUsagesCsvReportHandler handler = new ScenarioUsagesCsvReportHandler(pipedOutputStream)) {
-            int size = selectOne("IReportMapper.findScenarioUsageDtosCount", parameters);
-            for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
-                parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
-                getTemplate().select("IReportMapper.findScenarioUsageReportDtos", parameters, handler);
-            }
-        }
+        writeCsvReportByParts("IReportMapper.findScenarioUsageDtosCount", "IReportMapper.findScenarioUsageReportDtos",
+            parameters, () -> new ScenarioUsagesCsvReportHandler(pipedOutputStream));
     }
 
     @Override
@@ -161,15 +158,8 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     public void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        try (UsageCsvReportHandler handler = new UsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
-            if (!filter.isEmpty()) {
-                int size = selectOne("IReportMapper.findUsagesCountByFilter", ImmutableMap.of(FILTER_KEY, filter));
-                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
-                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
-                    getTemplate().select("IReportMapper.findUsageReportDtos", parameters, handler);
-                }
-            }
-        }
+        writeCsvReportByParts("IReportMapper.findUsagesCountByFilter", "IReportMapper.findUsageReportDtos", parameters,
+            !filter.isEmpty(), () -> new UsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
@@ -189,50 +179,47 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     @Override
     public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        try (AuditCsvReportHandler handler = new AuditCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
-            if (!Objects.requireNonNull(filter).isEmpty()) {
-                int size = selectOne("IReportMapper.findUsagesCountForAudit", ImmutableMap.of(FILTER_KEY, filter));
-                parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
-                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
-                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
-                    getTemplate().select("IReportMapper.findAuditReportDtos", parameters, handler);
-                }
-            }
-        }
+        parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
+        writeCsvReportByParts("IReportMapper.findUsagesCountForAudit", "IReportMapper.findAuditReportDtos", parameters,
+            !Objects.requireNonNull(filter).isEmpty(),
+            () -> new AuditCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
-    // TODO {pliakh} generalize partitioning logic for writeAuditCsvReport, writeUsagesCsvReport,
-    //  writeScenarioUsagesCsvReport, writeScenarioUsagesCsvReport, writeWorkClassificationCsvReportBySearch
-    public void writeWorkClassificationCsvReportByBatchIds(Set<String> batchesIds, String searchValue,
-                                                           PipedOutputStream pipedOutputStream) {
+    public void writeWorkClassificationCsvReport(Set<String> batchesIds, String searchValue,
+                                                 PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("batchesIds", Objects.requireNonNull(batchesIds));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
-        int size = selectOne("IReportMapper.findCountByBatchIds", parameters);
-        try (WorkClassificationCsvReportHandler handler =
-                 new WorkClassificationCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
-            if (0 < size) {
-                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
-                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
-                    getTemplate().select("IReportMapper.findByBatchIds", parameters, handler);
-                }
-            }
-        }
+        writeCsvReportByParts("IReportMapper.findWorkClassificationCountByBatchIds",
+            "IReportMapper.findWorkClassificationByBatchIds", parameters,
+            () -> new WorkClassificationCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
-    public void writeWorkClassificationCsvReportBySearch(String searchValue,
-                                                         PipedOutputStream pipedOutputStream) {
+    public void writeWorkClassificationCsvReport(String searchValue, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SEARCH_VALUE_KEY, searchValue);
-        int size = selectOne("IReportMapper.findCountBySearch", parameters);
-        try (WorkClassificationCsvReportHandler handler =
-                 new WorkClassificationCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
-            if (0 < size) {
+        writeCsvReportByParts("IReportMapper.findWorkClassificationCountBySearch",
+            "IReportMapper.findWorkClassificationBySearch", parameters,
+            () -> new WorkClassificationCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    private <T> void writeCsvReportByParts(String countMethodName, String selectMethodName,
+                                           Map<String, Object> parameters,
+                                           Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
+        writeCsvReportByParts(countMethodName, selectMethodName, parameters, true, handlerSupplier);
+    }
+
+    private <T> void writeCsvReportByParts(String countMethodName, String selectMethodName,
+                                           Map<String, Object> parameters, boolean precondition,
+                                           Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
+        int size = selectOne(countMethodName, parameters);
+        try (BaseCsvReportHandler handler = handlerSupplier.get()) {
+            if (precondition && 0 < size) {
                 for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
                     parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
-                    getTemplate().select("IReportMapper.findBySearch", parameters, handler);
+                    getTemplate().select(selectMethodName, parameters, handler);
                 }
             }
         }

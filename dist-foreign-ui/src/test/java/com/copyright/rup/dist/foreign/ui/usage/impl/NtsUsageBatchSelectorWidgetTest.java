@@ -96,10 +96,10 @@ public class NtsUsageBatchSelectorWidgetTest {
     @Test
     public void testOnSave() {
         mockStatic(Windows.class);
+        IWorkClassificationController workClassificationController = createMock(IWorkClassificationController.class);
         FilterSaveEvent<UsageBatch> filterSaveEvent = createMock(FilterSaveEvent.class);
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(buildUsageBatch())).once();
-        IWorkClassificationController workClassificationController = createMock(IWorkClassificationController.class);
         expect(usagesController.getWorkClassificationController()).andReturn(workClassificationController).once();
         expect(workClassificationController.getExportWorkClassificationStreamSource(
             anyObject(Set.class), anyObject(Supplier.class))).andReturn(streamSource).once();

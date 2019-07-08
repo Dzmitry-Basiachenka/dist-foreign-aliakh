@@ -83,7 +83,7 @@ public class WorkClassificationController implements IWorkClassificationControll
     @Override
     public IStreamSource getExportWorkClassificationStreamSource(Set<String> batchesIds,
                                                                  Supplier<String> searchValueSupplier) {
-        return streamSourceHandler.getCsvStreamSource(() -> "work_classification_", "MM_dd_YYYY_HH_mm",
+        return streamSourceHandler.getCsvStreamSource(() -> "work_classification_",
             pos -> reportService.writeWorkClassificationCsvReport(batchesIds, searchValueSupplier.get(), pos));
     }
 }

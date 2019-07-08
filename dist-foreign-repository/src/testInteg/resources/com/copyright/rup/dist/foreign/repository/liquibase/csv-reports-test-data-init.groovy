@@ -4621,7 +4621,6 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '500')
-            column(name: 'gross_amount', value: '500.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
@@ -4673,10 +4672,9 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '500')
-            column(name: 'gross_amount', value: '500.00')
         }
 
-        // work not suit's the search criteria
+        // work not suits the search criteria
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b51340ad-cf32-4c38-8445-4455e4ae81eb')
             column(name: 'df_usage_batch_uid', value: 'e17ebc80-e74e-436d-ba6e-acf3d355b7ff')
@@ -4696,7 +4694,6 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '500')
-            column(name: 'gross_amount', value: '500.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {

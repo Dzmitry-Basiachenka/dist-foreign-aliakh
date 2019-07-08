@@ -212,32 +212,32 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testWriteWorkClassificationCsvReportByBatchIds() throws Exception {
+    public void testWriteWorkClassificationCsvReportWithBatchIds() throws Exception {
         assertFilesWithExecutor(outputStream ->
-                reportRepository.writeWorkClassificationCsvReportByBatchIds(
+                reportRepository.writeWorkClassificationCsvReport(
                     Collections.singleton("e17ebc80-e74e-436d-ba6e-acf3d355b7ff"), "987654321", outputStream),
             "work_classification_report_by_batch_ids.csv");
     }
 
     @Test
-    public void testWriteWorkClassificationCsvReportByBatchIdsEmpty() throws Exception {
+    public void testWriteWorkClassificationCsvReportWithEmptyBatchIds() throws Exception {
         assertFilesWithExecutor(outputStream ->
-                reportRepository.writeWorkClassificationCsvReportByBatchIds(Collections.singleton("not-existing-uid"),
+                reportRepository.writeWorkClassificationCsvReport(Collections.singleton("not-existing-uid"),
                     null, outputStream),
             "work_classification_report_empty.csv");
     }
 
     @Test
-    public void testWriteWorkClassificationCsvReportBySearch() throws Exception {
+    public void testWriteWorkClassificationCsvReportWithSearch() throws Exception {
         assertFilesWithExecutor(
-            outputStream -> reportRepository.writeWorkClassificationCsvReportBySearch("987654321", outputStream),
+            outputStream -> reportRepository.writeWorkClassificationCsvReport("987654321", outputStream),
             "work_classification_report_by_search.csv");
     }
 
     @Test
-    public void testWriteWorkClassificationCsvReportBySearchEmpty() throws Exception {
+    public void testWriteWorkClassificationCsvReportWithEmptySearch() throws Exception {
         assertFilesWithExecutor(
-            outputStream -> reportRepository.writeWorkClassificationCsvReportBySearch("99999999", outputStream),
+            outputStream -> reportRepository.writeWorkClassificationCsvReport("99999999", outputStream),
             "work_classification_report_empty.csv");
     }
 
