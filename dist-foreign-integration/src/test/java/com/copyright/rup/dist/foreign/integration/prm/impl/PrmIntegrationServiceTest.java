@@ -66,7 +66,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testGetRightsholders() {
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
-        Rightsholder rightsholder = buildRightsholder(ACCOUNT_NUMBER, RIGHTSHOLDER_NAME);
+        Rightsholder rightsholder = buildRightsholder();
         expect(prmRightsholderService.getRightsholders(accountNumbers))
             .andReturn(Collections.singletonList(rightsholder)).once();
         replay(prmRightsholderService);
@@ -88,7 +88,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testGetRightsholderName() {
         expect(prmRightsholderService.getRightsholders(Sets.newHashSet(ACCOUNT_NUMBER)))
-            .andReturn(Collections.singletonList(buildRightsholder(ACCOUNT_NUMBER, RIGHTSHOLDER_NAME))).once();
+            .andReturn(Collections.singletonList(buildRightsholder())).once();
         replay(prmRightsholderService);
         Rightsholder rightsholder = prmIntegrationService.getRightsholder(ACCOUNT_NUMBER);
         assertEquals(ACCOUNT_NUMBER, rightsholder.getAccountNumber(), 0);
@@ -233,11 +233,11 @@ public class PrmIntegrationServiceTest {
         verify(prmPreferenceService);
     }
 
-    private Rightsholder buildRightsholder(Long accountNumber, String name) {
+    private Rightsholder buildRightsholder() {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setId(RupPersistUtils.generateUuid());
-        rightsholder.setAccountNumber(accountNumber);
-        rightsholder.setName(name);
+        rightsholder.setAccountNumber(ACCOUNT_NUMBER);
+        rightsholder.setName(RIGHTSHOLDER_NAME);
         return rightsholder;
     }
 }
