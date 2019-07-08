@@ -138,7 +138,7 @@ public class NtsUsageBatchSelectorWidgetTest {
     private void verifySearchWidget(Component component) {
         assertTrue(component instanceof SearchWidget);
         SearchWidget searchWidget = (SearchWidget) component;
-        verifySize(searchWidget, Unit.PERCENTAGE, 100, Unit.PIXELS, -1);
+        verifySize(searchWidget);
         assertEquals("Enter Usage Batch Name",
             Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
     }
@@ -171,11 +171,11 @@ public class NtsUsageBatchSelectorWidgetTest {
         return (Button) component;
     }
 
-    private void verifySize(Component component, Unit widthUnit, float width, Unit heightUnit, float height) {
-        assertEquals(width, component.getWidth(), 0);
-        assertEquals(height, component.getHeight(), 0);
-        assertEquals(heightUnit, component.getHeightUnits());
-        assertEquals(widthUnit, component.getWidthUnits());
+    private void verifySize(Component component) {
+        assertEquals(100, component.getWidth(), 0);
+        assertEquals(-1, component.getHeight(), 0);
+        assertEquals(Unit.PIXELS, component.getHeightUnits());
+        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 
     private UsageBatch buildUsageBatch() {

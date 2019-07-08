@@ -128,7 +128,7 @@ public class AuditWidgetTest {
     }
 
     private void verifyGridLayout(VerticalLayout layout) {
-        verifySize(layout, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
+        verifySize(layout, 100, Unit.PERCENTAGE, 100);
         assertTrue(layout.isSpacing());
         assertEquals(2, layout.getComponentCount());
         verifyToolbar(layout.getComponent(0));
@@ -138,7 +138,7 @@ public class AuditWidgetTest {
     private void verifyToolbar(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
-        verifySize(layout, Unit.PERCENTAGE, 100, Unit.PIXELS, -1);
+        verifySize(layout,  100, Unit.PIXELS, -1);
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(2, layout.getComponentCount());
         verifyExportButton(layout.getComponent(0));
@@ -148,7 +148,7 @@ public class AuditWidgetTest {
     private void verifySearchWidget(Component component) {
         assertTrue(component instanceof SearchWidget);
         SearchWidget searchWidget = (SearchWidget) component;
-        verifySize(searchWidget, Unit.PERCENTAGE, 75, Unit.PIXELS, -1);
+        verifySize(searchWidget, 75, Unit.PIXELS, -1);
         assertEquals("Enter Detail ID or Wr Wrk Inst or System Title or Work Title",
             Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
     }
@@ -163,7 +163,7 @@ public class AuditWidgetTest {
     private void verifyGrid(Component component) {
         assertTrue(component instanceof Grid);
         Grid grid = (Grid) component;
-        verifySize(grid, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
+        verifySize(grid, 100, Unit.PERCENTAGE, 100);
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
             "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title",
@@ -172,11 +172,11 @@ public class AuditWidgetTest {
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
-    private void verifySize(Component component, Unit widthUnit, float width, Unit heightUnit, float height) {
+    private void verifySize(Component component, float width, Unit heightUnit, float height) {
         assertEquals(width, component.getWidth(), 0);
         assertEquals(height, component.getHeight(), 0);
         assertEquals(heightUnit, component.getHeightUnits());
-        assertEquals(widthUnit, component.getWidthUnits());
+        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 
     private void initWidget() {

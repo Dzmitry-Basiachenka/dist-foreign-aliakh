@@ -52,7 +52,7 @@ public class PreServiceFeeFundBatchesFilterWindowTest {
         PreServiceFeeFundBatchesFilterWindow window =
             new PreServiceFeeFundBatchesFilterWindow(controller);
         assertEquals("Batches filter", window.getCaption());
-        verifySize(window, Unit.PIXELS, 450, Unit.PIXELS, 400);
+        verifySize(window, Unit.PIXELS, 450, 400);
         assertEquals("batches-filter-window", window.getStyleName());
         verifyRootLayout(window.getContent());
         verify(controller);
@@ -70,7 +70,7 @@ public class PreServiceFeeFundBatchesFilterWindowTest {
     private void verifySearchWidget(Component component) {
         assertTrue(component instanceof SearchWidget);
         SearchWidget searchWidget = (SearchWidget) component;
-        verifySize(searchWidget, Unit.PERCENTAGE, 100, Unit.PIXELS, -1);
+        verifySize(searchWidget, Unit.PERCENTAGE, 100, -1);
         assertEquals("Enter Usage Batch Name",
             Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
     }
@@ -103,10 +103,10 @@ public class PreServiceFeeFundBatchesFilterWindowTest {
         return (Button) component;
     }
 
-    private void verifySize(Component component, Unit widthUnit, float width, Unit heightUnit, float height) {
+    private void verifySize(Component component, Unit widthUnit, float width, float height) {
         assertEquals(width, component.getWidth(), 0);
         assertEquals(height, component.getHeight(), 0);
-        assertEquals(heightUnit, component.getHeightUnits());
+        assertEquals(Unit.PIXELS, component.getHeightUnits());
         assertEquals(widthUnit, component.getWidthUnits());
     }
 

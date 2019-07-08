@@ -87,7 +87,7 @@ public class StatisticUsageRestTest {
         mockMvc.perform(MockMvcRequestBuilders.get(PATH + TEST_USAGE_ID)
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string(loadJson("usage_statistic.json")));
+            .andExpect(MockMvcResultMatchers.content().string(loadJson()));
         verify(usageAuditRepository);
     }
 
@@ -139,8 +139,8 @@ public class StatisticUsageRestTest {
         return statistic;
     }
 
-    private String loadJson(String fileName) {
-        return TestUtils.fileToString(this.getClass(), fileName)
+    private String loadJson() {
+        return TestUtils.fileToString(this.getClass(), "usage_statistic.json")
             .replaceAll("\n", StringUtils.EMPTY)
             .replaceAll("\r", StringUtils.EMPTY)
             .replaceAll(" ", StringUtils.EMPTY);

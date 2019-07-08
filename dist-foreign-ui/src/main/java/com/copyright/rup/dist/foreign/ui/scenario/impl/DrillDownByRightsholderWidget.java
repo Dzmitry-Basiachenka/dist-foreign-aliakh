@@ -99,7 +99,7 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
         addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber", true, 125);
         addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", true, 135);
         addColumn(usageDto ->
-            CommonDateUtils.format(usageDto.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+                CommonDateUtils.format(usageDto.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.payment_date", "paymentDate", true, 115);
         addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle");
         addColumn(UsageDto::getArticle, "table.column.article", "article");
@@ -110,20 +110,21 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
         addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
         addColumn(usageDto ->
-            CommonDateUtils.format(usageDto.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+                CommonDateUtils.format(usageDto.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.publication_date", "publicationDate", true, 90);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
-        addColumn(usageDto -> CurrencyUtils.format(usageDto.getReportedValue(), null), "table.column.reported_value",
-            "reportedValue", STYLE_ALIGN_RIGHT, 130);
-        addColumn(usageDto -> CurrencyUtils.format(usageDto.getGrossAmount(), null), "table.column.gross_amount",
-            "grossAmount", STYLE_ALIGN_RIGHT, 110);
-        addColumn(usageDto -> 0 != BigDecimal.ZERO.compareTo(usageDto.getBatchGrossAmount())
-                ? CurrencyUtils.format(usageDto.getBatchGrossAmount(), null) : null,
-            "table.column.batch_gross_amount", "batchGrossAmount", STYLE_ALIGN_RIGHT, 135);
-        addColumn(usageDto -> CurrencyUtils.format(usageDto.getServiceFeeAmount(), null),
-            "table.column.service_fee_amount", "serviceFeeAmount", STYLE_ALIGN_RIGHT, 150);
-        addColumn(usageDto -> CurrencyUtils.format(usageDto.getNetAmount(), null), "table.column.net_amount",
-            "netAmount", STYLE_ALIGN_RIGHT, 120);
+        addAmountColumn(usageDto -> CurrencyUtils.format(usageDto.getReportedValue(), null),
+            "table.column.reported_value", "reportedValue", 130);
+        addAmountColumn(usageDto -> CurrencyUtils.format(usageDto.getGrossAmount(), null), "table.column.gross_amount",
+            "grossAmount", 110);
+        addAmountColumn(
+            usageDto -> 0 != BigDecimal.ZERO.compareTo(usageDto.getBatchGrossAmount()) ? CurrencyUtils.format(
+                usageDto.getBatchGrossAmount(), null) : null, "table.column.batch_gross_amount", "batchGrossAmount",
+            135);
+        addAmountColumn(usageDto -> CurrencyUtils.format(usageDto.getServiceFeeAmount(), null),
+            "table.column.service_fee_amount", "serviceFeeAmount", 150);
+        addAmountColumn(usageDto -> CurrencyUtils.format(usageDto.getNetAmount(), null), "table.column.net_amount",
+            "netAmount", 120);
         addColumn(usageDto -> {
             BigDecimal value = usageDto.getServiceFee();
             return Objects.nonNull(value)
@@ -153,13 +154,13 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
             .setWidth(width);
     }
 
-    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, String style,
-                           double width) {
+    private void addAmountColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
+                                 double width) {
         grid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setHidable(true)
-            .setStyleGenerator(item -> style)
+            .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
             .setWidth(width);
     }
 

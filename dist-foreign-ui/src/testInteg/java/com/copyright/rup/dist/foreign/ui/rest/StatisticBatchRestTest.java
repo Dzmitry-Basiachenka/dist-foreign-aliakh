@@ -90,7 +90,7 @@ public class StatisticBatchRestTest {
             .param(DATE, TEST_DATE)
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string(loadJson("batch_statistic.json")))
+            .andExpect(MockMvcResultMatchers.content().string(loadJson()))
             .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_STACKTRACE)
                 .doesNotExist());
         verify(usageAuditServiceMock);
@@ -209,8 +209,8 @@ public class StatisticBatchRestTest {
         return ImmutableList.of(statistic);
     }
 
-    private String loadJson(String fileName) {
-        return TestUtils.fileToString(this.getClass(), fileName)
+    private String loadJson() {
+        return TestUtils.fileToString(this.getClass(), "batch_statistic.json")
             .replaceAll("\n", StringUtils.EMPTY)
             .replaceAll("\r", StringUtils.EMPTY)
             .replaceAll(" ", StringUtils.EMPTY);

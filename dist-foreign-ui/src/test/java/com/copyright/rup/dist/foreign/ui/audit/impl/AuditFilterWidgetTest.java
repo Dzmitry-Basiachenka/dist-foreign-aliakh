@@ -97,7 +97,7 @@ public class AuditFilterWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
-        verifySize(layout, Unit.PERCENTAGE, 100, Unit.PIXELS, -1);
+        verifySize(layout);
         assertEquals("filter-buttons", layout.getStyleName());
         assertEquals("filter-buttons", layout.getId());
         assertEquals(2, layout.getComponentCount());
@@ -115,10 +115,10 @@ public class AuditFilterWidgetTest {
         assertEquals(enabled, button.isEnabled());
     }
 
-    private void verifySize(Component component, Unit widthUnit, float width, Unit heightUnit, float height) {
-        assertEquals(width, component.getWidth(), 0);
-        assertEquals(height, component.getHeight(), 0);
-        assertEquals(heightUnit, component.getHeightUnits());
-        assertEquals(widthUnit, component.getWidthUnits());
+    private void verifySize(Component component) {
+        assertEquals(100, component.getWidth(), 0);
+        assertEquals(-1, component.getHeight(), 0);
+        assertEquals(Unit.PIXELS, component.getHeightUnits());
+        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 }
