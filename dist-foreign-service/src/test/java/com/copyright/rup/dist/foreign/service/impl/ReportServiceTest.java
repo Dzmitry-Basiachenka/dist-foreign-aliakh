@@ -249,7 +249,7 @@ public class ReportServiceTest {
         Set<String> batchIds = Collections.singleton("batch-uid-1293213");
         String search = "search";
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        reportRepository.writeWorkClassificationCsvReportByBatchIds(batchIds, search, outputStream);
+        reportRepository.writeWorkClassificationCsvReport(batchIds, search, outputStream);
         expectLastCall().once();
         replay(reportRepository);
         reportService.writeWorkClassificationCsvReport(batchIds, search, outputStream);
@@ -261,7 +261,7 @@ public class ReportServiceTest {
     public void testWriteWorkClassificationCsvReportWithSearch() {
         String search = "search";
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        reportRepository.writeWorkClassificationCsvReportBySearch(search, outputStream);
+        reportRepository.writeWorkClassificationCsvReport(search, outputStream);
         expectLastCall().once();
         replay(reportRepository);
         reportService.writeWorkClassificationCsvReport(Collections.EMPTY_SET, search, outputStream);

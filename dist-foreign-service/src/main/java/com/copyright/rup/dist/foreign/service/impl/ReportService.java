@@ -127,9 +127,9 @@ public class ReportService implements IReportService {
     public void writeWorkClassificationCsvReport(Set<String> batchesIds, String searchValue,
                                                  PipedOutputStream pipedOutputStream) {
         if (CollectionUtils.isNotEmpty(batchesIds)) {
-            reportRepository.writeWorkClassificationCsvReportByBatchIds(batchesIds, searchValue, pipedOutputStream);
+            reportRepository.writeWorkClassificationCsvReport(batchesIds, searchValue, pipedOutputStream);
         } else {
-            reportRepository.writeWorkClassificationCsvReportBySearch(searchValue, pipedOutputStream);
+            reportRepository.writeWorkClassificationCsvReport(searchValue, pipedOutputStream);
         }
     }
 
