@@ -110,7 +110,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     @Test
     public void testInsert() {
         String usageId = RupPersistUtils.generateUuid();
-        usageArchiveRepository.insert(buildUsage(usageId, "56282dbc-2468-48d4-b926-93d3458a656a"));
+        usageArchiveRepository.insert(buildUsage(usageId));
         List<UsageDto> usageDtos = usageArchiveRepository.findByScenarioIdAndRhAccountNumber(
             "b1f0b236-3ae9-4a60-9fab-61db84199d6f", RH_ACCOUNT_NUMBER, null, null, null);
         assertEquals(1, usageDtos.size());
@@ -450,7 +450,7 @@ public class UsageArchiveRepositoryIntegrationTest {
 
     @Test
     public void testFindUsageInformationById() {
-        Usage expectedUsage = buildUsage(RupPersistUtils.generateUuid(), "56282dbc-2468-48d4-b926-93d3458a656a");
+        Usage expectedUsage = buildUsage(RupPersistUtils.generateUuid());
         usageArchiveRepository.insert(expectedUsage);
         List<Usage> actualUsages = usageArchiveRepository.findByIds(ImmutableList.of(expectedUsage.getId()));
         assertTrue(CollectionUtils.isNotEmpty(actualUsages));
@@ -543,9 +543,9 @@ public class UsageArchiveRepositoryIntegrationTest {
         return paidUsage;
     }
 
-    private Usage buildUsage(String usageid, String usageBatchId) {
+    private Usage buildUsage(String usageid) {
         Usage usage = new Usage();
-        setUsageFields(usage, usageid, usageBatchId);
+        setUsageFields(usage, usageid, "56282dbc-2468-48d4-b926-93d3458a656a");
         return usage;
     }
 

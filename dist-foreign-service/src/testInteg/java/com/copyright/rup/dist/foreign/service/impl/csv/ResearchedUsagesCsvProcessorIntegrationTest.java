@@ -66,7 +66,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
         ProcessingResult<ResearchedUsage> result = processFile("researched_usages.csv");
         assertNotNull(result);
         List<ResearchedUsage> actualUsages = result.get();
-        List<ResearchedUsage> expectedUsages = loadExpectedUsages("researched_usages.json");
+        List<ResearchedUsage> expectedUsages = loadExpectedUsages();
         int expectedSize = 2;
         assertEquals(expectedSize, actualUsages.size());
         assertEquals(expectedSize, expectedUsages.size());
@@ -157,8 +157,8 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
         assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
     }
 
-    private List<ResearchedUsage> loadExpectedUsages(String fileName) throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), BASE_PATH + fileName);
+    private List<ResearchedUsage> loadExpectedUsages() throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), BASE_PATH + "researched_usages.json");
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         return mapper.readValue(content, new TypeReference<List<ResearchedUsage>>() {

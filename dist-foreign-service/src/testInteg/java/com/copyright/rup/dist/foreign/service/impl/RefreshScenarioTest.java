@@ -69,7 +69,7 @@ public class RefreshScenarioTest {
                     FAS_PRODUCT_FAMILY, 243904752L, "5000.00", "4531.3300000000", SERVICE_FEE_32),
                 buildUsage("d0816728-4726-483d-91ff-8f24fa605e01", 1000001820L, 1000001820L, "2175.0384", "11418.9516",
                     FAS_PRODUCT_FAMILY, 471137967L, "15000.00", "13593.9900000000", "0.16000")))
-            .expectScenario(buildScenario("26348.4248", "34909.38", "8560.9552", "38520.00"))
+            .expectScenario(buildScenario("26348.4248", "8560.9552"))
             .build()
             .run();
     }
@@ -95,18 +95,18 @@ public class RefreshScenarioTest {
                     FAS2_PRODUCT_FAMILY, 122235134L, "9900.00", "8972.0400000000", "0.10000"),
                 buildUsage("ec5c39b5-4c16-40a7-b1c8-730320971f11", 1000024950L, 1000024950L, "870.016", "1848.784",
                     FAS2_PRODUCT_FAMILY, 122235139L, "3000.00", "2718.8000000000", SERVICE_FEE_32)))
-            .expectScenario(buildScenario("26832.7356", "34909.38", "8076.6444", "38520.00"))
+            .expectScenario(buildScenario("26832.7356", "8076.6444"))
             .build()
             .run();
     }
 
-    private Scenario buildScenario(String netTotal, String grossAmount, String serviceFeeTotal, String reportedTotal) {
+    private Scenario buildScenario(String netTotal, String serviceFeeTotal) {
         Scenario scenario = new Scenario();
         scenario.setName("Test Scenario");
         scenario.setNetTotal(new BigDecimal(netTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
-        scenario.setGrossTotal(new BigDecimal(grossAmount).setScale(10, BigDecimal.ROUND_HALF_UP));
+        scenario.setGrossTotal(new BigDecimal("34909.38").setScale(10, BigDecimal.ROUND_HALF_UP));
         scenario.setServiceFeeTotal(new BigDecimal(serviceFeeTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
-        scenario.setReportedTotal(new BigDecimal(reportedTotal).setScale(2, BigDecimal.ROUND_HALF_UP));
+        scenario.setReportedTotal(new BigDecimal("38520.00").setScale(2, BigDecimal.ROUND_HALF_UP));
         scenario.setDescription("Scenario Description");
         return scenario;
     }
