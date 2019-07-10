@@ -68,10 +68,17 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
-    public void testReceivePaidUsagesFromLm() throws InterruptedException, IOException {
+    public void testReceivePaidFasUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         expectReceivePaidUsages("lm/paid_usages_fas.json");
         assertPaidUsages("usage/paid_usages_fas.json");
+    }
+
+    @Test
+    public void testReceivePaidNtsUsagesFromLm() throws InterruptedException, IOException {
+        assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
+        expectReceivePaidUsages("lm/paid_usages_nts_receive_paid_from_lm_test.json");
+        assertPaidUsages("usage/paid_usages_nts.json");
     }
 
     @Test

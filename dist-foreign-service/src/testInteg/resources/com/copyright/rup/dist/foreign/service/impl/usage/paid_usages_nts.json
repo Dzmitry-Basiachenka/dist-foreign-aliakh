@@ -1,0 +1,28 @@
+[
+  {
+    "id": "adcd15c4-eb44-4e67-847a-7f386082646a\"",
+    "productFamily": "NTS",
+    "status": "PAID",
+    "wrWrkInst": "151811999",
+    "workTitle": "NON-TITLE NTS",
+    "systemTitle": "NON-TITLE NTS",
+    "serviceFee": "0.32000",
+    "serviceFeeAmount": "29.0000000000",
+    "netAmount": "61.6300000000",
+    "reportedValue": "0.00",
+    "grossAmount": "90.6300000000",
+    "rightsholder": {
+      "accountNumber": "7000864232"
+    },
+    "payee": {
+      "accountNumber": "1000010022"
+    },
+    "distributionName": "NTS March 19",
+    "distributionDate": "2019-01-14T00:00-05:00",
+    "cccEventId": "97687643",
+    "checkNumber": "76432764",
+    "checkDate": "2019-01-15T00:00-05:00",
+    "lmDetailId": "2cc5ff9d-d9dd-424f-8dc8-e372b846b727",
+    "periodEndDate": "2019-01-16T00:00-05:00"
+  }
+]
