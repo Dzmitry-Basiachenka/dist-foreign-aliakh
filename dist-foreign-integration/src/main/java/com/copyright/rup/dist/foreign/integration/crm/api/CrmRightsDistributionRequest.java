@@ -121,7 +121,7 @@ public class CrmRightsDistributionRequest {
     /**
      * Constructor for creating request to the CRM service.
      *
-     * @param usage            {@link PaidUsage} instance
+     * @param usage {@link PaidUsage} instance
      */
     public CrmRightsDistributionRequest(PaidUsage usage) {
         Objects.requireNonNull(usage);
@@ -146,7 +146,7 @@ public class CrmRightsDistributionRequest {
         this.marketPeriodFrom = usage.getMarketPeriodFrom();
         this.marketPeriodTo = usage.getMarketPeriodTo();
         this.arAccountNumber = usage.getRroAccountNumber();
-        if (!FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+        if (FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(usage.getProductFamily())) {
             this.serviceNameReporting = "FAS";
         }
     }

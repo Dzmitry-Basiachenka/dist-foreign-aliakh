@@ -100,8 +100,8 @@ public class WorkflowIntegrationTest {
             .expectPaidUsagesFromLm("lm/paid_usages_cla.json")
             .expectPaidUsageLmDetailIds(USAGE_LM_DETAIL_ID_1, USAGE_LM_DETAIL_ID_2, USAGE_LM_DETAIL_ID_3,
                 USAGE_LM_DETAIL_ID_4, USAGE_LM_DETAIL_ID_5, USAGE_LM_DETAIL_ID_6)
-            .expectCrmReporting("crm/cla_rights_distribution_request.json",
-                "crm/cla_rights_distribution_response.json")
+            .expectCrmReporting("crm/workflow/rights_distribution_request_cla.json",
+                "crm/workflow/rights_distribution_response_cla.json")
             .expectUsages("usage/expected_usages_for_workflow.json")
             .expectUsageAudit(USAGE_LM_DETAIL_ID_1, expectedUsageAudit)
             .expectUsageAudit(USAGE_LM_DETAIL_ID_2, expectedUsageAudit)
@@ -114,13 +114,13 @@ public class WorkflowIntegrationTest {
                 Pair.of(UsageActionTypeEnum.WORK_FOUND, "Usage was uploaded with Wr Wrk Inst"),
                 Pair.of(UsageActionTypeEnum.LOADED, AUDIT_UPLOADED_IN_BATCH)))
             .expectUsageAudit(USAGE_LM_DETAIL_ID_5, Arrays.asList(
-                Pair.of(UsageActionTypeEnum.ARCHIVED , AUDIT_USAGE_WAS_SENT_TO_CRM),
-                Pair.of(UsageActionTypeEnum.PAID , "Usage has been paid according to information from the LM"),
+                Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
+                Pair.of(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
                 Pair.of(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
-                Pair.of(UsageActionTypeEnum.RH_FOUND , "Rightsholder account 2000139286 was found in RMS"),
-                Pair.of(UsageActionTypeEnum.WORK_FOUND , "Wr Wrk Inst 100012905 was found by standard number " +
+                Pair.of(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 2000139286 was found in RMS"),
+                Pair.of(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100012905 was found by standard number " +
                     "12345XX-12978"),
-                Pair.of(UsageActionTypeEnum.LOADED , AUDIT_UPLOADED_IN_BATCH)))
+                Pair.of(UsageActionTypeEnum.LOADED, AUDIT_UPLOADED_IN_BATCH)))
             .expectUsageAudit(USAGE_LM_DETAIL_ID_6, Arrays.asList(
                 Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
                 Pair.of(UsageActionTypeEnum.PAID, "Usage has been created based on Post-Distribution process")))

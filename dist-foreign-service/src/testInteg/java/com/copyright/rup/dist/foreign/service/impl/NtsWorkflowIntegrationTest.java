@@ -60,7 +60,7 @@ public class NtsWorkflowIntegrationTest {
     }
 
     @Test
-    public void testNtsWorkflow() {
+    public void testNtsWorkflow() throws InterruptedException {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool()))
             .expectRollups("prm/nts_rollups_response.json", RH_ID)
@@ -68,10 +68,11 @@ public class NtsWorkflowIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage())
+            .expectUsage(buildPaidUsage())
             .expectLmDetails("details/nts_details_to_lm.json")
             .expectPaidInfo("lm/paid_usages_nts.json")
-            .expectCrmCall("crm/nts_rights_distribution_request.json", "crm/nts_rights_distribution_response.json")
+            .expectCrmCall("crm/workflow/rights_distribution_request_nts.json",
+                "crm/workflow/rights_distribution_response_nts.json")
             .expectScenario(buildScenario())
             .build()
             .run();
@@ -116,10 +117,11 @@ public class NtsWorkflowIntegrationTest {
         return fundPool;
     }
 
-    private PaidUsage buildUsage() {
+    private PaidUsage buildPaidUsage() {
         PaidUsage usage = new PaidUsage();
         usage.setWrWrkInst(151811999L);
         usage.setWorkTitle("NON-TITLE NTS");
+        usage.setSystemTitle("NON-TITLE NTS");
         usage.setRightsholder(buildRightsholder(1000023401L, "American College of Physicians - Journals"));
         usage.setPayee(buildRightsholder(1000010029L, "Georg Thieme Verlag KG"));
         usage.setStatus(UsageStatusEnum.ARCHIVED);
