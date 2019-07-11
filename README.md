@@ -1,3 +1,14 @@
+6.0.8
+-
+* B-44258 FDA: Distribute NTS through LM/CDP: implement test to receive paid usages from LM for NTS
+* B-50690 FDA: Report NTS distributions to RC: Adjust NtsWorkflowIntegrationTest to accept paid info and report to CRM
+* B-50690 FDA: Report NTS distributions to RC: make changes based on comments in CR-DIST-FOREIGN-121
+* B-51660 Tech Debt: FDA: replace Set with EnumSet in status widget filter
+* B-51660 Tech Debt: FDA: resolve declaration redundancy warnings on UI layer
+* B-51660 Tech Debt: FDA: resolve declaration redundancy warnings on repository layer
+* B-51660 Tech Debt: FDA: resolve declaration redundancy warnings on service layer
+* B-52269 FDA: Allow users to export list of NTS eligible works with classifications: make changes based on comments in CR-DIST-FOREIGN-120
+
 6.0.7
 -
 * B-51660 Tech Debt: FDA: resolve final modifier declaration warnings
