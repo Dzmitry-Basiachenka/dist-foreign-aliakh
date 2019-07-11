@@ -1,19 +1,30 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
+import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
+import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -27,6 +38,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -48,11 +63,20 @@ public class ServiceTestHelper {
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
+    private IUsageService usageService;
+    @Autowired
+    private IUsageArchiveRepository usageArchiveRepository;
+    @Autowired
     private AsyncRestTemplate asyncRestTemplate;
     @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
     private boolean prmRightsholderAsync;
     @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
+    @Autowired
+    private SqsClientMock sqsClientMock;
+    @Autowired
+    @Qualifier("df.service.paidUsageConsumer")
+    private PaidUsageConsumerMock paidUsageConsumer;
 
     private MockRestServiceServer mockServer;
     private MockRestServiceServer asyncMockServer;
@@ -65,6 +89,10 @@ public class ServiceTestHelper {
     public void verifyRestServer() {
         mockServer.verify();
         asyncMockServer.verify();
+    }
+
+    public void reset() {
+        sqsClientMock.reset();
     }
 
     public void expectGetRmsRights(String expectedRmsRequest, String expectedRmsResponse) {
@@ -141,35 +169,81 @@ public class ServiceTestHelper {
                     MediaType.APPLICATION_JSON)));
     }
 
-    public void expectCrmCall(String expectedRequestFileName, String responseFileName) {
+    public void expectCrmCall(String expectedRequestFileName, String responseFileName, List<String> fieldsToIgnore) {
         String expectedRequestBody = TestUtils.fileToString(this.getClass(), expectedRequestFileName);
         String responseBody = TestUtils.fileToString(this.getClass(), responseFileName);
-        List<String> excludedFields = ImmutableList.of("licenseCreateDate", "omOrderDetailNumber");
         mockServer.expect(MockRestRequestMatchers.requestTo(
             "http://localhost:9061/legacy-integration-rest/insertCCCRightsDistribution"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-            .andExpect(MockRestRequestMatchers.content().string(new JsonMatcher(expectedRequestBody, excludedFields)))
+            .andExpect(MockRestRequestMatchers.content().string(new JsonMatcher(expectedRequestBody, fieldsToIgnore)))
             .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
     }
 
-    public void assertAudit(String entityId, List<UsageAuditItem> auditItems) {
+    public void receivePaidUsagesFromLm(String paidUsagesMessageFile) throws InterruptedException {
+        doReceivePaidUsagesFromLm(TestUtils.fileToString(this.getClass(), paidUsagesMessageFile));
+    }
+
+    public void receivePaidUsagesFromLm(String paidUsagesMessageTemplateFile, List<String> usageIds)
+        throws InterruptedException {
+        doReceivePaidUsagesFromLm(
+            String.format(TestUtils.fileToString(this.getClass(), paidUsagesMessageTemplateFile), usageIds.toArray()));
+    }
+
+    public void assertAudit(String entityId, List<UsageAuditItem> expectedAuditItems) {
         List<UsageAuditItem> actualAuditItems = usageAuditService.getUsageAudit(entityId);
-        assertEquals(CollectionUtils.size(auditItems), auditItems.size());
-        IntStream.range(0, auditItems.size())
+        assertEquals(CollectionUtils.size(expectedAuditItems), expectedAuditItems.size());
+        IntStream.range(0, expectedAuditItems.size())
             .forEach(index -> {
-                assertEquals(actualAuditItems.get(index).getActionReason(), auditItems.get(index).getActionReason());
-                assertEquals(actualAuditItems.get(index).getActionType(), auditItems.get(index).getActionType());
+                UsageAuditItem expectedItem = expectedAuditItems.get(index);
+                UsageAuditItem actualItem = actualAuditItems.get(index);
+                assertEquals(expectedItem.getActionReason(), actualItem.getActionReason());
+                assertEquals(expectedItem.getActionType(), actualItem.getActionType());
             });
     }
 
     public void assertUsages(List<Usage> expectedUsages) {
-        expectedUsages.forEach(usage -> {
-            List<Usage> actualUsages = usageRepository.findByIds(Collections.singletonList(usage.getId()));
-            assertUsage(actualUsages.get(0), usage);
+        expectedUsages.forEach(expectedUsage -> {
+            List<Usage> actualUsages = usageRepository.findByIds(Collections.singletonList(expectedUsage.getId()));
+            assertUsage(expectedUsage, actualUsages.get(0));
         });
     }
 
-    private void assertUsage(Usage actualUsage, Usage expectedUsage) {
+    public void assertPaidUsages(List<PaidUsage> expectedUsages) {
+        expectedUsages.forEach(expectedUsage -> {
+            PaidUsage actualUsage = getPaidUsageByLmDetailId(expectedUsage.getLmDetailId());
+            assertUsage(expectedUsage, actualUsage);
+            assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+            assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
+            assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+            assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
+            assertEquals(expectedUsage.getPublisher(), actualUsage.getPublisher());
+            assertEquals(expectedUsage.getPublicationDate(), actualUsage.getPublicationDate());
+            assertEquals(expectedUsage.getMarket(), actualUsage.getMarket());
+            assertEquals(expectedUsage.getMarketPeriodFrom(), actualUsage.getMarketPeriodFrom());
+            assertEquals(expectedUsage.getMarketPeriodTo(), actualUsage.getMarketPeriodTo());
+            assertEquals(expectedUsage.getAuthor(), actualUsage.getAuthor());
+            assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
+            assertEquals(expectedUsage.isRhParticipating(), actualUsage.isRhParticipating());
+            assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+            assertEquals(expectedUsage.getDistributionName(), actualUsage.getDistributionName());
+            assertEquals(expectedUsage.getDistributionDate(), actualUsage.getDistributionDate());
+            assertEquals(expectedUsage.getCccEventId(), actualUsage.getCccEventId());
+            assertEquals(expectedUsage.getCheckNumber(), actualUsage.getCheckNumber());
+            assertEquals(expectedUsage.getCheckDate(), actualUsage.getCheckDate());
+            assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
+            assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        });
+    }
+
+    private void doReceivePaidUsagesFromLm(String message) throws InterruptedException {
+        paidUsageConsumer.setLatch(new CountDownLatch(1));
+        sqsClientMock.sendMessage("fda-test-df-consumer-sf-detail-paid", SnsMock.wrapBody(message),
+            Collections.emptyMap());
+        assertTrue(paidUsageConsumer.getLatch().await(2, TimeUnit.SECONDS));
+        sqsClientMock.assertQueueMessagesReceived("fda-test-df-consumer-sf-detail-paid");
+    }
+
+    private void assertUsage(Usage expectedUsage, Usage actualUsage) {
         assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
         assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
@@ -181,5 +255,19 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
         assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
         assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
+    }
+
+    private PaidUsage getPaidUsageByLmDetailId(String lmDetailId) {
+        assertNotNull(lmDetailId);
+        Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus =
+            usageService.getForAudit(new AuditFilter(), null, null).stream()
+                .collect(Collectors.groupingBy(UsageDto::getStatus,
+                    Collectors.mapping(UsageDto::getId, Collectors.toList())));
+        List<PaidUsage> usages = usageIdsGroupedByStatus.entrySet().stream()
+            .flatMap(entry -> usageArchiveRepository.findByIdAndStatus(entry.getValue(), entry.getKey()).stream())
+            .filter(paidUsage -> Objects.equals(lmDetailId, paidUsage.getLmDetailId()))
+            .collect(Collectors.toList());
+        assertEquals(1, usages.size());
+        return usages.get(0);
     }
 }

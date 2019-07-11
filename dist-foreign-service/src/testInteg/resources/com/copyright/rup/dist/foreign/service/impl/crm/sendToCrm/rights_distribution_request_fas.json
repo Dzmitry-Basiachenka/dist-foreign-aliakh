@@ -137,44 +137,6 @@
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
-      },
-      {
-        "cccEventId": "53256",
-        "product": "NTS",
-        "rorAccountNumber": "7000429266",
-        "payeeAccountNumber": "7000429266",
-        "royaltyAmount": 9182.2800000000,
-        "currency": "USD",
-        "licenseCreateDate": "03-12-2016T12:00:00 AM",
-        "serviceFeeAmount": 4321.0700000000,
-        "wrWrkInst": "151811999",
-        "publicationName": "NON-TITLE NTS",
-        "omOrderDetailNumber": "6fa92092-5cd3-4a12-bbf4-762f7ff6f815",
-        "totalAmount": 13503.3700000000,
-        "periodEndDate": "03/11/2018",
-        "adjustmentFlag": false,
-        "passThroughFlag": true,
-        "createUser": "FDA Distribution",
-        "status": "D - Distributed"
-      },
-      {
-        "cccEventId": "53256",
-        "product": "NTS",
-        "rorAccountNumber": "1000003821",
-        "payeeAccountNumber": "1000003821",
-        "royaltyAmount": 61.6300000000,
-        "currency": "USD",
-        "licenseCreateDate": "03-12-2016T12:00:00 AM",
-        "serviceFeeAmount": 29.0000000000,
-        "wrWrkInst": "151811999",
-        "publicationName": "NON-TITLE NTS",
-        "omOrderDetailNumber": "adcd15c4-eb44-4e67-847a-7f386082646a",
-        "totalAmount": 90.6300000000,
-        "periodEndDate": "03/11/2018",
-        "adjustmentFlag": false,
-        "passThroughFlag": true,
-        "createUser": "FDA Distribution",
-        "status": "D - Distributed"
       }
     ]
   }

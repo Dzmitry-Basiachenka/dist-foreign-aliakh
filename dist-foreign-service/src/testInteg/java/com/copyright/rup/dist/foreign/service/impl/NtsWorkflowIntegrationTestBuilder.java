@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
@@ -20,25 +19,19 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.NtsWorkflowIntegrationTestBuilder.Runner;
-import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
-import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
 import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Builder for {@link NtsWorkflowIntegrationTest}.
@@ -64,9 +57,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private SqsClientMock sqsClientMock;
-    @Autowired
-    @Qualifier("df.service.paidUsageConsumer")
-    private PaidUsageConsumerMock paidUsageConsumer;
     @Autowired
     private ServiceTestHelper testHelper;
 
@@ -179,7 +169,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private List<String> actualUsageIds;
         private Scenario actualScenario;
 
-        public void run() {
+        public void run() throws InterruptedException {
             testHelper.createRestServer();
             testHelper.expectGetRmsRights(expectedRmsRequest, expectedRmsResponse);
             if (Objects.nonNull(expectedPrmResponse)) {
@@ -195,7 +185,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 testHelper.expectGetRollups(expectedRollupsJson,
                     Collections.singletonList(expectedRollupsRightholderId));
             }
-            testHelper.expectCrmCall(Objects.requireNonNull(expectedCrmRequest), Objects.requireNonNull(crmResponse));
+            testHelper.expectCrmCall(Objects.requireNonNull(expectedCrmRequest), Objects.requireNonNull(crmResponse),
+                Arrays.asList("omOrderDetailNumber", "licenseCreateDate"));
             loadNtsBatch();
             createScenario();
             scenarioService.submit(actualScenario, "Submitting actualScenario for testing purposes");
@@ -204,7 +195,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             receivePaidUsagesFromLm();
             usageService.sendToCrm();
             assertScenario();
-            assertArchivedUsages();
+            testHelper.assertPaidUsages(expectedUsages);
             assertAudit();
             testHelper.verifyRestServer();
         }
@@ -230,19 +221,9 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
         }
 
-        // TODO {srudak} move to ServiceTestHelper
-        private void receivePaidUsagesFromLm() {
-            paidUsageConsumer.setLatch(new CountDownLatch(1));
-            sqsClientMock.sendMessage("fda-test-df-consumer-sf-detail-paid",
-                SnsMock.wrapBody(String.format(TestUtils.fileToString(this.getClass(), expectedPaidUsages),
-                    getArchivedUsages().get(0).getId())),
-                Collections.emptyMap());
-            try {
-                assertTrue(paidUsageConsumer.getLatch().await(2, TimeUnit.SECONDS));
-            } catch (InterruptedException e) {
-                throw new RupRuntimeException(e);
-            }
-            sqsClientMock.assertQueueMessagesReceived("fda-test-df-consumer-sf-detail-paid");
+        private void receivePaidUsagesFromLm() throws InterruptedException {
+            testHelper.receivePaidUsagesFromLm(expectedPaidUsages,
+                Collections.singletonList(getArchivedUsages().get(0).getId()));
         }
 
         private void assertScenario() {
@@ -258,41 +239,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void assertAudit() {
             actualUsageIds.forEach(
                 usageId -> assertTrue(CollectionUtils.isEmpty(usageAuditService.getUsageAudit(usageId))));
-        }
-
-        private void assertArchivedUsages() {
-            assertUsage(expectedUsages.get(0), getArchivedUsages().get(0));
-        }
-
-        // TODO {srudak} move to ServiceTestHelper
-        private void assertUsage(PaidUsage expectedUsage, UsageDto actualUsage) {
-            assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
-            assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
-            assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
-            assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
-            assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
-            assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
-            assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
-            assertEquals(expectedUsage.getPublisher(), actualUsage.getPublisher());
-            assertEquals(expectedUsage.getPublicationDate(), actualUsage.getPublicationDate());
-            assertEquals(expectedUsage.getMarket(), actualUsage.getMarket());
-            assertEquals(expectedUsage.getMarketPeriodFrom(), actualUsage.getMarketPeriodFrom());
-            assertEquals(expectedUsage.getMarketPeriodTo(), actualUsage.getMarketPeriodTo());
-            assertEquals(expectedUsage.getAuthor(), actualUsage.getAuthor());
-            assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
-            assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
-            assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
-            assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
-            assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
-            assertEquals(expectedUsage.getRightsholder().getAccountNumber(), actualUsage.getRhAccountNumber());
-            assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayeeAccountNumber());
-            assertEquals(expectedUsage.getDistributionName(), actualUsage.getDistributionName());
-            assertEquals(expectedUsage.getDistributionDate(), actualUsage.getDistributionDate());
-            assertEquals(expectedUsage.getCccEventId(), actualUsage.getCccEventId());
-            assertEquals(expectedUsage.getCheckNumber(), actualUsage.getCheckNumber());
-            assertEquals(expectedUsage.getCheckDate(), actualUsage.getCheckDate());
-            assertEquals(expectedUsage.getPeriodEndDate(),
-                actualUsage.getPeriodEndDate().atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime());
         }
 
         private List<UsageDto> getArchivedUsages() {
