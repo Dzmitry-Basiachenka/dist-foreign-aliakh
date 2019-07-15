@@ -1,3 +1,8 @@
+6.0.9
+-
+* B-51660 Tech Debt: FDA: resolve declaration access warnings
+* B-51660 Tech Debt: FDA: resolve security vulnerabilities in tomcat
+
 6.0.8
 -
 * B-44258 FDA: Distribute NTS through LM/CDP: implement test to receive paid usages from LM for NTS
