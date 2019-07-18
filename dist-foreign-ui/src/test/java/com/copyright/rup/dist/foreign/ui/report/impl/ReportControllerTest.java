@@ -1,25 +1,31 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
-import static org.powermock.api.easymock.PowerMock.createMock;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.OutputStream;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Verifies {@link ReportController}.
@@ -30,6 +36,8 @@ import java.time.OffsetDateTime;
  *
  * @author Uladzislau_Shalamitski
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
 public class ReportControllerTest {
 
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
@@ -41,9 +49,8 @@ public class ReportControllerTest {
         reportController = new ReportController();
         reportService = createMock(IReportService.class);
         undistributedLiabilitiesReportController = new UndistributedLiabilitiesReportController();
-        Whitebox.setInternalState(reportController, "undistributedLiabilitiesReportController",
-            undistributedLiabilitiesReportController);
-        Whitebox.setInternalState(reportController, "reportService", reportService);
+        Whitebox.setInternalState(reportController, undistributedLiabilitiesReportController);
+        Whitebox.setInternalState(reportController, reportService);
     }
 
     @Test
@@ -61,8 +68,13 @@ public class ReportControllerTest {
 
     @Test
     public void testFasBatchSummaryStreamSourceFileName() {
-        assertEquals("fas_batch_summary_report_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") +
-            ".csv", reportController.getFasBatchSummaryReportStreamSource().getSource().getKey().get());
+        OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+        mockStatic(OffsetDateTime.class);
+        expect(OffsetDateTime.now()).andReturn(now).once();
+        replay(OffsetDateTime.class);
+        assertEquals("fas_batch_summary_report_01_02_2019_03_04.csv",
+            reportController.getFasBatchSummaryReportStreamSource().getSource().getKey().get());
+        verify(OffsetDateTime.class);
     }
 
     @Test

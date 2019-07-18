@@ -3,25 +3,30 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportWidget;
 
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Verifies {@link ServiceFeeTrueUpReportController}.
@@ -32,6 +37,8 @@ import java.time.OffsetDateTime;
  *
  * @author Uladzislau_Shalamitski
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
 public class ServiceFeeTrueUpReportControllerTest {
 
     private IReportService reportService;
@@ -41,7 +48,7 @@ public class ServiceFeeTrueUpReportControllerTest {
     public void setUp() {
         controller = new ServiceFeeTrueUpReportController();
         reportService = createMock(IReportService.class);
-        Whitebox.setInternalState(controller, "reportService", reportService);
+        Whitebox.setInternalState(controller, reportService);
     }
 
     @Test
@@ -53,31 +60,33 @@ public class ServiceFeeTrueUpReportControllerTest {
 
     @Test
     public void testGetCsvStreamSource() {
+        OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+        mockStatic(OffsetDateTime.class);
         LocalDate fromDate = LocalDate.now();
         LocalDate toDate = LocalDate.now().plusDays(1);
         LocalDate paymentDateTo = LocalDate.now().plusDays(2);
         IServiceFeeTrueUpReportWidget widget = createMock(IServiceFeeTrueUpReportWidget.class);
         Whitebox.setInternalState(controller, widget);
-        String fileName = "service_fee_true_up_report_";
         Capture<LocalDate> fromDateCapture = new Capture<>();
         Capture<LocalDate> toDateCapture = new Capture<>();
         Capture<LocalDate> paymentDateToCapture = new Capture<>();
         Capture<OutputStream> osCapture = new Capture<>();
+        expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getFromDate()).andReturn(fromDate).once();
         expect(widget.getToDate()).andReturn(toDate).once();
         expect(widget.getPaymentDateTo()).andReturn(paymentDateTo).once();
         reportService.writeServiceFeeTrueUpCsvReport(capture(fromDateCapture), capture(toDateCapture),
             capture(paymentDateToCapture), capture(osCapture));
         expectLastCall().once();
-        replay(widget, reportService);
+        replay(OffsetDateTime.class, widget, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
-        assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+        assertEquals("service_fee_true_up_report_01_02_2019_03_04.csv",
             streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
         assertEquals(fromDate, fromDateCapture.getValue());
         assertEquals(toDate, toDateCapture.getValue());
         assertEquals(paymentDateTo, paymentDateToCapture.getValue());
         assertNotNull(osCapture.getValue());
-        verify(widget, reportService);
+        verify(OffsetDateTime.class, widget, reportService);
     }
 }

@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
@@ -13,7 +14,6 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
@@ -26,12 +26,16 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.InputStream;
 import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -46,6 +50,8 @@ import java.util.function.Supplier;
  *
  * @author Aliaksandr Liakh
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({OffsetDateTime.class, StreamSource.class})
 public class OwnershipAdjustmentReportControllerTest {
 
     @Test
@@ -62,6 +68,8 @@ public class OwnershipAdjustmentReportControllerTest {
 
     @Test
     public void testGetCsvStreamSource() {
+        OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+        mockStatic(OffsetDateTime.class);
         OwnershipAdjustmentReportController controller = new OwnershipAdjustmentReportController();
         IOwnershipAdjustmentReportWidget widget = createMock(IOwnershipAdjustmentReportWidget.class);
         IReportService reportService = createMock(IReportService.class);
@@ -78,21 +86,21 @@ public class OwnershipAdjustmentReportControllerTest {
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getScenario()).andReturn(scenario).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
         reportService.writeOwnershipAdjustmentCsvReport(scenario.getId(),
             ImmutableSet.of(RightsholderDiscrepancyStatusEnum.DRAFT, RightsholderDiscrepancyStatusEnum.APPROVED), pos);
         expectLastCall().once();
-        replay(widget, streamSourceHandler, reportService);
+        replay(OffsetDateTime.class, widget, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
-        assertEquals("ownership_adjustment_report_Scenario_name_" +
-            CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+        assertEquals("ownership_adjustment_report_Scenario_name_01_02_2019_03_04.csv",
             streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
-        verify(widget, streamSourceHandler, reportService);
+        verify(OffsetDateTime.class, widget, streamSourceHandler, reportService);
     }
 
     @Test

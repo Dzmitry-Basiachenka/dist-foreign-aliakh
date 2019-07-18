@@ -1,12 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
 import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.createMock;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -15,7 +15,6 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -41,6 +40,7 @@ import java.io.InputStream;
 import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -57,7 +57,7 @@ import java.util.function.Supplier;
  * @author Aliaksandr Radkevich
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Windows.class)
+@PrepareForTest({Windows.class, OffsetDateTime.class, StreamSource.class})
 public class AuditControllerTest {
 
     private AuditController controller;
@@ -165,6 +165,8 @@ public class AuditControllerTest {
 
     @Test
     public void testGetCsvStreamSource() {
+        OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+        mockStatic(OffsetDateTime.class);
         AuditFilter filter = new AuditFilter();
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
@@ -172,20 +174,20 @@ public class AuditControllerTest {
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(now).once();
         expect(auditFilterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
         reportService.writeAuditCsvReport(filter, pos);
         expectLastCall().once();
-        replay(auditFilterController, filterWidget, streamSourceHandler, reportService);
+        replay(OffsetDateTime.class, auditFilterController, filterWidget, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
-        assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            streamSource.getSource().getKey().get());
+        assertEquals("export_usage_audit_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
-        verify(auditFilterController, filterWidget, streamSourceHandler, reportService);
+        verify(OffsetDateTime.class, auditFilterController, filterWidget, streamSourceHandler, reportService);
     }
 
     @Test
