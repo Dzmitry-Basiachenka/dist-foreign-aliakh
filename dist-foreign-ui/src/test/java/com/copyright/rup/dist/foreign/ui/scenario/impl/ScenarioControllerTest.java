@@ -20,7 +20,6 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -54,6 +53,7 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collections;
 import java.util.List;
@@ -70,9 +70,10 @@ import java.util.function.Supplier;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ForeignSecurityUtils.class, Windows.class})
+@PrepareForTest({ForeignSecurityUtils.class, Windows.class, OffsetDateTime.class, StreamSource.class})
 public class ScenarioControllerTest {
 
+    private static final OffsetDateTime NOW = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
 
     private ScenarioController controller;
@@ -181,46 +182,48 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetExportScenarioUsagesStreamSource() {
+        mockStatic(OffsetDateTime.class);
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         String fileName = scenario.getName() + "_Details_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(NOW).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
         reportService.writeScenarioUsagesCsvReport(scenario, pos);
         expectLastCall().once();
-        replay(streamSourceHandler, reportService);
+        replay(OffsetDateTime.class, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getExportScenarioUsagesStreamSource();
-        assertEquals("Scenario_name_Details_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm")
-            + ".csv", streamSource.getSource().getKey().get());
+        assertEquals("Scenario_name_Details_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
-        verify(streamSourceHandler, reportService);
+        verify(OffsetDateTime.class, streamSourceHandler, reportService);
     }
 
     @Test
     public void testGetExportScenarioRightsholderTotalsStreamSource() {
+        mockStatic(OffsetDateTime.class);
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         String fileName = scenario.getName() + "_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(NOW).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
         reportService.writeScenarioRightsholderTotalsCsvReport(scenario, pos);
         expectLastCall().once();
-        replay(streamSourceHandler, reportService);
+        replay(OffsetDateTime.class, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getExportScenarioRightsholderTotalsStreamSource();
-        assertEquals("Scenario_name_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm")
-            + ".csv", streamSource.getSource().getKey().get());
+        assertEquals("Scenario_name_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
-        verify(streamSourceHandler, reportService);
+        verify(OffsetDateTime.class, streamSourceHandler, reportService);
     }
 
     @Test

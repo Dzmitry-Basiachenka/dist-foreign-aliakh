@@ -2,16 +2,16 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.createMock;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -23,7 +23,6 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -40,6 +39,7 @@ import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
@@ -66,6 +66,7 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -84,9 +85,10 @@ import java.util.function.Supplier;
  */
 // TODO add testCreateScenario
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(RupContextUtils.class)
+@PrepareForTest({RupContextUtils.class, OffsetDateTime.class, ByteArrayStreamSource.class, StreamSource.class})
 public class UsagesControllerTest {
 
+    private static final OffsetDateTime NOW = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
     private static final String RRO_ACCOUNT_NAME = "Account Name";
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
@@ -219,33 +221,38 @@ public class UsagesControllerTest {
 
     @Test
     public void testSendForResearchUsagesStreamSourceFileName() {
-        assertEquals("send_for_research_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+        mockStatic(OffsetDateTime.class);
+        expect(OffsetDateTime.now()).andReturn(NOW).once();
+        replay(OffsetDateTime.class);
+        assertEquals("send_for_research_01_02_2019_03_04.csv",
             controller.getSendForResearchUsagesStreamSource().getSource().getKey().get());
+        verify(OffsetDateTime.class);
     }
 
     @Test
     public void testGetExportUsagesStreamSource() {
+        mockStatic(OffsetDateTime.class);
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         String fileName = "export_usage_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(NOW).once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
         reportService.writeUsageCsvReport(usageFilter, pos);
         expectLastCall().once();
-        replay(filterWidgetMock, filterController, streamSourceHandler, reportService);
+        replay(OffsetDateTime.class, filterWidgetMock, filterController, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getExportUsagesStreamSource();
-        assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            streamSource.getSource().getKey().get());
+        assertEquals("export_usage_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
         assertNotNull(posConsumer);
-        verify(filterWidgetMock, filterController, streamSourceHandler, reportService);
+        verify(OffsetDateTime.class, filterWidgetMock, filterController, streamSourceHandler, reportService);
     }
 
     @Test
@@ -466,26 +473,28 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetPreServiceFeeFundBatchesStreamSource() {
+        mockStatic(OffsetDateTime.class);
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         String fileName = "pre_service_fee_fund_batches_";
         Supplier<String> fileNameSupplier = () -> fileName;
         Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(NOW).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
-        PipedOutputStream pos = new PipedOutputStream();
         reportService.writePreServiceFeeFundBatchesCsvReport(
             Collections.singletonList(new UsageBatch()), BigDecimal.ONE, pos);
         expectLastCall().once();
-        replay(streamSourceHandler, reportService);
+        replay(OffsetDateTime.class, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getPreServiceFeeFundBatchesStreamSource(
             Collections.singletonList(new UsageBatch()), BigDecimal.ONE);
-        assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+        assertEquals("pre_service_fee_fund_batches_01_02_2019_03_04.csv",
             streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
         posConsumer.accept(pos);
-        verify(streamSourceHandler, reportService);
+        verify(OffsetDateTime.class, streamSourceHandler, reportService);
     }
 
     @Test

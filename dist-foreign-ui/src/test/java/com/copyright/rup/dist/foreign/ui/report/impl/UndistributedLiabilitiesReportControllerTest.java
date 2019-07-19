@@ -3,25 +3,30 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportWidget;
 
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Verifies {@link UndistributedLiabilitiesReportController}.
@@ -32,6 +37,8 @@ import java.time.OffsetDateTime;
  *
  * @author Uladzislau_Shalamitski
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
 public class UndistributedLiabilitiesReportControllerTest {
 
     private IReportService reportService;
@@ -53,22 +60,24 @@ public class UndistributedLiabilitiesReportControllerTest {
 
     @Test
     public void testGetCsvStreamSource() {
+        OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+        mockStatic(OffsetDateTime.class);
         LocalDate paymentDate = LocalDate.now();
         IUndistributedLiabilitiesReportWidget widget = createMock(IUndistributedLiabilitiesReportWidget.class);
         Whitebox.setInternalState(controller, widget);
-        String fileName = "undistributed_liabilities_";
         Capture<LocalDate> paymentDateCapture = new Capture<>();
         Capture<OutputStream> osCapture = new Capture<>();
+        expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getPaymentDate()).andReturn(paymentDate).once();
         reportService.writeUndistributedLiabilitiesCsvReport(capture(paymentDateCapture), capture(osCapture));
         expectLastCall().once();
-        replay(widget, reportService);
+        replay(OffsetDateTime.class, widget, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
-        assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+        assertEquals("undistributed_liabilities_01_02_2019_03_04.csv",
             streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
         assertEquals(paymentDate, paymentDateCapture.getValue());
         assertNotNull(osCapture.getValue());
-        verify(widget, reportService);
+        verify(OffsetDateTime.class, widget, reportService);
     }
 }
