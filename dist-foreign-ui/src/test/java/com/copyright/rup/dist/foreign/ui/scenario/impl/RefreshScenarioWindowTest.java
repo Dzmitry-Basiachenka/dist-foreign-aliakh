@@ -105,7 +105,7 @@ public class RefreshScenarioWindowTest {
         assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
             "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
             "Standard Number Type", "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "Publisher", "Pub Date",
-            "Number of Copies", "Reported Value", "Amt in USD", "Gross Amt in USD", "Market", "Market Period From",
+            "Number of Copies", "Reported Value", "Amt in USD", "Batch Amt in USD", "Market", "Market Period From",
             "Market Period To", "Author", "Comment"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid);

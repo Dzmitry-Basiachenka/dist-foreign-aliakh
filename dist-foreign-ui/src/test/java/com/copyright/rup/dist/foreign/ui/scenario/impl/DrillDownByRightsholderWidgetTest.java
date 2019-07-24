@@ -92,7 +92,7 @@ public class DrillDownByRightsholderWidgetTest {
         assertArrayEquals(new String[]{"Detail ID", "Usage Batch Name", "Product Family", "Fiscal Year",
                 "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
                 "Standard Number Type", "Wr Wrk Inst", "System Title", "Publisher", "Pub Date", "Number of Copies",
-                "Reported Value", "Amt in USD", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD",
+                "Reported Value", "Amt in USD", "Batch Amt in USD", "Service Fee Amount", "Net Amt in USD",
                 "Service Fee %", "Market", "Market Period From", "Market Period To", "Author", "Comment"},
             grid.getColumns().stream().map(Column::getCaption).toArray());
         verifyGrossAmountInUsdDataProvider(columns.get(18));
@@ -100,7 +100,7 @@ public class DrillDownByRightsholderWidgetTest {
 
     @SuppressWarnings("unchecked")
     private void verifyGrossAmountInUsdDataProvider(Column grossAmountInUsdColumn) {
-        assertEquals("Gross Amt in USD", grossAmountInUsdColumn.getCaption());
+        assertEquals("Batch Amt in USD", grossAmountInUsdColumn.getCaption());
         UsageDto usage = new UsageDto();
         ValueProvider<UsageDto, String> provider = grossAmountInUsdColumn.getValueProvider();
         assertNull(provider.apply(usage));

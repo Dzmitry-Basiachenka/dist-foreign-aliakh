@@ -78,7 +78,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         NUMBER_OF_COPIES("Number of Copies"),
         REPORTED_VALUE("Reported Value"),
         GROSS_AMOUNT("Amt in USD"),
-        BATCH_GROSS_AMOUNT("Gross Amt in USD"),
+        BATCH_GROSS_AMOUNT("Batch Amt in USD"),
         MARKET("Market"),
         MARKET_PERIOD_FROM("Market Period From"),
         MARKET_PERIOD_TO("Market Period To"),
