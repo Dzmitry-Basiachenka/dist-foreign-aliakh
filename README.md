@@ -1,3 +1,10 @@
+6.0.10
+-
+* B-51660 Tech Debt: FDA: Update amounts in SendFasToCrmIntegrationTest
+* B-51660 Tech Debt: FDA: mock OffsetDateTime.now() in unit tests
+* B-51660 Tech Debt: FDA: update PRM urls
+* B-52861 FDA: Update fields on Audit Tab: FDA: Rename "Gross Amt in USD" column
+
 6.0.9
 -
 * B-51660 Tech Debt: FDA: resolve declaration access warnings
