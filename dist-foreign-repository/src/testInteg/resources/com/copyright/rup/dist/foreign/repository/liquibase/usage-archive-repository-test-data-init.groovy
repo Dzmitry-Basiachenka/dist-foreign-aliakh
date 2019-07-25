@@ -55,7 +55,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
-            column(name: 'gross_amount', value: '35000')
+            column(name: 'gross_amount', value: '70000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
