@@ -21,9 +21,9 @@ public class AuditCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Detail Status", "Product Family",
         "Usage Batch Name", "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name",
-        "Wr Wrk Inst", "System Title", "Title", "Standard Number", "Standard Number Type", "Amt in USD",
-        "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date",
-        "Period Ending", "Comment");
+        "Wr Wrk Inst", "System Title", "Title", "Standard Number", "Standard Number Type", "Reported Value",
+        "Amt in USD", "Batch Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID",
+        "Dist. Name", "Dist. Date", "Period Ending", "Comment");
 
     /**
      * Constructor.
@@ -51,7 +51,9 @@ public class AuditCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getWorkTitle());
         beanProperties.add(formatStringStartedWithZero(bean.getStandardNumber()));
         beanProperties.add(bean.getStandardNumberType());
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getReportedValue()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getBatchGrossAmount()));
         beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
         beanProperties.add(bean.getScenarioName());
         beanProperties.add(bean.getCheckNumber());

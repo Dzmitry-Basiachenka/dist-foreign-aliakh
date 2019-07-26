@@ -266,7 +266,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'gross_amount', value: '32874.80')
+            column(name: 'gross_amount', value: '3000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -289,10 +289,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '11177.40')
-            column(name: 'net_amount', value: '800.40')
-            column(name: 'service_fee_amount', value: '5260.00')
+            column(name: 'reported_value', value: '100.00')
+            column(name: 'gross_amount', value: '1000.00')
+            column(name: 'net_amount', value: '840.00')
+            column(name: 'service_fee_amount', value: '160.00')
             column(name: 'service_fee', value: '0.16000')
             column(name: 'comment', value: 'usage from usages_10.csv')
         }
@@ -314,10 +314,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '16437.40')
-            column(name: 'net_amount', value: '11177.40')
-            column(name: 'service_fee_amount', value: '5260.00')
+            column(name: 'reported_value', value: '200.00')
+            column(name: 'gross_amount', value: '2000.00')
+            column(name: 'net_amount', value: '1360.00')
+            column(name: 'service_fee_amount', value: '640.00')
             column(name: 'service_fee', value: '0.32000')
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'comment', value: 'usage from usages_20.csv')
