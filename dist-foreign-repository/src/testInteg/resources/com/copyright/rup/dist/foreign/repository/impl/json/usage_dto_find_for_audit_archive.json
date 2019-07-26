@@ -1,0 +1,29 @@
+[
+  {
+    "id": "0d85f51d-212b-4181-9972-3154cad74bd0",
+    "batchName": "Paid batch",
+    "paymentDate": "2021-02-12",
+    "wrWrkInst": 243904752,
+    "workTitle": "100 ROAD MOVIES",
+    "systemTitle": "100 ROAD MOVIES",
+    "rhAccountNumber": 1000002859,
+    "rhName": "John Wiley & Sons - Books",
+    "standardNumber": "1008902112317555XX",
+    "payeeAccountNumber": 1000002859,
+    "payeeName": "John Wiley & Sons - Books",
+    "grossAmount": 500.0000000000,
+    "reportedValue": 3000.00,
+    "batchGrossAmount": 1000.00,
+    "serviceFee": 0.16000,
+    "status": "PAID",
+    "productFamily": "FAS",
+    "scenarioName": "Paid Scenario for Audit",
+    "checkNumber": "578945",
+    "checkDate": "2017-03-15T04:41:52.735531-04:00",
+    "cccEventId": "53256",
+    "distributionName": "FDA_March_17",
+    "distributionDate": "2017-03-15T04:41:52.735531-04:00",
+    "periodEndDate": "2017-03-15",
+    "comment": "usage from usages_10.csv"
+  }
+]
