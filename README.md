@@ -1,3 +1,8 @@
+6.0.11
+-
+* B-52861 FDA: Update fields on Audit Tab: Add reported_value and batch_gross_amount columns to repository methods that retrieve usages for audit
+* CDP-795 FDA: Export scenario details: 'Batch amt in USD' column displays gross usage amt in exported file instead of gross batch amount
+
 6.0.10
 -
 * B-51660 Tech Debt: FDA: Update amounts in SendFasToCrmIntegrationTest
