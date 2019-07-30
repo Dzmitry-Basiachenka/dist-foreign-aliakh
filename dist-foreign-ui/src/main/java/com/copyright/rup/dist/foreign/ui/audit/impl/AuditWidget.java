@@ -147,12 +147,13 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", 300);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
         addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", 155);
-        auditGrid.addColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null))
-            .setCaption(ForeignUi.getMessage("table.column.gross_amount"))
-            .setSortProperty("grossAmount")
-            .setHidable(true)
-            .setStyleGenerator(item -> "v-align-right")
-            .setWidth(100);
+        //TODO {aazarenka} replace ValueProviders with Functions to avoid code duplicates
+        addAmountColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
+            "reportedValue", 115);
+        addAmountColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount",
+            "grossAmount", 100);
+        addAmountColumn(usage -> CurrencyUtils.format(usage.getBatchGrossAmount(), null),
+            "table.column.batch_gross_amount", "batchGrossAmount", 120);
         addColumn(usage -> {
             BigDecimal value = usage.getServiceFee();
             return Objects.nonNull(value)
@@ -177,6 +178,16 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         auditGrid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
+            .setHidable(true)
+            .setWidth(width);
+    }
+
+    private void addAmountColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
+                                 double width) {
+        auditGrid.addColumn(provider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setSortProperty(sort)
+            .setStyleGenerator(item -> "v-align-right")
             .setHidable(true)
             .setWidth(width);
     }

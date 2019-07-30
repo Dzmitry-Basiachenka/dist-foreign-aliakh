@@ -138,7 +138,7 @@ public class AuditWidgetTest {
     private void verifyToolbar(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
-        verifySize(layout,  100, Unit.PIXELS, -1);
+        verifySize(layout, 100, Unit.PIXELS, -1);
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(2, layout.getComponentCount());
         verifyExportButton(layout.getComponent(0));
@@ -167,8 +167,9 @@ public class AuditWidgetTest {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
             "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title",
-            "Title", "Standard Number", "Standard Number Type", "Amt in USD", "Service Fee %", "Scenario Name",
-            "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date", "Period Ending", "Comment"),
+            "Title", "Standard Number", "Standard Number Type", "Reported Value", "Amt in USD", "Batch Amt in USD",
+            "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date",
+            "Period Ending", "Comment"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
