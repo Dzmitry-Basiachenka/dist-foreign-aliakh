@@ -110,7 +110,8 @@ public class CsvReportsIntegrationTest {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Sets.newHashSet("e855bf85-236c-42e7-9b12-8d68dd747bbe",
             "034873b3-97fa-475a-9a2a-191e8ec988b3", "02a09322-5f0f-4cae-888c-73127050dc98",
-            "d016d9c2-5460-41bf-837c-8598cf00b654", "acae006c-a4fe-45f0-a0cc-098e12db00c5"));
+            "d016d9c2-5460-41bf-837c-8598cf00b654", "acae006c-a4fe-45f0-a0cc-098e12db00c5",
+            "e17ebc80-e74e-436d-ba6e-acf3d355b7ff"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeUsagesCsvReport(usageFilter, outputStream),
             "usages_report.csv");
     }
@@ -126,6 +127,13 @@ public class CsvReportsIntegrationTest {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeScenarioUsagesCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",
                 outputStream), "scenario_usages_report.csv");
+    }
+
+    @Test
+    public void testExportScenarioUsagesCsvReportWithNts() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeScenarioUsagesCsvReport("85ba864e-1939-4a60-9fab-888b84199321",
+                outputStream), "scenario_nts_usages_report.csv");
     }
 
     @Test

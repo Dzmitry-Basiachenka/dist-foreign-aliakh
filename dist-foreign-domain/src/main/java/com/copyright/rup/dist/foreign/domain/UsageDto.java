@@ -48,7 +48,7 @@ public class UsageDto extends StoredEntity<String> {
     private String payeeName;
     private BigDecimal grossAmount = DEFAULT_AMOUNT;
     private BigDecimal reportedValue = DEFAULT_AMOUNT;
-    private BigDecimal batchGrossAmount = DEFAULT_AMOUNT;
+    private BigDecimal batchGrossAmount;
     private BigDecimal netAmount = DEFAULT_AMOUNT;
     private BigDecimal serviceFee = DEFAULT_AMOUNT;
     private BigDecimal serviceFeeAmount = DEFAULT_AMOUNT;

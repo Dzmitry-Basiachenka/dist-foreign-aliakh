@@ -41,6 +41,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -179,8 +180,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             "reportedValue", 130);
         addAmountColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount",
             "grossAmount", 110);
-        addAmountColumn(usage -> CurrencyUtils.format(usage.getBatchGrossAmount(), null),
-            "table.column.batch_gross_amount", "batchGrossAmount", 135);
+        addAmountColumn(
+            usage -> Objects.nonNull(usage.getBatchGrossAmount()) ? CurrencyUtils.format(usage.getBatchGrossAmount(),
+                null) : null, "table.column.batch_gross_amount", "batchGrossAmount", 135);
         addColumn(UsageDto::getMarket, "table.column.market", "market", true, 115);
         addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", true, 150);
         addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", true, 145);

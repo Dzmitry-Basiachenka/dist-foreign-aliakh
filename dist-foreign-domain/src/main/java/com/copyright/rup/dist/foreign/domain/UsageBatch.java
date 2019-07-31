@@ -27,7 +27,7 @@ public class UsageBatch extends StoredEntity<String> {
     private String productFamily;
     private LocalDate paymentDate;
     private Integer fiscalYear;
-    private BigDecimal grossAmount = BigDecimal.ZERO;
+    private BigDecimal grossAmount;
     private FundPool fundPool;
 
     public String getName() {
@@ -75,14 +75,12 @@ public class UsageBatch extends StoredEntity<String> {
     }
 
     /**
-     * Sets not null gross amount value.
+     * Sets gross amount value.
      *
      * @param grossAmount gross amount
      */
     public void setGrossAmount(BigDecimal grossAmount) {
-        if (null != grossAmount) {
-            this.grossAmount = grossAmount;
-        }
+        this.grossAmount = grossAmount;
     }
 
     public FundPool getFundPool() {
