@@ -53,7 +53,7 @@ public class AuditCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getStandardNumberType());
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getReportedValue()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getBatchGrossAmount()));
+        beanProperties.add(getBeanPropertyAsString(bean.getBatchGrossAmount()));
         beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
         beanProperties.add(bean.getScenarioName());
         beanProperties.add(bean.getCheckNumber());

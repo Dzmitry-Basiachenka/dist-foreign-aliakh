@@ -152,8 +152,9 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             "reportedValue", 115);
         addAmountColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount",
             "grossAmount", 100);
-        addAmountColumn(usage -> CurrencyUtils.format(usage.getBatchGrossAmount(), null),
-            "table.column.batch_gross_amount", "batchGrossAmount", 120);
+        addAmountColumn(
+            usage -> Objects.nonNull(usage.getBatchGrossAmount()) ? CurrencyUtils.format(usage.getBatchGrossAmount(),
+                null) : null, "table.column.batch_gross_amount", "batchGrossAmount", 120);
         addColumn(usage -> {
             BigDecimal value = usage.getServiceFee();
             return Objects.nonNull(value)
@@ -167,7 +168,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         addColumn(UsageDto::getCccEventId, "table.column.event_id", "cccEventId", 85);
         addColumn(UsageDto::getDistributionName, "table.column.distribution_name", "distributionName", 110);
         addColumn(usage ->
-            CommonDateUtils.format(usage.getDistributionDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+                CommonDateUtils.format(usage.getDistributionDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.distribution_date", "distributionDate", 105);
         addColumn(usage -> CommonDateUtils.format(usage.getPeriodEndDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.period_end_date", "periodEndDate", 115);

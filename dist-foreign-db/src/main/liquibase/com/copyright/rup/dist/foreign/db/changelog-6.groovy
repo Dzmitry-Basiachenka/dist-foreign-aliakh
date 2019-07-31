@@ -21,4 +21,30 @@ databaseChangeLog {
                     columnDataType: 'VARCHAR(2000)')
         }
     }
+
+    changeSet(id: '2019-07-30-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-51660 Tech Debt: display empty batch gross amount for NTS product family")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'gross_amount')
+
+        dropDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'gross_amount')
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'gross_amount', value: null)
+            where "gross_amount = 0.00"
+        }
+
+        rollback {
+
+            update(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+                column(name: 'gross_amount', value: '0.00')
+                where "gross_amount is null"
+            }
+
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'gross_amount',
+                    columnDataType: 'DECIMAL(38,2)')
+
+            addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'gross_amount', defaultValue: '0.00')
+        }
+    }
 }
