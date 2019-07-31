@@ -1,3 +1,7 @@
+6.0.12
+-
+* B-52861 FDA: Update fields on Audit Tab: add columns in audit tab
+
 6.0.11
 -
 * B-52861 FDA: Update fields on Audit Tab: Add reported_value and batch_gross_amount columns to repository methods that retrieve usages for audit
