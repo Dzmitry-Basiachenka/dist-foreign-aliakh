@@ -61,7 +61,7 @@ public class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDt
         beanProperties.add(getBeanPropertyAsString(bean.getNumberOfCopies()));
         beanProperties.add(getBeanPropertyAsString(bean.getReportedValue()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getBatchGrossAmount()));
+        beanProperties.add(getBeanPropertyAsString(bean.getBatchGrossAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getServiceFeeAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getNetAmount()));
         beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
