@@ -1,3 +1,8 @@
+6.0.13
+-
+* B-43660 Tech Debt: FDA: Update release notes for version 6.0.12
+* B-51662 Tech Debt: FDA: display empty batch gross amount for NTS product family
+
 6.0.12
 -
 * B-52861 FDA: Update fields on Audit Tab: add columns in audit tab
