@@ -740,18 +740,35 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindForAudit() throws IOException {
+    public void testFindForAuditFas() throws IOException {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(USAGE_ID_8);
-        verifyUsageDtosForAudit(
-            loadExpectedUsageDtos("json/usage_dto_find_for_audit.json"),
-            usageRepository.findForAudit(filter, null, null)
-        );
+        verifyUsageDtosForAudit(loadExpectedUsageDtos("json/usage_dto_find_for_audit_fas.json"),
+            usageRepository.findForAudit(filter, null, null));
+    }
+
+    @Test
+    public void testFindForAuditArchivedFas() throws IOException {
+        AuditFilter filter = new AuditFilter();
         filter.setSearchValue(USAGE_ID_15);
-        verifyUsageDtosForAudit(
-            loadExpectedUsageDtos("json/usage_dto_find_for_audit_archive.json"),
-            usageRepository.findForAudit(filter, null, null)
-        );
+        verifyUsageDtosForAudit(loadExpectedUsageDtos("json/usage_dto_find_for_audit_archive_fas.json"),
+            usageRepository.findForAudit(filter, null, null));
+    }
+
+    @Test
+    public void testFindForAuditNts() throws IOException {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue("c09aa888-85a5-4377-8c7a-85d84d255b5a");
+        verifyUsageDtosForAudit(loadExpectedUsageDtos("json/usage_dto_find_for_audit_nts.json"),
+            usageRepository.findForAudit(filter, null, null));
+    }
+
+    @Test
+    public void testFindForAuditArchivedNts() throws IOException {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue("fb297d5d-4d46-4492-93b0-cd6e02b8ce8d");
+        verifyUsageDtosForAudit(loadExpectedUsageDtos("json/usage_dto_find_for_audit_archive_nts.json"),
+            usageRepository.findForAudit(filter, null, null));
     }
 
     @Test

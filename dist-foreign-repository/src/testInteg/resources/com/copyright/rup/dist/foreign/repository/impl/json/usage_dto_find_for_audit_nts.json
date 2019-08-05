@@ -1,0 +1,21 @@
+[
+  {
+    "id": "c09aa888-85a5-4377-8c7a-85d84d255b5a",
+    "batchName": "NTS Batch associated with Scenario",
+    "paymentDate": "2019-01-11",
+    "wrWrkInst": 122267677,
+    "workTitle": "A theory of cognitive dissonance",
+    "systemTitle": "A theory of cognitive dissonance",
+    "rhAccountNumber": 1000009997,
+    "rhName": "IEEE - Inst of Electrical and Electronics Engrs",
+    "standardNumber": "1003324112314587XX",
+    "grossAmount": 900.0000000000,
+    "reportedValue": 900.00,
+    "netAmount": 0.00,
+    "serviceFee": 0.32000,
+    "serviceFeeAmount": 0.00,
+    "status": "LOCKED",
+    "productFamily": "NTS",
+    "scenarioName": "Test NTS scenario"
+  }
+]

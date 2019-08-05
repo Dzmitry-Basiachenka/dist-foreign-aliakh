@@ -1,0 +1,26 @@
+[
+  {
+    "id": "fb297d5d-4d46-4492-93b0-cd6e02b8ce8d",
+    "wrWrkInst": 151811999,
+    "workTitle": "NON-TITLE NTS",
+    "systemTitle": "NON-TITLE NTS",
+    "rhAccountNumber": 1000002859,
+    "rhName": "John Wiley & Sons - Books",
+    "payeeAccountNumber": 1000002859,
+    "payeeName": "John Wiley & Sons - Books",
+    "grossAmount": 6000.0000000000,
+    "reportedValue": 0.00,
+    "netAmount": 0.00,
+    "serviceFee": 0.32000,
+    "serviceFeeAmount": 0.00,
+    "status": "PAID",
+    "productFamily": "NTS",
+    "scenarioName": "Test NTS Scenario",
+    "checkNumber": "578671",
+    "checkDate": "2019-08-05T05:14:00-04:00",
+    "cccEventId": "53578",
+    "distributionName": "FDA April 19",
+    "distributionDate": "2019-08-05T05:14:00-04:00",
+    "periodEndDate": "2019-08-05"
+  }
+]

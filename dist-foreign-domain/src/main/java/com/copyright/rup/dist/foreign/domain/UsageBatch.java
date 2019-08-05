@@ -74,11 +74,6 @@ public class UsageBatch extends StoredEntity<String> {
         return grossAmount;
     }
 
-    /**
-     * Sets gross amount value.
-     *
-     * @param grossAmount gross amount
-     */
     public void setGrossAmount(BigDecimal grossAmount) {
         this.grossAmount = grossAmount;
     }

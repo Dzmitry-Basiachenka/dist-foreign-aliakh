@@ -80,22 +80,22 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
         PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream(pos);
         try {
-            processFile("researched_usages_2000_errors.csv");
+            processFile("researched_usages_with_2000_errors.csv");
             fail();
         } catch (ThresholdExceededException e) {
             assertEquals("The file could not be uploaded. There are more than 2000 errors", e.getMessage());
             Executors.newSingleThreadExecutor().execute(() -> e.getProcessingResult().writeToFile(pos));
-            reportTestUtils.assertCsvReport("researched_usages_2000_errors_report.csv", pis);
+            reportTestUtils.assertCsvReport("researched_usages_with_2000_errors_report.csv", pis);
         }
     }
 
     @Test
     public void testProcessorFailure() throws Exception {
-        ProcessingResult<ResearchedUsage> result = processFile("researched_usages_errors.csv");
+        ProcessingResult<ResearchedUsage> result = processFile("researched_usages_with_errors.csv");
         PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream(pos);
         Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(pos));
-        reportTestUtils.assertCsvReport("researched_usages_errors_report.csv", pis);
+        reportTestUtils.assertCsvReport("researched_usages_with_errors_report.csv", pis);
     }
 
     @Test

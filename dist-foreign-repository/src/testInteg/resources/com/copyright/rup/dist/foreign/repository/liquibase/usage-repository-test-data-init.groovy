@@ -988,7 +988,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'gross_amount', value: '35000')
             column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
@@ -1307,7 +1306,6 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: '1000000001')
             column(name: 'payment_date', value: '2019-03-10')
             column(name: 'fiscal_year', value: '2019')
-            column(name: 'gross_amount', value: '1000.00')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fund_pool', value: '{"non_stm_minimum_amount":7,"stm_amount":700,"stm_minimum_amount":50,"non_stm_amount":5000,"fund_pool_period_from":2015,"markets":["Bus","Doc Del"],"fund_pool_period_to":2016}')
         }
@@ -1577,7 +1575,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'gross_amount', value: '0.00')
             column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, "fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
 
@@ -1649,7 +1646,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'gross_amount', value: '0.00')
             column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
@@ -1842,7 +1838,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'gross_amount', value: '0.00')
             column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
@@ -2016,6 +2011,42 @@ databaseChangeLog {
             column(name: 'df_work_classification_uid', value: 'e920c634-f59d-4d9c-82bd-275af99132b6')
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'classification', value: 'STM')
+        }
+    }
+
+    changeSet(id: '2019-08-05-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
+        comment("Insert archived NTS usage for testFindForAuditArchivedNts")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: 'ddb556a0-991c-45a7-ade9-32959b676ae0')
+            column(name: 'name', value: 'Test NTS Scenario')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
+            column(name: 'description', value: 'Test NTS Scenario')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: 'fb297d5d-4d46-4492-93b0-cd6e02b8ce8d')
+            column(name: 'df_scenario_uid', value: 'ddb556a0-991c-45a7-ade9-32959b676ae0')
+            column(name: 'wr_wrk_inst', value: '151811999')
+            column(name: 'work_title', value: 'NON-TITLE NTS')
+            column(name: 'system_title', value: 'NON-TITLE NTS')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'PAID')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'reported_value', value: '0.00')
+            column(name: 'gross_amount', value: '6000.00')
+            column(name: 'net_amount', value: '4080.00')
+            column(name: 'service_fee_amount', value: '1920.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'is_rh_participating_flag', value: 'false')
+            column(name: 'ccc_event_id', value: '53578')
+            column(name: 'check_number', value: '578671')
+            column(name: 'check_date', value: '2019-08-05 05:14:00-04:00')
+            column(name: 'distribution_name', value: 'FDA April 19')
+            column(name: 'distribution_date', value: '2019-08-05 05:14:00-04:00')
+            column(name: 'period_end_date', value: '2019-08-05 05:14:00-04:00')
+            column(name: 'lm_detail_id', value: '6e727232-15b6-4b98-8b97-a8536cd8b24c')
         }
     }
 }

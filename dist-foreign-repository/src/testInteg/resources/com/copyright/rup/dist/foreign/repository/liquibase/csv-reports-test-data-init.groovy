@@ -1320,7 +1320,6 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2018-01-04')
             column(name: 'fiscal_year', value: '2018')
-            column(name: 'gross_amount', value: '0.00')
             column(name: 'fund_pool', value: '{"markets": ["Bus,Univ,Doc Del"], "stm_amount": 10, "non_stm_amount": 20, "stm_minimum_amount": 30, "non_stm_minimum_amount": 40, "fund_pool_period_to": 2018, "fund_pool_period_from": 2018}')
         }
 
@@ -4595,7 +4594,6 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
-            column(name: 'gross_amount', value: null)
             column(name: 'product_family', value: 'NTS')
             column(name: 'fund_pool', value: '{"non_stm_minimum_amount":7,"stm_amount":700,"stm_minimum_amount":50,"non_stm_amount":5000,"fund_pool_period_from":2010,"markets":["Bus","Doc Del"],"fund_pool_period_to":2012}')
         }
@@ -4727,7 +4725,6 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
-            column(name: 'gross_amount', value: null)
             column(name: 'product_family', value: 'NTS')
             column(name: 'fund_pool', value: '{"non_stm_minimum_amount":7,"stm_amount":700,"stm_minimum_amount":50,"non_stm_amount":5000,"fund_pool_period_from":2010,"markets":["Bus","Doc Del"],"fund_pool_period_to":2012}')
         }

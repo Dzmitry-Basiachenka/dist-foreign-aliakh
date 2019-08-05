@@ -130,7 +130,7 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testExportScenarioUsagesCsvReportWithNts() throws IOException {
+    public void testWriteScenarioUsagesCsvReportNts() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeScenarioUsagesCsvReport("85ba864e-1939-4a60-9fab-888b84199321",
                 outputStream), "scenario_nts_usages_report.csv");
