@@ -241,7 +241,6 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
-            column(name: 'gross_amount', value: '30000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

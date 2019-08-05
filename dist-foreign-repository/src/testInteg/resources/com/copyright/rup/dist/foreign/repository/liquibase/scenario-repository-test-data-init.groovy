@@ -675,9 +675,8 @@ databaseChangeLog {
                 column(name: 'name', value: 'Test NTS batch')
                 column(name: 'rro_account_number', value: '2000017010')
                 column(name: 'payment_date', value: '2010-09-10')
-                column(name: 'fiscal_year', value: '2011')
-                column(name: 'gross_amount', value: '500.00')
                 column(name: 'product_family', value: 'NTS')
+                column(name: 'fiscal_year', value: '2011')
             }
 
             insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

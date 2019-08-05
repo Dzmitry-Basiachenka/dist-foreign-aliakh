@@ -23,7 +23,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-07-30-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("B-51660 Tech Debt: display empty batch gross amount for NTS product family")
+        comment("B-51660 Tech Debt: drop not-null constraint and default value from batch gross_amount column")
 
         dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'gross_amount')
 
@@ -31,14 +31,14 @@ databaseChangeLog {
 
         update(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'gross_amount', value: null)
-            where "gross_amount = 0.00"
+            where "product_family = 'NTS'"
         }
 
         rollback {
 
             update(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
                 column(name: 'gross_amount', value: '0.00')
-                where "gross_amount is null"
+                where "product_family = 'NTS'"
             }
 
             addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'gross_amount',

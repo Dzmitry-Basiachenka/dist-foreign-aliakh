@@ -582,10 +582,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '9abfd0a0-2779-4321-af07-ebabe22627a0')
             column(name: 'name', value: 'NTS batch')
             column(name: 'rro_account_number', value: '7000813806')
-            column(name: 'product_family', value: 'FAS')
+            column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2021')
-            column(name: 'gross_amount', value: '0.00')
             column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 0, "stm_minimum_amount": 0, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 0}')
         }
@@ -678,7 +677,6 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2022-02-12')
             column(name: 'fiscal_year', value: '2022')
-            column(name: 'gross_amount', value: '300.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -790,7 +788,6 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2022-02-12')
             column(name: 'fiscal_year', value: '2022')
-            column(name: 'gross_amount', value: '300.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
