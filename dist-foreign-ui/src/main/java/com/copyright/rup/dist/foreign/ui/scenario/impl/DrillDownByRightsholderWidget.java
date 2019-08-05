@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Represents widget to display drill down report.
@@ -113,16 +114,11 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
                 CommonDateUtils.format(usageDto.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.publication_date", "publicationDate", true, 90);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
-        addAmountColumn(usageDto -> CurrencyUtils.format(usageDto.getReportedValue(), null),
-            "table.column.reported_value", "reportedValue", 130);
-        addAmountColumn(usageDto -> CurrencyUtils.format(usageDto.getGrossAmount(), null), "table.column.gross_amount",
-            "grossAmount", 110);
-        addAmountColumn(usageDto -> Objects.nonNull(usageDto.getBatchGrossAmount()) ? CurrencyUtils.format(
-            usageDto.getBatchGrossAmount(), null) : null, "table.column.batch_gross_amount", "batchGrossAmount", 135);
-        addAmountColumn(usageDto -> CurrencyUtils.format(usageDto.getServiceFeeAmount(), null),
-            "table.column.service_fee_amount", "serviceFeeAmount", 150);
-        addAmountColumn(usageDto -> CurrencyUtils.format(usageDto.getNetAmount(), null), "table.column.net_amount",
-            "netAmount", 120);
+        addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", 130);
+        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount", "grossAmount", 110);
+        addAmountColumn(UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", 135);
+        addAmountColumn(UsageDto::getServiceFeeAmount, "table.column.service_fee_amount", "serviceFeeAmount", 150);
+        addAmountColumn(UsageDto::getNetAmount, "table.column.net_amount", "netAmount", 120);
         addColumn(usageDto -> {
             BigDecimal value = usageDto.getServiceFee();
             return Objects.nonNull(value)
@@ -152,9 +148,9 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
             .setWidth(width);
     }
 
-    private void addAmountColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
+    private void addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty, String sort,
                                  double width) {
-        grid.addColumn(provider)
+        grid.addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setHidable(true)
