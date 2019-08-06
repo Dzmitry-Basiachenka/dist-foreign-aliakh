@@ -39,10 +39,11 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -176,13 +177,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
                 CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.publication_date", "publicationDate", true, 90);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
-        addAmountColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
-            "reportedValue", 130);
-        addAmountColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount",
-            "grossAmount", 110);
-        addAmountColumn(
-            usage -> Objects.nonNull(usage.getBatchGrossAmount()) ? CurrencyUtils.format(usage.getBatchGrossAmount(),
-                null) : null, "table.column.batch_gross_amount", "batchGrossAmount", 135);
+        addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", 130);
+        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount", "grossAmount", 110);
+        addAmountColumn(UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", 135);
         addColumn(UsageDto::getMarket, "table.column.market", "market", true, 115);
         addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", true, 150);
         addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", true, 145);
@@ -199,9 +196,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             .setWidth(width);
     }
 
-    private void addAmountColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
+    private void addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty, String sort,
                                  double width) {
-        usagesGrid.addColumn(provider)
+        usagesGrid.addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setHidable(true)

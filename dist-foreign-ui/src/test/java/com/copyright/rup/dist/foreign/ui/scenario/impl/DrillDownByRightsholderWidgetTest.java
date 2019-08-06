@@ -5,7 +5,6 @@ import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -22,6 +21,7 @@ import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -95,15 +95,15 @@ public class DrillDownByRightsholderWidgetTest {
                 "Reported Value", "Amt in USD", "Batch Amt in USD", "Service Fee Amount", "Net Amt in USD",
                 "Service Fee %", "Market", "Market Period From", "Market Period To", "Author", "Comment"},
             grid.getColumns().stream().map(Column::getCaption).toArray());
-        verifyGrossAmountInUsdDataProvider(columns.get(18));
+        verifyBatchGrossAmountDataProvider(columns.get(18));
     }
 
     @SuppressWarnings("unchecked")
-    private void verifyGrossAmountInUsdDataProvider(Column grossAmountInUsdColumn) {
-        assertEquals("Batch Amt in USD", grossAmountInUsdColumn.getCaption());
+    private void verifyBatchGrossAmountDataProvider(Column batchGrossAmountColumn) {
+        assertEquals("Batch Amt in USD", batchGrossAmountColumn.getCaption());
         UsageDto usage = new UsageDto();
-        ValueProvider<UsageDto, String> provider = grossAmountInUsdColumn.getValueProvider();
-        assertNull(provider.apply(usage));
+        ValueProvider<UsageDto, String> provider = batchGrossAmountColumn.getValueProvider();
+        assertEquals(StringUtils.EMPTY, provider.apply(usage));
         usage.setBatchGrossAmount(new BigDecimal("100.00"));
         assertEquals("100.00", provider.apply(usage));
     }
