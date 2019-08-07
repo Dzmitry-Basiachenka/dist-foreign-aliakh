@@ -1,5 +1,8 @@
 6.0.14
 -
+* B-51662 Tech Debt: FDA: display empty batch gross amount for NTS product family
+* B-51662 Tech Debt: FDA: apply rup-vaadin 7.8.0
+* B-52861 FDA: Update fields on Audit Tab: make changes based on comments in CR-DIST-FOREIGN-123
 
 6.0.13
 -
