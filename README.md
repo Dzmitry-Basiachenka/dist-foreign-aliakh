@@ -1,3 +1,8 @@
+6.0.15
+-
+* B-51662 Tech Debt: FDA: Skip from Splunk alerts the case, when user cancels report download in browser
+* B-51662 Tech Debt: FDA: Update release notes for 6.0.14 version
+
 6.0.14
 -
 * B-51662 Tech Debt: FDA: display empty batch gross amount for NTS product family
