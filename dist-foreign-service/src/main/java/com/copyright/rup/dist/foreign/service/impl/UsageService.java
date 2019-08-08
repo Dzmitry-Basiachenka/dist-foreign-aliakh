@@ -462,7 +462,14 @@ public class UsageService implements IUsageService {
                     insertPaidUsage(buildPaidUsage(usageIdToUsageMap.get(paidUsageId), paidUsage), actionReason);
                     newUsagesCount.getAndIncrement();
                 } else if (Objects.isNull(paidUsage.getSplitParentFlag())) {
-                    updatePaidUsage(paidUsage, "Usage has been paid according to information from the LM");
+                    String actionReason = "Usage has been paid according to information from the LM";
+                    Long oldRhAccountNumber = usageIdToUsageMap.get(paidUsageId).getRightsholder().getAccountNumber();
+                    Long newRhAccountNumber = paidUsage.getRightsholder().getAccountNumber();
+                    if (!oldRhAccountNumber.equals(newRhAccountNumber)) {
+                        actionReason += String.format(" with RH change from %d to %d",
+                            oldRhAccountNumber, newRhAccountNumber);
+                    }
+                    updatePaidUsage(paidUsage, actionReason);
                 } else if (paidUsage.getSplitParentFlag()) {
                     updatePaidUsage(paidUsage, "Usage has been adjusted based on Split process");
                     scenarioAuditService.logAction(usageIdToUsageMap.get(paidUsageId).getScenarioId(),
