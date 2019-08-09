@@ -96,8 +96,10 @@ public class UsageServiceTest {
     private static final String BATCH_ID = RupPersistUtils.generateUuid();
     private static final String USER_NAME = "User name";
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
+    private static final Long RH_ACCOUNT_NUMBER_2 = 7000481360L;
     private static final Long PAYEE_ACCOUNT_NUMBER = 12387456L;
     private static final String RH_ID = RupPersistUtils.generateUuid();
+    private static final String RH_ID_2 = RupPersistUtils.generateUuid();
     private static final String PAYEE_ID = RupPersistUtils.generateUuid();
     private static final Set<String> RH_IDS = Sets.newHashSet(RH_ID, PAYEE_ID);
     private static final Map<String, Long> IDS_TO_ACCOUNT_NUMBER_MAP =
@@ -543,15 +545,15 @@ public class UsageServiceTest {
     @Test
     public void testUpdatePaidInfo() {
         PaidUsage usage = buildPaidUsage(UsageStatusEnum.SENT_TO_LM, false, null);
-        PaidUsage usageInPaidStatus = buildPaidUsage(UsageStatusEnum.PAID, false, null);
+        PaidUsage paidUsage = buildPaidUsage(UsageStatusEnum.PAID, false, null);
         expect(rightsholderService.findAccountNumbersByRightsholderIds(RH_IDS))
             .andReturn(IDS_TO_ACCOUNT_NUMBER_MAP).once();
         expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
             .andReturn(ImmutableList.of(usage))
             .once();
-        usageInPaidStatus.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
-        usageInPaidStatus.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
-        usageArchiveRepository.updatePaidInfo(usageInPaidStatus);
+        paidUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
+        paidUsage.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
+        usageArchiveRepository.updatePaidInfo(paidUsage);
         expectLastCall().once();
         usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
             "Usage has been paid according to information from the LM");
@@ -562,17 +564,44 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testUpdatePaidInfoWithRightsholderChange() {
+        PaidUsage oldUsage = buildPaidUsage(UsageStatusEnum.SENT_TO_LM, false, null);
+        PaidUsage newUsage = buildPaidUsage(UsageStatusEnum.SENT_TO_LM, false, null);
+        newUsage.getRightsholder().setId(RH_ID_2);
+        newUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER_2);
+        expect(rightsholderService.findAccountNumbersByRightsholderIds(Sets.newHashSet(RH_ID_2, PAYEE_ID)))
+            .andReturn(ImmutableMap.of(RH_ID, RH_ACCOUNT_NUMBER, RH_ID_2, RH_ACCOUNT_NUMBER_2,
+                PAYEE_ID, PAYEE_ACCOUNT_NUMBER)).once();
+        expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
+            .andReturn(ImmutableList.of(oldUsage))
+            .once();
+        PaidUsage paidUsage = buildPaidUsage(UsageStatusEnum.PAID, false, null);
+        paidUsage.getRightsholder().setId(RH_ID_2);
+        paidUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER_2);
+        paidUsage.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
+        usageArchiveRepository.updatePaidInfo(paidUsage);
+        expectLastCall().once();
+        usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
+            "Usage has been paid according to information from the LM" +
+                " with RH change from 1000001534 to 7000481360");
+        expectLastCall().once();
+        replay(usageArchiveRepository, usageAuditService, rightsholderService);
+        usageService.updatePaidInfo(Collections.singletonList(newUsage));
+        verify(usageArchiveRepository, usageAuditService, rightsholderService);
+    }
+
+    @Test
     public void testUpdatePaidInfoSplitOriginalDetail() {
         PaidUsage usage = buildPaidUsage(UsageStatusEnum.SENT_TO_LM, false, true);
-        PaidUsage usageInPaidStatus = buildPaidUsage(UsageStatusEnum.PAID, false, true);
+        PaidUsage paidUsage = buildPaidUsage(UsageStatusEnum.PAID, false, true);
         expect(rightsholderService.findAccountNumbersByRightsholderIds(RH_IDS))
             .andReturn(IDS_TO_ACCOUNT_NUMBER_MAP).once();
         expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
             .andReturn(ImmutableList.of(usage))
             .once();
-        usageInPaidStatus.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
-        usageInPaidStatus.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
-        usageArchiveRepository.updatePaidInfo(usageInPaidStatus);
+        paidUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
+        paidUsage.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
+        usageArchiveRepository.updatePaidInfo(paidUsage);
         expectLastCall().once();
         usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
             "Usage has been adjusted based on Split process");
@@ -940,7 +969,9 @@ public class UsageServiceTest {
         paidUsage.setServiceFeeAmount(new BigDecimal("10.00"));
         paidUsage.setServiceFee(new BigDecimal("0.32"));
         paidUsage.getRightsholder().setId(RH_ID);
+        paidUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         paidUsage.getPayee().setId(PAYEE_ID);
+        paidUsage.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
         paidUsage.setProductFamily(FAS_PRODUCT_FAMILY);
         paidUsage.setWrWrkInst(123160519L);
         paidUsage.setPostDistributionFlag(postDistributionFlag);
