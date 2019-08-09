@@ -92,15 +92,15 @@ public class UsageServiceTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final String USAGE_ID_2 = "Usage id 2";
-    private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
-    private static final String BATCH_ID = RupPersistUtils.generateUuid();
+    private static final String SCENARIO_ID = "78179a10-ad9e-432e-8aae-30b91fd14ed1";
+    private static final String BATCH_ID = "3e2d710d-8753-4432-ad7b-25e327c97e94";
     private static final String USER_NAME = "User name";
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
     private static final Long RH_ACCOUNT_NUMBER_2 = 7000481360L;
     private static final Long PAYEE_ACCOUNT_NUMBER = 12387456L;
-    private static final String RH_ID = RupPersistUtils.generateUuid();
-    private static final String RH_ID_2 = RupPersistUtils.generateUuid();
-    private static final String PAYEE_ID = RupPersistUtils.generateUuid();
+    private static final String RH_ID = "9f9d59ce-4e03-41c1-81dc-0577afee2705";
+    private static final String RH_ID_2 = "3d2791ed-4d7e-4096-839b-972ac3132e1f";
+    private static final String PAYEE_ID = "507d63f2-bb93-499e-8537-78ec185c492a";
     private static final Set<String> RH_IDS = Sets.newHashSet(RH_ID, PAYEE_ID);
     private static final Map<String, Long> IDS_TO_ACCOUNT_NUMBER_MAP =
         ImmutableMap.of(RH_ID, RH_ACCOUNT_NUMBER, PAYEE_ID, PAYEE_ACCOUNT_NUMBER);
@@ -611,6 +611,35 @@ public class UsageServiceTest {
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
         usageService.updatePaidInfo(Collections.singletonList(usage));
+        verify(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
+    }
+
+    @Test
+    public void testUpdatePaidInfoSplitOriginalDetailWithRightsholderChange() {
+        PaidUsage oldUsage = buildPaidUsage(UsageStatusEnum.SENT_TO_LM, false, true);
+        PaidUsage newUsage = buildPaidUsage(UsageStatusEnum.SENT_TO_LM, false, true);
+        newUsage.getRightsholder().setId(RH_ID_2);
+        newUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER_2);
+        expect(rightsholderService.findAccountNumbersByRightsholderIds(Sets.newHashSet(RH_ID_2, PAYEE_ID)))
+            .andReturn(ImmutableMap.of(RH_ID, RH_ACCOUNT_NUMBER, RH_ID_2, RH_ACCOUNT_NUMBER_2,
+                PAYEE_ID, PAYEE_ACCOUNT_NUMBER)).once();
+        expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
+            .andReturn(ImmutableList.of(oldUsage))
+            .once();
+        PaidUsage paidUsage = buildPaidUsage(UsageStatusEnum.PAID, false, true);
+        paidUsage.getRightsholder().setId(RH_ID_2);
+        paidUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER_2);
+        paidUsage.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
+        usageArchiveRepository.updatePaidInfo(paidUsage);
+        expectLastCall().once();
+        usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
+            "Usage has been adjusted based on Split process with RH change from 1000001534 to 7000481360");
+        expectLastCall().once();
+        scenarioAuditService.logAction("e4a81dff-719b-4f73-bb0d-fcfc23ea2395",
+            ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process");
+        expectLastCall().once();
+        replay(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
+        usageService.updatePaidInfo(Collections.singletonList(newUsage));
         verify(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
     }
 

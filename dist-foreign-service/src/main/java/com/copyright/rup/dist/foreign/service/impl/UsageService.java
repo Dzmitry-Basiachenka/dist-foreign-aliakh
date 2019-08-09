@@ -455,6 +455,8 @@ public class UsageService implements IUsageService {
         paidUsages.forEach(paidUsage -> {
             String paidUsageId = paidUsage.getId();
             if (Objects.nonNull(usageIdToUsageMap.get(paidUsageId))) {
+                final Long oldAccountNumber = usageIdToUsageMap.get(paidUsageId).getRightsholder().getAccountNumber();
+                final Long newAccountNumber = paidUsage.getRightsholder().getAccountNumber();
                 if (paidUsage.isPostDistributionFlag()) {
                     String actionReason = Objects.nonNull(paidUsage.getSplitParentFlag())
                         ? "Usage has been created based on Post-Distribution and Split processes"
@@ -462,16 +464,11 @@ public class UsageService implements IUsageService {
                     insertPaidUsage(buildPaidUsage(usageIdToUsageMap.get(paidUsageId), paidUsage), actionReason);
                     newUsagesCount.getAndIncrement();
                 } else if (Objects.isNull(paidUsage.getSplitParentFlag())) {
-                    String actionReason = "Usage has been paid according to information from the LM";
-                    Long oldRhAccountNumber = usageIdToUsageMap.get(paidUsageId).getRightsholder().getAccountNumber();
-                    Long newRhAccountNumber = paidUsage.getRightsholder().getAccountNumber();
-                    if (!oldRhAccountNumber.equals(newRhAccountNumber)) {
-                        actionReason += String.format(" with RH change from %d to %d",
-                            oldRhAccountNumber, newRhAccountNumber);
-                    }
-                    updatePaidUsage(paidUsage, actionReason);
+                    updatePaidUsage(paidUsage, buildActionReason(oldAccountNumber, newAccountNumber,
+                        "Usage has been paid according to information from the LM"));
                 } else if (paidUsage.getSplitParentFlag()) {
-                    updatePaidUsage(paidUsage, "Usage has been adjusted based on Split process");
+                    updatePaidUsage(paidUsage, buildActionReason(oldAccountNumber, newAccountNumber,
+                        "Usage has been adjusted based on Split process"));
                     scenarioAuditService.logAction(usageIdToUsageMap.get(paidUsageId).getScenarioId(),
                         ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT,
                         "Scenario has been updated after Split process");
@@ -750,5 +747,11 @@ public class UsageService implements IUsageService {
         usage.setScenarioId(scenario.getId());
         usage.setStatus(UsageStatusEnum.LOCKED);
         usage.setUpdateUser(scenario.getCreateUser());
+    }
+
+    private String buildActionReason(Long oldAccountNumber, Long newAccountNumber, String actionReason) {
+        return oldAccountNumber.equals(newAccountNumber)
+            ? actionReason
+            : actionReason + String.format(" with RH change from %d to %d", oldAccountNumber, newAccountNumber);
     }
 }
