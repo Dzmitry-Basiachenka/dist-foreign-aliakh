@@ -1,3 +1,8 @@
+6.0.16
+-
+* B-51809 FDA: Consume updated rightsholders from CDP Pre-Distribution: implement details update after RH change without Split process
+* B-51809 FDA: Consume updated rightsholders from CDP Pre-Distribution: implement details update after RH change with Split process
+
 6.0.15
 -
 * B-51662 Tech Debt: FDA: Skip from Splunk alerts the case, when user cancels report download in browser
