@@ -1,3 +1,7 @@
+6.0.17
+-
+* B-51809 FDA: Consume updated rightsholders from CDP Pre-Distribution: make changes based on comments in CR-DIST-FOREIGN-124
+
 6.0.16
 -
 * B-51809 FDA: Consume updated rightsholders from CDP Pre-Distribution: implement details update after RH change without Split process
