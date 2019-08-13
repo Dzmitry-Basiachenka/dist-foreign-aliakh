@@ -570,8 +570,7 @@ public class UsageServiceTest {
         newUsage.getRightsholder().setId(RH_ID_2);
         newUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER_2);
         expect(rightsholderService.findAccountNumbersByRightsholderIds(Sets.newHashSet(RH_ID_2, PAYEE_ID)))
-            .andReturn(ImmutableMap.of(RH_ID, RH_ACCOUNT_NUMBER, RH_ID_2, RH_ACCOUNT_NUMBER_2,
-                PAYEE_ID, PAYEE_ACCOUNT_NUMBER)).once();
+            .andReturn(ImmutableMap.of(RH_ID_2, RH_ACCOUNT_NUMBER_2, PAYEE_ID, PAYEE_ACCOUNT_NUMBER)).once();
         expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
             .andReturn(ImmutableList.of(oldUsage))
             .once();
@@ -621,8 +620,7 @@ public class UsageServiceTest {
         newUsage.getRightsholder().setId(RH_ID_2);
         newUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER_2);
         expect(rightsholderService.findAccountNumbersByRightsholderIds(Sets.newHashSet(RH_ID_2, PAYEE_ID)))
-            .andReturn(ImmutableMap.of(RH_ID, RH_ACCOUNT_NUMBER, RH_ID_2, RH_ACCOUNT_NUMBER_2,
-                PAYEE_ID, PAYEE_ACCOUNT_NUMBER)).once();
+            .andReturn(ImmutableMap.of(RH_ID_2, RH_ACCOUNT_NUMBER_2, PAYEE_ID, PAYEE_ACCOUNT_NUMBER)).once();
         expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
             .andReturn(ImmutableList.of(oldUsage))
             .once();
