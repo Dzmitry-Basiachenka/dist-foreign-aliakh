@@ -57,8 +57,8 @@ public class LoadResearchedUsagesIntegrationTest {
             "rights/rms_grants_658824345_response.json");
         testHelper.expectPrmCall("prm/rightsholder_1000023401_response.json", 1000023401L);
         usageService.loadResearchedUsages(Arrays.asList(
-            buildResearchedUsage(USAGE_ID_1, 658824345L, "Medical Journal"),
-            buildResearchedUsage(USAGE_ID_2, 854030732L, "Technical Journal")));
+            buildResearchedUsage(USAGE_ID_1, 658824345L, "1008902112377654XX", "VALISBN13", "Medical Journal"),
+            buildResearchedUsage(USAGE_ID_2, 854030732L, null, null, "Technical Journal")));
         testHelper.assertUsages(Arrays.asList(buildUsage(USAGE_ID_1, UsageStatusEnum.ELIGIBLE, 658824345L,
             1000023401L, "Medical Journal", "1008902112377654XX", "VALISSN"),
             buildUsage(USAGE_ID_2, UsageStatusEnum.RH_NOT_FOUND, 854030732L, null, "Technical Journal",
@@ -105,9 +105,11 @@ public class LoadResearchedUsagesIntegrationTest {
         return usage;
     }
 
-    private ResearchedUsage buildResearchedUsage(String usageId, Long wrWrkInst, String systemTitle) {
+    private ResearchedUsage buildResearchedUsage(String usageId, Long wrWrkInst, String standardNumber,
+                                                 String standardNumberType, String systemTitle) {
         ResearchedUsage researchedUsage = new ResearchedUsage();
-        researchedUsage.setStandardNumber("1008902112377654XX");
+        researchedUsage.setStandardNumber(standardNumber);
+        researchedUsage.setStandardNumberType(standardNumberType);
         researchedUsage.setSystemTitle(systemTitle);
         researchedUsage.setUsageId(usageId);
         researchedUsage.setWrWrkInst(wrWrkInst);
