@@ -8,12 +8,14 @@ import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmResultStatusEnum;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequestWrapper;
+import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionResponse;
 import com.copyright.rup.dist.foreign.integration.crm.api.ICrmService;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -53,8 +55,11 @@ public class CrmService implements ICrmService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("$RUP{dist.foreign.rest.crm.rights_distribution.url}")
-    private String crmRightsDistributionRequestsUrl;
+    @Value("$RUP{dist.foreign.rest.crm.get_rights_distribution.url}")
+    private String getRightsDistributionRequestsUrl;
+
+    @Value("$RUP{dist.foreign.rest.crm.insert_rights_distribution.url}")
+    private String insertRightsDistributionRequestsUrl;
 
     /**
      * Constructor.
@@ -62,6 +67,27 @@ public class CrmService implements ICrmService {
     public CrmService() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
+    }
+
+    @Override
+    public List<CrmRightsDistributionResponse> readRightsDistribution(List<String> cccEventIds) {
+        try {
+            List<CrmRightsDistributionResponse> responses = new ArrayList<>();
+            JsonNode list = JsonUtils.readJsonTree(objectMapper,
+                restTemplate.getForObject(getRightsDistributionRequestsUrl, String.class,
+                        ImmutableMap.of("cccEventIds", Objects.requireNonNull(cccEventIds)))).get("list");
+            if (null != list && list.isArray()) {
+                JsonNode item = list.get(0);
+                if (null != item) {
+                    parseCrmRightsDistributionResponses(item.get("cccRightsDistribution"), responses);
+                }
+            }
+            return responses;
+        } catch (HttpClientErrorException | ResourceAccessException e) {
+            throw new IntegrationConnectionException("Could not connect to the CRM system", e);
+        } catch (IOException e) {
+            throw new RupRuntimeException("Problem with processing (parsing, generating) JSON content", e);
+        }
     }
 
     @Override
@@ -91,7 +117,7 @@ public class CrmService implements ICrmService {
                 new CrmRightsDistributionRequestWrapper(batchRequests)), buildRequestHeader());
             LOGGER.trace("Send rights distribution request. Request={}", crmRequest);
             result = parseResponse(
-                restTemplate.postForObject(crmRightsDistributionRequestsUrl, crmRequest, String.class),
+                restTemplate.postForObject(insertRightsDistributionRequestsUrl, crmRequest, String.class),
                 batchRequests.stream().collect(Collectors.toMap(
                     CrmRightsDistributionRequest::getOmOrderDetailNumber,
                     CrmRightsDistributionRequest::toString)));
@@ -146,5 +172,21 @@ public class CrmService implements ICrmService {
         requestHeaders.setContentType(new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(), Charsets.UTF_8));
         return requestHeaders;
+    }
+
+    private void parseCrmRightsDistributionResponses(JsonNode nodes,
+                                                     List<CrmRightsDistributionResponse> responses) {
+        if (null != nodes && nodes.isArray()) {
+            for (JsonNode node : nodes) {
+                responses.add(parseCrmRightsDistributionResponse(node));
+            }
+        }
+    }
+
+    private CrmRightsDistributionResponse parseCrmRightsDistributionResponse(JsonNode node) {
+        CrmRightsDistributionResponse response = new CrmRightsDistributionResponse();
+        response.setCccEventId(node.findValue("cccEventId").asText());
+        response.setOmOrderDetailNumber(JsonUtils.getStringValue(node.findValue("omOrderDetailNumber")));
+        return response;
     }
 }

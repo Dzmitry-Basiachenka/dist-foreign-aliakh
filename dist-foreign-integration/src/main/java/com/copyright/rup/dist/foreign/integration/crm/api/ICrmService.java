@@ -14,6 +14,14 @@ import java.util.List;
 public interface ICrmService {
 
     /**
+     * Reads rights distribution by list of cccEventId from the CRM system.
+     *
+     * @param cccEventIds list of cccEventId
+     * @return list of {@link CrmRightsDistributionResponse}
+     */
+    List<CrmRightsDistributionResponse> readRightsDistribution(List<String> cccEventIds);
+
+    /**
      * Sends list of {@link CrmRightsDistributionRequest} to the CRM system.
      *
      * @param crmRightsDistributionRequests list of {@link CrmRightsDistributionRequest}s
