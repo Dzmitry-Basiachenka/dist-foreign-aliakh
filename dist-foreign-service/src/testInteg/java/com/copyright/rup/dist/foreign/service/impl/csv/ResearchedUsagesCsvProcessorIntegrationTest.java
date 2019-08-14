@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.HeaderValidationException;
@@ -65,6 +67,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
     public void testProcessor() throws Exception {
         ProcessingResult<ResearchedUsage> result = processFile("researched_usages.csv");
         assertNotNull(result);
+        assertTrue(result.isSuccessful());
         List<ResearchedUsage> actualUsages = result.get();
         List<ResearchedUsage> expectedUsages = loadExpectedUsages();
         int expectedSize = 2;
@@ -92,6 +95,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
     @Test
     public void testProcessorFailure() throws Exception {
         ProcessingResult<ResearchedUsage> result = processFile("researched_usages_with_errors.csv");
+        assertFalse(result.isSuccessful());
         PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream(pos);
         Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(pos));
@@ -155,6 +159,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
         assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
         assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
     }
 
     private List<ResearchedUsage> loadExpectedUsages() throws IOException {

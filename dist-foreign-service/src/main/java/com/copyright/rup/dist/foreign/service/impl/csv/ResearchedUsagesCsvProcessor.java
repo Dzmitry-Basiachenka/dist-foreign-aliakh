@@ -48,7 +48,8 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.DETAIL_ID, requiredValidator, new LengthValidator(36),
             new DuplicateInFileValidator());
-        addPlainValidators(Header.STANDARD_NUMBER, requiredValidator, new LengthValidator(1000));
+        addPlainValidators(Header.STANDARD_NUMBER, new LengthValidator(1000));
+        addPlainValidators(Header.STANDARD_NUMBER_TYPE, new LengthValidator(50));
         addPlainValidators(Header.SYSTEM_TITLE, requiredValidator, new LengthValidator(2000));
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(9));
     }
@@ -130,6 +131,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
             ResearchedUsage researchedUsage = new ResearchedUsage();
             researchedUsage.setUsageId(getString(row, Header.DETAIL_ID));
             researchedUsage.setStandardNumber(getString(row, Header.STANDARD_NUMBER));
+            researchedUsage.setStandardNumberType(getString(row, Header.STANDARD_NUMBER_TYPE));
             researchedUsage.setSystemTitle(getString(row, Header.SYSTEM_TITLE));
             researchedUsage.setWrWrkInst(getLong(row, Header.WR_WRK_INST));
             return researchedUsage;
