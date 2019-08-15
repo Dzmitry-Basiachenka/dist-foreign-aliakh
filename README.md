@@ -1,3 +1,7 @@
+6.0.18
+-
+* B-53527 FDA: Remove the standard number requirement when loading researched works: Remove standard number validation, read standard number type from researched CSV
+
 6.0.17
 -
 * B-51809 FDA: Consume updated rightsholders from CDP Pre-Distribution: make changes based on comments in CR-DIST-FOREIGN-124
