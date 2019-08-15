@@ -156,14 +156,14 @@ public class CrmServiceTest {
     }
 
     @Test
-    public void testReadRightsDistributions() throws IOException {
+    public void testGetRightsDistribution() throws IOException {
         Capture<String> urlCapture = new Capture<>();
         Capture<Map<String, List<String>>> urlVariablesCapture = new Capture<>();
         expect(restTemplate.getForObject(capture(urlCapture), eq(String.class), capture(urlVariablesCapture)))
             .andReturn(TestUtils.fileToString(CrmServiceTest.class, "crm_get_rights_distribution_response.json"))
             .once();
         replay(restTemplate);
-        List<CrmRightsDistributionResponse> actualResult = crmService.readRightsDistribution(CCC_EVENT_IDS);
+        List<CrmRightsDistributionResponse> actualResult = crmService.getRightsDistribution(CCC_EVENT_IDS);
         List<CrmRightsDistributionResponse> expectedResult =
             loadFromJson("expected_crm_read_rights_distribution_response.json");
         assertEquals(expectedResult, actualResult);
@@ -173,14 +173,14 @@ public class CrmServiceTest {
     }
 
     @Test
-    public void testReadRightsDistributionsIntegrationConnectionException() throws IOException {
+    public void testGetRightsDistributionIntegrationConnectionException() throws IOException {
         Capture<String> urlCapture = new Capture<>();
         Capture<Map<String, List<String>>> urlVariablesCapture = new Capture<>();
         expect(restTemplate.getForObject(capture(urlCapture), eq(String.class), capture(urlVariablesCapture)))
             .andThrow(new HttpClientErrorException(HttpStatus.BAD_GATEWAY)).once();
         replay(restTemplate);
         try {
-            crmService.readRightsDistribution(CCC_EVENT_IDS);
+            crmService.getRightsDistribution(CCC_EVENT_IDS);
             fail();
         } catch (IntegrationConnectionException e) {
             assertEquals("Could not connect to the CRM system", e.getMessage());
@@ -191,19 +191,19 @@ public class CrmServiceTest {
     }
 
     @Test
-    public void testReadRightsDistributionsInvalidJson() {
+    public void testGetRightsDistributionInvalidJson() {
         Capture<String> urlCapture = new Capture<>();
         Capture<Map<String, List<String>>> urlVariablesCapture = new Capture<>();
         expect(restTemplate.getForObject(capture(urlCapture), eq(String.class), capture(urlVariablesCapture)))
             .andReturn("{abc123").once();
         replay(restTemplate);
         try {
-            crmService.readRightsDistribution(CCC_EVENT_IDS);
+            crmService.getRightsDistribution(CCC_EVENT_IDS);
             fail();
         } catch (RupRuntimeException e) {
+            assertEquals("Problem with processing (parsing, generating) JSON content", e.getMessage());
             Throwable cause = e.getCause();
             assertTrue(cause instanceof IOException);
-            assertEquals("Problem with processing (parsing, generating) JSON content", cause.getMessage());
         }
         assertEquals(GET_RIGHTS_DISTRIBUTION_URL, urlCapture.getValue());
         assertEquals(ImmutableMap.of("cccEventIds", CCC_EVENT_IDS), urlVariablesCapture.getValue());

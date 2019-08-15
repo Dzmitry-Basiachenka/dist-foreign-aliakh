@@ -70,16 +70,16 @@ public class CrmService implements ICrmService {
     }
 
     @Override
-    public List<CrmRightsDistributionResponse> readRightsDistribution(List<String> cccEventIds) {
+    public List<CrmRightsDistributionResponse> getRightsDistribution(List<String> cccEventIds) {
         try {
             List<CrmRightsDistributionResponse> responses = new ArrayList<>();
             JsonNode list = JsonUtils.readJsonTree(objectMapper,
                 restTemplate.getForObject(getRightsDistributionRequestsUrl, String.class,
-                        ImmutableMap.of("cccEventIds", Objects.requireNonNull(cccEventIds)))).get("list");
+                    ImmutableMap.of("cccEventIds", Objects.requireNonNull(cccEventIds)))).get("list");
             if (null != list && list.isArray()) {
                 JsonNode item = list.get(0);
                 if (null != item) {
-                    parseCrmRightsDistributionResponses(item.get("cccRightsDistribution"), responses);
+                    parseResponse(item.get("cccRightsDistribution"), responses);
                 }
             }
             return responses;
@@ -174,19 +174,14 @@ public class CrmService implements ICrmService {
         return requestHeaders;
     }
 
-    private void parseCrmRightsDistributionResponses(JsonNode nodes,
-                                                     List<CrmRightsDistributionResponse> responses) {
+    private void parseResponse(JsonNode nodes, List<CrmRightsDistributionResponse> responses) {
         if (null != nodes && nodes.isArray()) {
             for (JsonNode node : nodes) {
-                responses.add(parseCrmRightsDistributionResponse(node));
+                CrmRightsDistributionResponse response = new CrmRightsDistributionResponse();
+                response.setCccEventId(node.findValue("cccEventId").asText());
+                response.setOmOrderDetailNumber(JsonUtils.getStringValue(node.findValue("omOrderDetailNumber")));
+                responses.add(response);
             }
         }
-    }
-
-    private CrmRightsDistributionResponse parseCrmRightsDistributionResponse(JsonNode node) {
-        CrmRightsDistributionResponse response = new CrmRightsDistributionResponse();
-        response.setCccEventId(node.findValue("cccEventId").asText());
-        response.setOmOrderDetailNumber(JsonUtils.getStringValue(node.findValue("omOrderDetailNumber")));
-        return response;
     }
 }

@@ -29,8 +29,8 @@ public class CrmIntegrationService implements ICrmIntegrationService {
     private ICrmService crmService;
 
     @Override
-    public Map<String, List<CrmRightsDistributionResponse>> readRightsDistribution(List<String> cccEventIds) {
-        return crmService.readRightsDistribution(cccEventIds)
+    public Map<String, List<CrmRightsDistributionResponse>> getRightsDistribution(List<String> cccEventIds) {
+        return crmService.getRightsDistribution(cccEventIds)
             .stream()
             .collect(Collectors.groupingBy(CrmRightsDistributionResponse::getCccEventId));
     }

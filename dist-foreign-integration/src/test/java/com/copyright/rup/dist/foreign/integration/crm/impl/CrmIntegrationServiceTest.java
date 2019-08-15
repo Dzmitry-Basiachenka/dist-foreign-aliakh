@@ -46,9 +46,8 @@ public class CrmIntegrationServiceTest {
         Whitebox.setInternalState(crmIntegrationService, ICrmService.class, crmService);
     }
 
-
     @Test
-    public void testReadRightsDistribution() {
+    public void testGetRightsDistribution() {
         String cccEventId1 = "12477";
         String cccEventId2 = "13315";
         ImmutableList<String> cccEventIds = ImmutableList.of(cccEventId1, cccEventId2);
@@ -62,10 +61,10 @@ public class CrmIntegrationServiceTest {
         CrmRightsDistributionResponse response3 = new CrmRightsDistributionResponse();
         response3.setCccEventId(cccEventId2);
         responses.add(response3);
-        expect(crmService.readRightsDistribution(cccEventIds)).andReturn(responses).once();
+        expect(crmService.getRightsDistribution(cccEventIds)).andReturn(responses).once();
         replay(crmService);
         Map<String, List<CrmRightsDistributionResponse>> cccEventIdsToResponses =
-            crmIntegrationService.readRightsDistribution(cccEventIds);
+            crmIntegrationService.getRightsDistribution(cccEventIds);
         List<CrmRightsDistributionResponse> responses1 = cccEventIdsToResponses.get(cccEventId1);
         assertEquals(2, responses1.size());
         assertEquals(cccEventId1, responses1.get(0).getCccEventId());

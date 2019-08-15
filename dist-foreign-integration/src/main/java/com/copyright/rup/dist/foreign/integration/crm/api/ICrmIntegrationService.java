@@ -15,12 +15,12 @@ import java.util.Map;
 public interface ICrmIntegrationService {
 
     /**
-     * Reads rights distribution by list of cccEventId from the CRM system.
+     * Gets rights distribution by list of cccEventId from the CRM system.
      *
      * @param cccEventIds list of cccEventId
      * @return map of cccEventId to list of {@link CrmRightsDistributionResponse}
      */
-    Map<String, List<CrmRightsDistributionResponse>> readRightsDistribution(List<String> cccEventIds);
+    Map<String, List<CrmRightsDistributionResponse>> getRightsDistribution(List<String> cccEventIds);
 
     /**
      * Sends list of {@link CrmRightsDistributionRequest}s to the CRM system.
