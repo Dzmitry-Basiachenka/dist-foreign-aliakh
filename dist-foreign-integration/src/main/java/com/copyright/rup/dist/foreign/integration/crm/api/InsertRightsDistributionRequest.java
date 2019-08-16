@@ -22,7 +22,7 @@ import java.time.ZoneId;
 import java.util.Objects;
 
 /**
- * Represents request to CRM.
+ * Represents 'insert rights distribution' request to CRM system.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -31,7 +31,7 @@ import java.util.Objects;
  * @author Darya Baraukova
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CrmRightsDistributionRequest {
+public class InsertRightsDistributionRequest {
 
     @JsonProperty(value = "cccEventId")
     private String cccEventId;
@@ -119,11 +119,11 @@ public class CrmRightsDistributionRequest {
     private String status = "D - Distributed";
 
     /**
-     * Constructor for creating request to the CRM service.
+     * Constructor for creating request to the CRM system.
      *
      * @param usage {@link PaidUsage} instance
      */
-    public CrmRightsDistributionRequest(PaidUsage usage) {
+    public InsertRightsDistributionRequest(PaidUsage usage) {
         Objects.requireNonNull(usage);
         this.cccEventId = usage.getCccEventId();
         this.productFamily = usage.getProductFamily();
@@ -367,7 +367,7 @@ public class CrmRightsDistributionRequest {
         if (null == obj || this.getClass() != obj.getClass()) {
             return false;
         }
-        CrmRightsDistributionRequest that = (CrmRightsDistributionRequest) obj;
+        InsertRightsDistributionRequest that = (InsertRightsDistributionRequest) obj;
         return new EqualsBuilder()
             .append(this.cccEventId, that.cccEventId)
             .append(this.productFamily, that.productFamily)

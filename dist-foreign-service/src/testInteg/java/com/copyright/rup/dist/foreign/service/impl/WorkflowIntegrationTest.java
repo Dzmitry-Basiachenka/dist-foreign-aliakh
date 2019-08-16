@@ -100,7 +100,8 @@ public class WorkflowIntegrationTest {
             .expectPaidUsagesFromLm("lm/paid_usages_cla.json")
             .expectPaidUsageLmDetailIds(USAGE_LM_DETAIL_ID_1, USAGE_LM_DETAIL_ID_2, USAGE_LM_DETAIL_ID_3,
                 USAGE_LM_DETAIL_ID_4, USAGE_LM_DETAIL_ID_5, USAGE_LM_DETAIL_ID_6)
-            .expectCrmReporting("crm/workflow/rights_distribution_request_cla.json",
+            .expectCrmGetRightsDistribution("53255", "53256", "53257", "53258", "53259")
+            .expectCrmInsertRightsDistribution("crm/workflow/rights_distribution_request_cla.json",
                 "crm/workflow/rights_distribution_response_cla.json")
             .expectUsages("usage/expected_usages_for_workflow.json")
             .expectUsageAudit(USAGE_LM_DETAIL_ID_1, expectedUsageAudit)

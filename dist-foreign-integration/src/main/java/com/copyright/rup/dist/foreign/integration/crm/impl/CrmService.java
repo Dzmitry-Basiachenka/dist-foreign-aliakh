@@ -3,22 +3,22 @@ package com.copyright.rup.dist.foreign.integration.crm.impl;
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.IntegrationConnectionException;
-import com.copyright.rup.dist.common.integration.util.JsonUtils;
-import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
-import com.copyright.rup.dist.foreign.integration.crm.api.CrmResultStatusEnum;
-import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
-import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequestWrapper;
-import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionResponse;
+import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.integration.crm.api.GetRightsDistributionResponse;
 import com.copyright.rup.dist.foreign.integration.crm.api.ICrmService;
+import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionRequest;
+import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionRequestWrapper;
+import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionResponse;
+import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionResponseStatusEnum;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,10 +31,9 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -55,6 +54,12 @@ public class CrmService implements ICrmService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private GetRightsDistributionResponseHandler getRightsDistributionResponseHandler;
+
+    @Autowired
+    private InsertRightsDistributionResponseHandler insertionRightsDistributionResponseHandler;
+
     @Value("$RUP{dist.foreign.rest.crm.get_rights_distribution.url}")
     private String getRightsDistributionRequestsUrl;
 
@@ -70,19 +75,12 @@ public class CrmService implements ICrmService {
     }
 
     @Override
-    public List<CrmRightsDistributionResponse> getRightsDistribution(List<String> cccEventIds) {
+    public List<GetRightsDistributionResponse> getRightsDistribution(Set<String> cccEventIds) {
         try {
-            List<CrmRightsDistributionResponse> responses = new ArrayList<>();
-            JsonNode list = JsonUtils.readJsonTree(objectMapper,
-                restTemplate.getForObject(getRightsDistributionRequestsUrl, String.class,
-                    ImmutableMap.of("cccEventIds", Objects.requireNonNull(cccEventIds)))).get("list");
-            if (null != list && list.isArray()) {
-                JsonNode item = list.get(0);
-                if (null != item) {
-                    parseResponse(item.get("cccRightsDistribution"), responses);
-                }
-            }
-            return responses;
+            ImmutableMap<String, String> urlVariables = ImmutableMap.of("cccEventIds",
+                Joiner.on(',').join(Objects.requireNonNull(cccEventIds)));
+            String json = restTemplate.getForObject(getRightsDistributionRequestsUrl, String.class, urlVariables);
+            return getRightsDistributionResponseHandler.parseJson(json);
         } catch (HttpClientErrorException | ResourceAccessException e) {
             throw new IntegrationConnectionException("Could not connect to the CRM system", e);
         } catch (IOException e) {
@@ -91,9 +89,23 @@ public class CrmService implements ICrmService {
     }
 
     @Override
-    public CrmResult sendRightsDistributionRequests(List<CrmRightsDistributionRequest> crmRightsDistributionRequests) {
+    public InsertRightsDistributionResponse insertRightsDistribution(List<InsertRightsDistributionRequest> requests) {
         try {
-            return doSendRightsDistributionRequests(Objects.requireNonNull(crmRightsDistributionRequests));
+            InsertRightsDistributionResponse response =
+                new InsertRightsDistributionResponse(InsertRightsDistributionResponseStatusEnum.SUCCESS);
+            LOGGER.info("Send 'insert rights distribution' requests. Started. RequestsCount={}",
+                LogUtils.size(requests));
+            for (List<InsertRightsDistributionRequest> batchRequests :
+                Iterables.partition(Objects.requireNonNull(requests), 128)) {
+                HttpEntity<String> httpEntity = buildHttpEntity(batchRequests);
+                LOGGER.trace("Send 'insert rights distribution' request. Request={}", httpEntity);
+                String json = restTemplate.postForObject(insertRightsDistributionRequestsUrl, httpEntity, String.class);
+                response = insertionRightsDistributionResponseHandler.parseJson(json,
+                    batchRequests.stream().collect(Collectors.toMap(
+                        InsertRightsDistributionRequest::getOmOrderDetailNumber,
+                        InsertRightsDistributionRequest::toString)));
+            }
+            return response;
         } catch (HttpClientErrorException | ResourceAccessException e) {
             throw new IntegrationConnectionException("Could not connect to the CRM system", e);
         } catch (IOException e) {
@@ -101,87 +113,16 @@ public class CrmService implements ICrmService {
         }
     }
 
-    /**
-     * Internal method to send list of {@link CrmRightsDistributionRequest}s to CRM service.
-     *
-     * @param requests list of {@link CrmRightsDistributionRequest}s
-     * @return {@link CrmResult} instance
-     * @throws IOException when {@link CrmRightsDistributionRequest} cannot be converted to JSON or request cannot be
-     *                     sent to CRM service.
-     */
-    CrmResult doSendRightsDistributionRequests(List<CrmRightsDistributionRequest> requests) throws IOException {
-        CrmResult result = new CrmResult(CrmResultStatusEnum.SUCCESS);
-        LOGGER.info("Send rights distribution requests. Started. RequestsCount={}", requests.size());
-        for (List<CrmRightsDistributionRequest> batchRequests : Iterables.partition(requests, 128)) {
-            HttpEntity<String> crmRequest = new HttpEntity<>(objectMapper.writeValueAsString(
-                new CrmRightsDistributionRequestWrapper(batchRequests)), buildRequestHeader());
-            LOGGER.trace("Send rights distribution request. Request={}", crmRequest);
-            result = parseResponse(
-                restTemplate.postForObject(insertRightsDistributionRequestsUrl, crmRequest, String.class),
-                batchRequests.stream().collect(Collectors.toMap(
-                    CrmRightsDistributionRequest::getOmOrderDetailNumber,
-                    CrmRightsDistributionRequest::toString)));
-        }
-        return result;
+    private HttpEntity<String> buildHttpEntity(List<InsertRightsDistributionRequest> requests)
+        throws JsonProcessingException {
+        return new HttpEntity<>(objectMapper.writeValueAsString(new InsertRightsDistributionRequestWrapper(requests)),
+            buildRequestHeaders());
     }
 
-    /**
-     * Parses response from CRM service.
-     *
-     * @param response   the response of the request
-     * @param requestMap detail id to request map
-     * @return the {@link CrmResult} instances
-     * @throws IOException if response cannot be parsed
-     */
-    CrmResult parseResponse(String response, Map<String, String> requestMap)
-        throws IOException {
-        LOGGER.trace("Parse rights distribution response. Response={}", response);
-        JsonNode jsonNode = JsonUtils.readJsonTree(objectMapper, response);
-        JsonNode list = jsonNode.get("list");
-        CrmResult crmResult = new CrmResult(CrmResultStatusEnum.SUCCESS);
-        if (Objects.nonNull(list)) {
-            JsonNode errorNode = list.findValue("error");
-            if (Objects.nonNull(errorNode)) {
-                crmResult.setCrmResultStatus(CrmResultStatusEnum.CRM_ERROR);
-                List<JsonNode> errorMessageNodes = new ArrayList<>();
-                if (errorNode.isArray()) {
-                    errorNode.forEach(errorMessageNodes::add);
-                } else {
-                    errorMessageNodes.add(errorNode);
-                }
-                if (CollectionUtils.isNotEmpty(errorMessageNodes)) {
-                    for (JsonNode errorMessageNode : errorMessageNodes) {
-                        JsonNode key = errorMessageNode.findValue("key");
-                        List<JsonNode> errorMessages = errorMessageNode.findValues("string");
-                        crmResult.addInvalidUsageId(key.asText());
-                        LOGGER.warn("Send usages to CRM. Failed. DetailId={}, Request={}, ErrorMessage={}", key,
-                            requestMap.get(key.asText()), errorMessages);
-                    }
-                }
-            }
-        } else {
-            throw new IOException(
-                String.format("Send usages to CRM. Failed. Reason=Couldn't parse response. Response=%s, JsonNode=%s",
-                    response, jsonNode));
-        }
-        return crmResult;
-    }
-
-    private HttpHeaders buildRequestHeader() {
+    private HttpHeaders buildRequestHeaders() {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(), Charsets.UTF_8));
         return requestHeaders;
-    }
-
-    private void parseResponse(JsonNode nodes, List<CrmRightsDistributionResponse> responses) {
-        if (null != nodes && nodes.isArray()) {
-            for (JsonNode node : nodes) {
-                CrmRightsDistributionResponse response = new CrmRightsDistributionResponse();
-                response.setCccEventId(node.findValue("cccEventId").asText());
-                response.setOmOrderDetailNumber(JsonUtils.getStringValue(node.findValue("omOrderDetailNumber")));
-                responses.add(response);
-            }
-        }
     }
 }

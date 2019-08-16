@@ -104,6 +104,7 @@ databaseChangeLog {
             column(name: 'check_date', value: '2016-11-03')
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-03-11')
+            column(name: 'ccc_event_id', value: '152130')
             column(name: 'period_end_date', value: '2016-03-11')
             column(name: 'created_datetime', value: '2016-03-11')
         }
@@ -138,6 +139,7 @@ databaseChangeLog {
             column(name: 'check_date', value: '2016-11-03')
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-03-11')
+            column(name: 'ccc_event_id', value: '141029')
             column(name: 'period_end_date', value: '2016-03-11')
             column(name: 'created_datetime', value: '2016-03-11')
         }

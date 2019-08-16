@@ -17,15 +17,14 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.IntegrationConnectionException;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
-import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
-import com.copyright.rup.dist.foreign.integration.crm.api.CrmResultStatusEnum;
-import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
-import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionResponse;
+import com.copyright.rup.dist.foreign.integration.crm.api.GetRightsDistributionResponse;
+import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionRequest;
+import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionResponse;
+import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionResponseStatusEnum;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -48,7 +47,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Verifies {@link CrmService}.
@@ -65,7 +63,7 @@ public class CrmServiceTest {
         "http://localhost:9032/legacy-integration-rest/getCCCRightsDistributionV2?eventIds={cccEventIds}";
     private static final String INSERT_RIGHTS_DISTRIBUTION_URL =
         "http://localhost:9032/legacy-integration-rest/insertCCCRightsDistribution";
-    private static final ImmutableList<String> CCC_EVENT_IDS = ImmutableList.of("12477", "13315");
+    private static final ImmutableSet<String> CCC_EVENT_IDS = ImmutableSet.of("12477", "13315");
 
     private CrmService crmService;
     private RestTemplate restTemplate;
@@ -74,24 +72,27 @@ public class CrmServiceTest {
     public void setUp() {
         crmService = new CrmService();
         restTemplate = createStrictMock(RestTemplate.class);
-        Whitebox.setInternalState(crmService, RestTemplate.class, restTemplate);
+        Whitebox.setInternalState(crmService, restTemplate);
+        Whitebox.setInternalState(crmService, new GetRightsDistributionResponseHandler());
+        Whitebox.setInternalState(crmService, new InsertRightsDistributionResponseHandler());
         Whitebox.setInternalState(crmService, "getRightsDistributionRequestsUrl", GET_RIGHTS_DISTRIBUTION_URL);
         Whitebox.setInternalState(crmService, "insertRightsDistributionRequestsUrl", INSERT_RIGHTS_DISTRIBUTION_URL);
     }
 
     @Test
-    public void testSendCrmRightsDistributionRequests() throws IOException {
+    public void testInsertRightsDistribution() throws IOException {
         String expectedBody = formatJson(TestUtils.fileToString(CrmServiceTest.class,
             "crm_rights_distribution_request.json"));
         Capture<String> urlCapture = new Capture<>();
         Capture<HttpEntity> httpEntityCapture = new Capture<>();
         expect(restTemplate.postForObject(capture(urlCapture), capture(httpEntityCapture), eq(String.class)))
-            .andReturn(TestUtils.fileToString(CrmServiceTest.class, "crm_response.json")).once();
+            .andReturn(loadFile("crm_response.json")).once();
         replay(restTemplate);
-        CrmResult actualResult = crmService.sendRightsDistributionRequests(Collections.singletonList(buildRequest()));
+        InsertRightsDistributionResponse response =
+            crmService.insertRightsDistribution(Collections.singletonList(buildRequest()));
         assertEquals(INSERT_RIGHTS_DISTRIBUTION_URL, urlCapture.getValue());
-        assertEquals(CrmResultStatusEnum.SUCCESS, actualResult.getCrmResultStatus());
-        assertTrue(CollectionUtils.isEmpty(actualResult.getInvalidUsageIds()));
+        assertEquals(InsertRightsDistributionResponseStatusEnum.SUCCESS, response.getStatus());
+        assertTrue(CollectionUtils.isEmpty(response.getInvalidUsageIds()));
         HttpEntity httpEntity = httpEntityCapture.getValue();
         assertNotNull(httpEntity);
         assertEquals(expectedBody, formatJson(httpEntity.getBody()));
@@ -99,15 +100,14 @@ public class CrmServiceTest {
     }
 
     @Test
-    public void testSendRightsDistributionRequestsIntegrationConnectionException() throws IOException {
-        String expectedBody =
-            formatJson(TestUtils.fileToString(CrmServiceTest.class, "crm_rights_distribution_request.json"));
+    public void testInsertRightsDistributionIntegrationConnectionException() throws IOException {
+        String expectedBody = formatJson(loadFile("crm_rights_distribution_request.json"));
         Capture<HttpEntity> httpEntityCapture = new Capture<>();
         expect(restTemplate.postForObject(anyObject(String.class), capture(httpEntityCapture), eq(String.class)))
             .andThrow(new HttpClientErrorException(HttpStatus.BAD_GATEWAY)).once();
         replay(restTemplate);
         try {
-            crmService.sendRightsDistributionRequests(Collections.singletonList(buildRequest()));
+            crmService.insertRightsDistribution(Collections.singletonList(buildRequest()));
             fail();
         } catch (IntegrationConnectionException e) {
             assertEquals("Could not connect to the CRM system", e.getMessage());
@@ -119,63 +119,26 @@ public class CrmServiceTest {
     }
 
     @Test
-    public void testParseResponse() throws IOException {
-        CrmResult actualResult =
-            crmService.parseResponse(TestUtils.fileToString(CrmServiceTest.class, "crm_response.json"),
-                Collections.emptyMap());
-        assertEquals(CrmResultStatusEnum.SUCCESS, actualResult.getCrmResultStatus());
-        assertTrue(CollectionUtils.isEmpty(actualResult.getInvalidUsageIds()));
-    }
-
-    @Test
-    public void testParseInvalidResponseWith() throws IOException {
-        assertParseResponseWithInvalidUsages("crm_response_failed.json",
-            ImmutableSet.of("2e9747c7-f3e8-4c3c-94cf-4f9ba3d10109"));
-    }
-
-    @Test
-    public void testParseInvalidResponseWithTwoInvalidUsages() throws IOException {
-        assertParseResponseWithInvalidUsages("crm_response_failed_two_usages.json",
-            ImmutableSet.of("ca9763ab-1ce7-486e-8938-272f6c3392a7", "bbdc5eb3-7396-47b8-bc18-5ec6ad0c4ef1"));
-    }
-
-    @Test
-    public void testParseResponseWithNoListElement() {
-        try {
-            crmService.parseResponse("{\"elements\":{}}", Collections.emptyMap());
-            fail();
-        } catch (IOException e) {
-            assertEquals("Send usages to CRM. Failed. Reason=Couldn't parse response. " +
-                "Response={\"elements\":{}}, JsonNode={\"elements\":{}}", e.getMessage());
-        }
-    }
-
-    @Test(expected = IOException.class)
-    public void testParseResponseInvalidJson() throws IOException {
-        crmService.parseResponse("{abc123", Collections.emptyMap());
-    }
-
-    @Test
     public void testGetRightsDistribution() throws IOException {
         Capture<String> urlCapture = new Capture<>();
-        Capture<Map<String, List<String>>> urlVariablesCapture = new Capture<>();
+        Capture<Map<String, String>> urlVariablesCapture = new Capture<>();
         expect(restTemplate.getForObject(capture(urlCapture), eq(String.class), capture(urlVariablesCapture)))
-            .andReturn(TestUtils.fileToString(CrmServiceTest.class, "crm_get_rights_distribution_response.json"))
+            .andReturn(loadFile("crm_get_rights_distribution_response_multiple_values.json"))
             .once();
         replay(restTemplate);
-        List<CrmRightsDistributionResponse> actualResult = crmService.getRightsDistribution(CCC_EVENT_IDS);
-        List<CrmRightsDistributionResponse> expectedResult =
-            loadFromJson("expected_crm_read_rights_distribution_response.json");
+        List<GetRightsDistributionResponse> actualResult = crmService.getRightsDistribution(CCC_EVENT_IDS);
+        List<GetRightsDistributionResponse> expectedResult =
+            parseJson("expected_crm_read_rights_distribution_response.json");
         assertEquals(expectedResult, actualResult);
         assertEquals(GET_RIGHTS_DISTRIBUTION_URL, urlCapture.getValue());
-        assertEquals(ImmutableMap.of("cccEventIds", CCC_EVENT_IDS), urlVariablesCapture.getValue());
+        assertEquals(ImmutableMap.of("cccEventIds", "12477,13315"), urlVariablesCapture.getValue());
         verify(restTemplate);
     }
 
     @Test
     public void testGetRightsDistributionIntegrationConnectionException() throws IOException {
         Capture<String> urlCapture = new Capture<>();
-        Capture<Map<String, List<String>>> urlVariablesCapture = new Capture<>();
+        Capture<Map<String, String>> urlVariablesCapture = new Capture<>();
         expect(restTemplate.getForObject(capture(urlCapture), eq(String.class), capture(urlVariablesCapture)))
             .andThrow(new HttpClientErrorException(HttpStatus.BAD_GATEWAY)).once();
         replay(restTemplate);
@@ -186,14 +149,14 @@ public class CrmServiceTest {
             assertEquals("Could not connect to the CRM system", e.getMessage());
         }
         assertEquals(GET_RIGHTS_DISTRIBUTION_URL, urlCapture.getValue());
-        assertEquals(ImmutableMap.of("cccEventIds", CCC_EVENT_IDS), urlVariablesCapture.getValue());
+        assertEquals(ImmutableMap.of("cccEventIds", "12477,13315"), urlVariablesCapture.getValue());
         verify(restTemplate);
     }
 
     @Test
     public void testGetRightsDistributionInvalidJson() {
         Capture<String> urlCapture = new Capture<>();
-        Capture<Map<String, List<String>>> urlVariablesCapture = new Capture<>();
+        Capture<Map<String, String>> urlVariablesCapture = new Capture<>();
         expect(restTemplate.getForObject(capture(urlCapture), eq(String.class), capture(urlVariablesCapture)))
             .andReturn("{abc123").once();
         replay(restTemplate);
@@ -206,19 +169,8 @@ public class CrmServiceTest {
             assertTrue(cause instanceof IOException);
         }
         assertEquals(GET_RIGHTS_DISTRIBUTION_URL, urlCapture.getValue());
-        assertEquals(ImmutableMap.of("cccEventIds", CCC_EVENT_IDS), urlVariablesCapture.getValue());
+        assertEquals(ImmutableMap.of("cccEventIds", "12477,13315"), urlVariablesCapture.getValue());
         verify(restTemplate);
-    }
-
-    private void assertParseResponseWithInvalidUsages(String fileName, Set<String> expectedUsagesIds)
-        throws IOException {
-        CrmResult actualResult =
-            crmService.parseResponse(TestUtils.fileToString(CrmServiceTest.class, fileName), Collections.emptyMap());
-        assertEquals(CrmResultStatusEnum.CRM_ERROR, actualResult.getCrmResultStatus());
-        Set<String> actualInvalidUsageIds = actualResult.getInvalidUsageIds();
-        assertTrue(CollectionUtils.isNotEmpty(actualInvalidUsageIds));
-        assertEquals(CollectionUtils.size(expectedUsagesIds), CollectionUtils.size(actualInvalidUsageIds));
-        assertEquals(expectedUsagesIds, actualInvalidUsageIds);
     }
 
     private String formatJson(Object objectToFormat) throws IOException {
@@ -227,7 +179,15 @@ public class CrmServiceTest {
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
     }
 
-    private CrmRightsDistributionRequest buildRequest() {
+    private List<GetRightsDistributionResponse> parseJson(String fileName) throws IOException {
+        String content = loadFile(fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper.readValue(content, new TypeReference<List<GetRightsDistributionResponse>>() {
+        });
+    }
+
+    private InsertRightsDistributionRequest buildRequest() {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(1000012755L);
         Rightsholder payee = new Rightsholder();
@@ -254,14 +214,10 @@ public class CrmServiceTest {
         paidUsage.setMarket("Univ,Bus,Doc,S");
         paidUsage.setMarketPeriodFrom(2016);
         paidUsage.setMarketPeriodTo(2016);
-        return new CrmRightsDistributionRequest(paidUsage);
+        return new InsertRightsDistributionRequest(paidUsage);
     }
 
-    private List<CrmRightsDistributionResponse> loadFromJson(String fileName) throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), fileName);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper.readValue(content, new TypeReference<List<CrmRightsDistributionResponse>>() {
-        });
+    private String loadFile(String filePath) {
+        return TestUtils.fileToString(this.getClass(), filePath);
     }
 }

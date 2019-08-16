@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Represents result of CRM process.
+ * Represents 'insert rights distribution' response from CRM system.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -18,26 +18,26 @@ import java.util.Set;
  *
  * @author Darya Baraukova
  */
-public class CrmResult {
+public class InsertRightsDistributionResponse {
 
     private final Set<String> invalidUsageIds = Sets.newHashSet();
-    private CrmResultStatusEnum crmResultStatus;
+    private InsertRightsDistributionResponseStatusEnum status;
 
     /**
      * Constructor.
      *
-     * @param crmResultStatus {@link CrmResultStatusEnum} instance
+     * @param status {@link InsertRightsDistributionResponseStatusEnum} instance
      */
-    public CrmResult(CrmResultStatusEnum crmResultStatus) {
-        this.crmResultStatus = crmResultStatus;
+    public InsertRightsDistributionResponse(InsertRightsDistributionResponseStatusEnum status) {
+        this.status = status;
     }
 
-    public CrmResultStatusEnum getCrmResultStatus() {
-        return crmResultStatus;
+    public InsertRightsDistributionResponseStatusEnum getStatus() {
+        return status;
     }
 
-    public void setCrmResultStatus(CrmResultStatusEnum crmResultStatus) {
-        this.crmResultStatus = crmResultStatus;
+    public void setStatus(InsertRightsDistributionResponseStatusEnum status) {
+        this.status = status;
     }
 
     public Set<String> getInvalidUsageIds() {
@@ -58,17 +58,17 @@ public class CrmResult {
     /**
      * Checks whether send to CRM process was successful or not.
      *
-     * @return {@code true} - if status is {@link CrmResultStatusEnum#SUCCESS} and list of invalid detail ids is empty,
-     * {@code false} - otherwise
+     * @return {@code true} - if status is {@link InsertRightsDistributionResponseStatusEnum#SUCCESS}
+     * and list of invalid detail ids is empty, {@code false} - otherwise
      */
     public boolean isSuccessful() {
-        return CrmResultStatusEnum.SUCCESS == crmResultStatus && CollectionUtils.isEmpty(invalidUsageIds);
+        return InsertRightsDistributionResponseStatusEnum.SUCCESS == status && CollectionUtils.isEmpty(invalidUsageIds);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("crmResultStatus", crmResultStatus)
+            .append("status", status)
             .append("invalidUsageIds", invalidUsageIds)
             .toString();
     }
