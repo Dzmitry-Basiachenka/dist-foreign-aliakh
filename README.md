@@ -1,3 +1,9 @@
+6.0.19
+-
+* B-51779 FDA: Mitigate CRM job failure due to connection issues: implement reading rights distribution from CRM
+* B-51779 FDA: Mitigate CRM job failure due to connection issues: refactor sending usages to CRM by reading rights distribution before writing them
+* B-53571 Tech Debt: FDA: resolve Security Vulnerabilities in jackson-databind dependency
+
 6.0.18
 -
 * B-53527 FDA: Remove the standard number requirement when loading researched works: Remove standard number validation, read standard number type from researched CSV
