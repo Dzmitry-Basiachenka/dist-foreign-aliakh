@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.crm.api;
 
 /**
- * Enum containing result status of CRM call.
+ * Represents status of 'insert rights distribution' response from CRM system.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -9,7 +9,7 @@ package com.copyright.rup.dist.foreign.integration.crm.api;
  *
  * @author Darya Baraukova
  */
-public enum CrmResultStatusEnum {
+public enum InsertRightsDistributionResponseStatusEnum {
 
     /**
      * CRM process was successful.

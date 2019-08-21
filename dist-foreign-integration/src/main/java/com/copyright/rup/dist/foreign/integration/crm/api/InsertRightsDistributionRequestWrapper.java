@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
- * Wraps list of {@link CrmRightsDistributionRequest}s for sending to the CRM service.
+ * Wraps list of {@link InsertRightsDistributionRequest}s for sending to the CRM system.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -21,7 +21,7 @@ import java.util.Objects;
  * @author Darya Baraukova
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CrmRightsDistributionRequestWrapper {
+public class InsertRightsDistributionRequestWrapper {
 
     @JsonProperty(value = "list")
     private ListWrapper list;
@@ -31,7 +31,7 @@ public class CrmRightsDistributionRequestWrapper {
      *
      * @param requests the requests for CRM
      */
-    public CrmRightsDistributionRequestWrapper(Collection<CrmRightsDistributionRequest> requests) {
+    public InsertRightsDistributionRequestWrapper(Collection<InsertRightsDistributionRequest> requests) {
         this.list = new ListWrapper(Objects.requireNonNull(requests));
     }
 
@@ -59,7 +59,7 @@ public class CrmRightsDistributionRequestWrapper {
         if (null == obj || this.getClass() != obj.getClass()) {
             return false;
         }
-        CrmRightsDistributionRequestWrapper that = (CrmRightsDistributionRequestWrapper) obj;
+        InsertRightsDistributionRequestWrapper that = (InsertRightsDistributionRequestWrapper) obj;
         return new EqualsBuilder()
             .append(this.list, that.list)
             .isEquals();
@@ -80,35 +80,35 @@ public class CrmRightsDistributionRequestWrapper {
     }
 
     /**
-     * Wraps collection of {@link CrmRightsDistributionRequest}s for sending to the CRM service.
+     * Wraps collection of {@link InsertRightsDistributionRequest}s for sending to the CRM system.
      */
     static class ListWrapper {
 
         @JsonProperty(value = "rightsDistribution")
-        private Collection<CrmRightsDistributionRequest> requests;
+        private Collection<InsertRightsDistributionRequest> requests;
 
         /**
          * Constructor.
          *
-         * @param requests collection of {@link CrmRightsDistributionRequest} instances
+         * @param requests collection of {@link InsertRightsDistributionRequest} instances
          */
-        public ListWrapper(Collection<CrmRightsDistributionRequest> requests) {
+        public ListWrapper(Collection<InsertRightsDistributionRequest> requests) {
             this.requests = requests;
         }
 
         /**
-         * @return collection of {@link CrmRightsDistributionRequest}.
+         * @return collection of {@link InsertRightsDistributionRequest}.
          */
-        public Collection<CrmRightsDistributionRequest> getRequests() {
+        public Collection<InsertRightsDistributionRequest> getRequests() {
             return requests;
         }
 
         /**
-         * Sets collection of {@link CrmRightsDistributionRequest}.
+         * Sets collection of {@link InsertRightsDistributionRequest}.
          *
-         * @param requests collection of {@link CrmRightsDistributionRequest}
+         * @param requests collection of {@link InsertRightsDistributionRequest}
          */
-        public void setRequests(Collection<CrmRightsDistributionRequest> requests) {
+        public void setRequests(Collection<InsertRightsDistributionRequest> requests) {
             this.requests = requests;
         }
 

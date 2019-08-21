@@ -43,7 +43,8 @@ public class SendNtsToCrmIntegrationTest {
     @Test
     public void testSendToCrm() throws IOException {
         testBuilder
-            .expectCrmCall("crm/sendToCrm/rights_distribution_request_nts.json",
+            .expectCrmGetRightsDistribution("53256")
+            .expectCrmInsertRightsDistribution("crm/sendToCrm/rights_distribution_request_nts.json",
                 "crm/sendToCrm/rights_distribution_response_nts.json")
             .expectJobInfo(buildJobInfo())
             .expectUsageStatus(ImmutableMap.of(

@@ -98,8 +98,9 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedLmDetailsJsonFile;
     private String expectedPaidUsagesJsonFile;
     private List<String> expectedPaidUsageLmDetailids;
-    private String expectedCrmRequestJsonFile;
-    private String expectedCrmResponseJsonFile;
+    private List<String> expectedCrmGetRightsDistributionCccEventIds;
+    private String expectedCrmInsertRightsDistributionRequestJsonFile;
+    private String expectedCrmInsertRightsDistributionResponseJsonFile;
     private String expectedUsagesJsonFile;
 
      WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
@@ -155,9 +156,14 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-     WorkflowIntegrationTestBuilder expectCrmReporting(String requestJsonFile, String responseJsonFile) {
-        this.expectedCrmRequestJsonFile = requestJsonFile;
-        this.expectedCrmResponseJsonFile = responseJsonFile;
+    WorkflowIntegrationTestBuilder expectCrmGetRightsDistribution(String... cccEventIds) {
+        this.expectedCrmGetRightsDistributionCccEventIds = Arrays.asList(cccEventIds);
+        return this;
+    }
+
+     WorkflowIntegrationTestBuilder expectCrmInsertRightsDistribution(String requestJsonFile, String responseJsonFile) {
+        this.expectedCrmInsertRightsDistributionRequestJsonFile = requestJsonFile;
+        this.expectedCrmInsertRightsDistributionResponseJsonFile = responseJsonFile;
         return this;
     }
 
@@ -202,7 +208,9 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             testHelper.expectGetRmsRights(expectedRmsRequestsToResponses);
             testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightsholdersIds);
             testHelper.expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
-            testHelper.expectCrmCall(expectedCrmRequestJsonFile, expectedCrmResponseJsonFile,
+            testHelper.expectCrmGetRightsDistribution(expectedCrmGetRightsDistributionCccEventIds);
+            testHelper.expectCrmInsertRightsDistribution(expectedCrmInsertRightsDistributionRequestJsonFile,
+                expectedCrmInsertRightsDistributionResponseJsonFile,
                 Arrays.asList("omOrderDetailNumber", "licenseCreateDate"));
             loadUsageBatch();
             addToScenario();

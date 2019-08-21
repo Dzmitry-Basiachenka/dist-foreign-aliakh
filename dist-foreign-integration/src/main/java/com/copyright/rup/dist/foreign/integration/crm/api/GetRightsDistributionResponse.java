@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * Result of reading rights distribution from the CRM endpoint "/getCCCRightsDistributionV2".
+ * Represents 'get rights distribution' response from CRM system.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -14,7 +14,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * @author Aliaksandr Liakh
  */
-public class CrmRightsDistributionResponse {
+public class GetRightsDistributionResponse {
 
     private String cccEventId;
     private String omOrderDetailNumber;
@@ -43,7 +43,7 @@ public class CrmRightsDistributionResponse {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        CrmRightsDistributionResponse that = (CrmRightsDistributionResponse) obj;
+        GetRightsDistributionResponse that = (GetRightsDistributionResponse) obj;
         return new EqualsBuilder()
             .append(cccEventId, that.cccEventId)
             .append(omOrderDetailNumber, that.omOrderDetailNumber)

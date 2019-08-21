@@ -71,7 +71,8 @@ public class NtsWorkflowIntegrationTest {
             .expectUsage(buildPaidUsage())
             .expectLmDetails("details/nts_details_to_lm.json")
             .expectPaidInfo("lm/paid_usages_nts.json")
-            .expectCrmCall("crm/workflow/rights_distribution_request_nts.json",
+            .expectCrmGetRightsDistribution("53256")
+            .expectCrmInsertRightsDistribution("crm/workflow/rights_distribution_request_nts.json",
                 "crm/workflow/rights_distribution_response_nts.json")
             .expectScenario(buildScenario())
             .build()

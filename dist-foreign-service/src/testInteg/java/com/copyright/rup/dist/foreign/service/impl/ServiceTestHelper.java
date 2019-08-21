@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -169,7 +170,18 @@ public class ServiceTestHelper {
                     MediaType.APPLICATION_JSON)));
     }
 
-    public void expectCrmCall(String expectedRequestFileName, String responseFileName, List<String> fieldsToIgnore) {
+    public void expectCrmGetRightsDistribution(List<String> cccEventIds) {
+        mockServer.expect(MockRestRequestMatchers.requestTo(
+            "http://localhost:9061/legacy-integration-rest/getCCCRightsDistributionV2?eventIds="
+                + Joiner.on(',').join(cccEventIds)))
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+            .andRespond(MockRestResponseCreators.withSuccess(
+                TestUtils.fileToString(this.getClass(), "crm/get_rights_distribution_response_empty.json"),
+                MediaType.APPLICATION_JSON));
+    }
+
+    public void expectCrmInsertRightsDistribution(String expectedRequestFileName, String responseFileName,
+                                                  List<String> fieldsToIgnore) {
         String expectedRequestBody = TestUtils.fileToString(this.getClass(), expectedRequestFileName);
         String responseBody = TestUtils.fileToString(this.getClass(), responseFileName);
         mockServer.expect(MockRestRequestMatchers.requestTo(
