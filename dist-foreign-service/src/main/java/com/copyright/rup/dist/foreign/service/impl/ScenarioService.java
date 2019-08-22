@@ -224,7 +224,7 @@ public class ScenarioService implements IScenarioService {
         if (CollectionUtils.isNotEmpty(usageIds)) {
             Iterables.partition(usageIds, batchSize)
                 .forEach(partition -> {
-                    List<Usage> usages = usageService.getArchivedUsagesByIds(usageIds);
+                    List<Usage> usages = usageService.getArchivedUsagesByIds(partition);
                     if (FdaConstants.NTS_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
                         usages.forEach(usage -> {
                             //for NTS usages System should not send work information to LM

@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -95,7 +96,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<String> expectedPreferencesRightholderIds;
     private String expectedRollupsJson;
     private List<String> expectedRollupsRightsholdersIds;
-    private String expectedLmDetailsJsonFile;
+    private int expecteLmDetailsMessagesCount;
+    private List<String> expectedLmDetailsJsonFiles;
     private String expectedPaidUsagesJsonFile;
     private List<String> expectedPaidUsageLmDetailids;
     private List<String> expectedCrmGetRightsDistributionCccEventIds;
@@ -141,8 +143,9 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-     WorkflowIntegrationTestBuilder expectLmDetails(String jsonFile) {
-        this.expectedLmDetailsJsonFile = jsonFile;
+     WorkflowIntegrationTestBuilder expectLmDetails(int messagesCount, String... lmDetailsJsonFile) {
+        this.expecteLmDetailsMessagesCount = messagesCount;
+        this.expectedLmDetailsJsonFiles = Arrays.asList(lmDetailsJsonFile);
         return this;
     }
 
@@ -258,9 +261,11 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         void sendScenarioToLm() {
             scenarioService.sendToLm(scenario);
-            sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
-                Collections.singletonList(TestUtils.fileToString(this.getClass(), expectedLmDetailsJsonFile)),
-                Collections.EMPTY_LIST, ImmutableMap.of("source", "FDA"));
+            List<String> lmUsageMessages = Lists.newArrayListWithExpectedSize(expecteLmDetailsMessagesCount);
+            expectedLmDetailsJsonFiles.forEach(lmDetailsFile ->
+                lmUsageMessages.add(TestUtils.fileToString(this.getClass(), lmDetailsFile)));
+            sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmUsageMessages,
+                Collections.emptyList(), ImmutableMap.of("source", "FDA"));
         }
 
         private void receivePaidUsagesFromLm() throws InterruptedException {
