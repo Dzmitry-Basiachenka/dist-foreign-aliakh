@@ -96,7 +96,7 @@ public class WorkflowIntegrationTest {
                 RIGHTHOLDER_ID_1,
                 RIGHTHOLDER_ID_5,
                 RIGHTHOLDER_ID_3)
-            .expectLmDetails("details/cla_details_to_lm.json")
+            .expectLmDetails(2, "details/cla_details_to_lm1.json", "details/cla_details_to_lm2.json")
             .expectPaidUsagesFromLm("lm/paid_usages_cla.json")
             .expectPaidUsageLmDetailIds(USAGE_LM_DETAIL_ID_1, USAGE_LM_DETAIL_ID_2, USAGE_LM_DETAIL_ID_3,
                 USAGE_LM_DETAIL_ID_4, USAGE_LM_DETAIL_ID_5, USAGE_LM_DETAIL_ID_6)
