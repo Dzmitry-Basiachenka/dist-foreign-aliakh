@@ -1,3 +1,7 @@
+6.0.20
+-
+* CDP-807 FDA: Send to LM: Duplicate messages are sent to LM for scenarios having more than 2500 usages
+
 6.0.19
 -
 * B-51779 FDA: Mitigate CRM job failure due to connection issues: implement reading rights distribution from CRM
