@@ -77,6 +77,9 @@
         <constructor-arg ref="df.service.lm.detail.paid.endpoint"/>
     </bean>
 
+    <bean id="df.common.snsNotificationMessageConverter"
+          class="com.copyright.rup.dist.common.integration.aws.SnsNotificationMessageConverter"/>
+
     <bean id="defaultRedeliveryPolicy" class="org.apache.camel.processor.RedeliveryPolicy"
           p:maximumRedeliveries="$RUP{dist.foreign.broker.redelivery.count}"
           p:redeliveryDelay="$RUP{dist.foreign.broker.redelivery.delay}"
@@ -131,7 +134,7 @@
         <route id="df.service.paidUsageRoute">
             <from ref="df.service.lm.detail.paid.endpoint"/>
             <!-- TODO {pliakh} replace converted with default Jackson unmarshaller -->
-            <bean ref="df.service.snsNotificationMessageConverter"/>
+            <bean ref="df.common.snsNotificationMessageConverter"/>
             <log message="Consume paid usages from LM. Source=${headers.source}, Body: ${body}"
                  loggingLevel="DEBUG" logName="com.copyright.rup.dist"/>
             <unmarshal>
