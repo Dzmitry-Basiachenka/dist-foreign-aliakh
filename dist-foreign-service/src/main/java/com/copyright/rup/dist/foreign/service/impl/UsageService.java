@@ -525,7 +525,7 @@ public class UsageService implements IUsageService {
                     usageArchiveRepository.findByIdAndStatus(ids, UsageStatusEnum.PAID), archivedUsagesCount);
                 if (CollectionUtils.isNotEmpty(paidUsages)) {
                     InsertRightsDistributionResponse response = crmIntegrationService.insertRightsDistribution(
-                        buildCrmRightsDistributionRequest(paidUsages));
+                        buildInsertRightsDistributionRequest(paidUsages));
                     if (response.isSuccessful()) {
                         Set<String> usagesIds = paidUsages.stream().map(PaidUsage::getId).collect(Collectors.toSet());
                         updateReportedUsages(usagesIds);
@@ -723,7 +723,7 @@ public class UsageService implements IUsageService {
         return resultUsage;
     }
 
-    private List<InsertRightsDistributionRequest> buildCrmRightsDistributionRequest(List<PaidUsage> paidUsages) {
+    private List<InsertRightsDistributionRequest> buildInsertRightsDistributionRequest(List<PaidUsage> paidUsages) {
         List<InsertRightsDistributionRequest> requests = Lists.newArrayListWithExpectedSize(paidUsages.size());
         paidUsages.forEach(paidUsage -> requests.add(new InsertRightsDistributionRequest(paidUsage)));
         return requests;

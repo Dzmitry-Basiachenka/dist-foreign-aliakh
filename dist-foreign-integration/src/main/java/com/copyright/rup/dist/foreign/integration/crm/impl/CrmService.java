@@ -15,7 +15,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
@@ -58,7 +57,7 @@ public class CrmService implements ICrmService {
     private GetRightsDistributionResponseHandler getRightsDistributionResponseHandler;
 
     @Autowired
-    private InsertRightsDistributionResponseHandler insertionRightsDistributionResponseHandler;
+    private InsertRightsDistributionResponseHandler insertRightsDistributionResponseHandler;
 
     @Value("$RUP{dist.foreign.rest.crm.get_rights_distribution.url}")
     private String getRightsDistributionRequestsUrl;
@@ -78,7 +77,7 @@ public class CrmService implements ICrmService {
     public List<GetRightsDistributionResponse> getRightsDistribution(Set<String> cccEventIds) {
         try {
             ImmutableMap<String, String> urlVariables = ImmutableMap.of("cccEventIds",
-                Joiner.on(',').join(Objects.requireNonNull(cccEventIds)));
+                String.join(",", Objects.requireNonNull(cccEventIds)));
             String json = restTemplate.getForObject(getRightsDistributionRequestsUrl, String.class, urlVariables);
             return getRightsDistributionResponseHandler.parseJson(json);
         } catch (HttpClientErrorException | ResourceAccessException e) {
@@ -100,7 +99,7 @@ public class CrmService implements ICrmService {
                 HttpEntity<String> httpEntity = buildHttpEntity(batchRequests);
                 LOGGER.trace("Send 'insert rights distribution' request. Request={}", httpEntity);
                 String json = restTemplate.postForObject(insertRightsDistributionRequestsUrl, httpEntity, String.class);
-                response = insertionRightsDistributionResponseHandler.parseJson(json,
+                response = insertRightsDistributionResponseHandler.parseJson(json,
                     batchRequests.stream().collect(Collectors.toMap(
                         InsertRightsDistributionRequest::getOmOrderDetailNumber,
                         InsertRightsDistributionRequest::toString)));

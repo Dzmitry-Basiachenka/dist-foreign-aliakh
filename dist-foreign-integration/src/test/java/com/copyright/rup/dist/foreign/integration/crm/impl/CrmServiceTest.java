@@ -81,12 +81,11 @@ public class CrmServiceTest {
 
     @Test
     public void testInsertRightsDistribution() throws IOException {
-        String expectedBody = formatJson(TestUtils.fileToString(CrmServiceTest.class,
-            "crm_rights_distribution_request.json"));
+        String expectedBody = formatJson(loadFile("insert_rights_distribution_request.json"));
         Capture<String> urlCapture = new Capture<>();
         Capture<HttpEntity> httpEntityCapture = new Capture<>();
         expect(restTemplate.postForObject(capture(urlCapture), capture(httpEntityCapture), eq(String.class)))
-            .andReturn(loadFile("crm_response.json")).once();
+            .andReturn(loadFile("insert_rights_distribution_response.json")).once();
         replay(restTemplate);
         InsertRightsDistributionResponse response =
             crmService.insertRightsDistribution(Collections.singletonList(buildRequest()));
@@ -101,7 +100,7 @@ public class CrmServiceTest {
 
     @Test
     public void testInsertRightsDistributionIntegrationConnectionException() throws IOException {
-        String expectedBody = formatJson(loadFile("crm_rights_distribution_request.json"));
+        String expectedBody = formatJson(loadFile("insert_rights_distribution_request.json"));
         Capture<HttpEntity> httpEntityCapture = new Capture<>();
         expect(restTemplate.postForObject(anyObject(String.class), capture(httpEntityCapture), eq(String.class)))
             .andThrow(new HttpClientErrorException(HttpStatus.BAD_GATEWAY)).once();
@@ -123,12 +122,12 @@ public class CrmServiceTest {
         Capture<String> urlCapture = new Capture<>();
         Capture<Map<String, String>> urlVariablesCapture = new Capture<>();
         expect(restTemplate.getForObject(capture(urlCapture), eq(String.class), capture(urlVariablesCapture)))
-            .andReturn(loadFile("crm_get_rights_distribution_response_multiple_values.json"))
+            .andReturn(loadFile("get_rights_distribution_response_multiple_values.json"))
             .once();
         replay(restTemplate);
         List<GetRightsDistributionResponse> actualResult = crmService.getRightsDistribution(CCC_EVENT_IDS);
         List<GetRightsDistributionResponse> expectedResult =
-            parseJson("expected_crm_read_rights_distribution_response.json");
+            parseJson("get_rights_distribution_response_expected.json");
         assertEquals(expectedResult, actualResult);
         assertEquals(GET_RIGHTS_DISTRIBUTION_URL, urlCapture.getValue());
         assertEquals(ImmutableMap.of("cccEventIds", "12477,13315"), urlVariablesCapture.getValue());

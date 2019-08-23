@@ -33,20 +33,20 @@ public class InsertRightsDistributionResponseHandlerTest {
     @Test
     public void testParseJsonSuccess() throws IOException {
         InsertRightsDistributionResponse response =
-            handler.parseJson(loadFile("crm_response.json"), Collections.emptyMap());
+            handler.parseJson(loadFile("insert_rights_distribution_response.json"), Collections.emptyMap());
         assertEquals(InsertRightsDistributionResponseStatusEnum.SUCCESS, response.getStatus());
         assertTrue(CollectionUtils.isEmpty(response.getInvalidUsageIds()));
     }
 
     @Test
-    public void testParseJsonInvalidResponseOneInvalidUsage() throws IOException {
-        assertParseResponseWithInvalidUsages("crm_response_failed.json",
+    public void testParseJsonFailureOneInvalidUsage() throws IOException {
+        assertParseResponseWithInvalidUsages("insert_rights_distribution_response_failure.json",
             ImmutableSet.of("2e9747c7-f3e8-4c3c-94cf-4f9ba3d10109"));
     }
 
     @Test
-    public void testParseJsonInvalidResponseTwoInvalidUsages() throws IOException {
-        assertParseResponseWithInvalidUsages("crm_response_failed_two_usages.json",
+    public void testParseJsonFailureTwoInvalidUsages() throws IOException {
+        assertParseResponseWithInvalidUsages("insert_rights_distribution_response_failure_two_usages.json",
             ImmutableSet.of("ca9763ab-1ce7-486e-8938-272f6c3392a7", "bbdc5eb3-7396-47b8-bc18-5ec6ad0c4ef1"));
     }
 

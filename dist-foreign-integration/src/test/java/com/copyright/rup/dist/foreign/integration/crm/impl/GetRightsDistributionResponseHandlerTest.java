@@ -26,7 +26,7 @@ public class GetRightsDistributionResponseHandlerTest {
 
     @Test
     public void testParseJsonMultipleValues() throws IOException {
-        String json = loadFile("crm_get_rights_distribution_response_multiple_values.json");
+        String json = loadFile("get_rights_distribution_response_multiple_values.json");
         List<GetRightsDistributionResponse> responses = handler.parseJson(json);
         assertEquals(2, responses.size());
         GetRightsDistributionResponse response1 = responses.get(0);
@@ -39,7 +39,7 @@ public class GetRightsDistributionResponseHandlerTest {
 
     @Test
     public void testParseJsonSingleValue() throws IOException {
-        String json = loadFile("crm_get_rights_distribution_response_single_value.json");
+        String json = loadFile("get_rights_distribution_response_single_value.json");
         List<GetRightsDistributionResponse> responses = handler.parseJson(json);
         assertEquals(1, responses.size());
         GetRightsDistributionResponse response = responses.get(0);
@@ -49,7 +49,7 @@ public class GetRightsDistributionResponseHandlerTest {
 
     @Test
     public void testParseJsonNoValue() throws IOException {
-        String json = loadFile("crm_get_rights_distribution_response_no_value.json");
+        String json = loadFile("get_rights_distribution_response_no_value.json");
         List<GetRightsDistributionResponse> responses = handler.parseJson(json);
         assertEquals(0, responses.size());
     }
