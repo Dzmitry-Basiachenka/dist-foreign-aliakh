@@ -183,7 +183,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
+    public void loadResearchedUsages(List<ResearchedUsage> researchedUsages) {
         usageService.loadResearchedUsages(researchedUsages);
         filterController.getWidget().clearFilter();
     }

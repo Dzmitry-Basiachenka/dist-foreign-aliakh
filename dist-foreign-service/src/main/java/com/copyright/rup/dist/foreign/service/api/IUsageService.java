@@ -349,9 +349,19 @@ public interface IUsageService {
     /**
      * Updates researched usage details.
      *
-     * @param researchedUsages collection of {@link ResearchedUsage}s
+     * @param researchedUsages list of {@link ResearchedUsage}s
      */
-    void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages);
+    void loadResearchedUsages(List<ResearchedUsage> researchedUsages);
+
+    /**
+     * Updates researched usage details, sets WORK_FOUND status and adds log action.
+     * Is used only by {@link IUsageService#loadResearchedUsages(List)}.
+     * Due to the fact that default mechanisms of proxying in Spring are Dynamic Proxy and CGLIB,
+     * it was implemented as public method to support declarative transaction.
+     *
+     * @param researchedUsages list of {@link ResearchedUsage}s
+     */
+    void markAsWorkFound(List<ResearchedUsage> researchedUsages);
 
     /**
      * Gets list of {@link PaidUsage} available for sending to CRM.

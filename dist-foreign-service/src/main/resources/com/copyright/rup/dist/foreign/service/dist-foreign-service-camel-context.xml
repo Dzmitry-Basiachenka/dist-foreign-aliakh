@@ -117,7 +117,7 @@
                 <constant>true</constant>
             </handled>
             <log message="Exception on processed usage update. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}"
-                 loggingLevel="DEBUG" logName="com.copyright.rup.dist.foreign.service.impl.chain.processor"/>
+                 loggingLevel="INFO" logName="com.copyright.rup.dist.foreign.service.impl.chain.processor"/>
         </onException>
 
         <route id="jobStatusRoute">

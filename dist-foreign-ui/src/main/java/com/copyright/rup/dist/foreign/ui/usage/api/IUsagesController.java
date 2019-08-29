@@ -202,9 +202,9 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     /**
      * Updates researched usage details.
      *
-     * @param researchedUsages collection of {@link ResearchedUsage}s
+     * @param researchedUsages list of {@link ResearchedUsage}s
      */
-    void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages);
+    void loadResearchedUsages(List<ResearchedUsage> researchedUsages);
 
     /**
      * Creates a {@link Scenario} by entered scenario name and description.
