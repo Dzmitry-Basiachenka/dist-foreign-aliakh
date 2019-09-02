@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributi
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -33,15 +32,7 @@ class InsertRightsDistributionResponseHandler {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
-    private final ObjectMapper objectMapper;
-
-    /**
-     * Constructor.
-     */
-    public InsertRightsDistributionResponseHandler() {
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-    }
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Parses 'insert rights distribution' response JSON.
