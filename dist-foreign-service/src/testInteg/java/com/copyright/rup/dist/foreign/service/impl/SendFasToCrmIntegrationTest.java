@@ -34,7 +34,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=send-to-crm-data-init.groovy"})
+@TestPropertySource(properties = {"test.liquibase.changelog=send-fas-to-crm-data-init.groovy"})
 public class SendFasToCrmIntegrationTest {
 
     @Autowired
