@@ -1,3 +1,17 @@
+7.1.0
+-
+* B-51662 Tech Debt: FDA: replace Camel redelivery policies with AWS redrive policies
+* B-51779 FDA: Mitigate CRM job failure due to connection issues: make changes based on comments in CR-DIST-FOREIGN-124
+* B-53571 Tech Debt: FDA: Use SnsNotificationMessageConverter from dist-common
+* B-53571 Tech Debt: FDA: apply dist-common 42.0.2 version
+* B-53571 Tech Debt: FDA: rename liquibase test data file for SendFasToCrmintegrationTest
+* B-53893 Tech Debt: FDA: resolve vulnerability issue related to postgres driver
+* B-53893 Tech Debt: FDA: revert postgres driver version to 42.2.1
+* B-53893 Tech Debt: FDA: update commonSchema version to 3.5.0 for rup-db-postgres dependency
+* B-53893 Tech Debt: FDA: update rupJdbc.standardDependencies.postgresDriver.version to 42.2.6 to resolve vulnerability issue related to postgres driver
+* B-53893 Tech Debt: apply 6.7.+ rup-common version
+* CDP-811 FDA: Load researched details: Usage remains in WORK_FOUND status after researched details upload, if another usage with the same wr_wrk_inst is already present in usage batch with any different detail status
+
 6.1.21
 -
 * Revving up build version
