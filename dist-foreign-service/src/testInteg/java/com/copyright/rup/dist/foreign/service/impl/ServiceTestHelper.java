@@ -250,7 +250,7 @@ public class ServiceTestHelper {
         paidUsageConsumer.setLatch(new CountDownLatch(1));
         sqsClientMock.sendMessage("fda-test-df-consumer-sf-detail-paid", SnsMock.wrapBody(message),
             Collections.emptyMap());
-        assertTrue(paidUsageConsumer.getLatch().await(2, TimeUnit.SECONDS));
+        assertTrue(paidUsageConsumer.getLatch().await(10, TimeUnit.SECONDS));
         sqsClientMock.assertQueueMessagesReceived("fda-test-df-consumer-sf-detail-paid");
     }
 
