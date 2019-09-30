@@ -1,3 +1,8 @@
+7.1.1
+-
+* B-54040 Tech Debt: FDA: Increase consumer latch awaiting timeout in integration tests
+* CDP-824 FDA: Upgrade to RUP Common 7, update dist-common version to 45.0.+
+
 7.1.0
 -
 * B-51662 Tech Debt: FDA: replace Camel redelivery policies with AWS redrive policies
