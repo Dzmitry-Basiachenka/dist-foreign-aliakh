@@ -79,7 +79,7 @@ public class CreateScenarioIntegrationTest {
         testBuilder
             .withFilter(buildUsageFilter("31ddaa1a-e60b-44ce-a968-0ca262870358", "FAS"))
             .expectPreferences("prm/preferences_response.json",
-                RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_2, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_5)
+                RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectRollups("prm/fas_rollups_response.json",
                 RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectUsages(Arrays.asList(
@@ -111,7 +111,7 @@ public class CreateScenarioIntegrationTest {
         testBuilder
             .withFilter(buildUsageFilter("31ddaa1a-e60b-44ce-a968-0ca262870358", "FAS"))
             .expectPreferences("prm/not_found_response.json",
-                RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_2, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_5)
+                RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectRollups("prm/not_found_response.json",
                 RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectUsages(Arrays.asList(
@@ -142,8 +142,8 @@ public class CreateScenarioIntegrationTest {
     public void testCreateClaScenario() {
         testBuilder
             .withFilter(buildUsageFilter("ce0ca941-1e16-4a3b-a991-b596189b4f22", "FAS2"))
-            .expectPreferences("prm/not_found_response.json", RIGHTSHOLDER_ID_6, RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_7,
-                RIGHTSHOLDER_ID_8, RIGHTSHOLDER_ID_9, RIGHTSHOLDER_ID_10)
+            .expectPreferences("prm/not_found_response.json", RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_7, RIGHTSHOLDER_ID_9,
+                RIGHTSHOLDER_ID_10, RIGHTSHOLDER_ID_6, RIGHTSHOLDER_ID_8)
             .expectRollups("prm/cla_rollups_response.json",
                 RIGHTSHOLDER_ID_7, RIGHTSHOLDER_ID_9, RIGHTSHOLDER_ID_10, RIGHTSHOLDER_ID_6, RIGHTSHOLDER_ID_8)
             .expectUsages(Arrays.asList(
@@ -172,7 +172,7 @@ public class CreateScenarioIntegrationTest {
         testBuilder
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
             .expectRollups("prm/nts_rollups_response.json", RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
-            .expectPreferences("prm/preferences_response.json", RIGHTSHOLDER_ID_2, RIGHTSHOLDER_ID_5)
+            .expectPreferences("prm/preferences_response.json", RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectUsages(Arrays.asList(
                 buildUsage(USAGE_ID_6, 7000429266L, 1000009997L, SERVICE_FEE_32, "83.3578205256", "177.1353686169",
                     "260.4931891425", 135632563L, NTS_PRODUCT_FAMILY, new BigDecimal(REPORTED_VALUE_1), false, false),
@@ -202,7 +202,7 @@ public class CreateScenarioIntegrationTest {
         testBuilder
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
             .expectRollups("prm/nts_rollups_response.json", RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
-            .expectPreferences("prm/preferences_response.json", RIGHTSHOLDER_ID_2, RIGHTSHOLDER_ID_5)
+            .expectPreferences("prm/preferences_response.json", RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectUsages(Arrays.asList(
                 buildUsage(USAGE_ID_6, 7000429266L, 1000009997L, SERVICE_FEE_32, "5.2647044542",
                     "559.8684143076", "565.1331187618", 135632563L, NTS_PRODUCT_FAMILY,

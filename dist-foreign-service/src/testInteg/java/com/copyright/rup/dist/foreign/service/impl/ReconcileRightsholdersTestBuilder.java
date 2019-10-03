@@ -86,9 +86,9 @@ class ReconcileRightsholdersTestBuilder {
         return this;
     }
 
-    ReconcileRightsholdersTestBuilder expectPreferences(String preferencesJson, String... rightholderIds) {
+    ReconcileRightsholdersTestBuilder expectPreferences(String preferencesJson, String... rightsholderIds) {
         this.expectedPreferencesJson = preferencesJson;
-        this.expectedPreferencesRightholderIds = Arrays.asList(rightholderIds);
+        this.expectedPreferencesRightholderIds = Arrays.asList(rightsholderIds);
         return this;
     }
 

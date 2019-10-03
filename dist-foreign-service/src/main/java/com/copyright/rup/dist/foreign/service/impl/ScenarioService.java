@@ -294,17 +294,16 @@ public class ScenarioService implements IScenarioService {
             .map(discrepancy -> discrepancy.getNewRightsholder().getId())
             .collect(Collectors.toSet()));
         discrepancies.forEach(discrepancy -> {
-                Rightsholder newRightsholder = discrepancy.getNewRightsholder();
-                Rightsholder payee =
-                    PrmRollUpService.getPayee(rollUps, newRightsholder, discrepancy.getProductFamily());
-                groupedByWrWrkInstUsages.get(discrepancy.getWrWrkInst()).forEach(usage -> {
-                    usage.setRightsholder(newRightsholder);
-                    usage.setPayee(payee);
-                    usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.RH_UPDATED, String.format(
-                        "Rightsholder account %s found during reconciliation", newRightsholder.getAccountNumber()));
-                });
-            }
-        );
+            Rightsholder newRightsholder = discrepancy.getNewRightsholder();
+            Rightsholder payee =
+                PrmRollUpService.getPayee(rollUps, newRightsholder, discrepancy.getProductFamily());
+            groupedByWrWrkInstUsages.get(discrepancy.getWrWrkInst()).forEach(usage -> {
+                usage.setRightsholder(newRightsholder);
+                usage.setPayee(payee);
+                usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.RH_UPDATED, String.format(
+                    "Rightsholder account %s found during reconciliation", newRightsholder.getAccountNumber()));
+            });
+        });
         List<Usage> usages = groupedByWrWrkInstUsages.values().stream()
             .flatMap(Collection::stream)
             .collect(Collectors.toList());

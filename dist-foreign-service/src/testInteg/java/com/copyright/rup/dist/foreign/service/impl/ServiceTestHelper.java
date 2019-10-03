@@ -148,15 +148,14 @@ public class ServiceTestHelper {
                 MediaType.APPLICATION_JSON)));
     }
 
-    public void expectGetPreferences(String fileName, List<String> rightsholderIds) {
-        rightsholderIds.forEach(rightsholderId ->
-            mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
-                    + rightsholderId
-                    + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE,IS-RH-STM-IPRO"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                    MediaType.APPLICATION_JSON)));
+    public void expectGetPreferences(String fileName, List<String> rightsholdersIds) {
+        mockServer.expect(MockRestRequestMatchers
+            .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
+                + String.join(",", rightsholdersIds)
+                + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE,IS-RH-STM-IPRO"))
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+            .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
+                MediaType.APPLICATION_JSON));
     }
 
     public void expectGetRollups(String fileName, List<String> rightsholdersIds) {

@@ -84,10 +84,10 @@ public class WorkflowIntegrationTest {
                 "rights/rms_grants_100012905_response.json")
             .expectRmsRights("rights/rms_grants_100011821_request.json",
                 "rights/rms_grants_100011821_response.json")
-            .expectPreferences("prm/not_found_response.json", RIGHTHOLDER_ID_1, "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
-                RIGHTHOLDER_ID_2, RIGHTHOLDER_ID_3, RIGHTHOLDER_ID_5, RIGHTHOLDER_ID_4)
-            .expectRollups("prm/cla_rollups_response.json", RIGHTHOLDER_ID_2, RIGHTHOLDER_ID_4, RIGHTHOLDER_ID_1,
-                RIGHTHOLDER_ID_5, RIGHTHOLDER_ID_3)
+            .expectRollups("prm/cla_rollups_response.json",
+                RIGHTHOLDER_ID_2, RIGHTHOLDER_ID_4, RIGHTHOLDER_ID_1, RIGHTHOLDER_ID_5, RIGHTHOLDER_ID_3)
+            .expectPreferences("prm/not_found_response.json", "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f", RIGHTHOLDER_ID_2,
+                RIGHTHOLDER_ID_4, RIGHTHOLDER_ID_1, RIGHTHOLDER_ID_5, RIGHTHOLDER_ID_3)
             .expectLmDetails(2, "details/cla_details_to_lm1.json", "details/cla_details_to_lm2.json")
             .expectPaidUsagesFromLm("lm/paid_usages_cla.json")
             .expectPaidUsageLmDetailIds(USAGE_LM_DETAIL_ID_1, USAGE_LM_DETAIL_ID_2, USAGE_LM_DETAIL_ID_3,
