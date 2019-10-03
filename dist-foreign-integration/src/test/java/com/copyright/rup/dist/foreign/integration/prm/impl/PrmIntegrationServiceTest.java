@@ -17,6 +17,7 @@ import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
@@ -26,7 +27,9 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -111,8 +114,8 @@ public class PrmIntegrationServiceTest {
     public void testGetRollUps() {
         String rightsholderId = RupPersistUtils.generateUuid();
         Set<String> rightsholdersIds = Collections.singleton(rightsholderId);
-        HashBasedTable<String, String, Rightsholder> result = HashBasedTable.create(1, 1);
-        result.put(rightsholderId, FAS_PRODUCT_FAMILY, buildRightsholder());
+        Map<String, Map<String, Rightsholder>> result = new HashMap<>();
+        result.put(rightsholderId, ImmutableMap.of(FAS_PRODUCT_FAMILY, buildRightsholder()));
         expect(prmRollUpService.getRollUps(rightsholdersIds)).andReturn(result).once();
         replay(prmRollUpService);
         assertEquals(result, prmIntegrationService.getRollUps(rightsholdersIds));
@@ -124,8 +127,8 @@ public class PrmIntegrationServiceTest {
         Whitebox.setInternalState(prmIntegrationService, "prmRollUpAsync", true);
         String rightsholderId = RupPersistUtils.generateUuid();
         Set<String> rightsholdersIds = Collections.singleton(rightsholderId);
-        HashBasedTable<String, String, Rightsholder> result = HashBasedTable.create(1, 1);
-        result.put(rightsholderId, FAS_PRODUCT_FAMILY, buildRightsholder());
+        Map<String, Map<String, Rightsholder>> result = new HashMap<>();
+        result.put(rightsholderId, ImmutableMap.of(FAS_PRODUCT_FAMILY, buildRightsholder()));
         expect(prmRollUpAsyncService.getRollUps(rightsholdersIds)).andReturn(result).once();
         replay(prmRollUpAsyncService);
         assertEquals(result, prmIntegrationService.getRollUps(rightsholdersIds));

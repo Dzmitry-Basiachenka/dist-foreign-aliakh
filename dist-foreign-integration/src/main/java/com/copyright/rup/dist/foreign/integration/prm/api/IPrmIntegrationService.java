@@ -2,11 +2,9 @@ package com.copyright.rup.dist.foreign.integration.prm.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 
-import com.google.common.collect.Table;
-
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -37,16 +35,16 @@ public interface IPrmIntegrationService {
     Rightsholder getRightsholder(Long accountNumber);
 
     /**
-     * Gets the table of roll ups for the rightsholders with specified ids.
-     * Returned table has the following structure:
-     * <br/>row key    - related rightsholder id (child organization)
-     * <br/>column key - product id (license product id)
-     * <br/>value key  - primary rightsholder (parent organization)
+     * Gets the map of roll ups for the rightsholders with specified ids.
+     * Returned map has the following structure:
+     * <br/>first key - related rightsholder id (child organization)
+     * <br/>second key - product id (license product id)
+     * <br/>value - primary rightsholder (parent organization)
      *
-     * @param rightsholdersIds collection of related rightsholders (child organizations) ids
+     * @param rightsholdersIds set of related rightsholders (child organizations) ids
      * @return roll ups for the rightsholders with specified ids
      */
-    Table<String, String, Rightsholder> getRollUps(Collection<String> rightsholdersIds);
+    Map<String, Map<String, Rightsholder>> getRollUps(Set<String> rightsholdersIds);
 
     /**
      * Checks whether {@link com.copyright.rup.dist.common.domain.Rightsholder rightsholder} is participating or not.

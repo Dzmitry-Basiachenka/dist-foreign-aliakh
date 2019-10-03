@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -68,7 +68,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     }
 
     @Override
-    public Table<String, String, Rightsholder> getRollUps(Collection<String> rightsholdersIds) {
+    public Map<String, Map<String, Rightsholder>> getRollUps(Set<String> rightsholdersIds) {
         return prmRollUpAsync
             ? prmRollUpAsyncService.getRollUps(rightsholdersIds)
             : prmRollUpService.getRollUps(rightsholdersIds);

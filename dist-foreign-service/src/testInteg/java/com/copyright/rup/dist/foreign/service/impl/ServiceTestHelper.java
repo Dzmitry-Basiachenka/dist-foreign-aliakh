@@ -160,13 +160,12 @@ public class ServiceTestHelper {
     }
 
     public void expectGetRollups(String fileName, List<String> rightsholdersIds) {
-        rightsholdersIds.forEach(rightsholdersId ->
-            (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollupv2?orgIds=" +
-                    rightsholdersId + "&relationshipCode=PARENT&prefCodes=payee"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                    MediaType.APPLICATION_JSON)));
+        (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
+            .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollupv2?orgIds=" +
+                String.join(",", rightsholdersIds) + "&relationshipCode=PARENT&prefCodes=payee"))
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+            .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
+                MediaType.APPLICATION_JSON));
     }
 
     public void expectCrmGetRightsDistribution(List<String> cccEventIds) {
