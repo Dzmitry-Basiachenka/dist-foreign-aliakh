@@ -54,6 +54,8 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
     private String expectedRmsResponse;
     private String expectedOracleResponse;
     private Long expectedOracleAccountNumber;
+    private Long expectedRroAccountNumber;
+    private String expectedPrmResponseForUpdateRro;
     private String expectedPrmResponse;
     private String expectedPreferencesResponse;
     private String expectedPreferencesRightsholderId;
@@ -101,6 +103,12 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    CreateNtsBatchIntegrationTestBuilder expectPrmCallForUpdateRro(Long accountNumber, String expectedResponse) {
+        this.expectedRroAccountNumber = accountNumber;
+        this.expectedPrmResponseForUpdateRro = expectedResponse;
+        return this;
+    }
+
     @Override
     public Runner build() {
         return new Runner();
@@ -131,6 +139,7 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
         public void run() {
             testHelper.createRestServer();
             testHelper.expectGetRmsRights(expectedRmsRequest, expectedRmsResponse);
+            testHelper.expectPrmCall(expectedPrmResponseForUpdateRro, expectedRroAccountNumber);
             if (Objects.nonNull(expectedPrmResponse)) {
                 testHelper.expectPrmCall(expectedPrmResponse, expectedPrmAccountNumber);
             }
@@ -163,6 +172,9 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(usageBatch.getGrossAmount(), insertedBatch.getGrossAmount());
             assertEquals(usageBatch.getPaymentDate(), insertedBatch.getPaymentDate());
             assertEquals(usageBatch.getRro().getAccountNumber(), insertedBatch.getRro().getAccountNumber());
+            if (Objects.nonNull(expectedPrmResponse)) {
+                assertEquals("American College of Physicians - Journals", insertedBatch.getRro().getName());
+            }
             usageBatch.setId(insertedBatch.getId());
         }
 
@@ -199,6 +211,7 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
             assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
                 actualUsage.getRightsholder().getAccountNumber());
+            assertEquals("American College of Physicians - Journals", actualUsage.getRightsholder().getName());
         }
 
         private void assertAudit() {

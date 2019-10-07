@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -131,6 +132,7 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
         usageBatchRepository.insert(usageBatch);
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(usageBatch.getRro().getAccountNumber()));
         return usageService.insertNtsUsages(usageBatch);
     }
 
