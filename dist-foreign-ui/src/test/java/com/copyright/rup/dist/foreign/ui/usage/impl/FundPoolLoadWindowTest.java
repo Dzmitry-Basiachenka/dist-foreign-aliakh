@@ -32,6 +32,7 @@ import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -111,7 +112,7 @@ public class FundPoolLoadWindowTest {
         assertEquals("Load Fund Pool", window.getCaption());
         assertEquals(440, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(330, window.getHeight(), 0);
+        assertEquals(360, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
         verify(usagesController);
@@ -216,6 +217,8 @@ public class FundPoolLoadWindowTest {
         assertEquals(new BigDecimal(AMOUNT), fundPool.getNonStmAmount());
         assertEquals(new BigDecimal(MIN_AMOUNT), fundPool.getStmMinimumAmount());
         assertEquals(new BigDecimal(MIN_AMOUNT), fundPool.getNonStmMinimumAmount());
+        assertEquals(new BigDecimal(MIN_AMOUNT), fundPool.getNonStmMinimumAmount());
+        assertTrue(fundPool.isExcludingStm());
         assertNotNull(usageBatch);
         verify(window, usagesController, Windows.class);
     }
@@ -256,6 +259,7 @@ public class FundPoolLoadWindowTest {
         setTextField(STM_MIN_FIELD, MIN_AMOUNT);
         setTextField(NON_STM_MIN_FIELD, MIN_AMOUNT);
         setTextField("marketValidationField", "2");
+        Whitebox.setInternalState(window, "excludeStmCheckBox", new CheckBox("Exclude STM RHs", true));
     }
 
     private void verifyAmountFieldValidation(String fieldName) {
@@ -271,14 +275,15 @@ public class FundPoolLoadWindowTest {
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(7, verticalLayout.getComponentCount());
+        assertEquals(8, verticalLayout.getComponentCount());
         verifyUsageBatchNameComponent(verticalLayout.getComponent(0));
         verifyRightsholdersComponents(verticalLayout.getComponent(1));
         verifyDateComponents(verticalLayout.getComponent(2));
         verifyMarketsWidget(verticalLayout.getComponent(3));
         verifyAmountsComponent(verticalLayout.getComponent(4));
         verifyMinAmountsComponent(verticalLayout.getComponent(5));
-        verifyButtonsLayout(verticalLayout.getComponent(6));
+        verifyExcludeStmCheckBox(verticalLayout.getComponent(6));
+        verifyButtonsLayout(verticalLayout.getComponent(7));
     }
 
     private void verifyUsageBatchNameComponent(Component component) {
@@ -420,6 +425,14 @@ public class FundPoolLoadWindowTest {
         assertEquals(100, amountField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, amountField.getWidthUnits());
         assertEquals(defaultValue, amountField.getValue());
+    }
+
+    private void verifyExcludeStmCheckBox(Component component) {
+        assertTrue(component instanceof CheckBox);
+        CheckBox checkBox = (CheckBox) component;
+        assertEquals("Exclude STM RHs", checkBox.getCaption());
+        assertEquals("exclude-stm-rhs-checkbox", checkBox.getStyleName());
+        assertFalse(checkBox.getValue());
     }
 
     private void verifyAmountValidationMessage(TextField field, String value, Binder binder, boolean isValid) {

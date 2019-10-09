@@ -19,6 +19,7 @@ import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -62,6 +63,7 @@ class FundPoolLoadWindow extends Window {
     private TextField fundPoolPeriodToField;
     private TextField fundPoolPeriodFromField;
     private TextField marketValidationField;
+    private CheckBox excludeStmCheckBox;
     private Rightsholder rro;
 
     /**
@@ -75,7 +77,7 @@ class FundPoolLoadWindow extends Window {
         setCaption(ForeignUi.getMessage("window.upload_fund_pool"));
         setResizable(false);
         setWidth(440, Unit.PIXELS);
-        setHeight(330, Unit.PIXELS);
+        setHeight(360, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "fund-pool-upload-window");
     }
 
@@ -125,6 +127,7 @@ class FundPoolLoadWindow extends Window {
         fundPool.setNonStmAmount(new BigDecimal(nonStmAmountField.getValue()));
         fundPool.setStmMinimumAmount(new BigDecimal(stmMinAmountField.getValue()));
         fundPool.setNonStmMinimumAmount(new BigDecimal(nonStmMinAmountField.getValue()));
+        fundPool.setExcludingStm(excludeStmCheckBox.getValue());
         usageBatch.setFundPool(fundPool);
         return usageBatch;
     }
@@ -133,7 +136,8 @@ class FundPoolLoadWindow extends Window {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initUsageBatchNameField(), initRightsholderLayout(), initDateLayout(),
-            initMarketFilterWidget(), initAmountsLayout(), initMinAmountsLayout(), buttonsLayout);
+            initMarketFilterWidget(), initAmountsLayout(), initMinAmountsLayout(), initExcludeStmCheckBox(),
+            buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -349,6 +353,13 @@ class FundPoolLoadWindow extends Window {
             }
         });
         return button;
+    }
+
+    private CheckBox initExcludeStmCheckBox() {
+        excludeStmCheckBox = new CheckBox();
+        excludeStmCheckBox.setCaption(ForeignUi.getMessage("label.exclude.stm"));
+        VaadinUtils.addComponentStyle(excludeStmCheckBox, "exclude-stm-rhs-checkbox");
+        return excludeStmCheckBox;
     }
 
     private SerializablePredicate<String> getNumericValidator() {
