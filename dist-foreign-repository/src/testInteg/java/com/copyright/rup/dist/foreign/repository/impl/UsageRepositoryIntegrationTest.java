@@ -633,6 +633,8 @@ public class UsageRepositoryIntegrationTest {
         BigDecimal netAmount = new BigDecimal("4686.764").setScale(10);
         usage.setNetAmount(netAmount);
         usage.setServiceFee(SERVICE_FEE);
+        usage.setRhParticipating(true);
+        usage.setPayeeParticipating(true);
         usageRepository.addToScenario(Collections.singletonList(usage));
         usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_3));
         assertEquals(1, CollectionUtils.size(usages));
@@ -640,6 +642,8 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(SERVICE_FEE, usage.getServiceFee());
         assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
         assertEquals(netAmount, usage.getNetAmount());
+        assertTrue(usage.isRhParticipating());
+        assertTrue(usage.isPayeeParticipating());
     }
 
     @Test
