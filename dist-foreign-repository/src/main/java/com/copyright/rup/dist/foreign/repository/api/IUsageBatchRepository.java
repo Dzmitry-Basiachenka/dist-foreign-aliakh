@@ -39,6 +39,14 @@ public interface IUsageBatchRepository {
     List<UsageBatch> findAll();
 
     /**
+     * Gets {@link UsageBatch} by its id.
+     *
+     * @param batchId id of the {@link UsageBatch}
+     * @return {@link UsageBatch} with the given id or {@code null} if none exists
+     */
+    UsageBatch findById(String batchId);
+
+    /**
      * Finds list of {@link UsageBatch}es by specified Product Family.
      *
      * @param productFamily Product Family

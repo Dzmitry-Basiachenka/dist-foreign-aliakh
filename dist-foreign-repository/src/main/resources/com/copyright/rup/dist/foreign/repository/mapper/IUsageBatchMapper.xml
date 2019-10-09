@@ -77,6 +77,14 @@
         order by ub.updated_datetime desc
     </select>
 
+    <select id="findById" resultMap="usageBatchResultMap" parameterType="string">
+        select
+            <include refid="usageBatchColumns"/>
+        from ${schema}.df_usage_batch ub
+        left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
+        where ub.df_usage_batch_uid = #{batchId}
+    </select>
+
     <select id="findByProductFamily" resultMap="usageBatchResultMap" parameterType="string">
         select
             <include refid="usageBatchColumns"/>

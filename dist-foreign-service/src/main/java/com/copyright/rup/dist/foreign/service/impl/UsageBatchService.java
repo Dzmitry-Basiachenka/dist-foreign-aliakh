@@ -93,6 +93,11 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
+    public UsageBatch getUsageBatchById(String batchId) {
+        return usageBatchRepository.findById(batchId);
+    }
+
+    @Override
     public List<UsageBatch> getUsageBatchesForPreServiceFeeFunds() {
         return usageBatchRepository.findUsageBatchesForPreServiceFeeFunds();
     }

@@ -8,5 +8,6 @@
   "markets": [
     "Edu",
     "Gov"
-  ]
+  ],
+  "excluding_stm": true
 }

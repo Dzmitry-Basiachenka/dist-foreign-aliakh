@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
@@ -38,6 +39,7 @@ public class FundPoolJsonMapperTest {
         assertEquals(new BigDecimal("300.3"), fundPool.getStmMinimumAmount());
         assertEquals(new BigDecimal("400.44"), fundPool.getNonStmMinimumAmount());
         assertEquals(ImmutableSet.of("Edu", "Gov"), fundPool.getMarkets());
+        assertTrue(fundPool.isExcludingStm());
     }
 
     @Test
@@ -50,6 +52,7 @@ public class FundPoolJsonMapperTest {
         fundPool.setStmMinimumAmount(new BigDecimal("300.3"));
         fundPool.setNonStmMinimumAmount(new BigDecimal("400.44"));
         fundPool.setMarkets(ImmutableSet.of("Edu", "Gov"));
+        fundPool.setExcludingStm(true);
         String actualJson = jsonMapper.serialize(fundPool);
         assertEquals(fundPool, jsonMapper.deserialize(actualJson));
     }

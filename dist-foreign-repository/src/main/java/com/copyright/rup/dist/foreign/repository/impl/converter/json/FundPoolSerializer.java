@@ -32,6 +32,7 @@ public class FundPoolSerializer extends StdSerializer<FundPool> {
         writePeriods(jg, fundPool);
         writeAmounts(jg, fundPool);
         writeMarkets(jg, fundPool);
+        jg.writeBooleanField("excluding_stm", fundPool.isExcludingStm());
         jg.writeEndObject();
     }
 

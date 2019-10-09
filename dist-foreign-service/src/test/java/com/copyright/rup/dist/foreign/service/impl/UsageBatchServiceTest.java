@@ -127,6 +127,14 @@ public class UsageBatchServiceTest {
     }
 
     @Test
+    public void testGetUsageBatchById() {
+        expect(usageBatchRepository.findById(BATCH_UID)).andReturn(new UsageBatch()).once();
+        replay(usageBatchRepository);
+        usageBatchService.getUsageBatchById(BATCH_UID);
+        verify(usageBatchRepository);
+    }
+
+    @Test
     public void testGetUsageBatchesForPreServiceFeeFunds() {
         expect(usageBatchRepository.findUsageBatchesForPreServiceFeeFunds()).andReturn(Collections.emptyList()).once();
         replay(usageBatchRepository);
