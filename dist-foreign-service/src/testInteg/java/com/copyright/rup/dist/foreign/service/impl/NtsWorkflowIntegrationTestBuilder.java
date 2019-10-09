@@ -78,6 +78,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private UsageBatch usageBatch;
     private List<PaidUsage> expectedUsages;
     private Scenario expectedScenario;
+    private Long expectedRroAccountNumber;
+    private String expectedPrmResponseForUpdateRro;
 
     NtsWorkflowIntegrationTestBuilder expectRollups(String rollupsJson, String rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
@@ -140,6 +142,12 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    NtsWorkflowIntegrationTestBuilder expectPrmCallForUpdateRro(Long accountNumber, String expectedResponse) {
+        this.expectedRroAccountNumber = accountNumber;
+        this.expectedPrmResponseForUpdateRro = expectedResponse;
+        return this;
+    }
+
     NtsWorkflowIntegrationTestBuilder expectScenario(Scenario scenario) {
         this.expectedScenario = scenario;
         return this;
@@ -178,6 +186,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         public void run() throws InterruptedException {
             testHelper.createRestServer();
             testHelper.expectGetRmsRights(expectedRmsRequest, expectedRmsResponse);
+            testHelper.expectPrmCall(expectedPrmResponseForUpdateRro, expectedRroAccountNumber);
             if (Objects.nonNull(expectedPrmResponse)) {
                 testHelper.expectPrmCall(expectedPrmResponse, expectedPrmAccountNumber);
             }
