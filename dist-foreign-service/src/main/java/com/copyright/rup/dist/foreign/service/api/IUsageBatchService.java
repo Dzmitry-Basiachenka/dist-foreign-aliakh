@@ -42,6 +42,14 @@ public interface IUsageBatchService {
     List<UsageBatch> getUsageBatches(String productFamily);
 
     /**
+     * Gets {@link UsageBatch} by its id.
+     *
+     * @param batchId {@link UsageBatch} id
+     * @return found {@link UsageBatch} or {@code null} - if none found
+     */
+    UsageBatch getUsageBatchById(String batchId);
+
+    /**
      * Finds list of {@link UsageBatch}es suitable for including in Pre-Service fee funds.
      *
      * @return list of found {@link UsageBatch}es

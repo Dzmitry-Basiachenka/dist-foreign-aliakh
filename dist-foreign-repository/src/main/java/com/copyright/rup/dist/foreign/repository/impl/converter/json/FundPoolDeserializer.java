@@ -42,6 +42,9 @@ public class FundPoolDeserializer extends StdDeserializer<FundPool> {
             if (JsonToken.START_ARRAY == currentToken) {
                 readMarkets(jp, fundPool);
             }
+            if (JsonToken.VALUE_TRUE == currentToken || JsonToken.VALUE_FALSE == currentToken) {
+                readExcludingStmFlag(jp, fundPool);
+            }
         }
         return fundPool;
     }
@@ -84,6 +87,12 @@ public class FundPoolDeserializer extends StdDeserializer<FundPool> {
                 Set<String> markets = fundPool.getMarkets();
                 markets.add(jp.getValueAsString());
             }
+        }
+    }
+
+    private void readExcludingStmFlag(JsonParser jp, FundPool fundPool) throws IOException {
+        if ("excluding_stm".equals(jp.getCurrentName())) {
+            fundPool.setExcludingStm(jp.getValueAsBoolean());
         }
     }
 }

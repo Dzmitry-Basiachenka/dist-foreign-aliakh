@@ -27,6 +27,7 @@ public class FundPool {
     private BigDecimal stmMinimumAmount;
     private BigDecimal nonStmMinimumAmount;
     private Set<String> markets = new HashSet<>();
+    private boolean excludingStm;
 
     public Integer getFundPoolPeriodFrom() {
         return fundPoolPeriodFrom;
@@ -84,6 +85,14 @@ public class FundPool {
         this.markets = markets;
     }
 
+    public boolean isExcludingStm() {
+        return excludingStm;
+    }
+
+    public void setExcludingStm(boolean excludingStm) {
+        this.excludingStm = excludingStm;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -101,6 +110,7 @@ public class FundPool {
             .append(stmMinimumAmount, that.stmMinimumAmount)
             .append(nonStmMinimumAmount, that.nonStmMinimumAmount)
             .append(markets, that.markets)
+            .append(excludingStm, that.excludingStm)
             .isEquals();
     }
 
@@ -114,6 +124,7 @@ public class FundPool {
             .append(stmMinimumAmount)
             .append(nonStmMinimumAmount)
             .append(markets)
+            .append(excludingStm)
             .toHashCode();
     }
 
@@ -127,6 +138,7 @@ public class FundPool {
             .append("stmMinimumAmount", stmMinimumAmount)
             .append("nonStmMinimumAmount", nonStmMinimumAmount)
             .append("markets", markets)
+            .append("excludingStm", excludingStm)
             .toString();
     }
 }

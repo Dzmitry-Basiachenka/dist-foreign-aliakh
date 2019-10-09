@@ -52,6 +52,11 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
+    public UsageBatch findById(String batchId) {
+        return selectOne("IUsageBatchMapper.findById", Objects.requireNonNull(batchId));
+    }
+
+    @Override
     public List<UsageBatch> findByProductFamily(String productFamily) {
         return selectList("IUsageBatchMapper.findByProductFamily", Objects.requireNonNull(productFamily));
     }

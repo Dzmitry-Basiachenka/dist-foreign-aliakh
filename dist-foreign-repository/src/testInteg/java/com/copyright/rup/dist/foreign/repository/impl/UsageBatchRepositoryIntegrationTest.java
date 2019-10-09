@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import com.google.common.collect.ImmutableSet;
-
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -57,6 +56,7 @@ public class UsageBatchRepositoryIntegrationTest {
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("23.53");
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 23);
     private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String NTS_BATCH_NAME = "NTS Batch without STM usages";
     private static final String NTS_USAGE_BATCH_ID_1 = "7c028d85-58c3-45f8-be2d-33c16b0905b0";
     private static final String NTS_USAGE_BATCH_ID_2 = "334959d7-ad39-4624-a8fa-38c3e82be6eb";
@@ -104,7 +104,7 @@ public class UsageBatchRepositoryIntegrationTest {
         usageBatchRepository.insert(buildUsageBatchWithFundPool());
         UsageBatch usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_2);
         assertNotNull(usageBatch);
-        assertEquals("NTS", usageBatch.getProductFamily());
+        assertEquals(NTS_PRODUCT_FAMILY, usageBatch.getProductFamily());
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
@@ -116,6 +116,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(new BigDecimal("300.3"), fundPool.getStmMinimumAmount());
         assertEquals(new BigDecimal("400.44"), fundPool.getNonStmMinimumAmount());
         assertEquals(ImmutableSet.of("Edu", "Gov"), fundPool.getMarkets());
+        assertTrue(fundPool.isExcludingStm());
     }
 
     @Test
@@ -142,6 +143,25 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals("66282dbc-2468-48d4-b926-93d3458a656b", usageBatches.get(8).getId());
         assertEquals("071ebf56-eb38-49fc-b26f-cc210a374d3a", usageBatches.get(9).getId());
         assertEquals("033cc3dd-b121-41d5-91e6-cf4ddf71c141", usageBatches.get(10).getId());
+    }
+
+    @Test
+    public void testFindById() {
+        UsageBatch usageBatch = usageBatchRepository.findById(NTS_USAGE_BATCH_ID_1);
+        assertNotNull(usageBatch);
+        assertEquals(NTS_PRODUCT_FAMILY, usageBatch.getProductFamily());
+        assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
+        assertEquals(LocalDate.of(2019, 1, 11), usageBatch.getPaymentDate());
+        assertEquals(2020, usageBatch.getFiscalYear().intValue());
+        FundPool fundPool = usageBatch.getFundPool();
+        assertEquals(2017, fundPool.getFundPoolPeriodFrom().intValue());
+        assertEquals(2018, fundPool.getFundPoolPeriodTo().intValue());
+        assertEquals(new BigDecimal("100"), fundPool.getStmAmount());
+        assertEquals(BigDecimal.ZERO, fundPool.getNonStmAmount());
+        assertEquals(new BigDecimal("50"), fundPool.getStmMinimumAmount());
+        assertEquals(new BigDecimal("7"), fundPool.getNonStmMinimumAmount());
+        assertEquals(Collections.singleton("Univ"), fundPool.getMarkets());
+        assertTrue(fundPool.isExcludingStm());
     }
 
     @Test
@@ -246,7 +266,7 @@ public class UsageBatchRepositoryIntegrationTest {
     private UsageBatch buildUsageBatchWithFundPool() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());
-        usageBatch.setProductFamily("NTS");
+        usageBatch.setProductFamily(NTS_PRODUCT_FAMILY);
         usageBatch.setName(USAGE_BATCH_NAME_2);
         usageBatch.setFiscalYear(FISCAL_YEAR_2017);
         Rightsholder rightsholder = new Rightsholder();
@@ -266,6 +286,7 @@ public class UsageBatchRepositoryIntegrationTest {
         fundPool.setStmMinimumAmount(new BigDecimal("300.3"));
         fundPool.setNonStmMinimumAmount(new BigDecimal("400.44"));
         fundPool.setMarkets(ImmutableSet.of("Edu", "Gov"));
+        fundPool.setExcludingStm(true);
         return fundPool;
     }
 }
