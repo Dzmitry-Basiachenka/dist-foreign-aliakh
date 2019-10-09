@@ -154,8 +154,8 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(LocalDate.of(2019, 1, 11), usageBatch.getPaymentDate());
         assertEquals(2020, usageBatch.getFiscalYear().intValue());
         FundPool fundPool = usageBatch.getFundPool();
-        assertEquals(2017, fundPool.getFundPoolPeriodFrom().intValue());
-        assertEquals(2018, fundPool.getFundPoolPeriodTo().intValue());
+        assertEquals(2013, fundPool.getFundPoolPeriodFrom().intValue());
+        assertEquals(2017, fundPool.getFundPoolPeriodTo().intValue());
         assertEquals(new BigDecimal("100"), fundPool.getStmAmount());
         assertEquals(BigDecimal.ZERO, fundPool.getNonStmAmount());
         assertEquals(new BigDecimal("50"), fundPool.getStmMinimumAmount());
