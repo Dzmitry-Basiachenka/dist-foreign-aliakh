@@ -154,6 +154,8 @@ public class WorkClassificationRepositoryIntegrationTest {
         assertEquals(expectedClassification.getRhName(), actualClassification.getRhName());
         assertEquals(expectedClassification.getStandardNumber(), actualClassification.getStandardNumber());
         assertEquals(expectedClassification.getStandardNumberType(), actualClassification.getStandardNumberType());
+        assertEquals(expectedClassification.getUpdateDate(), actualClassification.getUpdateDate());
+        assertEquals(expectedClassification.getUpdateUser(), actualClassification.getUpdateUser());
     }
 
     private WorkClassification buildClassification(String classification, Long wrWkrInst) {

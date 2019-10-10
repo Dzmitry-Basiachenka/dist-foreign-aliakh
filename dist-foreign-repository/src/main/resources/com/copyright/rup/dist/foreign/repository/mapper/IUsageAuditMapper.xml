@@ -183,7 +183,7 @@
                         0 total_amount2,
                         <include refid="batchStatisticColumns"/>
                     from ${schema}.df_usage_audit audit
-                    left join ${schema}.df_usage u on audit.df_usage_uid = u.df_usage_uid
+                    join ${schema}.df_usage u on audit.df_usage_uid = u.df_usage_uid
                     left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
                     <include refid="batchStatisticWhereAndGroupClause"/>
                     union all
@@ -194,7 +194,7 @@
                         (select sum(u.gross_amount) from ${schema}.df_usage_archive u where u.df_usage_batch_uid = min(ub.df_usage_batch_uid)) total_amount2,
                         <include refid="batchStatisticColumns"/>
                     from ${schema}.df_usage_audit audit
-                    left join ${schema}.df_usage_archive u on audit.df_usage_uid = u.df_usage_archive_uid
+                    join ${schema}.df_usage_archive u on audit.df_usage_uid = u.df_usage_archive_uid
                     left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
                     <include refid="batchStatisticWhereAndGroupClause"/>
                 ) nested

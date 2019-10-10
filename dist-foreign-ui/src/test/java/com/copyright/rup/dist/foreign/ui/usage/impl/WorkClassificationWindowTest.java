@@ -184,7 +184,7 @@ public class WorkClassificationWindowTest {
         verifySize(grid, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Wr Wrk Inst", "System Title", "Classification", "Standard Number",
-            "Standard Number Type", "RH Account #", "RH Name"),
+            "Standard Number Type", "RH Account #", "RH Name", "Classification Date", "Classified By"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertEquals(100, columns.get(0).getWidth(), 0);
         assertEquals(285, columns.get(1).getWidth(), 0);
@@ -193,6 +193,8 @@ public class WorkClassificationWindowTest {
         assertEquals(155, columns.get(4).getWidth(), 0);
         assertEquals(100, columns.get(5).getWidth(), 0);
         assertEquals(-1.0, columns.get(6).getWidth(), 0);
+        assertEquals(200, columns.get(7).getWidth(), 0);
+        assertEquals(245, columns.get(8).getWidth(), 0);
     }
 
     private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {

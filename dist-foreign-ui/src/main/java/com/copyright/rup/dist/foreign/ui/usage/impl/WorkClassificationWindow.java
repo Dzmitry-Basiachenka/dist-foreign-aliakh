@@ -166,6 +166,8 @@ public class WorkClassificationWindow extends Window {
         grid.addColumn(WorkClassification::getRhName)
             .setCaption(ForeignUi.getMessage("table.column.rh_account_name"))
             .setSortProperty("rhName");
+        addColumn(WorkClassification::getUpdateDate, "table.column.classification_date", "updateDate", 200);
+        addColumn(WorkClassification::getUpdateUser, "table.column.classified_by", "updateUser", 245);
     }
 
     private void addColumn(ValueProvider<WorkClassification, ?> provider, String captionProperty, String sort,

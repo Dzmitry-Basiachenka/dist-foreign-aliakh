@@ -7,7 +7,9 @@
     "standardNumber": "1008902112377654XX",
     "standardNumberType": "VALISBN13",
     "rhAccountNumber": "1000009997",
-    "rhName": "IEEE - Inst of Electrical and Electronics Engrs"
+    "rhName": "IEEE - Inst of Electrical and Electronics Engrs",
+    "updateUser": "user@copyright.com",
+    "updateDate": "2019-02-01"
   },
   {
     "id": "84ba864e-716a-4103-bcd7-180563695f50",
@@ -17,7 +19,9 @@
     "standardNumber": "1008902112377654XX",
     "standardNumberType": null,
     "rhAccountNumber": "1000002859",
-    "rhName": "John Wiley & Sons - Books"
+    "rhName": "John Wiley & Sons - Books",
+    "updateUser": "user@copyright.com",
+    "updateDate": "2019-02-01"
   },
   {
     "id": null,
@@ -27,6 +31,8 @@
     "standardNumber": "1008902112377654XX",
     "standardNumberType": null,
     "rhAccountNumber": "1000002859",
-    "rhName": "John Wiley & Sons - Books"
+    "rhName": "John Wiley & Sons - Books",
+    "updateUser": null,
+    "updateDate": null
   }
 ]

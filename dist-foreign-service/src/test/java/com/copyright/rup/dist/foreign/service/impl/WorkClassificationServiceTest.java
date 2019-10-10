@@ -30,10 +30,13 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -83,7 +86,7 @@ public class WorkClassificationServiceTest {
     }
 
     @Test
-    public void testInsertOrUpdateClassifications() {
+    public void testInsertOrUpdateClassifications() throws ParseException {
         Capture<WorkClassification> classificationCapture1 = new Capture<>();
         Capture<WorkClassification> classificationCapture2 = new Capture<>();
         workClassificationRepository.insertOrUpdate(capture(classificationCapture1));
@@ -110,6 +113,8 @@ public class WorkClassificationServiceTest {
             Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), STM);
         WorkClassification classification1 = classificationCapture1.getValue();
         assertNotNull(classification1.getWrWrkInst());
+        assertNotNull(classification1.getUpdateUser());
+        assertNotNull(classification1.getUpdateDate());
         assertEquals(STM, classification1.getClassification());
         WorkClassification classification2 = classificationCapture2.getValue();
         assertNotNull(classification2.getWrWrkInst());
@@ -118,7 +123,7 @@ public class WorkClassificationServiceTest {
     }
 
     @Test
-    public void testDeleteClassifications() {
+    public void testDeleteClassifications() throws ParseException {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         workClassificationRepository.deleteByWrWrkInst(WR_WRK_INST_1);
@@ -177,10 +182,12 @@ public class WorkClassificationServiceTest {
         verify(workClassificationRepository);
     }
 
-    private WorkClassification buildClassification(Long wrWrkInst) {
+    private WorkClassification buildClassification(Long wrWrkInst) throws ParseException {
         WorkClassification classification = new WorkClassification();
         classification.setWrWrkInst(wrWrkInst);
         classification.setClassification(NON_STM);
+        classification.setUpdateDate(new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse("2019-02-01"));
+        classification.setUpdateUser("user@copyright.com");
         return classification;
     }
 }

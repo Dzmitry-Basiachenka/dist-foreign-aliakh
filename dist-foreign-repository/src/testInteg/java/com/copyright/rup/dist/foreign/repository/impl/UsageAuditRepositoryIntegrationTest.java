@@ -148,7 +148,7 @@ public class UsageAuditRepositoryIntegrationTest {
         List<BatchStatistic> actualStatistics = usageAuditRepository.findBatchesStatisticByDateFromAndDateTo(
             LocalDate.of(2013, 1, 1), LocalDate.of(2050, 1, 1));
         assertNotNull(actualStatistics);
-        assertEquals(4, actualStatistics.size());
+        assertEquals(3, actualStatistics.size());
         assertEquals(loadExpectedBatchStatisticsList(),
             actualStatistics);
     }
