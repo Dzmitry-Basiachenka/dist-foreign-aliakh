@@ -1,3 +1,16 @@
+7.1.2
+-
+* B-46037 FDA: Exclude STM RHs from the NTS batch: add Exclude STM RHs checkbox to Load Fund Pool Window
+* B-46037 FDA: Exclude STM RHs from the NTS batch: add excludingStm flag to FundPool, add repository and service methods to get batch by id
+* B-46037 FDA: Exclude STM RHs from the NTS batch: implement service logic for getting IS-RH-STM-IPRO preference
+* B-46037 FDA: Exclude STM RHs from the NTS batch: use correct values in UsageBatchRepositoryIntegrationTest.testFindById
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: add is_payee_participating column to df_usage table and adjust repository logic to store payee participating flag
+* B-51245 FDA: Update Classification View to include 2 new columns: add updated date and updated by user columns to Works Classification view
+* B-51245 FDA: Update Classification View to include 2 new columns: replace properties in config file
+* B-54040 Tech Debt: FDA: Update dist-common version to 45.1.+
+* B-54040 Tech Debt: FDA: get and store RRO information into RHs table while loading NTS Fund Pool
+* Revert "B-54040 Tech Debt: FDA: get and store RRO information into RHs table while loading NTS Fund Pool"
+
 7.1.1
 -
 * B-54040 Tech Debt: FDA: Increase consumer latch awaiting timeout in integration tests
