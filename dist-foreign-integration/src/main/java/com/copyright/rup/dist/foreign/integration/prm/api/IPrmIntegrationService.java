@@ -57,7 +57,7 @@ public interface IPrmIntegrationService {
      * id and <b>{@code '*'}</b> ('*' is passed as a product family).
      *
      * @param rightsholderId rightsholder id
-     * @param productFamily product family
+     * @param productFamily  product family
      * @return the found rightsholder participating flag or
      * {@code false} if there is neither no preferences for rightsholder
      */
@@ -83,4 +83,18 @@ public interface IPrmIntegrationService {
      * @return RH participating service fee
      */
     BigDecimal getRhParticipatingServiceFee(boolean rhParticipatingFlag);
+
+    /**
+     * Checks whether {@link com.copyright.rup.dist.common.domain.Rightsholder} is STM rightsholder.
+     * Gets STM flag {@link com.copyright.rup.dist.foreign.domain.FdaConstants#IS_RH_STM_IPRO_CODE} by specified
+     * rightsholder id and product family.
+     * </br>
+     * If preferences for NTS product family were not found System finds preferences for the same rightsholder id
+     * and <b>{@code '*'}</b> ('*' is passed as a product family).
+     *
+     * @param rightsholderId rightsholder id
+     * @param productFamily  product family
+     * @return {@code true} if RH is STM RH, otherwise {@code false}
+     */
+    boolean isStmRightsholder(String rightsholderId, String productFamily);
 }

@@ -101,6 +101,11 @@
                 <util:constant static-field="com.copyright.rup.dist.foreign.domain.FdaConstants.IS_RH_DIST_INELIGIBLE_CODE"/>
             </constructor-arg>
         </bean>
+        <bean class="com.copyright.rup.dist.common.integration.rest.prm.PrmPreferenceProcessorBoolean">
+            <constructor-arg name="preferenceCode">
+                <util:constant static-field="com.copyright.rup.dist.foreign.domain.FdaConstants.IS_RH_STM_IPRO_CODE"/>
+            </constructor-arg>
+        </bean>
     </util:list>
 
     <bean id="df.integration.oracleRhTaxCacheService" class="com.copyright.rup.dist.foreign.integration.oracle.impl.OracleRhTaxCacheService">

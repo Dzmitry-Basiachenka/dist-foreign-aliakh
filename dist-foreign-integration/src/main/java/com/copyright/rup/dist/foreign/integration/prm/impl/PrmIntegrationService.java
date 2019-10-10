@@ -93,6 +93,12 @@ public class PrmIntegrationService implements IPrmIntegrationService {
         return rhParticipatingFlag ? rhParticipatingServiceFee : rhNonParticipatingServiceFee;
     }
 
+    @Override
+    public boolean isStmRightsholder(String rightsholderId, String productFamily) {
+        return getBooleanPreference(prmPreferenceService.getPreferencesTable(rightsholderId), productFamily,
+            FdaConstants.IS_RH_STM_IPRO_CODE);
+    }
+
     private boolean getBooleanPreference(Table<String, String, Object> preferencesTable,
                                          String productFamily, String preferenceCode) {
         Boolean preferenceValue = (Boolean) ObjectUtils.defaultIfNull(

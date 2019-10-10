@@ -44,6 +44,8 @@ public class PrmIntegrationServiceTest {
     private static final String RIGHTSHOLDER_ID = "66a7c2c0-3b09-48ad-9aa5-a6d0822226c7";
     private static final String RIGHTSHOLDER_NAME = "CANADIAN CERAMIC SOCIETY";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
+    private static final String ALL_PRODUCTS = "*";
     private IPrmRightsholderService prmRightsholderService;
     private PrmIntegrationService prmIntegrationService;
     private IPrmRollUpService prmRollUpService;
@@ -133,7 +135,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderEligibleForNtsDistributionTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put("NTS", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, true);
+        preferencesTable.put(NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, true);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable)
             .once();
@@ -145,7 +147,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderEligibleForNtsDistributionFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put("NTS", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, false);
+        preferencesTable.put(NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, false);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable)
             .once();
@@ -157,7 +159,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderEligibleForNtsDistributionAllProductsTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put("*", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, true);
+        preferencesTable.put(ALL_PRODUCTS, FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, true);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable)
             .once();
@@ -169,7 +171,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderEligibleForNtsDistributionAllProductsFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put("*", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, false);
+        preferencesTable.put(ALL_PRODUCTS, FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, false);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable)
             .once();
@@ -203,7 +205,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderParticipatingByAllProductsTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put("*", FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE, true);
+        preferencesTable.put(ALL_PRODUCTS, FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE, true);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable).once();
         replay(prmPreferenceService);
@@ -214,7 +216,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderParticipatingByAllProductsFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put("*", FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE, false);
+        preferencesTable.put(ALL_PRODUCTS, FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE, false);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable).once();
         replay(prmPreferenceService);
@@ -225,11 +227,66 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderParticipatingDefaultFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put(FAS_PRODUCT_FAMILY, FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE, false);
+        preferencesTable.put(NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE, true);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isRightsholderParticipating(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
+        verify(prmPreferenceService);
+    }
+
+    @Test
+    public void testIsStmRightsholderTrue() {
+        Table<String, String, Object> preferencesTable = HashBasedTable.create();
+        preferencesTable.put(NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_STM_IPRO_CODE, true);
+        expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
+            .andReturn(preferencesTable).once();
+        replay(prmPreferenceService);
+        assertTrue(prmIntegrationService.isStmRightsholder(RIGHTSHOLDER_ID, NTS_PRODUCT_FAMILY));
+        verify(prmPreferenceService);
+    }
+
+    @Test
+    public void testIsStmRightsholderFalse() {
+        Table<String, String, Object> preferencesTable = HashBasedTable.create();
+        preferencesTable.put(NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_STM_IPRO_CODE, false);
+        expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
+            .andReturn(preferencesTable).once();
+        replay(prmPreferenceService);
+        assertFalse(prmIntegrationService.isStmRightsholder(RIGHTSHOLDER_ID, NTS_PRODUCT_FAMILY));
+        verify(prmPreferenceService);
+    }
+
+    @Test
+    public void testIsStmRightsholderAllProductsTrue() {
+        Table<String, String, Object> preferencesTable = HashBasedTable.create();
+        preferencesTable.put(ALL_PRODUCTS, FdaConstants.IS_RH_STM_IPRO_CODE, true);
+        expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
+            .andReturn(preferencesTable).once();
+        replay(prmPreferenceService);
+        assertTrue(prmIntegrationService.isStmRightsholder(RIGHTSHOLDER_ID, NTS_PRODUCT_FAMILY));
+        verify(prmPreferenceService);
+    }
+
+    @Test
+    public void testIsStmRightsholderAllProductsFalse() {
+        Table<String, String, Object> preferencesTable = HashBasedTable.create();
+        preferencesTable.put(ALL_PRODUCTS, FdaConstants.IS_RH_STM_IPRO_CODE, false);
+        expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
+            .andReturn(preferencesTable).once();
+        replay(prmPreferenceService);
+        assertFalse(prmIntegrationService.isStmRightsholder(RIGHTSHOLDER_ID, NTS_PRODUCT_FAMILY));
+        verify(prmPreferenceService);
+    }
+
+    @Test
+    public void testIsStmRightsholderDefaultFalse() {
+        Table<String, String, Object> preferencesTable = HashBasedTable.create();
+        preferencesTable.put(FAS_PRODUCT_FAMILY, FdaConstants.IS_RH_STM_IPRO_CODE, true);
+        expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
+            .andReturn(preferencesTable).once();
+        replay(prmPreferenceService);
+        assertFalse(prmIntegrationService.isStmRightsholder(RIGHTSHOLDER_ID, NTS_PRODUCT_FAMILY));
         verify(prmPreferenceService);
     }
 

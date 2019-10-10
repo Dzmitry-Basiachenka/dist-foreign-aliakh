@@ -129,7 +129,7 @@ public class ServiceTestHelper {
         mockServer.expect(MockRestRequestMatchers
             .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
                 + expectedPreferencesRightsholderId
-                + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
+                + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE,IS-RH-STM-IPRO"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                 expectedPreferencesResponse), MediaType.APPLICATION_JSON));
@@ -153,7 +153,7 @@ public class ServiceTestHelper {
             mockServer.expect(MockRestRequestMatchers
                 .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
                     + rightsholderId
-                    + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
+                    + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE,IS-RH-STM-IPRO"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                 .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
                     MediaType.APPLICATION_JSON)));
