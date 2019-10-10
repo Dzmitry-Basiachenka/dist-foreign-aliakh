@@ -4,7 +4,7 @@
 
 <mapper namespace="IWorkClassificationMapper">
 
-    <resultMap id="workClassificationResultMap" type="WorkClassification">
+    <resultMap id="workClassificationResultMap" type="WorkClassification" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_work_classification_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="systemTitle" column="system_title"/>
@@ -13,7 +13,6 @@
         <result property="standardNumberType" column="standard_number_type"/>
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
-        <result property="updateDate" column="updated_datetime"/>
     </resultMap>
 
     <insert id="insertOrUpdate" parameterType="WorkClassification">
@@ -82,6 +81,12 @@
                     <when test="sort.property == 'classification'">
                         classification <include refid="IUsageMapper.direction"/>
                     </when>
+                    <when test="sort.property == 'updateDate'">
+                        updated_datetime <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'updateUser'">
+                        updated_by_user <include refid="IUsageMapper.direction"/>
+                    </when>
                 </choose>
             </when>
             <otherwise>
@@ -95,9 +100,11 @@
             wc.df_work_classification_uid,
             wc.classification,
             internal.wr_wrk_inst wr_wrk_inst,
-            system_title,
-            standard_number,
-            standard_number_type,
+            internal.system_title,
+            internal.standard_number,
+            internal.standard_number_type,
+            wc.updated_by_user,
+            wc.updated_datetime,
             rh_account_number,
             rh_name
         from (
@@ -139,9 +146,11 @@
             wc.df_work_classification_uid,
             wc.classification,
             wc.wr_wrk_inst wr_wrk_inst,
-            system_title,
-            standard_number,
-            standard_number_type,
+            u.system_title,
+            u.standard_number,
+            u.standard_number_type,
+            wc.updated_by_user,
+            wc.updated_datetime,
             rh.rh_account_number,
             rh.name rh_name
         from ${schema}.df_work_classification wc

@@ -14,6 +14,7 @@
         <setting name="cacheEnabled" value="true"/>
         <setting name="localCacheScope" value="SESSION"/>
         <setting name="safeResultHandlerEnabled" value="false"/>
+        <setting name="callSettersOnNulls" value="true"/>
     </settings>
 
     <typeAliases>

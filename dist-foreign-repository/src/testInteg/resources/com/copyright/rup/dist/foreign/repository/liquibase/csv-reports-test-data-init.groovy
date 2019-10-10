@@ -110,6 +110,7 @@ databaseChangeLog {
             column(name: 'reported_value', value: '9900.00')
             column(name: 'gross_amount', value: '26776.51')
             column(name: 'standard_number_type', value: 'VALISSN')
+            column(name: 'service_fee', value: '0.0')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -134,6 +135,7 @@ databaseChangeLog {
             column(name: 'reported_value', value: '5000.00')
             column(name: 'gross_amount', value: '13523.49')
             column(name: 'standard_number_type', value: 'VALISSN')
+            column(name: 'service_fee', value: '0.0')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -4749,6 +4751,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '500')
+            column(name: 'service_fee', value: '0.0')
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter_to_usage_batches_ids_map") {
