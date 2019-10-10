@@ -42,6 +42,11 @@ public final class FdaConstants {
     public static final String IS_RH_DIST_INELIGIBLE_CODE = "ISRHDISTINELIGIBLE";
 
     /**
+     * Rightsholder preference code for STM flag in PRM.
+     */
+    public static final String IS_RH_STM_IPRO_CODE = "IS-RH-STM-IPRO";
+
+    /**
      * Key for all products for reading rightsholder preferences from PRM.
      */
     public static final String ALL_PRODUCTS_KEY = "*";
