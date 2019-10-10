@@ -48,6 +48,7 @@ public class Usage extends StoredEntity<String> {
     private UsageStatusEnum status;
     private String productFamily;
     private boolean rhParticipating;
+    private boolean payeeParticipating;
     private String comment;
 
     public String getBatchId() {
@@ -258,6 +259,14 @@ public class Usage extends StoredEntity<String> {
         this.rhParticipating = rhParticipating;
     }
 
+    public boolean isPayeeParticipating() {
+        return payeeParticipating;
+    }
+
+    public void setPayeeParticipating(boolean payeeParticipating) {
+        this.payeeParticipating = payeeParticipating;
+    }
+
     public String getComment() {
         return comment;
     }
@@ -303,6 +312,7 @@ public class Usage extends StoredEntity<String> {
             .append(this.productFamily, that.productFamily)
             .append(this.payee, that.payee)
             .append(this.rhParticipating, that.rhParticipating)
+            .append(this.payeeParticipating, that.payeeParticipating)
             .append(this.comment, that.comment)
             .isEquals();
     }
@@ -337,6 +347,7 @@ public class Usage extends StoredEntity<String> {
             .append(productFamily)
             .append(payee)
             .append(rhParticipating)
+            .append(payeeParticipating)
             .append(comment)
             .toHashCode();
     }
@@ -371,6 +382,7 @@ public class Usage extends StoredEntity<String> {
             .append("productFamily", productFamily)
             .append("payee", payee)
             .append("rhParticipating", rhParticipating)
+            .append("payeeParticipating", payeeParticipating)
             .append("comment", comment)
             .toString();
     }

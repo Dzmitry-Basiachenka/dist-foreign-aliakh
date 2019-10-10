@@ -743,6 +743,7 @@
             service_fee_amount = #{serviceFeeAmount},
             service_fee = #{serviceFee},
             is_rh_participating_flag = #{rhParticipating},
+            is_payee_participating_flag = #{payeeParticipating},
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid = #{id}
     </update>
