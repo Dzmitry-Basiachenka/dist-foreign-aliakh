@@ -23,7 +23,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 class ScenarioMediator implements IMediator {
 
-    private Button excludeButton;
+    private Button excludeByRroButton;
+    private Button excludeByPayeeButton;
     private Button exportDetailsButton;
     private Button exportButton;
     private Grid<RightsholderTotalsHolder> rightsholderGrid;
@@ -32,15 +33,21 @@ class ScenarioMediator implements IMediator {
 
     @Override
     public void applyPermissions() {
-        excludeButton.setVisible(ForeignSecurityUtils.hasExcludeFromScenarioPermission());
+        boolean excludePermission = ForeignSecurityUtils.hasExcludeFromScenarioPermission();
+        excludeByRroButton.setVisible(excludePermission);
+        excludeByPayeeButton.setVisible(excludePermission);
     }
 
     public void setRightsholderGrid(Grid<RightsholderTotalsHolder> rightsholderGrid) {
         this.rightsholderGrid = rightsholderGrid;
     }
 
-    void setExcludeButton(Button excludeButton) {
-        this.excludeButton = excludeButton;
+    void setExcludeByRroButton(Button excludeByRroButton) {
+        this.excludeByRroButton = excludeByRroButton;
+    }
+
+    void setExcludeByPayeeButton(Button excludeByPayeeButton) {
+        this.excludeByPayeeButton = excludeByPayeeButton;
     }
 
     void setExportDetailsButton(Button exportDetailsButton) {
@@ -66,9 +73,11 @@ class ScenarioMediator implements IMediator {
      * @param scenario      selected {@link Scenario}
      */
     void onScenarioUpdated(boolean scenarioEmpty, Scenario scenario) {
-        excludeButton.setEnabled(!scenarioEmpty
+        boolean excludeEnabled = !scenarioEmpty
             && ScenarioStatusEnum.IN_PROGRESS == scenario.getStatus()
-            && FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(scenario.getProductFamily()));
+            && FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(scenario.getProductFamily());
+        excludeByRroButton.setEnabled(excludeEnabled);
+        excludeByPayeeButton.setEnabled(excludeEnabled);
         exportDetailsButton.setEnabled(!scenarioEmpty);
         exportButton.setEnabled(!scenarioEmpty);
         rightsholderGrid.setVisible(!scenarioEmpty);

@@ -24,7 +24,6 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -105,13 +104,20 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     }
 
     @Override
-    public void onExcludeDetailsClicked() {
-        if (0 < rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
-            RightsholderDiscrepancyStatusEnum.APPROVED)) {
+    public void onExcludeByRroClicked() {
+        if (hasApprovedDiscrepancies()) {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.info.exclude_details.reconciled_scenario"));
         } else {
             Windows.showModalWindow(new ExcludeSourceRroWindow(this));
         }
+    }
+
+    @Override
+    public void onExcludeByPayeeClicked() {
+        if (hasApprovedDiscrepancies()) {
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.info.exclude_details.reconciled_scenario"));
+        }
+        //TODO show Exclude Details By Payee window
     }
 
     @Override
@@ -151,5 +157,10 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     @Override
     public void fireWidgetEvent(ExcludeUsagesEvent event) {
         getWidget().fireWidgetEvent(event);
+    }
+
+    private boolean hasApprovedDiscrepancies() {
+        return 0 < rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
+            RightsholderDiscrepancyStatusEnum.APPROVED);
     }
 }

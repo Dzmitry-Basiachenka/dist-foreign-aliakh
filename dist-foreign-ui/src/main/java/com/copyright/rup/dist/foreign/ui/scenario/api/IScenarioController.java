@@ -42,9 +42,14 @@ public interface IScenarioController extends IController<IScenarioWidget>, ISear
     void onRightsholderAccountNumberClicked(Long accountNumber, String rightsholderName);
 
     /**
-     * Handles click on "Exclude Details" button.
+     * Handles click on "Exclude By RRO" button.
      */
-    void onExcludeDetailsClicked();
+    void onExcludeByRroClicked();
+
+    /**
+     * Handles click on "Exclude By Payee" button.
+     */
+    void onExcludeByPayeeClicked();
 
     /**
      * @return boolean result that shows whether scenario is empty or not.
