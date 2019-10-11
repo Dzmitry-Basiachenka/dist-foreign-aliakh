@@ -66,6 +66,7 @@ public class WorkClassificationService implements IWorkClassificationService {
                 workClassification.setId(RupPersistUtils.generateUuid());
             }
             workClassification.setClassification(newClassification);
+            workClassification.setUpdateUser(RupContextUtils.getUserName());
             workClassificationRepository.insertOrUpdate(workClassification);
         });
         updateClassifiedUsages();

@@ -59,8 +59,10 @@ public class WorkClassificationIntegrationTest {
         workClassificationService.insertOrUpdateClassifications(
             Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), STM);
         assertAndGetUsages(2, UsageStatusEnum.ELIGIBLE);
-        assertEquals(STM, workClassificationService.getClassification(WR_WRK_INST_1));
-        assertEquals(STM, workClassificationService.getClassification(WR_WRK_INST_2));
+        List<WorkClassification> workClassifications =
+            workClassificationService.getClassifications(Sets.newHashSet(BATCHES_IDS), null, null, null);
+        assertEquals("SYSTEM", workClassifications.get(0).getUpdateUser());
+        workClassifications.forEach(workClassification -> assertEquals(STM, workClassification.getClassification()));
     }
 
     @Test
@@ -69,9 +71,15 @@ public class WorkClassificationIntegrationTest {
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
         workClassificationService.insertOrUpdateClassifications(
             Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), NON_STM);
+        List<WorkClassification> workClassifications =
+            workClassificationService.getClassifications(Sets.newHashSet(BATCHES_IDS), null, null, null);
+        assertEquals("SYSTEM",
+            workClassificationService.getClassifications(Sets.newHashSet(BATCHES_IDS), null, null, null)
+                .get(0).getUpdateUser());
         assertAndGetUsages(2, UsageStatusEnum.ELIGIBLE);
-        assertEquals(NON_STM, workClassificationService.getClassification(WR_WRK_INST_1));
-        assertEquals(NON_STM, workClassificationService.getClassification(WR_WRK_INST_2));
+        assertEquals("SYSTEM", workClassifications.get(0).getUpdateUser());
+        workClassifications.forEach(
+            workClassification -> assertEquals(NON_STM, workClassification.getClassification()));
     }
 
     @Test
