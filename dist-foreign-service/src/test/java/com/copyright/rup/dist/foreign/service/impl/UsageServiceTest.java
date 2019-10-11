@@ -333,16 +333,18 @@ public class UsageServiceTest {
         Usage usage2 = buildUsage(USAGE_ID_2);
         Capture<List<String>> rightsholdersIdsCapture = new Capture<>();
         List<Usage> usages = Lists.newArrayList(usage1, usage2);
-        Table<String, String, Long> rollUps = HashBasedTable.create();
-        rollUps.put(RH_ID, FAS_PRODUCT_FAMILY, PAYEE_ACCOUNT_NUMBER);
+        Table<String, String, Rightsholder> rollUps = HashBasedTable.create();
+        Rightsholder payee = buildRightsholder(PAYEE_ACCOUNT_NUMBER);
+        rollUps.put(RH_ID, FAS_PRODUCT_FAMILY, payee);
         usageRepository.addToScenario(usages);
         expectLastCall().once();
-        expect(prmIntegrationService.getRollUps(capture(rightsholdersIdsCapture)))
-            .andReturn(rollUps).once();
+        expect(prmIntegrationService.getRollUps(capture(rightsholdersIdsCapture))).andReturn(rollUps).once();
         expect(prmIntegrationService.isRightsholderParticipating(usage1.getRightsholder().getId(),
             usage1.getProductFamily())).andReturn(true).once();
         expect(prmIntegrationService.isRightsholderParticipating(usage2.getRightsholder().getId(),
             usage2.getProductFamily())).andReturn(true).once();
+        expect(prmIntegrationService.isRightsholderParticipating(payee.getId(), FAS_PRODUCT_FAMILY)).andReturn(true)
+            .times(2);
         expect(prmIntegrationService.getRhParticipatingServiceFee(true))
             .andReturn(new BigDecimal("0.16000")).times(2);
         rightsholderService.updateUsagesPayeesAsync(Lists.newArrayList(usage1, usage2));
@@ -483,7 +485,7 @@ public class UsageServiceTest {
     @Test
     public void testMoveToArchivedFas() {
         mockStatic(RupContextUtils.class);
-        scenario.setProductFamily("FAS");
+        scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(usageArchiveRepository.copyToArchiveByScenarioId(scenario.getId(), USER_NAME))
@@ -519,14 +521,17 @@ public class UsageServiceTest {
         UsageFilter filter = new UsageFilter();
         Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
         Usage usage2 = buildUsageWithPayee(RupPersistUtils.generateUuid());
-        Table<String, String, Long> rollUps = HashBasedTable.create();
-        rollUps.put(RH_ID, FAS_PRODUCT_FAMILY, PAYEE_ACCOUNT_NUMBER);
+        Rightsholder payee = usage2.getPayee();
+        Table<String, String, Rightsholder> rollUps = HashBasedTable.create();
+        rollUps.put(RH_ID, FAS_PRODUCT_FAMILY, payee);
         expect(usageRepository.findRightsholdersInformation(SCENARIO_ID)).andReturn(
             ImmutableMap.of(usage2.getRightsholder().getAccountNumber(), usage2)).once();
         expect(usageRepository.findWithAmountsAndRightsholders(filter)).andReturn(Collections.singletonList(usage1))
             .once();
         expect(prmIntegrationService.getRollUps(Collections.EMPTY_SET)).andReturn(rollUps).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.32")).once();
+        expect(prmIntegrationService.isRightsholderParticipating(payee.getId(), FAS_PRODUCT_FAMILY)).andReturn(true)
+            .once();
         usageRepository.addToScenario(Collections.singletonList(usage1));
         expectLastCall().once();
         rightsholderService.updateUsagesPayeesAsync(Collections.singletonList(usage1));
@@ -997,9 +1002,9 @@ public class UsageServiceTest {
         scenario.setNtsFields(ntsFields);
         Rightsholder rightsholder1 = buildRightsholder(1000009522L);
         Rightsholder rightsholder2 = buildRightsholder(2000009522L);
-        Table<String, String, Long> rollUps = HashBasedTable.create();
-        rollUps.put(rightsholder1.getId(), NTS_PRODUCT_FAMILY, 1000004422L);
-        rollUps.put(rightsholder2.getId(), NTS_PRODUCT_FAMILY, 2000004422L);
+        Table<String, String, Rightsholder> rollUps = HashBasedTable.create();
+        rollUps.put(rightsholder1.getId(), NTS_PRODUCT_FAMILY, buildRightsholder(1000004422L));
+        rollUps.put(rightsholder2.getId(), NTS_PRODUCT_FAMILY, buildRightsholder(2000004422L));
         expect(prmIntegrationService.getRollUps(Sets.newHashSet(rightsholder2.getId(), rightsholder1.getId())))
             .andReturn(rollUps).once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();

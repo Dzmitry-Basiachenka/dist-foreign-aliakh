@@ -111,8 +111,8 @@ public class PrmIntegrationServiceTest {
     public void testGetRollUps() {
         String rightsholderId = RupPersistUtils.generateUuid();
         Set<String> rightsholdersIds = Collections.singleton(rightsholderId);
-        HashBasedTable<String, String, Long> result = HashBasedTable.create(1, 1);
-        result.put(rightsholderId, FAS_PRODUCT_FAMILY, ACCOUNT_NUMBER);
+        HashBasedTable<String, String, Rightsholder> result = HashBasedTable.create(1, 1);
+        result.put(rightsholderId, FAS_PRODUCT_FAMILY, buildRightsholder());
         expect(prmRollUpService.getRollUps(rightsholdersIds)).andReturn(result).once();
         replay(prmRollUpService);
         assertEquals(result, prmIntegrationService.getRollUps(rightsholdersIds));
@@ -124,8 +124,8 @@ public class PrmIntegrationServiceTest {
         Whitebox.setInternalState(prmIntegrationService, "prmRollUpAsync", true);
         String rightsholderId = RupPersistUtils.generateUuid();
         Set<String> rightsholdersIds = Collections.singleton(rightsholderId);
-        HashBasedTable<String, String, Long> result = HashBasedTable.create(1, 1);
-        result.put(rightsholderId, FAS_PRODUCT_FAMILY, ACCOUNT_NUMBER);
+        HashBasedTable<String, String, Rightsholder> result = HashBasedTable.create(1, 1);
+        result.put(rightsholderId, FAS_PRODUCT_FAMILY, buildRightsholder());
         expect(prmRollUpAsyncService.getRollUps(rightsholdersIds)).andReturn(result).once();
         replay(prmRollUpAsyncService);
         assertEquals(result, prmIntegrationService.getRollUps(rightsholdersIds));
