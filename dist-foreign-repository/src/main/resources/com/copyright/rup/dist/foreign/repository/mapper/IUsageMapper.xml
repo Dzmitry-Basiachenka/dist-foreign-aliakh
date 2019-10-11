@@ -93,6 +93,7 @@
         <result property="payee.accountNumber" column="payee_account_number"/>
         <result property="payee.name" column="payee_name"/>
         <result property="rhParticipating" column="is_rh_participating_flag"/>
+        <result property="payeeParticipating" column="is_payee_participating_flag"/>
         <result property="comment" column="comment"/>
     </resultMap>
 
@@ -556,6 +557,7 @@
         select distinct
             u.rh_account_number,
             rh.df_rightsholder_uid rh_id,
+            p.df_rightsholder_uid payee_id,
             u.payee_account_number,
             u.is_rh_participating_flag
         from ${schema}.df_usage u
@@ -623,6 +625,7 @@
             u.service_fee,
             u.net_amount,
             u.is_rh_participating_flag,
+            u.is_payee_participating_flag,
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,

@@ -291,16 +291,16 @@ public class ScenarioService implements IScenarioService {
         Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
             .stream()
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));
-        Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(discrepancies.stream()
+        Table<String, String, Rightsholder> rollUps = prmIntegrationService.getRollUps(discrepancies.stream()
             .map(discrepancy -> discrepancy.getNewRightsholder().getId())
             .collect(Collectors.toSet()));
         discrepancies.forEach(discrepancy -> {
                 Rightsholder newRightsholder = discrepancy.getNewRightsholder();
-                Long payeeAccountNumber = PrmRollUpService.getPayeeAccountNumber(rollUps, newRightsholder,
-                    discrepancy.getProductFamily());
+                Rightsholder payee =
+                    PrmRollUpService.getPayee(rollUps, newRightsholder, discrepancy.getProductFamily());
                 groupedByWrWrkInstUsages.get(discrepancy.getWrWrkInst()).forEach(usage -> {
                     usage.setRightsholder(newRightsholder);
-                    usage.getPayee().setAccountNumber(payeeAccountNumber);
+                    usage.setPayee(payee);
                     usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.RH_UPDATED, String.format(
                         "Rightsholder account %s found during reconciliation", newRightsholder.getAccountNumber()));
                 });

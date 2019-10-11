@@ -41,12 +41,12 @@ public interface IPrmIntegrationService {
      * Returned table has the following structure:
      * <br/>row key    - related rightsholder id (child organization)
      * <br/>column key - product id (license product id)
-     * <br/>value key  - primary rightsholder account number (parent organization)
+     * <br/>value key  - primary rightsholder (parent organization)
      *
      * @param rightsholdersIds collection of related rightsholders (child organizations) ids
      * @return roll ups for the rightsholders with specified ids
      */
-    Table<String, String, Long> getRollUps(Collection<String> rightsholdersIds);
+    Table<String, String, Rightsholder> getRollUps(Collection<String> rightsholdersIds);
 
     /**
      * Checks whether {@link com.copyright.rup.dist.common.domain.Rightsholder rightsholder} is participating or not.

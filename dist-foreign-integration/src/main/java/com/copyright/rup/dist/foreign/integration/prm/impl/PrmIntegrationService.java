@@ -68,7 +68,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     }
 
     @Override
-    public Table<String, String, Long> getRollUps(Collection<String> rightsholdersIds) {
+    public Table<String, String, Rightsholder> getRollUps(Collection<String> rightsholdersIds) {
         return prmRollUpAsync
             ? prmRollUpAsyncService.getRollUps(rightsholdersIds)
             : prmRollUpService.getRollUps(rightsholdersIds);
