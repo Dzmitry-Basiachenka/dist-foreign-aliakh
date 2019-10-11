@@ -36,7 +36,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -291,7 +290,7 @@ public class ScenarioService implements IScenarioService {
         Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
             .stream()
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));
-        Table<String, String, Rightsholder> rollUps = prmIntegrationService.getRollUps(discrepancies.stream()
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(discrepancies.stream()
             .map(discrepancy -> discrepancy.getNewRightsholder().getId())
             .collect(Collectors.toSet()));
         discrepancies.forEach(discrepancy -> {

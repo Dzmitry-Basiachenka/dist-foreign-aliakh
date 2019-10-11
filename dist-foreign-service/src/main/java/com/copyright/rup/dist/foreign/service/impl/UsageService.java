@@ -48,7 +48,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -240,7 +239,7 @@ public class UsageService implements IUsageService {
             .collect(Collectors.toSet());
         rightsholdersIds.removeAll(
             rhToUsageMap.values().stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
-        Table<String, String, Rightsholder> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
         newUsages.forEach(usage -> {
             final long rhAccountNumber = usage.getRightsholder().getAccountNumber();
             Usage scenarioUsage = rhToUsageMap.get(rhAccountNumber);
@@ -276,7 +275,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
-        Table<String, String, Rightsholder> rollUps = prmIntegrationService.getRollUps(
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(
             usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
         usages.forEach(usage -> {
             usage.setPayee(PrmRollUpService.getPayee(rollUps, usage.getRightsholder(), usage.getProductFamily()));
@@ -295,7 +294,7 @@ public class UsageService implements IUsageService {
         String userName = RupContextUtils.getUserName();
         Set<Long> payeeAccountNumbers = new HashSet<>();
         List<Rightsholder> rightsholders = rightsholderService.getByScenarioId(scenario.getId());
-        Table<String, String, Rightsholder> rollUps = prmIntegrationService.getRollUps(
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(
             rightsholders.stream().map(BaseEntity::getId).collect(Collectors.toSet()));
         rightsholders.forEach(rightsholder -> {
             Long payeeAccountNumber = PrmRollUpService.getPayee(rollUps, rightsholder, FdaConstants.NTS_PRODUCT_FAMILY)
