@@ -314,14 +314,14 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void updateRhPayeeAndAmounts(List<Usage> usages) {
-        //TODO: adjust logic to retrieve and store payee participating flag
+    public void updateRhPayeeAmountsAndParticipating(List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         usages.forEach(usage -> {
             calculateAmounts(usage,
                 prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
                     usage.getProductFamily()));
             usage.setUpdateUser(userName);
+            fillPayeeParticipating(usage);
         });
         usageRepository.update(usages);
     }

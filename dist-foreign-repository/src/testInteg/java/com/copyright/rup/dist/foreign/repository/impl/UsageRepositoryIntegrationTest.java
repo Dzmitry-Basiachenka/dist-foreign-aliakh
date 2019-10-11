@@ -1056,28 +1056,24 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdateRhPayeeAndAmounts() {
+    public void testUpdate() {
         List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_8));
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage = usages.get(0);
-        assertEquals(1000002859L, usage.getRightsholder().getAccountNumber(), 0);
-        assertEquals(new BigDecimal("16437.4000000000"), usage.getGrossAmount());
-        assertEquals(new BigDecimal("11177.4000000000"), usage.getNetAmount());
-        assertEquals(new BigDecimal("5260.0000000000"), usage.getServiceFeeAmount());
-        assertEquals(SERVICE_FEE, usage.getServiceFee());
+        verifyUsageAmountsAccountNumberAndParticipating(1000002859L, new BigDecimal("16437.4000000000"),
+            new BigDecimal("11177.4000000000"), new BigDecimal("5260.0000000000"), SERVICE_FEE, false, false, usage);
         usage.getRightsholder().setAccountNumber(1000000001L);
         usage.setServiceFee(new BigDecimal("0.16000"));
         usage.setNetAmount(new BigDecimal("13807.4000000000"));
         usage.setServiceFeeAmount(new BigDecimal("2630.0000000000"));
+        usage.setRhParticipating(true);
+        usage.setPayeeParticipating(true);
         usageRepository.update(Collections.singletonList(usage));
         usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_8));
         assertEquals(1, CollectionUtils.size(usages));
-        usage = usages.get(0);
-        assertEquals(1000000001L, usage.getRightsholder().getAccountNumber(), 0);
-        assertEquals(new BigDecimal("13807.4000000000"), usage.getNetAmount());
-        assertEquals(new BigDecimal("2630.0000000000"), usage.getServiceFeeAmount());
-        assertEquals(new BigDecimal("0.16000"), usage.getServiceFee());
-        usage.getRightsholder().setAccountNumber(1000000001L);
+        verifyUsageAmountsAccountNumberAndParticipating(1000000001L, new BigDecimal("16437.4000000000"),
+            new BigDecimal("13807.4000000000"), new BigDecimal("2630.0000000000"), new BigDecimal("0.16000"), true,
+            true, usages.get(0));
     }
 
     @Test
@@ -1562,5 +1558,18 @@ public class UsageRepositoryIntegrationTest {
             .map(Usage::getId)
             .collect(Collectors.toList());
         assertTrue(CollectionUtils.containsAll(usagesIdsBeforeDeletion, expectedUsageIds));
+    }
+
+    private void verifyUsageAmountsAccountNumberAndParticipating(long accountNumber, BigDecimal grossAmount,
+                                                                 BigDecimal netAmount, BigDecimal serviceFeeAmount,
+                                                                 BigDecimal serviceFee, boolean rhParticipating,
+                                                                 boolean payeeParticipating, Usage usage) {
+        assertEquals(accountNumber, usage.getRightsholder().getAccountNumber(), 0);
+        assertEquals(grossAmount, usage.getGrossAmount());
+        assertEquals(netAmount, usage.getNetAmount());
+        assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
+        assertEquals(serviceFee, usage.getServiceFee());
+        assertEquals(rhParticipating, usage.isRhParticipating());
+        assertEquals(payeeParticipating, usage.isPayeeParticipating());
     }
 }
