@@ -152,11 +152,11 @@ public interface IScenarioService {
     void reconcileRightsholders(Scenario scenario);
 
     /**
-     * Updates usages participating flag and amounts for specified {@link Scenario} using PRM service.
+     * Updates usages RH and Payee participating flags and amounts for specified {@link Scenario} using PRM service.
      *
      * @param scenario {@link Scenario} instance
      */
-    void updateRhParticipationAndAmounts(Scenario scenario);
+    void updateParticipatingAndAmounts(Scenario scenario);
 
     /**
      * Approves ownership changes for {@link Scenario}.

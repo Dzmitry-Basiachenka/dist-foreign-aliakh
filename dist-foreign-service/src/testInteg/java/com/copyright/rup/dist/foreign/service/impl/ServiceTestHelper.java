@@ -266,6 +266,7 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
         assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
         assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
+        assertEquals(expectedUsage.isRhParticipating(), actualUsage.isRhParticipating());
         assertEquals(expectedUsage.isPayeeParticipating(), actualUsage.isPayeeParticipating());
     }
 

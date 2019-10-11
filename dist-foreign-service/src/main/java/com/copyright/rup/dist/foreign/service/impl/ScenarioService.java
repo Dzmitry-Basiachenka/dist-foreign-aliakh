@@ -276,8 +276,8 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    public void updateRhParticipationAndAmounts(Scenario scenario) {
-        usageService.updateRhPayeeAndAmounts(usageService.getUsagesByScenarioId(scenario.getId()));
+    public void updateParticipatingAndAmounts(Scenario scenario) {
+        usageService.updateRhPayeeAmountsAndParticipating(usageService.getUsagesByScenarioId(scenario.getId()));
     }
 
     @Override
@@ -309,7 +309,7 @@ public class ScenarioService implements IScenarioService {
         List<Usage> usages = groupedByWrWrkInstUsages.values().stream()
             .flatMap(Collection::stream)
             .collect(Collectors.toList());
-        usageService.updateRhPayeeAndAmounts(usages);
+        usageService.updateRhPayeeAmountsAndParticipating(usages);
         rightsholderService.updateUsagesPayeesAsync(usages);
         rightsholderDiscrepancyService.approveByScenarioId(scenario.getId());
         LOGGER.info("Approve Ownership Changes. Finished. {}, RhDiscrepanciesCount={}",

@@ -189,12 +189,12 @@ public interface IUsageService {
     void populatePayeeAndCalculateAmountsForNtsScenarioUsages(Scenario scenario);
 
     /**
-     * Updates RH account number, payee account number, net amount, service fee amount and RH participating flag
-     * for {@link Usage}s.
+     * Updates RH account number, payee account number, net amount, service fee amount and
+     * RH and Payee participating flags for {@link Usage}s.
      *
      * @param usages list of {@link Usage}s
      */
-    void updateRhPayeeAndAmounts(List<Usage> usages);
+    void updateRhPayeeAmountsAndParticipating(List<Usage> usages);
 
     /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s

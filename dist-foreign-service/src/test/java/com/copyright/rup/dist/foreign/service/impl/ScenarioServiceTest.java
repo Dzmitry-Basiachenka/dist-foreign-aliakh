@@ -248,16 +248,16 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testUpdateRhParticipationAndAmounts() {
+    public void testUpdateParticipatingAndAmounts() {
         Usage usage = new Usage();
         usage.setWrWrkInst(1L);
         usage.getRightsholder().setAccountNumber(2000017010L);
         List<Usage> usages = Collections.singletonList(usage);
         expect(usageService.getUsagesByScenarioId(SCENARIO_ID)).andReturn(usages).once();
-        usageService.updateRhPayeeAndAmounts(usages);
+        usageService.updateRhPayeeAmountsAndParticipating(usages);
         expectLastCall().once();
         replayAll();
-        scenarioService.updateRhParticipationAndAmounts(scenario);
+        scenarioService.updateParticipatingAndAmounts(scenario);
         verifyAll();
     }
 }
