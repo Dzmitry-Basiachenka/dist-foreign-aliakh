@@ -193,7 +193,7 @@ public class WorkClassificationWindowTest {
         assertEquals(155, columns.get(4).getWidth(), 0);
         assertEquals(100, columns.get(5).getWidth(), 0);
         assertEquals(-1.0, columns.get(6).getWidth(), 0);
-        assertEquals(200, columns.get(7).getWidth(), 0);
+        assertEquals(135, columns.get(7).getWidth(), 0);
         assertEquals(245, columns.get(8).getWidth(), 0);
     }
 
