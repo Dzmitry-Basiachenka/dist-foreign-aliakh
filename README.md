@@ -1,5 +1,12 @@
 7.1.3
 -
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: implement service logic to retrieve payee participation status during scenario creation and refreshing
+* B-51245 FDA: Update Classification View to include 2 new columns: fix sql exception when user clicks mark as STM
+* B-54040 Tech Debt: FDA: apply updated rollup service to get roll up by batches
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: implement service logic to retrieve payee participation status during reconciliation
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: adjust View Scenario window
+* B-51245 FDA: Update Classification View to include 2 new columns: add format date in Classified Date column
+* B-51245 FDA: Update Classification View to include 2 new columns: fix WorkClassificationWindowTest
 
 7.1.2
 -
