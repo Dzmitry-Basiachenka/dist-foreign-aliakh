@@ -227,7 +227,7 @@ public class ScenarioControllerTest {
     }
 
     @Test
-    public void testOnExcludeDetailsClickedWithDiscrepancies() {
+    public void testOnExcludeByRroClickedWithDiscrepancies() {
         mockStatic(Windows.class);
         IRightsholderDiscrepancyService rightsholderDiscrepancyService =
             createMock(IRightsholderDiscrepancyService.class);
@@ -237,12 +237,12 @@ public class ScenarioControllerTest {
         Windows.showNotificationWindow("Details cannot be excluded after reconciliation");
         expectLastCall().once();
         replay(rightsholderDiscrepancyService, Windows.class);
-        controller.onExcludeDetailsClicked();
+        controller.onExcludeByRroClicked();
         verify(rightsholderDiscrepancyService, Windows.class);
     }
 
     @Test
-    public void testOnExcludeDetailsClickedWithoutDiscrepancies() {
+    public void testOnExcludeByRroClickedWithoutDiscrepancies() {
         mockStatic(Windows.class);
         IRightsholderDiscrepancyService rightsholderDiscrepancyService =
             createMock(IRightsholderDiscrepancyService.class);
@@ -255,7 +255,7 @@ public class ScenarioControllerTest {
             Collections.singletonList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
             .once();
         replay(rightsholderDiscrepancyService, scenarioService, Windows.class);
-        controller.onExcludeDetailsClicked();
+        controller.onExcludeByRroClicked();
         verify(rightsholderDiscrepancyService, scenarioService, Windows.class);
     }
 

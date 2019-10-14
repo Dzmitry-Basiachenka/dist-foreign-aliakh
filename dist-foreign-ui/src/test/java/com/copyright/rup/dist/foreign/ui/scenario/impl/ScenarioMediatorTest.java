@@ -36,7 +36,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class ScenarioMediatorTest {
 
     private static final String PERMISSION_NAME = "FDA_EXCLUDE_FROM_SCENARIO";
-    private final Button excludeButton = new Button();
+    private final Button excludeByRroButton = new Button();
+    private final Button excludeByPayeeButton = new Button();
     private final Button exportDetailsButton = new Button();
     private final Button exportButton = new Button();
     private final SearchWidget searchWidget = new SearchWidget(() -> {/*stub*/});
@@ -51,7 +52,8 @@ public class ScenarioMediatorTest {
         scenario = new Scenario();
         scenario.setProductFamily("FAS");
         mediator = new ScenarioMediator();
-        mediator.setExcludeButton(excludeButton);
+        mediator.setExcludeByRroButton(excludeByRroButton);
+        mediator.setExcludeByPayeeButton(excludeByPayeeButton);
         mediator.setExportDetailsButton(exportDetailsButton);
         mediator.setExportButton(exportButton);
         mediator.setSearchWidget(searchWidget);
@@ -65,7 +67,8 @@ public class ScenarioMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         verify(SecurityUtils.class);
-        assertTrue(excludeButton.isVisible());
+        assertTrue(excludeByRroButton.isVisible());
+        assertTrue(excludeByPayeeButton.isVisible());
         assertTrue(exportDetailsButton.isVisible());
         assertTrue(exportButton.isVisible());
         assertTrue(grid.isVisible());
@@ -79,7 +82,8 @@ public class ScenarioMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         verify(SecurityUtils.class);
-        assertFalse(excludeButton.isVisible());
+        assertFalse(excludeByRroButton.isVisible());
+        assertFalse(excludeByPayeeButton.isVisible());
         assertTrue(exportDetailsButton.isVisible());
         assertTrue(exportButton.isVisible());
         assertTrue(grid.isVisible());
@@ -95,7 +99,8 @@ public class ScenarioMediatorTest {
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         mediator.onScenarioUpdated(false, scenario);
         verify(SecurityUtils.class);
-        assertTrue(excludeButton.isEnabled());
+        assertTrue(excludeByRroButton.isEnabled());
+        assertTrue(excludeByPayeeButton.isEnabled());
         assertTrue(exportDetailsButton.isEnabled());
         assertTrue(exportButton.isEnabled());
         assertTrue(grid.isVisible());
@@ -111,7 +116,8 @@ public class ScenarioMediatorTest {
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
         mediator.onScenarioUpdated(false, scenario);
         verify(SecurityUtils.class);
-        assertFalse(excludeButton.isEnabled());
+        assertFalse(excludeByRroButton.isEnabled());
+        assertFalse(excludeByPayeeButton.isEnabled());
         assertTrue(exportDetailsButton.isEnabled());
         assertTrue(exportButton.isEnabled());
         assertTrue(grid.isVisible());
@@ -127,7 +133,8 @@ public class ScenarioMediatorTest {
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         mediator.onScenarioUpdated(true, scenario);
         verify(SecurityUtils.class);
-        assertFalse(excludeButton.isEnabled());
+        assertFalse(excludeByRroButton.isEnabled());
+        assertFalse(excludeByPayeeButton.isEnabled());
         assertFalse(exportDetailsButton.isEnabled());
         assertFalse(exportButton.isEnabled());
         assertFalse(grid.isVisible());
@@ -143,8 +150,10 @@ public class ScenarioMediatorTest {
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         mediator.onScenarioUpdated(true, scenario);
         verify(SecurityUtils.class);
-        assertFalse(excludeButton.isVisible());
-        assertFalse(excludeButton.isEnabled());
+        assertFalse(excludeByRroButton.isVisible());
+        assertFalse(excludeByRroButton.isEnabled());
+        assertFalse(excludeByPayeeButton.isVisible());
+        assertFalse(excludeByPayeeButton.isEnabled());
         assertFalse(exportDetailsButton.isEnabled());
         assertFalse(exportButton.isEnabled());
         assertFalse(grid.isVisible());
@@ -161,8 +170,10 @@ public class ScenarioMediatorTest {
         scenario.setProductFamily("NTS");
         mediator.onScenarioUpdated(false, scenario);
         verify(SecurityUtils.class);
-        assertTrue(excludeButton.isVisible());
-        assertFalse(excludeButton.isEnabled());
+        assertTrue(excludeByRroButton.isVisible());
+        assertFalse(excludeByRroButton.isEnabled());
+        assertTrue(excludeByPayeeButton.isVisible());
+        assertFalse(excludeByPayeeButton.isEnabled());
         assertTrue(exportDetailsButton.isEnabled());
         assertTrue(exportButton.isEnabled());
         assertTrue(grid.isVisible());

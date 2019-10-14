@@ -30,7 +30,6 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterCell;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -57,7 +56,8 @@ public class ScenarioWidget extends Window implements IScenarioWidget, IMediator
     private VerticalLayout emptyUsagesLayout;
     private Button exportDetailsButton;
     private Button exportButton;
-    private Button excludeButton;
+    private Button excludeByRroButton;
+    private Button excludeByPayeeButton;
     private ScenarioMediator mediator;
     private Grid<RightsholderTotalsHolder> rightsholdersGrid;
     private DataProvider<RightsholderTotalsHolder, Void> dataProvider;
@@ -115,7 +115,8 @@ public class ScenarioWidget extends Window implements IScenarioWidget, IMediator
     @Override
     public IMediator initMediator() {
         mediator = new ScenarioMediator();
-        mediator.setExcludeButton(excludeButton);
+        mediator.setExcludeByRroButton(excludeByRroButton);
+        mediator.setExcludeByPayeeButton(excludeByPayeeButton);
         mediator.setExportDetailsButton(exportDetailsButton);
         mediator.setExportButton(exportButton);
         mediator.setEmptyUsagesLayout(emptyUsagesLayout);
@@ -256,10 +257,12 @@ public class ScenarioWidget extends Window implements IScenarioWidget, IMediator
         OnDemandFileDownloader exportScenarioFileDownloader =
             new OnDemandFileDownloader(controller.getExportScenarioRightsholderTotalsStreamSource().getSource());
         exportScenarioFileDownloader.extend(exportButton);
-        excludeButton = new Button(ForeignUi.getMessage("button.exclude.details"));
-        excludeButton.addClickListener(event -> controller.onExcludeDetailsClicked());
-        HorizontalLayout buttons = new HorizontalLayout(
-            excludeButton, exportDetailsButton, exportButton, Buttons.createCloseButton(this));
+        excludeByRroButton = new Button(ForeignUi.getMessage("button.exclude_by_rro"));
+        excludeByRroButton.addClickListener(event -> controller.onExcludeByRroClicked());
+        excludeByPayeeButton = new Button(ForeignUi.getMessage("button.exclude_by_payee"));
+        excludeByPayeeButton.addClickListener(event -> controller.onExcludeByPayeeClicked());
+        HorizontalLayout buttons = new HorizontalLayout(excludeByRroButton, excludeByPayeeButton, exportDetailsButton,
+            exportButton, Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");
         buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;
