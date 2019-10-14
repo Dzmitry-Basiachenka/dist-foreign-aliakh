@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -28,6 +29,10 @@ import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+
+import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -166,7 +171,7 @@ public class WorkClassificationWindow extends Window {
         grid.addColumn(WorkClassification::getRhName)
             .setCaption(ForeignUi.getMessage("table.column.rh_account_name"))
             .setSortProperty("rhName");
-        addColumn(WorkClassification::getUpdateDate, "table.column.classification_date", "updateDate", 200);
+        addClassificationDateColumn(WorkClassification::getUpdateDate);
         addColumn(WorkClassification::getUpdateUser, "table.column.classified_by", "updateUser", 245);
     }
 
@@ -176,6 +181,15 @@ public class WorkClassificationWindow extends Window {
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setWidth(width);
+    }
+
+    private void addClassificationDateColumn(ValueProvider<WorkClassification, Date> provider) {
+        grid.addColumn(date -> Objects.nonNull(provider.apply(date))
+                ? DateFormatUtils.format(provider.apply(date), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)
+                : null)
+            .setCaption(ForeignUi.getMessage("table.column.classification_date"))
+            .setSortProperty("updateDate")
+            .setWidth(135);
     }
 
     private void addClickListener(Button button, String message, Consumer<Set<WorkClassification>> consumer) {
