@@ -1,3 +1,6 @@
+7.1.3
+-
+
 7.1.2
 -
 * B-46037 FDA: Exclude STM RHs from the NTS batch: add Exclude STM RHs checkbox to Load Fund Pool Window
