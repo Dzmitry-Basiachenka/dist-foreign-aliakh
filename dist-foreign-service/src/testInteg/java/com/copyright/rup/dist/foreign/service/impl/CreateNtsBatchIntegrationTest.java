@@ -46,7 +46,8 @@ public class CreateNtsBatchIntegrationTest {
     private static final String PRM_RH_1000023401_RESPONSE = "prm/rightsholder_1000023401_response.json";
     private static final String RMS_GRANTS_65882434_REQUEST = "rights/rms_grants_658824345_request.json";
     private static final String RMS_GRANTS_65882434_RESPONSE = "rights/rms_grants_658824345_response.json";
-    private static final String PRM_ELIGIBLE_RH_1000023401_RESPONSE = "eligibility/pref_eligible_rh_response.json";
+    private static final String PRM_ELIGIBLE_RH_1000023401_RESPONSE =
+        "preferences/rh_1000023401_eligible_response.json";
     private static final String RH_ID = "85f864f2-30a5-4215-ac4f-f1f541901218";
     private static final BigDecimal STM_AMOUNT = new BigDecimal("100");
     private static final BigDecimal DEFAULT_GROSS_AMOUNT = new BigDecimal("0.0000000000");
@@ -65,8 +66,8 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatch() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET, STM_AMOUNT)))
-            .expectRmsRights(RMS_GRANTS_65882434_REQUEST, "rights/rms_grants_658824345_response.json")
+            .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET, STM_AMOUNT, false)))
+            .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
@@ -77,9 +78,35 @@ public class CreateNtsBatchIntegrationTest {
     }
 
     @Test
+    public void testCreateNtsBatchExcludingStmWithStmRh() {
+        testBuilder
+            .withUsageBatch(buildUsageBatch(buildFundPool("Doc Del", STM_AMOUNT, true)))
+            .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
+            .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
+            .expectPreferences("preferences/rh_1000023401_stm_response.json", RH_ID)
+            .build()
+            .run();
+    }
+
+    @Test
+    public void testCreateNtsBatchExcludingStmWithoutStmRh() {
+        testBuilder
+            .withUsageBatch(buildUsageBatch(buildFundPool("Doc Del", STM_AMOUNT, true)))
+            .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
+            .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
+            .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
+            .expectUsages(Collections.singletonList(buildUsage("Doc Del", UsageStatusEnum.ELIGIBLE, 658824345L)))
+            .expectAudit(getEligibleUsageAuditItem())
+            .build()
+            .run();
+    }
+
+    @Test
     public void testCreateNtsBatchWithUnclassified() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool("Gov", STM_AMOUNT)))
+            .withUsageBatch(buildUsageBatch(buildFundPool("Gov", STM_AMOUNT, false)))
             .expectRmsRights("rights/rms_grants_576324545_request.json", "rights/rms_grants_576324545_response.json")
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
@@ -92,11 +119,11 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchWithIneligibleRh() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET, STM_AMOUNT)))
+            .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET, STM_AMOUNT, false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
-            .expectPreferences("eligibility/pref_ineligible_rh_response.json", RH_ID)
+            .expectPreferences("preferences/rh_1000023401_ineligible_response.json", RH_ID)
             .build()
             .run();
     }
@@ -104,7 +131,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchWithNonUsRhTaxCountry() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET, STM_AMOUNT)))
+            .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET, STM_AMOUNT, false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
             .expectOracleCall(1000023401L, "tax/rh_1000023401_tax_country_fr_response.json")
@@ -115,7 +142,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchWithRhNotFound() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool("Univ", STM_AMOUNT)))
+            .withUsageBatch(buildUsageBatch(buildFundPool("Univ", STM_AMOUNT, false)))
             .expectRmsRights("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json")
             .build()
             .run();
@@ -124,7 +151,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchWithUsageUnderMinimum() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool("Lib", STM_AMOUNT)))
+            .withUsageBatch(buildUsageBatch(buildFundPool("Lib", STM_AMOUNT, false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
@@ -138,7 +165,8 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchZeroStmAmount() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool("Edu", new BigDecimal("0.000"))))
+            .withUsageBatch(
+                buildUsageBatch(buildFundPool("Edu", new BigDecimal("0.000"), false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
@@ -168,7 +196,7 @@ public class CreateNtsBatchIntegrationTest {
         return rightsholder;
     }
 
-    private FundPool buildFundPool(String market, BigDecimal stmAmount) {
+    private FundPool buildFundPool(String market, BigDecimal stmAmount, boolean excludingStm) {
         FundPool fundPool = new FundPool();
         fundPool.setFundPoolPeriodFrom(2013);
         fundPool.setFundPoolPeriodTo(2016);
@@ -177,6 +205,7 @@ public class CreateNtsBatchIntegrationTest {
         fundPool.setStmMinimumAmount(new BigDecimal("300.3"));
         fundPool.setNonStmMinimumAmount(new BigDecimal("200."));
         fundPool.setMarkets(ImmutableSet.of(market));
+        fundPool.setExcludingStm(excludingStm);
         return fundPool;
     }
 

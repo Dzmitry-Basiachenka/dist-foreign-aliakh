@@ -11,26 +11,26 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
 /**
- * Quartz job to send NTS usages in NON_STM_RH status to RH Eligibility queue for further processing.
+ * Quartz job to send NTS usages in US_TAX_COUNTRY status to STM RH queue for further processing.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
- * Date: 01/04/19
+ * Date: 10/14/19
  *
- * @author Uladzislau Shalamitski
+ * @author Stanislau Rudak
  */
 @DisallowConcurrentExecution
 @Component
-public class RhEligibilityJob extends QuartzJobBean {
+public class StmRhJob extends QuartzJobBean {
 
     @Autowired
     private IChainExecutor<Usage> executor;
 
     /**
-     * Finds NTS usages in NON_STM_RH status and send to RH Eligibility queue.
+     * Finds NTS usages in US_TAX_COUNTRY status and send to STM RH queue.
      */
     @Override
     public void executeInternal(JobExecutionContext context) {
-        context.setResult(executor.execute(ChainProcessorTypeEnum.RH_ELIGIBILITY));
+        context.setResult(executor.execute(ChainProcessorTypeEnum.STM_RH));
     }
 }

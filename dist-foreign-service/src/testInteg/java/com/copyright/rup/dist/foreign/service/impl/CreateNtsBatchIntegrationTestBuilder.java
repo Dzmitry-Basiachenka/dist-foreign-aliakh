@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -41,8 +40,6 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
     private IUsageBatchRepository usageBatchRepository;
     @Autowired
     private IUsageAuditService usageAuditService;
-    @Autowired
-    private SqsClientMock sqsClientMock;
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
@@ -118,7 +115,7 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
         expectedOracleResponse = null;
         expectedPreferencesResponse = null;
         expectedPreferencesRightsholderId = null;
-        this.sqsClientMock.reset();
+        testHelper.reset();
     }
 
     /**
