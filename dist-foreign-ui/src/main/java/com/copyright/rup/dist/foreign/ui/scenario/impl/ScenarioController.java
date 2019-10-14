@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -47,6 +48,8 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     private Scenario scenario;
 
+    @Autowired
+    private IExcludePayeesController excludePayeesController;
     @Autowired
     private IUsageService usageService;
     @Autowired
@@ -116,8 +119,9 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     public void onExcludeByPayeeClicked() {
         if (hasApprovedDiscrepancies()) {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.info.exclude_details.reconciled_scenario"));
+        } else {
+            Windows.showModalWindow(new ExcludePayeesWindow(excludePayeesController));
         }
-        //TODO show Exclude Details By Payee window
     }
 
     @Override
