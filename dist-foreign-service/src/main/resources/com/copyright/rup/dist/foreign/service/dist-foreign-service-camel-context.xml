@@ -39,6 +39,14 @@
         <property name="deserializer" ref="df.service.commonUsageDeserializer" />
     </bean>
 
+    <bean id="df.service.stmRhMarshaller" parent="df.service.usageMarshaller">
+        <property name="serializer" ref="df.service.commonUsageSerializer" />
+    </bean>
+
+    <bean id="df.service.stmRhUnmarshaller" parent="df.service.usageUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUsageDeserializer" />
+    </bean>
+
     <bean id="df.service.rhEligibilityMarshaller" parent="df.service.usageMarshaller">
         <property name="serializer" ref="df.service.commonUsageSerializer" />
     </bean>
@@ -55,6 +63,10 @@
 
     <bean id="df.service.rhTaxProducer" parent="df.service.usageProducer">
         <property name="endPoint" value="direct:df.service.tax"/>
+    </bean>
+
+    <bean id="df.service.stmRhProducer" parent="df.service.usageProducer">
+        <property name="endPoint" value="direct:df.service.stm.rh"/>
     </bean>
 
     <bean id="df.service.rhEligibilityProducer" parent="df.service.usageProducer">
@@ -99,6 +111,9 @@
 
         <endpoint id="df.service.internal.rights.endpoint" uri="direct:df.service.rights"/>
         <endpoint id="df.service.rights.endpoint" uri="$RUP{dist.foreign.endpoint.rights}"/>
+
+        <endpoint id="df.service.internal.stm.rh.endpoint" uri="direct:df.service.stm.rh"/>
+        <endpoint id="df.service.stm.rh.endpoint" uri="$RUP{dist.foreign.endpoint.stm_rh}"/>
 
         <endpoint id="df.service.internal.tax.endpoint" uri="direct:df.service.tax"/>
         <endpoint id="df.service.rh.tax.endpoint" uri="$RUP{dist.foreign.endpoint.rh_tax}"/>
@@ -232,6 +247,31 @@
                     <constant>false</constant>
                 </handled>
                 <log message="Exception during RH tax processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
+                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
+            </onException>
+        </route>
+
+        <route id="df.service.stmRhInternalRoute">
+            <from ref="df.service.internal.stm.rh.endpoint"/>
+            <marshal>
+                <custom ref="df.service.stmRhMarshaller"/>
+            </marshal>
+            <to ref="df.service.stm.rh.endpoint"/>
+        </route>
+
+        <route id="df.service.stmRhRoute">
+            <from ref="df.service.stm.rh.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.stmRhUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.stmRhConsumer"/>
+
+            <onException useOriginalMessage="true">
+                <exception>java.lang.Exception</exception>
+                <handled>
+                    <constant>false</constant>
+                </handled>
+                <log message="Exception during processing STM RH usages. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
                      loggingLevel="WARN" logName="com.copyright.rup.dist"/>
             </onException>
         </route>

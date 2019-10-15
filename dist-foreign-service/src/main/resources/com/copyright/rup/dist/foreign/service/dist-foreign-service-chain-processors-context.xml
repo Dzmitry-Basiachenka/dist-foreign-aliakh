@@ -30,12 +30,18 @@
 
     <bean id="df.service.ntsRhTaxProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhTaxProcessor">
         <property name="usageStatus" value="RH_FOUND"/>
+        <property name="successProcessor" ref="df.service.ntsStmRhProcessor"/>
+        <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsStmRhProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.StmRhProcessor">
+        <property name="usageStatus" value="US_TAX_COUNTRY"/>
         <property name="successProcessor" ref="df.service.ntsRhEligibilityProcessor"/>
         <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
     </bean>
 
     <bean id="df.service.ntsRhEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhEligibilityProcessor">
-        <property name="usageStatus" value="US_TAX_COUNTRY"/>
+        <property name="usageStatus" value="NON_STM_RH"/>
         <property name="successProcessor" ref="df.service.ntsClassificationProcessor"/>
         <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
     </bean>

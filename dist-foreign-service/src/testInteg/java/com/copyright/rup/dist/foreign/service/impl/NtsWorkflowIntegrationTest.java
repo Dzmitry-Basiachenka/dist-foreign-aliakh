@@ -44,7 +44,8 @@ public class NtsWorkflowIntegrationTest {
     private static final String ORACLE_RH_TAX_1000023401_US_RESPONSE = "tax/rh_1000023401_tax_country_us_response.json";
     private static final String PRM_RH_1000023401_RESPONSE = "prm/rightsholder_1000023401_response.json";
     private static final String RMS_GRANTS_65882434_REQUEST = "rights/rms_grants_658824345_request.json";
-    private static final String PRM_ELIGIBLE_RH_1000023401_RESPONSE = "eligibility/pref_eligible_rh_response.json";
+    private static final String PRM_ELIGIBLE_RH_1000023401_RESPONSE =
+        "preferences/rh_1000023401_eligible_response.json";
     private static final String RH_ID = "85f864f2-30a5-4215-ac4f-f1f541901218";
     private static final BigDecimal STM_AMOUNT = new BigDecimal("100");
 

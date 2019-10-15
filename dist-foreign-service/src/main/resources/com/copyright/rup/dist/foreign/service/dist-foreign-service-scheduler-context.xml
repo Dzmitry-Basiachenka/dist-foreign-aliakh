@@ -19,6 +19,11 @@
         <property name="durability" value="true"/>
     </bean>
 
+    <bean id="df.service.stmRhQuartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.copyright.rup.dist.foreign.service.impl.quartz.StmRhJob"/>
+        <property name="durability" value="true"/>
+    </bean>
+
     <bean id="df.service.rhEligibilityQuartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="com.copyright.rup.dist.foreign.service.impl.quartz.RhEligibilityJob"/>
         <property name="durability" value="true"/>
@@ -59,6 +64,11 @@
         <property name="cronExpression" value="$RUP{dist.foreign.scheduler.rh_tax}"/>
     </bean>
 
+    <bean id="df.service.stmRhTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="df.service.stmRhQuartzJob"/>
+        <property name="cronExpression" value="$RUP{dist.foreign.scheduler.stm_rh}"/>
+    </bean>
+
     <bean id="df.service.rhEligibilityTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="df.service.rhEligibilityQuartzJob"/>
         <property name="cronExpression" value="$RUP{dist.foreign.scheduler.rh_eligibility}"/>
@@ -94,6 +104,7 @@
             <list>
                 <ref bean="df.service.getRightsQuartzJob"/>
                 <ref bean="df.service.rhTaxQuartzJob"/>
+                <ref bean="df.service.stmRhQuartzJob"/>
                 <ref bean="df.service.updateRightsholdersQuartzJob"/>
                 <ref bean="df.service.sendToRightsAssignmentQuartzJob"/>
                 <ref bean="df.service.sendToCrmQuartzJob"/>
@@ -106,6 +117,7 @@
             <list>
                 <ref bean="df.service.getRightsTrigger"/>
                 <ref bean="df.service.rhTaxTrigger"/>
+                <ref bean="df.service.stmRhTrigger"/>
                 <ref bean="df.service.updateRightsholdersTrigger"/>
                 <ref bean="df.service.sendToRightsAssignmentTrigger"/>
                 <ref bean="df.service.sendToCrmTrigger"/>

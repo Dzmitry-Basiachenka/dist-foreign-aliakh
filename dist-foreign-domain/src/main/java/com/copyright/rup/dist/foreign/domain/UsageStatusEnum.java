@@ -48,6 +48,11 @@ public enum UsageStatusEnum {
     SENT_FOR_RA,
 
     /**
+     * Status for usages with non-STM RH.
+     */
+    NON_STM_RH,
+
+    /**
      * Status for NTS usages with US tax rightsholder.
      */
     US_TAX_COUNTRY,
