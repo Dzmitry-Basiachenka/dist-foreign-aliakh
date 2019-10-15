@@ -18,6 +18,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '500.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -52,6 +53,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '40300.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -62,6 +64,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '10250.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -546,6 +549,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2010-01-01')
             column(name: 'fiscal_year', value: '2010')
             column(name: 'gross_amount', value: '500.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -594,6 +598,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2010-01-01')
             column(name: 'fiscal_year', value: '2010')
             column(name: 'gross_amount', value: '1000.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -683,6 +688,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2010-01-02')
             column(name: 'fiscal_year', value: '2010')
             column(name: 'gross_amount', value: '60.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -751,6 +757,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2010-01-03')
             column(name: 'fiscal_year', value: '2010')
             column(name: 'gross_amount', value: '800.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -932,6 +939,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2010-04-21')
             column(name: 'fiscal_year', value: '2010')
             column(name: 'gross_amount', value: '400.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1043,6 +1051,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2010-01-03')
             column(name: 'fiscal_year', value: '2010')
             column(name: 'gross_amount', value: '200.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1192,6 +1201,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-04')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '100.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         // Batch with two non eligible, two nts and two eligible details
@@ -1203,6 +1213,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-04')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '250.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         // Batch with two non eligible, two eligible and two details associated with in progress scenario
@@ -1214,6 +1225,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-04')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '550.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         // Batch with two non eligible, two eligible, two nts, two details that were sent to lm and details in paid and archived status
@@ -1225,6 +1237,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-04')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '450.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         // Batch with two non eligible, two eligible, two nts and two details associated with scenario in status submit
@@ -1236,6 +1249,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-04')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '450.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         // Batch with two non eligible, two eligible, two nts and two details associated with scenario in status approved
@@ -1247,6 +1261,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-04')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '450.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
         // Batch with two non eligible, two eligible, two nts, two details associated with scenario and two return to cla details that were sent to lm
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -1257,6 +1272,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-04')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '650.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         // Batch with two non eligible, two eligible, two nts, two details associated with scenario and two details that were sent to lm
@@ -1268,6 +1284,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-04')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '550.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         // Batch with two non eligible, two eligible, two nts, two details associated with scenario and two details that were sent to lm
@@ -1279,6 +1296,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-05-08')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '550.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         // Batch with two details that were sent to lm. Shouldn't be included into report
@@ -1312,6 +1330,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-05-08')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '600.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         // Batch with NTS product family to be excluded from report
@@ -3263,6 +3282,7 @@ databaseChangeLog {
             column(name: "payment_date", value: "2013-01-01")
             column(name: "fiscal_year", value: "2013")
             column(name: "gross_amount", value: "500.00")
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_usage") {
@@ -3311,6 +3331,7 @@ databaseChangeLog {
             column(name: "payment_date", value: "2013-01-01")
             column(name: "fiscal_year", value: "2013")
             column(name: "gross_amount", value: "1000.00")
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_usage") {
@@ -3359,6 +3380,7 @@ databaseChangeLog {
             column(name: "payment_date", value: "2013-01-02")
             column(name: "fiscal_year", value: "2013")
             column(name: "gross_amount", value: "60.00")
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_usage") {
@@ -3424,6 +3446,7 @@ databaseChangeLog {
             column(name: "payment_date", value: "2013-01-03")
             column(name: "fiscal_year", value: "2013")
             column(name: "gross_amount", value: "800.00")
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_usage") {
@@ -3598,6 +3621,7 @@ databaseChangeLog {
             column(name: "payment_date", value: "2013-04-21")
             column(name: "fiscal_year", value: "2013")
             column(name: "gross_amount", value: "400.00")
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_usage") {
@@ -3698,6 +3722,7 @@ databaseChangeLog {
             column(name: "payment_date", value: "2013-01-03")
             column(name: "fiscal_year", value: "2013")
             column(name: "gross_amount", value: "200.00")
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_usage") {
@@ -3727,6 +3752,7 @@ databaseChangeLog {
             column(name: "payment_date", value: "2013-01-03")
             column(name: "fiscal_year", value: "2013")
             column(name: "gross_amount", value: "200.00")
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_scenario") {
@@ -4544,6 +4570,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '30000')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {

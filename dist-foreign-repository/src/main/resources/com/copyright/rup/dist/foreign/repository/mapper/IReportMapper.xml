@@ -58,7 +58,7 @@
         <result property="totalPaymentAmount" column="total_payment_amount"/>
     </resultMap>
 
-    <resultMap id="fasBatchSummaryReportDtoResultMap" type="FasBatchSummaryReportDto">
+    <resultMap id="fasBatchSummaryReportDtoResultMap" type="FasBatchSummaryReportDto" extends="StoredEntityMapper.storedEntityResult">
         <result property="batchName" column="batch_name"/>
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="rroName" column="rro_name"/>
@@ -193,7 +193,8 @@
             scenarios_details_gross_amount,
             scenarios_details_net_amount,
             return_to_cla_details_count,
-            return_to_cla_details_gross_amount
+            return_to_cla_details_gross_amount,
+            created_datetime
         from ${schema}.v_fas_batch_summary_report
     </select>
 
