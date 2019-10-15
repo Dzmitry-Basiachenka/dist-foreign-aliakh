@@ -31,6 +31,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.ScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IWidget;
@@ -80,7 +81,9 @@ public class ScenarioControllerTest {
     private IUsageService usageService;
     private IScenarioService scenarioService;
     private IReportService reportService;
+    private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
     private IStreamSourceHandler streamSourceHandler;
+    private IExcludePayeesController excludePayeesController;
     private Scenario scenario;
 
     @Before
@@ -98,11 +101,15 @@ public class ScenarioControllerTest {
         scenarioService = createMock(ScenarioService.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
+        rightsholderDiscrepancyService = createMock(IRightsholderDiscrepancyService.class);
+        excludePayeesController = createMock(IExcludePayeesController.class);
         mockStatic(ForeignSecurityUtils.class);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
+        Whitebox.setInternalState(controller, excludePayeesController);
+        Whitebox.setInternalState(controller, rightsholderDiscrepancyService);
     }
 
     @Test
@@ -229,9 +236,6 @@ public class ScenarioControllerTest {
     @Test
     public void testOnExcludeByRroClickedWithDiscrepancies() {
         mockStatic(Windows.class);
-        IRightsholderDiscrepancyService rightsholderDiscrepancyService =
-            createMock(IRightsholderDiscrepancyService.class);
-        Whitebox.setInternalState(controller, rightsholderDiscrepancyService);
         expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(1).once();
         Windows.showNotificationWindow("Details cannot be excluded after reconciliation");
@@ -244,9 +248,6 @@ public class ScenarioControllerTest {
     @Test
     public void testOnExcludeByRroClickedWithoutDiscrepancies() {
         mockStatic(Windows.class);
-        IRightsholderDiscrepancyService rightsholderDiscrepancyService =
-            createMock(IRightsholderDiscrepancyService.class);
-        Whitebox.setInternalState(controller, rightsholderDiscrepancyService);
         expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(0).once();
         Windows.showModalWindow(anyObject(ExcludeSourceRroWindow.class));
@@ -257,6 +258,30 @@ public class ScenarioControllerTest {
         replay(rightsholderDiscrepancyService, scenarioService, Windows.class);
         controller.onExcludeByRroClicked();
         verify(rightsholderDiscrepancyService, scenarioService, Windows.class);
+    }
+
+    @Test
+    public void testOnExcludeByPayeeClickedWithDiscrepancies() {
+        mockStatic(Windows.class);
+        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(1).once();
+        Windows.showNotificationWindow("Details cannot be excluded after reconciliation");
+        expectLastCall().once();
+        replay(rightsholderDiscrepancyService, excludePayeesController, Windows.class);
+        controller.onExcludeByPayeeClicked();
+        verify(rightsholderDiscrepancyService, excludePayeesController, Windows.class);
+    }
+
+    @Test
+    public void testOnExcludeByPayeeClickedWithoutDiscrepancies() {
+        mockStatic(Windows.class);
+        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(0).once();
+        Windows.showModalWindow(anyObject(ExcludePayeesWindow.class));
+        expectLastCall().once();
+        replay(rightsholderDiscrepancyService, scenarioService, excludePayeesController, Windows.class);
+        controller.onExcludeByPayeeClicked();
+        verify(rightsholderDiscrepancyService, scenarioService, excludePayeesController, Windows.class);
     }
 
     @Test
