@@ -1,5 +1,8 @@
 7.1.4
 -
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: implement Exclude Details by Payee window
+* B-46037 FDA: Exclude STM RHs from the NTS batch: implement service logic for excluding usage with STM RHs
+* B-54040 Tech Debt: FDA: adjust logic for applying rh participation status during scenario creation
 
 7.1.3
 -
