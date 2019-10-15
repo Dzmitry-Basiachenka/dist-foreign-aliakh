@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmPreferenceService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
+import com.copyright.rup.dist.common.integration.rest.prm.PrmPreferenceService;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -75,17 +77,21 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     }
 
     @Override
-    public boolean isRightsholderParticipating(String rightsholderId, String productFamily) {
-        return getBooleanPreference(
-            prmPreferenceService.getPreferencesTable(rightsholderId),
-            productFamily,
+    public boolean isRightsholderParticipating(Map<String, Table<String, String, Object>> preferencesMap,
+                                               String rightsholderId, String productFamily) {
+        return getBooleanPreference(preferencesMap, rightsholderId, productFamily,
             FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE);
     }
 
     @Override
+    public Map<String, Table<String, String, Object>> getPreferences(Set<String> rightsholderIds) {
+        return prmPreferenceService.getPreferencesMap(rightsholderIds);
+    }
+
+    @Override
     public boolean isRightsholderEligibleForNtsDistribution(String rightsholderId) {
-        return !getBooleanPreference(prmPreferenceService.getPreferencesTable(rightsholderId),
-            FdaConstants.NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_DIST_INELIGIBLE_CODE);
+        return !getBooleanPreference(prmPreferenceService.getPreferencesMap(Collections.singleton(rightsholderId)),
+            rightsholderId, FdaConstants.NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_DIST_INELIGIBLE_CODE);
     }
 
     @Override
@@ -95,15 +101,17 @@ public class PrmIntegrationService implements IPrmIntegrationService {
 
     @Override
     public boolean isStmRightsholder(String rightsholderId, String productFamily) {
-        return getBooleanPreference(prmPreferenceService.getPreferencesTable(rightsholderId), productFamily,
-            FdaConstants.IS_RH_STM_IPRO_CODE);
+        return getBooleanPreference(
+            prmPreferenceService.getPreferencesMap(Collections.singleton(rightsholderId)), rightsholderId,
+            productFamily, FdaConstants.IS_RH_STM_IPRO_CODE);
     }
 
-    private boolean getBooleanPreference(Table<String, String, Object> preferencesTable,
-                                         String productFamily, String preferenceCode) {
+    private boolean getBooleanPreference(Map<String, Table<String, String, Object>> preferencesMap,
+                                         String rightsholderId, String productFamily, String preferenceCode) {
         Boolean preferenceValue = (Boolean) ObjectUtils.defaultIfNull(
-            preferencesTable.get(productFamily, preferenceCode),
-            preferencesTable.get(FdaConstants.ALL_PRODUCTS_KEY, preferenceCode));
+            PrmPreferenceService.getPreferenceValue(preferencesMap, rightsholderId, productFamily, preferenceCode),
+            PrmPreferenceService.getPreferenceValue(preferencesMap, rightsholderId, FdaConstants.ALL_PRODUCTS_KEY,
+                preferenceCode));
         if (null != preferenceValue) {
             return preferenceValue;
         } else {

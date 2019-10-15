@@ -48,6 +48,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -240,6 +241,9 @@ public class UsageService implements IUsageService {
         rightsholdersIds.removeAll(
             rhToUsageMap.values().stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
         Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        rightsholdersIds.addAll(getPayeeAndRhIds(rollUps));
+        Map<String, Table<String, String, Object>> preferencesMap =
+            prmIntegrationService.getPreferences(rightsholdersIds);
         newUsages.forEach(usage -> {
             final long rhAccountNumber = usage.getRightsholder().getAccountNumber();
             Usage scenarioUsage = rhToUsageMap.get(rhAccountNumber);
@@ -248,11 +252,12 @@ public class UsageService implements IUsageService {
                 : scenarioUsage.getPayee();
             usage.setPayee(payee);
             addScenarioInfo(usage, scenario);
-            calculateAmounts(usage, null == scenarioUsage
-                ? prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
-                usage.getProductFamily())
+            calculateAmounts(usage, Objects.isNull(scenarioUsage)
+                ? prmIntegrationService.isRightsholderParticipating(preferencesMap,
+                usage.getRightsholder().getId(), usage.getProductFamily())
                 : scenarioUsage.isRhParticipating());
-            fillPayeeParticipating(usage);
+            // TODO call PRM only for usages with new rightsholder, otherwise take from scenario usage
+            fillPayeeParticipating(preferencesMap, usage);
         });
         usageRepository.addToScenario(newUsages);
         rightsholderService.updateUsagesPayeesAsync(newUsages);
@@ -275,14 +280,19 @@ public class UsageService implements IUsageService {
 
     @Override
     public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
-        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(
-            usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
+        Set<String> rightsholdersIds =
+            usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet());
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        rightsholdersIds.addAll(getPayeeAndRhIds(rollUps));
+        Map<String, Table<String, String, Object>> preferencesMap =
+            prmIntegrationService.getPreferences(rightsholdersIds);
         usages.forEach(usage -> {
             usage.setPayee(PrmRollUpService.getPayee(rollUps, usage.getRightsholder(), usage.getProductFamily()));
             addScenarioInfo(usage, scenario);
-            calculateAmounts(usage, prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
-                usage.getProductFamily()));
-            fillPayeeParticipating(usage);
+            calculateAmounts(usage,
+                prmIntegrationService.isRightsholderParticipating(preferencesMap, usage.getRightsholder().getId(),
+                    usage.getProductFamily()));
+            fillPayeeParticipating(preferencesMap, usage);
         });
         usageRepository.addToScenario(usages);
         rightsholderService.updateUsagesPayeesAsync(usages);
@@ -294,14 +304,17 @@ public class UsageService implements IUsageService {
         String userName = RupContextUtils.getUserName();
         Set<Long> payeeAccountNumbers = new HashSet<>();
         List<Rightsholder> rightsholders = rightsholderService.getByScenarioId(scenario.getId());
-        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(
-            rightsholders.stream().map(BaseEntity::getId).collect(Collectors.toSet()));
+        Set<String> rightsholdersIds = rightsholders.stream().map(BaseEntity::getId).collect(Collectors.toSet());
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        Map<String, Table<String, String, Object>> preferencesMap =
+            prmIntegrationService.getPreferences(rightsholdersIds);
         rightsholders.forEach(rightsholder -> {
             Long payeeAccountNumber = PrmRollUpService.getPayee(rollUps, rightsholder, FdaConstants.NTS_PRODUCT_FAMILY)
                 .getAccountNumber();
             payeeAccountNumbers.add(payeeAccountNumber);
-            boolean participationFlag = prmIntegrationService.
-                isRightsholderParticipating(rightsholder.getId(), FdaConstants.NTS_PRODUCT_FAMILY);
+            boolean participationFlag =
+                prmIntegrationService.isRightsholderParticipating(preferencesMap, rightsholder.getId(),
+                    FdaConstants.NTS_PRODUCT_FAMILY);
             BigDecimal serviceFee = prmIntegrationService.getRhParticipatingServiceFee(participationFlag);
             usageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(rightsholder.getAccountNumber(),
                 scenario.getId(), serviceFee, participationFlag, payeeAccountNumber, userName);
@@ -315,12 +328,16 @@ public class UsageService implements IUsageService {
     @Override
     public void updateRhPayeeAmountsAndParticipating(List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
+        Map<String, Table<String, String, Object>> preferencesMap =
+            prmIntegrationService.getPreferences(usages.stream()
+                .flatMap(usage -> Stream.of(usage.getRightsholder().getId(), usage.getPayee().getId()))
+                .collect(Collectors.toSet()));
         usages.forEach(usage -> {
             calculateAmounts(usage,
-                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
+                prmIntegrationService.isRightsholderParticipating(preferencesMap, usage.getRightsholder().getId(),
                     usage.getProductFamily()));
             usage.setUpdateUser(userName);
-            fillPayeeParticipating(usage);
+            fillPayeeParticipating(preferencesMap, usage);
         });
         usageRepository.update(usages);
     }
@@ -647,6 +664,13 @@ public class UsageService implements IUsageService {
         usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, userName);
     }
 
+    private Set<String> getPayeeAndRhIds(Map<String, Map<String, Rightsholder>> rollUps) {
+        return rollUps.values()
+            .stream()
+            .flatMap(map -> map.values().stream().map(Rightsholder::getId))
+            .collect(Collectors.toSet());
+    }
+
     private void populateTitlesStandardNumberAndType(Collection<ResearchedUsage> researchedUsages) {
         researchedUsages.forEach(researchedUsage -> {
             Work work = piIntegrationService.findWorkByWrWrkInst(researchedUsage.getWrWrkInst());
@@ -796,9 +820,10 @@ public class UsageService implements IUsageService {
         }
     }
 
-    private void fillPayeeParticipating(Usage usage) {
+    private void fillPayeeParticipating(Map<String, Table<String, String, Object>> preferencesMap, Usage usage) {
         boolean payeeParticipating = !usage.getRightsholder().getId().equals(usage.getPayee().getId())
-            ? prmIntegrationService.isRightsholderParticipating(usage.getPayee().getId(), usage.getProductFamily())
+            ? prmIntegrationService.isRightsholderParticipating(preferencesMap, usage.getPayee().getId(),
+            usage.getProductFamily())
             : usage.isRhParticipating();
         usage.setPayeeParticipating(payeeParticipating);
     }

@@ -56,6 +56,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -328,21 +329,22 @@ public class UsageServiceTest {
     public void testAddUsagesToScenario() {
         Usage usage1 = buildUsage(USAGE_ID_1);
         Usage usage2 = buildUsage(USAGE_ID_2);
-        Capture<Set<String>> rightsholdersIdsCapture = new Capture<>();
         List<Usage> usages = Arrays.asList(usage1, usage2);
         Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
         Rightsholder payee = buildRightsholder(PAYEE_ACCOUNT_NUMBER);
-        rollUps.put(RH_ID, ImmutableMap.of(FAS_PRODUCT_FAMILY, buildRightsholder(PAYEE_ACCOUNT_NUMBER)));
         rollUps.put(RH_ID, ImmutableMap.of(FAS_PRODUCT_FAMILY, payee));
+        Map<String, Table<String, String, Object>> preferences = new HashMap<>();
+        expect(prmIntegrationService.getRollUps(Collections.singleton(RH_ID))).andReturn(rollUps).once();
+        expect(prmIntegrationService.getPreferences(Sets.newHashSet(payee.getId(), RH_ID)))
+            .andReturn(preferences).once();
         usageRepository.addToScenario(usages);
         expectLastCall().once();
-        expect(prmIntegrationService.getRollUps(capture(rightsholdersIdsCapture))).andReturn(rollUps).once();
-        expect(prmIntegrationService.isRightsholderParticipating(usage1.getRightsholder().getId(),
+        expect(prmIntegrationService.isRightsholderParticipating(preferences, usage1.getRightsholder().getId(),
             usage1.getProductFamily())).andReturn(true).once();
-        expect(prmIntegrationService.isRightsholderParticipating(usage2.getRightsholder().getId(),
+        expect(prmIntegrationService.isRightsholderParticipating(preferences, usage2.getRightsholder().getId(),
             usage2.getProductFamily())).andReturn(true).once();
-        expect(prmIntegrationService.isRightsholderParticipating(payee.getId(), FAS_PRODUCT_FAMILY)).andReturn(true)
-            .times(2);
+        expect(prmIntegrationService.isRightsholderParticipating(preferences, payee.getId(), FAS_PRODUCT_FAMILY))
+            .andReturn(true).times(2);
         expect(prmIntegrationService.getRhParticipatingServiceFee(true))
             .andReturn(new BigDecimal("0.16000")).times(2);
         rightsholderService.updateUsagesPayeesAsync(Arrays.asList(usage1, usage2));
@@ -521,16 +523,15 @@ public class UsageServiceTest {
         Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
         Usage usage2 = buildUsageWithPayee(RupPersistUtils.generateUuid());
         Rightsholder payee = usage2.getPayee();
-        Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
-        rollUps.put(RH_ID, ImmutableMap.of(FAS_PRODUCT_FAMILY, buildRightsholder(PAYEE_ACCOUNT_NUMBER)));
-        expect(usageRepository.findRightsholdersInformation(SCENARIO_ID)).andReturn(
-            ImmutableMap.of(usage2.getRightsholder().getAccountNumber(), usage2)).once();
+        expect(usageRepository.findRightsholdersInformation(SCENARIO_ID))
+            .andReturn(ImmutableMap.of(usage2.getRightsholder().getAccountNumber(), usage2)).once();
         expect(usageRepository.findWithAmountsAndRightsholders(filter)).andReturn(Collections.singletonList(usage1))
             .once();
-        expect(prmIntegrationService.getRollUps(Collections.emptySet())).andReturn(rollUps).once();
+        expect(prmIntegrationService.getRollUps(Collections.emptySet())).andReturn(Collections.emptyMap()).once();
+        expect(prmIntegrationService.getPreferences(Collections.emptySet())).andReturn(Collections.emptyMap()).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.32")).once();
-        expect(prmIntegrationService.isRightsholderParticipating(payee.getId(), FAS_PRODUCT_FAMILY)).andReturn(true)
-            .once();
+        expect(prmIntegrationService.isRightsholderParticipating(Collections.emptyMap(), payee.getId(),
+            FAS_PRODUCT_FAMILY)).andReturn(true).once();
         usageRepository.addToScenario(Collections.singletonList(usage1));
         expectLastCall().once();
         rightsholderService.updateUsagesPayeesAsync(Collections.singletonList(usage1));
@@ -1002,16 +1003,22 @@ public class UsageServiceTest {
         Rightsholder rightsholder1 = buildRightsholder(1000009522L);
         Rightsholder rightsholder2 = buildRightsholder(2000009522L);
         Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
-        rollUps.put(rightsholder1.getId(), ImmutableMap.of(NTS_PRODUCT_FAMILY, buildRightsholder(1000004422L)));
-        rollUps.put(rightsholder2.getId(), ImmutableMap.of(NTS_PRODUCT_FAMILY, buildRightsholder(2000004422L)));
+        Rightsholder payee1 = buildRightsholder(1000004422L);
+        Rightsholder payee2 = buildRightsholder(2000004422L);
+        rollUps.put(rightsholder1.getId(), ImmutableMap.of(NTS_PRODUCT_FAMILY, payee1));
+        rollUps.put(rightsholder2.getId(), ImmutableMap.of(NTS_PRODUCT_FAMILY, payee2));
         Set<String> rightsholderIds = Sets.newHashSet(rightsholder2.getId(), rightsholder1.getId());
         expect(prmIntegrationService.getRollUps(rightsholderIds)).andReturn(rollUps).once();
+        Map<String, Table<String, String, Object>> preferences = new HashMap<>();
+        expect(prmIntegrationService.getPreferences(rightsholderIds)).andReturn(preferences).once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(rightsholderService.getByScenarioId(SCENARIO_ID))
             .andReturn(Arrays.asList(rightsholder1, rightsholder2)).once();
-        expect(prmIntegrationService.isRightsholderParticipating(rightsholder1.getId(), NTS_PRODUCT_FAMILY))
+        expect(
+            prmIntegrationService.isRightsholderParticipating(preferences, rightsholder1.getId(), NTS_PRODUCT_FAMILY))
             .andReturn(true).once();
-        expect(prmIntegrationService.isRightsholderParticipating(rightsholder2.getId(), NTS_PRODUCT_FAMILY))
+        expect(
+            prmIntegrationService.isRightsholderParticipating(preferences, rightsholder2.getId(), NTS_PRODUCT_FAMILY))
             .andReturn(false).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(true)).andReturn(SERVICE_FEE).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(SERVICE_FEE).once();

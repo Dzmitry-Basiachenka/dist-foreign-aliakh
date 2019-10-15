@@ -87,8 +87,8 @@ public class ReconcileRightsholdersTest {
             .expectRollups("reconcileRightsholders/rollups_with_discrepancies_response.json",
                 "f0ba198d-14fd-49c9-a2c3-ffc65b2f14af", "cd1d10f8-c625-4634-afee-9b983071e725")
             .expectPreferences("reconcileRightsholders/preferences_with_discrepancies_response.json",
-                "f0ba198d-14fd-49c9-a2c3-ffc65b2f14af", "3259b121-8b0e-4b9e-8d7a-88707cf418a4",
-                "e395cf0e-312f-425c-a37d-4a7ab824b8f6", "cd1d10f8-c625-4634-afee-9b983071e725")
+                "3259b121-8b0e-4b9e-8d7a-88707cf418a4", "f0ba198d-14fd-49c9-a2c3-ffc65b2f14af",
+                "cd1d10f8-c625-4634-afee-9b983071e725", "e395cf0e-312f-425c-a37d-4a7ab824b8f6")
             .expectDiscrepancies(Sets.newHashSet(
                 buildDiscrepancy(7000515031L, 2000152614L, 127778305L),
                 buildDiscrepancy(2000152614L, 1000002137L, 122861189L),

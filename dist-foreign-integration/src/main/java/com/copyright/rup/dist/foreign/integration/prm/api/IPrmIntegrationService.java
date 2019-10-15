@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.integration.prm.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 
+import com.google.common.collect.Table;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -54,12 +56,26 @@ public interface IPrmIntegrationService {
      * If preferences for specified product family were not found System finds preferences for the same rightsholder
      * id and <b>{@code '*'}</b> ('*' is passed as a product family).
      *
-     * @param rightsholderId rightsholder id
+     * @param preferences    map with preferences
+     * @param rightsholderId rightsholder identifier
      * @param productFamily  product family
      * @return the found rightsholder participating flag or
      * {@code false} if there is neither no preferences for rightsholder
      */
-    boolean isRightsholderParticipating(String rightsholderId, String productFamily);
+    boolean isRightsholderParticipating(Map<String, Table<String, String, Object>> preferences, String rightsholderId,
+                                        String productFamily);
+
+    /**
+     * Gets rightsholder to preferences table map, key is rightsholderId, value - preferences table.
+     * Table has the following structure:
+     * <br/>row key    - product family
+     * <br/>column key - preference code
+     * <br/>value key  - preference value
+     *
+     * @param rightsholderIds set of rightsholder ids
+     * @return rightsholder to preferences table map
+     */
+    Map<String, Table<String, String, Object>> getPreferences(Set<String> rightsholderIds);
 
     /**
      * Checks whether {@link com.copyright.rup.dist.common.domain.Rightsholder} is eligible for NTS distribution or not.
