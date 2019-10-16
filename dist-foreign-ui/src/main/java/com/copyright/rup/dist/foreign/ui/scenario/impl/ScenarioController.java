@@ -121,6 +121,7 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
         if (hasApprovedDiscrepancies()) {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.info.exclude_details.reconciled_scenario"));
         } else {
+            excludePayeesController.setScenario(scenario);
             Windows.showModalWindow((Window) excludePayeesController.initWidget());
         }
     }

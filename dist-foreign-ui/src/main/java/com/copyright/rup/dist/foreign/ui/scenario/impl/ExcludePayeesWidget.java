@@ -1,19 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeesFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.ValueProvider;
-import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -44,17 +44,16 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
 
     private SearchWidget searchWidget;
     private IExcludePayeesController controller;
-    private Grid<RightsholderTotalsHolder> payeesGrid;
-    private DataProvider<RightsholderTotalsHolder, Void> dataProvider;
+    private Grid<PayeeTotalsHolder> payeesGrid;
 
     @Override
     public void performSearch() {
-        dataProvider.refreshAll();
+        resetFilters();
     }
 
     @Override
     public void refresh() {
-        dataProvider.refreshAll();
+        resetFilters();
     }
 
     @Override
@@ -94,10 +93,8 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
     }
 
     private void initGrid() {
-        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
-            query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
-            query -> controller.getBeansCount());
-        payeesGrid = new Grid<>(dataProvider);
+        payeesGrid = new Grid<>();
+        payeesGrid.setItems(controller.findPayeeTotalsHolders());
         payeesGrid.setSelectionMode(SelectionMode.MULTI);
         payeesGrid.setSizeFull();
         VaadinUtils.addComponentStyle(payeesGrid, "exclude-details-by-payee-grid");
@@ -107,23 +104,23 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
     private void addColumns() {
         addColumn(holder -> holder.getPayee().getAccountNumber(), "table.column.payee_account_number",
             "payee.accountNumber");
-        addColumn(holder -> holder.getPayee().getAccountNumber(), "table.column.payee_name", "payee.name");
-        addAmountColumn(RightsholderTotalsHolder::getGrossTotal, "table.column.amount_in_usd", "grossTotal");
-        addAmountColumn(RightsholderTotalsHolder::getServiceFeeTotal, "table.column.service_fee_amount",
+        addColumn(holder -> holder.getPayee().getName(), "table.column.payee_name", "payee.name");
+        addAmountColumn(PayeeTotalsHolder::getGrossTotal, "table.column.amount_in_usd", "grossTotal");
+        addAmountColumn(PayeeTotalsHolder::getServiceFeeTotal, "table.column.service_fee_amount",
             "serviceFeeTotal");
-        addAmountColumn(RightsholderTotalsHolder::getServiceFeeTotal, "table.column.net_amount", "netTotal");
+        addAmountColumn(PayeeTotalsHolder::getNetTotal, "table.column.net_amount", "netTotal");
         addColumn(holder -> getServiceFeeString(holder.getServiceFee()), "table.column.service_fee", "serviceFee");
         payeesGrid.getColumns().forEach(column -> column.setSortable(true));
     }
 
-    private void addColumn(ValueProvider<RightsholderTotalsHolder, ?> provider, String captionProperty,
+    private void addColumn(ValueProvider<PayeeTotalsHolder, ?> provider, String captionProperty,
                            String sortProperty) {
         payeesGrid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sortProperty);
     }
 
-    private void addAmountColumn(Function<RightsholderTotalsHolder, BigDecimal> function, String captionProperty,
+    private void addAmountColumn(Function<PayeeTotalsHolder, BigDecimal> function, String captionProperty,
                                  String sortProperty) {
         payeesGrid.addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null))
             .setCaption(ForeignUi.getMessage(captionProperty))
@@ -141,5 +138,32 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
         Button excludeDetails = Buttons.createButton(ForeignUi.getMessage("button.exclude_details"));
         Button redesignateDetails = Buttons.createButton(ForeignUi.getMessage("button.redesignate_details"));
         return new HorizontalLayout(excludeDetails, redesignateDetails, Buttons.createCloseButton(this));
+    }
+
+    private void resetFilters() {
+        ListDataProvider<PayeeTotalsHolder> dataProvider =
+            (ListDataProvider<PayeeTotalsHolder>) payeesGrid.getDataProvider();
+        dataProvider.clearFilters();
+        String searchValue = searchWidget.getSearchValue();
+        ExcludePayeesFilter filter = controller.getExcludePayeesFilterController().getWidget().getAppliedFilter();
+        boolean notBlankSearchValue = StringUtils.isNotBlank(searchValue);
+        boolean notEmptyFilter = !filter.isEmpty();
+        if (notBlankSearchValue || notEmptyFilter) {
+            dataProvider.setFilter(holder -> {
+                boolean result = true;
+                if (notBlankSearchValue) {
+                    result =
+                        StringUtils.containsIgnoreCase(holder.getPayee().getAccountNumber().toString(), searchValue)
+                            || StringUtils.containsIgnoreCase(holder.getPayee().getName(), searchValue);
+                }
+                if (notEmptyFilter && Objects.nonNull(filter.getMinimumThreshold())) {
+                    result = result && 0 > holder.getNetTotal().compareTo(filter.getMinimumThreshold());
+                }
+                if (notEmptyFilter && Objects.nonNull(filter.getPayeeParticipating())) {
+                    result = result && filter.getPayeeParticipating().equals(holder.isPayeeParticipating());
+                }
+                return result;
+            });
+        }
     }
 }

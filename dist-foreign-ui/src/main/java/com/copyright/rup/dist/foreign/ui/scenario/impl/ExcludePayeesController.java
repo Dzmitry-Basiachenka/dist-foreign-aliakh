@@ -1,18 +1,18 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
-import com.vaadin.data.provider.QuerySortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,6 +28,10 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ExcludePayeesController extends CommonController<IExcludePayeeWidget> implements IExcludePayeesController {
 
+    private Scenario scenario;
+
+    @Autowired
+    private IUsageService usageService;
     @Autowired
     private IExcludePayeesFilterController payeesFilterController;
 
@@ -42,19 +46,17 @@ public class ExcludePayeesController extends CommonController<IExcludePayeeWidge
     }
 
     @Override
-    public int getBeansCount() {
-        //TODO: use service logic here
-        return 0;
-    }
-
-    @Override
-    public List<RightsholderTotalsHolder> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
-        //TODO: use service logic here
-        return Collections.emptyList();
+    public List<PayeeTotalsHolder> findPayeeTotalsHolders() {
+        return usageService.getPayeeTotalsHoldersByScenarioId(scenario.getId());
     }
 
     @Override
     protected IExcludePayeeWidget instantiateWidget() {
         return new ExcludePayeesWidget();
+    }
+
+    @Override
+    public void setScenario(Scenario scenario) {
+        this.scenario = scenario;
     }
 }

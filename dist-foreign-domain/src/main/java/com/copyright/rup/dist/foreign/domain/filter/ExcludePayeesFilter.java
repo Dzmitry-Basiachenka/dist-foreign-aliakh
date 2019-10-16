@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Filter fo exclude payees.
@@ -19,7 +20,6 @@ public class ExcludePayeesFilter {
 
     private Boolean payeeParticipating;
     private BigDecimal minimumThreshold;
-    private String searchValue;
 
     /**
      * Default constructor.
@@ -36,7 +36,6 @@ public class ExcludePayeesFilter {
     public ExcludePayeesFilter(ExcludePayeesFilter filter) {
         this.payeeParticipating = filter.getPayeeParticipating();
         this.minimumThreshold = filter.getMinimumThreshold();
-        this.searchValue = filter.getSearchValue();
     }
 
     public Boolean getPayeeParticipating() {
@@ -55,12 +54,9 @@ public class ExcludePayeesFilter {
         this.minimumThreshold = minimumThreshold;
     }
 
-    public String getSearchValue() {
-        return searchValue;
-    }
-
-    public void setSearchValue(String searchValue) {
-        this.searchValue = searchValue;
+    public boolean isEmpty() {
+        return Objects.isNull(payeeParticipating)
+            && Objects.isNull(minimumThreshold);
     }
 
     @Override
@@ -75,7 +71,6 @@ public class ExcludePayeesFilter {
         return new EqualsBuilder()
             .append(payeeParticipating, that.payeeParticipating)
             .append(minimumThreshold, that.minimumThreshold)
-            .append(searchValue, that.searchValue)
             .isEquals();
     }
 
@@ -84,7 +79,6 @@ public class ExcludePayeesFilter {
         return new HashCodeBuilder()
             .append(payeeParticipating)
             .append(minimumThreshold)
-            .append(searchValue)
             .toHashCode();
     }
 
@@ -93,7 +87,6 @@ public class ExcludePayeesFilter {
         return new ToStringBuilder(this)
             .append("payeeParticipating", payeeParticipating)
             .append("minimumThreshold", minimumThreshold)
-            .append("searchValue", searchValue)
             .toString();
     }
 }

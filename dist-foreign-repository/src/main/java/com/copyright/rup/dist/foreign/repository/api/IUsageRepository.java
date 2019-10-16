@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -262,6 +263,14 @@ public interface IUsageRepository {
      */
     List<RightsholderTotalsHolder> findRightsholderTotalsHoldersByScenarioId(String scenarioId, String searchValue,
                                                                              Pageable pageable, Sort sort);
+
+    /**
+     * Gets list of {@link PayeeTotalsHolder}s by scenario identifier.
+     *
+     * @param scenarioId scenario identifier
+     * @return list of {@link PayeeTotalsHolder}s
+     */
+    List<PayeeTotalsHolder> findPayeeTotalsHoldersByScenarioId(String scenarioId);
 
     /**
      * Gets count of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}

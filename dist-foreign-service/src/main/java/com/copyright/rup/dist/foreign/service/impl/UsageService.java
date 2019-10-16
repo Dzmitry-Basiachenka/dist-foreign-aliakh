@@ -15,6 +15,7 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -396,6 +397,11 @@ public class UsageService implements IUsageService {
             ? usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(scenario.getId(), searchValue, pageable,
             sort)
             : usageRepository.findRightsholderTotalsHoldersByScenarioId(scenario.getId(), searchValue, pageable, sort);
+    }
+
+    @Override
+    public List<PayeeTotalsHolder> getPayeeTotalsHoldersByScenarioId(String scenarioId) {
+        return usageRepository.findPayeeTotalsHoldersByScenarioId(scenarioId);
     }
 
     @Override
