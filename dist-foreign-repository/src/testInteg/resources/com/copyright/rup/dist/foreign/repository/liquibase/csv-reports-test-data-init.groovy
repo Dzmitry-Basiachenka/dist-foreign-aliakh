@@ -4654,6 +4654,8 @@ databaseChangeLog {
             column(name: 'df_work_classification_uid', value: '0b3f6bb1-40b7-4d11-ba53-d54e9d67e61f')
             column(name: 'wr_wrk_inst', value: '987654321')
             column(name: 'classification', value: 'NON-STM')
+            column(name: 'updated_datetime', value: '2019-10-16')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
         }
 
         // archived
