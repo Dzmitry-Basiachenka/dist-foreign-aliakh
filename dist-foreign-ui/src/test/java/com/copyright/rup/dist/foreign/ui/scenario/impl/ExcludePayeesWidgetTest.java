@@ -1,10 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterWidget;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.shared.ui.MarginInfo;
@@ -12,10 +18,12 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
@@ -23,7 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link ExcludePayeesWindow}.
+ * Verifies {@link ExcludePayeesWidget}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -31,24 +39,34 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau Shalamitski
  */
-public class ExcludePayeesWindowTest {
+public class ExcludePayeesWidgetTest {
 
-    private ExcludePayeesWindow window;
+    private ExcludePayeesWidget widget;
+    private IExcludePayeesController controller;
+    private IExcludePayeesFilterController filterController;
+    private IExcludePayeesFilterWidget filterWidget;
 
     @Before
     public void setUp() {
-        window = new ExcludePayeesWindow(createMock(IExcludePayeesController.class));
+        controller = createMock(IExcludePayeesController.class);
+        widget = new ExcludePayeesWidget();
+        widget.setController(controller);
+        filterController = PowerMock.createMock(IExcludePayeesFilterController.class);
+        filterWidget = new ExcludePayeesFilterWidget();
+        filterWidget.setController(filterController);
+        initWidget();
     }
 
     @Test
     public void testStructure() {
-        assertEquals("Exclude Details By Payee", window.getCaption());
-        assertEquals("exclude-details-by-payee-window", window.getId());
-        assertEquals(500, window.getHeight(), 0);
-        assertEquals(1200, window.getWidth(), 0);
-        assertTrue(window.isDraggable());
-        assertTrue(window.isResizable());
-        VerticalLayout content = (VerticalLayout) window.getContent();
+        assertEquals("Exclude Details By Payee", widget.getCaption());
+        assertEquals("exclude-details-by-payee-window", widget.getId());
+        assertEquals(500, widget.getHeight(), 0);
+        assertEquals(1200, widget.getWidth(), 0);
+        assertTrue(widget.isDraggable());
+        assertTrue(widget.isResizable());
+        HorizontalSplitPanel splitPanel = (HorizontalSplitPanel) widget.getContent();
+        VerticalLayout content = (VerticalLayout) splitPanel.getSecondComponent();
         assertEquals(3, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
         verifyGrid(content.getComponent(1));
@@ -85,5 +103,14 @@ public class ExcludePayeesWindowTest {
     private void verifyButton(Button button, String name) {
         assertEquals(name, button.getCaption());
         assertEquals(name.replaceAll(" ", "_"), button.getId());
+    }
+
+    private void initWidget() {
+        expect(controller.getExcludePayeesFilterController()).andReturn(filterController).once();
+        expect(filterController.initWidget()).andReturn(filterWidget).once();
+        replay(controller, filterController);
+        widget.init();
+        verify(controller, filterController);
+        reset(controller, filterController);
     }
 }

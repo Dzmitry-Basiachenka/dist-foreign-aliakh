@@ -2,13 +2,15 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
-import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
@@ -18,6 +20,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
@@ -35,36 +38,44 @@ import java.util.function.Function;
  *
  * @author Uladzislau_Shalamitski
  */
-public class ExcludePayeesWindow extends Window implements ISearchController {
+public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
-    private final IExcludePayeesController controller;
+    private SearchWidget searchWidget;
+    private IExcludePayeesController controller;
     private Grid<RightsholderTotalsHolder> payeesGrid;
     private DataProvider<RightsholderTotalsHolder, Void> dataProvider;
-
-    /**
-     * Constructor.
-     *
-     * @param controller instance of {@link IExcludePayeesController}
-     */
-    ExcludePayeesWindow(IExcludePayeesController controller) {
-        this.controller = controller;
-        setCaption(ForeignUi.getMessage("window.exclude.payee"));
-        initContent();
-    }
 
     @Override
     public void performSearch() {
         dataProvider.refreshAll();
     }
 
-    private void initContent() {
+    @Override
+    public void refresh() {
+        dataProvider.refreshAll();
+    }
+
+    @Override
+    public void setController(IExcludePayeesController controller) {
+        this.controller = controller;
+    }
+
+    @Override
+    public String getSearchValue() {
+        return searchWidget.getSearchValue();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public ExcludePayeesWidget init() {
         setWidth(1200, Unit.PIXELS);
         setHeight(500, Unit.PIXELS);
+        setCaption(ForeignUi.getMessage("window.exclude.payee"));
         VaadinUtils.addComponentStyle(this, "exclude-details-by-payee-window");
         initGrid();
-        SearchWidget searchWidget = new SearchWidget(this);
+        searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.scenario.search_widget.payee"));
         HorizontalLayout buttonsLayout = createButtonsLayout();
         VerticalLayout mainLayout = new VerticalLayout(searchWidget, payeesGrid, buttonsLayout);
@@ -72,7 +83,14 @@ public class ExcludePayeesWindow extends Window implements ISearchController {
         mainLayout.setSizeFull();
         mainLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         mainLayout.setExpandRatio(payeesGrid, 1);
-        setContent(mainLayout);
+        IExcludePayeesFilterWidget filterWidget = controller.getExcludePayeesFilterController().initWidget();
+        filterWidget.addListener(FilterChangedEvent.class, controller, IExcludePayeesController.ON_FILTER_CHANGED);
+        HorizontalSplitPanel splitPanel = new HorizontalSplitPanel();
+        splitPanel.addComponents(filterWidget, mainLayout);
+        splitPanel.setSplitPosition(200, Unit.PIXELS);
+        splitPanel.setLocked(true);
+        setContent(splitPanel);
+        return this;
     }
 
     private void initGrid() {
