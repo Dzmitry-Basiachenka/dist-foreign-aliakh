@@ -1,0 +1,23 @@
+package com.copyright.rup.dist.foreign.ui.scenario.api;
+
+import com.copyright.rup.vaadin.widget.SearchWidget;
+import com.copyright.rup.vaadin.widget.api.IRefreshable;
+import com.copyright.rup.vaadin.widget.api.IWidget;
+
+/**
+ * Interface for exclude payees widget.
+ * <p>
+ * Copyright (C) 2019 copyright.com
+ * <p>
+ * Date: 10/15/19
+ *
+ * @author Uladzislau Shalamitski
+ */
+public interface IExcludePayeeWidget extends SearchWidget.ISearchController, IRefreshable,
+    IWidget<IExcludePayeesController> {
+
+    /**
+     * @return search value string.
+     */
+    String getSearchValue();
+}

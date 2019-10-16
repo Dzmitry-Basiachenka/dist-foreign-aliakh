@@ -1,9 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
+import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -22,7 +26,20 @@ import java.util.List;
  */
 @Controller
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ExcludePayeesController implements IExcludePayeesController {
+public class ExcludePayeesController extends CommonController<IExcludePayeeWidget> implements IExcludePayeesController {
+
+    @Autowired
+    private IExcludePayeesFilterController payeesFilterController;
+
+    @Override
+    public IExcludePayeesFilterController getExcludePayeesFilterController() {
+        return payeesFilterController;
+    }
+
+    @Override
+    public void onFilterChanged() {
+        getWidget().refresh();
+    }
 
     @Override
     public int getBeansCount() {
@@ -34,5 +51,10 @@ public class ExcludePayeesController implements IExcludePayeesController {
     public List<RightsholderTotalsHolder> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
         //TODO: use service logic here
         return Collections.emptyList();
+    }
+
+    @Override
+    protected IExcludePayeeWidget instantiateWidget() {
+        return new ExcludePayeesWidget();
     }
 }

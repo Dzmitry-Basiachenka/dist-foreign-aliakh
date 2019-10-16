@@ -1,9 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.util.ReflectTools;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -15,7 +18,22 @@ import java.util.List;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IExcludePayeesController {
+public interface IExcludePayeesController extends IController<IExcludePayeeWidget> {
+
+    /**
+     * {@link #onFilterChanged()}.
+     */
+    Method ON_FILTER_CHANGED = ReflectTools.findMethod(IExcludePayeesController.class, "onFilterChanged");
+
+    /**
+     * Handles filter change event.
+     */
+    void onFilterChanged();
+
+    /**
+     * @return payee filter controller
+     */
+    IExcludePayeesFilterController getExcludePayeesFilterController();
 
     /**
      * @return number of items.
