@@ -12,6 +12,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -264,6 +265,20 @@ public class UsageRepositoryIntegrationTest {
         List<Long> accountNumbers = usageRepository.findInvalidRightsholdersByFilter(usageFilter);
         assertEquals(1, accountNumbers.size());
         assertEquals(1000000003L, accountNumbers.get(0), 0);
+    }
+
+    @Test
+    public void testFindPayeeTotalsHoldersByScenarioId() {
+        List<PayeeTotalsHolder> payeeTotalsHolders =
+            usageRepository.findPayeeTotalsHoldersByScenarioId("e13ecc44-6795-4b75-90f0-4a3fc191f1b9");
+        assertEquals(2, CollectionUtils.size(payeeTotalsHolders));
+        verifyPayeeTotalsHolder(7000813806L,
+            "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
+            new BigDecimal("100.0000000000"), new BigDecimal("68.0000000000"), new BigDecimal("32.0000000000"),
+            SERVICE_FEE, true, payeeTotalsHolders.get(0));
+        verifyPayeeTotalsHolder(1000002859L,
+            "John Wiley & Sons - Books", new BigDecimal("200.0000000000"), new BigDecimal("136.0000000000"),
+            new BigDecimal("64.0000000000"), SERVICE_FEE, false, payeeTotalsHolders.get(1));
     }
 
     @Test
@@ -1571,5 +1586,17 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(serviceFee, usage.getServiceFee());
         assertEquals(rhParticipating, usage.isRhParticipating());
         assertEquals(payeeParticipating, usage.isPayeeParticipating());
+    }
+
+    private void verifyPayeeTotalsHolder(Long accountNumber, String name, BigDecimal grossTotal, BigDecimal netTotal,
+                                         BigDecimal serviceFeeTotal, BigDecimal serviceFee, boolean payeePrticipating,
+                                         PayeeTotalsHolder holder) {
+        assertEquals(accountNumber, holder.getPayee().getAccountNumber());
+        assertEquals(name, holder.getPayee().getName());
+        assertEquals(grossTotal, holder.getGrossTotal());
+        assertEquals(netTotal, holder.getNetTotal());
+        assertEquals(serviceFeeTotal, holder.getServiceFeeTotal());
+        assertEquals(serviceFee, holder.getServiceFee());
+        assertEquals(payeePrticipating, holder.isPayeeParticipating());
     }
 }

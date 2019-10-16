@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -255,6 +256,14 @@ public interface IUsageService {
      */
     List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenario(Scenario scenario, String searchValue,
                                                                           Pageable pageable, Sort sort);
+
+    /**
+     * Gets list of {@link PayeeTotalsHolder}s by scenario identifier.
+     *
+     * @param scenarioId scenario identifier
+     * @return list of {@link PayeeTotalsHolder}s
+     */
+    List<PayeeTotalsHolder> getPayeeTotalsHoldersByScenarioId(String scenarioId);
 
     /**
      * Gets count of {@link RightsholderTotalsHolder}s based on {@link Scenario}.

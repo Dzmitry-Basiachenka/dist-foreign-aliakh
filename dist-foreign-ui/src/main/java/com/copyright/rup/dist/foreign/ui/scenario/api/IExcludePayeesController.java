@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
-import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.vaadin.widget.api.IController;
 
-import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
@@ -36,17 +36,14 @@ public interface IExcludePayeesController extends IController<IExcludePayeeWidge
     IExcludePayeesFilterController getExcludePayeesFilterController();
 
     /**
-     * @return number of items.
+     * @return list of {@link PayeeTotalsHolder}s to be displayed on UI.
      */
-    int getBeansCount();
+    List<PayeeTotalsHolder> findPayeeTotalsHolders();
 
     /**
-     * Loads specified number of beans from the storage with given start index.
+     * Sets {@link Scenario}.
      *
-     * @param startIndex start index
-     * @param count      items count to load
-     * @param sortOrders sort orders
-     * @return list of items to be displayed on UI
+     * @param scenario instance of {@link Scenario} to set
      */
-    List<RightsholderTotalsHolder> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
+    void setScenario(Scenario scenario);
 }

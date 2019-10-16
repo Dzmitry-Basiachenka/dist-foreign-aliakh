@@ -27,6 +27,7 @@ import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -108,6 +109,7 @@ public class ExcludePayeesWidgetTest {
     private void initWidget() {
         expect(controller.getExcludePayeesFilterController()).andReturn(filterController).once();
         expect(filterController.initWidget()).andReturn(filterWidget).once();
+        expect(controller.findPayeeTotalsHolders()).andReturn(Collections.emptyList()).once();
         replay(controller, filterController);
         widget.init();
         verify(controller, filterController);

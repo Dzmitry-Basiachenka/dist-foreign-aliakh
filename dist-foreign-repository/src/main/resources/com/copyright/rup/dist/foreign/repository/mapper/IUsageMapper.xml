@@ -102,6 +102,16 @@
         <result property="usageId" column="df_usage_uid"/>
     </resultMap>
 
+    <resultMap id="payeeTotalsHolderResultMap" type="PayeeTotalsHolder">
+        <result property="payee.name" column="payee_name"/>
+        <result property="payee.accountNumber" column="payee_account_number"/>
+        <result property="grossTotal" column="gross_total"/>
+        <result property="serviceFeeTotal" column="service_fee_total"/>
+        <result property="netTotal" column="net_total"/>
+        <result property="serviceFee" column="service_fee"/>
+        <result property="payeeParticipating" column="is_payee_participating_flag"/>
+    </resultMap>
+
     <sql id="usageColumns">
         df_usage_batch_uid,
         df_scenario_uid,
@@ -835,6 +845,31 @@
 
     <select id="findRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="rightsholderTotalsHolderResultMap">
         <include refid="IUsageMapper.selectRightsholderTotalsHoldersByScenarioIdSql"/>
+    </select>
+
+    <select id="findPayeeTotalsHoldersByScenarioId" parameterType="string" resultMap="payeeTotalsHolderResultMap">
+        select
+            p.name payee_name,
+            u.payee_account_number,
+            u.gross_total,
+            u.service_fee_total,
+            u.net_total,
+            u.service_fee,
+            u.is_payee_participating_flag
+        from (
+            select
+                payee_account_number,
+                sum(gross_amount) gross_total,
+                sum(service_fee_amount) service_fee_total,
+                sum(net_amount) net_total,
+                service_fee,
+                is_payee_participating_flag
+            from ${schema}.df_usage
+            where df_scenario_uid = #{scenarioId}
+            group by payee_account_number, is_payee_participating_flag, service_fee
+        ) u
+        left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
+        order by p.name asc
     </select>
 
     <select id="getTotalAmountByStandardNumberAndBatchId" parameterType="map" resultType="BigDecimal">

@@ -277,6 +277,8 @@ public class ScenarioControllerTest {
         mockStatic(Windows.class);
         expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(0).once();
+        excludePayeesController.setScenario(scenario);
+        expectLastCall().once();
         ExcludePayeesWidget widget = new ExcludePayeesWidget();
         expect(excludePayeesController.initWidget()).andReturn(widget).once();
         Windows.showModalWindow(widget);
