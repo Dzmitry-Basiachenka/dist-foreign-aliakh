@@ -1,6 +1,10 @@
 7.1.5
 -
 * B-51245 FDA: Update Classification View to include 2 new columns: repair CsvreportsIntegrationTest
+* B-54104 FDA: Add Date Loaded column to the Batch Summary Report: Add Date Loaded column to the Report
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: implement logic to populate grid on Exclude Details By Payee window
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: implement filter on Exclude Details by Payee window
+* CDP-844 FDA: Export from Works Classification window: report exported from Works Classification window doesn’t contain Classification Date and Classified By columns
 
 7.1.4
 -
