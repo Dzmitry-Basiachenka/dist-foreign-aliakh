@@ -454,7 +454,8 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-10-11-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment('Inserting data for testCreateNtsBatchExcludingStmWithStmRh')
+        comment('Inserting data for testCreateNtsBatchExcludingStmWithStmRh, ' +
+                'testCreateNtsBatchExcludingStmWithoutStmRh, testCreateNtsBatchExcludingStmWithStmRhForAnotherProduct')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: 'e5a80e61-27d6-4dec-9a75-03cb99e9f41b')
