@@ -48,7 +48,7 @@ public class WorkClassificationCsvReportHandler extends BaseCsvReportHandler<Wor
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(getBeanPropertyAsString(bean.getRhName()));
         beanProperties.add(Objects.nonNull(bean.getUpdateDate())
-            ? DateFormatUtils.format(bean.getCreateDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)
+            ? DateFormatUtils.format(bean.getUpdateDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)
             : StringUtils.EMPTY);
         beanProperties.add(bean.getUpdateUser());
         return beanProperties;
