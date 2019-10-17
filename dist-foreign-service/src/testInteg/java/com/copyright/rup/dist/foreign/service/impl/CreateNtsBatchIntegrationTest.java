@@ -42,6 +42,7 @@ public class CreateNtsBatchIntegrationTest {
 
     private static final LocalDate DATE = LocalDate.of(2017, 2, 1);
     private static final String BUS_MARKET = "Bus";
+    private static final String DOC_DEL_MARKET = "Doc Del";
     private static final String ORACLE_RH_TAX_1000023401_US_RESPONSE = "tax/rh_1000023401_tax_country_us_response.json";
     private static final String PRM_RH_1000023401_RESPONSE = "prm/rightsholder_1000023401_response.json";
     private static final String RMS_GRANTS_65882434_REQUEST = "rights/rms_grants_658824345_request.json";
@@ -80,11 +81,11 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchExcludingStmWithStmRh() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool("Doc Del", STM_AMOUNT, true)))
+            .withUsageBatch(buildUsageBatch(buildFundPool(DOC_DEL_MARKET, STM_AMOUNT, true)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
-            .expectPreferences("preferences/rh_1000023401_stm_response.json", RH_ID)
+            .expectPreferences("preferences/rh_1000023401_stm_nts_response.json", RH_ID)
             .build()
             .run();
     }
@@ -92,12 +93,26 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchExcludingStmWithoutStmRh() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool("Doc Del", STM_AMOUNT, true)))
+            .withUsageBatch(buildUsageBatch(buildFundPool(DOC_DEL_MARKET, STM_AMOUNT, true)))
+            .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
+            .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
+            .expectPreferences("preferences/rh_1000023401_stm_fas_response.json", RH_ID)
+            .expectUsages(Collections.singletonList(buildUsage(DOC_DEL_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L)))
+            .expectAudit(getEligibleUsageAuditItem())
+            .build()
+            .run();
+    }
+
+    @Test
+    public void testCreateNtsBatchExcludingStmWithStmRhForAnotherProduct() {
+        testBuilder
+            .withUsageBatch(buildUsageBatch(buildFundPool(DOC_DEL_MARKET, STM_AMOUNT, true)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsages(Collections.singletonList(buildUsage("Doc Del", UsageStatusEnum.ELIGIBLE, 658824345L)))
+            .expectUsages(Collections.singletonList(buildUsage(DOC_DEL_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L)))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();

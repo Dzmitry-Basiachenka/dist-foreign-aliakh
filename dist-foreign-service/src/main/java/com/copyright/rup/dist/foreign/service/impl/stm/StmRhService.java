@@ -32,7 +32,7 @@ public class StmRhService implements IStmRhService {
 
     @Override
     public void processStmRh(Usage usage) {
-        LOGGER.debug("Consume usage for STM RH processing. Started. UsageId={}, RhId={}", usage.getId(),
+        LOGGER.debug("Processing STM RHs. Started. UsageId={}, RhId={}", usage.getId(),
             usage.getRightsholder().getId());
         boolean isStmRh =
             prmIntegrationService.isStmRightsholder(usage.getRightsholder().getId(), usage.getProductFamily());
@@ -40,7 +40,7 @@ public class StmRhService implements IStmRhService {
             usage.setStatus(UsageStatusEnum.NON_STM_RH);
             usageService.updateProcessedUsage(usage);
         }
-        LOGGER.debug("Consume usage for STM RH processing. Finished. UsageId={}, RhId={}, IsStmRh={}",
-            usage.getId(), usage.getRightsholder().getId(), isStmRh);
+        LOGGER.debug("Processing STM RHs. Finished. UsageId={}, RhId={}, IsStmRh={}", usage.getId(),
+            usage.getRightsholder().getId(), isStmRh);
     }
 }
