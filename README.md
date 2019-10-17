@@ -1,3 +1,7 @@
+7.1.5
+-
+* B-51245 FDA: Update Classification View to include 2 new columns: repair CsvreportsIntegrationTest
+
 7.1.4
 -
 * B-50006 FDA: Exclude details from FAS scenario at the Payee level: implement Exclude Details by Payee window
