@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeesFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
@@ -9,6 +10,7 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.vaadin.data.Binder;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -16,7 +18,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -32,6 +34,7 @@ import java.util.Map;
  */
 public class ExcludePayeesFilterWidget extends VerticalLayout implements IExcludePayeesFilterWidget {
 
+    private final Binder<String> binder = new Binder<>();
     private IExcludePayeesFilterController controller;
     private ExcludePayeesFilter filter = new ExcludePayeesFilter();
     private ExcludePayeesFilter appliedFilter = new ExcludePayeesFilter();
@@ -105,10 +108,15 @@ public class ExcludePayeesFilterWidget extends VerticalLayout implements IExclud
 
     private void initMinimumThresholdFilter() {
         minimumThreshold = new TextField(ForeignUi.getMessage("label.minimum_threshold"));
+        binder.forField(minimumThreshold)
+            .withValidator(value -> new AmountValidator().isValid(StringUtils.trimToEmpty(value)),
+                ForeignUi.getMessage("field.error.positive_number"))
+            .bind(source -> source, (beanValue, fieldValue) -> beanValue = fieldValue);
         minimumThreshold.addValueChangeListener(event -> {
-            //TODO: analyze how to validate input data
-            filter.setMinimumThreshold(
-                NumberUtils.isParsable(event.getValue()) ? new BigDecimal(event.getValue()) : null);
+            if (!binder.validate().hasErrors()) {
+                filter.setMinimumThreshold(StringUtils.isNotBlank(event.getValue())
+                    ? new BigDecimal(StringUtils.trimToEmpty(event.getValue())) : null);
+            }
             filterChanged();
         });
         VaadinUtils.setMaxComponentsWidth(minimumThreshold);
@@ -116,7 +124,7 @@ public class ExcludePayeesFilterWidget extends VerticalLayout implements IExclud
     }
 
     private void filterChanged() {
-        applyButton.setEnabled(!filter.equals(appliedFilter));
+        applyButton.setEnabled(!binder.validate().hasErrors() && !filter.equals(appliedFilter));
     }
 
     private Label buildFiltersHeaderLabel() {
