@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeesFilter;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
@@ -24,9 +25,12 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -65,6 +69,35 @@ public class ExcludePayeesFilterWidgetTest {
         verifyMinimumThresholdComponent(widget.getComponent(2));
         verifyButtonsLayout(widget.getComponent(3));
         verify(controller);
+    }
+
+    @Test
+    public void testMinimumThresholdChangeValueListener() {
+        expect(controller.getParticipatingStatuses())
+            .andReturn(ImmutableMap.of("Participating", Boolean.TRUE, "Not Participating", Boolean.FALSE))
+            .once();
+        replay(controller);
+        widget.init();
+        BigDecimal filterValue = new BigDecimal("45.10");
+        TextField threshold = Whitebox.getInternalState(widget, "minimumThreshold");
+        Button applyButton = Whitebox.getInternalState(widget, "applyButton");
+        ExcludePayeesFilter filter = Whitebox.getInternalState(widget, "filter");
+        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "45.10", filterValue, true);
+        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "-45.10", filterValue, false);
+        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "45,10", filterValue, false);
+        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "45.10a", filterValue, false);
+        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, " 0 ", filterValue, false);
+        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "0", filterValue, false);
+        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, StringUtils.EMPTY, null, false);
+        verify(controller);
+    }
+
+    private void setThresholdAndValidateFilterAndApplyButton(TextField minimumThreshold, Button applyButton,
+                                                             ExcludePayeesFilter filter, String valueToSet,
+                                                             BigDecimal filterValue, boolean applyEnabled) {
+        minimumThreshold.setValue(valueToSet);
+        assertEquals(applyEnabled, applyButton.isEnabled());
+        assertEquals(filterValue, filter.getMinimumThreshold());
     }
 
     private void verifyParticipatingStatusCombobox(Component component) {

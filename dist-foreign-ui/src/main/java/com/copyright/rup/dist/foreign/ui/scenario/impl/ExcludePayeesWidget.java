@@ -18,6 +18,7 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.data.validator.StringLengthValidator;
+import com.vaadin.server.SerializableComparator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -117,7 +118,9 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
     private void addColumns() {
         addColumn(holder -> holder.getPayee().getAccountNumber(), "table.column.payee_account_number",
             "payee.accountNumber");
-        addColumn(holder -> holder.getPayee().getName(), "table.column.payee_name", "payee.name");
+        addColumn(holder -> holder.getPayee().getName(), "table.column.payee_name", "payee.name")
+            .setComparator((SerializableComparator<PayeeTotalsHolder>) (holder1, holder2) ->
+                holder1.getPayee().getName().compareToIgnoreCase(holder2.getPayee().getName()));
         addAmountColumn(PayeeTotalsHolder::getGrossTotal, "table.column.amount_in_usd", "grossTotal");
         addAmountColumn(PayeeTotalsHolder::getServiceFeeTotal, "table.column.service_fee_amount",
             "serviceFeeTotal");
@@ -126,18 +129,20 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
         payeesGrid.getColumns().forEach(column -> column.setSortable(true));
     }
 
-    private void addColumn(ValueProvider<PayeeTotalsHolder, ?> provider, String captionProperty,
-                           String sortProperty) {
-        payeesGrid.addColumn(provider)
+    private Grid.Column<PayeeTotalsHolder, ?> addColumn(ValueProvider<PayeeTotalsHolder, ?> provider,
+                                                        String captionProperty, String sortProperty) {
+        return payeesGrid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sortProperty);
     }
 
     private void addAmountColumn(Function<PayeeTotalsHolder, BigDecimal> function, String captionProperty,
                                  String sortProperty) {
-        payeesGrid.addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null))
+        payeesGrid.addColumn(holder -> CurrencyUtils.format(function.apply(holder), null))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sortProperty)
+            .setComparator((SerializableComparator<PayeeTotalsHolder>) (holder1, holder2) ->
+                function.apply(holder1).compareTo(function.apply(holder2)))
             .setStyleGenerator(item -> STYLE_ALIGN_RIGHT);
     }
 
@@ -198,7 +203,8 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
                             || StringUtils.containsIgnoreCase(holder.getPayee().getName(), searchValue);
                 }
                 if (notEmptyFilter && Objects.nonNull(filter.getMinimumThreshold())) {
-                    result = result && 0 > holder.getNetTotal().compareTo(filter.getMinimumThreshold());
+                    result = result && 0 > holder.getNetTotal().setScale(2, BigDecimal.ROUND_HALF_UP)
+                        .compareTo(filter.getMinimumThreshold());
                 }
                 if (notEmptyFilter && Objects.nonNull(filter.getPayeeParticipating())) {
                     result = result && filter.getPayeeParticipating().equals(holder.isPayeeParticipating());
