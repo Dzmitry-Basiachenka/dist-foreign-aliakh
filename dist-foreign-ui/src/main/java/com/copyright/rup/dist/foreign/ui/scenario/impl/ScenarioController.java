@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
@@ -122,7 +123,9 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
             Windows.showNotificationWindow(ForeignUi.getMessage("message.info.exclude_details.reconciled_scenario"));
         } else {
             excludePayeesController.setScenario(scenario);
-            Windows.showModalWindow((Window) excludePayeesController.initWidget());
+            IExcludePayeeWidget widget = excludePayeesController.initWidget();
+            widget.addListener(this::fireWidgetEvent);
+            Windows.showModalWindow((Window) widget);
         }
     }
 

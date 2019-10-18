@@ -1,18 +1,27 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterWidget;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.Validator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -21,12 +30,17 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.powermock.api.easymock.PowerMock;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,22 +54,29 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau Shalamitski
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Windows.class})
 public class ExcludePayeesWidgetTest {
+
+    private static final String REASON = "reason";
 
     private ExcludePayeesWidget widget;
     private IExcludePayeesController controller;
     private IExcludePayeesFilterController filterController;
     private IExcludePayeesFilterWidget filterWidget;
+    private Grid<PayeeTotalsHolder> payeesGrid;
 
     @Before
     public void setUp() {
         controller = createMock(IExcludePayeesController.class);
+        payeesGrid = createMock(Grid.class);
         widget = new ExcludePayeesWidget();
         widget.setController(controller);
         filterController = PowerMock.createMock(IExcludePayeesFilterController.class);
         filterWidget = new ExcludePayeesFilterWidget();
         filterWidget.setController(filterController);
         initWidget();
+        Whitebox.setInternalState(widget, payeesGrid);
     }
 
     @Test
@@ -72,6 +93,75 @@ public class ExcludePayeesWidgetTest {
         verifySearchWidget(content.getComponent(0));
         verifyGrid(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2));
+    }
+
+    @Test
+    public void testExcludeDetailsButtonClick() {
+        mockStatic(Windows.class);
+        Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
+        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
+        expect(payeesGrid.getSelectedItems()).andReturn(Collections.singleton(new PayeeTotalsHolder())).once();
+        Windows.showConfirmDialogWithReason(eq("Confirm action"),
+            eq("Are you sure you want to exclude details with selected Payees?"),
+            eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture), anyObject(Validator.class));
+        expectLastCall().once();
+        controller.excludeDetails(anyObject(), eq(REASON));
+        expectLastCall().once();
+        replay(clickEvent, controller, payeesGrid, Windows.class);
+        buttonClick(0, clickEvent);
+        actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
+        verify(clickEvent, controller, payeesGrid, Windows.class);
+    }
+
+    @Test
+    public void testExcludeDetailsButtonClickWithoutSelectionPayees() {
+        mockStatic(Windows.class);
+        Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
+        Windows.showNotificationWindow("Please select at least one Payee");
+        expectLastCall().once();
+        replay(clickEvent, controller, Windows.class);
+        buttonClick(0, clickEvent);
+        verify(clickEvent, controller, Windows.class);
+    }
+
+    @Test
+    public void testRedesignateDetailsButtonClick() {
+        mockStatic(Windows.class);
+        Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
+        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
+        expect(payeesGrid.getSelectedItems()).andReturn(Collections.singleton(new PayeeTotalsHolder())).once();
+        Windows.showConfirmDialogWithReason(eq("Confirm action"),
+            eq("Are you sure you want to redesignate details with selected Payees?"),
+            eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture), anyObject(Validator.class));
+        expectLastCall().once();
+        controller.redesignateDetails(anyObject(), eq(REASON));
+        expectLastCall().once();
+        replay(clickEvent, controller, payeesGrid, Windows.class);
+        buttonClick(1, clickEvent);
+        actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
+        verify(clickEvent, controller, payeesGrid, Windows.class);
+    }
+
+    @Test
+    public void testRedesignateDetailsButtonClickWithoutSelectionPayees() {
+        mockStatic(Windows.class);
+        Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
+        Windows.showNotificationWindow("Please select at least one Payee");
+        expectLastCall().once();
+        replay(clickEvent, controller, Windows.class);
+        buttonClick(1, clickEvent);
+        verify(clickEvent, controller, Windows.class);
+    }
+
+    private void buttonClick(int buttonIndex, Button.ClickEvent clickEvent) {
+        HorizontalSplitPanel splitPanel = (HorizontalSplitPanel) widget.getContent();
+        VerticalLayout content = (VerticalLayout) splitPanel.getSecondComponent();
+        HorizontalLayout horizontalLayout = (HorizontalLayout) content.getComponent(2);
+        Button button = (Button) horizontalLayout.getComponent(buttonIndex);
+        Collection<?> listeners = button.getListeners(Button.ClickEvent.class);
+        assertEquals(1, listeners.size());
+        Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
     }
 
     private void verifySearchWidget(Component component) {
@@ -109,7 +199,7 @@ public class ExcludePayeesWidgetTest {
     private void initWidget() {
         expect(controller.getExcludePayeesFilterController()).andReturn(filterController).once();
         expect(filterController.initWidget()).andReturn(filterWidget).once();
-        expect(controller.findPayeeTotalsHolders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getPayeeTotalsHolders()).andReturn(Collections.emptyList()).once();
         replay(controller, filterController);
         widget.init();
         verify(controller, filterController);

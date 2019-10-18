@@ -667,7 +667,8 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(1, CollectionUtils.size(usages));
         verifyFasUsage(usages.get(0), UsageStatusEnum.LOCKED, SCENARIO_ID, StoredEntity.DEFAULT_USER, 1000002859L);
         usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
-        verifyUsageExcludedFromScenario(usageRepository.findByIds(Collections.singletonList(USAGE_ID_8)).get(0));
+        verifyUsageExcludedFromScenario(usageRepository.findByIds(Collections.singletonList(USAGE_ID_8)).get(0),
+            FAS_PRODUCT_FAMILY, UsageStatusEnum.ELIGIBLE);
     }
 
     @Test
@@ -699,6 +700,42 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testExcludeFromScenarioByPayees() {
+        Set<String> excludedIds = usageRepository.deleteFromScenarioByPayees("edbcc8b3-8fa4-4c58-9244-a91627cac7a9",
+            Collections.singleton(7000813806L), USER_NAME);
+        assertEquals(1, CollectionUtils.size(excludedIds));
+        assertTrue(excludedIds.contains("730d7964-f399-4971-9403-dbedc9d7a180"));
+        List<Usage> usages =
+            usageRepository.findByIds(Collections.singletonList("730d7964-f399-4971-9403-dbedc9d7a180"));
+        assertEquals(1, CollectionUtils.size(usages));
+        verifyUsageExcludedFromScenario(usages.get(0), "FAS2", UsageStatusEnum.ELIGIBLE);
+        List<String> usageIds = usageRepository.findByScenarioId("edbcc8b3-8fa4-4c58-9244-a91627cac7a9")
+            .stream()
+            .map(Usage::getId)
+            .collect(Collectors.toList());
+        assertEquals(1, CollectionUtils.size(usageIds));
+        assertTrue(usageIds.contains("7234feb4-a59e-483b-985a-e8de2e3eb190"));
+    }
+
+    @Test
+    public void testRedesignateByPayees() {
+        Set<String> excludedIds = usageRepository.redesignateByPayees("767a2647-7e6e-4479-b381-e642de480863",
+            Collections.singleton(7000813806L), USER_NAME);
+        assertEquals(1, CollectionUtils.size(excludedIds));
+        assertTrue(excludedIds.contains("72f6abdb-c82d-4cee-aadf-570942cf0093"));
+        List<Usage> usages =
+            usageRepository.findByIds(Collections.singletonList("72f6abdb-c82d-4cee-aadf-570942cf0093"));
+        assertEquals(1, CollectionUtils.size(usages));
+        verifyUsageExcludedFromScenario(usages.get(0), "NTS", UsageStatusEnum.NTS_WITHDRAWN);
+        List<String> usageIds = usageRepository.findByScenarioId("767a2647-7e6e-4479-b381-e642de480863")
+            .stream()
+            .map(Usage::getId)
+            .collect(Collectors.toList());
+        assertEquals(1, CollectionUtils.size(usageIds));
+        assertTrue(usageIds.contains("209a960f-5896-43da-b020-fc52981b9633"));
+    }
+
+    @Test
     public void testDeleteFromScenarioByAccountNumbers() throws IOException {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_8, USAGE_ID_7));
         assertEquals(2, CollectionUtils.size(usages));
@@ -709,7 +746,7 @@ public class UsageRepositoryIntegrationTest {
         usageRepository.deleteFromScenario(Lists.newArrayList(USAGE_ID_8, USAGE_ID_7), USER_NAME);
         usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_8, USAGE_ID_7));
         assertEquals(2, CollectionUtils.size(usages));
-        usages.forEach(this::verifyUsageExcludedFromScenario);
+        usages.forEach(usage1 -> verifyUsageExcludedFromScenario(usage1, FAS_PRODUCT_FAMILY, UsageStatusEnum.ELIGIBLE));
         usages = usageRepository.findByIds(Collections.singletonList(usage.getId()));
         assertEquals(SCENARIO_ID, usages.get(0).getScenarioId());
     }
@@ -1362,16 +1399,17 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(USER_NAME, actualUsage.getCreateUser());
     }
 
-    private void verifyUsageExcludedFromScenario(Usage usage) {
-        assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+    private void verifyUsageExcludedFromScenario(Usage usage, String productFamily, UsageStatusEnum status) {
+        assertEquals(status, usage.getStatus());
         assertNull(usage.getScenarioId());
         assertNull(usage.getPayee().getAccountNumber());
         assertNull(usage.getServiceFee());
         assertEquals(DEFAULT_ZERO_AMOUNT, usage.getServiceFeeAmount());
         assertEquals(DEFAULT_ZERO_AMOUNT, usage.getNetAmount());
         assertFalse(usage.isRhParticipating());
+        assertFalse(usage.isPayeeParticipating());
         assertEquals(USER_NAME, usage.getUpdateUser());
-        assertEquals(FAS_PRODUCT_FAMILY, usage.getProductFamily());
+        assertEquals(productFamily, usage.getProductFamily());
     }
 
     private UsageFilter buildUsageFilter(Set<Long> accountNumbers, Set<String> usageBatchIds,

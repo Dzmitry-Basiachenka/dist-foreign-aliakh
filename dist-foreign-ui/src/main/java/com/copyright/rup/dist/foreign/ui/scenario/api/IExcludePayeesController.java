@@ -8,6 +8,7 @@ import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for exclude payees controller.
@@ -38,7 +39,23 @@ public interface IExcludePayeesController extends IController<IExcludePayeeWidge
     /**
      * @return list of {@link PayeeTotalsHolder}s to be displayed on UI.
      */
-    List<PayeeTotalsHolder> findPayeeTotalsHolders();
+    List<PayeeTotalsHolder> getPayeeTotalsHolders();
+
+    /**
+     * Exclude details from corresponding scenario with selected payees' account numbers.
+     *
+     * @param payeeAccountNumbers payee's account numbers
+     * @param reason              reason of exclusion
+     */
+    void excludeDetails(Set<Long> payeeAccountNumbers, String reason);
+
+    /**
+     * Redesignates details for corresponding scenario with selected payees' account numbers.
+     *
+     * @param payeeAccountNumbers payee's account numbers
+     * @param reason              reason of exclusion
+     */
+    void redesignateDetails(Set<Long> payeeAccountNumbers, String reason);
 
     /**
      * Sets {@link Scenario}.

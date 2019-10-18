@@ -94,6 +94,7 @@ import java.util.Set;
 public class UsageServiceTest {
 
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
+    private static final String REASON = "reason";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USAGE_ID_1 = "Usage id 1";
@@ -155,6 +156,34 @@ public class UsageServiceTest {
         Whitebox.setInternalState(usageService, "scenarioAuditService", scenarioAuditService);
         Whitebox.setInternalState(usageService, "rightsholderService", rightsholderService);
         Whitebox.setInternalState(usageService, "claAccountNumber", 2000017000L);
+    }
+
+    @Test
+    public void testDeleteFromScenarioByPayees() {
+        Set<String> usageIds = Sets.newHashSet(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
+        Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
+        expect(usageRepository.deleteFromScenarioByPayees(scenario.getId(), accountNumbers, "SYSTEM"))
+            .andReturn(usageIds)
+            .once();
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, REASON);
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService);
+        usageService.deleteFromScenarioByPayees(scenario, accountNumbers, REASON);
+        verify(usageRepository, usageAuditService);
+    }
+
+    @Test
+    public void testRedesignateByPayees() {
+        Set<String> usageIds = Sets.newHashSet(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
+        Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
+        expect(usageRepository.redesignateByPayees(scenario.getId(), accountNumbers, "SYSTEM"))
+            .andReturn(usageIds)
+            .once();
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, REASON);
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService);
+        usageService.redesignateByPayees(scenario, accountNumbers, REASON);
+        verify(usageRepository, usageAuditService);
     }
 
     @Test

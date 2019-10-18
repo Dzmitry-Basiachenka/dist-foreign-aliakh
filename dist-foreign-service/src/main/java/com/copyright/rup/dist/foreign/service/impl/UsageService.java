@@ -365,6 +365,22 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Transactional
+    public void deleteFromScenarioByPayees(Scenario scenario, Set<Long> accountNumbers, String reason) {
+        Set<String> usageIds = usageRepository
+            .deleteFromScenarioByPayees(scenario.getId(), accountNumbers, RupContextUtils.getUserName());
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
+    }
+
+    @Override
+    @Transactional
+    public void redesignateByPayees(Scenario scenario, Set<Long> accountNumbers, String reason) {
+        Set<String> usageIds = usageRepository
+            .redesignateByPayees(scenario.getId(), accountNumbers, RupContextUtils.getUserName());
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
+    }
+
+    @Override
     public boolean isUsageIdExists(String usageId, UsageStatusEnum statusEnum) {
         return 0 != usageRepository.findCountByUsageIdAndStatus(usageId, statusEnum);
     }

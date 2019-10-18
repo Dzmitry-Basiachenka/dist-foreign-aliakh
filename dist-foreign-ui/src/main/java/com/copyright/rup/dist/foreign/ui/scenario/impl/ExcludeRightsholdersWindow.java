@@ -137,13 +137,11 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
                             .map(pair -> pair.getRightsholder().getAccountNumber())
                             .collect(Collectors.toList());
                         scenarioController.deleteFromScenario(accountNumber, selectedIds, reason);
-                        scenarioController.getWidget().refresh();
-                        scenarioController.getWidget().refreshTable();
                         fireEvent(new ExcludeUsagesEvent(this));
                         this.close();
                     }, new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024));
             } else {
-                Windows.showNotificationWindow(ForeignUi.getMessage("message.exclude.empty"));
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.exclude_rro.empty"));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IExcludePayeesController}.
@@ -46,8 +47,18 @@ public class ExcludePayeesController extends CommonController<IExcludePayeeWidge
     }
 
     @Override
-    public List<PayeeTotalsHolder> findPayeeTotalsHolders() {
+    public List<PayeeTotalsHolder> getPayeeTotalsHolders() {
         return usageService.getPayeeTotalsHoldersByScenarioId(scenario.getId());
+    }
+
+    @Override
+    public void excludeDetails(Set<Long> payeeAccountNumbers, String reason) {
+        usageService.deleteFromScenarioByPayees(scenario, payeeAccountNumbers, reason);
+    }
+
+    @Override
+    public void redesignateDetails(Set<Long> payeeAccountNumbers, String reason) {
+        usageService.redesignateByPayees(scenario, payeeAccountNumbers, reason);
     }
 
     @Override

@@ -229,6 +229,29 @@ public interface IUsageService {
     void deleteFromScenario(Scenario scenario, Long rroAccountNumber, List<Long> accountNumbers, String reason);
 
     /**
+     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
+     * sets scenario id, payee account number, service fee to {@code null}, sets rh and payee participating flags to
+     * {@code false}, service fee amount and net amount to 0 for usages with payees from given list of account numbers.
+     *
+     * @param scenario       {@link Scenario}
+     * @param accountNumbers set of payees' account numbers
+     * @param reason         reason provided by user
+     */
+    void deleteFromScenarioByPayees(Scenario scenario, Set<Long> accountNumbers, String reason);
+
+    /**
+     * Redesignates {@link Usage}s. Sets status of {@link Usage}s to {@link UsageStatusEnum#NTS_WITHDRAWN},
+     * sets product family to NTS, sets scenario id, payee account number, service fee to {@code null},
+     * sets rh and payee participating flags to {@code false}, service fee amount and net amount to 0
+     * for usages with payees from given list of account numbers and in given scenario.
+     *
+     * @param scenario       {@link Scenario}
+     * @param accountNumbers set of payees' account numbers
+     * @param reason         reason provided by user
+     */
+    void redesignateByPayees(Scenario scenario, Set<Long> accountNumbers, String reason);
+
+    /**
      * Checks if usage with usage id and status exists in database.
      *
      * @param usageId    usage id
