@@ -397,6 +397,7 @@
             payee_account_number = null,
             service_fee = null,
             is_rh_participating_flag = false,
+            is_payee_participating_flag = false,
             service_fee_amount = 0,
             net_amount = 0,
             <include refid="StoredEntityMapper.update"/>
@@ -760,6 +761,38 @@
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid = #{id}
     </update>
+
+    <select id="deleteFromScenarioByPayees" parameterType="map" resultType="string">
+        <include refid="deleteFromScenarioSql"/>
+        where df_scenario_uid = #{scenarioId}
+            and payee_account_number in
+            <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
+                #{accountNumber}
+            </foreach>
+        returning df_usage_uid
+    </select>
+
+    <select id="redesignateByPayees" parameterType="map" resultType="string">
+        update
+            ${schema}.df_usage
+        set
+            status_ind = #{status},
+            product_family = #{productFamily},
+            df_scenario_uid = null,
+            payee_account_number = null,
+            service_fee = null,
+            is_rh_participating_flag = false,
+            is_payee_participating_flag = false,
+            service_fee_amount = 0,
+            net_amount = 0,
+            <include refid="StoredEntityMapper.update"/>
+        where df_scenario_uid = #{scenarioId}
+            and payee_account_number in
+            <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
+                #{accountNumber}
+            </foreach>
+        returning df_usage_uid
+    </select>
 
     <update id="deleteFromScenario" parameterType="map">
         <include refid="deleteFromScenarioSql"/>

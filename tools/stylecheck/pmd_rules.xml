@@ -98,7 +98,7 @@
             </property>
             <!--Max count for class. This value was used to support existing Tests-->
             <property name="classReportLevel">
-                <value>1020</value>
+                <value>1040</value>
             </property>
         </properties>
     </rule>

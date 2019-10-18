@@ -20,4 +20,11 @@ public interface IExcludePayeeWidget extends SearchWidget.ISearchController, IRe
      * @return search value string.
      */
     String getSearchValue();
+
+    /**
+     * Adds {@link IExcludeUsagesListener} on window.
+     *
+     * @param listener instance of {@link IExcludeUsagesListener}
+     */
+    void addListener(IExcludeUsagesListener listener);
 }

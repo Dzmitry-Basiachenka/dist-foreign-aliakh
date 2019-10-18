@@ -3,17 +3,21 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeesFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -23,11 +27,15 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Represents window with ability to exclude RH details by Payee.
@@ -67,6 +75,11 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
     }
 
     @Override
+    public void addListener(IExcludeUsagesListener listener) {
+        addListener(ExcludeUsagesEvent.class, listener, IExcludeUsagesListener.EXCLUDE_DETAILS_HANDLER);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public ExcludePayeesWidget init() {
         setWidth(1200, Unit.PIXELS);
@@ -94,7 +107,7 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
 
     private void initGrid() {
         payeesGrid = new Grid<>();
-        payeesGrid.setItems(controller.findPayeeTotalsHolders());
+        payeesGrid.setItems(controller.getPayeeTotalsHolders());
         payeesGrid.setSelectionMode(SelectionMode.MULTI);
         payeesGrid.setSizeFull();
         VaadinUtils.addComponentStyle(payeesGrid, "exclude-details-by-payee-grid");
@@ -136,8 +149,36 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
 
     private HorizontalLayout createButtonsLayout() {
         Button excludeDetails = Buttons.createButton(ForeignUi.getMessage("button.exclude_details"));
+        addClickListener(excludeDetails, "message.confirm.exclude.payees",
+            (accountNumbers, reason) -> controller.excludeDetails(accountNumbers, reason));
         Button redesignateDetails = Buttons.createButton(ForeignUi.getMessage("button.redesignate_details"));
+        addClickListener(redesignateDetails, "message.confirm.redesignate",
+            (accountNumbers, reason) -> controller.redesignateDetails(accountNumbers, reason));
         return new HorizontalLayout(excludeDetails, redesignateDetails, Buttons.createCloseButton(this));
+    }
+
+    private void addClickListener(Button button, String dialogMessageProperty,
+                                  BiConsumer<Set<Long>, String> actionHandler) {
+        button.addClickListener(event -> {
+            Set<PayeeTotalsHolder> selectedPayees = payeesGrid.getSelectedItems();
+            if (CollectionUtils.isNotEmpty(selectedPayees)) {
+                Windows.showConfirmDialogWithReason(
+                    ForeignUi.getMessage("window.confirm"),
+                    ForeignUi.getMessage(dialogMessageProperty),
+                    ForeignUi.getMessage("button.yes"),
+                    ForeignUi.getMessage("button.cancel"),
+                    reason -> {
+                        Set<Long> selectedAccountNumbers = selectedPayees.stream()
+                            .map(holder -> holder.getPayee().getAccountNumber())
+                            .collect(Collectors.toSet());
+                        actionHandler.accept(selectedAccountNumbers, reason);
+                        fireEvent(new ExcludeUsagesEvent(this));
+                        this.close();
+                    }, new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024));
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.exclude_payee.empty"));
+            }
+        });
     }
 
     private void resetFilters() {

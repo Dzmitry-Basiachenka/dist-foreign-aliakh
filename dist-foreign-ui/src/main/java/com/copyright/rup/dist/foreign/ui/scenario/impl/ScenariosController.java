@@ -106,7 +106,11 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     public void onViewButtonClicked() {
         scenarioController.setScenario(getWidget().getSelectedScenario());
         IScenarioWidget scenarioWidget = scenarioController.initWidget();
-        scenarioWidget.addListener((IExcludeUsagesListener) event -> getWidget().refreshSelectedScenario());
+        scenarioWidget.addListener((IExcludeUsagesListener) event -> {
+            scenarioWidget.refresh();
+            scenarioWidget.refreshTable();
+            getWidget().refreshSelectedScenario();
+        });
         Window scenarioWindow = (Window) scenarioWidget;
         Windows.showModalWindow(scenarioWindow);
         scenarioWindow.setPositionY(30);
