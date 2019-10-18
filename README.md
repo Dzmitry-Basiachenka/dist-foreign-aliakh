@@ -1,3 +1,9 @@
+7.1.6
+-
+* B-46037 FDA: Exclude STM RHs from the NTS batch: make changes based on comments in CR-DIST-FOREIGN-128
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: implement service logic to exclude and redesignate details
+* B-51245 FDA: Update Classification View to include 2 new columns: make changes based on CR-DIST-FOREIGN-127
+
 7.1.5
 -
 * B-51245 FDA: Update Classification View to include 2 new columns: repair CsvreportsIntegrationTest
