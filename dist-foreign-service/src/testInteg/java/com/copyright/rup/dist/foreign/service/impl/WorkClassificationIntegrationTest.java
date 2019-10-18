@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
@@ -12,6 +13,7 @@ import com.copyright.rup.dist.foreign.service.api.IWorkClassificationService;
 
 import com.google.common.collect.Sets;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -58,11 +61,15 @@ public class WorkClassificationIntegrationTest {
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
         workClassificationService.insertOrUpdateClassifications(
             Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), STM);
-        assertAndGetUsages(2, UsageStatusEnum.ELIGIBLE);
         List<WorkClassification> workClassifications =
             workClassificationService.getClassifications(Sets.newHashSet(BATCHES_IDS), null, null, null);
-        assertEquals("SYSTEM", workClassifications.get(0).getUpdateUser());
-        workClassifications.forEach(workClassification -> assertEquals(STM, workClassification.getClassification()));
+        assertEquals(2,workClassifications.size());
+        assertAndGetUsages(2, UsageStatusEnum.ELIGIBLE);
+        workClassifications.forEach(workClassification -> {
+            assertEquals(STM, workClassification.getClassification());
+            assertEquals("SYSTEM", workClassification.getUpdateUser());
+            assertEquals(getConvertedDate(new Date()),getConvertedDate(workClassification.getUpdateDate()));
+        });
     }
 
     @Test
@@ -73,13 +80,15 @@ public class WorkClassificationIntegrationTest {
             Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), NON_STM);
         List<WorkClassification> workClassifications =
             workClassificationService.getClassifications(Sets.newHashSet(BATCHES_IDS), null, null, null);
-        assertEquals("SYSTEM",
-            workClassificationService.getClassifications(Sets.newHashSet(BATCHES_IDS), null, null, null)
-                .get(0).getUpdateUser());
+        assertEquals(2,workClassifications.size());
         assertAndGetUsages(2, UsageStatusEnum.ELIGIBLE);
         assertEquals("SYSTEM", workClassifications.get(0).getUpdateUser());
         workClassifications.forEach(
-            workClassification -> assertEquals(NON_STM, workClassification.getClassification()));
+            workClassification ->{
+                assertEquals(NON_STM, workClassification.getClassification());
+                assertEquals("SYSTEM", workClassification.getUpdateUser());
+                assertEquals(getConvertedDate(new Date()),getConvertedDate(workClassification.getUpdateDate()));
+            });
     }
 
     @Test
@@ -118,5 +127,9 @@ public class WorkClassificationIntegrationTest {
         WorkClassification classification = new WorkClassification();
         classification.setWrWrkInst(wrWrkInst);
         return classification;
+    }
+
+    private String getConvertedDate(Date date){
+        return DateFormatUtils.format(date, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     }
 }
