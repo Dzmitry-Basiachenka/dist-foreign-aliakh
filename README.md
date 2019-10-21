@@ -1,3 +1,7 @@
+7.1.7
+-
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: implement validation for Minimum Threshold field, adjust sorting of amounts fields on Exclude Details By Payee window
+
 7.1.6
 -
 * B-46037 FDA: Exclude STM RHs from the NTS batch: make changes based on comments in CR-DIST-FOREIGN-128
