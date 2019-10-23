@@ -1,3 +1,8 @@
+7.1.8
+-
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: replace column Service Fee % with Participating and add Clear button on Exclude Details By Payee window
+* B-54041 Tech Debt: FDA: fix 'No log4j2 configuration file found' log error message during startup
+
 7.1.7
 -
 * B-50006 FDA: Exclude details from FAS scenario at the Payee level: implement validation for Minimum Threshold field, adjust sorting of amounts fields on Exclude Details By Payee window
