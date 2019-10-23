@@ -45,6 +45,7 @@ public class CreateNtsBatchIntegrationTest {
     private static final String DOC_DEL_MARKET = "Doc Del";
     private static final String ORACLE_RH_TAX_1000023401_US_RESPONSE = "tax/rh_1000023401_tax_country_us_response.json";
     private static final String PRM_RH_1000023401_RESPONSE = "prm/rightsholder_1000023401_response.json";
+    private static final String PRM_RH_2000017001_RESPONSE = "prm/rightsholder_2000017001_response.json";
     private static final String RMS_GRANTS_65882434_REQUEST = "rights/rms_grants_658824345_request.json";
     private static final String RMS_GRANTS_65882434_RESPONSE = "rights/rms_grants_658824345_response.json";
     private static final String PRM_ELIGIBLE_RH_1000023401_RESPONSE =
@@ -70,6 +71,7 @@ public class CreateNtsBatchIntegrationTest {
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET, STM_AMOUNT, false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
             .expectUsages(Collections.singletonList(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L)))
@@ -84,6 +86,7 @@ public class CreateNtsBatchIntegrationTest {
             .withUsageBatch(buildUsageBatch(buildFundPool(DOC_DEL_MARKET, STM_AMOUNT, true)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences("preferences/rh_1000023401_stm_nts_response.json", RH_ID)
             .build()
@@ -96,6 +99,7 @@ public class CreateNtsBatchIntegrationTest {
             .withUsageBatch(buildUsageBatch(buildFundPool(DOC_DEL_MARKET, STM_AMOUNT, true)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences("preferences/rh_1000023401_stm_fas_response.json", RH_ID)
             .expectUsages(Collections.singletonList(buildUsage(DOC_DEL_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L)))
@@ -110,6 +114,7 @@ public class CreateNtsBatchIntegrationTest {
             .withUsageBatch(buildUsageBatch(buildFundPool(DOC_DEL_MARKET, STM_AMOUNT, true)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
             .expectUsages(Collections.singletonList(buildUsage(DOC_DEL_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L)))
@@ -124,6 +129,7 @@ public class CreateNtsBatchIntegrationTest {
             .withUsageBatch(buildUsageBatch(buildFundPool("Gov", STM_AMOUNT, false)))
             .expectRmsRights("rights/rms_grants_576324545_request.json", "rights/rms_grants_576324545_response.json")
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
             .expectUsages(Collections.singletonList(buildUsage("Gov", UsageStatusEnum.UNCLASSIFIED, 576324545L)))
@@ -137,6 +143,7 @@ public class CreateNtsBatchIntegrationTest {
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET, STM_AMOUNT, false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences("preferences/rh_1000023401_ineligible_response.json", RH_ID)
             .build()
@@ -169,6 +176,7 @@ public class CreateNtsBatchIntegrationTest {
             .withUsageBatch(buildUsageBatch(buildFundPool("Lib", STM_AMOUNT, false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
             .expectUsages(Collections.singletonList(buildUsage("Lib", UsageStatusEnum.ELIGIBLE, 658824345L)))
@@ -184,6 +192,7 @@ public class CreateNtsBatchIntegrationTest {
                 buildUsageBatch(buildFundPool("Edu", new BigDecimal("0.000"), false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
             .expectUsages(Collections.singletonList(buildUsage("Edu", UsageStatusEnum.ELIGIBLE, 658824345L)))
@@ -197,17 +206,16 @@ public class CreateNtsBatchIntegrationTest {
         usageBatch.setName("Batch name");
         usageBatch.setFiscalYear(2017);
         usageBatch.setPaymentDate(DATE);
-        usageBatch.setRro(buildRightsholder(2000017001L, "CFC, Centre Francais d'exploitation du droit de Copie"));
+        usageBatch.setRro(buildRightsholder(2000017001L));
         usageBatch.setProductFamily("NTS");
         usageBatch.setFundPool(fundPool);
         usageBatch.setGrossAmount(new BigDecimal("0.00"));
         return usageBatch;
     }
 
-    private Rightsholder buildRightsholder(Long accountNumber, String name) {
+    private Rightsholder buildRightsholder(Long accountNumber) {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(accountNumber);
-        rightsholder.setName(name);
         return rightsholder;
     }
 
@@ -228,7 +236,7 @@ public class CreateNtsBatchIntegrationTest {
         Usage usage = new Usage();
         usage.setWrWrkInst(wrWrkInst);
         usage.setWorkTitle("100 ROAD MOVIES");
-        usage.setRightsholder(buildRightsholder(1000023401L, "American College of Physicians - Journals"));
+        usage.setRightsholder(buildRightsholder(1000023401L));
         usage.setStatus(status);
         usage.setProductFamily("NTS");
         usage.setStandardNumber("1008902112317555XX");

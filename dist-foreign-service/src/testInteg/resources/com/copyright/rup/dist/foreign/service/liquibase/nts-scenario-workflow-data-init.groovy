@@ -10,6 +10,12 @@ databaseChangeLog {
             column(name: 'name', value: 'CLA, The Copyright Licensing Agency Ltd.')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '77b111d3-9eea-49af-b815-100b9716c1b4')
+            column(name: 'rh_account_number', value: '1000010029')
+            column(name: 'name', value: 'CLA, The Copyright Licensing Agency Ltd.')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '929b9f19-489a-47a2-a680-4d5ad6ba887a')
             column(name: 'name', value: 'Archived scenario')

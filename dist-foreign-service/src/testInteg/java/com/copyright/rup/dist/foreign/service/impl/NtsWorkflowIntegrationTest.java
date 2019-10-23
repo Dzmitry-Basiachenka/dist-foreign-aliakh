@@ -43,6 +43,7 @@ public class NtsWorkflowIntegrationTest {
     private static final String BUS_MARKET = "Bus";
     private static final String ORACLE_RH_TAX_1000023401_US_RESPONSE = "tax/rh_1000023401_tax_country_us_response.json";
     private static final String PRM_RH_1000023401_RESPONSE = "prm/rightsholder_1000023401_response.json";
+    private static final String PRM_RH_2000017001_RESPONSE = "prm/rightsholder_2000017001_response.json";
     private static final String RMS_GRANTS_65882434_REQUEST = "rights/rms_grants_658824345_request.json";
     private static final String PRM_ELIGIBLE_RH_1000023401_RESPONSE =
         "preferences/rh_1000023401_eligible_response.json";
@@ -67,6 +68,7 @@ public class NtsWorkflowIntegrationTest {
             .expectRollups("prm/nts_rollups_response.json", RH_ID)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, "rights/rms_grants_658824345_response.json")
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
             .expectUsage(buildPaidUsage())
