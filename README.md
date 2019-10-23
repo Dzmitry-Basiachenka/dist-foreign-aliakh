@@ -1,3 +1,8 @@
+7.1.9
+-
+* B-54041 Tech Debt: FDA: get and store RRO information into RHs table while loading NTS Fund Pool
+* B-54041 Tech Debt: LM: apply new dist-common version 47.1.+
+
 7.1.8
 -
 * B-50006 FDA: Exclude details from FAS scenario at the Payee level: replace column Service Fee % with Participating and add Clear button on Exclude Details By Payee window
