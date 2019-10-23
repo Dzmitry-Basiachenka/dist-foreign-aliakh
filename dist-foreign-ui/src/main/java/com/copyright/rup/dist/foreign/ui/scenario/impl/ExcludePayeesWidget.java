@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeesFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
@@ -53,7 +53,7 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
 
     private SearchWidget searchWidget;
     private IExcludePayeesController controller;
-    private Grid<PayeeTotalsHolder> payeesGrid;
+    private Grid<PayeeTotalHolder> payeesGrid;
 
     @Override
     public void performSearch() {
@@ -108,7 +108,7 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
 
     private void initGrid() {
         payeesGrid = new Grid<>();
-        payeesGrid.setItems(controller.getPayeeTotalsHolders());
+        payeesGrid.setItems(controller.getPayeeTotalHolders());
         payeesGrid.setSelectionMode(SelectionMode.MULTI);
         payeesGrid.setSizeFull();
         VaadinUtils.addComponentStyle(payeesGrid, "exclude-details-by-payee-grid");
@@ -119,37 +119,33 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
         addColumn(holder -> holder.getPayee().getAccountNumber(), "table.column.payee_account_number",
             "payee.accountNumber");
         addColumn(holder -> holder.getPayee().getName(), "table.column.payee_name", "payee.name")
-            .setComparator((SerializableComparator<PayeeTotalsHolder>) (holder1, holder2) ->
+            .setComparator((SerializableComparator<PayeeTotalHolder>) (holder1, holder2) ->
                 holder1.getPayee().getName().compareToIgnoreCase(holder2.getPayee().getName()));
-        addAmountColumn(PayeeTotalsHolder::getGrossTotal, "table.column.amount_in_usd", "grossTotal");
-        addAmountColumn(PayeeTotalsHolder::getServiceFeeTotal, "table.column.service_fee_amount",
+        addAmountColumn(PayeeTotalHolder::getGrossTotal, "table.column.amount_in_usd", "grossTotal");
+        addAmountColumn(PayeeTotalHolder::getServiceFeeTotal, "table.column.service_fee_amount",
             "serviceFeeTotal");
-        addAmountColumn(PayeeTotalsHolder::getNetTotal, "table.column.net_amount", "netTotal");
-        addColumn(holder -> getServiceFeeString(holder.getServiceFee()), "table.column.service_fee", "serviceFee");
+        addAmountColumn(PayeeTotalHolder::getNetTotal, "table.column.net_amount", "netTotal");
+        payeesGrid.addColumn(holder -> holder.isPayeeParticipating() ? 'Y' : 'N')
+            .setCaption(ForeignUi.getMessage("table.column.participating"))
+            .setSortProperty("payeeParticipating");
         payeesGrid.getColumns().forEach(column -> column.setSortable(true));
     }
 
-    private Grid.Column<PayeeTotalsHolder, ?> addColumn(ValueProvider<PayeeTotalsHolder, ?> provider,
-                                                        String captionProperty, String sortProperty) {
+    private Grid.Column<PayeeTotalHolder, ?> addColumn(ValueProvider<PayeeTotalHolder, ?> provider,
+                                                       String captionProperty, String sortProperty) {
         return payeesGrid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sortProperty);
     }
 
-    private void addAmountColumn(Function<PayeeTotalsHolder, BigDecimal> function, String captionProperty,
+    private void addAmountColumn(Function<PayeeTotalHolder, BigDecimal> function, String captionProperty,
                                  String sortProperty) {
         payeesGrid.addColumn(holder -> CurrencyUtils.format(function.apply(holder), null))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sortProperty)
-            .setComparator((SerializableComparator<PayeeTotalsHolder>) (holder1, holder2) ->
+            .setComparator((SerializableComparator<PayeeTotalHolder>) (holder1, holder2) ->
                 function.apply(holder1).compareTo(function.apply(holder2)))
             .setStyleGenerator(item -> STYLE_ALIGN_RIGHT);
-    }
-
-    private String getServiceFeeString(BigDecimal value) {
-        return Objects.nonNull(value)
-            ? Objects.toString(value.multiply(new BigDecimal("100")).setScale(1, BigDecimal.ROUND_HALF_UP))
-            : StringUtils.EMPTY;
     }
 
     private HorizontalLayout createButtonsLayout() {
@@ -159,13 +155,15 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
         Button redesignateDetails = Buttons.createButton(ForeignUi.getMessage("button.redesignate_details"));
         addClickListener(redesignateDetails, "message.confirm.redesignate",
             (accountNumbers, reason) -> controller.redesignateDetails(accountNumbers, reason));
-        return new HorizontalLayout(excludeDetails, redesignateDetails, Buttons.createCloseButton(this));
+        Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
+        clearButton.addClickListener(event -> payeesGrid.getSelectionModel().deselectAll());
+        return new HorizontalLayout(excludeDetails, redesignateDetails, clearButton, Buttons.createCloseButton(this));
     }
 
     private void addClickListener(Button button, String dialogMessageProperty,
                                   BiConsumer<Set<Long>, String> actionHandler) {
         button.addClickListener(event -> {
-            Set<PayeeTotalsHolder> selectedPayees = payeesGrid.getSelectedItems();
+            Set<PayeeTotalHolder> selectedPayees = payeesGrid.getSelectedItems();
             if (CollectionUtils.isNotEmpty(selectedPayees)) {
                 Windows.showConfirmDialogWithReason(
                     ForeignUi.getMessage("window.confirm"),
@@ -187,8 +185,8 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
     }
 
     private void resetFilters() {
-        ListDataProvider<PayeeTotalsHolder> dataProvider =
-            (ListDataProvider<PayeeTotalsHolder>) payeesGrid.getDataProvider();
+        ListDataProvider<PayeeTotalHolder> dataProvider =
+            (ListDataProvider<PayeeTotalHolder>) payeesGrid.getDataProvider();
         dataProvider.clearFilters();
         String searchValue = searchWidget.getSearchValue();
         ExcludePayeesFilter filter = controller.getExcludePayeesFilterController().getWidget().getAppliedFilter();

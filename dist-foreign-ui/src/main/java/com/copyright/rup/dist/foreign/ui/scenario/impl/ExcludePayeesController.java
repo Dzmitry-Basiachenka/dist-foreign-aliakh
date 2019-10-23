@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
@@ -47,8 +47,8 @@ public class ExcludePayeesController extends CommonController<IExcludePayeeWidge
     }
 
     @Override
-    public List<PayeeTotalsHolder> getPayeeTotalsHolders() {
-        return usageService.getPayeeTotalsHoldersByScenarioId(scenario.getId());
+    public List<PayeeTotalHolder> getPayeeTotalHolders() {
+        return usageService.getPayeeTotalHoldersByScenarioId(scenario.getId());
     }
 
     @Override

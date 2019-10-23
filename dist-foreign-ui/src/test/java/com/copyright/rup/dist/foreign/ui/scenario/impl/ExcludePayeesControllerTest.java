@@ -8,7 +8,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
@@ -67,13 +67,13 @@ public class ExcludePayeesControllerTest {
     }
 
     @Test
-    public void testGetPayeeTotalsHolders() {
-        List<PayeeTotalsHolder> payeeTotalsHolders = Collections.singletonList(new PayeeTotalsHolder());
-        expect(usageService.getPayeeTotalsHoldersByScenarioId(scenario.getId()))
-            .andReturn(payeeTotalsHolders)
+    public void testGetPayeeTotalHolders() {
+        List<PayeeTotalHolder> payeeTotalHolders = Collections.singletonList(new PayeeTotalHolder());
+        expect(usageService.getPayeeTotalHoldersByScenarioId(scenario.getId()))
+            .andReturn(payeeTotalHolders)
             .once();
         replay(usageService);
-        assertEquals(payeeTotalsHolders, controller.getPayeeTotalsHolders());
+        assertEquals(payeeTotalHolders, controller.getPayeeTotalHolders());
         verify(usageService);
     }
 

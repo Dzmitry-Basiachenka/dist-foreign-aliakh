@@ -7,7 +7,7 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -331,8 +331,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<PayeeTotalsHolder> findPayeeTotalsHoldersByScenarioId(String scenarioId) {
-        return selectList("IUsageMapper.findPayeeTotalsHoldersByScenarioId", Objects.requireNonNull(scenarioId));
+    public List<PayeeTotalHolder> findPayeeTotalHoldersByScenarioId(String scenarioId) {
+        return selectList("IUsageMapper.findPayeeTotalHoldersByScenarioId", Objects.requireNonNull(scenarioId));
     }
 
     @Override

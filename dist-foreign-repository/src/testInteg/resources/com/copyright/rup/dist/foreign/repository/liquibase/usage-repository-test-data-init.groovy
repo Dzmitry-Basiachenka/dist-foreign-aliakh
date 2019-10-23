@@ -2051,7 +2051,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-10-16-00', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
-        comment("Insert test data for testFindPayeeTotalsHoldersByScenarioId")
+        comment("Insert test data for testFindPayeeTotalHoldersByScenarioId")
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: 'e13ecc44-6795-4b75-90f0-4a3fc191f1b9')
@@ -2101,7 +2101,7 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: 'e13ecc44-6795-4b75-90f0-4a3fc191f1b9')
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'work_title', value: 'Cell Biology')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: '1000005413')
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
@@ -2116,9 +2116,10 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
             column(name: 'gross_amount', value: '100.00')
-            column(name: 'net_amount', value: '68.00')
-            column(name: 'service_fee_amount', value: '32.00')
-            column(name: 'service_fee', value: '0.32000')
+            column(name: 'net_amount', value: '84.00')
+            column(name: 'service_fee_amount', value: '16.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'is_rh_participating_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2195,6 +2196,33 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '582c86e2-213e-48ad-a885-f9ff49d48a69')
+            column(name: 'df_usage_batch_uid', value: '32daf15a-eb82-4b9e-862d-c647e72f76ca')
+            column(name: 'df_scenario_uid', value: 'edbcc8b3-8fa4-4c58-9244-a91627cac7a9')
+            column(name: 'wr_wrk_inst', value: '773904752')
+            column(name: 'work_title', value: 'Medical Journal')
+            column(name: 'rh_account_number', value: '1000005413')
+            column(name: 'payee_account_number', value: '7000813806')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2019')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00')
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '84.00')
+            column(name: 'service_fee_amount', value: '16.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'is_rh_participating_flag', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '730d7964-f399-4971-9403-dbedc9d7a180')
             column(name: 'df_usage_batch_uid', value: '32daf15a-eb82-4b9e-862d-c647e72f76ca')
             column(name: 'df_scenario_uid', value: 'edbcc8b3-8fa4-4c58-9244-a91627cac7a9')
@@ -2265,6 +2293,33 @@ databaseChangeLog {
             column(name: 'net_amount', value: '68.00')
             column(name: 'service_fee_amount', value: '32.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '1ae671ca-ed5a-4d92-8ab6-a10a53d9884a')
+            column(name: 'df_usage_batch_uid', value: '452baaea-5c52-417c-9ee6-70ab014624cf')
+            column(name: 'df_scenario_uid', value: '767a2647-7e6e-4479-b381-e642de480863')
+            column(name: 'wr_wrk_inst', value: '773904752')
+            column(name: 'work_title', value: 'Medical Journal')
+            column(name: 'rh_account_number', value: '1000005413')
+            column(name: 'payee_account_number', value: '7000813806')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2019')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00')
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '84.00')
+            column(name: 'service_fee_amount', value: '16.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'is_rh_participating_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
