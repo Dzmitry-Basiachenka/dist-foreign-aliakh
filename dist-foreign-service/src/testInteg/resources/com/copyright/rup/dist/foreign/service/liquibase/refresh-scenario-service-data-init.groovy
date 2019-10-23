@@ -194,6 +194,12 @@ databaseChangeLog {
             column(name: 'name', value: 'Abbey Publications, Inc. [L]')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: 'a5989f7c-fc6f-4e8c-88d4-2fe7bcce3d1d')
+            column(name: 'rh_account_number', value: '2000017000')
+            column(name: 'name', value: 'John Wiley & Sons - Books')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '8fba95e3-c706-47f7-a1c8-fad9af5e31a9')
             column(name: 'name', value: 'Test Scenario')

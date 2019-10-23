@@ -196,6 +196,18 @@ databaseChangeLog {
             column(name: 'name', value: 'Abbey Publications, Inc. [L]')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: 'a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d14')
+            column(name: 'rh_account_number', value: '2000017000')
+            column(name: 'name', value: 'John Wiley & Sons - Books')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: 'a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d15')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'name', value: 'John Wiley & Sons - Books')
+        }
+
         rollback ""
     }
 

@@ -118,11 +118,21 @@ public class RightsholderService extends CommonRightsholderService implements IR
     }
 
     /**
+     * Gets instance of {@link ExecutorService} with 2 threads.
+     * Used for sending usages to queues to process them.
+     *
+     * @return instance of {@link ExecutorService}
+     */
+    protected ExecutorService getExecutorService() {
+        return Executors.newCachedThreadPool();
+    }
+
+    /**
      * Post construct method.
      */
     @PostConstruct
     void postConstruct() {
-        executorService = Executors.newSingleThreadExecutor();
+        executorService = getExecutorService();
     }
 
     /**
