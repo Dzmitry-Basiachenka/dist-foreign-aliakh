@@ -17,13 +17,12 @@ import java.math.BigDecimal;
  *
  * @author Uladzislau Shalamitski
  */
-public class PayeeTotalsHolder {
+public class PayeeTotalHolder {
 
     private Rightsholder payee = new Rightsholder();
     private BigDecimal grossTotal;
     private BigDecimal serviceFeeTotal;
     private BigDecimal netTotal;
-    private BigDecimal serviceFee;
     private boolean payeeParticipating;
 
     public Rightsholder getPayee() {
@@ -58,14 +57,6 @@ public class PayeeTotalsHolder {
         this.netTotal = netTotal;
     }
 
-    public BigDecimal getServiceFee() {
-        return serviceFee;
-    }
-
-    public void setServiceFee(BigDecimal serviceFee) {
-        this.serviceFee = serviceFee;
-    }
-
     public boolean isPayeeParticipating() {
         return payeeParticipating;
     }
@@ -82,13 +73,12 @@ public class PayeeTotalsHolder {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        PayeeTotalsHolder that = (PayeeTotalsHolder) obj;
+        PayeeTotalHolder that = (PayeeTotalHolder) obj;
         return new EqualsBuilder()
             .append(payee, that.payee)
             .append(grossTotal, that.grossTotal)
             .append(serviceFeeTotal, that.serviceFeeTotal)
             .append(netTotal, that.netTotal)
-            .append(serviceFee, that.serviceFee)
             .append(payeeParticipating, that.payeeParticipating)
             .isEquals();
     }
@@ -100,7 +90,6 @@ public class PayeeTotalsHolder {
             .append(grossTotal)
             .append(serviceFeeTotal)
             .append(netTotal)
-            .append(serviceFee)
             .append(payeeParticipating)
             .toHashCode();
     }
@@ -112,7 +101,6 @@ public class PayeeTotalsHolder {
             .append("grossTotal", grossTotal)
             .append("serviceFeeTotal", serviceFeeTotal)
             .append("netTotal", netTotal)
-            .append("serviceFee", serviceFee)
             .append("payeeParticipating", payeeParticipating)
             .toString();
     }

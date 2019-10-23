@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
-import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -37,9 +37,9 @@ public interface IExcludePayeesController extends IController<IExcludePayeeWidge
     IExcludePayeesFilterController getExcludePayeesFilterController();
 
     /**
-     * @return list of {@link PayeeTotalsHolder}s to be displayed on UI.
+     * @return list of {@link PayeeTotalHolder}s to be displayed on UI.
      */
-    List<PayeeTotalsHolder> getPayeeTotalsHolders();
+    List<PayeeTotalHolder> getPayeeTotalHolders();
 
     /**
      * Exclude details from corresponding scenario with selected payees' account numbers.

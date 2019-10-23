@@ -13,7 +13,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterWidget;
@@ -30,6 +30,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.components.grid.GridSelectionModel;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,10 +65,12 @@ public class ExcludePayeesWidgetTest {
     private IExcludePayeesController controller;
     private IExcludePayeesFilterController filterController;
     private IExcludePayeesFilterWidget filterWidget;
-    private Grid<PayeeTotalsHolder> payeesGrid;
+    private Grid<PayeeTotalHolder> payeesGrid;
+    private GridSelectionModel<PayeeTotalHolder> selectionModel;
 
     @Before
     public void setUp() {
+        selectionModel = createMock(GridSelectionModel.class);
         controller = createMock(IExcludePayeesController.class);
         payeesGrid = createMock(Grid.class);
         widget = new ExcludePayeesWidget();
@@ -100,7 +103,7 @@ public class ExcludePayeesWidgetTest {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
-        expect(payeesGrid.getSelectedItems()).andReturn(Collections.singleton(new PayeeTotalsHolder())).once();
+        expect(payeesGrid.getSelectedItems()).andReturn(Collections.singleton(new PayeeTotalHolder())).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
             eq("Are you sure you want to exclude details with selected Payees?"),
             eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture), anyObject(Validator.class));
@@ -129,7 +132,7 @@ public class ExcludePayeesWidgetTest {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
-        expect(payeesGrid.getSelectedItems()).andReturn(Collections.singleton(new PayeeTotalsHolder())).once();
+        expect(payeesGrid.getSelectedItems()).andReturn(Collections.singleton(new PayeeTotalHolder())).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
             eq("Are you sure you want to redesignate details with selected Payees?"),
             eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture), anyObject(Validator.class));
@@ -151,6 +154,17 @@ public class ExcludePayeesWidgetTest {
         replay(clickEvent, controller, Windows.class);
         buttonClick(1, clickEvent);
         verify(clickEvent, controller, Windows.class);
+    }
+
+    @Test
+    public void testClearButtonClick() {
+        Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
+        expect(payeesGrid.getSelectionModel()).andReturn(selectionModel).once();
+        selectionModel.deselectAll();
+        expectLastCall().once();
+        replay(clickEvent, payeesGrid);
+        buttonClick(2, clickEvent);
+        verify(clickEvent, payeesGrid);
     }
 
     private void buttonClick(int buttonIndex, Button.ClickEvent clickEvent) {
@@ -176,17 +190,18 @@ public class ExcludePayeesWidgetTest {
         Grid grid = (Grid) component;
         List<Grid.Column> columns = grid.getColumns();
         assertEquals(Arrays.asList(
-            "Payee Account #", "Payee Name", "Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %"),
+            "Payee Account #", "Payee Name", "Amt in USD", "Service Fee Amount", "Net Amt in USD", "Participating"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
     }
 
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(3, horizontalLayout.getComponentCount());
+        assertEquals(4, horizontalLayout.getComponentCount());
         verifyButton((Button) horizontalLayout.getComponent(0), "Exclude Details");
         verifyButton((Button) horizontalLayout.getComponent(1), "Redesignate Details");
-        verifyButton((Button) horizontalLayout.getComponent(2), "Close");
+        verifyButton((Button) horizontalLayout.getComponent(2), "Clear");
+        verifyButton((Button) horizontalLayout.getComponent(3), "Close");
         assertTrue(horizontalLayout.isSpacing());
         assertEquals(new MarginInfo(false, false), horizontalLayout.getMargin());
     }
@@ -199,7 +214,7 @@ public class ExcludePayeesWidgetTest {
     private void initWidget() {
         expect(controller.getExcludePayeesFilterController()).andReturn(filterController).once();
         expect(filterController.initWidget()).andReturn(filterWidget).once();
-        expect(controller.getPayeeTotalsHolders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getPayeeTotalHolders()).andReturn(Collections.emptyList()).once();
         replay(controller, filterController);
         widget.init();
         verify(controller, filterController);

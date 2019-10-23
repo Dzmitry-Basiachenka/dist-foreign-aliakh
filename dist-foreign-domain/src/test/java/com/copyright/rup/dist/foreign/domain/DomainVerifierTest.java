@@ -66,7 +66,7 @@ public class DomainVerifierTest {
             {WorkClassification.class},
             {PreServiceFeeFund.class},
             {ExcludePayeesFilter.class},
-            {PayeeTotalsHolder.class}
+            {PayeeTotalHolder.class}
         };
         return Arrays.asList(testData);
     }

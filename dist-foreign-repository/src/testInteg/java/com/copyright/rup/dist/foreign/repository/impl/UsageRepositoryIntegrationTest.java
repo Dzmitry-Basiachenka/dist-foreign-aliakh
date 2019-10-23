@@ -12,7 +12,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
-import com.copyright.rup.dist.foreign.domain.PayeeTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -268,17 +268,17 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindPayeeTotalsHoldersByScenarioId() {
-        List<PayeeTotalsHolder> payeeTotalsHolders =
-            usageRepository.findPayeeTotalsHoldersByScenarioId("e13ecc44-6795-4b75-90f0-4a3fc191f1b9");
-        assertEquals(2, CollectionUtils.size(payeeTotalsHolders));
+    public void testFindPayeeTotalHoldersByScenarioId() {
+        List<PayeeTotalHolder> payeeTotalHolders =
+            usageRepository.findPayeeTotalHoldersByScenarioId("e13ecc44-6795-4b75-90f0-4a3fc191f1b9");
+        assertEquals(2, CollectionUtils.size(payeeTotalHolders));
         verifyPayeeTotalsHolder(7000813806L,
             "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
-            new BigDecimal("100.0000000000"), new BigDecimal("68.0000000000"), new BigDecimal("32.0000000000"),
-            SERVICE_FEE, true, payeeTotalsHolders.get(0));
+            new BigDecimal("100.0000000000"), new BigDecimal("68.0000000000"), new BigDecimal("32.0000000000"), true,
+            payeeTotalHolders.get(0));
         verifyPayeeTotalsHolder(1000002859L,
-            "John Wiley & Sons - Books", new BigDecimal("200.0000000000"), new BigDecimal("136.0000000000"),
-            new BigDecimal("64.0000000000"), SERVICE_FEE, false, payeeTotalsHolders.get(1));
+            "John Wiley & Sons - Books", new BigDecimal("200.0000000000"), new BigDecimal("152.0000000000"),
+            new BigDecimal("48.0000000000"), false, payeeTotalHolders.get(1));
     }
 
     @Test
@@ -700,15 +700,15 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testExcludeFromScenarioByPayees() {
+    public void testDeleteFromScenarioByPayees() {
         Set<String> excludedIds = usageRepository.deleteFromScenarioByPayees("edbcc8b3-8fa4-4c58-9244-a91627cac7a9",
             Collections.singleton(7000813806L), USER_NAME);
-        assertEquals(1, CollectionUtils.size(excludedIds));
+        assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("730d7964-f399-4971-9403-dbedc9d7a180"));
-        List<Usage> usages =
-            usageRepository.findByIds(Collections.singletonList("730d7964-f399-4971-9403-dbedc9d7a180"));
-        assertEquals(1, CollectionUtils.size(usages));
-        verifyUsageExcludedFromScenario(usages.get(0), "FAS2", UsageStatusEnum.ELIGIBLE);
+        List<Usage> usages = usageRepository.findByIds(
+            Arrays.asList("730d7964-f399-4971-9403-dbedc9d7a180", "582c86e2-213e-48ad-a885-f9ff49d48a69"));
+        assertEquals(2, CollectionUtils.size(usages));
+        usages.forEach(usage -> verifyUsageExcludedFromScenario(usage, "FAS2", UsageStatusEnum.ELIGIBLE));
         List<String> usageIds = usageRepository.findByScenarioId("edbcc8b3-8fa4-4c58-9244-a91627cac7a9")
             .stream()
             .map(Usage::getId)
@@ -721,12 +721,12 @@ public class UsageRepositoryIntegrationTest {
     public void testRedesignateByPayees() {
         Set<String> excludedIds = usageRepository.redesignateByPayees("767a2647-7e6e-4479-b381-e642de480863",
             Collections.singleton(7000813806L), USER_NAME);
-        assertEquals(1, CollectionUtils.size(excludedIds));
+        assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("72f6abdb-c82d-4cee-aadf-570942cf0093"));
-        List<Usage> usages =
-            usageRepository.findByIds(Collections.singletonList("72f6abdb-c82d-4cee-aadf-570942cf0093"));
-        assertEquals(1, CollectionUtils.size(usages));
-        verifyUsageExcludedFromScenario(usages.get(0), "NTS", UsageStatusEnum.NTS_WITHDRAWN);
+        List<Usage> usages = usageRepository.findByIds(
+            Arrays.asList("72f6abdb-c82d-4cee-aadf-570942cf0093", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a"));
+        assertEquals(2, CollectionUtils.size(usages));
+        usages.forEach(usage -> verifyUsageExcludedFromScenario(usage, "NTS", UsageStatusEnum.NTS_WITHDRAWN));
         List<String> usageIds = usageRepository.findByScenarioId("767a2647-7e6e-4479-b381-e642de480863")
             .stream()
             .map(Usage::getId)
@@ -1627,14 +1627,13 @@ public class UsageRepositoryIntegrationTest {
     }
 
     private void verifyPayeeTotalsHolder(Long accountNumber, String name, BigDecimal grossTotal, BigDecimal netTotal,
-                                         BigDecimal serviceFeeTotal, BigDecimal serviceFee, boolean payeePrticipating,
-                                         PayeeTotalsHolder holder) {
+                                         BigDecimal serviceFeeTotal, boolean payeeParticipating,
+                                         PayeeTotalHolder holder) {
         assertEquals(accountNumber, holder.getPayee().getAccountNumber());
         assertEquals(name, holder.getPayee().getName());
         assertEquals(grossTotal, holder.getGrossTotal());
         assertEquals(netTotal, holder.getNetTotal());
         assertEquals(serviceFeeTotal, holder.getServiceFeeTotal());
-        assertEquals(serviceFee, holder.getServiceFee());
-        assertEquals(payeePrticipating, holder.isPayeeParticipating());
+        assertEquals(payeeParticipating, holder.isPayeeParticipating());
     }
 }
