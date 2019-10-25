@@ -59,8 +59,8 @@ public class UsageServiceIntegrationTest {
         Scenario scenario = new Scenario();
         scenario.setId("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e");
         scenario.setName("Test Scenario for exclude");
-        usageService.deleteFromScenario(scenario, 2000017001L, Lists.newArrayList(1000000003L, 1000000004L),
-            "Exclude reason");
+        usageService.deleteFromScenario("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e", 2000017001L,
+            Lists.newArrayList(1000000003L, 1000000004L), "Exclude reason");
         verifyExcludedUsages(scenario, true, 1000000003L, 1000000004L);
         verifyExcludedUsages(scenario, false, 1000000001L, 1000000002L, 1000000006L);
         verifyAuditItems(auditRepository.findByUsageId("2641e7fe-2a5a-4cdf-8879-48816d705169"));

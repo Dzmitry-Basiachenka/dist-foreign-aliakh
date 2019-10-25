@@ -259,13 +259,13 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
             actualUsage.getRightsholder().getAccountNumber());
         assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber());
+        assertEquals(expectedUsage.isRhParticipating(), actualUsage.isRhParticipating());
+        assertEquals(expectedUsage.isPayeeParticipating(), actualUsage.isPayeeParticipating());
         assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
         assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
         assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
         assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
         assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
-        assertEquals(expectedUsage.isRhParticipating(), actualUsage.isRhParticipating());
-        assertEquals(expectedUsage.isPayeeParticipating(), actualUsage.isPayeeParticipating());
     }
 
     private PaidUsage getPaidUsageByLmDetailId(String lmDetailId) {

@@ -275,7 +275,7 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    public void updateParticipatingAndAmounts(Scenario scenario) {
+    public void updateRhPayeeParticipating(Scenario scenario) {
         usageService.updateRhPayeeAmountsAndParticipating(usageService.getUsagesByScenarioId(scenario.getId()));
     }
 

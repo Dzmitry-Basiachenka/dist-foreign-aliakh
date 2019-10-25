@@ -248,7 +248,7 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testUpdateParticipatingAndAmounts() {
+    public void testUpdateRhPayeeParticipating() {
         Usage usage = new Usage();
         usage.setWrWrkInst(1L);
         usage.getRightsholder().setAccountNumber(2000017010L);
@@ -257,7 +257,7 @@ public class ScenarioServiceTest {
         usageService.updateRhPayeeAmountsAndParticipating(usages);
         expectLastCall().once();
         replayAll();
-        scenarioService.updateParticipatingAndAmounts(scenario);
+        scenarioService.updateRhPayeeParticipating(scenario);
         verifyAll();
     }
 }

@@ -243,7 +243,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public Set<String> redesignateByPayees(String scenarioId, Set<Long> accountNumbers, String userName) {
+    public Set<String> redesignateToNtsWithdrawnByPayees(String scenarioId, Set<Long> accountNumbers, String userName) {
         Set<String> result = new HashSet<>();
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
@@ -253,7 +253,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Iterables.partition(Objects.requireNonNull(accountNumbers), MAX_VARIABLES_COUNT)
             .forEach(partition -> {
                 parameters.put("accountNumbers", partition);
-                result.addAll(selectList("IUsageMapper.redesignateByPayees", parameters));
+                result.addAll(selectList("IUsageMapper.redesignateToNtsWithdrawnByPayees", parameters));
             });
         return result;
     }

@@ -355,9 +355,9 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
-    public void deleteFromScenario(Scenario scenario, Long rroAccountNumber, List<Long> accountNumbers, String reason) {
+    public void deleteFromScenario(String scenarioId, Long rroAccountNumber, List<Long> accountNumbers, String reason) {
         List<String> usagesIds =
-            usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenario.getId(), rroAccountNumber,
+            usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenarioId, rroAccountNumber,
                 accountNumbers);
         usagesIds.forEach(
             usageId -> usageAuditService.logAction(usageId, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason));
@@ -366,17 +366,17 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
-    public void deleteFromScenarioByPayees(Scenario scenario, Set<Long> accountNumbers, String reason) {
+    public void deleteFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String reason) {
         Set<String> usageIds = usageRepository
-            .deleteFromScenarioByPayees(scenario.getId(), accountNumbers, RupContextUtils.getUserName());
+            .deleteFromScenarioByPayees(scenarioId, accountNumbers, RupContextUtils.getUserName());
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
     }
 
     @Override
     @Transactional
-    public void redesignateByPayees(Scenario scenario, Set<Long> accountNumbers, String reason) {
+    public void redesignateToNtsWithdrawnByPayees(String scenarioId, Set<Long> accountNumbers, String reason) {
         Set<String> usageIds = usageRepository
-            .redesignateByPayees(scenario.getId(), accountNumbers, RupContextUtils.getUserName());
+            .redesignateToNtsWithdrawnByPayees(scenarioId, accountNumbers, RupContextUtils.getUserName());
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
     }
 

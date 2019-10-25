@@ -168,21 +168,21 @@ public class UsageServiceTest {
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, REASON);
         expectLastCall().once();
         replay(usageRepository, usageAuditService);
-        usageService.deleteFromScenarioByPayees(scenario, accountNumbers, REASON);
+        usageService.deleteFromScenarioByPayees(scenario.getId(), accountNumbers, REASON);
         verify(usageRepository, usageAuditService);
     }
 
     @Test
-    public void testRedesignateByPayees() {
+    public void testRedisignateToNtsWithdrawnByPayees() {
         Set<String> usageIds = Sets.newHashSet(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
         Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
-        expect(usageRepository.redesignateByPayees(scenario.getId(), accountNumbers, "SYSTEM"))
+        expect(usageRepository.redesignateToNtsWithdrawnByPayees(scenario.getId(), accountNumbers, "SYSTEM"))
             .andReturn(usageIds)
             .once();
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, REASON);
         expectLastCall().once();
         replay(usageRepository, usageAuditService);
-        usageService.redesignateByPayees(scenario, accountNumbers, REASON);
+        usageService.redesignateToNtsWithdrawnByPayees(scenario.getId(), accountNumbers, REASON);
         verify(usageRepository, usageAuditService);
     }
 
@@ -508,7 +508,7 @@ public class UsageServiceTest {
             "Action reason");
         expectLastCall().once();
         replay(usageRepository, usageAuditService, RupContextUtils.class);
-        usageService.deleteFromScenario(scenario, 2000017011L, accountNumbers, "Action reason");
+        usageService.deleteFromScenario(scenario.getId(), 2000017011L, accountNumbers, "Action reason");
         verify(usageRepository, usageAuditService, RupContextUtils.class);
     }
 

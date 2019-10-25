@@ -317,7 +317,7 @@ class FundPoolLoadWindow extends Window {
         binder.forField(textField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_length", 10))
+                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
         VaadinUtils.setMaxComponentsWidth(textField);
@@ -330,7 +330,7 @@ class FundPoolLoadWindow extends Window {
         binder.forField(textField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_length", 10))
+                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .withValidator(getFundPoolAmountValidator(),
                 "At least one of STM Amount or NON-STM Amount should be greater than 0")
             .withConverter(new StringToBigDecimalConverter("Field should be numeric"))

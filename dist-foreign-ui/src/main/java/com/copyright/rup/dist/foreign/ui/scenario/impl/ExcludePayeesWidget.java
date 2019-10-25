@@ -39,7 +39,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Represents window with ability to exclude RH details by Payee.
+ * Represents window with ability to exclude details by Payee.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -200,9 +200,9 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
                         StringUtils.containsIgnoreCase(holder.getPayee().getAccountNumber().toString(), searchValue)
                             || StringUtils.containsIgnoreCase(holder.getPayee().getName(), searchValue);
                 }
-                if (notEmptyFilter && Objects.nonNull(filter.getMinimumThreshold())) {
+                if (notEmptyFilter && Objects.nonNull(filter.getNetAmountMinThreshold())) {
                     result = result && 0 > holder.getNetTotal().setScale(2, BigDecimal.ROUND_HALF_UP)
-                        .compareTo(filter.getMinimumThreshold());
+                        .compareTo(filter.getNetAmountMinThreshold());
                 }
                 if (notEmptyFilter && Objects.nonNull(filter.getPayeeParticipating())) {
                     result = result && filter.getPayeeParticipating().equals(holder.isPayeeParticipating());

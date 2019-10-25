@@ -33,6 +33,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Verifies {@link ExcludePayeesFilterWidget}.
@@ -96,8 +97,12 @@ public class ExcludePayeesFilterWidgetTest {
                                                              ExcludePayeesFilter filter, String valueToSet,
                                                              BigDecimal filterValue, boolean applyEnabled) {
         minimumThreshold.setValue(valueToSet);
+        if (Objects.nonNull(minimumThreshold.getErrorMessage())) {
+            assertEquals("Field&#32;value&#32;should&#32;be&#32;positive&#32;number&#32;and&#32;should&#32;not&#32;" +
+                    "exceed&#32;10&#32;digits", minimumThreshold.getErrorMessage().getFormattedHtmlMessage());
+        }
         assertEquals(applyEnabled, applyButton.isEnabled());
-        assertEquals(filterValue, filter.getMinimumThreshold());
+        assertEquals(filterValue, filter.getNetAmountMinThreshold());
     }
 
     private void verifyParticipatingStatusCombobox(Component component) {
