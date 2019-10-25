@@ -1,3 +1,8 @@
+7.1.10
+-
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: make changes based on comments in CR-DIST-FOREIGN-130
+* B-54041 Tech Debt:  FDA: place Load Date column right after Payment Date in FAS batch summary report
+
 7.1.9
 -
 * B-54041 Tech Debt: FDA: get and store RRO information into RHs table while loading NTS Fund Pool
