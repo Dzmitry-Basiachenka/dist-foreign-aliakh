@@ -49,7 +49,7 @@ public class ExcludePayeesControllerTest {
     @Test
     public void testRedesignateDetails() {
         Set<Long> accountNumbers = Collections.singleton(2000017566L);
-        usageService.redesignateByPayees(scenario, accountNumbers, REASON);
+        usageService.redesignateToNtsWithdrawnByPayees(scenario.getId(), accountNumbers, REASON);
         expectLastCall().once();
         replay(usageService);
         controller.redesignateDetails(accountNumbers, REASON);
@@ -59,7 +59,7 @@ public class ExcludePayeesControllerTest {
     @Test
     public void testExcludeDetails() {
         Set<Long> accountNumbers = Collections.singleton(2000017566L);
-        usageService.deleteFromScenarioByPayees(scenario, accountNumbers, REASON);
+        usageService.deleteFromScenarioByPayees(scenario.getId(), accountNumbers, REASON);
         expectLastCall().once();
         replay(usageService);
         controller.excludeDetails(accountNumbers, REASON);

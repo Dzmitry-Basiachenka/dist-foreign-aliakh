@@ -156,7 +156,7 @@ public interface IScenarioService {
      *
      * @param scenario {@link Scenario} instance
      */
-    void updateParticipatingAndAmounts(Scenario scenario);
+    void updateRhPayeeParticipating(Scenario scenario);
 
     /**
      * Approves ownership changes for {@link Scenario}.

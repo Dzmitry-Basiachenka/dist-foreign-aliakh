@@ -53,12 +53,12 @@ public class ExcludePayeesController extends CommonController<IExcludePayeeWidge
 
     @Override
     public void excludeDetails(Set<Long> payeeAccountNumbers, String reason) {
-        usageService.deleteFromScenarioByPayees(scenario, payeeAccountNumbers, reason);
+        usageService.deleteFromScenarioByPayees(scenario.getId(), payeeAccountNumbers, reason);
     }
 
     @Override
     public void redesignateDetails(Set<Long> payeeAccountNumbers, String reason) {
-        usageService.redesignateByPayees(scenario, payeeAccountNumbers, reason);
+        usageService.redesignateToNtsWithdrawnByPayees(scenario.getId(), payeeAccountNumbers, reason);
     }
 
     @Override

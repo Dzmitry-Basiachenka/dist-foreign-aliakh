@@ -129,7 +129,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
             } else {
                 Windows.showConfirmDialog(ForeignUi.getMessage("window.reconcile_rightsholders", scenario.getName()),
                     () -> {
-                        scenarioService.updateParticipatingAndAmounts(scenario);
+                        scenarioService.updateRhPayeeParticipating(scenario);
                         getWidget().refreshSelectedScenario();
                     });
             }

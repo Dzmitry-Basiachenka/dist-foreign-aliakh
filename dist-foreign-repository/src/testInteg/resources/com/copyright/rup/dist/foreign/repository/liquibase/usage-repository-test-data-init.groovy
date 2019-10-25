@@ -2251,7 +2251,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-10-17-01', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
-        comment("Insert test data for testRedesignateByPayees")
+        comment("Insert test data for testRedisignateToNtsWithdrawnByPayees")
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '767a2647-7e6e-4479-b381-e642de480863')

@@ -305,7 +305,7 @@ public class ScenarioControllerTest {
     @Test
     public void testDeleteFromScenario() {
         List<Long> accountNumbers = Lists.newArrayList(1000009522L);
-        usageService.deleteFromScenario(buildScenario(), 2000017010L, accountNumbers, "reason");
+        usageService.deleteFromScenario(SCENARIO_ID, 2000017010L, accountNumbers, "reason");
         expectLastCall().once();
         replay(usageService);
         controller.deleteFromScenario(2000017010L, accountNumbers, "reason");

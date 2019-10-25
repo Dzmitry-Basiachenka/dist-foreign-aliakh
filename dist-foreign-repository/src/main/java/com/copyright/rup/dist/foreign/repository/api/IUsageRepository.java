@@ -245,7 +245,7 @@ public interface IUsageRepository {
      * @param userName       user name
      * @return set of redesignated usages' identifiers
      */
-    Set<String> redesignateByPayees(String scenarioId, Set<Long> accountNumbers, String userName);
+    Set<String> redesignateToNtsWithdrawnByPayees(String scenarioId, Set<Long> accountNumbers, String userName);
 
     /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},

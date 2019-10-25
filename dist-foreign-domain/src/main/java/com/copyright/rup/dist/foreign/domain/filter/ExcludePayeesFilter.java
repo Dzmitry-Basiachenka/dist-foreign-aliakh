@@ -19,7 +19,7 @@ import java.util.Objects;
 public class ExcludePayeesFilter {
 
     private Boolean payeeParticipating;
-    private BigDecimal minimumThreshold;
+    private BigDecimal netAmountMinThreshold;
 
     /**
      * Default constructor.
@@ -35,7 +35,7 @@ public class ExcludePayeesFilter {
      */
     public ExcludePayeesFilter(ExcludePayeesFilter filter) {
         this.payeeParticipating = filter.getPayeeParticipating();
-        this.minimumThreshold = filter.getMinimumThreshold();
+        this.netAmountMinThreshold = filter.getNetAmountMinThreshold();
     }
 
     public Boolean getPayeeParticipating() {
@@ -46,17 +46,17 @@ public class ExcludePayeesFilter {
         this.payeeParticipating = payeeParticipating;
     }
 
-    public BigDecimal getMinimumThreshold() {
-        return minimumThreshold;
+    public BigDecimal getNetAmountMinThreshold() {
+        return netAmountMinThreshold;
     }
 
-    public void setMinimumThreshold(BigDecimal minimumThreshold) {
-        this.minimumThreshold = minimumThreshold;
+    public void setNetAmountMinThreshold(BigDecimal netAmountMinThreshold) {
+        this.netAmountMinThreshold = netAmountMinThreshold;
     }
 
     public boolean isEmpty() {
         return Objects.isNull(payeeParticipating)
-            && Objects.isNull(minimumThreshold);
+            && Objects.isNull(netAmountMinThreshold);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ExcludePayeesFilter {
         ExcludePayeesFilter that = (ExcludePayeesFilter) obj;
         return new EqualsBuilder()
             .append(payeeParticipating, that.payeeParticipating)
-            .append(minimumThreshold, that.minimumThreshold)
+            .append(netAmountMinThreshold, that.netAmountMinThreshold)
             .isEquals();
     }
 
@@ -78,7 +78,7 @@ public class ExcludePayeesFilter {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(payeeParticipating)
-            .append(minimumThreshold)
+            .append(netAmountMinThreshold)
             .toHashCode();
     }
 
@@ -86,7 +86,7 @@ public class ExcludePayeesFilter {
     public String toString() {
         return new ToStringBuilder(this)
             .append("payeeParticipating", payeeParticipating)
-            .append("minimumThreshold", minimumThreshold)
+            .append("netAmountMinThreshold", netAmountMinThreshold)
             .toString();
     }
 }

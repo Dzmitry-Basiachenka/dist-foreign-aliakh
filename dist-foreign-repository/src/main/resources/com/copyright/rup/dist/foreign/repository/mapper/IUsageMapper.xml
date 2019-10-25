@@ -771,7 +771,7 @@
         returning df_usage_uid
     </select>
 
-    <select id="redesignateByPayees" parameterType="map" resultType="string">
+    <select id="redesignateToNtsWithdrawnByPayees" parameterType="map" resultType="string">
         update
             ${schema}.df_usage
         set

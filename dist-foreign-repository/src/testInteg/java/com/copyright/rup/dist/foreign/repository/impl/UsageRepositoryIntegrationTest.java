@@ -701,6 +701,12 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testDeleteFromScenarioByPayees() {
+        List<Usage> usagesBeforeExclude = usageRepository.findByIds(
+            Arrays.asList("7234feb4-a59e-483b-985a-e8de2e3eb190", "582c86e2-213e-48ad-a885-f9ff49d48a69",
+                "730d7964-f399-4971-9403-dbedc9d7a180"));
+        assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
+        usagesBeforeExclude.forEach(usage ->
+            assertEquals("edbcc8b3-8fa4-4c58-9244-a91627cac7a9", usage.getScenarioId()));
         Set<String> excludedIds = usageRepository.deleteFromScenarioByPayees("edbcc8b3-8fa4-4c58-9244-a91627cac7a9",
             Collections.singleton(7000813806L), USER_NAME);
         assertEquals(2, CollectionUtils.size(excludedIds));
@@ -718,9 +724,15 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testRedesignateByPayees() {
-        Set<String> excludedIds = usageRepository.redesignateByPayees("767a2647-7e6e-4479-b381-e642de480863",
-            Collections.singleton(7000813806L), USER_NAME);
+    public void testRedisignateToNtsWithdrawnByPayees() {
+        List<Usage> usagesBeforeExclude = usageRepository.findByIds(
+            Arrays.asList("209a960f-5896-43da-b020-fc52981b9633", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a",
+                "72f6abdb-c82d-4cee-aadf-570942cf0093"));
+        assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
+        usagesBeforeExclude.forEach(usage ->
+            assertEquals("767a2647-7e6e-4479-b381-e642de480863", usage.getScenarioId()));
+        Set<String> excludedIds = usageRepository.redesignateToNtsWithdrawnByPayees(
+            "767a2647-7e6e-4479-b381-e642de480863", Collections.singleton(7000813806L), USER_NAME);
         assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("72f6abdb-c82d-4cee-aadf-570942cf0093"));
         List<Usage> usages = usageRepository.findByIds(

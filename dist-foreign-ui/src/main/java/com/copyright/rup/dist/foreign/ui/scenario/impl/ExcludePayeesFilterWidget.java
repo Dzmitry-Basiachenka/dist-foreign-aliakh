@@ -110,11 +110,11 @@ public class ExcludePayeesFilterWidget extends VerticalLayout implements IExclud
         minimumThreshold = new TextField(ForeignUi.getMessage("label.minimum_threshold"));
         binder.forField(minimumThreshold)
             .withValidator(value -> new AmountValidator().isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number"))
+                ForeignUi.getMessage("field.error.positive_number_and_length", 10))
             .bind(source -> source, (beanValue, fieldValue) -> beanValue = fieldValue);
         minimumThreshold.addValueChangeListener(event -> {
             if (!binder.validate().hasErrors()) {
-                filter.setMinimumThreshold(StringUtils.isNotBlank(event.getValue())
+                filter.setNetAmountMinThreshold(StringUtils.isNotBlank(event.getValue())
                     ? new BigDecimal(StringUtils.trimToEmpty(event.getValue())) : null);
             }
             filterChanged();

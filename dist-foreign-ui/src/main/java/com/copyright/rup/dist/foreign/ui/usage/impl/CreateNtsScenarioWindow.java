@@ -109,7 +109,7 @@ public class CreateNtsScenarioWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .withValidator(value -> new AmountValidator(true).isValid(value.toString()),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_length", 10))
+                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .bind(scenario -> scenario.getNtsFields().getRhMinimumAmount(),
                 (Setter<Scenario, BigDecimal>) (scenario, rhMinimumAmount) ->
                     scenario.getNtsFields().setRhMinimumAmount(rhMinimumAmount));
@@ -140,7 +140,7 @@ public class CreateNtsScenarioWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .withValidator(value -> new AmountValidator(true).isValid(value.toString()),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_length", 10))
+                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .bind(getter, setter);
         VaadinUtils.setMaxComponentsWidth(amountField);
         VaadinUtils.addComponentStyle(amountField, fieldId);
