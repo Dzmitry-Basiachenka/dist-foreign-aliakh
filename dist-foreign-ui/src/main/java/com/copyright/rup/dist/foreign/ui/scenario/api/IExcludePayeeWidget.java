@@ -14,7 +14,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * @author Uladzislau Shalamitski
  */
 public interface IExcludePayeeWidget extends SearchWidget.ISearchController, IRefreshable,
-    IWidget<IExcludePayeesController> {
+    IWidget<IExcludePayeeController> {
 
     /**
      * @return search value string.

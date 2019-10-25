@@ -14,9 +14,9 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterWidget;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link ExcludePayeesWidget}.
+ * Verifies {@link ExcludePayeeWidget}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -57,26 +57,26 @@ import java.util.stream.Collectors;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class})
-public class ExcludePayeesWidgetTest {
+public class ExcludePayeeWidgetTest {
 
     private static final String REASON = "reason";
 
-    private ExcludePayeesWidget widget;
-    private IExcludePayeesController controller;
-    private IExcludePayeesFilterController filterController;
-    private IExcludePayeesFilterWidget filterWidget;
+    private ExcludePayeeWidget widget;
+    private IExcludePayeeController controller;
+    private IExcludePayeeFilterController filterController;
+    private IExcludePayeeFilterWidget filterWidget;
     private Grid<PayeeTotalHolder> payeesGrid;
     private GridSelectionModel<PayeeTotalHolder> selectionModel;
 
     @Before
     public void setUp() {
         selectionModel = createMock(GridSelectionModel.class);
-        controller = createMock(IExcludePayeesController.class);
+        controller = createMock(IExcludePayeeController.class);
         payeesGrid = createMock(Grid.class);
-        widget = new ExcludePayeesWidget();
+        widget = new ExcludePayeeWidget();
         widget.setController(controller);
-        filterController = PowerMock.createMock(IExcludePayeesFilterController.class);
-        filterWidget = new ExcludePayeesFilterWidget();
+        filterController = PowerMock.createMock(IExcludePayeeFilterController.class);
+        filterWidget = new ExcludePayeeFilterWidget();
         filterWidget.setController(filterController);
         initWidget();
         Whitebox.setInternalState(widget, payeesGrid);

@@ -9,8 +9,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeesFilter;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableMap;
@@ -36,7 +36,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
- * Verifies {@link ExcludePayeesFilterWidget}.
+ * Verifies {@link ExcludePayeeFilterWidget}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -44,15 +44,15 @@ import java.util.Objects;
  *
  * @author Uladzislau Shalamitski
  */
-public class ExcludePayeesFilterWidgetTest {
+public class ExcludePayeeFilterWidgetTest {
 
-    private IExcludePayeesFilterController controller;
-    private ExcludePayeesFilterWidget widget;
+    private IExcludePayeeFilterController controller;
+    private ExcludePayeeFilterWidget widget;
 
     @Before
     public void setUp() {
-        controller = createMock(IExcludePayeesFilterController.class);
-        widget = new ExcludePayeesFilterWidget();
+        controller = createMock(IExcludePayeeFilterController.class);
+        widget = new ExcludePayeeFilterWidget();
         widget.setController(controller);
     }
 
@@ -82,7 +82,7 @@ public class ExcludePayeesFilterWidgetTest {
         BigDecimal filterValue = new BigDecimal("45.10");
         TextField threshold = Whitebox.getInternalState(widget, "minimumThreshold");
         Button applyButton = Whitebox.getInternalState(widget, "applyButton");
-        ExcludePayeesFilter filter = Whitebox.getInternalState(widget, "filter");
+        ExcludePayeeFilter filter = Whitebox.getInternalState(widget, "filter");
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "45.10", filterValue, true);
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "-45.10", filterValue, false);
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "45,10", filterValue, false);
@@ -94,7 +94,7 @@ public class ExcludePayeesFilterWidgetTest {
     }
 
     private void setThresholdAndValidateFilterAndApplyButton(TextField minimumThreshold, Button applyButton,
-                                                             ExcludePayeesFilter filter, String valueToSet,
+                                                             ExcludePayeeFilter filter, String valueToSet,
                                                              BigDecimal filterValue, boolean applyEnabled) {
         minimumThreshold.setValue(valueToSet);
         if (Objects.nonNull(minimumThreshold.getErrorMessage())) {
