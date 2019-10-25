@@ -23,10 +23,10 @@ import java.util.List;
 public class FasBatchSummaryReportHandler extends BaseCsvReportHandler<FasBatchSummaryReportDto> {
 
     private static final List<String> HEADERS = Arrays.asList("Usage Batch Name", "RRO Account Number", "RRO Name",
-        "Payment Date", "Gross Fund Pool in USD", "# non-Eligible Details", "Gross USD non-Eligible Details",
-        "# Details NTS", "Gross USD NTS", "# FAS/FAS2 Eligible Details", "Gross FAS/FAS2 Eligible USD",
-        "# Details in-progress Scenarios", "Gross USD in-progress Scenarios", "Royalty Payable USD",
-        "# Details Return to CLA", "Gross USD Return to CLA", "Load Date");
+        "Payment Date", "Load Date", "Gross Fund Pool in USD", "# non-Eligible Details",
+        "Gross USD non-Eligible Details", "# Details NTS", "Gross USD NTS", "# FAS/FAS2 Eligible Details",
+        "Gross FAS/FAS2 Eligible USD", "# Details in-progress Scenarios", "Gross USD in-progress Scenarios",
+        "Royalty Payable USD", "# Details Return to CLA", "Gross USD Return to CLA");
 
     /**
      * Constructor.
@@ -44,6 +44,7 @@ public class FasBatchSummaryReportHandler extends BaseCsvReportHandler<FasBatchS
         beanProperties.add(getBeanPropertyAsString(bean.getRroAccountNumber()));
         beanProperties.add(bean.getRroName());
         beanProperties.add(getBeanLocalDate(bean.getPaymentDate()));
+        beanProperties.add(DateFormatUtils.format(bean.getCreateDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getNonEligibleDetailsCount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getNonEligibleDetailsGrossAmount()));
@@ -56,7 +57,6 @@ public class FasBatchSummaryReportHandler extends BaseCsvReportHandler<FasBatchS
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getScenariosDetailsNetAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getReturnToClaDetailsCount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getReturnToClaDetailsGrossAmount()));
-        beanProperties.add(DateFormatUtils.format(bean.getCreateDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
         return beanProperties;
     }
 
