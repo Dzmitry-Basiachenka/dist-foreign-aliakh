@@ -1,12 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
-import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeesFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -47,12 +47,12 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau_Shalamitski
  */
-public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
+public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private SearchWidget searchWidget;
-    private IExcludePayeesController controller;
+    private IExcludePayeeController controller;
     private Grid<PayeeTotalHolder> payeesGrid;
 
     @Override
@@ -66,7 +66,7 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
     }
 
     @Override
-    public void setController(IExcludePayeesController controller) {
+    public void setController(IExcludePayeeController controller) {
         this.controller = controller;
     }
 
@@ -82,7 +82,7 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
 
     @Override
     @SuppressWarnings("unchecked")
-    public ExcludePayeesWidget init() {
+    public ExcludePayeeWidget init() {
         setWidth(1200, Unit.PIXELS);
         setHeight(500, Unit.PIXELS);
         setCaption(ForeignUi.getMessage("window.exclude.payee"));
@@ -96,8 +96,8 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
         mainLayout.setSizeFull();
         mainLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         mainLayout.setExpandRatio(payeesGrid, 1);
-        IExcludePayeesFilterWidget filterWidget = controller.getExcludePayeesFilterController().initWidget();
-        filterWidget.addListener(FilterChangedEvent.class, controller, IExcludePayeesController.ON_FILTER_CHANGED);
+        IExcludePayeeFilterWidget filterWidget = controller.getExcludePayeesFilterController().initWidget();
+        filterWidget.addListener(FilterChangedEvent.class, controller, IExcludePayeeController.ON_FILTER_CHANGED);
         HorizontalSplitPanel splitPanel = new HorizontalSplitPanel();
         splitPanel.addComponents(filterWidget, mainLayout);
         splitPanel.setSplitPosition(200, Unit.PIXELS);
@@ -189,7 +189,7 @@ public class ExcludePayeesWidget extends Window implements IExcludePayeeWidget {
             (ListDataProvider<PayeeTotalHolder>) payeesGrid.getDataProvider();
         dataProvider.clearFilters();
         String searchValue = searchWidget.getSearchValue();
-        ExcludePayeesFilter filter = controller.getExcludePayeesFilterController().getWidget().getAppliedFilter();
+        ExcludePayeeFilter filter = controller.getExcludePayeesFilterController().getWidget().getAppliedFilter();
         boolean notBlankSearchValue = StringUtils.isNotBlank(searchValue);
         boolean notEmptyFilter = !filter.isEmpty();
         if (notBlankSearchValue || notEmptyFilter) {

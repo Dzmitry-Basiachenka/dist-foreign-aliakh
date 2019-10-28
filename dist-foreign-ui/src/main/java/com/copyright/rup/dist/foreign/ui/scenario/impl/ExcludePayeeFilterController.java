@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -24,8 +24,8 @@ import java.util.Map;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ExcludePayeesFilterController extends CommonController<IExcludePayeesFilterWidget>
-    implements IExcludePayeesFilterController {
+public class ExcludePayeeFilterController extends CommonController<IExcludePayeeFilterWidget>
+    implements IExcludePayeeFilterController {
 
     private static final Map<String, Boolean> PARTICIPATING_STATUSES = new LinkedHashMap<>();
 
@@ -40,7 +40,7 @@ public class ExcludePayeesFilterController extends CommonController<IExcludePaye
     }
 
     @Override
-    protected IExcludePayeesFilterWidget instantiateWidget() {
-        return new ExcludePayeesFilterWidget();
+    protected IExcludePayeeFilterWidget instantiateWidget() {
+        return new ExcludePayeeFilterWidget();
     }
 }

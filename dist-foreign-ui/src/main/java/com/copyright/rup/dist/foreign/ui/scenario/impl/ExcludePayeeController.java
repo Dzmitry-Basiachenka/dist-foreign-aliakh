@@ -3,9 +3,9 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Implementation of {@link IExcludePayeesController}.
+ * Implementation of {@link IExcludePayeeController}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -27,17 +27,17 @@ import java.util.Set;
  */
 @Controller
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ExcludePayeesController extends CommonController<IExcludePayeeWidget> implements IExcludePayeesController {
+public class ExcludePayeeController extends CommonController<IExcludePayeeWidget> implements IExcludePayeeController {
 
     private Scenario scenario;
 
     @Autowired
     private IUsageService usageService;
     @Autowired
-    private IExcludePayeesFilterController payeesFilterController;
+    private IExcludePayeeFilterController payeesFilterController;
 
     @Override
-    public IExcludePayeesFilterController getExcludePayeesFilterController() {
+    public IExcludePayeeFilterController getExcludePayeesFilterController() {
         return payeesFilterController;
     }
 
@@ -63,7 +63,7 @@ public class ExcludePayeesController extends CommonController<IExcludePayeeWidge
 
     @Override
     protected IExcludePayeeWidget instantiateWidget() {
-        return new ExcludePayeesWidget();
+        return new ExcludePayeeWidget();
     }
 
     @Override

@@ -19,12 +19,12 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IExcludePayeesController extends IController<IExcludePayeeWidget> {
+public interface IExcludePayeeController extends IController<IExcludePayeeWidget> {
 
     /**
      * {@link #onFilterChanged()}.
      */
-    Method ON_FILTER_CHANGED = ReflectTools.findMethod(IExcludePayeesController.class, "onFilterChanged");
+    Method ON_FILTER_CHANGED = ReflectTools.findMethod(IExcludePayeeController.class, "onFilterChanged");
 
     /**
      * Handles filter change event.
@@ -34,7 +34,7 @@ public interface IExcludePayeesController extends IController<IExcludePayeeWidge
     /**
      * @return payee filter controller
      */
-    IExcludePayeesFilterController getExcludePayeesFilterController();
+    IExcludePayeeFilterController getExcludePayeesFilterController();
 
     /**
      * @return list of {@link PayeeTotalHolder}s to be displayed on UI.

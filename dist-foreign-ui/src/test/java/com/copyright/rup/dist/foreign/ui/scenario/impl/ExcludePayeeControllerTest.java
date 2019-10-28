@@ -11,7 +11,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeController;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies {@link ExcludePayeesController}.
+ * Verifies {@link ExcludePayeeController}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -30,17 +30,17 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public class ExcludePayeesControllerTest {
+public class ExcludePayeeControllerTest {
 
     private static final String REASON = "reason";
-    private IExcludePayeesController controller;
+    private IExcludePayeeController controller;
     private IUsageService usageService;
     private Scenario scenario;
 
     @Before
     public void setUp() {
         usageService = createMock(IUsageService.class);
-        controller = new ExcludePayeesController();
+        controller = new ExcludePayeeController();
         scenario = buildScenario();
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, scenario);

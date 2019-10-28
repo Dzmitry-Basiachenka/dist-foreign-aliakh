@@ -1,10 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
-import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeesFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -32,24 +32,24 @@ import java.util.Map;
  *
  * @author Uladzislau Shalamitski
  */
-public class ExcludePayeesFilterWidget extends VerticalLayout implements IExcludePayeesFilterWidget {
+public class ExcludePayeeFilterWidget extends VerticalLayout implements IExcludePayeeFilterWidget {
 
     private final Binder<String> binder = new Binder<>();
-    private IExcludePayeesFilterController controller;
-    private ExcludePayeesFilter filter = new ExcludePayeesFilter();
-    private ExcludePayeesFilter appliedFilter = new ExcludePayeesFilter();
+    private IExcludePayeeFilterController controller;
+    private ExcludePayeeFilter filter = new ExcludePayeeFilter();
+    private ExcludePayeeFilter appliedFilter = new ExcludePayeeFilter();
     private ComboBox<String> participatingComboBox;
     private TextField minimumThreshold;
     private Button applyButton;
 
     @Override
-    public ExcludePayeesFilter getAppliedFilter() {
+    public ExcludePayeeFilter getAppliedFilter() {
         return appliedFilter;
     }
 
     @Override
     public void applyFilter() {
-        appliedFilter = new ExcludePayeesFilter(filter);
+        appliedFilter = new ExcludePayeeFilter(filter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
     }
@@ -58,18 +58,18 @@ public class ExcludePayeesFilterWidget extends VerticalLayout implements IExclud
     public void clearFilter() {
         participatingComboBox.clear();
         minimumThreshold.clear();
-        filter = new ExcludePayeesFilter();
+        filter = new ExcludePayeeFilter();
         applyFilter();
     }
 
     @Override
-    public void setController(IExcludePayeesFilterController controller) {
+    public void setController(IExcludePayeeFilterController controller) {
         this.controller = controller;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public ExcludePayeesFilterWidget init() {
+    public ExcludePayeeFilterWidget init() {
         initParticipatingFilter();
         initMinimumThresholdFilter();
         HorizontalLayout buttonsLayout = initButtonsLayout();

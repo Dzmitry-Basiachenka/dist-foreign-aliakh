@@ -31,7 +31,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.ScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeesController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IWidget;
@@ -83,7 +83,7 @@ public class ScenarioControllerTest {
     private IReportService reportService;
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
     private IStreamSourceHandler streamSourceHandler;
-    private IExcludePayeesController excludePayeesController;
+    private IExcludePayeeController excludePayeesController;
     private Scenario scenario;
 
     @Before
@@ -102,7 +102,7 @@ public class ScenarioControllerTest {
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         rightsholderDiscrepancyService = createMock(IRightsholderDiscrepancyService.class);
-        excludePayeesController = createMock(IExcludePayeesController.class);
+        excludePayeesController = createMock(IExcludePayeeController.class);
         mockStatic(ForeignSecurityUtils.class);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, scenarioService);
@@ -279,7 +279,7 @@ public class ScenarioControllerTest {
             RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(0).once();
         excludePayeesController.setScenario(scenario);
         expectLastCall().once();
-        ExcludePayeesWidget widget = new ExcludePayeesWidget();
+        ExcludePayeeWidget widget = new ExcludePayeeWidget();
         expect(excludePayeesController.initWidget()).andReturn(widget).once();
         Windows.showModalWindow(widget);
         expectLastCall().once();

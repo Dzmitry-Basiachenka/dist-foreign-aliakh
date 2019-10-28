@@ -16,7 +16,7 @@ import java.util.Objects;
  *
  * @author Uladzislau Shalamitski
  */
-public class ExcludePayeesFilter {
+public class ExcludePayeeFilter {
 
     private Boolean payeeParticipating;
     private BigDecimal netAmountMinThreshold;
@@ -24,16 +24,16 @@ public class ExcludePayeesFilter {
     /**
      * Default constructor.
      */
-    public ExcludePayeesFilter() {
+    public ExcludePayeeFilter() {
         // default constructor
     }
 
     /**
      * Constructor.
      *
-     * @param filter instance of {@link ExcludePayeesFilter}
+     * @param filter instance of {@link ExcludePayeeFilter}
      */
-    public ExcludePayeesFilter(ExcludePayeesFilter filter) {
+    public ExcludePayeeFilter(ExcludePayeeFilter filter) {
         this.payeeParticipating = filter.getPayeeParticipating();
         this.netAmountMinThreshold = filter.getNetAmountMinThreshold();
     }
@@ -67,7 +67,7 @@ public class ExcludePayeesFilter {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        ExcludePayeesFilter that = (ExcludePayeesFilter) obj;
+        ExcludePayeeFilter that = (ExcludePayeeFilter) obj;
         return new EqualsBuilder()
             .append(payeeParticipating, that.payeeParticipating)
             .append(netAmountMinThreshold, that.netAmountMinThreshold)

@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
-import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeesFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.vaadin.widget.api.IFilterWidget;
 
 /**
@@ -12,10 +12,10 @@ import com.copyright.rup.vaadin.widget.api.IFilterWidget;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IExcludePayeesFilterWidget extends IFilterWidget<IExcludePayeesFilterController> {
+public interface IExcludePayeeFilterWidget extends IFilterWidget<IExcludePayeeFilterController> {
 
     /**
-     * @return currently applied {@link ExcludePayeesFilter}.
+     * @return currently applied {@link ExcludePayeeFilter}.
      */
-    ExcludePayeesFilter getAppliedFilter();
+    ExcludePayeeFilter getAppliedFilter();
 }

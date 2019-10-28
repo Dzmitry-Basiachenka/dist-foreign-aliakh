@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
-import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeesFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto;
@@ -65,7 +65,7 @@ public class DomainVerifierTest {
             {Work.class},
             {WorkClassification.class},
             {PreServiceFeeFund.class},
-            {ExcludePayeesFilter.class},
+            {ExcludePayeeFilter.class},
             {PayeeTotalHolder.class}
         };
         return Arrays.asList(testData);
