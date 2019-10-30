@@ -1,5 +1,6 @@
 7.1.11
 -
+* B-50006 FDA: Exclude details from FAS scenario at the Payee level: make changes based on comments in CR-DIST-FOREIGN-130
 
 7.1.10
 -
