@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto;
+import com.copyright.rup.dist.foreign.domain.report.NtsWithDrawnBatchSummaryReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
@@ -59,6 +60,7 @@ public class DomainVerifierTest {
             {ResearchedUsage.class},
             {UndistributedLiabilitiesReportDto.class},
             {FasBatchSummaryReportDto.class},
+            {NtsWithDrawnBatchSummaryReportDto.class},
             {ResearchStatusReportDto.class},
             {ServiceFeeTrueUpReportDto.class},
             {BatchStatistic.class},
