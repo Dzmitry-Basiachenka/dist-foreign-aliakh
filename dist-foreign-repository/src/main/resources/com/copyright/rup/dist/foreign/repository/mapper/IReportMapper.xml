@@ -77,6 +77,16 @@
         <result property="returnToClaDetailsGrossAmount" column="return_to_cla_details_gross_amount"/>
     </resultMap>
 
+    <resultMap id="ntsWithdrawnBatchSummaryReportDtoResultMap" type="NtsWithDrawnBatchSummaryReportDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="batchName" column="batch_name"/>
+        <result property="rroAccountNumber" column="rro_account_number"/>
+        <result property="rroName" column="rro_name"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="ntsDetailsCount" column="nts_details_count"/>
+        <result property="ntsDetailsGrossAmount" column="nts_details_gross_amount"/>
+    </resultMap>
+
     <select id="findUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="undistributedLiabilitiesReportDtoResultMap">
         select
             reportInfo.rro_account_number,
@@ -196,6 +206,19 @@
             return_to_cla_details_gross_amount,
             created_datetime
         from ${schema}.v_fas_batch_summary_report
+    </select>
+
+    <select id="findNtsWithdrawnBatchSummaryReportDtos" resultMap="ntsWithdrawnBatchSummaryReportDtoResultMap">
+        select
+            batch_name,
+            rro_account_number,
+            rro_name,
+            payment_date,
+            gross_amount,
+            nts_details_count,
+            nts_details_gross_amount,
+            created_datetime
+        from ${schema}.v_nts_withdrawn_batch_summary_report
     </select>
 
     <select id="findServiceFeeTrueUpReportDtos" resultMap="serviceFeeTrueUpReportDtoResultMap">
