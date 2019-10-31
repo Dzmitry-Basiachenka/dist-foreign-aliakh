@@ -190,6 +190,12 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    public void testWriteNtsWithdrawnBatchSummaryCsvReport() throws IOException {
+        assertFiles(outputStream -> reportRepository.writeNtsWithdrawnBatchSummaryCsvReport(outputStream),
+            "nts_withdrawn_batch_summary_report.csv");
+    }
+
+    @Test
     public void testWriteServiceFeeTrueUpCsvReport() throws IOException {
         assertFiles(outputStream -> reportRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2012, 1, 1),
             LocalDate.of(2012, 3, 15), LocalDate.of(2014, 5, 5), outputStream, 2000017000L,

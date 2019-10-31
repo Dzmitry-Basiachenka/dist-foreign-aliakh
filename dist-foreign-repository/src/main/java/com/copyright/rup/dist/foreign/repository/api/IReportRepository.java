@@ -140,4 +140,11 @@ public interface IReportRepository {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeWorkClassificationCsvReport(String searchValue, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes NTS Withdrawn Batch Summary Report into the output stream in csv format.
+     *
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeNtsWithdrawnBatchSummaryCsvReport(OutputStream outputStream);
 }

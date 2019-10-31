@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.AuditCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.FasBatchSummaryReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.OwnershipAdjustmentReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ResearchStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
@@ -203,6 +204,14 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         writeCsvReportByParts("IReportMapper.findWorkClassificationCountBySearch",
             "IReportMapper.findWorkClassificationBySearch", parameters,
             () -> new WorkClassificationCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeNtsWithdrawnBatchSummaryCsvReport(OutputStream outputStream) {
+        try (NtsWithdrawnBatchSummaryReportHandler handler = new NtsWithdrawnBatchSummaryReportHandler(
+            Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IReportMapper.findNtsWithdrawnBatchSummaryReportDtos", handler);
+        }
     }
 
     private <T> void writeCsvReportByParts(String countMethodName, String selectMethodName,
