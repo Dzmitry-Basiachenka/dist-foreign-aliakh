@@ -76,4 +76,10 @@ public class ReportController extends CommonController<IReportWidget> implements
         return new ByteArrayStreamSource("research_status_report_",
             outputStream -> reportService.writeResearchStatusCsvReport(outputStream));
     }
+
+    @Override
+    public IStreamSource getNtsWithdrawnBatchSummaryReportStreamSource() {
+        return new ByteArrayStreamSource("nts_withdrawn_batch_summary_report_",
+            outputStream -> reportService.writeNtsWithdrawnBatchSummaryCsvReport(outputStream));
+    }
 }
