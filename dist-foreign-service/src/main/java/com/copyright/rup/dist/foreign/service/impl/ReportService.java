@@ -87,6 +87,11 @@ public class ReportService implements IReportService {
     }
 
     @Override
+    public void writeNtsWithdrawnBatchSummaryCsvReport(OutputStream outputStream) {
+        reportRepository.writeNtsWithdrawnBatchSummaryCsvReport(outputStream);
+    }
+
+    @Override
     public void writeResearchStatusCsvReport(OutputStream outputStream) {
         reportRepository.writeResearchStatusCsvReport(outputStream);
     }

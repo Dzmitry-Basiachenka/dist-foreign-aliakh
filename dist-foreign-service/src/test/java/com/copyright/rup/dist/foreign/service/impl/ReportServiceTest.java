@@ -203,6 +203,16 @@ public class ReportServiceTest {
     }
 
     @Test
+    public void testWriteNtsWithdrawnBatchSummaryReport() {
+        ByteArrayOutputStream outputStream = createMock(ByteArrayOutputStream.class);
+        reportRepository.writeNtsWithdrawnBatchSummaryCsvReport(outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeNtsWithdrawnBatchSummaryCsvReport(outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
     public void testWriteResearchStatusCsvReport() {
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
         reportRepository.writeResearchStatusCsvReport(outputStream);
