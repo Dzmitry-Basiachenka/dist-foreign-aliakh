@@ -43,4 +43,9 @@ public interface IReportController extends IController<IReportWidget> {
      * @return instance of {@link IStreamSource} for research status report.
      */
     IStreamSource getResearchStatusReportStreamSource();
+
+    /**
+     * @return instance of {@link IStreamSource} for NTS withdrawn Batch Summary Report.
+     */
+    IStreamSource getNtsWithdrawnBatchSummaryReportStreamSource();
 }

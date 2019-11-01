@@ -82,13 +82,14 @@ public class ReportWidgetTest {
         assertEquals("reports-menu", reportWidget.getStyleName());
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(6, CollectionUtils.size(menuItems));
+        assertEquals(7, CollectionUtils.size(menuItems));
         assertEquals("FAS Batch Summary Report", menuItems.get(0).getText());
-        assertEquals("Summary of Market Report", menuItems.get(1).getText());
-        assertEquals("Research Status Report", menuItems.get(2).getText());
-        assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
-        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(4).getText());
-        assertEquals("Ownership Adjustment Report", menuItems.get(5).getText());
+        assertEquals("NTS Withdrawn Batch Summary Report", menuItems.get(1).getText());
+        assertEquals("Summary of Market Report", menuItems.get(2).getText());
+        assertEquals("Research Status Report", menuItems.get(3).getText());
+        assertEquals("Service Fee True-up Report", menuItems.get(4).getText());
+        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(5).getText());
+        assertEquals("Ownership Adjustment Report", menuItems.get(6).getText());
     }
 
     @Test
@@ -99,7 +100,7 @@ public class ReportWidgetTest {
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
         replayAll();
-        selectMenuItem(4);
+        selectMenuItem(5);
         verifyAll();
     }
 
@@ -112,6 +113,14 @@ public class ReportWidgetTest {
     }
 
     @Test
+    public void testNtsWithdrawnBatchSummaryReportSelected() {
+        expectReportGenerated(reportController.getNtsWithdrawnBatchSummaryReportStreamSource());
+        replayAll();
+        selectMenuItem(1);
+        verifyAll();
+    }
+
+    @Test
     public void testSummaryMarketReportSelected() {
         ISummaryMarketReportController summaryMarketReportController = createMock(ISummaryMarketReportController.class);
         expect(reportController.getSummaryMarketReportController()).andReturn(summaryMarketReportController).once();
@@ -119,7 +128,7 @@ public class ReportWidgetTest {
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
         replayAll();
-        selectMenuItem(1);
+        selectMenuItem(2);
         verifyAll();
     }
 
@@ -127,7 +136,7 @@ public class ReportWidgetTest {
     public void testResearchStatusReportSelected() {
         expectReportGenerated(reportController.getResearchStatusReportStreamSource());
         replayAll();
-        selectMenuItem(2);
+        selectMenuItem(3);
         verifyAll();
     }
 
@@ -139,7 +148,7 @@ public class ReportWidgetTest {
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
         replayAll();
-        selectMenuItem(3);
+        selectMenuItem(4);
         verifyAll();
     }
 
