@@ -42,7 +42,7 @@ public class NtsWithdrawnBatchSummaryReportHandler extends BaseCsvReportHandler<
         beanProperties.add(bean.getRroName());
         beanProperties.add(getBeanLocalDate(bean.getPaymentDate()));
         beanProperties.add(DateFormatUtils.format(bean.getCreateDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getBatchGrossAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getNtsDetailsCount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getNtsDetailsGrossAmount()));
         return beanProperties;

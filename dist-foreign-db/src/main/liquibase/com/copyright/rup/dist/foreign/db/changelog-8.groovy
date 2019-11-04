@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2019-10-30-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("B-53752 FDA: Create NTS withdrawn batch summary report: Create DB view for generating batch summary report")
+        comment("B-53752 FDA: Create NTS withdrawn batch summary report: create DB view for generating batch summary report")
 
         createView(viewName: 'v_nts_withdrawn_batch_summary_report', schemaName: dbAppsSchema) {
             """select

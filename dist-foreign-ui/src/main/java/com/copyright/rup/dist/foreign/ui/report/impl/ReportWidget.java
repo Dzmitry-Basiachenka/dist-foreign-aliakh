@@ -47,10 +47,9 @@ public class ReportWidget extends MenuBar implements IReportWidget {
         String serviceFeeTrueUpReportCaption = ForeignUi.getMessage("menu.report.service_fee_true_up");
         String summaryMarketReportCaption = ForeignUi.getMessage("menu.report.market_summary");
         String ownershipAdjustmentReportCaption = ForeignUi.getMessage("menu.report.ownership_adjustment_report");
-        String ntsWithdrawnBatchReport = ForeignUi.getMessage("menu.report.nts_batch_summary");
         rootItem.addItem(ForeignUi.getMessage("menu.report.batch_summary"),
             menuItem -> generateReport(controller.getFasBatchSummaryReportStreamSource()));
-        rootItem.addItem(ntsWithdrawnBatchReport,
+        rootItem.addItem(ForeignUi.getMessage("menu.report.nts_batch_summary"),
             menuItem -> generateReport(controller.getNtsWithdrawnBatchSummaryReportStreamSource()));
         rootItem.addItem(summaryMarketReportCaption,
             menuItem -> openReportWindow(summaryMarketReportCaption, controller.getSummaryMarketReportController()));

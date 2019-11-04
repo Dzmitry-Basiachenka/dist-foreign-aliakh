@@ -82,7 +82,7 @@
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="rroName" column="rro_name"/>
         <result property="paymentDate" column="payment_date"/>
-        <result property="grossAmount" column="gross_amount"/>
+        <result property="batchGrossAmount" column="gross_amount"/>
         <result property="ntsDetailsCount" column="nts_details_count"/>
         <result property="ntsDetailsGrossAmount" column="nts_details_gross_amount"/>
     </resultMap>
