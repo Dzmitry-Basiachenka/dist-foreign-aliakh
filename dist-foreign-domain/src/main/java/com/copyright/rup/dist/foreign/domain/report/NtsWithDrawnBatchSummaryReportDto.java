@@ -27,7 +27,7 @@ public class NtsWithDrawnBatchSummaryReportDto extends StoredEntity<String> {
     private String rroName;
     private LocalDate paymentDate;
     private int ntsDetailsCount;
-    private BigDecimal grossAmount = DEFAULT_AMOUNT;
+    private BigDecimal batchGrossAmount = DEFAULT_AMOUNT;
     private BigDecimal ntsDetailsGrossAmount = DEFAULT_AMOUNT;
 
     public String getBatchName() {
@@ -70,12 +70,12 @@ public class NtsWithDrawnBatchSummaryReportDto extends StoredEntity<String> {
         this.ntsDetailsCount = ntsDetailsCount;
     }
 
-    public BigDecimal getGrossAmount() {
-        return grossAmount;
+    public BigDecimal getBatchGrossAmount() {
+        return batchGrossAmount;
     }
 
-    public void setGrossAmount(BigDecimal grossAmount) {
-        this.grossAmount = grossAmount;
+    public void setBatchGrossAmount(BigDecimal batchGrossAmount) {
+        this.batchGrossAmount = batchGrossAmount;
     }
 
     public BigDecimal getNtsDetailsGrossAmount() {
@@ -102,7 +102,7 @@ public class NtsWithDrawnBatchSummaryReportDto extends StoredEntity<String> {
             .append(rroAccountNumber, that.rroAccountNumber)
             .append(rroName, that.rroName)
             .append(paymentDate, that.paymentDate)
-            .append(grossAmount, that.grossAmount)
+            .append(batchGrossAmount, that.batchGrossAmount)
             .append(ntsDetailsGrossAmount, that.ntsDetailsGrossAmount)
             .isEquals();
     }
@@ -116,7 +116,7 @@ public class NtsWithDrawnBatchSummaryReportDto extends StoredEntity<String> {
             .append(rroName)
             .append(paymentDate)
             .append(ntsDetailsCount)
-            .append(grossAmount)
+            .append(batchGrossAmount)
             .append(ntsDetailsGrossAmount)
             .toHashCode();
     }
@@ -129,7 +129,7 @@ public class NtsWithDrawnBatchSummaryReportDto extends StoredEntity<String> {
             .append("rroName", rroName)
             .append("paymentDate", paymentDate)
             .append("ntsDetailsCount", ntsDetailsCount)
-            .append("grossAmount", grossAmount)
+            .append("batchGrossAmount", batchGrossAmount)
             .append("ntsDetailsGrossAmount", ntsDetailsGrossAmount)
             .toString();
     }
