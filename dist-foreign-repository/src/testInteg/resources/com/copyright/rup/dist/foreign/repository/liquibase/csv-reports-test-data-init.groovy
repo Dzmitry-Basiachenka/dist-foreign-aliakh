@@ -4795,6 +4795,27 @@ databaseChangeLog {
     changeSet(id: '2019-10-28-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
         comment('Inserting test data for testWriteNtsWithdrawnBatchSummaryCsvReport')
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '3fef25b0-c0d1-4819-887f-4c6acc01390e')
+            column(name: 'name', value: 'Test fund1')
+            column(name: 'comment', value: 'test comment')
+            column(name: 'withdrawn_amount', value: '10.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '4fef25b0-c0d1-4819-887f-4c6acc01390e')
+            column(name: 'name', value: 'Test fund2')
+            column(name: 'comment', value: 'test comment')
+            column(name: 'withdrawn_amount', value: '10.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '5fef25b0-c0d1-4819-887f-4c6acc01390e')
+            column(name: 'name', value: 'Test fund3')
+            column(name: 'comment', value: 'test comment')
+            column(name: 'withdrawn_amount', value: '10.00')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'a6669f7c-fc6f-4e8c-88d4-2fe7bcce8d1f')
             column(name: 'rh_account_number', value: '1000002900')
@@ -4914,6 +4935,7 @@ databaseChangeLog {
             column(name: "df_usage_batch_uid", value: "88866cac-2468-48d4-b346-93d3458a656a")
             column(name: "product_family", value: "NTS")
             column(name: "work_title", value: "Wissenschaft & Forschung Japan")
+            column(name: 'df_fund_pool_uid', value: '3fef25b0-c0d1-4819-887f-4c6acc01390e')
             column(name: "status_ind", value: "TO_BE_DISTRIBUTED")
             column(name: "article", value: "DIN EN 779:2013")
             column(name: "standard_number", value: "2192-3558")
@@ -4934,6 +4956,7 @@ databaseChangeLog {
             column(name: "product_family", value: "NTS")
             column(name: "wr_wrk_inst", value: "180382915")
             column(name: "work_title", value: "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA")
+            column(name: 'df_fund_pool_uid', value: '4fef25b0-c0d1-4819-887f-4c6acc01390e')
             column(name: "status_ind", value: "TO_BE_DISTRIBUTED")
             column(name: "article", value: "DIN EN 779:2013")
             column(name: "standard_number", value: "2192-3566")
@@ -4955,6 +4978,7 @@ databaseChangeLog {
             column(name: "product_family", value: "NTS")
             column(name: "wr_wrk_inst", value: "180382915")
             column(name: "work_title", value: "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA")
+            column(name: 'df_fund_pool_uid', value: '5fef25b0-c0d1-4819-887f-4c6acc01390e')
             column(name: "status_ind", value: "TO_BE_DISTRIBUTED")
             column(name: "article", value: "DIN EN 779:2013")
             column(name: "standard_number", value: "2192-3566")
