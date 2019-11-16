@@ -1,3 +1,22 @@
+8.1.0
+-
+* B-53554 Tech Debt: CDP: upgrade jackson-databind version to 2.9.10.1, upgrade dist-common version to 48.2.+, update Spring XML schema version in config files
+* B-53554 Tech Debt: FDA: add consistent data for CsvReportIntegrationTest
+* B-53554 Tech Debt: FDA: replace property in web.xml related to aplly new rup auth version and apply new spring version 4.3.25.RELEASE
+* B-53554 Tech Debt: FDA: apply new rup auth version 8.+
+* B-53752 FDA: NTS withdrawn batch summary report: make changes based on CR-DIST-FOREIGN-131
+* B-53752 FDA: NTS withdrawn batch summary report: add NTS Withdrawn Batch Summary Report to Reports tab
+* B-53752 FDA: NTS withdrawn batch summary report: implement service logic for generating batch summary report
+* B-53752 FDA: NTS withdrawn batch summary report: implement repository logic for generating batch summary report
+* B-53752 FDA: NTS withdrawn batch summary report: implement NTS withdrawn report handler
+* B-53752 FDA: NTS withdrawn batch summary report: create DB view for generating batch summary report
+* B-53554 Tech Debt: FDA: Apply rup-vaadin 8
+
+7.1.12
+-
+* B-53554 Tech Debt: FDA: upgrade jackson-databind version to 2.9.10.1, upgrade dist-common version to 48.2.+, update Spring XML schema version in config files
+* CDP-852 FDA: Several exceptions while sending FAS/FAS2 details to CRM in production: revert reading rights distribution from CRM before writing them
+
 7.1.11
 -
 * B-50006 FDA: Exclude details from FAS scenario at the Payee level: make changes based on comments in CR-DIST-FOREIGN-130
