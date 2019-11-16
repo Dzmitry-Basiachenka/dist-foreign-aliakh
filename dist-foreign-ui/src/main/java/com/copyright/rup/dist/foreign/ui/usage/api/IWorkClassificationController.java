@@ -30,6 +30,11 @@ public interface IWorkClassificationController {
     int getClassificationCount(Set<String> batchesIds, String searchValue);
 
     /**
+     * @return threshold value for work classifications size.
+     */
+    int getWorkClassificationThreshold();
+
+    /**
      * Gets list of {@link WorkClassification}s by usage batches ids and search value.
      *
      * @param batchesIds  set of batches ids

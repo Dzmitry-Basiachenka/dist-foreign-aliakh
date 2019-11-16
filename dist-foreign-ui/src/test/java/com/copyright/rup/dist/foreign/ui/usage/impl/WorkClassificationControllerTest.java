@@ -49,6 +49,14 @@ public class WorkClassificationControllerTest {
     }
 
     @Test
+    public void testGetWorkClassificationThreshold() {
+        expect(workClassificationService.getWorkClassificationThreshold()).andReturn(10).once();
+        replay(workClassificationService);
+        assertEquals(10, controller.getWorkClassificationThreshold());
+        verify(workClassificationService);
+    }
+
+    @Test
     public void testGetClassificationCount() {
         expect(workClassificationService.getClassificationCount(BATCHES_IDS, SEARCH_VALUE))
             .andReturn(1).once();

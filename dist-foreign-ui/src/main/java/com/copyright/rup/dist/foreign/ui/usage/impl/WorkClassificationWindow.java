@@ -14,6 +14,7 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -25,10 +26,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.util.Date;
@@ -48,8 +49,8 @@ import java.util.function.Consumer;
 public class WorkClassificationWindow extends Window {
 
     private Grid<WorkClassification> grid;
-    private MultiSelectionModelImpl gridSelectionModel;
     private SearchWidget searchWidget;
+    private ListDataProvider<WorkClassification> listDataProvider;
     private DataProvider<WorkClassification, Void> dataProvider;
     private final IWorkClassificationController controller;
     private final Set<String> selectedBatchesIds;
@@ -98,7 +99,7 @@ public class WorkClassificationWindow extends Window {
     }
 
     private void initSearchWidget() {
-        searchWidget = new SearchWidget(() -> dataProvider.refreshAll());
+        searchWidget = new SearchWidget(this::performSearch);
         searchWidget.setPrompt(ForeignUi.getMessage("prompt.works_classification"));
         searchWidget.setWidth(70, Unit.PERCENTAGE);
     }
@@ -136,28 +137,29 @@ public class WorkClassificationWindow extends Window {
     }
 
     private void initGrid() {
-        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
-            query -> controller.getClassifications(selectedBatchesIds, searchWidget.getSearchValue(),
-                query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
-            query -> controller.getClassificationCount(selectedBatchesIds,
-                searchWidget.getSearchValue()));
-        grid = new Grid<>(dataProvider);
-        addColumns();
+        grid = new Grid<>(selectAndBuildDataProvider());
         grid.setSizeFull();
-        gridSelectionModel = (MultiSelectionModelImpl) grid.setSelectionMode(SelectionMode.MULTI);
-        gridSelectionModel.setSelectAllCheckBoxVisibility(SelectAllCheckBoxVisibility.VISIBLE);
+        MultiSelectionModelImpl gridSelectionModel =
+            (MultiSelectionModelImpl) grid.setSelectionMode(SelectionMode.MULTI);
+        gridSelectionModel.setSelectAllCheckBoxVisibility(SelectAllCheckBoxVisibility.HIDDEN);
+        addColumns();
         grid.getColumns().forEach(column -> column.setSortable(true));
-        grid.addItemClickListener((ItemClickListener<WorkClassification>) event -> {
-            if (!event.getMouseEventDetails().isDoubleClick()) {
-                WorkClassification classification = event.getItem();
-                if (gridSelectionModel.isSelected(classification)) {
-                    gridSelectionModel.deselect(classification);
-                } else {
-                    gridSelectionModel.select(classification);
-                }
-            }
-        });
         VaadinUtils.addComponentStyle(grid, "works-classification-grid");
+    }
+
+    private DataProvider selectAndBuildDataProvider() {
+        int classificationCount = controller.getClassificationCount(selectedBatchesIds, null);
+        if (controller.getWorkClassificationThreshold() < classificationCount) {
+            dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
+                query -> controller.getClassifications(selectedBatchesIds, searchWidget.getSearchValue(),
+                    query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
+                query -> controller.getClassificationCount(selectedBatchesIds, searchWidget.getSearchValue()));
+            return dataProvider;
+        } else {
+            listDataProvider = DataProvider.ofCollection(
+                controller.getClassifications(selectedBatchesIds, null, 0, classificationCount, null));
+            return listDataProvider;
+        }
     }
 
     private void addColumns() {
@@ -192,9 +194,27 @@ public class WorkClassificationWindow extends Window {
             .setWidth(135);
     }
 
+    private void performSearch() {
+        if (Objects.nonNull(listDataProvider)) {
+            listDataProvider.clearFilters();
+            String searchValue = searchWidget.getSearchValue();
+            if (StringUtils.isNotBlank(searchValue)) {
+                listDataProvider.addFilter(
+                    value -> StringUtils.containsIgnoreCase(Objects.toString(value.getWrWrkInst(), null), searchValue)
+                        || StringUtils.containsIgnoreCase(value.getSystemTitle(), searchValue)
+                        || StringUtils.containsIgnoreCase(value.getStandardNumber(), searchValue)
+                        || StringUtils.containsIgnoreCase(value.getRhName(), searchValue)
+                        || StringUtils.containsIgnoreCase(Objects.toString(value.getRhAccountNumber(), null),
+                        searchValue));
+            }
+        } else {
+            dataProvider.refreshAll();
+        }
+    }
+
     private void addClickListener(Button button, String message, Consumer<Set<WorkClassification>> consumer) {
         button.addClickListener(event -> {
-            Set<WorkClassification> selectedItems = getSelectedItems();
+            Set<WorkClassification> selectedItems = grid.getSelectedItems();
             if (!selectedItems.isEmpty()) {
                 int usageCount = controller.getCountToUpdate(selectedItems);
                 Windows.showConfirmDialog(0 < usageCount
@@ -209,14 +229,5 @@ public class WorkClassificationWindow extends Window {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.classification.empty"));
             }
         });
-    }
-
-    private Set<WorkClassification> getSelectedItems() {
-        // Server selection is not synched with UI-client on search changes while "allSelected" is checked.
-        // See https://github.com/vaadin/framework/issues/11479
-        if (gridSelectionModel.isAllSelected()) {
-            gridSelectionModel.selectAll();
-        }
-        return grid.getSelectedItems();
     }
 }

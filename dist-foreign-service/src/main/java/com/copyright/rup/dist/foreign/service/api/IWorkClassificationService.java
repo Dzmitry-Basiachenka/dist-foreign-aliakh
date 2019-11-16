@@ -62,4 +62,9 @@ public interface IWorkClassificationService {
      * @return count of work classifications
      */
     int getClassificationCount(Set<String> batchesIds, String searchValue);
+
+    /**
+     * @return threshold value for work classifications size.
+     */
+    int getWorkClassificationThreshold();
 }

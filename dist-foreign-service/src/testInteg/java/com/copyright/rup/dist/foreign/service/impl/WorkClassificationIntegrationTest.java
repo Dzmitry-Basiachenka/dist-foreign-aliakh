@@ -56,6 +56,11 @@ public class WorkClassificationIntegrationTest {
     private IUsageService usageService;
 
     @Test
+    public void testGetWorkClassificationThreshold() {
+        assertEquals(10000, workClassificationService.getWorkClassificationThreshold());
+    }
+
+    @Test
     public void testApplyStmClassification() {
         assertAndGetUsages(1, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
@@ -63,12 +68,12 @@ public class WorkClassificationIntegrationTest {
             Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), STM);
         List<WorkClassification> workClassifications =
             workClassificationService.getClassifications(Sets.newHashSet(BATCHES_IDS), null, null, null);
-        assertEquals(2,workClassifications.size());
+        assertEquals(2, workClassifications.size());
         assertAndGetUsages(2, UsageStatusEnum.ELIGIBLE);
         workClassifications.forEach(workClassification -> {
             assertEquals(STM, workClassification.getClassification());
             assertEquals("SYSTEM", workClassification.getUpdateUser());
-            assertEquals(getConvertedDate(new Date()),getConvertedDate(workClassification.getUpdateDate()));
+            assertEquals(getConvertedDate(new Date()), getConvertedDate(workClassification.getUpdateDate()));
         });
     }
 
@@ -80,14 +85,14 @@ public class WorkClassificationIntegrationTest {
             Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), NON_STM);
         List<WorkClassification> workClassifications =
             workClassificationService.getClassifications(Sets.newHashSet(BATCHES_IDS), null, null, null);
-        assertEquals(2,workClassifications.size());
+        assertEquals(2, workClassifications.size());
         assertAndGetUsages(2, UsageStatusEnum.ELIGIBLE);
         assertEquals("SYSTEM", workClassifications.get(0).getUpdateUser());
         workClassifications.forEach(
-            workClassification ->{
+            workClassification -> {
                 assertEquals(NON_STM, workClassification.getClassification());
                 assertEquals("SYSTEM", workClassification.getUpdateUser());
-                assertEquals(getConvertedDate(new Date()),getConvertedDate(workClassification.getUpdateDate()));
+                assertEquals(getConvertedDate(new Date()), getConvertedDate(workClassification.getUpdateDate()));
             });
     }
 
@@ -129,7 +134,7 @@ public class WorkClassificationIntegrationTest {
         return classification;
     }
 
-    private String getConvertedDate(Date date){
+    private String getConvertedDate(Date date) {
         return DateFormatUtils.format(date, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     }
 }

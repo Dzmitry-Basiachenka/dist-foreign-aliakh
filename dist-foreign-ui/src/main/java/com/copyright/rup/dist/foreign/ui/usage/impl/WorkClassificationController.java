@@ -53,6 +53,11 @@ public class WorkClassificationController implements IWorkClassificationControll
     }
 
     @Override
+    public int getWorkClassificationThreshold() {
+        return workClassificationService.getWorkClassificationThreshold();
+    }
+
+    @Override
     public List<WorkClassification> getClassifications(Set<String> batchesIds, String searchValue, int startIndex,
                                                        int count, List<QuerySortOrder> sortOrders) {
         Sort sort = null;
