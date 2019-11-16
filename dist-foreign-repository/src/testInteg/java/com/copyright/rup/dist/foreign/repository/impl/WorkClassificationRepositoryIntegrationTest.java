@@ -1,10 +1,10 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static junit.framework.TestCase.assertNull;
-
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -99,12 +99,10 @@ public class WorkClassificationRepositoryIntegrationTest {
     public void testFindByBatchIds() throws IOException {
         List<WorkClassification> expectedClassifications =
             loadExpectedClassifications("json/work_classifications_find_by_batch_ids.json");
-        List<WorkClassification> actualClassifications =
-            workClassificationRepository.findByBatchIds(Collections.singleton(BATCH_UID), StringUtils.EMPTY, null,
-                new Sort("wrWrkInst", Direction.ASC));
-        assertEquals(expectedClassifications.size(), actualClassifications.size());
-        IntStream.range(0, actualClassifications.size())
-            .forEach(i -> assertClassification(expectedClassifications.get(i), actualClassifications.get(i)));
+        findByBatchIdsAndAssertResult(expectedClassifications, null, 3);
+        findByBatchIdsAndAssertResult(expectedClassifications, new Pageable(0, 3), 3);
+        findByBatchIdsAndAssertResult(expectedClassifications, new Pageable(0, 2), 2);
+        findByBatchIdsAndAssertResult(expectedClassifications, new Pageable(0, 1), 1);
     }
 
     @Test
@@ -121,11 +119,11 @@ public class WorkClassificationRepositoryIntegrationTest {
     public void testFindBySearch() throws IOException {
         List<WorkClassification> expectedClassifications =
             loadExpectedClassifications("json/work_classifications_find_by_search.json");
-        List<WorkClassification> actualClassifications =
-            workClassificationRepository.findBySearch(StringUtils.EMPTY, null, new Sort("wrWrkInst", Direction.ASC));
-        assertEquals(expectedClassifications.size(), actualClassifications.size());
-        IntStream.range(0, actualClassifications.size())
-            .forEach(i -> assertClassification(expectedClassifications.get(i), actualClassifications.get(i)));
+        findAndAssertResult(expectedClassifications, null, 5);
+        findAndAssertResult(expectedClassifications, new Pageable(0, 4), 4);
+        findAndAssertResult(expectedClassifications, new Pageable(0, 3), 3);
+        findAndAssertResult(expectedClassifications, new Pageable(0, 2), 2);
+        findAndAssertResult(expectedClassifications, new Pageable(0, 1), 1);
     }
 
     @Test
@@ -142,6 +140,26 @@ public class WorkClassificationRepositoryIntegrationTest {
         mapper.registerModule(new JavaTimeModule());
         return mapper.readValue(content, new TypeReference<List<WorkClassification>>() {
         });
+    }
+
+    private void findByBatchIdsAndAssertResult(List<WorkClassification> expectedClassifications, Pageable pageable,
+                                               int count) {
+        List<WorkClassification> actualClassifications =
+            workClassificationRepository.findByBatchIds(Collections.singleton(BATCH_UID), StringUtils.EMPTY, pageable,
+                new Sort("wrWrkInst", Direction.ASC));
+        assertEquals(count, actualClassifications.size());
+        IntStream.range(0, actualClassifications.size())
+            .forEach(i -> assertClassification(expectedClassifications.get(i), actualClassifications.get(i)));
+    }
+
+    private void findAndAssertResult(List<WorkClassification> expectedClassifications, Pageable pageable,
+                                     int count) {
+        List<WorkClassification> actualClassifications =
+            workClassificationRepository.findBySearch(StringUtils.EMPTY, pageable, new Sort("wrWrkInst",
+                Direction.ASC));
+        assertEquals(count, actualClassifications.size());
+        IntStream.range(0, actualClassifications.size())
+            .forEach(i -> assertClassification(expectedClassifications.get(i), actualClassifications.get(i)));
     }
 
     private void assertClassification(WorkClassification expectedClassification,

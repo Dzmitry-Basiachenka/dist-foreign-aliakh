@@ -92,7 +92,8 @@
             <otherwise>
                 wc.updated_datetime desc
             </otherwise>
-        </choose>
+        </choose>,
+        row_number() over (order by wc.df_work_classification_uid)
     </sql>
 
     <sql id="findByBatchIdsSql">
