@@ -74,6 +74,9 @@ public class WorkClassificationWindowTest {
     public void setUp() {
         workClassificationController = createMock(IWorkClassificationController.class);
         IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(workClassificationController.getWorkClassificationThreshold()).andReturn(5).once();
+        expect(workClassificationController.getClassificationCount(batchesIds, null))
+            .andReturn(10).once();
         expect(workClassificationController.getExportWorkClassificationStreamSource(
             anyObject(Set.class), anyObject(Supplier.class))).andReturn(streamSource).once();
         expect(streamSource.getSource())

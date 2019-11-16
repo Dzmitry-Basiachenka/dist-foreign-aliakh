@@ -101,6 +101,9 @@ public class NtsUsageBatchSelectorWidgetTest {
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(buildUsageBatch())).once();
         expect(usagesController.getWorkClassificationController()).andReturn(workClassificationController).once();
+        expect(workClassificationController.getWorkClassificationThreshold()).andReturn(5).once();
+        expect(workClassificationController.getClassificationCount(Collections.singleton(USAGE_BATCH_ID), null))
+            .andReturn(10).once();
         expect(workClassificationController.getExportWorkClassificationStreamSource(
             anyObject(Set.class), anyObject(Supplier.class))).andReturn(streamSource).once();
         expect(streamSource.getSource())

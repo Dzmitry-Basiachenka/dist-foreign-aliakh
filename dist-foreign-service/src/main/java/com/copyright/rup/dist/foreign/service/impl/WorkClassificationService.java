@@ -55,6 +55,8 @@ public class WorkClassificationService implements IWorkClassificationService {
     private IChainProcessor<Usage> nonBelletristicProcessor;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private int usagesBatchSize;
+    @Value("$RUP{dist.foreign.work_classification.threshold}")
+    private int worksThreshold;
 
     @Override
     @Transactional
@@ -114,6 +116,11 @@ public class WorkClassificationService implements IWorkClassificationService {
         return CollectionUtils.isNotEmpty(batchesIds)
             ? workClassificationRepository.findCountByBatchIds(batchesIds, searchValue)
             : workClassificationRepository.findCountBySearch(searchValue);
+    }
+
+    @Override
+    public int getWorkClassificationThreshold() {
+        return worksThreshold;
     }
 
     void setWorkClassificationRepository(IWorkClassificationRepository workClassificationRepository) {
