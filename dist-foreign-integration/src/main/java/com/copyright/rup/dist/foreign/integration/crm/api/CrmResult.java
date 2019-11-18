@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Represents 'insert rights distribution' response from CRM system.
+ * Represents result of CRM process.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -18,25 +18,25 @@ import java.util.Set;
  *
  * @author Darya Baraukova
  */
-public class InsertRightsDistributionResponse {
+public class CrmResult {
 
     private final Set<String> invalidUsageIds = Sets.newHashSet();
-    private InsertRightsDistributionResponseStatusEnum status;
+    private CrmResultStatusEnum status;
 
     /**
      * Constructor.
      *
-     * @param status {@link InsertRightsDistributionResponseStatusEnum} instance
+     * @param status {@link CrmResultStatusEnum} instance
      */
-    public InsertRightsDistributionResponse(InsertRightsDistributionResponseStatusEnum status) {
+    public CrmResult(CrmResultStatusEnum status) {
         this.status = status;
     }
 
-    public InsertRightsDistributionResponseStatusEnum getStatus() {
+    public CrmResultStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(InsertRightsDistributionResponseStatusEnum status) {
+    public void setStatus(CrmResultStatusEnum status) {
         this.status = status;
     }
 
@@ -58,11 +58,11 @@ public class InsertRightsDistributionResponse {
     /**
      * Checks whether send to CRM process was successful or not.
      *
-     * @return {@code true} - if status is {@link InsertRightsDistributionResponseStatusEnum#SUCCESS}
-     * and list of invalid detail ids is empty, {@code false} - otherwise
+     * @return {@code true} - if status is {@link CrmResultStatusEnum#SUCCESS} and list of invalid detail ids is empty,
+     * {@code false} - otherwise
      */
     public boolean isSuccessful() {
-        return InsertRightsDistributionResponseStatusEnum.SUCCESS == status && CollectionUtils.isEmpty(invalidUsageIds);
+        return CrmResultStatusEnum.SUCCESS == status && CollectionUtils.isEmpty(invalidUsageIds);
     }
 
     @Override

@@ -37,24 +37,18 @@ import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService;
-import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionRequest;
-import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionResponse;
-import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionResponseStatusEnum;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
@@ -71,7 +65,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -115,12 +108,10 @@ public class UsageServiceTest {
     private IUsageRepository usageRepository;
     private IUsageArchiveRepository usageArchiveRepository;
     private IUsageAuditService usageAuditService;
-    private IScenarioService scenarioService;
     private IScenarioAuditService scenarioAuditService;
     private IRightsholderService rightsholderService;
     private UsageService usageService;
     private IPrmIntegrationService prmIntegrationService;
-    private ICrmIntegrationService crmIntegrationService;
     private IChainExecutor<Usage> chainExecutor;
     private IPiIntegrationService piIntegrationService;
 
@@ -136,9 +127,7 @@ public class UsageServiceTest {
         scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         usageRepository = createMock(IUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
-        scenarioService = createMock(IScenarioService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
-        crmIntegrationService = createMock(ICrmIntegrationService.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
         rightsholderService = createMock(IRightsholderService.class);
@@ -149,9 +138,7 @@ public class UsageServiceTest {
         Whitebox.setInternalState(usageService, "chainExecutor", chainExecutor);
         Whitebox.setInternalState(usageService, "usageRepository", usageRepository);
         Whitebox.setInternalState(usageService, "usageAuditService", usageAuditService);
-        Whitebox.setInternalState(usageService, "scenarioService", scenarioService);
         Whitebox.setInternalState(usageService, "prmIntegrationService", prmIntegrationService);
-        Whitebox.setInternalState(usageService, "crmIntegrationService", crmIntegrationService);
         Whitebox.setInternalState(usageService, "usageArchiveRepository", usageArchiveRepository);
         Whitebox.setInternalState(usageService, "scenarioAuditService", scenarioAuditService);
         Whitebox.setInternalState(usageService, "rightsholderService", rightsholderService);
@@ -842,82 +829,6 @@ public class UsageServiceTest {
         assertEquals("VALISSN", researchedUsage1.getStandardNumberType());
         assertNull(researchedUsage2.getStandardNumberType());
         verify(usageRepository, usageAuditService, chainExecutor, piIntegrationService);
-    }
-
-    @Test
-    public void testSendToCrm() {
-        String usageId1 = "2cb529a7-24c5-41ec-a095-46a645df9eea";
-        String usageId2 = "dab30b02-565e-4fae-957e-5db09d9aca07";
-        String cccEventId1 = "12477";
-        String cccEventId2 = "13315";
-        expect(usageArchiveRepository.findPaidIds()).andReturn(Arrays.asList(usageId1, usageId2)).once();
-        List<PaidUsage> paidUsages = new ArrayList<>();
-        PaidUsage paidUsage1 = new PaidUsage();
-        paidUsage1.setId(usageId1);
-        paidUsage1.setCccEventId(cccEventId1);
-        paidUsages.add(paidUsage1);
-        PaidUsage paidUsage2 = new PaidUsage();
-        paidUsage2.setId(usageId2);
-        paidUsage2.setCccEventId(cccEventId2);
-        paidUsages.add(paidUsage2);
-        expect(usageArchiveRepository.findByIdAndStatus(Arrays.asList(usageId1, usageId2), UsageStatusEnum.PAID))
-            .andReturn(paidUsages).once();
-        expect(crmIntegrationService.getRightsDistribution(ImmutableSet.of(cccEventId1, cccEventId2)))
-            .andReturn(new HashMap<>()).once();
-        Capture<List<InsertRightsDistributionRequest>> captureRequests = new Capture<>();
-        expect(crmIntegrationService.insertRightsDistribution(capture(captureRequests)))
-            .andReturn(new InsertRightsDistributionResponse(InsertRightsDistributionResponseStatusEnum.SUCCESS)).once();
-        usageArchiveRepository.updateStatus(Sets.newHashSet(usageId1, usageId2), UsageStatusEnum.ARCHIVED);
-        expectLastCall().once();
-        expect(scenarioService.archiveScenarios()).andReturn(1).once();
-        replay(usageArchiveRepository, crmIntegrationService, scenarioService);
-        usageService.sendToCrm();
-        List<InsertRightsDistributionRequest> requests = captureRequests.getValue();
-        assertEquals(2, requests.size());
-        InsertRightsDistributionRequest request1 = requests.get(0);
-        assertEquals(cccEventId1, request1.getCccEventId());
-        assertEquals(usageId1, request1.getOmOrderDetailNumber());
-        InsertRightsDistributionRequest request2 = requests.get(1);
-        assertEquals(cccEventId2, request2.getCccEventId());
-        assertEquals(usageId2, request2.getOmOrderDetailNumber());
-        verify(usageArchiveRepository, crmIntegrationService, scenarioService);
-    }
-
-    @Test
-    public void testSendToCrmSkipPaidUsageExistInCrm() {
-        String usageId1 = "2cb529a7-24c5-41ec-a095-46a645df9eea";
-        String usageId2 = "dab30b02-565e-4fae-957e-5db09d9aca07";
-        String cccEventId1 = "12477";
-        String cccEventId2 = "13315";
-        expect(usageArchiveRepository.findPaidIds()).andReturn(Arrays.asList(usageId1, usageId2)).once();
-        List<PaidUsage> paidUsages = new ArrayList<>();
-        PaidUsage paidUsage1 = new PaidUsage();
-        paidUsage1.setId(usageId1);
-        paidUsage1.setCccEventId(cccEventId1);
-        paidUsages.add(paidUsage1);
-        PaidUsage paidUsage2 = new PaidUsage();
-        paidUsage2.setId(usageId2);
-        paidUsage2.setCccEventId(cccEventId2);
-        paidUsages.add(paidUsage2);
-        expect(usageArchiveRepository.findByIdAndStatus(Arrays.asList(usageId1, usageId2), UsageStatusEnum.PAID))
-            .andReturn(paidUsages).once();
-        expect(crmIntegrationService.getRightsDistribution(ImmutableSet.of(cccEventId1, cccEventId2)))
-            .andReturn(ImmutableMap.of(cccEventId1, Collections.singleton(usageId1))).once();
-        Capture<List<InsertRightsDistributionRequest>> captureRequests = new Capture<>();
-        expect(crmIntegrationService.insertRightsDistribution(capture(captureRequests)))
-            .andReturn(new InsertRightsDistributionResponse(InsertRightsDistributionResponseStatusEnum.SUCCESS)).once();
-        usageArchiveRepository.updateStatus(Sets.newHashSet(usageId1), UsageStatusEnum.ARCHIVED);
-        usageArchiveRepository.updateStatus(Sets.newHashSet(usageId2), UsageStatusEnum.ARCHIVED);
-        expectLastCall().once();
-        expect(scenarioService.archiveScenarios()).andReturn(1).once();
-        replay(usageArchiveRepository, crmIntegrationService, scenarioService);
-        usageService.sendToCrm();
-        List<InsertRightsDistributionRequest> requests = captureRequests.getValue();
-        assertEquals(1, requests.size());
-        InsertRightsDistributionRequest request = requests.get(0);
-        assertEquals(cccEventId2, request.getCccEventId());
-        assertEquals(usageId2, request.getOmOrderDetailNumber());
-        verify(usageArchiveRepository, crmIntegrationService, scenarioService);
     }
 
     @Test

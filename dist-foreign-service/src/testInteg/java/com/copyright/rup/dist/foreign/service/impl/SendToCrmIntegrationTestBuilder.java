@@ -19,7 +19,6 @@ import org.apache.commons.lang3.builder.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -54,9 +53,8 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
     private Map<String, List<UsageAuditItem>> usageIdToExpectedAudit = new HashMap<>();
     private Map<String, ScenarioStatusEnum> scenarioIdToExpectedStatus = new HashMap<>();
     private Map<String, List<ScenarioAuditItem>> scenarioIdToExpectedAudit = new HashMap<>();
-    private List<String> expectedCrmGetRightsDistributionCccEventIds;
-    private String expectedCrmInsertRightsDistributionRequestJsonFile;
-    private String expectedCrmInsertRightsDistributionResponseJsonFile;
+    private String expectedCrmRequest;
+    private String crmResponse;
     private JobInfo expectedJobInfo;
 
     SendToCrmIntegrationTestBuilder expectUsageStatus(Map<String, UsageStatusEnum> usageIdToStatusMap) {
@@ -79,14 +77,9 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    SendToCrmIntegrationTestBuilder expectCrmGetRightsDistribution(String... cccEventIds) {
-        this.expectedCrmGetRightsDistributionCccEventIds = Arrays.asList(cccEventIds);
-        return this;
-    }
-
-    SendToCrmIntegrationTestBuilder expectCrmInsertRightsDistribution(String requestJsonFile, String responseJsonFile) {
-        this.expectedCrmInsertRightsDistributionRequestJsonFile = requestJsonFile;
-        this.expectedCrmInsertRightsDistributionResponseJsonFile = responseJsonFile;
+    SendToCrmIntegrationTestBuilder expectCrmCall(String expectedRequest, String response) {
+        this.expectedCrmRequest = expectedRequest;
+        this.crmResponse = response;
         return this;
     }
 
@@ -105,9 +98,8 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
         usageIdToExpectedAudit = null;
         scenarioIdToExpectedStatus = null;
         scenarioIdToExpectedAudit = null;
-        expectedCrmGetRightsDistributionCccEventIds = null;
-        expectedCrmInsertRightsDistributionRequestJsonFile = null;
-        expectedCrmInsertRightsDistributionResponseJsonFile = null;
+        expectedCrmRequest = null;
+        crmResponse = null;
     }
 
     /**
@@ -117,9 +109,7 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
 
         public void run() {
             testHelper.createRestServer();
-            testHelper.expectCrmGetRightsDistribution(expectedCrmGetRightsDistributionCccEventIds);
-            testHelper.expectCrmInsertRightsDistribution(expectedCrmInsertRightsDistributionRequestJsonFile,
-                expectedCrmInsertRightsDistributionResponseJsonFile, Collections.emptyList());
+            testHelper.expectCrmCall(expectedCrmRequest, crmResponse, Collections.emptyList());
             JobInfo jobInfo = usageService.sendToCrm();
             verifyJobInfo(jobInfo);
             verifyUsages();
