@@ -329,7 +329,6 @@
             <foreach collection="usageIds" item="usageId" separator="," open="(" close=")">
                 #{usageId}
             </foreach>
-        order by u.ccc_event_id
     </select>
 
     <select id="findPaidIds" parameterType="UsageStatusEnum" resultType="string">

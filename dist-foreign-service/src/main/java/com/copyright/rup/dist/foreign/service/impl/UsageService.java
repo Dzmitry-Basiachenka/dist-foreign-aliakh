@@ -30,9 +30,9 @@ import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
+import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
 import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService;
-import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionRequest;
-import com.copyright.rup.dist.foreign.integration.crm.api.InsertRightsDistributionResponse;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
@@ -64,7 +64,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -561,22 +560,22 @@ public class UsageService implements IUsageService {
         List<String> paidUsagesIds = usageArchiveRepository.findPaidIds();
         LogUtils.ILogWrapper paidUsagesCount = LogUtils.size(paidUsagesIds);
         LOGGER.info("Send to CRM. Started. PaidUsagesCount={}", paidUsagesCount);
-        AtomicInteger archivedUsagesCount = new AtomicInteger(0);
+        int archivedUsagesCount = 0;
         JobInfo jobInfo;
         if (CollectionUtils.isNotEmpty(paidUsagesIds)) {
             Set<String> invalidUsageIds = Sets.newHashSet();
             for (List<String> ids : Iterables.partition(paidUsagesIds, 128)) {
-                List<PaidUsage> paidUsages = filterPaidUsagesNotExistInCrm(
-                    usageArchiveRepository.findByIdAndStatus(ids, UsageStatusEnum.PAID), archivedUsagesCount);
+                List<PaidUsage> paidUsages = usageArchiveRepository.findByIdAndStatus(ids, UsageStatusEnum.PAID);
                 if (CollectionUtils.isNotEmpty(paidUsages)) {
-                    InsertRightsDistributionResponse response = crmIntegrationService.insertRightsDistribution(
-                        buildInsertRightsDistributionRequest(paidUsages));
-                    if (response.isSuccessful()) {
+                    CrmResult result =
+                        crmIntegrationService.insertRightsDistribution(
+                            buildCrmRightsDistributionRequest(paidUsages));
+                    if (result.isSuccessful()) {
                         Set<String> usagesIds = paidUsages.stream().map(PaidUsage::getId).collect(Collectors.toSet());
                         updateReportedUsages(usagesIds);
-                        archivedUsagesCount.addAndGet(usagesIds.size());
+                        archivedUsagesCount += usagesIds.size();
                     } else {
-                        Set<String> invalidIds = response.getInvalidUsageIds();
+                        Set<String> invalidIds = result.getInvalidUsageIds();
                         if (CollectionUtils.isNotEmpty(invalidIds) && paidUsages.size() != invalidIds.size()) {
                             Set<String> usagesIds = paidUsages.stream()
                                 .filter(paidUsage -> !invalidIds.contains(paidUsage.getId()))
@@ -584,10 +583,10 @@ public class UsageService implements IUsageService {
                                 .collect(Collectors.toSet());
                             if (CollectionUtils.isNotEmpty(usagesIds)) {
                                 updateReportedUsages(usagesIds);
-                                archivedUsagesCount.addAndGet(usagesIds.size());
+                                archivedUsagesCount += usagesIds.size();
                             }
                         }
-                        invalidUsageIds.addAll(response.getInvalidUsageIds());
+                        invalidUsageIds.addAll(result.getInvalidUsageIds());
                     }
                 }
             }
@@ -775,9 +774,9 @@ public class UsageService implements IUsageService {
         return resultUsage;
     }
 
-    private List<InsertRightsDistributionRequest> buildInsertRightsDistributionRequest(List<PaidUsage> paidUsages) {
-        List<InsertRightsDistributionRequest> requests = Lists.newArrayListWithExpectedSize(paidUsages.size());
-        paidUsages.forEach(paidUsage -> requests.add(new InsertRightsDistributionRequest(paidUsage)));
+    private List<CrmRightsDistributionRequest> buildCrmRightsDistributionRequest(List<PaidUsage> paidUsages) {
+        List<CrmRightsDistributionRequest> requests = Lists.newArrayListWithExpectedSize(paidUsages.size());
+        paidUsages.forEach(paidUsage -> requests.add(new CrmRightsDistributionRequest(paidUsage)));
         return requests;
     }
 
@@ -806,40 +805,6 @@ public class UsageService implements IUsageService {
         return oldAccountNumber.equals(newAccountNumber)
             ? actionReason
             : actionReason + String.format(" with RH change from %d to %d", oldAccountNumber, newAccountNumber);
-    }
-
-    private List<PaidUsage> filterPaidUsagesNotExistInCrm(List<PaidUsage> allPaidUsages,
-                                                          AtomicInteger archivedUsagesCount) {
-        if (allPaidUsages.isEmpty()) {
-            return allPaidUsages;
-        } else {
-            Set<String> cccEventIds = allPaidUsages.stream()
-                .map(PaidUsage::getCccEventId)
-                .collect(Collectors.toCollection(LinkedHashSet::new));
-            Map<String, Set<String>> cccEventIdsToUsageIds =
-                crmIntegrationService.getRightsDistribution(cccEventIds);
-            Set<String> skippedUsagesIds = new HashSet<>();
-            List<PaidUsage> paidUsages = allPaidUsages.stream()
-                .filter(paidUsage -> {
-                    Set<String> reportedUsageIds = cccEventIdsToUsageIds.get(paidUsage.getCccEventId());
-                    if (null == reportedUsageIds) {
-                        return true;
-                    } else {
-                        boolean skip = reportedUsageIds.contains(paidUsage.getId());
-                        if (skip) {
-                            skippedUsagesIds.add(paidUsage.getId());
-                            LOGGER.info("Send to CRM. Skipped. Rights distribution is already presented in CRM " +
-                                "for UsageId={}, CccEventId={}", paidUsage.getId(), paidUsage.getCccEventId());
-                        }
-                        return !skip;
-                    }
-                }).collect(Collectors.toList());
-            if (!skippedUsagesIds.isEmpty()) {
-                updateReportedUsages(skippedUsagesIds);
-                archivedUsagesCount.addAndGet(skippedUsagesIds.size());
-            }
-            return paidUsages;
-        }
     }
 
     private void fillPayeeParticipating(Map<String, Table<String, String, Object>> preferencesMap, Usage usage) {

@@ -1,8 +1,6 @@
 package com.copyright.rup.dist.foreign.integration.crm.api;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Interface for services to encapsulate logic for CRM system.
@@ -16,18 +14,10 @@ import java.util.Set;
 public interface ICrmIntegrationService {
 
     /**
-     * Gets rights distribution by set of cccEventId from the CRM system.
+     * Sends list of {@link CrmRightsDistributionRequest}s to the CRM system.
      *
-     * @param cccEventIds set of cccEventId
-     * @return map of cccEventId to set of usageIds
+     * @param crmRightsDistributionRequests list of {@link CrmRightsDistributionRequest} instances
+     * @return {@link CrmResult} instance
      */
-    Map<String, Set<String>> getRightsDistribution(Set<String> cccEventIds);
-
-    /**
-     * Inserts rights distribution by list of {@link InsertRightsDistributionRequest} to the CRM system.
-     *
-     * @param requests list of {@link InsertRightsDistributionRequest} instances
-     * @return instance of {@link InsertRightsDistributionResponse}
-     */
-    InsertRightsDistributionResponse insertRightsDistribution(List<InsertRightsDistributionRequest> requests);
+    CrmResult insertRightsDistribution(List<CrmRightsDistributionRequest> crmRightsDistributionRequests);
 }

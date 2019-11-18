@@ -167,18 +167,7 @@ public class ServiceTestHelper {
                 MediaType.APPLICATION_JSON));
     }
 
-    public void expectCrmGetRightsDistribution(List<String> cccEventIds) {
-        mockServer.expect(MockRestRequestMatchers.requestTo(
-            "http://localhost:9061/legacy-integration-rest/getCCCRightsDistributionV2?eventIds="
-                + String.join(",", cccEventIds)))
-            .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-            .andRespond(MockRestResponseCreators.withSuccess(
-                TestUtils.fileToString(this.getClass(), "crm/sendToCrm/get_rights_distribution_response_empty.json"),
-                MediaType.APPLICATION_JSON));
-    }
-
-    public void expectCrmInsertRightsDistribution(String expectedRequestFileName, String responseFileName,
-                                                  List<String> fieldsToIgnore) {
+    public void expectCrmCall(String expectedRequestFileName, String responseFileName, List<String> fieldsToIgnore) {
         String expectedRequestBody = TestUtils.fileToString(this.getClass(), expectedRequestFileName);
         String responseBody = TestUtils.fileToString(this.getClass(), responseFileName);
         mockServer.expect(MockRestRequestMatchers.requestTo(

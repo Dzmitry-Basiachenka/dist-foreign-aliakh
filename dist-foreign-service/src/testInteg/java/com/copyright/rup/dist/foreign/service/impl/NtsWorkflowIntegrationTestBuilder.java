@@ -71,7 +71,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedPreferencesRightsholderId;
     private String expectedLmDetailsJsonFile;
     private String expectedPaidUsages;
-    private List<String> expectedCrmGetRightsDistributionCccEventIds;
     private String expectedCrmRequest;
     private String crmResponse;
     private Long expectedPrmAccountNumber;
@@ -131,12 +130,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectCrmGetRightsDistribution(String... cccEventIds) {
-        this.expectedCrmGetRightsDistributionCccEventIds = Arrays.asList(cccEventIds);
-        return this;
-    }
-
-    NtsWorkflowIntegrationTestBuilder expectCrmInsertRightsDistribution(String expectedRequest, String response) {
+    NtsWorkflowIntegrationTestBuilder expectCrmCall(String expectedRequest, String response) {
         this.expectedCrmRequest = expectedRequest;
         this.crmResponse = response;
         return this;
@@ -199,9 +193,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 testHelper.expectGetRollups(expectedRollupsJson,
                     Collections.singletonList(expectedRollupsRightholderId));
             }
-            testHelper.expectCrmGetRightsDistribution(expectedCrmGetRightsDistributionCccEventIds);
-            testHelper.expectCrmInsertRightsDistribution(Objects.requireNonNull(expectedCrmRequest),
-                Objects.requireNonNull(crmResponse), Arrays.asList("omOrderDetailNumber", "licenseCreateDate"));
+            testHelper.expectCrmCall(Objects.requireNonNull(expectedCrmRequest), Objects.requireNonNull(crmResponse),
+                Arrays.asList("omOrderDetailNumber", "licenseCreateDate"));
             loadNtsBatch();
             createScenario();
             scenarioService.submit(actualScenario, "Submitting actualScenario for testing purposes");
