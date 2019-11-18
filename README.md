@@ -12,6 +12,11 @@
 * B-53752 FDA: NTS withdrawn batch summary report: create DB view for generating batch summary report
 * B-53554 Tech Debt: FDA: Apply rup-vaadin 8
 
+7.1.13
+-
+* CDP-855 FDA production: Various performance issues related to NTS Classification: apply lazy loading for work classifications based on number of selected works
+* CDP-855 FDA production: Various performance issues related to NTS Classification
+
 7.1.12
 -
 * B-53554 Tech Debt: FDA: upgrade jackson-databind version to 2.9.10.1, upgrade dist-common version to 48.2.+, update Spring XML schema version in config files
