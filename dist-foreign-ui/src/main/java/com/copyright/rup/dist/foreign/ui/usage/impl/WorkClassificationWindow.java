@@ -119,17 +119,29 @@ public class WorkClassificationWindow extends Window {
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> grid.deselectAll());
         Button markAsStmButton = Buttons.createButton(ForeignUi.getMessage("button.mark_as_stm"));
-        addClickListener(markAsStmButton, "message.confirm.classification.update_usage", (classifications) ->
-            controller.updateClassifications(classifications, FdaConstants.STM_CLASSIFICATION));
+        addClickListener(markAsStmButton, "message.confirm.classification.update_usage",
+            (classifications) -> {
+                controller.updateClassifications(classifications, FdaConstants.STM_CLASSIFICATION);
+                refreshDataProvider();
+            });
         Button markAsNonStmButton = Buttons.createButton(ForeignUi.getMessage("button.mark_as_non_stm"));
-        addClickListener(markAsNonStmButton, "message.confirm.classification.update_usage", (classifications) ->
-            controller.updateClassifications(classifications, FdaConstants.NON_STM_CLASSIFICATION));
+        addClickListener(markAsNonStmButton, "message.confirm.classification.update_usage",
+            (classifications) -> {
+                controller.updateClassifications(classifications, FdaConstants.NON_STM_CLASSIFICATION);
+                refreshDataProvider();
+            });
         Button markAsBelletristicButton = Buttons.createButton(ForeignUi.getMessage("button.mark_as_belletristic"));
-        addClickListener(markAsBelletristicButton, "message.confirm.classification.delete_usage", (classifications) ->
-            controller.updateClassifications(classifications, FdaConstants.BELLETRISTIC_CLASSIFICATION));
+        addClickListener(markAsBelletristicButton, "message.confirm.classification.delete_usage",
+            (classifications) -> {
+                controller.updateClassifications(classifications, FdaConstants.BELLETRISTIC_CLASSIFICATION);
+                updateAndRefreshDataProvider();
+            });
         Button deleteClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.delete_classification"));
         addClickListener(deleteClassificationButton, "message.confirm.delete_classification",
-            controller::deleteClassification);
+            (classifications) -> {
+                controller.deleteClassification(classifications);
+                updateAndRefreshDataProvider();
+            });
         buttonsLayout.addComponents(markAsStmButton, markAsNonStmButton, markAsBelletristicButton,
             deleteClassificationButton, clearButton, Buttons.createCloseButton(this));
         buttonsLayout.setSpacing(true);
@@ -220,14 +232,32 @@ public class WorkClassificationWindow extends Window {
                 Windows.showConfirmDialog(0 < usageCount
                         ? ForeignUi.getMessage(message, usageCount)
                         : ForeignUi.getMessage("message.confirm.action"),
-                    () -> {
-                        consumer.accept(selectedItems);
-                        dataProvider.refreshAll();
-                        grid.setDataProvider(dataProvider);
-                    });
+                    () -> consumer.accept(selectedItems));
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.classification.empty"));
             }
         });
+    }
+
+    private void updateAndRefreshDataProvider() {
+        if (Objects.nonNull(listDataProvider)) {
+            listDataProvider =
+                DataProvider.ofCollection(controller.getClassifications(selectedBatchesIds, null, 0,
+                    controller.getWorkClassificationThreshold(), null));
+            grid.setDataProvider(listDataProvider);
+        } else {
+            dataProvider.refreshAll();
+            grid.setDataProvider(dataProvider);
+        }
+    }
+
+    private void refreshDataProvider() {
+        if (Objects.nonNull(listDataProvider)) {
+            listDataProvider.refreshAll();
+            grid.setDataProvider(listDataProvider);
+        } else {
+            dataProvider.refreshAll();
+            grid.setDataProvider(dataProvider);
+        }
     }
 }
