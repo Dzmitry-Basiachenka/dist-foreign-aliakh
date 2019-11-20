@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -38,6 +39,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -136,12 +138,16 @@ public class WorkClassificationWindowTest {
         grid.setItems(classifications);
         grid.getSelectionModel().select(new WorkClassification());
         Button button = (Button) ((HorizontalLayout) content.getComponent(3)).getComponent(0);
-        ClickListener listener = (ClickListener) button.getListeners(ClickEvent.class).iterator().next();
+        Capture<IListener> confirmListener = new Capture<>();
         expect(workClassificationController.getCountToUpdate(classifications)).andReturn(2).once();
         expect(Windows.showConfirmDialog(eq("2 usages will be updated. Are you sure you want to confirm action?"),
-            anyObject(IListener.class))).andReturn(confirmWindowCapture).once();
+            capture(confirmListener))).andReturn(confirmWindowCapture).once();
+        workClassificationController.updateClassifications(classifications, "STM");
+        expectLastCall().once();
         replay(workClassificationController, confirmWindowCapture, Windows.class);
+        ClickListener listener = (ClickListener) button.getListeners(ClickEvent.class).iterator().next();
         listener.buttonClick(null);
+        confirmListener.getValue().onActionConfirmed();
         verify(workClassificationController, confirmWindowCapture, Windows.class);
     }
 
@@ -155,12 +161,16 @@ public class WorkClassificationWindowTest {
         grid.setItems(classifications);
         grid.getSelectionModel().select(new WorkClassification());
         Button button = (Button) ((HorizontalLayout) content.getComponent(3)).getComponent(0);
-        ClickListener listener = (ClickListener) button.getListeners(ClickEvent.class).iterator().next();
+        Capture<IListener> confirmListener = new Capture<>();
         expect(workClassificationController.getCountToUpdate(classifications)).andReturn(0).once();
-        expect(Windows.showConfirmDialog(eq("Are you sure you want to perform action?"), anyObject(IListener.class)))
+        expect(Windows.showConfirmDialog(eq("Are you sure you want to perform action?"), capture(confirmListener)))
             .andReturn(confirmWindowCapture).once();
+        workClassificationController.updateClassifications(classifications, "STM");
+        expectLastCall().once();
         replay(workClassificationController, confirmWindowCapture, Windows.class);
+        ClickListener listener = (ClickListener) button.getListeners(ClickEvent.class).iterator().next();
         listener.buttonClick(null);
+        confirmListener.getValue().onActionConfirmed();
         verify(workClassificationController, confirmWindowCapture, Windows.class);
     }
 

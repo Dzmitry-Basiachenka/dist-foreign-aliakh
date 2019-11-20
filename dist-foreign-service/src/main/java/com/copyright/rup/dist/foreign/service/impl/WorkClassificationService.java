@@ -26,7 +26,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -69,6 +72,7 @@ public class WorkClassificationService implements IWorkClassificationService {
             }
             workClassification.setClassification(newClassification);
             workClassification.setUpdateUser(RupContextUtils.getUserName());
+            workClassification.setUpdateDate(Date.from(Instant.now().atZone(ZoneId.systemDefault()).toInstant()));
             workClassificationRepository.insertOrUpdate(workClassification);
         });
         updateClassifiedUsages();
