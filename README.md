@@ -12,6 +12,10 @@
 * B-53752 FDA: NTS withdrawn batch summary report: create DB view for generating batch summary report
 * B-53554 Tech Debt: FDA: Apply rup-vaadin 8
 
+7.1.14
+-
+* CDP-860 FDA: Assign Classification: Exception occurs when the user tries to update the classification of a work
+
 7.1.13
 -
 * CDP-855 FDA production: Various performance issues related to NTS Classification: apply lazy loading for work classifications based on number of selected works
