@@ -1,3 +1,11 @@
+8.1.1
+-
+* B-55560 Tech Debt: FDA: adjust sorting by String values on work classification window
+* CDP-852 FDA: Several exceptions while sending FAS/FAS2 details to CRM in production: revert reading rights distribution from CRM before writing them
+* CDP-855 FDA production: Various performance issues related to NTS Classification
+* CDP-855 FDA production: Various performance issues related to NTS Classification: apply lazy loading for work classifications based on number of selected works
+* CDP-860 FDA: Assign Classification: Exception occurs when the user tries to update the classification of a work
+
 8.1.0
 -
 * B-53554 Tech Debt: CDP: upgrade jackson-databind version to 2.9.10.1, upgrade dist-common version to 48.2.+, update Spring XML schema version in config files
