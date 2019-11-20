@@ -15,6 +15,7 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializableComparator;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -32,6 +33,7 @@ import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
@@ -176,22 +178,29 @@ public class WorkClassificationWindow extends Window {
 
     private void addColumns() {
         addColumn(WorkClassification::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 100);
-        addColumn(WorkClassification::getSystemTitle, "table.column.system_title", "systemTitle", 285);
+        addStringColumn(WorkClassification::getSystemTitle, "table.column.system_title", "systemTitle", 285);
         addColumn(WorkClassification::getClassification, "table.column.classification", "classification", 110);
         addColumn(WorkClassification::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
         addColumn(
             WorkClassification::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", 155);
         addColumn(WorkClassification::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 100);
-        grid.addColumn(WorkClassification::getRhName)
-            .setCaption(ForeignUi.getMessage("table.column.rh_account_name"))
-            .setSortProperty("rhName");
+        addStringColumn(WorkClassification::getRhName, "table.column.rh_account_name", "rhName", 285);
         addClassificationDateColumn(WorkClassification::getUpdateDate);
-        addColumn(WorkClassification::getUpdateUser, "table.column.classified_by", "updateUser", 245);
+        addStringColumn(WorkClassification::getUpdateUser, "table.column.classified_by", "updateUser", 245);
     }
 
-    private void addColumn(ValueProvider<WorkClassification, ?> provider, String captionProperty, String sort,
-                           double width) {
-        grid.addColumn(provider)
+    @SuppressWarnings("unchecked")
+    private void addStringColumn(ValueProvider<WorkClassification, String> provider, String caption, String property,
+                                 double width) {
+        addColumn(provider, caption, property, width)
+            .setComparator((SerializableComparator<WorkClassification>) (classification1, classification2) ->
+                Comparator.comparing(provider, Comparator.nullsFirst(String.CASE_INSENSITIVE_ORDER))
+                    .compare(classification1, classification2));
+    }
+
+    private Grid.Column addColumn(ValueProvider<WorkClassification, ?> provider, String captionProperty, String sort,
+                                  double width) {
+        return grid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setWidth(width);
