@@ -1466,14 +1466,22 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.16000')
+            column(name: 'market', value: 'Doc')    //TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea01')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1487,16 +1495,23 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.16000')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea02')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1507,13 +1522,19 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '50.00')
+            column(name: 'market_period_to', value: '2017')//TODO {B-55836} remove columns below after reorganize table
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea03')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1524,13 +1545,20 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '50.00')
+            column(name: 'market', value: 'Univ,Bus,Doc,S')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea04')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Univ,Bus,Doc,S')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1540,13 +1568,20 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'gross_amount', value: '25.00')
+            column(name: 'market', value: 'Univ,Bus,Doc,S')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea05')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Univ,Bus,Doc,S')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1556,13 +1591,20 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'gross_amount', value: '25.00')
+            column(name: 'market', value: 'Univ,Bus,Doc,S')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea06')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Univ,Bus,Doc,S')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1575,13 +1617,20 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '50.00')
+            column(name: 'market', value: 'Gov')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea07')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Gov')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1594,13 +1643,20 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '50.00')
+            column(name: 'market', value: 'Gov')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea08')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Gov')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1727,13 +1783,20 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '50.00')
+            column(name: 'market', value: 'Univ')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea15')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1744,13 +1807,20 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '50.00')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea16')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1760,13 +1830,20 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'gross_amount', value: '25.00')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea17')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1776,13 +1853,20 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'gross_amount', value: '25.00')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea18')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1795,13 +1879,20 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '50.00')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea19')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1814,13 +1905,20 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '50.00')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea20')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -1834,16 +1932,23 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '45.00')
             column(name: 'service_fee_amount', value: '5.00')
             column(name: 'service_fee', value: '0.10000')
+            column(name: 'market', value: 'Univ')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea23')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -1857,16 +1962,23 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '45.00')
             column(name: 'service_fee_amount', value: '5.00')
             column(name: 'service_fee', value: '0.10000')
+            column(name: 'market', value: 'Univ')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea24')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -1880,12 +1992,7 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'PAID')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
@@ -1896,6 +2003,18 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea25')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -1909,11 +2028,7 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
@@ -1925,6 +2040,17 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea26')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2427,13 +2553,20 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea55')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2444,13 +2577,20 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea56')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2460,13 +2600,20 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'gross_amount', value: '25.00')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea57')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2476,13 +2623,20 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'gross_amount', value: '25.00')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea58')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2495,13 +2649,20 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '50.00')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea59')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2514,13 +2675,20 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '50.00')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea60')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2534,16 +2702,23 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea61')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2557,16 +2732,23 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea62')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -2580,16 +2762,23 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea63')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -2603,16 +2792,23 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea64')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

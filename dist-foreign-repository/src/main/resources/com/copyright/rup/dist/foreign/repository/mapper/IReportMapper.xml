@@ -155,31 +155,33 @@
                 b.rro_account_number,
                 b.name,
                 b.payment_date,
-                market,
+                ufas.market,
                 sum(u.gross_amount) market_total_amount,
                 b.gross_amount total_payment_amount
             from ${schema}.df_usage u
+            join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
             join ${schema}.df_usage_batch b on b.df_usage_batch_uid = u.df_usage_batch_uid
             where u.df_usage_batch_uid in
                 <foreach collection="list" item="batchId" open="(" separator="," close=")">
                     #{batchId}
                 </foreach>
-            group by rro_account_number, b.name, b.payment_date, market, b.gross_amount
+            group by rro_account_number, b.name, b.payment_date, ufas.market, b.gross_amount
             union all
             select
                 b.rro_account_number,
                 b.name,
                 b.payment_date,
-                market,
+                ufas.market,
                 sum(ua.gross_amount) market_total_amount,
                 b.gross_amount total_payment_amount
             from ${schema}.df_usage_archive ua
+            join ${schema}.df_usage_fas ufas on ua.df_usage_archive_uid = ufas.df_usage_fas_uid
             join ${schema}.df_usage_batch b on b.df_usage_batch_uid = ua.df_usage_batch_uid
             where ua.df_usage_batch_uid in
                 <foreach collection="list" item="batchId" open="(" separator="," close=")">
                     #{batchId}
                 </foreach>
-            group by rro_account_number, b.name, b.payment_date, market, b.gross_amount
+            group by rro_account_number, b.name, b.payment_date, ufas.market, b.gross_amount
         ) report
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = report.rro_account_number
         group by report.rro_account_number, rro.name, report.name, report.payment_date, report.market, report.total_payment_amount
