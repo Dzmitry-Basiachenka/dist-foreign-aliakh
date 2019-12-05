@@ -46,7 +46,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-12-04-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("B-55836 FDA: Database changes to support AACL Create database for FAS specific fields")
+        comment("B-55836 FDA: Database changes to support AACL: create table for FAS specific fields")
 
         createTable(tableName: 'df_usage_fas', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
                 remarks: 'Table for storing specific fields of usages with FAS/FAS2/NTS product family') {
