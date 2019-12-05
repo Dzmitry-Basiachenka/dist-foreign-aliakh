@@ -65,6 +65,9 @@ databaseChangeLog {
             column(name: 'reported_value', type: 'DECIMAL(38,2)', defaultValue: 0.00, remarks: 'The amount in original currency')
         }
 
+        addPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_usage_fas', tablespace: dbIndexTablespace,
+                columnNames: 'df_usage_fas_uid', constraintName: 'df_usage_fas_pk')
+
         sql("""insert into ${dbAppsSchema}.df_usage_fas              
             select df_usage_uid, article, author, publisher, publication_date, market, market_period_from, market_period_to, df_fund_pool_uid,
             is_rh_participating_flag, is_payee_participating_flag, reported_value
