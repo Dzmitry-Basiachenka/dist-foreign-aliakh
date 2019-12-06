@@ -14,5 +14,5 @@ public interface IProductFamilyProvider {
     /**
      * @return selected product family.
      */
-    String getProductFamily();
+    String getSelectedProductFamily();
 }

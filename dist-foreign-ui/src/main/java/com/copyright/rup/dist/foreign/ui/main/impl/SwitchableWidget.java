@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.main.impl;
 
+import com.copyright.rup.dist.foreign.ui.main.api.IControllerProvider;
 import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
@@ -7,7 +8,6 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 import com.vaadin.ui.Panel;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * Allows to display different widgets on {@link #refresh()} depending on provides {@link IController} instance.
@@ -22,17 +22,17 @@ import java.util.function.Supplier;
  */
 class SwitchableWidget<W extends IWidget<C>, C extends IController<W>> extends Panel implements IRefreshable {
 
-    private final Supplier<C> controllerSupplier;
+    private final IControllerProvider<C> controllerProvider;
     private final Consumer<W> listenerRegisterer;
 
     /**
      * Constructor.
      *
-     * @param controllerSupplier a {@link Supplier} to get a controller instance
+     * @param controllerProvider instance of {@link IControllerProvider}
      * @param listenerRegisterer a {@link Consumer} that adds listeners to the widget
      */
-    public SwitchableWidget(Supplier<C> controllerSupplier, Consumer<W> listenerRegisterer) {
-        this.controllerSupplier = controllerSupplier;
+    public SwitchableWidget(IControllerProvider<C> controllerProvider, Consumer<W> listenerRegisterer) {
+        this.controllerProvider = controllerProvider;
         this.listenerRegisterer = listenerRegisterer;
         setStyleName("switchable-widget");
         setSizeFull();
@@ -40,7 +40,7 @@ class SwitchableWidget<W extends IWidget<C>, C extends IController<W>> extends P
 
     @Override
     public void refresh() {
-        C controller = controllerSupplier.get();
+        C controller = controllerProvider.getController();
         W widget = controller.initWidget();
         listenerRegisterer.accept(widget);
         setContent(widget);

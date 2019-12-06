@@ -29,14 +29,19 @@ public interface IMainWidgetController extends IController<IMainWidget>, ITabCha
         ReflectTools.findMethod(IMainWidgetController.class, "onScenarioCreated", ScenarioCreateEvent.class);
 
     /**
-     * @return instance of {@link IUsagesController}.
+     * @return instance of {@link IControllerProvider} for {@link IUsagesController}.
      */
-    IUsagesController getUsagesController();
+    IControllerProvider<IUsagesController> getUsagesControllerProvider();
 
     /**
-     * @return {@link IScenariosController}.
+     * @return instance of {@link IControllerProvider} for {@link IScenariosController}.
      */
-    IScenariosController getScenariosController();
+    IControllerProvider<IScenariosController> getScenariosControllerProvider();
+
+    /**
+     * @return instance of {@link IControllerProvider} for {@link IAuditController}.
+     */
+    IControllerProvider<IAuditController> getAuditControllerProvider();
 
     /**
      * Handles {@link com.copyright.rup.dist.foreign.domain.Scenario} creation.
@@ -49,9 +54,4 @@ public interface IMainWidgetController extends IController<IMainWidget>, ITabCha
      * Handles global product family selection.
      */
     void onProductFamilyChanged();
-
-    /**
-     * @return {@link IAuditController}.
-     */
-    IAuditController getAuditController();
 }

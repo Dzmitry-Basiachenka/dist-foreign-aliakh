@@ -1,10 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.main.impl;
 
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
+import com.copyright.rup.dist.foreign.ui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
-import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
@@ -13,6 +12,7 @@ import com.copyright.rup.vaadin.widget.api.TabController;
 import com.vaadin.ui.TabSheet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -33,53 +33,39 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     private static final int SCENARIOS_TAB_INDEX = 1;
 
     @Autowired
-    private IUsagesController fasUsagesController;
+    @Qualifier("dist.foreign.usagesControllerProvider")
+    private IControllerProvider<IUsagesController> usagesControllerProvider;
     @Autowired
-    private IUsagesController ntsUsagesController;
+    @Qualifier("dist.foreign.scenariosControllerProvider")
+    private IControllerProvider<IScenariosController> scenariosControllerProvider;
     @Autowired
-    private IScenariosController fasScenariosController;
-    @Autowired
-    private IScenariosController ntsScenariosController;
-    @Autowired
-    private IAuditController fasAuditController;
-    @Autowired
-    private IAuditController ntsAuditController;
-    @Autowired
-    private IProductFamilyProvider productFamilyProvider;
+    @Qualifier("dist.foreign.auditControllerProvider")
+    private IControllerProvider<IAuditController> auditControllerProvider;
 
     @Override
-    public IUsagesController getUsagesController() {
-        // TODO {srudak} move logic to switch between product families to a separate component
-        return FdaConstants.NTS_PRODUCT_FAMILY.equals(productFamilyProvider.getProductFamily())
-            ? ntsUsagesController
-            : fasUsagesController;
+    public IControllerProvider<IUsagesController> getUsagesControllerProvider() {
+        return usagesControllerProvider;
     }
 
     @Override
-    public IScenariosController getScenariosController() {
-        // TODO {srudak} move logic to switch between product families to a separate component
-        return FdaConstants.NTS_PRODUCT_FAMILY.equals(productFamilyProvider.getProductFamily())
-            ? ntsScenariosController
-            : fasScenariosController;
+    public IControllerProvider<IScenariosController> getScenariosControllerProvider() {
+        return scenariosControllerProvider;
+    }
+
+    @Override
+    public IControllerProvider<IAuditController> getAuditControllerProvider() {
+        return auditControllerProvider;
     }
 
     @Override
     public void onScenarioCreated(ScenarioCreateEvent event) {
         getTabSheet().setSelectedTab(SCENARIOS_TAB_INDEX);
-        getScenariosController().getWidget().selectScenario(event.getScenarioId());
+        getScenariosControllerProvider().getController().getWidget().selectScenario(event.getScenarioId());
     }
 
     @Override
     public void onProductFamilyChanged() {
         refreshWidget();
-    }
-
-    @Override
-    public IAuditController getAuditController() {
-        // TODO {srudak} move logic to switch between product families to a separate component
-        return FdaConstants.NTS_PRODUCT_FAMILY.equals(productFamilyProvider.getProductFamily())
-            ? ntsAuditController
-            : fasAuditController;
     }
 
     @Override
