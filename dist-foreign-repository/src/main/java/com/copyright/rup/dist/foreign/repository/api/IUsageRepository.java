@@ -472,12 +472,12 @@ public interface IUsageRepository {
      * @param rhAccountNumber    rightsholder account number
      * @param scenarioId         identifier of scenario
      * @param serviceFee         service fee
-     * @param participatingFlag  participating flag
+     * @param rhParticipating    RH participating flag
      * @param payeeAccountNumber payee account number
      * @param userName           user name
      */
     void calculateAmountsAndUpdatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, BigDecimal serviceFee,
-                                                       boolean participatingFlag, Long payeeAccountNumber,
+                                                       boolean rhParticipating, Long payeeAccountNumber,
                                                        String userName);
 
     /**

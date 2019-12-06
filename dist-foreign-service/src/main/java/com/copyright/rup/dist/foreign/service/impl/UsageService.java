@@ -312,12 +312,12 @@ public class UsageService implements IUsageService {
             Long payeeAccountNumber = PrmRollUpService.getPayee(rollUps, rightsholder, FdaConstants.NTS_PRODUCT_FAMILY)
                 .getAccountNumber();
             payeeAccountNumbers.add(payeeAccountNumber);
-            boolean participationFlag =
+            boolean rhParticipating =
                 prmIntegrationService.isRightsholderParticipating(preferencesMap, rightsholder.getId(),
                     FdaConstants.NTS_PRODUCT_FAMILY);
-            BigDecimal serviceFee = prmIntegrationService.getRhParticipatingServiceFee(participationFlag);
+            BigDecimal serviceFee = prmIntegrationService.getRhParticipatingServiceFee(rhParticipating);
             usageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(rightsholder.getAccountNumber(),
-                scenario.getId(), serviceFee, participationFlag, payeeAccountNumber, userName);
+                scenario.getId(), serviceFee, rhParticipating, payeeAccountNumber, userName);
         });
         if (0 != BigDecimal.ZERO.compareTo(scenario.getNtsFields().getPostServiceFeeAmount())) {
             usageRepository.applyPostServiceFeeAmount(scenario.getId());
