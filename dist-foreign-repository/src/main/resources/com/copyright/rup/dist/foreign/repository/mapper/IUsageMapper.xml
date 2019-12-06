@@ -135,7 +135,7 @@
         comment
     </sql>
 
-    <sql id="usageDtoColumns">
+    <sql id="usageDtoColumnsTemp">
         u.df_scenario_uid,
         u.wr_wrk_inst,
         u.work_title,
@@ -171,10 +171,46 @@
         u.comment
     </sql>
 
+    <sql id="usageDtoColumns">
+        u.df_scenario_uid,
+        u.wr_wrk_inst,
+        u.work_title,
+        u.system_title,
+        u.rh_account_number,
+        rh.name rh_name,
+        u.payee_account_number,
+        p.name payee_name,
+        u.status_ind,
+        u.product_family,
+        u.standard_number,
+        u.standard_number_type,
+        u.number_of_copies,
+        u.gross_amount,
+        u.service_fee_amount,
+        u.net_amount,
+        u.service_fee,
+        ub.gross_amount batch_gross_amount,
+        ub.name batch_name,
+        ub.rro_account_number,
+        rro.name rro_name,
+        ub.payment_date,
+        ub.fiscal_year,
+        u.updated_datetime,
+        u.comment,
+        ufas.article,
+        ufas.author,
+        ufas.publisher,
+        ufas.publication_date,
+        ufas.market,
+        ufas.market_period_from,
+        ufas.market_period_to,
+        ufas.reported_value
+    </sql>
+
     <sql id="selectUsageDtosTemp">
         select
             u.df_usage_uid,
-            <include refid="IUsageMapper.usageDtoColumns"/>
+            <include refid="IUsageMapper.usageDtoColumnsTemp"/>
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
@@ -185,41 +221,9 @@
     <sql id="selectUsageDtos">
         select
             u.df_usage_uid,
-            u.df_scenario_uid,
-            u.wr_wrk_inst,
-            u.work_title,
-            u.system_title,
-            u.rh_account_number,
-            rh.name rh_name,
-            u.payee_account_number,
-            p.name payee_name,
-            u.status_ind,
-            u.product_family,
-            u.standard_number,
-            u.standard_number_type,
-            u.number_of_copies,
-            u.gross_amount,
-            u.service_fee_amount,
-            u.net_amount,
-            u.service_fee,
-            ub.gross_amount batch_gross_amount,
-            ub.name batch_name,
-            ub.rro_account_number,
-            rro.name rro_name,
-            ub.payment_date,
-            ub.fiscal_year,
-            u.updated_datetime,
-            u.comment,
-            uf.article,
-            uf.author,
-            uf.publisher,
-            uf.publication_date,
-            uf.market,
-            uf.market_period_from,
-            uf.market_period_to,
-            uf.reported_value
+            <include refid="IUsageMapper.usageDtoColumns"/>
         from ${schema}.df_usage u
-        join ${schema}.df_usage_fas uf on u.df_usage_uid = uf.df_usage_fas_uid
+        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
@@ -1022,7 +1026,7 @@
     </select>
 
     <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="usageDtoResultMap">
-        <include refid="selectUsageDtosTemp"/>
+        <include refid="selectUsageDtos"/>
         where u.df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
         <if test="null != searchValue">
             and (

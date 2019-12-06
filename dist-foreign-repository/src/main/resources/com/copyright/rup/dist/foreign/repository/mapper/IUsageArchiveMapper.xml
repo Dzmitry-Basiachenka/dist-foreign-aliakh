@@ -181,6 +181,7 @@
             u.distribution_date,
             u.period_end_date
         from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
@@ -227,6 +228,7 @@
             u.df_usage_archive_uid df_usage_uid,
             <include refid="IUsageMapper.usageDtoColumns"/>
         from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
@@ -475,41 +477,52 @@
     </select>
 
     <select id="copyNtsToArchiveByScenarioId" parameterType="map" resultType="string">
-        insert into ${schema}.df_usage_archive (
-            df_usage_archive_uid,
-            df_scenario_uid,
-            status_ind,
-            rh_account_number,
-            payee_account_number,
-            product_family,
-            wr_wrk_inst,
-            work_title,
-            system_title,
-            gross_amount,
-            service_fee,
-            service_fee_amount,
-            net_amount,
-            is_rh_participating_flag,
-            <include refid="StoredEntityMapper.additionalColumns"/>)
+        with participation_flags as (
+            insert into ${schema}.df_usage_archive (
+                df_usage_archive_uid,
+                df_scenario_uid,
+                status_ind,
+                rh_account_number,
+                payee_account_number,
+                product_family,
+                wr_wrk_inst,
+                work_title,
+                system_title,
+                gross_amount,
+                service_fee,
+                service_fee_amount,
+                net_amount,
+                is_rh_participating_flag,
+                <include refid="StoredEntityMapper.additionalColumns"/>)
+            select
+                uuid_generate_v4(),
+                df_scenario_uid,
+                #{status},
+                rh_account_number,
+                payee_account_number,
+                product_family,
+                151811999,
+                'NON-TITLE NTS',
+                'NON-TITLE NTS',
+                sum(gross_amount),
+                service_fee,
+                sum(service_fee_amount),
+                sum(net_amount),
+                is_rh_participating_flag,
+                <include refid="StoredEntityMapper.insert"/>
+                from ${schema}.df_usage
+            where df_scenario_uid = #{scenarioId}
+            group by rh_account_number, product_family, payee_account_number, service_fee, is_rh_participating_flag, df_scenario_uid
+            returning df_usage_archive_uid, is_rh_participating_flag
+        )
+        insert into ${schema}.df_usage_fas (
+            df_usage_fas_uid,
+            is_rh_participating_flag
+        )
         select
-            uuid_generate_v4(),
-            df_scenario_uid,
-            #{status},
-            rh_account_number,
-            payee_account_number,
-            product_family,
-            151811999,
-            'NON-TITLE NTS',
-            'NON-TITLE NTS',
-            sum(gross_amount),
-            service_fee,
-            sum(service_fee_amount),
-            sum(net_amount),
-            is_rh_participating_flag,
-            <include refid="StoredEntityMapper.insert"/>
-            from ${schema}.df_usage
-        where df_scenario_uid = #{scenarioId}
-        group by rh_account_number, product_family, payee_account_number, service_fee, is_rh_participating_flag, df_scenario_uid
-        returning df_usage_archive_uid
+            df_usage_archive_uid,
+            is_rh_participating_flag
+        from participation_flags
+        returning df_usage_fas_uid
     </select>
 </mapper>

@@ -110,17 +110,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle') // B-55836 remove
             column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500') // B-55836 remove
+            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3ab5e80b-89c0-4d78-9675-54c7ab284450')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
-            column(name: 'gross_amount', value: '35000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -131,17 +143,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants')
+            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants') // B-55836 remove
             column(name: 'standard_number', value: '1008902002377655XX')
+            column(name: 'publisher', value: 'John Wiley & Sons') // B-55836 remove
+            column(name: 'publication_date', value: '2011-05-10') // B-55836 remove
+            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'author', value: 'Nanette M. Schwann') // B-55836 remove
+            column(name: 'number_of_copies', value: '1600')
+            column(name: 'reported_value', value: '1560') // B-55836 remove
+            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '8a06905f-37ae-4e1f-8550-245277f8165c')
+            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants')
             column(name: 'publisher', value: 'John Wiley & Sons')
             column(name: 'publication_date', value: '2011-05-10')
             column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2019')
             column(name: 'author', value: 'Nanette M. Schwann')
-            column(name: 'number_of_copies', value: '1600')
             column(name: 'reported_value', value: '1560')
-            column(name: 'gross_amount', value: '35000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -152,17 +176,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000005413')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902002377655XX')
+            column(name: 'publisher', value: 'McGraw-Hill') // B-55836 remove
+            column(name: 'publication_date', value: '2009-12-31') // B-55836 remove
+            column(name: 'market', value: 'Edu') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'author', value: 'Mirjam H. Hüberli') // B-55836 remove
+            column(name: 'number_of_copies', value: '2630')
+            column(name: 'reported_value', value: '1280.00') // B-55836 remove
+            column(name: 'gross_amount', value: '2125.24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '5c5f8c1c-1418-4cfd-8685-9212f4c421d1')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'McGraw-Hill')
             column(name: 'publication_date', value: '2009-12-31')
             column(name: 'market', value: 'Edu')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2019')
             column(name: 'author', value: 'Mirjam H. Hüberli')
-            column(name: 'number_of_copies', value: '2630')
             column(name: 'reported_value', value: '1280.00')
-            column(name: 'gross_amount', value: '2125.24')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -175,20 +211,32 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '9900') // B-55836 remove
+            column(name: 'gross_amount', value: '16437.40')
+            column(name: 'net_amount', value: '11177.40')
+            column(name: 'service_fee_amount', value: '5260.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d11')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '16437.40')
-            column(name: 'net_amount', value: '11177.40')
-            column(name: 'service_fee_amount', value: '5260.00')
-            column(name: 'service_fee', value: '0.32000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -201,20 +249,32 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '9900') // B-55836 remove
+            column(name: 'gross_amount', value: '16437.40')
+            column(name: 'net_amount', value: '11177.40')
+            column(name: 'service_fee_amount', value: '5260.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'cf38d390-11bb-4af7-9685-e034c9c32fb6')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '16437.40')
-            column(name: 'net_amount', value: '11177.40')
-            column(name: 'service_fee_amount', value: '5260.00')
-            column(name: 'service_fee', value: '0.32000')
         }
 
         // testFindByStatuses
@@ -235,21 +295,33 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Psychiatric services')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112316635XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '9900') // B-55836 remove
+            column(name: 'gross_amount', value: '16437.40')
+            column(name: 'net_amount', value: '11177.40')
+            column(name: 'service_fee_amount', value: '5260.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '62e0ddd7-a37f-4810-8ada-abab805cb48d')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '16437.40')
-            column(name: 'net_amount', value: '11177.40')
-            column(name: 'service_fee_amount', value: '5260.00')
-            column(name: 'service_fee', value: '0.32000')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -280,21 +352,33 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002475')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00') // B-55836 remove
+            column(name: 'gross_amount', value: '1000.00')
+            column(name: 'net_amount', value: '840.00')
+            column(name: 'service_fee_amount', value: '160.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'comment', value: 'usage from usages_10.csv')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'a71a0544-128e-41c0-b6b0-cfbbea6d2182')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
-            column(name: 'gross_amount', value: '1000.00')
-            column(name: 'net_amount', value: '840.00')
-            column(name: 'service_fee_amount', value: '160.00')
-            column(name: 'service_fee', value: '0.16000')
-            column(name: 'comment', value: 'usage from usages_10.csv')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -305,22 +389,34 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Hydronitrous')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '5475802112214578XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'reported_value', value: '200.00')
+            column(name: 'reported_value', value: '200.00') // B-55836 remove
             column(name: 'gross_amount', value: '2000.00')
             column(name: 'net_amount', value: '1360.00')
             column(name: 'service_fee_amount', value: '640.00')
             column(name: 'service_fee', value: '0.32000')
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'comment', value: 'usage from usages_20.csv')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'd9ca07b5-8282-4a81-9b9d-e4480f529d34')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '200.00')
         }
 
         //testFindProductFamilies
@@ -339,9 +435,23 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'cb597f4e-f636-447f-8710-0436d8994d10')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '5475802112214578XX')
             column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '16.40')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '4dd8cdf8-ca10-422e-bdd5-3220105e6379')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
@@ -349,8 +459,6 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '16.40')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -369,18 +477,30 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3558')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'gross_amount', value: '10000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '593c49c3-eb5b-477b-8556-f7a4725df2b3')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '10000')
-            column(name: 'gross_amount', value: '10000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -389,17 +509,29 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3566')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'gross_amount', value: '10000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '7db6455e-5249-44db-801a-307f1c239310')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '10000')
-            column(name: 'gross_amount', value: '10000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -418,18 +550,30 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3559')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'gross_amount', value: '10000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '66a7c2c0-3b09-48ad-9aa5-a6d0822226c7')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '10000')
-            column(name: 'gross_amount', value: '10000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -438,17 +582,29 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3567')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'gross_amount', value: '10000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '0c099fc0-e6f5-43c0-b2d5-ad971f974c10')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '10000')
-            column(name: 'gross_amount', value: '10000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -457,6 +613,20 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'gross_amount', value: '10000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'dcc794ba-42aa-481d-937b-8f431929a611')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
@@ -464,9 +634,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '10000')
-            column(name: 'gross_amount', value: '10000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -475,6 +643,20 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'gross_amount', value: '10000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '47d48889-76b5-4957-aca0-2a7850a09f92')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
@@ -482,9 +664,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '10000')
-            column(name: 'gross_amount', value: '10000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -493,6 +673,20 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'gross_amount', value: '10000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'c5ea47b0-b269-4791-9aa7-76308fe835e6')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
@@ -500,9 +694,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '10000')
-            column(name: 'gross_amount', value: '10000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -510,6 +702,20 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'gross_amount', value: '10000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'b53bb4f3-9eee-4732-8e3d-0c88722081d8')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
@@ -517,9 +723,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '10000')
-            column(name: 'gross_amount', value: '10000.00')
         }
 
         //testFindForAuditWithSort
@@ -551,16 +755,16 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'PAID')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: '3000') // B-55836 remove
             column(name: 'gross_amount', value: '500.00')
             column(name: 'net_amount', value: '420.00')
             column(name: 'service_fee_amount', value: '80.00')
@@ -574,6 +778,18 @@ databaseChangeLog {
             column(name: 'comment', value: 'usage from usages_10.csv')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '0d85f51d-212b-4181-9972-3154cad74bd0')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '3000')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: '1cb766c6-7c49-489a-bd8f-9b8b052f5785')
             column(name: 'df_usage_batch_uid', value: '48bfe456-fbc1-436e-8762-baca46a0e09c')
@@ -585,16 +801,16 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002797')
             column(name: 'status_ind', value: 'PAID')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: '3000') // B-55836 remove
             column(name: 'gross_amount', value: '500.00')
             column(name: 'net_amount', value: '420.00')
             column(name: 'service_fee_amount', value: '80.00')
@@ -606,6 +822,18 @@ databaseChangeLog {
             column(name: 'distribution_date', value: '2017-03-16 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-16 11:41:52.735531+03')
             column(name: 'comment', value: 'usage from usages_20.csv')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '1cb766c6-7c49-489a-bd8f-9b8b052f5785')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '3000')
         }
 
         //testUpdateResearchedUsage
@@ -625,21 +853,33 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3558')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'gross_amount', value: '10000.00')
+            column(name: 'net_amount', value: '8400.00')
+            column(name: 'service_fee_amount', value: '1600.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '721ca627-09bc-4204-99f4-6acae415fa5d')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '10000')
-            column(name: 'gross_amount', value: '10000.00')
-            column(name: 'net_amount', value: '8400.00')
-            column(name: 'service_fee_amount', value: '1600.00')
-            column(name: 'service_fee', value: '0.16000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -648,6 +888,23 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'gross_amount', value: '10000.00')
+            column(name: 'net_amount', value: '8400.00')
+            column(name: 'service_fee_amount', value: '1600.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
@@ -655,12 +912,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '10000')
-            column(name: 'gross_amount', value: '10000.00')
-            column(name: 'net_amount', value: '8400.00')
-            column(name: 'service_fee_amount', value: '1600.00')
-            column(name: 'service_fee', value: '0.16000')
         }
 
         //testFindByFilterSortingByBatchInfo
@@ -696,17 +948,17 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'LOCKED')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3559')
-            column(name: 'publisher', value: 'Network for Science')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '1000')
+            column(name: 'reported_value', value: '1000') // B-55836 remove
             column(name: 'gross_amount', value: '1000.00')
             column(name: 'net_amount', value: '8400.00')
             column(name: 'service_fee_amount', value: '1600.00')
@@ -715,12 +967,40 @@ databaseChangeLog {
             column(name: 'standard_number_type', value: 'VALISSN')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3b6892a9-49b2-41a2-aa3a-8705ea6640cc')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '1000')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3c31db4f-4065-4fe1-84c2-b48a0f3bc079')
             column(name: 'df_usage_batch_uid', value: '9776da8d-098d-4f39-99fd-85405c339e9b')
             column(name: 'product_family', value: 'FAS2')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2014') // B-55836 remove
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2014-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2014') // B-55836 remove
+            column(name: 'market_period_to', value: '2018') // B-55836 remove
+            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '200')
+            column(name: 'reported_value', value: '2000') // B-55836 remove
+            column(name: 'gross_amount', value: '2000.00')
+            column(name: 'comment', value: 'usage from usages_25.csv')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3c31db4f-4065-4fe1-84c2-b48a0f3bc079')
             column(name: 'article', value: 'DIN EN 779:2014')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2014-09-10')
@@ -728,11 +1008,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2014')
             column(name: 'market_period_to', value: '2018')
             column(name: 'author', value: 'Aarseth, Espen J.')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '200')
             column(name: 'reported_value', value: '2000')
-            column(name: 'gross_amount', value: '2000.00')
-            column(name: 'comment', value: 'usage from usages_25.csv')
         }
 
         rollback ""
@@ -751,16 +1027,16 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'PAID')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2016-11-03')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2016-11-03') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: '3000') // B-55836 remove
             column(name: 'gross_amount', value: '500.00')
             column(name: 'net_amount', value: '80.00')
             column(name: 'service_fee_amount', value: '420.00')
@@ -771,6 +1047,18 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA_March_17')
             column(name: 'distribution_date', value: '2016-11-03')
             column(name: 'lm_detail_id', value: 'ced40f77-704a-4b77-ae46-2698ef408df4')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'cce295c6-23cf-47b4-b00c-2e0e50cce169')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '3000')
         }
     }
 
@@ -794,21 +1082,33 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'RH_FOUND')
             column(name: 'rh_account_number', value: '1000009523')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3559')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100') // B-55836 remove
+            column(name: 'gross_amount', value: '500.00')
+            column(name: 'net_amount', value: '420.00')
+            column(name: 'service_fee_amount', value: '80.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3cf274c5-8eac-4d4a-96be-5921ae026840')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100')
-            column(name: 'gross_amount', value: '500.00')
-            column(name: 'net_amount', value: '420.00')
-            column(name: 'service_fee_amount', value: '80.00')
-            column(name: 'service_fee', value: '0.16000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -818,21 +1118,33 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'RH_FOUND')
             column(name: 'rh_account_number', value: '1000009524')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3559')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100') // B-55836 remove
+            column(name: 'gross_amount', value: '500.00')
+            column(name: 'net_amount', value: '420.00')
+            column(name: 'service_fee_amount', value: '80.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'f5eb98ce-ab59-44c8-9a50-1afea2b5ae15')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100')
-            column(name: 'gross_amount', value: '500.00')
-            column(name: 'net_amount', value: '420.00')
-            column(name: 'service_fee_amount', value: '80.00')
-            column(name: 'service_fee', value: '0.16000')
         }
     }
 
@@ -857,21 +1169,33 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'RH_FOUND')
             column(name: 'rh_account_number', value: '1000009523')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3559')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100') // B-55836 remove
+            column(name: 'gross_amount', value: '500.00')
+            column(name: 'net_amount', value: '420.00')
+            column(name: 'service_fee_amount', value: '80.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3adb01b0-6dc0-4f3c-ba71-c47a1f8d69b8')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100')
-            column(name: 'gross_amount', value: '500.00')
-            column(name: 'net_amount', value: '420.00')
-            column(name: 'service_fee_amount', value: '80.00')
-            column(name: 'service_fee', value: '0.16000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -881,21 +1205,33 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_NOT_FOUND')
             column(name: 'rh_account_number', value: '1000009524')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3559')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100') // B-55836 remove
+            column(name: 'gross_amount', value: '500.00')
+            column(name: 'net_amount', value: '420.00')
+            column(name: 'service_fee_amount', value: '80.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '775ceaf9-125f-4387-b076-459eb4673d92')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100')
-            column(name: 'gross_amount', value: '500.00')
-            column(name: 'net_amount', value: '420.00')
-            column(name: 'service_fee_amount', value: '80.00')
-            column(name: 'service_fee', value: '0.16000')
         }
     }
 
@@ -933,22 +1269,34 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'US_TAX_COUNTRY')
             column(name: 'rh_account_number', value: '1000009523')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3559')
             column(name: 'standard_number_type', value: 'STDID')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2015') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '200') // B-55836 remove
+            column(name: 'gross_amount', value: '1000.00')
+            column(name: 'net_amount', value: '840.00')
+            column(name: 'service_fee_amount', value: '160.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '463e2239-1a36-41cc-9a51-ee2a80eae0c7')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2015')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '200')
-            column(name: 'gross_amount', value: '1000.00')
-            column(name: 'net_amount', value: '840.00')
-            column(name: 'service_fee_amount', value: '160.00')
-            column(name: 'service_fee', value: '0.16000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -959,22 +1307,34 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Medical Journal')
             column(name: 'status_ind', value: 'US_TAX_COUNTRY')
             column(name: 'rh_account_number', value: '1000009524')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-2555')
             column(name: 'standard_number_type', value: 'STDID')
+            column(name: 'publisher', value: 'Network for Medicine') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Arturo de Mézières') // B-55836 remove
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100') // B-55836 remove
+            column(name: 'gross_amount', value: '500.00')
+            column(name: 'net_amount', value: '420.00')
+            column(name: 'service_fee_amount', value: '80.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'bd407b50-6101-4304-8316-6404fe32a800')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Medicine')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Arturo de Mézières')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100')
-            column(name: 'gross_amount', value: '500.00')
-            column(name: 'net_amount', value: '420.00')
-            column(name: 'service_fee_amount', value: '80.00')
-            column(name: 'service_fee', value: '0.16000')
         }
     }
 
@@ -1000,15 +1360,27 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Cell Biology')
             column(name: 'status_ind', value: 'UNCLASSIFIED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500') // B-55836 remove
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'c6cb5b07-45c0-4188-9da3-920046eec4cf')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
         }
 
@@ -1021,15 +1393,27 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000015086')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500') // B-55836 remove
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '6dc54058-5566-4aa2-8cd4-d1a09805ae20')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
         }
 
@@ -1048,17 +1432,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'UNCLASSIFIED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500') // B-55836 remove
+            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '2255188f-d582-4516-8c08-835cfe1d68c2')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
-            column(name: 'gross_amount', value: '35000.00')
         }
 
         rollback ""
@@ -1095,17 +1491,17 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ARCHIVED')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2016-11-03')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2016-11-03') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: '3000') // B-55836 remove
             column(name: 'gross_amount', value: '1176.9160')
             column(name: 'net_amount', value: '80.00')
             column(name: 'service_fee_amount', value: '420.00')
@@ -1117,6 +1513,18 @@ databaseChangeLog {
             column(name: 'distribution_date', value: '2016-11-03')
             column(name: 'lm_detail_id', value: '63b3da58-ac6b-4946-bd67-37a251769467')
             column(name: 'comment', value: 'for nts batch')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'bc0fe9bc-9b24-4324-b624-eed0d9773e19')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '3000')
         }
 
         // included
@@ -1131,17 +1539,17 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ARCHIVED')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2016-11-03')
-            column(name: 'market', value: 'Bus')
-            column(name: 'market_period_from', value: '2016')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2016-11-03') // B-55836 remove
+            column(name: 'market', value: 'Bus') // B-55836 remove
+            column(name: 'market_period_from', value: '2016') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: '3000') // B-55836 remove
             column(name: 'gross_amount', value: '500.00')
             column(name: 'net_amount', value: '80.00')
             column(name: 'service_fee_amount', value: '420.00')
@@ -1153,6 +1561,18 @@ databaseChangeLog {
             column(name: 'distribution_date', value: '2016-11-03')
             column(name: 'lm_detail_id', value: '4c56f661-5bef-4c82-8526-fd987b5455f8')
             column(name: 'comment', value: 'for nts batch')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '5b8c2754-2f63-425a-a95f-dbd744e815fc')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Bus')
+            column(name: 'market_period_from', value: '2016')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '3000')
         }
 
         // included unclassified
@@ -1167,17 +1587,17 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ARCHIVED')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2016-11-03')
-            column(name: 'market', value: 'Bus')
-            column(name: 'market_period_from', value: '2014')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2016-11-03') // B-55836 remove
+            column(name: 'market', value: 'Bus') // B-55836 remove
+            column(name: 'market_period_from', value: '2014') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: '3000') // B-55836 remove
             column(name: 'gross_amount', value: '500.00')
             column(name: 'net_amount', value: '80.00')
             column(name: 'service_fee_amount', value: '420.00')
@@ -1189,6 +1609,18 @@ databaseChangeLog {
             column(name: 'distribution_date', value: '2016-11-03')
             column(name: 'lm_detail_id', value: '4c56f661-5bef-4c82-8526-fd987b5455f8')
             column(name: 'comment', value: 'for nts batch')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'f06de87a-511e-46ae-88a8-fc9778efc194')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Bus')
+            column(name: 'market_period_from', value: '2014')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '3000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
@@ -1209,16 +1641,16 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ARCHIVED')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2016-11-03')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2014')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2016-11-03') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2014') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: '3000') // B-55836 remove
             column(name: 'gross_amount', value: '1200.00')
             column(name: 'net_amount', value: '80.00')
             column(name: 'service_fee_amount', value: '420.00')
@@ -1230,6 +1662,18 @@ databaseChangeLog {
             column(name: 'distribution_date', value: '2016-11-03')
             column(name: 'lm_detail_id', value: 'bfa206bb-83fa-4c71-9a89-99f743018237')
             column(name: 'comment', value: 'for nts batch')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '33113b79-791a-4aa9-b192-12b292c32823')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2014')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '3000')
         }
 
         // excluded by market
@@ -1244,16 +1688,16 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ARCHIVED')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2016-11-03')
-            column(name: 'market', value: 'Edu')
-            column(name: 'market_period_from', value: '2016')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2016-11-03') // B-55836 remove
+            column(name: 'market', value: 'Edu') // B-55836 remove
+            column(name: 'market_period_from', value: '2016') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: '3000') // B-55836 remove
             column(name: 'gross_amount', value: '1200.00')
             column(name: 'net_amount', value: '80.00')
             column(name: 'service_fee_amount', value: '420.00')
@@ -1264,6 +1708,18 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-11-03')
             column(name: 'lm_detail_id', value: 'b8688ed5-3986-4f41-8a16-d33cd44e2ab5')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'a9fac1e1-5a34-416b-9ecb-f2615b24d1c1')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Edu')
+            column(name: 'market_period_from', value: '2016')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '3000')
         }
 
         // excluded as belletristic
@@ -1278,16 +1734,16 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ARCHIVED')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2016-11-03')
-            column(name: 'market', value: 'Bus')
-            column(name: 'market_period_from', value: '2016')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2016-11-03') // B-55836 remove
+            column(name: 'market', value: 'Bus') // B-55836 remove
+            column(name: 'market_period_from', value: '2016') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: '3000') // B-55836 remove
             column(name: 'gross_amount', value: '1200.00')
             column(name: 'net_amount', value: '80.00')
             column(name: 'service_fee_amount', value: '420.00')
@@ -1298,6 +1754,18 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-11-03')
             column(name: 'lm_detail_id', value: '83bb6666-7484-49d6-8ed1-c653286590f3')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'b6fc6063-a0ea-4e4d-832d-b1cbc896963d')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Bus')
+            column(name: 'market_period_from', value: '2016')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '3000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -1354,17 +1822,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2000') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '0f86df24-39a0-4420-8e9b-327713ddd2b9')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2000')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1376,17 +1856,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '1000') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'a86308b1-7f89-474b-9390-fc926c5b218b')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '1000')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1398,17 +1890,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '3000') // B-55836 remove
+            column(name: 'gross_amount', value: '30.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'af1f25e5-75ca-463f-8c9f-1f1e4b92f699')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '3000')
-            column(name: 'gross_amount', value: '30.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1420,17 +1924,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2000') // B-55836 remove
+            column(name: 'gross_amount', value: '2.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'f9ddb072-a411-443b-89ca-1bb5a63425a4')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2000')
-            column(name: 'gross_amount', value: '2.00')
         }
 
         rollback ""
@@ -1464,17 +1980,29 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Cell Biology')
             column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'reported_value', value: '10') // B-55836 remove
+            column(name: 'gross_amount', value: '10.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'ba95f0b3-dc94-4925-96f2-93d05db9c469')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '10')
-            column(name: 'gross_amount', value: '10.00')
         }
     }
 
@@ -1521,20 +2049,32 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'reported_value', value: '900') // B-55836 remove
+            column(name: 'gross_amount', value: '900.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'service_fee_amount', value: '288.00')
+            column(name: 'net_amount', value: '612.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'c09aa888-85a5-4377-8c7a-85d84d255b5a')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '900')
-            column(name: 'gross_amount', value: '900.00')
-            column(name: 'service_fee', value: '0.32000')
-            column(name: 'service_fee_amount', value: '288.00')
-            column(name: 'net_amount', value: '612.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1545,17 +2085,29 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Cell Biology')
             column(name: 'status_ind', value: 'NTS_EXCLUDED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'reported_value', value: '100') // B-55836 remove
+            column(name: 'gross_amount', value: '0.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '45445974-5bee-477a-858b-e9e8c1a642b8')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '100')
-            column(name: 'gross_amount', value: '0.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
@@ -1587,14 +2139,24 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '0804709114')
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '296.72') // B-55836 remove
+            column(name: 'gross_amount', value: '0.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'f6cb5b07-45c0-4188-9da3-920046eec4c0')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '296.72')
-            column(name: 'gross_amount', value: '0.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1606,14 +2168,24 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '10457143')
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '162.41') // B-55836 remove
+            column(name: 'gross_amount', value: '0.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'f255188f-d582-4516-8c08-835cfe1d68c3')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '162.41')
-            column(name: 'gross_amount', value: '0.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
@@ -1660,14 +2232,24 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '0804709114')
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '296.72') // B-55836 remove
+            column(name: 'gross_amount', value: '256.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'bbbd64db-2668-499a-9d18-be8b3f87fbf5')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '296.72')
-            column(name: 'gross_amount', value: '256.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1680,14 +2262,24 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '10457143')
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '162.41') // B-55836 remove
+            column(name: 'gross_amount', value: '1452.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '83a26087-a3b3-43ca-8b34-c66134fb6edf')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '162.41')
-            column(name: 'gross_amount', value: '1452.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1700,14 +2292,24 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '10457143')
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '86.41') // B-55836 remove
+            column(name: 'gross_amount', value: '359.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '6cad4cf2-6a19-4e5b-b4e0-f2f7a62ff91c')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '86.41')
-            column(name: 'gross_amount', value: '359.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter") {
@@ -1756,14 +2358,24 @@ databaseChangeLog {
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '0804709114')
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '25.00') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '2f2ca785-a7d3-4a7f-abd9-2bad80ac71dd')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '25.00')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1774,14 +2386,24 @@ databaseChangeLog {
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '0804709114')
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '25.00') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'cbd6768d-a424-476e-b502-a832d9dbe85e')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '25.00')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1792,14 +2414,24 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Speculum')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '10457143')
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '150.01') // B-55836 remove
+            column(name: 'gross_amount', value: '150.01')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'e2834925-ede5-4796-a30b-05770a6f04be')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '150.01')
-            column(name: 'gross_amount', value: '150.01')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1810,14 +2442,24 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Cell Biology')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '10457143')
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '99.99') // B-55836 remove
+            column(name: 'gross_amount', value: '99.99')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'd5e3c637-155a-4c05-999a-31a07e335491')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '99.99')
-            column(name: 'gross_amount', value: '99.99')
         }
     }
 
@@ -1852,14 +2494,24 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '0804709114')
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '296.72') // B-55836 remove
+            column(name: 'gross_amount', value: '256.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '8a80a2e7-4758-4e43-ae42-e8b29802a210')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '296.72')
-            column(name: 'gross_amount', value: '256.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1872,14 +2524,24 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '10457143')
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '162.41') // B-55836 remove
+            column(name: 'gross_amount', value: '1452.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '085268cd-7a0c-414e-8b28-2acb299d9698')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '162.41')
-            column(name: 'gross_amount', value: '1452.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1892,14 +2554,24 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '10457143')
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '16.24') // B-55836 remove
+            column(name: 'gross_amount', value: '145.20')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'bfc9e375-c489-4600-9308-daa101eed97c')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '16.24')
-            column(name: 'gross_amount', value: '145.20')
         }
     }
 
@@ -1943,22 +2615,34 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'work_title', value: 'Cell Biology')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'reported_value', value: '33') // B-55836 remove
+            column(name: 'gross_amount', value: '33')
+            column(name: 'service_fee', value: '0.16')
+            column(name: 'service_fee_amount', value: '5.28')
+            column(name: 'net_amount', value: '27.72')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '7778a37d-6184-42c1-8e23-5841837c5411')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '33')
-            column(name: 'gross_amount', value: '33')
-            column(name: 'service_fee', value: '0.16')
-            column(name: 'service_fee_amount', value: '5.28')
-            column(name: 'net_amount', value: '27.72')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1968,22 +2652,34 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '2000017004')
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'work_title', value: 'Cell Biology')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'reported_value', value: '66') // B-55836 remove
+            column(name: 'gross_amount', value: '66')
+            column(name: 'service_fee', value: '0.32')
+            column(name: 'service_fee_amount', value: '21.12')
+            column(name: 'net_amount', value: '44.88')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '54247c55-bf6b-4ad6-9369-fb4baea6b19b')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '66')
-            column(name: 'gross_amount', value: '66')
-            column(name: 'service_fee', value: '0.32')
-            column(name: 'service_fee_amount', value: '21.12')
-            column(name: 'net_amount', value: '44.88')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1992,19 +2688,31 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '7000896777')
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'work_title', value: 'Cell Biology')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'status_ind', value: 'NTS_EXCLUDED')
             column(name: 'product_family', value: 'NTS')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'reported_value', value: '11') // B-55836 remove
+            column(name: 'gross_amount', value: '11')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'ade68eac-0d79-4d23-861b-499a0c6e91d3')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '11')
-            column(name: 'gross_amount', value: '11')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
@@ -2034,7 +2742,7 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'PAID')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'reported_value', value: '0.00')
+            column(name: 'reported_value', value: '0.00') // B-55836 remove
             column(name: 'gross_amount', value: '6000.00')
             column(name: 'net_amount', value: '4080.00')
             column(name: 'service_fee_amount', value: '1920.00')
@@ -2047,6 +2755,11 @@ databaseChangeLog {
             column(name: 'distribution_date', value: '2019-08-05 05:14:00-04:00')
             column(name: 'period_end_date', value: '2019-08-05 05:14:00-04:00')
             column(name: 'lm_detail_id', value: '6e727232-15b6-4b98-8b97-a8536cd8b24c')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'fb297d5d-4d46-4492-93b0-cd6e02b8ce8d')
+            column(name: 'reported_value', value: '0.00')
         }
     }
 
@@ -2079,20 +2792,32 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '68.00')
+            column(name: 'service_fee_amount', value: '32.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '30787462-b66a-4679-a2bc-1b89abd6ea66')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
-            column(name: 'gross_amount', value: '100.00')
-            column(name: 'net_amount', value: '68.00')
-            column(name: 'service_fee_amount', value: '32.00')
-            column(name: 'service_fee', value: '0.32000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2105,21 +2830,33 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2008902112317645XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '84.00')
+            column(name: 'service_fee_amount', value: '16.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'is_rh_participating_flag', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '5e3b4c6c-fe20-4a16-bbb6-9dc61b6c1eed')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
-            column(name: 'gross_amount', value: '100.00')
-            column(name: 'net_amount', value: '84.00')
-            column(name: 'service_fee_amount', value: '16.00')
-            column(name: 'service_fee', value: '0.16000')
-            column(name: 'is_rh_participating_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2132,21 +2869,33 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '7000813806')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '3008902112317645XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '68.00')
+            column(name: 'service_fee_amount', value: '32.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'is_payee_participating_flag', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '77dce0ba-3a7c-4162-8264-69d1b973e7ac')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
-            column(name: 'gross_amount', value: '100.00')
-            column(name: 'net_amount', value: '68.00')
-            column(name: 'service_fee_amount', value: '32.00')
-            column(name: 'service_fee', value: '0.32000')
-            column(name: 'is_payee_participating_flag', value: true)
         }
     }
 
@@ -2179,20 +2928,32 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '68.00')
+            column(name: 'service_fee_amount', value: '32.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '7234feb4-a59e-483b-985a-e8de2e3eb190')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
-            column(name: 'gross_amount', value: '100.00')
-            column(name: 'net_amount', value: '68.00')
-            column(name: 'service_fee_amount', value: '32.00')
-            column(name: 'service_fee', value: '0.32000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2205,21 +2966,33 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '7000813806')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '84.00')
+            column(name: 'service_fee_amount', value: '16.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'is_rh_participating_flag', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '582c86e2-213e-48ad-a885-f9ff49d48a69')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
-            column(name: 'gross_amount', value: '100.00')
-            column(name: 'net_amount', value: '84.00')
-            column(name: 'service_fee_amount', value: '16.00')
-            column(name: 'service_fee', value: '0.16000')
-            column(name: 'is_rh_participating_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2232,21 +3005,33 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '7000813806')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '3008902112317645XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '68.00')
+            column(name: 'service_fee_amount', value: '32.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'is_payee_participating_flag', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '730d7964-f399-4971-9403-dbedc9d7a180')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
-            column(name: 'gross_amount', value: '100.00')
-            column(name: 'net_amount', value: '68.00')
-            column(name: 'service_fee_amount', value: '32.00')
-            column(name: 'service_fee', value: '0.32000')
-            column(name: 'is_payee_participating_flag', value: true)
         }
     }
 
@@ -2279,20 +3064,32 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '68.00')
+            column(name: 'service_fee_amount', value: '32.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '209a960f-5896-43da-b020-fc52981b9633')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
-            column(name: 'gross_amount', value: '100.00')
-            column(name: 'net_amount', value: '68.00')
-            column(name: 'service_fee_amount', value: '32.00')
-            column(name: 'service_fee', value: '0.32000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2305,21 +3102,33 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '7000813806')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '84.00')
+            column(name: 'service_fee_amount', value: '16.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'is_rh_participating_flag', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '1ae671ca-ed5a-4d92-8ab6-a10a53d9884a')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
-            column(name: 'gross_amount', value: '100.00')
-            column(name: 'net_amount', value: '84.00')
-            column(name: 'service_fee_amount', value: '16.00')
-            column(name: 'service_fee', value: '0.16000')
-            column(name: 'is_rh_participating_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2332,21 +3141,33 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '7000813806')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '3008902112317645XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '68.00')
+            column(name: 'service_fee_amount', value: '32.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'is_payee_participating_flag', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '72f6abdb-c82d-4cee-aadf-570942cf0093')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
-            column(name: 'gross_amount', value: '100.00')
-            column(name: 'net_amount', value: '68.00')
-            column(name: 'service_fee_amount', value: '32.00')
-            column(name: 'service_fee', value: '0.32000')
-            column(name: 'is_payee_participating_flag', value: true)
         }
     }
 }
