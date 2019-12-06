@@ -60,27 +60,46 @@ databaseChangeLog {
             column(name: 'market_period_from', type: 'NUMERIC(4,0)', remarks: 'The beginning period of when the usage occured')
             column(name: 'market_period_to', type: 'NUMERIC(4,0)', remarks: 'The ending period of when the usage occured')
             column(name: 'df_fund_pool_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool')
-            column(name: 'is_rh_participating_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'RH participating flag')
-            column(name: 'is_payee_participating_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Payee participating flag')
+            column(name: 'is_rh_participating_flag', type: 'BOOLEAN', defaultValueBoolean: false, remarks: 'RH participating flag')
+            column(name: 'is_payee_participating_flag', type: 'BOOLEAN', defaultValueBoolean: false, remarks: 'Payee participating flag')
             column(name: 'reported_value', type: 'DECIMAL(38,2)', defaultValue: 0.00, remarks: 'The amount in original currency')
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
         }
 
         addPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_usage_fas', tablespace: dbIndexTablespace,
                 columnNames: 'df_usage_fas_uid', constraintName: 'df_usage_fas_pk')
 
-        sql("""insert into ${dbAppsSchema}.df_usage_fas              
+        sql("""insert into ${dbAppsSchema}.df_usage_fas
             select df_usage_uid, article, author, publisher, publication_date, market, market_period_from, market_period_to, df_fund_pool_uid,
             is_rh_participating_flag, is_payee_participating_flag, reported_value
             from ${dbAppsSchema}.df_usage where product_family='FAS'"""
         )
 
-        sql("""insert into ${dbAppsSchema}.df_usage_fas                
+        sql("""insert into ${dbAppsSchema}.df_usage_fas
             select df_usage_uid, article, author, publisher, publication_date, market, market_period_from, market_period_to, df_fund_pool_uid,
             is_rh_participating_flag, is_payee_participating_flag, reported_value
             from ${dbAppsSchema}.df_usage where product_family='FAS2'"""
         )
 
-        sql("""insert into ${dbAppsSchema}.df_usage_fas                
+        sql("""insert into ${dbAppsSchema}.df_usage_fas
             select df_usage_uid, article, author, publisher, publication_date, market, market_period_from, market_period_to, df_fund_pool_uid,
             is_rh_participating_flag, is_payee_participating_flag, reported_value
             from ${dbAppsSchema}.df_usage where product_family='NTS'"""
@@ -88,7 +107,7 @@ databaseChangeLog {
 
         sql("""insert into ${dbAppsSchema}.df_usage_fas
             (df_usage_fas_uid, article, author, publisher, publication_date, market, market_period_from, market_period_to, df_fund_pool_uid,
-            is_rh_participating_flag, reported_value)              
+            is_rh_participating_flag, reported_value)
             select df_usage_archive_uid, article, author, publisher, publication_date, market, market_period_from, market_period_to, df_fund_pool_uid,
             is_rh_participating_flag, reported_value
             from ${dbAppsSchema}.df_usage_archive where product_family='FAS'"""
@@ -96,7 +115,7 @@ databaseChangeLog {
 
         sql("""insert into ${dbAppsSchema}.df_usage_fas
             (df_usage_fas_uid, article, author, publisher, publication_date, market, market_period_from, market_period_to, df_fund_pool_uid,
-            is_rh_participating_flag, reported_value)                
+            is_rh_participating_flag, reported_value)
             select df_usage_archive_uid, article, author, publisher, publication_date, market, market_period_from, market_period_to, df_fund_pool_uid,
             is_rh_participating_flag, reported_value
             from ${dbAppsSchema}.df_usage_archive where product_family='FAS2'"""
@@ -104,7 +123,7 @@ databaseChangeLog {
 
         sql("""insert into ${dbAppsSchema}.df_usage_fas
             (df_usage_fas_uid, article, author, publisher, publication_date, market, market_period_from, market_period_to, df_fund_pool_uid,
-            is_rh_participating_flag, reported_value)                
+            is_rh_participating_flag, reported_value)
             select df_usage_archive_uid, article, author, publisher, publication_date, market, market_period_from, market_period_to, df_fund_pool_uid,
             is_rh_participating_flag, reported_value
             from ${dbAppsSchema}.df_usage_archive where product_family='NTS'"""
