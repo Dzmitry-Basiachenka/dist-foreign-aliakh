@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.main.impl;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
@@ -28,32 +30,56 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MainWidgetController extends TabController<IMainWidget> implements IMainWidgetController {
 
+    private static final int SCENARIOS_TAB_INDEX = 1;
+
     @Autowired
-    private IUsagesController usagesController;
+    private IUsagesController fasUsagesController;
     @Autowired
-    private IScenariosController scenariosController;
+    private IUsagesController ntsUsagesController;
     @Autowired
-    private IAuditController auditController;
+    private IScenariosController fasScenariosController;
+    @Autowired
+    private IScenariosController ntsScenariosController;
+    @Autowired
+    private IAuditController fasAuditController;
+    @Autowired
+    private IAuditController ntsAuditController;
+    @Autowired
+    private IProductFamilyProvider productFamilyProvider;
 
     @Override
     public IUsagesController getUsagesController() {
-        return usagesController;
+        // TODO {srudak} move logic to switch between product families to a separate component
+        return FdaConstants.NTS_PRODUCT_FAMILY.equals(productFamilyProvider.getProductFamily())
+            ? ntsUsagesController
+            : fasUsagesController;
     }
 
     @Override
     public IScenariosController getScenariosController() {
-        return scenariosController;
+        // TODO {srudak} move logic to switch between product families to a separate component
+        return FdaConstants.NTS_PRODUCT_FAMILY.equals(productFamilyProvider.getProductFamily())
+            ? ntsScenariosController
+            : fasScenariosController;
     }
 
     @Override
     public void onScenarioCreated(ScenarioCreateEvent event) {
-        selectTab(scenariosController.getWidget());
-        scenariosController.getWidget().selectScenario(event.getScenarioId());
+        getTabSheet().setSelectedTab(SCENARIOS_TAB_INDEX);
+        getScenariosController().getWidget().selectScenario(event.getScenarioId());
+    }
+
+    @Override
+    public void onProductFamilyChanged() {
+        refreshWidget();
     }
 
     @Override
     public IAuditController getAuditController() {
-        return auditController;
+        // TODO {srudak} move logic to switch between product families to a separate component
+        return FdaConstants.NTS_PRODUCT_FAMILY.equals(productFamilyProvider.getProductFamily())
+            ? ntsAuditController
+            : fasAuditController;
     }
 
     @Override

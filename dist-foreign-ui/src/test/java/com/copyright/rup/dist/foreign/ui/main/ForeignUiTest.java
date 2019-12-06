@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.ui.report.impl.ReportWidget;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 
 import org.junit.After;
@@ -135,8 +136,9 @@ public class ForeignUiTest {
         replay(ForeignSecurityUtils.class);
         List<Component> additionalComponents = foreignUi.getAdditionalComponents();
         assertNotNull(additionalComponents);
-        assertEquals(1, additionalComponents.size());
-        assertEquals(Button.class, additionalComponents.get(0).getClass());
+        assertEquals(2, additionalComponents.size());
+        assertEquals(ComboBox.class, additionalComponents.get(0).getClass());
+        assertEquals(Button.class, additionalComponents.get(1).getClass());
         verify(ForeignSecurityUtils.class);
     }
 

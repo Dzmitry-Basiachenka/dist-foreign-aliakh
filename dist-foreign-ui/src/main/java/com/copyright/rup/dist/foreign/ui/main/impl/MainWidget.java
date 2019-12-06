@@ -1,8 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.main.impl;
 
+import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -28,11 +33,17 @@ public class MainWidget extends TabSheet implements IMainWidget {
     @SuppressWarnings("unchecked")
     public MainWidget init() {
         VaadinUtils.addComponentStyle(this, Cornerstone.MAIN_TABSHEET);
-        IUsagesWidget usagesWidget = controller.getUsagesController().initWidget();
-        usagesWidget.addListener(ScenarioCreateEvent.class, controller, IMainWidgetController.ON_SCENARIO_CREATED);
+        SwitchableWidget<IUsagesWidget, IUsagesController> usagesWidget =
+            new SwitchableWidget<>(() -> controller.getUsagesController(),
+                widget -> widget.addListener(ScenarioCreateEvent.class,
+                    controller, IMainWidgetController.ON_SCENARIO_CREATED));
+        SwitchableWidget<IScenariosWidget, IScenariosController> scenariosWidget =
+            new SwitchableWidget<>(() -> controller.getScenariosController(), widget -> {});
+        SwitchableWidget<IAuditWidget, IAuditController> auditWidget =
+            new SwitchableWidget<>(() -> controller.getAuditController(), widget -> {});
         addTab(usagesWidget, ForeignUi.getMessage("tab.usages"));
-        addTab(controller.getScenariosController().initWidget(), ForeignUi.getMessage("tab.scenario"));
-        addTab(controller.getAuditController().initWidget(), ForeignUi.getMessage("tab.audit"));
+        addTab(scenariosWidget, ForeignUi.getMessage("tab.scenario"));
+        addTab(auditWidget, ForeignUi.getMessage("tab.audit"));
         addListener(TabSheet.SelectedTabChangeEvent.class, controller, ITabChangeController.TAB_CHANGE_HANDLER);
         return this;
     }
