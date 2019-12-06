@@ -29,7 +29,7 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000003821')
             column(name: 'status_ind', value: 'PAID')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'reported_value', value: '0.00')
+            column(name: 'reported_value', value: '0.00') // B-55836 remove
             column(name: 'gross_amount', value: '90.63')
             column(name: 'service_fee_amount', value: '29.00')
             column(name: 'net_amount', value: '61.63')
@@ -44,6 +44,11 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2016-03-12')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'adcd15c4-eb44-4e67-847a-7f386082646a')
+            column(name: 'reported_value', value: '0.00')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: '6fa92092-5cd3-4a12-bbf4-762f7ff6f815')
             column(name: 'df_scenario_uid', value: '67027e15-17c6-4b9b-b7f0-12ec414ad344')
@@ -54,7 +59,7 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '7000429266')
             column(name: 'status_ind', value: 'PAID')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'reported_value', value: '0.00')
+            column(name: 'reported_value', value: '0.00') // B-55836 remove
             column(name: 'gross_amount', value: '13503.37')
             column(name: 'net_amount', value: '9182.28')
             column(name: 'service_fee_amount', value: '4321.07')
@@ -67,6 +72,11 @@ databaseChangeLog {
             column(name: 'lm_detail_id', value: '13f6c68e-9000-465d-8db0-fe03deeebe01')
             column(name: 'period_end_date', value: '2018-03-11')
             column(name: 'created_datetime', value: '2016-03-12')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '6fa92092-5cd3-4a12-bbf4-762f7ff6f815')
+            column(name: 'reported_value', value: '0.00')
         }
     }
 }
