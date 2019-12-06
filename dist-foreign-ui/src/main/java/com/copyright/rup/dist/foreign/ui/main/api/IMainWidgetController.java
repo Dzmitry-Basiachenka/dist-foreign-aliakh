@@ -46,6 +46,11 @@ public interface IMainWidgetController extends IController<IMainWidget>, ITabCha
     void onScenarioCreated(ScenarioCreateEvent event);
 
     /**
+     * Handles global product family selection.
+     */
+    void onProductFamilyChanged();
+
+    /**
      * @return {@link IAuditController}.
      */
     IAuditController getAuditController();
