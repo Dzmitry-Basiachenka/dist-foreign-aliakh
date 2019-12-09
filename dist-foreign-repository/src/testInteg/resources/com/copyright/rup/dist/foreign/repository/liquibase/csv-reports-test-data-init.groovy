@@ -27,22 +27,17 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_NOT_FOUND')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '500.00')
-            column(name: 'net_amount', value: '420.00')
-            column(name: 'service_fee_amount', value: '80.00')
-            column(name: 'service_fee', value: '0.16000')
-            column(name: 'comment', value: 'DIN EN 779:2012')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '500.00')
+            column(name: 'reported_value', value: '500.00') // B-55836 remove
             column(name: 'gross_amount', value: '500.00')
             column(name: 'net_amount', value: '420.00')
             column(name: 'service_fee_amount', value: '80.00')
@@ -52,13 +47,13 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: 'e2b3c369-3084-41ad-92b5-62197660d645')
-            column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: '500.00')
         }
 
@@ -118,18 +113,16 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000000001')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2558902245377325XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Nanette M. Schwann') // B-55836 remove
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'gross_amount', value: '26776.51')
-            column(name: 'standard_number_type', value: 'VALISSN')
-            column(name: 'service_fee', value: '0.0')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Nanette M. Schwann')
-            column(name: 'number_of_copies', value: '250232')
-            column(name: 'reported_value', value: '9900.00')
+            column(name: 'reported_value', value: '9900.00') // B-55836 remove
             column(name: 'gross_amount', value: '26776.51')
             column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'service_fee', value: '0.0')
@@ -157,18 +150,16 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000000002')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '0003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '25')
-            column(name: 'gross_amount', value: '13523.49')
-            column(name: 'standard_number_type', value: 'VALISSN')
-            column(name: 'service_fee', value: '0.0')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '25')
-            column(name: 'reported_value', value: '5000.00')
+            column(name: 'reported_value', value: '5000.00') // B-55836 remove
             column(name: 'gross_amount', value: '13523.49')
             column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'service_fee', value: '0.0')
@@ -197,29 +188,34 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000000003')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
+            column(name: 'is_rh_participating_flag', value: 'false') // B-55836 remove
+            column(name: 'reported_value', value: '15000.00') // B-55836 remove
             column(name: 'gross_amount', value: '6509.31')
             column(name: 'service_fee_amount', value: '2082.98')
             column(name: 'net_amount', value: '4426.33')
             column(name: 'service_fee', value: '0.32')
             column(name: 'comment', value: '471137967')
             column(name: 'standard_number_type', value: 'VALISSN')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '15000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: '2641e7fe-2a5a-4cdf-8879-48816d705169')
             column(name: 'article', value: 'DIN EN 779:2012')
-            column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: '15000.00')
         }
@@ -235,29 +231,34 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000000004')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '452365874521235XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
+            column(name: 'is_rh_participating_flag', value: 'false') // B-55836 remove
+            column(name: 'reported_value', value: '3000.00') // B-55836 remove
             column(name: 'gross_amount', value: '1301.86')
             column(name: 'service_fee_amount', value: '416.60')
             column(name: 'net_amount', value: '885.26')
             column(name: 'service_fee', value: '0.32')
             column(name: 'comment', value: '122235139')
             column(name: 'standard_number_type', value: 'VALISBN10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '3000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: '405491b1-49a9-4b70-9cdb-d082be6a802d')
             column(name: 'article', value: 'DIN EN 779:2012')
-            column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: '3000.00')
         }
@@ -273,29 +274,34 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000000006')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '052365874521235XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
+            column(name: 'is_rh_participating_flag', value: 'false') // B-55836 remove
+            column(name: 'reported_value', value: '5620.00') // B-55836 remove
             column(name: 'gross_amount', value: '2438.82')
             column(name: 'service_fee_amount', value: '780.42')
             column(name: 'net_amount', value: '1658.40')
             column(name: 'service_fee', value: '0.32')
             column(name: 'comment', value: '471137469')
             column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '5620.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: '4ddfcb74-cb72-48f6-9ee4-8b4e05afce75')
             column(name: 'article', value: 'DIN EN 779:2012')
-            column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: '5620.00')
         }
@@ -611,16 +617,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '2000017000')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '190.0000000007')
             column(name: 'net_amount', value: '171.0000000006')
             column(name: 'service_fee_amount', value: '19.0000000001')
             column(name: 'service_fee', value: '0.10000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'd04b4d45-b143-404c-bf45-0984542cc25a')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -634,16 +649,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '2000017000')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '190.0000000007')
             column(name: 'net_amount', value: '171.0000000006')
             column(name: 'service_fee_amount', value: '19.0000000001')
             column(name: 'service_fee', value: '0.10000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'af8e8b6c-29e2-4b7a-aaa1-746c48ef2253')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -667,13 +691,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '249.9999999988')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea82')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '249.9999999988')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -686,13 +719,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '249.9999999988')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'a63d87498-3c12-429a-87ef-241951638b8e')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '249.9999999988')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -716,13 +758,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'RH_FOUND')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '500.0000000007')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'd376bdd6-d87f-4d39-bf8f-05c41404d19b')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '500.0000000007')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -735,13 +786,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '500.0000000007')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '038c46ae-7931-48c6-8cb9-ff4fab9faa95')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '500.0000000007')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -750,13 +810,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622Xxxx')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '155.0000000007')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3b7aed62-eb9f-4244-9248-2f9ba329e3be')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '155.0000000007')
         }
 
         // Undistributed Liabilities reconciliation report TO_BE_DISTRIBUTED status
@@ -771,17 +840,27 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b92f4f46-38c1-4f6c-9f69-2c1dcd73d579')
             column(name: 'df_usage_batch_uid', value: 'e116e5e0-9080-4abf-9e67-86959f2cae52')
-            column(name: 'df_fund_pool_uid', value: '49060c9b-9cc2-4b93-b701-fffc82eb28b0')
+            column(name: 'df_fund_pool_uid', value: '49060c9b-9cc2-4b93-b701-fffc82eb28b0') // B-55836 remove
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622Xxxx')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '155.0000000007')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'b92f4f46-38c1-4f6c-9f69-2c1dcd73d579')
+            column(name: 'df_fund_pool_uid', value: '49060c9b-9cc2-4b93-b701-fffc82eb28b0')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '155.0000000007')
         }
 
         // Record in report that includes amounts for batch with fas and nts usages in eligible status
@@ -806,13 +885,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '20')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'b05046a6-9baf-4be3-baa6-5c08c8527826')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '20')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -825,13 +913,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '20')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '5329943d-1214-405d-8e29-59a9281d3275')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '20')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -839,8 +936,23 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '502cf0b4-3e28-4712-837a-3728ef57b100')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '5475802112214578XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '20')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '4dd8cdf8-ca10-422e-bdd5-3220105e6379')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
@@ -848,9 +960,6 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '20')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
         }
 
         // Record in report that includes amounts for batch with usages in different statuses
@@ -871,19 +980,31 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3558')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '200')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '9e8de601-d771-42eb-992f-75ecd083b8d0')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '200')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -893,18 +1014,31 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '180382914')
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3566')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '200')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '10000')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '200')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -913,20 +1047,33 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3558')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '200')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '721ca627-09bc-4204-99f4-6acae415fa5d')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '10000')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '200')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -936,18 +1083,30 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Nitrates')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '5475802112214578XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '200')
+
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'd9ca07b5-8282-4a81-9b9d-e4480f529d34')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '200')
-
         }
 
         // Record in report that includes amounts for batch with usages that were sent to lm and batch with paid usages
@@ -978,16 +1137,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '34.00')
             column(name: 'service_fee_amount', value: '16.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '14ed2c94-9316-49d9-ad74-02e5627eba8d')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -1017,12 +1185,12 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'PAID')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '34.00')
             column(name: 'service_fee_amount', value: '16.00')
@@ -1033,6 +1201,15 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '74be71d1-b1dd-45ac-95b6-78677b37beec')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         // Record in reports that includes amounts for batch with two sent to lm usages and two not included into scenario usages
@@ -1053,19 +1230,31 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3558')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '454b5ed8-bff1-4410-b455-235ec5271e6c')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1074,19 +1263,31 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3558')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '910dae16-f495-48aa-932d-0909d8103b00')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -1106,16 +1307,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '100.00')
             column(name: 'net_amount', value: '68.00')
             column(name: 'service_fee_amount', value: '32.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '0ac629ea-9e8b-45bd-bbd8-857bd7d34424')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -1129,16 +1339,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '100.00')
             column(name: 'net_amount', value: '68.00')
             column(name: 'service_fee_amount', value: '32.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '146ce0f2-f71f-4a53-b0c4-9925ec08da5f')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         // Record in report that includes amounts for batch with rro which is not included into table with estimated service fee
@@ -1165,19 +1384,31 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3558')
+            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '5f95fedc-1c63-4cda-b874-2a39e0ac39fe')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -1197,16 +1428,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '100')
             column(name: 'net_amount', value: '64.00')
             column(name: 'service_fee_amount', value: '32.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'd1f1def6-4062-47f6-8675-59328fafb157')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         // Record for this batch should't be included into report. Batch contains paid and archived usages
@@ -1237,12 +1477,12 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'PAID')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '100.00')
             column(name: 'net_amount', value: '68.00')
             column(name: 'service_fee_amount', value: '32.00')
@@ -1253,6 +1493,15 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'e8790b32-9d4e-42e6-93f6-eeafc46131fc')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -1266,12 +1515,12 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '100.00')
             column(name: 'net_amount', value: '68.00')
             column(name: 'service_fee_amount', value: '32.00')
@@ -1282,6 +1531,15 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '9fe2be4a-d4fc-4d73-aa55-56da80feeff2')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         rollback ""
@@ -1545,15 +1803,16 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.16000')
-            column(name: 'market', value: 'Doc')    //TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1576,14 +1835,16 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.16000')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1603,11 +1864,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
-            column(name: 'market_period_to', value: '2017')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1615,6 +1878,7 @@ databaseChangeLog {
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
         }
 
@@ -1626,11 +1890,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Univ,Bus,Doc,S') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
-            column(name: 'market', value: 'Univ,Bus,Doc,S')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1649,11 +1915,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'market', value: 'Univ,Bus,Doc,S') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '25.00')
-            column(name: 'market', value: 'Univ,Bus,Doc,S')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1672,11 +1940,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'market', value: 'Univ,Bus,Doc,S') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '25.00')
-            column(name: 'market', value: 'Univ,Bus,Doc,S')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1698,11 +1968,13 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Gov') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
-            column(name: 'market', value: 'Gov')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1724,11 +1996,13 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Gov') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
-            column(name: 'market', value: 'Gov')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1747,13 +2021,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea09')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1764,13 +2047,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea10')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1783,13 +2075,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea11')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1802,13 +2103,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea12')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1822,16 +2132,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '150.00')
             column(name: 'net_amount', value: '102.00')
             column(name: 'service_fee_amount', value: '48.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea13')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1845,16 +2164,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '150.00')
             column(name: 'net_amount', value: '102.00')
             column(name: 'service_fee_amount', value: '48.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea14')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1864,11 +2192,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
-            column(name: 'market', value: 'Univ')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1888,11 +2218,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1911,11 +2243,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '25.00')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1934,11 +2268,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '25.00')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1960,12 +2296,13 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1974,6 +2311,7 @@ databaseChangeLog {
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1986,11 +2324,13 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2013,14 +2353,16 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '45.00')
             column(name: 'service_fee_amount', value: '5.00')
             column(name: 'service_fee', value: '0.10000')
-            column(name: 'market', value: 'Univ')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2043,14 +2385,16 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '45.00')
             column(name: 'service_fee_amount', value: '5.00')
             column(name: 'service_fee', value: '0.10000')
-            column(name: 'market', value: 'Univ')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2073,7 +2417,12 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'PAID')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
@@ -2084,9 +2433,6 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2109,8 +2455,12 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
@@ -2121,9 +2471,6 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2132,6 +2479,7 @@ databaseChangeLog {
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2141,13 +2489,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea27')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2158,13 +2515,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea28')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2174,13 +2540,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea29')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2190,13 +2565,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea30')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2209,13 +2593,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea31')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2228,13 +2621,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea32')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2248,16 +2650,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea33')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2271,16 +2682,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea34')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2290,13 +2710,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea35')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2307,13 +2736,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea36')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2323,13 +2761,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea37')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2339,13 +2786,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea38')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2358,13 +2814,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea39')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2377,13 +2842,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea40')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2397,16 +2871,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea41')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2420,16 +2903,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea42')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2439,13 +2931,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea43')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2456,13 +2957,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea44')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2472,13 +2982,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea45')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2488,13 +3007,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea46')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2507,13 +3035,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea47')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2526,13 +3063,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea50')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2546,16 +3092,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '150.00')
             column(name: 'net_amount', value: '102.00')
             column(name: 'service_fee_amount', value: '48.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea51')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2569,16 +3124,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '150.00')
             column(name: 'net_amount', value: '102.00')
             column(name: 'service_fee_amount', value: '48.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea52')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -2592,16 +3156,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '2000017000')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea53')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -2615,16 +3188,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '2000017000')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea54')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2634,11 +3216,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '100.00')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2658,11 +3242,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '100.00')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2681,11 +3267,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '25.00')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2704,11 +3292,13 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '25.00')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2730,11 +3320,13 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2756,11 +3348,13 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2783,14 +3377,16 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2813,14 +3409,16 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2843,14 +3441,16 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2873,14 +3473,16 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
-            column(name: 'market', value: 'Doc Del')//TODO {B-55836} remove columns below after reorganize table
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2899,13 +3501,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea65')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2916,13 +3527,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea66')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2932,13 +3552,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea67')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2948,13 +3577,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea68')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '25.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2967,13 +3605,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea69')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2986,13 +3633,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea70')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3006,16 +3662,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea71')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3029,16 +3694,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea72')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -3052,16 +3726,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea73')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -3075,16 +3758,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea74')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -3098,16 +3790,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea75')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -3121,16 +3822,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea76')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3140,13 +3850,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea77')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3156,13 +3875,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea78')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3172,13 +3900,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea79')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3189,13 +3926,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea80')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3205,13 +3951,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea90')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3221,13 +3976,22 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '8902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea91')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3240,13 +4004,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea92')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3259,13 +4032,22 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea93')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3279,16 +4061,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea94')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3302,16 +4093,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '42.00')
             column(name: 'service_fee_amount', value: '8.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea95')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3325,16 +4125,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '2000017000')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '45.00')
             column(name: 'service_fee_amount', value: '5.00')
             column(name: 'service_fee', value: '0.10000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea96')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3348,16 +4157,25 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '2000017000')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS2')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
             column(name: 'net_amount', value: '45.00')
             column(name: 'service_fee_amount', value: '5.00')
             column(name: 'service_fee', value: '0.10000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '82db1184-640c-4745-8e4e-2e96e9d0ea97')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3371,11 +4189,19 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '12345XX-177361')
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2018') // B-55836 remove
+            column(name: 'market_period_to', value: '2018') // B-55836 remove
+            column(name: 'reported_value', value: '51.50') // B-55836 remove
+            column(name: 'gross_amount', value: '0.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '92db1184-740c-5745-9e4e-3e96e9d0ea02')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2018')
             column(name: 'market_period_to', value: '2018')
             column(name: 'reported_value', value: '51.50')
-            column(name: 'gross_amount', value: '0.00')
         }
 
         rollback ""
@@ -4808,16 +5634,16 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ARCHIVED')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2016-11-03')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2016-11-03') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: '3000') // B-55836 remove
             column(name: 'gross_amount', value: '500.00')
             column(name: 'net_amount', value: '80.00')
             column(name: 'service_fee_amount', value: '420.00')
@@ -4903,15 +5729,24 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Bus, Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '9900') // B-55836 remove
+            column(name: 'gross_amount', value: '16437.40')
+            column(name: 'net_amount', value: '11177.40')
+            column(name: 'service_fee_amount', value: '5260.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Bus, Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '16437.40')
-            column(name: 'net_amount', value: '11177.40')
-            column(name: 'service_fee_amount', value: '5260.00')
-            column(name: 'service_fee', value: '0.32000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy') {
@@ -5132,23 +5967,28 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '2000017001')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle') // B-55836 remove
             column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Bus') // B-55836 remove
+            column(name: 'market_period_from', value: '2010') // B-55836 remove
+            column(name: 'market_period_to', value: '2011') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
             column(name: 'number_of_copies', value: '1')
+            column(name: 'reported_value', value: '500') // B-55836 remove
             column(name: 'service_fee', value: '0.0')
-            column(name: 'market', value: 'Bus')
-            column(name: 'market_period_from', value: '2010')
-            column(name: 'market_period_to', value: '2011')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: '89ba847e-3b09-457f-a306-f36fc55710af')
             column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
-            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Bus')
             column(name: 'market_period_from', value: '2010')
             column(name: 'market_period_to', value: '2011')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '500')
         }
 
