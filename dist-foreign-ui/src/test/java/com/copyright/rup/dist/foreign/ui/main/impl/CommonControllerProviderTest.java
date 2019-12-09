@@ -64,7 +64,7 @@ public class CommonControllerProviderTest {
             controllerProvider.getController();
             fail();
         } catch (IllegalStateException e) {
-            assertEquals("No controller found. ProductFamily=DPS, RegisteredProductFamilies=[FAS, FAS2, NTS]",
+            assertEquals("No controller found. SelectedProductFamily=DPS, RegisteredProductFamilies=[FAS, FAS2, NTS]",
                 e.getMessage());
         }
         verify(firstControllerMock, secondControllerMock, productFamilyProviderMock);
