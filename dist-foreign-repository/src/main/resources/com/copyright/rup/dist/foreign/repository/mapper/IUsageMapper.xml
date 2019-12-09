@@ -135,42 +135,6 @@
         comment
     </sql>
 
-    <sql id="usageDtoColumnsTemp">
-        u.df_scenario_uid,
-        u.wr_wrk_inst,
-        u.work_title,
-        u.system_title,
-        u.rh_account_number,
-        rh.name rh_name,
-        u.payee_account_number,
-        p.name payee_name,
-        u.status_ind,
-        u.product_family,
-        u.article,
-        u.standard_number,
-        u.standard_number_type,
-        u.publisher,
-        u.publication_date,
-        u.market,
-        u.market_period_from,
-        u.market_period_to,
-        u.author,
-        u.number_of_copies,
-        u.reported_value,
-        u.gross_amount,
-        u.service_fee_amount,
-        u.net_amount,
-        u.service_fee,
-        ub.gross_amount batch_gross_amount,
-        ub.name batch_name,
-        ub.rro_account_number,
-        rro.name rro_name,
-        ub.payment_date,
-        ub.fiscal_year,
-        u.updated_datetime,
-        u.comment
-    </sql>
-
     <sql id="usageDtoColumns">
         u.df_scenario_uid,
         u.wr_wrk_inst,
@@ -205,17 +169,6 @@
         ufas.market_period_from,
         ufas.market_period_to,
         ufas.reported_value
-    </sql>
-
-    <sql id="selectUsageDtosTemp">
-        select
-            u.df_usage_uid,
-            <include refid="IUsageMapper.usageDtoColumnsTemp"/>
-        from ${schema}.df_usage u
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
-        left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
-        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
     </sql>
 
     <sql id="selectUsageDtos">
@@ -317,7 +270,7 @@
                 u.work_title <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'article'">
-                u.article <include refid="IUsageMapper.direction"/>
+                ufas.article <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'standardNumber'">
                 u.standard_number <include refid="IUsageMapper.direction"/>
@@ -338,16 +291,16 @@
                 rh.name <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'publisher'">
-                u.publisher <include refid="IUsageMapper.direction"/>
+                ufas.publisher <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'publicationDate'">
-                u.publication_date <include refid="IUsageMapper.direction"/>
+                ufas.publication_date <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'numberOfCopies'">
                 u.number_of_copies <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'reportedValue'">
-                u.reported_value <include refid="IUsageMapper.direction"/>
+                ufas.reported_value <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'grossAmount'">
                 u.gross_amount <include refid="IUsageMapper.direction"/>
@@ -365,16 +318,16 @@
                 u.service_fee <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'market'">
-                u.market <include refid="IUsageMapper.direction"/>
+                ufas.market <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'marketPeriodFrom'">
-                u.market_period_from <include refid="IUsageMapper.direction"/>
+                ufas.market_period_from <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'marketPeriodTo'">
-                u.market_period_to <include refid="IUsageMapper.direction"/>
+                ufas.market_period_to <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'author'">
-                u.author <include refid="IUsageMapper.direction"/>
+                ufas.author <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'status'">
                 u.status_ind <include refid="IUsageMapper.direction"/>
@@ -590,17 +543,9 @@
             rh.name rh_name,
             u.status_ind,
             u.product_family,
-            u.article,
             u.standard_number,
             u.standard_number_type,
-            u.publisher,
-            u.publication_date,
-            u.market,
-            u.market_period_from,
-            u.market_period_to,
-            u.author,
             u.number_of_copies,
-            u.reported_value,
             u.gross_amount,
             u.service_fee,
             u.service_fee_amount,
@@ -608,9 +553,18 @@
             u.payee_account_number,
             p.df_rightsholder_uid payee_id,
             p.name payee_name,
-            u.is_rh_participating_flag,
+            ufas.article,
+            ufas.publisher,
+            ufas.publication_date,
+            ufas.market,
+            ufas.market_period_from,
+            ufas.market_period_to,
+            ufas.author,
+            ufas.reported_value,
+            ufas.is_rh_participating_flag,
             u.comment
         from ${schema}.df_usage u
+        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where df_scenario_uid = #{scenarioId}
