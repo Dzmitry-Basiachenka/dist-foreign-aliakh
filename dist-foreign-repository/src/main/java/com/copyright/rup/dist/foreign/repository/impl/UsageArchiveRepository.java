@@ -50,11 +50,6 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     private static final String STATUS_KEY = "status";
 
     @Override
-    public void insert(Usage usage) {
-        insert("IUsageArchiveMapper.insert", Objects.requireNonNull(usage));
-    }
-
-    @Override
     public void deleteByBatchId(String batchId) {
         delete("IUsageArchiveMapper.deleteByBatchId", Objects.requireNonNull(batchId));
     }
