@@ -1427,13 +1427,14 @@
                 'NTS' product_family,
                 standard_number,
                 standard_number_type,
-                market,
-                market_period_from,
-                market_period_to,
+                ufas.market,
+                ufas.market_period_from,
+                ufas.market_period_to,
                 gross_amount reported_value,
                 comment,
                 <include refid="StoredEntityMapper.insert"/>
             from ${schema}.df_usage_archive ua
+            join ${schema}.df_usage_fas ufas on ua.df_usage_archive_uid = ufas.df_usage_fas_uid
             left join ${schema}.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
             <include refid="IUsageArchiveMapper.ntsBatchWhereClause"/>
                 <if test="0 == stmAmount">
@@ -1482,46 +1483,64 @@
             from nts_usages u
             left join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
             group by u.wr_wrk_inst, wc.classification
+        ),
+        usage_info as (
+            insert into ${schema}.df_usage (
+                df_usage_uid,
+                df_usage_batch_uid,
+                wr_wrk_inst,
+                work_title,
+                system_title,
+                status_ind,
+                product_family,
+                standard_number,
+                standard_number_type,
+                market,
+                market_period_from,
+                market_period_to,
+                reported_value,
+                comment,
+                <include refid="StoredEntityMapper.additionalColumns"/>
+            )
+            select
+                ua.df_usage_uid,
+                ua.df_usage_batch_uid,
+                ua.wr_wrk_inst,
+                ua.work_title,
+                ua.system_title,
+                ua.status_ind,
+                ua.product_family,
+                ua.standard_number,
+                ua.standard_number_type,
+                ua.market,
+                ua.market_period_from,
+                ua.market_period_to,
+                ua.reported_value,
+                ua.comment,
+                <include refid="StoredEntityMapper.insert"/>
+            from nts_usages ua
+            join work_total_weight_subquery sub on sub.wr_wrk_inst = ua.wr_wrk_inst
+            where ((sub.work_total_weight &gt;= (select cutoff_amount from cutoff_amounts c where c.classification = sub.classification))
+                or (sub.classification is null and sub.work_total_weight &gt;= (select unclassified_cutoff from unclassified_cutoff_amount)))
+            returning df_usage_uid, market, market_period_from, market_period_to, reported_value
         )
-
-        insert into ${schema}.df_usage (
-            df_usage_uid,
-            df_usage_batch_uid,
-            wr_wrk_inst,
-            work_title,
-            system_title,
-            status_ind,
-            product_family,
-            standard_number,
-            standard_number_type,
+        insert into ${schema}.df_usage_fas (
+            df_usage_fas_uid,
             market,
             market_period_from,
             market_period_to,
             reported_value,
-            comment,
             <include refid="StoredEntityMapper.additionalColumns"/>
         )
         select
-            ua.df_usage_uid,
-            ua.df_usage_batch_uid,
-            ua.wr_wrk_inst,
-            ua.work_title,
-            ua.system_title,
-            ua.status_ind,
-            ua.product_family,
-            ua.standard_number,
-            ua.standard_number_type,
-            ua.market,
-            ua.market_period_from,
-            ua.market_period_to,
-            ua.reported_value,
-            ua.comment,
+            df_usage_uid,
+            market,
+            market_period_from,
+            market_period_to,
+            reported_value,
             <include refid="StoredEntityMapper.insert"/>
-        from nts_usages ua
-        join work_total_weight_subquery sub on sub.wr_wrk_inst = ua.wr_wrk_inst
-        where ((sub.work_total_weight &gt;= (select cutoff_amount from cutoff_amounts c where c.classification = sub.classification))
-            or (sub.classification is null and sub.work_total_weight &gt;= (select unclassified_cutoff from unclassified_cutoff_amount)))
-        returning df_usage_uid
+        from usage_info
+        returning df_usage_fas_uid
     </select>
 
     <update id="calculateAmountsAndUpdatePayeeByAccountNumber" parameterType="map">
