@@ -27,44 +27,6 @@
         is_rh_participating_flag
     </sql>
 
-    <insert id="insert" parameterType="Usage">
-        insert into ${schema}.df_usage_archive(
-            df_usage_archive_uid,
-            <include refid="IUsageMapper.usageColumns"/>,
-            <include refid="payeeColumns"/>,
-            <include refid="StoredEntityMapper.additionalColumns"/>)
-        values(
-            #{id},
-            #{batchId},
-            #{scenarioId},
-            #{wrWrkInst},
-            #{workTitle},
-            #{systemTitle},
-            #{rightsholder.accountNumber},
-            #{status},
-            #{productFamily},
-            #{article},
-            #{standardNumber},
-            #{standardNumberType},
-            #{publisher},
-            #{publicationDate},
-            #{market},
-            #{marketPeriodFrom},
-            #{marketPeriodTo},
-            #{author},
-            #{numberOfCopies},
-            #{reportedValue},
-            #{grossAmount},
-            #{comment},
-            #{serviceFee},
-            #{serviceFeeAmount},
-            #{netAmount},
-            #{payee.accountNumber},
-            #{rhParticipating},
-            <include refid="StoredEntityMapper.insert"/>
-        )
-    </insert>
-
     <insert id="moveFundUsagesToArchive" parameterType="string">
         with fund_pool_id as (
             select

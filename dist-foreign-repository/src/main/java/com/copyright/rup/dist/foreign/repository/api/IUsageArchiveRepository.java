@@ -24,13 +24,6 @@ import java.util.Set;
 public interface IUsageArchiveRepository {
 
     /**
-     * Inserts archive Usage into database.
-     *
-     * @param usage {@link Usage} instance
-     */
-    void insert(Usage usage);
-
-    /**
      * Deletes archived {@link Usage}s by given batch identifier.
      *
      * @param batchId batch identifier
@@ -167,8 +160,8 @@ public interface IUsageArchiveRepository {
     /**
      * Copies usages related to specified scenario to archive table with {@link UsageStatusEnum#SENT_TO_LM} status.
      *
-     * @param scenarioId  {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
-     * @param userName    name of user who peforms action
+     * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param userName   name of user who peforms action
      * @return list of moved usage ids
      */
     List<String> copyToArchiveByScenarioId(String scenarioId, String userName);
@@ -178,8 +171,8 @@ public interface IUsageArchiveRepository {
      * with {@link UsageStatusEnum#SENT_TO_LM} status.
      * Generates new UUID for usage and sets Wr Wrk Inst and Work Title predefined for NTS.
      *
-     * @param scenarioId  {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
-     * @param userName    name of user who peforms action
+     * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param userName   name of user who peforms action
      * @return list of moved usage ids
      */
     List<String> copyNtsToArchiveByScenarioId(String scenarioId, String userName);

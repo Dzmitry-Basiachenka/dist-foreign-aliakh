@@ -26,7 +26,6 @@ import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,40 +105,6 @@ public class UsageArchiveRepositoryIntegrationTest {
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
         ReportTestUtils.setUpTestDirectory(UsageArchiveRepositoryIntegrationTest.class);
-    }
-
-    @Test
-    @Ignore //TODO B-5583 fix after insert for archived details will be adjusted
-    public void testInsert() {
-        String usageId = RupPersistUtils.generateUuid();
-        usageArchiveRepository.insert(buildUsage(usageId));
-        List<UsageDto> usageDtos = usageArchiveRepository.findByScenarioIdAndRhAccountNumber(
-            "b1f0b236-3ae9-4a60-9fab-61db84199d6f", RH_ACCOUNT_NUMBER, null, null, null);
-        assertEquals(1, usageDtos.size());
-        UsageDto usageDto = usageDtos.get(0);
-        assertNotNull(usageDto);
-        assertEquals("CADRA_11Dec16", usageDto.getBatchName());
-        assertEquals(WR_WRK_INST, usageDto.getWrWrkInst());
-        assertEquals(2017, usageDto.getFiscalYear(), 0);
-        assertEquals(RH_ACCOUNT_NUMBER, usageDto.getRhAccountNumber(), 0);
-        assertEquals(2000017004L, usageDto.getPayeeAccountNumber(), 0);
-        assertEquals(WORK_TITLE, usageDto.getWorkTitle());
-        assertEquals(SYSTEM_TITLE, usageDto.getSystemTitle());
-        assertEquals(UsageStatusEnum.SENT_TO_LM, usageDto.getStatus());
-        assertEquals(ARTICLE, usageDto.getArticle());
-        assertEquals(STANDARD_NUMBER, usageDto.getStandardNumber());
-        assertEquals(STANDARD_NUMBER_TYPE, usageDto.getStandardNumberType());
-        assertEquals(PUBLISHER, usageDto.getPublisher());
-        assertEquals(PUBLICATION_DATE, usageDto.getPublicationDate());
-        assertEquals(MARKET, usageDto.getMarket());
-        assertEquals(MARKED_PERIOD_FROM, usageDto.getMarketPeriodFrom());
-        assertEquals(MARKED_PERIOD_TO, usageDto.getMarketPeriodTo());
-        assertEquals(AUTHOR, usageDto.getAuthor());
-        assertEquals(NUMBER_OF_COPIES, usageDto.getNumberOfCopies());
-        assertEquals(REPORTED_VALUE, usageDto.getReportedValue());
-        assertEquals(GROSS_AMOUNT, usageDto.getGrossAmount());
-        assertEquals("FAS", usageDto.getProductFamily());
-        assertEquals("usage from usages.csv", usageDto.getComment());
     }
 
     @Test
@@ -451,13 +416,13 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindUsageInformationById() {
-        Usage expectedUsage = buildUsage(RupPersistUtils.generateUuid());
-        usageArchiveRepository.insert(expectedUsage);
-        List<Usage> actualUsages = usageArchiveRepository.findByIds(ImmutableList.of(expectedUsage.getId()));
-        assertTrue(CollectionUtils.isNotEmpty(actualUsages));
-        assertEquals(1, CollectionUtils.size(actualUsages));
-        assertUsage(expectedUsage, actualUsages.get(0));
+    public void testFindUsageByIds() {
+        PaidUsage paidUsage = buildPaidUsage();
+        usageArchiveRepository.insertPaid(paidUsage);
+        List<Usage> usages = usageArchiveRepository.findByIds(ImmutableList.of(paidUsage.getId()));
+        assertTrue(CollectionUtils.isNotEmpty(usages));
+        assertEquals(1, CollectionUtils.size(usages));
+        assertUsage(paidUsage, usages.get(0));
     }
 
     private void assertUsagePaidInformation(PaidUsage expectedPaidUsage) {
@@ -543,12 +508,6 @@ public class UsageArchiveRepositoryIntegrationTest {
         paidUsage.setGrossAmount(new BigDecimal("66.0000000000"));
         paidUsage.setServiceFee(new BigDecimal("0.32000"));
         return paidUsage;
-    }
-
-    private Usage buildUsage(String usageid) {
-        Usage usage = new Usage();
-        setUsageFields(usage, usageid, "56282dbc-2468-48d4-b926-93d3458a656a");
-        return usage;
     }
 
     private void assertUsage(Usage expectedUsage, Usage actualUsage) {
