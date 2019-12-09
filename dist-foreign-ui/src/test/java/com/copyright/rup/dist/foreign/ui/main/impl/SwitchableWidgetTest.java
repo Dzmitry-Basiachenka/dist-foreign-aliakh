@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
+import com.copyright.rup.dist.foreign.ui.main.api.IControllerProvider;
 import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -18,7 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * Verifies {@link SwitchableWidget}.
@@ -33,7 +33,7 @@ public class SwitchableWidgetTest {
 
     private ITestController firstControllerMock;
     private ITestController secondControllerMock;
-    private Supplier<ITestController> controllerSupplierMock;
+    private IControllerProvider<ITestController> controllerProviderMock;
     private Consumer<ITestWidget> listenerRegistererMock;
 
     private SwitchableWidget<ITestWidget, ITestController> widget;
@@ -43,9 +43,9 @@ public class SwitchableWidgetTest {
     public void setUp() {
         firstControllerMock = createMock(ITestController.class);
         secondControllerMock = createMock(ITestController.class);
-        controllerSupplierMock = createMock(Supplier.class);
+        controllerProviderMock = createMock(IControllerProvider.class);
         listenerRegistererMock = createMock(Consumer.class);
-        widget = new SwitchableWidget<>(controllerSupplierMock, listenerRegistererMock);
+        widget = new SwitchableWidget<>(controllerProviderMock, listenerRegistererMock);
     }
 
     @Test
@@ -62,20 +62,20 @@ public class SwitchableWidgetTest {
         TestWidget firstWidget = new TestWidget();
         TestWidget secondWidget = new TestWidget();
         prepareRefreshExpectations(firstControllerMock, firstWidget);
-        replay(firstControllerMock, secondControllerMock, controllerSupplierMock, listenerRegistererMock);
+        replay(firstControllerMock, secondControllerMock, controllerProviderMock, listenerRegistererMock);
         widget.refresh();
-        verify(firstControllerMock, secondControllerMock, controllerSupplierMock, listenerRegistererMock);
+        verify(firstControllerMock, secondControllerMock, controllerProviderMock, listenerRegistererMock);
         assertEquals(firstWidget, widget.getContent());
-        reset(firstControllerMock, secondControllerMock, controllerSupplierMock, listenerRegistererMock);
+        reset(firstControllerMock, secondControllerMock, controllerProviderMock, listenerRegistererMock);
         prepareRefreshExpectations(secondControllerMock, secondWidget);
-        replay(firstControllerMock, secondControllerMock, controllerSupplierMock, listenerRegistererMock);
+        replay(firstControllerMock, secondControllerMock, controllerProviderMock, listenerRegistererMock);
         widget.refresh();
-        verify(firstControllerMock, secondControllerMock, controllerSupplierMock, listenerRegistererMock);
+        verify(firstControllerMock, secondControllerMock, controllerProviderMock, listenerRegistererMock);
         assertEquals(secondWidget, widget.getContent());
     }
 
     private void prepareRefreshExpectations(ITestController controllerMock, ITestWidget content) {
-        expect(controllerSupplierMock.get()).andReturn(controllerMock).once();
+        expect(controllerProviderMock.getController()).andReturn(controllerMock).once();
         expect(controllerMock.initWidget()).andReturn(content).once();
         listenerRegistererMock.accept(content);
         expectLastCall().once();

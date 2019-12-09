@@ -23,15 +23,16 @@ import java.util.concurrent.atomic.AtomicReference;
 @UIScope
 public class ProductFamilyProvider implements ISettableProductFamilyProvider {
 
-    private final AtomicReference<String> productFamilyHolder = new AtomicReference<>(FdaConstants.FAS_PRODUCT_FAMILY);
+    private final AtomicReference<String> selectedProductFamilyHolder =
+        new AtomicReference<>(FdaConstants.FAS_PRODUCT_FAMILY);
 
     @Override
     public void setProductFamily(String productFamily) {
-        this.productFamilyHolder.set(Objects.requireNonNull(productFamily));
+        this.selectedProductFamilyHolder.set(Objects.requireNonNull(productFamily));
     }
 
     @Override
-    public String getProductFamily() {
-        return productFamilyHolder.get();
+    public String getSelectedProductFamily() {
+        return selectedProductFamilyHolder.get();
     }
 }

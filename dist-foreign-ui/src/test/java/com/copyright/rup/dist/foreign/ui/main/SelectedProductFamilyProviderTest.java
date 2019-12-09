@@ -22,12 +22,12 @@ public class SelectedProductFamilyProviderTest {
     @Test
     public void testGetAndSet() {
         provider.setProductFamily("NTS");
-        assertEquals("NTS", provider.getProductFamily());
+        assertEquals("NTS", provider.getSelectedProductFamily());
     }
 
     @Test
     public void testGetWithDefaultValue() {
-        assertEquals("FAS", provider.getProductFamily());
+        assertEquals("FAS", provider.getSelectedProductFamily());
     }
 
     @Test(expected = NullPointerException.class)

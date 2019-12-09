@@ -24,7 +24,7 @@ public abstract class ForeignCommonController<T extends IWidget> extends CommonC
     /**
      * @return globally selected product family.
      */
-    protected String getProductFamily() {
-        return productFamilyProvider.getProductFamily();
+    protected String getSelectedProductFamily() {
+        return productFamilyProvider.getSelectedProductFamily();
     }
 }
