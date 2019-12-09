@@ -93,10 +93,10 @@ public interface IPrmIntegrationService {
     /**
      * Gets service fee configuration value based on RH participating flag.
      *
-     * @param rhParticipatingFlag RH participating flag
+     * @param rhParticipating RH participating flag
      * @return RH participating service fee
      */
-    BigDecimal getRhParticipatingServiceFee(boolean rhParticipatingFlag);
+    BigDecimal getRhParticipatingServiceFee(boolean rhParticipating);
 
     /**
      * Checks whether {@link com.copyright.rup.dist.common.domain.Rightsholder} is STM rightsholder.

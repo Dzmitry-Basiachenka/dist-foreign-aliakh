@@ -95,8 +95,8 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     }
 
     @Override
-    public BigDecimal getRhParticipatingServiceFee(boolean rhParticipatingFlag) {
-        return rhParticipatingFlag ? rhParticipatingServiceFee : rhNonParticipatingServiceFee;
+    public BigDecimal getRhParticipatingServiceFee(boolean rhParticipating) {
+        return rhParticipating ? rhParticipatingServiceFee : rhNonParticipatingServiceFee;
     }
 
     @Override

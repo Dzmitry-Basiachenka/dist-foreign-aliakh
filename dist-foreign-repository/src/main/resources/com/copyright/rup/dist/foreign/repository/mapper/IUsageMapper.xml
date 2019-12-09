@@ -451,37 +451,63 @@
     </sql>
 
     <insert id="insert" parameterType="Usage">
-        insert into ${schema}.df_usage(
-            df_usage_uid,
-            <include refid="usageColumns"/>,
-            payee_account_number,
-            <include refid="StoredEntityMapper.additionalColumns"/>)
-        values(
+        with u as (
+            insert into ${schema}.df_usage (
+                df_usage_uid,
+                <include refid="usageColumns"/>,
+                payee_account_number,
+                <include refid="StoredEntityMapper.additionalColumns"/>
+            )
+            values (
+                #{id},
+                #{batchId},
+                #{scenarioId},
+                #{wrWrkInst},
+                #{workTitle},
+                #{systemTitle},
+                #{rightsholder.accountNumber},
+                #{status},
+                #{productFamily},
+                #{article},
+                #{standardNumber},
+                #{standardNumberType},
+                #{publisher},
+                #{publicationDate},
+                #{market},
+                #{marketPeriodFrom},
+                #{marketPeriodTo},
+                #{author},
+                #{numberOfCopies},
+                #{reportedValue},
+                #{grossAmount},
+                #{comment},
+                #{payee.accountNumber},
+                <include refid="StoredEntityMapper.insert"/>
+            )
+        )
+        insert into ${schema}.df_usage_fas (
+            df_usage_fas_uid,
+            article,
+            publisher,
+            publication_date,
+            market,
+            market_period_from,
+            market_period_to,
+            author,
+            reported_value,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        )
+        select
             #{id},
-            #{batchId},
-            #{scenarioId},
-            #{wrWrkInst},
-            #{workTitle},
-            #{systemTitle},
-            #{rightsholder.accountNumber},
-            #{status},
-            #{productFamily},
             #{article},
-            #{standardNumber},
-            #{standardNumberType},
             #{publisher},
             #{publicationDate},
             #{market},
             #{marketPeriodFrom},
             #{marketPeriodTo},
             #{author},
-            #{numberOfCopies},
             #{reportedValue},
-            #{grossAmount},
-            #{comment},
-            #{payee.accountNumber},
             <include refid="StoredEntityMapper.insert"/>
-        )
     </insert>
 
     <sql id="selectDtosByFilterSql">
@@ -662,30 +688,31 @@
             p.df_rightsholder_uid payee_id,
             u.status_ind,
             u.product_family,
-            u.article,
+            ufas.article,
             u.standard_number,
             u.standard_number_type,
-            u.publisher,
-            u.publication_date,
-            u.market,
-            u.market_period_from,
-            u.market_period_to,
-            u.author,
+            ufas.publisher,
+            ufas.publication_date,
+            ufas.market,
+            ufas.market_period_from,
+            ufas.market_period_to,
+            ufas.author,
             u.comment,
             u.number_of_copies,
-            u.reported_value,
+            ufas.reported_value,
             u.gross_amount,
             u.service_fee_amount,
             u.service_fee,
             u.net_amount,
-            u.is_rh_participating_flag,
-            u.is_payee_participating_flag,
+            ufas.is_rh_participating_flag,
+            ufas.is_payee_participating_flag,
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,
             u.updated_by_user,
             u.record_version
         from ${schema}.df_usage u
+        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where u.df_usage_uid in
@@ -789,52 +816,82 @@
             and r.df_rightsholder_uid is null
     </select>
 
-    <update id="addToScenario" parameterType="Usage">
-        update
-            ${schema}.df_usage
+    <update id="addToScenario" parameterType="Usage" >
+        with u as (
+            update ${schema}.df_usage
+            set
+                status_ind = #{status},
+                df_scenario_uid = #{scenarioId},
+                payee_account_number = #{payee.accountNumber},
+                net_amount = #{netAmount},
+                service_fee_amount = #{serviceFeeAmount},
+                service_fee = #{serviceFee},
+                <include refid="StoredEntityMapper.update"/>
+            where df_usage_uid = #{id}
+        )
+        update ${schema}.df_usage_fas
         set
-            status_ind = #{status},
-            df_scenario_uid = #{scenarioId},
-            payee_account_number = #{payee.accountNumber},
-            net_amount = #{netAmount},
-            service_fee_amount = #{serviceFeeAmount},
-            service_fee = #{serviceFee},
             is_rh_participating_flag = #{rhParticipating},
             is_payee_participating_flag = #{payeeParticipating},
             <include refid="StoredEntityMapper.update"/>
-        where df_usage_uid = #{id}
+        where df_usage_fas_uid = #{id}
     </update>
 
     <select id="deleteFromScenarioByPayees" parameterType="map" resultType="string">
-        <include refid="deleteFromScenarioSql"/>
-        where df_scenario_uid = #{scenarioId}
-            and payee_account_number in
-            <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
-                #{accountNumber}
-            </foreach>
-        returning df_usage_uid
+        with u as (
+            update ${schema}.df_usage
+            set
+                status_ind = #{status},
+                df_scenario_uid = null,
+                payee_account_number = null,
+                service_fee = null,
+                service_fee_amount = 0,
+                net_amount = 0,
+                <include refid="StoredEntityMapper.update"/>
+                where df_scenario_uid = #{scenarioId}
+                    and payee_account_number in
+                    <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
+                        #{accountNumber}
+                    </foreach>
+                returning df_usage_uid
+        )
+        update ${schema}.df_usage_fas
+        set
+            is_rh_participating_flag = false,
+            is_payee_participating_flag = false,
+            <include refid="StoredEntityMapper.update"/>
+        from u
+        where df_usage_fas_uid = u.df_usage_uid
+        returning u.df_usage_uid
     </select>
 
     <select id="redesignateToNtsWithdrawnByPayees" parameterType="map" resultType="string">
-        update
-            ${schema}.df_usage
+        with u as (
+            update ${schema}.df_usage
+            set
+                status_ind = #{status},
+                product_family = #{productFamily},
+                df_scenario_uid = null,
+                payee_account_number = null,
+                service_fee = null,
+                service_fee_amount = 0,
+                net_amount = 0,
+                <include refid="StoredEntityMapper.update"/>
+            where df_scenario_uid = #{scenarioId}
+                and payee_account_number in
+                <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
+                    #{accountNumber}
+                </foreach>
+            returning df_usage_uid
+        )
+        update ${schema}.df_usage_fas
         set
-            status_ind = #{status},
-            product_family = #{productFamily},
-            df_scenario_uid = null,
-            payee_account_number = null,
-            service_fee = null,
             is_rh_participating_flag = false,
             is_payee_participating_flag = false,
-            service_fee_amount = 0,
-            net_amount = 0,
             <include refid="StoredEntityMapper.update"/>
-        where df_scenario_uid = #{scenarioId}
-            and payee_account_number in
-            <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
-                #{accountNumber}
-            </foreach>
-        returning df_usage_uid
+        from u
+        where df_usage_fas_uid = u.df_usage_uid
+        returning u.df_usage_uid
     </select>
 
     <update id="deleteFromScenario" parameterType="map">
@@ -1358,21 +1415,27 @@
     </update>
 
     <update id="update" parameterType="Usage">
-        update ${schema}.df_usage
+        with u as (
+            update ${schema}.df_usage
+            set
+                status_ind = #{status},
+                wr_wrk_inst = #{wrWrkInst},
+                work_title = #{workTitle},
+                system_title = #{systemTitle},
+                rh_account_number = #{rightsholder.accountNumber},
+                payee_account_number = #{payee.accountNumber},
+                net_amount = #{netAmount},
+                service_fee_amount = #{serviceFeeAmount},
+                service_fee = #{serviceFee},
+                <include refid="StoredEntityMapper.update"/>
+            where df_usage_uid = #{id}
+        )
+        update ${schema}.df_usage_fas
         set
-            status_ind = #{status},
-            wr_wrk_inst = #{wrWrkInst},
-            work_title = #{workTitle},
-            system_title = #{systemTitle},
-            rh_account_number = #{rightsholder.accountNumber},
-            payee_account_number = #{payee.accountNumber},
-            net_amount = #{netAmount},
-            service_fee_amount = #{serviceFeeAmount},
-            service_fee = #{serviceFee},
             is_rh_participating_flag = #{rhParticipating},
             is_payee_participating_flag = #{payeeParticipating},
             <include refid="StoredEntityMapper.update"/>
-        where df_usage_uid = #{id}
+        where df_usage_fas_uid = #{id}
     </update>
 
     <update id="updateResearchedUsage" parameterType="map">
@@ -1544,16 +1607,24 @@
     </select>
 
     <update id="calculateAmountsAndUpdatePayeeByAccountNumber" parameterType="map">
-        update ${schema}.df_usage
+        with u as (
+            update ${schema}.df_usage
+            set
+                payee_account_number = #{payeeAccountNumber},
+                service_fee = #{serviceFee},
+                service_fee_amount = gross_amount * #{serviceFee},
+                net_amount = gross_amount - (gross_amount * #{serviceFee}),
+                <include refid="StoredEntityMapper.update"/>
+            where rh_account_number = #{rhAccountNumber}
+                and df_scenario_uid = #{scenarioId}
+            returning df_usage_uid
+        )
+        update ${schema}.df_usage_fas
         set
-            payee_account_number = #{payeeAccountNumber},
-            is_rh_participating_flag = #{participatingFlag},
-            service_fee = #{serviceFee},
-            service_fee_amount = gross_amount * #{serviceFee},
-            net_amount = gross_amount - (gross_amount * #{serviceFee}),
+            is_rh_participating_flag = #{rhParticipating},
             <include refid="StoredEntityMapper.update"/>
-        where rh_account_number = #{rhAccountNumber}
-            and df_scenario_uid = #{scenarioId}
+        from u
+        where df_usage_fas_uid = u.df_usage_uid
     </update>
 
     <update id="addWithdrawnUsagesToPreServiceFeeFund" parameterType="map">
