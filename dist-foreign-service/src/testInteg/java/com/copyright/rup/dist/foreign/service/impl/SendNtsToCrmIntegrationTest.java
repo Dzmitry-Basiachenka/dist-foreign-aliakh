@@ -18,7 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class SendNtsToCrmIntegrationTest {
     private SendToCrmIntegrationTestBuilder testBuilder;
 
     @Test
-    public void testSendToCrm() throws IOException {
+    public void testSendToCrm() {
         testBuilder
             .expectCrmCall("crm/sendToCrm/rights_distribution_request_nts.json",
                 "crm/sendToCrm/rights_distribution_response_nts.json")

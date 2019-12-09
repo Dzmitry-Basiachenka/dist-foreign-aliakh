@@ -32,21 +32,33 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '7001832491')
             column(name: 'status_ind', value: 'SENT_TO_LM')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '6000') // B-55836 remove
+            column(name: 'gross_amount', value: '1000.00')
+            column(name: 'net_amount', value: '840.00')
+            column(name: 'service_fee_amount', value: '160.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'comment', value: 'usage from usages.csv')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'e783caf7-586d-434c-baaa-2ddf09afee77')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '6000')
-            column(name: 'gross_amount', value: '1000.00')
-            column(name: 'net_amount', value: '840.00')
-            column(name: 'service_fee_amount', value: '160.00')
-            column(name: 'service_fee', value: '0.16000')
-            column(name: 'comment', value: 'usage from usages.csv')
         }
 
         rollback ""
@@ -83,21 +95,33 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000000001')
             column(name: 'payee_account_number', value: '1000000001')
             column(name: 'status_ind', value: 'ARCHIVED')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317555XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '6000') // B-55836 remove
+            column(name: 'gross_amount', value: '2000.00')
+            column(name: 'net_amount', value: '1680.00')
+            column(name: 'service_fee_amount', value: '320.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'comment', value: 'usage from usages.csv')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'ef058a3f-b60e-429b-b6e3-14d386eb86ba')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '6000')
-            column(name: 'gross_amount', value: '2000.00')
-            column(name: 'net_amount', value: '1680.00')
-            column(name: 'service_fee_amount', value: '320.00')
-            column(name: 'service_fee', value: '0.16000')
-            column(name: 'comment', value: 'usage from usages.csv')
         }
 
         rollback ""
@@ -143,6 +167,11 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2016-03-12')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '84cd1b64-d1eb-455f-a52c-f9dd0da2e356')
+            column(name: 'reported_value', value: '0.00')
+        }
+
         // will not be updated
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: 'c70b06a4-dfdf-4fe3-8ad9-f90d973f566f')
@@ -159,6 +188,11 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '4321.07')
             column(name: 'service_fee', value: '0.32000')
             column(name: 'created_datetime', value: '2016-03-12')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'c70b06a4-dfdf-4fe3-8ad9-f90d973f566f')
+            column(name: 'reported_value', value: '0.00')
         }
     }
 }

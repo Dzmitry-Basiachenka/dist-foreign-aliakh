@@ -46,7 +46,7 @@ databaseChangeLog {
     changeSet(id: '2018-09-14-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
         comment('Inserting test data for workflow test:' +
                 'insert usage for creating post-distribution usage')
-        
+
         insert(schemaName: dbAppsSchema, tableName: "df_usage_batch") {
             column(name: "df_usage_batch_uid", value: "03ba3d02-c86a-40f8-8b14-270ca46a1f3a")
             column(name: "name", value: "AT_service-fee-true-up-report-12_BATCH")
@@ -74,13 +74,13 @@ databaseChangeLog {
             column(name: "payee_account_number", value: "1000009522")
             column(name: "status_ind", value: "ARCHIVED")
             column(name: "product_family", value: "FAS")
-            column(name: "article", value: "DIN EN 779:2013")
+            column(name: "article", value: "DIN EN 779:2013") // B-55836 remove
             column(name: "standard_number", value: "1008902112317622XX")
             column(name: "standard_number_type", value: "VALISBN10")
-            column(name: "market", value: "Doc Del")
-            column(name: "market_period_from", value: "2013")
-            column(name: "market_period_to", value: "2017")
-            column(name: "reported_value", value: "30.86")
+            column(name: "market", value: "Doc Del") // B-55836 remove
+            column(name: "market_period_from", value: "2013") // B-55836 remove
+            column(name: "market_period_to", value: "2017") // B-55836 remove
+            column(name: "reported_value", value: "30.86") // B-55836 remove
             column(name: "gross_amount", value: "100.00")
             column(name: "net_amount", value: "68.00")
             column(name: "service_fee_amount", value: "32.00")
@@ -92,6 +92,15 @@ databaseChangeLog {
             column(name: "distribution_date", value: "2011-03-15 11:41:52.735531+03")
             column(name: "period_end_date", value: "2011-03-15 11:41:52.735531+03")
             column(name: "lm_detail_id", value: "803dea5c-03d9-4404-8b3a-7f6b5ba9acce")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'bde1e665-b10f-4015-936f-71fb42410e3b')
+            column(name: "article", value: "DIN EN 779:2013")
+            column(name: "market", value: "Doc Del")
+            column(name: "market_period_from", value: "2013")
+            column(name: "market_period_to", value: "2017")
+            column(name: "reported_value", value: "30.86")
         }
     }
 }
