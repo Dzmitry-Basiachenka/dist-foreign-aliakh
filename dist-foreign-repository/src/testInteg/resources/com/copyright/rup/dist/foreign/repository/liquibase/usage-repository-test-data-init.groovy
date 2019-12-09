@@ -1975,7 +1975,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'ba95f0b3-dc94-4925-96f2-93d05db9c469')
             column(name: 'df_usage_batch_uid', value: '0f00e96b-eed7-4f26-8004-3370ec30da45')
-            column(name: 'df_fund_pool_uid', value: '3fef25b0-c0d1-4819-887f-4c6acc01390e')
+            column(name: 'df_fund_pool_uid', value: '3fef25b0-c0d1-4819-887f-4c6acc01390e') // B-55836 remove
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'system_title', value: 'Cell Biology')
             column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
@@ -1995,6 +1995,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: 'ba95f0b3-dc94-4925-96f2-93d05db9c469')
+            column(name: 'df_fund_pool_uid', value: '3fef25b0-c0d1-4819-887f-4c6acc01390e')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
@@ -2747,7 +2748,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '4080.00')
             column(name: 'service_fee_amount', value: '1920.00')
             column(name: 'service_fee', value: '0.32000')
-            column(name: 'is_rh_participating_flag', value: 'false')
+            column(name: 'is_rh_participating_flag', value: 'false') // B-55836 remove
             column(name: 'ccc_event_id', value: '53578')
             column(name: 'check_number', value: '578671')
             column(name: 'check_date', value: '2019-08-05 05:14:00-04:00')
@@ -2760,6 +2761,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: 'fb297d5d-4d46-4492-93b0-cd6e02b8ce8d')
             column(name: 'reported_value', value: '0.00')
+            column(name: 'is_rh_participating_flag', value: 'false')
         }
     }
 
@@ -2844,7 +2846,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '84.00')
             column(name: 'service_fee_amount', value: '16.00')
             column(name: 'service_fee', value: '0.16000')
-            column(name: 'is_rh_participating_flag', value: true)
+            column(name: 'is_rh_participating_flag', value: true) // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2857,6 +2859,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
             column(name: 'reported_value', value: '100.00')
+            column(name: 'is_rh_participating_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -2883,7 +2886,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '68.00')
             column(name: 'service_fee_amount', value: '32.00')
             column(name: 'service_fee', value: '0.32000')
-            column(name: 'is_payee_participating_flag', value: true)
+            column(name: 'is_payee_participating_flag', value: true) // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2896,6 +2899,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
             column(name: 'reported_value', value: '100.00')
+            column(name: 'is_payee_participating_flag', value: true)
         }
     }
 
@@ -2980,7 +2984,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '84.00')
             column(name: 'service_fee_amount', value: '16.00')
             column(name: 'service_fee', value: '0.16000')
-            column(name: 'is_rh_participating_flag', value: true)
+            column(name: 'is_rh_participating_flag', value: true) // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -2993,6 +2997,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
             column(name: 'reported_value', value: '100.00')
+            column(name: 'is_rh_participating_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3019,7 +3024,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '68.00')
             column(name: 'service_fee_amount', value: '32.00')
             column(name: 'service_fee', value: '0.32000')
-            column(name: 'is_payee_participating_flag', value: true)
+            column(name: 'is_payee_participating_flag', value: true) // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -3032,6 +3037,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
             column(name: 'reported_value', value: '100.00')
+            column(name: 'is_payee_participating_flag', value: true)
         }
     }
 
@@ -3116,7 +3122,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '84.00')
             column(name: 'service_fee_amount', value: '16.00')
             column(name: 'service_fee', value: '0.16000')
-            column(name: 'is_rh_participating_flag', value: true)
+            column(name: 'is_rh_participating_flag', value: true) // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -3129,6 +3135,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
             column(name: 'reported_value', value: '100.00')
+            column(name: 'is_rh_participating_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -3155,7 +3162,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '68.00')
             column(name: 'service_fee_amount', value: '32.00')
             column(name: 'service_fee', value: '0.32000')
-            column(name: 'is_payee_participating_flag', value: true)
+            column(name: 'is_payee_participating_flag', value: true) // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -3168,6 +3175,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2019')
             column(name: 'reported_value', value: '100.00')
+            column(name: 'is_rh_participating_flag', value: true)
         }
     }
 }

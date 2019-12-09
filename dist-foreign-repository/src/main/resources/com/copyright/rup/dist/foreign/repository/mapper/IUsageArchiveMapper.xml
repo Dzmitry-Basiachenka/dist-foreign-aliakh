@@ -73,7 +73,7 @@
         delete from ${schema}.df_usage
         where df_fund_pool_uid = (select fund_id from fund_pool_id)
     </insert>
-    
+
     <delete id="deleteByBatchId" parameterType="string" >
         delete from ${schema}.df_usage_archive
         where df_usage_batch_uid = #{batchId}

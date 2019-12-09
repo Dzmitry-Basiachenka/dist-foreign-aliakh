@@ -511,7 +511,7 @@
     </insert>
 
     <sql id="selectDtosByFilterSql">
-        <include refid="IUsageMapper.selectUsageDtosTemp"/>
+        <include refid="IUsageMapper.selectUsageDtos"/>
         <include refid="IUsageMapper.usageFilter"/>
         and u.df_scenario_uid is null
         order by
@@ -545,7 +545,7 @@
             u.df_usage_uid,
             u.df_usage_batch_uid,
             u.df_scenario_uid,
-            u.df_fund_pool_uid,
+            ufas.df_fund_pool_uid,
             u.wr_wrk_inst,
             u.work_title,
             u.system_title,
@@ -554,20 +554,21 @@
             rh.name as rh_name,
             u.status_ind,
             u.product_family,
-            u.article,
+            ufas.article,
             u.standard_number,
             u.standard_number_type,
-            u.publisher,
-            u.publication_date,
-            u.market,
-            u.market_period_from,
-            u.market_period_to,
-            u.author,
+            ufas.publisher,
+            ufas.publication_date,
+            ufas.market,
+            ufas.market_period_from,
+            ufas.market_period_to,
+            ufas.author,
             u.number_of_copies,
-            u.reported_value,
+            ufas.reported_value,
             u.gross_amount,
             u.record_version
         from ${schema}.df_usage u
+        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         where
             u.status_ind = #{status} and
@@ -1173,7 +1174,7 @@
                     system_title,
                     standard_number,
                     standard_number_type,
-                    u.reported_value,
+                    ufas.reported_value,
                     u.gross_amount,
                     service_fee,
                     ub.gross_amount batch_gross_amount,
@@ -1187,6 +1188,7 @@
                     null period_end_date,
                     u.comment
                 from ${schema}.df_usage u
+                join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
                 join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
                 left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
                 left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
@@ -1313,7 +1315,7 @@
             system_title,
             standard_number,
             standard_number_type,
-            u.reported_value,
+            ufas.reported_value,
             u.gross_amount,
             service_fee,
             ub.gross_amount batch_gross_amount,
@@ -1327,6 +1329,7 @@
             u.period_end_date,
             u.comment
         from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
