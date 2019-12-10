@@ -13,7 +13,7 @@ databaseChangeLog {
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
         }
-        
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
             column(name: 'name', value: 'AccessCopyright_11Dec16')
@@ -32,17 +32,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle') // B-55836 remove
             column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500') // B-55836 remove
+            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3ab5e80b-89c0-4d78-9675-54c7ab284450')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
-            column(name: 'gross_amount', value: '35000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -1076,20 +1088,32 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'reported_value', value: '900') // B-55836 remove
+            column(name: 'gross_amount', value: '900.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'service_fee_amount', value: '288.00')
+            column(name: 'net_amount', value: '612.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'ea85a226-8a4b-45e3-82f8-1233a9cd7ecb')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '900')
-            column(name: 'gross_amount', value: '900.00')
-            column(name: 'service_fee', value: '0.32000')
-            column(name: 'service_fee_amount', value: '288.00')
-            column(name: 'net_amount', value: '612.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1100,17 +1124,29 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Cell Biology')
             column(name: 'status_ind', value: 'NTS_EXCLUDED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'reported_value', value: '100') // B-55836 remove
+            column(name: 'gross_amount', value: '0.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '4b5751aa-6258-44c6-b839-a1ec0edfcf4d')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '1')
             column(name: 'reported_value', value: '100')
-            column(name: 'gross_amount', value: '0.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {

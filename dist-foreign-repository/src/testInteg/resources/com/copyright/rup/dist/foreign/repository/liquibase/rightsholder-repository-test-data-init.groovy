@@ -104,20 +104,32 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '7001555529')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water') // B-55836 remove
             column(name: 'standard_number', value: '1008902992377654XX')
+            column(name: 'publisher', value: 'IEEE 015') // B-55836 remove
+            column(name: 'publication_date', value: '2014-09-11') // B-55836 remove
+            column(name: 'market', value: 'Play Market') // B-55836 remove
+            column(name: 'market_period_from', value: '2014') // B-55836 remove
+            column(name: 'market_period_to', value: '2018') // B-55836 remove
+            column(name: 'author', value: 'Mikalai Bezmen') // B-55836 remove
+            column(name: 'number_of_copies', value: '190222')
+            column(name: 'reported_value', value: '2300') // B-55836 remove
+            column(name: 'gross_amount', value: '30000.00')
+            column(name: 'service_fee_amount', value: '9600.00')
+            column(name: 'net_amount', value: '20400.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '03f77c25-0c4c-4266-8a48-40f327779f12')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water')
             column(name: 'publisher', value: 'IEEE 015')
             column(name: 'publication_date', value: '2014-09-11')
             column(name: 'market', value: 'Play Market')
             column(name: 'market_period_from', value: '2014')
             column(name: 'market_period_to', value: '2018')
             column(name: 'author', value: 'Mikalai Bezmen')
-            column(name: 'number_of_copies', value: '190222')
             column(name: 'reported_value', value: '2300')
-            column(name: 'gross_amount', value: '30000.00')
-            column(name: 'service_fee_amount', value: '9600.00')
-            column(name: 'net_amount', value: '20400.00')
-            column(name: 'service_fee', value: '0.32000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -128,17 +140,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle') // B-55836 remove
             column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500') // B-55836 remove
+            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3ab5e80b-89c0-4d78-9675-54c7ab284450')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
-            column(name: 'gross_amount', value: '35000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -149,17 +173,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants')
+            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants') // B-55836 remove
             column(name: 'standard_number', value: '1008902002377655XX')
+            column(name: 'publisher', value: 'John Wiley & Sons') // B-55836 remove
+            column(name: 'publication_date', value: '2011-05-10') // B-55836 remove
+            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'author', value: 'Nanette M. Schwann') // B-55836 remove
+            column(name: 'number_of_copies', value: '1600')
+            column(name: 'reported_value', value: '1560') // B-55836 remove
+            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '8a06905f-37ae-4e1f-8550-245277f8165c')
+            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants')
             column(name: 'publisher', value: 'John Wiley & Sons')
             column(name: 'publication_date', value: '2011-05-10')
             column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2019')
             column(name: 'author', value: 'Nanette M. Schwann')
-            column(name: 'number_of_copies', value: '1600')
             column(name: 'reported_value', value: '1560')
-            column(name: 'gross_amount', value: '35000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -170,17 +206,29 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000005413')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902002377655XX')
+            column(name: 'publisher', value: 'McGraw-Hill') // B-55836 remove
+            column(name: 'publication_date', value: '2009-12-31') // B-55836 remove
+            column(name: 'market', value: 'Edu') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2019') // B-55836 remove
+            column(name: 'author', value: 'Mirjam H. Hüberli') // B-55836 remove
+            column(name: 'number_of_copies', value: '2630')
+            column(name: 'reported_value', value: '1280.00') // B-55836 remove
+            column(name: 'gross_amount', value: '2125.24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '5c5f8c1c-1418-4cfd-8685-9212f4c421d1')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'McGraw-Hill')
             column(name: 'publication_date', value: '2009-12-31')
             column(name: 'market', value: 'Edu')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2019')
             column(name: 'author', value: 'Mirjam H. Hüberli')
-            column(name: 'number_of_copies', value: '2630')
             column(name: 'reported_value', value: '1280.00')
-            column(name: 'gross_amount', value: '2125.24')
         }
 
         rollback ""
@@ -196,17 +244,29 @@ databaseChangeLog {
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle') // B-55836 remove
             column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE') // B-55836 remove
+            column(name: 'publication_date', value: '2014-09-10') // B-55836 remove
+            column(name: 'market', value: 'Doc Del') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500') // B-55836 remove
+            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '23876f21-8ab2-4fcb-adf3-777be88eddbb')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2014-09-10')
             column(name: 'market', value: 'Doc Del')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
-            column(name: 'gross_amount', value: '35000.00')
         }
 
         rollback ""
@@ -243,14 +303,24 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '0804709114')
+            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2013') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '296.72') // B-55836 remove
+            column(name: 'gross_amount', value: '256.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '8a80a2e7-4758-4e43-ae42-e8b29802a210')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '296.72')
-            column(name: 'gross_amount', value: '256.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -263,14 +333,24 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000005413')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '10457143')
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '162.41') // B-55836 remove
+            column(name: 'gross_amount', value: '1452.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '085268cd-7a0c-414e-8b28-2acb299d9698')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '162.41')
-            column(name: 'gross_amount', value: '1452.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -283,14 +363,24 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '10457143')
+            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
+            column(name: 'market', value: 'Univ') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2017') // B-55836 remove
+            column(name: 'reported_value', value: '16.24') // B-55836 remove
+            column(name: 'gross_amount', value: '145.20')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'bfc9e375-c489-4600-9308-daa101eed97c')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '16.24')
-            column(name: 'gross_amount', value: '145.20')
         }
     }
 }

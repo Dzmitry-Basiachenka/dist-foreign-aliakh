@@ -699,13 +699,22 @@
     </select>
 
     <delete id="deleteByBatchId" parameterType="string">
-        delete from ${schema}.df_usage
-        where df_usage_batch_uid = #{batchId}
+        with u as (
+            delete from ${schema}.df_usage
+            where df_usage_batch_uid = #{batchId}
+            returning df_usage_uid
+        )
+        delete from ${schema}.df_usage_fas
+        where df_usage_fas_uid in (select u.df_usage_uid from u)
     </delete>
 
     <delete id="deleteByUsageId" parameterType="string">
-        delete from ${schema}.df_usage
-        where df_usage_uid = #{usageId}
+        with u as (
+            delete from ${schema}.df_usage
+            where df_usage_uid = #{usageId}
+        )
+        delete from ${schema}.df_usage_fas
+        where df_usage_fas_uid = #{usageId}
     </delete>
 
     <delete id="deleteByScenarioId" parameterType="map">
@@ -1643,4 +1652,13 @@
         from gt_factor
         where u.df_scenario_uid = #{scenarioId}
     </update>
+
+    <select id="findReferencedUsagesCountByIds" resultType="int" parameterType="list">
+        select count(1)
+            from ${schema}.df_usage_fas
+        where df_usage_fas_uid in
+        <foreach collection="usageIds" item="usageId" open="(" separator="," close=")">
+            #{usageId}
+        </foreach>
+    </select>
 </mapper>
