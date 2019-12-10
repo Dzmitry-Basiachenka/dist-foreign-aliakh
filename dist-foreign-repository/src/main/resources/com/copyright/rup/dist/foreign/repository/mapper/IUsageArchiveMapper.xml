@@ -28,50 +28,50 @@
     </sql>
 
     <insert id="moveFundUsagesToArchive" parameterType="string">
-        with fund_pool_id as (
+        with fund_pool_ids as (
             select
                 nts_fields->>'pre_service_fee_fund_uid' fund_id
             from ${schema}.df_scenario
             where df_scenario_uid = #{scenarioId}
         ),
 
-        archived_usages as (
+        ua as (
             insert into ${schema}.df_usage_archive (
                 df_usage_archive_uid,
-                df_fund_pool_uid,
                 <include refid="IUsageMapper.usageColumns"/>,
                 <include refid="StoredEntityMapper.additionalColumns"/>)
             select
-                df_usage_uid,
-                df_fund_pool_uid,
-                df_usage_batch_uid,
+                u.df_usage_uid,
+                u.df_usage_batch_uid,
                 null, <!-- scenario_uid -->
-                wr_wrk_inst,
-                work_title,
-                system_title,
-                rh_account_number,
+                u.wr_wrk_inst,
+                u.work_title,
+                u.system_title,
+                u.rh_account_number,
                 'ARCHIVED',
                 'NTS',
-                article,
-                standard_number,
-                standard_number_type,
-                publisher,
-                publication_date,
-                market,
-                market_period_from,
-                market_period_to,
-                author,
-                number_of_copies,
-                reported_value,
-                gross_amount,
-                comment,
+                ufas.article,
+                u.standard_number,
+                u.standard_number_type,
+                ufas.publisher,
+                ufas.publication_date,
+                ufas.market,
+                ufas.market_period_from,
+                ufas.market_period_to,
+                ufas.author,
+                u.number_of_copies,
+                ufas.reported_value,
+                u.gross_amount,
+                u.comment,
                 <include refid="StoredEntityMapper.insert"/>
-            from ${schema}.df_usage
-            where df_fund_pool_uid = (select fund_id from fund_pool_id)
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+            where ufas.df_fund_pool_uid = (select fund_id from fund_pool_ids)
+            returning df_usage_archive_uid
         )
 
         delete from ${schema}.df_usage
-        where df_fund_pool_uid = (select fund_id from fund_pool_id)
+        where df_usage_uid in (select ua.df_usage_archive_uid from ua)
     </insert>
 
     <delete id="deleteByBatchId" parameterType="string" >

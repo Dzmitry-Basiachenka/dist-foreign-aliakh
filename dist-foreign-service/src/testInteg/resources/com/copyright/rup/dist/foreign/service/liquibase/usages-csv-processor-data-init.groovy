@@ -21,20 +21,32 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: '1984,Appendix: The Principles of Newspeak')
             column(name: 'status_ind', value: 'WORK_FOUND')
-            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '9780150000000')
+            column(name: 'publisher', value: 'Publisher') // B-55836 remove
+            column(name: 'publication_date', value: '3000-12-22') // B-55836 remove
+            column(name: 'market', value: 'Univ,Bus,Doc,S') // B-55836 remove
+            column(name: 'market_period_from', value: '2015') // B-55836 remove
+            column(name: 'market_period_to', value: '2016') // B-55836 remove
+            column(name: 'author', value: 'Aarseth, Espen J') // B-55836 remove
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000') // B-55836 remove
+            column(name: 'gross_amount', value: '10000.00')
+            column(name: 'net_amount', value: '8400.00')
+            column(name: 'service_fee_amount', value: '1600.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3b2bb7f1-eb4a-46a4-9609-1fa3cb36ae20')
+            column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'Publisher')
             column(name: 'publication_date', value: '3000-12-22')
             column(name: 'market', value: 'Univ,Bus,Doc,S')
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2016')
             column(name: 'author', value: 'Aarseth, Espen J')
-            column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '10000')
-            column(name: 'gross_amount', value: '10000.00')
-            column(name: 'net_amount', value: '8400.00')
-            column(name: 'service_fee_amount', value: '1600.00')
-            column(name: 'service_fee', value: '0.16000')
         }
 
         rollback ""

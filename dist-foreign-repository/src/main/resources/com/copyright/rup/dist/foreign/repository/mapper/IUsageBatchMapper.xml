@@ -97,7 +97,7 @@
     <sql id="withdrawnUsagesWhereClause">
         where u.df_usage_batch_uid = ub.df_usage_batch_uid
             and u.status_ind = #{status}
-            and u.df_fund_pool_uid is null
+            and ufas.df_fund_pool_uid is null
     </sql>
 
     <select id="findUsageBatchesForPreServiceFeeFunds" resultMap="usageBatchResultMap" parameterType="map">
@@ -107,6 +107,7 @@
             (
                 select sum(u.gross_amount)
                 from ${schema}.df_usage u
+                join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
                 <include refid="withdrawnUsagesWhereClause"/>
             ) gross_amount,
             ub.updated_datetime
@@ -118,6 +119,7 @@
         and exists (
             select 1
             from ${schema}.df_usage u
+            join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
             <include refid="withdrawnUsagesWhereClause"/>
         )
         order by ub.updated_datetime desc
