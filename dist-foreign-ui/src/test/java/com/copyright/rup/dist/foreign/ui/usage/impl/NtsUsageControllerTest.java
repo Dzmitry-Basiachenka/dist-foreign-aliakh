@@ -1,0 +1,340 @@
+package com.copyright.rup.dist.foreign.ui.usage.impl;
+
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
+
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.common.reporting.impl.StreamSource;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
+
+import com.vaadin.ui.HorizontalLayout;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.easymock.Capture;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
+
+import java.io.InputStream;
+import java.io.PipedOutputStream;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+/**
+ * Verifies {@link NtsUsageController}.
+ * <p>
+ * Copyright (C) 2019 copyright.com
+ * <p>
+ * Date: 12/09/19
+ *
+ * @author Uladzislau Shalamitski
+ */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({RupContextUtils.class, OffsetDateTime.class, ByteArrayStreamSource.class, StreamSource.class})
+public class NtsUsageControllerTest {
+
+    private static final OffsetDateTime DATE = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+    private static final String RRO_ACCOUNT_NAME = "Account Name";
+    private static final String USAGE_BATCH_ID = "47dbb3ec-ca8d-4feb-98dc-bce07bf9907e";
+    private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
+    private static final String USER_NAME = "Test User Name";
+    private static final String BATCH_NAME = "Test Batch Name";
+    private static final String SCENARIO_NAME = "Test Scenario Name";
+    private static final String DESCRIPTION = "Test Description";
+
+    private NtsUsageController controller;
+    private IUsageService usageService;
+    private IUsagesFilterController filterController;
+    private IUsagesFilterWidget filterWidgetMock;
+    private INtsUsageWidget usagesWidget;
+    private IUsageBatchService usageBatchService;
+    private IPrmIntegrationService prmIntegrationService;
+    private IScenarioService scenarioService;
+    private IFundPoolService fundPoolService;
+    private IReportService reportService;
+    private IStreamSourceHandler streamSourceHandler;
+    private UsageFilter usageFilter;
+
+    @Before
+
+    public void setUp() {
+        controller = new NtsUsageController();
+        usageService = createMock(IUsageService.class);
+        usageBatchService = createMock(IUsageBatchService.class);
+        filterController = createMock(IUsagesFilterController.class);
+        usagesWidget = createMock(INtsUsageWidget.class);
+        scenarioService = createMock(IScenarioService.class);
+        prmIntegrationService = createMock(IPrmIntegrationService.class);
+        filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        fundPoolService = createMock(IFundPoolService.class);
+        reportService = createMock(IReportService.class);
+        streamSourceHandler = createMock(IStreamSourceHandler.class);
+        Whitebox.setInternalState(controller, usageBatchService);
+        Whitebox.setInternalState(controller, usageService);
+        Whitebox.setInternalState(controller, usagesWidget);
+        Whitebox.setInternalState(controller, filterController);
+        Whitebox.setInternalState(controller, prmIntegrationService);
+        Whitebox.setInternalState(controller, scenarioService);
+        Whitebox.setInternalState(controller, fundPoolService);
+        Whitebox.setInternalState(controller, reportService);
+        Whitebox.setInternalState(controller, streamSourceHandler);
+        usageFilter = new UsageFilter();
+    }
+
+    @Test
+    public void testCreateNtsScenario() {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        Scenario scenario = new Scenario();
+        expect(scenarioService.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION, usageFilter))
+            .andReturn(scenario).once();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).times(2);
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        filterWidgetMock.clearFilter();
+        expectLastCall().once();
+        replay(filterController, filterWidgetMock, scenarioService);
+        assertEquals(scenario, controller.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION));
+        verify(filterController, filterWidgetMock, scenarioService);
+    }
+
+    @Test
+    public void testInstantiateWidget() {
+        assertNotNull(controller.instantiateWidget());
+    }
+
+    @Test
+    public void testOnFilterChanged() {
+        FilterChangedEvent filterChangedEvent = new FilterChangedEvent(new HorizontalLayout());
+        usagesWidget.refresh();
+        expectLastCall().once();
+        replay(usagesWidget);
+        controller.onFilterChanged(filterChangedEvent);
+        verify(usagesWidget);
+    }
+
+    @Test
+    public void testGetExportUsagesStreamSource() {
+        mockStatic(OffsetDateTime.class);
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        String fileName = "export_usage_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(DATE).once();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        reportService.writeUsageCsvReport(usageFilter, pos);
+        expectLastCall().once();
+        replay(OffsetDateTime.class, filterWidgetMock, filterController, streamSourceHandler, reportService);
+        IStreamSource streamSource = controller.getExportUsagesStreamSource();
+        assertEquals("export_usage_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        assertNotNull(posConsumer);
+        verify(OffsetDateTime.class, filterWidgetMock, filterController, streamSourceHandler, reportService);
+    }
+
+    @Test
+    public void testGetScenarioNameAssociatedWithPreServiceFeeFund() {
+        expect(scenarioService.getScenarioNameByPreServiceFeeFundId(USAGE_BATCH_ID))
+            .andReturn(SCENARIO_NAME).once();
+        replay(scenarioService);
+        assertEquals(SCENARIO_NAME, controller.getScenarioNameAssociatedWithPreServiceFeeFund(USAGE_BATCH_ID));
+        verify(scenarioService);
+    }
+
+    @Test
+    public void testGetUsageBatchesForPreServiceFeeFunds() {
+        expect(usageBatchService.getUsageBatchesForPreServiceFeeFunds()).andReturn(Collections.emptyList()).once();
+        replay(usageBatchService);
+        controller.getUsageBatchesForPreServiceFeeFunds();
+        verify(usageBatchService);
+    }
+
+    @Test
+    public void testGetMarkets() {
+        List<String> markets = Collections.singletonList("Bus");
+        expect(usageService.getMarkets()).andReturn(markets).once();
+        replay(usageService);
+        assertEquals(markets, controller.getMarkets());
+        verify(usageService);
+    }
+
+    @Test
+    public void testLoadNtsBatch() {
+        mockStatic(RupContextUtils.class);
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(BATCH_NAME);
+        Usage usage1 = new Usage();
+        usage1.setId("d9440e59-4943-4cdc-bb32-84edcb7febbc");
+        Usage usage2 = new Usage();
+        usage2.setId("43f31060-acde-477a-8f73-80fadbafaa70");
+        List<String> ntsUsageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(usageBatchService.insertNtsBatch(usageBatch, USER_NAME)).andReturn(ntsUsageIds).once();
+        usageBatchService.getAndSendForGettingRights(ntsUsageIds, BATCH_NAME);
+        expectLastCall().once();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        filterWidgetMock.clearFilter();
+        expectLastCall().once();
+        replay(usageBatchService, filterController, filterWidgetMock, RupContextUtils.class);
+        assertEquals(2, controller.loadNtsBatch(usageBatch));
+        verify(usageBatchService, filterController, filterWidgetMock, RupContextUtils.class);
+    }
+
+    @Test
+    public void testGetAdditionalFunds() {
+        List<PreServiceFeeFund> additionalFunds = Collections.singletonList(new PreServiceFeeFund());
+        expect(fundPoolService.getPreServiceFeeFunds()).andReturn(additionalFunds).once();
+        replay(fundPoolService);
+        assertEquals(additionalFunds, controller.getPreServiceSeeFunds());
+        verify(fundPoolService);
+    }
+
+    @Test
+    public void testGetPreServiceFeeFundsNotAttachedToScenario() {
+        List<PreServiceFeeFund> additionalFunds = Collections.singletonList(new PreServiceFeeFund());
+        expect(fundPoolService.getPreServiceFeeFundsNotAttachedToScenario()).andReturn(additionalFunds).once();
+        replay(fundPoolService);
+        assertEquals(additionalFunds, controller.getPreServiceFeeFundsNotAttachedToScenario());
+        verify(fundPoolService);
+    }
+
+    @Test
+    public void testDeleteAdditionalFund() {
+        PreServiceFeeFund fund = new PreServiceFeeFund();
+        fundPoolService.deletePreServiceFeeFund(fund);
+        expectLastCall().once();
+        replay(fundPoolService);
+        controller.deletePreServiceFeeFund(fund);
+        verify(fundPoolService);
+    }
+
+    @Test
+    public void testGetUsagesCountForNtsBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        expect(usageService.getUsagesCountForNtsBatch(usageBatch)).andReturn(5).once();
+        replay(usageService);
+        assertEquals(5, controller.getUsagesCountForNtsBatch(usageBatch));
+        verify(usageService);
+    }
+
+    @Test
+    public void testGetRroName() {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setName(RRO_ACCOUNT_NAME);
+        rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
+        rightsholder.setId("53686adc-1f20-473a-b57f-25ff23425372");
+        expect(prmIntegrationService.getRightsholder(RRO_ACCOUNT_NUMBER)).andReturn(rightsholder).once();
+        replay(prmIntegrationService);
+        assertEquals(rightsholder, controller.getRro(RRO_ACCOUNT_NUMBER));
+        verify(prmIntegrationService);
+    }
+
+    @Test
+    public void testGetNullRroName() {
+        expect(prmIntegrationService.getRightsholder(RRO_ACCOUNT_NUMBER)).andReturn(null).once();
+        replay(prmIntegrationService);
+        assertEquals(new Rightsholder(), controller.getRro(RRO_ACCOUNT_NUMBER));
+        verify(prmIntegrationService);
+    }
+
+    @Test
+    public void testOnScenarioCreated() {
+        INtsUsageWidget usageWidgetMock = createMock(INtsUsageWidget.class);
+        ScenarioCreateEvent eventMock = createMock(ScenarioCreateEvent.class);
+        Whitebox.setInternalState(controller, "widget", usageWidgetMock);
+        usageWidgetMock.fireWidgetEvent(eventMock);
+        expectLastCall().once();
+        replay(usageWidgetMock, eventMock);
+        controller.onScenarioCreated(eventMock);
+        verify(usageWidgetMock, eventMock);
+    }
+
+    @Test
+    public void testGetPreServiceFeeFundBatchesStreamSource() {
+        mockStatic(OffsetDateTime.class);
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        String fileName = "pre_service_fee_fund_batches_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(DATE).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        reportService.writePreServiceFeeFundBatchesCsvReport(
+            Collections.singletonList(new UsageBatch()), BigDecimal.ONE, pos);
+        expectLastCall().once();
+        replay(OffsetDateTime.class, streamSourceHandler, reportService);
+        IStreamSource streamSource = controller.getPreServiceFeeFundBatchesStreamSource(
+            Collections.singletonList(new UsageBatch()), BigDecimal.ONE);
+        assertEquals("pre_service_fee_fund_batches_01_02_2019_03_04.csv",
+            streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        verify(OffsetDateTime.class, streamSourceHandler, reportService);
+    }
+
+    @Test
+    public void testGetBatchNamesWithUnclassifiedUsages() {
+        expect(usageBatchService.getBatchNamesWithUnclassifiedWorks(Collections.singleton(USAGE_BATCH_ID)))
+            .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
+        replay(usageBatchService);
+        controller.getBatchNamesWithUnclassifiedWorks(Collections.singleton(USAGE_BATCH_ID));
+        verify(usageBatchService);
+    }
+
+    @Test
+    public void testGetBatchNamesWithInvalidStmOrNonStmUsagesState() {
+        Set<String> batchIds = Collections.singleton(USAGE_BATCH_ID);
+        expect(usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(batchIds))
+            .andReturn(Collections.emptyMap()).once();
+        replay(usageBatchService);
+        controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(batchIds);
+        verify(usageBatchService);
+    }
+}
