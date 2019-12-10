@@ -538,6 +538,12 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         update("IUsageMapper.applyPostServiceFeeAmount", Objects.requireNonNull(scenarioId));
     }
 
+    @Override
+    public int findReferencedUsagesCountByIds(String... usageIds) {
+        return selectOne("IUsageMapper.findReferencedUsagesCountByIds",
+            ImmutableMap.of("usageIds", Objects.requireNonNull(usageIds)));
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));

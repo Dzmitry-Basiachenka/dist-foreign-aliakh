@@ -486,4 +486,12 @@ public interface IUsageRepository {
      * @param scenarioId identifier of scenario
      */
     void applyPostServiceFeeAmount(String scenarioId);
+
+    /**
+     * Finds count of referenced usages in the df_usage_fas table by ids.
+     *
+     * @param usageIds set of usage ids
+     * @return the count of usages
+     */
+    int findReferencedUsagesCountByIds(String... usageIds);
 }

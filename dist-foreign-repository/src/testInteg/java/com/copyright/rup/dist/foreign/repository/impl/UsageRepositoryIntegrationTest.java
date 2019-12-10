@@ -133,6 +133,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_28 = "cbd6768d-a424-476e-b502-a832d9dbe85e";
     private static final String USAGE_ID_29 = "d5e3c637-155a-4c05-999a-31a07e335491";
     private static final String USAGE_ID_30 = "e2834925-ede5-4796-a30b-05770a6f04be";
+    private static final String USAGE_ID_31 = "3cf274c5-8eac-4d4a-96be-5921ae026840";
+    private static final String USAGE_ID_32 = "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15";
     private static final String USAGE_ID_BELLETRISTIC = "bbbd64db-2668-499a-9d18-be8b3f87fbf5";
     private static final String USAGE_ID_UNCLASSIFIED = "6cad4cf2-6a19-4e5b-b4e0-f2f7a62ff91c";
     private static final String USAGE_ID_STM = "83a26087-a3b3-43ca-8b34-c66134fb6edf";
@@ -442,21 +444,27 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Sets.newHashSet(USAGE_BATCH_ID_1));
         Sort sort = new Sort(DETAIL_ID_KEY, Direction.ASC);
-        assertEquals(1, usageRepository.findDtosByFilter(filter, null, sort).size());
+        List<UsageDto> usages = usageRepository.findDtosByFilter(filter, null, sort);
+        assertEquals(1, usages.size());
+        assertEquals(USAGE_ID_1, usages.get(0).getId());
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_1));
         usageRepository.deleteByBatchId(USAGE_BATCH_ID_1);
         assertEquals(0, usageRepository.findDtosByFilter(filter, null, sort).size());
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_1));
     }
 
     @Test
     public void testDeleteById() {
-        List<Usage> usages = usageRepository.findByIds(
-            Arrays.asList("3cf274c5-8eac-4d4a-96be-5921ae026840", "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15"));
+        List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_31, USAGE_ID_32));
         assertEquals(2, CollectionUtils.size(usages));
-        usageRepository.deleteById("3cf274c5-8eac-4d4a-96be-5921ae026840");
-        usages = usageRepository.findByIds(
-            Arrays.asList("3cf274c5-8eac-4d4a-96be-5921ae026840", "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15"));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_31));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_32));
+        usageRepository.deleteById(USAGE_ID_31);
+        usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_31, USAGE_ID_32));
         assertEquals(1, CollectionUtils.size(usages));
-        assertEquals("f5eb98ce-ab59-44c8-9a50-1afea2b5ae15", usages.get(0).getId());
+        assertEquals(USAGE_ID_32, usages.get(0).getId());
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_31));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_32));
     }
 
     @Test
