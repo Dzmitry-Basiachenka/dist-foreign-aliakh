@@ -53,7 +53,7 @@ databaseChangeLog {
 
             column(name: 'df_usage_fas_uid', type: 'VARCHAR(255)', remarks: 'The identifier of usage')
             column(name: 'article', type: 'VARCHAR(1000)', remarks: 'The article')
-            column(name: 'author', type: 'VARCHAR(1000)', remarks: 'The author')
+            column(name: 'author', type: 'VARCHAR(2000)', remarks: 'The author')
             column(name: 'publisher', type: 'VARCHAR(1000)', remarks: 'The publisher')
             column(name: 'publication_date', type: 'DATE', remarks: 'The publication date')
             column(name: 'market', type: 'VARCHAR(200)', remarks: 'The market')
