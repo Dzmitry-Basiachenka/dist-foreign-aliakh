@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -35,7 +35,7 @@ import java.util.Set;
  */
 class CreatePreServiceFeeFundWindow extends Window {
 
-    private final IUsagesController controller;
+    private final INtsUsageController controller;
     private final Set<String> batchIds;
     private final BigDecimal amount;
     private final PreServiceFeeFundBatchesFilterWindow batchesFilterWindow;
@@ -48,13 +48,13 @@ class CreatePreServiceFeeFundWindow extends Window {
     /**
      * Constructor.
      *
-     * @param controller            instance of {@link IUsagesController}
+     * @param controller            instance of {@link INtsUsageController}
      * @param batchIds              set of ids of usage batches
      * @param amount                gross amount
      * @param batchesFilterWindow   instance of {@link PreServiceFeeFundBatchesFilterWindow}
      * @param filteredBatchesWindow instance of {@link PreServiceFeeFundFilteredBatchesWindow}
      */
-    CreatePreServiceFeeFundWindow(IUsagesController controller, Set<String> batchIds, BigDecimal amount,
+    CreatePreServiceFeeFundWindow(INtsUsageController controller, Set<String> batchIds, BigDecimal amount,
                                   PreServiceFeeFundBatchesFilterWindow batchesFilterWindow,
                                   PreServiceFeeFundFilteredBatchesWindow filteredBatchesWindow) {
         this.controller = controller;
@@ -82,7 +82,7 @@ class CreatePreServiceFeeFundWindow extends Window {
         binder.forField(fundNameField)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !controller.getFundPoolService().fundPoolNameExists(value),
+            .withValidator(value -> !controller.fundPoolExists(value),
                 ForeignUi.getMessage("message.error.unique_name", "Fund"))
             .bind(PreServiceFeeFund::getName, PreServiceFeeFund::setName);
         VaadinUtils.setMaxComponentsWidth(fundNameField);
@@ -121,7 +121,7 @@ class CreatePreServiceFeeFundWindow extends Window {
             fundPool.setName(StringUtils.trimToEmpty(fundNameField.getValue()));
             fundPool.setComment(StringUtils.trimToEmpty(commentsArea.getValue()));
             fundPool.setAmount(amount);
-            controller.getFundPoolService().create(fundPool, batchIds);
+            controller.createPreServiceFeeFund(fundPool, batchIds);
             closeAllWindows();
         } else {
             Windows.showValidationErrorWindow(Lists.newArrayList(fundNameField, commentsArea));

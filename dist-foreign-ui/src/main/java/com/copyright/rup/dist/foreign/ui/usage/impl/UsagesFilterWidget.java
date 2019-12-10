@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
  *
  * @author Mikita Hladkikh
  */
+//TODO: split it into product specific usage filters
 class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     private Button applyButton;
@@ -46,7 +47,6 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     private IUsagesFilterController controller;
     private RightsholderFilterWidget rightsholderFilterWidget;
     private UsageBatchFilterWidget usageBatchFilterWidget;
-    private ComboBox<String> productFamilyCombobox;
     private UsageFilter usageFilter = new UsageFilter();
     private UsageFilter appliedUsageFilter = new UsageFilter();
     private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES = Sets.newHashSet(UsageStatusEnum.NEW,
@@ -106,13 +106,8 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         this.controller = controller;
     }
 
-    @Override
-    public String getSelectedProductFamily() {
-        return productFamilyCombobox.getValue();
-    }
-
     private void refreshFilterValues() {
-        String selectedProductFamily = getSelectedProductFamily();
+        String selectedProductFamily = controller.getSelectedProductFamily();
         fiscalYearComboBox.setItems(getController().getFiscalYears(selectedProductFamily));
         statusComboBox.setItems(getAvailableStatuses());
         usageFilter = new UsageFilter();
@@ -120,31 +115,18 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private VerticalLayout initFiltersLayout() {
-        initProductFamilyCombobox();
         initPaymentDateFilter();
         initFiscalYearFilter();
         initStatusFilter();
-        VerticalLayout verticalLayout = new VerticalLayout(productFamilyCombobox, buildFiltersHeaderLabel(),
-            buildUsageBatchFilter(), buildRroAccountNumberFilter(), paymentDateWidget, statusComboBox,
-            fiscalYearComboBox);
+        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUsageBatchFilter(),
+            buildRroAccountNumberFilter(), paymentDateWidget, statusComboBox, fiscalYearComboBox);
         verticalLayout.setMargin(false);
         return verticalLayout;
     }
 
-    private void initProductFamilyCombobox() {
-        productFamilyCombobox =
-            new ComboBox<>(ForeignUi.getMessage("label.product_family"), controller.getProductFamilies());
-        productFamilyCombobox.setSelectedItem("FAS");
-        productFamilyCombobox.setEmptySelectionAllowed(false);
-        productFamilyCombobox.setTextInputAllowed(false);
-        productFamilyCombobox.addValueChangeListener(event -> clearFilter());
-        VaadinUtils.setMaxComponentsWidth(productFamilyCombobox);
-        VaadinUtils.addComponentStyle(productFamilyCombobox, "product-family-combo-box");
-    }
-
     private HorizontalLayout buildUsageBatchFilter() {
         usageBatchFilterWidget = new UsageBatchFilterWidget(
-            () -> controller.getUsageBatches(getSelectedProductFamily()));
+            () -> controller.getUsageBatches(controller.getSelectedProductFamily()));
         usageBatchFilterWidget.addFilterSaveListener((IFilterSaveListener<UsageBatch>) saveEvent -> {
             usageFilter.setUsageBatchesIds(
                 saveEvent.getSelectedItemsIds().stream().map(UsageBatch::getId).collect(Collectors.toSet()));
@@ -159,7 +141,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
             ForeignUi.getMessage("label.rros"),
             ForeignUi.getMessage("prompt.rro"),
             ForeignUi.getMessage("message.error.rro_not_found"),
-            () -> controller.getRros(getSelectedProductFamily()));
+            () -> controller.getRros(controller.getSelectedProductFamily()));
         rightsholderFilterWidget.addFilterSaveListener((IFilterSaveListener<Rightsholder>) saveEvent -> {
             usageFilter.setRhAccountNumbers(saveEvent.getSelectedItemsIds()
                 .stream()
@@ -219,7 +201,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private Set<UsageStatusEnum> getAvailableStatuses() {
-        return FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(getSelectedProductFamily())
+        return FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(controller.getSelectedProductFamily())
             ? FAS_FAS2_STATUSES
             : NTS_STATUSES;
     }

@@ -7,8 +7,8 @@ import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -33,7 +33,7 @@ public class MainWidget extends TabSheet implements IMainWidget {
     @SuppressWarnings("unchecked")
     public MainWidget init() {
         VaadinUtils.addComponentStyle(this, Cornerstone.MAIN_TABSHEET);
-        SwitchableWidget<IUsagesWidget, IUsagesController> usagesWidget =
+        SwitchableWidget<? extends ICommonUsageWidget, ? extends ICommonUsageController> usagesWidget =
             new SwitchableWidget<>(controller.getUsagesControllerProvider(),
                 widget -> widget.addListener(ScenarioCreateEvent.class,
                     controller, IMainWidgetController.ON_SCENARIO_CREATED));

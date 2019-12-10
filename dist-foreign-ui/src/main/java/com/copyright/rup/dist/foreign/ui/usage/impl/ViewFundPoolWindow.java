@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 
 import com.vaadin.server.SerializableComparator;
 import com.vaadin.ui.Grid;
@@ -22,9 +22,9 @@ class ViewFundPoolWindow extends AbstractViewUsageBatchWindow {
     /**
      * Constructor.
      *
-     * @param controller {@link IUsagesController}
+     * @param controller {@link INtsUsageController}
      */
-    ViewFundPoolWindow(IUsagesController controller) {
+    ViewFundPoolWindow(INtsUsageController controller) {
         super(controller);
     }
 

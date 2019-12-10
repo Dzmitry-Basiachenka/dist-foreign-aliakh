@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -51,7 +51,7 @@ public class PreServiceFeeFundFilteredBatchesWindowTest {
 
     @Test
     public void testConstructor() {
-        IUsagesController controller = createMock(IUsagesController.class);
+        INtsUsageController controller = createMock(INtsUsageController.class);
         List<UsageBatch> batches = Collections.singletonList(buildUsageBatch());
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),

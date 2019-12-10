@@ -4,7 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -34,7 +34,7 @@ public class UsagesFilterController extends CommonController<IUsagesFilterWidget
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
-    private IUsageService usageService;
+    private IProductFamilyProvider productFamilyProvider;
 
     @Override
     public List<UsageBatch> getUsageBatches(String productFamily) {
@@ -47,13 +47,13 @@ public class UsagesFilterController extends CommonController<IUsagesFilterWidget
     }
 
     @Override
-    public List<String> getProductFamilies() {
-        return usageService.getProductFamilies();
+    public List<Integer> getFiscalYears(String productFamily) {
+        return usageBatchService.getFiscalYears(productFamily);
     }
 
     @Override
-    public List<Integer> getFiscalYears(String productFamily) {
-        return usageBatchService.getFiscalYears(productFamily);
+    public String getSelectedProductFamily() {
+        return productFamilyProvider.getSelectedProductFamily();
     }
 
     @Override

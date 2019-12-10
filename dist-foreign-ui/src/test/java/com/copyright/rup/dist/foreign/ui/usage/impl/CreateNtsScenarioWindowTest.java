@@ -14,8 +14,7 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 
 import com.vaadin.data.Binder;
@@ -60,28 +59,25 @@ public class CreateNtsScenarioWindowTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private PreServiceFeeFund preServiceFeeFund;
 
-    private IUsagesController controller;
-    private IScenarioService scenarioService;
+    private INtsUsageController controller;
     private CreateNtsScenarioWindow window;
 
     @Before
     public void setUp() {
-        controller = createMock(IUsagesController.class);
-        scenarioService = createMock(IScenarioService.class);
+        controller = createMock(INtsUsageController.class);
         preServiceFeeFund = new PreServiceFeeFund();
         preServiceFeeFund.setName("Pre-Service Fee Fund 1");
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).anyTimes();
-        expect(controller.getScenarioService()).andReturn(scenarioService).anyTimes();
         expect(controller.getPreServiceFeeFundsNotAttachedToScenario())
             .andReturn(Collections.singletonList(preServiceFeeFund)).once();
     }
 
     @Test
     public void testComponentStructure() {
-        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
-        replay(controller, scenarioService);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        replay(controller);
         window = new CreateNtsScenarioWindow(controller);
-        verify(controller, scenarioService);
+        verify(controller);
         assertEquals("Create Scenario", window.getCaption());
         assertEquals(320, window.getWidth(), 0);
         assertEquals("create-scenario-window", window.getId());
@@ -106,8 +102,8 @@ public class CreateNtsScenarioWindowTest {
         ntsFields.setPostServiceFeeAmount(BigDecimal.ZERO);
         Scenario scenario = new Scenario();
         expect(controller.createNtsScenario(SCENARIO_NAME, ntsFields, "")).andReturn(scenario).once();
-        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
-        replay(controller, scenarioService);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
+        replay(controller);
         TestCreateNtsScenarioWindow createScenarioWindow = new TestCreateNtsScenarioWindow(controller);
         VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();
         Component component = content.getComponent(6);
@@ -121,13 +117,13 @@ public class CreateNtsScenarioWindowTest {
         ScenarioCreateEvent scenarioCreateEvent = (ScenarioCreateEvent) event;
         assertEquals(scenario, scenarioCreateEvent.getScenarioId());
         assertEquals(createScenarioWindow, scenarioCreateEvent.getSource());
-        verify(controller, scenarioService);
+        verify(controller);
     }
 
     @Test
     public void testButtonCloseClick() {
-        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
-        replay(controller, scenarioService);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        replay(controller);
         TestCreateNtsScenarioWindow createScenarioWindow = new TestCreateNtsScenarioWindow(controller);
         assertFalse(createScenarioWindow.isClosed());
         VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();
@@ -137,19 +133,19 @@ public class CreateNtsScenarioWindowTest {
         ClickListener listener = (ClickListener) cancelButton.getListeners(ClickEvent.class).iterator().next();
         listener.buttonClick(new ClickEvent(createScenarioWindow));
         assertTrue(createScenarioWindow.isClosed());
-        verify(controller, scenarioService);
+        verify(controller);
     }
 
     @Test
     public void testScenarioNameExists() {
-        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(true).times(4);
-        replay(controller, scenarioService);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(true).times(4);
+        replay(controller);
         window = new CreateNtsScenarioWindow(controller);
         TextField scenarioNameField = Whitebox.getInternalState(window, "scenarioNameField");
         Binder binder = Whitebox.getInternalState(window, "scenarioBinder");
         validateScenarioNameExistence(scenarioNameField, binder, SCENARIO_NAME);
         validateScenarioNameExistence(scenarioNameField, binder, ' ' + SCENARIO_NAME + ' ');
-        verify(controller, scenarioService);
+        verify(controller);
     }
 
     private void validateScenarioNameExistence(TextField scenarioNameField, Binder binder, String scenarioName) {
@@ -228,7 +224,7 @@ public class CreateNtsScenarioWindowTest {
         private EventObject eventObject;
         private boolean closed;
 
-        TestCreateNtsScenarioWindow(IUsagesController controller) {
+        TestCreateNtsScenarioWindow(INtsUsageController controller) {
             super(controller);
         }
 

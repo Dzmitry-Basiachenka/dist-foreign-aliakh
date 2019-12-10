@@ -33,7 +33,6 @@ import java.util.List;
  *
  * @author Uladzislau Shalamitski
  */
-//TODO: add unit tests once all todos are resolved
 public class FasUsageWidget extends CommonUsageWidget<IFasUsageWidget, IFasUsageController>
     implements IFasUsageWidget {
 
@@ -92,9 +91,8 @@ public class FasUsageWidget extends CommonUsageWidget<IFasUsageWidget, IFasUsage
     @Override
     HorizontalLayout initButtonsLayout() {
         loadResearchedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_researched_usages"));
-        loadResearchedUsagesButton.addClickListener(event -> {
-            //TODO: show ResearchedUsagesUploadWindow once it is adjusted
-        });
+        loadResearchedUsagesButton.addClickListener(event ->
+            Windows.showModalWindow(new ResearchedUsagesUploadWindow(getController())));
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(event -> onAddToScenarioClicked());
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
@@ -131,13 +129,9 @@ public class FasUsageWidget extends CommonUsageWidget<IFasUsageWidget, IFasUsage
         MenuBar.MenuItem menuItem =
             usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
         loadUsageBatchMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
-            item -> {
-                //TODO: show ResearchedUsagesUploadWindow once it is adjusted
-            });
+            item -> Windows.showModalWindow(new UsageBatchUploadWindow(getController())));
         menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
-            item -> {
-                //TODO: show ViewUsageBatchWindow once it is adjusted
-            });
+            item -> Windows.showModalWindow(new ViewUsageBatchWindow(getController())));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
     }
@@ -146,8 +140,9 @@ public class FasUsageWidget extends CommonUsageWidget<IFasUsageWidget, IFasUsage
         String message = getScenarioValidationMessage();
         if (null != message) {
             Windows.showNotificationWindow(message);
+        } else {
+            showCreateScenarioWindow(new CreateScenarioWindow(getController()));
         }
-        //TODO: show CreateScenarioWindow once it is adjusted
     }
 
     private String getScenarioValidationMessage() {

@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau Shalamitski
  */
-//TODO: add unit tests once all todos are resolved
 public class NtsUsageWidget extends CommonUsageWidget<INtsUsageWidget, INtsUsageController>
     implements INtsUsageWidget {
 
@@ -105,9 +104,7 @@ public class NtsUsageWidget extends CommonUsageWidget<INtsUsageWidget, INtsUsage
         fileDownloader.extend(exportButton);
         assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
         assignClassificationButton.addClickListener(
-            event -> {
-                //TODO: show NtsUsageBatchSelectorWidget once it is adjusted
-            });
+            event -> new NtsUsageBatchSelectorWidget(getController()).showFilterWindow());
         initFundPoolMenuBar();
         initAdditionalFundsMenuBar();
         VaadinUtils.setButtonsAutoDisabled(assignClassificationButton, addToScenarioButton);
@@ -122,13 +119,9 @@ public class NtsUsageWidget extends CommonUsageWidget<INtsUsageWidget, INtsUsage
         fundPoolMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem = fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
         loadFundPoolMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
-            item -> {
-                //TODO: show FundPoolLoadWindow once it is adjusted
-            });
+            item -> Windows.showModalWindow(new FundPoolLoadWindow(getController())));
         menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
-            item -> {
-                //TODO: show ViewFundPoolWindow once it is adjusted
-            });
+            item -> Windows.showModalWindow(new ViewFundPoolWindow(getController())));
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
     }
@@ -140,9 +133,7 @@ public class NtsUsageWidget extends CommonUsageWidget<INtsUsageWidget, INtsUsage
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             item -> Windows.showModalWindow(initPreServiceFeeFundBatchesFilterWindow()));
         menuItem.addItem(ForeignUi.getMessage("menu.item.delete"), null,
-            item -> {
-                //TODO: show DeleteAdditionalFundsWindow once it is adjusted
-            });
+            item -> Windows.showModalWindow(new DeleteAdditionalFundsWindow(getController())));
         VaadinUtils.addComponentStyle(additionalFundsMenuBar, "additional-funds-menu-bar");
         VaadinUtils.addComponentStyle(additionalFundsMenuBar, "v-menubar-df");
     }
@@ -154,8 +145,10 @@ public class NtsUsageWidget extends CommonUsageWidget<INtsUsageWidget, INtsUsage
         window.updateSaveButtonClickListener(
             () -> {
                 List<UsageBatch> selectedUsageBatches = widget.getSelectedUsageBatches();
-                //TODO: show PreServiceFeeFundFilteredBatchesWindow once it is adjusted
-                if (selectedUsageBatches.isEmpty()) {
+                if (!selectedUsageBatches.isEmpty()) {
+                    Windows.showModalWindow(
+                        new PreServiceFeeFundFilteredBatchesWindow(getController(), selectedUsageBatches, window));
+                } else {
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.usage.batches.empty"));
                 }
             });
@@ -167,8 +160,9 @@ public class NtsUsageWidget extends CommonUsageWidget<INtsUsageWidget, INtsUsage
         String message = getScenarioValidationMessage();
         if (null != message) {
             Windows.showNotificationWindow(message);
+        } else {
+            showCreateScenarioWindow(new CreateNtsScenarioWindow(getController()));
         }
-        //TODO: show CreateNtsScenarioWindow once it is adjusted
     }
 
     private String getScenarioValidationMessage() {

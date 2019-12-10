@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -40,16 +40,16 @@ import java.util.Objects;
 public abstract class AbstractViewUsageBatchWindow extends Window implements SearchWidget.ISearchController {
 
     private final SearchWidget searchWidget;
-    private final IUsagesController controller;
+    private final ICommonUsageController controller;
     private Grid<UsageBatch> grid;
     private Button deleteButton;
 
     /**
      * Constructor.
      *
-     * @param controller {@link IUsagesController}
+     * @param controller {@link ICommonUsageController}
      */
-    AbstractViewUsageBatchWindow(IUsagesController controller) {
+    AbstractViewUsageBatchWindow(ICommonUsageController controller) {
         this.controller = controller;
         setWidth(1000, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);

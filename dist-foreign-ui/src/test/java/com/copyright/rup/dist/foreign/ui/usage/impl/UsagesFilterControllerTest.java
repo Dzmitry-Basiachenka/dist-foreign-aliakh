@@ -12,7 +12,6 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.google.common.collect.Lists;
 
@@ -89,18 +88,5 @@ public class UsagesFilterControllerTest {
         assertEquals(1, rightsholders.size());
         assertEquals(rightsholder.getAccountNumber(), rightsholders.iterator().next().getAccountNumber());
         verify(rightsholderService);
-    }
-
-    @Test
-    public void testGetProductFamilies() {
-        IUsageService usageService = createMock(IUsageService.class);
-        Whitebox.setInternalState(controller, IUsageService.class, usageService);
-        List<String> expectedProductFamilies = Lists.newArrayList(FAS_PRODUCT_FAMILY, "NTS");
-        expect(usageService.getProductFamilies()).andReturn(expectedProductFamilies).once();
-        replay(usageService);
-        List<String> productFamilies = controller.getProductFamilies();
-        assertEquals(2, productFamilies.size());
-        assertTrue(CollectionUtils.isEqualCollection(expectedProductFamilies, productFamilies));
-        verify(usageService);
     }
 }

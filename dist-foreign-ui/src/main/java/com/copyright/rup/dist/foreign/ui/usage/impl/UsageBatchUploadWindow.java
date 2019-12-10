@@ -11,7 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -50,7 +50,7 @@ class UsageBatchUploadWindow extends Window {
 
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
 
-    private final IUsagesController usagesController;
+    private final IFasUsageController usagesController;
     private final Binder<UsageBatch> binder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
     private TextField accountNumberField;
@@ -66,9 +66,9 @@ class UsageBatchUploadWindow extends Window {
     /**
      * Constructor.
      *
-     * @param usagesController {@link IUsagesController} instance
+     * @param usagesController {@link IFasUsageController} instance
      */
-    UsageBatchUploadWindow(IUsagesController usagesController) {
+    UsageBatchUploadWindow(IFasUsageController usagesController) {
         this.usagesController = usagesController;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_usage_batch"));

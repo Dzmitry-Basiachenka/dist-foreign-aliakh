@@ -17,7 +17,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -56,11 +56,11 @@ import java.util.Collections;
 public class ResearchedUsagesUploadWindowTest {
 
     private ResearchedUsagesUploadWindow window;
-    private IUsagesController usagesController;
+    private IFasUsageController usagesController;
 
     @Before
     public void setUp() {
-        usagesController = createMock(IUsagesController.class);
+        usagesController = createMock(IFasUsageController.class);
     }
 
     @Test

@@ -6,7 +6,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Validatio
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -36,16 +36,16 @@ import java.util.Collections;
  */
 class ResearchedUsagesUploadWindow extends Window {
 
-    private final IUsagesController usagesController;
+    private final IFasUsageController usagesController;
     private final Binder<String> uploadBinder = new Binder<>();
     private UploadField uploadField;
 
     /**
      * Constructor.
      *
-     * @param usagesController {@link IUsagesController} instance
+     * @param usagesController {@link IFasUsageController} instance
      */
-    ResearchedUsagesUploadWindow(IUsagesController usagesController) {
+    ResearchedUsagesUploadWindow(IFasUsageController usagesController) {
         this.usagesController = usagesController;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_researched_usages"));

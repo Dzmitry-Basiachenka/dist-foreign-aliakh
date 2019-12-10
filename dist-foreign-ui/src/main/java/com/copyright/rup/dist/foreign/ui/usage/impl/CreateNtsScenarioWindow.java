@@ -7,7 +7,7 @@ import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -45,7 +45,7 @@ import java.util.Objects;
  */
 public class CreateNtsScenarioWindow extends Window {
 
-    private final IUsagesController controller;
+    private final INtsUsageController controller;
     private final Binder<Scenario> scenarioBinder = new Binder<>();
     private final Binder<PreServiceFeeFund> fundBinder = new Binder<>();
     private TextField scenarioNameField;
@@ -58,9 +58,9 @@ public class CreateNtsScenarioWindow extends Window {
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IUsagesController}
+     * @param controller instance of {@link INtsUsageController}
      */
-    CreateNtsScenarioWindow(IUsagesController controller) {
+    CreateNtsScenarioWindow(INtsUsageController controller) {
         this.controller = controller;
         setResizable(false);
         setWidth(320, Unit.PIXELS);
@@ -91,7 +91,7 @@ public class CreateNtsScenarioWindow extends Window {
         scenarioBinder.forField(scenarioNameField)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !controller.getScenarioService().scenarioExists(StringUtils.trimToEmpty(value)),
+            .withValidator(value -> !controller.scenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Scenario"))
             .bind(Scenario::getName, Scenario::setName);
         VaadinUtils.setMaxComponentsWidth(scenarioNameField);

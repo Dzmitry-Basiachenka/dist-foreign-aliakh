@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -36,17 +36,17 @@ import java.util.stream.Collectors;
  */
 class PreServiceFeeFundFilteredBatchesWindow extends Window {
 
-    private final IUsagesController controller;
+    private final INtsUsageController controller;
     private final PreServiceFeeFundBatchesFilterWindow batchesFilterWindow;
 
     /**
      * Constructor.
      *
-     * @param controller          instance of {@link IUsagesController}
+     * @param controller          instance of {@link INtsUsageController}
      * @param batches             list of {@link UsageBatch}'es
      * @param batchesFilterWindow instance of {@link PreServiceFeeFundBatchesFilterWindow}
      */
-    PreServiceFeeFundFilteredBatchesWindow(IUsagesController controller, List<UsageBatch> batches,
+    PreServiceFeeFundFilteredBatchesWindow(INtsUsageController controller, List<UsageBatch> batches,
                                            PreServiceFeeFundBatchesFilterWindow batchesFilterWindow) {
         this.controller = controller;
         this.batchesFilterWindow = batchesFilterWindow;
