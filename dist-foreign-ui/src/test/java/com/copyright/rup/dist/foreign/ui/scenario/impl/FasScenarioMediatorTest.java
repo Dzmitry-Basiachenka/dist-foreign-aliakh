@@ -161,24 +161,4 @@ public class FasScenarioMediatorTest {
         assertTrue(emptyUsagesLayout.isVisible());
         assertFalse(searchWidget.isVisible());
     }
-
-    @Test
-    public void testOnScenarioUpdatedNtsProductFamily() {
-        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true).once();
-        replay(SecurityUtils.class);
-        mediator.applyPermissions();
-        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
-        scenario.setProductFamily("NTS");
-        mediator.onScenarioUpdated(false, scenario);
-        verify(SecurityUtils.class);
-        assertTrue(excludeByRroButton.isVisible());
-        assertFalse(excludeByRroButton.isEnabled());
-        assertTrue(excludeByPayeeButton.isVisible());
-        assertFalse(excludeByPayeeButton.isEnabled());
-        assertTrue(exportDetailsButton.isEnabled());
-        assertTrue(exportButton.isEnabled());
-        assertTrue(grid.isVisible());
-        assertFalse(emptyUsagesLayout.isVisible());
-        assertTrue(searchWidget.isVisible());
-    }
 }
