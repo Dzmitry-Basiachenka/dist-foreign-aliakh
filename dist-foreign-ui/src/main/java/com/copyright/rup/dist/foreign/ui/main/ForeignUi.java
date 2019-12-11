@@ -11,6 +11,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.RootWidget;
 import com.copyright.rup.vaadin.widget.api.IController;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.ErrorHandler;
@@ -22,8 +23,6 @@ import com.vaadin.ui.Component;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -43,8 +42,8 @@ import java.util.Set;
 @SpringUI
 public class ForeignUi extends CommonUi {
 
-    private static final Set<String> PRODUCT_FAMILIES = new HashSet<>(Arrays.asList(
-        FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY));
+    private static final Set<String> PRODUCT_FAMILIES = ImmutableSet.of(
+        FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY);
     private static final ResourceBundle MESSAGES =
         ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages");
 
@@ -117,6 +116,7 @@ public class ForeignUi extends CommonUi {
         productFamilyComboBox.addValueChangeListener(event -> {
             productFamilyProvider.setProductFamily(event.getValue());
             controller.onProductFamilyChanged();
+            reportController.onProductFamilyChanged();
         });
         VaadinUtils.setMaxComponentsWidth(productFamilyComboBox);
         VaadinUtils.addComponentStyle(productFamilyComboBox, "global-product-family-combo-box");

@@ -11,8 +11,10 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
 
@@ -43,14 +45,22 @@ public class ReportControllerTest {
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
     private ReportController reportController;
     private IReportService reportService;
+    private IProductFamilyProvider productFamilyProvider;
 
     @Before
     public void setUp() {
         reportController = new ReportController();
         reportService = createMock(IReportService.class);
         undistributedLiabilitiesReportController = new UndistributedLiabilitiesReportController();
+        productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(reportController, undistributedLiabilitiesReportController);
         Whitebox.setInternalState(reportController, reportService);
+        Whitebox.setInternalState(reportController, productFamilyProvider);
+    }
+
+    @Test
+    public void testProductFamilyProvider() {
+        assertSame(productFamilyProvider, reportController.getProductFamilyProvider());
     }
 
     @Test
@@ -92,29 +102,32 @@ public class ReportControllerTest {
     public void testFasBatchSummaryReportStreamSource() {
         reportService.writeFasBatchSummaryCsvReport(anyObject(OutputStream.class));
         expectLastCall().once();
-        replay(reportService);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
+        replay(reportService, productFamilyProvider);
         reportController.initWidget();
         assertNotNull(reportController.getFasBatchSummaryReportStreamSource().getSource().getValue().get());
-        verify(reportService);
+        verify(reportService, productFamilyProvider);
     }
 
     @Test
     public void testNtsWithdrawnBatchSummaryReportStreamSource() {
         reportService.writeNtsWithdrawnBatchSummaryCsvReport(anyObject(OutputStream.class));
         expectLastCall().once();
-        replay(reportService);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.NTS_PRODUCT_FAMILY).once();
+        replay(reportService, productFamilyProvider);
         reportController.initWidget();
         assertNotNull(reportController.getNtsWithdrawnBatchSummaryReportStreamSource().getSource().getValue().get());
-        verify(reportService);
+        verify(reportService, productFamilyProvider);
     }
 
     @Test
     public void testResearchStatusReportStreamSource() {
         reportService.writeResearchStatusCsvReport(anyObject(OutputStream.class));
         expectLastCall().once();
-        replay(reportService);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.FAS_PRODUCT_FAMILY).once();
+        replay(reportService, productFamilyProvider);
         reportController.initWidget();
         assertNotNull(reportController.getResearchStatusReportStreamSource().getSource().getValue().get());
-        verify(reportService);
+        verify(reportService, productFamilyProvider);
     }
 }

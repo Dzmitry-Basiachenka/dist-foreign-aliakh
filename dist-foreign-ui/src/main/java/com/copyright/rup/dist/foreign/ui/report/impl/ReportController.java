@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
@@ -39,6 +40,18 @@ public class ReportController extends CommonController<IReportWidget> implements
     private IOwnershipAdjustmentReportController ownershipAdjustmentReportController;
     @Autowired
     private IReportService reportService;
+    @Autowired
+    private IProductFamilyProvider productFamilyProvider;
+
+    @Override
+    public void onProductFamilyChanged() {
+        refreshWidget();
+    }
+
+    @Override
+    public IProductFamilyProvider getProductFamilyProvider() {
+        return productFamilyProvider;
+    }
 
     @Override
     public IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController() {

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.api;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 /**
@@ -13,6 +14,16 @@ import com.copyright.rup.vaadin.widget.api.IController;
  * @author Nikita Levyankov
  */
 public interface IReportController extends IController<IReportWidget> {
+
+    /**
+     * Handles global product family selection.
+     */
+    void onProductFamilyChanged();
+
+    /**
+     * @return product family provider.
+     */
+    IProductFamilyProvider getProductFamilyProvider();
 
     /**
      * @return undistributed liabilities report controller.
