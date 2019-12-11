@@ -54,12 +54,14 @@
         select distinct name
         from ${schema}.df_fund_pool
         where df_fund_pool_uid in (
-            select df_fund_pool_uid
-            from ${schema}.df_usage
+            select ufas.df_fund_pool_uid
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
             where df_usage_batch_uid = #{df_usage_batch_id}
             union
-            select df_fund_pool_uid
-            from ${schema}.df_usage_archive
+            select ufas.df_fund_pool_uid
+            from ${schema}.df_usage_archive u
+            join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
             where df_usage_batch_uid = #{df_usage_batch_id}
         )
     </select>

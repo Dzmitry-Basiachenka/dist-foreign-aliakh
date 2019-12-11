@@ -518,7 +518,7 @@
         select
             u.df_usage_uid,
             u.df_usage_batch_uid,
-            u.df_fund_pool_uid,
+            ufas.df_fund_pool_uid,
             u.df_scenario_uid,
             u.wr_wrk_inst,
             u.work_title,
@@ -617,7 +617,7 @@
             u.df_usage_uid,
             u.df_usage_batch_uid,
             u.df_scenario_uid,
-            u.df_fund_pool_uid,
+            ufas.df_fund_pool_uid,
             u.wr_wrk_inst,
             u.work_title,
             u.system_title,
@@ -721,13 +721,21 @@
     </delete>
 
     <update id="deleteFromPreServiceFeeFund" parameterType="map">
-        update
-            ${schema}.df_usage
+        with ufas as (
+            update
+                ${schema}.df_usage_fas
+            set
+                df_fund_pool_uid = null,
+                <include refid="StoredEntityMapper.update"/>
+            where df_fund_pool_uid = #{fundPoolId}
+            returning df_usage_fas_uid
+        )
+        update ${schema}.df_usage
         set
             status_ind = #{status},
-            df_fund_pool_uid = null,
             <include refid="StoredEntityMapper.update"/>
-        where df_fund_pool_uid = #{fundPoolId}
+        from ufas
+        where df_usage_uid = ufas.df_usage_fas_uid
     </update>
 
     <select id="findWithAmountsAndRightsholders" parameterType="map" resultMap="usageAmountResultMap">
@@ -1644,16 +1652,24 @@
     </update>
 
     <update id="addWithdrawnUsagesToPreServiceFeeFund" parameterType="map">
-        update ${schema}.df_usage
+        with u as (
+            update ${schema}.df_usage
+            set
+                status_ind = #{statusToSet},
+                <include refid="StoredEntityMapper.update"/>
+            where df_usage_batch_uid in
+                <foreach collection="batchIds" item="batchId" separator="," open="(" close=")">
+                    #{batchId}
+                </foreach>
+                and status_ind = #{statusToFind}
+            returning df_usage_uid
+        )
+        update ${schema}.df_usage_fas
         set
-            status_ind = #{statusToSet},
             df_fund_pool_uid = #{fundId},
             <include refid="StoredEntityMapper.update"/>
-        where df_usage_batch_uid in
-            <foreach collection="batchIds" item="batchId" separator="," open="(" close=")">
-                #{batchId}
-            </foreach>
-            and status_ind = #{statusToFind}
+        from u
+        where df_usage_fas_uid = u.df_usage_uid
     </update>
 
     <update id="updateUsagesStatusToUnclassified" parameterType="map">
