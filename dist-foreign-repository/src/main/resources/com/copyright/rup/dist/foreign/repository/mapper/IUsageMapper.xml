@@ -388,21 +388,6 @@
         cast(ub.rro_account_number as text) like '%' || #{searchValue} || '%'
     </sql>
 
-    <sql id="deleteFromScenarioSql">
-        update
-            ${schema}.df_usage
-        set
-            status_ind = #{status},
-            df_scenario_uid = null,
-            payee_account_number = null,
-            service_fee = null,
-            is_rh_participating_flag = false,
-            is_payee_participating_flag = false,
-            service_fee_amount = 0,
-            net_amount = 0,
-            <include refid="StoredEntityMapper.update"/>
-    </sql>
-
     <insert id="insert" parameterType="Usage">
         with u as (
             insert into ${schema}.df_usage (
@@ -860,40 +845,81 @@
         returning u.df_usage_uid
     </select>
 
+    <sql id="deleteFromScenarioSql">
+        update ${schema}.df_usage
+        set
+            status_ind = #{status},
+            df_scenario_uid = null,
+            payee_account_number = null,
+            service_fee = null,
+            is_rh_participating_flag = false,
+            is_payee_participating_flag = false,
+            service_fee_amount = 0,
+            net_amount = 0,
+            <include refid="StoredEntityMapper.update"/>
+    </sql>
+
     <update id="deleteFromScenario" parameterType="map">
-        <include refid="deleteFromScenarioSql"/>
-        where df_scenario_uid = #{scenarioId}
+        with usage_ids as (
+            <include refid="deleteFromScenarioSql"/>
+            where df_scenario_uid = #{scenarioId}
+            returning df_usage_uid
+        )
+        update ${schema}.df_usage_fas
+        set
+            is_rh_participating_flag = false,
+            is_payee_participating_flag = false,
+            <include refid="StoredEntityMapper.update"/>
+        from usage_ids
+        where df_usage_fas_uid = usage_ids.df_usage_uid
     </update>
 
     <update id="deleteFromScenarioByUsageId" parameterType="map">
-        <include refid="deleteFromScenarioSql"/>
-        where df_usage_uid = #{usageId}
+        with result as (
+            <include refid="deleteFromScenarioSql"/>
+            where df_usage_uid = #{usageId}
+        )
+        update ${schema}.df_usage_fas
+        set
+            is_rh_participating_flag = false,
+            is_payee_participating_flag = false,
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_fas_uid = #{usageId}
     </update>
 
     <update id="deleteFromNtsScenario" parameterType="map">
-        update
-            ${schema}.df_usage u
+        with usage_ids as (
+            update
+                ${schema}.df_usage u
+            set
+                status_ind = case when usage_with_classification.classification is not null then #{eligibleStatus} else #{unclassifiedStatus} end,
+                df_scenario_uid = null,
+                service_fee = null,
+                service_fee_amount = 0,
+                net_amount = 0,
+                gross_amount = 0,
+                is_rh_participating_flag = false,
+                <include refid="StoredEntityMapper.update"/>
+            from (
+                select
+                    u.df_usage_uid,
+                    wc.classification
+                from ${schema}.df_usage u
+                left join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
+                where <include refid="scenarioBatchesFilter"/>
+                    and status_ind in
+                    <foreach collection="statusesToUpdate" item="statusToUpdate" separator="," open="(" close=")">
+                        #{statusToUpdate}
+                    </foreach>) as usage_with_classification
+            where u.df_usage_uid = usage_with_classification.df_usage_uid
+            returning u.df_usage_uid
+        )
+        update ${schema}.df_usage_fas
         set
-            status_ind = case when usage_with_classification.classification is not null then #{eligibleStatus} else #{unclassifiedStatus} end,
-            df_scenario_uid = null,
-            service_fee = null,
-            service_fee_amount = 0,
-            net_amount = 0,
-            gross_amount = 0,
             is_rh_participating_flag = false,
             <include refid="StoredEntityMapper.update"/>
-        from (
-            select
-                u.df_usage_uid,
-                wc.classification
-            from ${schema}.df_usage u
-            left join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
-            where <include refid="scenarioBatchesFilter"/>
-                and status_ind in
-                <foreach collection="statusesToUpdate" item="statusToUpdate" separator="," open="(" close=")">
-                    #{statusToUpdate}
-                </foreach>) as usage_with_classification
-        where u.df_usage_uid = usage_with_classification.df_usage_uid
+        from usage_ids
+        where df_usage_fas_uid = usage_ids.df_usage_uid
     </update>
 
     <select id="findCountByUsageIdAndStatus" parameterType="map" resultType="int">
