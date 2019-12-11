@@ -101,6 +101,7 @@ public class LoadUsagesIntegrationTest {
         testHelper.assertAudit(USAGE_ID_4, buildUsageAuditItems(USAGE_ID_4, ImmutableMap.of(
             UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible",
             UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Usage was uploaded with Wr Wrk Inst",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.verifyRestServer();
     }
@@ -169,11 +170,12 @@ public class LoadUsagesIntegrationTest {
 
     private List<UsageAuditItem> buildUsageAuditItems(String usageId, Map<UsageActionTypeEnum, String> map) {
         List<UsageAuditItem> usageAuditItems = new ArrayList<>();
-        UsageAuditItem usageAuditItem = new UsageAuditItem();
-        usageAuditItem.setUsageId(usageId);
         map.forEach((actionTypeEnum, detail) -> {
+            UsageAuditItem usageAuditItem = new UsageAuditItem();
+            usageAuditItem.setUsageId(usageId);
             usageAuditItem.setActionType(actionTypeEnum);
             usageAuditItem.setActionReason(detail);
+            usageAuditItems.add(usageAuditItem);
         });
         return usageAuditItems;
     }

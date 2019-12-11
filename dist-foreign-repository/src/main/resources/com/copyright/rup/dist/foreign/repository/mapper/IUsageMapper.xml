@@ -120,17 +120,9 @@
         rh_account_number,
         status_ind,
         product_family,
-        article,
         standard_number,
         standard_number_type,
-        publisher,
-        publication_date,
-        market,
-        market_period_from,
-        market_period_to,
-        author,
         number_of_copies,
-        reported_value,
         gross_amount,
         comment
     </sql>
@@ -406,17 +398,9 @@
                 #{rightsholder.accountNumber},
                 #{status},
                 #{productFamily},
-                #{article},
                 #{standardNumber},
                 #{standardNumberType},
-                #{publisher},
-                #{publicationDate},
-                #{market},
-                #{marketPeriodFrom},
-                #{marketPeriodTo},
-                #{author},
                 #{numberOfCopies},
-                #{reportedValue},
                 #{grossAmount},
                 #{comment},
                 #{payee.accountNumber},
@@ -518,7 +502,6 @@
         select
             u.df_usage_uid,
             u.df_usage_batch_uid,
-            ufas.df_fund_pool_uid,
             u.df_scenario_uid,
             u.wr_wrk_inst,
             u.work_title,
@@ -547,6 +530,7 @@
             ufas.author,
             ufas.reported_value,
             ufas.is_rh_participating_flag,
+            ufas.df_fund_pool_uid,
             u.comment
         from ${schema}.df_usage u
         join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
@@ -860,8 +844,6 @@
             df_scenario_uid = null,
             payee_account_number = null,
             service_fee = null,
-            is_rh_participating_flag = false,
-            is_payee_participating_flag = false,
             service_fee_amount = 0,
             net_amount = 0,
             <include refid="StoredEntityMapper.update"/>
@@ -906,7 +888,6 @@
                 service_fee_amount = 0,
                 net_amount = 0,
                 gross_amount = 0,
-                is_rh_participating_flag = false,
                 <include refid="StoredEntityMapper.update"/>
             from (
                 select
@@ -1571,7 +1552,7 @@
             left join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
             group by u.wr_wrk_inst, wc.classification
         ),
-        usage_info as (
+        usage_ids as (
             insert into ${schema}.df_usage (
                 df_usage_uid,
                 df_usage_batch_uid,
@@ -1582,10 +1563,6 @@
                 product_family,
                 standard_number,
                 standard_number_type,
-                market,
-                market_period_from,
-                market_period_to,
-                reported_value,
                 comment,
                 <include refid="StoredEntityMapper.additionalColumns"/>
             )
@@ -1599,17 +1576,13 @@
                 ua.product_family,
                 ua.standard_number,
                 ua.standard_number_type,
-                ua.market,
-                ua.market_period_from,
-                ua.market_period_to,
-                ua.reported_value,
                 ua.comment,
                 <include refid="StoredEntityMapper.insert"/>
             from nts_usages ua
             join work_total_weight_subquery sub on sub.wr_wrk_inst = ua.wr_wrk_inst
             where ((sub.work_total_weight &gt;= (select cutoff_amount from cutoff_amounts c where c.classification = sub.classification))
                 or (sub.classification is null and sub.work_total_weight &gt;= (select unclassified_cutoff from unclassified_cutoff_amount)))
-            returning df_usage_uid, market, market_period_from, market_period_to, reported_value
+            returning df_usage_uid
         )
         insert into ${schema}.df_usage_fas (
             df_usage_fas_uid,
@@ -1626,7 +1599,8 @@
             market_period_to,
             reported_value,
             <include refid="StoredEntityMapper.insert"/>
-        from usage_info
+        from nts_usages
+        where df_usage_uid::text in (select df_usage_uid from usage_ids)
         returning df_usage_fas_uid
     </select>
 

@@ -23,8 +23,7 @@
         service_fee,
         service_fee_amount,
         net_amount,
-        payee_account_number,
-        is_rh_participating_flag
+        payee_account_number
     </sql>
 
     <insert id="moveFundUsagesToArchive" parameterType="string">
@@ -50,17 +49,9 @@
                 u.rh_account_number,
                 'ARCHIVED',
                 'NTS',
-                ufas.article,
                 u.standard_number,
                 u.standard_number_type,
-                ufas.publisher,
-                ufas.publication_date,
-                ufas.market,
-                ufas.market_period_from,
-                ufas.market_period_to,
-                ufas.author,
                 u.number_of_copies,
-                ufas.reported_value,
                 u.gross_amount,
                 u.comment,
                 <include refid="StoredEntityMapper.insert"/>
@@ -373,24 +364,15 @@
                 #{rightsholder.accountNumber},
                 #{status},
                 #{productFamily},
-                #{article},
                 #{standardNumber},
                 #{standardNumberType},
-                #{publisher},
-                #{publicationDate},
-                #{market},
-                #{marketPeriodFrom},
-                #{marketPeriodTo},
-                #{author},
                 #{numberOfCopies},
-                #{reportedValue},
                 #{grossAmount},
                 #{comment},
                 #{serviceFee},
                 #{serviceFeeAmount},
                 #{netAmount},
                 #{payee.accountNumber},
-                #{rhParticipating},
                 #{checkNumber},
                 #{checkDate},
                 #{cccEventId},
@@ -442,24 +424,15 @@
             rh_account_number,
             #{status},
             product_family,
-            article,
             standard_number,
             standard_number_type,
-            publisher,
-            publication_date,
-            market,
-            market_period_from,
-            market_period_to,
-            author,
             number_of_copies,
-            reported_value,
             gross_amount,
             comment,
             service_fee,
             service_fee_amount,
             net_amount,
             payee_account_number,
-            is_rh_participating_flag,
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_usage
         where df_scenario_uid = #{scenarioId}
@@ -468,6 +441,14 @@
 
     <select id="copyNtsToArchiveByScenarioId" parameterType="map" resultType="string">
         with participation_flags as (
+            select
+                distinct rh_account_number,
+                ufas.is_rh_participating_flag
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+            where df_scenario_uid = #{scenarioId}
+        ),
+        rightsholders as (
             insert into ${schema}.df_usage_archive (
                 df_usage_archive_uid,
                 df_scenario_uid,
@@ -482,7 +463,6 @@
                 service_fee,
                 service_fee_amount,
                 net_amount,
-                is_rh_participating_flag,
                 <include refid="StoredEntityMapper.additionalColumns"/>)
             select
                 uuid_generate_v4(),
@@ -498,12 +478,11 @@
                 service_fee,
                 sum(service_fee_amount),
                 sum(net_amount),
-                is_rh_participating_flag,
                 <include refid="StoredEntityMapper.insert"/>
-                from ${schema}.df_usage
+            from ${schema}.df_usage u
             where df_scenario_uid = #{scenarioId}
-            group by rh_account_number, product_family, payee_account_number, service_fee, is_rh_participating_flag, df_scenario_uid
-            returning df_usage_archive_uid, is_rh_participating_flag
+            group by rh_account_number, product_family, payee_account_number, service_fee, df_scenario_uid
+            returning df_usage_archive_uid, rh_account_number
         )
         insert into ${schema}.df_usage_fas (
             df_usage_fas_uid,
@@ -512,7 +491,8 @@
         select
             df_usage_archive_uid,
             is_rh_participating_flag
-        from participation_flags
+        from rightsholders r
+        join participation_flags p on r.rh_account_number = p.rh_account_number
         returning df_usage_fas_uid
     </select>
 </mapper>

@@ -29,7 +29,6 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000003821')
             column(name: 'status_ind', value: 'PAID')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'reported_value', value: '0.00') // B-55836 remove
             column(name: 'gross_amount', value: '90.63')
             column(name: 'service_fee_amount', value: '29.00')
             column(name: 'net_amount', value: '61.63')
@@ -59,7 +58,6 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '7000429266')
             column(name: 'status_ind', value: 'PAID')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'reported_value', value: '0.00') // B-55836 remove
             column(name: 'gross_amount', value: '13503.37')
             column(name: 'net_amount', value: '9182.28')
             column(name: 'service_fee_amount', value: '4321.07')

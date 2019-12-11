@@ -23,14 +23,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'article', value: 'Appendix: The Principles of Newspeak') // B-55836 remove
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
             column(name: 'gross_amount', value: '70.00')
-            column(name: 'reported_value', value: '70.00') // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -52,12 +45,6 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'article', value: 'Appendix: The Principles of Newspeak') // B-55836 remove
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
             column(name: 'gross_amount', value: '25.00')
         }
 
@@ -79,12 +66,6 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'article', value: 'Appendix: The Principles of Newspeak') // B-55836 remove
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
             column(name: 'gross_amount', value: '99.00')
         }
 
@@ -106,12 +87,6 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'article', value: 'Appendix: The Principles of Newspeak') // B-55836 remove
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -133,12 +108,6 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'article', value: 'Appendix: The Principles of Newspeak') // B-55836 remove
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
             column(name: 'gross_amount', value: '200.00')
         }
 
@@ -160,12 +129,6 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'article', value: 'Appendix: The Principles of Newspeak') // B-55836 remove
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
             column(name: 'gross_amount', value: '300.00')
         }
 
@@ -187,13 +150,7 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Appendix: The Principles of Newspeak') // B-55836 remove
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ,Bus,Doc,S') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
             column(name: 'gross_amount', value: '150.00')
         }
 
@@ -214,13 +171,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '(En)gendering the war on terror : war stories and camouflaged politics')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'between orientalism and fundamentalism') // B-55836 remove
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
             column(name: 'gross_amount', value: '250.00')
         }
 
@@ -241,13 +192,7 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Annals of internal medicine')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Appendix: The Principles of Newspeak') // B-55836 remove
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
             column(name: 'gross_amount', value: '150.00')
         }
 
@@ -267,10 +212,6 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
             column(name: 'gross_amount', value: '50.00')
         }
 

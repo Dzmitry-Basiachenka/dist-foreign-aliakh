@@ -74,13 +74,8 @@ databaseChangeLog {
             column(name: "payee_account_number", value: "1000009522")
             column(name: "status_ind", value: "ARCHIVED")
             column(name: "product_family", value: "FAS")
-            column(name: "article", value: "DIN EN 779:2013") // B-55836 remove
             column(name: "standard_number", value: "1008902112317622XX")
             column(name: "standard_number_type", value: "VALISBN10")
-            column(name: "market", value: "Doc Del") // B-55836 remove
-            column(name: "market_period_from", value: "2013") // B-55836 remove
-            column(name: "market_period_to", value: "2017") // B-55836 remove
-            column(name: "reported_value", value: "30.86") // B-55836 remove
             column(name: "gross_amount", value: "100.00")
             column(name: "net_amount", value: "68.00")
             column(name: "service_fee_amount", value: "32.00")

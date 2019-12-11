@@ -22,7 +22,7 @@ import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
 import com.google.common.collect.Lists;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -189,7 +189,7 @@ public class ServiceTestHelper {
 
     public void assertAudit(String entityId, List<UsageAuditItem> expectedAuditItems) {
         List<UsageAuditItem> actualAuditItems = usageAuditService.getUsageAudit(entityId);
-        assertEquals(CollectionUtils.size(expectedAuditItems), expectedAuditItems.size());
+        assertEquals(CollectionUtils.size(expectedAuditItems), CollectionUtils.size(actualAuditItems));
         IntStream.range(0, expectedAuditItems.size())
             .forEach(index -> {
                 UsageAuditItem expectedItem = expectedAuditItems.get(index);

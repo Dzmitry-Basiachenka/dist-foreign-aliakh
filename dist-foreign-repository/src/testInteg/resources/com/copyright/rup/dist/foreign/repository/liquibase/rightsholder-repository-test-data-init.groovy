@@ -104,16 +104,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '7001555529')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water') // B-55836 remove
             column(name: 'standard_number', value: '1008902992377654XX')
-            column(name: 'publisher', value: 'IEEE 015') // B-55836 remove
-            column(name: 'publication_date', value: '2014-09-11') // B-55836 remove
-            column(name: 'market', value: 'Play Market') // B-55836 remove
-            column(name: 'market_period_from', value: '2014') // B-55836 remove
-            column(name: 'market_period_to', value: '2018') // B-55836 remove
-            column(name: 'author', value: 'Mikalai Bezmen') // B-55836 remove
             column(name: 'number_of_copies', value: '190222')
-            column(name: 'reported_value', value: '2300') // B-55836 remove
             column(name: 'gross_amount', value: '30000.00')
             column(name: 'service_fee_amount', value: '9600.00')
             column(name: 'net_amount', value: '20400.00')
@@ -140,16 +132,8 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle') // B-55836 remove
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'reported_value', value: '2500') // B-55836 remove
             column(name: 'gross_amount', value: '35000.00')
         }
 
@@ -173,16 +157,8 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants') // B-55836 remove
             column(name: 'standard_number', value: '1008902002377655XX')
-            column(name: 'publisher', value: 'John Wiley & Sons') // B-55836 remove
-            column(name: 'publication_date', value: '2011-05-10') // B-55836 remove
-            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2019') // B-55836 remove
-            column(name: 'author', value: 'Nanette M. Schwann') // B-55836 remove
             column(name: 'number_of_copies', value: '1600')
-            column(name: 'reported_value', value: '1560') // B-55836 remove
             column(name: 'gross_amount', value: '35000.00')
         }
 
@@ -206,16 +182,8 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000005413')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902002377655XX')
-            column(name: 'publisher', value: 'McGraw-Hill') // B-55836 remove
-            column(name: 'publication_date', value: '2009-12-31') // B-55836 remove
-            column(name: 'market', value: 'Edu') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2019') // B-55836 remove
-            column(name: 'author', value: 'Mirjam H. Hüberli') // B-55836 remove
             column(name: 'number_of_copies', value: '2630')
-            column(name: 'reported_value', value: '1280.00') // B-55836 remove
             column(name: 'gross_amount', value: '2125.24')
         }
 
@@ -244,16 +212,8 @@ databaseChangeLog {
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle') // B-55836 remove
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2014-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'reported_value', value: '2500') // B-55836 remove
             column(name: 'gross_amount', value: '35000.00')
         }
 
@@ -303,13 +263,7 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '0804709114')
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'reported_value', value: '296.72') // B-55836 remove
             column(name: 'gross_amount', value: '256.00')
         }
 
@@ -333,13 +287,7 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000005413')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '10457143')
-            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'reported_value', value: '162.41') // B-55836 remove
             column(name: 'gross_amount', value: '1452.00')
         }
 
@@ -363,13 +311,7 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '10457143')
-            column(name: 'publication_date', value: '2019-09-10') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'reported_value', value: '16.24') // B-55836 remove
             column(name: 'gross_amount', value: '145.20')
         }
 

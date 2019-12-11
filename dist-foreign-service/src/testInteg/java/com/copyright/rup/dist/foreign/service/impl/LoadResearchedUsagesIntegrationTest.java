@@ -118,11 +118,12 @@ public class LoadResearchedUsagesIntegrationTest {
 
     private List<UsageAuditItem> buildUsageAuditItems(String usageId, Map<UsageActionTypeEnum, String> map) {
         List<UsageAuditItem> usageAuditItems = new ArrayList<>();
-        UsageAuditItem usageAuditItem = new UsageAuditItem();
-        usageAuditItem.setUsageId(usageId);
         map.forEach((actionTypeEnum, detail) -> {
+            UsageAuditItem usageAuditItem = new UsageAuditItem();
+            usageAuditItem.setUsageId(usageId);
             usageAuditItem.setActionType(actionTypeEnum);
             usageAuditItem.setActionReason(detail);
+            usageAuditItems.add(usageAuditItem);
         });
         return usageAuditItems;
     }

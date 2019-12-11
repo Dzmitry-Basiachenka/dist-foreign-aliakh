@@ -197,11 +197,12 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testUpdateStatus() {
-        Scenario scenario = scenarioRepository.findWithAmountsAndLastAction("3210b236-1239-4a60-9fab-888b84199321");
+        Scenario scenario =
+            scenarioRepository.findArchivedWithAmountsAndLastAction("3210b236-1239-4a60-9fab-888b84199321");
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
         scenarioRepository.updateStatus(scenario);
         Scenario updatedScenario =
-            scenarioRepository.findWithAmountsAndLastAction("3210b236-1239-4a60-9fab-888b84199321");
+            scenarioRepository.findArchivedWithAmountsAndLastAction("3210b236-1239-4a60-9fab-888b84199321");
         assertNotNull(updatedScenario);
         assertEquals(ScenarioStatusEnum.SUBMITTED, updatedScenario.getStatus());
         assertEquals(scenario.getName(), updatedScenario.getName());

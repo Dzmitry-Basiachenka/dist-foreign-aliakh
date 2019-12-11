@@ -133,4 +133,221 @@ databaseChangeLog {
             dropTable(tableName: 'df_usage_fas', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2019-12-11-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-55836 FDA: Database changes to support AACL: remove FAS specific fields from df_usage and df_usage_archive tables")
+
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'article')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'author')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'publisher')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'publication_date')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'market')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'market_period_from')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'market_period_to')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'df_fund_pool_uid')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'is_rh_participating_flag')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'is_payee_participating_flag')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'reported_value')
+
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'article')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'author')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'publisher')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'publication_date')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'market')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'market_period_from')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'market_period_to')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'df_fund_pool_uid')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'is_rh_participating_flag')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'reported_value')
+
+
+        rollback {
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'article', type: 'VARCHAR(1000)', remarks: 'The article')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'author', type: 'VARCHAR(2000)', remarks: 'The author')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'publisher', type: 'VARCHAR(1000)', remarks: 'The publisher')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'publication_date', type: 'DATE', remarks: 'The publication date')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'market', type: 'VARCHAR(200)', remarks: 'The market')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'market_period_from', type: 'NUMERIC(4,0)', remarks: 'The beginning period of when the usage occured')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'market_period_to', type: 'NUMERIC(4,0)', remarks: 'The ending period of when the usage occured')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'df_fund_pool_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'is_rh_participating_flag', type: 'BOOLEAN', defaultValueBoolean: false, remarks: 'RH participating flag') {
+                    constraints(nullable: false)
+                }
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'is_payee_participating_flag', type: 'BOOLEAN', defaultValueBoolean: false, remarks: 'Payee participating flag') {
+                    constraints(nullable: false)
+                }
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'reported_value', type: 'DECIMAL(38,2)', defaultValue: 0.00, remarks: 'The amount in original currency') {
+                    constraints(nullable: false)
+                }
+            }
+
+            sql("""update ${dbAppsSchema}.df_usage u
+                set 
+                    article = ufas.article, 
+                    author = ufas.author, 
+                    publisher = ufas.publisher, 
+                    publication_date = ufas.publication_date, 
+                    market = ufas.market, 
+                    market_period_from = ufas.market_period_from, 
+                    market_period_to = ufas.market_period_to, 
+                    df_fund_pool_uid = ufas.df_fund_pool_uid, 
+                    is_rh_participating_flag = ufas.is_rh_participating_flag, 
+                    is_payee_participating_flag = ufas.is_payee_participating_flag, 
+                    reported_value = ufas.reported_value
+                from ${dbAppsSchema}.df_usage_fas ufas
+                where u.df_usage_uid = ufas.df_usage_fas_uid
+                and product_family = 'FAS'"""
+            )
+
+            sql("""update ${dbAppsSchema}.df_usage u
+                set 
+                    article = ufas.article, 
+                    author = ufas.author, 
+                    publisher = ufas.publisher, 
+                    publication_date = ufas.publication_date, 
+                    market = ufas.market, 
+                    market_period_from = ufas.market_period_from, 
+                    market_period_to = ufas.market_period_to, 
+                    df_fund_pool_uid = ufas.df_fund_pool_uid, 
+                    is_rh_participating_flag = ufas.is_rh_participating_flag, 
+                    is_payee_participating_flag = ufas.is_payee_participating_flag, 
+                    reported_value = ufas.reported_value
+                from ${dbAppsSchema}.df_usage_fas ufas
+                where u.df_usage_uid = ufas.df_usage_fas_uid
+                and product_family = 'FAS2'"""
+            )
+
+            sql("""update ${dbAppsSchema}.df_usage u
+                set 
+                    article = ufas.article, 
+                    author = ufas.author, 
+                    publisher = ufas.publisher, 
+                    publication_date = ufas.publication_date, 
+                    market = ufas.market, 
+                    market_period_from = ufas.market_period_from, 
+                    market_period_to = ufas.market_period_to, 
+                    df_fund_pool_uid = ufas.df_fund_pool_uid, 
+                    is_rh_participating_flag = ufas.is_rh_participating_flag, 
+                    is_payee_participating_flag = ufas.is_payee_participating_flag, 
+                    reported_value = ufas.reported_value
+                from ${dbAppsSchema}.df_usage_fas ufas
+                where u.df_usage_uid = ufas.df_usage_fas_uid
+                and product_family = 'NTS'"""
+            )
+
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'market',
+                    columnDataType: 'VARCHAR(200)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'market_period_from',
+                    columnDataType: 'NUMERIC(4,0)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'market_period_to',
+                    columnDataType: 'NUMERIC(4,0)')
+
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'article', type: 'VARCHAR(1000)', remarks: 'The article')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'author', type: 'VARCHAR(2000)', remarks: 'The author')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'publisher', type: 'VARCHAR(1000)', remarks: 'The publisher')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'publication_date', type: 'DATE', remarks: 'The publication date')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'market', type: 'VARCHAR(200)', remarks: 'The market')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'market_period_from', type: 'NUMERIC(4,0)', remarks: 'The beginning period of when the usage occured')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'market_period_to', type: 'NUMERIC(4,0)', remarks: 'The ending period of when the usage occured')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'df_fund_pool_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool')
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'is_rh_participating_flag', type: 'BOOLEAN', defaultValueBoolean: false, remarks: 'RH participating flag') {
+                    constraints(nullable: false)
+                }
+            }
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'reported_value', type: 'DECIMAL(38,2)', defaultValue: 0.00, remarks: 'The amount in original currency') {
+                    constraints(nullable: false)
+                }
+            }
+
+            sql("""update ${dbAppsSchema}.df_usage_archive u
+                set 
+                    article = ufas.article, 
+                    author = ufas.author, 
+                    publisher = ufas.publisher, 
+                    publication_date = ufas.publication_date, 
+                    market = ufas.market, 
+                    market_period_from = ufas.market_period_from, 
+                    market_period_to = ufas.market_period_to, 
+                    df_fund_pool_uid = ufas.df_fund_pool_uid, 
+                    is_rh_participating_flag = ufas.is_rh_participating_flag, 
+                    reported_value = ufas.reported_value
+                from ${dbAppsSchema}.df_usage_fas ufas
+                where u.df_usage_archive_uid = ufas.df_usage_fas_uid
+                and product_family = 'FAS'"""
+            )
+
+            sql("""update ${dbAppsSchema}.df_usage_archive u
+                set 
+                    article = ufas.article, 
+                    author = ufas.author, 
+                    publisher = ufas.publisher, 
+                    publication_date = ufas.publication_date, 
+                    market = ufas.market, 
+                    market_period_from = ufas.market_period_from, 
+                    market_period_to = ufas.market_period_to, 
+                    df_fund_pool_uid = ufas.df_fund_pool_uid, 
+                    is_rh_participating_flag = ufas.is_rh_participating_flag, 
+                    reported_value = ufas.reported_value
+                from ${dbAppsSchema}.df_usage_fas ufas
+                where u.df_usage_archive_uid = ufas.df_usage_fas_uid
+                and product_family = 'FAS2'"""
+            )
+
+            sql("""update ${dbAppsSchema}.df_usage_archive u
+                set 
+                    article = ufas.article, 
+                    author = ufas.author, 
+                    publisher = ufas.publisher, 
+                    publication_date = ufas.publication_date, 
+                    market = ufas.market, 
+                    market_period_from = ufas.market_period_from, 
+                    market_period_to = ufas.market_period_to, 
+                    df_fund_pool_uid = ufas.df_fund_pool_uid, 
+                    is_rh_participating_flag = ufas.is_rh_participating_flag, 
+                    reported_value = ufas.reported_value
+                from ${dbAppsSchema}.df_usage_fas ufas
+                where u.df_usage_archive_uid = ufas.df_usage_fas_uid
+                and product_family = 'NTS'"""
+            )
+        }
+    }
 }
