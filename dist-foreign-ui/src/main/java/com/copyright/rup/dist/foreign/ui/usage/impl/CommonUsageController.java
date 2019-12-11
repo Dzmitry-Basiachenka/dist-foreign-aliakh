@@ -10,7 +10,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ForeignCommonController;
-import com.copyright.rup.dist.foreign.ui.main.api.ISettableProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
@@ -52,8 +51,6 @@ public abstract class CommonUsageController<W extends ICommonUsageWidget<W, C>,
     private IUsagesFilterController filterController;
     @Autowired
     private IScenarioService scenarioService;
-    @Autowired
-    private ISettableProductFamilyProvider productFamilyProvider;
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
@@ -119,11 +116,6 @@ public abstract class CommonUsageController<W extends ICommonUsageWidget<W, C>,
     @Override
     public void clearFilter() {
         filterController.getWidget().clearFilter();
-    }
-
-    @Override
-    public String getSelectedProductFamily() {
-        return productFamilyProvider.getSelectedProductFamily();
     }
 
     @Override
