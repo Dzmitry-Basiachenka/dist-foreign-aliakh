@@ -25,5 +25,4 @@ public interface INtsScenarioWidget extends ICommonScenarioWidget<INtsScenarioWi
      * @param listener instance of {@link IExcludeUsagesListener}
      */
     void addListener(IExcludeUsagesListener listener);
-
 }
