@@ -26,6 +26,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
@@ -53,6 +54,7 @@ import java.util.List;
  */
 public class CommonUsageControllerTest {
 
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String USAGE_BATCH_ID = "bf6d5d00-0d61-453f-8a76-8a7b133efecc";
     private static final String SCENARIO_NAME = "Test Scenario Name";
 
@@ -64,6 +66,7 @@ public class CommonUsageControllerTest {
     private IScenarioService scenarioService;
     private IFundPoolService fundPoolService;
     private UsageFilter usageFilter;
+    private IProductFamilyProvider productFamilyProvider;
 
     @Before
     public void setUp() {
@@ -74,12 +77,14 @@ public class CommonUsageControllerTest {
         scenarioService = createMock(IScenarioService.class);
         filterWidgetMock = createMock(IUsagesFilterWidget.class);
         fundPoolService = createMock(IFundPoolService.class);
+        productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, fundPoolService);
+        Whitebox.setInternalState(controller, productFamilyProvider);
         usageFilter = new UsageFilter();
     }
 
@@ -133,9 +138,9 @@ public class CommonUsageControllerTest {
 
     @Test
     public void testGetUsageBatches() {
-        expect(usageBatchService.getUsageBatches("FAS")).andReturn(Collections.emptyList()).once();
+        expect(usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
         replay(usageBatchService);
-        controller.getUsageBatches("FAS");
+        controller.getUsageBatches(FAS_PRODUCT_FAMILY);
         verify(usageBatchService);
     }
 
@@ -187,6 +192,14 @@ public class CommonUsageControllerTest {
         replay(scenarioService);
         assertTrue(controller.scenarioExists(SCENARIO_NAME));
         verify(scenarioService);
+    }
+
+    @Test
+    public void testGetSelectedProductFamily() {
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        replay(productFamilyProvider);
+        assertEquals(FAS_PRODUCT_FAMILY, controller.getSelectedProductFamily());
+        verify(productFamilyProvider);
     }
 
     private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {
