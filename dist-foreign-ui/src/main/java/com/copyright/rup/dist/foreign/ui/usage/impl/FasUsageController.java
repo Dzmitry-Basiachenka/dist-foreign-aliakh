@@ -18,7 +18,6 @@ import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageWidget;
-import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.io.Files;
@@ -43,7 +42,7 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class FasUsagesController extends CommonUsageController<IFasUsageWidget, IFasUsageController>
+public class FasUsageController extends CommonUsageController<IFasUsageWidget, IFasUsageController>
     implements IFasUsageController {
 
     @Autowired
@@ -113,11 +112,6 @@ public class FasUsagesController extends CommonUsageController<IFasUsageWidget, 
         return streamSourceHandler.getCsvStreamSource(
             () -> String.format("Error_for_%s", Files.getNameWithoutExtension(fileName)), null,
             processingResult::writeToFile);
-    }
-
-    @Override
-    public void onScenarioCreated(ScenarioCreateEvent event) {
-        getWidget().fireWidgetEvent(event);
     }
 
     @Override

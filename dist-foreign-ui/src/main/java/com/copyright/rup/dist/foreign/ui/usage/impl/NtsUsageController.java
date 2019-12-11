@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IWorkClassificationController;
-import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 
 import com.google.common.base.MoreObjects;
 
@@ -136,11 +135,6 @@ public class NtsUsageController extends CommonUsageController<INtsUsageWidget, I
     @Override
     public IWorkClassificationController getWorkClassificationController() {
         return workClassificationController;
-    }
-
-    @Override
-    public void onScenarioCreated(ScenarioCreateEvent event) {
-        getWidget().fireWidgetEvent(event);
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.copyright.rup.dist.foreign.ui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.widget.api.TabController;
 
@@ -34,7 +34,7 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
 
     @Autowired
     @Qualifier("dist.foreign.usagesControllerProvider")
-    private IControllerProvider<IUsagesController> usagesControllerProvider;
+    private IControllerProvider<ICommonUsageController> usagesControllerProvider;
     @Autowired
     @Qualifier("dist.foreign.scenariosControllerProvider")
     private IControllerProvider<IScenariosController> scenariosControllerProvider;
@@ -43,7 +43,7 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     private IControllerProvider<IAuditController> auditControllerProvider;
 
     @Override
-    public IControllerProvider<IUsagesController> getUsagesControllerProvider() {
+    public IControllerProvider<ICommonUsageController> getUsagesControllerProvider() {
         return usagesControllerProvider;
     }
 

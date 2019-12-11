@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.main.api;
 
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.ITabChangeController;
@@ -29,9 +29,9 @@ public interface IMainWidgetController extends IController<IMainWidget>, ITabCha
         ReflectTools.findMethod(IMainWidgetController.class, "onScenarioCreated", ScenarioCreateEvent.class);
 
     /**
-     * @return instance of {@link IControllerProvider} for {@link IUsagesController}.
+     * @return instance of {@link IControllerProvider} for {@link ICommonUsageController}.
      */
-    IControllerProvider<IUsagesController> getUsagesControllerProvider();
+    IControllerProvider<ICommonUsageController> getUsagesControllerProvider();
 
     /**
      * @return instance of {@link IControllerProvider} for {@link IScenariosController}.

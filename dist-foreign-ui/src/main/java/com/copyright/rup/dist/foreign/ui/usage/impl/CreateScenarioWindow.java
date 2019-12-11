@@ -4,7 +4,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -36,7 +36,7 @@ import java.time.LocalDate;
  */
 public class CreateScenarioWindow extends Window {
 
-    private final IUsagesController controller;
+    private final IFasUsageController controller;
     private final Binder<Scenario> binder = new Binder<>();
     private TextField scenarioNameField;
     private TextArea descriptionArea;
@@ -44,9 +44,9 @@ public class CreateScenarioWindow extends Window {
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IUsagesController}
+     * @param controller instance of {@link IFasUsageController}
      */
-    CreateScenarioWindow(IUsagesController controller) {
+    CreateScenarioWindow(IFasUsageController controller) {
         this.controller = controller;
         setResizable(false);
         setWidth(320, Unit.PIXELS);
@@ -88,7 +88,7 @@ public class CreateScenarioWindow extends Window {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
         binder.forField(scenarioNameField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !controller.getScenarioService().scenarioExists(StringUtils.trimToEmpty(value)),
+            .withValidator(value -> !controller.scenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Scenario"))
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .bind(Scenario::getName, Scenario::setName);

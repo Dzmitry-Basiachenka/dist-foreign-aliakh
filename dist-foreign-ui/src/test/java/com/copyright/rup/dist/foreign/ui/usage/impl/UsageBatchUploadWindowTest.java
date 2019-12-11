@@ -20,7 +20,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -78,11 +78,11 @@ public class UsageBatchUploadWindowTest {
     private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private UsageBatchUploadWindow window;
-    private IUsagesController usagesController;
+    private IFasUsageController usagesController;
 
     @Before
     public void setUp() {
-        usagesController = createMock(IUsagesController.class);
+        usagesController = createMock(IFasUsageController.class);
     }
 
     @Test

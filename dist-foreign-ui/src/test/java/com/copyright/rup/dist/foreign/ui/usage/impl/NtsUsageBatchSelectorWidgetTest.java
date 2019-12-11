@@ -13,7 +13,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IWorkClassificationController;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
@@ -65,11 +65,11 @@ public class NtsUsageBatchSelectorWidgetTest {
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private NtsUsageBatchSelectorWidget ntsUsageBatchSelectorWidget;
-    private IUsagesController usagesController;
+    private INtsUsageController usagesController;
 
     @Before
     public void setUp() {
-        usagesController = createMock(IUsagesController.class);
+        usagesController = createMock(INtsUsageController.class);
         ntsUsageBatchSelectorWidget = new NtsUsageBatchSelectorWidget(usagesController);
     }
 

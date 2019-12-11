@@ -5,7 +5,9 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -15,6 +17,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 import java.math.BigDecimal;
 import java.util.function.Function;
@@ -125,6 +128,16 @@ public abstract class CommonUsageWidget<W extends ICommonUsageWidget<W, C>,
             .setHidable(true)
             .setStyleGenerator(item -> "v-align-right")
             .setWidth(width);
+    }
+
+    /**
+     * Shows create scenario window.
+     *
+     * @param window window to show
+     */
+    void showCreateScenarioWindow(Window window) {
+        window.addListener(ScenarioCreateEvent.class, getController(), ICommonUsageController.ON_SCENARIO_CREATED);
+        Windows.showModalWindow(window);
     }
 
     private VerticalLayout initUsagesLayout() {

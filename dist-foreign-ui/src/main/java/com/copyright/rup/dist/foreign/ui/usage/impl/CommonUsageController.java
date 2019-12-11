@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
@@ -123,6 +124,11 @@ public abstract class CommonUsageController<W extends ICommonUsageWidget<W, C>,
     @Override
     public String getSelectedProductFamily() {
         return productFamilyProvider.getSelectedProductFamily();
+    }
+
+    @Override
+    public void onScenarioCreated(ScenarioCreateEvent event) {
+        getWidget().fireWidgetEvent(event);
     }
 
     IScenarioService getScenarioService() {

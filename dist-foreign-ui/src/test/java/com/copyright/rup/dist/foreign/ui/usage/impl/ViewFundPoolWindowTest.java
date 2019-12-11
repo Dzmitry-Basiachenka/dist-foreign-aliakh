@@ -17,7 +17,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -59,12 +59,12 @@ public class ViewFundPoolWindowTest {
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
 
     private ViewFundPoolWindow viewFundPoolWindow;
-    private IUsagesController controller;
+    private INtsUsageController controller;
 
     @Before
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
-        controller = createMock(IUsagesController.class);
+        controller = createMock(INtsUsageController.class);
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("NTS").once();
         expect(controller.getUsageBatches("NTS")).andReturn(Collections.singletonList(new UsageBatch())).once();

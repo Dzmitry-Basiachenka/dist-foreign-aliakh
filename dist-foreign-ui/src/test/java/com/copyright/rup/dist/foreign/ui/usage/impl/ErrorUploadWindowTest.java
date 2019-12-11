@@ -10,7 +10,7 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageController;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 
 import com.vaadin.server.Extension;
@@ -46,7 +46,7 @@ public class ErrorUploadWindowTest {
 
     @Test
     public void testComponentStructure() {
-        IUsagesController controller = createMock(IUsagesController.class);
+        IFasUsageController controller = createMock(IFasUsageController.class);
         ProcessingResult processingResult = Whitebox.newInstance(ProcessingResult.class);
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),

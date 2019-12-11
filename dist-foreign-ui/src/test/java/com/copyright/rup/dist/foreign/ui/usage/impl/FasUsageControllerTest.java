@@ -58,7 +58,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * Verifies {@link FasUsagesController}.
+ * Verifies {@link FasUsageController}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -74,7 +74,7 @@ public class FasUsageControllerTest {
     private static final String RRO_ACCOUNT_NAME = "Account Name";
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
 
-    private FasUsagesController controller;
+    private FasUsageController controller;
     private IUsageService usageService;
     private IUsagesFilterController filterController;
     private IUsagesFilterWidget filterWidgetMock;
@@ -88,7 +88,7 @@ public class FasUsageControllerTest {
 
     @Before
     public void setUp() {
-        controller = new FasUsagesController();
+        controller = new FasUsageController();
         usageService = createMock(UsageService.class);
         usageBatchService = createMock(IUsageBatchService.class);
         filterController = createMock(IUsagesFilterController.class);

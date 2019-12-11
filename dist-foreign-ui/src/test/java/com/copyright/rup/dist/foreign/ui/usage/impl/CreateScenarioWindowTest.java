@@ -13,7 +13,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 
 import com.vaadin.data.Binder;
@@ -55,14 +55,12 @@ public class CreateScenarioWindowTest {
 
     @Test
     public void testComponentStructure() {
-        IUsagesController controller = createMock(IUsagesController.class);
-        IScenarioService scenarioService = createMock(IScenarioService.class);
+        IFasUsageController controller = createMock(IFasUsageController.class);
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        expect(controller.getScenarioService()).andReturn(scenarioService).times(1);
-        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
-        replay(controller, scenarioService);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        replay(controller);
         createScenarioWindow = new CreateScenarioWindow(controller);
-        verify(controller, scenarioService);
+        verify(controller);
         assertEquals("Create Scenario", createScenarioWindow.getCaption());
         assertEquals(320, createScenarioWindow.getWidth(), 0);
         assertEquals("create-scenario-window", createScenarioWindow.getId());
@@ -77,13 +75,12 @@ public class CreateScenarioWindowTest {
 
     @Test
     public void testButtonConfirmClick() {
-        IUsagesController controller = createMock(IUsagesController.class);
+        IFasUsageController controller = createMock(IFasUsageController.class);
         IScenarioService scenarioService = createMock(IScenarioService.class);
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        expect(controller.getScenarioService()).andReturn(scenarioService).times(2);
         Scenario scenario = new Scenario();
         expect(controller.createScenario(SCENARIO_NAME, "")).andReturn(scenario).once();
-        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         replay(controller, scenarioService);
         TestCreateScenarioWindow window = new TestCreateScenarioWindow(controller);
         VerticalLayout content = (VerticalLayout) window.getContent();
@@ -103,11 +100,10 @@ public class CreateScenarioWindowTest {
 
     @Test
     public void testButtonCloseClick() {
-        IUsagesController controller = createMock(IUsagesController.class);
+        IFasUsageController controller = createMock(IFasUsageController.class);
         IScenarioService scenarioService = createMock(IScenarioService.class);
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        expect(controller.getScenarioService()).andReturn(scenarioService).once();
-        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
         replay(controller, scenarioService);
         TestCreateScenarioWindow window = new TestCreateScenarioWindow(controller);
         assertFalse(window.isClosed());
@@ -123,11 +119,10 @@ public class CreateScenarioWindowTest {
 
     @Test
     public void testScenarioNameExists() {
-        IUsagesController controller = createMock(IUsagesController.class);
+        IFasUsageController controller = createMock(IFasUsageController.class);
         IScenarioService scenarioService = createMock(IScenarioService.class);
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        expect(controller.getScenarioService()).andReturn(scenarioService).times(4);
-        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(true).times(4);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(true).times(4);
         replay(controller, scenarioService);
         createScenarioWindow = new CreateScenarioWindow(controller);
         TextField scenarioNameField = Whitebox.getInternalState(createScenarioWindow, "scenarioNameField");
@@ -181,7 +176,7 @@ public class CreateScenarioWindowTest {
         private EventObject eventObject;
         private boolean closed;
 
-        TestCreateScenarioWindow(IUsagesController controller) {
+        TestCreateScenarioWindow(IFasUsageController controller) {
             super(controller);
         }
 

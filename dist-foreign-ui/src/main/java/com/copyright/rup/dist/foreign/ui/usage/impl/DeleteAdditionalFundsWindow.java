@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
@@ -35,15 +35,15 @@ import java.util.Objects;
 class DeleteAdditionalFundsWindow extends Window {
 
     private final SearchWidget searchWidget;
-    private final IUsagesController controller;
+    private final INtsUsageController controller;
     private Grid<PreServiceFeeFund> grid;
 
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IUsagesController}
+     * @param controller instance of {@link INtsUsageController}
      */
-    DeleteAdditionalFundsWindow(IUsagesController controller) {
+    DeleteAdditionalFundsWindow(INtsUsageController controller) {
         this.controller = controller;
         setCaption(ForeignUi.getMessage("window.delete_fund"));
         setWidth(700, Unit.PIXELS);

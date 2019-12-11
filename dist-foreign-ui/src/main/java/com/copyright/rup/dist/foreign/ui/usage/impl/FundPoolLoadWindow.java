@@ -6,7 +6,7 @@ import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -48,7 +48,7 @@ class FundPoolLoadWindow extends Window {
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
 
-    private final IUsagesController usagesController;
+    private final INtsUsageController usagesController;
     private final Binder<UsageBatch> binder = new Binder<>();
     private final Binder<String> stringBinder = new Binder<>();
     private Set<String> selectedMarkets;
@@ -69,9 +69,9 @@ class FundPoolLoadWindow extends Window {
     /**
      * Constructor.
      *
-     * @param usagesController {@link IUsagesController} instance
+     * @param usagesController {@link INtsUsageController} instance
      */
-    FundPoolLoadWindow(IUsagesController usagesController) {
+    FundPoolLoadWindow(INtsUsageController usagesController) {
         this.usagesController = usagesController;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_fund_pool"));

@@ -43,7 +43,7 @@ public interface IUsagesFilterController extends IFilterController<IUsagesFilter
     List<Rightsholder> getRros(String productFamily);
 
     /**
-     * @return list of product families.
+     * @return globally selected product family.
      */
-    List<String> getProductFamilies();
+    String getSelectedProductFamily();
 }

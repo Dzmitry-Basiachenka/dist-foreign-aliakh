@@ -18,7 +18,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -86,11 +86,11 @@ public class FundPoolLoadWindowTest {
     private static final String INVALID_PERIOD_ERROR_MESSAGE = "Field value should be in range from 1950 to 2099";
     private static final LocalDate PAYMENT_DATA_WIDGET = LocalDate.of(2019, 6, 20);
     private FundPoolLoadWindow window;
-    private IUsagesController usagesController;
+    private INtsUsageController usagesController;
 
     @Before
     public void setUp() {
-        usagesController = createMock(IUsagesController.class);
+        usagesController = createMock(INtsUsageController.class);
     }
 
     @Test

@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.main.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -23,16 +25,15 @@ import java.util.Map;
  */
 @Component("dist.foreign.usagesControllerProvider")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UsagesControllerProvider extends CommonControllerProvider<IUsagesController> {
+public class UsagesControllerProvider extends CommonControllerProvider<ICommonUsageController> {
 
-    // TODO {srudak} replace with specific interfaces once implemented
     @Autowired
-    private IUsagesController fasUsagesController;
+    private IFasUsageController fasUsagesController;
     @Autowired
-    private IUsagesController ntsUsagesController;
+    private INtsUsageController ntsUsagesController;
 
     @Override
-    protected Map<String, IUsagesController> getProductFamilyToControllerMap() {
+    protected Map<String, ICommonUsageController> getProductFamilyToControllerMap() {
         return ImmutableMap.of(
             FdaConstants.FAS_PRODUCT_FAMILY, fasUsagesController,
             FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasUsagesController,

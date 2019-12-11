@@ -16,7 +16,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.DeleteAdditionalFundsWindow.SearchController;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -68,14 +68,14 @@ public class DeleteAdditionalFundsWindowTest {
 
     private DeleteAdditionalFundsWindow deleteWindow;
     private PreServiceFeeFund fundPool;
-    private IUsagesController controller;
+    private INtsUsageController controller;
 
     @Before
     public void setUp() {
         fundPool = new PreServiceFeeFund();
         fundPool.setName("Test Fund");
         fundPool.setId(FUND_ID);
-        controller = createMock(IUsagesController.class);
+        controller = createMock(INtsUsageController.class);
         expect(controller.getPreServiceSeeFunds()).andReturn(Collections.singletonList(fundPool)).once();
         replay(controller);
         deleteWindow = new DeleteAdditionalFundsWindow(controller);

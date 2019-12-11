@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -35,7 +35,7 @@ public class CreatePreServiceFeeFundWindowTest {
 
     @Test
     public void testConstructor() {
-        IUsagesController controller = createMock(IUsagesController.class);
+        INtsUsageController controller = createMock(INtsUsageController.class);
         CreatePreServiceFeeFundWindow window = new CreatePreServiceFeeFundWindow(controller,
             Collections.emptySet(), BigDecimal.ONE, createMock(PreServiceFeeFundBatchesFilterWindow.class),
             createMock(PreServiceFeeFundFilteredBatchesWindow.class));
