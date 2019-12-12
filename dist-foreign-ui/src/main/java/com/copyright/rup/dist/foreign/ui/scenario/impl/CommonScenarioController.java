@@ -88,11 +88,6 @@ public abstract class CommonScenarioController<W extends ICommonScenarioWidget<W
     }
 
     @Override
-    public boolean isScenarioEmpty() {
-        return usageService.isScenarioEmpty(getScenario());
-    }
-
-    @Override
     public Scenario getScenario() {
         return scenario;
     }

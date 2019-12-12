@@ -43,11 +43,6 @@ public interface ICommonScenarioController<W extends ICommonScenarioWidget<W, C>
     void onRightsholderAccountNumberClicked(Long accountNumber, String rightsholderName);
 
     /**
-     * @return boolean result that shows whether scenario is empty or not.
-     */
-    boolean isScenarioEmpty();
-
-    /**
      * @return current {@link Scenario}.
      */
     Scenario getScenario();

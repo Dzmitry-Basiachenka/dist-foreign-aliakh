@@ -11,6 +11,7 @@ import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -186,6 +187,15 @@ public class FasScenarioControllerTest {
     public void testSetScenario() {
         controller.setScenario(scenario);
         assertSame(scenario, controller.getScenario());
+    }
+
+    @Test
+    public void testIsScenarioEmpty() {
+        controller.setScenario(scenario);
+        expect(usageService.isScenarioEmpty(scenario)).andReturn(true).once();
+        replay(usageService);
+        assertTrue(controller.isScenarioEmpty());
+        verify(usageService);
     }
 
     @Test
