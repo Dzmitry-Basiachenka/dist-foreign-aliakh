@@ -16,6 +16,8 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.AuditCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.FasBatchSummaryReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.FasUsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.NtsUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.OwnershipAdjustmentReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ResearchStatusReportHandler;
@@ -25,7 +27,6 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.SendForResearchCsvRepo
 import com.copyright.rup.dist.foreign.repository.impl.csv.ServiceFeeTrueUpReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.SummaryMarketReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.UndistributedLiabilitiesReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.UsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.WorkClassificationCsvReportHandler;
 
 import com.google.common.collect.ImmutableMap;
@@ -156,11 +157,19 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     }
 
     @Override
-    public void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+    public void writeFasUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
         writeCsvReportByParts("IReportMapper.findUsagesCountByFilter", "IReportMapper.findUsageReportDtos", parameters,
-            !filter.isEmpty(), () -> new UsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+            !filter.isEmpty(), () -> new FasUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeNtsUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        writeCsvReportByParts("IReportMapper.findUsagesCountByFilter", "IReportMapper.findUsageReportDtos", parameters,
+            !filter.isEmpty(), () -> new NtsUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override

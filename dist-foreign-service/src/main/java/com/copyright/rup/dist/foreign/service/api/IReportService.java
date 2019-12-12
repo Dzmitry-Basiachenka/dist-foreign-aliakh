@@ -33,12 +33,20 @@ public interface IReportService {
     void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
-     * Writes usages found by filter into csv output stream.
+     * Writes FAS and FAS2 usages found by filter into csv output stream.
      *
      * @param filter            instance of {@link UsageFilter}
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
+    void writeFasUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes NTS usages found by filter into csv output stream.
+     *
+     * @param filter            instance of {@link UsageFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeNtsUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes scenario usages into csv output stream.

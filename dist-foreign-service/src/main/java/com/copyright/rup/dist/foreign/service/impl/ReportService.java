@@ -49,8 +49,13 @@ public class ReportService implements IReportService {
     private BigDecimal defaultEstimatedServiceFee;
 
     @Override
-    public void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
-        reportRepository.writeUsagesCsvReport(filter, pipedOutputStream);
+    public void writeFasUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        reportRepository.writeFasUsageCsvReport(filter, pipedOutputStream);
+    }
+
+    @Override
+    public void writeNtsUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        reportRepository.writeNtsUsageCsvReport(filter, pipedOutputStream);
     }
 
     @Override

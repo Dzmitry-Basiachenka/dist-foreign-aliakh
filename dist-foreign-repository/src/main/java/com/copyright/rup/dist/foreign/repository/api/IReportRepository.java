@@ -80,12 +80,21 @@ public interface IReportRepository {
                                            OutputStream outputStream);
 
     /**
-     * Finds usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.
+     * Finds FAS or FAS2 usages according to given {@link UsageFilter} and writes them to the output stream
+     * in CSV format.
      *
      * @param filter            instance of {@link UsageFilter}
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
+    void writeFasUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds NTS usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.
+     *
+     * @param filter            instance of {@link UsageFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeNtsUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes usages found by filter into the output stream in CSV format

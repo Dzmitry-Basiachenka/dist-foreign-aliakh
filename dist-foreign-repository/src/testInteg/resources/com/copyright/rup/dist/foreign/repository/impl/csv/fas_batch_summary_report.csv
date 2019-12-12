@@ -11,6 +11,7 @@ AT_service-fee-true-up-report-6_BATCH,7000581909,"CLASS, The Copyright Licensing
 AT_service-fee-true-up-report-11_BATCH,5000581901,Unknown RRO,01/03/2013,01/01/2010,200.00,1,200.00,0,0.00,0,0.00,0,0.00,0.00,0,0.00
 AT_service-fee-true-up-report-7_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/03/2013,01/01/2010,800.00,4,800.00,0,0.00,0,0.00,0,0.00,0.00,0,0.00
 AT_service-fee-true-up-report-10_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",04/21/2013,01/01/2010,400.00,2,200.00,0,0.00,0,0.00,0,0.00,0.00,0,0.00
+FAS Batch 2,2000017001,CFC/ Center Fran dexploitation du droit de Copie,01/11/2017,12/11/2019,8972.00,0,0.00,0,0.00,0,0.00,1,8972.04,6100.99,0,0.00
 Ownership Adjustment Report Batch,,,01/11/2017,01/01/2010,30000.00,0,0.00,0,0.00,0,0.00,1,16437.40,11177.40,0,0.00
 Test Batch 1,2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/11/2017,01/01/2010,40300.00,0,0.00,0,0.00,2,40300.00,0,0.00,0.00,0,0.00
 Test Batch 2,2000017001,CFC/ Center Fran dexploitation du droit de Copie,01/11/2017,01/01/2010,10250.00,0,0.00,0,0.00,0,0.00,3,10249.99,6969.99,0,0.00
@@ -24,4 +25,5 @@ AT_batch-summary-report-7_BATCH,2000017000,"CLA, The Copyright Licensing Agency 
 AT_batch-summary-report-8_BATCH,2000017011,"DALRO, Dramatic, Artistic & Literary Rights Organisation",01/04/2018,01/01/2010,550.00,2,200.00,2,50.00,2,100.00,2,100.00,84.00,0,0.00
 AT_batch-summary-report-12_BATCH,2000017000,"CLA, The Copyright Licensing Agency Ltd.",05/08/2018,01/01/2010,600.00,2,200.00,2,100.00,2,100.00,4,200.00,174.00,2,100.00
 AT_batch-summary-report-9_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",05/08/2018,01/01/2010,550.00,2,200.00,2,50.00,2,100.00,2,100.00,84.00,0,0.00
+FAS batch 1,2000017001,CFC/ Center Fran dexploitation du droit de Copie,01/01/2019,01/01/2010,500.00,0,0.00,0,0.00,2,500.00,0,0.00,0.00,0,0.00
 Batch with NTS,2000017010,"JAC, Japan Academic Association for Copyright Clearance, Inc.",02/12/2021,01/01/2010,500.00,1,500.00,0,0.00,0,0.00,0,0.00,0.00,0,0.00

@@ -129,7 +129,7 @@ public class NtsUsageController extends CommonUsageController<INtsUsageWidget, I
     @Override
     public IStreamSource getExportUsagesStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_usage_",
-            pos -> reportService.writeUsageCsvReport(getFilterController().getWidget().getAppliedFilter(), pos));
+            pos -> reportService.writeNtsUsageCsvReport(getFilterController().getWidget().getAppliedFilter(), pos));
     }
 
     @Override

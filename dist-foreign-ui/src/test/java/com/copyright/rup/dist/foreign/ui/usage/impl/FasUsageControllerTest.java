@@ -158,7 +158,7 @@ public class FasUsageControllerTest {
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
-        reportService.writeUsageCsvReport(usageFilter, pos);
+        reportService.writeFasUsageCsvReport(usageFilter, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, filterWidgetMock, filterController, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getExportUsagesStreamSource();
