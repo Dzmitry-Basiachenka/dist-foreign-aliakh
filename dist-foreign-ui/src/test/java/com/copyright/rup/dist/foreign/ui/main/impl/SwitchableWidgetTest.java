@@ -7,9 +7,12 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.ui.main.api.IControllerProvider;
 import com.copyright.rup.vaadin.widget.api.IController;
+import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -59,27 +62,39 @@ public class SwitchableWidgetTest {
 
     @Test
     public void testRefresh() {
+        TestWidget testWidget = new TestWidget();
+        prepareInitWidgetExpectations(firstControllerMock, testWidget);
+        replay(firstControllerMock, controllerProviderMock, listenerRegistererMock);
+        widget.updateProductFamily();
+        assertFalse(testWidget.isRefreshed());
+        widget.refresh();
+        assertTrue(testWidget.isRefreshed());
+        verify(firstControllerMock, controllerProviderMock, listenerRegistererMock);
+    }
+
+    @Test
+    public void testUpdateProductFamily() {
         TestWidget firstWidget = new TestWidget();
         TestWidget secondWidget = new TestWidget();
-        prepareRefreshExpectations(firstControllerMock, firstWidget);
+        prepareInitWidgetExpectations(firstControllerMock, firstWidget);
         replay(firstControllerMock, secondControllerMock, controllerProviderMock, listenerRegistererMock);
-        widget.refresh();
+        widget.updateProductFamily();
+        assertFalse(firstWidget.isRefreshed());
         verify(firstControllerMock, secondControllerMock, controllerProviderMock, listenerRegistererMock);
         assertEquals(firstWidget, widget.getContent());
         reset(firstControllerMock, secondControllerMock, controllerProviderMock, listenerRegistererMock);
-        prepareRefreshExpectations(secondControllerMock, secondWidget);
+        prepareInitWidgetExpectations(secondControllerMock, secondWidget);
         replay(firstControllerMock, secondControllerMock, controllerProviderMock, listenerRegistererMock);
-        widget.refresh();
+        widget.updateProductFamily();
+        assertFalse(firstWidget.isRefreshed());
         verify(firstControllerMock, secondControllerMock, controllerProviderMock, listenerRegistererMock);
         assertEquals(secondWidget, widget.getContent());
     }
 
-    private void prepareRefreshExpectations(ITestController controllerMock, ITestWidget content) {
+    private void prepareInitWidgetExpectations(ITestController controllerMock, ITestWidget content) {
         expect(controllerProviderMock.getController()).andReturn(controllerMock).once();
         expect(controllerMock.initWidget()).andReturn(content).once();
         listenerRegistererMock.accept(content);
-        expectLastCall().once();
-        controllerMock.refreshWidget();
         expectLastCall().once();
     }
 
@@ -89,7 +104,9 @@ public class SwitchableWidgetTest {
     private interface ITestController extends IController<ITestWidget> {
     }
 
-    private static class TestWidget extends Label implements ITestWidget {
+    private static class TestWidget extends Label implements ITestWidget, IRefreshable {
+
+        private boolean refreshed;
 
         @Override
         public ITestWidget init() {
@@ -97,8 +114,17 @@ public class SwitchableWidgetTest {
         }
 
         @Override
+        public void refresh() {
+            refreshed = true;
+        }
+
+        @Override
         public void setController(ITestController controller) {
             // do nothing
+        }
+
+        boolean isRefreshed() {
+            return refreshed;
         }
     }
 }

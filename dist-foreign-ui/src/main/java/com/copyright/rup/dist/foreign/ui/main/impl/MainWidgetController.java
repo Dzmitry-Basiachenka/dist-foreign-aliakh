@@ -65,6 +65,7 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
 
     @Override
     public void onProductFamilyChanged() {
+        getWidget().updateProductFamily();
         refreshWidget();
     }
 
