@@ -106,20 +106,33 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testWriteUsagesCsvReport() throws IOException {
+    public void testWriteFasUsagesCsvReport() throws IOException {
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Sets.newHashSet("e855bf85-236c-42e7-9b12-8d68dd747bbe",
-            "034873b3-97fa-475a-9a2a-191e8ec988b3", "02a09322-5f0f-4cae-888c-73127050dc98",
-            "d016d9c2-5460-41bf-837c-8598cf00b654", "acae006c-a4fe-45f0-a0cc-098e12db00c5",
-            "e17ebc80-e74e-436d-ba6e-acf3d355b7ff"));
-        assertFilesWithExecutor(outputStream -> reportRepository.writeUsagesCsvReport(usageFilter, outputStream),
-            "usages_report.csv");
+        usageFilter.setUsageBatchesIds(Sets.newHashSet("4c9cc089-b812-42cf-a5d2-1f5eda51fa76",
+            "02a09322-5f0f-4cae-888c-73127050dc98"));
+        assertFilesWithExecutor(outputStream -> reportRepository.writeFasUsageCsvReport(usageFilter, outputStream),
+            "fas_usages_report.csv");
     }
 
     @Test
-    public void testWriteUsagesEmptyCsvReport() throws IOException {
-        assertFilesWithExecutor(outputStream -> reportRepository.writeUsagesCsvReport(new UsageFilter(), outputStream),
-            "usages_report_empty.csv");
+    public void testWriteFasUsagesEmptyCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeFasUsageCsvReport(new UsageFilter(), outputStream), "fas_usages_report_empty.csv");
+    }
+
+    @Test
+    public void testWriteNtsUsagesCsvReport() throws IOException {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(Sets.newHashSet("f20ac1a3-eee4-4027-b5fb-def9adf0f871",
+            "c0c07d51-2216-43c3-b61b-b904d86ec36a"));
+        assertFilesWithExecutor(outputStream -> reportRepository.writeNtsUsageCsvReport(usageFilter, outputStream),
+            "nts_usages_report.csv");
+    }
+
+    @Test
+    public void testWriteNtsUsagesEmptyCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeNtsUsageCsvReport(new UsageFilter(), outputStream), "nts_usages_report_empty.csv");
     }
 
     @Test

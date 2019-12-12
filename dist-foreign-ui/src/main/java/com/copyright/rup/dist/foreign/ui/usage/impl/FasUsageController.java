@@ -97,7 +97,7 @@ public class FasUsageController extends CommonUsageController<IFasUsageWidget, I
     @Override
     public IStreamSource getExportUsagesStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_usage_",
-            pos -> reportService.writeUsageCsvReport(getFilterController().getWidget().getAppliedFilter(), pos));
+            pos -> reportService.writeFasUsageCsvReport(getFilterController().getWidget().getAppliedFilter(), pos));
     }
 
     @Override

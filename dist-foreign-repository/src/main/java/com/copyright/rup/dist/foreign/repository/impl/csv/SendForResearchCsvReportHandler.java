@@ -18,7 +18,7 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public class SendForResearchCsvReportHandler extends UsageCsvReportHandler {
+public class SendForResearchCsvReportHandler extends FasUsageCsvReportHandler {
 
     private final Set<String> usagesIds;
 
