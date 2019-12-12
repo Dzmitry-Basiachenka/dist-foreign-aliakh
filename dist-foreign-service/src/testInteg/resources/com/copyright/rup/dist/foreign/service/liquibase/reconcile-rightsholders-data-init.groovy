@@ -30,16 +30,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000003821')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '452365874521235XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '1000.00') // B-55836 remove
             column(name: 'gross_amount', value: '1000.00')
             column(name: 'service_fee_amount', value: '320.00')
             column(name: 'net_amount', value: '680.00')
@@ -101,16 +93,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '7000515031')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '452365874521235XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '10')
-            column(name: 'reported_value', value: '5000.00') // B-55836 remove
             column(name: 'gross_amount', value: '5000.00')
             column(name: 'service_fee_amount', value: '1600.00')
             column(name: 'net_amount', value: '3400.00')
@@ -146,16 +130,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '2000152614')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '452365874521235XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '1')
-            column(name: 'reported_value', value: '1000.00') // B-55836 remove
             column(name: 'gross_amount', value: '1000.00')
             column(name: 'service_fee_amount', value: '320.00')
             column(name: 'net_amount', value: '680.00')
@@ -191,16 +167,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '2000152614')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '452365874521235XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '50')
-            column(name: 'reported_value', value: '200.00') // B-55836 remove
             column(name: 'gross_amount', value: '200.00')
             column(name: 'service_fee_amount', value: '64.00')
             column(name: 'net_amount', value: '136.00')
@@ -236,16 +204,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000000026')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '452365874521235XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '1800.00') // B-55836 remove
             column(name: 'gross_amount', value: '1800.00')
             column(name: 'service_fee_amount', value: '576.00')
             column(name: 'net_amount', value: '1224.00')
@@ -281,16 +241,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000000322')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '452365874521235XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '12')
-            column(name: 'reported_value', value: '4500.00') // B-55836 remove
             column(name: 'gross_amount', value: '4500.00')
             column(name: 'service_fee_amount', value: '720.00')
             column(name: 'net_amount', value: '3870.00')
@@ -326,16 +278,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000000322')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '452365874521235XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '2500.00') // B-55836 remove
             column(name: 'gross_amount', value: '2500.00')
             column(name: 'service_fee_amount', value: '400.00')
             column(name: 'net_amount', value: '2100.00')

@@ -21,16 +21,8 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: '1984,Appendix: The Principles of Newspeak')
             column(name: 'status_ind', value: 'WORK_FOUND')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '9780150000000')
-            column(name: 'publisher', value: 'Publisher') // B-55836 remove
-            column(name: 'publication_date', value: '3000-12-22') // B-55836 remove
-            column(name: 'market', value: 'Univ,Bus,Doc,S') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2016') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J') // B-55836 remove
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'reported_value', value: '10000') // B-55836 remove
             column(name: 'gross_amount', value: '10000.00')
             column(name: 'net_amount', value: '8400.00')
             column(name: 'service_fee_amount', value: '1600.00')

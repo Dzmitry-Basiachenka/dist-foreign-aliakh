@@ -21,16 +21,8 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3558')
-            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '10000') // B-55836 remove
             column(name: 'gross_amount', value: '10000.00')
             column(name: 'net_amount', value: '8400.00')
             column(name: 'service_fee_amount', value: '1600.00')
@@ -56,16 +48,8 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3566')
-            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'reported_value', value: '10000') // B-55836 remove
             column(name: 'gross_amount', value: '10000.00')
             column(name: 'net_amount', value: '8400.00')
             column(name: 'service_fee_amount', value: '1600.00')
@@ -91,16 +75,8 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_FOUND')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2192-3566')
-            column(name: 'publisher', value: 'Network for Science') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Philippe de Mézières') // B-55836 remove
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'reported_value', value: '10000') // B-55836 remove
             column(name: 'gross_amount', value: '10000.00')
             column(name: 'net_amount', value: '8400.00')
             column(name: 'service_fee_amount', value: '1600.00')

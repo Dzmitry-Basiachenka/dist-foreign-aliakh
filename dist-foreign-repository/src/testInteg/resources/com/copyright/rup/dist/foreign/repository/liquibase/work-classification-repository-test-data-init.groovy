@@ -65,17 +65,9 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle') // B-55836 remove
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2012') // B-55836 remove
-            column(name: 'market_period_to', value: '2014') // B-55836 remove
-            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
             column(name: 'number_of_copies', value: '1')
-            column(name: 'reported_value', value: '500') // B-55836 remove
             column(name: 'gross_amount', value: '500.00')
         }
 
@@ -100,16 +92,8 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle') // B-55836 remove
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Bus') // B-55836 remove
-            column(name: 'market_period_from', value: '2010') // B-55836 remove
-            column(name: 'market_period_to', value: '2011') // B-55836 remove
-            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
             column(name: 'number_of_copies', value: '1')
-            column(name: 'reported_value', value: '500') // B-55836 remove
             column(name: 'gross_amount', value: '500.00')
         }
 
@@ -134,16 +118,8 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle') // B-55836 remove
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Bus') // B-55836 remove
-            column(name: 'market_period_from', value: '2010') // B-55836 remove
-            column(name: 'market_period_to', value: '2011') // B-55836 remove
-            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana') // B-55836 remove
             column(name: 'number_of_copies', value: '1')
-            column(name: 'reported_value', value: '500') // B-55836 remove
             column(name: 'gross_amount', value: '500.00')
         }
 
@@ -207,17 +183,9 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants') // B-55836 remove
             column(name: 'standard_number', value: '1008902002377655XX')
             column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'publisher', value: 'John Wiley & Sons') // B-55836 remove
-            column(name: 'publication_date', value: '2011-05-10') // B-55836 remove
-            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2019') // B-55836 remove
-            column(name: 'author', value: 'Nanette M. Schwann') // B-55836 remove
             column(name: 'number_of_copies', value: '1600')
-            column(name: 'reported_value', value: '1560') // B-55836 remove
             column(name: 'gross_amount', value: '35000.00')
             column(name: 'net_amount', value: '23800.00')
             column(name: 'service_fee_amount', value: '11200.00')
@@ -263,17 +231,9 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants') // B-55836 remove
             column(name: 'standard_number', value: '1008902002377655XX')
             column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'publisher', value: 'John Wiley & Sons') // B-55836 remove
-            column(name: 'publication_date', value: '2011-05-10') // B-55836 remove
-            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2019') // B-55836 remove
-            column(name: 'author', value: 'Nanette M. Schwann') // B-55836 remove
             column(name: 'number_of_copies', value: '1600')
-            column(name: 'reported_value', value: '1560') // B-55836 remove
             column(name: 'gross_amount', value: '35000.00')
             column(name: 'net_amount', value: '23800.00')
             column(name: 'service_fee_amount', value: '11200.00')
@@ -303,16 +263,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants') // B-55836 remove
             column(name: 'standard_number', value: '1008902002377655XX')
-            column(name: 'publisher', value: 'John Wiley & Sons') // B-55836 remove
-            column(name: 'publication_date', value: '2011-05-10') // B-55836 remove
-            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2019') // B-55836 remove
-            column(name: 'author', value: 'Nanette M. Schwann') // B-55836 remove
             column(name: 'number_of_copies', value: '1600')
-            column(name: 'reported_value', value: '1560') // B-55836 remove
             column(name: 'gross_amount', value: '35000.00')
             column(name: 'net_amount', value: '23800.00')
             column(name: 'service_fee_amount', value: '11200.00')
@@ -342,16 +294,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants') // B-55836 remove
             column(name: 'standard_number', value: '1008902002377655XX')
-            column(name: 'publisher', value: 'John Wiley & Sons') // B-55836 remove
-            column(name: 'publication_date', value: '2011-05-10') // B-55836 remove
-            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2019') // B-55836 remove
-            column(name: 'author', value: 'Nanette M. Schwann') // B-55836 remove
             column(name: 'number_of_copies', value: '1600')
-            column(name: 'reported_value', value: '1560') // B-55836 remove
             column(name: 'gross_amount', value: '35000.00')
             column(name: 'net_amount', value: '23800.00')
             column(name: 'service_fee_amount', value: '11200.00')

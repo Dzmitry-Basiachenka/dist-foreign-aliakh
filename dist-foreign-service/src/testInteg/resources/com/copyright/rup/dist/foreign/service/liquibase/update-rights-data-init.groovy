@@ -46,18 +46,10 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Appendix: The Principles of Newspeak') // B-55836 remove
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ,Bus,Doc,S') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
-            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '124.9783785347')
-            column(name: 'is_rh_participating_flag', value: 'FALSE') // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -80,18 +72,10 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'Appendix: The Principles of Newspeak') // B-55836 remove
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ,Bus,Doc,S') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
-            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '390.1883929693')
-            column(name: 'is_rh_participating_flag', value: 'FALSE') // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -112,15 +96,9 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '390.1883929693')
-            column(name: 'is_rh_participating_flag', value: 'FALSE') // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -140,18 +118,10 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Akropolites: Nicaean Empire')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'between orientalism and fundamentalism') // B-55836 remove
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
-            column(name: 'reported_value', value: '22.34') // B-55836 remove
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '282.4630168157')
-            column(name: 'is_rh_participating_flag', value: 'FALSE') // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -173,18 +143,10 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Akropolites: Nicaean Empire')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'between orientalism and fundamentalism') // B-55836 remove
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
-            column(name: 'reported_value', value: '9.41') // B-55836 remove
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '118.9783790616')
-            column(name: 'is_rh_participating_flag', value: 'FALSE') // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -206,18 +168,10 @@ databaseChangeLog {
             column(name: 'work_title', value: 'ACP journal club')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'between orientalism and fundamentalism') // B-55836 remove
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
-            column(name: 'reported_value', value: '9.41') // B-55836 remove
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '118.9783790616')
-            column(name: 'is_rh_participating_flag', value: 'FALSE') // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -239,18 +193,10 @@ databaseChangeLog {
             column(name: 'work_title', value: 'ACP journal club')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'between orientalism and fundamentalism') // B-55836 remove
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
-            column(name: 'reported_value', value: '9.41') // B-55836 remove
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '118.9783790616')
-            column(name: 'is_rh_participating_flag', value: 'FALSE') // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -272,18 +218,10 @@ databaseChangeLog {
             column(name: 'work_title', value: 'ACP journal club')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'between orientalism and fundamentalism') // B-55836 remove
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
-            column(name: 'reported_value', value: '82.30') // B-55836 remove
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '1040.5866734081')
-            column(name: 'is_rh_participating_flag', value: 'FALSE') // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -305,18 +243,10 @@ databaseChangeLog {
             column(name: 'work_title', value: '(En)gendering the war on terror : war stories and camouflaged politics')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'war stories and camouflaged politics') // B-55836 remove
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
-            column(name: 'reported_value', value: '109.34') // B-55836 remove
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '1382.4756606371')
-            column(name: 'is_rh_participating_flag', value: 'FALSE') // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -339,17 +269,9 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'article', value: 'war stories and camouflaged politics') // B-55836 remove
-            column(name: 'publication_date', value: '3000-12-12') // B-55836 remove
-            column(name: 'market', value: 'Univ') // B-55836 remove
-            column(name: 'market_period_from', value: '2015') // B-55836 remove
-            column(name: 'market_period_to', value: '2015') // B-55836 remove
-            column(name: 'author', value: 'Aarseth, Espen J.') // B-55836 remove
-            column(name: 'reported_value', value: '110.34') // B-55836 remove
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '1395.1194841293')
-            column(name: 'is_rh_participating_flag', value: 'FALSE') // B-55836 remove
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -382,12 +304,7 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '112317622XX')
-            column(name: 'market', value: 'Univ,Bus,Doc,S') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'reported_value', value: '16.00') // B-55836 remove
             column(name: 'gross_amount', value: '84.00')
         }
 

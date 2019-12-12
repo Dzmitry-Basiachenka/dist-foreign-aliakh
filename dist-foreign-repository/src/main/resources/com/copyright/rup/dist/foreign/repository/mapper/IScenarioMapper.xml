@@ -40,7 +40,7 @@
         s.df_scenario_uid,
         s.name,
         s.status_ind,
-        coalesce(sum(u.reported_value), 0) reported_total,
+        coalesce(sum(ufas.reported_value), 0) reported_total,
         coalesce(sum(u.gross_amount), 0) gross_total,
         coalesce(sum(u.service_fee_amount), 0) service_fee_total,
         coalesce(sum(u.net_amount), 0) net_total,
@@ -101,10 +101,11 @@
                 u.df_usage_batch_uid,
                 u.rh_account_number,
                 wc.classification,
-                u.reported_value * ((ub.fund_pool ->> 'fund_pool_period_to')::int - (ub.fund_pool ->> 'fund_pool_period_from')::int + 1) /
-                (u.market_period_to - u.market_period_from + 1) as numerator_weight,
+                ufas.reported_value * ((ub.fund_pool ->> 'fund_pool_period_to')::int - (ub.fund_pool ->> 'fund_pool_period_from')::int + 1) /
+                (ufas.market_period_to - ufas.market_period_from + 1) as numerator_weight,
                 case when wc.classification = 'STM' then (ub.fund_pool ->> 'stm_amount')::numeric else (ub.fund_pool ->> 'non_stm_amount')::numeric end fund_pool_amount
             from ${schema}.df_usage u
+            join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
             join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
             join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
             <include refid="IUsageMapper.usageFilter"/>
@@ -260,6 +261,7 @@
             <include refid="fullScenarioInformation"/>
         from ${schema}.df_scenario s
         left join ${schema}.df_usage u on u.df_scenario_uid = s.df_scenario_uid
+        left join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_fund_pool fund on (s.nts_fields->>'pre_service_fee_fund_uid') = fund.df_fund_pool_uid
         left join ${schema}.df_scenario_audit a1 on s.df_scenario_uid = a1.df_scenario_uid
         left join ${schema}.df_scenario_audit a2 on s.df_scenario_uid = a2.df_scenario_uid
@@ -279,6 +281,7 @@
             <include refid="fullScenarioInformation"/>
         from ${schema}.df_scenario s
         left join ${schema}.df_usage_archive u on u.df_scenario_uid = s.df_scenario_uid
+        join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_fund_pool fund on (s.nts_fields->>'pre_service_fee_fund_uid') = fund.df_fund_pool_uid
         left join ${schema}.df_scenario_audit a1 on s.df_scenario_uid = a1.df_scenario_uid
         left join ${schema}.df_scenario_audit a2 on s.df_scenario_uid = a2.df_scenario_uid
