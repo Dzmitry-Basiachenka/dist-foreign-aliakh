@@ -5662,12 +5662,7 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '250.00')
         }
 
@@ -5690,12 +5685,7 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002901')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '250.00')
         }
 
@@ -5717,6 +5707,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '8972.00')
+            column(name: 'created_datetime', value: '2019-01-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -5743,19 +5734,9 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2558902245377325XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Nanette M. Schwann') // B-55836 remove
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'reported_value', value: '9900.00') // B-55836 remove
             column(name: 'net_amount', value: '6100.9872')
-            column(name: 'is_rh_participating_flag', value: false) // B-55836 remove
-            column(name: 'is_payee_participating_flag', value: false) // B-55836 remove
             column(name: 'service_fee', value: '0.32')
             column(name: 'service_fee_amount', value: '2871.0528')
             column(name: 'gross_amount', value: '8972.04')
@@ -5802,12 +5783,7 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '0.00')
         }
 
@@ -5830,12 +5806,7 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000002901')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'reported_value', value: '30.86') // B-55836 remove
             column(name: 'gross_amount', value: '0.00')
         }
 
@@ -5857,6 +5828,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '8972.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
             column(name: 'fund_pool', value: '{"markets": ["Bus,Univ,Doc Del"], "stm_amount": 10, "non_stm_amount": 20, "stm_minimum_amount": 30, "non_stm_minimum_amount": 40, "fund_pool_period_to": 2017, "fund_pool_period_from": 2017}')
         }
 
@@ -5884,19 +5856,9 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'article', value: 'DIN EN 779:2012') // B-55836 remove
             column(name: 'standard_number', value: '2558902245377325XX')
-            column(name: 'publisher', value: 'IEEE') // B-55836 remove
-            column(name: 'publication_date', value: '2013-09-10') // B-55836 remove
-            column(name: 'market', value: 'Doc Del') // B-55836 remove
-            column(name: 'market_period_from', value: '2013') // B-55836 remove
-            column(name: 'market_period_to', value: '2017') // B-55836 remove
-            column(name: 'author', value: 'Nanette M. Schwann') // B-55836 remove
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'reported_value', value: '9900.00') // B-55836 remove
             column(name: 'net_amount', value: '6100.9872')
-            column(name: 'is_rh_participating_flag', value: false) // B-55836 remove
-            column(name: 'is_payee_participating_flag', value: false) // B-55836 remove
             column(name: 'service_fee', value: '0.32')
             column(name: 'service_fee_amount', value: '2871.0528')
             column(name: 'gross_amount', value: '8972.04')
