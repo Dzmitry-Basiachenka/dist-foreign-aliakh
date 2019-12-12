@@ -1,3 +1,48 @@
+8.1.2
+-
+* B-55560 Tech Debt: FDA: update CAS url property, update PI index property
+* B-55626 FDA: Globalization of Product Family: Add FAS Scenario widget and controller
+* B-55626 FDA: Globalization of Product Family: Add NTS Scenario widget and controller, remove NTS related test from FasScenarioMediatorTest
+* B-55626 FDA: Globalization of Product Family: Add common Scenario widget and controller
+* B-55626 FDA: Globalization of Product Family: Add interfaces for Drill-Down by Rightsholder widgets and controllers
+* B-55626 FDA: Globalization of Product Family: Add interfaces for product family specific Scenario controllers and widgets
+* B-55626 FDA: Globalization of Product Family: Fix expected exception message in CommonControllerProviderTest
+* B-55626 FDA: Globalization of Product Family: Fix expected exception message in CommonControllerProviderTest
+* B-55626 FDA: Globalization of Product Family: Implement NTS Drill-Down by Rightsholder widget and controller
+* B-55626 FDA: Globalization of Product Family: Implement common and FAS Drill-Down by Rightsholder widget and controller
+* B-55626 FDA: Globalization of Product Family: Move isScenarioEmpty method to IFasScenarioController
+* B-55626 FDA: Globalization of Product Family: adjust export functionality on Usages tab to generate product specific reports
+* B-55626 FDA: Globalization of Product Family: fix test data for CsvReportsIntegrationTest
+* B-55626 FDA: Globalization of Product Family: get rid of redundant usage of product family provider
+* B-55626 FDA: Globalization of Product Family: implement FAS and NTS usages mediators
+* B-55626 FDA: Globalization of Product Family: implement FAS usage controller and widget
+* B-55626 FDA: Globalization of Product Family: implement NTS usage controller and widget
+* B-55626 FDA: Globalization of Product Family: implement common logic for switching between product families
+* B-55626 FDA: Globalization of Product Family: implement common usages widget and controller
+* B-55626 FDA: Globalization of Product Family: reorganize approach to selecting product family specific controller
+* B-55626 FDA: Globalization of Product Family: replace UsagesWidget and UsagesController with product specific implementations
+* B-55836 FDA: Database changes to support AACL: add columns to df_usage_fas and fix default value
+* B-55836 FDA: Database changes to support AACL: add primary key into df_usage_fas
+* B-55836 FDA: Database changes to support AACL: adjust adding usages to scenario for NTS
+* B-55836 FDA: Database changes to support AACL: adjust additional fund workflow for NTS
+* B-55836 FDA: Database changes to support AACL: adjust logic for exporting usages from scenario
+* B-55836 FDA: Database changes to support AACL: adjust logic for getting archived usages by ids for marking as paid
+* B-55836 FDA: Database changes to support AACL: adjust logic for inserting NTS usages
+* B-55836 FDA: Database changes to support AACL: adjust logic for inserting paid usages
+* B-55836 FDA: Database changes to support AACL: adjust logic for summary market report
+* B-55836 FDA: Database changes to support AACL: adjust logic for viewing usages by scenario
+* B-55836 FDA: Database changes to support AACL: adjust logic to audit filter
+* B-55836 FDA: Database changes to support AACL: adjust new table for specific fields for FAS
+* B-55836 FDA: Database changes to support AACL: adjust queries for deleting usages from scenarios
+* B-55836 FDA: Database changes to support AACL: adjust queries related to getting usages by rightsholders
+* B-55836 FDA: Database changes to support AACL: adjust usage batch workflow for FAS
+* B-55836 FDA: Database changes to support AACL: adjust usage export workflow for FAS, NTS
+* B-55836 FDA: Database changes to support AACL: apply sorting base on new column for scenario usages, remove temp functionality
+* B-55836 FDA: Database changes to support AACL: create new database for FAS specific fields
+* B-55836 FDA: Database changes to support AACL: create new database for FAS specific fields
+* B-55836 FDA: Database changes to support AACL: remove redundant FAS specific columns from df_usage and df_usage_archived tables
+* B-55836 FDA: Database changes to support AACL: remove unused repository method for inserting archived usages
+
 8.1.1
 -
 * B-55560 Tech Debt: FDA: adjust sorting by String values on work classification window
