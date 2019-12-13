@@ -16,7 +16,9 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.api.IScenarioUsageFilterRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
@@ -39,6 +41,7 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -67,6 +70,7 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String SCENARIO_WITH_AUDIT_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USER = "user@copyright.com";
 
     @Autowired
@@ -75,6 +79,8 @@ public class ScenarioRepositoryIntegrationTest {
     private IUsageRepository usageRepository;
     @Autowired
     private IUsageBatchRepository batchRepository;
+    @Autowired
+    private IScenarioUsageFilterRepository filterRepository;
 
     @Test
     public void testFindCountByName() {
@@ -86,35 +92,43 @@ public class ScenarioRepositoryIntegrationTest {
     @Test
     public void testFindAll() {
         List<Scenario> scenarios = scenarioRepository.findAll();
-        assertEquals(10, scenarios.size());
-        verifyScenario(scenarios.get(0), "095f3df4-c8a7-4dba-9a8f-7dce0b61c40a", "Scenario with excluded usages",
+        assertEquals(12, scenarios.size());
+        verifyScenario(scenarios.get(0), "8cb9092d-a0f7-474e-a13b-af1a134e4c86", "Sent to LM NTS scenario with audit",
+            "The description of scenario 8", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
+        assertNotNull(scenarios.get(0).getNtsFields());
+        verifyScenario(scenarios.get(1), "2369313c-dd17-45ed-a6e9-9461b9232ffd", "Approved NTS scenario with audit",
+            "The description of scenario 7", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.APPROVED);
+        assertNotNull(scenarios.get(1).getNtsFields());
+        verifyScenario(scenarios.get(2), "095f3df4-c8a7-4dba-9a8f-7dce0b61c40a", "Scenario with excluded usages",
             "The description of scenario 6", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(1), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
+        verifyScenario(scenarios.get(3), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
             "The description of scenario 2", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(2), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
-            "The description of scenario", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(3), "1230b236-1239-4a60-9fab-123b84199123", "Scenario name 4",
+        verifyScenario(scenarios.get(4), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
+            "The description of scenario", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.APPROVED);
+        verifyScenario(scenarios.get(5), "1230b236-1239-4a60-9fab-123b84199123", "Scenario name 4",
             "The description of scenario 4", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(4), "8a6a6b15-6922-4fda-b40c-5097fcbd256e", "Scenario name 5",
+        verifyScenario(scenarios.get(6), "8a6a6b15-6922-4fda-b40c-5097fcbd256e", "Scenario name 5",
             "The description of scenario 5", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
-        verifyScenario(scenarios.get(5), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
+        verifyScenario(scenarios.get(7), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
             "The description of scenario 3", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(6), "005a33fc-26c5-4e0d-afd3-1d581b62ec70", "Partially Paid Scenario",
+        verifyScenario(scenarios.get(8), "005a33fc-26c5-4e0d-afd3-1d581b62ec70", "Partially Paid Scenario",
             "Not all usages are paid", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
-        verifyScenario(scenarios.get(7), "a9ee7491-d166-47cd-b36f-fe80ee7450f1", "Fully Paid Scenario",
+        verifyScenario(scenarios.get(9), "a9ee7491-d166-47cd-b36f-fe80ee7450f1", "Fully Paid Scenario",
             "All usages are paid and reported to CRM", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
-        verifyScenario(scenarios.get(8), "a386bd74-c112-4b19-b9b7-c5e4f18c7fcd", "Archived Scenario",
+        verifyScenario(scenarios.get(10), "a386bd74-c112-4b19-b9b7-c5e4f18c7fcd", "Archived Scenario",
             "Scenario already archived", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.ARCHIVED);
-        Scenario ntsScenario = scenarios.get(9);
+        Scenario ntsScenario = scenarios.get(11);
         verifyScenario(ntsScenario, "1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b", "Test NTS scenario",
-            "Description for test NTS scenario", "NTS", ScenarioStatusEnum.IN_PROGRESS);
+            "Description for test NTS scenario", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
         assertNotNull(ntsScenario.getNtsFields());
         assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
     }
 
     @Test
-    public void testFindWithAmountsAndLastAction() {
+    public void testFindWithAmountsAndLastActionForFasScenario() {
         Scenario scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_WITH_AUDIT_ID);
+        verifyScenario(scenario, "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
+            "The description of scenario", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.APPROVED);
         ScenarioAuditItem scenarioAuditItem = scenario.getAuditItem();
         assertEquals(ScenarioActionTypeEnum.APPROVED, scenarioAuditItem.getActionType());
         assertEquals("Scenario approved by manager", scenarioAuditItem.getActionReason());
@@ -122,18 +136,15 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("22354.8000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("10520.0000000000"), scenario.getServiceFeeTotal());
         assertEquals(new BigDecimal("19800.00"), scenario.getReportedTotal());
-        NtsFields ntsFields = scenario.getNtsFields();
-        assertEquals("a7131cd2-c7cd-4d70-a78f-9554e9598693", ntsFields.getPreServiceFeeFundId());
-        assertEquals("Pre-Service Fee Additional Fund 2", ntsFields.getPreServiceFeeFundName());
-        assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
-        assertEquals(new BigDecimal("800.00"), ntsFields.getPostServiceFeeAmount());
-        assertEquals(new BigDecimal("500.00"), ntsFields.getPreServiceFeeAmount());
+        assertNull(scenario.getNtsFields());
     }
 
     @Test
-    public void testFindArchivedWithAmountsAndLastAction() {
+    public void testFindArchivedWithAmountsAndLastActionForFasScenario() {
         Scenario scenario =
             scenarioRepository.findArchivedWithAmountsAndLastAction("8a6a6b15-6922-4fda-b40c-5097fcbd256e");
+        verifyScenario(scenario, "8a6a6b15-6922-4fda-b40c-5097fcbd256e", "Scenario name 5",
+            "The description of scenario 5", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
         ScenarioAuditItem scenarioAuditItem = scenario.getAuditItem();
         assertEquals(ScenarioActionTypeEnum.SENT_TO_LM, scenarioAuditItem.getActionType());
         assertNull(scenarioAuditItem.getActionReason());
@@ -141,12 +152,58 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("680.0000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("320.0000000000"), scenario.getServiceFeeTotal());
         assertEquals(new BigDecimal("1000.00"), scenario.getReportedTotal());
+        assertNull(scenario.getNtsFields());
+    }
+
+    @Test
+    public void testFindWithAmountsAndLastActionForNtsScenario() {
+        Scenario scenario = scenarioRepository.findWithAmountsAndLastAction("2369313c-dd17-45ed-a6e9-9461b9232ffd");
+        verifyScenario(scenario, "2369313c-dd17-45ed-a6e9-9461b9232ffd", "Approved NTS scenario with audit",
+            "The description of scenario 7", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.APPROVED);
+        ScenarioAuditItem scenarioAuditItem = scenario.getAuditItem();
+        assertEquals(ScenarioActionTypeEnum.APPROVED, scenarioAuditItem.getActionType());
+        assertEquals("Scenario approved by manager", scenarioAuditItem.getActionReason());
+        assertEquals(new BigDecimal("1100.0000000000"), scenario.getGrossTotal());
+        assertEquals(new BigDecimal("780.0000000000"), scenario.getNetTotal());
+        assertEquals(new BigDecimal("320.0000000000"), scenario.getServiceFeeTotal());
+        assertEquals(new BigDecimal("900.00"), scenario.getReportedTotal());
         NtsFields ntsFields = scenario.getNtsFields();
-        assertEquals("5210b859-1239-4a60-9fab-999b84199321", ntsFields.getPreServiceFeeFundId());
-        assertEquals("Pre-Service Fee Additional Fund 1", ntsFields.getPreServiceFeeFundName());
+        assertEquals("7141290b-7042-4cc6-975f-10546370adce", ntsFields.getPreServiceFeeFundId());
+        assertEquals("Pre-Service Fee Additional Fund 3", ntsFields.getPreServiceFeeFundName());
         assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
-        assertEquals(new BigDecimal("800.00"), ntsFields.getPostServiceFeeAmount());
-        assertEquals(new BigDecimal("500.00"), ntsFields.getPreServiceFeeAmount());
+        assertEquals(new BigDecimal("100.00"), ntsFields.getPostServiceFeeAmount());
+        assertEquals(new BigDecimal("50.00"), ntsFields.getPreServiceFeeAmount());
+        assertEquals(USER, scenario.getCreateUser());
+        assertEquals(Date.from(OffsetDateTime.parse("2017-02-14T12:00:00+00:00").toInstant()),
+            scenario.getCreateDate());
+        assertEquals(Date.from(OffsetDateTime.parse("2018-05-14T11:41:52.735531+03:00").toInstant()),
+            scenario.getUpdateDate());
+    }
+
+    @Test
+    public void testFindArchivedWithAmountsAndLastActionForNtsScenario() {
+        Scenario scenario =
+            scenarioRepository.findArchivedWithAmountsAndLastAction("8cb9092d-a0f7-474e-a13b-af1a134e4c86");
+        verifyScenario(scenario, "8cb9092d-a0f7-474e-a13b-af1a134e4c86", "Sent to LM NTS scenario with audit",
+            "The description of scenario 8", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
+        ScenarioAuditItem scenarioAuditItem = scenario.getAuditItem();
+        assertEquals(ScenarioActionTypeEnum.SENT_TO_LM, scenarioAuditItem.getActionType());
+        assertNull(scenarioAuditItem.getActionReason());
+        assertEquals(new BigDecimal("1100.0000000000"), scenario.getGrossTotal());
+        assertEquals(new BigDecimal("780.0000000000"), scenario.getNetTotal());
+        assertEquals(new BigDecimal("320.0000000000"), scenario.getServiceFeeTotal());
+        assertEquals(new BigDecimal("900.00"), scenario.getReportedTotal());
+        NtsFields ntsFields = scenario.getNtsFields();
+        assertEquals("815d6736-a34e-4fc8-96c3-662a114fa7f2", ntsFields.getPreServiceFeeFundId());
+        assertEquals("Pre-Service Fee Additional Fund 4", ntsFields.getPreServiceFeeFundName());
+        assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
+        assertEquals(new BigDecimal("100.00"), ntsFields.getPostServiceFeeAmount());
+        assertEquals(new BigDecimal("50.00"), ntsFields.getPreServiceFeeAmount());
+        assertEquals(USER, scenario.getCreateUser());
+        assertEquals(Date.from(OffsetDateTime.parse("2017-02-14T12:00:00+00:00").toInstant()),
+            scenario.getCreateDate());
+        assertEquals(Date.from(OffsetDateTime.parse("2018-05-15T11:41:52.735531+03:00").toInstant()),
+            scenario.getUpdateDate());
     }
 
     @Test
@@ -182,8 +239,8 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindNameByPreServiceFeeFundId() {
-        assertEquals("Scenario name 5",
-            scenarioRepository.findNameByPreServiceFeeFundId("5210b859-1239-4a60-9fab-999b84199321"));
+        assertEquals("Sent to LM NTS scenario with audit",
+            scenarioRepository.findNameByPreServiceFeeFundId("815d6736-a34e-4fc8-96c3-662a114fa7f2"));
         assertNull(scenarioRepository.findNameByPreServiceFeeFundId(RupPersistUtils.generateUuid()));
     }
 
@@ -284,7 +341,12 @@ public class ScenarioRepositoryIntegrationTest {
         ntsFields.setPostServiceFeeAmount(new BigDecimal("5005.00"));
         ntsFields.setPreServiceFeeFundId("5210b859-1239-4a60-9fab-999b84199321");
         scenario.setNtsFields(ntsFields);
-        scenarioRepository.insertNtsScenarioAndAddUsages(scenario, buildUsageFilter());
+        UsageFilter usageFilter = buildUsageFilter();
+        scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
+        ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter(usageFilter);
+        scenarioUsageFilter.setId(RupPersistUtils.generateUuid());
+        scenarioUsageFilter.setScenarioId(scenario.getId());
+        filterRepository.insert(scenarioUsageFilter);
         Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID);
         assertNotNull(ntsScenario.getNtsFields());
         assertEquals(new BigDecimal("700.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
@@ -384,7 +446,7 @@ public class ScenarioRepositoryIntegrationTest {
             "d8baa8e6-10fd-4c3c-8851-b1e6883e8cde", "f8f23728-75ac-4114-b910-2d7abc061217"));
         usageFilter.setRhAccountNumbers(Collections.singleton(2000017001L));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        usageFilter.setProductFamilies(Collections.singleton("NTS"));
+        usageFilter.setProductFamilies(Collections.singleton(NTS_PRODUCT_FAMILY));
         usageFilter.setPaymentDate(LocalDate.of(2020, 1, 1));
         usageFilter.setFiscalYear(2020);
         return usageFilter;

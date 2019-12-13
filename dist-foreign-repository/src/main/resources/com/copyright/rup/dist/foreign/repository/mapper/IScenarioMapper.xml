@@ -40,6 +40,7 @@
         s.df_scenario_uid,
         s.name,
         s.status_ind,
+        f.product_family,
         coalesce(sum(ufas.reported_value), 0) reported_total,
         coalesce(sum(u.gross_amount), 0) gross_total,
         coalesce(sum(u.service_fee_amount), 0) service_fee_total,
@@ -56,7 +57,12 @@
         a1.updated_datetime action_updated_datetime,
         a1.created_by_user action_created_by_user,
         a1.updated_by_user action_updated_by_user,
-        a1.record_version action_record_version
+        s.record_version action_record_version,
+        s.created_datetime created_datetime,
+        s.updated_datetime updated_datetime,
+        s.created_by_user created_by_user,
+        s.updated_by_user updated_by_user,
+        s.record_version record_version
     </sql>
 
     <insert id="insert" parameterType="Scenario">
@@ -260,6 +266,7 @@
         select
             <include refid="fullScenarioInformation"/>
         from ${schema}.df_scenario s
+        join ${schema}.df_scenario_usage_filter f on s.df_scenario_uid = f.df_scenario_uid
         left join ${schema}.df_usage u on u.df_scenario_uid = s.df_scenario_uid
         left join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_fund_pool fund on (s.nts_fields->>'pre_service_fee_fund_uid') = fund.df_fund_pool_uid
@@ -273,13 +280,15 @@
             s.name,
             a1.df_scenario_audit_uid,
             fund.name,
-            fund.withdrawn_amount
+            fund.withdrawn_amount,
+            f.product_family
     </select>
 
     <select id="findArchivedWithAmountsAndLastAction" parameterType="string" resultMap="scenarioResultMap">
         select
             <include refid="fullScenarioInformation"/>
         from ${schema}.df_scenario s
+        join ${schema}.df_scenario_usage_filter f on s.df_scenario_uid = f.df_scenario_uid
         left join ${schema}.df_usage_archive u on u.df_scenario_uid = s.df_scenario_uid
         join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_fund_pool fund on (s.nts_fields->>'pre_service_fee_fund_uid') = fund.df_fund_pool_uid
@@ -293,7 +302,8 @@
             s.name,
             a1.df_scenario_audit_uid,
             fund.name,
-            fund.withdrawn_amount
+            fund.withdrawn_amount,
+            f.product_family
     </select>
 
     <select id="findRightsholdersByScenarioIdAndSourceRro" parameterType="map" resultMap="rightsholderPayeePairResultMap">
