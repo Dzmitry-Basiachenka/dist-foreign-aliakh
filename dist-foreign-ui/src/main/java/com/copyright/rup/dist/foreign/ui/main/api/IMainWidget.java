@@ -12,4 +12,9 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * @author Nikita Levyankov
  */
 public interface IMainWidget extends IWidget<IMainWidgetController> {
+
+    /**
+     * Displays specific widgets based on globally selected product family.
+     */
+    void updateProductFamily();
 }

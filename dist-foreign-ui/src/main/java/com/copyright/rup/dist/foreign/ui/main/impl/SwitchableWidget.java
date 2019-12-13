@@ -5,12 +5,13 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 
 import java.util.function.Consumer;
 
 /**
- * Allows to display different widgets on {@link #refresh()} depending on provides {@link IController} instance.
+ * Allows to display different widgets depending on provides {@link IController} instance.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -38,12 +39,21 @@ class SwitchableWidget<W extends IWidget<C>, C extends IController<W>> extends P
         setSizeFull();
     }
 
-    @Override
-    public void refresh() {
+    /**
+     * Updates widget content provided {@link IController} instance.
+     */
+    public void updateProductFamily() {
         C controller = controllerProvider.getController();
         W widget = controller.initWidget();
         listenerRegisterer.accept(widget);
         setContent(widget);
-        controller.refreshWidget();
+    }
+
+    @Override
+    public void refresh() {
+        Component content = getContent();
+        if (content instanceof IRefreshable) {
+            ((IRefreshable) content).refresh();
+        }
     }
 }
