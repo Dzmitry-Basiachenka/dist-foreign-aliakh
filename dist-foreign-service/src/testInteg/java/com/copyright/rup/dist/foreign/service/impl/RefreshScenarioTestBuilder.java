@@ -114,7 +114,7 @@ class RefreshScenarioTestBuilder {
             assertEquals(expectedScenario.getDescription(), scenario.getDescription());
             assertEquals("SYSTEM", scenario.getCreateUser());
             assertEquals("SYSTEM", scenario.getUpdateUser());
-            assertEquals(1, scenario.getVersion());
+            assertEquals(2, scenario.getVersion());
         }
 
         private void assertScenarioActions(String entityId) {
