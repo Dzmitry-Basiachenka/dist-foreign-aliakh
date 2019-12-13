@@ -94,7 +94,8 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     @Override
     public IStreamSource getExportScenarioUsagesStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> scenario.getName() + "_Details_",
-            pos -> reportService.writeScenarioUsagesCsvReport(scenario, pos));
+            // TODO {srudak} method acts the same as before; class will be removed when scenarios tab migration finished
+            pos -> reportService.writeFasScenarioUsagesCsvReport(scenario, pos));
     }
 
     @Override

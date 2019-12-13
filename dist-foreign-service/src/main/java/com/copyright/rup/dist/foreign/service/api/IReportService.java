@@ -49,12 +49,20 @@ public interface IReportService {
     void writeNtsUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
-     * Writes scenario usages into csv output stream.
+     * Writes FAS scenario usages into csv output stream.
      *
      * @param scenario          {@link Scenario}
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
+    void writeFasScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes NTS scenario usages into csv output stream.
+     *
+     * @param scenario          {@link Scenario}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeNtsScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes scenario rightsholders into csv output stream.

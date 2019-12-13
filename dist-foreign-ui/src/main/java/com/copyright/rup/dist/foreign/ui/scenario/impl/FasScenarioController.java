@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.PipedOutputStream;
 import java.util.List;
 
 /**
@@ -98,6 +100,11 @@ public class FasScenarioController extends CommonScenarioController<IFasScenario
     @Override
     protected ICommonDrillDownByRightsholderController<?, ?> getDrillDownByRightsholderController() {
         return drillDownByRightsholderController;
+    }
+
+    @Override
+    protected void writeScenarioUsagesCsvReport(Scenario scenarioForReport, PipedOutputStream pos) {
+        getReportService().writeFasScenarioUsagesCsvReport(scenarioForReport, pos);
     }
 
     private boolean hasApprovedDiscrepancies() {

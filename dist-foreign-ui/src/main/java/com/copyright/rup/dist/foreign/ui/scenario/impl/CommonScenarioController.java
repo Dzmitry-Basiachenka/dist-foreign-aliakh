@@ -21,6 +21,7 @@ import com.vaadin.shared.data.sort.SortDirection;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.PipedOutputStream;
 import java.util.List;
 
 /**
@@ -78,7 +79,7 @@ public abstract class CommonScenarioController<W extends ICommonScenarioWidget<W
     @Override
     public IStreamSource getExportScenarioUsagesStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> scenario.getName() + "_Details_",
-            pos -> reportService.writeScenarioUsagesCsvReport(scenario, pos));
+            pos -> writeScenarioUsagesCsvReport(scenario, pos));
     }
 
     @Override
@@ -110,8 +111,20 @@ public abstract class CommonScenarioController<W extends ICommonScenarioWidget<W
         return scenarioService;
     }
 
+    protected IReportService getReportService() {
+        return reportService;
+    }
+
     /**
      * @return an {@link ICommonDrillDownByRightsholderController} instance.
      */
     protected abstract ICommonDrillDownByRightsholderController<?, ?> getDrillDownByRightsholderController();
+
+    /**
+     * Writes scenario usages into csv output stream.
+     *
+     * @param scenarioForReport a {@link Scenario}
+     * @param pos               a {@link PipedOutputStream} instance
+     */
+    protected abstract void writeScenarioUsagesCsvReport(Scenario scenarioForReport, PipedOutputStream pos);
 }

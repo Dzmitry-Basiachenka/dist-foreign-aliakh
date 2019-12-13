@@ -86,12 +86,22 @@ public interface IUsageArchiveRepository {
     int findCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue);
 
     /**
-     * Finds usages by scenario id and writes them into the output stream in CSV format.
+     * Finds usages by FAS scenario id and writes them into the output stream in CSV format.
      *
      * @param scenarioId        scenario id
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+    // TODO {srudak} move to IReportRepository
+    void writeFasScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds usages by NTS scenario id and writes them into the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    // TODO {srudak} move to IReportRepository
+    void writeNtsScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
      * Finds {@link RightsholderTotalsHolder}s based on scenario id and writes them to the output stream in CSV format.
@@ -99,6 +109,7 @@ public interface IUsageArchiveRepository {
      * @param scenarioId        scenario id
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
+    // TODO {srudak} move to IReportRepository
     void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
