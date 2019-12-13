@@ -9,7 +9,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -61,7 +61,7 @@ public class RefreshScenarioWindowTest {
 
     @Test
     public void testOnOkButtonClick() {
-        IScenariosController controller = createMock(IScenariosController.class);
+        IFasScenariosController controller = createMock(IFasScenariosController.class);
         RefreshScenarioWindow window = new RefreshScenarioWindow(value -> null, value -> 0, controller);
         VerticalLayout layout = (VerticalLayout) window.getContent();
         HorizontalLayout buttonsLayout = (HorizontalLayout) layout.getComponent(2);
@@ -80,7 +80,7 @@ public class RefreshScenarioWindowTest {
 
     @Test
     public void testOnOkButtonClickInvalidRightsholders() {
-        IScenariosController controller = createMock(IScenariosController.class);
+        IFasScenariosController controller = createMock(IFasScenariosController.class);
         RefreshScenarioWindow window = new RefreshScenarioWindow(value -> null, value -> 0, controller);
         VerticalLayout layout = (VerticalLayout) window.getContent();
         HorizontalLayout buttonsLayout = (HorizontalLayout) layout.getComponent(2);

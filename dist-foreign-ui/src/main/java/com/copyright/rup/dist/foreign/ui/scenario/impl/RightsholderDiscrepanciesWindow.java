@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -37,17 +37,17 @@ import java.util.List;
 class RightsholderDiscrepanciesWindow extends Window {
 
     private final IReconcileRightsholdersController controller;
-    private final IScenariosController scenariosController;
+    private final IFasScenariosController scenariosController;
     private Grid<RightsholderDiscrepancy> grid;
 
     /**
      * Constructor.
      *
      * @param reconcileRightsholdersController instance of {@link IReconcileRightsholdersController}
-     * @param scenariosController              instance of {@link IScenariosController}
+     * @param scenariosController              instance of {@link IFasScenariosController}
      */
     RightsholderDiscrepanciesWindow(IReconcileRightsholdersController reconcileRightsholdersController,
-                                    IScenariosController scenariosController) {
+                                    IFasScenariosController scenariosController) {
         this.controller = reconcileRightsholdersController;
         this.scenariosController = scenariosController;
         setWidth(900, Unit.PIXELS);

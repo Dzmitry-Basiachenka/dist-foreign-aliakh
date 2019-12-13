@@ -64,7 +64,7 @@ public class FasScenariosController extends CommonScenariosController<IFasScenar
             if (0 < rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
                 RightsholderDiscrepancyStatusEnum.DRAFT)) {
                 reconcileRightsholdersController.setScenario(scenario);
-                Windows.showModalWindow(new FasRightsholderDiscrepanciesWindow(reconcileRightsholdersController, this));
+                Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController, this));
             } else {
                 Windows.showConfirmDialog(ForeignUi.getMessage("window.reconcile_rightsholders", scenario.getName()),
                     () -> {
@@ -85,7 +85,7 @@ public class FasScenariosController extends CommonScenariosController<IFasScenar
         if (Objects.nonNull(filter)) {
             UsageFilter usageFilter = new UsageFilter(filter);
             if (0 < getSize(usageFilter)) {
-                Windows.showModalWindow(new FasRefreshScenarioWindow(
+                Windows.showModalWindow(new RefreshScenarioWindow(
                     query ->
                         loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders(), usageFilter).stream(),
                     query -> getSize(usageFilter), this));

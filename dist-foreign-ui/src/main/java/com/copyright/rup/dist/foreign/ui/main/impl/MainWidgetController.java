@@ -4,7 +4,8 @@ import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.widget.api.TabController;
@@ -37,7 +38,7 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     private IControllerProvider<ICommonUsageController> usagesControllerProvider;
     @Autowired
     @Qualifier("dist.foreign.scenariosControllerProvider")
-    private IControllerProvider<IScenariosController> scenariosControllerProvider;
+    private IControllerProvider<ICommonScenariosController> scenariosControllerProvider;
     @Autowired
     @Qualifier("dist.foreign.auditControllerProvider")
     private IControllerProvider<IAuditController> auditControllerProvider;
@@ -48,7 +49,7 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     }
 
     @Override
-    public IControllerProvider<IScenariosController> getScenariosControllerProvider() {
+    public IControllerProvider<ICommonScenariosController> getScenariosControllerProvider() {
         return scenariosControllerProvider;
     }
 
@@ -60,7 +61,8 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Override
     public void onScenarioCreated(ScenarioCreateEvent event) {
         getTabSheet().setSelectedTab(SCENARIOS_TAB_INDEX);
-        getScenariosControllerProvider().getController().getWidget().selectScenario(event.getScenarioId());
+        ((ICommonScenariosWidget) getScenariosControllerProvider().getController().getWidget())
+            .selectScenario(event.getScenarioId());
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -41,7 +41,7 @@ import java.util.List;
  */
 public class RefreshScenarioWindow extends Window {
 
-    private final IScenariosController controller;
+    private final IFasScenariosController controller;
     private final DataProvider<UsageDto, Void> dataProvider;
     private Grid<UsageDto> grid;
     private HorizontalLayout buttonsLayout;
@@ -51,10 +51,10 @@ public class RefreshScenarioWindow extends Window {
      *
      * @param fetchCallback callback for fetching a stream of items
      * @param countCallback callback for counting the number of items
-     * @param controller    instance of {@link IScenariosController}
+     * @param controller    instance of {@link IFasScenariosController}
      */
     public RefreshScenarioWindow(FetchCallback<UsageDto, Void> fetchCallback,
-                                 CountCallback<UsageDto, Void> countCallback, IScenariosController controller) {
+                                 CountCallback<UsageDto, Void> countCallback, IFasScenariosController controller) {
         this.controller = controller;
         setCaption(ForeignUi.getMessage("label.refresh_scenario"));
         setWidth(800, Unit.PIXELS);

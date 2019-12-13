@@ -4,7 +4,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 public class ExcludeRightsholdersWindow extends Window implements ISearchController {
 
     private final Long accountNumber;
-    private final IScenarioController scenarioController;
+    private final IFasScenarioController scenarioController;
     private Grid<RightsholderPayeePair> rightsholdersGrid;
     private SearchWidget searchWidget;
 
@@ -49,9 +49,9 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
      * Constructor.
      *
      * @param rroAccountNumber   rro account number
-     * @param scenarioController instance of {@link IScenarioController}
+     * @param scenarioController instance of {@link IFasScenarioController}
      */
-    ExcludeRightsholdersWindow(Long rroAccountNumber, IScenarioController scenarioController) {
+    ExcludeRightsholdersWindow(Long rroAccountNumber, IFasScenarioController scenarioController) {
         this.accountNumber = rroAccountNumber;
         this.scenarioController = scenarioController;
         setCaption(ForeignUi.getMessage("window.exclude.rh", rroAccountNumber));
@@ -66,10 +66,10 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
         String searchValue = searchWidget.getSearchValue();
         if (StringUtils.isNotBlank(searchValue)) {
             dataProvider.setFilter(pair ->
-                caseInsensitiveContains(pair.getPayee().getAccountNumber().toString(), searchValue)
-                    || caseInsensitiveContains(pair.getPayee().getName(), searchValue)
-                    || caseInsensitiveContains(pair.getRightsholder().getAccountNumber().toString(), searchValue)
-                    || caseInsensitiveContains(pair.getRightsholder().getName(), searchValue));
+                StringUtils.containsIgnoreCase(pair.getPayee().getAccountNumber().toString(), searchValue)
+                    || StringUtils.containsIgnoreCase(pair.getPayee().getName(), searchValue)
+                    || StringUtils.containsIgnoreCase(pair.getRightsholder().getAccountNumber().toString(), searchValue)
+                    || StringUtils.containsIgnoreCase(pair.getRightsholder().getName(), searchValue));
         }
     }
 
@@ -147,9 +147,5 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> rightsholdersGrid.getSelectionModel().deselectAll());
         return new HorizontalLayout(confirmButton, clearButton, Buttons.createCloseButton(this));
-    }
-
-    private Boolean caseInsensitiveContains(String where, String what) {
-        return StringUtils.contains(StringUtils.lowerCase(where), StringUtils.lowerCase(what));
     }
 }

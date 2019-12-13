@@ -56,7 +56,7 @@ public class FasScenarioController extends CommonScenarioController<IFasScenario
         if (hasApprovedDiscrepancies()) {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.info.exclude_details.reconciled_scenario"));
         } else {
-            Windows.showModalWindow(new FasExcludeSourceRroWindow(this));
+            Windows.showModalWindow(new ExcludeSourceRroWindow(this));
         }
     }
 

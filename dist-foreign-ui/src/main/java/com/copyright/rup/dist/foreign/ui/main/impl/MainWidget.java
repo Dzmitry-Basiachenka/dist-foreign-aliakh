@@ -5,8 +5,8 @@ import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
@@ -30,7 +30,7 @@ public class MainWidget extends TabSheet implements IMainWidget {
     private IMainWidgetController controller;
 
     private SwitchableWidget<? extends ICommonUsageWidget, ? extends ICommonUsageController> usagesWidget;
-    private SwitchableWidget<IScenariosWidget, IScenariosController> scenariosWidget;
+    private SwitchableWidget<? extends ICommonScenariosWidget, ? extends ICommonScenariosController> scenariosWidget;
     private SwitchableWidget<IAuditWidget, IAuditController> auditWidget;
 
     @Override
@@ -38,10 +38,12 @@ public class MainWidget extends TabSheet implements IMainWidget {
     public MainWidget init() {
         VaadinUtils.addComponentStyle(this, Cornerstone.MAIN_TABSHEET);
         usagesWidget = new SwitchableWidget<>(controller.getUsagesControllerProvider(),
-                widget -> widget.addListener(ScenarioCreateEvent.class,
-                    controller, IMainWidgetController.ON_SCENARIO_CREATED));
-        scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {});
-        auditWidget = new SwitchableWidget<>(controller.getAuditControllerProvider(), widget -> {});
+            widget -> widget.addListener(ScenarioCreateEvent.class,
+                controller, IMainWidgetController.ON_SCENARIO_CREATED));
+        scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {
+        });
+        auditWidget = new SwitchableWidget<>(controller.getAuditControllerProvider(), widget -> {
+        });
         addTab(usagesWidget, ForeignUi.getMessage("tab.usages"));
         addTab(scenariosWidget, ForeignUi.getMessage("tab.scenario"));
         addTab(auditWidget, ForeignUi.getMessage("tab.audit"));

@@ -8,8 +8,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 
 import com.vaadin.server.Extension;
@@ -47,7 +47,7 @@ public class RightsholderDiscrepanciesWindowTest {
     public void testConstructor() {
         IReconcileRightsholdersController reconcileRightsholdersController =
             createMock(IReconcileRightsholdersController.class);
-        IScenariosController scenariosController = createMock(IScenariosController.class);
+        IFasScenariosController scenariosController = createMock(IFasScenariosController.class);
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
