@@ -14,8 +14,9 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
+import com.copyright.rup.dist.foreign.repository.impl.csv.FasScenarioUsagesCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.NtsScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
@@ -102,9 +103,19 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     }
 
     @Override
-    public void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+    public void writeFasScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         Objects.requireNonNull(pipedOutputStream);
-        try (ScenarioUsagesCsvReportHandler handler = new ScenarioUsagesCsvReportHandler(pipedOutputStream)) {
+        try (FasScenarioUsagesCsvReportHandler handler = new FasScenarioUsagesCsvReportHandler(pipedOutputStream)) {
+            if (Objects.nonNull(scenarioId)) {
+                getTemplate().select("IUsageArchiveMapper.findDtoByScenarioId", scenarioId, handler);
+            }
+        }
+    }
+
+    @Override
+    public void writeNtsScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        try (NtsScenarioUsagesCsvReportHandler handler = new NtsScenarioUsagesCsvReportHandler(pipedOutputStream)) {
             if (Objects.nonNull(scenarioId)) {
                 getTemplate().select("IUsageArchiveMapper.findDtoByScenarioId", scenarioId, handler);
             }

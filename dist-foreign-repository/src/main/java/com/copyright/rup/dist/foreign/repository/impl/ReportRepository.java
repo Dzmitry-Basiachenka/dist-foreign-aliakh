@@ -16,13 +16,14 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.AuditCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.FasBatchSummaryReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.FasScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.FasUsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.NtsScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.NtsUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.OwnershipAdjustmentReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ResearchStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.SendForResearchCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ServiceFeeTrueUpReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.SummaryMarketReportHandler;
@@ -63,6 +64,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SEARCH_VALUE_KEY = "searchValue";
+    private static final String SCENARIO_ID_KEY = "scenarioId";
 
     @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
@@ -127,7 +129,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
                                                   OutputStream outputStream) {
         checkArgument(CollectionUtils.isNotEmpty(statuses));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("statuses", statuses);
         try (OwnershipAdjustmentReportHandler handler = new OwnershipAdjustmentReportHandler(
             Objects.requireNonNull(outputStream))) {
@@ -136,19 +138,28 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     }
 
     @Override
-    public void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+    public void writeFasScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         writeCsvReportByParts("IReportMapper.findScenarioUsageDtosCount", "IReportMapper.findScenarioUsageReportDtos",
-            parameters, () -> new ScenarioUsagesCsvReportHandler(pipedOutputStream));
+            parameters, () -> new FasScenarioUsagesCsvReportHandler(pipedOutputStream));
+    }
+
+    @Override
+    public void writeNtsScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        writeCsvReportByParts("IReportMapper.findScenarioUsageDtosCount", "IReportMapper.findScenarioUsageReportDtos",
+            parameters, () -> new NtsScenarioUsagesCsvReportHandler(pipedOutputStream));
     }
 
     @Override
     public void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("sort", new Sort("rightsholder.accountNumber", Direction.ASC));
         try (ScenarioRightsholderTotalsCsvReportHandler handler
                  = new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {

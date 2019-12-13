@@ -107,12 +107,20 @@ public interface IReportRepository {
     Set<String> writeUsagesForResearchAndFindIds(UsageFilter filter, OutputStream outputStream);
 
     /**
-     * Finds usages by scenario id and writes them into the output stream in CSV format.
+     * Finds usages by FAS scenario id and writes them into the output stream in CSV format.
      *
      * @param scenarioId        scenario id
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+    void writeFasScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds usages by NTS scenario id and writes them into the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeNtsScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
      * Finds {@link com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder}s based on scenario id

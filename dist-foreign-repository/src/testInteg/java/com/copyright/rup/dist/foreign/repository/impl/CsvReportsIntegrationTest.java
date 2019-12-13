@@ -136,16 +136,16 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testExportScenarioUsagesCsvReport() throws IOException {
+    public void testWriteFasScenarioUsagesCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
-            reportRepository.writeScenarioUsagesCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",
-                outputStream), "scenario_usages_report.csv");
+            reportRepository.writeFasScenarioUsagesCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",
+                outputStream), "scenario_fas_usages_report.csv");
     }
 
     @Test
-    public void testWriteScenarioUsagesCsvReportNts() throws IOException {
+    public void testWriteNtsScenarioUsagesCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
-            reportRepository.writeScenarioUsagesCsvReport("85ba864e-1939-4a60-9fab-888b84199321",
+            reportRepository.writeNtsScenarioUsagesCsvReport("85ba864e-1939-4a60-9fab-888b84199321",
                 outputStream), "scenario_nts_usages_report.csv");
     }
 

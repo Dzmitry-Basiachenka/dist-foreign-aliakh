@@ -127,35 +127,68 @@ public class ReportServiceTest {
     }
 
     @Test
-    public void testWriteScenarioUsagesCsvReportStatusSentToLM() {
+    public void testWriteFasScenarioUsagesCsvReportStatusSentToLM() {
         Scenario scenario = buildScenario(ScenarioStatusEnum.SENT_TO_LM);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        usageArchiveRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        usageArchiveRepository.writeFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
         expectLastCall().once();
         replay(usageArchiveRepository);
-        reportService.writeScenarioUsagesCsvReport(scenario, outputStream);
+        reportService.writeFasScenarioUsagesCsvReport(scenario, outputStream);
         verify(usageArchiveRepository);
     }
 
     @Test
-    public void testWriteScenarioUsagesCsvReportStatusArchived() {
+    public void testWriteNtsScenarioUsagesCsvReportStatusSentToLM() {
+        Scenario scenario = buildScenario(ScenarioStatusEnum.SENT_TO_LM);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        usageArchiveRepository.writeNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        expectLastCall().once();
+        replay(usageArchiveRepository);
+        reportService.writeNtsScenarioUsagesCsvReport(scenario, outputStream);
+        verify(usageArchiveRepository);
+    }
+
+    @Test
+    public void testWriteFasScenarioUsagesCsvReportStatusArchived() {
         Scenario scenario = buildScenario(ScenarioStatusEnum.ARCHIVED);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        usageArchiveRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        usageArchiveRepository.writeFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
         expectLastCall().once();
         replay(usageArchiveRepository);
-        reportService.writeScenarioUsagesCsvReport(scenario, outputStream);
+        reportService.writeFasScenarioUsagesCsvReport(scenario, outputStream);
         verify(usageArchiveRepository);
     }
 
     @Test
-    public void testWriteScenarioUsagesCsvReportStatusInProgress() {
+    public void testWriteNtsScenarioUsagesCsvReportStatusArchived() {
+        Scenario scenario = buildScenario(ScenarioStatusEnum.ARCHIVED);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        usageArchiveRepository.writeNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        expectLastCall().once();
+        replay(usageArchiveRepository);
+        reportService.writeNtsScenarioUsagesCsvReport(scenario, outputStream);
+        verify(usageArchiveRepository);
+    }
+
+    @Test
+    public void testWriteFasScenarioUsagesCsvReportStatusInProgress() {
         Scenario scenario = buildScenario(ScenarioStatusEnum.IN_PROGRESS);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        reportRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        reportRepository.writeFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
         expectLastCall().once();
         replay(reportRepository);
-        reportService.writeScenarioUsagesCsvReport(scenario, outputStream);
+        reportService.writeFasScenarioUsagesCsvReport(scenario, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testWriteNtsScenarioUsagesCsvReportStatusInProgress() {
+        Scenario scenario = buildScenario(ScenarioStatusEnum.IN_PROGRESS);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeNtsScenarioUsagesCsvReport(scenario, outputStream);
         verify(reportRepository);
     }
 
@@ -182,24 +215,46 @@ public class ReportServiceTest {
     }
 
     @Test
-    public void testWriteScenarioUsagesCsvReportStatusApproved() {
+    public void testWriteFasScenarioUsagesCsvReportStatusApproved() {
         Scenario scenario = buildScenario(ScenarioStatusEnum.APPROVED);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        reportRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        reportRepository.writeFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
         expectLastCall().once();
         replay(reportRepository);
-        reportService.writeScenarioUsagesCsvReport(scenario, outputStream);
+        reportService.writeFasScenarioUsagesCsvReport(scenario, outputStream);
         verify(reportRepository);
     }
 
     @Test
-    public void testWriteScenarioUsagesCsvReportStatusSubmitted() {
-        Scenario scenario = buildScenario(ScenarioStatusEnum.SUBMITTED);
+    public void testWriteNtsScenarioUsagesCsvReportStatusApproved() {
+        Scenario scenario = buildScenario(ScenarioStatusEnum.APPROVED);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        reportRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        reportRepository.writeNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
         expectLastCall().once();
         replay(reportRepository);
-        reportService.writeScenarioUsagesCsvReport(scenario, outputStream);
+        reportService.writeNtsScenarioUsagesCsvReport(scenario, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testWriteFasScenarioUsagesCsvReportStatusSubmitted() {
+        Scenario scenario = buildScenario(ScenarioStatusEnum.SUBMITTED);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeFasScenarioUsagesCsvReport(scenario, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testWriteNtsScenarioUsagesCsvReportStatusSubmitted() {
+        Scenario scenario = buildScenario(ScenarioStatusEnum.SUBMITTED);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeNtsScenarioUsagesCsvReport(scenario, outputStream);
         verify(reportRepository);
     }
 

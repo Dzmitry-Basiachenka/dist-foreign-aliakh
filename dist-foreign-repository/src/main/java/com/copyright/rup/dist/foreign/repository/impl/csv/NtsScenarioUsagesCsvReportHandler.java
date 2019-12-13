@@ -10,29 +10,29 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Writes scenario usages into a {@link PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
+ * Writes NTS scenario usages into a {@link PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
- * Date: 10/11/2017
+ * Date: 12/12/2019
  *
- * @author Uladzislau Shalamitski
+ * @author Stanislau Rudak
  */
-public class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
+public class NtsScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("Detail ID", "Usage Batch Name", "Product Family",
-        "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
-        "Standard Number Type", "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "Payee Account #",
-        "Payee Name", "Publisher", "Pub Date", "Number of Copies", "Reported Value", "Amt in USD", "Batch Amt in USD",
-        "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market", "Market Period From", "Market Period To",
-        "Author", "Comment");
+    private static final List<String> HEADERS =
+        Arrays.asList("Detail ID", "Product Family", "Usage Batch Name", "RRO Account #", "RRO Name", "RH Account #",
+            "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title", "Standard Number",
+            "Standard Number Type", "Fiscal Year", "Payment Date", "Title", "Article", "Publisher", "Pub Date",
+            "Number of Copies", "Reported Value", "Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %",
+            "Market", "Market Period From", "Market Period To", "Author", "Comment");
 
     /**
      * Constructor.
      *
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    public ScenarioUsagesCsvReportHandler(PipedOutputStream pipedOutputStream) {
+    public NtsScenarioUsagesCsvReportHandler(PipedOutputStream pipedOutputStream) {
         super(pipedOutputStream);
     }
 
@@ -61,7 +61,6 @@ public class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDt
         beanProperties.add(getBeanPropertyAsString(bean.getNumberOfCopies()));
         beanProperties.add(getBeanPropertyAsString(bean.getReportedValue()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
-        beanProperties.add(getBeanPropertyAsString(bean.getBatchGrossAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getServiceFeeAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getNetAmount()));
         beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));

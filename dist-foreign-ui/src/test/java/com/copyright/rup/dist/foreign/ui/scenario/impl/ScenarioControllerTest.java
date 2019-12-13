@@ -199,7 +199,7 @@ public class ScenarioControllerTest {
         expect(OffsetDateTime.now()).andReturn(NOW).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
-        reportService.writeScenarioUsagesCsvReport(scenario, pos);
+        reportService.writeFasScenarioUsagesCsvReport(scenario, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getExportScenarioUsagesStreamSource();
