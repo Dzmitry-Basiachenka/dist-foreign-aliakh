@@ -20,7 +20,6 @@ import com.vaadin.ui.VerticalLayout;
  *
  * @author Stanislau Rudak
  */
-// TODO {srudak} remove this class and rename the original ScenarioMediator
 class FasScenarioMediator implements IMediator {
 
     private Button excludeByRroButton;

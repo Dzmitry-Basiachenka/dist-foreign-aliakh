@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Lists;
@@ -49,7 +49,7 @@ public class ExcludeRightsholdersWindowTest {
 
     @Before
     public void setUp() {
-        IScenarioController scenarioController = createMock(ScenarioController.class);
+        IFasScenarioController scenarioController = createMock(IFasScenarioController.class);
         expect(scenarioController.getRightsholdersPayeePairs(1000009522L))
             .andReturn(Lists.newArrayList(
                 buildRightsholderPayeePair(

@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -34,16 +34,16 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ExcludeSourceRroWindow extends Window implements ISearchController {
 
-    private final IScenarioController scenarioController;
+    private final IFasScenarioController scenarioController;
     private SearchWidget searchWidget;
     private Grid<Rightsholder> grid;
 
     /**
      * Constructs window.
      *
-     * @param scenarioController instance of {@link IScenarioController}
+     * @param scenarioController instance of {@link IFasScenarioController}
      */
-    ExcludeSourceRroWindow(IScenarioController scenarioController) {
+    ExcludeSourceRroWindow(IFasScenarioController scenarioController) {
         super(ForeignUi.getMessage("label.exclude.rro"));
         this.scenarioController = scenarioController;
         setWidth(880, Unit.PIXELS);

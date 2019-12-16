@@ -9,7 +9,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.provider.ListDataProvider;
@@ -48,7 +48,7 @@ public class ExcludeSourceRroWindowTest {
 
     @Before
     public void setUp() {
-        IScenarioController scenarioController = createMock(ScenarioController.class);
+        IFasScenarioController scenarioController = createMock(IFasScenarioController.class);
         expect(scenarioController.getSourceRros())
             .andReturn(Arrays.asList(
                 buildRightsholder(2000017004L, "Access Copyright, The Canadian Copyright Agency"),

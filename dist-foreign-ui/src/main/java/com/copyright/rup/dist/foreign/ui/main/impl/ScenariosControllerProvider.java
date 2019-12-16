@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.main.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenariosController;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -23,16 +25,15 @@ import java.util.Map;
  */
 @Component("dist.foreign.scenariosControllerProvider")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ScenariosControllerProvider extends CommonControllerProvider<IScenariosController> {
+public class ScenariosControllerProvider extends CommonControllerProvider<ICommonScenariosController> {
 
-    // TODO {srudak} replace with specific interfaces once implemented
     @Autowired
-    private IScenariosController fasScenariosController;
+    private IFasScenariosController fasScenariosController;
     @Autowired
-    private IScenariosController ntsScenariosController;
+    private INtsScenariosController ntsScenariosController;
 
     @Override
-    protected Map<String, IScenariosController> getProductFamilyToControllerMap() {
+    protected Map<String, ICommonScenariosController> getProductFamilyToControllerMap() {
         return ImmutableMap.of(
             FdaConstants.FAS_PRODUCT_FAMILY, fasScenariosController,
             FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasScenariosController,
