@@ -1,16 +1,31 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.usage.api.nts.IWorkClassificationController;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Common interface for usages controllers.
@@ -19,12 +34,10 @@ import java.util.List;
  * <p>
  * Date: 12/5/19
  *
- * @param <C> controller instance
- * @param <W> widget instance
  * @author Uladzislau Shalamitski
  */
-public interface ICommonUsageController<W extends ICommonUsageWidget<W, C>,
-    C extends ICommonUsageController<W, C>> extends IController<W> {
+//TODO delete FAS/NTS specific methods
+public interface ICommonUsageController extends IController<ICommonUsageWidget> {
 
     /**
      * {@link #onFilterChanged(FilterChangedEvent)}.
@@ -39,20 +52,6 @@ public interface ICommonUsageController<W extends ICommonUsageWidget<W, C>,
         ReflectTools.findMethod(ICommonUsageController.class, "onScenarioCreated", ScenarioCreateEvent.class);
 
     /**
-     * Handles changes of filter.
-     *
-     * @param event event
-     */
-    void onFilterChanged(FilterChangedEvent event);
-
-    /**
-     * Handles {@link com.copyright.rup.dist.foreign.domain.Scenario} creation.
-     *
-     * @param event {@link ScenarioCreateEvent}
-     */
-    void onScenarioCreated(ScenarioCreateEvent event);
-
-    /**
      * Initializes {@link IUsagesFilterWidget}.
      *
      * @return initialized {@link IUsagesFilterWidget}
@@ -60,13 +59,50 @@ public interface ICommonUsageController<W extends ICommonUsageWidget<W, C>,
     IUsagesFilterWidget initUsagesFilterWidget();
 
     /**
-     * Vefiries whether all filtered {@link com.copyright.rup.dist.foreign.domain.Usage}s in specifies status or not.
+     * Handles changes of filter.
      *
-     * @param status {@link UsageStatusEnum} instance
-     * @return {@code true} - if all filtered {@link com.copyright.rup.dist.foreign.domain.Usage}s
-     * have specified {@link UsageStatusEnum},{@code false} - otherwise
+     * @param event event
      */
-    boolean isValidUsagesState(UsageStatusEnum status);
+    void onFilterChanged(FilterChangedEvent event);
+
+    /**
+     * Creates Pre-Service Fee Fund.
+     *
+     * @param fundPool {@link PreServiceFeeFund} instance
+     * @param batchIds set of batch ids
+     */
+    void createPreServiceFeeFund(PreServiceFeeFund fundPool, Set<String> batchIds);
+
+    /**
+     * Gets RRO from PRM by account number.
+     *
+     * @param rroAccountNumber RRO account number
+     * @return RRO {@link Rightsholder}
+     */
+    Rightsholder getRro(Long rroAccountNumber);
+
+    /**
+     * Checks whether usage batch with provided name already exists or not.
+     *
+     * @param name usage batch name
+     * @return {@code true} - if usage batch exists, {@code false} - otherwise
+     */
+    boolean usageBatchExists(String name);
+
+    /**
+     * @return number of items.
+     */
+    int getBeansCount();
+
+    /**
+     * Loads specified number of beans from the storage with given start index.
+     *
+     * @param startIndex start index
+     * @param count      items count to load
+     * @param sortOrders sort orders
+     * @return list of items to be displayed on UI
+     */
+    List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
 
     /**
      * Gets list of {@link UsageBatch}es associated with selected Product Family.
@@ -75,6 +111,23 @@ public interface ICommonUsageController<W extends ICommonUsageWidget<W, C>,
      * @return list of found {@link UsageBatch}es
      */
     List<UsageBatch> getUsageBatches(String productFamily);
+
+    /**
+     * Gets list of {@link UsageBatch}es suitable for including in Pre-Service fee funds.
+     *
+     * @return list of found {@link UsageBatch}es
+     */
+    List<UsageBatch> getUsageBatchesForPreServiceFeeFunds();
+
+    /**
+     * @return list of available markets.
+     */
+    List<String> getMarkets();
+
+    /**
+     * @return CLA account number.
+     */
+    Long getClaAccountNumber();
 
     /**
      * Deletes {@link UsageBatch} and all it's details.
@@ -93,28 +146,65 @@ public interface ICommonUsageController<W extends ICommonUsageWidget<W, C>,
     List<String> getScenariosNamesAssociatedWithUsageBatch(String batchId);
 
     /**
-     * Checks whether usage batch with provided name already exists or not.
+     * Gets {@link Scenario} name associated with Pre-Service fee fund identifier.
      *
-     * @param name usage batch name
-     * @return {@code true} - if usage batch exists, {@code false} - otherwise
+     * @param fundId Pre-Service fee fund identifier
+     * @return {@link Scenario} name
      */
-    boolean usageBatchExists(String name);
+    String getScenarioNameAssociatedWithPreServiceFeeFund(String fundId);
 
     /**
-     * Checks whether scenario with provided name already exists or not.
+     * Inserts usage batch and it's usages.
      *
-     * @param name scenario name
-     * @return {@code true} - if scenario exists, {@code false} - otherwise
+     * @param usageBatch {@link UsageBatch} instance
+     * @param usages     list of {@link Usage}s
+     * @return count of inserted usages
      */
-    boolean scenarioExists(String name);
+    int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
-     * Gets Pre-Service fee fund names associated with batch identifier.
+     * Gets count of archived usages based on batch information.
      *
-     * @param batchId batch identifier
-     * @return list of names
+     * @param usageBatch {@link UsageBatch} instance
+     * @return usages count
+     */
+    int getUsagesCountForNtsBatch(UsageBatch usageBatch);
+
+    /**
+     * Updates researched usage details.
+     *
+     * @param researchedUsages list of {@link ResearchedUsage}s
+     */
+    void loadResearchedUsages(List<ResearchedUsage> researchedUsages);
+
+    /**
+     * Creates a {@link Scenario} by entered scenario name and description.
+     *
+     * @param scenarioName name of scenario
+     * @param description  description for creating scenario
+     * @return created scenario
+     */
+    Scenario createScenario(String scenarioName, String description);
+
+    /**
+     * Gets Pre-Service Fee Funds by usage batch id.
+     *
+     * @param batchId batch id
+     * @return list of found Pre-Service Funds names
      */
     List<String> getPreServiceFeeFundNamesByUsageBatchId(String batchId);
+
+    /**
+     * @return instance of {@link IScenarioService}.
+     */
+    IScenarioService getScenarioService();
+
+    /**
+     * Handles {@link com.copyright.rup.dist.foreign.domain.Scenario} creation.
+     *
+     * @param event {@link ScenarioCreateEvent}
+     */
+    void onScenarioCreated(ScenarioCreateEvent event);
 
     /**
      * @return instance of {@link IStreamSource} for export.
@@ -122,27 +212,119 @@ public interface ICommonUsageController<W extends ICommonUsageWidget<W, C>,
     IStreamSource getExportUsagesStreamSource();
 
     /**
+     * @return instance of {@link IStreamSource} for sending for research.
+     */
+    IStreamSource getSendForResearchUsagesStreamSource();
+
+    /**
+     * @return instance of {@link IWorkClassificationController}.
+     */
+    IWorkClassificationController getWorkClassificationController();
+
+    /**
+     * Vefiries whether all filtered {@link Usage}s in specifies status or not.
+     *
+     * @param status {@link UsageStatusEnum} instance
+     * @return {@code true} - if all filtered {@link Usage}s have specified {@link UsageStatusEnum},
+     * {@code false} - otherwise
+     */
+    boolean isValidUsagesState(UsageStatusEnum status);
+
+    /**
+     * Return instance of {@link IStreamSource} for errors result.
+     *
+     * @param fileName         name of processed file
+     * @param processingResult information about errors
+     * @return instance of {@link IStreamSource}
+     */
+    IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult processingResult);
+
+    /**
+     * Gets instance of processor for given product family.
+     *
+     * @param productFamily product family
+     * @return instance of {@link UsageCsvProcessor}
+     */
+    UsageCsvProcessor getCsvProcessor(String productFamily);
+
+    /**
+     * Gets instance of CSV processor for researched usage details.
+     *
+     * @return instance of {@link ResearchedUsagesCsvProcessor}
+     */
+    ResearchedUsagesCsvProcessor getResearchedUsagesCsvProcessor();
+
+    /**
+     * @return selected product family from filter
+     * or empty string in case when filter is empty or more than one product family selected.
+     */
+    String getSelectedProductFamily();
+
+    /**
+     * @return rightsholders account numbers that are not presented in database based on applied usage filter.
+     */
+    List<Long> getInvalidRightsholders();
+
+    /**
      * Resets filter.
      */
     void clearFilter();
 
     /**
-     * @return number of items.
-     */
-    int getBeansCount();
-
-    /**
-     * Loads specified number of beans from the storage with given start index.
+     * Gets instance of {@link IStreamSource} for for pre-service fee fund filtered batches CSV report.
      *
-     * @param startIndex start index
-     * @param count      items count to load
-     * @param sortOrders sort orders
-     * @return list of items to be displayed on UI
+     * @param batches          list of batches
+     * @param totalGrossAmount total gross amount
+     * @return instance of {@link IStreamSource}
      */
-    List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
+    IStreamSource getPreServiceFeeFundBatchesStreamSource(List<UsageBatch> batches, BigDecimal totalGrossAmount);
 
     /**
-     * @return globally selected product family.
+     * Gets instance of {@link IFundPoolService}.
+     *
+     * @return instance of {@link IFundPoolService}.
      */
-    String getSelectedProductFamily();
+    IFundPoolService getFundPoolService();
+
+    /**
+     * Gets list of batch names containing usages with unclassified works.
+     *
+     * @param batchIds set of batch ids
+     * @return list of found batches names
+     */
+    List<String> getBatchNamesWithUnclassifiedWorks(Set<String> batchIds);
+
+    /**
+     * Gets map of STM and NON-STM classification to list of batch names
+     * that don't have at least one usages related to corresponding STM and NON-STM classification
+     * when corresponding Fund Pool amount is greater than zero.
+     *
+     * @param batchIds set of batch ids
+     * @return map with key - classficiation, value - list of batch names with invalid classification state of usages
+     */
+    Map<String, List<String>> getBatchNamesWithInvalidStmOrNonStmUsagesState(Set<String> batchIds);
+
+    /**
+     * Checks whether scenario with provided name exists or not.
+     *
+     * @param name scenario name
+     * @return {@code true} - if scenario exists, {@code false} - otherwise
+     */
+    boolean scenarioExists(String name);
+
+    /**
+     * Gets names of processing batches (with usages in statuses besides ELIGIBLE, UNCLASSIFIED).
+     *
+     * @param batchesIds set of batches ids
+     * @return list of batches names
+     */
+    List<String> getProcessingBatchesNames(Set<String> batchesIds);
+
+    /**
+     * Gets map of batches names to scenario names associated with the given batches.
+     *
+     * @param batchesIds set of batches ids
+     * @return map of batches names to scenario names
+     */
+    Map<String, String> getBatchesNamesToScenariosNames(Set<String> batchesIds);
 }

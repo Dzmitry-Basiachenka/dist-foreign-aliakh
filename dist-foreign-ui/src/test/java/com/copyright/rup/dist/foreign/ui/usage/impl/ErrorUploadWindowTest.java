@@ -10,7 +10,7 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 
 import com.vaadin.server.Extension;

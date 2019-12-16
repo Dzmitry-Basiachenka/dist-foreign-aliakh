@@ -29,16 +29,13 @@ import java.util.function.Function;
  * <p>
  * Date: 12/5/19
  *
- * @param <C> controller instance
- * @param <W> widget instance
  * @author Uladzislau Shalamitski
  */
-public abstract class CommonUsageWidget<W extends ICommonUsageWidget<W, C>,
-    C extends ICommonUsageController<W, C>> extends HorizontalSplitPanel implements ICommonUsageWidget<W, C> {
+public abstract class CommonUsageWidget extends HorizontalSplitPanel implements ICommonUsageWidget {
 
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
 
-    private C controller;
+    private ICommonUsageController controller;
     private DataProvider<UsageDto, Void> dataProvider;
     private Grid<UsageDto> usagesGrid;
     private IUsagesFilterWidget usagesFilterWidget;
@@ -55,30 +52,30 @@ public abstract class CommonUsageWidget<W extends ICommonUsageWidget<W, C>,
 
     @Override
     @SuppressWarnings("unchecked")
-    public W init() {
+    public ICommonUsageWidget init() {
         usagesFilterWidget = controller.initUsagesFilterWidget();
         setFirstComponent(usagesFilterWidget);
         setSecondComponent(initUsagesLayout());
         setSplitPosition(200, Unit.PIXELS);
         setLocked(true);
         setSizeFull();
-        return (W) this;
+        return this;
     }
 
     @Override
-    public void setController(C controller) {
+    public void setController(ICommonUsageController controller) {
         this.controller = controller;
     }
 
     @Override
-    public C getController() {
+    public ICommonUsageController getController() {
         return controller;
     }
 
     /**
      * @return instance of {@link IUsagesFilterWidget}.
      */
-    IUsagesFilterWidget getFilterWidget() {
+    protected IUsagesFilterWidget getFilterWidget() {
         return usagesFilterWidget;
     }
 
@@ -88,12 +85,12 @@ public abstract class CommonUsageWidget<W extends ICommonUsageWidget<W, C>,
      * @see #addColumn(ValueProvider, String, String, boolean, double)
      * @see #addAmountColumn(Function, String, String, double)
      */
-    abstract void addGridColumns();
+    protected abstract void addGridColumns();
 
     /**
      * @return instance of {@link HorizontalLayout} that contains available buttons.
      */
-    abstract HorizontalLayout initButtonsLayout();
+    protected abstract HorizontalLayout initButtonsLayout();
 
     /**
      * Adds column to the grid.
@@ -104,8 +101,8 @@ public abstract class CommonUsageWidget<W extends ICommonUsageWidget<W, C>,
      * @param isHidable       sets whether this column can be hidden by the user
      * @param width           width of the column
      */
-    void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, boolean isHidable,
-                   double width) {
+    protected void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort,
+                             boolean isHidable, double width) {
         usagesGrid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
@@ -121,7 +118,8 @@ public abstract class CommonUsageWidget<W extends ICommonUsageWidget<W, C>,
      * @param sort            sort property
      * @param width           width of the column
      */
-    void addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty, String sort, double width) {
+    protected void addAmountColumn(Function<UsageDto, BigDecimal> function, String captionProperty, String sort,
+                                   double width) {
         usagesGrid.addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
@@ -135,7 +133,7 @@ public abstract class CommonUsageWidget<W extends ICommonUsageWidget<W, C>,
      *
      * @param window window to show
      */
-    void showCreateScenarioWindow(Window window) {
+    protected void showCreateScenarioWindow(Window window) {
         window.addListener(ScenarioCreateEvent.class, getController(), ICommonUsageController.ON_SCENARIO_CREATED);
         Windows.showModalWindow(window);
     }
