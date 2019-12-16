@@ -1,3 +1,17 @@
+8.1.3
+-
+* B-55626 FDA: Globalization of Product Family: Add FAS Scenarios widget and controller
+* B-55626 FDA: Globalization of Product Family: Add NTS Scenarios widget and controller
+* B-55626 FDA: Globalization of Product Family: Add common Scenarios widget and controller
+* B-55626 FDA: Globalization of Product Family: Add interfaces for Scenarios widgets and controllers
+* B-55626 FDA: Globalization of Product Family: Add mediators for Scenarios widgets
+* B-55626 FDA: Globalization of Product Family: Adjust expected scenario version in RefreshScenarioTest
+* B-55626 FDA: Globalization of Product Family: Adjust findWithAmountsAndLastAction and findArchivedWithAmountsAndLastAction repository methods to retrieve product family and common entity fields
+* B-55626 FDA: Globalization of Product Family: Fix refresh functionality
+* B-55626 FDA: Globalization of Product Family: Make scenario detail export product family specific
+* B-55626 FDA: Globalization of Product Family: Use product family specific widgets in Scenarios tab
+* B-55626 FDA: Globalization of Product Family: fix FAS and NTS usage csv report handlers
+
 8.1.2
 -
 * B-55560 Tech Debt: FDA: update CAS url property, update PI index property
