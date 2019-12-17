@@ -2,9 +2,9 @@ package com.copyright.rup.dist.foreign.ui.main.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
-import com.copyright.rup.dist.foreign.ui.usage.api.IFasUsageController;
-import com.copyright.rup.dist.foreign.ui.usage.api.INtsUsageController;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.google.common.collect.ImmutableMap;
 
 import org.springframework.beans.factory.annotation.Autowired;

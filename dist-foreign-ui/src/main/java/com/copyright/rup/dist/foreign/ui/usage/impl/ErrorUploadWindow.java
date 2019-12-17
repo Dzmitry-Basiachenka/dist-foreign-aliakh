@@ -31,7 +31,7 @@ public class ErrorUploadWindow extends Window {
      * @param streamSource {@link IStreamSource}
      * @param labelCaption label caption
      */
-    ErrorUploadWindow(IStreamSource streamSource, String labelCaption) {
+    public ErrorUploadWindow(IStreamSource streamSource, String labelCaption) {
         setCaption(ForeignUi.getMessage("window.error"));
         setWidth(365, Unit.PIXELS);
         setHeight(150, Unit.PIXELS);

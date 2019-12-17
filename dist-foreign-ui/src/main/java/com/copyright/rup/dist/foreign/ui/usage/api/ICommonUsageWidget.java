@@ -11,17 +11,14 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * <p>
  * Date: 12/5/19
  *
- * @param <C> controller instance
- * @param <W> widget instance
  * @author Uladzislau Shalamitski
  */
-public interface ICommonUsageWidget<W extends ICommonUsageWidget<W, C>, C extends ICommonUsageController<W, C>>
-    extends IWidget<C>, IRefreshable, IMediatorProvider {
+public interface ICommonUsageWidget extends IWidget<ICommonUsageController>, IRefreshable, IMediatorProvider {
 
     /**
      * @return controller for given widget.
      */
-    C getController();
+    ICommonUsageController getController();
 
     /**
      * Fires {@link com.vaadin.ui.Component.Event}.

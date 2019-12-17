@@ -49,7 +49,7 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
      *
      * @param controller {@link ICommonUsageController}
      */
-    AbstractViewUsageBatchWindow(ICommonUsageController controller) {
+    public AbstractViewUsageBatchWindow(ICommonUsageController controller) {
         this.controller = controller;
         setWidth(1000, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
@@ -87,7 +87,7 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
      * @param date value to convert
      * @return converted date as string
      */
-    String getStringFromDate(Date date) {
+    protected String getStringFromDate(Date date) {
         return Objects.nonNull(date)
             ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
             : StringUtils.EMPTY;
@@ -100,7 +100,7 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
      * @param caption       column caption
      * @param width         column width
      */
-    void addColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, int width) {
+    protected void addColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, int width) {
         grid.addColumn(valueProvider)
             .setCaption(ForeignUi.getMessage(caption))
             .setWidth(width);
@@ -114,7 +114,7 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
      * @param width         column width
      * @param comparator    column comparator
      */
-    void addColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, int width,
+    protected void addColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, int width,
                    SerializableComparator<UsageBatch> comparator) {
         grid.addColumn(valueProvider)
             .setCaption(ForeignUi.getMessage(caption))
@@ -126,12 +126,12 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
     /**
      * @return message for search widget.
      */
-    abstract String getSearchMessage();
+    protected abstract String getSearchMessage();
 
     /**
      * @return message for window's caption.
      */
-    abstract String getCaptionMessage();
+    protected abstract String getCaptionMessage();
 
     /**
      * Returns message to confirm deletion.
@@ -139,7 +139,7 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
      * @param butchName batch name
      * @return message to confirm deletion
      */
-    abstract String getDeleteMessage(String butchName);
+    protected abstract String getDeleteMessage(String butchName);
 
     /**
      * Returns error delete message.
@@ -148,14 +148,14 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
      * @param itemsList items associated with batch under deletion
      * @return error delete message
      */
-    abstract String getDeleteErrorMessage(String fieldName, String itemsList);
+    protected abstract String getDeleteErrorMessage(String fieldName, String itemsList);
 
     /**
      * Adds columns to data grid.
      *
      * @param dataGrid instance of {@link Grid}
      */
-    abstract void addGridColumns(Grid<UsageBatch> dataGrid);
+    protected abstract void addGridColumns(Grid<UsageBatch> dataGrid);
 
     private void initMediator() {
         ViewUsageBatchMediator mediator = new ViewUsageBatchMediator();

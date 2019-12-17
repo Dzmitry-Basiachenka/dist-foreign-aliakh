@@ -26,7 +26,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
-import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
@@ -66,7 +65,6 @@ public class CommonUsageControllerTest {
     private IScenarioService scenarioService;
     private IFundPoolService fundPoolService;
     private UsageFilter usageFilter;
-    private IProductFamilyProvider productFamilyProvider;
 
     @Before
     public void setUp() {
@@ -77,14 +75,12 @@ public class CommonUsageControllerTest {
         scenarioService = createMock(IScenarioService.class);
         filterWidgetMock = createMock(IUsagesFilterWidget.class);
         fundPoolService = createMock(IFundPoolService.class);
-        productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, fundPoolService);
-        Whitebox.setInternalState(controller, productFamilyProvider);
         usageFilter = new UsageFilter();
     }
 
@@ -194,26 +190,19 @@ public class CommonUsageControllerTest {
         verify(scenarioService);
     }
 
-    @Test
-    public void testGetSelectedProductFamily() {
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        replay(productFamilyProvider);
-        assertEquals(FAS_PRODUCT_FAMILY, controller.getSelectedProductFamily());
-        verify(productFamilyProvider);
-    }
-
     private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(expectedUsageFilter).once();
     }
 
-    private interface ITestUsageWidget extends ICommonUsageWidget<ITestUsageWidget, ITestUsageController> {
+    private interface ITestUsageWidget extends ICommonUsageWidget {
     }
 
-    private interface ITestUsageController extends ICommonUsageController<ITestUsageWidget, ITestUsageController> {
+    private interface ITestUsageController extends ICommonUsageController {
     }
 
-    private static class TestUsageController extends CommonUsageController<ITestUsageWidget, ITestUsageController> {
+    private static class TestUsageController extends CommonUsageController implements ITestUsageController {
+
         @Override
         public void onFilterChanged(FilterChangedEvent event) {
         }

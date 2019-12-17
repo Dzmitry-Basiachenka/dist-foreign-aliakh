@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * @author Mikita Hladkikh
  */
 //TODO: split it into product specific usage filters
-class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
+public class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     private Button applyButton;
     private LocalDateWidget paymentDateWidget;
