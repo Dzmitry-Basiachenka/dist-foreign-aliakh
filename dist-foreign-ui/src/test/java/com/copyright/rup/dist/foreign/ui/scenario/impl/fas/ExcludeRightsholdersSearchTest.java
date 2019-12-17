@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -7,15 +7,15 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioController;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.Grid;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies search functionality on {@link ExcludeSourceRroWindow}.
+ * Verifies search functionality on {@link ExcludeRightsholdersWindow}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -39,16 +39,16 @@ import java.util.Set;
  * @author Ihar Suvorau
  */
 @RunWith(Parameterized.class)
-public class ExcludeSourceRroSearchTest {
+public class ExcludeRightsholdersSearchTest {
 
-    private static final List<Rightsholder> CONTAINER_DATA = Lists.newArrayList(
-        buildRightsholder(1000000413L, "Times Mirror Magazines, Inc. [T]"),
-        buildRightsholder(1000004191L, "Klasing & Co [T]"),
-        buildRightsholder(7000425425L, "Kelton Publications"),
-        buildRightsholder(7000427902L, "Bruggemann US Inc."));
+    private static final List<RightsholderPayeePair> CONTAINER_DATA = Arrays.asList(
+        buildPair(1000000413L, "Times Mirror Magazines, Inc. [T]", 1000004155L, "Spectator Limited"),
+        buildPair(1000004191L, "Klasing & Co [T]", 1000004271L, "Keith-Stevens Inc"),
+        buildPair(7000425425L, "Kelton Publications", 7000425807L, "Desktop Communications"),
+        buildPair(7000427902L, "Bruggemann US Inc.", 7000427971L, "New York State College of Ceramics [T]"));
     private final String value;
-    private final Set<Rightsholder> expectedResult;
-    private ExcludeSourceRroWindow window;
+    private final Set<RightsholderPayeePair> expectedResult;
+    private ExcludeRightsholdersWindow window;
 
     /**
      * Constructor.
@@ -56,7 +56,7 @@ public class ExcludeSourceRroSearchTest {
      * @param value          value to verify
      * @param expectedResult expected result
      */
-    public ExcludeSourceRroSearchTest(String value, Set<Rightsholder> expectedResult) {
+    public ExcludeRightsholdersSearchTest(String value, Set<RightsholderPayeePair> expectedResult) {
         this.value = value;
         this.expectedResult = expectedResult;
     }
@@ -69,12 +69,26 @@ public class ExcludeSourceRroSearchTest {
                 {"Invalid name", Collections.emptySet()},
                 {"Bru ggemann US Inc.", Collections.emptySet()},
                 {"BruGgemAnn us Inc.", Collections.singleton(CONTAINER_DATA.get(3))},
+                {"Spectator Limited", Collections.singleton(CONTAINER_DATA.get(0))},
+                {"State College", Collections.singleton(CONTAINER_DATA.get(3))},
+                {"desktop coMmUniCations", Collections.singleton(CONTAINER_DATA.get(2))},
+                {"Keith-St evens Inc", Collections.emptySet()},
                 {"7000427902", Collections.singleton(CONTAINER_DATA.get(3))},
                 {"70004 27902", Collections.emptySet()},
-                {"7000427905", Collections.emptySet()},
-                {"10000", Sets.newHashSet(CONTAINER_DATA.get(0), CONTAINER_DATA.get(1))}
+                {"10000", Sets.newHashSet(CONTAINER_DATA.get(0), CONTAINER_DATA.get(1))},
+                {"42", Sets.newHashSet(CONTAINER_DATA.get(1), CONTAINER_DATA.get(2), CONTAINER_DATA.get(3))},
+                {"7000425807", Sets.newHashSet(CONTAINER_DATA.get(2))},
+                {"100000 4271", Collections.emptySet()}
             }
         );
+    }
+
+    private static RightsholderPayeePair buildPair(Long payeeAccountNumber, String payeeName, Long rhAccountNumber,
+                                                   String rhName) {
+        RightsholderPayeePair pair = new RightsholderPayeePair();
+        pair.setPayee(buildRightsholder(payeeAccountNumber, payeeName));
+        pair.setRightsholder(buildRightsholder(rhAccountNumber, rhName));
+        return pair;
     }
 
     private static Rightsholder buildRightsholder(Long accountNumber, String name) {
@@ -87,15 +101,18 @@ public class ExcludeSourceRroSearchTest {
     @Before
     public void setUp() {
         IFasScenarioController scenarioController = createMock(IFasScenarioController.class);
-        expect(scenarioController.getSourceRros()).andReturn(Collections.emptyList()).once();
+        expect(scenarioController.getRightsholdersPayeePairs(1000009522L))
+            .andReturn(CONTAINER_DATA).once();
         replay(scenarioController);
-        window = new ExcludeSourceRroWindow(scenarioController);
+        window = new ExcludeRightsholdersWindow(1000009522L, scenarioController);
         verify(scenarioController);
     }
 
+
+    // Test case IDs: 'eb607c0b-0398-47cb-b492-e7adf1de6bc2', '4d96b57d-b1c0-44e2-b24c-29db8b1aef3d',
+    // '6322bcf8-05cb-4a27-b97d-0332671edecc', '62e035f1-8d07-4121-b489-52028dcbfe7d'
     @Test
     @SuppressWarnings("unchecked")
-    // Test cases IDs: '351993c0-bba7-449a-b2a5-65b69615979f', '7f2cb98c-7cce-4c7c-9d5a-110128ba0264'
     public void testSearch() {
         SearchWidget searchWidget = createMock(SearchWidget.class);
         Whitebox.setInternalState(window, searchWidget);

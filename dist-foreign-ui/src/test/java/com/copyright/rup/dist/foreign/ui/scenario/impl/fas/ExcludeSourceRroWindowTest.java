@@ -1,19 +1,17 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
@@ -24,9 +22,9 @@ import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
@@ -34,8 +32,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 /**
- * Verifies {@link ExcludeRightsholdersWindow}.
+ * Verifies {@link ExcludeSourceRroWindow}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -43,32 +42,28 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau_Shalamitski
  */
-public class ExcludeRightsholdersWindowTest {
+public class ExcludeSourceRroWindowTest {
 
-    private ExcludeRightsholdersWindow window;
+    private ExcludeSourceRroWindow window;
 
     @Before
     public void setUp() {
         IFasScenarioController scenarioController = createMock(IFasScenarioController.class);
-        expect(scenarioController.getRightsholdersPayeePairs(1000009522L))
-            .andReturn(Lists.newArrayList(
-                buildRightsholderPayeePair(
-                    buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
-                    buildRightsholder(2000148821L, "ABR Company, Ltd")),
-                buildRightsholderPayeePair(
-                    buildRightsholder(7000425474L, "American Dialect Society"),
-                    buildRightsholder(2000196395L, "Advance Central Services"))))
+        expect(scenarioController.getSourceRros())
+            .andReturn(Arrays.asList(
+                buildRightsholder(2000017004L, "Access Copyright, The Canadian Copyright Agency"),
+                buildRightsholder(2000017006L, "CAL, Copyright Agency Limited")))
             .once();
         replay(scenarioController);
-        window = new ExcludeRightsholdersWindow(1000009522L, scenarioController);
+        window = new ExcludeSourceRroWindow(scenarioController);
         verify(scenarioController);
     }
 
     @Test
     public void testStructure() {
-        assertEquals("Exclude RH Details for Source RRO #: 1000009522", window.getCaption());
+        assertEquals("Exclude Details by Source RRO", window.getCaption());
         assertEquals(500, window.getHeight(), 0);
-        assertEquals(830, window.getWidth(), 0);
+        assertEquals(880, window.getWidth(), 0);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
         verifyGrid(content.getComponent(1));
@@ -84,49 +79,32 @@ public class ExcludeRightsholdersWindowTest {
         Whitebox.setInternalState(window, grid);
         ListDataProvider provider = new ListDataProvider(Collections.EMPTY_LIST);
         expect(grid.getDataProvider()).andReturn(provider).once();
-        expect(searchWidget.getSearchValue()).andReturn("1000033963").once();
-        PowerMock.replay(searchWidget, grid);
+        expect(searchWidget.getSearchValue()).andReturn("Access").once();
+        replay(searchWidget, grid);
         window.performSearch();
         SerializablePredicate filter = provider.getFilter();
-        assertTrue(filter.test(buildRightsholderPayeePair(
-            buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
-            buildRightsholder(2000148821L, "ABR Company, Ltd"))));
-        assertFalse(filter.test(buildRightsholderPayeePair(
-            buildRightsholder(7000425474L, "American Dialect Society"),
-            buildRightsholder(2000196395L, "Advance Central Services"))));
-        PowerMock.verify(searchWidget, grid);
+        assertTrue(filter.test(buildRightsholder(2000017004L, "Access Copyright, The Canadian Copyright Agency")));
+        assertFalse(filter.test(buildRightsholder(2000017006L, "CAL, Copyright Agency Limited")));
+        verify(searchWidget, grid);
     }
 
     private void verifyGrid(Component component) {
         assertEquals(Grid.class, component.getClass());
         Grid grid = (Grid) component;
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Payee Account #", "Payee Name", "RH Account #", "RH Name"),
+        assertEquals(Arrays.asList("Source RRO Account #", "Source RRO Name", StringUtils.EMPTY),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(3, horizontalLayout.getComponentCount());
-        Button confirmButton = (Button) horizontalLayout.getComponent(0);
-        assertEquals("Confirm", confirmButton.getCaption());
-        assertEquals("Confirm", confirmButton.getId());
-        Button clearButton = (Button) horizontalLayout.getComponent(1);
-        assertEquals("Clear", clearButton.getCaption());
-        assertEquals("Clear", clearButton.getId());
-        Button closeButton = (Button) horizontalLayout.getComponent(2);
-        assertEquals("Close", closeButton.getCaption());
-        assertEquals("Close", closeButton.getId());
+        assertEquals(1, horizontalLayout.getComponentCount());
+        Button cancelButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals("Cancel", cancelButton.getCaption());
+        assertEquals("Cancel", cancelButton.getId());
         assertTrue(horizontalLayout.isSpacing());
         assertEquals(new MarginInfo(false, false, false, false), horizontalLayout.getMargin());
-    }
-
-    private RightsholderPayeePair buildRightsholderPayeePair(Rightsholder rightsholder, Rightsholder payee) {
-        RightsholderPayeePair pair = new RightsholderPayeePair();
-        pair.setPayee(payee);
-        pair.setRightsholder(rightsholder);
-        return pair;
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {

@@ -1,10 +1,11 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenarioController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -24,15 +25,14 @@ import java.io.PipedOutputStream;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class NtsScenarioController extends CommonScenarioController<INtsScenarioWidget, INtsScenarioController>
-    implements INtsScenarioController {
+public class NtsScenarioController extends CommonScenarioController implements INtsScenarioController {
 
     @Autowired
     private INtsDrillDownByRightsholderController drillDownByRightsholderController;
 
     @Override
     protected INtsScenarioWidget instantiateWidget() {
-        return new NtsScenarioWidget();
+        return new NtsScenarioWidget(this);
     }
 
     @Override

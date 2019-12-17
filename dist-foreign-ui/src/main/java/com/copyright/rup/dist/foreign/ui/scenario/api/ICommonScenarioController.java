@@ -17,12 +17,9 @@ import java.util.List;
  * <p>
  * Date: 12/10/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanislau Rudak
  */
-public interface ICommonScenarioController<W extends ICommonScenarioWidget<W, C>,
-    C extends ICommonScenarioController<W, C>> extends IController<W>, ISearchController {
+public interface ICommonScenarioController extends IController<ICommonScenarioWidget>, ISearchController {
 
     /**
      * @return instance of {@link IStreamSource} for export details.

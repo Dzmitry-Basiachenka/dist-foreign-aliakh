@@ -35,20 +35,16 @@ import java.util.Objects;
  * <p>
  * Date: 12/10/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanislau Rudak
  */
-public abstract class CommonScenarioWidget<W extends ICommonScenarioWidget<W, C>,
-    C extends ICommonScenarioController<W, C>>
-    extends Window implements ICommonScenarioWidget<W, C> {
+public abstract class CommonScenarioWidget extends Window implements ICommonScenarioWidget {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
     private static final String PROPERTY_GROSS_TOTAL = "grossTotal";
     private static final String PROPERTY_SERVICE_FEE_TOTAL = "serviceFeeTotal";
     private static final String PROPERTY_NET_TOTAL = "netTotal";
 
-    private C controller;
+    private ICommonScenarioController controller;
     private SearchWidget searchWidget;
     private Grid<RightsholderTotalsHolder> rightsholdersGrid;
     private DataProvider<RightsholderTotalsHolder, Void> dataProvider;
@@ -67,7 +63,7 @@ public abstract class CommonScenarioWidget<W extends ICommonScenarioWidget<W, C>
     }
 
     @Override
-    public void setController(C controller) {
+    public void setController(ICommonScenarioController controller) {
         this.controller = controller;
     }
 
@@ -96,10 +92,6 @@ public abstract class CommonScenarioWidget<W extends ICommonScenarioWidget<W, C>
         FooterCell netTotalCell = row.getCell(PROPERTY_NET_TOTAL);
         netTotalCell.setText(CurrencyUtils.format(scenarioWithAmounts.getNetTotal(), null));
         netTotalCell.setStyleName(STYLE_ALIGN_RIGHT);
-    }
-
-    protected C getController() {
-        return controller;
     }
 
     protected SearchWidget getSearchWidget() {

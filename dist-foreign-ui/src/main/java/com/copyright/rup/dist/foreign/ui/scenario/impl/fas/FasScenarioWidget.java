@@ -1,9 +1,10 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -28,9 +29,9 @@ import com.vaadin.ui.VerticalLayout;
  *
  * @author Stanislau Rudak
  */
-public class FasScenarioWidget extends CommonScenarioWidget<IFasScenarioWidget, IFasScenarioController>
-    implements IFasScenarioWidget {
+public class FasScenarioWidget extends CommonScenarioWidget implements IFasScenarioWidget {
 
+    private final IFasScenarioController scenarioController;
     private VerticalLayout emptyUsagesLayout;
     private Button exportDetailsButton;
     private Button exportButton;
@@ -38,9 +39,18 @@ public class FasScenarioWidget extends CommonScenarioWidget<IFasScenarioWidget, 
     private Button excludeByPayeeButton;
     private FasScenarioMediator mediator;
 
+    /**
+     * Constructor.
+     *
+     * @param scenarioController instance of {@link IFasScenarioController}
+     */
+    public FasScenarioWidget(IFasScenarioController scenarioController) {
+        this.scenarioController = scenarioController;
+    }
+
     @Override
     public void refresh() {
-        mediator.onScenarioUpdated(getController().isScenarioEmpty(), getController().getScenario());
+        mediator.onScenarioUpdated(scenarioController.isScenarioEmpty(), scenarioController.getScenario());
     }
 
     @Override
@@ -87,16 +97,16 @@ public class FasScenarioWidget extends CommonScenarioWidget<IFasScenarioWidget, 
     protected HorizontalLayout initButtons() {
         exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
         OnDemandFileDownloader exportDetailsFileDownloader =
-            new OnDemandFileDownloader(getController().getExportScenarioUsagesStreamSource().getSource());
+            new OnDemandFileDownloader(scenarioController.getExportScenarioUsagesStreamSource().getSource());
         exportDetailsFileDownloader.extend(exportDetailsButton);
         exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        OnDemandFileDownloader exportScenarioFileDownloader =
-            new OnDemandFileDownloader(getController().getExportScenarioRightsholderTotalsStreamSource().getSource());
+        OnDemandFileDownloader exportScenarioFileDownloader = new OnDemandFileDownloader(
+            scenarioController.getExportScenarioRightsholderTotalsStreamSource().getSource());
         exportScenarioFileDownloader.extend(exportButton);
         excludeByRroButton = new Button(ForeignUi.getMessage("button.exclude_by_rro"));
-        excludeByRroButton.addClickListener(event -> getController().onExcludeByRroClicked());
+        excludeByRroButton.addClickListener(event -> scenarioController.onExcludeByRroClicked());
         excludeByPayeeButton = new Button(ForeignUi.getMessage("button.exclude_by_payee"));
-        excludeByPayeeButton.addClickListener(event -> getController().onExcludeByPayeeClicked());
+        excludeByPayeeButton.addClickListener(event -> scenarioController.onExcludeByPayeeClicked());
         HorizontalLayout buttons = new HorizontalLayout(excludeByRroButton, excludeByPayeeButton, exportDetailsButton,
             exportButton, Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");

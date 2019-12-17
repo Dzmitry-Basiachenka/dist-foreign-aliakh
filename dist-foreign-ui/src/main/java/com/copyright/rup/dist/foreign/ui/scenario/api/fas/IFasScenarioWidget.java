@@ -1,5 +1,6 @@
-package com.copyright.rup.dist.foreign.ui.scenario.api;
+package com.copyright.rup.dist.foreign.ui.scenario.api.fas;
 
+import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 
@@ -12,8 +13,7 @@ import com.copyright.rup.vaadin.widget.api.IRefreshable;
  *
  * @author Stanislau Rudak
  */
-public interface IFasScenarioWidget extends ICommonScenarioWidget<IFasScenarioWidget, IFasScenarioController>,
-    IRefreshable, IMediatorProvider {
+public interface IFasScenarioWidget extends ICommonScenarioWidget, IRefreshable, IMediatorProvider {
 
     /**
      * Fires {@link com.vaadin.ui.Component.Event}.

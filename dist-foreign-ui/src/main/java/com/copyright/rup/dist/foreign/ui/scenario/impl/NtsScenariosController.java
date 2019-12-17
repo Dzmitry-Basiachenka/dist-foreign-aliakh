@@ -1,14 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenarioController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.ui.Window;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -52,7 +51,7 @@ public class NtsScenariosController extends CommonScenariosController<INtsScenar
     }
 
     @Override
-    protected INtsScenarioWidget initScenarioWidget() {
+    protected ICommonScenarioWidget initScenarioWidget() {
         return scenarioController.initWidget();
     }
 }

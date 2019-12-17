@@ -10,14 +10,13 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.common.ForeignCommonController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
+import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,13 +30,10 @@ import java.util.List;
  * <p>
  * Date: 12/10/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanislau Rudak
  */
-public abstract class CommonScenarioController<W extends ICommonScenarioWidget<W, C>,
-    C extends ICommonScenarioController<W, C>>
-    extends ForeignCommonController<W> implements ICommonScenarioController<W, C> {
+public abstract class CommonScenarioController extends CommonController<ICommonScenarioWidget>
+    implements ICommonScenarioController {
 
     private Scenario scenario;
 

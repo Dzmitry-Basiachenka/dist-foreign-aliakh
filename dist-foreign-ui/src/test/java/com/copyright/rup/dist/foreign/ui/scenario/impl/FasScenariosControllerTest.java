@@ -30,9 +30,11 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.fas.FasScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.fas.FasScenarioWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow;
@@ -57,7 +59,7 @@ import java.util.Collections;
 import java.util.function.Supplier;
 
 /**
- * Verifies {@link ScenariosController}.
+ * Verifies {@link FasScenariosController}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -89,7 +91,7 @@ public class FasScenariosControllerTest {
         scenarioController = createMock(FasScenarioController.class);
         Whitebox.setInternalState(scenariosController, "scenarioController", scenarioController);
         scenariosWidget = createMock(IFasScenariosWidget.class);
-        scenarioWidget = new FasScenarioWidget();
+        scenarioWidget = new FasScenarioWidget(scenarioController);
         Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.getUserName()).andReturn("user@copyright.com").anyTimes();

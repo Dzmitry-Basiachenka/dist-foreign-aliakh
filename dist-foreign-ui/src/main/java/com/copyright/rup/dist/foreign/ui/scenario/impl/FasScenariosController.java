@@ -12,17 +12,16 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyServic
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -116,7 +115,7 @@ public class FasScenariosController extends CommonScenariosController<IFasScenar
 
     @Override
     protected IFasScenarioWidget initScenarioWidget() {
-        IFasScenarioWidget scenarioWidget = scenarioController.initWidget();
+        IFasScenarioWidget scenarioWidget = (IFasScenarioWidget) scenarioController.initWidget();
         IExcludeUsagesListener listener = event -> {
             scenarioWidget.refresh();
             scenarioWidget.refreshTable();
