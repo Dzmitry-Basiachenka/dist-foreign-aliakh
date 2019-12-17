@@ -169,18 +169,18 @@ public class UsageCsvProcessorIntegrationTest {
                     "<li>Detail Status</li>" +
                     "<li>Product Family</li>" +
                     "<li>Usage Batch Name</li>" +
-                    "<li>Fiscal Year</li>" +
                     "<li>RRO Account #</li>" +
                     "<li>RRO Name</li>" +
+                    "<li>RH Account #</li>" +
+                    "<li>RH Name</li>" +
+                    "<li>Wr Wrk Inst</li>" +
+                    "<li>System Title</li>" +
+                    "<li>Standard Number</li>" +
+                    "<li>Standard Number Type</li>" +
+                    "<li>Fiscal Year</li>" +
                     "<li>Payment Date</li>" +
                     "<li>Title</li>" +
                     "<li>Article</li>" +
-                    "<li>Standard Number</li>" +
-                    "<li>Standard Number Type</li>" +
-                    "<li>Wr Wrk Inst</li>" +
-                    "<li>System Title</li>" +
-                    "<li>RH Account #</li>" +
-                    "<li>RH Name</li>" +
                     "<li>Publisher</li>" +
                     "<li>Pub Date</li>" +
                     "<li>Number of Copies</li>" +
