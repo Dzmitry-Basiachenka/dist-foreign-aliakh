@@ -35,17 +35,14 @@ import java.util.function.Function;
  * <p>
  * Date: 12/9/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanslau Rudak
  */
-public abstract class CommonDrillDownByRightsholderWidget<W extends ICommonDrillDownByRightsholderWidget<W, C>,
-    C extends ICommonDrillDownByRightsholderController<W, C>>
-    extends Window implements ICommonDrillDownByRightsholderWidget<W, C> {
+public abstract class CommonDrillDownByRightsholderWidget extends Window
+    implements ICommonDrillDownByRightsholderWidget {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
-    private C controller;
+    private ICommonDrillDownByRightsholderController controller;
     private SearchWidget searchWidget;
     private Grid<UsageDto> grid;
     private DataProvider<UsageDto, Void> dataProvider;
@@ -66,7 +63,7 @@ public abstract class CommonDrillDownByRightsholderWidget<W extends ICommonDrill
     }
 
     @Override
-    public void setController(C controller) {
+    public void setController(ICommonDrillDownByRightsholderController controller) {
         this.controller = controller;
     }
 

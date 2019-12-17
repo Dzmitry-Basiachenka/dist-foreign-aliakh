@@ -10,9 +10,9 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasDrillDownByRightsholderController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.ui.Window;
@@ -98,7 +98,7 @@ public class FasScenarioController extends CommonScenarioController<IFasScenario
     }
 
     @Override
-    protected ICommonDrillDownByRightsholderController<?, ?> getDrillDownByRightsholderController() {
+    protected ICommonDrillDownByRightsholderController getDrillDownByRightsholderController() {
         return drillDownByRightsholderController;
     }
 

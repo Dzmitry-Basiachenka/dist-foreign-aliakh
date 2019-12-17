@@ -9,12 +9,9 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * <p>
  * Date: 12/9/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanislau Rudak
  */
-public interface ICommonDrillDownByRightsholderWidget<W extends ICommonDrillDownByRightsholderWidget<W, C>,
-    C extends ICommonDrillDownByRightsholderController<W, C>> extends IWidget<C> {
+public interface ICommonDrillDownByRightsholderWidget extends IWidget<ICommonDrillDownByRightsholderController> {
 
     /**
      * @return value from search field.

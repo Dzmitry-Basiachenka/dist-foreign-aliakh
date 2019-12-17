@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.reset;
@@ -8,10 +8,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsDrillDownByRightsholderController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.vaadin.data.ValueProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -22,15 +21,13 @@ import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Verifies {@link FasDrillDownByRightsholderWidget}.
+ * Verifies {@link NtsDrillDownByRightsholderWidget}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -38,14 +35,14 @@ import java.util.List;
  *
  * @author Stanislau Rudak
  */
-public class FasDrillDownByRightsholderWidgetTest {
+public class NtsDrillDownByRightsholderWidgetTest {
 
-    private FasDrillDownByRightsholderWidget widget;
+    private NtsDrillDownByRightsholderWidget widget;
 
     @Before
     public void setUp() {
-        IFasDrillDownByRightsholderController controller = createMock(IFasDrillDownByRightsholderController.class);
-        widget = new FasDrillDownByRightsholderWidget();
+        INtsDrillDownByRightsholderController controller = createMock(INtsDrillDownByRightsholderController.class);
+        widget = new NtsDrillDownByRightsholderWidget();
         widget.setController(controller);
         widget.init();
         reset(controller);
@@ -90,24 +87,12 @@ public class FasDrillDownByRightsholderWidgetTest {
             assertTrue(column.isSortable());
             assertTrue(column.isResizable());
         });
-        assertArrayEquals(
-            new String[]{"Detail ID", "Product Family", "Usage Batch Name", "RRO Account #", "RRO Name", "Wr Wrk Inst",
-                "System Title", "Standard Number", "Standard Number Type", "Fiscal Year", "Payment Date", "Title",
-                "Article", "Publisher", "Pub Date", "Number of Copies", "Reported Value", "Amt in USD",
-                "Batch Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market",
-                "Market Period From", "Market Period To", "Author", "Comment"},
+        assertArrayEquals(new String[]{"Detail ID", "Product Family", "Usage Batch Name", "RRO Account #", "RRO Name",
+                "Wr Wrk Inst", "System Title", "Standard Number", "Standard Number Type", "Fiscal Year", "Payment Date",
+                "Title", "Article", "Publisher", "Pub Date", "Number of Copies", "Reported Value", "Amt in USD",
+                "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market", "Market Period From",
+                "Market Period To", "Author", "Comment"},
             grid.getColumns().stream().map(Column::getCaption).toArray());
-        verifyBatchGrossAmountDataProvider(columns.get(18));
-    }
-
-    @SuppressWarnings("unchecked")
-    private void verifyBatchGrossAmountDataProvider(Column batchGrossAmountColumn) {
-        assertEquals("Batch Amt in USD", batchGrossAmountColumn.getCaption());
-        UsageDto usage = new UsageDto();
-        ValueProvider<UsageDto, String> provider = batchGrossAmountColumn.getValueProvider();
-        assertEquals(StringUtils.EMPTY, provider.apply(usage));
-        usage.setBatchGrossAmount(new BigDecimal("100.00"));
-        assertEquals("100.00", provider.apply(usage));
     }
 
     private void verifyButtonsLayout(Component component) {

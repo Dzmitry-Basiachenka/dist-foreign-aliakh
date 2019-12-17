@@ -2,9 +2,9 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.INtsDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsDrillDownByRightsholderController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -36,7 +36,7 @@ public class NtsScenarioController extends CommonScenarioController<INtsScenario
     }
 
     @Override
-    protected ICommonDrillDownByRightsholderController<?, ?> getDrillDownByRightsholderController() {
+    protected ICommonDrillDownByRightsholderController getDrillDownByRightsholderController() {
         return drillDownByRightsholderController;
     }
 

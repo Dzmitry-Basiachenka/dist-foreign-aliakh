@@ -6,11 +6,11 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.common.ForeignCommonController;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
@@ -30,13 +30,11 @@ import java.util.Objects;
  * <p>
  * Date: 12/9/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanislau Rudak
  */
-public abstract class CommonDrillDownByRightsholderController<W extends ICommonDrillDownByRightsholderWidget<W, C>,
-    C extends ICommonDrillDownByRightsholderController<W, C>>
-    extends ForeignCommonController<W> implements ICommonDrillDownByRightsholderController<W, C> {
+public abstract class CommonDrillDownByRightsholderController
+    extends CommonController<ICommonDrillDownByRightsholderWidget>
+    implements ICommonDrillDownByRightsholderController {
 
     private Long selectedRightsholderAccountNumber;
     private Scenario selectedScenario;

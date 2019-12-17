@@ -118,7 +118,7 @@ public abstract class CommonScenarioController<W extends ICommonScenarioWidget<W
     /**
      * @return an {@link ICommonDrillDownByRightsholderController} instance.
      */
-    protected abstract ICommonDrillDownByRightsholderController<?, ?> getDrillDownByRightsholderController();
+    protected abstract ICommonDrillDownByRightsholderController getDrillDownByRightsholderController();
 
     /**
      * Writes scenario usages into csv output stream.

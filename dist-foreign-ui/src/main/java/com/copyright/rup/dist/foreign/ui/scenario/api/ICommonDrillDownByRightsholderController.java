@@ -15,12 +15,9 @@ import java.util.List;
  * <p>
  * Date: 12/9/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanislau Rudak
  */
-public interface ICommonDrillDownByRightsholderController<W extends ICommonDrillDownByRightsholderWidget<W, C>,
-    C extends ICommonDrillDownByRightsholderController<W, C>> extends IController<W> {
+public interface ICommonDrillDownByRightsholderController extends IController<ICommonDrillDownByRightsholderWidget> {
 
     /**
      * Initializes and shows the widget.

@@ -1,7 +1,8 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasDrillDownByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasDrillDownByRightsholderWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasDrillDownByRightsholderWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonDrillDownByRightsholderController;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -18,8 +19,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class FasDrillDownByRightsholderController extends
-    CommonDrillDownByRightsholderController<IFasDrillDownByRightsholderWidget, IFasDrillDownByRightsholderController>
+public class FasDrillDownByRightsholderController extends CommonDrillDownByRightsholderController
     implements IFasDrillDownByRightsholderController {
 
     @Override
