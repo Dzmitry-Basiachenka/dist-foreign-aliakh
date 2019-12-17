@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
@@ -17,8 +17,8 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasDrillDownByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasDrillDownByRightsholderWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsDrillDownByRightsholderWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.provider.QuerySortOrder;
@@ -37,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link FasDrillDownByRightsholderController}.
+ * Verifies {@link NtsDrillDownByRightsholderController}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -46,8 +46,8 @@ import java.util.List;
  * @author Stanislau Rudak
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({FasDrillDownByRightsholderController.class, Windows.class})
-public class FasDrillDownByRightsholderControllerTest {
+@PrepareForTest({NtsDrillDownByRightsholderController.class, Windows.class})
+public class NtsDrillDownByRightsholderControllerTest {
 
     private static final Long RH_ACCOUNT_NUMBER = 100000001L;
     private static final String RH_NAME = "Rothchild Consultants";
@@ -57,12 +57,12 @@ public class FasDrillDownByRightsholderControllerTest {
     private static final String SORT_PROPERTY = "detailId";
 
     private IUsageService usageServiceMock;
-    private FasDrillDownByRightsholderController controller;
+    private NtsDrillDownByRightsholderController controller;
 
     @Before
     public void setUp() {
         usageServiceMock = createMock(IUsageService.class);
-        controller = createPartialMock(FasDrillDownByRightsholderController.class, "initWidget", "getWidget");
+        controller = createPartialMock(NtsDrillDownByRightsholderController.class, "initWidget", "getWidget");
         Whitebox.setInternalState(controller, usageServiceMock);
     }
 
@@ -116,7 +116,7 @@ public class FasDrillDownByRightsholderControllerTest {
         assertEquals("Rothchild Consultants (Account #: 100000001)", widget.getCaption());
     }
 
-    private static class WidgetMock extends Window implements IFasDrillDownByRightsholderWidget {
+    private static class WidgetMock extends Window implements INtsDrillDownByRightsholderWidget {
 
         @Override
         public String getSearchValue() {
@@ -124,12 +124,12 @@ public class FasDrillDownByRightsholderControllerTest {
         }
 
         @Override
-        public IFasDrillDownByRightsholderWidget init() {
+        public INtsDrillDownByRightsholderWidget init() {
             return this;
         }
 
         @Override
-        public void setController(IFasDrillDownByRightsholderController controller) {
+        public void setController(ICommonDrillDownByRightsholderController controller) {
             // do nothing
         }
     }
