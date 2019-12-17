@@ -1,3 +1,7 @@
+8.1.4
+-
+* B-55836 FDA: Database changes to support AACL: adjust queries for deleting usages to remove additional FAS fields
+
 8.1.3
 -
 * B-55626 FDA: Globalization of Product Family: Add FAS Scenarios widget and controller
