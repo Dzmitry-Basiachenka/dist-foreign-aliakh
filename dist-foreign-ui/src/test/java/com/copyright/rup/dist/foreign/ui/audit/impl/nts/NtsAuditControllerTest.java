@@ -1,7 +1,8 @@
-package com.copyright.rup.dist.foreign.ui.audit.impl;
+package com.copyright.rup.dist.foreign.ui.audit.impl.nts;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
@@ -15,7 +16,10 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
@@ -23,7 +27,8 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.nts.INtsAuditWidget;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import org.apache.commons.io.IOUtils;
@@ -48,23 +53,23 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * Verifies {@link AuditController}.
+ * Verifies {@link NtsAuditController}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
- * Date: 1/20/18
+ * Date: 01/20/2018
  *
  * @author Aliaksandr Radkevich
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, OffsetDateTime.class, StreamSource.class})
-public class AuditControllerTest {
+public class NtsAuditControllerTest {
 
-    private AuditController controller;
+    private NtsAuditController controller;
     private IUsageAuditService usageAuditService;
     private IAuditFilterController auditFilterController;
     private IUsageService usageService;
-    private IAuditWidget auditWidget;
+    private INtsAuditWidget auditWidget;
     private IAuditFilterWidget filterWidget;
     private IReportService reportService;
     private IStreamSourceHandler streamSourceHandler;
@@ -74,11 +79,11 @@ public class AuditControllerTest {
         usageAuditService = createMock(IUsageAuditService.class);
         auditFilterController = createMock(IAuditFilterController.class);
         usageService = createMock(IUsageService.class);
-        auditWidget = createMock(IAuditWidget.class);
+        auditWidget = createMock(INtsAuditWidget.class);
         filterWidget = createMock(IAuditFilterWidget.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
-        controller = new AuditController();
+        controller = new NtsAuditController();
         Whitebox.setInternalState(controller, auditWidget);
         Whitebox.setInternalState(controller, usageAuditService);
         Whitebox.setInternalState(controller, auditFilterController);
@@ -118,8 +123,8 @@ public class AuditControllerTest {
         controller.onFilterChanged();
         verify(auditWidget);
     }
-    // TODO those methods should be implemented
-/*    @Test
+
+    @Test
     public void testLoadBeans() {
         Capture<Pageable> pageableCapture = new Capture<>();
         Capture<Sort> sortCapture = new Capture<>();
@@ -131,7 +136,7 @@ public class AuditControllerTest {
         expect(usageService.getForAudit(eq(filter), capture(pageableCapture), capture(sortCapture)))
             .andReturn(Collections.emptyList()).once();
         replay(filterWidget, auditWidget, auditFilterController, usageService);
-        List<UsageDto> result = controller.loadBeans(0, 10, new Object[]{}, false);
+        List<UsageDto> result = controller.loadBeans(0, 10, null);
         assertEquals(Collections.emptyList(), result);
         verify(filterWidget, auditWidget, auditFilterController, usageService);
     }
@@ -143,9 +148,9 @@ public class AuditControllerTest {
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(auditWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
         replay(filterWidget, auditWidget, auditFilterController, usageService);
-        assertEquals(Collections.emptyList(), controller.loadBeans(0, 10, new Object[]{}, false));
+        assertEquals(Collections.emptyList(), controller.loadBeans(0, 10, null));
         verify(filterWidget, auditWidget, auditFilterController, usageService);
-    }*/
+    }
 
     @Test
     public void testShowUsageHistory() {
@@ -179,7 +184,7 @@ public class AuditControllerTest {
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
-        reportService.writeAuditFasCsvReport(filter, pos);
+        reportService.writeAuditNtsCsvReport(filter, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, auditFilterController, filterWidget, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
@@ -192,6 +197,6 @@ public class AuditControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertTrue(controller.instantiateWidget() instanceof AuditWidget);
+        assertTrue(controller.instantiateWidget() instanceof NtsAuditWidget);
     }
 }

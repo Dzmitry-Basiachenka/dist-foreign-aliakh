@@ -60,6 +60,7 @@
             from ${schema}.df_usage u
             left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
             where u.rh_account_number is not null
+                and u.product_family = #{productFamily}
             <if test="null != searchValue">
                 and <include refid="IUsageMapper.searchWhereClause"/>
             </if>
@@ -68,6 +69,7 @@
             from ${schema}.df_usage_archive u
             left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
             where u.rh_account_number is not null
+                and u.product_family = #{productFamily}
             <if test="null != searchValue">
                 and <include refid="IUsageMapper.searchWhereClause"/>
             </if>
@@ -81,6 +83,7 @@
         from ${schema}.df_usage u
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
         where u.rh_account_number is not null
+            and u.product_family = #{productFamily}
         <if test="null != searchValue">
             and <include refid="IUsageMapper.searchWhereClause"/>
         </if>
@@ -91,6 +94,7 @@
         from ${schema}.df_usage_archive u
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
         where u.rh_account_number is not null
+            and u.product_family = #{productFamily}
         <if test="null != searchValue">
             and <include refid="IUsageMapper.searchWhereClause"/>
         </if>

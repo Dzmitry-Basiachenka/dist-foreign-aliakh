@@ -13,6 +13,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 
@@ -76,18 +77,20 @@ public class RightsholderServiceTest {
     @Test
     public void testGetFromUsages() {
         Pageable pageable = new Pageable(0, 10);
-        expect(rightsholderRepository.findFromUsages("10001", pageable, null))
+        expect(rightsholderRepository.findFromUsages("10001", FdaConstants.FAS_PRODUCT_FAMILY, pageable, null))
             .andReturn(Collections.emptyList()).once();
         replay(rightsholderRepository);
-        assertEquals(Collections.emptyList(), rightsholderService.getFromUsages("10001", pageable, null));
+        assertEquals(Collections.emptyList(),
+            rightsholderService.getFromUsages("10001", FdaConstants.FAS_PRODUCT_FAMILY, pageable, null));
         verify(rightsholderRepository);
     }
 
     @Test
     public void testGetCountFromUsages() {
-        expect(rightsholderRepository.findCountFromUsages("Rightsholder")).andReturn(5).once();
+        expect(rightsholderRepository.findCountFromUsages("Rightsholder", FdaConstants.FAS_PRODUCT_FAMILY))
+            .andReturn(5).once();
         replay(rightsholderRepository);
-        assertEquals(5, rightsholderService.getCountFromUsages("Rightsholder"));
+        assertEquals(5, rightsholderService.getCountFromUsages("Rightsholder", FdaConstants.FAS_PRODUCT_FAMILY));
         verify(rightsholderRepository);
     }
 

@@ -7,9 +7,9 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
@@ -37,31 +37,31 @@ import java.util.List;
 public class AuditFilterController extends CommonController<IAuditFilterWidget> implements IAuditFilterController {
 
     @Autowired
-    private IUsageService usageService;
-    @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    private IProductFamilyProvider productFamilyProvider;
 
     @Override
-    public List<Rightsholder> loadBeans(String searchValue, int startIndex, int count,
+    public List<Rightsholder> loadBeans(String productFamily, String searchValue, int startIndex, int count,
                                         List<QuerySortOrder> sortOrders) {
         Sort sort = null;
         if (CollectionUtils.isNotEmpty(sortOrders)) {
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return rightsholderService.getFromUsages(searchValue, new Pageable(startIndex, count), sort);
+        return rightsholderService.getFromUsages(productFamily, searchValue, new Pageable(startIndex, count), sort);
     }
 
     @Override
-    public int getBeansCount(String searchValue) {
-        return rightsholderService.getCountFromUsages(searchValue);
+    public int getBeansCount(String productFamily, String searchValue) {
+        return rightsholderService.getCountFromUsages(searchValue, productFamily);
     }
 
     @Override
     public List<UsageBatch> getUsageBatches() {
-        return usageBatchService.getUsageBatches();
+        return usageBatchService.getUsageBatches(productFamilyProvider.getSelectedProductFamily());
     }
 
     @Override
@@ -70,7 +70,7 @@ public class AuditFilterController extends CommonController<IAuditFilterWidget> 
     }
 
     @Override
-    public List<String> getProductFamilies() {
-        return usageService.getProductFamiliesForAudit();
+    public String getProductFamily() {
+        return productFamilyProvider.getSelectedProductFamily();
     }
 }

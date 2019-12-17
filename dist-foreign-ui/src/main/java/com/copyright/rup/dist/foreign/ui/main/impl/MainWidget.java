@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.main.impl;
 
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
@@ -31,7 +31,7 @@ public class MainWidget extends TabSheet implements IMainWidget {
 
     private SwitchableWidget<? extends ICommonUsageWidget, ? extends ICommonUsageController> usagesWidget;
     private SwitchableWidget<? extends ICommonScenariosWidget, ? extends ICommonScenariosController> scenariosWidget;
-    private SwitchableWidget<IAuditWidget, IAuditController> auditWidget;
+    private SwitchableWidget<? extends ICommonAuditWidget, ? extends ICommonAuditController> auditWidget;
 
     @Override
     @SuppressWarnings("unchecked")

@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.main.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.api.fas.IFasAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.api.nts.INtsAuditController;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -23,16 +25,15 @@ import java.util.Map;
  */
 @Component("dist.foreign.auditControllerProvider")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class AuditControllerProvider extends CommonControllerProvider<IAuditController> {
+public class AuditControllerProvider extends CommonControllerProvider<ICommonAuditController> {
 
-    // TODO {srudak} replace with specific interfaces once implemented
     @Autowired
-    private IAuditController fasAuditController;
+    private IFasAuditController fasAuditController;
     @Autowired
-    private IAuditController ntsAuditController;
+    private INtsAuditController ntsAuditController;
 
     @Override
-    protected Map<String, IAuditController> getProductFamilyToControllerMap() {
+    protected Map<String, ICommonAuditController> getProductFamilyToControllerMap() {
         return ImmutableMap.of(
             FdaConstants.FAS_PRODUCT_FAMILY, fasAuditController,
             FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasAuditController,

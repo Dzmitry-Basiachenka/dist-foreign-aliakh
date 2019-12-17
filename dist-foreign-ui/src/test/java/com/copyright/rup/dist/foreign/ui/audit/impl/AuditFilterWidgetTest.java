@@ -1,12 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
 
+import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWindow.IRightsholderFilterSaveListener;
-import com.copyright.rup.dist.foreign.ui.common.ProductFamilyFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -42,8 +46,13 @@ public class AuditFilterWidgetTest {
 
     @Before
     public void setUp() {
+        IAuditFilterController controller = createMock(IAuditFilterController.class);
+        expect(controller.getProductFamily()).andReturn("FAS").once();
+        replay(controller);
         widget = new AuditFilterWidget();
+        widget.setController(controller);
         widget.init();
+        verify(controller);
     }
 
     @Test
@@ -51,26 +60,23 @@ public class AuditFilterWidgetTest {
         assertTrue(widget.isSpacing());
         assertEquals(new MarginInfo(true), widget.getMargin());
         assertEquals("audit-filter-widget", widget.getStyleName());
-        assertEquals(8, widget.getComponentCount());
+        assertEquals(7, widget.getComponentCount());
         Component component = widget.getComponent(0);
         assertTrue(component instanceof Label);
         verifyLabel((Label) component);
         component = widget.getComponent(1);
-        assertTrue(component instanceof ProductFamilyFilterWidget);
-        verifyFilterWidget((ProductFamilyFilterWidget) component, "Product Families");
-        component = widget.getComponent(2);
         assertTrue(component instanceof LazyRightsholderFilterWidget);
         assertEquals("Rightsholders", Whitebox.getInternalState(component, Button.class).getCaption());
         assertNotNull(Whitebox.getInternalState(component, IRightsholderFilterSaveListener.class));
-        component = widget.getComponent(3);
+        component = widget.getComponent(2);
         assertTrue(component instanceof UsageBatchFilterWidget);
         verifyFilterWidget((UsageBatchFilterWidget) component, "Batches");
-        component = widget.getComponent(4);
+        component = widget.getComponent(3);
         assertTrue(component instanceof StatusFilterWidget);
         verifyFilterWidget((StatusFilterWidget) component, "Status");
-        verifyTextField(widget.getComponent(5), "Event ID");
-        verifyTextField(widget.getComponent(6), "Dist. Name");
-        component = widget.getComponent(7);
+        verifyTextField(widget.getComponent(4), "Event ID");
+        verifyTextField(widget.getComponent(5), "Dist. Name");
+        component = widget.getComponent(6);
         assertTrue(component instanceof HorizontalLayout);
         verifyButtonsLayout((HorizontalLayout) component);
         assertEquals(Alignment.MIDDLE_RIGHT, widget.getComponentAlignment(component));
