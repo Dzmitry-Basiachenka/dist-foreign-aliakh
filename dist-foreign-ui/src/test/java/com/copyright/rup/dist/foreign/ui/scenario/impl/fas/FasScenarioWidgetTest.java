@@ -1,7 +1,8 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -13,8 +14,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -25,9 +27,9 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +45,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link NtsScenarioWidget}.
+ * Verifies {@link FasScenarioWidget}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -53,17 +55,20 @@ import java.util.stream.Collectors;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ForeignSecurityUtils.class})
-public class NtsScenarioWidgetTest {
+public class FasScenarioWidgetTest {
 
-    private NtsScenarioWidget scenarioWidget;
-    private INtsScenarioController controller;
+    private FasScenarioWidget scenarioWidget;
+    private IFasScenarioController controller;
+    private FasScenarioMediator mediator;
 
     @Before
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
-        controller = createMock(INtsScenarioController.class);
-        scenarioWidget = new NtsScenarioWidget();
+        controller = createMock(IFasScenarioController.class);
+        mediator = createMock(FasScenarioMediator.class);
+        scenarioWidget = new FasScenarioWidget(controller);
         scenarioWidget.setController(controller);
+        Whitebox.setInternalState(scenarioWidget, "mediator", mediator);
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName("Scenario name");
@@ -77,10 +82,10 @@ public class NtsScenarioWidgetTest {
         expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
-        replay(controller, streamSource, ForeignSecurityUtils.class);
+        replay(controller, streamSource, ForeignSecurityUtils.class, mediator);
         scenarioWidget.init();
         verify(controller, streamSource, ForeignSecurityUtils.class);
-        reset(controller);
+        reset(controller, mediator);
     }
 
     @Test
@@ -92,10 +97,11 @@ public class NtsScenarioWidgetTest {
         assertFalse(scenarioWidget.isDraggable());
         assertFalse(scenarioWidget.isResizable());
         VerticalLayout content = (VerticalLayout) scenarioWidget.getContent();
-        assertEquals(3, content.getComponentCount());
+        assertEquals(4, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
         verifyGrid(content.getComponent(1));
-        verifyButtonsLayout(content.getComponent(2));
+        verifyEmptyScenarioLabel(((VerticalLayout) content.getComponent(2)).getComponent(0));
+        verifyButtonsLayout(content.getComponent(3));
     }
 
     @Test
@@ -104,6 +110,19 @@ public class NtsScenarioWidgetTest {
         searchWidget.setSearchValue("search");
         Whitebox.setInternalState(scenarioWidget, searchWidget);
         assertEquals("search", scenarioWidget.getSearchValue());
+    }
+
+    @Test
+    public void testRefresh() {
+        Scenario scenario = new Scenario();
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        expect(controller.isScenarioEmpty()).andReturn(false).once();
+        expect(controller.getScenario()).andReturn(scenario).once();
+        mediator.onScenarioUpdated(false, scenario);
+        expectLastCall().once();
+        replay(mediator, controller);
+        scenarioWidget.refresh();
+        verify(mediator, controller);
     }
 
     private void verifySearchWidget(Component component) {
@@ -133,17 +152,26 @@ public class NtsScenarioWidgetTest {
         assertEquals("13,600.00", footerRow.getCell("netTotal").getText());
     }
 
+    private void verifyEmptyScenarioLabel(Component component) {
+        assertEquals(Label.class, component.getClass());
+        assertEquals("Scenario is empty due to all usages were excluded", ((Label) component).getValue());
+    }
+
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(3, horizontalLayout.getComponentCount());
-        Button exportDetailsButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals(5, horizontalLayout.getComponentCount());
+        Button excludeByRroButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals("Exclude By RRO", excludeByRroButton.getCaption());
+        Button excludeByPayeeButton = (Button) horizontalLayout.getComponent(1);
+        assertEquals("Exclude By Payee", excludeByPayeeButton.getCaption());
+        Button exportDetailsButton = (Button) horizontalLayout.getComponent(2);
         assertEquals("Export Details", exportDetailsButton.getCaption());
         assertEquals("Export_Details", exportDetailsButton.getId());
-        Button exportButton = (Button) horizontalLayout.getComponent(1);
+        Button exportButton = (Button) horizontalLayout.getComponent(3);
         assertEquals("Export", exportButton.getCaption());
         assertEquals("Export", exportButton.getId());
-        Button closeButton = (Button) horizontalLayout.getComponent(2);
+        Button closeButton = (Button) horizontalLayout.getComponent(4);
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());

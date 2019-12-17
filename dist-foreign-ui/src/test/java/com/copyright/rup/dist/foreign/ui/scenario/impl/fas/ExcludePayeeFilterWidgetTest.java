@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -10,7 +10,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableMap;
@@ -99,7 +99,7 @@ public class ExcludePayeeFilterWidgetTest {
         minimumThreshold.setValue(valueToSet);
         if (Objects.nonNull(minimumThreshold.getErrorMessage())) {
             assertEquals("Field&#32;value&#32;should&#32;be&#32;positive&#32;number&#32;and&#32;should&#32;not&#32;" +
-                    "exceed&#32;10&#32;digits", minimumThreshold.getErrorMessage().getFormattedHtmlMessage());
+                "exceed&#32;10&#32;digits", minimumThreshold.getErrorMessage().getFormattedHtmlMessage());
         }
         assertEquals(applyEnabled, applyButton.isEnabled());
         assertEquals(filterValue, filter.getNetAmountMinThreshold());

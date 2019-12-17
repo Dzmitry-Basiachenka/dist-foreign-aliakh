@@ -86,7 +86,7 @@ public abstract class CommonScenariosController<W extends ICommonScenariosWidget
     @Override
     public void onViewButtonClicked() {
         getScenarioController().setScenario(getWidget().getSelectedScenario());
-        ICommonScenarioWidget<?, ?> scenarioWidget = initScenarioWidget();
+        ICommonScenarioWidget scenarioWidget = initScenarioWidget();
         Window scenarioWindow = (Window) scenarioWidget;
         Windows.showModalWindow(scenarioWindow);
         scenarioWindow.setPositionY(30);
@@ -173,14 +173,14 @@ public abstract class CommonScenariosController<W extends ICommonScenariosWidget
     /**
      * @return an {@link ICommonScenarioController} instance.
      */
-    protected abstract ICommonScenarioController<?, ?> getScenarioController();
+    protected abstract ICommonScenarioController getScenarioController();
 
     /**
      * Inits scenario view widget.
      *
      * @return an {@link ICommonScenarioWidget} instance
      */
-    protected abstract ICommonScenarioWidget<?, ?> initScenarioWidget();
+    protected abstract ICommonScenarioWidget initScenarioWidget();
 
     /**
      * Initializes handlers for actions.

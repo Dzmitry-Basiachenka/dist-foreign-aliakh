@@ -1,13 +1,13 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;

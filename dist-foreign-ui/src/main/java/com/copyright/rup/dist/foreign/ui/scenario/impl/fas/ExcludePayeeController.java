@@ -1,11 +1,11 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeFilterController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;

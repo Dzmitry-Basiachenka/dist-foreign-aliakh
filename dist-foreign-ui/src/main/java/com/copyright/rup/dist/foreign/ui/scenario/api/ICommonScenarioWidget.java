@@ -9,12 +9,9 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * <p>
  * Date: 12/10/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanislau Rudak
  */
-public interface ICommonScenarioWidget<W extends ICommonScenarioWidget<W, C>, C extends ICommonScenarioController<W, C>>
-    extends IWidget<C> {
+public interface ICommonScenarioWidget extends IWidget<ICommonScenarioController> {
 
     /**
      * @return value from search field.

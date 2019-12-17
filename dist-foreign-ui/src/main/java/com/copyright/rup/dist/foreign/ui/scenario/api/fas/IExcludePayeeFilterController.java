@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.api;
+package com.copyright.rup.dist.foreign.ui.scenario.api.fas;
 
 import com.copyright.rup.vaadin.widget.api.IFilterController;
 

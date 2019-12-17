@@ -1,7 +1,9 @@
-package com.copyright.rup.dist.foreign.ui.scenario.api;
+package com.copyright.rup.dist.foreign.ui.scenario.api.fas;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioController;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ import java.util.List;
  *
  * @author Stanislau Rudak
  */
-public interface IFasScenarioController extends ICommonScenarioController<IFasScenarioWidget, IFasScenarioController> {
+public interface IFasScenarioController extends ICommonScenarioController {
 
     /**
      * @return boolean result that shows whether scenario is empty or not.

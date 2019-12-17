@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
@@ -8,15 +8,15 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyServic
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludePayeeWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.ui.Window;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -36,8 +36,7 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class FasScenarioController extends CommonScenarioController<IFasScenarioWidget, IFasScenarioController>
-    implements IFasScenarioController {
+public class FasScenarioController extends CommonScenarioController implements IFasScenarioController {
 
     @Autowired
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
@@ -89,12 +88,12 @@ public class FasScenarioController extends CommonScenarioController<IFasScenario
 
     @Override
     public void fireWidgetEvent(ExcludeUsagesEvent event) {
-        getWidget().fireWidgetEvent(event);
+        ((IFasScenarioWidget) getWidget()).fireWidgetEvent(event);
     }
 
     @Override
     protected IFasScenarioWidget instantiateWidget() {
-        return new FasScenarioWidget();
+        return new FasScenarioWidget(this);
     }
 
     @Override

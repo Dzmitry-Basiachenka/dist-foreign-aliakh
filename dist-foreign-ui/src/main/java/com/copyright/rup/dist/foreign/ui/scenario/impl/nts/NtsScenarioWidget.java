@@ -1,11 +1,12 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
-import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenarioController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -25,8 +26,18 @@ import com.vaadin.ui.VerticalLayout;
  *
  * @author Stanislau Rudak
  */
-public class NtsScenarioWidget extends CommonScenarioWidget<INtsScenarioWidget, INtsScenarioController>
-    implements INtsScenarioWidget {
+public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScenarioWidget {
+
+    private final INtsScenarioController scenarioController;
+
+    /**
+     * Constructor.
+     *
+     * @param ntsScenarioController instance of {@link INtsScenarioController}
+     */
+    public NtsScenarioWidget(INtsScenarioController ntsScenarioController) {
+        this.scenarioController = ntsScenarioController;
+    }
 
     @Override
     public void fireWidgetEvent(Event event) {
@@ -50,11 +61,11 @@ public class NtsScenarioWidget extends CommonScenarioWidget<INtsScenarioWidget, 
     protected HorizontalLayout initButtons() {
         Button exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
         OnDemandFileDownloader exportDetailsFileDownloader =
-            new OnDemandFileDownloader(getController().getExportScenarioUsagesStreamSource().getSource());
+            new OnDemandFileDownloader(scenarioController.getExportScenarioUsagesStreamSource().getSource());
         exportDetailsFileDownloader.extend(exportDetailsButton);
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        OnDemandFileDownloader exportScenarioFileDownloader =
-            new OnDemandFileDownloader(getController().getExportScenarioRightsholderTotalsStreamSource().getSource());
+        OnDemandFileDownloader exportScenarioFileDownloader = new OnDemandFileDownloader(
+            scenarioController.getExportScenarioRightsholderTotalsStreamSource().getSource());
         exportScenarioFileDownloader.extend(exportButton);
         HorizontalLayout buttons =
             new HorizontalLayout(exportDetailsButton, exportButton, Buttons.createCloseButton(this));

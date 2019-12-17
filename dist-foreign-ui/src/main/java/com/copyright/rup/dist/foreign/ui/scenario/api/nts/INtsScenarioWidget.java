@@ -1,4 +1,7 @@
-package com.copyright.rup.dist.foreign.ui.scenario.api;
+package com.copyright.rup.dist.foreign.ui.scenario.api.nts;
+
+import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
 
 /**
  * Interface for scenario view widget for NTS product family.
@@ -9,7 +12,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.api;
  *
  * @author Stanislau Rudak
  */
-public interface INtsScenarioWidget extends ICommonScenarioWidget<INtsScenarioWidget, INtsScenarioController> {
+public interface INtsScenarioWidget extends ICommonScenarioWidget {
 
     /**
      * Fires {@link com.vaadin.ui.Component.Event}.
