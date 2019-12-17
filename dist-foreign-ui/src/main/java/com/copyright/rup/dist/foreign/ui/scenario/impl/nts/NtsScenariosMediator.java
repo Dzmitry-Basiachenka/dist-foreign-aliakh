@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -8,7 +8,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
 import com.vaadin.ui.Button;
 
 /**
- * Implementation of {@link IScenariosMediator} for FAS product family.
+ * Implementation of {@link IScenariosMediator} for NTS product family.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -16,7 +16,7 @@ import com.vaadin.ui.Button;
  *
  * @author Stanislau Rudak
  */
-class FasScenariosMediator implements IScenariosMediator {
+class NtsScenariosMediator implements IScenariosMediator {
 
     private Button deleteButton;
     private Button viewButton;
@@ -24,8 +24,6 @@ class FasScenariosMediator implements IScenariosMediator {
     private Button rejectButton;
     private Button approveButton;
     private Button sendToLmButton;
-    private Button reconcileRightsholdersButton;
-    private Button refreshScenarioButton;
 
     @Override
     public void applyPermissions() {
@@ -34,8 +32,6 @@ class FasScenariosMediator implements IScenariosMediator {
         rejectButton.setVisible(ForeignSecurityUtils.hasRejectScenarioPermission());
         approveButton.setVisible(ForeignSecurityUtils.hasApproveScenarioPermission());
         sendToLmButton.setVisible(ForeignSecurityUtils.hasSendScenarioToLmPermission());
-        reconcileRightsholdersButton.setVisible(ForeignSecurityUtils.hasReconcileRightsholdersPermission());
-        refreshScenarioButton.setVisible(ForeignSecurityUtils.hasRefreshScenarioPermission());
         viewButton.setVisible(true);
     }
 
@@ -47,8 +43,6 @@ class FasScenariosMediator implements IScenariosMediator {
             boolean isInProgressState = ScenarioStatusEnum.IN_PROGRESS == status;
             deleteButton.setEnabled(isInProgressState);
             submitButton.setEnabled(isInProgressState);
-            refreshScenarioButton.setEnabled(isInProgressState);
-            reconcileRightsholdersButton.setEnabled(isInProgressState);
             boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
             rejectButton.setEnabled(isSubmittedState);
             approveButton.setEnabled(isSubmittedState);
@@ -60,8 +54,6 @@ class FasScenariosMediator implements IScenariosMediator {
             rejectButton.setEnabled(false);
             approveButton.setEnabled(false);
             sendToLmButton.setEnabled(false);
-            reconcileRightsholdersButton.setEnabled(false);
-            refreshScenarioButton.setEnabled(false);
         }
     }
 
@@ -87,13 +79,5 @@ class FasScenariosMediator implements IScenariosMediator {
 
     void setSendToLmButton(Button sendToLmButton) {
         this.sendToLmButton = sendToLmButton;
-    }
-
-    void setReconcileRightsholdersButton(Button reconcileRightsholdersButton) {
-        this.reconcileRightsholdersButton = reconcileRightsholdersButton;
-    }
-
-    void setRefreshScenarioButton(Button refreshScenarioButton) {
-        this.refreshScenarioButton = refreshScenarioButton;
     }
 }

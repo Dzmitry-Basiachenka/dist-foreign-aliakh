@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.ui.Window;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

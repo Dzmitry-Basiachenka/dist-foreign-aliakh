@@ -13,13 +13,9 @@ import java.util.List;
  * <p>
  * Date: 12/11/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanislau Rudak
  */
-public interface ICommonScenariosController<W extends ICommonScenariosWidget<W, C>,
-    C extends ICommonScenariosController<W, C>>
-    extends IController<W> {
+public interface ICommonScenariosController extends IController<ICommonScenariosWidget> {
 
     /**
      * @return list of {@link Scenario}s.

@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
@@ -11,7 +11,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IReconcileRightsholdersController;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;

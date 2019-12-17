@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -8,8 +8,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IReconcileRightsholdersController;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 
 import com.vaadin.server.Extension;

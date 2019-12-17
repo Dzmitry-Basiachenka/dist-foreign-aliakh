@@ -15,6 +15,7 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

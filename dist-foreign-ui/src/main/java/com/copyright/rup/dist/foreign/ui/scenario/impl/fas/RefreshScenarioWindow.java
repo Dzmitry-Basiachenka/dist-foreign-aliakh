@@ -1,11 +1,11 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.window.Windows;

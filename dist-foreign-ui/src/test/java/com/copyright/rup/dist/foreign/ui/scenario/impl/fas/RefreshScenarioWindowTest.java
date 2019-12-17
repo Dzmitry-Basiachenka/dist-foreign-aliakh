@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -9,7 +9,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.server.Sizeable.Unit;

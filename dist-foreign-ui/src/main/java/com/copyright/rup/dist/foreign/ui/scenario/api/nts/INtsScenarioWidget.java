@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.nts;
 
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
 
 /**
  * Interface for scenario view widget for NTS product family.
@@ -21,11 +20,4 @@ public interface INtsScenarioWidget extends ICommonScenarioWidget {
      * @see com.vaadin.server.AbstractClientConnector#fireEvent(java.util.EventObject)
      */
     void fireWidgetEvent(Event event);
-
-    /**
-     * Adds {@link IExcludeUsagesListener} on widget.
-     *
-     * @param listener instance of {@link IExcludeUsagesListener}
-     */
-    void addListener(IExcludeUsagesListener listener);
 }

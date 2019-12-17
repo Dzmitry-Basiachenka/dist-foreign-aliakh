@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -13,9 +13,11 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.ScenarioHistoryController;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.data.sort.SortDirection;
@@ -46,7 +48,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link FasScenariosWidget}.
+ * Verifies {@link NtsScenariosWidget}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -55,23 +57,31 @@ import java.util.stream.Collectors;
  * @author Aliaksandr Radkevich
  * @author Mikalai Bezmen
  */
-public class FasScenariosWidgetTest {
+public class NtsScenariosWidgetTest {
 
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String GRID_ID = "scenarioGrid";
     private static final String SELECTION_CRITERIA = "<b>Selection Criteria:</b>";
 
-    private FasScenariosWidget scenariosWidget;
-    private IFasScenariosController controller;
+    private NtsScenariosWidget scenariosWidget;
+    private INtsScenariosController controller;
     private Scenario scenario;
 
     @Before
     public void setUp() {
-        controller = createMock(IFasScenariosController.class);
-        scenariosWidget = new FasScenariosWidget(new ScenarioHistoryController());
+        controller = createMock(INtsScenariosController.class);
+        scenariosWidget = new NtsScenariosWidget(new ScenarioHistoryController());
         scenariosWidget.setController(controller);
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        ntsFields.setPreServiceFeeAmount(new BigDecimal("500.00"));
+        ntsFields.setPostServiceFeeAmount(new BigDecimal("800.00"));
+        ntsFields.setPreServiceFeeFundTotal(new BigDecimal("300.00"));
+        ntsFields.setPreServiceFeeFundId("40f97da2-79f6-4917-b683-1cfa0fccd669");
+        ntsFields.setPreServiceFeeFundName("test name");
+        scenario.setNtsFields(ntsFields);
         scenario.setDescription("Description");
         scenario.setNetTotal(new BigDecimal("10000.00"));
         scenario.setGrossTotal(new BigDecimal("20000.00"));
@@ -106,7 +116,7 @@ public class FasScenariosWidgetTest {
 
     @Test
     public void testInitMediator() {
-        assertTrue(scenariosWidget.initMediator() instanceof FasScenariosMediator);
+        assertTrue(scenariosWidget.initMediator() instanceof NtsScenariosMediator);
     }
 
     @Test
@@ -184,15 +194,13 @@ public class FasScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        assertEquals(8, layout.getComponentCount());
+        assertEquals(6, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "View");
         verifyButton(layout.getComponent(1), "Delete");
-        verifyButton(layout.getComponent(2), "Reconcile Rightsholders");
-        verifyButton(layout.getComponent(3), "Submit for Approval");
-        verifyButton(layout.getComponent(4), "Reject");
-        verifyButton(layout.getComponent(5), "Approve");
-        verifyButton(layout.getComponent(6), "Send to LM");
-        verifyButton(layout.getComponent(7), "Refresh Scenario");
+        verifyButton(layout.getComponent(2), "Submit for Approval");
+        verifyButton(layout.getComponent(3), "Reject");
+        verifyButton(layout.getComponent(4), "Approve");
+        verifyButton(layout.getComponent(5), "Send to LM");
     }
 
     private void verifyButton(Component component, String caption) {
@@ -221,7 +229,7 @@ public class FasScenariosWidgetTest {
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
-        assertEquals(7, layout.getComponentCount());
+        assertEquals(11, layout.getComponentCount());
         verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
         verifyMetadataLabel(layout.getComponent(1),
             "<b>Net Amt in USD: </b><span class='label-amount'>10,000.00</span>");
@@ -229,10 +237,18 @@ public class FasScenariosWidgetTest {
             "<b>Gross Amt in USD: </b><span class='label-amount'>20,000.00</span>");
         verifyMetadataLabel(layout.getComponent(3),
             "<b>Reported Value Total: </b><span class='label-amount'>30,000.00</span>");
-        verifyMetadataLabel(layout.getComponent(4), "<b>Description: </b>Description");
-        verifyMetadataLabel(layout.getComponent(5), SELECTION_CRITERIA);
-        assertTrue(layout.getComponent(6) instanceof VerticalLayout);
-        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(6);
+        verifyMetadataLabel(layout.getComponent(4),
+            "<b>RH Minimum Amt in USD: </b><span class='label-amount'>300.00</span>");
+        verifyMetadataLabel(layout.getComponent(5),
+            "<b>Pre-Service Fee Amount: </b><span class='label-amount'>500.00</span>");
+        verifyMetadataLabel(layout.getComponent(6),
+            "<b>Post-Service Fee Amount: </b><span class='label-amount'>800.00</span>");
+        verifyMetadataLabel(layout.getComponent(7),
+            "<b>Pre-Service Fee Fund: </b>test name (<span class='label-amount'>300.00</span>)");
+        verifyMetadataLabel(layout.getComponent(8), "<b>Description: </b>Description");
+        verifyMetadataLabel(layout.getComponent(9), SELECTION_CRITERIA);
+        assertTrue(layout.getComponent(10) instanceof VerticalLayout);
+        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(10);
         assertEquals(5, lastActionLayout.getComponentCount());
         verifyMetadataLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
         verifyMetadataLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");

@@ -1,13 +1,15 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenariosController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.ui.Window;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -24,8 +26,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class NtsScenariosController extends CommonScenariosController<INtsScenariosWidget, INtsScenariosController>
-    implements INtsScenariosController {
+public class NtsScenariosController extends CommonScenariosController implements INtsScenariosController {
 
     @Autowired
     private IScenarioHistoryController scenarioHistoryController;

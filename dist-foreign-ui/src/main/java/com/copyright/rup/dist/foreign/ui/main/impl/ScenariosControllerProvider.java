@@ -2,8 +2,8 @@ package com.copyright.rup.dist.foreign.ui.main.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.INtsScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosController;
 
 import com.google.common.collect.ImmutableMap;
 

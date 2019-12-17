@@ -12,13 +12,9 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * <p>
  * Date: 12/11/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanislau Rudak
  */
-public interface ICommonScenariosWidget<W extends ICommonScenariosWidget<W, C>,
-    C extends ICommonScenariosController<W, C>>
-    extends IWidget<C>, IRefreshable, IMediatorProvider {
+public interface ICommonScenariosWidget extends IWidget<ICommonScenariosController>, IRefreshable, IMediatorProvider {
 
     /**
      * Selects specified {@link Scenario} in grid.
