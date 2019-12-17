@@ -536,6 +536,7 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageIdsInScenario(Arrays.asList(USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
         assertTrue(CollectionUtils.isEmpty(
             usageRepository.findByIds(Collections.singletonList(USAGE_ID_BELLETRISTIC))));
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_BELLETRISTIC));
     }
 
     @Test

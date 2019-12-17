@@ -66,13 +66,25 @@
     </insert>
 
     <delete id="deleteByBatchId" parameterType="string" >
-        delete from ${schema}.df_usage_archive
-        where df_usage_batch_uid = #{batchId}
+        with ua as (
+            delete from ${schema}.df_usage_archive
+            where df_usage_batch_uid = #{batchId}
+            returning df_usage_archive_uid
+        )
+        delete from ${schema}.df_usage_fas
+        where df_usage_fas_uid in (select df_usage_archive_uid from ua)
     </delete>
 
     <delete id="deleteByIds" parameterType="list">
-        delete from ${schema}.df_usage_archive
-        where df_usage_archive_uid in
+        with ua as (
+            delete from ${schema}.df_usage_archive
+            where df_usage_archive_uid in
+            <foreach collection="list" item="usageId" open="(" close=")" separator=",">
+                #{usageId}
+            </foreach>
+        )
+        delete from ${schema}.df_usage_fas
+        where df_usage_fas_uid in
         <foreach collection="list" item="usageId" open="(" close=")" separator=",">
             #{usageId}
         </foreach>

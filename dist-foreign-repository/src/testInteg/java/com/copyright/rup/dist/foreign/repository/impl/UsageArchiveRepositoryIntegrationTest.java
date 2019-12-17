@@ -91,6 +91,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final String FAS_SCENARIO_ID = "5f7c87e7-34d9-4548-8b85-97e405235f4a";
     private static final String NTS_SCENARIO_ID = "e65833c8-3a40-47ba-98fe-21aba07ef11e";
     private static final String PAID_USAGE_ID = "3f8ce825-6514-4307-a118-3ec89187bef3";
+    private static final String ARCHIVED_USAGE_ID = "5f90f7d7-566f-402a-975b-d54466862704";
     private static final String LM_DETAIL_ID = "5963a9c2-b639-468c-a4c1-02101a4597c6";
     private static final String PATH_TO_EXPECTED_REPORTS =
         "src/testInteg/resources/com/copyright/rup/dist/foreign/repository/impl/csv";
@@ -110,23 +111,25 @@ public class UsageArchiveRepositoryIntegrationTest {
     @Test
     public void testDeleteByBatchId() {
         assertTrue(CollectionUtils.isNotEmpty(
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList("5f90f7d7-566f-402a-975b-d54466862704"),
+            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(ARCHIVED_USAGE_ID),
                 UsageStatusEnum.ARCHIVED)));
         usageArchiveRepository.deleteByBatchId("f043c988-3344-4c0f-bce9-120af0027d09");
         assertTrue(CollectionUtils.isEmpty(
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList("5f90f7d7-566f-402a-975b-d54466862704"),
+            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(ARCHIVED_USAGE_ID),
                 UsageStatusEnum.ARCHIVED)));
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(ARCHIVED_USAGE_ID));
     }
 
     @Test
     public void testDeleteByIds() {
-        List<String> usageIds =
-            Arrays.asList("5f90f7d7-566f-402a-975b-d54466862704", "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1");
+        List<String> usageIds = Arrays.asList(ARCHIVED_USAGE_ID, "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1");
         assertTrue(
             CollectionUtils.isNotEmpty(usageArchiveRepository.findByIdAndStatus(usageIds, UsageStatusEnum.ARCHIVED)));
         usageArchiveRepository.deleteByIds(usageIds);
         assertTrue(
             CollectionUtils.isEmpty(usageArchiveRepository.findByIdAndStatus(usageIds, UsageStatusEnum.ARCHIVED)));
+        assertEquals(0,
+            usageRepository.findReferencedUsagesCountByIds(ARCHIVED_USAGE_ID, "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1"));
     }
 
     @Test

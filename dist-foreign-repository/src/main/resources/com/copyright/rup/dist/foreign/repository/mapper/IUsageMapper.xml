@@ -675,7 +675,7 @@
             returning df_usage_uid
         )
         delete from ${schema}.df_usage_fas
-        where df_usage_fas_uid in (select u.df_usage_uid from u)
+        where df_usage_fas_uid in (select df_usage_uid from u)
     </delete>
 
     <delete id="deleteByUsageId" parameterType="string">
@@ -695,13 +695,18 @@
     </delete>
 
     <delete id="deleteBelletristicByScenarioId" parameterType="map">
-        delete from ${schema}.df_usage
-        where df_usage_uid in (
-            select u.df_usage_uid
-            from ${schema}.df_usage u
-            join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
-                and wc.classification = #{belletristicClassification}
-            where <include refid="scenarioBatchesFilter"/>)
+        with u as (
+            delete from ${schema}.df_usage
+            where df_usage_uid in (
+                select u.df_usage_uid
+                from ${schema}.df_usage u
+                join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
+                    and wc.classification = #{belletristicClassification}
+                where <include refid="scenarioBatchesFilter"/>)
+            returning df_usage_uid
+        )
+        delete from ${schema}.df_usage_fas
+        where df_usage_fas_uid in (select df_usage_uid from u)
     </delete>
 
     <update id="deleteFromPreServiceFeeFund" parameterType="map">
