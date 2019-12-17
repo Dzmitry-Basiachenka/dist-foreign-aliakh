@@ -12,10 +12,12 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
-import com.copyright.rup.dist.foreign.ui.report.impl.ReportWidget.ReportStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -78,18 +80,35 @@ public class ReportWidgetTest {
 
     @Test
     public void testInit() {
+        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
+        replayAll();
         reportWidget.init();
         assertEquals("reports-menu", reportWidget.getStyleName());
-        assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
-        List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(7, CollectionUtils.size(menuItems));
-        assertEquals("FAS Batch Summary Report", menuItems.get(0).getText());
-        assertEquals("NTS Withdrawn Batch Summary Report", menuItems.get(1).getText());
-        assertEquals("Summary of Market Report", menuItems.get(2).getText());
-        assertEquals("Research Status Report", menuItems.get(3).getText());
-        assertEquals("Service Fee True-up Report", menuItems.get(4).getText());
-        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(5).getText());
-        assertEquals("Ownership Adjustment Report", menuItems.get(6).getText());
+        assertReportsMenuFasFas2();
+    }
+
+    @Test
+    public void testRefreshProductFamilyFas() {
+        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
+        replayAll();
+        reportWidget.refresh();
+        assertReportsMenuFasFas2();
+    }
+
+    @Test
+    public void testRefreshProductFamilyFas2() {
+        expectProductFamily(FdaConstants.CLA_FAS_PRODUCT_FAMILY);
+        replayAll();
+        reportWidget.refresh();
+        assertReportsMenuFasFas2();
+    }
+
+    @Test
+    public void testRefreshProductFamilyNts() {
+        expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+        replayAll();
+        reportWidget.refresh();
+        assertReportsMenuNts();
     }
 
     @Test
@@ -99,14 +118,16 @@ public class ReportWidgetTest {
         expect(ResourceReference.create(anyObject(), anyObject(), anyObject())).andReturn(resourceReference).once();
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
+        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
         replayAll();
-        selectMenuItem(5);
+        selectMenuItem(4);
         verifyAll();
     }
 
     @Test
     public void testFasBatchSummaryReportSelected() {
         expectReportGenerated(reportController.getFasBatchSummaryReportStreamSource());
+        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
         replayAll();
         selectMenuItem(0);
         verifyAll();
@@ -115,8 +136,9 @@ public class ReportWidgetTest {
     @Test
     public void testNtsWithdrawnBatchSummaryReportSelected() {
         expectReportGenerated(reportController.getNtsWithdrawnBatchSummaryReportStreamSource());
+        expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
         replayAll();
-        selectMenuItem(1);
+        selectMenuItem(0);
         verifyAll();
     }
 
@@ -127,16 +149,18 @@ public class ReportWidgetTest {
         expect(summaryMarketReportController.initWidget()).andReturn(new SummaryMarketReportWidget()).once();
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
+        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
         replayAll();
-        selectMenuItem(2);
+        selectMenuItem(1);
         verifyAll();
     }
 
     @Test
     public void testResearchStatusReportSelected() {
         expectReportGenerated(reportController.getResearchStatusReportStreamSource());
+        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
         replayAll();
-        selectMenuItem(3);
+        selectMenuItem(2);
         verifyAll();
     }
 
@@ -147,8 +171,9 @@ public class ReportWidgetTest {
         expect(ResourceReference.create(anyObject(), anyObject(), anyObject())).andReturn(resourceReference).once();
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
+        expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
         replayAll();
-        selectMenuItem(4);
+        selectMenuItem(3);
         verifyAll();
     }
 
@@ -206,5 +231,30 @@ public class ReportWidgetTest {
         expect(resourceReference.getURL()).andReturn(StringUtils.EMPTY).once();
         page.open(anyObject(), anyObject());
         expectLastCall().once();
+    }
+
+    private void expectProductFamily(String productFamily) {
+        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(productFamily).once();
+        expect(reportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+    }
+
+    private void assertReportsMenuFasFas2() {
+        assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
+        List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
+        assertEquals(6, CollectionUtils.size(menuItems));
+        assertEquals("FAS Batch Summary Report", menuItems.get(0).getText());
+        assertEquals("Summary of Market Report", menuItems.get(1).getText());
+        assertEquals("Research Status Report", menuItems.get(2).getText());
+        assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
+        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(4).getText());
+        assertEquals("Ownership Adjustment Report", menuItems.get(5).getText());
+    }
+
+    private void assertReportsMenuNts() {
+        assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
+        List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
+        assertEquals(1, CollectionUtils.size(menuItems));
+        assertEquals("NTS Withdrawn Batch Summary Report", menuItems.get(0).getText());
     }
 }

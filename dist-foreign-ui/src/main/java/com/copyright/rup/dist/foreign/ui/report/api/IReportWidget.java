@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.report.api;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.vaadin.widget.api.IController;
+import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
@@ -11,5 +14,20 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Nikita Levyankov
  */
-public interface IReportWidget extends IWidget<IReportController> {
+public interface IReportWidget extends IWidget<IReportController>, IRefreshable {
+
+    /**
+     * Opens a report window.
+     *
+     * @param reportCaption    the report window caption
+     * @param reportController the report controller
+     */
+    void openReportWindow(String reportCaption, IController reportController);
+
+    /**
+     * Generates a report.
+     *
+     * @param streamSource instance of {@link IStreamSource}
+     */
+    void generateReport(IStreamSource streamSource);
 }
