@@ -132,13 +132,17 @@ public class UsageBatchService implements IUsageBatchService {
     @Override
     @Transactional
     public List<String> insertNtsBatch(UsageBatch usageBatch, String userName) {
+        LOGGER.info("Insert NTS batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
         usageBatchRepository.insert(usageBatch);
         rightsholderService.updateRighstholdersAsync(Collections.singleton(usageBatch.getRro().getAccountNumber()));
-        return usageService.insertNtsUsages(usageBatch);
+        List<String> ntsUsageIds = usageService.insertNtsUsages(usageBatch);
+        LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
+            usageBatch.getName(), userName, LogUtils.size(ntsUsageIds));
+        return ntsUsageIds;
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
@@ -26,14 +26,14 @@ import java.util.stream.Collectors;
  */
 public class NtsUsageBatchSelectorWidget implements IFilterWindowController<UsageBatch> {
 
-    private final ICommonUsageController usagesController;
+    private final INtsUsageController usagesController;
 
     /**
      * Constructor.
      *
-     * @param controller instance of {@link ICommonUsageController}
+     * @param controller instance of {@link INtsUsageController}
      */
-    public NtsUsageBatchSelectorWidget(ICommonUsageController controller) {
+    public NtsUsageBatchSelectorWidget(INtsUsageController controller) {
         usagesController = controller;
     }
 

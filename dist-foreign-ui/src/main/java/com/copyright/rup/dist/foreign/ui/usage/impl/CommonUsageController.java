@@ -1,30 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.reporting.api.IStreamSource;
-import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
-import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
-import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
-import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
-import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
-import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.ISettableProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
@@ -32,11 +21,9 @@ import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
-import com.copyright.rup.dist.foreign.ui.usage.api.nts.IWorkClassificationController;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 
@@ -47,12 +34,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Common controller for {@link ICommonUsageWidget}.
@@ -73,21 +56,13 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     @Autowired
     private IUsageService usageService;
     @Autowired
-    private IResearchService researchService;
-    @Autowired
     private IUsagesFilterController filterController;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private IScenarioService scenarioService;
     @Autowired
-    private CsvProcessorFactory csvProcessorFactory;
-    @Autowired
     private IReportService reportService;
-    @Autowired
-    private IStreamSourceHandler streamSourceHandler;
-    @Autowired
-    private IWorkClassificationController workClassificationController;
     @Autowired
     private IFundPoolService fundPoolService;
     @Autowired
@@ -103,11 +78,6 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     @Override
     public void onFilterChanged(FilterChangedEvent event) {
         getWidget().refresh();
-    }
-
-    @Override
-    public void createPreServiceFeeFund(PreServiceFeeFund fundPool, Set<String> batchIds) {
-        getFundPoolService().create(fundPool, batchIds);
     }
 
     @Override
@@ -142,36 +112,11 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     }
 
     @Override
-    public int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
-        int result = usageBatchService.insertFasBatch(usageBatch, usages);
-        usageBatchService.sendForMatching(usages);
-        usageBatchService.sendForGettingRights(usages, usageBatch.getName());
-        filterController.getWidget().clearFilter();
-        return result;
-    }
-
-    @Override
-    public int getUsagesCountForNtsBatch(UsageBatch usageBatch) {
-        return usageService.getUsagesCountForNtsBatch(usageBatch);
-    }
-
-    @Override
-    public void loadResearchedUsages(List<ResearchedUsage> researchedUsages) {
-        usageService.loadResearchedUsages(researchedUsages);
-        filterController.getWidget().clearFilter();
-    }
-
-    @Override
     public Scenario createScenario(String scenarioName, String description) {
         Scenario scenario = scenarioService.createScenario(scenarioName, description,
             filterController.getWidget().getAppliedFilter());
         filterController.getWidget().clearFilter();
         return scenario;
-    }
-
-    @Override
-    public IScenarioService getScenarioService() {
-        return scenarioService;
     }
 
     @Override
@@ -181,28 +126,8 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     }
 
     @Override
-    public String getScenarioNameAssociatedWithPreServiceFeeFund(String fundId) {
-        return scenarioService.getScenarioNameByPreServiceFeeFundId(fundId);
-    }
-
-    @Override
     public List<UsageBatch> getUsageBatches(String productFamily) {
         return usageBatchService.getUsageBatches(productFamily);
-    }
-
-    @Override
-    public List<UsageBatch> getUsageBatchesForPreServiceFeeFunds() {
-        return usageBatchService.getUsageBatchesForPreServiceFeeFunds();
-    }
-
-    @Override
-    public List<String> getMarkets() {
-        return usageService.getMarkets();
-    }
-
-    @Override
-    public Long getClaAccountNumber() {
-        return usageService.getClaAccountNumber();
     }
 
     @Override
@@ -212,41 +137,13 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     }
 
     @Override
-    public IStreamSource getSendForResearchUsagesStreamSource() {
-        return new ByteArrayStreamSource("send_for_research_", pipedStream ->
-            researchService.sendForResearch(filterController.getWidget().getAppliedFilter(), pipedStream));
-    }
-
-    @Override
-    public IWorkClassificationController getWorkClassificationController() {
-        return workClassificationController;
-    }
-
-    @Override
     public boolean isValidUsagesState(UsageStatusEnum status) {
         return usageService.isValidUsagesState(filterController.getWidget().getAppliedFilter(), status);
     }
 
     @Override
-    public IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult processingResult) {
-        return streamSourceHandler.getCsvStreamSource(
-            () -> String.format("Error_for_%s", Files.getNameWithoutExtension(fileName)), null,
-            processingResult::writeToFile);
-    }
-
-    @Override
     public void onScenarioCreated(ScenarioCreateEvent event) {
         getWidget().fireWidgetEvent(event);
-    }
-
-    @Override
-    public UsageCsvProcessor getCsvProcessor(String productFamily) {
-        return csvProcessorFactory.getUsageCsvProcessor(productFamily);
-    }
-
-    @Override
-    public ResearchedUsagesCsvProcessor getResearchedUsagesCsvProcessor() {
-        return csvProcessorFactory.getResearchedUsagesCsvProcessor();
     }
 
     @Override
@@ -265,40 +162,23 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     }
 
     @Override
-    public IStreamSource getPreServiceFeeFundBatchesStreamSource(List<UsageBatch> batches,
-                                                                 BigDecimal totalGrossAmount) {
-        return streamSourceHandler.getCsvStreamSource(() -> "pre_service_fee_fund_batches_",
-            pos -> reportService.writePreServiceFeeFundBatchesCsvReport(batches, totalGrossAmount, pos));
-    }
-
-    @Override
-    public IFundPoolService getFundPoolService() {
-        return fundPoolService;
-    }
-
-    @Override
-    public List<String> getBatchNamesWithUnclassifiedWorks(Set<String> batchIds) {
-        return usageBatchService.getBatchNamesWithUnclassifiedWorks(batchIds);
-    }
-
-    @Override
-    public Map<String, List<String>> getBatchNamesWithInvalidStmOrNonStmUsagesState(Set<String> batchIds) {
-        return usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(batchIds);
-    }
-
-    @Override
     public boolean scenarioExists(String name) {
         return scenarioService.scenarioExists(name);
     }
 
-    @Override
-    public List<String> getProcessingBatchesNames(Set<String> batchesIds) {
-        return usageBatchService.getProcessingBatchesNames(batchesIds);
+    /**
+     * @return {@link IScenarioService} instance.
+     */
+    protected IScenarioService getScenarioService() {
+        return scenarioService;
     }
 
-    @Override
-    public Map<String, String> getBatchesNamesToScenariosNames(Set<String> batchesIds) {
-        return usageBatchService.getBatchesNamesToScenariosNames(batchesIds);
+
+    /**
+     * @return {@link IFundPoolService} instance.
+     */
+    protected IFundPoolService getFundPoolService() {
+        return fundPoolService;
     }
 
     /**
@@ -309,17 +189,17 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     }
 
     /**
+     * @return {@link IUsageService} instance.
+     */
+    protected IUsageService getUsageService() {
+        return usageService;
+    }
+
+    /**
      * @return {@link IReportService} instance.
      */
     protected IReportService getReportService() {
         return reportService;
-    }
-
-    /**
-     * @return {@link IStreamSourceHandler} instance.
-     */
-    protected IStreamSourceHandler getStreamSourceHandler() {
-        return streamSourceHandler;
     }
 
     /**

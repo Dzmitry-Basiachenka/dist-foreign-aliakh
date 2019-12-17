@@ -1,6 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.fas;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Interface for FAS/FAS2 usages controller.
@@ -11,6 +21,55 @@ import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
  *
  * @author Darya Baraukova
  */
-//TODO add FAS specific methods from CommonUsageController
 public interface IFasUsageController extends ICommonUsageController {
+
+    /**
+     * Inserts usage batch and it's usages.
+     *
+     * @param usageBatch {@link UsageBatch} instance
+     * @param usages     list of {@link Usage}s
+     * @return count of inserted usages
+     */
+    int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
+
+    /**
+     * @return CLA account number.
+     */
+    Long getClaAccountNumber();
+
+    /**
+     * Gets instance of CSV processor for researched usage details.
+     *
+     * @return instance of {@link ResearchedUsagesCsvProcessor}
+     */
+    ResearchedUsagesCsvProcessor getResearchedUsagesCsvProcessor();
+
+    /**
+     * Gets instance of processor for given product family.
+     *
+     * @param productFamily product family
+     * @return instance of {@link UsageCsvProcessor}
+     */
+    UsageCsvProcessor getCsvProcessor(String productFamily);
+
+    /**
+     * Return instance of {@link IStreamSource} for errors result.
+     *
+     * @param fileName         name of processed file
+     * @param processingResult information about errors
+     * @return instance of {@link IStreamSource}
+     */
+    IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult processingResult);
+
+    /**
+     * @return instance of {@link IStreamSource} for sending for research.
+     */
+    IStreamSource getSendForResearchUsagesStreamSource();
+
+    /**
+     * Updates researched usage details.
+     *
+     * @param researchedUsages list of {@link ResearchedUsage}s
+     */
+    void loadResearchedUsages(List<ResearchedUsage> researchedUsages);
 }
