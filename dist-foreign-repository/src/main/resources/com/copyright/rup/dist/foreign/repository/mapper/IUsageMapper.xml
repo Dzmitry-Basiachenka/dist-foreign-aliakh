@@ -1698,7 +1698,7 @@
         where u.df_scenario_uid = #{scenarioId}
     </update>
 
-    <select id="findReferencedUsagesCountByIds" resultType="int" parameterType="list">
+    <select id="findReferencedFasUsagesCountByIds" resultType="int" parameterType="list">
         select count(1)
             from ${schema}.df_usage_fas
         where df_usage_fas_uid in
