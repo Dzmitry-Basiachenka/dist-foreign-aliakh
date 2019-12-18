@@ -1,4 +1,6 @@
-package com.copyright.rup.dist.foreign.ui.scenario.api;
+package com.copyright.rup.dist.foreign.ui.scenario.api.fas;
+
+import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 
 import java.util.List;
 
@@ -11,8 +13,7 @@ import java.util.List;
  *
  * @author Stanislau Rudak
  */
-public interface IFasScenariosController
-    extends ICommonScenariosController<IFasScenariosWidget, IFasScenariosController> {
+public interface IFasScenariosController extends ICommonScenariosController {
 
     /**
      * @return rightsholders account numbers that are not presented in database based on applied usage filter.

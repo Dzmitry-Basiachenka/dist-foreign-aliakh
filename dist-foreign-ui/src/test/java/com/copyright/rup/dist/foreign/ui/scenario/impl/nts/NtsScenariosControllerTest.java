@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
@@ -15,26 +15,18 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.reporting.api.IStreamSource;
-import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.impl.fas.FasScenarioController;
-import com.copyright.rup.dist.foreign.ui.scenario.impl.fas.FasScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow;
@@ -54,44 +46,41 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collections;
-import java.util.function.Supplier;
 
 /**
- * Verifies {@link FasScenariosController}.
+ * Verifies {@link NtsScenariosController}.
  * <p>
- * Copyright (C) 2017 copyright.com
+ * Copyright (C) 2019 copyright.com
  * <p>
- * Date: 03/15/17
+ * Date: 12/12/19
  *
- * @author Aliaksandr Radkevich
- * @author Mikalai Bezmen
+ * @author Stanislau Rudak
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, SecurityUtils.class})
-public class FasScenariosControllerTest {
+public class NtsScenariosControllerTest {
 
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String SCENARIO_NAME = "Scenario name";
-    private FasScenariosController scenariosController;
+    private NtsScenariosController scenariosController;
     private IUsageService usageService;
     private IScenarioService scenarioService;
-    private FasScenarioController scenarioController;
+    private NtsScenarioController scenarioController;
     private Scenario scenario;
-    private IFasScenariosWidget scenariosWidget;
-    private IFasScenarioWidget scenarioWidget;
+    private INtsScenariosWidget scenariosWidget;
+    private INtsScenarioWidget scenarioWidget;
 
     @Before
     public void setUp() {
         usageService = createMock(IUsageService.class);
         scenarioService = createMock(IScenarioService.class);
-        scenariosController = new FasScenariosController();
+        scenariosController = new NtsScenariosController();
         buildScenario();
-        scenarioController = createMock(FasScenarioController.class);
+        scenarioController = createMock(NtsScenarioController.class);
         Whitebox.setInternalState(scenariosController, "scenarioController", scenarioController);
-        scenariosWidget = createMock(IFasScenariosWidget.class);
-        scenarioWidget = new FasScenarioWidget(scenarioController);
+        scenariosWidget = createMock(INtsScenariosWidget.class);
+        scenarioWidget = new NtsScenarioWidget(scenarioController);
         Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.getUserName()).andReturn("user@copyright.com").anyTimes();
@@ -145,55 +134,6 @@ public class FasScenariosControllerTest {
         replay(scenariosWidget, scenarioController, Windows.class);
         scenariosController.onViewButtonClicked();
         verify(scenariosWidget, scenarioController, Windows.class);
-    }
-
-    @Test
-    public void testOnReconcileRightsholdersButtonClickedNoDiscrepancies() {
-        mockStatic(Windows.class);
-        IRightsholderDiscrepancyService rightsholderDiscrepancyService =
-            createMock(IRightsholderDiscrepancyService.class);
-        Whitebox.setInternalState(scenariosController, rightsholderDiscrepancyService);
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        scenarioService.reconcileRightsholders(scenario);
-        expectLastCall().once();
-        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.DRAFT)).andReturn(0).once();
-        expect(Windows.showConfirmDialog(eq("There are no rightsholders updates for scenario " +
-                "<i><b>Scenario name</b></i>. Do you want to update service fee?"),
-            anyObject(ConfirmDialogWindow.IListener.class))).andReturn(null).once();
-        replay(scenariosWidget, scenarioService, rightsholderDiscrepancyService, Windows.class);
-        scenariosController.onReconcileRightsholdersButtonClicked();
-        verify(scenariosWidget, scenarioService, rightsholderDiscrepancyService, Windows.class);
-    }
-
-    @Test
-    public void testOnReconcileRightsholdersButtonClickedWithDiscrepancies() {
-        mockStatic(Windows.class);
-        IReconcileRightsholdersController reconcileRightsholdersController =
-            createMock(IReconcileRightsholdersController.class);
-        Whitebox.setInternalState(scenariosController, "reconcileRightsholdersController",
-            reconcileRightsholdersController);
-        IRightsholderDiscrepancyService rightsholderDiscrepancyService =
-            createMock(IRightsholderDiscrepancyService.class);
-        Whitebox.setInternalState(scenariosController, rightsholderDiscrepancyService);
-        IStreamSource streamSource = createMock(IStreamSource.class);
-        expect(streamSource.getSource()).andReturn(
-            new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
-        expect(reconcileRightsholdersController.getCsvStreamSource()).andReturn(streamSource).once();
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        scenarioService.reconcileRightsholders(scenario);
-        expectLastCall().once();
-        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.DRAFT)).andReturn(5).once();
-        Windows.showModalWindow(anyObject(RightsholderDiscrepanciesWindow.class));
-        expectLastCall().once();
-        reconcileRightsholdersController.setScenario(scenario);
-        expectLastCall().once();
-        replay(scenariosWidget, scenarioService, reconcileRightsholdersController, rightsholderDiscrepancyService,
-            Windows.class, streamSource);
-        scenariosController.onReconcileRightsholdersButtonClicked();
-        verify(scenariosWidget, scenarioService, reconcileRightsholdersController, rightsholderDiscrepancyService,
-            Windows.class, streamSource);
     }
 
     @Test
@@ -270,37 +210,6 @@ public class FasScenariosControllerTest {
     }
 
     @Test
-    public void testOnRefreshScenarioButtonClickedNullFilter() {
-        mockStatic(Windows.class);
-        IScenarioUsageFilterService scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
-        Whitebox.setInternalState(scenariosController, scenarioUsageFilterService);
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(null).once();
-        Windows.showNotificationWindow("There are no usages that meet the criteria");
-        expectLastCall().once();
-        replay(Windows.class, scenariosWidget, scenarioUsageFilterService);
-        scenariosController.onRefreshScenarioButtonClicked();
-        verify(Windows.class, scenariosWidget, scenarioUsageFilterService);
-    }
-
-    @Test
-    public void testOnRefreshScenarioButtonClickedNotNullFilter() {
-        mockStatic(Windows.class);
-        IScenarioUsageFilterService scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
-        Whitebox.setInternalState(scenariosController, scenarioUsageFilterService);
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(new ScenarioUsageFilter()).once();
-        UsageDto usageDto = new UsageDto();
-        usageDto.setId(RupPersistUtils.generateUuid());
-        expect(usageService.getUsagesCount(new UsageFilter(new ScenarioUsageFilter()))).andReturn(1).once();
-        Windows.showModalWindow(anyObject(RefreshScenarioWindow.class));
-        expectLastCall().once();
-        replay(Windows.class, scenariosWidget, scenarioUsageFilterService, usageService);
-        scenariosController.onRefreshScenarioButtonClicked();
-        verify(Windows.class, scenariosWidget, scenarioUsageFilterService, usageService);
-    }
-
-    @Test
     public void testRefreshScenario() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         scenarioService.refreshScenario(scenario);
@@ -320,7 +229,7 @@ public class FasScenariosControllerTest {
         ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter();
         scenarioUsageFilter.setFiscalYear(2018);
         scenarioUsageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        scenarioUsageFilter.setProductFamily("FAS");
+        scenarioUsageFilter.setProductFamily("NTS");
         scenarioUsageFilter.setRhAccountNumbers(Sets.newHashSet(1000000001L, 1000000002L));
         scenarioUsageFilter.setPaymentDate(LocalDate.of(2010, 1, 1));
         UsageBatch usageBatch = new UsageBatch();
@@ -336,7 +245,7 @@ public class FasScenariosControllerTest {
         replay(scenariosWidget, scenarioUsageFilterService, rightsholderService);
         String result = scenariosController.getCriteriaHtmlRepresentation();
         assertTrue(result.contains("<b>Selection Criteria:</b>"));
-        assertTrue(result.contains("<li><b><i>Product Family </i></b>(FAS)</li>"));
+        assertTrue(result.contains("<li><b><i>Product Family </i></b>(NTS)</li>"));
         assertTrue(result.contains("<li><b><i>Batch in </i></b>(BatchName)</li>"));
         assertTrue(result.contains("<li><b><i>RRO in </i></b>(1000000001: Rothchild Consultants, " +
             "1000000002: Royal Society of Victoria)</li>"));
@@ -361,7 +270,7 @@ public class FasScenariosControllerTest {
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setName(SCENARIO_NAME);
-        scenario.setProductFamily("FAS");
+        scenario.setProductFamily("NTS");
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {

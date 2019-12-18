@@ -43,20 +43,16 @@ import java.util.Objects;
  * <p>
  * Date: 12/11/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanislau Rudak
  */
-public abstract class CommonScenariosWidget<W extends ICommonScenariosWidget<W, C>,
-    C extends ICommonScenariosController<W, C>>
-    extends VerticalLayout implements ICommonScenariosWidget<W, C> {
+public abstract class CommonScenariosWidget extends VerticalLayout implements ICommonScenariosWidget {
 
     private final Label actionType = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionCreatedUser = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionCreatedDate = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionReason = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final IScenarioHistoryController scenarioHistoryController;
-    private C controller;
+    private ICommonScenariosController controller;
     private Panel metadataPanel;
     private VerticalLayout metadataLayout;
     private ListDataProvider<Scenario> dataProvider;
@@ -115,7 +111,7 @@ public abstract class CommonScenariosWidget<W extends ICommonScenariosWidget<W, 
     }
 
     @Override
-    public void setController(C controller) {
+    public void setController(ICommonScenariosController controller) {
         this.controller = controller;
     }
 
@@ -130,7 +126,7 @@ public abstract class CommonScenariosWidget<W extends ICommonScenariosWidget<W, 
         return ForeignUi.getMessage("label.format.label_with_caption", caption, value);
     }
 
-    protected C getController() {
+    protected ICommonScenariosController getController() {
         return controller;
     }
 

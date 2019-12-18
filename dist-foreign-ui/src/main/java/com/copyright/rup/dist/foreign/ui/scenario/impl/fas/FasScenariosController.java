@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -11,17 +11,19 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IFasScenariosWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IReconcileRightsholdersController;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -42,8 +44,7 @@ import java.util.Objects;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class FasScenariosController extends CommonScenariosController<IFasScenariosWidget, IFasScenariosController>
-    implements IFasScenariosController {
+public class FasScenariosController extends CommonScenariosController implements IFasScenariosController {
 
     @Autowired
     private IScenarioHistoryController scenarioHistoryController;
@@ -105,7 +106,7 @@ public class FasScenariosController extends CommonScenariosController<IFasScenar
 
     @Override
     protected IFasScenariosWidget instantiateWidget() {
-        return new FasScenariosWidget(scenarioHistoryController);
+        return new FasScenariosWidget(this, scenarioHistoryController);
     }
 
     @Override

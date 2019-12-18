@@ -27,6 +27,7 @@ import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

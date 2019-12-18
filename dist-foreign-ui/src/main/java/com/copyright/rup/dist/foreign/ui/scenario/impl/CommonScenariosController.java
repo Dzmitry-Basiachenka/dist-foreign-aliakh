@@ -11,8 +11,8 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.common.ForeignCommonController;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.collect.Maps;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -44,13 +45,10 @@ import javax.annotation.PostConstruct;
  * <p>
  * Date: 12/11/19
  *
- * @param <W> type of widget
- * @param <C> type of controller
  * @author Stanislau Rudak
  */
-public abstract class CommonScenariosController<W extends ICommonScenariosWidget<W, C>,
-    C extends ICommonScenariosController<W, C>>
-    extends ForeignCommonController<W> implements ICommonScenariosController<W, C> {
+public abstract class CommonScenariosController extends CommonController<ICommonScenariosWidget>
+    implements ICommonScenariosController {
 
     private static final String LIST_SEPARATOR = ", ";
     private Map<ScenarioActionTypeEnum, IActionHandler> actionHandlers;
@@ -63,11 +61,15 @@ public abstract class CommonScenariosController<W extends ICommonScenariosWidget
     private IRightsholderService rightsholderService;
     @Autowired
     private IScenarioUsageFilterService scenarioUsageFilterService;
+    @Autowired
+    private IProductFamilyProvider productFamilyProvider;
 
     @Override
     public List<Scenario> getScenarios() {
-        return scenarioService.getScenarios().stream()
-            .filter(scenario -> Objects.equals(getSelectedProductFamily(), scenario.getProductFamily()))
+        return scenarioService.getScenarios()
+            .stream()
+            .filter(scenario -> Objects.equals(productFamilyProvider.getSelectedProductFamily(),
+                scenario.getProductFamily()))
             .collect(Collectors.toList());
     }
 
@@ -158,6 +160,48 @@ public abstract class CommonScenariosController<W extends ICommonScenariosWidget
         return sb.toString();
     }
 
+    /**
+     * Initializes handlers for actions.
+     */
+    @PostConstruct
+    public void initActionHandlers() {
+        actionHandlers = Maps.newHashMap();
+        actionHandlers.put(ScenarioActionTypeEnum.SUBMITTED,
+            (scenario, reason) -> scenarioService.submit(scenario, reason));
+        actionHandlers.put(ScenarioActionTypeEnum.APPROVED,
+            (scenario, reason) -> scenarioService.approve(scenario, reason));
+        actionHandlers.put(ScenarioActionTypeEnum.REJECTED,
+            (scenario, reason) -> scenarioService.reject(scenario, reason));
+    }
+
+    /**
+     * Applies scenario action.
+     *
+     * @param actionHandler instance of {@link IActionHandler}
+     * @param reason        action reason
+     */
+    public void applyScenarioAction(IActionHandler actionHandler, String reason) {
+        ICommonScenariosWidget widget = getWidget();
+        Scenario scenario = widget.getSelectedScenario();
+        scenario.setUpdateUser(SecurityUtils.getUserName());
+        actionHandler.handleAction(scenario, reason);
+        widget.refresh();
+    }
+
+    /**
+     * Sends specified scenario to LM.
+     *
+     * @param scenario selected {@link Scenario}
+     */
+    public void sendToLM(Scenario scenario) {
+        try {
+            scenarioService.sendToLm(scenario);
+        } catch (RuntimeException e) {
+            Windows.showNotificationWindow(e.getMessage());
+        }
+        getWidget().refresh();
+    }
+
     protected IUsageService getUsageService() {
         return usageService;
     }
@@ -181,48 +225,6 @@ public abstract class CommonScenariosController<W extends ICommonScenariosWidget
      * @return an {@link ICommonScenarioWidget} instance
      */
     protected abstract ICommonScenarioWidget initScenarioWidget();
-
-    /**
-     * Initializes handlers for actions.
-     */
-    @PostConstruct
-    void initActionHandlers() {
-        actionHandlers = Maps.newHashMap();
-        actionHandlers.put(ScenarioActionTypeEnum.SUBMITTED,
-            (scenario, reason) -> scenarioService.submit(scenario, reason));
-        actionHandlers.put(ScenarioActionTypeEnum.APPROVED,
-            (scenario, reason) -> scenarioService.approve(scenario, reason));
-        actionHandlers.put(ScenarioActionTypeEnum.REJECTED,
-            (scenario, reason) -> scenarioService.reject(scenario, reason));
-    }
-
-    /**
-     * Applies scenario action.
-     *
-     * @param actionHandler instance of {@link IActionHandler}
-     * @param reason        action reason
-     */
-    void applyScenarioAction(IActionHandler actionHandler, String reason) {
-        W widget = getWidget();
-        Scenario scenario = widget.getSelectedScenario();
-        scenario.setUpdateUser(SecurityUtils.getUserName());
-        actionHandler.handleAction(scenario, reason);
-        widget.refresh();
-    }
-
-    /**
-     * Sends specified scenario to LM.
-     *
-     * @param scenario selected {@link Scenario}
-     */
-    void sendToLM(Scenario scenario) {
-        try {
-            scenarioService.sendToLm(scenario);
-        } catch (RuntimeException e) {
-            Windows.showNotificationWindow(e.getMessage());
-        }
-        getWidget().refresh();
-    }
 
     private void deleteScenario(Scenario scenario) {
         scenarioService.deleteScenario(scenario);

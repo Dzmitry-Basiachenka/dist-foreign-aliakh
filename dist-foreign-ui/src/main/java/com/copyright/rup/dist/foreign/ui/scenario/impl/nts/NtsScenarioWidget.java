@@ -2,8 +2,6 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioWidget;
@@ -42,11 +40,6 @@ public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScena
     @Override
     public void fireWidgetEvent(Event event) {
         fireEvent(event);
-    }
-
-    @Override
-    public void addListener(IExcludeUsagesListener listener) {
-        addListener(ExcludeUsagesEvent.class, listener, IExcludeUsagesListener.EXCLUDE_DETAILS_HANDLER);
     }
 
     @Override

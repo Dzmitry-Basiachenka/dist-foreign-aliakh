@@ -4,9 +4,10 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.ui.common.ForeignCommonController;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -26,17 +27,25 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UsagesFilterController extends ForeignCommonController<IUsagesFilterWidget>
-    implements IUsagesFilterController {
+public class UsagesFilterController extends CommonController<IUsagesFilterWidget> implements IUsagesFilterController {
 
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    private IProductFamilyProvider productFamilyProvider;
 
     @Override
     public List<UsageBatch> getUsageBatches(String productFamily) {
         return usageBatchService.getUsageBatches(productFamily);
+    }
+
+    /**
+     * @return globally selected product family.
+     */
+    public String getSelectedProductFamily() {
+        return productFamilyProvider.getSelectedProductFamily();
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.ui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.widget.api.TabController;
@@ -61,8 +60,7 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Override
     public void onScenarioCreated(ScenarioCreateEvent event) {
         getTabSheet().setSelectedTab(SCENARIOS_TAB_INDEX);
-        ((ICommonScenariosWidget) getScenariosControllerProvider().getController().getWidget())
-            .selectScenario(event.getScenarioId());
+        getScenariosControllerProvider().getController().getWidget().selectScenario(event.getScenarioId());
     }
 
     @Override
