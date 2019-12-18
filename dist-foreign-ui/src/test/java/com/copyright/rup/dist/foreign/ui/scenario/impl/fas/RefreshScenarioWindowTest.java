@@ -102,11 +102,11 @@ public class RefreshScenarioWindowTest {
         assertTrue(component instanceof Grid);
         Grid grid = (Grid) component;
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-            "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
-            "Standard Number Type", "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "Publisher", "Pub Date",
-            "Number of Copies", "Reported Value", "Amt in USD", "Batch Amt in USD", "Market", "Market Period From",
-            "Market Period To", "Author", "Comment"),
+        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name", "RRO Account #",
+            "RRO Name", "RH Account #", "RH Name", "Wr Wrk Inst", "System Title", "Standard Number",
+            "Standard Number Type", "Fiscal Year", "Payment Date", "Title", "Article",
+            "Publisher", "Pub Date", "Number of Copies", "Reported Value", "Amt in USD", "Batch Amt in USD", "Market",
+            "Market Period From", "Market Period To", "Author", "Comment"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid);
     }

@@ -109,21 +109,21 @@ public class RefreshScenarioWindow extends Window {
         addColumn(UsageDto::getStatus, "table.column.usage_status", "status");
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily");
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", true, 135);
-        addColumn(usage -> UsageBatchUtils.getFiscalYear(usage.getFiscalYear()), "table.column.fiscal_year",
-            "fiscalYear");
         addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber");
         addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", true, 135);
+        addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber");
+        addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
+        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst");
+        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
+        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 125);
+        addColumn(
+            UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", true, 155);
+        addColumn(usage -> UsageBatchUtils.getFiscalYear(usage.getFiscalYear()), "table.column.fiscal_year",
+            "fiscalYear");
         addColumn(usage -> CommonDateUtils.format(usage.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.payment_date", "paymentDate");
         addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", true, 300);
         addColumn(UsageDto::getArticle, "table.column.article", "article", true, 135);
-        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 125);
-        addColumn(
-            UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", true, 155);
-        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst");
-        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
-        addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber");
-        addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
         addColumn(usage ->
                 CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
