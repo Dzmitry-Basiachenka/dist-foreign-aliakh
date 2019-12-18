@@ -1,3 +1,16 @@
+8.1.5
+-
+* B-55626 FDA: Globalization of Product Family: adjust and reorganize drill down widgets and controllers
+* B-55626 FDA: Globalization of Product Family: adjust and reorganize scenario widgets and controllers
+* B-55626 FDA: Globalization of Product Family: adjust and reorganize scenarios widgets and controllers
+* B-55626 FDA: Globalization of Product Family: adjust upload researched and exported usages functionalities
+* B-55626 FDA: Globalization of Product Family: adjust usage filter widget and controller to make them product family specific
+* B-55626 FDA: Globalization of Product Family: fix failed build
+* B-55626 FDA: Globalization of Product Family: implement product specific Reports tab
+* B-55626 FDA: Globalization of Product Family: reorganize columns in refresh scenario window and in exported from scneario usages files
+* B-55626 FDA: Globalization of Product Family: reorganize common components for Usages tab and introduce product family specific packages
+* B-55626 FDA: Globalization of Product Family: reorganize methods in usage related controllers by product families
+
 8.1.4
 -
 * B-55836 FDA: Database changes to support AACL: adjust queries for deleting usages to remove additional FAS fields
