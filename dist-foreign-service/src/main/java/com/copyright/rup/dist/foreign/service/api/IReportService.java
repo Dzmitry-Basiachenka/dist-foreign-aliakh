@@ -25,12 +25,20 @@ import java.util.Set;
 public interface IReportService {
 
     /**
-     * Writes usages found by {@link AuditFilter} into CSV output stream.
+     * Writes FAS and FAS2 usages found by {@link AuditFilter} into CSV output stream.
      *
      * @param filter            {@link AuditFilter}
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
+    void writeAuditFasCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes NTS usages found by {@link AuditFilter} into CSV output stream.
+     *
+     * @param filter            {@link AuditFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeAuditNtsCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes FAS and FAS2 usages found by filter into csv output stream.

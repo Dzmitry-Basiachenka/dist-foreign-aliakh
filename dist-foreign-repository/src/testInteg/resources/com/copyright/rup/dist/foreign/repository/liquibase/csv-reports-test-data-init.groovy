@@ -5879,4 +5879,53 @@ databaseChangeLog {
             column(name: 'is_payee_participating_flag', value: false)
         }
     }
+
+    changeSet(id: '2019-12-18-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment('Inserting test data for testWriteAuditNtsCsvReport')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '0c0a379a-461c-4e84-8062-326ece3c1f65')
+            column(name: 'name', value: 'Test Batch 2')
+            column(name: 'rro_account_number', value: '2000017001')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'payment_date', value: '2017-01-11')
+            column(name: 'fiscal_year', value: '2017')
+            column(name: 'gross_amount', value: '8972.00')
+            column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
+            column(name: 'fund_pool', value: '{"markets": ["Bus,Univ,Doc Del"], "stm_amount": 10, "non_stm_amount": 20, "stm_minimum_amount": 30, "non_stm_minimum_amount": 40, "fund_pool_period_to": 2017, "fund_pool_period_from": 2017}')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'b9a487f4-77b6-4264-8a53-ed1eab585a4a')
+            column(name: 'df_usage_batch_uid', value: '0c0a379a-461c-4e84-8062-326ece3c1f65')
+            column(name: 'df_scenario_uid', value: 'c90921d6-3315-4673-8825-2e0c6f7229ee')
+            column(name: 'wr_wrk_inst', value: '122235134')
+            column(name: 'work_title', value: 'CHICKEN BREAST ON GRILL WITH FLAMES')
+            column(name: 'rh_account_number', value: '7000429266')
+            column(name: 'payee_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '2558902245377325XX')
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'net_amount', value: '6100.9872')
+            column(name: 'service_fee', value: '0.32')
+            column(name: 'service_fee_amount', value: '2871.0528')
+            column(name: 'gross_amount', value: '8972.04')
+            column(name: 'comment', value: 'usage from usages.csv')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'b9a487f4-77b6-4264-8a53-ed1eab585a4a')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Nanette M. Schwann')
+            column(name: 'reported_value', value: '9900.00')
+            column(name: 'is_rh_participating_flag', value: false)
+            column(name: 'is_payee_participating_flag', value: false)
+        }
+    }
 }

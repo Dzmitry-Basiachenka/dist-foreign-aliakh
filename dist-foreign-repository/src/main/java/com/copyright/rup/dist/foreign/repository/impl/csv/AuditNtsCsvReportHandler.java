@@ -3,35 +3,35 @@ package com.copyright.rup.dist.foreign.repository.impl.csv;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 
-import java.io.PipedOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Writes usages into a {@link PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
+ * Writes usages into a {@link java.io.PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
  * <p/>
- * Copyright (C) 2018 copyright.com
+ * Copyright (C) 2019 copyright.com
  * <p/>
- * Date: 01/16/18
+ * Date: 12/17/19
  *
- * @author Aliaksandr Radkevich
+ * @author Anton Azarenka
  */
-public class AuditCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
+public class AuditNtsCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Detail Status", "Product Family",
         "Usage Batch Name", "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name",
         "Wr Wrk Inst", "System Title", "Title", "Standard Number", "Standard Number Type", "Reported Value",
-        "Amt in USD", "Batch Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID",
+        "Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID",
         "Dist. Name", "Dist. Date", "Period Ending", "Comment");
 
     /**
      * Constructor.
      *
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     * @param outputStream {@link OutputStream} instance
      */
-    public AuditCsvReportHandler(PipedOutputStream pipedOutputStream) {
-        super(pipedOutputStream);
+    public AuditNtsCsvReportHandler(OutputStream outputStream) {
+        super(outputStream);
     }
 
     @Override
@@ -53,7 +53,6 @@ public class AuditCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getStandardNumberType());
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getReportedValue()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
-        beanProperties.add(getBeanPropertyAsString(bean.getBatchGrossAmount()));
         beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
         beanProperties.add(bean.getScenarioName());
         beanProperties.add(bean.getCheckNumber());

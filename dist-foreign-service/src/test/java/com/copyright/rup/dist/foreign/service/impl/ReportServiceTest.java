@@ -116,13 +116,24 @@ public class ReportServiceTest {
     }
 
     @Test
-    public void testWriteAuditCsvReport() {
+    public void testWriteFasAuditCsvReport() {
         AuditFilter filter = createMock(AuditFilter.class);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        reportRepository.writeAuditCsvReport(filter, outputStream);
+        reportRepository.writeAuditFasCsvReport(filter, outputStream);
         expectLastCall().once();
         replay(reportRepository);
-        reportService.writeAuditCsvReport(filter, outputStream);
+        reportService.writeAuditFasCsvReport(filter, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testWriteAuditNtsCsvReport() {
+        AuditFilter filter = createMock(AuditFilter.class);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeAuditNtsCsvReport(filter, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeAuditNtsCsvReport(filter, outputStream);
         verify(reportRepository);
     }
 

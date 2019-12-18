@@ -89,7 +89,7 @@ public class AuditController extends CommonController<IAuditWidget> implements I
     @Override
     public IStreamSource getCsvStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_usage_audit_",
-            pos -> reportService.writeAuditCsvReport(getFilter(), pos));
+            pos -> reportService.writeAuditFasCsvReport(getFilter(), pos));
     }
 
     @Override
