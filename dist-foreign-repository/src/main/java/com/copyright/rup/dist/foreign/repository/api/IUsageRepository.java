@@ -493,5 +493,5 @@ public interface IUsageRepository {
      * @param usageIds set of usage ids
      * @return the count of usages
      */
-    int findReferencedUsagesCountByIds(String... usageIds);
+    int findReferencedFasUsagesCountByIds(String... usageIds);
 }
