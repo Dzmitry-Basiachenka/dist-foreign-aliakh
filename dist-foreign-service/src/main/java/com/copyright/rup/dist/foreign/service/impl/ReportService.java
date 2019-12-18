@@ -86,8 +86,13 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
-        reportRepository.writeAuditCsvReport(filter, pipedOutputStream);
+    public void writeAuditFasCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
+        reportRepository.writeAuditFasCsvReport(filter, pipedOutputStream);
+    }
+
+    @Override
+    public void writeAuditNtsCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
+        reportRepository.writeAuditNtsCsvReport(filter, pipedOutputStream);
     }
 
     @Override

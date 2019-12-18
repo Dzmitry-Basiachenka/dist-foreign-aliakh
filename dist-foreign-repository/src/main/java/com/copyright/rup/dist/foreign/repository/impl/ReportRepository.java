@@ -14,7 +14,8 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
-import com.copyright.rup.dist.foreign.repository.impl.csv.AuditCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.AuditFasCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.AuditNtsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.FasBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.FasScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.FasUsageCsvReportHandler;
@@ -198,12 +199,23 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     }
 
     @Override
-    public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
+    public void writeAuditFasCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
-        writeCsvReportByParts("IReportMapper.findUsagesCountForAudit", "IReportMapper.findAuditReportDtos", parameters,
+        writeCsvReportByParts("IReportMapper.findUsagesCountForAudit", "IReportMapper.findAuditReportDtos",
+            parameters,
             !Objects.requireNonNull(filter).isEmpty(),
-            () -> new AuditCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+            () -> new AuditFasCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeAuditNtsCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
+        writeCsvReportByParts("IReportMapper.findUsagesCountForAudit", "IReportMapper.findAuditReportDtos",
+            parameters,
+            !Objects.requireNonNull(filter).isEmpty(),
+            () -> new AuditNtsCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override

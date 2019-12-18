@@ -132,13 +132,22 @@ public interface IReportRepository {
     void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
-     * Finds usages by given {@link AuditFilter} and writes them to the given {@link PipedOutputStream}.
+     * Finds FAS and FAS2 usages by given {@link AuditFilter} and writes them to the given {@link PipedOutputStream}.
      *
      * @param filter            filter
      * @param pipedOutputStream stream
      * @throws RupRuntimeException in case when IOException appears during writing report
      */
-    void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
+    void writeAuditFasCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
+
+    /**
+     * Finds NTS usages by given {@link AuditFilter} and writes them to the given {@link PipedOutputStream}.
+     *
+     * @param filter            filter
+     * @param pipedOutputStream stream
+     * @throws RupRuntimeException in case when IOException appears during writing report
+     */
+    void writeAuditNtsCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
 
     /**
      * Writes {@link com.copyright.rup.dist.foreign.domain.WorkClassification}s by batches ids and search value.

@@ -179,7 +179,7 @@ public class AuditControllerTest {
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
-        reportService.writeAuditCsvReport(filter, pos);
+        reportService.writeAuditFasCsvReport(filter, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, auditFilterController, filterWidget, streamSourceHandler, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();

@@ -64,45 +64,89 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testWriteAuditCsvReport() throws Exception {
+    public void testWriteAuditFasCsvReport() throws Exception {
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setBatchesIds(Sets.newHashSet("e855bf85-236c-42e7-9b12-8d68dd747bbe",
-            "034873b3-97fa-475a-9a2a-191e8ec988b3", "02a09322-5f0f-4cae-888c-73127050dc98",
-            "d016d9c2-5460-41bf-837c-8598cf00b654", "acae006c-a4fe-45f0-a0cc-098e12db00c5"));
-        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditCsvReport(auditFilter, outputStream),
-            "audit_usages_report.csv");
+            "02a09322-5f0f-4cae-888c-73127050dc98", "d016d9c2-5460-41bf-837c-8598cf00b654"));
+        auditFilter.setProductFamilies(Sets.newHashSet("FAS"));
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(auditFilter, outputStream),
+            "audit_usages_fas_report.csv");
     }
 
     @Test
-    public void testWriteAuditCsvReportForPostDistribution() throws Exception {
+    public void testWriteAuditFas2CsvReport() throws Exception {
+        AuditFilter auditFilter = new AuditFilter();
+        auditFilter.setBatchesIds(
+            Sets.newHashSet("034873b3-97fa-475a-9a2a-191e8ec988b3", "acae006c-a4fe-45f0-a0cc-098e12db00c5"));
+        auditFilter.setProductFamilies(Sets.newHashSet("FAS2"));
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(auditFilter, outputStream),
+            "audit_usages_fas2_report.csv");
+    }
+
+    @Test
+    public void testWriteAuditNtsCsvReport() throws Exception {
+        AuditFilter auditFilter = new AuditFilter();
+        auditFilter.setBatchesIds(
+            Sets.newHashSet("0c0a379a-461c-4e84-8062-326ece3c1f65", "f20ac1a3-eee4-4027-b5fb-def9adf0f871"));
+        auditFilter.setProductFamilies(Sets.newHashSet("NTS"));
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditNtsCsvReport(auditFilter, outputStream),
+            "audit_usages_nts_report.csv");
+    }
+
+    @Test
+    public void testWriteAuditFasCsvReportForPostDistribution() throws Exception {
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setSearchValue("75693c90-d6f5-401a-8c26-134adc9745c5");
-        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditCsvReport(auditFilter, outputStream),
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(auditFilter, outputStream),
             "audit_usages_report_post_distribution.csv");
     }
 
     @Test
-    public void testWriteAuditCsvReportEmptyCsvReport() throws Exception {
-        assertEmptyAuditReport(new AuditFilter());
+    public void testWriteAuditFasCsvReportEmptyCsvReport() throws Exception {
+        assertEmptyAuditFasReport(new AuditFilter());
     }
 
     @Test
-    public void testWriteAuditCsvReportSearchBySqlLikePattern() throws Exception {
+    public void testWriteAuditNtsCsvReportEmptyCsvReport() throws Exception {
+        assertEmptyAuditNtsReport(new AuditFilter());
+    }
+
+    @Test
+    public void testWriteAuditFasCsvReportSearchBySqlLikePattern() throws Exception {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(SEARCH_WITH_SQL_1);
-        assertEmptyAuditReport(filter);
+        assertEmptyAuditFasReport(filter);
         filter.setSearchValue(SEARCH_WITH_SQL_2);
-        assertEmptyAuditReport(filter);
+        assertEmptyAuditFasReport(filter);
         filter = new AuditFilter();
         filter.setCccEventId(SEARCH_WITH_SQL_1);
-        assertEmptyAuditReport(filter);
+        assertEmptyAuditFasReport(filter);
         filter.setCccEventId(SEARCH_WITH_SQL_2);
-        assertEmptyAuditReport(filter);
+        assertEmptyAuditFasReport(filter);
         filter = new AuditFilter();
         filter.setDistributionName(SEARCH_WITH_SQL_1);
-        assertEmptyAuditReport(filter);
+        assertEmptyAuditFasReport(filter);
         filter.setDistributionName(SEARCH_WITH_SQL_2);
-        assertEmptyAuditReport(filter);
+        assertEmptyAuditFasReport(filter);
+    }
+
+    @Test
+    public void testWriteAuditNtsCsvReportSearchBySqlLikePattern() throws Exception {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue(SEARCH_WITH_SQL_1);
+        assertEmptyAuditNtsReport(filter);
+        filter.setSearchValue(SEARCH_WITH_SQL_2);
+        assertEmptyAuditNtsReport(filter);
+        filter = new AuditFilter();
+        filter.setCccEventId(SEARCH_WITH_SQL_1);
+        assertEmptyAuditNtsReport(filter);
+        filter.setCccEventId(SEARCH_WITH_SQL_2);
+        assertEmptyAuditNtsReport(filter);
+        filter = new AuditFilter();
+        filter.setDistributionName(SEARCH_WITH_SQL_1);
+        assertEmptyAuditNtsReport(filter);
+        filter.setDistributionName(SEARCH_WITH_SQL_2);
+        assertEmptyAuditNtsReport(filter);
     }
 
     @Test
@@ -281,8 +325,13 @@ public class CsvReportsIntegrationTest {
         reportTestUtils.assertCsvReport(fileName, new PipedInputStream(outputStream));
     }
 
-    private void assertEmptyAuditReport(AuditFilter filter) throws IOException {
-        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditCsvReport(filter, outputStream),
+    private void assertEmptyAuditFasReport(AuditFilter filter) throws IOException {
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(filter, outputStream),
+            "audit_usages_report_empty.csv");
+    }
+
+    private void assertEmptyAuditNtsReport(AuditFilter filter) throws IOException {
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(filter, outputStream),
             "audit_usages_report_empty.csv");
     }
 }
