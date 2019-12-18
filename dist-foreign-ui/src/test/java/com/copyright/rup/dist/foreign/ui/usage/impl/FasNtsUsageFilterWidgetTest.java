@@ -16,7 +16,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
@@ -50,38 +50,38 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies {@link UsagesFilterWidget}.
+ * Verifies {@link FasNtsUsageFilterWidget}.
  * <p>
- * Copyright (C) 2017 copyright.com
+ * Copyright (C) 2019 copyright.com
  * <p>
- * Date: 2/10/17
+ * Date: 12/12/19
  *
- * @author Mikalai Bezmen
+ * @author Uladzislau Shalamitski
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Windows.class)
-public class UsagesFilterWidgetTest {
+public class FasNtsUsageFilterWidgetTest {
 
     private static final Integer FISCAL_YEAR = 2017;
     private static final Long ACCOUNT_NUMBER = 12345678L;
     private static final String FAS_PRODUCT_FAMILY = "FAS";
-    private static final String NTS_PRODUCT_FAMILY = "NTS";
+
     private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES = Sets.newHashSet(UsageStatusEnum.NEW,
         UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
         UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE);
     private static final Set<UsageStatusEnum> NTS_STATUSES = Sets.newHashSet(UsageStatusEnum.NTS_WITHDRAWN,
         UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE,
         UsageStatusEnum.TO_BE_DISTRIBUTED, UsageStatusEnum.NTS_EXCLUDED);
-    private IUsagesFilterController usagesFilterController;
-    private UsagesFilterWidget widget;
+
+    private IFasNtsUsageFilterController usagesFilterController;
+    private FasNtsUsageFilterWidget widget;
 
     @Before
     public void setUp() {
-        usagesFilterController = createMock(IUsagesFilterController.class);
-        widget = new UsagesFilterWidget();
+        usagesFilterController = createMock(IFasNtsUsageFilterController.class);
+        widget = new FasNtsUsageFilterWidget(usagesFilterController);
         widget.setController(usagesFilterController);
-        expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
     }
 
     @Test
@@ -99,8 +99,7 @@ public class UsagesFilterWidgetTest {
     @Test
     public void testApplyFilter() {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(4);
-        expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
@@ -134,21 +133,9 @@ public class UsagesFilterWidgetTest {
     }
 
     @Test
-    public void testGetController() {
-        expect(usagesFilterController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(2);
-        replay(usagesFilterController);
-        widget.init();
-        UsagesFilterController controller = new UsagesFilterController();
-        widget.setController(controller);
-        verify(usagesFilterController);
-        assertSame(controller, widget.getController());
-    }
-
-    @Test
     public void testClearFilter() {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(4);
-        expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
@@ -157,7 +144,7 @@ public class UsagesFilterWidgetTest {
         assertFalse(widget.getFilter().getProductFamilies().isEmpty());
         assertTrue(widget.getAppliedFilter().getProductFamilies().isEmpty());
         widget.getFilter().setRhAccountNumbers(Sets.newHashSet(ACCOUNT_NUMBER));
-        widget.getFilter().setProductFamilies(Sets.newHashSet("FAS", "NTS"));
+        widget.getFilter().setProductFamilies(Collections.singleton(FAS_PRODUCT_FAMILY));
         applyButton.setEnabled(true);
         applyButton.click();
         assertFalse(widget.getFilter().getRhAccountNumbers().isEmpty());
@@ -170,10 +157,9 @@ public class UsagesFilterWidgetTest {
         assertFalse(widget.getFilter().getProductFamilies().isEmpty());
         assertFalse(widget.getAppliedFilter().getProductFamilies().isEmpty());
         assertFalse(applyButton.isEnabled());
-        LocalDateWidget localDateWidget =
-            Whitebox.getInternalState(widget, "paymentDateWidget", UsagesFilterWidget.class);
+        LocalDateWidget localDateWidget = Whitebox.getInternalState(widget, "paymentDateWidget");
         assertNull(localDateWidget.getValue());
-        ComboBox fiscalYearComboBox = Whitebox.getInternalState(widget, "fiscalYearComboBox", UsagesFilterWidget.class);
+        ComboBox fiscalYearComboBox = Whitebox.getInternalState(widget, "fiscalYearComboBox");
         assertNull(fiscalYearComboBox.getValue());
         verify(usagesFilterController);
     }
@@ -196,8 +182,7 @@ public class UsagesFilterWidgetTest {
     public void verifyButtonClickListener() {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(4);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
         replay(clickEvent, usagesFilterController);
         widget.init();
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
@@ -218,17 +203,16 @@ public class UsagesFilterWidgetTest {
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(3);
         replay(usagesFilterController);
         widget.init();
-        assertEquals(FAS_FAS2_STATUSES, getGetAvailableStatuses());
+        assertEquals(FAS_FAS2_STATUSES, getGetStatuses());
     }
 
     @Test
     public void testGetAvailableStatusesNtsProductFamily() {
-        expect(usagesFilterController.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).times(3);
-        expect(usagesFilterController.getFiscalYears(NTS_PRODUCT_FAMILY))
-            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getSelectedProductFamily()).andReturn("NTS").times(3);
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
         replay(usagesFilterController);
         widget.init();
-        assertEquals(NTS_STATUSES, getGetAvailableStatuses());
+        assertEquals(NTS_STATUSES, getGetStatuses());
     }
 
     private void verifyFiltersLayout(Component layout) {
@@ -258,7 +242,7 @@ public class UsagesFilterWidgetTest {
         assertEquals("(0)", ((Label) iterator.next()).getValue());
         Button button = (Button) iterator.next();
         assertEquals(buttonCaption, button.getCaption());
-        assertEquals(2, button.getListeners(Button.ClickEvent.class).size());
+        assertEquals(2, button.getListeners(ClickEvent.class).size());
         assertTrue(button.isDisableOnClick());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
         assertFalse(iterator.hasNext());
@@ -316,12 +300,12 @@ public class UsagesFilterWidgetTest {
     }
 
     private Button getApplyButton() {
-        return Whitebox.getInternalState(widget, "applyButton", UsagesFilterWidget.class);
+        return Whitebox.getInternalState(widget, "applyButton");
     }
 
-    private Object getGetAvailableStatuses() {
+    private Object getGetStatuses() {
         try {
-            return Whitebox.invokeMethod(widget, "getAvailableStatuses");
+            return Whitebox.invokeMethod(widget, "getStatuses");
         } catch (Exception e) {
             throw new RupRuntimeException(e);
         }

@@ -29,11 +29,11 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
-
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageWidget;
+
 import com.vaadin.ui.HorizontalLayout;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -82,8 +82,8 @@ public class NtsUsageControllerTest {
 
     private NtsUsageController controller;
     private IUsageService usageService;
-    private IUsagesFilterController filterController;
-    private IUsagesFilterWidget filterWidgetMock;
+    private IFasNtsUsageFilterController filterController;
+    private IFasNtsUsageFilterWidget filterWidgetMock;
     private INtsUsageWidget usagesWidget;
     private IUsageBatchService usageBatchService;
     private IPrmIntegrationService prmIntegrationService;
@@ -99,11 +99,11 @@ public class NtsUsageControllerTest {
         controller = new NtsUsageController();
         usageService = createMock(IUsageService.class);
         usageBatchService = createMock(IUsageBatchService.class);
-        filterController = createMock(IUsagesFilterController.class);
+        filterController = createMock(IFasNtsUsageFilterController.class);
         usagesWidget = createMock(INtsUsageWidget.class);
         scenarioService = createMock(IScenarioService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
-        filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        filterWidgetMock = createMock(IFasNtsUsageFilterWidget.class);
         fundPoolService = createMock(IFundPoolService.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);

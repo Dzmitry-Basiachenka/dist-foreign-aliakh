@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -38,7 +38,7 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
     private ICommonUsageController controller;
     private DataProvider<UsageDto, Void> dataProvider;
     private Grid<UsageDto> usagesGrid;
-    private IUsagesFilterWidget usagesFilterWidget;
+    private ICommonUsageFilterWidget usagesFilterWidget;
 
     @Override
     public void fireWidgetEvent(Event event) {
@@ -73,9 +73,9 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
     }
 
     /**
-     * @return instance of {@link IUsagesFilterWidget}.
+     * @return instance of {@link ICommonUsageFilterWidget}.
      */
-    protected IUsagesFilterWidget getFilterWidget() {
+    protected ICommonUsageFilterWidget getFilterWidget() {
         return usagesFilterWidget;
     }
 
