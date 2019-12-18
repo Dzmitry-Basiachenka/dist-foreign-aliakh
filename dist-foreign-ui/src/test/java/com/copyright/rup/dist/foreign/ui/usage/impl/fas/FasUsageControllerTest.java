@@ -29,11 +29,11 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
-
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageWidget;
+
 import com.google.common.collect.Lists;
 
 import com.vaadin.ui.HorizontalLayout;
@@ -76,8 +76,8 @@ public class FasUsageControllerTest {
 
     private FasUsageController controller;
     private IUsageService usageService;
-    private IUsagesFilterController filterController;
-    private IUsagesFilterWidget filterWidgetMock;
+    private IFasNtsUsageFilterController filterController;
+    private IFasNtsUsageFilterWidget filterWidgetMock;
     private IFasUsageWidget usagesWidget;
     private IUsageBatchService usageBatchService;
     private IPrmIntegrationService prmIntegrationService;
@@ -91,11 +91,11 @@ public class FasUsageControllerTest {
         controller = new FasUsageController();
         usageService = createMock(UsageService.class);
         usageBatchService = createMock(IUsageBatchService.class);
-        filterController = createMock(IUsagesFilterController.class);
+        filterController = createMock(IFasNtsUsageFilterController.class);
         usagesWidget = createMock(IFasUsageWidget.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         researchService = createMock(IResearchService.class);
-        filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        filterWidgetMock = createMock(IFasNtsUsageFilterWidget.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         Whitebox.setInternalState(controller, usageBatchService);

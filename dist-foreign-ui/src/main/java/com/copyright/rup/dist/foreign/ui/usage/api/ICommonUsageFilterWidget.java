@@ -4,15 +4,15 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.vaadin.widget.api.IFilterWidget;
 
 /**
- * Interface for widget for usage filtering.
+ * Interface for common widget for usage filtering.
  * <p/>
- * Copyright (C) 2017 copyright.com
+ * Copyright (C) 2019 copyright.com
  * <p/>
- * Date: 01/11/2017
+ * Date: 12/12/2019
  *
- * @author Mikita Hladkikh
+ * @author Uladzislau Shalamitski
  */
-public interface IUsagesFilterWidget extends IFilterWidget<IUsagesFilterController> {
+public interface ICommonUsageFilterWidget extends IFilterWidget<ICommonUsageFilterController> {
 
     /**
      * @return {@link UsageFilter}.

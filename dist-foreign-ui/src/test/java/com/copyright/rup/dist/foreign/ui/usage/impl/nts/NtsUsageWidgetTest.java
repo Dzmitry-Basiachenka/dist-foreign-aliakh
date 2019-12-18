@@ -21,8 +21,10 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.UsagesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.FasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.fas.UsageBatchUploadWindow;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -80,13 +82,13 @@ public class NtsUsageWidgetTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private NtsUsageWidget usagesWidget;
     private INtsUsageController controller;
-    private UsagesFilterWidget filterWidget;
+    private IFasNtsUsageFilterWidget filterWidget;
     private String batchId;
 
     @Before
     public void setUp() {
         controller = createMock(INtsUsageController.class);
-        filterWidget = new UsagesFilterWidget();
+        filterWidget = new FasNtsUsageFilterWidget(createMock(IFasNtsUsageFilterController.class));
         batchId = RupPersistUtils.generateUuid();
         filterWidget.getFilter().setUsageBatchesIds(Collections.singleton(batchId));
         usagesWidget = new NtsUsageWidget(controller);
@@ -107,7 +109,7 @@ public class NtsUsageWidgetTest {
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget);
-        assertTrue(usagesWidget.getFirstComponent() instanceof UsagesFilterWidget);
+        assertTrue(usagesWidget.getFirstComponent() instanceof FasNtsUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;

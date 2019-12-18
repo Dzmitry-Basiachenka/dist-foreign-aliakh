@@ -20,8 +20,9 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.UsagesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.FasNtsUsageFilterWidget;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
@@ -79,7 +80,8 @@ public class FasUsageWidgetTest {
     @Before
     public void setUp() {
         controller = createMock(IFasUsageController.class);
-        UsagesFilterWidget filterWidget = new UsagesFilterWidget();
+        FasNtsUsageFilterWidget filterWidget =
+            new FasNtsUsageFilterWidget(createMock(IFasNtsUsageFilterController.class));
         filterWidget.getFilter().setUsageBatchesIds(Collections.singleton("3a070817-03ae-4ebd-b25f-dd3168a7ffb0"));
         usagesWidget = new FasUsageWidget(controller);
         usagesWidget.setController(controller);
@@ -100,7 +102,7 @@ public class FasUsageWidgetTest {
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget);
-        assertTrue(usagesWidget.getFirstComponent() instanceof UsagesFilterWidget);
+        assertTrue(usagesWidget.getFirstComponent() instanceof FasNtsUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;

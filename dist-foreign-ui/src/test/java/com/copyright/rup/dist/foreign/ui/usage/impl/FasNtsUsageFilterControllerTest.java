@@ -12,6 +12,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 
 import com.google.common.collect.Lists;
 
@@ -24,23 +25,33 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link UsagesFilterController}.
+ * Verifies {@link FasNtsUsageFilterController}.
  * <p/>
- * Copyright (C) 2017 copyright.com
+ * Copyright (C) 2019 copyright.com
  * <p/>
- * Date: 1/20/17
+ * Date: 12/12/19
  *
- * @author Aliaksandr Radkevich
+ * @author Uladzislau Shalamitski
  */
-public class UsagesFilterControllerTest {
+public class FasNtsUsageFilterControllerTest {
 
     private static final Integer FISCAL_YEAR = 2017;
     private static final String FAS_PRODUCT_FAMILY = "FAS";
-    private UsagesFilterController controller;
+
+    private FasNtsUsageFilterController controller;
+    private IProductFamilyProvider productFamilyProvider;
+    private IUsageBatchService usageBatchService;
+    private IRightsholderService rightsholderService;
 
     @Before
     public void setUp() {
-        controller = new UsagesFilterController();
+        productFamilyProvider = createMock(IProductFamilyProvider.class);
+        rightsholderService = createMock(IRightsholderService.class);
+        usageBatchService = createMock(IUsageBatchService.class);
+        controller = new FasNtsUsageFilterController();
+        Whitebox.setInternalState(controller, productFamilyProvider);
+        Whitebox.setInternalState(controller, usageBatchService);
+        Whitebox.setInternalState(controller, rightsholderService);
     }
 
     @Test
@@ -50,43 +61,39 @@ public class UsagesFilterControllerTest {
 
     @Test
     public void testGetFiscalYears() {
-        IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
-        Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(usageBatchService.getFiscalYears(FAS_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        replay(usageBatchService);
-        List<Integer> fiscalYears = controller.getFiscalYears(FAS_PRODUCT_FAMILY);
-        assertTrue(CollectionUtils.isNotEmpty(fiscalYears));
-        assertEquals(1, fiscalYears.size());
+        replay(usageBatchService, productFamilyProvider);
+        List<Integer> fiscalYears = controller.getFiscalYears();
+        assertEquals(1, CollectionUtils.size(fiscalYears));
         assertTrue(fiscalYears.contains(FISCAL_YEAR));
-        verify(usageBatchService);
+        verify(usageBatchService, productFamilyProvider);
     }
 
     @Test
     public void testGetUsageBatchesForFilter() {
-        IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
-        Whitebox.setInternalState(controller, IUsageBatchService.class, usageBatchService);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName("name");
         expect(usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(Lists.newArrayList(usageBatch)).once();
-        replay(usageBatchService);
-        List<UsageBatch> usageBatches = controller.getUsageBatches(FAS_PRODUCT_FAMILY);
-        assertEquals(1, usageBatches.size());
+        replay(usageBatchService, productFamilyProvider);
+        List<UsageBatch> usageBatches = controller.getUsageBatches();
+        assertEquals(1, CollectionUtils.size(usageBatches));
         assertEquals(usageBatch.getName(), usageBatches.iterator().next().getName());
-        verify(usageBatchService);
+        verify(usageBatchService, productFamilyProvider);
     }
 
     @Test
     public void testGetRros() {
-        IRightsholderService rightsholderService = createMock(IRightsholderService.class);
-        Whitebox.setInternalState(controller, IRightsholderService.class, rightsholderService);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(12345678L);
         expect(rightsholderService.getRros(FAS_PRODUCT_FAMILY)).andReturn(Lists.newArrayList(rightsholder)).once();
-        replay(rightsholderService);
-        List<Rightsholder> rightsholders = controller.getRros(FAS_PRODUCT_FAMILY);
-        assertEquals(1, rightsholders.size());
+        replay(rightsholderService, productFamilyProvider);
+        List<Rightsholder> rightsholders = controller.getRros();
+        assertEquals(1, CollectionUtils.size(rightsholders));
         assertEquals(rightsholder.getAccountNumber(), rightsholders.iterator().next().getAccountNumber());
-        verify(rightsholderService);
+        verify(rightsholderService, productFamilyProvider);
     }
 }

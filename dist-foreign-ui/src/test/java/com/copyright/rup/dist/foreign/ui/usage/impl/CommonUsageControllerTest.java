@@ -29,8 +29,8 @@ import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 
 import org.easymock.Capture;
@@ -59,8 +59,8 @@ public class CommonUsageControllerTest {
 
     private TestUsageController controller;
     private IUsageService usageService;
-    private IUsagesFilterController filterController;
-    private IUsagesFilterWidget filterWidgetMock;
+    private IFasNtsUsageFilterController filterController;
+    private IFasNtsUsageFilterWidget filterWidgetMock;
     private IUsageBatchService usageBatchService;
     private IScenarioService scenarioService;
     private IFundPoolService fundPoolService;
@@ -71,9 +71,9 @@ public class CommonUsageControllerTest {
         controller = new TestUsageController();
         usageService = createMock(UsageService.class);
         usageBatchService = createMock(IUsageBatchService.class);
-        filterController = createMock(IUsagesFilterController.class);
+        filterController = createMock(IFasNtsUsageFilterController.class);
         scenarioService = createMock(IScenarioService.class);
-        filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        filterWidgetMock = createMock(IFasNtsUsageFilterWidget.class);
         fundPoolService = createMock(IFundPoolService.class);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
@@ -114,8 +114,7 @@ public class CommonUsageControllerTest {
 
     @Test
     public void testInitUsagesFilterWidget() {
-        UsagesFilterWidget filterWidget = new UsagesFilterWidget();
-        Whitebox.setInternalState(controller, "filterController", filterController);
+        IFasNtsUsageFilterWidget filterWidget = new FasNtsUsageFilterWidget(filterController);
         expect(filterController.initWidget()).andReturn(filterWidget).once();
         replay(filterController);
         assertSame(filterWidget, controller.initUsagesFilterWidget());
