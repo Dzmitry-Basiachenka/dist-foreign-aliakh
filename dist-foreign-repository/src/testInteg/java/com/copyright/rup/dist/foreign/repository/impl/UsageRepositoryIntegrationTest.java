@@ -135,6 +135,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_30 = "e2834925-ede5-4796-a30b-05770a6f04be";
     private static final String USAGE_ID_31 = "3cf274c5-8eac-4d4a-96be-5921ae026840";
     private static final String USAGE_ID_32 = "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15";
+    private static final String USAGE_ID_33 = "45445974-5bee-477a-858b-e9e8c1a642b8";
     private static final String USAGE_ID_BELLETRISTIC = "bbbd64db-2668-499a-9d18-be8b3f87fbf5";
     private static final String USAGE_ID_UNCLASSIFIED = "6cad4cf2-6a19-4e5b-b4e0-f2f7a62ff91c";
     private static final String USAGE_ID_STM = "83a26087-a3b3-43ca-8b34-c66134fb6edf";
@@ -392,7 +393,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchDetailId() {
         populateScenario();
-        verifyFindByScenarioIdAndRhSearch("b1f0b236-3ae9-4a60-9fab-61db84199d11", 1);
+        verifyFindByScenarioIdAndRhSearch(USAGE_ID_8, 1);
         verifyFindByScenarioIdAndRhSearch("4a60", 1);
         verifyFindByScenarioIdAndRhSearch("4a", 2);
     }
@@ -526,11 +527,21 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testDeleteByScenarioId() {
         assertEquals(2, usageRepository.findByScenarioId(SCENARIO_ID).size());
+        assertEquals(2, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_7, USAGE_ID_8));
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         assertTrue(usageRepository.findByScenarioId(SCENARIO_ID).isEmpty());
+        assertEquals(2, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_7, USAGE_ID_8));
+    }
+
+    @Test
+    public void testDeleteByScenarioIdNtsExcluded() {
         assertEquals(2, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
+        assertEquals(2,
+            usageRepository.findReferencedFasUsagesCountByIds("ade68eac-0d79-4d23-861b-499a0c6e91d3", USAGE_ID_33));
         usageRepository.deleteByScenarioId(NTS_SCENARIO_ID);
         assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
+        assertEquals(1,
+            usageRepository.findReferencedFasUsagesCountByIds("ade68eac-0d79-4d23-861b-499a0c6e91d3", USAGE_ID_33));
     }
 
     @Test
@@ -690,7 +701,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testDeleteFromNtsScenario() {
         List<Usage> usages = usageRepository.findByIds(
-            Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", "45445974-5bee-477a-858b-e9e8c1a642b8"));
+            Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", USAGE_ID_33));
         assertEquals(2, CollectionUtils.size(usages));
         BigDecimal reportedValue = new BigDecimal("900.00");
         verifyNtsUsage(usages.get(0), UsageStatusEnum.NTS_EXCLUDED, null, StoredEntity.DEFAULT_USER,
@@ -700,7 +711,7 @@ public class UsageRepositoryIntegrationTest {
             new BigDecimal("612.0000000000"));
         usageRepository.deleteFromNtsScenario(NTS_SCENARIO_ID, USER_NAME);
         usages = usageRepository.findByIds(
-            Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", "45445974-5bee-477a-858b-e9e8c1a642b8"));
+            Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", USAGE_ID_33));
         assertEquals(2, CollectionUtils.size(usages));
         verifyNtsUsage(usages.get(0), UsageStatusEnum.ELIGIBLE, null, USER_NAME, DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT,
             null, DEFAULT_ZERO_AMOUNT, DEFAULT_ZERO_AMOUNT);
