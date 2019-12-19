@@ -127,7 +127,7 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
 
     @Override
     public List<UsageBatch> getUsageBatches(String productFamily) {
-        return usageBatchService.getUsageBatches(productFamily);
+        return usageBatchService.getUsageBatchesByProductFamilies(Collections.singleton(productFamily));
     }
 
     @Override
