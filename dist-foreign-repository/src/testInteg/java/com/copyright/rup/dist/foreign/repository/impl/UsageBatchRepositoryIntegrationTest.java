@@ -165,8 +165,9 @@ public class UsageBatchRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByProductFamily() {
-        List<UsageBatch> usageBatches = usageBatchRepository.findByProductFamily(FAS_PRODUCT_FAMILY);
+    public void testFindByProductFamilies() {
+        List<UsageBatch> usageBatches =
+            usageBatchRepository.findByProductFamilies(Collections.singleton(FAS_PRODUCT_FAMILY));
         assertEquals(4, usageBatches.size());
         assertEquals(NTS_USAGE_BATCH_ID_4, usageBatches.get(0).getId());
         assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(1).getId());

@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBoxGroup;
@@ -43,7 +44,8 @@ public class SummaryMarketReportWidgetTest {
         SummaryMarketReportController controller = new SummaryMarketReportController();
         IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
         Whitebox.setInternalState(controller, usageBatchService);
-        expect(usageBatchService.getUsageBatches()).andReturn(Collections.emptyList()).once();
+        expect(usageBatchService.getUsageBatchesByProductFamilies(Sets.newHashSet("FAS", "FAS2")))
+            .andReturn(Collections.emptyList()).once();
         replay(usageBatchService);
         widget = (SummaryMarketReportWidget) controller.initWidget();
         verify(usageBatchService);

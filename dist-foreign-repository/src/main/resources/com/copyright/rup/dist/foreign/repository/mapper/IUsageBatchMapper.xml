@@ -85,12 +85,15 @@
         where ub.df_usage_batch_uid = #{batchId}
     </select>
 
-    <select id="findByProductFamily" resultMap="usageBatchResultMap" parameterType="string">
+    <select id="findByProductFamilies" resultMap="usageBatchResultMap" parameterType="collection">
         select
             <include refid="usageBatchColumns"/>
         from ${schema}.df_usage_batch ub
         left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
-        where ub.product_family = #{productFamily}
+        where ub.product_family in
+            <foreach collection="collection" item="productFamily" separator="," open="(" close=")">
+                #{productFamily}
+            </foreach>
         order by ub.updated_datetime desc
     </select>
 

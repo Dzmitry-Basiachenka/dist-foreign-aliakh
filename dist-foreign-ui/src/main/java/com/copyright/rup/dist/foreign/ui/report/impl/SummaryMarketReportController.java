@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
@@ -37,7 +38,7 @@ public class SummaryMarketReportController extends CommonController<ISummaryMark
 
     @Override
     public List<UsageBatch> getUsageBatches() {
-        return usageBatchService.getUsageBatches();
+        return usageBatchService.getUsageBatchesByProductFamilies(FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
     }
 
     @Override

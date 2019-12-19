@@ -34,12 +34,12 @@ public interface IUsageBatchService {
     List<UsageBatch> getUsageBatches();
 
     /**
-     * Gets list of {@link UsageBatch}s related to specified Product Family.
+     * Gets list of {@link UsageBatch}s related to specified Product Families.
      *
-     * @param productFamily Product Family
+     * @param productFamilies set of Product Families
      * @return list of found {@link UsageBatch}es
      */
-    List<UsageBatch> getUsageBatches(String productFamily);
+    List<UsageBatch> getUsageBatchesByProductFamilies(Set<String> productFamilies);
 
     /**
      * Gets {@link UsageBatch} by its id.

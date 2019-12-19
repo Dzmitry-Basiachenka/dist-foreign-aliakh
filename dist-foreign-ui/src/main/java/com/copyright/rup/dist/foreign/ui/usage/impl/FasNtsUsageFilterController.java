@@ -11,6 +11,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ class FasNtsUsageFilterController extends CommonUsageFilterController implements
 
     @Override
     public List<UsageBatch> getUsageBatches() {
-        return usageBatchService.getUsageBatches(getSelectedProductFamily());
+        return usageBatchService.getUsageBatchesByProductFamilies(Collections.singleton(getSelectedProductFamily()));
     }
 
     @Override

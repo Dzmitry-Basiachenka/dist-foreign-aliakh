@@ -73,7 +73,8 @@ public class AuditFilterControllerTest {
     public void testGetUsageBatches() {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         List<UsageBatch> usageBatches = Collections.emptyList();
-        expect(usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(usageBatches).once();
+        expect(usageBatchService.getUsageBatchesByProductFamilies(Collections.singleton(FAS_PRODUCT_FAMILY)))
+            .andReturn(usageBatches).once();
         replay(usageBatchService, productFamilyProvider);
         assertSame(usageBatches, controller.getUsageBatches());
         verify(usageBatchService, productFamilyProvider);
