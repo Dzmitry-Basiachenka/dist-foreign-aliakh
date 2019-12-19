@@ -27,6 +27,7 @@ public class UsageFilter {
 
     private Set<Long> rhAccountNumbers = Sets.newHashSet();
     private Set<String> usageBatchesIds = Sets.newHashSet();
+    // TODO {aliakh} replace with value instead of collection
     private Set<String> productFamilies = Sets.newHashSet();
     private UsageStatusEnum usageStatus;
     private LocalDate paymentDate;
