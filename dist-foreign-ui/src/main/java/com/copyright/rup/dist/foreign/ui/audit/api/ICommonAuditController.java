@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.audit.api;
 
 import com.copyright.rup.dist.common.reporting.api.ICsvReportProvider;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
@@ -11,7 +12,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * Interface for audit widget controller.
+ * Common interface for audit controllers.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -19,20 +20,25 @@ import java.util.List;
  *
  * @author Aliaksandr Radkevich
  */
-public interface IAuditController extends IController<IAuditWidget>, ICsvReportProvider {
+public interface ICommonAuditController extends IController<ICommonAuditWidget>, ICsvReportProvider {
 
     /**
      * {@link #onFilterChanged()}.
      */
-    Method ON_FILTER_CHANGED = ReflectTools.findMethod(IAuditController.class, "onFilterChanged");
+    Method ON_FILTER_CHANGED = ReflectTools.findMethod(ICommonAuditController.class, "onFilterChanged");
 
     /**
-     * @return filter controller.
+     * @return audit filter controller.
      */
     IAuditFilterController getAuditFilterController();
 
     /**
-     * Handles filter change.
+     * @return audit filter.
+     */
+    AuditFilter getFilter();
+
+    /**
+     * Handles audit filter change event.
      */
     void onFilterChanged();
 

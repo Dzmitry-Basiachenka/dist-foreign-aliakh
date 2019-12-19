@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.main.impl;
 
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditController;
 import com.copyright.rup.dist.foreign.ui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
@@ -40,7 +40,7 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     private IControllerProvider<ICommonScenariosController> scenariosControllerProvider;
     @Autowired
     @Qualifier("dist.foreign.auditControllerProvider")
-    private IControllerProvider<IAuditController> auditControllerProvider;
+    private IControllerProvider<ICommonAuditController> auditControllerProvider;
 
     @Override
     public IControllerProvider<ICommonUsageController> getUsagesControllerProvider() {
@@ -53,7 +53,7 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     }
 
     @Override
-    public IControllerProvider<IAuditController> getAuditControllerProvider() {
+    public IControllerProvider<ICommonAuditController> getAuditControllerProvider() {
         return auditControllerProvider;
     }
 

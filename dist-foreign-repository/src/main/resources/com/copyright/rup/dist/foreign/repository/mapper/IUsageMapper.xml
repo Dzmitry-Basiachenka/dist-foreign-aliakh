@@ -1356,11 +1356,8 @@
                 #{status}
             </foreach>
         </if>
-        <if test="!filter.productFamilies.isEmpty()">
-            and u.product_family in
-            <foreach collection="filter.productFamilies" item="productFamily" open="(" separator="," close=")">
-                #{productFamily}
-            </foreach>
+        <if test="null != filter.productFamily">
+            and u.product_family = #{filter.productFamily}
         </if>
         <if test="null != filter.searchValue">
             and (

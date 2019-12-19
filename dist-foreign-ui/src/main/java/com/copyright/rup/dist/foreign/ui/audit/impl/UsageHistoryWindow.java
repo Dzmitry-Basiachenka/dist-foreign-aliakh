@@ -29,7 +29,7 @@ import java.util.Locale;
  *
  * @author Aliaksandr Radkevich
  */
-class UsageHistoryWindow extends Window {
+public class UsageHistoryWindow extends Window {
 
     /**
      * Constructor.

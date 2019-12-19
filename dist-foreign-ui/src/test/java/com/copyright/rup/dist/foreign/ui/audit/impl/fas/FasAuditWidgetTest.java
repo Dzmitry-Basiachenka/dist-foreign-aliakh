@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.audit.impl;
+package com.copyright.rup.dist.foreign.ui.audit.impl.fas;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
@@ -14,9 +14,10 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.fas.IFasAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.impl.AuditFilterWidget;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Lists;
@@ -51,7 +52,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Verifies {@link AuditWidget}.
+ * Verifies {@link FasAuditWidget}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -61,17 +62,17 @@ import java.util.stream.Stream;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(JavaScript.class)
-public class AuditWidgetTest {
+public class FasAuditWidgetTest {
 
-    private AuditWidget widget;
-    private IAuditController controller;
+    private FasAuditWidget widget;
+    private IFasAuditController controller;
     private IAuditFilterWidget filterWidget;
     private IAuditFilterController filterController;
 
     @Before
     public void setUp() {
-        controller = createMock(IAuditController.class);
-        widget = new AuditWidget();
+        controller = createMock(IFasAuditController.class);
+        widget = new FasAuditWidget(controller);
         widget.setController(controller);
         filterController = createMock(IAuditFilterController.class);
         filterWidget = new AuditFilterWidget();
@@ -165,9 +166,9 @@ public class AuditWidgetTest {
         Grid grid = (Grid) component;
         verifySize(grid, 100, Unit.PERCENTAGE, 100);
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-            "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title",
-            "Title", "Standard Number", "Standard Number Type", "Reported Value", "Amt in USD", "Batch Amt in USD",
+        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name", "Payment Date",
+            "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title", "Title",
+            "Standard Number", "Standard Number Type", "Reported Value", "Amt in USD", "Batch Amt in USD",
             "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date",
             "Period Ending", "Comment"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));

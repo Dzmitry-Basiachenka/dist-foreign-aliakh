@@ -16,11 +16,8 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 
-import com.google.common.collect.Lists;
-
-import org.apache.commons.collections4.CollectionUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,27 +40,30 @@ public class AuditFilterControllerTest {
     private AuditFilterController controller;
     private IUsageBatchService usageBatchService;
     private IRightsholderService rightsholderService;
-    private IUsageService usageService;
+    private IProductFamilyProvider productFamilyProvider;
+
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
 
     @Before
     public void setUp() {
         controller = new AuditFilterController();
         usageBatchService = createMock(IUsageBatchService.class);
         rightsholderService = createMock(IRightsholderService.class);
-        usageService = createMock(IUsageService.class);
-        Whitebox.setInternalState(controller, "usageService", usageService);
-        Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
-        Whitebox.setInternalState(controller, "rightsholderService", rightsholderService);
+        productFamilyProvider = createMock(IProductFamilyProvider.class);
+        Whitebox.setInternalState(controller, usageBatchService);
+        Whitebox.setInternalState(controller, rightsholderService);
+        Whitebox.setInternalState(controller, productFamilyProvider);
     }
 
     @Test
     public void testGetRightsholders() {
         List<Rightsholder> rightsholders = Collections.emptyList();
         Capture<Pageable> pageableCapture = new Capture<>();
-        expect(rightsholderService.getFromUsages(eq("search"), capture(pageableCapture), isNull()))
+        expect(rightsholderService.getFromUsages(
+            eq(FAS_PRODUCT_FAMILY), eq("search"), capture(pageableCapture), isNull()))
             .andReturn(rightsholders).once();
         replay(rightsholderService);
-        assertSame(rightsholders, controller.loadBeans("search", 0, 10, null));
+        assertSame(rightsholders, controller.loadBeans(FAS_PRODUCT_FAMILY, "search", 0, 10, null));
         assertEquals(10, pageableCapture.getValue().getLimit());
         assertEquals(0, pageableCapture.getValue().getOffset());
         verify(rightsholderService);
@@ -71,11 +71,12 @@ public class AuditFilterControllerTest {
 
     @Test
     public void testGetUsageBatches() {
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         List<UsageBatch> usageBatches = Collections.emptyList();
-        expect(usageBatchService.getUsageBatches()).andReturn(usageBatches).once();
-        replay(usageBatchService);
+        expect(usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(usageBatches).once();
+        replay(usageBatchService, productFamilyProvider);
         assertSame(usageBatches, controller.getUsageBatches());
-        verify(usageBatchService);
+        verify(usageBatchService, productFamilyProvider);
     }
 
     @Test
@@ -84,15 +85,10 @@ public class AuditFilterControllerTest {
     }
 
     @Test
-    public void testGetProductFamilies() {
-        List<String> expectedProductFamilies = Lists.newArrayList("FAS", "NTS");
-        expect(usageService.getProductFamiliesForAudit())
-            .andReturn(expectedProductFamilies)
-            .once();
-        replay(usageService);
-        List<String> productFamilies = controller.getProductFamilies();
-        assertTrue(CollectionUtils.isNotEmpty(productFamilies));
-        assertTrue(CollectionUtils.isEqualCollection(expectedProductFamilies, productFamilies));
-        verify(usageService);
+    public void testGetProductFamily() {
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        replay(productFamilyProvider);
+        assertEquals(FAS_PRODUCT_FAMILY, controller.getProductFamily());
+        verify(productFamilyProvider);
     }
 }

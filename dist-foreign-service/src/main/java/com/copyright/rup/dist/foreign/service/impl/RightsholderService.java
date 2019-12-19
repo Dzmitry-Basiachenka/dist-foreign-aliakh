@@ -78,13 +78,13 @@ public class RightsholderService extends CommonRightsholderService implements IR
     }
 
     @Override
-    public List<Rightsholder> getFromUsages(String searchValue, Pageable pageable, Sort sort) {
-        return rightsholderRepository.findFromUsages(searchValue, pageable, sort);
+    public List<Rightsholder> getFromUsages(String productFamily, String searchValue, Pageable pageable, Sort sort) {
+        return rightsholderRepository.findFromUsages(productFamily, searchValue, pageable, sort);
     }
 
     @Override
-    public int getCountFromUsages(String searchValue) {
-        return rightsholderRepository.findCountFromUsages(searchValue);
+    public int getCountFromUsages(String productFamily, String searchValue) {
+        return rightsholderRepository.findCountFromUsages(productFamily, searchValue);
     }
 
     @Override

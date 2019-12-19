@@ -68,7 +68,7 @@ public class CsvReportsIntegrationTest {
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setBatchesIds(Sets.newHashSet("e855bf85-236c-42e7-9b12-8d68dd747bbe",
             "02a09322-5f0f-4cae-888c-73127050dc98", "d016d9c2-5460-41bf-837c-8598cf00b654"));
-        auditFilter.setProductFamilies(Sets.newHashSet("FAS"));
+        auditFilter.setProductFamily("FAS");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(auditFilter, outputStream),
             "audit_usages_fas_report.csv");
     }
@@ -78,7 +78,7 @@ public class CsvReportsIntegrationTest {
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setBatchesIds(
             Sets.newHashSet("034873b3-97fa-475a-9a2a-191e8ec988b3", "acae006c-a4fe-45f0-a0cc-098e12db00c5"));
-        auditFilter.setProductFamilies(Sets.newHashSet("FAS2"));
+        auditFilter.setProductFamily("FAS2");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(auditFilter, outputStream),
             "audit_usages_fas2_report.csv");
     }
@@ -88,7 +88,7 @@ public class CsvReportsIntegrationTest {
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setBatchesIds(
             Sets.newHashSet("0c0a379a-461c-4e84-8062-326ece3c1f65", "f20ac1a3-eee4-4027-b5fb-def9adf0f871"));
-        auditFilter.setProductFamilies(Sets.newHashSet("NTS"));
+        auditFilter.setProductFamily("NTS");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditNtsCsvReport(auditFilter, outputStream),
             "audit_usages_nts_report.csv");
     }

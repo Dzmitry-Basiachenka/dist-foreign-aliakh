@@ -26,7 +26,8 @@ public class AuditFilter {
 
     private Set<Long> rhAccountNumbers = Sets.newHashSet();
     private Set<String> batchesIds = Sets.newHashSet();
-    private Set<String> productFamilies = Sets.newHashSet();
+    // TODO {dbaraukova} investigate options to remove product family field from filter as it is not a part of it
+    private String productFamily;
     private Set<UsageStatusEnum> statuses = Sets.newHashSet();
     private String cccEventId;
     private String distributionName;
@@ -51,7 +52,7 @@ public class AuditFilter {
         setCccEventId(filter.getCccEventId());
         setDistributionName(filter.getDistributionName());
         setSearchValue(filter.getSearchValue());
-        setProductFamilies(filter.getProductFamilies());
+        setProductFamily(filter.getProductFamily());
     }
 
     public Set<Long> getRhAccountNumbers() {
@@ -86,12 +87,12 @@ public class AuditFilter {
         this.statuses = statuses;
     }
 
-    public Set<String> getProductFamilies() {
-        return productFamilies;
+    public String getProductFamily() {
+        return productFamily;
     }
 
-    public void setProductFamilies(Set<String> productFamilies) {
-        this.productFamilies = productFamilies;
+    public void setProductFamily(String productFamily) {
+        this.productFamily = productFamily;
     }
 
     public String getCccEventId() {
@@ -114,7 +115,7 @@ public class AuditFilter {
         return CollectionUtils.isEmpty(rhAccountNumbers)
             && CollectionUtils.isEmpty(batchesIds)
             && CollectionUtils.isEmpty(statuses)
-            && CollectionUtils.isEmpty(productFamilies)
+            && StringUtils.isEmpty(productFamily)
             && StringUtils.isBlank(cccEventId)
             && StringUtils.isBlank(distributionName)
             && StringUtils.isBlank(searchValue);
@@ -133,7 +134,7 @@ public class AuditFilter {
             .append(this.rhAccountNumbers, that.rhAccountNumbers)
             .append(this.batchesIds, that.batchesIds)
             .append(this.statuses, that.statuses)
-            .append(this.productFamilies, that.productFamilies)
+            .append(this.productFamily, that.productFamily)
             .append(this.cccEventId, that.cccEventId)
             .append(this.distributionName, that.distributionName)
             .append(this.searchValue, that.searchValue)
@@ -146,7 +147,7 @@ public class AuditFilter {
             .append(rhAccountNumbers)
             .append(batchesIds)
             .append(statuses)
-            .append(productFamilies)
+            .append(productFamily)
             .append(cccEventId)
             .append(distributionName)
             .append(searchValue)
@@ -159,7 +160,7 @@ public class AuditFilter {
             .append("rhAccountNumbers", rhAccountNumbers)
             .append("batchesIds", batchesIds)
             .append("statuses", statuses)
-            .append("productFamilies", productFamilies)
+            .append("productFamily", productFamily)
             .append("cccEventId", cccEventId)
             .append("distributionName", distributionName)
             .append("searchValue", searchValue)

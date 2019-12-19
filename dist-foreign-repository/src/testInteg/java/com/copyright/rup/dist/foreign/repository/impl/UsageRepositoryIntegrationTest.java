@@ -885,7 +885,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
-        filter.setProductFamilies(Collections.singleton(FAS_PRODUCT_FAMILY));
+        filter.setProductFamily(FAS_PRODUCT_FAMILY);
         assertEquals(32, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages =
             usageRepository.findForAudit(filter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));

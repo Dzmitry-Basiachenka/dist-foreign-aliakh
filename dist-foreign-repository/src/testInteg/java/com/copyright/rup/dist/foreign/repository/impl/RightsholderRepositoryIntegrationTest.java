@@ -46,6 +46,7 @@ public class RightsholderRepositoryIntegrationTest {
         "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
     private static final String RH_NAME_2000017004 = "Access Copyright, The Canadian Copyright Agency";
     private static final String RH_NAME_2000017010 = "JAC, Japan Academic Association for Copyright Clearance, Inc.";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
 
     @Autowired
     private RightsholderRepository rightsholderRepository;
@@ -91,7 +92,7 @@ public class RightsholderRepositoryIntegrationTest {
 
     @Test
     public void testFindRros() {
-        List<Rightsholder> rros = rightsholderRepository.findRros("FAS");
+        List<Rightsholder> rros = rightsholderRepository.findRros(FAS_PRODUCT_FAMILY);
         assertNotNull(rros);
         assertTrue(CollectionUtils.isNotEmpty(rros));
         assertEquals(4, rros.size());
@@ -126,13 +127,14 @@ public class RightsholderRepositoryIntegrationTest {
 
     @Test
     public void testFindFromUsages() {
-        List<Rightsholder> rightsholders = rightsholderRepository.findFromUsages(null, null, null);
+        List<Rightsholder> rightsholders =
+            rightsholderRepository.findFromUsages(FAS_PRODUCT_FAMILY, null, null, null);
         assertEquals(4, rightsholders.size());
         assertTrue(rightsholders.stream()
             .map(Rightsholder::getAccountNumber)
             .collect(Collectors.toList())
             .containsAll(Sets.newHashSet(1000159997L, 1000009997L, 1000002859L, 1000005413L)));
-        rightsholders = rightsholderRepository.findFromUsages("9997", null, null);
+        rightsholders = rightsholderRepository.findFromUsages(FAS_PRODUCT_FAMILY, "9997", null, null);
         assertEquals(2, rightsholders.size());
         assertTrue(rightsholders.stream()
             .map(Rightsholder::getAccountNumber)
@@ -142,9 +144,9 @@ public class RightsholderRepositoryIntegrationTest {
 
     @Test
     public void testFindCountFromUsages() {
-        assertEquals(4, rightsholderRepository.findCountFromUsages(null));
-        assertEquals(2, rightsholderRepository.findCountFromUsages("9997"));
-        assertEquals(1, rightsholderRepository.findCountFromUsages("IEEE"));
+        assertEquals(4, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, null));
+        assertEquals(2, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, "9997"));
+        assertEquals(1, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, "IEEE"));
     }
 
     @Test

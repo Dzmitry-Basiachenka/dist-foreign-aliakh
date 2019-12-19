@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
-import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -10,9 +9,9 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -29,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Controller for {@link AuditWidget}.
+ * Common implementation for audit controllers.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -39,7 +38,8 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class AuditController extends CommonController<IAuditWidget> implements IAuditController {
+public abstract class CommonAuditController extends CommonController<ICommonAuditWidget>
+    implements ICommonAuditController {
 
     @Autowired
     private IUsageAuditService usageAuditService;
@@ -55,6 +55,13 @@ public class AuditController extends CommonController<IAuditWidget> implements I
     @Override
     public IAuditFilterController getAuditFilterController() {
         return auditFilterController;
+    }
+
+    @Override
+    public AuditFilter getFilter() {
+        AuditFilter filter = getAuditFilterController().getWidget().getAppliedFilter();
+        filter.setSearchValue(getWidget().getSearchValue());
+        return filter;
     }
 
     @Override
@@ -86,23 +93,26 @@ public class AuditController extends CommonController<IAuditWidget> implements I
         Windows.showModalWindow(new UsageHistoryWindow(detailId, usageAuditService.getUsageAudit(usageId)));
     }
 
-    @Override
-    public IStreamSource getCsvStreamSource() {
-        return streamSourceHandler.getCsvStreamSource(() -> "export_usage_audit_",
-            pos -> reportService.writeAuditFasCsvReport(getFilter(), pos));
-    }
-
-    @Override
-    protected IAuditWidget instantiateWidget() {
-        return new AuditWidget();
-    }
-
     /**
-     * @return applied {@link AuditFilter}.
+     * Instantiates widget.
+     *
+     * @return {@link ICommonAuditWidget} instance
      */
-    AuditFilter getFilter() {
-        AuditFilter filter = getAuditFilterController().getWidget().getAppliedFilter();
-        filter.setSearchValue(getWidget().getSearchValue());
-        return filter;
+    protected abstract ICommonAuditWidget instantiateWidget();
+
+    protected IUsageAuditService getUsageAuditService() {
+        return usageAuditService;
+    }
+
+    protected IUsageService getUsageService() {
+        return usageService;
+    }
+
+    protected IReportService getReportService() {
+        return reportService;
+    }
+
+    protected IStreamSourceHandler getStreamSourceHandler() {
+        return streamSourceHandler;
     }
 }
