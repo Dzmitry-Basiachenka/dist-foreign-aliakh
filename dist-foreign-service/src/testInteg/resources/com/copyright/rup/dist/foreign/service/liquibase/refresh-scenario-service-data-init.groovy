@@ -51,7 +51,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Nanette M. Schwann')
             column(name: 'reported_value', value: '9900.00')
             column(name: 'is_rh_participating_flag', value: false)
-            column(name: 'is_payee_participating_flag', value: false)
+            column(name: 'is_payee_participating_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -172,6 +172,32 @@ databaseChangeLog {
             column(name: 'reported_value', value: '5620.00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '0c4c3878-20b8-49e3-a967-91e8b73c7570')
+            column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
+            column(name: 'wr_wrk_inst', value: '122235134')
+            column(name: 'work_title', value: 'CHICKEN BREAST ON GRILL WITH FLAMES')
+            column(name: 'rh_account_number', value: '7000429266')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '452365874521235XX')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'gross_amount', value: '5093.22')
+            column(name: 'comment', value: 'usage from usages.csv')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '0c4c3878-20b8-49e3-a967-91e8b73c7570')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '5620.00')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
             column(name: 'df_scenario_usage_filter_uid', value: '3964ac3b-4581-41d7-ad12-b93af2420345')
             column(name: 'df_scenario_uid', value: 'e6e2fe6c-4c47-4ca1-bf32-591af4c13060')
@@ -182,6 +208,12 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: '3964ac3b-4581-41d7-ad12-b93af2420345')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '6a8d68df-5a40-478d-a483-1c3e35c995cd')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'name', value: 'Medical Journal')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {

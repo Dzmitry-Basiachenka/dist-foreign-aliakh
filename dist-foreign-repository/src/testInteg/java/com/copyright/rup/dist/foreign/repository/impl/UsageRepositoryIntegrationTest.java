@@ -515,12 +515,13 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testFindRightsholdersInformation() {
-        Map<Long, Usage> rhInfo = usageRepository.findRightsholdersInformation(SCENARIO_ID);
+        Map<Long, Usage> rhInfo = usageRepository.findRightsholdersInformation("ee8fc320-692c-4f7d-9981-54945e4ae127");
         assertEquals(1, rhInfo.size());
         Entry<Long, Usage> entry = rhInfo.entrySet().iterator().next();
         assertEquals(1000002859L, entry.getKey(), 0);
         assertEquals(1000002859L, entry.getValue().getPayee().getAccountNumber(), 0);
-        assertFalse(entry.getValue().isRhParticipating());
+        assertTrue(entry.getValue().isRhParticipating());
+        assertTrue(entry.getValue().isPayeeParticipating());
     }
 
     @Test

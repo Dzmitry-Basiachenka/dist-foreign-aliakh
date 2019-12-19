@@ -2633,4 +2633,88 @@ databaseChangeLog {
             column(name: 'is_rh_participating_flag', value: true)
         }
     }
+
+    changeSet(id: '2019-12-19-01', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
+        comment("Insert test data for testFindRightsholdersInformation")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'b4652f21-a1bd-44c5-ab7d-23a287fd1756')
+            column(name: 'name', value: 'FAS2 batch')
+            column(name: 'rro_account_number', value: '2000017000')
+            column(name: 'payment_date', value: '2019-02-13')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'fiscal_year', value: '2020')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: 'ee8fc320-692c-4f7d-9981-54945e4ae127')
+            column(name: 'name', value: 'Scenario name')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'description', value: 'FAS scenario')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3b9adc20-58bc-40e3-9635-bf28f149293d')
+            column(name: 'df_usage_batch_uid', value: 'b4652f21-a1bd-44c5-ab7d-23a287fd1756')
+            column(name: 'df_scenario_uid', value: 'ee8fc320-692c-4f7d-9981-54945e4ae127')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'gross_amount', value: '16437.40')
+            column(name: 'net_amount', value: '11177.40')
+            column(name: 'service_fee_amount', value: '5260.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3b9adc20-58bc-40e3-9635-bf28f149293d')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '9900')
+            column(name: 'is_rh_participating_flag', value: true)
+            column(name: 'is_payee_participating_flag', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '4659b47b-002a-4e60-8b06-28be2094171a')
+            column(name: 'df_usage_batch_uid', value: 'b4652f21-a1bd-44c5-ab7d-23a287fd1756')
+            column(name: 'df_scenario_uid', value: 'ee8fc320-692c-4f7d-9981-54945e4ae127')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'gross_amount', value: '16437.40')
+            column(name: 'net_amount', value: '11177.40')
+            column(name: 'service_fee_amount', value: '5260.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '4659b47b-002a-4e60-8b06-28be2094171a')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '9900')
+            column(name: 'is_rh_participating_flag', value: true)
+            column(name: 'is_payee_participating_flag', value: true)
+        }
+    }
 }
