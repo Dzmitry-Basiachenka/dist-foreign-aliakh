@@ -688,10 +688,19 @@
     </delete>
 
     <delete id="deleteByScenarioId" parameterType="map">
-        delete from ${schema}.df_usage
-        where df_scenario_uid = #{scenarioId}
-            or (<include refid="scenarioBatchesFilter"/>
-                and status_ind = #{status})
+        with deleted_by_scenario as (
+            delete from ${schema}.df_usage
+            where df_scenario_uid = #{scenarioId}
+        ),
+        deleted_by_status as (
+            delete from ${schema}.df_usage
+            where
+                <include refid="scenarioBatchesFilter"/>
+                and status_ind = #{status}
+            returning df_usage_uid
+        )
+        delete from ${schema}.df_usage_fas
+        where df_usage_fas_uid in (select df_usage_uid from deleted_by_status)
     </delete>
 
     <delete id="deleteBelletristicByScenarioId" parameterType="map">
