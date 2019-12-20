@@ -7,16 +7,19 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterCell;
@@ -46,6 +49,7 @@ public abstract class CommonScenarioWidget extends Window implements ICommonScen
 
     private ICommonScenarioController controller;
     private SearchWidget searchWidget;
+    private VerticalLayout emptyUsagesLayout;
     private Grid<RightsholderTotalsHolder> rightsholdersGrid;
     private DataProvider<RightsholderTotalsHolder, Void> dataProvider;
 
@@ -98,6 +102,10 @@ public abstract class CommonScenarioWidget extends Window implements ICommonScen
         return searchWidget;
     }
 
+    protected VerticalLayout getEmptyUsagesLayout() {
+        return emptyUsagesLayout;
+    }
+
     protected Grid<RightsholderTotalsHolder> getRightsholdersGrid() {
         return rightsholdersGrid;
     }
@@ -116,13 +124,14 @@ public abstract class CommonScenarioWidget extends Window implements ICommonScen
     /**
      * Inits {@link VerticalLayout} that contains widget components.
      *
-     * @param searchLayout a {@link VerticalLayout} with search widget
-     * @param grid         rightsholders grid
-     * @param buttons      a {@link HorizontalLayout} with buttons
+     * @param searchLayout              a {@link VerticalLayout} with search widget
+     * @param emptyUsagesVerticalLayout a {@link VerticalLayout} with empty usages message
+     * @param grid                      rightsholders grid
+     * @param buttons                   a {@link HorizontalLayout} with buttons
      * @return a {@link VerticalLayout} with components
      */
     protected abstract VerticalLayout initLayout(VerticalLayout searchLayout, Grid<RightsholderTotalsHolder> grid,
-                                                 HorizontalLayout buttons);
+                                                 VerticalLayout emptyUsagesVerticalLayout, HorizontalLayout buttons);
 
     private VerticalLayout initContent() {
         dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
@@ -139,7 +148,8 @@ public abstract class CommonScenarioWidget extends Window implements ICommonScen
         VerticalLayout searchLayout = new VerticalLayout(initSearchWidget());
         searchLayout.setMargin(false);
         searchLayout.setSpacing(false);
-        VerticalLayout layout = initLayout(searchLayout, rightsholdersGrid, buttons);
+        initEmptyScenarioMessage();
+        VerticalLayout layout = initLayout(searchLayout, rightsholdersGrid, emptyUsagesLayout, buttons);
         layout.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
         layout.setSizeFull();
         layout.setMargin(false);
@@ -236,5 +246,16 @@ public abstract class CommonScenarioWidget extends Window implements ICommonScen
         toolbar.setSizeFull();
         toolbar.setExpandRatio(searchWidget, 1);
         return toolbar;
+    }
+
+    private void initEmptyScenarioMessage() {
+        Label emptyScenarioMessage =
+            new Label(ForeignUi.getMessage("label.content.empty_scenario"), ContentMode.HTML);
+        emptyScenarioMessage.setSizeUndefined();
+        emptyScenarioMessage.addStyleName(Cornerstone.LABEL_H2);
+        emptyUsagesLayout = new VerticalLayout(emptyScenarioMessage);
+        emptyUsagesLayout.setComponentAlignment(emptyScenarioMessage, Alignment.MIDDLE_CENTER);
+        emptyUsagesLayout.setSizeFull();
+        emptyUsagesLayout.setVisible(false);
     }
 }

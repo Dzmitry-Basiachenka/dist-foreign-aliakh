@@ -47,11 +47,6 @@ public class FasScenarioController extends CommonScenarioController implements I
     private IExcludePayeeController excludePayeesController;
 
     @Override
-    public boolean isScenarioEmpty() {
-        return getUsageService().isScenarioEmpty(getScenario());
-    }
-
-    @Override
     public void onExcludeByRroClicked() {
         if (hasApprovedDiscrepancies()) {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.info.exclude_details.reconciled_scenario"));

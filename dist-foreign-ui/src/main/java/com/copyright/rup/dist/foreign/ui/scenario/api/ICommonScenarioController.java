@@ -62,6 +62,11 @@ public interface ICommonScenarioController extends IController<ICommonScenarioWi
     int getSize();
 
     /**
+     * @return boolean result that shows whether scenario is empty or not.
+     */
+    boolean isScenarioEmpty();
+
+    /**
      * Loads specified number of beans from the storage with given start index.
      *
      * @param startIndex start index

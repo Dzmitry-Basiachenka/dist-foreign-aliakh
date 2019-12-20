@@ -25,6 +25,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
@@ -77,6 +78,7 @@ public class NtsScenarioWidgetTest {
         expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
+        expect(controller.isScenarioEmpty()).andReturn(false).once();
         replay(controller, streamSource, ForeignSecurityUtils.class);
         scenarioWidget.init();
         verify(controller, streamSource, ForeignSecurityUtils.class);
@@ -92,10 +94,11 @@ public class NtsScenarioWidgetTest {
         assertFalse(scenarioWidget.isDraggable());
         assertFalse(scenarioWidget.isResizable());
         VerticalLayout content = (VerticalLayout) scenarioWidget.getContent();
-        assertEquals(3, content.getComponentCount());
+        assertEquals(4, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
         verifyGrid(content.getComponent(1));
-        verifyButtonsLayout(content.getComponent(2));
+        verifyEmptyScenarioLabel(((VerticalLayout) content.getComponent(2)).getComponent(0));
+        verifyButtonsLayout(content.getComponent(3));
     }
 
     @Test
@@ -131,6 +134,11 @@ public class NtsScenarioWidgetTest {
         assertEquals("20,000.00", footerRow.getCell("grossTotal").getText());
         assertEquals("6,400.00", footerRow.getCell("serviceFeeTotal").getText());
         assertEquals("13,600.00", footerRow.getCell("netTotal").getText());
+    }
+
+    private void verifyEmptyScenarioLabel(Component component) {
+        assertEquals(Label.class, component.getClass());
+        assertEquals("Scenario is empty due to all usages were excluded", ((Label) component).getValue());
     }
 
     private void verifyButtonsLayout(Component component) {

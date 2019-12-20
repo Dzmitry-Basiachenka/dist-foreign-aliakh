@@ -27,6 +27,8 @@ import com.vaadin.ui.VerticalLayout;
 public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScenarioWidget {
 
     private final INtsScenarioController scenarioController;
+    private Button exportDetailsButton;
+    private Button exportButton;
 
     /**
      * Constructor.
@@ -44,19 +46,21 @@ public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScena
 
     @Override
     protected VerticalLayout initLayout(VerticalLayout searchLayout, Grid<RightsholderTotalsHolder> grid,
-                                        HorizontalLayout buttons) {
-        VerticalLayout layout = new VerticalLayout(searchLayout, grid, buttons);
+                                        VerticalLayout emptyUsagesLayout, HorizontalLayout buttons) {
+        VerticalLayout layout = new VerticalLayout(searchLayout, grid, emptyUsagesLayout, buttons);
         layout.setExpandRatio(grid, 1);
+        layout.setExpandRatio(emptyUsagesLayout, 1);
+        updateLayouts();
         return layout;
     }
 
     @Override
     protected HorizontalLayout initButtons() {
-        Button exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
+        exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
         OnDemandFileDownloader exportDetailsFileDownloader =
             new OnDemandFileDownloader(scenarioController.getExportScenarioUsagesStreamSource().getSource());
         exportDetailsFileDownloader.extend(exportDetailsButton);
-        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader exportScenarioFileDownloader = new OnDemandFileDownloader(
             scenarioController.getExportScenarioRightsholderTotalsStreamSource().getSource());
         exportScenarioFileDownloader.extend(exportButton);
@@ -65,5 +69,14 @@ public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScena
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");
         buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;
+    }
+
+    private void updateLayouts() {
+        boolean scenarioEmpty = scenarioController.isScenarioEmpty();
+        exportDetailsButton.setEnabled(!scenarioEmpty);
+        exportButton.setEnabled(!scenarioEmpty);
+        getRightsholdersGrid().setVisible(!scenarioEmpty);
+        getSearchWidget().setVisible(!scenarioEmpty);
+        getEmptyUsagesLayout().setVisible(scenarioEmpty);
     }
 }

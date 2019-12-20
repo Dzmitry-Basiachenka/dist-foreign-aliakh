@@ -19,11 +19,6 @@ import java.util.List;
 public interface IFasScenarioController extends ICommonScenarioController {
 
     /**
-     * @return boolean result that shows whether scenario is empty or not.
-     */
-    boolean isScenarioEmpty();
-
-    /**
      * Handles click on "Exclude By RRO" button.
      */
     void onExcludeByRroClicked();
