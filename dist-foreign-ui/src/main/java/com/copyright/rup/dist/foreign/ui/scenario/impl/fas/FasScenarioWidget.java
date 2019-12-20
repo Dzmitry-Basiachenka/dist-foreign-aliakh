@@ -7,17 +7,13 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
-import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -32,7 +28,6 @@ import com.vaadin.ui.VerticalLayout;
 public class FasScenarioWidget extends CommonScenarioWidget implements IFasScenarioWidget {
 
     private final IFasScenarioController scenarioController;
-    private VerticalLayout emptyUsagesLayout;
     private Button exportDetailsButton;
     private Button exportButton;
     private Button excludeByRroButton;
@@ -77,7 +72,7 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
         mediator.setExcludeByPayeeButton(excludeByPayeeButton);
         mediator.setExportDetailsButton(exportDetailsButton);
         mediator.setExportButton(exportButton);
-        mediator.setEmptyUsagesLayout(emptyUsagesLayout);
+        mediator.setEmptyUsagesLayout(getEmptyUsagesLayout());
         mediator.setRightsholderGrid(getRightsholdersGrid());
         mediator.setSearchWidget(getSearchWidget());
         return mediator;
@@ -85,8 +80,7 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
 
     @Override
     protected VerticalLayout initLayout(VerticalLayout searchLayout, Grid<RightsholderTotalsHolder> grid,
-                                        HorizontalLayout buttons) {
-        initEmptyScenarioMessage();
+                                        VerticalLayout emptyUsagesLayout, HorizontalLayout buttons) {
         VerticalLayout layout = new VerticalLayout(searchLayout, grid, emptyUsagesLayout, buttons);
         layout.setExpandRatio(grid, 1);
         layout.setExpandRatio(emptyUsagesLayout, 1);
@@ -112,16 +106,5 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");
         buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;
-    }
-
-    private void initEmptyScenarioMessage() {
-        Label emptyScenarioMessage =
-            new Label(ForeignUi.getMessage("label.content.empty_scenario"), ContentMode.HTML);
-        emptyScenarioMessage.setSizeUndefined();
-        emptyScenarioMessage.addStyleName(Cornerstone.LABEL_H2);
-        emptyUsagesLayout = new VerticalLayout(emptyScenarioMessage);
-        emptyUsagesLayout.setComponentAlignment(emptyScenarioMessage, Alignment.MIDDLE_CENTER);
-        emptyUsagesLayout.setSizeFull();
-        emptyUsagesLayout.setVisible(false);
     }
 }

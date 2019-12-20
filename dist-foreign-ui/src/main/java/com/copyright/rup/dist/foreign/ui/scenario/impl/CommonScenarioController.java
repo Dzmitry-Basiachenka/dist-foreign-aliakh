@@ -52,6 +52,11 @@ public abstract class CommonScenarioController extends CommonController<ICommonS
     }
 
     @Override
+    public boolean isScenarioEmpty() {
+        return getUsageService().isScenarioEmpty(getScenario());
+    }
+
+    @Override
     public List<RightsholderTotalsHolder> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
         Sort sort = null;
         if (CollectionUtils.isNotEmpty(sortOrders)) {

@@ -105,6 +105,7 @@ public class NtsScenarioControllerTest {
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
@@ -124,6 +125,7 @@ public class NtsScenarioControllerTest {
 
     @Test
     public void testGetSize() {
+        expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
         expect(usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY)).andReturn(1)
             .once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
