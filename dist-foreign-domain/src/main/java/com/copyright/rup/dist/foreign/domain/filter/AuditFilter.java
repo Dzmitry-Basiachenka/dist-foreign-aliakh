@@ -115,7 +115,6 @@ public class AuditFilter {
         return CollectionUtils.isEmpty(rhAccountNumbers)
             && CollectionUtils.isEmpty(batchesIds)
             && CollectionUtils.isEmpty(statuses)
-            && StringUtils.isEmpty(productFamily)
             && StringUtils.isBlank(cccEventId)
             && StringUtils.isBlank(distributionName)
             && StringUtils.isBlank(searchValue);
