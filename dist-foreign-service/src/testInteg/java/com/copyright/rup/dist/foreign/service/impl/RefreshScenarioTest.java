@@ -60,14 +60,16 @@ public class RefreshScenarioTest {
                 buildUsage("0e49fd89-f094-4023-b729-afe240272ebe", 1000024497L, 1000024497L, "435.008", "2283.792",
                     FAS_PRODUCT_FAMILY, 122235139L, "3000.00", "2718.8000000000", "0.16000", true, true),
                 buildUsage("b1f0b236-3ae9-4a60-9fab-61db84199dss", 7000429266L, 1000009997L, "2871.0528", "6100.9872",
-                    FAS_PRODUCT_FAMILY, 122235134L, "9900.00", "8972.0400000000", SERVICE_FEE_32, false, false),
+                    FAS_PRODUCT_FAMILY, 122235134L, "9900.00", "8972.0400000000", SERVICE_FEE_32, false, true),
                 buildUsage("cbda7c0d-c455-4d9f-b097-89db8d933264", 1000001820L, 1000001820L, "814.9152", "4278.3048",
                     FAS_PRODUCT_FAMILY, 471137469L, "5620.00", "5093.2200000000", "0.16000", true, true),
                 buildUsage("cf38d390-11bb-4af7-9685-e034c9c32fb6", 1000002859L, 1000002859L, "1450.0256", "3081.3044",
                     FAS_PRODUCT_FAMILY, 243904752L, "5000.00", "4531.3300000000", SERVICE_FEE_32, false, false),
                 buildUsage("d0816728-4726-483d-91ff-8f24fa605e01", 1000001820L, 1000001820L, "2175.0384", "11418.9516",
-                    FAS_PRODUCT_FAMILY, 471137967L, "15000.00", "13593.9900000000", "0.16000", true, true)))
-            .expectScenario(buildScenario("27163.34", "7746.04"))
+                    FAS_PRODUCT_FAMILY, 471137967L, "15000.00", "13593.9900000000", "0.16000", true, true),
+                buildUsage("0c4c3878-20b8-49e3-a967-91e8b73c7570", 7000429266L, 1000009997L, "1629.8304", "3463.3896",
+                    FAS_PRODUCT_FAMILY, 122235134L, "5620.00", "5093.2200000000", SERVICE_FEE_32, false, true)))
+            .expectScenario(buildScenario("44140.00", "40002.60", "30626.7296", "9375.8704"))
             .build()
             .run();
     }
@@ -90,18 +92,18 @@ public class RefreshScenarioTest {
                     FAS2_PRODUCT_FAMILY, 122235134L, "9900.00", "8972.0400000000", "0.10000", false, false),
                 buildUsage("ec5c39b5-4c16-40a7-b1c8-730320971f11", 1000024950L, 1000024950L, "870.016", "1848.784",
                     FAS2_PRODUCT_FAMILY, 122235139L, "3000.00", "2718.8000000000", SERVICE_FEE_32, false, false)))
-            .expectScenario(buildScenario("26832.7356", "8076.6444"))
+            .expectScenario(buildScenario("38520.00", "34909.38", "26832.7356", "8076.6444"))
             .build()
             .run();
     }
 
-    private Scenario buildScenario(String netTotal, String serviceFeeTotal) {
+    private Scenario buildScenario(String reportedValue, String grossAmount, String netTotal, String serviceFeeTotal) {
         Scenario scenario = new Scenario();
         scenario.setName("Test Scenario");
         scenario.setNetTotal(new BigDecimal(netTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
-        scenario.setGrossTotal(new BigDecimal("34909.38").setScale(10, BigDecimal.ROUND_HALF_UP));
+        scenario.setGrossTotal(new BigDecimal(grossAmount).setScale(10, BigDecimal.ROUND_HALF_UP));
         scenario.setServiceFeeTotal(new BigDecimal(serviceFeeTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
-        scenario.setReportedTotal(new BigDecimal("38520.00").setScale(2, BigDecimal.ROUND_HALF_UP));
+        scenario.setReportedTotal(new BigDecimal(reportedValue).setScale(2, BigDecimal.ROUND_HALF_UP));
         scenario.setDescription("Scenario Description");
         return scenario;
     }

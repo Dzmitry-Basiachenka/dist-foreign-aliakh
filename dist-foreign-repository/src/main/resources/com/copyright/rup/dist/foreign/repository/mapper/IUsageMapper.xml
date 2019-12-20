@@ -567,7 +567,8 @@
             rh.df_rightsholder_uid rh_id,
             p.df_rightsholder_uid payee_id,
             u.payee_account_number,
-            ufas.is_rh_participating_flag
+            ufas.is_rh_participating_flag,
+            ufas.is_payee_participating_flag
         from ${schema}.df_usage u
         join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number

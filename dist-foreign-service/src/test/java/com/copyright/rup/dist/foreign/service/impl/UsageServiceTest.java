@@ -538,7 +538,6 @@ public class UsageServiceTest {
         UsageFilter filter = new UsageFilter();
         Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
         Usage usage2 = buildUsageWithPayee(RupPersistUtils.generateUuid());
-        Rightsholder payee = usage2.getPayee();
         expect(usageRepository.findRightsholdersInformation(SCENARIO_ID))
             .andReturn(ImmutableMap.of(usage2.getRightsholder().getAccountNumber(), usage2)).once();
         expect(usageRepository.findWithAmountsAndRightsholders(filter)).andReturn(Collections.singletonList(usage1))
@@ -546,8 +545,6 @@ public class UsageServiceTest {
         expect(prmIntegrationService.getRollUps(Collections.emptySet())).andReturn(Collections.emptyMap()).once();
         expect(prmIntegrationService.getPreferences(Collections.emptySet())).andReturn(Collections.emptyMap()).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.32")).once();
-        expect(prmIntegrationService.isRightsholderParticipating(Collections.emptyMap(), payee.getId(),
-            FAS_PRODUCT_FAMILY)).andReturn(true).once();
         usageRepository.addToScenario(Collections.singletonList(usage1));
         expectLastCall().once();
         rightsholderService.updateUsagesPayeesAsync(Collections.singletonList(usage1));

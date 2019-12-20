@@ -256,8 +256,7 @@ public class UsageService implements IUsageService {
                 ? prmIntegrationService.isRightsholderParticipating(preferencesMap,
                 usage.getRightsholder().getId(), usage.getProductFamily())
                 : scenarioUsage.isRhParticipating());
-            // TODO call PRM only for usages with new rightsholder, otherwise take from scenario usage
-            fillPayeeParticipating(preferencesMap, usage);
+            fillPayeeParticipatingForRefresh(preferencesMap, usage, scenarioUsage);
         });
         usageRepository.addToScenario(newUsages);
         rightsholderService.updateUsagesPayeesAsync(newUsages);
@@ -813,5 +812,14 @@ public class UsageService implements IUsageService {
             usage.getProductFamily())
             : usage.isRhParticipating();
         usage.setPayeeParticipating(payeeParticipating);
+    }
+
+    private void fillPayeeParticipatingForRefresh(Map<String, Table<String, String, Object>> preferencesMap,
+                                                  Usage newUsage, Usage scenarioUsage) {
+        if (Objects.nonNull(scenarioUsage)) {
+            newUsage.setPayeeParticipating(scenarioUsage.isPayeeParticipating());
+        } else {
+            fillPayeeParticipating(preferencesMap, newUsage);
+        }
     }
 }
