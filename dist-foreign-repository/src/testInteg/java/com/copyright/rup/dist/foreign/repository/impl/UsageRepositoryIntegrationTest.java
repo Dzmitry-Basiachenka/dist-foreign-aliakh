@@ -539,7 +539,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(2, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
         assertEquals(2,
             usageRepository.findReferencedFasUsagesCountByIds("ade68eac-0d79-4d23-861b-499a0c6e91d3", USAGE_ID_33));
-        usageRepository.deleteByScenarioId(NTS_SCENARIO_ID);
+        usageRepository.deleteNtsByScenarioId(NTS_SCENARIO_ID);
         assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
         assertEquals(1,
             usageRepository.findReferencedFasUsagesCountByIds("ade68eac-0d79-4d23-861b-499a0c6e91d3", USAGE_ID_33));

@@ -524,7 +524,7 @@ public class UsageServiceTest {
             .andReturn(usageIds).once();
         usageAuditService.deleteActionsByScenarioId(scenario.getId());
         expectLastCall().once();
-        usageRepository.deleteByScenarioId(SCENARIO_ID);
+        usageRepository.deleteNtsByScenarioId(SCENARIO_ID);
         expectLastCall().once();
         usageArchiveRepository.moveFundUsagesToArchive(SCENARIO_ID);
         expectLastCall().once();

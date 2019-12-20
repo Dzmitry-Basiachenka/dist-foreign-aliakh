@@ -393,11 +393,12 @@ public class UsageService implements IUsageService {
                 usageArchiveRepository.copyNtsToArchiveByScenarioId(scenario.getId(), RupContextUtils.getUserName());
             usageArchiveRepository.moveFundUsagesToArchive(scenario.getId());
             usageAuditService.deleteActionsByScenarioId(scenario.getId());
+            usageRepository.deleteNtsByScenarioId(scenario.getId());
         } else {
             usageIds =
                 usageArchiveRepository.copyToArchiveByScenarioId(scenario.getId(), RupContextUtils.getUserName());
+            usageRepository.deleteByScenarioId(scenario.getId());
         }
-        usageRepository.deleteByScenarioId(scenario.getId());
         LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
             LogUtils.size(usageIds));
         return usageIds;
