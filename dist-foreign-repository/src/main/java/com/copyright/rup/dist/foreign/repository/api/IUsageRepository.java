@@ -181,6 +181,13 @@ public interface IUsageRepository {
     void deleteByScenarioId(String scenarioId);
 
     /**
+     * Deletes all NTS {@link Usage}s for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteNtsByScenarioId(String scenarioId);
+
+    /**
      * Finds the {@link Usage}s only with information about gross amount, net amount, reported value and rightsholder
      * based on {@link UsageFilter}.
      *
