@@ -1,3 +1,14 @@
+8.1.6
+-
+* B-55626 FDA: Globalization of Product Family: adjust export on audit tab
+* B-55626 FDA: Globalization of Product Family: fix wrong behavior of clear Audit filter button
+* B-55626 FDA: Globalization of Product Family: implement product specific Audit tab
+* B-55836 FDA: Database changes to support AACL: make changes based on comments in CR-DIST-FOREIGN-133
+* CDP-858 FDA: Summary of Market Report: Exception occurs when the user tries to generate Summary of Market Report for an NTS batch
+* CDP-868 FDA: NTS_EXCLUDED usages are not deleted from df_usage_fas table after sending scenario to LM
+* CDP-869 FDA: Exclude by Payee: There are duplicates with participating flag ‘N’ in ‘Exclude Details by Payee’ table after scenario refresh with usages with the same RH and Payee
+* CDP-870 FDA: NTS Scenario view: Export and search are not disabled for empty NTS scenarios, empty scenario label is not displayed
+
 8.1.5
 -
 * B-55626 FDA: Globalization of Product Family: adjust and reorganize drill down widgets and controllers
