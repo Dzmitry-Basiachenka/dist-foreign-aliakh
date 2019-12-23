@@ -43,7 +43,8 @@ import java.util.Set;
 public class ForeignUi extends CommonUi {
 
     private static final Set<String> PRODUCT_FAMILIES = ImmutableSet.of(
-        FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY);
+        FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY,
+        FdaConstants.AACL_PRODUCT_FAMILY);
     private static final ResourceBundle MESSAGES =
         ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages");
 

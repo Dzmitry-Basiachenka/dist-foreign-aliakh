@@ -4,9 +4,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -50,23 +48,9 @@ public class CommonControllerProviderTest {
         expect(productFamilyProviderMock.getSelectedProductFamily()).andReturn("FAS2").once();
         expect(productFamilyProviderMock.getSelectedProductFamily()).andReturn("NTS").once();
         replay(firstControllerMock, secondControllerMock, productFamilyProviderMock);
-        assertSame(firstControllerMock, controllerProvider.getController());
-        assertSame(firstControllerMock, controllerProvider.getController());
-        assertSame(secondControllerMock, controllerProvider.getController());
-        verify(firstControllerMock, secondControllerMock, productFamilyProviderMock);
-    }
-
-    @Test
-    public void testGetControllerWithUnknownProductFamily() {
-        expect(productFamilyProviderMock.getSelectedProductFamily()).andReturn("DPS").once();
-        replay(firstControllerMock, secondControllerMock, productFamilyProviderMock);
-        try {
-            controllerProvider.getController();
-            fail();
-        } catch (IllegalStateException e) {
-            assertEquals("No controller found. SelectedProductFamily=DPS, RegisteredProductFamilies=[FAS, FAS2, NTS]",
-                e.getMessage());
-        }
+        assertSame(firstControllerMock, controllerProvider.getController().get());
+        assertSame(firstControllerMock, controllerProvider.getController().get());
+        assertSame(secondControllerMock, controllerProvider.getController().get());
         verify(firstControllerMock, secondControllerMock, productFamilyProviderMock);
     }
 

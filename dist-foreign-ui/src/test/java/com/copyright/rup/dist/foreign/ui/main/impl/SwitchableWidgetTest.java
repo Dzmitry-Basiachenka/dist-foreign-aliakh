@@ -21,6 +21,7 @@ import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -92,7 +93,7 @@ public class SwitchableWidgetTest {
     }
 
     private void prepareInitWidgetExpectations(ITestController controllerMock, ITestWidget content) {
-        expect(controllerProviderMock.getController()).andReturn(controllerMock).once();
+        expect(controllerProviderMock.getController()).andReturn(Optional.of(controllerMock)).once();
         expect(controllerMock.initWidget()).andReturn(content).once();
         listenerRegistererMock.accept(content);
         expectLastCall().once();

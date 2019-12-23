@@ -32,6 +32,11 @@ public final class FdaConstants {
     public static final String NTS_PRODUCT_FAMILY = "NTS";
 
     /**
+     * AACL product family.
+     */
+    public static final String AACL_PRODUCT_FAMILY = "AACL";
+
+    /**
      * Rightsholder preference code for the rightsholder FDA participation flag from PRM.
      */
     public static final String IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE = "IS-RH-FDA-PARTICIPATING";

@@ -7,6 +7,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Contains common logic for providing {@link IController} instance based on selected product family.
@@ -26,18 +27,12 @@ public abstract class CommonControllerProvider<T extends IController> implements
     private Map<String, T> productFamilyToControllerMap;
 
     @Override
-    public T getController() {
+    public Optional<T> getController() {
         if (null == productFamilyToControllerMap) {
             productFamilyToControllerMap = getProductFamilyToControllerMap();
         }
         String productFamily = productFamilyProvider.getSelectedProductFamily();
-        if (productFamilyToControllerMap.containsKey(productFamily)) {
-            return productFamilyToControllerMap.get(productFamily);
-        } else {
-            throw new IllegalStateException(
-                String.format("No controller found. SelectedProductFamily=%s, RegisteredProductFamilies=%s",
-                    productFamily, productFamilyToControllerMap.keySet()));
-        }
+        return Optional.ofNullable(productFamilyToControllerMap.get(productFamily));
     }
 
     /**

@@ -33,6 +33,10 @@ public class MainWidget extends TabSheet implements IMainWidget {
     private SwitchableWidget<? extends ICommonScenariosWidget, ? extends ICommonScenariosController> scenariosWidget;
     private SwitchableWidget<? extends ICommonAuditWidget, ? extends ICommonAuditController> auditWidget;
 
+    private Tab usagesTab;
+    private Tab scenarioTab;
+    private Tab auditTab;
+
     @Override
     @SuppressWarnings("unchecked")
     public MainWidget init() {
@@ -44,9 +48,9 @@ public class MainWidget extends TabSheet implements IMainWidget {
         });
         auditWidget = new SwitchableWidget<>(controller.getAuditControllerProvider(), widget -> {
         });
-        addTab(usagesWidget, ForeignUi.getMessage("tab.usages"));
-        addTab(scenariosWidget, ForeignUi.getMessage("tab.scenario"));
-        addTab(auditWidget, ForeignUi.getMessage("tab.audit"));
+        usagesTab = addTab(usagesWidget, ForeignUi.getMessage("tab.usages"));
+        scenarioTab = addTab(scenariosWidget, ForeignUi.getMessage("tab.scenario"));
+        auditTab = addTab(auditWidget, ForeignUi.getMessage("tab.audit"));
         addListener(TabSheet.SelectedTabChangeEvent.class, controller, ITabChangeController.TAB_CHANGE_HANDLER);
         updateProductFamily();
         return this;
@@ -54,9 +58,9 @@ public class MainWidget extends TabSheet implements IMainWidget {
 
     @Override
     public void updateProductFamily() {
-        usagesWidget.updateProductFamily();
-        scenariosWidget.updateProductFamily();
-        auditWidget.updateProductFamily();
+        usagesTab.setVisible(usagesWidget.updateProductFamily());
+        scenarioTab.setVisible(scenariosWidget.updateProductFamily());
+        auditTab.setVisible(auditWidget.updateProductFamily());
     }
 
     @Override

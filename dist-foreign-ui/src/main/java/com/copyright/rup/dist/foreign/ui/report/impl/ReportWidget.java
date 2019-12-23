@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.impl.report.IReportMenuBuilder;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportMenuBuilder;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -34,12 +33,14 @@ public class ReportWidget extends MenuBar implements IReportWidget {
     @Override
     public void refresh() {
         removeItems();
-        MenuItem rootItem = addItem(ForeignUi.getMessage("tab.reports"), null);
-        rootItem.setStyleName("reports-menu-root");
         IProductFamilyProvider productFamilyProvider = controller.getProductFamilyProvider();
         String productFamily = productFamilyProvider.getSelectedProductFamily();
-        IReportMenuBuilder builder = ReportMenuBuilder.valueOf(productFamily);
-        builder.addItems(controller, this, rootItem);
+        ReportMenuBuilder builder = ReportMenuBuilder.valueOf(productFamily);
+        if (builder.isVisible()) {
+            MenuItem rootItem = addItem(ForeignUi.getMessage("tab.reports"), null);
+            rootItem.setStyleName("reports-menu-root");
+            builder.addItems(controller, this, rootItem);
+        }
     }
 
     @Override

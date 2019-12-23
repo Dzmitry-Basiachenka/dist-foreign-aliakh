@@ -8,6 +8,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -41,12 +42,19 @@ class SwitchableWidget<W extends IWidget<C>, C extends IController<W>> extends P
 
     /**
      * Updates widget content provided {@link IController} instance.
+     *
+     * @return {@code true} if the tab should be visible, {@code false} otherwise
      */
-    public void updateProductFamily() {
-        C controller = controllerProvider.getController();
-        W widget = controller.initWidget();
-        listenerRegisterer.accept(widget);
-        setContent(widget);
+    public boolean updateProductFamily() {
+        Optional<C> controller = controllerProvider.getController();
+        if (controller.isPresent()) {
+            W widget = controller.get().initWidget();
+            listenerRegisterer.accept(widget);
+            setContent(widget);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
