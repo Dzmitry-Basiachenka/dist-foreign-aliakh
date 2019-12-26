@@ -20,6 +20,7 @@ import java.time.LocalDate;
  *
  * @author Aliaksei Pchelnikau
  */
+// TODO extract FAS specific fields to separate domain
 public class Usage extends StoredEntity<String> {
 
     private String batchId;
@@ -50,6 +51,7 @@ public class Usage extends StoredEntity<String> {
     private boolean rhParticipating;
     private boolean payeeParticipating;
     private String comment;
+    private AaclUsage aaclUsage;
 
     public String getBatchId() {
         return batchId;
@@ -275,6 +277,14 @@ public class Usage extends StoredEntity<String> {
         this.comment = comment;
     }
 
+    public AaclUsage getAaclUsage() {
+        return aaclUsage;
+    }
+
+    public void setAaclUsage(AaclUsage aaclUsage) {
+        this.aaclUsage = aaclUsage;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -314,6 +324,7 @@ public class Usage extends StoredEntity<String> {
             .append(this.rhParticipating, that.rhParticipating)
             .append(this.payeeParticipating, that.payeeParticipating)
             .append(this.comment, that.comment)
+            .append(this.aaclUsage, that.aaclUsage)
             .isEquals();
     }
 
@@ -349,6 +360,7 @@ public class Usage extends StoredEntity<String> {
             .append(rhParticipating)
             .append(payeeParticipating)
             .append(comment)
+            .append(aaclUsage)
             .toHashCode();
     }
 
@@ -384,6 +396,7 @@ public class Usage extends StoredEntity<String> {
             .append("rhParticipating", rhParticipating)
             .append("payeeParticipating", payeeParticipating)
             .append("comment", comment)
+            .append("aaclUsage", aaclUsage)
             .toString();
     }
 }

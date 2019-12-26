@@ -49,6 +49,7 @@ public class DomainVerifierTest {
             {AuditFilter.class},
             {UsageBatch.class},
             {Usage.class},
+            {AaclUsage.class},
             {UsageDto.class},
             {PaidUsage.class},
             {Scenario.class},
