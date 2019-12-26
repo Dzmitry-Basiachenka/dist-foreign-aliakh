@@ -350,4 +350,41 @@ databaseChangeLog {
             )
         }
     }
+
+    changeSet(id: '2019-12-26-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-55412 FDA: Load AACL Usage Data: create table for storing AACL specific usage data")
+
+        createTable(tableName: 'df_usage_aacl', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing specific fields of usages with AACL product family') {
+
+            column(name: 'df_usage_aacl_uid', type: 'VARCHAR(255)', remarks: 'The identifier of usage')
+            column(name: 'institution', type: 'VARCHAR(255)', remarks: 'The institution of usage')
+            column(name: 'usage_period', type: 'NUMERIC(6,0)', remarks: 'The usage period')
+            column(name: 'usage_source', type: 'VARCHAR(150)', remarks: 'The usage source')
+            column(name: 'number_of_pages', type: 'INTEGER', remarks: 'The number of pages')
+            column(name: 'right_limitation', type: 'VARCHAR(20)', remarks: 'The rights limitation')
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1', remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()', remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()', remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_usage_aacl', tablespace: dbIndexTablespace,
+                columnNames: 'df_usage_aacl_uid', constraintName: 'df_usage_aacl_pk')
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
