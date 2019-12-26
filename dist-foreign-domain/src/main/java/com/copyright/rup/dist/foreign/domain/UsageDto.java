@@ -62,6 +62,8 @@ public class UsageDto extends StoredEntity<String> {
     private OffsetDateTime distributionDate;
     private LocalDate periodEndDate;
     private String comment;
+    // TODO {aliakh} remove the constructor call when repository methods are implemented
+    private AaclUsage aaclUsage = new AaclUsage();
 
     public String getBatchName() {
         return batchName;
@@ -367,6 +369,14 @@ public class UsageDto extends StoredEntity<String> {
         this.comment = comment;
     }
 
+    public AaclUsage getAaclUsage() {
+        return aaclUsage;
+    }
+
+    public void setAaclUsage(AaclUsage aaclUsage) {
+        this.aaclUsage = aaclUsage;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -416,6 +426,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.distributionDate, that.distributionDate)
             .append(this.periodEndDate, that.periodEndDate)
             .append(this.comment, that.comment)
+            .append(this.aaclUsage, that.aaclUsage)
             .isEquals();
     }
 
@@ -461,6 +472,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(distributionDate)
             .append(periodEndDate)
             .append(comment)
+            .append(aaclUsage)
             .toHashCode();
     }
 
@@ -506,6 +518,7 @@ public class UsageDto extends StoredEntity<String> {
             .append("distributionDate", distributionDate)
             .append("periodEndDate", periodEndDate)
             .append("comment", comment)
+            .append("aaclUsage", aaclUsage)
             .toString();
     }
 }
