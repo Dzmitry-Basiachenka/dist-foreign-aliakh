@@ -6,7 +6,7 @@ import com.copyright.rup.vaadin.widget.api.IMediator;
 import com.vaadin.ui.MenuBar;
 
 /**
- * Mediator for the AACL usages widgets.
+ * Mediator for the AACL usages widget.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>

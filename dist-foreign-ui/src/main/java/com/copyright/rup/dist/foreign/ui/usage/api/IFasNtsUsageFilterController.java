@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
 import java.util.List;
 
@@ -22,13 +21,6 @@ public interface IFasNtsUsageFilterController extends ICommonUsageFilterControll
      * @return list of fiscal years
      */
     List<Integer> getFiscalYears();
-
-    /**
-     * Gets list of {@link UsageBatch}es related to selected Product Family.
-     *
-     * @return list of {@link UsageBatch}es.
-     */
-    List<UsageBatch> getUsageBatches();
 
     /**
      * Gets list of RROs associated with selected Product Family.

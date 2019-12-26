@@ -25,7 +25,7 @@ import java.util.Collections;
  *
  * @author Uladzislau Shalamitski
  */
-abstract class CommonUsageFilterWidget extends VerticalLayout implements ICommonUsageFilterWidget {
+public abstract class CommonUsageFilterWidget extends VerticalLayout implements ICommonUsageFilterWidget {
 
     private ICommonUsageFilterController controller;
     private Button applyButton;
@@ -74,22 +74,22 @@ abstract class CommonUsageFilterWidget extends VerticalLayout implements ICommon
     /**
      * Refreshes filter values.
      */
-    abstract void refreshFilterValues();
+    protected abstract void refreshFilterValues();
 
     /**
      * Clears filter values.
      */
-    abstract void clearFilterValues();
+    protected abstract void clearFilterValues();
 
     /**
      * @return instantiated filter layout.
      */
-    abstract VerticalLayout initFiltersLayout();
+    protected abstract VerticalLayout initFiltersLayout();
 
     /**
      * @return built filters header label.
      */
-    Label buildFiltersHeaderLabel() {
+    protected Label buildFiltersHeaderLabel() {
         Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
         filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
         return filterHeaderLabel;
@@ -98,7 +98,7 @@ abstract class CommonUsageFilterWidget extends VerticalLayout implements ICommon
     /**
      * Handles filter change event.
      */
-    void filterChanged() {
+    protected void filterChanged() {
         applyButton.setEnabled(!usageFilter.equals(appliedUsageFilter));
     }
 

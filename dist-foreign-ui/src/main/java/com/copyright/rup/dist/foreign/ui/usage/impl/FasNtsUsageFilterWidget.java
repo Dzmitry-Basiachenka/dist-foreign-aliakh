@@ -13,7 +13,7 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveList
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
 
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
@@ -33,10 +33,10 @@ import java.util.stream.Collectors;
  */
 public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements IFasNtsUsageFilterWidget {
 
-    private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES = Sets.newHashSet(UsageStatusEnum.NEW,
+    private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES = ImmutableSet.of(UsageStatusEnum.NEW,
         UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
         UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE);
-    private static final Set<UsageStatusEnum> NTS_STATUSES = Sets.newHashSet(UsageStatusEnum.NTS_WITHDRAWN,
+    private static final Set<UsageStatusEnum> NTS_STATUSES = ImmutableSet.of(UsageStatusEnum.NTS_WITHDRAWN,
         UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE,
         UsageStatusEnum.TO_BE_DISTRIBUTED, UsageStatusEnum.NTS_EXCLUDED);
 
@@ -57,13 +57,13 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
     }
 
     @Override
-    public void refreshFilterValues() {
+    protected void refreshFilterValues() {
         fiscalYearComboBox.setItems(controller.getFiscalYears());
         statusComboBox.setItems(getStatuses());
     }
 
     @Override
-    void clearFilterValues() {
+    protected void clearFilterValues() {
         paymentDateWidget.clear();
         fiscalYearComboBox.clear();
         statusComboBox.clear();
@@ -72,7 +72,7 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
     }
 
     @Override
-    public VerticalLayout initFiltersLayout() {
+    protected VerticalLayout initFiltersLayout() {
         initPaymentDateFilter();
         initFiscalYearFilter();
         initStatusFilter();

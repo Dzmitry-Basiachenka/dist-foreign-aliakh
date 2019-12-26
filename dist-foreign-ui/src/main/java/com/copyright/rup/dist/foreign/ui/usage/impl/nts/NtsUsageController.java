@@ -6,7 +6,9 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.IWorkClassificationController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
@@ -39,6 +41,13 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     private IStreamSourceHandler streamSourceHandler;
     @Autowired
     private IWorkClassificationController workClassificationController;
+    @Autowired
+    private IFasNtsUsageFilterController fasNtsUsageFilterController;
+
+    @Override
+    public ICommonUsageFilterController getUsageFilterController() {
+        return fasNtsUsageFilterController;
+    }
 
     @Override
     public IStreamSource getExportUsagesStreamSource() {

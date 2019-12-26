@@ -11,7 +11,9 @@ import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
@@ -44,6 +46,13 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     private IStreamSourceHandler streamSourceHandler;
     @Autowired
     private IResearchService researchService;
+    @Autowired
+    private IFasNtsUsageFilterController fasNtsUsageFilterController;
+
+    @Override
+    public ICommonUsageFilterController getUsageFilterController() {
+        return fasNtsUsageFilterController;
+    }
 
     @Override
     public int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
