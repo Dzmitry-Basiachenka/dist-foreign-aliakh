@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
@@ -26,7 +27,6 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
 
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
-    @SuppressWarnings("all") // TODO {aliakh} remove when the widget is fully implemented
     private final IAaclUsageController controller;
 
     /**
@@ -96,9 +96,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         MenuBar.MenuItem menuItem =
             usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
         loadUsageBatchMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
-            item -> {
-                // TODO {aliakh} add Load Usage Batch implementation for AACL
-            });
+            item -> Windows.showModalWindow(new AaclUsageBatchUploadWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
     }
