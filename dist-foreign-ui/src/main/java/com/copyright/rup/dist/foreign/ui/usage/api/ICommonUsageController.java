@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -129,11 +128,6 @@ public interface ICommonUsageController extends IController<ICommonUsageWidget> 
      * @param event {@link ScenarioCreateEvent}
      */
     void onScenarioCreated(ScenarioCreateEvent event);
-
-    /**
-     * @return instance of {@link IStreamSource} for export.
-     */
-    IStreamSource getExportUsagesStreamSource();
 
     /**
      * Vefiries whether all filtered {@link com.copyright.rup.dist.foreign.domain.Usage}s in specifies status or not.

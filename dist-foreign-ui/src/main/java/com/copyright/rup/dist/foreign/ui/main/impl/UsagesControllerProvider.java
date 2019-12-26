@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.main.impl;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.google.common.collect.ImmutableMap;
@@ -31,13 +32,16 @@ public class UsagesControllerProvider extends CommonControllerProvider<ICommonUs
     private IFasUsageController fasUsagesController;
     @Autowired
     private INtsUsageController ntsUsagesController;
+    @Autowired
+    private IAaclUsageController aaclUsagesController;
 
     @Override
     protected Map<String, ICommonUsageController> getProductFamilyToControllerMap() {
         return ImmutableMap.of(
             FdaConstants.FAS_PRODUCT_FAMILY, fasUsagesController,
             FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasUsagesController,
-            FdaConstants.NTS_PRODUCT_FAMILY, ntsUsagesController
+            FdaConstants.NTS_PRODUCT_FAMILY, ntsUsagesController,
+            FdaConstants.AACL_PRODUCT_FAMILY, aaclUsagesController
         );
     }
 }
