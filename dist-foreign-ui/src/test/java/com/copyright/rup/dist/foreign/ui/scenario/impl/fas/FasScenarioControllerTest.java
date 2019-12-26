@@ -22,12 +22,10 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
-import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.ScenarioService;
@@ -83,7 +81,6 @@ public class FasScenarioControllerTest {
     private IUsageService usageService;
     private IScenarioService scenarioService;
     private IReportService reportService;
-    private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
     private IStreamSourceHandler streamSourceHandler;
     private IExcludePayeeController excludePayeesController;
     private Scenario scenario;
@@ -103,7 +100,6 @@ public class FasScenarioControllerTest {
         scenarioService = createMock(ScenarioService.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
-        rightsholderDiscrepancyService = createMock(IRightsholderDiscrepancyService.class);
         excludePayeesController = createMock(IExcludePayeeController.class);
         mockStatic(ForeignSecurityUtils.class);
         Whitebox.setInternalState(controller, usageService);
@@ -111,7 +107,6 @@ public class FasScenarioControllerTest {
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, excludePayeesController);
-        Whitebox.setInternalState(controller, rightsholderDiscrepancyService);
     }
 
     @Test
@@ -245,58 +240,30 @@ public class FasScenarioControllerTest {
     }
 
     @Test
-    public void testOnExcludeByRroClickedWithDiscrepancies() {
-        mockStatic(Windows.class);
-        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(1).once();
-        Windows.showNotificationWindow("Details cannot be excluded after reconciliation");
-        expectLastCall().once();
-        replay(rightsholderDiscrepancyService, Windows.class);
-        controller.onExcludeByRroClicked();
-        verify(rightsholderDiscrepancyService, Windows.class);
-    }
-
-    @Test
     public void testOnExcludeByRroClickedWithoutDiscrepancies() {
         mockStatic(Windows.class);
-        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(0).once();
         Windows.showModalWindow(anyObject(ExcludeSourceRroWindow.class));
         expectLastCall().once();
         expect(scenarioService.getSourceRros(SCENARIO_ID)).andReturn(
             Collections.singletonList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
             .once();
-        replay(rightsholderDiscrepancyService, scenarioService, Windows.class);
+        replay(scenarioService, Windows.class);
         controller.onExcludeByRroClicked();
-        verify(rightsholderDiscrepancyService, scenarioService, Windows.class);
-    }
-
-    @Test
-    public void testOnExcludeByPayeeClickedWithDiscrepancies() {
-        mockStatic(Windows.class);
-        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(1).once();
-        Windows.showNotificationWindow("Details cannot be excluded after reconciliation");
-        expectLastCall().once();
-        replay(rightsholderDiscrepancyService, excludePayeesController, Windows.class);
-        controller.onExcludeByPayeeClicked();
-        verify(rightsholderDiscrepancyService, excludePayeesController, Windows.class);
+        verify(scenarioService, Windows.class);
     }
 
     @Test
     public void testOnExcludeByPayeeClickedWithoutDiscrepancies() {
         mockStatic(Windows.class);
-        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(0).once();
         excludePayeesController.setScenario(scenario);
         expectLastCall().once();
         ExcludePayeeWidget widget = new ExcludePayeeWidget();
         expect(excludePayeesController.initWidget()).andReturn(widget).once();
         Windows.showModalWindow(widget);
         expectLastCall().once();
-        replay(rightsholderDiscrepancyService, scenarioService, excludePayeesController, Windows.class);
+        replay(scenarioService, excludePayeesController, Windows.class);
         controller.onExcludeByPayeeClicked();
-        verify(rightsholderDiscrepancyService, scenarioService, excludePayeesController, Windows.class);
+        verify(scenarioService, excludePayeesController, Windows.class);
     }
 
     @Test

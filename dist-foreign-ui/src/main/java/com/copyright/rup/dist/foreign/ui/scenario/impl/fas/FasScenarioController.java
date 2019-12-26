@@ -1,11 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
-import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
@@ -40,31 +37,21 @@ import java.util.List;
 public class FasScenarioController extends CommonScenarioController implements IFasScenarioController {
 
     @Autowired
-    private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
-    @Autowired
     private IFasDrillDownByRightsholderController drillDownByRightsholderController;
     @Autowired
     private IExcludePayeeController excludePayeesController;
 
     @Override
     public void onExcludeByRroClicked() {
-        if (hasApprovedDiscrepancies()) {
-            Windows.showNotificationWindow(ForeignUi.getMessage("message.info.exclude_details.reconciled_scenario"));
-        } else {
-            Windows.showModalWindow(new ExcludeSourceRroWindow(this));
-        }
+        Windows.showModalWindow(new ExcludeSourceRroWindow(this));
     }
 
     @Override
     public void onExcludeByPayeeClicked() {
-        if (hasApprovedDiscrepancies()) {
-            Windows.showNotificationWindow(ForeignUi.getMessage("message.info.exclude_details.reconciled_scenario"));
-        } else {
-            excludePayeesController.setScenario(getScenario());
-            IExcludePayeeWidget widget = excludePayeesController.initWidget();
-            widget.addListener(this::fireWidgetEvent);
-            Windows.showModalWindow((Window) widget);
-        }
+        excludePayeesController.setScenario(getScenario());
+        IExcludePayeeWidget widget = excludePayeesController.initWidget();
+        widget.addListener(this::fireWidgetEvent);
+        Windows.showModalWindow((Window) widget);
     }
 
     @Override
@@ -100,10 +87,5 @@ public class FasScenarioController extends CommonScenarioController implements I
     @Override
     protected void writeScenarioUsagesCsvReport(Scenario scenarioForReport, PipedOutputStream pos) {
         getReportService().writeFasScenarioUsagesCsvReport(scenarioForReport, pos);
-    }
-
-    private boolean hasApprovedDiscrepancies() {
-        return 0 < rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(getScenario().getId(),
-            RightsholderDiscrepancyStatusEnum.APPROVED);
     }
 }
