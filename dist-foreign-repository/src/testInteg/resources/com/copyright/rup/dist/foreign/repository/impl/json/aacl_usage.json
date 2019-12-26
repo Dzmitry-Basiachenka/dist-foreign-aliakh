@@ -1,0 +1,17 @@
+[
+  {
+    "id": "35231f08-cce8-409f-8dfd-0d4067ea99a0",
+    "batchId": "56282dbc-2468-48d4-b926-93d3458a656a",
+    "wrWrkInst": 123456783,
+    "status": "NEW",
+    "productFamily": "AACL",
+    "numberOfCopies": 155,
+    "aaclUsage": {
+      "institution": "University of Chicago",
+      "usagePeriod": 201906,
+      "usageSource": "Feb 2018 TUR",
+      "numberOfPages": 1
+    },
+    "comment": "AACL usage"
+  }
+]

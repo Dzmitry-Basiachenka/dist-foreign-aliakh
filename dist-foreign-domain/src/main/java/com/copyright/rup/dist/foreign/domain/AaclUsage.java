@@ -20,7 +20,7 @@ public class AaclUsage {
     private String discipline;
     private String publicationType;
     private String institution;
-    private String usagePeriod;
+    private int usagePeriod;
     private String usageSource;
     private String rightLimitation;
     private int numberOfPages;
@@ -65,11 +65,11 @@ public class AaclUsage {
         this.institution = institution;
     }
 
-    public String getUsagePeriod() {
+    public int getUsagePeriod() {
         return usagePeriod;
     }
 
-    public void setUsagePeriod(String usagePeriod) {
+    public void setUsagePeriod(int usagePeriod) {
         this.usagePeriod = usagePeriod;
     }
 
