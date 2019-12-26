@@ -175,6 +175,16 @@ public class UsageRepositoryIntegrationTest {
         verifyFasUsage(expectedUsage, usages.get(0));
     }
 
+    @Test//TODO {aazarenka} rewrite this test after implementing logic related to select query
+    public void testInsertAaclUsages() throws IOException {
+        Usage expectedUsage = buildAaclUsage();
+        usageRepository.insertAaclUsage(expectedUsage);
+        AuditFilter filter = new AuditFilter();
+        filter.setProductFamily("AACL");
+        int count = usageRepository.findCountForAudit(filter);
+        assertEquals(1, count);
+    }
+
     @Test
     public void testFindCountByFilter() {
         assertEquals(1, usageRepository.findCountByFilter(
@@ -1484,6 +1494,12 @@ public class UsageRepositoryIntegrationTest {
 
     private Usage buildUsage() throws IOException {
         List<Usage> usages = loadExpectedUsages("json/usage.json");
+        assertEquals(1, CollectionUtils.size(usages));
+        return usages.get(0);
+    }
+
+    private Usage buildAaclUsage() throws IOException {
+        List<Usage> usages = loadExpectedUsages("json/aacl_usage.json");
         assertEquals(1, CollectionUtils.size(usages));
         return usages.get(0);
     }

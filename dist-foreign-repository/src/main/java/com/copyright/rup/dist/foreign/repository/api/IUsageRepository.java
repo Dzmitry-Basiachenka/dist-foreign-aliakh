@@ -39,6 +39,13 @@ public interface IUsageRepository {
     void insert(Usage usage);
 
     /**
+     * Inserts Usage with AACL product family into database.
+     *
+     * @param usage {@link Usage} instance
+     */
+    void insertAaclUsage(Usage usage);
+
+    /**
      * Finds list of {@link UsageDto}s by usage filter.
      *
      * @param filter   instance of {@link UsageFilter}

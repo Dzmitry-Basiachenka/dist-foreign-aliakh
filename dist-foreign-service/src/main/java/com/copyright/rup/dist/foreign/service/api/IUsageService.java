@@ -70,6 +70,15 @@ public interface IUsageService {
     List<String> insertNtsUsages(UsageBatch usageBatch);
 
     /**
+     * Inserts AACL usages.
+     *
+     * @param usageBatch usage batch
+     * @param usages     list of {@link Usage}s
+     * @return count of inserted usages
+     */
+    int insertAaclUsages(UsageBatch usageBatch, Collection<Usage> usages);
+
+    /**
      * Deletes all {@link Usage}s associated with the given {@link UsageBatch}.
      *
      * @param usageBatch {@link UsageBatch} to delete usages from

@@ -240,6 +240,25 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testInsertAaclUsages() {
+        mockStatic(RupContextUtils.class);
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setGrossAmount(new BigDecimal("12.00"));
+        usageBatch.setName("AACL product family");
+        Usage usage1 = new Usage();
+        usage1.setProductFamily("AACL");
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        usageRepository.insertAaclUsage(usage1);
+        expectLastCall().once();
+        usageAuditService.logAction(usage1.getId(), UsageActionTypeEnum.LOADED,
+            "Uploaded in 'AACL product family' Batch");
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService, RupContextUtils.class);
+        assertEquals(1, usageService.insertAaclUsages(usageBatch, Collections.singleton(usage1)));
+        verify(usageRepository, usageAuditService, RupContextUtils.class);
+    }
+
+    @Test
     public void testDeleteUsageBatchDetails() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(BATCH_ID);
