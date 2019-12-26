@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.vaadin.widget.api.IFilterController;
+
+import java.util.List;
 
 /**
  * Interface for common controller for usage filtering.
@@ -14,7 +17,16 @@ import com.copyright.rup.vaadin.widget.api.IFilterController;
 public interface ICommonUsageFilterController extends IFilterController<ICommonUsageFilterWidget> {
 
     /**
-     * @return globally selected product family.
+     * Gets globally selected product family.
+     *
+     * @return the selected product family
      */
     String getSelectedProductFamily();
+
+    /**
+     * Gets list of {@link UsageBatch}es related to selected Product Family.
+     *
+     * @return list of {@link UsageBatch}es
+     */
+    List<UsageBatch> getUsageBatches();
 }

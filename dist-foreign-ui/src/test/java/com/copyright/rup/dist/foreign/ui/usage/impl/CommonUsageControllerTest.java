@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
@@ -67,17 +68,16 @@ public class CommonUsageControllerTest {
 
     @Before
     public void setUp() {
-        controller = new TestUsageController();
         usageService = createMock(UsageService.class);
         usageBatchService = createMock(IUsageBatchService.class);
         filterController = createMock(IFasNtsUsageFilterController.class);
         scenarioService = createMock(IScenarioService.class);
         filterWidgetMock = createMock(IFasNtsUsageFilterWidget.class);
         fundPoolService = createMock(IFundPoolService.class);
+        controller = new TestUsageController(filterController);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, usageBatchService);
-        Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, fundPoolService);
         usageFilter = new UsageFilter();
@@ -201,6 +201,18 @@ public class CommonUsageControllerTest {
     }
 
     private static class TestUsageController extends CommonUsageController implements ITestUsageController {
+
+        private final ICommonUsageFilterController usageFilterController;
+
+        TestUsageController(
+            ICommonUsageFilterController usageFilterController) {
+            this.usageFilterController = usageFilterController;
+        }
+
+        @Override
+        public ICommonUsageFilterController getUsageFilterController() {
+            return usageFilterController;
+        }
 
         @Override
         public void onFilterChanged(FilterChangedEvent event) {

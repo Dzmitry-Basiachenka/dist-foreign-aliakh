@@ -15,9 +15,8 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.FasNtsUsageFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.provider.DataProvider;
@@ -58,7 +57,6 @@ import java.util.stream.IntStream;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({AaclUsageWidget.class, Windows.class, ForeignSecurityUtils.class})
-// TODO {aliakh} replace with AACL filter widget and controller
 public class AaclUsageWidgetTest {
 
     private AaclUsageWidget usagesWidget;
@@ -67,8 +65,8 @@ public class AaclUsageWidgetTest {
     @Before
     public void setUp() {
         controller = createMock(IAaclUsageController.class);
-        FasNtsUsageFilterWidget filterWidget =
-            new FasNtsUsageFilterWidget(createMock(IFasNtsUsageFilterController.class));
+        AaclUsageFilterWidget filterWidget =
+            new AaclUsageFilterWidget(createMock(IAaclUsageFilterController.class));
         filterWidget.getFilter().setUsageBatchesIds(Collections.singleton("3a070817-03ae-4ebd-b25f-dd3168a7ffb0"));
         usagesWidget = new AaclUsageWidget(controller);
         usagesWidget.setController(controller);
@@ -87,7 +85,7 @@ public class AaclUsageWidgetTest {
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget);
-        assertTrue(usagesWidget.getFirstComponent() instanceof FasNtsUsageFilterWidget);
+        assertTrue(usagesWidget.getFirstComponent() instanceof AaclUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;

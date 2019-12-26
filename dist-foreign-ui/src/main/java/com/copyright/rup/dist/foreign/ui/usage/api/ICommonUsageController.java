@@ -37,6 +37,13 @@ public interface ICommonUsageController extends IController<ICommonUsageWidget> 
         ReflectTools.findMethod(ICommonUsageController.class, "onScenarioCreated", ScenarioCreateEvent.class);
 
     /**
+     * Gets {@link ICommonUsageFilterController}.
+     *
+     * @return instance of {@link ICommonUsageFilterController}
+     */
+    ICommonUsageFilterController getUsageFilterController();
+
+    /**
      * Initializes {@link ICommonUsageFilterWidget}.
      *
      * @return initialized {@link ICommonUsageFilterWidget}

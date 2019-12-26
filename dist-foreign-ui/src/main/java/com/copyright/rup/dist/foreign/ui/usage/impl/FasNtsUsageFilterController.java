@@ -1,9 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
-import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,14 +25,7 @@ import java.util.List;
 class FasNtsUsageFilterController extends CommonUsageFilterController implements IFasNtsUsageFilterController {
 
     @Autowired
-    private IUsageBatchService usageBatchService;
-    @Autowired
     private IRightsholderService rightsholderService;
-
-    @Override
-    public List<UsageBatch> getUsageBatches() {
-        return usageBatchService.getUsageBatchesByProductFamilies(Collections.singleton(getSelectedProductFamily()));
-    }
 
     @Override
     public List<Rightsholder> getRros() {
@@ -44,7 +34,7 @@ class FasNtsUsageFilterController extends CommonUsageFilterController implements
 
     @Override
     public List<Integer> getFiscalYears() {
-        return usageBatchService.getFiscalYears(getSelectedProductFamily());
+        return getUsageBatchService().getFiscalYears(getSelectedProductFamily());
     }
 
     @Override

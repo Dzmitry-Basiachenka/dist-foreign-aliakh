@@ -17,7 +17,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.main.api.ISettableProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
-import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
@@ -56,8 +55,6 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     @Autowired
     private IUsageService usageService;
     @Autowired
-    private ICommonUsageFilterController filterController;
-    @Autowired
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private IScenarioService scenarioService;
@@ -70,7 +67,7 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
 
     @Override
     public ICommonUsageFilterWidget initUsagesFilterWidget() {
-        ICommonUsageFilterWidget result = filterController.initWidget();
+        ICommonUsageFilterWidget result = getUsageFilterController().initWidget();
         result.addListener(FilterChangedEvent.class, this, ICommonUsageController.ON_FILTER_CHANGED);
         return result;
     }
@@ -82,7 +79,7 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
 
     @Override
     public int getBeansCount() {
-        return usageService.getUsagesCount(filterController.getWidget().getAppliedFilter());
+        return usageService.getUsagesCount(getUsageFilterController().getWidget().getAppliedFilter());
     }
 
     @Override
@@ -92,8 +89,8 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return usageService
-            .getUsageDtos(filterController.getWidget().getAppliedFilter(), new Pageable(startIndex, count), sort);
+        return usageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(),
+            new Pageable(startIndex, count), sort);
     }
 
     @Override
@@ -114,8 +111,8 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     @Override
     public Scenario createScenario(String scenarioName, String description) {
         Scenario scenario = scenarioService.createScenario(scenarioName, description,
-            filterController.getWidget().getAppliedFilter());
-        filterController.getWidget().clearFilter();
+            getUsageFilterController().getWidget().getAppliedFilter());
+        getUsageFilterController().getWidget().clearFilter();
         return scenario;
     }
 
@@ -133,12 +130,12 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     @Override
     public void deleteUsageBatch(UsageBatch usageBatch) {
         usageBatchService.deleteUsageBatch(usageBatch);
-        filterController.getWidget().clearFilter();
+        getUsageFilterController().getWidget().clearFilter();
     }
 
     @Override
     public boolean isValidUsagesState(UsageStatusEnum status) {
-        return usageService.isValidUsagesState(filterController.getWidget().getAppliedFilter(), status);
+        return usageService.isValidUsagesState(getUsageFilterController().getWidget().getAppliedFilter(), status);
     }
 
     @Override
@@ -153,12 +150,12 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
 
     @Override
     public List<Long> getInvalidRightsholders() {
-        return usageService.getInvalidRightsholdersByFilter(filterController.getWidget().getAppliedFilter());
+        return usageService.getInvalidRightsholdersByFilter(getUsageFilterController().getWidget().getAppliedFilter());
     }
 
     @Override
     public void clearFilter() {
-        filterController.getWidget().clearFilter();
+        getUsageFilterController().getWidget().clearFilter();
     }
 
     @Override
@@ -200,13 +197,6 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
      */
     protected IReportService getReportService() {
         return reportService;
-    }
-
-    /**
-     * @return {@link ICommonUsageFilterController} instance.
-     */
-    protected ICommonUsageFilterController getUsageFilterController() {
-        return filterController;
     }
 
     /**
