@@ -19,7 +19,7 @@ public enum ReportMenuBuilder implements IReportMenuBuilder {
     /**
      * Report builder for FAS product family
      */
-    FAS {
+    FAS(true) {
         @Override
         public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
             new FasReportMenuBuilder().addItems(controller, widget, rootItem);
@@ -29,7 +29,7 @@ public enum ReportMenuBuilder implements IReportMenuBuilder {
     /**
      * Report builder for FAS2 product family
      */
-    FAS2 {
+    FAS2(true) {
         @Override
         public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
             new FasReportMenuBuilder().addItems(controller, widget, rootItem);
@@ -39,10 +39,35 @@ public enum ReportMenuBuilder implements IReportMenuBuilder {
     /**
      * Report builder for NTS product family
      */
-    NTS {
+    NTS(true) {
         @Override
         public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
             new NtsReportMenuBuilder().addItems(controller, widget, rootItem);
         }
+    },
+
+    /**
+     * Report builder for AACL product family
+     */
+    AACL(false) {
+        @Override
+        public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
+            // no reports for AACL product family so far
+        }
     };
+
+    private final boolean visible;
+
+    /**
+     * Constructor.
+     *
+     * @param visible visibility of report menu tab
+     */
+    ReportMenuBuilder(boolean visible) {
+        this.visible = visible;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
 }

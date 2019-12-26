@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.ui.main.api;
 
 import com.copyright.rup.vaadin.widget.api.IController;
 
+import java.util.Optional;
+
 /**
  * Provides {@link IController} instance.
  * <p>
@@ -15,7 +17,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 public interface IControllerProvider<T extends IController> {
 
     /**
-     * @return {@link IController} instance.
+     * @return optional {@link IController} instance.
      */
-    T getController();
+    Optional<T> getController();
 }
