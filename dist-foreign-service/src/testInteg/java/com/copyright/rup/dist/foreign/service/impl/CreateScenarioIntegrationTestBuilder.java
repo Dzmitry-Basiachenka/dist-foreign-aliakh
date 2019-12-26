@@ -126,7 +126,7 @@ class CreateScenarioIntegrationTestBuilder {
     class Runner {
 
         private String scenarioId;
-        private final String productFamily = usageFilter.getProductFamilies().iterator().next();
+        private final String productFamily = usageFilter.getProductFamily();
 
         Runner() {
             expectedUsages.forEach(usage -> {
@@ -153,7 +153,7 @@ class CreateScenarioIntegrationTestBuilder {
 
         private void createScenario() {
             Scenario scenario;
-            if ("NTS".equals(usageFilter.getProductFamilies().iterator().next())) {
+            if ("NTS".equals(usageFilter.getProductFamily())) {
                 scenario = scenarioService.createNtsScenario(SCENARIO_NAME, expectedScenario.getNtsFields(),
                     DESCRIPTION, usageFilter);
             } else {
@@ -191,7 +191,7 @@ class CreateScenarioIntegrationTestBuilder {
             assertEquals(scenarioId, actualUsageFilter.getScenarioId());
             assertTrue(actualUsageFilter.getRhAccountNumbers().isEmpty());
             assertEquals(usageFilter.getUsageBatchesIds(), actualUsageFilter.getUsageBatchesIds());
-            assertEquals(usageFilter.getProductFamilies().iterator().next(), actualUsageFilter.getProductFamily());
+            assertEquals(usageFilter.getProductFamily(), actualUsageFilter.getProductFamily());
             assertEquals(UsageStatusEnum.ELIGIBLE, actualUsageFilter.getUsageStatus());
             assertNull(actualUsageFilter.getPaymentDate());
             assertNull(actualUsageFilter.getFiscalYear());

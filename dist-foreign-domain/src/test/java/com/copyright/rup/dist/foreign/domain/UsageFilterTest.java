@@ -35,7 +35,7 @@ public class UsageFilterTest {
     public void testIsEmpty() {
         UsageFilter usageFilter = new UsageFilter();
         assertTrue(usageFilter.isEmpty());
-        usageFilter.setProductFamilies(Collections.singleton("FAS"));
+        usageFilter.setProductFamily("FAS");
         assertTrue(usageFilter.isEmpty());
         usageFilter.setUsageBatchesIds(Sets.newHashSet());
         assertTrue(usageFilter.isEmpty());

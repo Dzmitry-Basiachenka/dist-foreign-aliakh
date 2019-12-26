@@ -8,8 +8,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
-import com.google.common.collect.Sets;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -288,7 +286,7 @@ public class CreateScenarioIntegrationTest {
     private UsageFilter buildUsageFilter(String batchId, String productFamily) {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Collections.singleton(batchId));
-        filter.setProductFamilies(Sets.newHashSet(productFamily));
+        filter.setProductFamily(productFamily);
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         return filter;
     }

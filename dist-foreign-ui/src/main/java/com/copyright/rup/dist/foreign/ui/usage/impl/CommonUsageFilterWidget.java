@@ -14,8 +14,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-import java.util.Collections;
-
 /**
  * Common widget for filtering usages.
  * <p>
@@ -105,7 +103,7 @@ public abstract class CommonUsageFilterWidget extends VerticalLayout implements 
     private void refreshFilter() {
         refreshFilterValues();
         usageFilter = new UsageFilter();
-        usageFilter.setProductFamilies(Collections.singleton(controller.getSelectedProductFamily()));
+        usageFilter.setProductFamily(controller.getSelectedProductFamily());
     }
 
     private HorizontalLayout initButtonsLayout() {

@@ -216,7 +216,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void createScenario() {
             UsageFilter usageFilter = new UsageFilter();
             usageFilter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
-            usageFilter.setProductFamilies(Collections.singleton("NTS"));
+            usageFilter.setProductFamily("NTS");
             NtsFields ntsFields = new NtsFields();
             ntsFields.setRhMinimumAmount(new BigDecimal("300"));
             actualScenario = scenarioService.createNtsScenario("Test Scenario", ntsFields, null, usageFilter);

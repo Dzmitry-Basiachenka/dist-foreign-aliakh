@@ -446,7 +446,7 @@ public class ScenarioRepositoryIntegrationTest {
             "d8baa8e6-10fd-4c3c-8851-b1e6883e8cde", "f8f23728-75ac-4114-b910-2d7abc061217"));
         usageFilter.setRhAccountNumbers(Collections.singleton(2000017001L));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        usageFilter.setProductFamilies(Collections.singleton(NTS_PRODUCT_FAMILY));
+        usageFilter.setProductFamily(NTS_PRODUCT_FAMILY);
         usageFilter.setPaymentDate(LocalDate.of(2020, 1, 1));
         usageFilter.setFiscalYear(2020);
         return usageFilter;

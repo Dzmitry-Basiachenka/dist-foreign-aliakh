@@ -62,8 +62,7 @@ public class UsageDto extends StoredEntity<String> {
     private OffsetDateTime distributionDate;
     private LocalDate periodEndDate;
     private String comment;
-    // TODO {aliakh} remove the constructor call when repository methods are implemented
-    private AaclUsage aaclUsage = new AaclUsage();
+    private AaclUsage aaclUsage;
 
     public String getBatchName() {
         return batchName;

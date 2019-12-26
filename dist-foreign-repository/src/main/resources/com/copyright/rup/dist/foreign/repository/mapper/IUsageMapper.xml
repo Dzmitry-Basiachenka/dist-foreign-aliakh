@@ -45,6 +45,11 @@
         <result property="distributionDate" column="distribution_date"/>
         <result property="periodEndDate" column="period_end_date"/>
         <result property="comment" column="comment"/>
+        <result property="aaclUsage.institution" column="institution"/>
+        <result property="aaclUsage.usagePeriod" column="usage_period"/>
+        <result property="aaclUsage.usageSource" column="usage_source"/>
+        <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
+        <result property="aaclUsage.rightLimitation" column="right_limitation"/>
     </resultMap>
 
     <resultMap id="usageAmountResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
@@ -199,11 +204,8 @@
                     ub.rro_account_number = #{rhAccountNumber}
                 </foreach>
             </if>
-            <if test="filter.productFamilies.size() > 0">
-                and
-                <foreach collection="filter.productFamilies" item="productFamily" open="(" separator=" or " close=")">
-                    u.product_family = #{productFamily}
-                </foreach>
+            <if test="null != filter.productFamily">
+                and u.product_family = #{filter.productFamily}
             </if>
             <if test="null != filter.paymentDate">
                 and <![CDATA[ub.payment_date <= #{filter.paymentDate}]]>
@@ -497,7 +499,79 @@
     </sql>
 
     <select id="findDtosByFilter" resultMap="usageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
-        <include refid="IUsageMapper.selectDtosByFilterSql"/>
+        select
+            u.df_usage_uid,
+            u.df_scenario_uid,
+            u.wr_wrk_inst,
+            u.work_title,
+            u.system_title,
+            u.rh_account_number,
+            rh.name rh_name,
+            u.payee_account_number,
+            p.name payee_name,
+            u.status_ind,
+            u.product_family,
+            u.standard_number,
+            u.standard_number_type,
+            u.number_of_copies,
+            u.gross_amount,
+            u.service_fee_amount,
+            u.net_amount,
+            u.service_fee,
+            ub.gross_amount batch_gross_amount,
+            ub.name batch_name,
+            ub.rro_account_number,
+            rro.name rro_name,
+            ub.payment_date,
+            ub.fiscal_year,
+            u.updated_datetime,
+            u.comment,
+            <choose>
+                <when test="filter.productFamily == 'AACL'">
+                    uaacl.institution,
+                    uaacl.usage_period,
+                    uaacl.usage_source,
+                    uaacl.number_of_pages,
+                    uaacl.right_limitation
+                </when>
+                <otherwise>
+                    ufas.article,
+                    ufas.author,
+                    ufas.publisher,
+                    ufas.publication_date,
+                    ufas.market,
+                    ufas.market_period_from,
+                    ufas.market_period_to,
+                    ufas.reported_value
+                </otherwise>
+            </choose>
+        from ${schema}.df_usage u
+        <choose>
+            <when test="filter.productFamily == 'AACL'">
+                join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+            </when>
+            <otherwise>
+                join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+            </otherwise>
+        </choose>
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        <include refid="IUsageMapper.usageFilter"/>
+        and u.df_scenario_uid is null
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="IUsageMapper.chooseSortProperty">
+                    <property name="detail_uid" value="u.df_usage_uid"/>
+                </include>
+            </when>
+            <otherwise>
+                updated_datetime desc, df_usage_uid
+            </otherwise>
+        </choose>
+        <include refid="IUsageMapper.ifPageable"/>
     </select>
 
     <select id="findIdsByStatusAndProductFamily" resultType="string" parameterType="map">

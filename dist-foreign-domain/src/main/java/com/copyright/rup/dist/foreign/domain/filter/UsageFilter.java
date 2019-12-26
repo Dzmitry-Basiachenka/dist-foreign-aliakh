@@ -27,8 +27,7 @@ public class UsageFilter {
 
     private Set<Long> rhAccountNumbers = Sets.newHashSet();
     private Set<String> usageBatchesIds = Sets.newHashSet();
-    // TODO {aliakh} replace with value instead of collection
-    private Set<String> productFamilies = Sets.newHashSet();
+    private String productFamily;
     private UsageStatusEnum usageStatus;
     private LocalDate paymentDate;
     private Integer fiscalYear;
@@ -52,7 +51,7 @@ public class UsageFilter {
             setUsageStatus(filter.getUsageStatus());
             setPaymentDate(filter.getPaymentDate());
             setFiscalYear(filter.getFiscalYear());
-            setProductFamilies(filter.getProductFamilies());
+            setProductFamily(filter.getProductFamily());
         }
     }
 
@@ -68,7 +67,7 @@ public class UsageFilter {
         setUsageStatus(usageFilter.getUsageStatus());
         setPaymentDate(usageFilter.getPaymentDate());
         setFiscalYear(usageFilter.getFiscalYear());
-        setProductFamilies(Sets.newHashSet(usageFilter.getProductFamily()));
+        setProductFamily(usageFilter.getProductFamily());
     }
 
     public Set<Long> getRhAccountNumbers() {
@@ -95,12 +94,12 @@ public class UsageFilter {
         this.usageStatus = usageStatus;
     }
 
-    public Set<String> getProductFamilies() {
-        return productFamilies;
+    public String getProductFamily() {
+        return productFamily;
     }
 
-    public void setProductFamilies(Set<String> productFamilies) {
-        this.productFamilies = productFamilies;
+    public void setProductFamily(String productFamily) {
+        this.productFamily = productFamily;
     }
 
     public LocalDate getPaymentDate() {
@@ -143,7 +142,7 @@ public class UsageFilter {
             .append(this.rhAccountNumbers, that.rhAccountNumbers)
             .append(this.usageBatchesIds, that.usageBatchesIds)
             .append(this.usageStatus, that.usageStatus)
-            .append(this.productFamilies, that.productFamilies)
+            .append(this.productFamily, that.productFamily)
             .append(this.paymentDate, that.paymentDate)
             .append(this.fiscalYear, that.fiscalYear)
             .isEquals();
@@ -155,7 +154,7 @@ public class UsageFilter {
             .append(rhAccountNumbers)
             .append(usageBatchesIds)
             .append(usageStatus)
-            .append(productFamilies)
+            .append(productFamily)
             .append(paymentDate)
             .append(fiscalYear)
             .toHashCode();
@@ -167,7 +166,7 @@ public class UsageFilter {
             .append("rhAccountNumbers", rhAccountNumbers)
             .append("usageBatchesIds", usageBatchesIds)
             .append("usageStatus", usageStatus)
-            .append("productFamilies", productFamilies)
+            .append("productFamily", productFamily)
             .append("paymentDate", paymentDate)
             .append("fiscalYear", fiscalYear)
             .toString();
