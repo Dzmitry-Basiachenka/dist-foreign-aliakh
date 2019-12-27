@@ -83,7 +83,7 @@ public class NtsAuditWidget extends CommonAuditWidget implements INtsAuditWidget
                 CommonDateUtils.format(usage.getDistributionDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.distribution_date", "distributionDate", 105);
         addColumn(usage -> CommonDateUtils.format(usage.getPeriodEndDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.period_end_date", "periodEndDate", 115);
+            "table.column.period_ending", "periodEndDate", 115);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", 200);
     }
 }

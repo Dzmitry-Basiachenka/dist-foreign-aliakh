@@ -19,7 +19,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -122,7 +121,7 @@ public class WorkflowIntegrationTest {
 
     private UsageFilter buildUsageFilter() {
         UsageFilter filter = new UsageFilter();
-        filter.setProductFamilies(Collections.singleton(FAS2_PRODUCT_FAMILY));
+        filter.setProductFamily(FAS2_PRODUCT_FAMILY);
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         return filter;
     }

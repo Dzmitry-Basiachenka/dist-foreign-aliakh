@@ -343,7 +343,7 @@ public class ScenarioService implements IScenarioService {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName(scenarioName);
-        scenario.setProductFamily(usageFilter.getProductFamilies().iterator().next());
+        scenario.setProductFamily(usageFilter.getProductFamily());
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenario.setDescription(description);
         String userName = RupContextUtils.getUserName();

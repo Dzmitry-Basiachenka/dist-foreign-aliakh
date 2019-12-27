@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.domain.filter;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -28,8 +27,6 @@ import java.util.stream.Collectors;
  */
 public class ScenarioUsageFilter extends StoredEntity<String> {
 
-    private static final int ONE = 1;
-
     private String scenarioId;
     private Set<Long> rhAccountNumbers = Sets.newHashSet();
     private Set<UsageBatch> usageBatches = Sets.newHashSet();
@@ -54,13 +51,7 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
         Objects.requireNonNull(usageFilter);
         this.rhAccountNumbers = usageFilter.getRhAccountNumbers();
         setUsageBatchesIds(usageFilter.getUsageBatchesIds());
-        Objects.requireNonNull(usageFilter.getProductFamilies());
-        if (ONE == usageFilter.getProductFamilies().size()) {
-            this.productFamily = Objects.requireNonNull(usageFilter.getProductFamilies().iterator().next());
-        } else {
-            throw new RupRuntimeException("Usage filter must have only 1 product family to create scenario " +
-                "but actually is: " + usageFilter.getProductFamilies());
-        }
+        this.productFamily = Objects.requireNonNull(usageFilter.getProductFamily());
         this.usageStatus = usageFilter.getUsageStatus();
         this.paymentDate = usageFilter.getPaymentDate();
         this.fiscalYear = usageFilter.getFiscalYear();

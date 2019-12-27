@@ -44,7 +44,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -133,21 +132,21 @@ public class AaclUsageFilterWidgetTest {
         Button applyButton = getApplyButton();
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
-        assertFalse(widget.getFilter().getProductFamilies().isEmpty());
-        assertTrue(widget.getAppliedFilter().getProductFamilies().isEmpty());
+        assertEquals(AACL_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
+        assertNull(widget.getAppliedFilter().getProductFamily());
         widget.getFilter().setRhAccountNumbers(Sets.newHashSet(ACCOUNT_NUMBER));
-        widget.getFilter().setProductFamilies(Collections.singleton(AACL_PRODUCT_FAMILY));
+        widget.getFilter().setProductFamily(AACL_PRODUCT_FAMILY);
         applyButton.setEnabled(true);
         applyButton.click();
         assertFalse(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertFalse(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
-        assertFalse(widget.getFilter().getProductFamilies().isEmpty());
-        assertFalse(widget.getAppliedFilter().getProductFamilies().isEmpty());
+        assertEquals(AACL_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
+        assertEquals(AACL_PRODUCT_FAMILY, widget.getAppliedFilter().getProductFamily());
         widget.clearFilter();
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
-        assertFalse(widget.getFilter().getProductFamilies().isEmpty());
-        assertFalse(widget.getAppliedFilter().getProductFamilies().isEmpty());
+        assertEquals(AACL_PRODUCT_FAMILY, widget.getFilter().getProductFamily());
+        assertEquals(AACL_PRODUCT_FAMILY, widget.getAppliedFilter().getProductFamily());
         assertFalse(applyButton.isEnabled());
         LocalDateWidget localDateWidget = Whitebox.getInternalState(widget, "periodEndDateWidget");
         assertNull(localDateWidget.getValue());
