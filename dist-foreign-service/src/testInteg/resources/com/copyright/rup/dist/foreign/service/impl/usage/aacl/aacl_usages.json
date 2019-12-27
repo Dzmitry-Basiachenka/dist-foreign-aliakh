@@ -1,0 +1,70 @@
+[
+  {
+    "id": "2a8f16f8-f248-4036-9b84-202708b6314c",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 16245866,
+    "numberOfCopies": 10,
+    "status": "NEW",
+    "productFamily": "AACL",
+    "aaclUsage": {
+      "institution": "CORNELL UNIVERSITY",
+      "usageSource": "Feb 2019 TUR",
+      "numberOfPages": 14
+    },
+    "comment": "AACL usage Comment 1"
+  },
+  {
+    "id": "7ec7d754-6a42-4ddc-82ff-d64b941fbfac",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 16912502,
+    "numberOfCopies": 30,
+    "status": "NEW",
+    "productFamily": "AACL",
+    "aaclUsage": {
+      "institution": "WESTERN MICHIGAN UNIVERSITY",
+      "usageSource": "Aug 2018 TUR",
+      "numberOfPages": 12
+    },
+    "comment": "AACL usage Comment 2"
+  },
+  {
+    "id": "8209b316-cbdf-4e0b-87b6-f9ac2eadf851",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 16565457,
+    "numberOfCopies": 2,
+    "status": "NEW",
+    "productFamily": "AACL",
+    "aaclUsage": {
+      "institution": "UNIV. OF MICHIGAN",
+      "usageSource": "Aug 2019 TUR",
+      "numberOfPages": 7
+    },
+    "comment": "AACL usage Comment 3"
+  },
+  {
+    "id": "9922484e-6e71-413d-be2c-34aaa5afc681",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 16504064,
+    "numberOfCopies": 3,
+    "status": "NEW",
+    "productFamily": "AACL",
+    "aaclUsage": {
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2018 TUR",
+      "numberOfPages": 17
+    },
+    "comment": "AACL usage Comment 4"
+  }
+]

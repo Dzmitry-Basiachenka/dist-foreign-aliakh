@@ -45,6 +45,13 @@ public class CsvProcessorFactory {
     }
 
     /**
+     * @return instance of {@link AaclUsageCsvProcessor}.
+     */
+    public AaclUsageCsvProcessor getAaclUsageCsvProcessor() {
+        return new AaclUsageCsvProcessor();
+    }
+
+    /**
      * @return instance of {@link ResearchedUsagesCsvProcessor}.
      */
     public ResearchedUsagesCsvProcessor getResearchedUsagesCsvProcessor() {
