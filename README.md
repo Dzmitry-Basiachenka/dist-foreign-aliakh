@@ -1,3 +1,9 @@
+8.1.9
+-
+* B-55070 FDA: Modify Usage Tab View for AACL: implement repository methods and MyBatis mappings
+* B-55412 FDA: Load AACL Usage Data: implement logic for inserting batch with usages in database
+* B-56091 Tech Debt: FDA: Update dist-common version to 48.3.+
+
 8.1.8
 -
 * B-55070 FDA: Modify Usage Tab View for AACL: add AACL product family in the dropdown
