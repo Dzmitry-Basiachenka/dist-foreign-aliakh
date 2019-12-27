@@ -52,7 +52,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", true, 125);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", true, 145);
         addColumn(usage -> CommonDateUtils.format(usage.getPeriodEndDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.period_end_date", "periodEndDate", true, 115);
+            "table.column.period_end_date", "paymentDate", true, 115);
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", true, 115);
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);
@@ -61,24 +61,24 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", true,
             155);
         addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass(), "table.column.detail_licensee_class_id",
-            "aaclUsage.detailLicenseeClassId", true, 140);
+            true, 140);
         addColumn(usage -> usage.getAaclUsage().getEnrollmentProfile(), "table.column.enrollment_profile",
-            "aaclUsage.enrollmentProfile", true, 140);
-        addColumn(usage -> usage.getAaclUsage().getDiscipline(), "table.column.discipline", "aaclUsage.discipline",
+            true, 140);
+        addColumn(usage -> usage.getAaclUsage().getDiscipline(), "table.column.discipline",
             true, 140);
         addColumn(usage -> usage.getAaclUsage().getPublicationType(), "table.column.publication_type",
-            "aaclUsage.publicationType", true, 140);
-        addColumn(usage -> usage.getAaclUsage().getInstitution(), "table.column.institution", "aaclUsage.institution",
             true, 140);
-        addColumn(usage -> usage.getAaclUsage().getUsagePeriod(), "table.column.usage_period", "aaclUsage.usagePeriod",
+        addColumn(usage -> usage.getAaclUsage().getInstitution(), "table.column.institution", "institution",
             true, 140);
-        addColumn(usage -> usage.getAaclUsage().getUsageSource(), "table.column.usage_source", "aaclUsage.usageSource",
+        addColumn(usage -> usage.getAaclUsage().getUsagePeriod(), "table.column.usage_period", "usagePeriod",
+            true, 140);
+        addColumn(usage -> usage.getAaclUsage().getUsageSource(), "table.column.usage_source", "usageSource",
             true, 140);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
         addColumn(usage -> usage.getAaclUsage().getNumberOfPages(), "table.column.number_of_pages",
-            "aaclUsage.numberOfPages", true, 140);
+            "numberOfPages", true, 140);
         addColumn(usage -> usage.getAaclUsage().getRightLimitation(), "table.column.right_limitation",
-            "aaclUsage.rightLimitation", true, 200);
+            "rightLimitation", true, 200);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", true, 200);
     }
 

@@ -144,6 +144,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String USAGE_ID_34 = "ade68eac-0d79-4d23-861b-499a0c6e91d3";
+    private static final String USAGE_ID_35 = "5d422f76-7d20-4e04-bdd2-810ca930a50d";
+    private static final String USAGE_ID_36 = "6ca311bc-394e-4cd2-9e39-c944d9206ea2";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String NTS_BATCH_ID = "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa";
     private static final String NTS_SCENARIO_ID = "ca163655-8978-4a45-8fe3-c3b5572c6879";
@@ -182,10 +184,10 @@ public class UsageRepositoryIntegrationTest {
     public void testInsertAaclUsages() throws IOException {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamily("AACL");
-        assertEquals(1, usageRepository.findCountForAudit(filter));
+        assertEquals(2, usageRepository.findCountForAudit(filter));
         Usage expectedUsage = buildAaclUsage();
         usageRepository.insertAaclUsage(expectedUsage);
-        assertEquals(2, usageRepository.findCountForAudit(filter));
+        assertEquals(3, usageRepository.findCountForAudit(filter));
     }
 
     @Test
@@ -275,7 +277,7 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             AACL_PRODUCT_FAMILY, null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
-            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), "5d422f76-7d20-4e04-bdd2-810ca930a50d");
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_35, USAGE_ID_36);
     }
 
     @Test
@@ -1074,6 +1076,18 @@ public class UsageRepositoryIntegrationTest {
         verifyFindByFilterSort(filter, "author", Direction.DESC, USAGE_ID_23, USAGE_ID_24);
         verifyFindByFilterSort(filter, COMMENT_KEY, Direction.ASC, USAGE_ID_23, USAGE_ID_24);
         verifyFindByFilterSort(filter, COMMENT_KEY, Direction.DESC, USAGE_ID_24, USAGE_ID_23);
+        filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Collections.emptySet(),
+            AACL_PRODUCT_FAMILY, null, null, null);
+        verifyFindByFilterSort(filter, "institution", Direction.ASC, USAGE_ID_36, USAGE_ID_35);
+        verifyFindByFilterSort(filter, "institution", Direction.DESC, USAGE_ID_35, USAGE_ID_36);
+        verifyFindByFilterSort(filter, "usagePeriod", Direction.ASC, USAGE_ID_36, USAGE_ID_35);
+        verifyFindByFilterSort(filter, "usagePeriod", Direction.DESC, USAGE_ID_35, USAGE_ID_36);
+        verifyFindByFilterSort(filter, "usageSource", Direction.ASC, USAGE_ID_36, USAGE_ID_35);
+        verifyFindByFilterSort(filter, "usageSource", Direction.DESC, USAGE_ID_35, USAGE_ID_36);
+        verifyFindByFilterSort(filter, "numberOfPages", Direction.ASC, USAGE_ID_36, USAGE_ID_35);
+        verifyFindByFilterSort(filter, "numberOfPages", Direction.DESC, USAGE_ID_35, USAGE_ID_36);
+        verifyFindByFilterSort(filter, "rightLimitation", Direction.ASC, USAGE_ID_36, USAGE_ID_35);
+        verifyFindByFilterSort(filter, "rightLimitation", Direction.DESC, USAGE_ID_35, USAGE_ID_36);
     }
 
     @Test
