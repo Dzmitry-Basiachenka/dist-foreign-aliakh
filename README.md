@@ -1,3 +1,16 @@
+8.1.8
+-
+* B-55070 FDA: Modify Usage Tab View for AACL: add AACL product family in the dropdown
+* B-55070 FDA: Modify Usage Tab View for AACL: fix PMD rule, increase number of allowed fields
+* B-55070 FDA: Modify Usage Tab View for AACL: implement usages filter on Usage tab
+* B-55070 FDA: Modify Usage Tab View for AACL: implement usages table on Usage tab
+* B-55412 FDA: Load AACL Usage Data: implement AACL usage csv processor
+* B-55412 FDA: Load AACL Usage Data: implement liquibase script to create df_usage_aacl table
+* B-55412 FDA: Load AACL Usage Data: implement logic to insert AACL usages
+* B-55412 FDA: Load AACL Usage Data: introduce AACL batch upload window
+* B-55412 FDA: Load AACL Usage Data: introduce AACL usage domain
+* CDP-869 FDA: Exclude by Payee: There are duplicates with participating flag ‘N’ in ‘Exclude Details by Payee’ table after scenario refresh with usages with the same RH and Payee
+
 8.1.7
 -
 
