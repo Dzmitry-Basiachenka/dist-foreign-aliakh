@@ -49,7 +49,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=load-researched-usages-data-init.groovy"})
-public class LoadUsagesIntegrationTest {
+public class LoadFasUsagesIntegrationTest {
 
     private static final String USAGE_ID_1 = "0f263081-1a5d-4c76-a1ff-d9a6e1e0b694";
     private static final String USAGE_ID_2 = "5ae4880e-0955-4518-8681-2aeeda667474";

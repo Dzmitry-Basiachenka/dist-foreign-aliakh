@@ -23,7 +23,7 @@ public class AaclUsage {
     private int usagePeriod;
     private String usageSource;
     private String rightLimitation;
-    private int numberOfPages;
+    private Integer numberOfPages;
 
     public String getDetailLicenseeClass() {
         return detailLicenseeClass;
@@ -89,11 +89,11 @@ public class AaclUsage {
         this.rightLimitation = rightLimitation;
     }
 
-    public int getNumberOfPages() {
+    public Integer getNumberOfPages() {
         return numberOfPages;
     }
 
-    public void setNumberOfPages(int numberOfPages) {
+    public void setNumberOfPages(Integer numberOfPages) {
         this.numberOfPages = numberOfPages;
     }
 

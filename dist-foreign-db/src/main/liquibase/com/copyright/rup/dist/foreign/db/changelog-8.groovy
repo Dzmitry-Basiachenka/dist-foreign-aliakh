@@ -387,4 +387,14 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2019-12-27-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-55412 FDA: Load AACL Usage Data: drop not null constrains from rro_account_number and fiscal_year " +
+                "columns in df_usage_batch table")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'fiscal_year')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'rro_account_number')
+
+        rollback ""
+    }
 }

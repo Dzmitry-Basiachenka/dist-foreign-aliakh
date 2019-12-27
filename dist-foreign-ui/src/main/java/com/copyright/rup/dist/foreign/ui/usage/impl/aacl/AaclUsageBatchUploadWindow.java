@@ -1,8 +1,15 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -27,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Window for uploading AACL usage batch with usages.
@@ -70,8 +78,33 @@ public class AaclUsageBatchUploadWindow extends Window {
      */
     void onUploadClicked() {
         if (isValid()) {
-            // TODO {isuvorau} introduce upload functionality
-            close();
+            try {
+                AaclUsageCsvProcessor processor = usagesController.getCsvProcessor();
+                if (StringUtils.isNotEmpty(uploadField.getValue())) {
+                    ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
+                    if (processingResult.isSuccessful()) {
+                        int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get());
+                        close();
+                        Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
+                    } else {
+                        Windows.showModalWindow(
+                            new ErrorUploadWindow(
+                                usagesController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
+                                ForeignUi.getMessage("message.error.upload")));
+                    }
+                } else {
+                    usagesController.loadUsageBatch(buildUsageBatch(), Collections.emptyList());
+                    close();
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", 0));
+                }
+            } catch (ThresholdExceededException e) {
+                Windows.showModalWindow(
+                    new ErrorUploadWindow(
+                        usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
+                        e.getMessage() + "<br>Press Download button to see detailed list of errors"));
+            } catch (ValidationException e) {
+                Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
+            }
         } else {
             Windows.showValidationErrorWindow(Arrays.asList(usageBatchNameField, uploadField, periodEndDateField));
         }
@@ -148,15 +181,27 @@ public class AaclUsageBatchUploadWindow extends Window {
         return periodEndDateField;
     }
 
+    private UsageBatch buildUsageBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
+        usageBatch.setProductFamily(FdaConstants.AACL_PRODUCT_FAMILY);
+        usageBatch.setPaymentDate(convertYearToDate(periodEndDateField.getValue()));
+        return usageBatch;
+    }
+
     private SerializablePredicate<String> getYearValidator() {
         return value -> Integer.parseInt(value) >= MIN_YEAR && Integer.parseInt(value) <= MAX_YEAR;
     }
 
-    private static class LocalDateConverter implements Converter<String, LocalDate> {
+    private LocalDate convertYearToDate(String value) {
+        return LocalDate.of(Integer.parseInt(value), 6, 30);
+    }
+
+    private class LocalDateConverter implements Converter<String, LocalDate> {
 
         @Override
         public Result<LocalDate> convertToModel(String value, ValueContext context) {
-            return Result.ok(LocalDate.of(Integer.parseInt(value), 6, 30));
+            return Result.ok(convertYearToDate(value));
         }
 
         @Override

@@ -1,16 +1,23 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -35,7 +42,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +63,9 @@ import java.util.stream.Collectors;
 public class AaclUsageBatchUploadWindowTest {
 
     private static final String USAGE_BATCH_NAME = "BatchName";
+    private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameField";
+    private static final String PERIOD_END_DATE_FIELD = "periodEndDateField";
+
     private AaclUsageBatchUploadWindow window;
     private IAaclUsageController usagesController;
 
@@ -83,9 +96,9 @@ public class AaclUsageBatchUploadWindowTest {
         UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
         Whitebox.getInternalState(uploadField, TextField.class).setValue("test.csv");
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue(USAGE_BATCH_NAME);
+        ((TextField) Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD)).setValue(USAGE_BATCH_NAME);
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "periodEndDateField")).setValue("2010");
+        ((TextField) Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD)).setValue("2010");
         assertTrue(window.isValid());
         verify(usagesController);
     }
@@ -95,13 +108,58 @@ public class AaclUsageBatchUploadWindowTest {
         replay(usagesController);
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
-        TextField periodEndDate = Whitebox.getInternalState(window, "periodEndDateField");
+        TextField periodEndDate = Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD);
         validateField(periodEndDate, "null", binder, "Field value should be specified", false);
         validateField(periodEndDate, "a", binder, "Field value should contain numeric values only", false);
         validateField(periodEndDate, "1000", binder, "Field value should be in range from 1950 to 2099", false);
         validateField(periodEndDate, "2100", binder, "Field value should be in range from 1950 to 2099", false);
         validateField(periodEndDate, "2020", binder, null, true);
         verify(usagesController);
+    }
+
+    @Test
+    public void testOnUploadClickedFileSpecified() {
+        mockStatic(Windows.class);
+        UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile", "getValue");
+        AaclUsageCsvProcessor processor = createMock(AaclUsageCsvProcessor.class);
+        ProcessingResult<Usage> processingResult = buildCsvProcessingResult();
+        window = createPartialMock(AaclUsageBatchUploadWindow.class, "isValid");
+        Whitebox.setInternalState(window, "usagesController", usagesController);
+        Whitebox.setInternalState(window, "uploadField", uploadField);
+        Whitebox.setInternalState(window, USAGE_BATCH_NAME_FIELD, new TextField("Usage Batch Name", USAGE_BATCH_NAME));
+        Whitebox.setInternalState(window, PERIOD_END_DATE_FIELD, new TextField("Period End Date", "2019"));
+        expect(window.isValid()).andReturn(true).once();
+        expect(uploadField.getValue()).andReturn("file.csv");
+        expect(usagesController.getCsvProcessor()).andReturn(processor).once();
+        expect(processor.process(anyObject())).andReturn(processingResult).once();
+        expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get())).andReturn(1).once();
+        expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
+        Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
+        expectLastCall().once();
+        replay(window, usagesController, Windows.class, processor, uploadField);
+        window.onUploadClicked();
+        verify(window, usagesController, Windows.class, processor, uploadField);
+    }
+
+    @Test
+    public void testOnUploadClickedEmptyFile() {
+        mockStatic(Windows.class);
+        UploadField uploadField = createPartialMock(UploadField.class, "getValue");
+        AaclUsageCsvProcessor processor = createMock(AaclUsageCsvProcessor.class);
+        window = createPartialMock(AaclUsageBatchUploadWindow.class, "isValid");
+        Whitebox.setInternalState(window, "usagesController", usagesController);
+        Whitebox.setInternalState(window, "uploadField", uploadField);
+        Whitebox.setInternalState(window, USAGE_BATCH_NAME_FIELD, new TextField("Usage Batch Name", USAGE_BATCH_NAME));
+        Whitebox.setInternalState(window, PERIOD_END_DATE_FIELD, new TextField("Period End Date", "2019"));
+        expect(window.isValid()).andReturn(true).once();
+        expect(uploadField.getValue()).andReturn(null);
+        expect(usagesController.getCsvProcessor()).andReturn(processor).once();
+        expect(usagesController.loadUsageBatch(buildUsageBatch(), Collections.emptyList())).andReturn(0).once();
+        Windows.showNotificationWindow("Upload completed: 0 record(s) were stored successfully");
+        expectLastCall().once();
+        replay(window, usagesController, Windows.class, processor, uploadField);
+        window.onUploadClicked();
+        verify(window, usagesController, Windows.class, processor, uploadField);
     }
 
     private void verifyRootLayout(Component component) {
@@ -140,9 +198,9 @@ public class AaclUsageBatchUploadWindowTest {
     private void verifyLoadClickListener(Button loadButton) {
         mockStatic(Windows.class);
         Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
-            Whitebox.getInternalState(window, "usageBatchNameField"),
+            Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD),
             Whitebox.getInternalState(window, "uploadField"),
-            Whitebox.getInternalState(window, "periodEndDateField"));
+            Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD));
         Windows.showValidationErrorWindow(fields);
         expectLastCall().once();
         replay(Windows.class);
@@ -175,5 +233,23 @@ public class AaclUsageBatchUploadWindowTest {
         assertTrue(component instanceof TextField);
         assertEquals(caption, component.getCaption());
         return (TextField) component;
+    }
+
+    private UsageBatch buildUsageBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(USAGE_BATCH_NAME);
+        usageBatch.setProductFamily("AACL");
+        usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
+        return usageBatch;
+    }
+
+    private ProcessingResult<Usage> buildCsvProcessingResult() {
+        ProcessingResult<Usage> processingResult = new ProcessingResult<>();
+        try {
+            Whitebox.invokeMethod(processingResult, "addRecord", new Usage());
+        } catch (Exception e) {
+            fail();
+        }
+        return processingResult;
     }
 }

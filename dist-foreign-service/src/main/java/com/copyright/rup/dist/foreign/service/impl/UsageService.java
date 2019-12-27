@@ -60,6 +60,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -176,16 +177,16 @@ public class UsageService implements IUsageService {
         int size = usages.size();
         LOGGER.info("Insert AACL usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);
+        int period = Integer.parseInt(usageBatch.getPaymentDate().format(DateTimeFormatter.ofPattern("uuuuMM")));
         usages.forEach(usage -> {
             usage.setBatchId(usageBatch.getId());
+            usage.getAaclUsage().setUsagePeriod(period);
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             usageRepository.insertAaclUsage(usage);
         });
         String loadedReason = "Uploaded in '" + usageBatch.getName() + "' Batch";
-        usages.forEach(usage -> {
-            usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason);
-        });
+        usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason));
         LOGGER.info("Insert AACL usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}",
             usageBatch.getName(), size, userName);
         return size;

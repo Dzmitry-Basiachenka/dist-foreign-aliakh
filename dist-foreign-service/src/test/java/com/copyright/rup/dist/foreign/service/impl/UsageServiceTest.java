@@ -21,6 +21,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -65,6 +66,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -245,16 +247,18 @@ public class UsageServiceTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setGrossAmount(new BigDecimal("12.00"));
         usageBatch.setName("AACL product family");
-        Usage usage1 = new Usage();
-        usage1.setProductFamily("AACL");
+        usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
+        Usage usage = new Usage();
+        usage.setProductFamily("AACL");
+        usage.setAaclUsage(new AaclUsage());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        usageRepository.insertAaclUsage(usage1);
+        usageRepository.insertAaclUsage(usage);
         expectLastCall().once();
-        usageAuditService.logAction(usage1.getId(), UsageActionTypeEnum.LOADED,
+        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED,
             "Uploaded in 'AACL product family' Batch");
         expectLastCall().once();
         replay(usageRepository, usageAuditService, RupContextUtils.class);
-        assertEquals(1, usageService.insertAaclUsages(usageBatch, Collections.singleton(usage1)));
+        assertEquals(1, usageService.insertAaclUsages(usageBatch, Collections.singleton(usage)));
         verify(usageRepository, usageAuditService, RupContextUtils.class);
     }
 
