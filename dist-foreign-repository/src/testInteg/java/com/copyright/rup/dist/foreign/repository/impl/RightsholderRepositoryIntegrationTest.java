@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -20,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,9 +64,9 @@ public class RightsholderRepositoryIntegrationTest {
     @Test
     public void testFindAccountNumbers() {
         Set<Long> accountNumbers = rightsholderRepository.findAccountNumbers();
-        assertEquals(9, accountNumbers.size());
-        assertTrue(accountNumbers.containsAll(Lists.newArrayList(7000813806L, 2000017004L, 2000017010L,
-            1000009997L, 1000002859L, 1000005413L, 1000159997L, 7000800832L, 7001555529L)));
+        assertEquals(10, accountNumbers.size());
+        assertTrue(accountNumbers.containsAll(Arrays.asList(7000813806L, 2000017004L, 2000017010L, 1000009997L,
+            1000002859L, 1000005413L, 1000159997L, 7000800832L, 7001555529L, 2000105646L)));
     }
 
     @Test
@@ -97,13 +97,13 @@ public class RightsholderRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isNotEmpty(rros));
         assertEquals(4, rros.size());
         assertTrue(rros.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toList())
-            .containsAll(Lists.newArrayList(7000813806L, 2000017004L, 2000017010L, 7000800832L)));
+            .containsAll(Arrays.asList(7000813806L, 2000017004L, 2000017010L, 7000800832L)));
         assertTrue(rros.stream().map(Rightsholder::getId).collect(Collectors.toList())
-            .containsAll(Lists.newArrayList("05c4714b-291d-4e38-ba4a-35307434acfb",
+            .containsAll(Arrays.asList("05c4714b-291d-4e38-ba4a-35307434acfb",
                 "46754660-b627-46b9-a782-3f703b6853c7", "ff8b9ac9-5fca-4d57-b74e-26da209c1040",
                 "05c4714b-291d-4e38-ba4a-35307434acfb")));
         assertTrue(rros.stream().map(Rightsholder::getName).collect(Collectors.toList())
-            .containsAll(Lists.newArrayList(RH_NAME_7000813806, RH_NAME_2000017004,
+            .containsAll(Arrays.asList(RH_NAME_7000813806, RH_NAME_2000017004,
                 RH_NAME_2000017010, null)));
     }
 
