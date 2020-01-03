@@ -1,3 +1,10 @@
+8.1.10
+-
+* B-55070 FDA: Modify Usage Tab View for AACL: implement service methods
+* B-55412 FDA: Load AACL Usage Data: adjust logic for parsing AACL usage batch to upload columns in any order
+* B-56091 Tech Debt: FDA: adjust logic for update rightsholder job to update information about discrepancies
+* B-56091 Tech Debt: FDA: resolve issue related to duplicate fundpool name
+
 8.1.9
 -
 * B-55070 FDA: Modify Usage Tab View for AACL: implement repository methods and MyBatis mappings
