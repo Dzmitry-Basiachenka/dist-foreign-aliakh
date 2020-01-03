@@ -89,7 +89,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '3210b236-1239-4a60-9fab-888b84199321')
             column(name: 'name', value: 'Scenario name 3')
-            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'The description of scenario 3')
         }
 
@@ -110,6 +110,17 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '9600.00')
             column(name: 'net_amount', value: '20400.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy') {
+            column(name: 'df_rightsholder_discrepancy_uid', value: '7b64e8b5-9e12-4424-a4cd-7b647284d515')
+            column(name: 'df_scenario_uid', value: '3210b236-1239-4a60-9fab-888b84199321')
+            column(name: 'wr_wrk_inst', value: '180382915')
+            column(name: 'old_rh_account_number', value: '2000105646')
+            column(name: 'new_rh_account_number', value: '1000159997')
+            column(name: 'work_title', value: 'High Performance Switching and Routing')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'APPROVED')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {

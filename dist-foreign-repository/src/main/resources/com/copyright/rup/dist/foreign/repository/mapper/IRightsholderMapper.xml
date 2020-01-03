@@ -22,30 +22,33 @@
     </select>
 
     <select id="findAccountNumbers" resultType="long">
-        select
-            distinct rro_account_number account_number
+        select distinct rro_account_number
         from ${schema}.df_usage_batch
         where rro_account_number is not null
         union
-        select
-            distinct rh_account_number account_number
+        select distinct rh_account_number
         from ${schema}.df_usage
         where rh_account_number is not null
         union
-        select
-            distinct payee_account_number account_number
+        select distinct payee_account_number
         from ${schema}.df_usage
         where payee_account_number is not null
         union
-        select
-            distinct rh_account_number account_number
+        select distinct rh_account_number
         from ${schema}.df_usage_archive
         where rh_account_number is not null
         union
-        select
-            distinct payee_account_number account_number
+        select distinct payee_account_number
         from ${schema}.df_usage_archive
         where payee_account_number is not null
+        union
+        select distinct old_rh_account_number
+        from ${schema}.df_rightsholder_discrepancy
+        where old_rh_account_number is not null
+        union
+        select distinct new_rh_account_number
+        from ${schema}.df_rightsholder_discrepancy
+        where new_rh_account_number is not null
     </select>
 
     <delete id="deleteByAccountNumber" parameterType="long">
