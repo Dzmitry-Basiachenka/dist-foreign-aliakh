@@ -115,7 +115,7 @@ public class LazyRightsholderFilterWindow extends Window {
             query -> controller.loadBeans(controller.getProductFamily(), searchWidget.getSearchValue(),
                 query.getOffset(), query.getLimit(),
                 query.getSortOrders()).stream(),
-            query -> controller.getBeansCount(searchWidget.getSearchValue(), controller.getProductFamily()));
+            query -> controller.getBeansCount(controller.getProductFamily(), searchWidget.getSearchValue()));
         grid = new Grid<>(dataProvider);
         grid.setSelectionMode(SelectionMode.MULTI);
         grid.addColumn(rightsholder -> {

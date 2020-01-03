@@ -56,7 +56,7 @@ public class AuditFilterControllerTest {
     }
 
     @Test
-    public void testGetRightsholders() {
+    public void testLoadBeans() {
         List<Rightsholder> rightsholders = Collections.emptyList();
         Capture<Pageable> pageableCapture = new Capture<>();
         expect(rightsholderService.getFromUsages(
@@ -66,6 +66,14 @@ public class AuditFilterControllerTest {
         assertSame(rightsholders, controller.loadBeans(FAS_PRODUCT_FAMILY, "search", 0, 10, null));
         assertEquals(10, pageableCapture.getValue().getLimit());
         assertEquals(0, pageableCapture.getValue().getOffset());
+        verify(rightsholderService);
+    }
+
+    @Test
+    public void testGetBeansCount() {
+        expect(rightsholderService.getCountFromUsages(FAS_PRODUCT_FAMILY, "searchValue")).andReturn(10).once();
+        replay(rightsholderService);
+        assertEquals(10, controller.getBeansCount(FAS_PRODUCT_FAMILY, "searchValue"));
         verify(rightsholderService);
     }
 
