@@ -2748,5 +2748,24 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'Print')
         }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '6ca311bc-394e-4cd2-9e39-c944d9206ea2')
+            column(name: 'df_usage_batch_uid', value: 'a1d148d4-425b-4b3c-bc91-823ab04e3a9c')
+            column(name: 'wr_wrk_inst', value: '4551919')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: '20')
+            column(name: 'comment', value: 'AACL comment')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: '6ca311bc-394e-4cd2-9e39-c944d9206ea2')
+            column(name: 'institution', value: 'BIOLA UNIVERSITY')
+            column(name: 'usage_period', value: '201812')
+            column(name: 'usage_source', value: 'Aug 2018 TUR')
+            column(name: 'number_of_pages', value: '6')
+            column(name: 'right_limitation', value: 'All')
+        }
     }
 }

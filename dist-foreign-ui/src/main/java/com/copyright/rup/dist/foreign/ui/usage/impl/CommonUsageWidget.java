@@ -105,7 +105,25 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
                              boolean isHidable, double width) {
         usagesGrid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
+            .setSortable(true)
             .setSortProperty(sort)
+            .setHidable(isHidable)
+            .setWidth(width);
+    }
+
+    /**
+     * Adds column without sorting to the grid.
+     *
+     * @param provider        value provider
+     * @param captionProperty property of the column's caption
+     * @param isHidable       sets whether this column can be hidden by the user
+     * @param width           width of the column
+     */
+    protected void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, boolean isHidable,
+                             double width) {
+        usagesGrid.addColumn(provider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setSortable(false)
             .setHidable(isHidable)
             .setWidth(width);
     }
@@ -122,6 +140,7 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
                                    double width) {
         usagesGrid.addColumn(usageDto -> CurrencyUtils.format(function.apply(usageDto), null))
             .setCaption(ForeignUi.getMessage(captionProperty))
+            .setSortable(true)
             .setSortProperty(sort)
             .setHidable(true)
             .setStyleGenerator(item -> "v-align-right")
@@ -165,7 +184,6 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
         addGridColumns();
         usagesGrid.setSelectionMode(Grid.SelectionMode.NONE);
         usagesGrid.setSizeFull();
-        usagesGrid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(usagesGrid, "usages-grid");
     }
 }

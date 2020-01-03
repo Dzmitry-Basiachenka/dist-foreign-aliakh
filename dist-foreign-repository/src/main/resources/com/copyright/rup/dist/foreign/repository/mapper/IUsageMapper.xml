@@ -329,6 +329,21 @@
             <when test="sort.property == 'comment'">
                 u.comment <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'institution'">
+                uaacl.institution <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'usagePeriod'">
+                uaacl.usage_period <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'usageSource'">
+                uaacl.usage_source <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'numberOfPages'">
+                uaacl.number_of_pages <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'rightLimitation'">
+                uaacl.right_limitation <include refid="IUsageMapper.direction"/>
+            </when>
         </choose>
     </sql>
 
