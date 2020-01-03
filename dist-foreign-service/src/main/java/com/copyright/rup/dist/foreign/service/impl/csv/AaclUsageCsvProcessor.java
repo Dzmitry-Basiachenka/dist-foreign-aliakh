@@ -38,8 +38,7 @@ public class AaclUsageCsvProcessor extends DistCsvProcessor<Usage> {
 
     @Override
     public List<String> getHeadersForValidation() {
-        return Stream.of(Header.values()).map(Header::getColumnName).collect(
-            Collectors.toList());
+        return Stream.of(Header.values()).map(Header::getColumnName).collect(Collectors.toList());
     }
 
     @Override
@@ -92,42 +91,48 @@ public class AaclUsageCsvProcessor extends DistCsvProcessor<Usage> {
      * @author Ihar Suvorau
      */
     //TODO introduce common converter
-    private static class AaclUsageConverter implements IConverter<Usage> {
+    private class AaclUsageConverter implements IConverter<Usage> {
 
-        private static String getValue(String[] row, ICsvColumn header) {
-            return StringUtils.defaultIfBlank(row[header.ordinal()], null);
+        private String getValue(String[] row, ICsvColumn header, List<String> headers) {
+            return StringUtils.defaultIfBlank(row[headers.indexOf(header.getColumnName())], null);
         }
 
-        private static String getString(String[] row, ICsvColumn column) {
-            return getValue(row, column);
+        private String getString(String[] row, ICsvColumn column, List<String> headers) {
+            String value = getValue(row, column, headers);
+            return null != value ? isPositiveNumber(value) ? parseScientific(value) : value : null;
         }
 
-        private Long getLong(String[] row, ICsvColumn column) {
-            String value = getValue(row, column);
+        private Long getLong(String[] row, ICsvColumn column, List<String> headers) {
+            String value = getValue(row, column, headers);
             return null != value ? Long.valueOf(parseScientific(value)) : null;
+        }
+
+        private Integer getInteger(String[] row, ICsvColumn column, List<String> headers) {
+            return NumberUtils.createInteger(getValue(row, column, headers));
+        }
+
+        private boolean isPositiveNumber(String value) {
+            return null != value && value.matches("[1-9]\\d*(\\.\\d*[eE][+]\\d+)?");
         }
 
         private String parseScientific(String value) {
             return null != value ? new BigDecimal(value).toPlainString() : null;
         }
 
-        private Integer getInteger(String[] row, ICsvColumn column) {
-            return NumberUtils.createInteger(getValue(row, column));
-        }
-
         @Override
         public Usage convert(String... row) {
+            List<String> headers = getActualHeaders();
             Usage result = new Usage();
             result.setId(RupPersistUtils.generateUuid());
-            result.setWrWrkInst(getLong(row, Header.WR_WRK_INST));
+            result.setWrWrkInst(getLong(row, Header.WR_WRK_INST, headers));
             result.setStatus(UsageStatusEnum.NEW);
             result.setProductFamily(FdaConstants.AACL_PRODUCT_FAMILY);
-            result.setNumberOfCopies(getInteger(row, Header.NUMBER_OF_COPIES));
-            result.setComment(getString(row, Header.COMMENT));
+            result.setNumberOfCopies(getInteger(row, Header.NUMBER_OF_COPIES, headers));
+            result.setComment(getString(row, Header.COMMENT, headers));
             AaclUsage aaclUsage = new AaclUsage();
-            aaclUsage.setInstitution(getString(row, Header.INSTITUTION));
-            aaclUsage.setUsageSource(getString(row, Header.USAGE_SOURCE));
-            aaclUsage.setNumberOfPages(getInteger(row, Header.NUMBER_OF_PAGES));
+            aaclUsage.setInstitution(getString(row, Header.INSTITUTION, headers));
+            aaclUsage.setUsageSource(getString(row, Header.USAGE_SOURCE, headers));
+            aaclUsage.setNumberOfPages(getInteger(row, Header.NUMBER_OF_PAGES, headers));
             result.setAaclUsage(aaclUsage);
             return result;
         }

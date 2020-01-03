@@ -63,16 +63,12 @@ public class AaclUsageCsvProcessorIntegrationTest {
 
     @Test
     public void testProcessor() throws Exception {
-        ProcessingResult<Usage> result = processFile("aacl_usages.csv");
-        assertNotNull(result);
-        List<Usage> actualUsages = result.get();
-        List<Usage> expectedUsages = loadExpectedUsages();
-        int expectedSize = 4;
-        assertEquals(expectedSize, actualUsages.size());
-        assertEquals(expectedSize, expectedUsages.size());
-        IntStream.range(0, expectedSize).forEach(i ->
-            assertUsage(expectedUsages.get(i), actualUsages.get(i))
-        );
+        verifyProcessorResult("aacl_usages.csv");
+    }
+
+    @Test
+    public void testProcessorMixedHeaders() throws Exception {
+        verifyProcessorResult("aacl_usages_mixed_headers.csv");
     }
 
     @Test
@@ -116,6 +112,19 @@ public class AaclUsageCsvProcessorIntegrationTest {
                     "</ul>",
                 e.getHtmlMessage());
         }
+    }
+
+    private void verifyProcessorResult(String fileName) throws IOException {
+        ProcessingResult<Usage> result = processFile(fileName);
+        assertNotNull(result);
+        List<Usage> actualUsages = result.get();
+        List<Usage> expectedUsages = loadExpectedUsages();
+        int expectedSize = 4;
+        assertEquals(expectedSize, actualUsages.size());
+        assertEquals(expectedSize, expectedUsages.size());
+        IntStream.range(0, expectedSize).forEach(i ->
+            assertUsage(expectedUsages.get(i), actualUsages.get(i))
+        );
     }
 
     private ProcessingResult<Usage> processFile(String file) throws IOException {

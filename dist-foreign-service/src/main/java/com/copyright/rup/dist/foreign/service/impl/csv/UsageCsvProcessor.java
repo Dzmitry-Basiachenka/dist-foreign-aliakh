@@ -219,7 +219,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
 
         @Override
         public Usage convert(String... row) {
-            List<String> headers = UsageCsvProcessor.this.getActualHeaders();
+            List<String> headers = getActualHeaders();
             Usage result = new Usage();
             result.setId(RupPersistUtils.generateUuid());
             result.setWorkTitle(getString(row, BasicHeader.TITLE, headers));
