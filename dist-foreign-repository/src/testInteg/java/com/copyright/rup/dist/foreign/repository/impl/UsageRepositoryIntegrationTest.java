@@ -276,8 +276,12 @@ public class UsageRepositoryIntegrationTest {
     public void testFindDtosByProductFamilyAaclFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             AACL_PRODUCT_FAMILY, null, null, null);
-        verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
-            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_35, USAGE_ID_36);
+        List<UsageDto> usageDtos = usageRepository.findDtosByFilter(usageFilter, null,
+            new Sort(DETAIL_ID_KEY, Direction.ASC));
+        assertEquals(2, usageDtos.size());
+        assertEquals(LocalDate.of(2019, 2, 13), usageDtos.get(0).getPeriodEndDate());
+        assertEquals(LocalDate.of(2019, 2, 12), usageDtos.get(1).getPeriodEndDate());
+        verifyUsageDtos(usageDtos, USAGE_ID_35, USAGE_ID_36);
     }
 
     @Test
@@ -1078,6 +1082,8 @@ public class UsageRepositoryIntegrationTest {
         verifyFindByFilterSort(filter, COMMENT_KEY, Direction.DESC, USAGE_ID_24, USAGE_ID_23);
         filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Collections.emptySet(),
             AACL_PRODUCT_FAMILY, null, null, null);
+        verifyFindByFilterSort(filter, "paymentDate", Direction.ASC, USAGE_ID_36, USAGE_ID_35);
+        verifyFindByFilterSort(filter, "paymentDate", Direction.DESC, USAGE_ID_35, USAGE_ID_36);
         verifyFindByFilterSort(filter, "institution", Direction.ASC, USAGE_ID_36, USAGE_ID_35);
         verifyFindByFilterSort(filter, "institution", Direction.DESC, USAGE_ID_35, USAGE_ID_36);
         verifyFindByFilterSort(filter, "usagePeriod", Direction.ASC, USAGE_ID_36, USAGE_ID_35);

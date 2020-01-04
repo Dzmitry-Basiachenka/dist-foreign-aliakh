@@ -543,6 +543,7 @@
             u.comment,
             <choose>
                 <when test="filter.productFamily == 'AACL'">
+                    ub.payment_date as period_end_date,
                     uaacl.institution,
                     uaacl.usage_period,
                     uaacl.usage_source,
