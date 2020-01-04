@@ -60,7 +60,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -177,7 +176,7 @@ public class UsageService implements IUsageService {
         int size = usages.size();
         LOGGER.info("Insert AACL usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);
-        int period = Integer.parseInt(usageBatch.getPaymentDate().format(DateTimeFormatter.ofPattern("uuuuMM")));
+        int period = usageBatch.getPaymentDate().getYear();
         usages.forEach(usage -> {
             usage.setBatchId(usageBatch.getId());
             usage.getAaclUsage().setUsagePeriod(period);

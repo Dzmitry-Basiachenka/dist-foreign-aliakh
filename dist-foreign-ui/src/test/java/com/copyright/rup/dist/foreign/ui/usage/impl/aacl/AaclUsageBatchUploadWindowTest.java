@@ -216,8 +216,8 @@ public class AaclUsageBatchUploadWindowTest {
     }
 
     private void verifyPeriodEndDate(Component component) {
-        TextField grossAmountField = verifyTextField(component, "Period End Date");
-        assertEquals(100, grossAmountField.getWidth(), 0);
+        TextField grossAmountField = verifyTextField(component, "Distribution Period");
+        assertEquals(115, grossAmountField.getWidth(), 0);
         assertEquals(Unit.PIXELS, grossAmountField.getWidthUnits());
     }
 
