@@ -1,3 +1,14 @@
+8.1.11
+-
+* B-55070 FDA: Modify Usage Tab View for AACL: fill value of Period End Date column in Usages table
+* B-55070 FDA: Modify Usage Tab View for AACL: replace in Usage filter Period End Date date widget with Usage Period combobox widget
+* B-55412 FDA: Load AACL Usage Data: rename period field on AACL upload window, populate usage periods as a year
+* B-56091 Tech Debt: FDA: Update dist-common version to 48.4.+
+* B-56091 Tech Debt: Fix comments in CR-DIST-FOREIGN-135
+* CDP-872 FDA: Ownership Adjustment Report: It is able to run report for NTS scenarios from FAS/FAS2 product families global filter
+* CDP-873 FDA: Audit tab: Search result displays records for all product families if no any filter is applied
+* CDP-874 FDA: Audit tab: Rightsholders for all product families are displayed on 'Rightsholders' filter despite of selected product family
+
 8.1.10
 -
 * B-55070 FDA: Modify Usage Tab View for AACL: implement service methods
