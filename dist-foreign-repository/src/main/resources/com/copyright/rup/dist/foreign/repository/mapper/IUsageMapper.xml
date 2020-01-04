@@ -216,6 +216,9 @@
             <if test="null != filter.fiscalYear">
                 and <![CDATA[ub.fiscal_year <= #{filter.fiscalYear}]]>
             </if>
+            <if test="null != filter.usagePeriod">
+                and uaacl.usage_period = #{filter.usagePeriod}
+            </if>
         </where>
     </sql>
 
@@ -730,7 +733,21 @@
     </sql>
 
     <select id="findCountByFilter" parameterType="map" resultType="int">
-        <include refid="IUsageMapper.selectCountByFilterSql"/>
+        select count(1)
+        from ${schema}.df_usage u
+        <choose>
+            <when test="filter.productFamily == 'AACL'">
+                join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+            </when>
+            <otherwise>
+                join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+            </otherwise>
+        </choose>
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
+        <include refid="IUsageMapper.usageFilter"/>
+        and u.df_scenario_uid is null
     </select>
 
     <select id="findByIds" resultMap="usageResultMap">
@@ -1848,5 +1865,12 @@
         <foreach collection="usageIds" item="usageId" open="(" separator="," close=")">
             #{usageId}
         </foreach>
+    </select>
+
+    <select id="findAaclUsagePeriods" resultType="int">
+        select
+            distinct usage_period
+        from ${schema}.df_usage_aacl
+        order by usage_period
     </select>
 </mapper>

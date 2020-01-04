@@ -276,12 +276,12 @@ public class UsageRepositoryIntegrationTest {
     public void testFindDtosByProductFamilyAaclFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             AACL_PRODUCT_FAMILY, null, null, null);
+        usageFilter.setUsagePeriod(2019);
         List<UsageDto> usageDtos = usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Direction.ASC));
-        assertEquals(2, usageDtos.size());
+        assertEquals(1, usageDtos.size());
         assertEquals(LocalDate.of(2019, 2, 13), usageDtos.get(0).getPeriodEndDate());
-        assertEquals(LocalDate.of(2019, 2, 12), usageDtos.get(1).getPeriodEndDate());
-        verifyUsageDtos(usageDtos, USAGE_ID_35, USAGE_ID_36);
+        verifyUsageDtos(usageDtos, USAGE_ID_35);
     }
 
     @Test
@@ -1391,6 +1391,14 @@ public class UsageRepositoryIntegrationTest {
             new BigDecimal("106.6981818182"), SERVICE_FEE, new BigDecimal("21.1200000000"), new BigDecimal("66.00"));
         assertNtsUsageAmounts(USAGE_ID_34, new BigDecimal("11.0000000000"),
             DEFAULT_ZERO_AMOUNT, null, DEFAULT_ZERO_AMOUNT, new BigDecimal("11.00"));
+    }
+
+    @Test
+    public void testFindAaclUsagePeriods() {
+        List<Integer> usagePeriods = usageRepository.findAaclUsagePeriods();
+        assertEquals(2, usagePeriods.size());
+        assertEquals(2018, usagePeriods.get(0).longValue());
+        assertEquals(2019, usagePeriods.get(1).longValue());
     }
 
     private void assertNtsUsageAmounts(String usageId, BigDecimal grossAmount, BigDecimal netAmount,

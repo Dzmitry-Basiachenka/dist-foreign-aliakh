@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 
 import com.google.common.collect.Lists;
@@ -37,14 +38,17 @@ public class AaclUsageFilterControllerTest {
     private AaclUsageFilterController controller;
     private IProductFamilyProvider productFamilyProvider;
     private IUsageBatchService usageBatchService;
+    private IUsageService usageService;
 
     @Before
     public void setUp() {
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         usageBatchService = createMock(IUsageBatchService.class);
+        usageService = createMock(IUsageService.class);
         controller = new AaclUsageFilterController();
         Whitebox.setInternalState(controller, productFamilyProvider);
         Whitebox.setInternalState(controller, usageBatchService);
+        Whitebox.setInternalState(controller, usageService);
     }
 
     @Test
@@ -64,5 +68,14 @@ public class AaclUsageFilterControllerTest {
         assertEquals(1, CollectionUtils.size(usageBatches));
         assertEquals(usageBatch.getName(), usageBatches.iterator().next().getName());
         verify(usageBatchService, productFamilyProvider);
+    }
+
+    @Test
+    public void testGetAaclUsagePeriods() {
+        List<Integer> usagePeriods = Collections.singletonList(2020);
+        expect(usageService.getAaclUsagePeriods()).andReturn(usagePeriods).once();
+        replay(usageService);
+        assertEquals(usagePeriods, controller.getAaclUsagePeriods());
+        verify(usageService);
     }
 }

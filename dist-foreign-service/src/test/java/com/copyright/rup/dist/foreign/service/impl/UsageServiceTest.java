@@ -997,6 +997,15 @@ public class UsageServiceTest {
         verify(usageRepository, prmIntegrationService, rightsholderService, RupContextUtils.class);
     }
 
+    @Test
+    public void testGetAaclUsagePeriods() {
+        List<Integer> usagePeriods = Collections.singletonList(2020);
+        expect(usageRepository.findAaclUsagePeriods()).andReturn(usagePeriods).once();
+        replay(usageRepository);
+        assertEquals(usagePeriods, usageService.getAaclUsagePeriods());
+        verify(usageRepository);
+    }
+
     private Work buildWork(String standardNumberType) {
         Work work = new Work();
         work.setMainIdnoType(standardNumberType);

@@ -31,6 +31,7 @@ public class UsageFilter {
     private UsageStatusEnum usageStatus;
     private LocalDate paymentDate;
     private Integer fiscalYear;
+    private Integer usagePeriod;
 
     /**
      * Default constructor.
@@ -52,6 +53,7 @@ public class UsageFilter {
             setPaymentDate(filter.getPaymentDate());
             setFiscalYear(filter.getFiscalYear());
             setProductFamily(filter.getProductFamily());
+            setUsagePeriod(filter.getUsagePeriod());
         }
     }
 
@@ -118,6 +120,14 @@ public class UsageFilter {
         this.fiscalYear = fiscalYear;
     }
 
+    public Integer getUsagePeriod() {
+        return usagePeriod;
+    }
+
+    public void setUsagePeriod(Integer usagePeriod) {
+        this.usagePeriod = usagePeriod;
+    }
+
     /**
      * @return {@code true} if filter does not contain any criteria except Product Family, otherwise {@code false}.
      */
@@ -126,7 +136,8 @@ public class UsageFilter {
             && CollectionUtils.isEmpty(usageBatchesIds)
             && null == paymentDate
             && null == fiscalYear
-            && null == usageStatus;
+            && null == usageStatus
+            && null == usagePeriod;
     }
 
     @Override
@@ -145,6 +156,7 @@ public class UsageFilter {
             .append(this.productFamily, that.productFamily)
             .append(this.paymentDate, that.paymentDate)
             .append(this.fiscalYear, that.fiscalYear)
+            .append(this.usagePeriod, that.usagePeriod)
             .isEquals();
     }
 
@@ -157,6 +169,7 @@ public class UsageFilter {
             .append(productFamily)
             .append(paymentDate)
             .append(fiscalYear)
+            .append(usagePeriod)
             .toHashCode();
     }
 
@@ -169,6 +182,7 @@ public class UsageFilter {
             .append("productFamily", productFamily)
             .append("paymentDate", paymentDate)
             .append("fiscalYear", fiscalYear)
+            .append("usagePeriod", usagePeriod)
             .toString();
     }
 }
