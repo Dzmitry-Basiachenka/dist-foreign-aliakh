@@ -22,7 +22,6 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import com.vaadin.util.ReflectTools;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
@@ -112,10 +111,9 @@ public class LazyRightsholderFilterWindow extends Window {
 
     private Panel initItemsPanel() {
         dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
-            query -> controller.loadBeans(controller.getProductFamily(), searchWidget.getSearchValue(),
-                query.getOffset(), query.getLimit(),
-                query.getSortOrders()).stream(),
-            query -> controller.getBeansCount(controller.getProductFamily(), searchWidget.getSearchValue()));
+            query -> controller.loadBeans(controller.getProductFamily(), getSearchValue(),
+                query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
+            query -> controller.getBeansCount(controller.getProductFamily(), getSearchValue()));
         grid = new Grid<>(dataProvider);
         grid.setSelectionMode(SelectionMode.MULTI);
         grid.addColumn(rightsholder -> {
@@ -131,6 +129,10 @@ public class LazyRightsholderFilterWindow extends Window {
         panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
         panel.setSizeFull();
         return panel;
+    }
+
+    private String getSearchValue() {
+        return StringUtils.defaultIfBlank(searchWidget.getSearchValue(), null);
     }
 
     /**

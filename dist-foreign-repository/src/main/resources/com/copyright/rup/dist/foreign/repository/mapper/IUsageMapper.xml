@@ -385,8 +385,8 @@
     </sql>
 
     <sql id="searchWhereClause">
-        r.name ilike '%' || #{searchValue} || '%' or
-        cast(u.rh_account_number as text) like '%' || #{searchValue} || '%'
+        (r.name ilike '%' || #{searchValue} || '%' or
+        cast(u.rh_account_number as text) like '%' || #{searchValue} || '%')
     </sql>
 
     <sql id="drillDownSearchWhereClause">
