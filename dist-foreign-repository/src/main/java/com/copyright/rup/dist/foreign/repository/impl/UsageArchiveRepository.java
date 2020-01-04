@@ -6,7 +6,6 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -14,9 +13,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
-import com.copyright.rup.dist.foreign.repository.impl.csv.FasScenarioUsagesCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.NtsScenarioUsagesCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
@@ -24,7 +20,6 @@ import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
-import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -100,39 +95,6 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         return selectOne("IUsageArchiveMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
-    }
-
-    @Override
-    public void writeFasScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
-        Objects.requireNonNull(pipedOutputStream);
-        try (FasScenarioUsagesCsvReportHandler handler = new FasScenarioUsagesCsvReportHandler(pipedOutputStream)) {
-            if (Objects.nonNull(scenarioId)) {
-                getTemplate().select("IUsageArchiveMapper.findDtoByScenarioId", scenarioId, handler);
-            }
-        }
-    }
-
-    @Override
-    public void writeNtsScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
-        Objects.requireNonNull(pipedOutputStream);
-        try (NtsScenarioUsagesCsvReportHandler handler = new NtsScenarioUsagesCsvReportHandler(pipedOutputStream)) {
-            if (Objects.nonNull(scenarioId)) {
-                getTemplate().select("IUsageArchiveMapper.findDtoByScenarioId", scenarioId, handler);
-            }
-        }
-    }
-
-    @Override
-    public void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
-        Objects.requireNonNull(pipedOutputStream);
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SORT_KEY, new Sort("rightsholder.accountNumber", Direction.ASC));
-        try (ScenarioRightsholderTotalsCsvReportHandler handler
-                 = new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
-            getTemplate().select("IUsageArchiveMapper.findRightsholderTotalsHoldersByScenarioId",
-                parameters, handler);
-        }
     }
 
     @Override

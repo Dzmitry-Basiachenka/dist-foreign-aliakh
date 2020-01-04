@@ -70,7 +70,7 @@ public class CsvReportsIntegrationTest {
             "02a09322-5f0f-4cae-888c-73127050dc98", "d016d9c2-5460-41bf-837c-8598cf00b654"));
         auditFilter.setProductFamily("FAS");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(auditFilter, outputStream),
-            "audit_usages_fas_report.csv");
+            "audit_usages_report_fas.csv");
     }
 
     @Test
@@ -80,7 +80,7 @@ public class CsvReportsIntegrationTest {
             Sets.newHashSet("034873b3-97fa-475a-9a2a-191e8ec988b3", "acae006c-a4fe-45f0-a0cc-098e12db00c5"));
         auditFilter.setProductFamily("FAS2");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(auditFilter, outputStream),
-            "audit_usages_fas2_report.csv");
+            "audit_usages_report_fas2.csv");
     }
 
     @Test
@@ -90,7 +90,7 @@ public class CsvReportsIntegrationTest {
             Sets.newHashSet("0c0a379a-461c-4e84-8062-326ece3c1f65", "f20ac1a3-eee4-4027-b5fb-def9adf0f871"));
         auditFilter.setProductFamily("NTS");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditNtsCsvReport(auditFilter, outputStream),
-            "audit_usages_nts_report.csv");
+            "audit_usages_report_nts.csv");
     }
 
     @Test
@@ -155,13 +155,13 @@ public class CsvReportsIntegrationTest {
         usageFilter.setUsageBatchesIds(Sets.newHashSet("4c9cc089-b812-42cf-a5d2-1f5eda51fa76",
             "02a09322-5f0f-4cae-888c-73127050dc98"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeFasUsageCsvReport(usageFilter, outputStream),
-            "fas_usages_report.csv");
+            "usages_report_fas.csv");
     }
 
     @Test
     public void testWriteFasUsagesEmptyCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
-            reportRepository.writeFasUsageCsvReport(new UsageFilter(), outputStream), "fas_usages_report_empty.csv");
+            reportRepository.writeFasUsageCsvReport(new UsageFilter(), outputStream), "usages_report_fas_empty.csv");
     }
 
     @Test
@@ -170,27 +170,41 @@ public class CsvReportsIntegrationTest {
         usageFilter.setUsageBatchesIds(Sets.newHashSet("f20ac1a3-eee4-4027-b5fb-def9adf0f871",
             "c0c07d51-2216-43c3-b61b-b904d86ec36a"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeNtsUsageCsvReport(usageFilter, outputStream),
-            "nts_usages_report.csv");
+            "usages_report_nts.csv");
     }
 
     @Test
     public void testWriteNtsUsagesEmptyCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
-            reportRepository.writeNtsUsageCsvReport(new UsageFilter(), outputStream), "nts_usages_report_empty.csv");
+            reportRepository.writeNtsUsageCsvReport(new UsageFilter(), outputStream), "usages_report_nts_empty.csv");
     }
 
     @Test
     public void testWriteFasScenarioUsagesCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeFasScenarioUsagesCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",
-                outputStream), "scenario_fas_usages_report.csv");
+                outputStream), "scenario_usages_report_fas.csv");
+    }
+
+    @Test
+    public void testWriteArchivedFasScenarioUsagesCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeArchivedFasScenarioUsagesCsvReport("ff47dee9-327a-4ff6-b170-d89f5190ccd8",
+                outputStream), "archived_scenario_usages_report_fas.csv");
     }
 
     @Test
     public void testWriteNtsScenarioUsagesCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeNtsScenarioUsagesCsvReport("85ba864e-1939-4a60-9fab-888b84199321",
-                outputStream), "scenario_nts_usages_report.csv");
+                outputStream), "scenario_usages_report_nts.csv");
+    }
+
+    @Test
+    public void testWriteArchivedNtsScenarioUsagesCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeArchivedNtsScenarioUsagesCsvReport("1ead8a3e-1231-43a5-a3c5-ed766abe5a2f",
+                outputStream), "archive_scenario_usages_report_nts.csv");
     }
 
     @Test
@@ -198,6 +212,13 @@ public class CsvReportsIntegrationTest {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeScenarioRightsholderTotalsCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",
                 outputStream), "scenario_rightsholder_totals_report.csv");
+    }
+
+    @Test
+    public void testExportArchivedScenarioRightsholderTotalsCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeArchivedScenarioRightsholderTotalsCsvReport("ff47dee9-327a-4ff6-b170-d89f5190ccd8",
+                outputStream), "archive_scenario_rightsholder_totals_report_fas.csv");
     }
 
     @Test
@@ -243,13 +264,13 @@ public class CsvReportsIntegrationTest {
     @Test
     public void testWriteFasBatchSummaryCsvReport() throws IOException {
         assertFiles(outputStream ->
-            reportRepository.writeFasBatchSummaryCsvReport(outputStream), "fas_batch_summary_report.csv");
+            reportRepository.writeFasBatchSummaryCsvReport(outputStream), "batch_summary_report_fas.csv");
     }
 
     @Test
     public void testWriteNtsWithdrawnBatchSummaryCsvReport() throws IOException {
         assertFiles(outputStream -> reportRepository.writeNtsWithdrawnBatchSummaryCsvReport(outputStream),
-            "nts_withdrawn_batch_summary_report.csv");
+            "withdrawn_batch_summary_report_nts.csv");
     }
 
     @Test
@@ -263,7 +284,7 @@ public class CsvReportsIntegrationTest {
     public void testWriteServiceFeeTrueUpCsvEmptyReport() throws IOException {
         assertFiles(outputStream -> reportRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2013, 1, 1),
             LocalDate.of(2012, 1, 1), LocalDate.of(2014, 5, 5), outputStream, 2000017000L,
-            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_empty_report.csv");
+            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report_empty.csv");
     }
 
     @Test

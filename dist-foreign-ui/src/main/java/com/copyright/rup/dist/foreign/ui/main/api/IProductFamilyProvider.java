@@ -15,4 +15,11 @@ public interface IProductFamilyProvider {
      * @return selected product family.
      */
     String getSelectedProductFamily();
+
+    /**
+     * Sets product family selection.
+     *
+     * @param productFamily product family
+     */
+    void setProductFamily(String productFamily);
 }

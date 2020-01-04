@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
-import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -84,33 +83,6 @@ public interface IUsageArchiveRepository {
      * @return count of usage details
      */
     int findCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue);
-
-    /**
-     * Finds usages by FAS scenario id and writes them into the output stream in CSV format.
-     *
-     * @param scenarioId        scenario id
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
-     */
-    // TODO {srudak} move to IReportRepository
-    void writeFasScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
-
-    /**
-     * Finds usages by NTS scenario id and writes them into the output stream in CSV format.
-     *
-     * @param scenarioId        scenario id
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
-     */
-    // TODO {srudak} move to IReportRepository
-    void writeNtsScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
-
-    /**
-     * Finds {@link RightsholderTotalsHolder}s based on scenario id and writes them to the output stream in CSV format.
-     *
-     * @param scenarioId        scenario id
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
-     */
-    // TODO {srudak} move to IReportRepository
-    void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
      * Updates paid information for {@link PaidUsage} by id.

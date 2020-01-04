@@ -14,22 +14,22 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
-import com.copyright.rup.dist.foreign.repository.impl.csv.AuditFasCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.AuditNtsCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.FasBatchSummaryReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.FasScenarioUsagesCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.FasUsageCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.NtsScenarioUsagesCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.NtsUsageCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.NtsWithdrawnBatchSummaryReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.OwnershipAdjustmentReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.ResearchStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.SendForResearchCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.ServiceFeeTrueUpReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.SummaryMarketReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.UndistributedLiabilitiesReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.WorkClassificationCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.AuditFasCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasBatchSummaryReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasScenarioUsagesCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasUsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.OwnershipAdjustmentReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.ResearchStatusReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.SendForResearchCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.ServiceFeeTrueUpReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.SummaryMarketReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.UndistributedLiabilitiesReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.nts.AuditNtsCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsScenarioUsagesCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchSummaryReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -148,12 +148,32 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     }
 
     @Override
+    public void writeArchivedFasScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        writeCsvReportByParts("IReportMapper.findArchivedScenarioUsageDtosCount",
+            "IReportMapper.findArchivedScenarioUsageReportDtos", parameters,
+            () -> new FasScenarioUsagesCsvReportHandler(pipedOutputStream));
+    }
+
+    @Override
     public void writeNtsScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         writeCsvReportByParts("IReportMapper.findScenarioUsageDtosCount", "IReportMapper.findScenarioUsageReportDtos",
             parameters, () -> new NtsScenarioUsagesCsvReportHandler(pipedOutputStream));
+    }
+
+    @Override
+    public void writeArchivedNtsScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        writeCsvReportByParts("IReportMapper.findArchivedScenarioUsageDtosCount",
+            "IReportMapper.findArchivedScenarioUsageReportDtos", parameters,
+            () -> new NtsScenarioUsagesCsvReportHandler(pipedOutputStream));
     }
 
     @Override
@@ -165,6 +185,19 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         try (ScenarioRightsholderTotalsCsvReportHandler handler
                  = new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
             getTemplate().select("IReportMapper.findRightsholderTotalsHoldersReportDtos", parameters, handler);
+        }
+    }
+
+    @Override
+    public void writeArchivedScenarioRightsholderTotalsCsvReport(String scenarioId,
+                                                                 PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put("sort", new Sort("rightsholder.accountNumber", Direction.ASC));
+        try (ScenarioRightsholderTotalsCsvReportHandler handler
+                 = new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
+            getTemplate().select("IReportMapper.findArchivedRightsholderTotalsHoldersReportDtos", parameters, handler);
         }
     }
 

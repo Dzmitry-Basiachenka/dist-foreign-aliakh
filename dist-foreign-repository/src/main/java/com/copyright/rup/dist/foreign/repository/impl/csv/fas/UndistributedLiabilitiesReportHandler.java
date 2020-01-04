@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.repository.impl.csv;
+package com.copyright.rup.dist.foreign.repository.impl.csv.fas;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;

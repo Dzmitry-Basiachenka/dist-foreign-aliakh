@@ -29,9 +29,9 @@ public class MainWidget extends TabSheet implements IMainWidget {
 
     private IMainWidgetController controller;
 
-    private SwitchableWidget<? extends ICommonUsageWidget, ? extends ICommonUsageController> usagesWidget;
-    private SwitchableWidget<? extends ICommonScenariosWidget, ? extends ICommonScenariosController> scenariosWidget;
-    private SwitchableWidget<? extends ICommonAuditWidget, ? extends ICommonAuditController> auditWidget;
+    private SwitchableWidget<ICommonUsageWidget, ICommonUsageController> usagesWidget;
+    private SwitchableWidget<ICommonScenariosWidget, ICommonScenariosController> scenariosWidget;
+    private SwitchableWidget<ICommonAuditWidget, ICommonAuditController> auditWidget;
 
     private Tab usagesTab;
     private Tab scenarioTab;
@@ -44,10 +44,8 @@ public class MainWidget extends TabSheet implements IMainWidget {
         usagesWidget = new SwitchableWidget<>(controller.getUsagesControllerProvider(),
             widget -> widget.addListener(ScenarioCreateEvent.class,
                 controller, IMainWidgetController.ON_SCENARIO_CREATED));
-        scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {
-        });
-        auditWidget = new SwitchableWidget<>(controller.getAuditControllerProvider(), widget -> {
-        });
+        scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {});
+        auditWidget = new SwitchableWidget<>(controller.getAuditControllerProvider(), widget -> {});
         usagesTab = addTab(usagesWidget, ForeignUi.getMessage("tab.usages"));
         scenarioTab = addTab(scenariosWidget, ForeignUi.getMessage("tab.scenario"));
         auditTab = addTab(auditWidget, ForeignUi.getMessage("tab.audit"));

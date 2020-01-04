@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.repository.impl.csv;
+package com.copyright.rup.dist.foreign.repository.impl.csv.nts;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -17,12 +17,12 @@ import java.util.List;
  *
  * @author Anton Azarenka
  */
-public class AuditFasCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
+public class AuditNtsCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Detail Status", "Product Family",
         "Usage Batch Name", "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name",
         "Wr Wrk Inst", "System Title", "Title", "Standard Number", "Standard Number Type", "Reported Value",
-        "Amt in USD", "Batch Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID",
+        "Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID",
         "Dist. Name", "Dist. Date", "Period Ending", "Comment");
 
     /**
@@ -30,7 +30,7 @@ public class AuditFasCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
      *
      * @param outputStream {@link OutputStream} instance
      */
-    public AuditFasCsvReportHandler(OutputStream outputStream) {
+    public AuditNtsCsvReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 
@@ -53,7 +53,6 @@ public class AuditFasCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getStandardNumberType());
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getReportedValue()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
-        beanProperties.add(getBeanPropertyAsString(bean.getBatchGrossAmount()));
         beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
         beanProperties.add(bean.getScenarioName());
         beanProperties.add(bean.getCheckNumber());

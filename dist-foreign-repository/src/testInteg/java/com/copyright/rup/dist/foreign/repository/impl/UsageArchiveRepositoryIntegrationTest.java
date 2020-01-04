@@ -36,8 +36,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -45,8 +43,6 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * Integration test for {@link UsageArchiveRepository}.
@@ -93,11 +89,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final String PAID_USAGE_ID = "3f8ce825-6514-4307-a118-3ec89187bef3";
     private static final String ARCHIVED_USAGE_ID = "5f90f7d7-566f-402a-975b-d54466862704";
     private static final String LM_DETAIL_ID = "5963a9c2-b639-468c-a4c1-02101a4597c6";
-    private static final String PATH_TO_EXPECTED_REPORTS =
-        "src/testInteg/resources/com/copyright/rup/dist/foreign/repository/impl/csv";
-    private static final Executor EXECUTOR = Executors.newSingleThreadExecutor();
 
-    private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_EXPECTED_REPORTS);
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
@@ -266,33 +258,6 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(1, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "IEEE"));
         assertEquals(0, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "%"));
         assertEquals(0, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "_"));
-    }
-
-    @Test
-    // TODO {pliakh} move to CsvReportsIntegrationTest
-    public void testWriteFasScenarioUsagesCsvReport() throws Exception {
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream(pos);
-        EXECUTOR.execute(() -> usageArchiveRepository.writeFasScenarioUsagesCsvReport(SCENARIO_ID, pos));
-        reportTestUtils.assertCsvReport("archive_scenario_fas_usages_report.csv", pis);
-    }
-
-    @Test
-    // TODO {srudak} move to CsvReportsIntegrationTest
-    public void testWriteNtsScenarioUsagesCsvReport() throws Exception {
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream(pos);
-        EXECUTOR.execute(
-            () -> usageArchiveRepository.writeNtsScenarioUsagesCsvReport("e19570d3-e9a0-4805-90ed-bd5dbcfcf803", pos));
-        reportTestUtils.assertCsvReport("archive_scenario_nts_usages_report.csv", pis);
-    }
-
-    @Test
-    public void testExportScenarioRightsholderTotalsCsvReport() throws IOException {
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream(pos);
-        EXECUTOR.execute(() -> usageArchiveRepository.writeScenarioRightsholderTotalsCsvReport(SCENARIO_ID, pos));
-        reportTestUtils.assertCsvReport("archive_scenario_rightsholder_totals_report.csv", pis);
     }
 
     @Test

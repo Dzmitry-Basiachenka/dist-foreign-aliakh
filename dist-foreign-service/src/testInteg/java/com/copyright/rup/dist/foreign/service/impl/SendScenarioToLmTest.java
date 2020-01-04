@@ -109,7 +109,7 @@ public class SendScenarioToLmTest {
     }
 
     private List<UsageDto> findUsageDtos(String scenarioId) {
-        return sqlSessionTemplate.selectList("IUsageArchiveMapper.findDtoByScenarioId", scenarioId);
+        return sqlSessionTemplate.selectList("IReportMapper.findArchivedScenarioUsageReportDtos", scenarioId);
     }
 
     private void assertUsageDto(UsageDto expected, UsageDto actual, boolean isFas) {
@@ -118,9 +118,8 @@ public class SendScenarioToLmTest {
         }
         assertEquals(expected.getBatchName(), actual.getBatchName());
         assertEquals(expected.getFiscalYear(), actual.getFiscalYear());
-        assertEquals(expected.getRroName(), actual.getRroName());
         assertEquals(expected.getRroAccountNumber(), actual.getRroAccountNumber());
-        assertEquals(expected.getPayeeName(), actual.getPayeeName());
+        assertEquals(expected.getRroName(), actual.getRroName());
         assertEquals(expected.getWrWrkInst(), actual.getWrWrkInst());
         assertEquals(expected.getSystemTitle(), actual.getSystemTitle());
         assertEquals(expected.getWorkTitle(), actual.getWorkTitle());
