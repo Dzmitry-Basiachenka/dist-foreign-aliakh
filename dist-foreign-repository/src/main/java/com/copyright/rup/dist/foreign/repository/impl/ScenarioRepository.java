@@ -63,8 +63,8 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
-    public List<Scenario> findAll() {
-        return selectList("IScenarioMapper.findAll");
+    public List<Scenario> findByProductFamily(String productFamily) {
+        return selectList("IScenarioMapper.findByProductFamily", Objects.requireNonNull(productFamily));
     }
 
     @Override

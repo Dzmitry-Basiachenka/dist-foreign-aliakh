@@ -44,7 +44,7 @@ public interface IScenarioRepository {
     void refresh(Scenario scenario);
 
     /**
-     * Gets {@link Scenario}s count with specified name.
+     * Finds {@link Scenario}s count with specified name.
      *
      * @param name {@link Scenario} name
      * @return count of found {@link Scenario}s
@@ -52,9 +52,12 @@ public interface IScenarioRepository {
     int findCountByName(String name);
 
     /**
-     * @return list of all {@link Scenario}s.
+     * Finds list of {@link Scenario}s by product family.
+     *
+     * @param productFamily product family
+     * @return list of {@link Scenario}s
      */
-    List<Scenario> findAll();
+    List<Scenario> findByProductFamily(String productFamily);
 
     /**
      * Finds {@link Scenario}s names associated with any of usages from selected usage batch.

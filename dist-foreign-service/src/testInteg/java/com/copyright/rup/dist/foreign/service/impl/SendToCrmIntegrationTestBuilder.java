@@ -56,6 +56,12 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
     private String expectedCrmRequest;
     private String crmResponse;
     private JobInfo expectedJobInfo;
+    private String productFamily;
+
+    SendToCrmIntegrationTestBuilder withProductFamily(String scenarioProductFamily) {
+        this.productFamily = scenarioProductFamily;
+        return this;
+    }
 
     SendToCrmIntegrationTestBuilder expectUsageStatus(Map<String, UsageStatusEnum> usageIdToStatusMap) {
         usageIdToExpectedStatus = usageIdToStatusMap;
@@ -134,7 +140,7 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
 
         private void verifyScenarios() {
             scenarioIdToExpectedStatus.forEach((scenarioId, expectedStatus) -> {
-                Scenario actualScenario = scenarioService.getScenarios().stream()
+                Scenario actualScenario = scenarioService.getScenarios(productFamily).stream()
                     .filter(scenario -> Objects.equals(scenarioId, scenario.getId()))
                     .findFirst()
                     .orElseThrow(
@@ -144,9 +150,8 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void verifyUsageAudit() {
-            usageIdToExpectedAudit.forEach((usageId, expectedAuditItems) -> {
-                testHelper.assertAudit(usageId, expectedAuditItems);
-            });
+            usageIdToExpectedAudit.forEach(
+                (usageId, expectedAuditItems) -> testHelper.assertAudit(usageId, expectedAuditItems));
         }
 
         private void verifyScenarioAudit() {

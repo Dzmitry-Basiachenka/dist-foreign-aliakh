@@ -22,9 +22,12 @@ import java.util.List;
 public interface IScenarioService {
 
     /**
-     * @return list of {@link Scenario}s.
+     * Gets list of {@link Scenario}s by product family.
+     *
+     * @param productFamily product family
+     * @return list of {@link Scenario}s
      */
-    List<Scenario> getScenarios();
+    List<Scenario> getScenarios(String productFamily);
 
     /**
      * Checks whether {@link Scenario} with specified name already exists in database.

@@ -235,7 +235,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void assertScenario() {
-            actualScenario = scenarioService.getScenarios().stream()
+            actualScenario = scenarioService.getScenarios("NTS").stream()
                 .filter(scenario -> actualScenario.getId().equals(scenario.getId()))
                 .findAny().get();
             assertNotNull(actualScenario);

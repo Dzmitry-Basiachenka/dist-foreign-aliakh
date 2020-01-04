@@ -95,8 +95,8 @@ public class ScenarioService implements IScenarioService {
     private IRightsholderService rightsholderService;
 
     @Override
-    public List<Scenario> getScenarios() {
-        return scenarioRepository.findAll();
+    public List<Scenario> getScenarios(String productFamily) {
+        return scenarioRepository.findByProductFamily(productFamily);
     }
 
     @Override
