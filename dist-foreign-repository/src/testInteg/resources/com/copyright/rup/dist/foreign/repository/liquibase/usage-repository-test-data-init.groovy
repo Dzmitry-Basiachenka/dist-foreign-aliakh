@@ -2723,9 +2723,18 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'a1d148d4-425b-4b3c-bc91-823ab04e3a9c')
-            column(name: 'name', value: 'AACL batch')
+            column(name: 'name', value: 'AACL batch 1')
             column(name: 'rro_account_number', value: '2000017000')
             column(name: 'payment_date', value: '2019-02-13')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'fiscal_year', value: '2019')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'bf9f9ae3-04b6-47ea-b08e-24699aa21255')
+            column(name: 'name', value: 'AACL batch 2')
+            column(name: 'rro_account_number', value: '2000017000')
+            column(name: 'payment_date', value: '2019-02-12')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2019')
         }
@@ -2751,7 +2760,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '6ca311bc-394e-4cd2-9e39-c944d9206ea2')
-            column(name: 'df_usage_batch_uid', value: 'a1d148d4-425b-4b3c-bc91-823ab04e3a9c')
+            column(name: 'df_usage_batch_uid', value: 'bf9f9ae3-04b6-47ea-b08e-24699aa21255')
             column(name: 'wr_wrk_inst', value: '4551919')
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'AACL')
