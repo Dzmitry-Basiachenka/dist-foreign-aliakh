@@ -14,6 +14,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 
 import com.vaadin.data.provider.ListDataProvider;
@@ -50,20 +51,23 @@ public class OwnershipAdjustmentReportWidgetTest {
     public void testInit() {
         OwnershipAdjustmentReportController controller = new OwnershipAdjustmentReportController();
         IScenarioService scenarioService = createMock(IScenarioService.class);
+        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName("Test scenario name");
-        expect(scenarioService.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         Whitebox.setInternalState(controller, scenarioService);
+        Whitebox.setInternalState(controller, productFamilyProvider);
         IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn("FAS").once();
+        expect(scenarioService.getScenarios("FAS")).andReturn(Collections.singletonList(scenario)).once();
         expect(streamSource.getSource()).andReturn(
             new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         IStreamSourceHandler streamSourceHandler = createMock(IStreamSourceHandler.class);
         expect(streamSourceHandler.getCsvStreamSource(anyObject(), anyObject())).andReturn(streamSource).once();
         Whitebox.setInternalState(controller, streamSourceHandler);
-        replay(scenarioService, streamSourceHandler, streamSource);
+        replay(scenarioService, streamSourceHandler, streamSource, productFamilyProvider);
         OwnershipAdjustmentReportWidget widget = (OwnershipAdjustmentReportWidget) controller.initWidget();
-        verify(scenarioService, streamSourceHandler, streamSource);
+        verify(scenarioService, streamSourceHandler, streamSource, productFamilyProvider);
         verifySize(widget);
         verifyContent(widget.getContent(), scenario);
     }

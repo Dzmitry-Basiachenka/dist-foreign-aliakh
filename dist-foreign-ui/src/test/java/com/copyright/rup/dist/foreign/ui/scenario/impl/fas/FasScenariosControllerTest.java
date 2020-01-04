@@ -29,6 +29,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosWidget;
@@ -72,6 +73,7 @@ public class FasScenariosControllerTest {
 
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String SCENARIO_NAME = "Scenario name";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private FasScenariosController scenariosController;
     private IUsageService usageService;
     private IScenarioService scenarioService;
@@ -79,11 +81,13 @@ public class FasScenariosControllerTest {
     private Scenario scenario;
     private IFasScenariosWidget scenariosWidget;
     private IFasScenarioWidget scenarioWidget;
+    private IProductFamilyProvider productFamilyProvider;
 
     @Before
     public void setUp() {
         usageService = createMock(IUsageService.class);
         scenarioService = createMock(IScenarioService.class);
+        productFamilyProvider = createMock(IProductFamilyProvider.class);
         scenariosController = new FasScenariosController();
         buildScenario();
         scenarioController = createMock(FasScenarioController.class);
@@ -97,6 +101,7 @@ public class FasScenariosControllerTest {
         scenariosController.initActionHandlers();
         Whitebox.setInternalState(scenariosController, "usageService", usageService);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
+        Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
         verify(SecurityUtils.class);
     }
 
@@ -107,10 +112,11 @@ public class FasScenariosControllerTest {
 
     @Test
     public void testGetScenarios() {
-        expect(scenarioService.getScenarios()).andReturn(Collections.emptyList()).once();
-        replay(scenarioService);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(scenarioService.getScenarios(FAS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
+        replay(scenarioService, productFamilyProvider);
         assertEquals(Collections.emptyList(), scenariosController.getScenarios());
-        verify(scenarioService);
+        verify(scenarioService, productFamilyProvider);
     }
 
     @Test
@@ -318,7 +324,7 @@ public class FasScenariosControllerTest {
         ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter();
         scenarioUsageFilter.setFiscalYear(2018);
         scenarioUsageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        scenarioUsageFilter.setProductFamily("FAS");
+        scenarioUsageFilter.setProductFamily(FAS_PRODUCT_FAMILY);
         scenarioUsageFilter.setRhAccountNumbers(Sets.newHashSet(1000000001L, 1000000002L));
         scenarioUsageFilter.setPaymentDate(LocalDate.of(2010, 1, 1));
         UsageBatch usageBatch = new UsageBatch();
@@ -359,7 +365,7 @@ public class FasScenariosControllerTest {
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setName(SCENARIO_NAME);
-        scenario.setProductFamily("FAS");
+        scenario.setProductFamily(FAS_PRODUCT_FAMILY);
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {

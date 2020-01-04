@@ -53,6 +53,7 @@ public class RefreshScenarioTest {
     @Test
     public void testRefreshFasScenario() {
         testBuilder
+            .withProductFamily(FAS_PRODUCT_FAMILY)
             .withScenario("e6e2fe6c-4c47-4ca1-bf32-591af4c13060")
             .expectPreferences("prm/preferences_response.json", RIGHTHOLDER_ID_1)
             .expectRollups("prm/fas_rollups_response.json", RIGHTHOLDER_ID_1)
@@ -77,6 +78,7 @@ public class RefreshScenarioTest {
     @Test
     public void testRefreshClaScenario() {
         testBuilder
+            .withProductFamily(FAS2_PRODUCT_FAMILY)
             .withScenario("8fba95e3-c706-47f7-a1c8-fad9af5e31a9")
             .expectPreferences("prm/not_found_response.json",
                 "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f", RIGHTHOLDER_ID_3, RIGHTHOLDER_ID_2)

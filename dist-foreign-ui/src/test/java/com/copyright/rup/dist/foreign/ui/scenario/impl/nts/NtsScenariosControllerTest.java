@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosWidget;
@@ -63,6 +64,7 @@ public class NtsScenariosControllerTest {
 
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String SCENARIO_NAME = "Scenario name";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private NtsScenariosController scenariosController;
     private IUsageService usageService;
     private IScenarioService scenarioService;
@@ -70,11 +72,13 @@ public class NtsScenariosControllerTest {
     private Scenario scenario;
     private INtsScenariosWidget scenariosWidget;
     private INtsScenarioWidget scenarioWidget;
+    private IProductFamilyProvider productFamilyProvider;
 
     @Before
     public void setUp() {
         usageService = createMock(IUsageService.class);
         scenarioService = createMock(IScenarioService.class);
+        productFamilyProvider = createMock(IProductFamilyProvider.class);
         scenariosController = new NtsScenariosController();
         buildScenario();
         scenarioController = createMock(NtsScenarioController.class);
@@ -88,6 +92,7 @@ public class NtsScenariosControllerTest {
         scenariosController.initActionHandlers();
         Whitebox.setInternalState(scenariosController, "usageService", usageService);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
+        Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
         verify(SecurityUtils.class);
     }
 
@@ -98,10 +103,11 @@ public class NtsScenariosControllerTest {
 
     @Test
     public void testGetScenarios() {
-        expect(scenarioService.getScenarios()).andReturn(Collections.emptyList()).once();
-        replay(scenarioService);
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
+        expect(scenarioService.getScenarios(NTS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
+        replay(scenarioService, productFamilyProvider);
         assertEquals(Collections.emptyList(), scenariosController.getScenarios());
-        verify(scenarioService);
+        verify(scenarioService, productFamilyProvider);
     }
 
     @Test
@@ -229,7 +235,7 @@ public class NtsScenariosControllerTest {
         ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter();
         scenarioUsageFilter.setFiscalYear(2018);
         scenarioUsageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        scenarioUsageFilter.setProductFamily("NTS");
+        scenarioUsageFilter.setProductFamily(NTS_PRODUCT_FAMILY);
         scenarioUsageFilter.setRhAccountNumbers(Sets.newHashSet(1000000001L, 1000000002L));
         scenarioUsageFilter.setPaymentDate(LocalDate.of(2010, 1, 1));
         UsageBatch usageBatch = new UsageBatch();
@@ -270,7 +276,7 @@ public class NtsScenariosControllerTest {
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setName(SCENARIO_NAME);
-        scenario.setProductFamily("NTS");
+        scenario.setProductFamily(NTS_PRODUCT_FAMILY);
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {

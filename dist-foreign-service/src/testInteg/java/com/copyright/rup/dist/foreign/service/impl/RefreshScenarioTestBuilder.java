@@ -36,6 +36,7 @@ class RefreshScenarioTestBuilder {
     private String expectedPreferencesJson;
     private List<String> expectedPreferencesRightholderIds;
     private String scenarioId;
+    private String productFamily;
     private List<Usage> expectedUsages;
     private Scenario expectedScenario;
 
@@ -65,6 +66,11 @@ class RefreshScenarioTestBuilder {
         return this;
     }
 
+    RefreshScenarioTestBuilder withProductFamily(String scenarioProductFamily) {
+        this.productFamily = scenarioProductFamily;
+        return this;
+    }
+
     RefreshScenarioTestBuilder expectUsages(List<Usage> usages) {
         this.expectedUsages = usages;
         return this;
@@ -88,7 +94,7 @@ class RefreshScenarioTestBuilder {
             testHelper.createRestServer();
             testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
             testHelper.expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
-            Scenario scenario = scenarioRepository.findAll()
+            Scenario scenario = scenarioRepository.findByProductFamily(productFamily)
                 .stream()
                 .filter(s -> s.getId().equals(scenarioId))
                 .findFirst()
@@ -101,7 +107,6 @@ class RefreshScenarioTestBuilder {
         }
 
         private void assertScenario() {
-            assertEquals(2, scenarioService.getScenarios().size());
             expectedScenario.setId(scenarioId);
             Scenario scenario = scenarioService.getScenarioWithAmountsAndLastAction(expectedScenario);
             assertEquals(expectedScenario.getId(), scenario.getId());

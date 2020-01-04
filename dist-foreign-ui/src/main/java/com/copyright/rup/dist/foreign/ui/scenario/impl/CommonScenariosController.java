@@ -66,11 +66,7 @@ public abstract class CommonScenariosController extends CommonController<ICommon
 
     @Override
     public List<Scenario> getScenarios() {
-        return scenarioService.getScenarios()
-            .stream()
-            .filter(scenario -> Objects.equals(productFamilyProvider.getSelectedProductFamily(),
-                scenario.getProductFamily()))
-            .collect(Collectors.toList());
+        return scenarioService.getScenarios(productFamilyProvider.getSelectedProductFamily());
     }
 
     @Override
