@@ -133,7 +133,7 @@ public class LoadAaclUsagesIntegrationTest {
         assertEquals(institution, aaclUsage.getInstitution());
         assertEquals(usageSource, aaclUsage.getUsageSource());
         assertEquals(numberOfPages, aaclUsage.getNumberOfPages());
-        assertEquals(201906, aaclUsage.getUsagePeriod());
+        assertEquals(2019, aaclUsage.getUsagePeriod());
     }
 
     private List<UsageAuditItem> buildUsageAuditItems(String usageId, Map<UsageActionTypeEnum, String> map) {

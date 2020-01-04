@@ -2752,7 +2752,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '5d422f76-7d20-4e04-bdd2-810ca930a50d')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '201906')
+            column(name: 'usage_period', value: '2019')
             column(name: 'usage_source', value: 'Feb 2019 TUR')
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'Print')
@@ -2771,7 +2771,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '6ca311bc-394e-4cd2-9e39-c944d9206ea2')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
-            column(name: 'usage_period', value: '201812')
+            column(name: 'usage_period', value: '2018')
             column(name: 'usage_source', value: 'Aug 2018 TUR')
             column(name: 'number_of_pages', value: '6')
             column(name: 'right_limitation', value: 'All')

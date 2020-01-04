@@ -167,7 +167,7 @@ public class AaclUsageBatchUploadWindow extends Window {
     }
 
     private TextField initPeriodEndDateField() {
-        periodEndDateField = new TextField(ForeignUi.getMessage("label.period_end_date"));
+        periodEndDateField = new TextField(ForeignUi.getMessage("label.distribution_period"));
         periodEndDateField.setRequiredIndicatorVisible(true);
         binder.forField(periodEndDateField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
@@ -176,8 +176,8 @@ public class AaclUsageBatchUploadWindow extends Window {
             .withValidator(getYearValidator(), "Field value should be in range from 1950 to 2099")
             .withConverter(new LocalDateConverter())
             .bind(UsageBatch::getPaymentDate, UsageBatch::setPaymentDate);
-        VaadinUtils.addComponentStyle(periodEndDateField, "period-end-date-field");
-        periodEndDateField.setWidth(100, Unit.PIXELS);
+        VaadinUtils.addComponentStyle(periodEndDateField, "distribution-period-field");
+        periodEndDateField.setWidth(115, Unit.PIXELS);
         return periodEndDateField;
     }
 
