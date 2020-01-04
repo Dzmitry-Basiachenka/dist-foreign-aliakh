@@ -10,6 +10,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +145,7 @@ public class RightsholderRepositoryIntegrationTest {
 
     @Test
     public void testFindCountFromUsages() {
+        assertEquals(4, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, StringUtils.EMPTY));
         assertEquals(4, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, null));
         assertEquals(2, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, "9997"));
         assertEquals(1, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, "IEEE"));

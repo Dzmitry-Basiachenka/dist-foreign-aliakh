@@ -15,6 +15,7 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Sets;
+
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
@@ -91,19 +92,22 @@ public class LazyRightsholderFilterWindowTest {
 
     @Test
     public void testRefreshDataProvider() {
+        SearchWidget searchWidget = createMock(SearchWidget.class);
+        Whitebox.setInternalState(filterWindow, searchWidget);
         List<Rightsholder> rightsholders = Collections.singletonList(new Rightsholder());
         mockStatic(JavaScript.class);
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(searchWidget.getSearchValue()).andReturn(StringUtils.EMPTY).times(2);
         expect(controller.getProductFamily()).andReturn("FAS").times(2);
-        expect(controller.getBeansCount("FAS", StringUtils.EMPTY)).andReturn(1).once();
-        expect(controller.loadBeans("FAS", StringUtils.EMPTY, 0, 1, Collections.emptyList()))
+        expect(controller.getBeansCount("FAS", null)).andReturn(1).once();
+        expect(controller.loadBeans("FAS", null, 0, 1, Collections.emptyList()))
             .andReturn(rightsholders).once();
         CallbackDataProvider<?, ?> dataProvider = Whitebox.getInternalState(filterWindow, "dataProvider");
-        replay(controller, JavaScript.class);
+        replay(controller, searchWidget, JavaScript.class);
         assertEquals(1, dataProvider.size(new Query<>()));
         Stream<?> stream = dataProvider.fetch(new Query<>(0, 1, Collections.emptyList(), null, null));
         assertEquals(rightsholders, stream.collect(Collectors.toList()));
-        verify(controller, JavaScript.class);
+        verify(controller, searchWidget, JavaScript.class);
     }
 
     private void verifyPanel(Panel panel) {
