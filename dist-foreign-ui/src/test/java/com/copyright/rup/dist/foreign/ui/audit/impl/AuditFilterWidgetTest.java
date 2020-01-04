@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWindow.IRightsholderFilterSaveListener;
@@ -26,7 +27,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -47,7 +47,7 @@ public class AuditFilterWidgetTest {
     @Before
     public void setUp() {
         IAuditFilterController controller = createMock(IAuditFilterController.class);
-        expect(controller.getProductFamily()).andReturn("FAS").once();
+        expect(controller.getProductFamily()).andReturn("FAS").times(3);
         replay(controller);
         widget = new AuditFilterWidget();
         widget.setController(controller);
@@ -80,6 +80,17 @@ public class AuditFilterWidgetTest {
         assertTrue(component instanceof HorizontalLayout);
         verifyButtonsLayout((HorizontalLayout) component);
         assertEquals(Alignment.MIDDLE_RIGHT, widget.getComponentAlignment(component));
+    }
+
+    @Test
+    public void testApplyFilter() {
+        AuditFilter auditFilter = new AuditFilter();
+        auditFilter.setProductFamily("FAS");
+        assertEquals(auditFilter, widget.getAppliedFilter());
+        auditFilter.setCccEventId("53256");
+        Whitebox.setInternalState(widget, "filter", auditFilter);
+        widget.applyFilter();
+        assertEquals(auditFilter, widget.getAppliedFilter());
     }
 
     private void verifyLabel(Label label) {
