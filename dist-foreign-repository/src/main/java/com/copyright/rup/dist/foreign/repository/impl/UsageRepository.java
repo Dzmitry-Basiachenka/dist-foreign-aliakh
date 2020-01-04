@@ -554,6 +554,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             ImmutableMap.of("usageIds", Objects.requireNonNull(usageIds)));
     }
 
+    @Override
+    public List<Integer> findAaclUsagePeriods() {
+        return selectList("IUsageMapper.findAaclUsagePeriods");
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));

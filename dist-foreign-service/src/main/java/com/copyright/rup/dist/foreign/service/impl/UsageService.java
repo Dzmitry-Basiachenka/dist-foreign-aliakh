@@ -706,6 +706,11 @@ public class UsageService implements IUsageService {
         usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, userName);
     }
 
+    @Override
+    public List<Integer> getAaclUsagePeriods() {
+        return usageRepository.findAaclUsagePeriods();
+    }
+
     private Set<String> getPayeeAndRhIds(Map<String, Map<String, Rightsholder>> rollUps) {
         return rollUps.values()
             .stream()

@@ -514,4 +514,11 @@ public interface IUsageService {
      * @param userName user name
      */
     void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName);
+
+    /**
+     * Gets list of AACL usage periods.
+     *
+     * @return list of AACL usage periods
+     */
+    List<Integer> getAaclUsagePeriods();
 }

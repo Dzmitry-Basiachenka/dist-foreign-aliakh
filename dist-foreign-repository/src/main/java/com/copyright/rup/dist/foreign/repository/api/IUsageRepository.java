@@ -508,4 +508,11 @@ public interface IUsageRepository {
      * @return the count of usages
      */
     int findReferencedFasUsagesCountByIds(String... usageIds);
+
+    /**
+     * Finds list of AACL usage periods.
+     *
+     * @return list of AACL usage periods
+     */
+    List<Integer> findAaclUsagePeriods();
 }

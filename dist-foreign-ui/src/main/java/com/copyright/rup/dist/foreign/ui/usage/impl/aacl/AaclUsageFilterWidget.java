@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.ImmutableSet;
 import com.vaadin.ui.ComboBox;
@@ -38,7 +37,7 @@ public class AaclUsageFilterWidget extends CommonUsageFilterWidget implements IA
 
     private UsageBatchFilterWidget usageBatchFilterWidget;
     private ComboBox<UsageStatusEnum> statusComboBox;
-    private LocalDateWidget periodEndDateWidget;
+    private ComboBox<Integer> usagePeriodComboBox;
 
     /**
      * Constructor.
@@ -51,6 +50,7 @@ public class AaclUsageFilterWidget extends CommonUsageFilterWidget implements IA
 
     @Override
     protected void refreshFilterValues() {
+        usagePeriodComboBox.setItems(controller.getAaclUsagePeriods());
         statusComboBox.setItems(AACL_STATUSES);
     }
 
@@ -58,15 +58,15 @@ public class AaclUsageFilterWidget extends CommonUsageFilterWidget implements IA
     protected void clearFilterValues() {
         usageBatchFilterWidget.reset();
         statusComboBox.clear();
-        periodEndDateWidget.clear();
+        usagePeriodComboBox.clear();
     }
 
     @Override
     protected VerticalLayout initFiltersLayout() {
         initStatusFilter();
-        initPeriodEndDateFilter();
+        initUsagePeriodFilter();
         VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUsageBatchFilter(),
-            statusComboBox, periodEndDateWidget);
+            statusComboBox, usagePeriodComboBox);
         verticalLayout.setMargin(false);
         return verticalLayout;
     }
@@ -92,12 +92,13 @@ public class AaclUsageFilterWidget extends CommonUsageFilterWidget implements IA
         VaadinUtils.addComponentStyle(statusComboBox, "status-filter");
     }
 
-    private void initPeriodEndDateFilter() {
-        periodEndDateWidget = new LocalDateWidget(ForeignUi.getMessage("label.period_end_date"));
-        periodEndDateWidget.addValueChangeListener(event -> {
-            getFilter().setPaymentDate(periodEndDateWidget.getValue());
+    private void initUsagePeriodFilter() {
+        usagePeriodComboBox = new ComboBox<>(ForeignUi.getMessage("label.usage_period"));
+        VaadinUtils.setMaxComponentsWidth(usagePeriodComboBox);
+        usagePeriodComboBox.addValueChangeListener(event -> {
+            getFilter().setUsagePeriod(usagePeriodComboBox.getValue());
             filterChanged();
         });
-        VaadinUtils.addComponentStyle(periodEndDateWidget, "payment-date-filter");
+        VaadinUtils.addComponentStyle(usagePeriodComboBox, "usage-period-filter");
     }
 }
