@@ -20,7 +20,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.stream.Collectors;
@@ -42,13 +41,15 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
     private StatusFilterWidget statusFilterWidget;
     private TextField cccEventIdField;
     private TextField distributionNameField;
-    private AuditFilter filter = new AuditFilter();
-    private AuditFilter appliedFilter = new AuditFilter();
+    private AuditFilter filter;
+    private AuditFilter appliedFilter;
     private Button applyButton;
 
     @SuppressWarnings("unchecked")
     @Override
     public AuditFilterWidget init() {
+        filter = buildAuditFilter();
+        appliedFilter = buildAuditFilter();
         HorizontalLayout buttonsLayout = initButtonsLayout();
         initRightsholdersFilter();
         initUsageBatchesFilter();
@@ -71,7 +72,6 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
 
     @Override
     public void applyFilter() {
-        filter.setProductFamily(controller.getProductFamily());
         appliedFilter = new AuditFilter(filter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
@@ -84,7 +84,7 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
         statusFilterWidget.reset();
         cccEventIdField.setValue(StringUtils.EMPTY);
         distributionNameField.setValue(StringUtils.EMPTY);
-        filter = new AuditFilter();
+        filter = buildAuditFilter();
         applyFilter();
     }
 
@@ -176,5 +176,11 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
         cccEventIdField.setValue(StringUtils.trim(cccEventIdField.getValue()));
         distributionNameField.setValue(StringUtils.trim(distributionNameField.getValue()));
         applyFilter();
+    }
+
+    private AuditFilter buildAuditFilter() {
+        AuditFilter auditFilter = new AuditFilter();
+        auditFilter.setProductFamily(controller.getProductFamily());
+        return auditFilter;
     }
 }
