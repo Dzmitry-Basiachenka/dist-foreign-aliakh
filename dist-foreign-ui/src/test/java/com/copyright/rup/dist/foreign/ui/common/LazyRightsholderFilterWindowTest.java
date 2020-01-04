@@ -1,9 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.common;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
@@ -11,6 +15,8 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Sets;
+import com.vaadin.data.provider.CallbackDataProvider;
+import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -19,14 +25,23 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Verifies {@link LazyRightsholderFilterWindow}.
@@ -37,12 +52,21 @@ import java.util.List;
  *
  * @author Ihar Suvorau
  */
-public class LazyFilterWindowTest {
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(JavaScript.class)
+public class LazyRightsholderFilterWindowTest {
+
+    private IAuditFilterController controller;
+    private LazyRightsholderFilterWindow filterWindow;
+
+    @Before
+    public void setUp() {
+        controller = createMock(IAuditFilterController.class);
+        filterWindow = new LazyRightsholderFilterWindow("Caption", controller);
+    }
 
     @Test
     public void testWindowStructure() {
-        LazyRightsholderFilterWindow filterWindow =
-            new LazyRightsholderFilterWindow("Caption", createMock(IAuditFilterController.class));
         assertEquals("Caption", filterWindow.getCaption());
         verifySize(filterWindow, 450, Unit.PIXELS, 400, Unit.PIXELS);
         assertFalse(filterWindow.isResizable());
@@ -59,12 +83,27 @@ public class LazyFilterWindowTest {
 
     @Test
     public void testGetSelectedItemsIds() {
-        LazyRightsholderFilterWindow filterWindow =
-            new LazyRightsholderFilterWindow("Caption", createMock(IAuditFilterController.class));
         assertTrue(filterWindow.getSelectedItemsIds().isEmpty());
         HashSet<Rightsholder> selectedItemsIds = Sets.newHashSet();
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         assertEquals(selectedItemsIds, filterWindow.getSelectedItemsIds());
+    }
+
+    @Test
+    public void testRefreshDataProvider() {
+        List<Rightsholder> rightsholders = Collections.singletonList(new Rightsholder());
+        mockStatic(JavaScript.class);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.getProductFamily()).andReturn("FAS").times(2);
+        expect(controller.getBeansCount("FAS", StringUtils.EMPTY)).andReturn(1).once();
+        expect(controller.loadBeans("FAS", StringUtils.EMPTY, 0, 1, Collections.emptyList()))
+            .andReturn(rightsholders).once();
+        CallbackDataProvider<?, ?> dataProvider = Whitebox.getInternalState(filterWindow, "dataProvider");
+        replay(controller, JavaScript.class);
+        assertEquals(1, dataProvider.size(new Query<>()));
+        Stream<?> stream = dataProvider.fetch(new Query<>(0, 1, Collections.emptyList(), null, null));
+        assertEquals(rightsholders, stream.collect(Collectors.toList()));
+        verify(controller, JavaScript.class);
     }
 
     private void verifyPanel(Panel panel) {

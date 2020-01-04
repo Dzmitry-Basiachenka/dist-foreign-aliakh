@@ -14,7 +14,6 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -57,7 +56,7 @@ public class AuditFilterController extends CommonController<IAuditFilterWidget> 
 
     @Override
     public int getBeansCount(String productFamily, String searchValue) {
-        return rightsholderService.getCountFromUsages(searchValue, productFamily);
+        return rightsholderService.getCountFromUsages(productFamily, searchValue);
     }
 
     @Override

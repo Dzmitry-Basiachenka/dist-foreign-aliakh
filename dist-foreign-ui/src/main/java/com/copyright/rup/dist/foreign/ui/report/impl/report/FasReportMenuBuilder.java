@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl.report;
 
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IReportMenuBuilder;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 
 import com.vaadin.ui.MenuBar.MenuItem;

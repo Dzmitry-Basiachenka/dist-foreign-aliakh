@@ -13,7 +13,6 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 
@@ -40,6 +39,7 @@ import java.util.concurrent.ExecutorService;
  */
 public class RightsholderServiceTest {
 
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final Long ACCOUNT_NUMBER_1 = 7000813806L;
     private static final Long ACCOUNT_NUMBER_2 = 5412316485L;
     private static final String RIGHTSHOLDER_NAME = "Rightsholder Name";
@@ -77,20 +77,20 @@ public class RightsholderServiceTest {
     @Test
     public void testGetFromUsages() {
         Pageable pageable = new Pageable(0, 10);
-        expect(rightsholderRepository.findFromUsages("10001", FdaConstants.FAS_PRODUCT_FAMILY, pageable, null))
+        expect(rightsholderRepository.findFromUsages(FAS_PRODUCT_FAMILY, "10001", pageable, null))
             .andReturn(Collections.emptyList()).once();
         replay(rightsholderRepository);
         assertEquals(Collections.emptyList(),
-            rightsholderService.getFromUsages("10001", FdaConstants.FAS_PRODUCT_FAMILY, pageable, null));
+            rightsholderService.getFromUsages(FAS_PRODUCT_FAMILY, "10001", pageable, null));
         verify(rightsholderRepository);
     }
 
     @Test
     public void testGetCountFromUsages() {
-        expect(rightsholderRepository.findCountFromUsages("Rightsholder", FdaConstants.FAS_PRODUCT_FAMILY))
+        expect(rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, "Rightsholder"))
             .andReturn(5).once();
         replay(rightsholderRepository);
-        assertEquals(5, rightsholderService.getCountFromUsages("Rightsholder", FdaConstants.FAS_PRODUCT_FAMILY));
+        assertEquals(5, rightsholderService.getCountFromUsages(FAS_PRODUCT_FAMILY, "Rightsholder"));
         verify(rightsholderRepository);
     }
 

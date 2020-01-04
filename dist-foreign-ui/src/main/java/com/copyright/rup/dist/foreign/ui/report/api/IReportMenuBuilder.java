@@ -1,7 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.report.impl.report;
-
-import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
+package com.copyright.rup.dist.foreign.ui.report.api;
 
 import com.vaadin.ui.MenuBar.MenuItem;
 
