@@ -90,8 +90,8 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByProductFamily() {
-        List<Scenario> fasScenarios = scenarioRepository.findByProductFamily("FAS");
+    public void testFindByProductFamilies() {
+        List<Scenario> fasScenarios = scenarioRepository.findByProductFamilies(Collections.singleton("FAS"));
         assertEquals(9, fasScenarios.size());
         verifyScenario(fasScenarios.get(0), "095f3df4-c8a7-4dba-9a8f-7dce0b61c40a", "Scenario with excluded usages",
             "The description of scenario 6", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
@@ -111,7 +111,7 @@ public class ScenarioRepositoryIntegrationTest {
             "All usages are paid and reported to CRM", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
         verifyScenario(fasScenarios.get(8), "a386bd74-c112-4b19-b9b7-c5e4f18c7fcd", "Archived Scenario",
             "Scenario already archived", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.ARCHIVED);
-        List<Scenario> ntsScenarios = scenarioRepository.findByProductFamily("NTS");
+        List<Scenario> ntsScenarios = scenarioRepository.findByProductFamilies(Collections.singleton("NTS"));
         assertEquals(3, ntsScenarios.size());
         verifyScenario(ntsScenarios.get(0), "8cb9092d-a0f7-474e-a13b-af1a134e4c86",
             "Sent to LM NTS scenario with audit", "The description of scenario 8", NTS_PRODUCT_FAMILY,

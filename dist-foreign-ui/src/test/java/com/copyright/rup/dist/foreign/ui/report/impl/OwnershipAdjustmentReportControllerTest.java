@@ -18,7 +18,6 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportWidget;
 
 import com.google.common.collect.ImmutableSet;
@@ -59,15 +58,13 @@ public class OwnershipAdjustmentReportControllerTest {
     public void testGetScenarios() {
         OwnershipAdjustmentReportController controller = new OwnershipAdjustmentReportController();
         IScenarioService scenarioService = createMock(IScenarioService.class);
-        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(controller, scenarioService);
-        Whitebox.setInternalState(controller, productFamilyProvider);
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn("FAS").once();
         List<Scenario> scenarios = Collections.emptyList();
-        expect(scenarioService.getScenarios("FAS")).andReturn(scenarios).once();
-        replay(scenarioService, productFamilyProvider);
+        expect(scenarioService.getScenariosByProductFamilies(ImmutableSet.of("FAS", "FAS2")))
+            .andReturn(scenarios).once();
+        replay(scenarioService);
         assertEquals(scenarios, controller.getScenarios());
-        verify(scenarioService, productFamilyProvider);
+        verify(scenarioService);
     }
 
     @Test

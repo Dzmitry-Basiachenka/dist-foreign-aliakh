@@ -2,11 +2,11 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -41,15 +41,13 @@ public class OwnershipAdjustmentReportController extends CommonController<IOwner
     @Autowired
     private IScenarioService scenarioService;
     @Autowired
-    private IProductFamilyProvider productFamilyProvider;
-    @Autowired
     private IReportService reportService;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public List<Scenario> getScenarios() {
-        return scenarioService.getScenarios(productFamilyProvider.getSelectedProductFamily());
+        return scenarioService.getScenariosByProductFamilies(FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
     }
 
     @Override
