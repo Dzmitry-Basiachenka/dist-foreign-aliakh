@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.PreServiceFeeFundBatchesCsvReportHandler;
@@ -41,8 +40,6 @@ public class ReportService implements IReportService {
     @Autowired
     private IReportRepository reportRepository;
     @Autowired
-    private IUsageArchiveRepository usageArchiveRepository;
-    @Autowired
     private IUsageService usageService;
 
     @Value("$RUP{dist.foreign.rro.default_estimated_service_fee}")
@@ -61,7 +58,7 @@ public class ReportService implements IReportService {
     @Override
     public void writeFasScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream outputStream) {
         if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
-            usageArchiveRepository.writeFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
+            reportRepository.writeArchivedFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
         } else {
             reportRepository.writeFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
         }
@@ -70,7 +67,7 @@ public class ReportService implements IReportService {
     @Override
     public void writeNtsScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream outputStream) {
         if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
-            usageArchiveRepository.writeNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
+            reportRepository.writeArchivedNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
         } else {
             reportRepository.writeNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
         }
@@ -79,7 +76,7 @@ public class ReportService implements IReportService {
     @Override
     public void writeScenarioRightsholderTotalsCsvReport(Scenario scenario, PipedOutputStream outputStream) {
         if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
-            usageArchiveRepository.writeScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
+            reportRepository.writeArchivedScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
         } else {
             reportRepository.writeScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
         }

@@ -107,12 +107,20 @@ public interface IReportRepository {
     Set<String> writeUsagesForResearchAndFindIds(UsageFilter filter, OutputStream outputStream);
 
     /**
-     * Finds usages by FAS scenario id and writes them into the output stream in CSV format.
+     * Finds usages by FAS/FAS2 scenario id and writes them into the output stream in CSV format.
      *
      * @param scenarioId        scenario id
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeFasScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds archived usages by FAS/FAS2 scenario id and writes them into the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeArchivedFasScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
      * Finds usages by NTS scenario id and writes them into the output stream in CSV format.
@@ -123,6 +131,14 @@ public interface IReportRepository {
     void writeNtsScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
+     * Finds archived usages by NTS scenario id and writes them into the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeArchivedNtsScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
      * Finds {@link com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder}s based on scenario id
      * and writes them to the output stream in CSV format.
      *
@@ -130,6 +146,15 @@ public interface IReportRepository {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds {@link com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder}s based on archived scenario id and
+     * writes them to the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeArchivedScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
      * Finds FAS and FAS2 usages by given {@link AuditFilter} and writes them to the given {@link PipedOutputStream}.

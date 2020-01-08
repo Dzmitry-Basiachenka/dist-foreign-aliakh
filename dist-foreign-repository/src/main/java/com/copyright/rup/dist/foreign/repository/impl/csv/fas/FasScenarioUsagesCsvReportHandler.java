@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.repository.impl.csv;
+package com.copyright.rup.dist.foreign.repository.impl.csv.fas;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -10,29 +10,29 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Writes NTS scenario usages into a {@link PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
+ * Writes FAS scenario usages into a {@link PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
- * Date: 12/12/2019
+ * Date: 10/11/2017
  *
- * @author Stanislau Rudak
+ * @author Uladzislau Shalamitski
  */
-public class NtsScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
+public class FasScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     private static final List<String> HEADERS =
         Arrays.asList("Detail ID", "Product Family", "Usage Batch Name", "RRO Account #", "RRO Name", "RH Account #",
             "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title", "Standard Number",
             "Standard Number Type", "Fiscal Year", "Payment Date", "Title", "Article", "Publisher", "Pub Date",
-            "Number of Copies", "Reported Value", "Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %",
-            "Market", "Market Period From", "Market Period To", "Author", "Comment");
+            "Number of Copies", "Reported Value", "Amt in USD", "Batch Amt in USD", "Service Fee Amount",
+            "Net Amt in USD", "Service Fee %", "Market", "Market Period From", "Market Period To", "Author", "Comment");
 
     /**
      * Constructor.
      *
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    public NtsScenarioUsagesCsvReportHandler(PipedOutputStream pipedOutputStream) {
+    public FasScenarioUsagesCsvReportHandler(PipedOutputStream pipedOutputStream) {
         super(pipedOutputStream);
     }
 
@@ -61,13 +61,14 @@ public class NtsScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<Usag
         beanProperties.add(getBeanPropertyAsString(bean.getNumberOfCopies()));
         beanProperties.add(getBeanPropertyAsString(bean.getReportedValue()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
+        beanProperties.add(getBeanPropertyAsString(bean.getBatchGrossAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getServiceFeeAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getNetAmount()));
         beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
         beanProperties.add(bean.getMarket());
         beanProperties.add(getBeanPropertyAsString(bean.getMarketPeriodFrom()));
         beanProperties.add(getBeanPropertyAsString(bean.getMarketPeriodTo()));
-        beanProperties.add(bean.getAuthor());
+        beanProperties.add(getBeanPropertyAsString(bean.getAuthor()));
         beanProperties.add(bean.getComment());
         return beanProperties;
     }

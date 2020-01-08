@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.main;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
-import com.copyright.rup.dist.foreign.ui.main.api.ISettableProductFamilyProvider;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -55,7 +55,7 @@ public class ForeignUi extends CommonUi {
     @Autowired
     private IReportController reportController;
     @Autowired
-    private ISettableProductFamilyProvider productFamilyProvider;
+    private IProductFamilyProvider productFamilyProvider;
 
     /**
      * Gets a message associated with specified {@code key}.

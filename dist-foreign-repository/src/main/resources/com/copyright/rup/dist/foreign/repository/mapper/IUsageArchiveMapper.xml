@@ -102,7 +102,7 @@
         </if>
     </select>
 
-    <select id="findRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="IUsageMapper.rightsholderTotalsHolderResultMap">
+    <sql id="selectRightsholderTotalsHoldersByScenarioIdSql">
         select
             r.name rh_name,
             u.rh_account_number,
@@ -133,6 +133,10 @@
             limit #{pageable.limit}
             offset #{pageable.offset}
         </if>
+    </sql>
+
+    <select id="findRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="IUsageMapper.rightsholderTotalsHolderResultMap">
+        <include refid="selectRightsholderTotalsHoldersByScenarioIdSql"/>
     </select>
 
     <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="IUsageMapper.usageDtoResultMap">
@@ -188,7 +192,7 @@
         </if>
     </select>
 
-    <select id="findDtoByScenarioId" resultMap="IUsageMapper.usageDtoResultMap">
+    <sql id="selectDtoByScenarioIdSql">
         select
             u.df_usage_archive_uid df_usage_uid,
             <include refid="IUsageMapper.usageDtoColumns"/>
@@ -200,7 +204,7 @@
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where df_scenario_uid = #{scenarioId}
         order by u.rh_account_number
-    </select>
+    </sql>
 
     <select id="findCountForNtsBatch" parameterType="map" resultType="int">
         select count(1)

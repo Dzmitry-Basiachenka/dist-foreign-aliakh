@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.repository.impl.csv;
+package com.copyright.rup.dist.foreign.repository.impl.csv.fas;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageDto;

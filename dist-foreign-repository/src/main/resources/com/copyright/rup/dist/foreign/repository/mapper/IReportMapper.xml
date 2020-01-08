@@ -287,12 +287,26 @@
         where df_scenario_uid = #{scenarioId}
     </select>
 
+    <select id="findArchivedScenarioUsageDtosCount" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage_archive ua
+        where df_scenario_uid = #{scenarioId}
+    </select>
+
     <select id="findScenarioUsageReportDtos" resultMap="IUsageMapper.usageDtoResultMap">
         <include refid="IUsageMapper.selectDtoByScenarioIdSql"/>
     </select>
 
+    <select id="findArchivedScenarioUsageReportDtos" resultMap="IUsageMapper.usageDtoResultMap">
+        <include refid="IUsageArchiveMapper.selectDtoByScenarioIdSql"/>
+    </select>
+
     <select id="findRightsholderTotalsHoldersReportDtos" parameterType="map" resultMap="IUsageMapper.rightsholderTotalsHolderResultMap">
         <include refid="IUsageMapper.selectRightsholderTotalsHoldersByScenarioIdSql"/>
+    </select>
+
+    <select id="findArchivedRightsholderTotalsHoldersReportDtos" parameterType="map" resultMap="IUsageMapper.rightsholderTotalsHolderResultMap">
+        <include refid="IUsageArchiveMapper.selectRightsholderTotalsHoldersByScenarioIdSql"/>
     </select>
 
     <select id="findUsagesCountByFilter" parameterType="map" resultType="int">
