@@ -14,9 +14,9 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 
+import com.google.common.collect.ImmutableSet;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable;
@@ -51,23 +51,21 @@ public class OwnershipAdjustmentReportWidgetTest {
     public void testInit() {
         OwnershipAdjustmentReportController controller = new OwnershipAdjustmentReportController();
         IScenarioService scenarioService = createMock(IScenarioService.class);
-        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName("Test scenario name");
         Whitebox.setInternalState(controller, scenarioService);
-        Whitebox.setInternalState(controller, productFamilyProvider);
         IStreamSource streamSource = createMock(IStreamSource.class);
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn("FAS").once();
-        expect(scenarioService.getScenarios("FAS")).andReturn(Collections.singletonList(scenario)).once();
-        expect(streamSource.getSource()).andReturn(
-            new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
+        expect(scenarioService.getScenariosByProductFamilies(ImmutableSet.of("FAS", "FAS2")))
+            .andReturn(Collections.singletonList(scenario)).once();
+        expect(streamSource.getSource())
+            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         IStreamSourceHandler streamSourceHandler = createMock(IStreamSourceHandler.class);
         expect(streamSourceHandler.getCsvStreamSource(anyObject(), anyObject())).andReturn(streamSource).once();
         Whitebox.setInternalState(controller, streamSourceHandler);
-        replay(scenarioService, streamSourceHandler, streamSource, productFamilyProvider);
+        replay(scenarioService, streamSourceHandler, streamSource);
         OwnershipAdjustmentReportWidget widget = (OwnershipAdjustmentReportWidget) controller.initWidget();
-        verify(scenarioService, streamSourceHandler, streamSource, productFamilyProvider);
+        verify(scenarioService, streamSourceHandler, streamSource);
         verifySize(widget);
         verifyContent(widget.getContent(), scenario);
     }

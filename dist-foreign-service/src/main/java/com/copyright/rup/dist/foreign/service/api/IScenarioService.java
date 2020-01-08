@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for scenario service.
@@ -22,12 +23,12 @@ import java.util.List;
 public interface IScenarioService {
 
     /**
-     * Gets list of {@link Scenario}s by product family.
+     * Gets list of {@link Scenario}s by product families.
      *
-     * @param productFamily product family
+     * @param productFamilies set of product families
      * @return list of {@link Scenario}s
      */
-    List<Scenario> getScenarios(String productFamily);
+    List<Scenario> getScenariosByProductFamilies(Set<String> productFamilies);
 
     /**
      * Checks whether {@link Scenario} with specified name already exists in database.

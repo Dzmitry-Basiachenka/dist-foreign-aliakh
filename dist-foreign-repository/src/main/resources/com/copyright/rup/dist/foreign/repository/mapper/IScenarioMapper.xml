@@ -203,7 +203,7 @@
         where upper(name) = upper(#{name})
     </select>
 
-    <select id="findByProductFamily" resultMap="scenarioResultMap">
+    <select id="findByProductFamilies" resultMap="scenarioResultMap" parameterType="collection">
         select
             s.df_scenario_uid,
             s.name,
@@ -216,7 +216,10 @@
             f.product_family
         from ${schema}.df_scenario s
         join ${schema}.df_scenario_usage_filter f on s.df_scenario_uid = f.df_scenario_uid
-        where f.product_family = #{productFamily}
+        where f.product_family in
+            <foreach collection="collection" item="productFamily" separator="," open="(" close=")">
+                #{productFamily}
+            </foreach>
         order by s.updated_datetime desc
     </select>
 

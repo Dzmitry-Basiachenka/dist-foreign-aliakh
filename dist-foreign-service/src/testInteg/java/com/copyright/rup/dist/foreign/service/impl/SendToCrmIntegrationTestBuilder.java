@@ -140,11 +140,12 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
 
         private void verifyScenarios() {
             scenarioIdToExpectedStatus.forEach((scenarioId, expectedStatus) -> {
-                Scenario actualScenario = scenarioService.getScenarios(productFamily).stream()
-                    .filter(scenario -> Objects.equals(scenarioId, scenario.getId()))
-                    .findFirst()
-                    .orElseThrow(
-                        () -> new AssertionError(String.format("Scenario must exists. ScenarioId=%s", scenarioId)));
+                Scenario actualScenario =
+                    scenarioService.getScenariosByProductFamilies(Collections.singleton(productFamily)).stream()
+                        .filter(scenario -> Objects.equals(scenarioId, scenario.getId()))
+                        .findFirst()
+                        .orElseThrow(
+                            () -> new AssertionError(String.format("Scenario must exists. ScenarioId=%s", scenarioId)));
                 assertEquals(expectedStatus, actualScenario.getStatus());
             });
         }
