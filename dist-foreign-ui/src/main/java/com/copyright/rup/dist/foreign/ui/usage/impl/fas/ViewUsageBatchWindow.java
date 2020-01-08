@@ -56,12 +56,14 @@ class ViewUsageBatchWindow extends AbstractViewUsageBatchWindow {
             .setComparator((batch1, batch2) -> batch1.getName().compareToIgnoreCase(batch2.getName()))
             .setWidth(150);
         addColumn(batch -> batch.getRro().getAccountNumber(), "table.column.rro_account_number", 120);
-        addColumn(batch -> batch.getRro().getName(), "table.column.rro_account_name", 150);
+        addColumn(batch -> batch.getRro().getName(), "table.column.rro_account_name", 150,
+            (batch1, batch2) -> batch1.getRro().getName().compareToIgnoreCase(batch2.getRro().getName()));
         addColumn(UsageBatch::getPaymentDate, "table.column.payment_date", 100);
         addColumn(batch -> UsageBatchUtils.getFiscalYear(batch.getFiscalYear()), "table.column.fiscal_year", 90);
-        addColumn(UsageBatch::getGrossAmount, "table.column.batch_gross_amount", 130,
+        addAmountColumn(UsageBatch::getGrossAmount, "table.column.batch_gross_amount", 130,
             (batch1, batch2) -> batch1.getGrossAmount().compareTo(batch2.getGrossAmount()));
-        addColumn(UsageBatch::getCreateUser, "table.column.create_user", 170);
+        addColumn(UsageBatch::getCreateUser, "table.column.create_user", 170,
+            (batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()));
         grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.create_date"))
             .setComparator((SerializableComparator<UsageBatch>) (batch1, batch2) ->

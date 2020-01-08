@@ -170,7 +170,7 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
     private void addColumns() {
         scenarioGrid.addColumn(Scenario::getName)
             .setCaption(ForeignUi.getMessage("table.column.name"))
-            .setSortProperty("name")
+            .setComparator((scenario1, scenario2) -> scenario1.getName().compareToIgnoreCase(scenario2.getName()))
             .setExpandRatio(1);
         scenarioGrid.addColumn(scenario -> getStringFromDate(scenario.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.create_date"))
@@ -179,7 +179,6 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
             .setWidth(100);
         scenarioGrid.addColumn(scenario -> scenario.getStatus().name())
             .setCaption(ForeignUi.getMessage("table.column.status"))
-            .setSortProperty("status")
             .setWidth(130);
     }
 
