@@ -115,7 +115,23 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
      * @param comparator    column comparator
      */
     protected void addColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, int width,
-                   SerializableComparator<UsageBatch> comparator) {
+                             SerializableComparator<UsageBatch> comparator) {
+        grid.addColumn(valueProvider)
+            .setCaption(ForeignUi.getMessage(caption))
+            .setComparator(comparator)
+            .setWidth(width);
+    }
+
+    /**
+     * Adds amount column to data grid.
+     *
+     * @param valueProvider column value provider
+     * @param caption       column caption
+     * @param width         column width
+     * @param comparator    column comparator
+     */
+    protected void addAmountColumn(ValueProvider<UsageBatch, ?> valueProvider, String caption, int width,
+                                   SerializableComparator<UsageBatch> comparator) {
         grid.addColumn(valueProvider)
             .setCaption(ForeignUi.getMessage(caption))
             .setComparator(comparator)

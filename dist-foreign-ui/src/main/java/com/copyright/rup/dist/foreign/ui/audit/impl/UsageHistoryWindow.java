@@ -53,17 +53,15 @@ public class UsageHistoryWindow extends Window {
         VaadinUtils.addComponentStyle(grid, "usage-history-grid");
         grid.setSizeFull();
         grid.addColumn(item -> item.getActionType().name())
-            .setCaption(ForeignUi.getMessage("label.action_type"))
-            .setSortProperty("actionType");
+            .setCaption(ForeignUi.getMessage("label.action_type"));
         grid.addColumn(UsageAuditItem::getCreateUser)
             .setCaption(ForeignUi.getMessage("label.action_user"))
-            .setSortProperty("createUser");
+            .setComparator((item1, item2) -> item1.getCreateUser().compareToIgnoreCase(item2.getCreateUser()));
         grid.addColumn(item -> getStringFromDate(item.getCreateDate()))
-            .setCaption(ForeignUi.getMessage("label.action_date"))
-            .setSortProperty("createDate");
+            .setCaption(ForeignUi.getMessage("label.action_date"));
         grid.addColumn(UsageAuditItem::getActionReason)
             .setCaption(ForeignUi.getMessage("label.action_reason"))
-            .setSortProperty("actionReason")
+            .setComparator((item1, item2) -> item1.getActionReason().compareToIgnoreCase(item2.getActionReason()))
             .setExpandRatio(1);
         return grid;
     }
