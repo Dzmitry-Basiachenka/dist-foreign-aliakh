@@ -177,7 +177,7 @@ public class AaclUsageBatchUploadWindow extends Window {
             .withConverter(new LocalDateConverter())
             .bind(UsageBatch::getPaymentDate, UsageBatch::setPaymentDate);
         VaadinUtils.addComponentStyle(periodEndDateField, "distribution-period-field");
-        periodEndDateField.setWidth(115, Unit.PIXELS);
+        periodEndDateField.setWidth(50, Unit.PERCENTAGE);
         return periodEndDateField;
     }
 
