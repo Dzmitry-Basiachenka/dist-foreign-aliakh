@@ -180,14 +180,14 @@ public class UsageRepositoryIntegrationTest {
         verifyFasUsage(expectedUsage, usages.get(0));
     }
 
-    @Test//TODO {aazarenka} rewrite this test after implementing logic related to select query
+    @Test
     public void testInsertAaclUsages() throws IOException {
-        AuditFilter filter = new AuditFilter();
+        UsageFilter filter = new UsageFilter();
         filter.setProductFamily("AACL");
-        assertEquals(2, usageRepository.findCountForAudit(filter));
+        assertEquals(2, usageRepository.findDtosByFilter(filter, null, null).size());
         Usage expectedUsage = buildAaclUsage();
         usageRepository.insertAaclUsage(expectedUsage);
-        assertEquals(3, usageRepository.findCountForAudit(filter));
+        assertEquals(3, usageRepository.findDtosByFilter(filter, null, null).size());
     }
 
     @Test

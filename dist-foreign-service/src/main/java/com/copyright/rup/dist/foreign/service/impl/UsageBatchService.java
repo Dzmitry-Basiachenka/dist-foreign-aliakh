@@ -152,10 +152,10 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
-        LOGGER.info("Insert usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+        LOGGER.info("Insert AACL batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
         int count = usageService.insertAaclUsages(usageBatch, usages);
-        LOGGER.info("Insert usage batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
+        LOGGER.info("Insert AACL batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
             usageBatch.getName(), userName, count);
         return count;
     }

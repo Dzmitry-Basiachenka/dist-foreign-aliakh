@@ -287,7 +287,7 @@ public class Usage extends StoredEntity<String> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
+        if (this == obj) {
             return true;
         }
         if (null == obj || this.getClass() != obj.getClass()) {
