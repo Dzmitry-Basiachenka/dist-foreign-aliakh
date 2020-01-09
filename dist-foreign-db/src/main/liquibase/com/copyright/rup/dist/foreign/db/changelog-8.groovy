@@ -397,4 +397,26 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2020-01-09-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment('B-55412 FDA: Load AACL Usage Data: rename primary keys based on database code standards')
+
+        dropPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_usage_aacl', constraintName: 'df_usage_aacl_pk')
+        dropPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_usage_fas', constraintName: 'df_usage_fas_pk')
+
+        addPrimaryKey(tablespace: dbIndexTablespace, schemaName: dbAppsSchema, tableName: 'df_usage_aacl',
+                columnNames: 'df_usage_aacl_uid', constraintName: 'pk_df_usage_aacl')
+        addPrimaryKey(tablespace: dbIndexTablespace, schemaName: dbAppsSchema, tableName: 'df_usage_fas',
+                columnNames: 'df_usage_fas_uid', constraintName: 'pk_df_usage_fas')
+
+        rollback {
+            dropPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_usage_aacl', constraintName: 'pk_df_usage_aacl')
+            dropPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_usage_fas', constraintName: 'pk_df_usage_fas')
+
+            addPrimaryKey(tablespace: dbIndexTablespace, schemaName: dbAppsSchema, tableName: 'df_usage_aacl',
+                    columnNames: 'df_usage_aacl_uid', constraintName: 'df_usage_aacl_pk')
+            addPrimaryKey(tablespace: dbIndexTablespace, schemaName: dbAppsSchema, tableName: 'df_usage_fas',
+                    columnNames: 'df_usage_fas_uid', constraintName: 'df_usage_fas_pk')
+        }
+    }
 }
