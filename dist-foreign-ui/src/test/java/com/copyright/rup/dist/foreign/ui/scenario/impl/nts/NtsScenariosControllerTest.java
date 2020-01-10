@@ -104,8 +104,7 @@ public class NtsScenariosControllerTest {
     @Test
     public void testGetScenarios() {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
-        expect(scenarioService.getScenariosByProductFamilies(Collections.singleton(NTS_PRODUCT_FAMILY)))
-            .andReturn(Collections.emptyList()).once();
+        expect(scenarioService.getScenarios(NTS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
         replay(scenarioService, productFamilyProvider);
         assertEquals(Collections.emptyList(), scenariosController.getScenarios());
         verify(scenarioService, productFamilyProvider);

@@ -31,7 +31,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -67,8 +66,7 @@ public abstract class CommonScenariosController extends CommonController<ICommon
 
     @Override
     public List<Scenario> getScenarios() {
-        return scenarioService.getScenariosByProductFamilies(
-            Collections.singleton(productFamilyProvider.getSelectedProductFamily()));
+        return scenarioService.getScenarios(productFamilyProvider.getSelectedProductFamily());
     }
 
     @Override
