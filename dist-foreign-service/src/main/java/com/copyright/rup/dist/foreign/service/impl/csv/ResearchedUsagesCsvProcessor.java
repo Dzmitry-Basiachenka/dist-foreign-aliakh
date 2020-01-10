@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
+import com.copyright.rup.dist.common.service.api.csv.ICsvConverter;
+import com.copyright.rup.dist.common.service.impl.csv.CommonCsvConverter;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
@@ -7,9 +9,6 @@ import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidato
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateInFileValidator;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,7 +37,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
     }
 
     @Override
-    public IConverter<ResearchedUsage> getConverter() {
+    public ICsvConverter<ResearchedUsage> getConverter() {
         return new ResearchedUsageConverter();
     }
 
@@ -107,33 +106,17 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
      *
      * @author Aliaksandr Liakh
      */
-    private static class ResearchedUsageConverter implements IConverter<ResearchedUsage> {
-
-        private static String getValue(String[] row, ICsvColumn header) {
-            return StringUtils.defaultIfBlank(row[header.ordinal()], null);
-        }
-
-        private static String getString(String[] row, ICsvColumn column) {
-            return getValue(row, column);
-        }
-
-        private static Long getLong(String[] row, ICsvColumn column) {
-            String value = getValue(row, column);
-            return null != value ? Long.valueOf(parseScientific(value)) : null;
-        }
-
-        private static String parseScientific(String value) {
-            return null != value ? new BigDecimal(value).toPlainString() : null;
-        }
+    private class ResearchedUsageConverter extends CommonCsvConverter<ResearchedUsage> {
 
         @Override
         public ResearchedUsage convert(String... row) {
+            List<String> headers = getActualHeaders();
             ResearchedUsage researchedUsage = new ResearchedUsage();
-            researchedUsage.setUsageId(getString(row, Header.DETAIL_ID));
-            researchedUsage.setStandardNumber(getString(row, Header.STANDARD_NUMBER));
-            researchedUsage.setStandardNumberType(getString(row, Header.STANDARD_NUMBER_TYPE));
-            researchedUsage.setSystemTitle(getString(row, Header.SYSTEM_TITLE));
-            researchedUsage.setWrWrkInst(getLong(row, Header.WR_WRK_INST));
+            researchedUsage.setUsageId(getString(row, Header.DETAIL_ID, headers));
+            researchedUsage.setStandardNumber(getString(row, Header.STANDARD_NUMBER, headers));
+            researchedUsage.setStandardNumberType(getString(row, Header.STANDARD_NUMBER_TYPE, headers));
+            researchedUsage.setSystemTitle(getString(row, Header.SYSTEM_TITLE, headers));
+            researchedUsage.setWrWrkInst(getLong(row, Header.WR_WRK_INST, headers));
             return researchedUsage;
         }
     }

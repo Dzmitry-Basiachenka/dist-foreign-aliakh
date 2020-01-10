@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.service.api.csv.ICsvConverter;
+import com.copyright.rup.dist.common.service.impl.csv.CommonCsvConverter;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
@@ -10,10 +12,6 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -42,7 +40,7 @@ public class AaclUsageCsvProcessor extends DistCsvProcessor<Usage> {
     }
 
     @Override
-    public IConverter<Usage> getConverter() {
+    public ICsvConverter<Usage> getConverter() {
         return new AaclUsageConverter();
     }
 
@@ -90,34 +88,7 @@ public class AaclUsageCsvProcessor extends DistCsvProcessor<Usage> {
      *
      * @author Ihar Suvorau
      */
-    //TODO introduce common converter
-    private class AaclUsageConverter implements IConverter<Usage> {
-
-        private String getValue(String[] row, ICsvColumn header, List<String> headers) {
-            return StringUtils.defaultIfBlank(row[headers.indexOf(header.getColumnName())], null);
-        }
-
-        private String getString(String[] row, ICsvColumn column, List<String> headers) {
-            String value = getValue(row, column, headers);
-            return null != value ? isPositiveNumber(value) ? parseScientific(value) : value : null;
-        }
-
-        private Long getLong(String[] row, ICsvColumn column, List<String> headers) {
-            String value = getValue(row, column, headers);
-            return null != value ? Long.valueOf(parseScientific(value)) : null;
-        }
-
-        private Integer getInteger(String[] row, ICsvColumn column, List<String> headers) {
-            return NumberUtils.createInteger(getValue(row, column, headers));
-        }
-
-        private boolean isPositiveNumber(String value) {
-            return null != value && value.matches("[1-9]\\d*(\\.\\d*[eE][+]\\d+)?");
-        }
-
-        private String parseScientific(String value) {
-            return null != value ? new BigDecimal(value).toPlainString() : null;
-        }
+    private class AaclUsageConverter extends CommonCsvConverter<Usage> {
 
         @Override
         public Usage convert(String... row) {

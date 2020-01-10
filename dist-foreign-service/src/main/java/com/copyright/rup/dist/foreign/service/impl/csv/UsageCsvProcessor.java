@@ -2,23 +2,20 @@ package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.service.api.csv.ICsvConverter;
+import com.copyright.rup.dist.common.service.impl.csv.CommonCsvConverter;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DateFormatValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.YearValidator;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -57,7 +54,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
     }
 
     @Override
-    public IConverter<Usage> getConverter() {
+    public ICsvConverter<Usage> getConverter() {
         return new UsageConverter(productFamily);
     }
 
@@ -169,7 +166,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
      *
      * @author Nikita Levyankov
      */
-    private class UsageConverter implements IConverter<Usage> {
+    private class UsageConverter extends CommonCsvConverter<Usage> {
 
         private final String productFamily;
 
@@ -180,41 +177,6 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
          */
         UsageConverter(String productFamily) {
             this.productFamily = Objects.requireNonNull(productFamily);
-        }
-
-        private String getValue(String[] row, ICsvColumn header, List<String> headers) {
-            return StringUtils.defaultIfBlank(row[headers.indexOf(header.getColumnName())], null);
-        }
-
-        private String getString(String[] row, ICsvColumn column, List<String> headers) {
-            String value = getValue(row, column, headers);
-            return null != value ? isPositiveNumber(value) ? parseScientific(value) : value : null;
-        }
-
-        private Long getLong(String[] row, ICsvColumn column, List<String> headers) {
-            String value = getValue(row, column, headers);
-            return null != value ? Long.valueOf(parseScientific(value)) : null;
-        }
-
-        private Integer getInteger(String[] row, ICsvColumn column, List<String> headers) {
-            return NumberUtils.createInteger(getValue(row, column, headers));
-        }
-
-        private BigDecimal getBigDecimal(String[] row, ICsvColumn column, List<String> headers) {
-            String value = getValue(row, column, headers);
-            return null != value ? new BigDecimal(value).setScale(2, RoundingMode.HALF_UP) : null;
-        }
-
-        private boolean isPositiveNumber(String value) {
-            return null != value && value.matches("[1-9]\\d*(\\.\\d*[eE][+]\\d+)?");
-        }
-
-        private String parseScientific(String value) {
-            return null != value ? new BigDecimal(value).toPlainString() : null;
-        }
-
-        private LocalDate getDate(String[] row, ICsvColumn column, List<String> headers) {
-            return CommonDateUtils.parseLocalDate(getValue(row, column, headers), "M/d/uuuu");
         }
 
         @Override
