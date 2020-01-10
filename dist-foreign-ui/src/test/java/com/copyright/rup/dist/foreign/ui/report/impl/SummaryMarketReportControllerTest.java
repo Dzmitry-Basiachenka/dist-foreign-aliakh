@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
@@ -13,7 +14,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportWidget;
 
 import org.easymock.Capture;
@@ -43,14 +46,20 @@ import java.util.List;
 @PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
 public class SummaryMarketReportControllerTest {
 
-    private IReportService reportService;
     private SummaryMarketReportController controller;
+    private IReportService reportService;
+    private IUsageBatchService usageBatchService;
+    private IProductFamilyProvider productFamilyProvider;
 
     @Before
     public void setUp() {
         controller = new SummaryMarketReportController();
         reportService = createMock(IReportService.class);
+        usageBatchService = createMock(IUsageBatchService.class);
+        productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(controller, reportService);
+        Whitebox.setInternalState(controller, usageBatchService);
+        Whitebox.setInternalState(controller, productFamilyProvider);
     }
 
     @Test
@@ -58,6 +67,16 @@ public class SummaryMarketReportControllerTest {
         ISummaryMarketReportWidget widget = controller.instantiateWidget();
         assertNotNull(controller.instantiateWidget());
         assertEquals(SummaryMarketReportWidget.class, widget.getClass());
+    }
+
+    @Test
+    public void testGetUsageBatches() {
+        List<UsageBatch> batches = Collections.singletonList(new UsageBatch());
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn("NTS").once();
+        expect(usageBatchService.getUsageBatches(eq("NTS"))).andReturn(batches).once();
+        replay(reportService, usageBatchService, productFamilyProvider);
+        assertEquals(batches, controller.getUsageBatches());
+        verify(reportService, usageBatchService, productFamilyProvider);
     }
 
     @Test
@@ -73,12 +92,12 @@ public class SummaryMarketReportControllerTest {
         expect(widget.getBatches()).andReturn(batches).once();
         reportService.writeSummaryMarkerCsvReport(capture(batchesCapture), capture(osCapture));
         expectLastCall().once();
-        replay(OffsetDateTime.class, widget, reportService);
+        replay(OffsetDateTime.class, widget, reportService, usageBatchService, productFamilyProvider);
         IStreamSource streamSource = controller.getCsvStreamSource();
         assertEquals("summary_of_market_report_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
         assertEquals(batches, batchesCapture.getValue());
         assertNotNull(osCapture.getValue());
-        verify(OffsetDateTime.class, widget, reportService);
+        verify(OffsetDateTime.class, widget, reportService, usageBatchService, productFamilyProvider);
     }
 }

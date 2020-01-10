@@ -103,7 +103,7 @@ public class SummaryMarketReportWidget extends Window implements ISummaryMarketR
     }
 
     private HorizontalLayout buildButtonsLayout() {
-        Button closeButton = Buttons.createCloseButton((Window) controller.getWidget());
+        Button closeButton = Buttons.createCloseButton(this);
         Button clearButton = Buttons.createButton("Clear");
         clearButton.addClickListener(event -> checkBoxGroup.clear());
         exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));

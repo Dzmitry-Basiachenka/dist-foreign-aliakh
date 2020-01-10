@@ -8,10 +8,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBoxGroup;
@@ -22,9 +22,10 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collections;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link SummaryMarketReportWidget}.
@@ -41,14 +42,17 @@ public class SummaryMarketReportWidgetTest {
 
     @Before
     public void setUp() {
-        SummaryMarketReportController controller = new SummaryMarketReportController();
-        IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
-        Whitebox.setInternalState(controller, usageBatchService);
-        expect(usageBatchService.getUsageBatchesByProductFamilies(Sets.newHashSet("FAS", "FAS2")))
-            .andReturn(Collections.emptyList()).once();
-        replay(usageBatchService);
-        widget = (SummaryMarketReportWidget) controller.initWidget();
-        verify(usageBatchService);
+        ISummaryMarketReportController controller = createMock(ISummaryMarketReportController.class);
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource())
+            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
+        expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
+        expect(controller.getUsageBatches()).andReturn(Collections.emptyList()).once();
+        replay(controller, streamSource);
+        widget = new SummaryMarketReportWidget();
+        widget.setController(controller);
+        widget.init();
+        verify(controller, streamSource);
     }
 
     @Test

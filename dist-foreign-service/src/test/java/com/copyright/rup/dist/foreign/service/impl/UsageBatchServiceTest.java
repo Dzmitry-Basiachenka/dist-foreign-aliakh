@@ -120,10 +120,9 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetUsageBatchesByProductFamily() {
-        expect(usageBatchRepository.findByProductFamilies(Collections.singleton(FAS_PRODUCT_FAMILY)))
-            .andReturn(Collections.emptyList()).once();
+        expect(usageBatchRepository.findByProductFamily(FAS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
         replay(usageBatchRepository);
-        usageBatchService.getUsageBatchesByProductFamilies(Collections.singleton(FAS_PRODUCT_FAMILY));
+        usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY);
         verify(usageBatchRepository);
     }
 

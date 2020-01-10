@@ -61,8 +61,7 @@ public class AaclUsageFilterControllerTest {
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName("name");
-        expect(usageBatchService.getUsageBatchesByProductFamilies(Collections.singleton(AACL_PRODUCT_FAMILY)))
-            .andReturn(Lists.newArrayList(usageBatch)).once();
+        expect(usageBatchService.getUsageBatches(AACL_PRODUCT_FAMILY)).andReturn(Lists.newArrayList(usageBatch)).once();
         replay(usageBatchService, productFamilyProvider);
         List<UsageBatch> usageBatches = controller.getUsageBatches();
         assertEquals(1, CollectionUtils.size(usageBatches));

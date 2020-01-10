@@ -88,8 +88,8 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public List<UsageBatch> getUsageBatchesByProductFamilies(Set<String> productFamilies) {
-        return usageBatchRepository.findByProductFamilies(productFamilies);
+    public List<UsageBatch> getUsageBatches(String productFamily) {
+        return usageBatchRepository.findByProductFamily(productFamily);
     }
 
     @Override
