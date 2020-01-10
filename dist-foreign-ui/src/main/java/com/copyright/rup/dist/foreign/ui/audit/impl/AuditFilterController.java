@@ -20,7 +20,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -61,8 +60,7 @@ public class AuditFilterController extends CommonController<IAuditFilterWidget> 
 
     @Override
     public List<UsageBatch> getUsageBatches() {
-        return usageBatchService.getUsageBatchesByProductFamilies(
-            Collections.singleton(productFamilyProvider.getSelectedProductFamily()));
+        return usageBatchService.getUsageBatches(productFamilyProvider.getSelectedProductFamily());
     }
 
     @Override

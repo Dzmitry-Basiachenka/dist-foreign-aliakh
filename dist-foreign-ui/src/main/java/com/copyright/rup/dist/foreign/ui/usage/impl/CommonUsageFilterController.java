@@ -9,7 +9,6 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,7 +36,7 @@ public abstract class CommonUsageFilterController extends CommonController<IComm
 
     @Override
     public List<UsageBatch> getUsageBatches() {
-        return usageBatchService.getUsageBatchesByProductFamilies(Collections.singleton(getSelectedProductFamily()));
+        return usageBatchService.getUsageBatches(getSelectedProductFamily());
     }
 
     protected IUsageBatchService getUsageBatchService() {

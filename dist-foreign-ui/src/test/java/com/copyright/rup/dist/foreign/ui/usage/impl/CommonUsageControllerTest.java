@@ -132,8 +132,7 @@ public class CommonUsageControllerTest {
 
     @Test
     public void testGetUsageBatches() {
-        expect(usageBatchService.getUsageBatchesByProductFamilies(Collections.singleton(FAS_PRODUCT_FAMILY)))
-            .andReturn(Collections.emptyList()).once();
+        expect(usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
         replay(usageBatchService);
         controller.getUsageBatches(FAS_PRODUCT_FAMILY);
         verify(usageBatchService);

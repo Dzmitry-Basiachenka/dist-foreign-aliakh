@@ -47,12 +47,12 @@ public interface IUsageBatchRepository {
     UsageBatch findById(String batchId);
 
     /**
-     * Finds list of {@link UsageBatch}es by specified Product Families.
+     * Finds list of {@link UsageBatch}es by specified Product Family.
      *
-     * @param productFamilies Product Families
+     * @param productFamily Product Family
      * @return list of found {@link UsageBatch}es
      */
-    List<UsageBatch> findByProductFamilies(Set<String> productFamilies);
+    List<UsageBatch> findByProductFamily(String productFamily);
 
     /**
      * Finds list of FAS/FAS2 {@link UsageBatch}es suitable for pre-service fee funds.
