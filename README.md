@@ -1,3 +1,16 @@
+8.1.12
+-
+* B-54117 CDP: Implement email notifications to inform users that liabilities arrived from LM: make changes based on comments in CR-DIST-MODELING-213
+* B-55412 FDA: Load AACL Usage Data: make changes based on comments in CR-DIST-FOREIGN-136
+* B-55412 FDA: Load AACL Usage Data: rename Distrubution Period field to Period End Date (YYYY) on Upload Usage Batch window
+* B-56091 FDA: fix sorting on Scenarios, Usage History, View Usage Batch and View Fund Pool grids
+* B-56091 Tech Debt: FDA: Show batches for selected product family only in Summary of Market report window
+* B-56091 Tech Debt: FDA: Update Tomcat version to 8.5.50 in order to resolve vulnerability issues
+* B-56091 Tech Debt: FDA: apply common CSV converter
+* CDP-872 FDA: Ownership Adjustment Report: It is able to run report for NTS scenarios from FAS/FAS2 product families global filter
+* CDP-876 FDA: FAS usage batch record not loaded - title beginning with #
+* Revert "CDP-872 FDA: Ownership Adjustment Report: It is able to run report for NTS scenarios from FAS/FAS2 product families global filter"
+
 8.1.11
 -
 * B-55070 FDA: Modify Usage Tab View for AACL: fill value of Period End Date column in Usages table
