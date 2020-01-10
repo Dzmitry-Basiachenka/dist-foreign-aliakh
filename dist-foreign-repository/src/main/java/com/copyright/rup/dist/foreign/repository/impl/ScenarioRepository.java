@@ -21,7 +21,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Implementation of {@link IScenarioRepository} for MyBatis.
@@ -64,8 +63,8 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
-    public List<Scenario> findByProductFamilies(Set<String> productFamilies) {
-        return selectList("IScenarioMapper.findByProductFamilies", Objects.requireNonNull(productFamilies));
+    public List<Scenario> findByProductFamily(String productFamily) {
+        return selectList("IScenarioMapper.findByProductFamily", Objects.requireNonNull(productFamily));
     }
 
     @Override

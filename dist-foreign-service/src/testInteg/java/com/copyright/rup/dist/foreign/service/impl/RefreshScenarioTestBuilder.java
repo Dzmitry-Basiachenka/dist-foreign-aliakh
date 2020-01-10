@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -95,7 +94,7 @@ class RefreshScenarioTestBuilder {
             testHelper.createRestServer();
             testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
             testHelper.expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
-            Scenario scenario = scenarioRepository.findByProductFamilies(Collections.singleton(productFamily))
+            Scenario scenario = scenarioRepository.findByProductFamily(productFamily)
                 .stream()
                 .filter(s -> s.getId().equals(scenarioId))
                 .findFirst()
