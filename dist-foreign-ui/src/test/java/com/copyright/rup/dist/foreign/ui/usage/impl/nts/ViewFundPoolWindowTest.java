@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Button;
@@ -57,6 +58,7 @@ import java.util.stream.Collectors;
 public class ViewFundPoolWindowTest {
 
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
+    private static final String UNCHECKED = "unchecked";
 
     private ViewFundPoolWindow viewFundPoolWindow;
     private INtsUsageController controller;
@@ -94,7 +96,7 @@ public class ViewFundPoolWindowTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public void testDeleteClickListenerAssociatedFunds() {
         mockStatic(Windows.class);
         Grid<UsageBatch> grid = createMock(Grid.class);
@@ -112,7 +114,7 @@ public class ViewFundPoolWindowTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public void testDeleteClickListenerWithAssociatedScenarios() {
         mockStatic(Windows.class);
         Grid<UsageBatch> grid = createMock(Grid.class);
@@ -132,6 +134,7 @@ public class ViewFundPoolWindowTest {
     }
 
     @Test
+    @SuppressWarnings(UNCHECKED)
     public void testDeleteClickListenerEmptyAssociatedScenarios() {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
@@ -150,6 +153,22 @@ public class ViewFundPoolWindowTest {
         verify(controller, confirmWindowCapture, grid, Windows.class);
     }
 
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testPerformSearch() {
+        SearchWidget searchWidget = createMock(SearchWidget.class);
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(viewFundPoolWindow, searchWidget);
+        Whitebox.setInternalState(viewFundPoolWindow, grid);
+        expect(grid.getDataProvider()).andReturn(new ListDataProvider(Collections.EMPTY_LIST)).once();
+        expect(searchWidget.getSearchValue()).andReturn("Search").once();
+        grid.recalculateColumnWidths();
+        expectLastCall().once();
+        replay(searchWidget, grid);
+        viewFundPoolWindow.performSearch();
+        verify(searchWidget, grid);
+    }
+
     private void verifySize(Component component) {
         assertEquals(1000, component.getWidth(), 0);
         assertEquals(550, component.getHeight(), 0);
@@ -157,7 +176,7 @@ public class ViewFundPoolWindowTest {
         assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Grid.Column> columns = grid.getColumns();
