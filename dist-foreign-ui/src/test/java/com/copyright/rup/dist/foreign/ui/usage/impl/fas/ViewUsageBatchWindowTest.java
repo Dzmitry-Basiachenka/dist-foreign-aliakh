@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Button;
@@ -57,6 +58,7 @@ import java.util.stream.Collectors;
 public class ViewUsageBatchWindowTest {
 
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
+    private static final String UNCHECKED = "unchecked";
 
     private ViewUsageBatchWindow viewUsageBatchWindow;
     private IFasUsageController controller;
@@ -94,7 +96,7 @@ public class ViewUsageBatchWindowTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public void testDeleteClickListenerAssociatedFunds() {
         mockStatic(Windows.class);
         Grid<UsageBatch> grid = createMock(Grid.class);
@@ -112,7 +114,7 @@ public class ViewUsageBatchWindowTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public void testDeleteClickListenerWithAssociatedScenarios() {
         mockStatic(Windows.class);
         Grid<UsageBatch> grid = createMock(Grid.class);
@@ -132,6 +134,7 @@ public class ViewUsageBatchWindowTest {
     }
 
     @Test
+    @SuppressWarnings(UNCHECKED)
     public void testDeleteClickListenerEmptyAssociatedScenarios() {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
@@ -150,6 +153,22 @@ public class ViewUsageBatchWindowTest {
         verify(controller, confirmWindowCapture, grid, Windows.class);
     }
 
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testPerformSearch() {
+        SearchWidget searchWidget = createMock(SearchWidget.class);
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(viewUsageBatchWindow, searchWidget);
+        Whitebox.setInternalState(viewUsageBatchWindow, grid);
+        expect(grid.getDataProvider()).andReturn(new ListDataProvider(Collections.EMPTY_LIST)).once();
+        expect(searchWidget.getSearchValue()).andReturn("Search").once();
+        grid.recalculateColumnWidths();
+        expectLastCall().once();
+        replay(searchWidget, grid);
+        viewUsageBatchWindow.performSearch();
+        verify(searchWidget, grid);
+    }
+
     private void verifySize(Component component) {
         assertEquals(1000, component.getWidth(), 0);
         assertEquals(550, component.getHeight(), 0);
@@ -157,7 +176,7 @@ public class ViewUsageBatchWindowTest {
         assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Grid.Column> columns = grid.getColumns();
