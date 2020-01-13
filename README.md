@@ -1,6 +1,5 @@
 8.1.12
 -
-* B-54117 CDP: Implement email notifications to inform users that liabilities arrived from LM: make changes based on comments in CR-DIST-MODELING-213
 * B-55412 FDA: Load AACL Usage Data: make changes based on comments in CR-DIST-FOREIGN-136
 * B-55412 FDA: Load AACL Usage Data: rename Distrubution Period field to Period End Date (YYYY) on Upload Usage Batch window
 * B-56091 FDA: fix sorting on Scenarios, Usage History, View Usage Batch and View Fund Pool grids
