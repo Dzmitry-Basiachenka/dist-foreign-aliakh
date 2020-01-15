@@ -419,4 +419,217 @@ databaseChangeLog {
                     columnNames: 'df_usage_fas_uid', constraintName: 'df_usage_fas_pk')
         }
     }
+
+    changeSet(id: '2020-01-15-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment('B-55538 FDA: Create Licensee Class Mapping: create df_aggregate_licensee_class table')
+
+        createTable(tableName: 'df_aggregate_licensee_class', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing aggregate licensee classes for AACL product family') {
+
+            column(name: 'aggregate_licensee_class_id', type: 'NUMERIC(38)', remarks: 'Aggregate Licensee Class Id')
+            column(name: 'aggregate_licensee_class_name', type: 'VARCHAR(255)', remarks: 'Aggregate Licensee Class Name')
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1', remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()', remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()', remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(tablespace: dbIndexTablespace, schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class',
+                columnNames: 'aggregate_licensee_class_id', constraintName: 'pk_df_aggregate_licensee_class')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 108)
+            column(name: 'aggregate_licensee_class_name', value: 'EXGP - Life Sciences')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 110)
+            column(name: 'aggregate_licensee_class_name', value: 'EXU4 - Life Sciences')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 111)
+            column(name: 'aggregate_licensee_class_name', value: 'HGP - Life Sciences')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 113)
+            column(name: 'aggregate_licensee_class_name', value: 'MU - Life Sciences')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 115)
+            column(name: 'aggregate_licensee_class_name', value: 'EXGP - Business Management')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 117)
+            column(name: 'aggregate_licensee_class_name', value: 'EXU4 - Business Management')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 118)
+            column(name: 'aggregate_licensee_class_name', value: 'HGP - Business Management')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 120)
+            column(name: 'aggregate_licensee_class_name', value: 'MU - Business Management')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 136)
+            column(name: 'aggregate_licensee_class_name', value: 'EXGP - Education')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 138)
+            column(name: 'aggregate_licensee_class_name', value: 'EXU4 - Education')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 139)
+            column(name: 'aggregate_licensee_class_name', value: 'HGP - Education')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 141)
+            column(name: 'aggregate_licensee_class_name', value: 'MU - Education')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 143)
+            column(name: 'aggregate_licensee_class_name', value: 'EXGP - Engineering')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 145)
+            column(name: 'aggregate_licensee_class_name', value: 'EXU4 - Engineering')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 146)
+            column(name: 'aggregate_licensee_class_name', value: 'HGP - Engineering')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 148)
+            column(name: 'aggregate_licensee_class_name', value: 'MU - Engineering')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 164)
+            column(name: 'aggregate_licensee_class_name', value: 'EXGP - Law & Legal Studies')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 166)
+            column(name: 'aggregate_licensee_class_name', value: 'EXU4 - Law & Legal Studies')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 167)
+            column(name: 'aggregate_licensee_class_name', value: 'HGP - Law & Legal Studies')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 169)
+            column(name: 'aggregate_licensee_class_name', value: 'MU - Law & Legal Studies')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 171)
+            column(name: 'aggregate_licensee_class_name', value: 'EXGP - Arts & Humanities')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 173)
+            column(name: 'aggregate_licensee_class_name', value: 'EXU4 - Arts & Humanities')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 174)
+            column(name: 'aggregate_licensee_class_name', value: 'HGP - Arts & Humanities')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 176)
+            column(name: 'aggregate_licensee_class_name', value: 'MU - Arts & Humanities')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 192)
+            column(name: 'aggregate_licensee_class_name', value: 'EXGP - Medical & Health')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 194)
+            column(name: 'aggregate_licensee_class_name', value: 'EXU4 - Medical & Health')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 195)
+            column(name: 'aggregate_licensee_class_name', value: 'HGP - Medical & Health')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 197)
+            column(name: 'aggregate_licensee_class_name', value: 'MU - Medical & Health')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 206)
+            column(name: 'aggregate_licensee_class_name', value: 'EXGP - Physical Sciences & Mathematics')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 208)
+            column(name: 'aggregate_licensee_class_name', value: 'EXU4 - Physical Sciences & Mathematics')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 209)
+            column(name: 'aggregate_licensee_class_name', value: 'HGP - Physical Sciences & Mathematics')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 211)
+            column(name: 'aggregate_licensee_class_name', value: 'MU - Physical Sciences & Mathematics')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 227)
+            column(name: 'aggregate_licensee_class_name', value: 'EXGP - Social & Behavioral Sciences')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 229)
+            column(name: 'aggregate_licensee_class_name', value: 'EXU4 - Social & Behavioral Sciences')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 230)
+            column(name: 'aggregate_licensee_class_name', value: 'HGP - Social & Behavioral Sciences')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 232)
+            column(name: 'aggregate_licensee_class_name', value: 'MU - Social & Behavioral Sciences')
+        }
+
+        rollback {
+            dropTable(tableName: 'df_aggregate_licensee_class', schemaName: dbAppsSchema)
+        }
+    }
 }
