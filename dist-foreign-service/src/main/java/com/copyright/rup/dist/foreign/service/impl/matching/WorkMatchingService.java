@@ -79,6 +79,26 @@ public class WorkMatchingService implements IWorkMatchingService {
 
     @Override
     @Transactional
+    public void matchByWrWrkInst(Usage usage) {
+        Work work = piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst());
+        if (Objects.nonNull(work.getWrWrkInst())) {
+            // TODO {srudak} check if we should set workTitle
+            usage.setSystemTitle(work.getMainTitle());
+            usage.setStatus(UsageStatusEnum.WORK_FOUND);
+            usage.setStandardNumber(work.getMainIdno());
+            usage.setStandardNumberType(StringUtils.upperCase(work.getMainIdnoType()));
+            auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                String.format("Wr Wrk Inst %s was found", usage.getWrWrkInst()));
+        } else {
+            usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
+            auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+                String.format("Wr Wrk Inst %s wasn't found", usage.getWrWrkInst()));
+        }
+        usageService.updateProcessedUsage(usage);
+    }
+
+    @Override
+    @Transactional
     public void updateStatusForUsageWithoutStandardNumberAndTitle(Usage usage) {
         updateUsagesStatusAndWriteAudit(usage, new Work(), UsageGroupEnum.SINGLE_USAGE, usage.getGrossAmount());
     }

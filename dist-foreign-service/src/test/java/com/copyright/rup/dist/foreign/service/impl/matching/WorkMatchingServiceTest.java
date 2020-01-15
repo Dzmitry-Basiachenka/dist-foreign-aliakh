@@ -1,13 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
-import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -37,6 +36,7 @@ import java.math.BigDecimal;
 public class WorkMatchingServiceTest {
 
     private static final String STANDARD_NUMBER = "000043122-1";
+    private static final String TITLE = "The theological roots of Pentecostalism";
     private IPiIntegrationService piIntegrationService;
     private WorkMatchingService workMatchingService;
     private IUsageRepository usageRepository;
@@ -58,13 +58,13 @@ public class WorkMatchingServiceTest {
 
     @Test
     public void testMatchByIdno() {
-        String title = "The theological roots of Pentecostalism";
-        Usage usage = buildUsage(STANDARD_NUMBER, title);
-        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, title))
-            .andReturn(new Work(112930820L, title, null, "valisbn10")).once();
+        Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
+        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, TITLE))
+            .andReturn(new Work(112930820L, TITLE, null, "valisbn10")).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
-        auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 112930820 was found by standard number 000043122-1");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService, usageService);
         workMatchingService.matchByIdno(usage);
@@ -77,12 +77,10 @@ public class WorkMatchingServiceTest {
 
     @Test
     public void testMatchByIdnoForNts() {
-        String title = "The theological roots of Pentecostalism";
         String batchId = RupPersistUtils.generateUuid();
-        Usage usage = buildUsage(STANDARD_NUMBER, title);
-        usage.setId(RupPersistUtils.generateUuid());
+        Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
         usage.setBatchId(batchId);
-        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, title))
+        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, TITLE))
             .andReturn(new Work()).once();
         expect(usageRepository.getTotalAmountByStandardNumberAndBatchId(STANDARD_NUMBER, batchId))
             .andReturn(new BigDecimal("99.00")).once();
@@ -101,13 +99,13 @@ public class WorkMatchingServiceTest {
 
     @Test
     public void testMatchByTitle() {
-        String title = "The theological roots of Pentecostalism";
-        Usage usage = buildUsage(null, title);
-        expect(piIntegrationService.findWorkByTitle(title))
-            .andReturn(new Work(112930820L, title, STANDARD_NUMBER, "valissn")).once();
+        Usage usage = buildUsage(null, TITLE);
+        expect(piIntegrationService.findWorkByTitle(TITLE))
+            .andReturn(new Work(112930820L, TITLE, STANDARD_NUMBER, "valissn")).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
-        auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 112930820 was found by title \"The theological roots of Pentecostalism\"");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
         workMatchingService.matchByTitle(usage);
@@ -118,8 +116,52 @@ public class WorkMatchingServiceTest {
         verify(piIntegrationService, usageRepository, auditService);
     }
 
+    @Test
+    public void testMatchByWrWrkInst() {
+        Usage usage = buildUsage(112930820L);
+        expect(piIntegrationService.findWorkByWrWrkInst(112930820L))
+            .andReturn(new Work(112930820L, TITLE, STANDARD_NUMBER, "valissn")).once();
+        usageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 112930820 was found");
+        expectLastCall().once();
+        replay(piIntegrationService, usageRepository, auditService);
+        workMatchingService.matchByWrWrkInst(usage);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        assertEquals(TITLE, usage.getSystemTitle());
+        assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
+        assertEquals("VALISSN", usage.getStandardNumberType());
+        verify(piIntegrationService, usageRepository, auditService);
+    }
+
+    @Test
+    public void testMatchByWrWrkInstWithWorkNotFound() {
+        Usage usage = buildUsage(112930820L);
+        expect(piIntegrationService.findWorkByWrWrkInst(112930820L)).andReturn(new Work()).once();
+        usageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 112930820 wasn't found");
+        expectLastCall().once();
+        replay(piIntegrationService, usageRepository, auditService);
+        workMatchingService.matchByWrWrkInst(usage);
+        assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        assertNull(usage.getSystemTitle());
+        assertNull(usage.getStandardNumber());
+        assertNull(usage.getStandardNumberType());
+        verify(piIntegrationService, usageRepository, auditService);
+    }
+
+    private Usage buildUsage(Long wrWrkInst) {
+        Usage usage = buildUsage(null, null);
+        usage.setWrWrkInst(wrWrkInst);
+        return usage;
+    }
+
     private Usage buildUsage(String standardNumber, String title) {
         Usage usage = new Usage();
+        usage.setId(RupPersistUtils.generateUuid());
         usage.setStandardNumber(standardNumber);
         usage.setWorkTitle(title);
         return usage;
