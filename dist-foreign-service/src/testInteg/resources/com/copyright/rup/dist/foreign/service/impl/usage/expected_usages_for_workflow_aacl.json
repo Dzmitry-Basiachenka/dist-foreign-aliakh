@@ -1,0 +1,86 @@
+[
+  {
+    "id": "3e9566e6-5cb9-4013-88ef-d4f8b66bda5d",
+    "batchName": "AACL test batch",
+    "paymentDate": "2019-06-30",
+    "wrWrkInst": 16245866,
+    "numberOfCopies": 10,
+    "grossAmount": 0.00,
+    "reportedValue": 0.00,
+    "netAmount": 0.00,
+    "serviceFeeAmount": 0.00,
+    "status": "NEW",
+    "productFamily": "AACL",
+    "periodEndDate": "2019-06-30",
+    "comment": "AACL usage Comment 1",
+    "aaclUsage": {
+      "institution": "CORNELL UNIVERSITY",
+      "usagePeriod": 2019,
+      "usageSource": "Feb 2019 TUR",
+      "numberOfPages": 14
+    }
+  },
+  {
+    "id": "599c5313-ed3b-4874-87e9-972425eb734f",
+    "batchName": "AACL test batch",
+    "paymentDate": "2019-06-30",
+    "wrWrkInst": 16912502,
+    "numberOfCopies": 30,
+    "grossAmount": 0.00,
+    "reportedValue": 0.00,
+    "netAmount": 0.00,
+    "serviceFeeAmount": 0.00,
+    "status": "NEW",
+    "productFamily": "AACL",
+    "periodEndDate": "2019-06-30",
+    "comment": "AACL usage Comment 2",
+    "aaclUsage": {
+      "institution": "WESTERN MICHIGAN UNIVERSITY",
+      "usagePeriod": 2019,
+      "usageSource": "Aug 2018 TUR",
+      "numberOfPages": 12
+    }
+  },
+  {
+    "id": "78272304-1a43-48f7-a83b-530a90ed27e6",
+    "batchName": "AACL test batch",
+    "paymentDate": "2019-06-30",
+    "wrWrkInst": 16565457,
+    "numberOfCopies": 2,
+    "grossAmount": 0.00,
+    "reportedValue": 0.00,
+    "netAmount": 0.00,
+    "serviceFeeAmount": 0.00,
+    "status": "NEW",
+    "productFamily": "AACL",
+    "periodEndDate": "2019-06-30",
+    "comment": "AACL usage Comment 3",
+    "aaclUsage": {
+      "institution": "UNIV. OF MICHIGAN",
+      "usagePeriod": 2019,
+      "usageSource": "Aug 2019 TUR",
+      "numberOfPages": 7
+    }
+  },
+  {
+    "id": "f634ec19-8ed1-4cc8-88bc-54461c62e670",
+    "batchName": "AACL test batch",
+    "paymentDate": "2019-06-30",
+    "wrWrkInst": 16504064,
+    "numberOfCopies": 3,
+    "grossAmount": 0.00,
+    "reportedValue": 0.00,
+    "netAmount": 0.00,
+    "serviceFeeAmount": 0.00,
+    "status": "NEW",
+    "productFamily": "AACL",
+    "periodEndDate": "2019-06-30",
+    "comment": "AACL usage Comment 4",
+    "aaclUsage": {
+      "institution": "University of Chicago",
+      "usagePeriod": 2019,
+      "usageSource": "Feb 2018 TUR",
+      "numberOfPages": 17
+    }
+  }
+]
