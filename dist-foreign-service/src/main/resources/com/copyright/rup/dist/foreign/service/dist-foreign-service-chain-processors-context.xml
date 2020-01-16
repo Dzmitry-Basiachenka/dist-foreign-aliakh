@@ -57,4 +57,9 @@
     </bean>
 
     <bean id="df.service.ntsUnclassifiedStatusProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.UnclassifiedStatusProcessor" />
+
+    <!-- AACL processors -->
+    <bean id="df.service.aaclMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingProcessor">
+        <property name="usageStatus" value="NEW"/>
+    </bean>
 </beans>

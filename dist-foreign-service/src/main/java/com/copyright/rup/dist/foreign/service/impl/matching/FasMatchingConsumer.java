@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 /**
- * Consumer to handle usages for PI matching.
+ * Consumer to handle FAS/FAS2 usages for PI matching.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -25,14 +25,14 @@ import java.util.Objects;
  *
  * @author Ihar Suvorau
  */
-@Component("df.service.matchingConsumer")
-public class MatchingConsumer implements IConsumer<Usage> {
+@Component("df.service.fasMatchingConsumer")
+public class FasMatchingConsumer implements IConsumer<Usage> {
 
-    private static final String MATCHING_BY_IDNO_FINISHED_LOG = "Consume usage for matching processing. Finished. " +
-        "UsageId={}, StandardNumber={}, WorkTitle={}, MatchBy=IDNO, WrWrkInst={}, UsageStatus={}";
-    private static final String MATCHING_BY_TITLE_FINISHED_LOG = "Consume usage for matching processing. Finished. " +
-        "UsageId={}, WorkTitle={}, MatchBy=Title, WrWrkInst={}, UsageStatus={}";
-    private static final String NOT_MATCHED_FINISHED_LOG = "Consume usage for matching processing. Finished. " +
+    private static final String MATCHING_BY_IDNO_FINISHED_LOG = "Consume FAS usage for matching processing. " +
+        "Finished. UsageId={}, StandardNumber={}, WorkTitle={}, MatchBy=IDNO, WrWrkInst={}, UsageStatus={}";
+    private static final String MATCHING_BY_TITLE_FINISHED_LOG = "Consume FAS usage for matching processing. " +
+        "Finished. UsageId={}, WorkTitle={}, MatchBy=Title, WrWrkInst={}, UsageStatus={}";
+    private static final String NOT_MATCHED_FINISHED_LOG = "Consume FAS usage for matching processing. Finished. " +
         "UsageId={}, UsageStatus={}, ProductFamily={}, WorkTitle={}, WrWrkInst={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -43,10 +43,11 @@ public class MatchingConsumer implements IConsumer<Usage> {
     private IChainProcessor<Usage> matchingProcessor;
 
     @Override
-    @Profiled(tag = "MatchingConsumer.consume")
+    @Profiled(tag = "FasMatchingConsumer.consume")
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
-            LOGGER.trace("Consume usage for matching processing. Started. UsageId={}, StandardNumber={}, WorkTitle={}",
+            LOGGER.trace(
+                "Consume FAS usage for matching processing. Started. UsageId={}, StandardNumber={}, WorkTitle={}",
                 usage.getId(), usage.getStandardNumber(), usage.getWorkTitle());
             if (StringUtils.isNoneEmpty(usage.getStandardNumber())) {
                 workMatchingService.matchByIdno(usage);

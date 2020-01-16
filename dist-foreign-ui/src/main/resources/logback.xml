@@ -44,7 +44,8 @@
     <!--Loggers for usage processing-->
     <logger name="com.copyright.rup.dist.foreign.service.impl.chain.processor" level="${logLevelUsageProcessing}" />
     <logger name="com.copyright.rup.dist.foreign.service.impl.eligibility.RhEligibilityConsumer" level="${logLevelUsageProcessing}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.MatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.FasMatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.AaclMatchingConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.rights.FasRightsConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.rights.NtsRightsConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.stm.StmRhConsumer" level="${logLevelUsageProcessing}"/>

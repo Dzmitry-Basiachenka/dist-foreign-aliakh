@@ -12,8 +12,8 @@ import static org.junit.Assert.assertNull;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -21,7 +21,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.Objects;
 
 /**
- * Verifies {@link MatchingConsumer}.
+ * Verifies {@link FasMatchingConsumer}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -29,11 +29,11 @@ import java.util.Objects;
  *
  * @author Ihar Suvorau
  */
-public class MatchingConsumerTest {
+public class FasMatchingConsumerTest {
 
     private static final String VALID_TITLE = "VALID TITLE";
     private static final String VALID_STANDARD_NUMBER = "VALID SN";
-    private final MatchingConsumer consumer = new MatchingConsumer();
+    private final FasMatchingConsumer consumer = new FasMatchingConsumer();
     private IChainProcessor<Usage> matchingProcessor;
 
     @Before
