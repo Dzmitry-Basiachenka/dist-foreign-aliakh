@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -52,7 +53,10 @@ import java.util.stream.Collectors;
 public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     private final Map<String, List<UsageAuditItem>> expectedUsageIdToAuditMap = Maps.newHashMap();
+    private final Map<String, String> expectedRmsRequestsToResponses = new LinkedHashMap<>();
     private List<String> predefinedUsageIds;
+    private Long expectedPrmAccountNumber;
+    private String expectedPrmResponse;
     private String usagesCsvFile;
     private String productFamily;
     private UsageBatch usageBatch;
@@ -93,13 +97,20 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    AaclWorkflowIntegrationTestBuilder expectRmsRights(String rmsRequest, String rmsResponse) {
+        this.expectedRmsRequestsToResponses.put(rmsRequest, rmsResponse);
+        return this;
+    }
+
+    AaclWorkflowIntegrationTestBuilder expectPrmCall(Long accountNumber, String expectedResponse) {
+        this.expectedPrmAccountNumber = accountNumber;
+        this.expectedPrmResponse = expectedResponse;
+        return this;
+    }
+
     void reset() {
-        usagesCsvFile = null;
-        predefinedUsageIds = null;
-        productFamily = null;
-        usageBatch = null;
-        expectedUsagesJsonFile = null;
         expectedUsageIdToAuditMap.clear();
+        expectedRmsRequestsToResponses.clear();
     }
 
     @Override
@@ -115,6 +126,9 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private List<UsageDto> actualUsages;
 
         public void run() throws IOException {
+            testHelper.createRestServer();
+            testHelper.expectGetRmsRights(expectedRmsRequestsToResponses);
+            testHelper.expectPrmCall(expectedPrmResponse, expectedPrmAccountNumber);
             loadUsageBatch();
             UsageFilter filter = new UsageFilter();
             filter.setProductFamily(productFamily);
@@ -122,6 +136,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             actualUsages = usageService.getUsageDtos(filter, null, null);
             verifyUsages();
             expectedUsageIdToAuditMap.forEach(testHelper::assertAudit);
+            testHelper.verifyRestServer();
         }
 
         private void loadUsageBatch() throws IOException {
@@ -171,6 +186,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertNotNull(actualUsage);
             assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
             assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+            assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
             assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
             assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
             assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
@@ -185,6 +201,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
             assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
             assertEquals(expectedAaclUsage.getUsagePeriod(), actualAaclUsage.getUsagePeriod());
+            assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
         }
     }
 }

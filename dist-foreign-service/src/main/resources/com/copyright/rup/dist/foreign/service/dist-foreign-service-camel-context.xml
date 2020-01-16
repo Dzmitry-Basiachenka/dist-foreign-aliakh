@@ -227,6 +227,10 @@
                     <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.NTS_PRODUCT_FAMILY}</simple>
                     <bean ref="df.service.ntsRightsConsumer"/>
                 </when>
+                <when>
+                    <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.AACL_PRODUCT_FAMILY}</simple>
+                    <bean ref="df.service.aaclRightsConsumer"/>
+                </when>
             </choice>
 
             <onException useOriginalMessage="true">

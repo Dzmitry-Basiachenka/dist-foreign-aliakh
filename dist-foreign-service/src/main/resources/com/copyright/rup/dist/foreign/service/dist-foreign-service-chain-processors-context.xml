@@ -6,6 +6,7 @@
 
     <!-- Common processors -->
     <bean id="df.service.commonEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.EligibilityProcessor"/>
+    <bean id="df.service.deleteUsageProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.DeleteUsageProcessor"/>
 
     <!-- FAS/FAS2 processors -->
 
@@ -20,30 +21,29 @@
     </bean>
 
     <!-- NTS processors -->
-    <bean id="df.service.ntsDeleteUsageProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.DeleteUsageProcessor"/>
 
     <bean id="df.service.ntsRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
         <property name="usageStatus" value="WORK_FOUND"/>
         <property name="successProcessor" ref="df.service.ntsRhTaxProcessor"/>
-        <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
     </bean>
 
     <bean id="df.service.ntsRhTaxProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhTaxProcessor">
         <property name="usageStatus" value="RH_FOUND"/>
         <property name="successProcessor" ref="df.service.ntsStmRhProcessor"/>
-        <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
     </bean>
 
     <bean id="df.service.ntsStmRhProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.StmRhProcessor">
         <property name="usageStatus" value="US_TAX_COUNTRY"/>
         <property name="successProcessor" ref="df.service.ntsRhEligibilityProcessor"/>
-        <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
     </bean>
 
     <bean id="df.service.ntsRhEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhEligibilityProcessor">
         <property name="usageStatus" value="NON_STM_RH"/>
         <property name="successProcessor" ref="df.service.ntsClassificationProcessor"/>
-        <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
     </bean>
 
     <bean id="df.service.ntsClassificationProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.ClassificationProcessor">
@@ -53,7 +53,7 @@
 
     <bean id="df.service.ntsNonBelletristicProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.NonBelletristicProcessor">
         <property name="successProcessor" ref="df.service.commonEligibilityProcessor"/>
-        <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
     </bean>
 
     <bean id="df.service.ntsUnclassifiedStatusProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.UnclassifiedStatusProcessor" />
@@ -61,5 +61,11 @@
     <!-- AACL processors -->
     <bean id="df.service.aaclMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingProcessor">
         <property name="usageStatus" value="NEW"/>
+        <property name="successProcessor" ref="df.service.aaclRightsProcessor"/>
+    </bean>
+
+    <bean id="df.service.aaclRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
     </bean>
 </beans>

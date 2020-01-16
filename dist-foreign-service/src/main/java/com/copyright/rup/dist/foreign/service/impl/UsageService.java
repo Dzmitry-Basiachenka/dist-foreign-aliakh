@@ -180,6 +180,7 @@ public class UsageService implements IUsageService {
         usages.forEach(usage -> {
             usage.setBatchId(usageBatch.getId());
             usage.getAaclUsage().setUsagePeriod(period);
+            usage.getAaclUsage().setBatchPeriodEndDate(usageBatch.getPaymentDate());
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             usageRepository.insertAaclUsage(usage);
@@ -222,7 +223,9 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Transactional
     public void deleteById(String usageId) {
+        usageAuditService.deleteActionsByUsageId(usageId);
         usageRepository.deleteById(usageId);
     }
 

@@ -848,9 +848,13 @@
         with u as (
             delete from ${schema}.df_usage
             where df_usage_uid = #{usageId}
+        ),
+        fas as (
+            delete from ${schema}.df_usage_fas
+            where df_usage_fas_uid = #{usageId}
         )
-        delete from ${schema}.df_usage_fas
-        where df_usage_fas_uid = #{usageId}
+        delete from ${schema}.df_usage_aacl
+        where df_usage_aacl_uid = #{usageId}
     </delete>
 
     <delete id="deleteByScenarioId" parameterType="string">

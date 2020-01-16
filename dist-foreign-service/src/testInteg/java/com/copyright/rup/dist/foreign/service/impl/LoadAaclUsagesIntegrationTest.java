@@ -76,20 +76,28 @@ public class LoadAaclUsagesIntegrationTest {
 
     @Test
     public void testLoadUsages() throws Exception {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/aacl/rms_grants_100009840_request.json",
+            "rights/aacl/rms_grants_100009840_response.json");
+        testHelper.expectGetRmsRights("rights/aacl/rms_grants_100010768_request.json",
+            "rights/aacl/rms_grants_100010768_response.json");
+        testHelper.expectGetRmsRights("rights/aacl/rms_grants_123456789_request.json",
+            "rights/rms_grants_empty_response.json");
+        testHelper.expectPrmCall("prm/rightsholder_1000024950_response.json", 1000024950L);
         loadUsageBatch();
         verifyUsages();
         testHelper.assertAudit(USAGE_ID_1, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
+            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS",
             UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100009840 was found",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.assertAudit(USAGE_ID_2, buildUsageAuditItems(USAGE_ID_2, ImmutableMap.of(
+            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS",
             UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100010768 was found",
-            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
-        testHelper.assertAudit(USAGE_ID_3, buildUsageAuditItems(USAGE_ID_3, ImmutableMap.of(
-            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 123456789 was found",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.assertAudit(USAGE_ID_4, buildUsageAuditItems(USAGE_ID_4, ImmutableMap.of(
             UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 963852741 wasn't found",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.verifyRestServer();
     }
 
     private void loadUsageBatch() throws IOException {
@@ -131,7 +139,8 @@ public class LoadAaclUsagesIntegrationTest {
         filter.setPaymentDate(PAYMENT_DATE);
         Map<String, UsageDto> actualUsageIdsToUsages = usageService.getUsageDtos(filter, null, null).stream()
             .collect(Collectors.toMap(UsageDto::getId, usageDto -> usageDto));
-        List<UsageDto> expectedUsages = loadExpectedUsages("usage/expected_usages_for_load_aacl.json");
+        List<UsageDto> expectedUsages = loadExpectedUsages("usage/aacl/aacl_expected_usages_for_upload.json");
+        assertEquals(expectedUsages.size(), actualUsageIdsToUsages.size());
         expectedUsages.forEach(
             expectedUsage -> assertUsage(expectedUsage, actualUsageIdsToUsages.get(expectedUsage.getId())));
     }
@@ -149,6 +158,7 @@ public class LoadAaclUsagesIntegrationTest {
         assertNotNull(actualUsage);
         assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
         assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
         assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
         assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
@@ -162,6 +172,7 @@ public class LoadAaclUsagesIntegrationTest {
         assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
         assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
         assertEquals(expectedAaclUsage.getUsagePeriod(), actualAaclUsage.getUsagePeriod());
+        assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
     }
 
     private List<UsageAuditItem> buildUsageAuditItems(String usageId, Map<UsageActionTypeEnum, String> map) {
