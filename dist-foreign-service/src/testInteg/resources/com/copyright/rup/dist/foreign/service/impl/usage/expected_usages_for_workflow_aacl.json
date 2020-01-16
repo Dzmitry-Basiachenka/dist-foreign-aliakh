@@ -14,12 +14,12 @@
     "serviceFeeAmount": 0.00,
     "status": "WORK_FOUND",
     "productFamily": "AACL",
-    "periodEndDate": "2019-06-30",
     "comment": "AACL usage Comment 1",
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
       "usagePeriod": 2019,
       "usageSource": "Feb 2019 TUR",
+      "batchPeriodEndDate": "2019-06-30",
       "numberOfPages": 14
     }
   },
@@ -38,12 +38,12 @@
     "serviceFeeAmount": 0.00,
     "status": "WORK_FOUND",
     "productFamily": "AACL",
-    "periodEndDate": "2019-06-30",
     "comment": "AACL usage Comment 2",
     "aaclUsage": {
       "institution": "WESTERN MICHIGAN UNIVERSITY",
       "usagePeriod": 2019,
       "usageSource": "Aug 2018 TUR",
+      "batchPeriodEndDate": "2019-06-30",
       "numberOfPages": 12
     }
   },
@@ -60,12 +60,12 @@
     "serviceFeeAmount": 0.00,
     "status": "WORK_FOUND",
     "productFamily": "AACL",
-    "periodEndDate": "2019-06-30",
     "comment": "AACL usage Comment 3",
     "aaclUsage": {
       "institution": "UNIV. OF MICHIGAN",
       "usagePeriod": 2019,
       "usageSource": "Aug 2019 TUR",
+      "batchPeriodEndDate": "2019-06-30",
       "numberOfPages": 7
     }
   },
@@ -81,12 +81,12 @@
     "serviceFeeAmount": 0.00,
     "status": "WORK_NOT_FOUND",
     "productFamily": "AACL",
-    "periodEndDate": "2019-06-30",
     "comment": "AACL usage Comment 4",
     "aaclUsage": {
       "institution": "University of Chicago",
       "usagePeriod": 2019,
       "usageSource": "Feb 2018 TUR",
+      "batchPeriodEndDate": "2019-06-30",
       "numberOfPages": 17
     }
   }

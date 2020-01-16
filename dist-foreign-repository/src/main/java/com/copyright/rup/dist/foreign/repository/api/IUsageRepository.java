@@ -418,12 +418,20 @@ public interface IUsageRepository {
     void update(List<Usage> usages);
 
     /**
-     * Updates given {@link Usage} in case of its version is the same as in database .
+     * Updates given {@link Usage} in case of its version is the same as in database.
      *
      * @param usage {@link Usage} to update
      * @return id of updated record, otherwise {@code null}
      */
     String updateProcessedUsage(Usage usage);
+
+    /**
+     * Updates given AACL {@link Usage} in case of its version is the same as in database.
+     *
+     * @param usage {@link Usage} to update
+     * @return id of updated record, otherwise {@code null}
+     */
+    String updateProcessedAaclUsage(Usage usage);
 
     /**
      * Updates researched usage details.

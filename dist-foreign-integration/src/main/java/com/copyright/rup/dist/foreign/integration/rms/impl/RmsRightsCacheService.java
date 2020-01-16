@@ -6,10 +6,10 @@ import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IRmsRightsService}. Uses cache to avoid redundant calls to RMS.
@@ -39,12 +39,11 @@ public class RmsRightsCacheService extends AbstractCacheService<Long, Set<RmsGra
     @Override
     public Set<RmsGrant> getGrants(List<Long> wrWrkInsts, LocalDate periodEndDate, List<String> typeOfUses,
                                    String... licenseTypes) {
-        Set<RmsGrant> result = new HashSet<>();
-        wrWrkInsts.forEach(wrWrkInst -> result.addAll(getFromCache(wrWrkInst)));
-        return result;
+        return wrWrkInsts.stream().flatMap(wrWrkInst -> getFromCache(wrWrkInst).stream()).collect(Collectors.toSet());
     }
 
     @Override
+    //TODO {isuvorau} adjust logic to have ability to use cache for AACL
     protected Set<RmsGrant> loadData(Long wrWrkInsts) {
         return rmsRightsService.getGrants(Collections.singletonList(wrWrkInsts), LocalDate.now(),
             Collections.emptyList());

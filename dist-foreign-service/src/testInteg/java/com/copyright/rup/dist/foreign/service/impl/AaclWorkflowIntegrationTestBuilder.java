@@ -180,6 +180,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsage.getComment(), actualUsage.getComment());
             AaclUsage expectedAaclUsage = expectedUsage.getAaclUsage();
             AaclUsage actualAaclUsage = actualUsage.getAaclUsage();
+            assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
             assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
             assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
             assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());

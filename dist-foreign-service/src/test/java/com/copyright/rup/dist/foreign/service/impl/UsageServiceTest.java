@@ -921,6 +921,17 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testUpdateProcessedUsageAaclProductFamily() {
+        String usageId = RupPersistUtils.generateUuid();
+        Usage usage = buildUsage(usageId);
+        usage.setProductFamily("AACL");
+        expect(usageRepository.updateProcessedAaclUsage(usage)).andReturn(usageId).once();
+        replay(usageRepository);
+        usageService.updateProcessedUsage(usage);
+        verify(usageRepository);
+    }
+
+    @Test
     public void testUpdateProcessedUsageWrongVersion() {
         Usage usage = buildUsage("ca62ea7e-4185-4c56-b12b-c53fbad1d6b8");
         usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
