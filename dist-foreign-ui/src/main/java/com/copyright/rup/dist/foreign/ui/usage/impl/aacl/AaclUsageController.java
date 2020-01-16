@@ -55,6 +55,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Override
     public int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
         int result = getUsageBatchService().insertAaclBatch(usageBatch, usages);
+        getUsageBatchService().sendForMatching(usages);
         aaclUsageFilterController.getWidget().clearFilter();
         return result;
     }

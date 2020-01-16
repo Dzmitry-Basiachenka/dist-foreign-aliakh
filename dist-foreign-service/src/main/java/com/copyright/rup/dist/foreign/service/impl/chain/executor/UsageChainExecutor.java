@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -40,6 +41,9 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
     @Autowired
     @Qualifier("df.service.ntsRightsProcessor")
     private IChainProcessor<Usage> ntsProcessor;
+    @Autowired
+    @Qualifier("df.service.aaclMatchingProcessor")
+    private IChainProcessor<Usage> aaclProcessor;
 
     private Map<String, IChainProcessor<Usage>> productFamilyToProcessorMap;
 
@@ -51,7 +55,8 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
         productFamilyToProcessorMap = ImmutableMap.of(
             FdaConstants.FAS_PRODUCT_FAMILY, fasProcessor,
             FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasProcessor,
-            FdaConstants.NTS_PRODUCT_FAMILY, ntsProcessor);
+            FdaConstants.NTS_PRODUCT_FAMILY, ntsProcessor,
+            FdaConstants.AACL_PRODUCT_FAMILY, aaclProcessor);
     }
 
     @Override
