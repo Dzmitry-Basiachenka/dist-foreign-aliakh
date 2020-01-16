@@ -1,3 +1,11 @@
+8.1.13
+-
+* B-54664 FDA: AACL Retrieve System Title, Standard Number and Standard Number Type: add AACL workflow test
+* B-54664 FDA: AACL Retrieve System Title, Standard Number and Standard Number Type: implement service logic for matching usages by Wr Wrk Inst
+* B-55538 FDA: Create Licensee Class Mapping: create and populate df_aggregate_licensee_class table
+* B-55538 FDA: Create Licensee Class Mapping: create and populate df_detail_licensee_class table
+* B-56091 Tech Debt: FDA: resize grid's columns size once scroll is disappeared on View Usage Batch and View Fund Pool windows
+
 8.1.12
 -
 * B-55412 FDA: Load AACL Usage Data: make changes based on comments in CR-DIST-FOREIGN-136
