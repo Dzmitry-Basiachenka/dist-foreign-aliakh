@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.time.LocalDate;
+
 /**
  * Represents AACL specific usage details.
  * <p>
@@ -24,6 +26,7 @@ public class AaclUsage {
     private String usageSource;
     private String rightLimitation;
     private Integer numberOfPages;
+    private LocalDate batchPeriodEndDate;
 
     public String getDetailLicenseeClass() {
         return detailLicenseeClass;
@@ -97,6 +100,14 @@ public class AaclUsage {
         this.numberOfPages = numberOfPages;
     }
 
+    public LocalDate getBatchPeriodEndDate() {
+        return batchPeriodEndDate;
+    }
+
+    public void setBatchPeriodEndDate(LocalDate batchPeriodEndDate) {
+        this.batchPeriodEndDate = batchPeriodEndDate;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -116,6 +127,7 @@ public class AaclUsage {
             .append(usageSource, that.usageSource)
             .append(rightLimitation, that.rightLimitation)
             .append(numberOfPages, that.numberOfPages)
+            .append(batchPeriodEndDate, that.batchPeriodEndDate)
             .isEquals();
     }
 
@@ -131,6 +143,7 @@ public class AaclUsage {
             .append(usageSource)
             .append(rightLimitation)
             .append(numberOfPages)
+            .append(batchPeriodEndDate)
             .toHashCode();
     }
 
@@ -146,6 +159,7 @@ public class AaclUsage {
             .append("usageSource", usageSource)
             .append("rightLimitation", rightLimitation)
             .append("numberOfPages", numberOfPages)
+            .append("batchPeriodEndDate", batchPeriodEndDate)
             .toString();
     }
 }

@@ -1,0 +1,10 @@
+{
+  "works": [
+    {
+      "status": ["GRANT", "DENY"],
+      "wr_wrk_inst": 122803735,
+      "period_end_date": "06/30/2015",
+      "type_of_use": ["PRINT", "DIGITAL"]
+    }
+  ]
+}

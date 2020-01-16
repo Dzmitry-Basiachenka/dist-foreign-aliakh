@@ -2,8 +2,11 @@ package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.domain.RmsGrant;
+import com.copyright.rup.dist.common.domain.RmsGrant.RightStatusEnum;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
+import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantProcessorService;
 import com.copyright.rup.dist.common.util.LogUtils;
@@ -19,10 +22,12 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,6 +56,8 @@ import java.util.stream.Collectors;
 @Service
 public class RightsService implements IRightsService {
 
+    private static final String PRINT_TYPE_OF_USE = "PRINT";
+    private static final String DIGITAL_TYPE_OF_USE = "DIGITAL";
     private static final String NTS_WITHDRAWN_AUDIT_MESSAGE =
         "Detail was made eligible for NTS because sum of gross amounts, grouped by Wr Wrk Inst, is less than $100";
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -67,6 +74,9 @@ public class RightsService implements IRightsService {
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
+    @Qualifier("dist.common.integration.rmsRightsService")
+    private IRmsRightsService rmsRightsService;
+    @Autowired
     private IChainExecutor<Usage> chainExecutor;
 
     @Override
@@ -75,7 +85,7 @@ public class RightsService implements IRightsService {
         updateNtsWithdrawnUsages();
         JobInfo jobInfo;
         List<String> availableBatches = usageBatchService.getBatchNamesAvailableForRightsAssignment();
-        LOGGER.info("Send for Rights Assignment. Started. BatchesCount=", availableBatches.size());
+        LOGGER.info("Send for Rights Assignment. Started. BatchesCount={}", availableBatches.size());
         AtomicInteger updatedUsagesCount = new AtomicInteger(0);
         AtomicInteger failedUsagesCount = new AtomicInteger(0);
         Set<String> failedBatches = new HashSet<>();
@@ -170,6 +180,38 @@ public class RightsService implements IRightsService {
             logAction(usageId, UsageActionTypeEnum.RH_NOT_FOUND,
                 String.format("Rightsholder account for %s was not found in RMS", wrWrkInst), logAction);
         }
+    }
+
+    @Override
+    @Transactional
+    public void updateAaclRight(Usage usage) {
+        Long wrWrkInst = usage.getWrWrkInst();
+        Set<RmsGrant> eligibleGrants = rmsRightsService.getGrants(Collections.singletonList(wrWrkInst),
+            usage.getAaclUsage().getBatchPeriodEndDate(), ImmutableList.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE))
+            .stream()
+            .filter(grant -> FdaConstants.AACL_PRODUCT_FAMILY.equals(grant.getProductFamily())
+                && RightStatusEnum.GRANT == grant.getRightStatus())
+            .collect(Collectors.toSet());
+        RmsGrant result = ObjectUtils.defaultIfNull(findGrantByTypeOfUse(eligibleGrants, DIGITAL_TYPE_OF_USE),
+            findGrantByTypeOfUse(eligibleGrants, PRINT_TYPE_OF_USE));
+        if (Objects.nonNull(result)) {
+            Long rhAccountNumber = result.getWorkGroupOwnerOrgNumber().longValueExact();
+            List<Rightsholder> rightsholders =
+                rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
+            usage.setRightsholder(rightsholders.get(0));
+            usage.setStatus(UsageStatusEnum.RH_FOUND);
+            usage.getAaclUsage()
+                .setRightLimitation(DIGITAL_TYPE_OF_USE.equals(result.getTypeOfUse()) ? "ALL" : PRINT_TYPE_OF_USE);
+            usageService.updateProcessedUsage(usage);
+            logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
+                String.format("Rightsholder account %s was found in RMS", rhAccountNumber), true);
+        } else {
+            usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+        }
+    }
+
+    private RmsGrant findGrantByTypeOfUse(Set<RmsGrant> grants, String typeOfUse) {
+        return grants.stream().filter(rmsGrant -> typeOfUse.equals(rmsGrant.getTypeOfUse())).findFirst().orElse(null);
     }
 
     private void updateNtsWithdrawnUsages() {

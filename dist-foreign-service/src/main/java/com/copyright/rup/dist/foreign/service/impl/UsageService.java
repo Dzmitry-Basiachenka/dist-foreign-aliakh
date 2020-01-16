@@ -678,7 +678,10 @@ public class UsageService implements IUsageService {
 
     @Override
     public void updateProcessedUsage(Usage usage) {
-        if (Objects.isNull(usageRepository.updateProcessedUsage(usage))) {
+        String usageId = FdaConstants.AACL_PRODUCT_FAMILY.equals(usage.getProductFamily())
+            ? usageRepository.updateProcessedAaclUsage(usage)
+            : usageRepository.updateProcessedUsage(usage);
+        if (Objects.isNull(usageId)) {
             // throws an exception and stops usage processing when such usage has been already consumed and processed
             throw new InconsistentUsageStateException(usage);
         }

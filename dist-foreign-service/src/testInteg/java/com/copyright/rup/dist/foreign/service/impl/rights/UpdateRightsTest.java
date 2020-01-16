@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -14,10 +15,8 @@ import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.impl.RightsholderService;
 
-import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -55,6 +56,7 @@ import java.util.stream.IntStream;
 public class UpdateRightsTest {
 
     private static final String FAS = "FAS";
+    private static final String AACL = "AACL";
 
     @Autowired
     private IUsageRepository usageRepository;
@@ -76,8 +78,8 @@ public class UpdateRightsTest {
     public void testUpdateRightsSentForRaUsages() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("rms_grants_854030732_request.json", "rms_grants_empty_response.json");
-        expectRmsCall("rms_grants_122824345_request.json", "rms_grants_122824345_response.json");
+        expectRmsCallIgnoreDate("rms_grants_854030732_request.json", "rms_grants_empty_response.json");
+        expectRmsCallIgnoreDate("rms_grants_122824345_request.json", "rms_grants_122824345_response.json");
         expectPrmCall();
         JobInfo jobInfo = rightsService.updateRightsSentForRaUsages();
         assertEquals(JobStatusEnum.FINISHED, jobInfo.getStatus());
@@ -99,10 +101,10 @@ public class UpdateRightsTest {
     public void testUpdateRight() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("rms_grants_254030731_request.json", "rms_grants_254030731_response.json");
-        expectRmsCall("rms_grants_658824345_request.json", "rms_grants_658824345_response.json");
-        expectRmsCall("rms_grants_488824345_request.json", "rms_grants_empty_response.json");
-        expectRmsCall("rms_grants_786768461_request.json", "rms_grants_786768461_response.json");
+        expectRmsCallIgnoreDate("rms_grants_254030731_request.json", "rms_grants_254030731_response.json");
+        expectRmsCallIgnoreDate("rms_grants_658824345_request.json", "rms_grants_658824345_response.json");
+        expectRmsCallIgnoreDate("rms_grants_488824345_request.json", "rms_grants_empty_response.json");
+        expectRmsCallIgnoreDate("rms_grants_786768461_request.json", "rms_grants_786768461_response.json");
         rightsService.updateRight(buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", FAS, 254030731L), true);
         rightsService.updateRight(buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", FAS, 254030731L), true);
         rightsService.updateRight(buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", FAS, 658824345L), true);
@@ -122,6 +124,27 @@ public class UpdateRightsTest {
         asyncMockServer.verify();
     }
 
+    @Test
+    public void testUpdateAaclRight() {
+        mockServer = MockRestServiceServer.createServer(restTemplate);
+        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
+        expectRmsCall("rms_grants_122803735_request.json", "rms_grants_122803735_response.json");
+        expectRmsCall("rms_grants_130297955_request.json", "rms_grants_130297955_response.json");
+        expectRmsCall("rms_grants_200208329_request.json", "rms_grants_empty_response.json");
+        expectPrmCall();
+        rightsService.updateAaclRight(buildAaclUsage("b23cb103-9242-4d58-a65d-2634b3e5a8cf", 122803735));
+        rightsService.updateAaclRight(buildAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", 130297955));
+        rightsService.updateAaclRight(buildAaclUsage("10c9a60f-28b6-466c-975c-3ea930089a9e", 200208329));
+        assertAaclUsage("b23cb103-9242-4d58-a65d-2634b3e5a8cf", UsageStatusEnum.RH_FOUND, 1000000322L, "ALL");
+        assertAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", UsageStatusEnum.RH_FOUND, 1000023401L, "PRINT");
+        assertAaclUsage("10c9a60f-28b6-466c-975c-3ea930089a9e", UsageStatusEnum.NEW, null, null);
+        assertAudit("b23cb103-9242-4d58-a65d-2634b3e5a8cf", "Rightsholder account 1000000322 was found in RMS");
+        assertAudit("7e7b97d1-ad60-4d47-915b-2834c5cc056a", "Rightsholder account 1000023401 was found in RMS");
+        assertAudit("10c9a60f-28b6-466c-975c-3ea930089a9e");
+        mockServer.verify();
+        asyncMockServer.verify();
+    }
+
     private Usage buildUsage(String usageId, String productFamily, Long wrWrkInst) {
         Usage usage = new Usage();
         usage.setId(usageId);
@@ -130,10 +153,24 @@ public class UpdateRightsTest {
         return usage;
     }
 
-    private void assertUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccounNumber) {
+    private Usage buildAaclUsage(String usageId, long wrWrkInst) {
+        Usage usage = buildUsage(usageId, AACL, wrWrkInst);
+        usage.setAaclUsage(new AaclUsage());
+        usage.getAaclUsage().setBatchPeriodEndDate(LocalDate.of(2015, 6, 30));
+        return usage;
+    }
+
+    private void assertAaclUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber,
+                                 String expectedRightLimitation) {
+        Usage usage = assertUsage(usageId, expectedStatus, expectedRhAccountNumber);
+        assertEquals(expectedRightLimitation, usage.getAaclUsage().getRightLimitation());
+    }
+
+    private Usage assertUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber) {
         Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
         assertEquals(expectedStatus, usage.getStatus());
-        assertEquals(expectedRhAccounNumber, usage.getRightsholder().getAccountNumber());
+        assertEquals(expectedRhAccountNumber, usage.getRightsholder().getAccountNumber());
+        return usage;
     }
 
     private void assertAudit(String usageId, String... reasons) {
@@ -143,13 +180,17 @@ public class UpdateRightsTest {
             .forEach(index -> assertEquals(reasons[index], auditItems.get(index).getActionReason()));
     }
 
-    private void expectRmsCall(String rmsRequestFileName, String rmsResponseFileName) {
+    private void expectRmsCallIgnoreDate(String rmsRequestFileName, String rmsResponseFileName) {
+        expectRmsCall(rmsRequestFileName, rmsResponseFileName, "period_end_date");
+    }
+
+    private void expectRmsCall(String rmsRequestFileName, String rmsResponseFileName, String... excludeFields) {
         mockServer
             .expect(MockRestRequestMatchers.requestTo("http://localhost:9051/rms-rights-rest/rights/"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content()
                 .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), rmsRequestFileName),
-                    Lists.newArrayList("period_end_date"))))
+                    Arrays.asList(excludeFields))))
             .andRespond(
                 MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), rmsResponseFileName),
                     MediaType.APPLICATION_JSON));

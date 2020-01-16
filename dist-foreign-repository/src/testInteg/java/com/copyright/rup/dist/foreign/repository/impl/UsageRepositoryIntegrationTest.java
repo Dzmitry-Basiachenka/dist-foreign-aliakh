@@ -107,6 +107,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String COMMENT_KEY = "comment";
     private static final String STATUS_KEY = "status";
     private static final String STANDARD_NUMBER = "2192-3558";
+    private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
     private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_ID_2 = "8a06905f-37ae-4e1f-8550-245277f8165c";
     private static final String USAGE_ID_3 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
@@ -280,7 +281,7 @@ public class UsageRepositoryIntegrationTest {
         List<UsageDto> usageDtos = usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Direction.ASC));
         assertEquals(1, usageDtos.size());
-        assertEquals(LocalDate.of(2019, 2, 13), usageDtos.get(0).getPeriodEndDate());
+        assertEquals(LocalDate.of(2019, 2, 13), usageDtos.get(0).getAaclUsage().getBatchPeriodEndDate());
         verifyUsageDtos(usageDtos, USAGE_ID_35);
     }
 
@@ -1242,10 +1243,11 @@ public class UsageRepositoryIntegrationTest {
         verifyFasUsage(usageId2, null, null, null, null, UsageStatusEnum.WORK_RESEARCH);
         usageRepository.updateResearchedUsages(Arrays.asList(
             buildResearchedUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN"),
-            buildResearchedUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", "VALISBN13")));
+            buildResearchedUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", STANDARD_NUMBER_TYPE)));
         verifyFasUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN",
             UsageStatusEnum.WORK_FOUND);
-        verifyFasUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", "VALISBN13", UsageStatusEnum.WORK_FOUND);
+        verifyFasUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", STANDARD_NUMBER_TYPE,
+            UsageStatusEnum.WORK_FOUND);
     }
 
     @Test
@@ -1281,6 +1283,29 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(STANDARD_NUMBER, updatedUsage.getStandardNumber());
         assertEquals("Wissenschaft & Forschung Italy", updatedUsage.getWorkTitle());
         assertEquals("Wissenschaft & Forschung France", updatedUsage.getSystemTitle());
+    }
+
+    @Test
+    public void testUpdateProcessedAaclUsage() {
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_35));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage = usages.get(0);
+        usage.setStatus(UsageStatusEnum.RH_FOUND);
+        usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
+        usage.setSystemTitle(WORK_TITLE_1);
+        usage.setStandardNumberType(STANDARD_NUMBER_TYPE);
+        usage.setStandardNumber(STANDARD_NUMBER);
+        usage.getAaclUsage().setRightLimitation("ALL");
+        assertNotNull(usageRepository.updateProcessedAaclUsage(usage));
+        List<Usage> updatedUsages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_35));
+        assertEquals(1, CollectionUtils.size(updatedUsages));
+        Usage updatedUsage = updatedUsages.get(0);
+        assertEquals(RH_ACCOUNT_NUMBER, updatedUsage.getRightsholder().getAccountNumber());
+        assertEquals(UsageStatusEnum.RH_FOUND, updatedUsage.getStatus());
+        assertEquals(STANDARD_NUMBER_TYPE, updatedUsage.getStandardNumberType());
+        assertEquals(STANDARD_NUMBER, updatedUsage.getStandardNumber());
+        assertEquals(WORK_TITLE_1, updatedUsage.getSystemTitle());
+        assertEquals("ALL", updatedUsage.getAaclUsage().getRightLimitation());
     }
 
     @Test
@@ -1514,7 +1539,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(UsageStatusEnum.WORK_FOUND, actualUsage.getStatus());
         assertEquals(NTS_PRODUCT_FAMILY, actualUsage.getProductFamily());
         assertEquals("1008902112317555XX", actualUsage.getStandardNumber());
-        assertEquals("VALISBN13", actualUsage.getStandardNumberType());
+        assertEquals(STANDARD_NUMBER_TYPE, actualUsage.getStandardNumberType());
         assertEquals(market, actualUsage.getMarket());
         assertEquals(marketPeriodFrom, actualUsage.getMarketPeriodFrom());
         assertEquals(Integer.valueOf(2017), actualUsage.getMarketPeriodTo());
