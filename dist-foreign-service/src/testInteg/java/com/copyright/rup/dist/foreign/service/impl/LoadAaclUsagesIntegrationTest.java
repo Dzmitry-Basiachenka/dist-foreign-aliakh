@@ -12,13 +12,16 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.io.IOUtils;
@@ -37,6 +40,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Verifies functionality for loading AACL usages.
@@ -73,19 +77,19 @@ public class LoadAaclUsagesIntegrationTest {
     @Test
     public void testLoadUsages() throws Exception {
         loadUsageBatch();
-        UsageFilter filter = new UsageFilter();
-        filter.setProductFamily(AACL_PRODUCT_FAMILY);
-        filter.setPaymentDate(PAYMENT_DATE);
-        List<UsageDto> usages = usageService.getUsageDtos(filter, null, null);
-        assertUsage(usages, USAGE_ID_1, 16245866L, "CORNELL UNIVERSITY", "Feb 2019 TUR", 10, 14,
-            "AACL usage Comment 1");
-        assertUsage(usages, USAGE_ID_2, 16912502L, "WESTERN MICHIGAN UNIVERSITY", "Aug 2018 TUR", 30, 12,
-            "AACL usage Comment 2");
-        assertUsage(usages, USAGE_ID_3, 16565457L, "UNIV. OF MICHIGAN", "Aug 2019 TUR", 2, 7, "AACL usage Comment 3");
-        assertUsage(usages, USAGE_ID_4, 16504064L, "University of Chicago", "Feb 2018 TUR", 3, 17,
-            "AACL usage Comment 4");
-        IDS.forEach(id -> testHelper.assertAudit(id,
-            buildUsageAuditItems(id, ImmutableMap.of(UsageActionTypeEnum.LOADED, UPLOADED_REASON))));
+        verifyUsages();
+        testHelper.assertAudit(USAGE_ID_1, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100009840 was found",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(USAGE_ID_2, buildUsageAuditItems(USAGE_ID_2, ImmutableMap.of(
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100010768 was found",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(USAGE_ID_3, buildUsageAuditItems(USAGE_ID_3, ImmutableMap.of(
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 123456789 was found",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(USAGE_ID_4, buildUsageAuditItems(USAGE_ID_4, ImmutableMap.of(
+            UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 963852741 wasn't found",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
     }
 
     private void loadUsageBatch() throws IOException {
@@ -97,6 +101,7 @@ public class LoadAaclUsagesIntegrationTest {
         setPredefinedUsageIds(usages);
         int usagesInsertedCount = usageBatchService.insertAaclBatch(batch, usages);
         assertEquals(4, usagesInsertedCount);
+        usageBatchService.sendForMatching(usages);
     }
 
     private UsageBatch buildUsageBatch() {
@@ -120,20 +125,43 @@ public class LoadAaclUsagesIntegrationTest {
         return out;
     }
 
-    private void assertUsage(List<UsageDto> usages, String usageId, Long wrWrkInst, String institution,
-                             String usageSource, Integer numberOfCopies, Integer numberOfPages, String comment) {
-        UsageDto usage = usages.stream().filter(usageDto -> usageDto.getId().equals(usageId)).findFirst().orElse(null);
-        assertNotNull(usage);
-        assertEquals(UsageStatusEnum.NEW, usage.getStatus());
-        assertEquals(wrWrkInst, usage.getWrWrkInst());
-        assertEquals(AACL_PRODUCT_FAMILY, usage.getProductFamily());
-        assertEquals(numberOfCopies, usage.getNumberOfCopies());
-        assertEquals(comment, usage.getComment());
-        AaclUsage aaclUsage = usage.getAaclUsage();
-        assertEquals(institution, aaclUsage.getInstitution());
-        assertEquals(usageSource, aaclUsage.getUsageSource());
-        assertEquals(numberOfPages, aaclUsage.getNumberOfPages());
-        assertEquals(2019, aaclUsage.getUsagePeriod());
+    private void verifyUsages() throws IOException {
+        UsageFilter filter = new UsageFilter();
+        filter.setProductFamily(AACL_PRODUCT_FAMILY);
+        filter.setPaymentDate(PAYMENT_DATE);
+        Map<String, UsageDto> actualUsageIdsToUsages = usageService.getUsageDtos(filter, null, null).stream()
+            .collect(Collectors.toMap(UsageDto::getId, usageDto -> usageDto));
+        List<UsageDto> expectedUsages = loadExpectedUsages("usage/expected_usages_for_load_aacl.json");
+        expectedUsages.forEach(
+            expectedUsage -> assertUsage(expectedUsage, actualUsageIdsToUsages.get(expectedUsage.getId())));
+    }
+
+    private List<UsageDto> loadExpectedUsages(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
+        });
+    }
+
+    private void assertUsage(UsageDto expectedUsage, UsageDto actualUsage) {
+        assertNotNull(actualUsage);
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
+        assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        AaclUsage expectedAaclUsage = expectedUsage.getAaclUsage();
+        AaclUsage actualAaclUsage = actualUsage.getAaclUsage();
+        assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
+        assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
+        assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
+        assertEquals(expectedAaclUsage.getUsagePeriod(), actualAaclUsage.getUsagePeriod());
     }
 
     private List<UsageAuditItem> buildUsageAuditItems(String usageId, Map<UsageActionTypeEnum, String> map) {

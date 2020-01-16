@@ -48,7 +48,7 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
     public Work findWorkByWrWrkInst(Long wrWrkInst) {
         Work work = new Work();
         if (Objects.equals(123456789L, wrWrkInst)) {
-            work = new Work(123456789L, "BIOCHEMISTRY (MOSCOW)", null, "VALISBN10");
+            work = new Work(123456789L, "BIOCHEMISTRY (MOSCOW)", null, null);
         } else if (Objects.equals(100009840L, wrWrkInst)) {
             work = new Work(100009840L, TITLE_2, "12345XX-79068", VALISSN);
         } else if (Objects.equals(100010768L, wrWrkInst)) {

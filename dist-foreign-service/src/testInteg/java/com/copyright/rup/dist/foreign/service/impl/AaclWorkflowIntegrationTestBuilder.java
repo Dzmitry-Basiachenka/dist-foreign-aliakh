@@ -132,6 +132,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             setPredefinedUsageIds(usages);
             int usagesInsertedCount = usageBatchService.insertAaclBatch(usageBatch, usages);
             assertEquals(predefinedUsageIds.size(), usagesInsertedCount);
+            usageBatchService.sendForMatching(usages);
         }
 
         // predefined usage ids are used, otherwise during every test run the usage ids will be random

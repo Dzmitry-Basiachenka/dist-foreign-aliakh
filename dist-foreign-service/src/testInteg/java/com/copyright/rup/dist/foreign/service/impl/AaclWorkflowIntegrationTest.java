@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.Arrays;
 
 /**
  * Verifies AACL workflow.
@@ -27,10 +27,10 @@ import java.util.Collections;
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 public class AaclWorkflowIntegrationTest {
 
-    private static final String USAGE_ID_1 = "3e9566e6-5cb9-4013-88ef-d4f8b66bda5d";
-    private static final String USAGE_ID_2 = "599c5313-ed3b-4874-87e9-972425eb734f";
-    private static final String USAGE_ID_3 = "78272304-1a43-48f7-a83b-530a90ed27e6";
-    private static final String USAGE_ID_4 = "f634ec19-8ed1-4cc8-88bc-54461c62e670";
+    private static final String USAGE_ID_1 = "072b4414-74b2-46cc-a69e-4b7f8f7cce5e";
+    private static final String USAGE_ID_2 = "5e4ea6e9-83f6-4712-b8ab-b5a5f0eb4a70";
+    private static final String USAGE_ID_3 = "8b0f4af8-f0b9-4a71-ac5b-ba6360dbe7d2";
+    private static final String USAGE_ID_4 = "0e5d1005-df99-419f-96be-e3af89163879";
     private static final String UPLOADED_REASON = "Uploaded in 'AACL test batch' Batch";
     private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2019, 6, 30);
@@ -45,14 +45,22 @@ public class AaclWorkflowIntegrationTest {
             .withUsagesCsvFile("usage/usages_for_workflow_aacl.csv", USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4)
             .withUsageBatch(buildUsageBatch())
             .expectUsages("usage/expected_usages_for_workflow_aacl.json")
-            .expectUsageAudit(USAGE_ID_1, Collections.singletonList(
-                buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)))
-            .expectUsageAudit(USAGE_ID_2, Collections.singletonList(
-                buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)))
-            .expectUsageAudit(USAGE_ID_3, Collections.singletonList(
-                buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)))
-            .expectUsageAudit(USAGE_ID_4, Collections.singletonList(
-                buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)))
+            .expectUsageAudit(USAGE_ID_1, Arrays.asList(
+                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100009840 was found"),
+                buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
+            ))
+            .expectUsageAudit(USAGE_ID_2, Arrays.asList(
+                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100010768 was found"),
+                buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
+            ))
+            .expectUsageAudit(USAGE_ID_3, Arrays.asList(
+                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 123456789 was found"),
+                buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
+            ))
+            .expectUsageAudit(USAGE_ID_4, Arrays.asList(
+                buildAuditItem(UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 963852741 wasn't found"),
+                buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
+            ))
             .build()
             .run();
     }
