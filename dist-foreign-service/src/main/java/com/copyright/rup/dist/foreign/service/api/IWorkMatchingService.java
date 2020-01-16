@@ -28,6 +28,13 @@ public interface IWorkMatchingService {
     void matchByTitle(Usage usage);
 
     /**
+     * Matches usage by Wr Wrk Inst.
+     *
+     * @param usage {@link Usage} to be matched
+     */
+    void matchByWrWrkInst(Usage usage);
+
+    /**
      * Updates {@link Usage} status and Wr Wrk Inst.
      *
      * @param usage {@link Usage} to update
