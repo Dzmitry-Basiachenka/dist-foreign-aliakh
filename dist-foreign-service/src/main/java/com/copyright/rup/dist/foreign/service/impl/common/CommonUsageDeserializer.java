@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.service.impl.common;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
+import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
@@ -57,6 +59,11 @@ public class CommonUsageDeserializer extends JsonDeserializer<Usage> {
             JsonUtils.getBigDecimalValue(jsonNode.get("gross_amount")).setScale(2, RoundingMode.HALF_UP));
         usage.setStatus(UsageStatusEnum.valueOf(JsonUtils.getStringValue(jsonNode.get("status"))));
         usage.setProductFamily(JsonUtils.getStringValue(jsonNode.get("product_family")));
+        if (FdaConstants.AACL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+            usage.setAaclUsage(new AaclUsage());
+            usage.getAaclUsage()
+                .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get("batch_period_end_date")));
+        }
         usage.setVersion(JsonUtils.getIntegerValue(jsonNode.get("record_version")));
         return usage;
     }

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
@@ -12,12 +13,14 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * Verifies {@link CommonUsageSerializer}.
@@ -70,7 +73,9 @@ public class CommonUsageSerializerTest {
         usage.setWorkTitle("True directions : living your sacred instructions");
         usage.setSystemTitle("True directions : living your sacred instructions");
         usage.setStatus(UsageStatusEnum.WORK_FOUND);
-        usage.setProductFamily("NTS");
+        usage.setProductFamily("AACL");
+        usage.setAaclUsage(new AaclUsage());
+        usage.getAaclUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
         usage.setRightsholder(buildRightsholder());
         return usage;
     }

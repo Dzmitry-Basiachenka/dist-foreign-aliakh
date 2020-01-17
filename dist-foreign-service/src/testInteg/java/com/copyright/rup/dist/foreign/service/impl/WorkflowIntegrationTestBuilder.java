@@ -104,28 +104,28 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedCrmResponseJsonFile;
     private String expectedUsagesJsonFile;
 
-     WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
+    WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
         this.usagesCsvFile = csvFile;
         this.predefinedUsageIds = Arrays.asList(usageIds);
         return this;
     }
 
-     WorkflowIntegrationTestBuilder withProductFamily(String productFamilyToUse) {
+    WorkflowIntegrationTestBuilder withProductFamily(String productFamilyToUse) {
         this.productFamily = productFamilyToUse;
         return this;
     }
 
-     WorkflowIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
+    WorkflowIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
         this.usageBatch = batch;
         return this;
     }
 
-     WorkflowIntegrationTestBuilder withUsageFilter(UsageFilter filter) {
+    WorkflowIntegrationTestBuilder withUsageFilter(UsageFilter filter) {
         this.usageFilter = filter;
         return this;
     }
 
-     WorkflowIntegrationTestBuilder expectInsertedUsagesCount(int insertedUsagesCount) {
+    WorkflowIntegrationTestBuilder expectInsertedUsagesCount(int insertedUsagesCount) {
         this.expectedInsertedUsagesCount = insertedUsagesCount;
         return this;
     }
@@ -142,35 +142,35 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-     WorkflowIntegrationTestBuilder expectLmDetails(int messagesCount, String... lmDetailsJsonFile) {
+    WorkflowIntegrationTestBuilder expectLmDetails(int messagesCount, String... lmDetailsJsonFile) {
         this.expecteLmDetailsMessagesCount = messagesCount;
         this.expectedLmDetailsJsonFiles = Arrays.asList(lmDetailsJsonFile);
         return this;
     }
 
-     WorkflowIntegrationTestBuilder expectPaidUsagesFromLm(String jsonFile) {
+    WorkflowIntegrationTestBuilder expectPaidUsagesFromLm(String jsonFile) {
         this.expectedPaidUsagesJsonFile = jsonFile;
         return this;
     }
 
-     WorkflowIntegrationTestBuilder expectPaidUsageLmDetailIds(String... usageLmDetailIds) {
+    WorkflowIntegrationTestBuilder expectPaidUsageLmDetailIds(String... usageLmDetailIds) {
         this.expectedPaidUsageLmDetailids = Arrays.asList(usageLmDetailIds);
         return this;
     }
 
-     WorkflowIntegrationTestBuilder expectCrmReporting(String requestJsonFile, String responseJsonFile) {
+    WorkflowIntegrationTestBuilder expectCrmReporting(String requestJsonFile, String responseJsonFile) {
         this.expectedCrmRequestJsonFile = requestJsonFile;
         this.expectedCrmResponseJsonFile = responseJsonFile;
         return this;
     }
 
-     WorkflowIntegrationTestBuilder expectUsageAudit(String usageLmDetailId,
-                                                           List<Pair<UsageActionTypeEnum, String>> usageAudit) {
+    WorkflowIntegrationTestBuilder expectUsageAudit(String usageLmDetailId,
+                                                    List<Pair<UsageActionTypeEnum, String>> usageAudit) {
         this.expectedUsageLmDetailIdToAuditMap.put(usageLmDetailId, usageAudit);
         return this;
     }
 
-     WorkflowIntegrationTestBuilder expectRmsRights(String rmsRequest, String rmsResponse) {
+    WorkflowIntegrationTestBuilder expectRmsRights(String rmsRequest, String rmsResponse) {
         this.expectedRmsRequestsToResponses.put(rmsRequest, rmsResponse);
         return this;
     }

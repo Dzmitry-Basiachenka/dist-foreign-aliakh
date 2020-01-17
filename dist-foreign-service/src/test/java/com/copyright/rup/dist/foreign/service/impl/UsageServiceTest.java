@@ -290,11 +290,13 @@ public class UsageServiceTest {
     @Test
     public void testDeleteById() {
         String usageId = RupPersistUtils.generateUuid();
+        usageAuditService.deleteActionsByUsageId(usageId);
+        expectLastCall().once();
         usageRepository.deleteById(usageId);
-        expectLastCall();
-        replay(usageRepository);
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService);
         usageService.deleteById(usageId);
-        verify(usageRepository);
+        verify(usageRepository, usageAuditService);
     }
 
     @Test

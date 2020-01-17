@@ -44,17 +44,22 @@ public class AaclWorkflowIntegrationTest {
             .withProductFamily(AACL_PRODUCT_FAMILY)
             .withUsagesCsvFile("usage/usages_for_workflow_aacl.csv", USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4)
             .withUsageBatch(buildUsageBatch())
-            .expectUsages("usage/expected_usages_for_workflow_aacl.json")
+            .expectRmsRights("rights/aacl/rms_grants_100009840_request_workflow.json",
+                "rights/aacl/rms_grants_100009840_response_workflow.json")
+            .expectRmsRights("rights/aacl/rms_grants_100010768_request_workflow.json",
+                "rights/aacl/rms_grants_100010768_response_workflow.json")
+            .expectRmsRights("rights/aacl/rms_grants_123456789_request_workflow.json",
+                "rights/rms_grants_empty_response.json")
+            .expectPrmCall(1000024950L, "prm/rightsholder_1000024950_response.json")
+            .expectUsages("usage/aacl/aacl_expected_usages_for_workflow.json")
             .expectUsageAudit(USAGE_ID_1, Arrays.asList(
+                buildAuditItem(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS"),
                 buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100009840 was found"),
                 buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
             ))
             .expectUsageAudit(USAGE_ID_2, Arrays.asList(
+                buildAuditItem(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS"),
                 buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100010768 was found"),
-                buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
-            ))
-            .expectUsageAudit(USAGE_ID_3, Arrays.asList(
-                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 123456789 was found"),
                 buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
             ))
             .expectUsageAudit(USAGE_ID_4, Arrays.asList(

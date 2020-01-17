@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.common;
 
+import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -50,6 +54,9 @@ public class CommonUsageSerializer extends StdSerializer<Usage> {
             writeNotNullField(jsonGenerator, "gross_amount", usage.getGrossAmount());
             writeNotNullField(jsonGenerator, "status", usage.getStatus().name());
             writeNotNullField(jsonGenerator, "product_family", usage.getProductFamily());
+            if (FdaConstants.AACL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+                writeNotNullField(jsonGenerator, "batch_period_end_date", usage.getAaclUsage().getBatchPeriodEndDate());
+            }
             jsonGenerator.writeNumberField("record_version", usage.getVersion());
         }
         jsonGenerator.writeEndObject();
@@ -73,6 +80,14 @@ public class CommonUsageSerializer extends StdSerializer<Usage> {
         throws IOException {
         if (Objects.nonNull(fieldValue)) {
             jsonGenerator.writeNumberField(fieldName, fieldValue);
+        }
+    }
+
+    private void writeNotNullField(JsonGenerator jsonGenerator, String fieldName, LocalDate fieldValue)
+        throws IOException {
+        if (Objects.nonNull(fieldValue)) {
+            jsonGenerator.writeStringField(fieldName,
+                fieldValue.format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)));
         }
     }
 }

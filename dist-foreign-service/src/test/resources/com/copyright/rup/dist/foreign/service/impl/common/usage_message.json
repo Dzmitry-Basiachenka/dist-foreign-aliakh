@@ -10,6 +10,7 @@
   "batch_id" : "5da597e4-f418-4b70-b43a-7990e82e6367",
   "gross_amount" : 50.00,
   "status" : "WORK_FOUND",
-  "product_family" : "NTS",
+  "product_family" : "AACL",
+  "batch_period_end_date" : "06/30/2019",
   "record_version" : 1
 }

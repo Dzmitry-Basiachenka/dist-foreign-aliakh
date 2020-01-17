@@ -1,9 +1,10 @@
 [
   {
-    "id": "3e9566e6-5cb9-4013-88ef-d4f8b66bda5d",
+    "id": "072b4414-74b2-46cc-a69e-4b7f8f7cce5e",
     "batchName": "AACL test batch",
     "paymentDate": "2019-06-30",
     "wrWrkInst": 100009840,
+    "rhAccountNumber": "1000024950",
     "systemTitle": "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )",
     "standardNumber": "12345XX-79068",
     "standardNumberType": "VALISSN",
@@ -12,22 +13,24 @@
     "reportedValue": 0.00,
     "netAmount": 0.00,
     "serviceFeeAmount": 0.00,
-    "status": "WORK_FOUND",
+    "status": "RH_FOUND",
     "productFamily": "AACL",
-    "periodEndDate": "2019-06-30",
     "comment": "AACL usage Comment 1",
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
       "usagePeriod": 2019,
       "usageSource": "Feb 2019 TUR",
+      "batchPeriodEndDate": "2019-06-30",
+      "rightLimitation": "ALL",
       "numberOfPages": 14
     }
   },
   {
-    "id": "599c5313-ed3b-4874-87e9-972425eb734f",
+    "id": "5e4ea6e9-83f6-4712-b8ab-b5a5f0eb4a70",
     "batchName": "AACL test batch",
     "paymentDate": "2019-06-30",
     "wrWrkInst": 100010768,
+    "rhAccountNumber": "1000024950",
     "systemTitle": "Reclaiming youth at risk : our hope for the future",
     "standardNumber": "12345XX-123117",
     "standardNumberType": "VALISSN",
@@ -36,41 +39,20 @@
     "reportedValue": 0.00,
     "netAmount": 0.00,
     "serviceFeeAmount": 0.00,
-    "status": "WORK_FOUND",
+    "status": "RH_FOUND",
     "productFamily": "AACL",
-    "periodEndDate": "2019-06-30",
     "comment": "AACL usage Comment 2",
     "aaclUsage": {
       "institution": "WESTERN MICHIGAN UNIVERSITY",
       "usagePeriod": 2019,
       "usageSource": "Aug 2018 TUR",
+      "batchPeriodEndDate": "2019-06-30",
+      "rightLimitation": "PRINT",
       "numberOfPages": 12
     }
   },
   {
-    "id": "78272304-1a43-48f7-a83b-530a90ed27e6",
-    "batchName": "AACL test batch",
-    "paymentDate": "2019-06-30",
-    "wrWrkInst": 123456789,
-    "systemTitle": "BIOCHEMISTRY (MOSCOW)",
-    "numberOfCopies": 2,
-    "grossAmount": 0.00,
-    "reportedValue": 0.00,
-    "netAmount": 0.00,
-    "serviceFeeAmount": 0.00,
-    "status": "WORK_FOUND",
-    "productFamily": "AACL",
-    "periodEndDate": "2019-06-30",
-    "comment": "AACL usage Comment 3",
-    "aaclUsage": {
-      "institution": "UNIV. OF MICHIGAN",
-      "usagePeriod": 2019,
-      "usageSource": "Aug 2019 TUR",
-      "numberOfPages": 7
-    }
-  },
-  {
-    "id": "f634ec19-8ed1-4cc8-88bc-54461c62e670",
+    "id": "0e5d1005-df99-419f-96be-e3af89163879",
     "batchName": "AACL test batch",
     "paymentDate": "2019-06-30",
     "wrWrkInst": 963852741,
@@ -81,12 +63,12 @@
     "serviceFeeAmount": 0.00,
     "status": "WORK_NOT_FOUND",
     "productFamily": "AACL",
-    "periodEndDate": "2019-06-30",
     "comment": "AACL usage Comment 4",
     "aaclUsage": {
       "institution": "University of Chicago",
       "usagePeriod": 2019,
       "usageSource": "Feb 2018 TUR",
+      "batchPeriodEndDate": "2019-06-30",
       "numberOfPages": 17
     }
   }
