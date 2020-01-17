@@ -1,5 +1,8 @@
 8.1.14
 -
+* B-54664 FDA: AACL Retrieve System Title, Standard Number and Standard Number Type: implement service logic for sending AACL usage for matching
+* B-54664 FDA: AACL Retrieve System Title, Standard Number and Standard Number Type: adjust integration tests to cover matching for AACL
+* B-52330 FDA: Get Rights Information from RMS for AACL usages (get grants): implement RMS service to apply grants for AACL product family
 
 8.1.13
 -
