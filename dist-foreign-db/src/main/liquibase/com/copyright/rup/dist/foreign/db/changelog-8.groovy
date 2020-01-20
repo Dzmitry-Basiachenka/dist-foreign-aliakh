@@ -927,4 +927,67 @@ databaseChangeLog {
             dropTable(tableName: 'df_detail_licensee_class', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2020-01-20-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment('B-55751 FDA: Load Pub Types: create df_publication_type table')
+
+        createTable(tableName: 'df_publication_type', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing publication types for AACL product family') {
+
+            column(name: 'df_publication_type_uid', type: 'VARCHAR(255)', remarks: 'Publication Type Identifier')
+            column(name: 'df_name', type: 'VARCHAR(255)', remarks: 'Publication Type Name')
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1', remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()', remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()', remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(tablespace: dbIndexTablespace, schemaName: dbAppsSchema, tableName: 'df_publication_type',
+                columnNames: 'df_publication_type_uid', constraintName: 'pk_df_publication_type')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'df_name', value: 'Book')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: '68fd94c0-a8c0-4a59-bfe3-6674c4b12199')
+            column(name: 'df_name', value: 'Business or Trade Journal')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
+            column(name: 'df_name', value: 'Consumer Magazine')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: 'a3dff475-fc06-4d8c-b7cc-f093073ada6f')
+            column(name: 'df_name', value: 'News Source')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: '357ea293-8f98-4160-820e-8369f6180654')
+            column(name: 'df_name', value: 'Other')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'df_name', value: 'STMA Journal')
+        }
+
+        rollback {
+            dropTable(tableName: 'df_publication_type', schemaName: dbAppsSchema)
+        }
+    }
 }
