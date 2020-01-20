@@ -4,6 +4,8 @@ import com.copyright.rup.common.caching.impl.AbstractCacheService;
 import com.copyright.rup.dist.common.domain.RmsGrant;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 
+import org.apache.commons.lang3.tuple.Triple;
+
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IRmsRightsService}. Uses cache to avoid redundant calls to RMS.
+ * The cache key is the grant identifier - Wr Wrk Inst, Period End Date and list of Type of Uses.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -20,7 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau Shalamitski
  */
-public class RmsRightsCacheService extends AbstractCacheService<Long, Set<RmsGrant>>
+public class RmsRightsCacheService extends AbstractCacheService<Triple<Long, LocalDate, List<String>>, Set<RmsGrant>>
     implements IRmsRightsService {
 
     private final IRmsRightsService rmsRightsService;
@@ -39,13 +42,14 @@ public class RmsRightsCacheService extends AbstractCacheService<Long, Set<RmsGra
     @Override
     public Set<RmsGrant> getGrants(List<Long> wrWrkInsts, LocalDate periodEndDate, List<String> typeOfUses,
                                    String... licenseTypes) {
-        return wrWrkInsts.stream().flatMap(wrWrkInst -> getFromCache(wrWrkInst).stream()).collect(Collectors.toSet());
+        return wrWrkInsts.stream()
+            .flatMap(wrWrkInst -> getFromCache(Triple.of(wrWrkInst, periodEndDate, typeOfUses)).stream())
+            .collect(Collectors.toSet());
     }
 
     @Override
-    //TODO {isuvorau} adjust logic to have ability to use cache for AACL
-    protected Set<RmsGrant> loadData(Long wrWrkInsts) {
-        return rmsRightsService.getGrants(Collections.singletonList(wrWrkInsts), LocalDate.now(),
-            Collections.emptyList());
+    protected Set<RmsGrant> loadData(Triple<Long, LocalDate, List<String>> grantKey) {
+        return rmsRightsService.getGrants(Collections.singletonList(grantKey.getLeft()), grantKey.getMiddle(),
+            grantKey.getRight());
     }
 }

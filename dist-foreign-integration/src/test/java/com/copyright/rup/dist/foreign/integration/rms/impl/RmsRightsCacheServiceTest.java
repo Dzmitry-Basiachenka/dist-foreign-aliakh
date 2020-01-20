@@ -21,6 +21,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -83,9 +84,27 @@ public class RmsRightsCacheServiceTest {
         Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInst, LocalDate.now(), Collections.emptyList());
         assertEquals(1, CollectionUtils.size(grants));
         assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
-        grants = rmsAllRightsCacheService.getGrants(wrWrkInst, LocalDate.now(), Collections.emptyList());
+        Set<RmsGrant> grantsFromCache =
+            rmsAllRightsCacheService.getGrants(wrWrkInst, LocalDate.now(), Collections.emptyList());
+        assertEquals(1, CollectionUtils.size(grantsFromCache));
+        assertTrue(grantsFromCache.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
+        verify(rmsService);
+    }
+
+    @Test
+    public void testGetAllRmsGrantsFromCacheWithTypeOfUses() {
+        LocalDate periodEndDate = LocalDate.of(2019, 6, 30);
+        List<String> typeOfUses = Arrays.asList("PRINT", "DIGITAL");
+        List<Long> wrWrkInst = Collections.singletonList(WR_WRK_INST_1);
+        expect(rmsService.getGrants(wrWrkInst, periodEndDate, typeOfUses))
+            .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1))).once();
+        replay(rmsService);
+        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInst, periodEndDate, typeOfUses);
         assertEquals(1, CollectionUtils.size(grants));
         assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
+        Set<RmsGrant> grantsFromCache = rmsAllRightsCacheService.getGrants(wrWrkInst, periodEndDate, typeOfUses);
+        assertEquals(1, CollectionUtils.size(grantsFromCache));
+        assertTrue(grantsFromCache.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
         verify(rmsService);
     }
 
