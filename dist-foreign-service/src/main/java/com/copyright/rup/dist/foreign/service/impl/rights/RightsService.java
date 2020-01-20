@@ -74,7 +74,7 @@ public class RightsService implements IRightsService {
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
-    @Qualifier("dist.common.integration.rmsRightsService")
+    @Qualifier("df.service.rmsCacheService")
     private IRmsRightsService rmsRightsService;
     @Autowired
     private IChainExecutor<Usage> chainExecutor;
@@ -167,9 +167,7 @@ public class RightsService implements IRightsService {
                 usage.getProductFamily());
         Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
         if (Objects.nonNull(rhAccountNumber)) {
-            List<Rightsholder> rightsholders =
-                rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
-            usage.setRightsholder(rightsholders.get(0));
+            usage.setRightsholder(buildRightsholder(rhAccountNumber));
             usage.setStatus(UsageStatusEnum.RH_FOUND);
             usageService.updateProcessedUsage(usage);
             logAction(usageId, UsageActionTypeEnum.RH_FOUND,
@@ -196,9 +194,7 @@ public class RightsService implements IRightsService {
             findGrantByTypeOfUse(eligibleGrants, PRINT_TYPE_OF_USE));
         if (Objects.nonNull(result)) {
             Long rhAccountNumber = result.getWorkGroupOwnerOrgNumber().longValueExact();
-            List<Rightsholder> rightsholders =
-                rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
-            usage.setRightsholder(rightsholders.get(0));
+            usage.setRightsholder(buildRightsholder(rhAccountNumber));
             usage.setStatus(UsageStatusEnum.RH_FOUND);
             usage.getAaclUsage()
                 .setRightLimitation(DIGITAL_TYPE_OF_USE.equals(result.getTypeOfUse()) ? "ALL" : PRINT_TYPE_OF_USE);
@@ -232,6 +228,19 @@ public class RightsService implements IRightsService {
         if (logAction) {
             auditService.logAction(usageId, type, message);
         }
+    }
+
+    private Rightsholder buildRightsholder(Long rhAccountNumber) {
+        List<Rightsholder> rightsholders =
+            rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
+        Rightsholder rightsholder = new Rightsholder();
+        if (CollectionUtils.isNotEmpty(rightsholders)) {
+            rightsholder = rightsholders.get(0);
+        } else {
+            rightsholder.setAccountNumber(rhAccountNumber);
+            LOGGER.warn("Rightsholder account {} was not found in PRM", rhAccountNumber);
+        }
+        return rightsholder;
     }
 
     private void updateSentForRaUsagesRightsholders(List<Usage> usages) {
