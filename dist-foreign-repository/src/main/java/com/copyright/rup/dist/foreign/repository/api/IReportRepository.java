@@ -97,7 +97,7 @@ public interface IReportRepository {
     void writeNtsUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
-     * Writes usages found by filter into the output stream in CSV format
+     * Writes FAS usages for work research found by filter into the output stream in CSV format
      * and returns identifiers of those usages.
      *
      * @param filter       instance of {@link UsageFilter}
@@ -105,6 +105,16 @@ public interface IReportRepository {
      * @return identifiers of usages written into CSV report
      */
     Set<String> writeUsagesForResearchAndFindIds(UsageFilter filter, OutputStream outputStream);
+
+    /**
+     * Writes AACL usages for classification found by filter into the output stream in CSV format
+     * and returns identifiers of those usages.
+     *
+     * @param filter       instance of {@link UsageFilter}
+     * @param outputStream instance of {@link OutputStream}
+     * @return identifiers of usages written into CSV report
+     */
+    Set<String> writeUsagesForClassificationAndFindIds(UsageFilter filter, OutputStream outputStream);
 
     /**
      * Finds usages by FAS/FAS2 scenario id and writes them into the output stream in CSV format.

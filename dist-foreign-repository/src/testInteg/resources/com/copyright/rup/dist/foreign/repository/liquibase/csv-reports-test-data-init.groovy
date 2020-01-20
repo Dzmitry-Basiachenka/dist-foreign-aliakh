@@ -6061,4 +6061,130 @@ databaseChangeLog {
             column(name: 'is_rh_participating_flag', value: 'false')
         }
     }
+
+    changeSet(id: '2020-01-20-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
+        comment('Inserting test data for testWriteUsagesForClassificationAndFindIds')
+
+        insert(schemaName: "apps", tableName: "df_usage_batch") {
+            column(name: "df_usage_batch_uid", value: "aed882d5-7625-4039-8781-a6676e11c579")
+            column(name: "name", value: "AACL batch")
+            column(name: "rro_account_number", value: "2000017000")
+            column(name: "payment_date", value: "2019-02-13")
+            column(name: "product_family", value: "AACL")
+            column(name: "fiscal_year", value: "2019")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage") {
+            column(name: "df_usage_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
+            column(name: "df_usage_batch_uid", value: "aed882d5-7625-4039-8781-a6676e11c579")
+            column(name: "wr_wrk_inst", value: "122825976")
+            column(name: "system_title", value: "Ecotoxicology")
+            column(name: "standard_number", value: "09639292")
+            column(name: "standard_number_type", value: "VALISSN")
+            column(name: "rh_account_number", value: "1000003578")
+            column(name: "status_ind", value: "RH_FOUND")
+            column(name: "product_family", value: "AACL")
+            column(name: "number_of_copies", value: "10")
+            column(name: "comment", value: "AACL comment")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage_aacl") {
+            column(name: "df_usage_aacl_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
+            column(name: "institution", value: "CORNELL UNIVERSITY")
+            column(name: "usage_period", value: "201906")
+            column(name: "usage_source", value: "Feb 2019 TUR")
+            column(name: "number_of_pages", value: "12")
+            column(name: "right_limitation", value: "ALL")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage") {
+            column(name: "df_usage_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
+            column(name: "df_usage_batch_uid", value: "aed882d5-7625-4039-8781-a6676e11c579")
+            column(name: "wr_wrk_inst", value: "122820420")
+            column(name: "system_title", value: "Castanea")
+            column(name: "standard_number", value: "00087475")
+            column(name: "standard_number_type", value: "VALISSN")
+            column(name: "rh_account_number", value: "7001413934")
+            column(name: "status_ind", value: "RH_FOUND")
+            column(name: "product_family", value: "AACL")
+            column(name: "number_of_copies", value: "20")
+            column(name: "comment", value: "AACL comment")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage_aacl") {
+            column(name: "df_usage_aacl_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
+            column(name: "institution", value: "BIOLA UNIVERSITY")
+            column(name: "usage_period", value: "201812")
+            column(name: "usage_source", value: "Aug 2018 TUR")
+            column(name: "number_of_pages", value: "6")
+            column(name: "right_limitation", value: "ALL")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage") {
+            column(name: "df_usage_uid", value: "67d36799-5523-474d-91f6-2e12756a4918")
+            column(name: "df_usage_batch_uid", value: "aed882d5-7625-4039-8781-a6676e11c579")
+            column(name: "wr_wrk_inst", value: "109713043")
+            column(name: "status_ind", value: "NEW")
+            column(name: "product_family", value: "AACL")
+            column(name: "number_of_copies", value: "20")
+            column(name: "comment", value: "AACL comment")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage_aacl") {
+            column(name: "df_usage_aacl_uid", value: "67d36799-5523-474d-91f6-2e12756a4918")
+            column(name: "institution", value: "BIOLA UNIVERSITY")
+            column(name: "usage_period", value: "201812")
+            column(name: "usage_source", value: "Aug 2018 TUR")
+            column(name: "number_of_pages", value: "6")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "945553a2-0200-4e5d-9c5a-a44b57839c42")
+            column(name: "df_usage_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
+            column(name: "action_type_ind", value: "LOADED")
+            column(name: "action_reason", value: "Uploaded in 'AACL batch'")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "25f4fa01-02aa-414a-9052-667360be8535")
+            column(name: "df_usage_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
+            column(name: "action_type_ind", value: "WORK_FOUND")
+            column(name: "action_reason", value: "Wr Wrk Inst 122825976 was found")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "3ef7b6e0-8248-4ccf-b8db-ff1e0e3b5837")
+            column(name: "df_usage_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
+            column(name: "action_type_ind", value: "RH_FOUND")
+            column(name: "action_reason", value: "Rightsholder account 1000003578 was found in RMS")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "0dd59537-2266-411b-8171-092544911540")
+            column(name: "df_usage_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
+            column(name: "action_type_ind", value: "LOADED")
+            column(name: "action_reason", value: "Uploaded in 'AACL batch'")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "532a2ec3-75de-457b-b8d3-736e3c8e5e5a")
+            column(name: "df_usage_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
+            column(name: "action_type_ind", value: "WORK_FOUND")
+            column(name: "action_reason", value: "Wr Wrk Inst 122820420 was found")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "b1c672ce-30a1-4703-a143-dca797c2b0ea")
+            column(name: "df_usage_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
+            column(name: "action_type_ind", value: "RH_FOUND")
+            column(name: "action_reason", value: "Rightsholder account 7001413934 was found in RMS")
+        }
+
+        insert(schemaName: "apps", tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "1fab6d9a-aa40-4ca9-b43e-cc657387c67d")
+            column(name: "df_usage_uid", value: "67d36799-5523-474d-91f6-2e12756a4918")
+            column(name: "action_type_ind", value: "LOADED")
+            column(name: "action_reason", value: "Uploaded in 'AACL batch'")
+        }
+    }
 }

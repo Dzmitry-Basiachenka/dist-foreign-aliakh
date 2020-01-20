@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.fas;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUsageCsvReportHandler;
 
 import org.apache.ibatis.session.ResultContext;
 
@@ -10,15 +11,15 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Writes usages into an {@link OutputStream} and collects their identifiers.
+ * Writes usages for classification into an {@link OutputStream} and collects their identifiers.
  * <p>
- * Copyright (C) 2017 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 3/21/18
+ * Date: 01/17/20
  *
- * @author Uladzislau Shalamitski
+ * @author Stanislau Rudak
  */
-public class SendForResearchCsvReportHandler extends FasUsageCsvReportHandler {
+public class SendForClassificationCsvReportHandler extends AaclUsageCsvReportHandler {
 
     private final Set<String> usagesIds;
 
@@ -28,7 +29,7 @@ public class SendForResearchCsvReportHandler extends FasUsageCsvReportHandler {
      * @param outputStream           instance of {@link OutputStream}
      * @param usagesIdsToBePopulated a mutable {@link Set} where handled usage ids will be stored
      */
-    public SendForResearchCsvReportHandler(OutputStream outputStream, Set<String> usagesIdsToBePopulated) {
+    public SendForClassificationCsvReportHandler(OutputStream outputStream, Set<String> usagesIdsToBePopulated) {
         super(outputStream);
         usagesIds = Objects.requireNonNull(usagesIdsToBePopulated);
     }

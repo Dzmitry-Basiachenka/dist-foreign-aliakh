@@ -236,6 +236,23 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    public void testWriteUsagesForClassificationAndFindIds() throws IOException {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setProductFamily("AACL");
+        usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
+        usageFilter.setUsageBatchesIds(Collections.singleton("aed882d5-7625-4039-8781-a6676e11c579"));
+        assertFiles(outputStream -> reportRepository.writeUsagesForClassificationAndFindIds(usageFilter, outputStream),
+            "usages_for_classification.csv");
+    }
+
+    @Test
+    public void testWriteUsagesForClassificationAndFindIdsEmptyReport() throws IOException {
+        assertFiles(
+            outputStream -> reportRepository.writeUsagesForClassificationAndFindIds(new UsageFilter(), outputStream),
+            "usages_for_classification_empty.csv");
+    }
+
+    @Test
     public void testWriteUndistributedLiabilitiesCsvReport() throws Exception {
         assertFiles(outputStream -> reportRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2011, 5, 5),
             outputStream, DEFAULT_ESTIMATED_SERVICE_FEE), "undistributed_liabilities_report.csv");
@@ -342,6 +359,7 @@ public class CsvReportsIntegrationTest {
     private void assertFilesWithExecutor(Consumer<PipedOutputStream> reportWriter, String fileName)
         throws IOException {
         PipedOutputStream outputStream = new PipedOutputStream();
+        // TODO {srudak} use submit() to preserve exceptions; inverstigate the reason of 'Pipe not connected' exception
         Executors.newSingleThreadExecutor().execute(() -> reportWriter.accept(outputStream));
         reportTestUtils.assertCsvReport(fileName, new PipedInputStream(outputStream));
     }
