@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasScenarioUsagesC
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.OwnershipAdjustmentReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.ResearchStatusReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.SendForClassificationCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.SendForResearchCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.ServiceFeeTrueUpReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.SummaryMarketReportHandler;
@@ -31,7 +32,6 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportH
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -42,6 +42,7 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +67,8 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String SCENARIO_ID_KEY = "scenarioId";
+    private static final String FIND_USAGE_REPORT_DTOS_METHOD_NAME = "IReportMapper.findUsageReportDtos";
+    private static final String FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME = "IReportMapper.findUsagesCountByFilter";
 
     @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
@@ -205,7 +208,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     public void writeFasUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        writeCsvReportByParts("IReportMapper.findUsagesCountByFilter", "IReportMapper.findUsageReportDtos", parameters,
+        writeCsvReportByParts(FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME, FIND_USAGE_REPORT_DTOS_METHOD_NAME, parameters,
             !filter.isEmpty(), () -> new FasUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
@@ -213,21 +216,29 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     public void writeNtsUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        writeCsvReportByParts("IReportMapper.findUsagesCountByFilter", "IReportMapper.findUsageReportDtos", parameters,
+        writeCsvReportByParts(FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME, FIND_USAGE_REPORT_DTOS_METHOD_NAME, parameters,
             !filter.isEmpty(), () -> new NtsUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
     public Set<String> writeUsagesForResearchAndFindIds(UsageFilter filter, OutputStream outputStream) {
         Set<String> usageIds = new HashSet<>();
-        try (SendForResearchCsvReportHandler handler =
-                 new SendForResearchCsvReportHandler(Objects.requireNonNull(outputStream))) {
-            if (!Objects.requireNonNull(filter).isEmpty()) {
-                getTemplate().select("IReportMapper.findUsageReportDtos", ImmutableMap.of(FILTER_KEY, filter),
-                    handler);
-                usageIds = handler.getUsagesIds();
-            }
-        }
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        writeCsvReportByParts(FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME, FIND_USAGE_REPORT_DTOS_METHOD_NAME, parameters,
+            !Objects.requireNonNull(filter).isEmpty(),
+            () -> new SendForResearchCsvReportHandler(Objects.requireNonNull(outputStream), usageIds));
+        return usageIds;
+    }
+
+    @Override
+    public Set<String> writeUsagesForClassificationAndFindIds(UsageFilter filter, OutputStream outputStream) {
+        Set<String> usageIds = new HashSet<>();
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        writeCsvReportByParts(FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME, FIND_USAGE_REPORT_DTOS_METHOD_NAME, parameters,
+            !Objects.requireNonNull(filter).isEmpty(),
+            () -> new SendForClassificationCsvReportHandler(Objects.requireNonNull(outputStream), usageIds));
         return usageIds;
     }
 
@@ -279,15 +290,13 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         }
     }
 
-    private <T> void writeCsvReportByParts(String countMethodName, String selectMethodName,
-                                           Map<String, Object> parameters,
-                                           Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
+    private void writeCsvReportByParts(String countMethodName, String selectMethodName, Map<String, Object> parameters,
+                                       Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
         writeCsvReportByParts(countMethodName, selectMethodName, parameters, true, handlerSupplier);
     }
 
-    private <T> void writeCsvReportByParts(String countMethodName, String selectMethodName,
-                                           Map<String, Object> parameters, boolean precondition,
-                                           Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
+    private void writeCsvReportByParts(String countMethodName, String selectMethodName, Map<String, Object> parameters,
+                                       boolean precondition, Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
         int size = selectOne(countMethodName, parameters);
         try (BaseCsvReportHandler handler = handlerSupplier.get()) {
             if (precondition && 0 < size) {

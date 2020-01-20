@@ -172,7 +172,13 @@
         ufas.market,
         ufas.market_period_from,
         ufas.market_period_to,
-        ufas.reported_value
+        ufas.reported_value,
+        ub.payment_date as batch_period_end_date,
+        uaacl.institution,
+        uaacl.usage_period,
+        uaacl.usage_source,
+        uaacl.number_of_pages,
+        uaacl.right_limitation
     </sql>
 
     <sql id="selectUsageDtos">
@@ -180,7 +186,9 @@
             u.df_usage_uid,
             <include refid="IUsageMapper.usageDtoColumns"/>
         from ${schema}.df_usage u
-        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+        <!--TODO {isuvorau/srudak} find solution to not join both tables at a time -->
+        left join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+        left join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
