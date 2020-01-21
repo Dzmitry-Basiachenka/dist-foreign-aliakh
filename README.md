@@ -1,3 +1,12 @@
+8.1.15
+-
+* B-52330 FDA: Get Rights Information from RMS for AACL usages (get grants): introduce rights processor for AACL product family
+* B-52330 FDA: Get Rights Information from RMS for AACL usages (get grants): refine cache service to process AACL product family
+* B-55751 FDA: Load Pub Types: create df_publication_type table and populate columns
+* B-56092 Tech Debt: FDA: Apply last version of dist-common
+* B-52333 FDA: Send AACL usages for classification: Add repository functionality to export AACL usages
+* B-55751 FDA: Load Pub Types: make changes based on comments in CR-DIST-FOREIGN-141
+
 8.1.14
 -
 * B-54664 FDA: AACL Retrieve System Title, Standard Number and Standard Number Type: implement service logic for sending AACL usage for matching
