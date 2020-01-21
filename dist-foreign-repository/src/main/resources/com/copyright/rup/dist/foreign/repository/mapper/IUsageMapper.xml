@@ -172,19 +172,19 @@
         ufas.market,
         ufas.market_period_from,
         ufas.market_period_to,
-        ufas.reported_value,
-        ub.payment_date as batch_period_end_date,
-        uaacl.institution,
-        uaacl.usage_period,
-        uaacl.usage_source,
-        uaacl.number_of_pages,
-        uaacl.right_limitation
+        ufas.reported_value
     </sql>
 
     <sql id="selectUsageDtos">
         select
             u.df_usage_uid,
-            <include refid="IUsageMapper.usageDtoColumns"/>
+            <include refid="IUsageMapper.usageDtoColumns"/>,
+            ub.payment_date as batch_period_end_date,
+            uaacl.institution,
+            uaacl.usage_period,
+            uaacl.usage_source,
+            uaacl.number_of_pages,
+            uaacl.right_limitation
         from ${schema}.df_usage u
         <!--TODO {isuvorau/srudak} find solution to not join both tables at a time -->
         left join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
