@@ -935,7 +935,7 @@ databaseChangeLog {
                 remarks: 'Table for storing publication types for AACL product family') {
 
             column(name: 'df_publication_type_uid', type: 'VARCHAR(255)', remarks: 'Publication Type Identifier')
-            column(name: 'df_name', type: 'VARCHAR(255)', remarks: 'Publication Type Name')
+            column(name: 'name', type: 'VARCHAR(255)', remarks: 'Publication Type Name')
             column(name: 'record_version', type: 'INTEGER', defaultValue: '1', remarks: 'The latest version of this record, used for optimistic locking') {
                 constraints(nullable: false)
             }
@@ -958,32 +958,32 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
-            column(name: 'df_name', value: 'Book')
+            column(name: 'name', value: 'Book')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
             column(name: 'df_publication_type_uid', value: '68fd94c0-a8c0-4a59-bfe3-6674c4b12199')
-            column(name: 'df_name', value: 'Business or Trade Journal')
+            column(name: 'name', value: 'Business or Trade Journal')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
             column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
-            column(name: 'df_name', value: 'Consumer Magazine')
+            column(name: 'name', value: 'Consumer Magazine')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
             column(name: 'df_publication_type_uid', value: 'a3dff475-fc06-4d8c-b7cc-f093073ada6f')
-            column(name: 'df_name', value: 'News Source')
+            column(name: 'name', value: 'News Source')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
             column(name: 'df_publication_type_uid', value: '357ea293-8f98-4160-820e-8369f6180654')
-            column(name: 'df_name', value: 'Other')
+            column(name: 'name', value: 'Other')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
-            column(name: 'df_name', value: 'STMA Journal')
+            column(name: 'name', value: 'STMA Journal')
         }
 
         rollback {
