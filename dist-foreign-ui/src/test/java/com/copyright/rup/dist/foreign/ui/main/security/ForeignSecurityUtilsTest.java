@@ -52,7 +52,7 @@ public final class ForeignSecurityUtilsTest {
         Object[] distributionSpecialistRole = {Sets.newHashSet(
             FDA_ACCESS_APPLICATION, "FDA_DELETE_USAGE", "FDA_LOAD_USAGE", "FDA_LOAD_FUND_POOL",
             "FDA_LOAD_RESEARCHED_USAGE", "FDA_CREATE_DELETE_FUND", "FDA_ASSIGN_CLASSIFICATION", "FDA_DELETE_SCENARIO",
-            "FDA_EXCLUDE_FROM_SCENARIO", "FDA_SEND_FOR_WORK_RESEARCH")};
+            "FDA_EXCLUDE_FROM_SCENARIO", "FDA_SEND_FOR_WORK_RESEARCH", "FDA_SEND_FOR_CLASSIFICATION")};
         Object[] roleWithoutPermissions = {Collections.emptySet()};
         return Arrays.asList(
             viewOnlyRole,
@@ -97,6 +97,8 @@ public final class ForeignSecurityUtilsTest {
             ForeignSecurityUtils.hasExcludeFromScenarioPermission());
         assertEquals(permissions.contains("FDA_SEND_FOR_WORK_RESEARCH"),
             ForeignSecurityUtils.hasSendForWorkResearchPermission());
+        assertEquals(permissions.contains("FDA_SEND_FOR_CLASSIFICATION"),
+            ForeignSecurityUtils.hasSendForClassificationPermission());
     }
 
     private static class MockSecurityContext implements SecurityContext {

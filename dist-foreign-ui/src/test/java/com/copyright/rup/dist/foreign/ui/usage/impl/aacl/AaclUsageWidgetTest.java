@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -9,28 +10,39 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.expectNew;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterController;
+import com.copyright.rup.vaadin.ui.component.window.NotificationWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.CloseEvent;
+import com.vaadin.ui.Window.CloseListener;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +52,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -73,10 +86,11 @@ public class AaclUsageWidgetTest {
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
-            createMock(Supplier.class))).times(2);
+            createMock(Supplier.class))).once();
+        expect(controller.getSendForClassificationUsagesStreamSource()).andReturn(streamSource).once();
         replay(controller, streamSource);
         usagesWidget.init();
-        verify(controller);
+        verify(controller, streamSource);
         reset(controller, streamSource);
     }
 
@@ -120,16 +134,70 @@ public class AaclUsageWidgetTest {
         expectNew(AaclUsageMediator.class).andReturn(mediator).once();
         mediator.setLoadUsageBatchMenuItem(anyObject(MenuItem.class));
         expectLastCall().once();
+        mediator.setSendForClassificationButton(anyObject(Button.class));
+        expectLastCall().once();
         replay(AaclUsageMediator.class, mediator, controller);
         assertNotNull(usagesWidget.initMediator());
         verify(AaclUsageMediator.class, mediator, controller);
     }
 
+    @Test
+    public void testSendForClassification() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        CloseEvent closeEvent = createMock(CloseEvent.class);
+        Capture<Window> notificationWindowCapture = new Capture<>();
+        Button sendForClassificationButton =
+            (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+                .getComponent(0)).getComponent(1);
+        expect(controller.isValidUsagesState(UsageStatusEnum.RH_FOUND)).andReturn(true).once();
+        Windows.showModalWindow(capture(notificationWindowCapture));
+        expectLastCall().once();
+        controller.clearFilter();
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = sendForClassificationButton.getListeners(ClickEvent.class);
+        assertEquals(1, listeners.size());
+        ((ClickListener) listeners.iterator().next()).buttonClick(clickEvent);
+        Window notificationWindow = notificationWindowCapture.getValue();
+        assertTrue(notificationWindow instanceof NotificationWindow);
+        assertEquals("File download is in progress. Please wait",
+            ((Label) ((VerticalLayout) notificationWindow.getContent()).getComponent(0)).getValue());
+        Collection<?> notificationWindowListeners = notificationWindow.getListeners(CloseEvent.class);
+        assertEquals(1, notificationWindowListeners.size());
+        ((CloseListener) notificationWindowListeners.iterator().next()).windowClose(closeEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testSendForClassificationInvalidUsagesState() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button sendForClassificationButton =
+            (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+                .getComponent(0)).getComponent(1);
+        expect(controller.isValidUsagesState(UsageStatusEnum.RH_FOUND)).andReturn(false).once();
+        Windows.showNotificationWindow("Only usages in RH_FOUND status can be sent for classification");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = sendForClassificationButton.getListeners(ClickEvent.class);
+        assertEquals(1, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(1, layout.getComponentCount());
+        assertEquals(2, layout.getComponentCount());
         verifyUsageBatchMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load"));
+        Button sendForClassificationButton = (Button) layout.getComponent(1);
+        assertEquals("Send for Classification", sendForClassificationButton.getCaption());
     }
 
     private void verifyUsageBatchMenuBar(Component component, String menuBarName, List<String> menuItems) {

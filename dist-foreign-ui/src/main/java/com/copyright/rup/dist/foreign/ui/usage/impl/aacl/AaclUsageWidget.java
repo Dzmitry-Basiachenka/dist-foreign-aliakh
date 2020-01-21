@@ -3,14 +3,21 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
+import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
+import com.copyright.rup.vaadin.ui.component.window.NotificationWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinResponse;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 
@@ -27,6 +34,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
 
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private Button sendForClassificationButton;
     private final IAaclUsageController controller;
 
     /**
@@ -42,6 +50,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     public IMediator initMediator() {
         AaclUsageMediator mediator = new AaclUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
+        mediator.setSendForClassificationButton(sendForClassificationButton);
         return mediator;
     }
 
@@ -85,7 +94,8 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     @Override
     protected HorizontalLayout initButtonsLayout() {
         initUsageBatchMenuBar();
-        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar);
+        initSendForClassificationButton();
+        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, sendForClassificationButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -99,5 +109,47 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
             item -> Windows.showModalWindow(new AaclUsageBatchUploadWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
+    }
+
+    private void initSendForClassificationButton() {
+        sendForClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.send_for_classification"));
+        SendForClassificationFileDownloader sendForClassificationDownloader =
+            new SendForClassificationFileDownloader(controller);
+        sendForClassificationDownloader.extend(sendForClassificationButton);
+        // Click listener and second isValidUsagesState() call were added due to problem with
+        // modal window appearance in chrome browser
+        sendForClassificationButton.addClickListener(event -> {
+            if (!controller.isValidUsagesState(UsageStatusEnum.RH_FOUND)) {
+                Windows.showNotificationWindow(
+                    ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.RH_FOUND,
+                        "sent for classification"));
+            } else {
+                NotificationWindow window =
+                    new NotificationWindow(ForeignUi.getMessage("message.download_in_progress"));
+                window.addCloseListener(closeEvent -> controller.clearFilter());
+                Windows.showModalWindow(window);
+            }
+        });
+    }
+
+    private static class SendForClassificationFileDownloader extends OnDemandFileDownloader {
+
+        private final IAaclUsageController controller;
+
+        /**
+         * Controller.
+         *
+         * @param controller instance of {@link IAaclUsageController}
+         */
+        SendForClassificationFileDownloader(IAaclUsageController controller) {
+            super(controller.getSendForClassificationUsagesStreamSource().getSource());
+            this.controller = controller;
+        }
+
+        @Override
+        public boolean handleConnectorRequest(VaadinRequest request, VaadinResponse response, String path) {
+            return controller.isValidUsagesState(UsageStatusEnum.RH_FOUND)
+                && super.handleConnectorRequest(request, response, path);
+        }
     }
 }

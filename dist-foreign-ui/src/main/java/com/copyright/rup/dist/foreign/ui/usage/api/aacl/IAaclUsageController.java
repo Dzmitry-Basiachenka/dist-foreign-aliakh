@@ -37,6 +37,11 @@ public interface IAaclUsageController extends ICommonUsageController {
     AaclUsageCsvProcessor getCsvProcessor();
 
     /**
+     * @return instance of {@link IStreamSource} for sending for classification.
+     */
+    IStreamSource getSendForClassificationUsagesStreamSource();
+
+    /**
      * Return instance of {@link IStreamSource} for errors result.
      *
      * @param fileName         name of processed file

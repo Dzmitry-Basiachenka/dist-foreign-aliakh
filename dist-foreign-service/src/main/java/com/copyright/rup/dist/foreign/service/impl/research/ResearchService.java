@@ -45,4 +45,15 @@ public class ResearchService implements IResearchService {
         usageIds.forEach(usageId -> usageAuditService.logAction(usageId, UsageActionTypeEnum.WORK_RESEARCH,
             "Usage detail was sent for research"));
     }
+
+    @Override
+    @Transactional
+    public void sendForClassification(UsageFilter filter, OutputStream outputStream) {
+        Set<String> usageIds = reportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream);
+        if (CollectionUtils.isNotEmpty(usageIds)) {
+            usageRepository.updateStatus(usageIds, UsageStatusEnum.WORK_RESEARCH);
+        }
+        usageIds.forEach(usageId -> usageAuditService.logAction(usageId, UsageActionTypeEnum.WORK_RESEARCH,
+            "Usage detail was sent for classification"));
+    }
 }

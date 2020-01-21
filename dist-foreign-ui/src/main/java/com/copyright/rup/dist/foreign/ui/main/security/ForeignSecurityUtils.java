@@ -70,6 +70,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to send usages for classification.
+     */
+    public static boolean hasSendForClassificationPermission() {
+        return SecurityUtils.hasPermission("FDA_SEND_FOR_CLASSIFICATION");
+    }
+
+    /**
      * @return {@code true} if user has permission to create and delete Pre-Service fee funds.
      */
     public static boolean hasCreateDeleteFundPermission() {

@@ -236,8 +236,8 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         Set<String> usageIds = new HashSet<>();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        writeCsvReportByParts(FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME, FIND_USAGE_REPORT_DTOS_METHOD_NAME, parameters,
-            !Objects.requireNonNull(filter).isEmpty(),
+        writeCsvReportByParts("IReportMapper.findAaclUsagesCountByFilter", "IReportMapper.findAaclUsageReportDtos",
+            parameters, !Objects.requireNonNull(filter).isEmpty(),
             () -> new SendForClassificationCsvReportHandler(Objects.requireNonNull(outputStream), usageIds));
         return usageIds;
     }

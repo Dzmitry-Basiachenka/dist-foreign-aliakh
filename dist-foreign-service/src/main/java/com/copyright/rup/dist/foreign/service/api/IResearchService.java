@@ -16,11 +16,20 @@ import java.io.OutputStream;
 public interface IResearchService {
 
     /**
-     * Writes usages found by filter into CSV output stream and
-     * change status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_RESEARCH}.
+     * Writes usages found by filter into CSV output stream for work research and
+     * changes status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_RESEARCH}.
      *
      * @param filter       instance of {@link UsageFilter}
      * @param outputStream instance of {@link OutputStream}
      */
     void sendForResearch(UsageFilter filter, OutputStream outputStream);
+
+    /**
+     * Writes usages found by filter into CSV output stream for future classification and
+     * changes status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_RESEARCH}.
+     *
+     * @param filter       instance of {@link UsageFilter}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void sendForClassification(UsageFilter filter, OutputStream outputStream);
 }

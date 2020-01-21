@@ -10,6 +10,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.vaadin.security.SecurityUtils;
 
+import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,14 +35,17 @@ public class AaclUsageMediatorTest {
 
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private Button sendForClassificationButton;
     private AaclUsageMediator mediator;
 
     @Before
     public void setUp() {
         usageBatchMenuBar = new MenuBar();
+        sendForClassificationButton = new Button();
         loadUsageBatchMenuItem = usageBatchMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
         mediator = new AaclUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
+        mediator.setSendForClassificationButton(sendForClassificationButton);
     }
 
     @Test
@@ -51,6 +55,7 @@ public class AaclUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
+        assertFalse(sendForClassificationButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -61,6 +66,7 @@ public class AaclUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
+        assertFalse(sendForClassificationButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -71,6 +77,7 @@ public class AaclUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertTrue(loadUsageBatchMenuItem.isVisible());
+        assertTrue(sendForClassificationButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -93,5 +100,6 @@ public class AaclUsageMediatorTest {
         expect(SecurityUtils.hasPermission("FDA_LOAD_RESEARCHED_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_CREATE_EDIT_SCENARIO")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_SEND_FOR_WORK_RESEARCH")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_SEND_FOR_CLASSIFICATION")).andReturn(true).anyTimes();
     }
 }

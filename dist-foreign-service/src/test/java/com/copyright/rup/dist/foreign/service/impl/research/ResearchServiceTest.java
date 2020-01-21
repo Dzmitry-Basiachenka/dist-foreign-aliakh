@@ -34,6 +34,7 @@ import java.util.Set;
  * @author Nikita Levyankov
  */
 public class ResearchServiceTest {
+
     private IUsageRepository usageRepository;
     private IReportRepository reportRepository;
     private IUsageAuditService usageAuditService;
@@ -81,6 +82,42 @@ public class ResearchServiceTest {
             .once();
         replay(reportRepository, usageAuditService);
         researchService.sendForResearch(filter, outputStream);
+        verify(reportRepository, usageAuditService);
+    }
+
+    @Test
+    public void testSendForClassification() {
+        UsageFilter filter = new UsageFilter();
+        OutputStream outputStream = new ByteArrayOutputStream();
+        String usageId1 = RupPersistUtils.generateUuid();
+        String usageId2 = RupPersistUtils.generateUuid();
+        Set<String> usageIds = new HashSet<>();
+        Collections.addAll(usageIds, usageId1, usageId2);
+        expect(reportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream))
+            .andReturn(usageIds)
+            .once();
+        usageRepository.updateStatus(usageIds, UsageStatusEnum.WORK_RESEARCH);
+        expectLastCall().once();
+        usageAuditService.logAction(usageId1, UsageActionTypeEnum.WORK_RESEARCH,
+            "Usage detail was sent for classification");
+        expectLastCall().once();
+        usageAuditService.logAction(usageId2, UsageActionTypeEnum.WORK_RESEARCH,
+            "Usage detail was sent for classification");
+        expectLastCall().once();
+        replay(usageRepository, reportRepository, usageAuditService);
+        researchService.sendForClassification(filter, outputStream);
+        verify(usageRepository, reportRepository, usageAuditService);
+    }
+
+    @Test
+    public void testSendForClassificationNoUsages() {
+        UsageFilter filter = new UsageFilter();
+        OutputStream outputStream = new ByteArrayOutputStream();
+        expect(reportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream))
+            .andReturn(Collections.emptySet())
+            .once();
+        replay(reportRepository, usageAuditService);
+        researchService.sendForClassification(filter, outputStream);
         verify(reportRepository, usageAuditService);
     }
 }
