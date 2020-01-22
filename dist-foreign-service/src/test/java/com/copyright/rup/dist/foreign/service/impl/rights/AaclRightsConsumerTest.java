@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -40,7 +41,7 @@ public class AaclRightsConsumerTest {
     public void setUp() {
         aaclRightsConsumer = new AaclRightsConsumer();
         aaclRightsProcessorMock = createMock(IChainProcessor.class);
-        aaclRightsConsumer.setAaclRightsProcessor(aaclRightsProcessorMock);
+        Whitebox.setInternalState(aaclRightsConsumer, aaclRightsProcessorMock);
     }
 
     @Test
@@ -54,7 +55,7 @@ public class AaclRightsConsumerTest {
     }
 
     private void testConsume(Long foundRhAccountNumber, boolean expectedPredicateResult) {
-        aaclRightsConsumer.setRightsService(new RightsServiceMock(foundRhAccountNumber));
+        Whitebox.setInternalState(aaclRightsConsumer, new RightsServiceMock(foundRhAccountNumber));
         Usage usage = buildUsage();
         Capture<Predicate<Usage>> predicateCapture = new Capture<>();
         aaclRightsProcessorMock.executeNextProcessor(eq(usage), capture(predicateCapture));

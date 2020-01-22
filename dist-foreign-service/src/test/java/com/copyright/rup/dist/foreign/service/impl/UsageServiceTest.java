@@ -914,7 +914,7 @@ public class UsageServiceTest {
 
     @Test
     public void testUpdateProcessedUsage() {
-        String usageId = RupPersistUtils.generateUuid();
+        String usageId = "3d1f1d34-c307-42be-99d2-075dbcdb7838";
         Usage usage = buildUsage(usageId);
         expect(usageRepository.updateProcessedUsage(usage)).andReturn(usageId).once();
         replay(usageRepository);
@@ -924,7 +924,7 @@ public class UsageServiceTest {
 
     @Test
     public void testUpdateProcessedUsageAaclProductFamily() {
-        String usageId = RupPersistUtils.generateUuid();
+        String usageId = "fbf3b27f-2031-41a0-812e-111bb668e180";
         Usage usage = buildUsage(usageId);
         usage.setProductFamily("AACL");
         expect(usageRepository.updateProcessedAaclUsage(usage)).andReturn(usageId).once();

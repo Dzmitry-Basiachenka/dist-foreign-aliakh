@@ -49,12 +49,4 @@ public class AaclRightsConsumer implements IConsumer<Usage> {
                 usage.getStatus(), usage.getRightsholder().getAccountNumber());
         }
     }
-
-    void setRightsService(IRightsService rightsService) {
-        this.rightsService = rightsService;
-    }
-
-    void setAaclRightsProcessor(IChainProcessor<Usage> aaclRightsProcessor) {
-        this.aaclRightsProcessor = aaclRightsProcessor;
-    }
 }
