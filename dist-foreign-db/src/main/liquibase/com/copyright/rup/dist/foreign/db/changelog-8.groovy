@@ -990,4 +990,15 @@ databaseChangeLog {
             dropTable(tableName: 'df_publication_type', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2020-01-22-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment('B-55751 FDA: Load Pub Types: create NOT NULL constraint for name column in df_publication_type table')
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_publication_type',
+                columnName: 'name')
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
