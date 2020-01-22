@@ -356,20 +356,6 @@ public interface IUsageService {
     List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
 
     /**
-     * Retrieves list of product families of non archived details.
-     *
-     * @return list of product families
-     */
-    List<String> getProductFamilies();
-
-    /**
-     * Retrieves list of product families of both archived and non archived details.
-     *
-     * @return list of product families
-     */
-    List<String> getProductFamiliesForAudit();
-
-    /**
      * @return list of supported markets.
      */
     List<String> getMarkets();

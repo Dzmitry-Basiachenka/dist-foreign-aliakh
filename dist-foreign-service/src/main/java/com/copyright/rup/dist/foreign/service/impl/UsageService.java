@@ -96,8 +96,6 @@ public class UsageService implements IUsageService {
     private static final Logger LOGGER = RupLogUtils.getLogger();
     @Value("$RUP{dist.foreign.service_fee.cla_payee}")
     private BigDecimal claPayeeServiceFee;
-    @Value("$RUP{dist.foreign.product_families}")
-    private List<String> supportedProductFamilies;
     @Value("$RUP{dist.foreign.markets}")
     private List<String> supportedMarkets;
     @Value("$RUP{dist.foreign.cla_account_number}")
@@ -482,16 +480,6 @@ public class UsageService implements IUsageService {
     @Override
     public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         return usageRepository.findForAudit(filter, pageable, sort);
-    }
-
-    @Override
-    public List<String> getProductFamilies() {
-        return supportedProductFamilies;
-    }
-
-    @Override
-    public List<String> getProductFamiliesForAudit() {
-        return supportedProductFamilies;
     }
 
     @Override
