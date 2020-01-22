@@ -82,17 +82,16 @@ public class WorkMatchingService implements IWorkMatchingService {
     public void matchByWrWrkInst(Usage usage) {
         Work work = piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst());
         if (Objects.nonNull(work.getWrWrkInst())) {
-            // TODO {srudak} check if we should set workTitle
             usage.setSystemTitle(work.getMainTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
             usage.setStandardNumber(work.getMainIdno());
             usage.setStandardNumberType(StringUtils.upperCase(work.getMainIdnoType()));
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                String.format("Wr Wrk Inst %s was found", usage.getWrWrkInst()));
+                String.format("Wr Wrk Inst %s was found in PI", usage.getWrWrkInst()));
         } else {
             usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
-                String.format("Wr Wrk Inst %s wasn't found", usage.getWrWrkInst()));
+                String.format("Wr Wrk Inst %s was not found in PI", usage.getWrWrkInst()));
         }
         usageService.updateProcessedUsage(usage);
     }

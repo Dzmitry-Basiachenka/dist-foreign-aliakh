@@ -42,7 +42,8 @@ public class AaclWorkflowIntegrationTest {
     public void testAaclWorkflow() throws Exception {
         testBuilder
             .withProductFamily(AACL_PRODUCT_FAMILY)
-            .withUsagesCsvFile("usage/usages_for_workflow_aacl.csv", USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4)
+            .withUsagesCsvFile("usage/aacl/aacl_usages_for_workflow.csv",
+                USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4)
             .withUsageBatch(buildUsageBatch())
             .expectRmsRights("rights/aacl/rms_grants_100009840_request_workflow.json",
                 "rights/aacl/rms_grants_100009840_response_workflow.json")
@@ -54,16 +55,16 @@ public class AaclWorkflowIntegrationTest {
             .expectUsages("usage/aacl/aacl_expected_usages_for_workflow.json")
             .expectUsageAudit(USAGE_ID_1, Arrays.asList(
                 buildAuditItem(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS"),
-                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100009840 was found"),
+                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100009840 was found in PI"),
                 buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
             ))
             .expectUsageAudit(USAGE_ID_2, Arrays.asList(
                 buildAuditItem(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS"),
-                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100010768 was found"),
+                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100010768 was found in PI"),
                 buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
             ))
             .expectUsageAudit(USAGE_ID_4, Arrays.asList(
-                buildAuditItem(UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 963852741 wasn't found"),
+                buildAuditItem(UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 963852741 was not found in PI"),
                 buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
             ))
             .build()
