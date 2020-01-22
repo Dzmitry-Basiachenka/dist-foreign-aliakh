@@ -1,0 +1,63 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IAaclUsageMapper">
+
+    <resultMap id="aaclUsageResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_usage_uid"/>
+        <result property="batchId" column="df_usage_batch_uid"/>
+        <result property="status" column="status_ind"/>
+        <result property="productFamily" column="product_family"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="rightsholder.id" column="rh_id"/>
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="rightsholder.name" column="rh_name"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="standardNumber" column="standard_number"/>
+        <result property="standardNumberType" column="standard_number_type"/>
+        <result property="numberOfCopies" column="number_of_copies"/>
+        <result property="comment" column="comment"/>
+        <result property="aaclUsage.institution" column="institution"/>
+        <result property="aaclUsage.usagePeriod" column="usage_period"/>
+        <result property="aaclUsage.usageSource" column="usage_source"/>
+        <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
+        <result property="aaclUsage.rightLimitation" column="right_limitation"/>
+        <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
+    </resultMap>
+
+    <select id="findByIds" resultMap="aaclUsageResultMap">
+        select
+            u.df_usage_uid,
+            u.df_usage_batch_uid,
+            u.wr_wrk_inst,
+            u.system_title,
+            u.rh_account_number,
+            r.name rh_name,
+            r.df_rightsholder_uid rh_id,
+            u.status_ind,
+            u.product_family,
+            u.comment,
+            u.number_of_copies,
+            ub.payment_date batch_period_end_date,
+            uaacl.institution,
+            uaacl.usage_period,
+            uaacl.usage_source,
+            uaacl.number_of_pages,
+            uaacl.right_limitation,
+            u.created_datetime,
+            u.updated_datetime,
+            u.created_by_user,
+            u.updated_by_user,
+            u.record_version
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
+        where u.df_usage_uid in
+        <foreach collection="list" item="usageId" open="(" separator="," close=")">
+            #{usageId}
+        </foreach>
+        order by u.df_usage_uid
+    </select>
+</mapper>
