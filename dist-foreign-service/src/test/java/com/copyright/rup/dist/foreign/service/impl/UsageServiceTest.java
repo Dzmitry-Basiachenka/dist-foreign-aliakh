@@ -176,43 +176,6 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetUsagesCount() {
-        UsageFilter filter = new UsageFilter();
-        filter.setFiscalYear(2017);
-        expect(usageRepository.findCountByFilter(filter)).andReturn(1).once();
-        replay(usageRepository);
-        usageService.getUsagesCount(filter);
-        verify(usageRepository);
-    }
-
-    @Test
-    public void testGetUsageCountEmptyFilter() {
-        assertEquals(0, usageService.getUsagesCount(new UsageFilter()));
-    }
-
-    @Test
-    public void testGetUsageDtos() {
-        List<UsageDto> usagesWithBatch = Collections.singletonList(new UsageDto());
-        Pageable pageable = new Pageable(0, 1);
-        Sort sort = new Sort("detailId", Sort.Direction.ASC);
-        UsageFilter filter = new UsageFilter();
-        filter.setFiscalYear(2017);
-        expect(usageRepository.findDtosByFilter(filter, pageable, sort)).andReturn(usagesWithBatch).once();
-        replay(usageRepository);
-        List<UsageDto> result = usageService.getUsageDtos(filter, pageable, sort);
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        verify(usageRepository);
-    }
-
-    @Test
-    public void testGetUsagesDtosEmptyFilter() {
-        List<UsageDto> result = usageService.getUsageDtos(new UsageFilter(), null, null);
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
     public void testInsertUsages() {
         mockStatic(RupContextUtils.class);
         Capture<Usage> captureUsage1 = new Capture<>();

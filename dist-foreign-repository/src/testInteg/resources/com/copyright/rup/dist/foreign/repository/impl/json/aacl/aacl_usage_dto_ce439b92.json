@@ -1,0 +1,18 @@
+[
+  {
+    "id": "ce439b92-dfe1-4607-9cba-01394cbfc087",
+    "batchName": "AACL batch 2",
+    "wrWrkInst": 269040891,
+    "status": "NEW",
+    "productFamily": "AACL",
+    "numberOfCopies": 1,
+    "aaclUsage": {
+      "institution": "CORNELL UNIVERSITY",
+      "usagePeriod": 2018,
+      "batchPeriodEndDate": "2018-06-30",
+      "usageSource": "Feb 2018 TUR",
+      "numberOfPages": 341
+    },
+    "comment": "AACL NEW status"
+  }
+]

@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
@@ -54,6 +55,8 @@ public class FasScenariosController extends CommonScenariosController implements
     private IReconcileRightsholdersController reconcileRightsholdersController;
     @Autowired
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
+    @Autowired
+    private IFasUsageService fasUsageService;
 
     @Override
     public void onReconcileRightsholdersButtonClicked() {
@@ -133,11 +136,10 @@ public class FasScenariosController extends CommonScenariosController implements
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return getUsageService().getUsageDtos(usageFilter, new Pageable(startIndex, count), sort);
+        return fasUsageService.getUsageDtos(usageFilter, new Pageable(startIndex, count), sort);
     }
 
     private int getSize(UsageFilter filter) {
-        return getUsageService().getUsagesCount(filter);
+        return fasUsageService.getUsagesCount(filter);
     }
-
 }

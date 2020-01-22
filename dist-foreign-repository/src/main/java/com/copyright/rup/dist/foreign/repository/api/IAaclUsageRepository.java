@@ -1,6 +1,10 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
 
@@ -44,4 +48,22 @@ public interface IAaclUsageRepository {
      * @return the count of usages
      */
     int findReferencedAaclUsagesCountByIds(String... usageIds);
+
+    /**
+     * Finds list of AACL {@link UsageDto}s by usage filter.
+     *
+     * @param filter   instance of {@link UsageFilter}
+     * @param pageable instance of {@link Pageable}
+     * @param sort     instance of {@link Sort}
+     * @return the list of {@link UsageDto}
+     */
+    List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * Finds AACL usages count based on applied filter.
+     *
+     * @param filter instance of {@link UsageFilter}
+     * @return the count of usages
+     */
+    int findCountByFilter(UsageFilter filter);
 }

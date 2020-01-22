@@ -61,7 +61,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", true, 125);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", true, 145);
         addColumn(usage -> CommonDateUtils.format(usage.getAaclUsage().getBatchPeriodEndDate(),
-            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.period_end_date", "paymentDate", true, 115);
+            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.period_end_date", "periodEndDate", true, 115);
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", true, 115);
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);

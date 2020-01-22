@@ -3,8 +3,10 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -16,17 +18,19 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
+import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
@@ -35,8 +39,8 @@ import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageWidget;
 
 import com.google.common.collect.Lists;
-
 import com.vaadin.ui.HorizontalLayout;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -53,6 +57,7 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -76,6 +81,7 @@ public class FasUsageControllerTest {
 
     private FasUsageController controller;
     private IUsageService usageService;
+    private IFasUsageService fasUsageService;
     private IFasNtsUsageFilterController filterController;
     private IFasNtsUsageFilterWidget filterWidgetMock;
     private IFasUsageWidget usagesWidget;
@@ -89,7 +95,8 @@ public class FasUsageControllerTest {
     @Before
     public void setUp() {
         controller = new FasUsageController();
-        usageService = createMock(UsageService.class);
+        usageService = createMock(IUsageService.class);
+        fasUsageService = createMock(IFasUsageService.class);
         usageBatchService = createMock(IUsageBatchService.class);
         filterController = createMock(IFasNtsUsageFilterController.class);
         usagesWidget = createMock(IFasUsageWidget.class);
@@ -100,6 +107,7 @@ public class FasUsageControllerTest {
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
+        Whitebox.setInternalState(controller, fasUsageService);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, prmIntegrationService);
@@ -107,6 +115,35 @@ public class FasUsageControllerTest {
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
         usageFilter = new UsageFilter();
+    }
+
+    @Test
+    public void getBeansCount() {
+        usageFilter.setFiscalYear(2017);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(fasUsageService.getUsagesCount(usageFilter)).andReturn(1).once();
+        replay(filterWidgetMock, usageService, fasUsageService, filterController);
+        assertEquals(1, controller.getBeansCount());
+        verify(filterWidgetMock, usageService, fasUsageService, filterController);
+    }
+
+    @Test
+    public void testLoadBeans() {
+        usageFilter.setFiscalYear(2017);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        Capture<Pageable> pageableCapture = new Capture<>();
+        expect(fasUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
+            .andReturn(Collections.emptyList()).once();
+        replay(filterWidgetMock, usageService, fasUsageService, filterController);
+        List<UsageDto> result = controller.loadBeans(10, 150, null);
+        Pageable pageable = pageableCapture.getValue();
+        assertEquals(10, pageable.getOffset());
+        assertEquals(150, pageable.getLimit());
+        assertNotNull(result);
+        assertEquals(0, result.size());
+        verify(filterWidgetMock, usageService, fasUsageService, filterController);
     }
 
     @Test

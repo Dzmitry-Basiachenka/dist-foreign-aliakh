@@ -29,6 +29,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
@@ -76,6 +77,7 @@ public class FasScenariosControllerTest {
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private FasScenariosController scenariosController;
     private IUsageService usageService;
+    private IFasUsageService fasUsageService;
     private IScenarioService scenarioService;
     private FasScenarioController scenarioController;
     private Scenario scenario;
@@ -86,6 +88,7 @@ public class FasScenariosControllerTest {
     @Before
     public void setUp() {
         usageService = createMock(IUsageService.class);
+        fasUsageService = createMock(IFasUsageService.class);
         scenarioService = createMock(IScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         scenariosController = new FasScenariosController();
@@ -100,6 +103,7 @@ public class FasScenariosControllerTest {
         replay(SecurityUtils.class);
         scenariosController.initActionHandlers();
         Whitebox.setInternalState(scenariosController, "usageService", usageService);
+        Whitebox.setInternalState(scenariosController, "fasUsageService", fasUsageService);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
         verify(SecurityUtils.class);
@@ -296,12 +300,12 @@ public class FasScenariosControllerTest {
         expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(new ScenarioUsageFilter()).once();
         UsageDto usageDto = new UsageDto();
         usageDto.setId(RupPersistUtils.generateUuid());
-        expect(usageService.getUsagesCount(new UsageFilter(new ScenarioUsageFilter()))).andReturn(1).once();
+        expect(fasUsageService.getUsagesCount(new UsageFilter(new ScenarioUsageFilter()))).andReturn(1).once();
         Windows.showModalWindow(anyObject(RefreshScenarioWindow.class));
         expectLastCall().once();
-        replay(Windows.class, scenariosWidget, scenarioUsageFilterService, usageService);
+        replay(Windows.class, scenariosWidget, scenarioUsageFilterService, usageService, fasUsageService);
         scenariosController.onRefreshScenarioButtonClicked();
-        verify(Windows.class, scenariosWidget, scenarioUsageFilterService, usageService);
+        verify(Windows.class, scenariosWidget, scenarioUsageFilterService, usageService, fasUsageService);
     }
 
     @Test

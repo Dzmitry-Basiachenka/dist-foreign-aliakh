@@ -14,7 +14,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 
@@ -70,7 +70,7 @@ public class LoadAaclUsagesIntegrationTest {
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
-    private IUsageService usageService;
+    private IAaclUsageService usageService;
     @Autowired
     private ServiceTestHelper testHelper;
 
