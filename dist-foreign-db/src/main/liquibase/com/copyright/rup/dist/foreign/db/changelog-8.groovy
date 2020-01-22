@@ -995,7 +995,7 @@ databaseChangeLog {
         comment('B-55751 FDA: Load Pub Types: create NOT NULL constraint for name column in df_publication_type table')
 
         addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_publication_type',
-                columnName: 'name')
+                columnName: 'name', columnDataType: 'VARCHAR(255)')
 
         rollback {
             // automatic rollback
