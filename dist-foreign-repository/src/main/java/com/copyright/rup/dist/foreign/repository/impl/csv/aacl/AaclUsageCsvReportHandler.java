@@ -41,7 +41,7 @@ public class AaclUsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getStatus().name());
         beanProperties.add(bean.getProductFamily());
         beanProperties.add(bean.getBatchName());
-        beanProperties.add(getBeanLocalDate(bean.getPeriodEndDate()));
+        beanProperties.add(getBeanLocalDate(bean.getAaclUsage().getBatchPeriodEndDate()));
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(bean.getRhName());
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
