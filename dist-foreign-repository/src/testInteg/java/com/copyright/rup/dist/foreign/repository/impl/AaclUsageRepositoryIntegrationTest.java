@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -45,6 +47,7 @@ public class AaclUsageRepositoryIntegrationTest {
 
     private static final String USAGE_ID_1 = "6c91f04e-60dc-49e0-9cdc-e782e0b923e2";
     private static final String USAGE_ID_2 = "0b5ac9fc-63e2-4162-8d63-953b7023293c";
+    private static final String USAGE_ID_3 = "5b41d618-0a2f-4736-bb75-29da627ad677";
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -57,10 +60,36 @@ public class AaclUsageRepositoryIntegrationTest {
     private AaclUsageRepository aaclUsageRepository;
 
     @Test
+    public void testInsert() throws IOException {
+        Usage expectedUsage = loadExpectedUsages("json/aacl/aacl_usage_insert.json").get(0);
+        aaclUsageRepository.insert(expectedUsage);
+        List<Usage> actualUsages = aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_3));
+        assertEquals(1, actualUsages.size());
+        verifyUsage(expectedUsage, actualUsages.get(0));
+    }
+
+    @Test
+    public void testDeleteById() throws IOException {
+        Usage expectedUsage = loadExpectedUsages("json/aacl/aacl_usage_insert.json").get(0);
+        aaclUsageRepository.insert(expectedUsage);
+        List<Usage> actualUsages = aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_3));
+        assertEquals(1, actualUsages.size());
+        aaclUsageRepository.deleteById(USAGE_ID_3);
+        assertTrue(CollectionUtils.isEmpty(aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_3))));
+        assertEquals(0, aaclUsageRepository.findReferencedAaclUsagesCountByIds(USAGE_ID_3));
+    }
+
+    @Test
     public void testFindByIds() throws IOException {
         List<Usage> actualUsages = aaclUsageRepository.findByIds(Arrays.asList(USAGE_ID_1, USAGE_ID_2));
         assertEquals(2, CollectionUtils.size(actualUsages));
         verifyUsages(loadExpectedUsages("json/aacl/aacl_usages.json"), actualUsages);
+    }
+
+    @Test
+    public void testFindReferencedAaclUsagesCountByIds() {
+        assertEquals(2, aaclUsageRepository.findReferencedAaclUsagesCountByIds(USAGE_ID_1, USAGE_ID_2));
+        assertEquals(0, aaclUsageRepository.findReferencedAaclUsagesCountByIds("nonExistingId"));
     }
 
     private void verifyUsages(List<Usage> expectedUsages, List<Usage> actualUsages) {

@@ -183,6 +183,66 @@
         <include refid="IAaclUsageMapper.aaclUsageFilter"/>
     </sql>
 
+    <insert id="insert" parameterType="Usage">
+        with u as (
+            insert into ${schema}.df_usage (
+                df_usage_uid,
+                df_usage_batch_uid,
+                wr_wrk_inst,
+                system_title,
+                standard_number,
+                standard_number_type,
+                rh_account_number,
+                status_ind,
+                product_family,
+                number_of_copies,
+                comment,
+                <include refid="StoredEntityMapper.additionalColumns"/>
+            )
+            values (
+                #{id},
+                #{batchId},
+                #{wrWrkInst},
+                #{systemTitle},
+                #{standardNumber},
+                #{standardNumberType},
+                #{rightsholder.accountNumber},
+                #{status},
+                #{productFamily},
+                #{numberOfCopies},
+                #{comment},
+                <include refid="StoredEntityMapper.insert"/>
+            )
+        )
+        insert into ${schema}.df_usage_aacl (
+            df_usage_aacl_uid,
+            institution,
+            usage_period,
+            usage_source,
+            number_of_pages,
+            right_limitation,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        )
+        values (
+            #{id},
+            #{aaclUsage.institution},
+            #{aaclUsage.usagePeriod},
+            #{aaclUsage.usageSource},
+            #{aaclUsage.numberOfPages},
+            #{aaclUsage.rightLimitation},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <delete id="deleteById" parameterType="string">
+        with u as (
+            delete from ${schema}.df_usage
+            where df_usage_uid = #{usageId}
+        )
+        delete from ${schema}.df_usage_aacl
+        where df_usage_aacl_uid = #{usageId}
+    </delete>
+
     <select id="findByIds" resultMap="aaclUsageResultMap">
         select
             <include refid="IAaclUsageMapper.aaclUsageColumns"/>
@@ -195,5 +255,14 @@
             #{usageId}
         </foreach>
         order by u.df_usage_uid
+    </select>
+
+    <select id="findReferencedAaclUsagesCountByIds" resultType="int" parameterType="list">
+        select count(1)
+        from ${schema}.df_usage_aacl
+        where df_usage_aacl_uid in
+        <foreach collection="usageIds" item="usageId" open="(" separator="," close=")">
+            #{usageId}
+        </foreach>
     </select>
 </mapper>

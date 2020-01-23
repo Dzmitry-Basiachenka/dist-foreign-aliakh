@@ -1,0 +1,26 @@
+[
+  {
+    "id": "5b41d618-0a2f-4736-bb75-29da627ad677",
+    "batchId": "6e6f656a-e080-4426-b8ea-985b69f8814d",
+    "wrWrkInst": 123173477,
+    "systemTitle": "Snap to grid",
+    "standardNumber": "9780262122269",
+    "standardNumberType": "VALISBN13",
+    "status": "NEW",
+    "productFamily": "AACL",
+    "numberOfCopies": 155,
+    "rightsholder": {
+      "id": "fd137df2-7308-49a0-b72e-0ea6924249a9",
+      "name": "Delmar Learning, a division of Cengage Learning",
+      "accountNumber": 1000011450
+    },
+    "aaclUsage": {
+      "batchPeriodEndDate": "2019-06-30",
+      "institution": "University of Chicago",
+      "usagePeriod": 2019,
+      "usageSource": "Feb 2018 TUR",
+      "numberOfPages": 100
+    },
+    "comment": "AACL usage"
+  }
+]
