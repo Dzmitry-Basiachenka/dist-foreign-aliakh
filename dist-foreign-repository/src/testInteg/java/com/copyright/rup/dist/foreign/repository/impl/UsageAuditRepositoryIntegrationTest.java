@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -45,7 +44,6 @@ import java.util.List;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=usage-audit-repository-test-data-init.groovy"})
-@TransactionConfiguration
 @Transactional
 public class UsageAuditRepositoryIntegrationTest {
 
@@ -119,7 +117,7 @@ public class UsageAuditRepositoryIntegrationTest {
     @Test
     public void testFindFasBatchStatisticByBatchNameAndDate() {
         List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
-            "FAS batch statistic",  LocalDate.of(2019, 4, 1));
+            "FAS batch statistic", LocalDate.of(2019, 4, 1));
         assertNotNull(statistics);
         assertEquals(1, statistics.size());
         assertFasBatchStatistics(statistics.get(0));

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static junit.framework.TestCase.assertNull;
+
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -21,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -42,7 +42,6 @@ import java.util.stream.IntStream;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=work-classification-repository-test-data-init.groovy"})
-@TransactionConfiguration
 @Transactional
 public class WorkClassificationRepositoryIntegrationTest {
 
@@ -163,7 +162,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     private void assertClassification(WorkClassification expectedClassification,
-        WorkClassification actualClassification) {
+                                      WorkClassification actualClassification) {
         assertEquals(expectedClassification.getId(), actualClassification.getId());
         assertEquals(expectedClassification.getWrWrkInst(), actualClassification.getWrWrkInst());
         assertEquals(expectedClassification.getClassification(), actualClassification.getClassification());
