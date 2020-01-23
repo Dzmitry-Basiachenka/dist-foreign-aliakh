@@ -123,7 +123,7 @@ public class WorkMatchingServiceTest {
             .andReturn(new Work(112930820L, TITLE, STANDARD_NUMBER, "valissn")).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
-        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 112930820 was found");
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 112930820 was found in PI");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
         workMatchingService.matchByWrWrkInst(usage);
@@ -141,7 +141,8 @@ public class WorkMatchingServiceTest {
         expect(piIntegrationService.findWorkByWrWrkInst(112930820L)).andReturn(new Work()).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
-        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 112930820 wasn't found");
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+            "Wr Wrk Inst 112930820 was not found in PI");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
         workMatchingService.matchByWrWrkInst(usage);

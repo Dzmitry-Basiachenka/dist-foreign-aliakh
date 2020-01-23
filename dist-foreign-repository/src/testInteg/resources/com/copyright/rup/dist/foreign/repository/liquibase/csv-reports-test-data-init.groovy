@@ -6149,7 +6149,7 @@ databaseChangeLog {
             column(name: "df_usage_audit_uid", value: "25f4fa01-02aa-414a-9052-667360be8535")
             column(name: "df_usage_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
             column(name: "action_type_ind", value: "WORK_FOUND")
-            column(name: "action_reason", value: "Wr Wrk Inst 122825976 was found")
+            column(name: "action_reason", value: "Wr Wrk Inst 122825976 was found in PI")
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -6170,7 +6170,7 @@ databaseChangeLog {
             column(name: "df_usage_audit_uid", value: "532a2ec3-75de-457b-b8d3-736e3c8e5e5a")
             column(name: "df_usage_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
             column(name: "action_type_ind", value: "WORK_FOUND")
-            column(name: "action_reason", value: "Wr Wrk Inst 122820420 was found")
+            column(name: "action_reason", value: "Wr Wrk Inst 122820420 was found in PI")
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {

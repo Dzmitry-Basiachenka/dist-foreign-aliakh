@@ -85,17 +85,17 @@ public class LoadAaclUsagesIntegrationTest {
             "rights/rms_grants_empty_response.json");
         testHelper.expectPrmCall("prm/rightsholder_1000024950_response.json", 1000024950L);
         loadUsageBatch();
-        verifyUsages();
+        assertUsages();
         testHelper.assertAudit(USAGE_ID_1, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
             UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS",
-            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100009840 was found",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100009840 was found in PI",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.assertAudit(USAGE_ID_2, buildUsageAuditItems(USAGE_ID_2, ImmutableMap.of(
             UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS",
-            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100010768 was found",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100010768 was found in PI",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.assertAudit(USAGE_ID_4, buildUsageAuditItems(USAGE_ID_4, ImmutableMap.of(
-            UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 963852741 wasn't found",
+            UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 963852741 was not found in PI",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.verifyRestServer();
     }
@@ -133,7 +133,7 @@ public class LoadAaclUsagesIntegrationTest {
         return out;
     }
 
-    private void verifyUsages() throws IOException {
+    private void assertUsages() throws IOException {
         UsageFilter filter = new UsageFilter();
         filter.setProductFamily(AACL_PRODUCT_FAMILY);
         filter.setPaymentDate(PAYMENT_DATE);
