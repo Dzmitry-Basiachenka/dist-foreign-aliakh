@@ -6069,7 +6069,7 @@ databaseChangeLog {
             column(name: "df_usage_batch_uid", value: "aed882d5-7625-4039-8781-a6676e11c579")
             column(name: "name", value: "AACL batch")
             column(name: "rro_account_number", value: "2000017000")
-            column(name: "payment_date", value: "2019-02-13")
+            column(name: "payment_date", value: "2019-06-30")
             column(name: "product_family", value: "AACL")
             column(name: "fiscal_year", value: "2019")
         }
@@ -6091,7 +6091,7 @@ databaseChangeLog {
         insert(schemaName: "apps", tableName: "df_usage_aacl") {
             column(name: "df_usage_aacl_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
             column(name: "institution", value: "CORNELL UNIVERSITY")
-            column(name: "usage_period", value: "201906")
+            column(name: "usage_period", value: "2019")
             column(name: "usage_source", value: "Feb 2019 TUR")
             column(name: "number_of_pages", value: "12")
             column(name: "right_limitation", value: "ALL")
@@ -6114,7 +6114,7 @@ databaseChangeLog {
         insert(schemaName: "apps", tableName: "df_usage_aacl") {
             column(name: "df_usage_aacl_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
             column(name: "institution", value: "BIOLA UNIVERSITY")
-            column(name: "usage_period", value: "201812")
+            column(name: "usage_period", value: "2019")
             column(name: "usage_source", value: "Aug 2018 TUR")
             column(name: "number_of_pages", value: "6")
             column(name: "right_limitation", value: "ALL")
@@ -6133,7 +6133,7 @@ databaseChangeLog {
         insert(schemaName: "apps", tableName: "df_usage_aacl") {
             column(name: "df_usage_aacl_uid", value: "67d36799-5523-474d-91f6-2e12756a4918")
             column(name: "institution", value: "BIOLA UNIVERSITY")
-            column(name: "usage_period", value: "201812")
+            column(name: "usage_period", value: "2019")
             column(name: "usage_source", value: "Aug 2018 TUR")
             column(name: "number_of_pages", value: "6")
         }
