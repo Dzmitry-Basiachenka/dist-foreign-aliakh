@@ -121,7 +121,8 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
                     ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.WORK_NOT_FOUND,
                         "sent for research"));
             } else {
-                NotificationWindow window = new NotificationWindow(ForeignUi.getMessage("message.send_for_research"));
+                NotificationWindow window =
+                    new NotificationWindow(ForeignUi.getMessage("message.download_in_progress"));
                 window.addCloseListener(closeEvent -> controller.clearFilter());
                 Windows.showModalWindow(window);
             }

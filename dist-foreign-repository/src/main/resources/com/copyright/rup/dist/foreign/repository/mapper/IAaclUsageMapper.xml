@@ -26,34 +26,170 @@
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
     </resultMap>
 
+    <resultMap id="aaclUsageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_usage_uid"/>
+        <result property="batchName" column="batch_name"/>
+        <result property="status" column="status_ind"/>
+        <result property="productFamily" column="product_family"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="rhName" column="rh_name"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="standardNumber" column="standard_number"/>
+        <result property="standardNumberType" column="standard_number_type"/>
+        <result property="numberOfCopies" column="number_of_copies"/>
+        <result property="comment" column="comment"/>
+        <result property="aaclUsage.institution" column="institution"/>
+        <result property="aaclUsage.usagePeriod" column="usage_period"/>
+        <result property="aaclUsage.usageSource" column="usage_source"/>
+        <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
+        <result property="aaclUsage.rightLimitation" column="right_limitation"/>
+        <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
+    </resultMap>
+
+    <sql id="aaclUsageColumns">
+        u.df_usage_uid,
+        u.df_usage_batch_uid,
+        u.wr_wrk_inst,
+        u.system_title,
+        u.standard_number,
+        u.standard_number_type,
+        u.rh_account_number,
+        rh.name rh_name,
+        rh.df_rightsholder_uid rh_id,
+        u.status_ind,
+        u.product_family,
+        u.number_of_copies,
+        u.comment,
+        ub.payment_date batch_period_end_date,
+        uaacl.institution,
+        uaacl.usage_period,
+        uaacl.usage_source,
+        uaacl.number_of_pages,
+        uaacl.right_limitation,
+        u.created_datetime,
+        u.updated_datetime,
+        u.created_by_user,
+        u.updated_by_user,
+        u.record_version
+    </sql>
+
+    <sql id="aaclUsageFilter">
+        <where>
+            <if test="filter.usageBatchesIds.size() > 0">
+                and
+                <foreach collection="filter.usageBatchesIds" item="usageBatchId" open="(" separator=" or " close=")">
+                    u.df_usage_batch_uid = #{usageBatchId}
+                </foreach>
+            </if>
+            <if test="null != filter.productFamily">
+                and u.product_family = #{filter.productFamily}
+            </if>
+            <if test="null != filter.usageStatus">
+                and u.status_ind = #{filter.usageStatus}
+            </if>
+            <if test="null != filter.usagePeriod">
+                and uaacl.usage_period = #{filter.usagePeriod}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="aaclChooseSortProperty">
+        <choose>
+            <when test="sort.property == 'detailId'">
+                ${detail_uid} <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'status'">
+                u.status_ind <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'productFamily'">
+                u.product_family <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'batchName'">
+                ub.name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'periodEndDate'">
+                ub.payment_date <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'rhAccountNumber'">
+                u.rh_account_number <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'rhName'">
+                rh.name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'wrWrkInst'">
+                u.wr_wrk_inst <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'systemTitle'">
+                u.system_title <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'standardNumber'">
+                u.standard_number <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'standardNumberType'">
+                u.standard_number_type <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'institution'">
+                uaacl.institution <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'usagePeriod'">
+                uaacl.usage_period <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'usageSource'">
+                uaacl.usage_source <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'numberOfCopies'">
+                u.number_of_copies <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'numberOfPages'">
+                uaacl.number_of_pages <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'rightLimitation'">
+                uaacl.right_limitation <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'comment'">
+                u.comment <include refid="IUsageMapper.direction"/>
+            </when>
+        </choose>
+    </sql>
+
+    <sql id="selectDtosByFilterSql">
+        select
+            <include refid="IAaclUsageMapper.aaclUsageColumns"/>,
+            ub.name batch_name
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        <include refid="IAaclUsageMapper.aaclUsageFilter"/>
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="IAaclUsageMapper.aaclChooseSortProperty">
+                    <property name="detail_uid" value="u.df_usage_uid"/>
+                </include>
+            </when>
+            <otherwise>
+                updated_datetime desc, df_usage_uid
+            </otherwise>
+        </choose>
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <sql id="selectCountByFilterSql">
+        select count(1)
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+        <include refid="IAaclUsageMapper.aaclUsageFilter"/>
+    </sql>
+
     <select id="findByIds" resultMap="aaclUsageResultMap">
         select
-            u.df_usage_uid,
-            u.df_usage_batch_uid,
-            u.wr_wrk_inst,
-            u.system_title,
-            u.rh_account_number,
-            r.name rh_name,
-            r.df_rightsholder_uid rh_id,
-            u.status_ind,
-            u.product_family,
-            u.comment,
-            u.number_of_copies,
-            ub.payment_date batch_period_end_date,
-            uaacl.institution,
-            uaacl.usage_period,
-            uaacl.usage_source,
-            uaacl.number_of_pages,
-            uaacl.right_limitation,
-            u.created_datetime,
-            u.updated_datetime,
-            u.created_by_user,
-            u.updated_by_user,
-            u.record_version
+            <include refid="IAaclUsageMapper.aaclUsageColumns"/>
         from ${schema}.df_usage u
         join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         where u.df_usage_uid in
         <foreach collection="list" item="usageId" open="(" separator="," close=")">
             #{usageId}

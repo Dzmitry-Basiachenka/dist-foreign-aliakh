@@ -5,8 +5,10 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
+import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
@@ -41,6 +43,8 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
+    @Autowired
+    private IResearchService researchService;
 
     @Override
     public ICommonUsageFilterController getUsageFilterController() {
@@ -58,6 +62,13 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
         getUsageBatchService().sendForMatching(usages);
         aaclUsageFilterController.getWidget().clearFilter();
         return result;
+    }
+
+    @Override
+    public IStreamSource getSendForClassificationUsagesStreamSource() {
+        return new ByteArrayStreamSource("send_for_classification_",
+            pipedStream -> researchService.sendForClassification(
+                getUsageFilterController().getWidget().getAppliedFilter(), pipedStream));
     }
 
     @Override
