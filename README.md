@@ -1,3 +1,9 @@
+8.1.17
+-
+* B-52329 FDA: Load classified AACL usages: implement classified usage validator
+* B-52329 FDA: Load classified AACL usages: implement wrWrkInst validator
+* B-52333 FDA: Send AACL usages for classification: add party-changelog-8 changelog to the main-party-changelog
+
 8.1.16
 -
 * B-52330 FDA: Get Rights Information from RMS for AACL usages: make changes based on comments in CR-DIST-FOREIGN-140
