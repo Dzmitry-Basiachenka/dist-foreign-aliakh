@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 import org.springframework.stereotype.Repository;
@@ -30,11 +31,27 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     private static final int MAX_VARIABLES_COUNT = 32000;
 
     @Override
+    public void insert(Usage usage) {
+        insert("IAaclUsageMapper.insert", Objects.requireNonNull(usage));
+    }
+
+    @Override
+    public void deleteById(String usageId) {
+        delete("IAaclUsageMapper.deleteById", Objects.requireNonNull(usageId));
+    }
+
+    @Override
     // TODO {isuvorau} should be used on service layer for AACL product family
     public List<Usage> findByIds(List<String> usageIds) {
         List<Usage> result = new ArrayList<>();
         Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT)
             .forEach(partition -> result.addAll(selectList("IAaclUsageMapper.findByIds", partition)));
         return result;
+    }
+
+    @Override
+    public int findReferencedAaclUsagesCountByIds(String... usageIds) {
+        return selectOne("IAaclUsageMapper.findReferencedAaclUsagesCountByIds",
+            ImmutableMap.of("usageIds", Objects.requireNonNull(usageIds)));
     }
 }
