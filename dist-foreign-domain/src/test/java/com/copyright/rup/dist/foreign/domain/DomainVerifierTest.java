@@ -69,7 +69,8 @@ public class DomainVerifierTest {
             {WorkClassification.class},
             {PreServiceFeeFund.class},
             {ExcludePayeeFilter.class},
-            {PayeeTotalHolder.class}
+            {PayeeTotalHolder.class},
+            {AaclClassifiedUsage.class}
         };
         return Arrays.asList(testData);
     }
