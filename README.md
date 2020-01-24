@@ -1,3 +1,16 @@
+8.1.16
+-
+* B-52330 FDA: Get Rights Information from RMS for AACL usages: make changes based on comments in CR-DIST-FOREIGN-140
+* B-52333 FDA: Send AACL usages for classification: Adjust repository logic and add service logic for sending AACL usages for classification, UI button and permissions
+* B-52333 FDA: Send AACL usages for classification: fix batch period end date being always empty in exported CSV
+* B-54664 FDA: AACL Retrieve System Title, Standard Number and Standard Number Type: make changes based on comments in CR-DIST-FOREIGN-139
+* B-55751 FDA: Load Pub Types: create NOT NULL constraint for name column in df_publication_type table
+* B-55751 FDA: Load Pub Types: fix database script
+* B-56092 Tech Debt: FDA: Apply last version of dist-common
+* B-56092 Tech Debt: FDA: eliminate obsolete dist.foreign.product_families property
+* B-56092 Tech Debt: FDA: introduce separate repository for AACL product family
+* B-56092 Tech Debt: FDA: move aacl related repository methods to AaclUsageRepository
+
 8.1.15
 -
 * B-52330 FDA: Get Rights Information from RMS for AACL usages (get grants): introduce rights processor for AACL product family
