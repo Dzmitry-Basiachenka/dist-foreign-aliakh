@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedWrWrkInstValidator;
@@ -58,6 +59,15 @@ public class CsvProcessorFactory {
         ResearchedUsagesCsvProcessor processor = new ResearchedUsagesCsvProcessor();
         processor.addBusinessValidators(new ResearchedUsageValidator(usageService),
             new ResearchedWrWrkInstValidator(piIntegrationService));
+        return processor;
+    }
+
+    /**
+     * @return instance of {@link ResearchedUsagesCsvProcessor}.
+     */
+    public ClassifiedUsageCsvProcessor getClassifiedUsageCsvProcessor() {
+        ClassifiedUsageCsvProcessor processor = new ClassifiedUsageCsvProcessor();
+        processor.addBusinessValidators(new ClassifiedUsageValidator(usageService));
         return processor;
     }
 }
