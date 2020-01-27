@@ -79,7 +79,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testInit() {
-        expect(usagesFilterController.getAaclUsagePeriods()).andReturn(Collections.singletonList(2020)).once();
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).once();
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         replay(usagesFilterController);
         assertSame(widget, widget.init());
@@ -92,7 +92,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testApplyFilter() {
-        expect(usagesFilterController.getAaclUsagePeriods()).andReturn(Collections.singletonList(2020)).times(2);
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         replay(usagesFilterController);
         widget.init();
@@ -116,7 +116,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testFilterChangedEmptyFilter() {
-        expect(usagesFilterController.getAaclUsagePeriods()).andReturn(Collections.singletonList(2020)).once();
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).once();
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         replay(usagesFilterController);
         widget.init();
@@ -129,7 +129,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
-        expect(usagesFilterController.getAaclUsagePeriods()).andReturn(Collections.singletonList(2020)).times(2);
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         replay(usagesFilterController);
         widget.init();
@@ -159,7 +159,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void verifyApplyButtonClickListener() {
-        expect(usagesFilterController.getAaclUsagePeriods()).andReturn(Collections.singletonList(2020)).once();
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).once();
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
@@ -174,7 +174,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void verifyButtonClickListener() {
-        expect(usagesFilterController.getAaclUsagePeriods()).andReturn(Collections.singletonList(2020)).times(2);
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         replay(clickEvent, usagesFilterController);

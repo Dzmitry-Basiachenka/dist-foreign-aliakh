@@ -117,6 +117,15 @@ public class AaclUsageServiceTest {
     }
 
     @Test
+    public void testGetUsagePeriods() {
+        List<Integer> usagePeriods = Collections.singletonList(2020);
+        expect(aaclUsageRepository.findUsagePeriods()).andReturn(usagePeriods).once();
+        replay(aaclUsageRepository);
+        assertEquals(usagePeriods, aaclUsageService.getUsagePeriods());
+        verify(aaclUsageRepository);
+    }
+
+    @Test
     public void testDeleteById() {
         String usageId = "7adb441e-d709-4f58-8dc0-9264bfac2e19 ";
         usageAuditService.deleteActionsByUsageId(usageId);

@@ -78,4 +78,9 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         return selectOne("IAaclUsageMapper.findCountByFilter",
             ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
     }
+
+    @Override
+    public List<Integer> findUsagePeriods() {
+        return selectList("IAaclUsageMapper.findUsagePeriods");
+    }
 }

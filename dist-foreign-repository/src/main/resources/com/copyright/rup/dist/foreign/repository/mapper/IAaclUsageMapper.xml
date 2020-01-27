@@ -273,4 +273,10 @@
             #{usageId}
         </foreach>
     </select>
+
+    <select id="findUsagePeriods" resultType="int">
+        select distinct usage_period
+        from ${schema}.df_usage_aacl
+        order by usage_period
+    </select>
 </mapper>

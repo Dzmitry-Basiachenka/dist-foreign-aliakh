@@ -20,5 +20,5 @@ public interface IAaclUsageFilterController extends ICommonUsageFilterController
      *
      * @return list of AACL usage periods
      */
-    List<Integer> getAaclUsagePeriods();
+    List<Integer> getUsagePeriods();
 }

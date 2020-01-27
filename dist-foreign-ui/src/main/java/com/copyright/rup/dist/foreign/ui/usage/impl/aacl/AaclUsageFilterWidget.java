@@ -50,7 +50,7 @@ public class AaclUsageFilterWidget extends CommonUsageFilterWidget implements IA
 
     @Override
     protected void refreshFilterValues() {
-        usagePeriodComboBox.setItems(controller.getAaclUsagePeriods());
+        usagePeriodComboBox.setItems(controller.getUsagePeriods());
         statusComboBox.setItems(AACL_STATUSES);
     }
 

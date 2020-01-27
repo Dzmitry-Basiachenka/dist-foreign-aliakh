@@ -1364,14 +1364,6 @@ public class UsageRepositoryIntegrationTest {
             DEFAULT_ZERO_AMOUNT, null, DEFAULT_ZERO_AMOUNT, new BigDecimal("11.00"));
     }
 
-    @Test
-    public void testFindAaclUsagePeriods() {
-        List<Integer> usagePeriods = usageRepository.findAaclUsagePeriods();
-        assertEquals(2, usagePeriods.size());
-        assertEquals(2018, usagePeriods.get(0).longValue());
-        assertEquals(2019, usagePeriods.get(1).longValue());
-    }
-
     private void assertNtsUsageAmounts(String usageId, BigDecimal grossAmount, BigDecimal netAmount,
                                        BigDecimal serviceFee, BigDecimal serviceFeeAmount, BigDecimal reportedValue) {
         Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
