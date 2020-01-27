@@ -1,8 +1,7 @@
-package com.copyright.rup.dist.foreign.repository.impl.csv.fas;
+package com.copyright.rup.dist.foreign.repository.impl.csv.aacl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUsageCsvReportHandler;
 
 import org.apache.ibatis.session.ResultContext;
 
