@@ -49,6 +49,13 @@ public interface IAaclUsageService {
     int getUsagesCount(UsageFilter filter);
 
     /**
+     * Gets list of AACL usage periods.
+     *
+     * @return list of AACL usage periods
+     */
+    List<Integer> getUsagePeriods();
+
+    /**
      * Deletes AACL {@link Usage} with given id.
      *
      * @param usageId usage identifier

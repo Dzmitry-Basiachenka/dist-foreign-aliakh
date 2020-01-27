@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageFilterController;
 
@@ -25,7 +25,7 @@ import java.util.List;
 class AaclUsageFilterController extends CommonUsageFilterController implements IAaclUsageFilterController {
 
     @Autowired
-    private IUsageService usageService;
+    private IAaclUsageService aaclUsageService;
 
     @Override
     protected AaclUsageFilterWidget instantiateWidget() {
@@ -33,7 +33,7 @@ class AaclUsageFilterController extends CommonUsageFilterController implements I
     }
 
     @Override
-    public List<Integer> getAaclUsagePeriods() {
-        return usageService.getAaclUsagePeriods();
+    public List<Integer> getUsagePeriods() {
+        return aaclUsageService.getUsagePeriods();
     }
 }

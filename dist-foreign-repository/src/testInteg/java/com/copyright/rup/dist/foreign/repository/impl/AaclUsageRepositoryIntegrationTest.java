@@ -131,6 +131,14 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(1, aaclUsageRepository.findCountByFilter(usageFilter));
     }
 
+    @Test
+    public void testFindUsagePeriods() {
+        List<Integer> usagePeriods = aaclUsageRepository.findUsagePeriods();
+        assertEquals(2, usagePeriods.size());
+        assertEquals(2018, usagePeriods.get(0).longValue());
+        assertEquals(2019, usagePeriods.get(1).longValue());
+    }
+
     private void verifyUsages(List<String> usageIds, List<Usage> actualUsages) {
         List<Usage> expectedUsages = loadExpectedUsages(usageIds);
         assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));

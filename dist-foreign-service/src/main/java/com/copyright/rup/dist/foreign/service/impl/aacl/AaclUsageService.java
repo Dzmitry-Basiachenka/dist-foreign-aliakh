@@ -76,6 +76,11 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    public List<Integer> getUsagePeriods() {
+        return aaclUsageRepository.findUsagePeriods();
+    }
+
+    @Override
     @Transactional
     public void deleteById(String usageId) {
         usageAuditService.deleteActionsByUsageId(usageId);

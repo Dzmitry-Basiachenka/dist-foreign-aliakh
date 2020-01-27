@@ -66,4 +66,11 @@ public interface IAaclUsageRepository {
      * @return the count of usages
      */
     int findCountByFilter(UsageFilter filter);
+
+    /**
+     * Finds list of AACL usage periods.
+     *
+     * @return list of AACL usage periods
+     */
+    List<Integer> findUsagePeriods();
 }

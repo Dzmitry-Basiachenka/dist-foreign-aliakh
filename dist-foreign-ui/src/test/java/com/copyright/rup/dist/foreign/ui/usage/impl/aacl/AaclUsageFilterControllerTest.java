@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 
 import com.google.common.collect.Lists;
@@ -38,17 +38,17 @@ public class AaclUsageFilterControllerTest {
     private AaclUsageFilterController controller;
     private IProductFamilyProvider productFamilyProvider;
     private IUsageBatchService usageBatchService;
-    private IUsageService usageService;
+    private IAaclUsageService aaclUsageService;
 
     @Before
     public void setUp() {
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         usageBatchService = createMock(IUsageBatchService.class);
-        usageService = createMock(IUsageService.class);
+        aaclUsageService = createMock(IAaclUsageService.class);
         controller = new AaclUsageFilterController();
         Whitebox.setInternalState(controller, productFamilyProvider);
         Whitebox.setInternalState(controller, usageBatchService);
-        Whitebox.setInternalState(controller, usageService);
+        Whitebox.setInternalState(controller, aaclUsageService);
     }
 
     @Test
@@ -70,11 +70,11 @@ public class AaclUsageFilterControllerTest {
     }
 
     @Test
-    public void testGetAaclUsagePeriods() {
+    public void testGetUsagePeriods() {
         List<Integer> usagePeriods = Collections.singletonList(2020);
-        expect(usageService.getAaclUsagePeriods()).andReturn(usagePeriods).once();
-        replay(usageService);
-        assertEquals(usagePeriods, controller.getAaclUsagePeriods());
-        verify(usageService);
+        expect(aaclUsageService.getUsagePeriods()).andReturn(usagePeriods).once();
+        replay(aaclUsageService);
+        assertEquals(usagePeriods, controller.getUsagePeriods());
+        verify(aaclUsageService);
     }
 }
