@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 /**
  * Interface for Publication type repository.
  * <p>
- * Copyright (C) 2019 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p>
  * Date: 01/24/2020
  *

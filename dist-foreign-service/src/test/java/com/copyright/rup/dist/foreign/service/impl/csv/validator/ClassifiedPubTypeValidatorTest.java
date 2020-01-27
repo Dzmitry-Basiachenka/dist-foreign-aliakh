@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -44,12 +45,25 @@ public class ClassifiedPubTypeValidatorTest {
     }
 
     @Test
+    public void testIsValidDisqualified() {
+        AaclClassifiedUsage usage = buildClassifiedAaclUsage("disqualified");
+        replay(publicationTypeService);
+        assertTrue(validator.isValid(usage));
+        verify(publicationTypeService);
+    }
+
+    @Test
     public void testIsValidPubTypeNotExist() {
         AaclClassifiedUsage usage = buildClassifiedAaclUsage(null);
         expect(publicationTypeService.isPublicationTypeExist(null)).andReturn(false).once();
         replay(publicationTypeService);
         assertFalse(validator.isValid(usage));
         verify(publicationTypeService);
+    }
+
+    @Test
+    public void testGetErrorMessage() {
+        assertEquals("Loaded Publication Type is missing in the system", validator.getErrorMessage());
     }
 
     @Test(expected = NullPointerException.class)
