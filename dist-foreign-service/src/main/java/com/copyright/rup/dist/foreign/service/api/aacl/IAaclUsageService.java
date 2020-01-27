@@ -41,6 +41,15 @@ public interface IAaclUsageService {
     List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort);
 
     /**
+     * Updates AACL {@link Usage} and verifies that version of {@link Usage} is the same as in database.
+     * Throws an {@link com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException} in case of
+     * there are {@link Usage} version discrepancies.
+     *
+     * @param usage {@link Usage} to update
+     */
+    void updateProcessedUsage(Usage usage);
+
+    /**
      * Gets AACL usages count based on applied filter.
      *
      * @param filter instance of {@link UsageFilter}.

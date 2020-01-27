@@ -419,14 +419,6 @@ public interface IUsageRepository {
     String updateProcessedUsage(Usage usage);
 
     /**
-     * Updates given AACL {@link Usage} in case of its version is the same as in database.
-     *
-     * @param usage {@link Usage} to update
-     * @return id of updated record, otherwise {@code null}
-     */
-    String updateProcessedAaclUsage(Usage usage);
-
-    /**
      * Updates researched usage details.
      *
      * @param researchedUsages collection of {@link ResearchedUsage}s

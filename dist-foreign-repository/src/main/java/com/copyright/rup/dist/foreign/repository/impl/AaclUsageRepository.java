@@ -50,6 +50,11 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
+    public String updateProcessedUsage(Usage usage) {
+        return selectOne("IAaclUsageMapper.updateProcessedUsage", Objects.requireNonNull(usage));
+    }
+
+    @Override
     // TODO {isuvorau} should be used on service layer for AACL product family
     public List<Usage> findByIds(List<String> usageIds) {
         List<Usage> result = new ArrayList<>();

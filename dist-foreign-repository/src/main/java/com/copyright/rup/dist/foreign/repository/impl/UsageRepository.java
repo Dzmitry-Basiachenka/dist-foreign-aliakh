@@ -447,11 +447,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public String updateProcessedAaclUsage(Usage usage) {
-        return selectOne("IUsageMapper.updateProcessedAaclUsage", Objects.requireNonNull(usage));
-    }
-
-    @Override
     public void updateResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
         Objects.requireNonNull(researchedUsages);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);

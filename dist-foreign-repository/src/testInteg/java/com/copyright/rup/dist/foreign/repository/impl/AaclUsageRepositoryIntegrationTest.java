@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -53,6 +54,11 @@ public class AaclUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_1 = "0b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_2 = "6c91f04e-60dc-49e0-9cdc-e782e0b923e2";
     private static final String USAGE_ID_3 = "5b41d618-0a2f-4736-bb75-29da627ad677";
+    private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
+    private static final String SYSTEM_TITLE = "Wissenschaft & Forschung Japan";
+    private static final String STANDARD_NUMBER = "2192-3558";
+    private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
+    private static final String RIGHT_LIMITATION = "ALL";
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -84,6 +90,29 @@ public class AaclUsageRepositoryIntegrationTest {
         aaclUsageRepository.deleteById(USAGE_ID_3);
         assertTrue(CollectionUtils.isEmpty(aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_3))));
         assertEquals(0, aaclUsageRepository.findReferencedAaclUsagesCountByIds(USAGE_ID_3));
+    }
+
+    @Test
+    public void testUpdateProcessedUsage() {
+        List<Usage> usages = aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_1));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage = usages.get(0);
+        usage.setStatus(UsageStatusEnum.RH_FOUND);
+        usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
+        usage.setSystemTitle(SYSTEM_TITLE);
+        usage.setStandardNumberType(STANDARD_NUMBER_TYPE);
+        usage.setStandardNumber(STANDARD_NUMBER);
+        usage.getAaclUsage().setRightLimitation(RIGHT_LIMITATION);
+        assertNotNull(aaclUsageRepository.updateProcessedUsage(usage));
+        List<Usage> updatedUsages = aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_1));
+        assertEquals(1, CollectionUtils.size(updatedUsages));
+        Usage updatedUsage = updatedUsages.get(0);
+        assertEquals(RH_ACCOUNT_NUMBER, updatedUsage.getRightsholder().getAccountNumber());
+        assertEquals(UsageStatusEnum.RH_FOUND, updatedUsage.getStatus());
+        assertEquals(STANDARD_NUMBER_TYPE, updatedUsage.getStandardNumberType());
+        assertEquals(STANDARD_NUMBER, updatedUsage.getStandardNumber());
+        assertEquals(SYSTEM_TITLE, updatedUsage.getSystemTitle());
+        assertEquals(RIGHT_LIMITATION, updatedUsage.getAaclUsage().getRightLimitation());
     }
 
     @Test

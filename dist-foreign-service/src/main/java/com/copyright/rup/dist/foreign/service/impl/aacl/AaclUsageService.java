@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IAaclUsageService}.
@@ -68,6 +70,16 @@ public class AaclUsageService implements IAaclUsageService {
         return !filter.isEmpty()
             ? aaclUsageRepository.findDtosByFilter(filter, pageable, sort)
             : Collections.emptyList();
+    }
+
+    @Override
+    public void updateProcessedUsage(Usage usage) {
+        String usageId = aaclUsageRepository.updateProcessedUsage(usage);
+        if (Objects.isNull(usageId)) {
+            // throws an exception and stops usage processing when such usage has been already consumed and processed
+            throw new InconsistentUsageStateException(usage);
+        }
+        usage.setVersion(usage.getVersion() + 1);
     }
 
     @Override

@@ -178,16 +178,9 @@
     <sql id="selectUsageDtos">
         select
             u.df_usage_uid,
-            <include refid="IUsageMapper.usageDtoColumns"/>,
-            ub.payment_date as batch_period_end_date,
-            uaacl.institution,
-            uaacl.usage_period,
-            uaacl.usage_source,
-            uaacl.number_of_pages,
-            uaacl.right_limitation
+            <include refid="IUsageMapper.usageDtoColumns"/>
         from ${schema}.df_usage u
-        left join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
-        left join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
@@ -1526,27 +1519,6 @@
             work_title = #{workTitle},
             status_ind = #{status},
             product_family = #{productFamily},
-            standard_number = #{standardNumber},
-            standard_number_type = #{standardNumberType},
-            <include refid="StoredEntityMapper.update"/>
-        where df_usage_uid = #{id}
-            and record_version = #{version}
-        returning df_usage_uid
-    </select>
-
-    <select id="updateProcessedAaclUsage" parameterType="map" resultType="string">
-        with u as (
-            update ${schema}.df_usage_aacl
-            set
-                right_limitation = #{aaclUsage.rightLimitation},
-                <include refid="StoredEntityMapper.update"/>
-            where df_usage_aacl_uid = #{id}
-        )
-        update ${schema}.df_usage
-        set
-            status_ind = #{status},
-            rh_account_number = #{rightsholder.accountNumber},
-            system_title = #{systemTitle},
             standard_number = #{standardNumber},
             standard_number_type = #{standardNumberType},
             <include refid="StoredEntityMapper.update"/>
