@@ -70,7 +70,8 @@ public class DomainVerifierTest {
             {PreServiceFeeFund.class},
             {ExcludePayeeFilter.class},
             {PayeeTotalHolder.class},
-            {AaclClassifiedUsage.class}
+            {AaclClassifiedUsage.class},
+            {PublicationType.class}
         };
         return Arrays.asList(testData);
     }

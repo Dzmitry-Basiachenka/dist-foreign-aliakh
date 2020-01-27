@@ -1,0 +1,17 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IPublicationTypeMapper">
+
+    <resultMap id="pubTypeMap" type="PubType" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_publication_type_uid"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <select id="findIdByName" parameterType="string" resultType="string">
+        select df_publication_type_uid
+        from ${schema}.df_publication_type
+        where name = #{pubTypeName}
+    </select>
+</mapper>
