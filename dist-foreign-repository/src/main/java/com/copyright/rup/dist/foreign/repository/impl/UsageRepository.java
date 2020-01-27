@@ -74,10 +74,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         insert("IUsageMapper.insert", Objects.requireNonNull(usage));
     }
 
-    @Override
-    public void insertAaclUsage(Usage usage) {
-        insert("IUsageMapper.insertAaclUsage", Objects.requireNonNull(usage));
-    }
 
     @Override
     public List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort) {

@@ -448,52 +448,6 @@
             <include refid="StoredEntityMapper.insert"/>
     </insert>
 
-    <insert id="insertAaclUsage" parameterType="Usage">
-        with u as (
-            insert into ${schema}.df_usage (
-                df_usage_uid,
-                <include refid="usageColumns"/>,
-                payee_account_number,
-                <include refid="StoredEntityMapper.additionalColumns"/>
-            )
-            values (
-                #{id},
-                #{batchId},
-                #{scenarioId},
-                #{wrWrkInst},
-                #{workTitle},
-                #{systemTitle},
-                #{rightsholder.accountNumber},
-                #{status},
-                #{productFamily},
-                #{standardNumber},
-                #{standardNumberType},
-                #{numberOfCopies},
-                #{grossAmount},
-                #{comment},
-                #{payee.accountNumber},
-                <include refid="StoredEntityMapper.insert"/>
-             )
-        )
-        insert into ${schema}.df_usage_aacl (
-            df_usage_aacl_uid,
-            institution,
-            usage_period,
-            usage_source,
-            number_of_pages,
-            right_limitation,
-            <include refid="StoredEntityMapper.additionalColumns"/>
-        )
-        select
-            #{id},
-            #{aaclUsage.institution},
-            #{aaclUsage.usagePeriod},
-            #{aaclUsage.usageSource},
-            #{aaclUsage.numberOfPages},
-            #{aaclUsage.rightLimitation},
-            <include refid="StoredEntityMapper.insert"/>
-    </insert>
-
     <sql id="selectDtosByFilterSql">
         <include refid="IUsageMapper.selectUsageDtos"/>
         <include refid="IUsageMapper.usageFilter"/>
@@ -779,13 +733,9 @@
         with u as (
             delete from ${schema}.df_usage
             where df_usage_uid = #{usageId}
-        ),
-        fas as (
-            delete from ${schema}.df_usage_fas
-            where df_usage_fas_uid = #{usageId}
         )
-        delete from ${schema}.df_usage_aacl
-        where df_usage_aacl_uid = #{usageId}
+        delete from ${schema}.df_usage_fas
+        where df_usage_fas_uid = #{usageId}
     </delete>
 
     <delete id="deleteByScenarioId" parameterType="string">

@@ -21,7 +21,6 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -66,7 +65,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -201,27 +199,6 @@ public class UsageServiceTest {
         assertEquals(2, usageService.insertUsages(usageBatch, usages));
         verifyUsage(captureUsage1.getValue(), new BigDecimal("10.9090909090"));
         verifyUsage(captureUsage2.getValue(), new BigDecimal("1.0909090909"));
-        verify(usageRepository, usageAuditService, RupContextUtils.class);
-    }
-
-    @Test
-    public void testInsertAaclUsages() {
-        mockStatic(RupContextUtils.class);
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setGrossAmount(new BigDecimal("12.00"));
-        usageBatch.setName("AACL product family");
-        usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
-        Usage usage = new Usage();
-        usage.setProductFamily("AACL");
-        usage.setAaclUsage(new AaclUsage());
-        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        usageRepository.insertAaclUsage(usage);
-        expectLastCall().once();
-        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED,
-            "Uploaded in 'AACL product family' Batch");
-        expectLastCall().once();
-        replay(usageRepository, usageAuditService, RupContextUtils.class);
-        assertEquals(1, usageService.insertAaclUsages(usageBatch, Collections.singleton(usage)));
         verify(usageRepository, usageAuditService, RupContextUtils.class);
     }
 

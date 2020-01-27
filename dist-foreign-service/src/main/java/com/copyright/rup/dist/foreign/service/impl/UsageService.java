@@ -157,28 +157,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public int insertAaclUsages(UsageBatch usageBatch, Collection<Usage> usages) {
-        String userName = RupContextUtils.getUserName();
-        int size = usages.size();
-        LOGGER.info("Insert AACL usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
-            size, userName);
-        int period = usageBatch.getPaymentDate().getYear();
-        usages.forEach(usage -> {
-            usage.setBatchId(usageBatch.getId());
-            usage.getAaclUsage().setUsagePeriod(period);
-            usage.getAaclUsage().setBatchPeriodEndDate(usageBatch.getPaymentDate());
-            usage.setCreateUser(userName);
-            usage.setUpdateUser(userName);
-            usageRepository.insertAaclUsage(usage);
-        });
-        String loadedReason = "Uploaded in '" + usageBatch.getName() + "' Batch";
-        usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason));
-        LOGGER.info("Insert AACL usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}",
-            usageBatch.getName(), size, userName);
-        return size;
-    }
-
-    @Override
     @Transactional
     public List<String> insertNtsUsages(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
