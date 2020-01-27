@@ -188,7 +188,7 @@ public class FasUsageWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -209,7 +209,7 @@ public class FasUsageWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(1000000001L)).once();
         Windows.showNotificationWindow("Scenario cannot be created. The following rightsholder(s) are absent " +
             "in PRM: <i><b>[1000000001]</b></i>");
@@ -232,7 +232,7 @@ public class FasUsageWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists("FAS Distribution " + DATE)).andReturn(true).once();
@@ -254,7 +254,7 @@ public class FasUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button sendForResearchButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
-        expect(controller.isValidUsagesState(UsageStatusEnum.WORK_NOT_FOUND)).andReturn(false).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.WORK_NOT_FOUND)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in WORK_NOT_FOUND status can be sent for research");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);

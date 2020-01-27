@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -24,6 +25,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
@@ -154,6 +156,17 @@ public class NtsUsageControllerTest {
         assertNotNull(result);
         assertEquals(0, result.size());
         verify(filterWidgetMock, usageService, fasUsageService, filterController);
+    }
+
+    @Test
+    public void testIsValidFilteredUsageStatus() {
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(usageService.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        replay(filterController, filterWidgetMock, usageService);
+        assertTrue(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE));
+        verify(filterController, filterWidgetMock, usageService);
     }
 
     @Test

@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
@@ -108,11 +107,6 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     public void deleteUsageBatch(UsageBatch usageBatch) {
         usageBatchService.deleteUsageBatch(usageBatch);
         getUsageFilterController().getWidget().clearFilter();
-    }
-
-    @Override
-    public boolean isValidUsagesState(UsageStatusEnum status) {
-        return usageService.isValidUsagesState(getUsageFilterController().getWidget().getAppliedFilter(), status);
     }
 
     @Override

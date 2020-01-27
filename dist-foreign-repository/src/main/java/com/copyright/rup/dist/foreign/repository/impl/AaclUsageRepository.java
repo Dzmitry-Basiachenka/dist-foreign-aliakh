@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 
@@ -87,5 +88,13 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     @Override
     public List<Integer> findUsagePeriods() {
         return selectList("IAaclUsageMapper.findUsagePeriods");
+    }
+
+    @Override
+    public boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(FILTER_KEY, Objects.requireNonNull(filter));
+        params.put("status", Objects.requireNonNull(status));
+        return selectOne("IAaclUsageMapper.isValidFilteredUsageStatus", params);
     }
 }

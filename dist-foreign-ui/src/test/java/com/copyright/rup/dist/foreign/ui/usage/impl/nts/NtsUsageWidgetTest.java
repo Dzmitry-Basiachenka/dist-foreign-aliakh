@@ -176,7 +176,7 @@ public class NtsUsageWidgetTest {
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
             .andReturn(Collections.emptyList()).once();
@@ -208,7 +208,7 @@ public class NtsUsageWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
             .andReturn(ImmutableList.of("batch name 1", "batch name 2")).once();
@@ -233,7 +233,7 @@ public class NtsUsageWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
             .andReturn(Collections.emptyList()).once();
@@ -260,7 +260,7 @@ public class NtsUsageWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
@@ -289,7 +289,7 @@ public class NtsUsageWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(Collections.emptyList()).once();
@@ -320,7 +320,7 @@ public class NtsUsageWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
             .andReturn(Collections.emptyList()).once();

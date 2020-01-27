@@ -180,7 +180,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         String message;
         if (0 == controller.getBeansCount()) {
             message = ForeignUi.getMessage("message.error.empty_usages");
-        } else if (!controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)) {
+        } else if (!controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)) {
             message = ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.ELIGIBLE,
                 "added to scenario");
         } else {

@@ -433,7 +433,7 @@ public interface IUsageRepository {
      * @return {@code true} - if there are no {@link Usage}s found by defined {@link UsageFilter}
      * with status different from specified , {@code false} - otherwise
      */
-    boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
+    boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
 
     /**
      * Inserts usages from archived FAS usages based on NTS Batch criteria (Market Period From/To, Markets).

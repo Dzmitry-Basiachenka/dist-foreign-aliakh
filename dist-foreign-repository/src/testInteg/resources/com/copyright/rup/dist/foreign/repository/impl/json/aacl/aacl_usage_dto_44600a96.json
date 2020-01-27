@@ -1,0 +1,21 @@
+[
+  {
+    "id": "44600a96-5cf5-4e11-80df-d52caddd33aa",
+    "batchName": "AACL batch 3",
+    "wrWrkInst": 269040891,
+    "status": "RH_FOUND",
+    "productFamily": "AACL",
+    "numberOfCopies": 10,
+    "aaclUsage": {
+      "institution": "CORNELL UNIVERSITY",
+      "usagePeriod": 2020,
+      "batchPeriodEndDate": "2020-06-30",
+      "usageSource": "Feb 2019 TUR",
+      "rightLimitation": "PRINT",
+      "numberOfPages": 12
+    },
+    "rhName": "Georgia State University Business Press [C]",
+    "rhAccountNumber": 1000000026,
+    "comment": "AACL comment 1"
+  }
+]

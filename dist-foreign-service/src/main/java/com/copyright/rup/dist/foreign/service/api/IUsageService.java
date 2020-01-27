@@ -427,7 +427,7 @@ public interface IUsageService {
      * @return {@code true} - if all filtered {@link Usage}s have specified {@link UsageStatusEnum},
      * {@code false} - otherwise
      */
-    boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
+    boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
 
     /**
      * Updates {@link Usage} and verifies that version of {@link Usage} is the same as in database.

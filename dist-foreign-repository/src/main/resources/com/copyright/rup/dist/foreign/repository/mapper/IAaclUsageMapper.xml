@@ -300,4 +300,16 @@
         from ${schema}.df_usage_aacl
         order by usage_period
     </select>
+
+    <select id="isValidFilteredUsageStatus" parameterType="map" resultType="boolean">
+        select not exists (
+            select 1
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+            join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+            <include refid="IAaclUsageMapper.aaclUsageFilter"/>
+                and u.df_scenario_uid is null
+                and u.status_ind != #{status}
+        )
+    </select>
 </mapper>

@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
@@ -55,7 +56,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Autowired
     private IResearchService researchService;
     @Autowired
-    private IAaclUsageService usageService;
+    private IAaclUsageService aaclUsageService;
 
     @Override
     public ICommonUsageFilterController getUsageFilterController() {
@@ -64,7 +65,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public int getBeansCount() {
-        return usageService.getUsagesCount(getUsageFilterController().getWidget().getAppliedFilter());
+        return aaclUsageService.getUsagesCount(getUsageFilterController().getWidget().getAppliedFilter());
     }
 
     @Override
@@ -74,7 +75,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return usageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(),
+        return aaclUsageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(),
             new Pageable(startIndex, count), sort);
     }
 
@@ -89,6 +90,12 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
         getUsageBatchService().sendForMatching(usages);
         aaclUsageFilterController.getWidget().clearFilter();
         return result;
+    }
+
+    @Override
+    public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
+        return aaclUsageService
+            .isValidFilteredUsageStatus(getUsageFilterController().getWidget().getAppliedFilter(), status);
     }
 
     @Override

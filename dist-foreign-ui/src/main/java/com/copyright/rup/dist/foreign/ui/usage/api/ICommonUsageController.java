@@ -143,7 +143,7 @@ public interface ICommonUsageController extends IController<ICommonUsageWidget> 
      * @return {@code true} - if all filtered usages have specified {@link UsageStatusEnum},
      * {@code false} - otherwise
      */
-    boolean isValidUsagesState(UsageStatusEnum status);
+    boolean isValidFilteredUsageStatus(UsageStatusEnum status);
 
     /**
      * @return selected product family from filter

@@ -1,0 +1,21 @@
+[
+  {
+    "id": "67750f86-3077-4857-b2f6-af31c3d3d5b1",
+    "batchName": "AACL batch 3",
+    "wrWrkInst": 122830308,
+    "status": "RH_FOUND",
+    "productFamily": "AACL",
+    "numberOfCopies": 20,
+    "aaclUsage": {
+      "institution": "BIOLA UNIVERSITY",
+      "usagePeriod": 2020,
+      "batchPeriodEndDate": "2020-06-30",
+      "usageSource": "Aug 2019 TUR",
+      "rightLimitation": "ALL",
+      "numberOfPages": 6
+    },
+    "rhName": "Delmar Learning, a division of Cengage Learning",
+    "rhAccountNumber": 1000011450,
+    "comment": "AACL comment 2"
+  }
+]

@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
@@ -89,6 +90,12 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
         getUsageBatchService().getAndSendForGettingRights(ntsUsageIds, usageBatch.getName());
         getUsageFilterController().getWidget().clearFilter();
         return CollectionUtils.size(ntsUsageIds);
+    }
+
+    @Override
+    public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
+        return getUsageService()
+            .isValidFilteredUsageStatus(getUsageFilterController().getWidget().getAppliedFilter(), status);
     }
 
     @Override
