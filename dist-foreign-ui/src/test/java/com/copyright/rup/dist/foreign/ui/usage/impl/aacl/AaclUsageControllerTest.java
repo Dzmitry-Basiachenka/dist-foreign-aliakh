@@ -2,8 +2,10 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -12,11 +14,14 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterController;
@@ -59,6 +64,8 @@ public class AaclUsageControllerTest {
     private IAaclUsageFilterWidget filterWidgetMock;
     private IUsageBatchService usageBatchService;
     private IResearchService researchService;
+    private UsageFilter usageFilter;
+    private IAaclUsageService aaclUsageService;
 
     @Before
     public void setUp() {
@@ -68,11 +75,43 @@ public class AaclUsageControllerTest {
         filterController = createMock(IAaclUsageFilterController.class);
         filterWidgetMock = createMock(IAaclUsageFilterWidget.class);
         researchService = createMock(IResearchService.class);
+        aaclUsageService = createMock(IAaclUsageService.class);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, researchService);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, filterController);
+        Whitebox.setInternalState(controller, aaclUsageService);
+        usageFilter = new UsageFilter();
+    }
+
+    @Test
+    public void getBeansCount() {
+        usageFilter.setFiscalYear(2017);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(aaclUsageService.getUsagesCount(usageFilter)).andReturn(1).once();
+        replay(filterWidgetMock, aaclUsageService, filterController);
+        assertEquals(1, controller.getBeansCount());
+        verify(filterWidgetMock, aaclUsageService, filterController);
+    }
+
+    @Test
+    public void testLoadBeans() {
+        usageFilter.setFiscalYear(2017);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        Capture<Pageable> pageableCapture = new Capture<>();
+        expect(aaclUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
+            .andReturn(Collections.emptyList()).once();
+        replay(filterWidgetMock, aaclUsageService, filterController);
+        List<UsageDto> result = controller.loadBeans(10, 150, null);
+        Pageable pageable = pageableCapture.getValue();
+        assertEquals(10, pageable.getOffset());
+        assertEquals(150, pageable.getLimit());
+        assertNotNull(result);
+        assertEquals(0, result.size());
+        verify(filterWidgetMock, aaclUsageService, filterController);
     }
 
     @Test

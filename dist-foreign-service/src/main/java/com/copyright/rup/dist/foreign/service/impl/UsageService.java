@@ -125,18 +125,6 @@ public class UsageService implements IUsageService {
     private IPiIntegrationService piIntegrationService;
 
     @Override
-    public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
-        return !filter.isEmpty()
-            ? usageRepository.findDtosByFilter(filter, pageable, sort)
-            : Collections.emptyList();
-    }
-
-    @Override
-    public int getUsagesCount(UsageFilter filter) {
-        return !filter.isEmpty() ? usageRepository.findCountByFilter(filter) : 0;
-    }
-
-    @Override
     public int insertUsages(UsageBatch usageBatch, Collection<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         int size = usages.size();

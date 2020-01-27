@@ -1,21 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -33,7 +28,8 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 
-import org.easymock.Capture;
+import com.vaadin.data.provider.QuerySortOrder;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -77,38 +73,9 @@ public class CommonUsageControllerTest {
         controller = new TestUsageController(filterController);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
-        Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, fundPoolService);
         usageFilter = new UsageFilter();
-    }
-
-    @Test
-    public void getBeansCount() {
-        UsageFilter filter = new UsageFilter();
-        filter.setFiscalYear(2017);
-        prepareGetAppliedFilterExpectations(filter);
-        expect(usageService.getUsagesCount(filter)).andReturn(1).once();
-        replay(filterWidgetMock, usageService, filterController);
-        assertEquals(1, controller.getBeansCount());
-        verify(filterWidgetMock, usageService, filterController);
-    }
-
-    @Test
-    public void testLoadBeans() {
-        usageFilter.setFiscalYear(2017);
-        prepareGetAppliedFilterExpectations(usageFilter);
-        Capture<Pageable> pageableCapture = new Capture<>();
-        expect(usageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
-            .andReturn(Collections.emptyList()).once();
-        replay(filterWidgetMock, usageService, filterController);
-        List<UsageDto> result = controller.loadBeans(10, 150, null);
-        Pageable pageable = pageableCapture.getValue();
-        assertEquals(10, pageable.getOffset());
-        assertEquals(150, pageable.getLimit());
-        assertNotNull(result);
-        assertEquals(0, result.size());
-        verify(filterWidgetMock, usageService, filterController);
     }
 
     @Test
@@ -188,11 +155,6 @@ public class CommonUsageControllerTest {
         verify(scenarioService);
     }
 
-    private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {
-        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
-        expect(filterWidgetMock.getAppliedFilter()).andReturn(expectedUsageFilter).once();
-    }
-
     private interface ITestUsageWidget extends ICommonUsageWidget {
     }
 
@@ -223,6 +185,16 @@ public class CommonUsageControllerTest {
 
         @Override
         protected ITestUsageWidget instantiateWidget() {
+            return null;
+        }
+
+        @Override
+        public int getBeansCount() {
+            return 0;
+        }
+
+        @Override
+        public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
             return null;
         }
     }

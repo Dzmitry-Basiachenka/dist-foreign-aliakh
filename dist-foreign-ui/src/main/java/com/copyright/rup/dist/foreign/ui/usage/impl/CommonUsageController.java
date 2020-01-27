@@ -1,12 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
@@ -23,10 +19,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.base.MoreObjects;
-import com.vaadin.data.provider.QuerySortOrder;
-import com.vaadin.shared.data.sort.SortDirection;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -75,22 +68,6 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     @Override
     public void onFilterChanged(FilterChangedEvent event) {
         getWidget().refresh();
-    }
-
-    @Override
-    public int getBeansCount() {
-        return usageService.getUsagesCount(getUsageFilterController().getWidget().getAppliedFilter());
-    }
-
-    @Override
-    public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
-        Sort sort = null;
-        if (CollectionUtils.isNotEmpty(sortOrders)) {
-            QuerySortOrder sortOrder = sortOrders.get(0);
-            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
-        }
-        return usageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(),
-            new Pageable(startIndex, count), sort);
     }
 
     @Override

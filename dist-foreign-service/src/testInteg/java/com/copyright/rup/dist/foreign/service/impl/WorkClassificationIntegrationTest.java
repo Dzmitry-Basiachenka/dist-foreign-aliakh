@@ -8,8 +8,8 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkClassificationService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 
 import com.google.common.collect.Sets;
 
@@ -53,7 +53,7 @@ public class WorkClassificationIntegrationTest {
     @Autowired
     private IWorkClassificationService workClassificationService;
     @Autowired
-    private IUsageService usageService;
+    private IFasUsageService usageService;
 
     @Test
     public void testGetWorkClassificationThreshold() {

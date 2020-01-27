@@ -35,24 +35,6 @@ import java.util.Set;
 public interface IUsageService {
 
     /**
-     * Gets list of {@link UsageDto}s based on applied filter.
-     *
-     * @param filter   instance of {@link UsageFilter}
-     * @param pageable instance of {@link Pageable}
-     * @param sort     instance of {@link Sort}
-     * @return the list of {@link UsageDto}
-     */
-    List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort);
-
-    /**
-     * Gets usages count based on applied filter.
-     *
-     * @param filter instance of {@link UsageFilter}.
-     * @return count of usages
-     */
-    int getUsagesCount(UsageFilter filter);
-
-    /**
      * Inserts usages.
      *
      * @param usageBatch usage batch

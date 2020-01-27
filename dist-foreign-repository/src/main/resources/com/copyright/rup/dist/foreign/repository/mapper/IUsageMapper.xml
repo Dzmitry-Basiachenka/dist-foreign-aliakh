@@ -186,7 +186,6 @@
             uaacl.number_of_pages,
             uaacl.right_limitation
         from ${schema}.df_usage u
-        <!--TODO {isuvorau/srudak} find solution to not join both tables at a time -->
         left join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
@@ -230,9 +229,6 @@
             </if>
             <if test="null != filter.fiscalYear">
                 and <![CDATA[ub.fiscal_year <= #{filter.fiscalYear}]]>
-            </if>
-            <if test="null != filter.usagePeriod">
-                and uaacl.usage_period = #{filter.usagePeriod}
             </if>
         </where>
     </sql>
@@ -346,21 +342,6 @@
             </when>
             <when test="sort.property == 'comment'">
                 u.comment <include refid="IUsageMapper.direction"/>
-            </when>
-            <when test="sort.property == 'institution'">
-                uaacl.institution <include refid="IUsageMapper.direction"/>
-            </when>
-            <when test="sort.property == 'usagePeriod'">
-                uaacl.usage_period <include refid="IUsageMapper.direction"/>
-            </when>
-            <when test="sort.property == 'usageSource'">
-                uaacl.usage_source <include refid="IUsageMapper.direction"/>
-            </when>
-            <when test="sort.property == 'numberOfPages'">
-                uaacl.number_of_pages <include refid="IUsageMapper.direction"/>
-            </when>
-            <when test="sort.property == 'rightLimitation'">
-                uaacl.right_limitation <include refid="IUsageMapper.direction"/>
             </when>
         </choose>
     </sql>
@@ -534,60 +515,9 @@
     <select id="findDtosByFilter" resultMap="usageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         select
             u.df_usage_uid,
-            u.df_scenario_uid,
-            u.wr_wrk_inst,
-            u.work_title,
-            u.system_title,
-            u.rh_account_number,
-            rh.name rh_name,
-            u.payee_account_number,
-            p.name payee_name,
-            u.status_ind,
-            u.product_family,
-            u.standard_number,
-            u.standard_number_type,
-            u.number_of_copies,
-            u.gross_amount,
-            u.service_fee_amount,
-            u.net_amount,
-            u.service_fee,
-            ub.gross_amount batch_gross_amount,
-            ub.name batch_name,
-            ub.rro_account_number,
-            rro.name rro_name,
-            ub.payment_date,
-            ub.fiscal_year,
-            u.updated_datetime,
-            u.comment,
-            <choose>
-                <when test="filter.productFamily == 'AACL'">
-                    ub.payment_date as batch_period_end_date,
-                    uaacl.institution,
-                    uaacl.usage_period,
-                    uaacl.usage_source,
-                    uaacl.number_of_pages,
-                    uaacl.right_limitation
-                </when>
-                <otherwise>
-                    ufas.article,
-                    ufas.author,
-                    ufas.publisher,
-                    ufas.publication_date,
-                    ufas.market,
-                    ufas.market_period_from,
-                    ufas.market_period_to,
-                    ufas.reported_value
-                </otherwise>
-            </choose>
+            <include refid="IUsageMapper.usageDtoColumns"/>
         from ${schema}.df_usage u
-        <choose>
-            <when test="filter.productFamily == 'AACL'">
-                join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
-            </when>
-            <otherwise>
-                join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
-            </otherwise>
-        </choose>
+        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
@@ -750,14 +680,7 @@
     <select id="findCountByFilter" parameterType="map" resultType="int">
         select count(1)
         from ${schema}.df_usage u
-        <choose>
-            <when test="filter.productFamily == 'AACL'">
-                join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
-            </when>
-            <otherwise>
-                join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
-            </otherwise>
-        </choose>
+        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number

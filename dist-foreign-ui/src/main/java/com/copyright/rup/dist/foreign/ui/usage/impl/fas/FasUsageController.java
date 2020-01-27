@@ -2,11 +2,16 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
@@ -18,7 +23,10 @@ import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
 import com.google.common.io.Files;
+import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.shared.data.sort.SortDirection;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -48,10 +56,28 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     private IResearchService researchService;
     @Autowired
     private IFasNtsUsageFilterController fasNtsUsageFilterController;
+    @Autowired
+    private IFasUsageService fasUsageService;
 
     @Override
     public ICommonUsageFilterController getUsageFilterController() {
         return fasNtsUsageFilterController;
+    }
+
+    @Override
+    public int getBeansCount() {
+        return fasUsageService.getUsagesCount(getUsageFilterController().getWidget().getAppliedFilter());
+    }
+
+    @Override
+    public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.get(0);
+            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
+        return fasUsageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(),
+            new Pageable(startIndex, count), sort);
     }
 
     @Override

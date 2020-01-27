@@ -3,7 +3,7 @@ databaseChangeLog {
 
 
     changeSet(id: '2019-12-27-01', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("Insert test data for testFindDtosByProductFamilyAaclFilter")
+        comment("Insert test data for testFindDtosByFilter")
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '05844db0-e0e4-4423-8966-7f1c6160f000')
@@ -63,6 +63,32 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Aug 2019 TUR')
             column(name: 'number_of_pages', value: '6')
             column(name: 'right_limitation', value: 'ALL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '38e3190a-cf2b-4a2a-8a14-1f6e5f09011c')
+            column(name: 'name', value: 'AACL batch 2')
+            column(name: 'payment_date', value: '2018-06-30')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'fiscal_year', value: '2018')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'ce439b92-dfe1-4607-9cba-01394cbfc087')
+            column(name: 'df_usage_batch_uid', value: '38e3190a-cf2b-4a2a-8a14-1f6e5f09011c')
+            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'comment', value: 'AACL NEW status')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: 'ce439b92-dfe1-4607-9cba-01394cbfc087')
+            column(name: 'institution', value: 'CORNELL UNIVERSITY')
+            column(name: 'usage_period', value: '2018')
+            column(name: 'usage_source', value: 'Feb 2018 TUR')
+            column(name: 'number_of_pages', value: '341')
         }
     }
 }
