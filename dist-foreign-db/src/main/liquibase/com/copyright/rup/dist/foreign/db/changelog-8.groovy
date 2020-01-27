@@ -1001,4 +1001,33 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2020-01-27-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment('B-52329 FDA: Load classified AACL usages: add publication_type_uid and detail_licensee_class_id columns in df_usage_aacl table')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'publication_type_uid', type: 'VARCHAR(255)', remarks: 'Publication Type Identifier')
+            column(name: 'detail_licensee_class_id', type: 'INTEGER', remarks: 'Detail Licensee Class Id')
+        }
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_aacl_2_df_publication_type',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage_aacl',
+                baseColumnNames: 'publication_type_uid',
+                referencedTableName: 'df_publication_type',
+                referencedColumnNames: 'df_publication_type_uid')
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_aacl_2_df_detail_licensee_class',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage_aacl',
+                baseColumnNames: 'detail_licensee_class_id',
+                referencedTableName: 'df_detail_licensee_class',
+                referencedColumnNames: 'detail_licensee_class_id')
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
