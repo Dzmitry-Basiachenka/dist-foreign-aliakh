@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.repository.api.IPublicationTypeRepository;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
+import com.copyright.rup.dist.foreign.service.impl.aacl.PublicationTypeService;
 
 import org.junit.Before;
 import org.junit.Test;

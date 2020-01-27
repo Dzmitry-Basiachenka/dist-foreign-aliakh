@@ -1,0 +1,13 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IDetailLicenseeClassMapper">
+
+    <select id="findLicenseeClassIdByDisciplineAndEnrollmentProfile" parameterType="string" resultType="string">
+        select detail_licensee_class_id
+        from ${schema}.df_detail_licensee_class
+        where enrollment_profile = #{enrollmentProfile}
+            and discipline = #{discipline}
+    </select>
+</mapper>

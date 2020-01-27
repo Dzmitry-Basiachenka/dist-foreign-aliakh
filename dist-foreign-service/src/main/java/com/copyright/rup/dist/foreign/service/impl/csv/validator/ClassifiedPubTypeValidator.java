@@ -1,10 +1,10 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
-
-import java.util.Objects;
 
 /**
  * The validator for Classified AACL usages to check if publication type
@@ -31,7 +31,9 @@ public class ClassifiedPubTypeValidator implements DistCsvProcessor.IValidator<A
 
     @Override
     public boolean isValid(AaclClassifiedUsage aaclClassifiedUsage) {
-        return pubTypeService.isPublicationTypeExist(Objects.requireNonNull(aaclClassifiedUsage).getPublicationType());
+        checkNotNull(aaclClassifiedUsage);
+        return "disqualified".equals(aaclClassifiedUsage.getPublicationType())
+            || pubTypeService.isPublicationTypeExist(aaclClassifiedUsage.getPublicationType());
     }
 
     @Override

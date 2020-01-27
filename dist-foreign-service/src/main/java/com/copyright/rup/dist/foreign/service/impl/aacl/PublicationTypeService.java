@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl;
+package com.copyright.rup.dist.foreign.service.impl.aacl;
 
 import com.copyright.rup.dist.foreign.repository.api.IPublicationTypeRepository;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
