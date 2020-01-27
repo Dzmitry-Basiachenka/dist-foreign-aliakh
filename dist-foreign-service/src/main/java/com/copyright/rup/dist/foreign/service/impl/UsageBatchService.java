@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
@@ -67,6 +68,8 @@ public class UsageBatchService implements IUsageBatchService {
     private IUsageBatchRepository usageBatchRepository;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IAaclUsageService aaclUsageService;
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
@@ -154,7 +157,7 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatch.setUpdateUser(userName);
         LOGGER.info("Insert AACL batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
-        int count = usageService.insertAaclUsages(usageBatch, usages);
+        int count = aaclUsageService.insertUsages(usageBatch, usages);
         LOGGER.info("Insert AACL batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
             usageBatch.getName(), userName, count);
         return count;
