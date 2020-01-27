@@ -1,3 +1,7 @@
+8.1.18
+-
+* B-52329 FDA: Load classified AACL usages: implement classified usages csv processor
+
 8.1.17
 -
 * B-52329 FDA: Load classified AACL usages: implement classified usage validator
