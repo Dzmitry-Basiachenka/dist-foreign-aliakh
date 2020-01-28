@@ -1,3 +1,16 @@
+8.1.19
+-
+* B-52329 FDA: FDA: Load classified AACL usages: implement Discipline and Enrollment Profile validator
+* B-52329 FDA: Load classified AACL usages: add publication_type_uid and detail_licensee_class_id columns in df_usage_aacl
+* B-52329 FDA: Load classified AACL usages: implement publication type validator
+* B-52333 FDA: Send AACL usages for classification: make changes based on comments in CR-DIST-FOREIGN-142
+* B-56092 Tech Debt: FDA: apply insert and delete AACL specific methods on service layer
+* B-56092 Tech Debt: FDA: move AACL related logic for getting usage dtos and count to separate repository and service
+* B-56092 Tech Debt: FDA: move update processed AACL usages logic to AACL related classes
+* B-56092 Tech Debt: FDA: place getAaclUsagePeriods method to AACL specific service
+* CDP-879 FDA: Send for Classification: Exception occurs when the user tries to send AACL usages for classification with applied 'Usage Period' fiter
+* CDP-880 FDA: Research Status Report for FAS/FAS2: AACL batches are displayed in the report
+
 8.1.18
 -
 * B-52329 FDA: Load classified AACL usages: implement classified usages csv processor
