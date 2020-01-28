@@ -6187,4 +6187,51 @@ databaseChangeLog {
             column(name: "action_reason", value: "Uploaded in 'AACL batch'")
         }
     }
+
+    changeSet(id: '2020-01-28-00', author: 'Ihar Suvorau<isuvorau@copyright.com>') {
+        comment('Inserting AACL test data for testWriteResearchStatusCsvReport which should not be displayed in reports')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'd08c250e-a8d8-491b-84d6-3945fd07be78')
+            column(name: 'name', value: 'AACL Usage Batch 2015')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'payment_date', value: '2015-06-30')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '94ef6c15-bcd1-41ab-a65e-6dccec4a3213')
+            column(name: 'df_usage_batch_uid', value: 'd08c250e-a8d8-491b-84d6-3945fd07be78')
+            column(name: 'wr_wrk_inst', value: '122803735')
+            column(name: 'status_ind', value: 'WORK_NOT_FOUND')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: '10')
+            column(name: 'comment', value: 'AACL comment')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: '94ef6c15-bcd1-41ab-a65e-6dccec4a3213')
+            column(name: 'institution', value: 'CORNELL UNIVERSITY')
+            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_source', value: 'Feb 2015 TUR')
+            column(name: 'number_of_pages', value: '12')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '731ce234-0c44-41f3-971c-e5de3be7ab91')
+            column(name: 'df_usage_batch_uid', value: 'd08c250e-a8d8-491b-84d6-3945fd07be78')
+            column(name: 'wr_wrk_inst', value: '130297955')
+            column(name: 'status_ind', value: 'WORK_RESEARCH')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'comment', value: 'AACL comment')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: '731ce234-0c44-41f3-971c-e5de3be7ab91')
+            column(name: 'institution', value: 'CORNELL UNIVERSITY')
+            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_source', value: 'Feb 2015 TUR')
+            column(name: 'number_of_pages', value: '199')
+        }
+    }
 }
