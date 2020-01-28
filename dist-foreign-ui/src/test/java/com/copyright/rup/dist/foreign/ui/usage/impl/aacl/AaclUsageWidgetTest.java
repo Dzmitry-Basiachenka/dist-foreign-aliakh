@@ -152,7 +152,7 @@ public class AaclUsageWidgetTest {
         Button sendForClassificationButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
                 .getComponent(0)).getComponent(1);
-        expect(controller.isValidUsagesState(UsageStatusEnum.RH_FOUND)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.RH_FOUND)).andReturn(true).once();
         Windows.showModalWindow(capture(notificationWindowCapture));
         expectLastCall().once();
         controller.clearFilter();
@@ -180,7 +180,7 @@ public class AaclUsageWidgetTest {
         Button sendForClassificationButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
                 .getComponent(0)).getComponent(1);
-        expect(controller.isValidUsagesState(UsageStatusEnum.RH_FOUND)).andReturn(false).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.RH_FOUND)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in RH_FOUND status can be sent for classification");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);

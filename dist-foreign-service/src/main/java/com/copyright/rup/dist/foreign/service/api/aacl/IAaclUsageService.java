@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.Collection;
@@ -70,4 +71,14 @@ public interface IAaclUsageService {
      * @param usageId usage identifier
      */
     void deleteById(String usageId);
+
+    /**
+     * Verifies whether all usages found by defined {@link UsageFilter} have specified status or not.
+     *
+     * @param filter {@link UsageFilter} instance
+     * @param status {@link UsageStatusEnum} instance
+     * @return {@code true} - if all filtered usages have specified {@link UsageStatusEnum},
+     * {@code false} - otherwise
+     */
+    boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
 }

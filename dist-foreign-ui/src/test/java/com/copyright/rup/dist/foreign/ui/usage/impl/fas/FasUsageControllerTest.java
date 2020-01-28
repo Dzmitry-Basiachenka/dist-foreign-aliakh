@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -24,6 +25,7 @@ import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
@@ -276,6 +278,18 @@ public class FasUsageControllerTest {
         replay(usageWidgetMock, eventMock);
         controller.onScenarioCreated(eventMock);
         verify(usageWidgetMock, eventMock);
+    }
+
+    @Test
+    public void testIsValidFilteredUsageStatus() {
+        usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(usageService.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND))
+            .andReturn(true).once();
+        replay(filterController, filterWidgetMock, usageService);
+        assertTrue(controller.isValidFilteredUsageStatus(UsageStatusEnum.WORK_NOT_FOUND));
+        verify(filterController, filterWidgetMock, usageService);
     }
 
     private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {

@@ -629,8 +629,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status) {
-        return usageRepository.isValidUsagesState(filter, status);
+    public boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status) {
+        return usageRepository.isValidFilteredUsageStatus(filter, status);
     }
 
     @Override

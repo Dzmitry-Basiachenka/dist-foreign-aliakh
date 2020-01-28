@@ -1196,12 +1196,12 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testIsValidUsagesState() {
+    public void testIsValidFilteredUsageStatus() {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("ee575916-f6d0-4c3c-b589-32663e0f4793"));
-        assertFalse(usageRepository.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
+        assertFalse(usageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        assertTrue(usageRepository.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
+        assertTrue(usageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
     }
 
     @Test

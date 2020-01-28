@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -18,6 +19,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
@@ -112,6 +114,18 @@ public class AaclUsageControllerTest {
         assertNotNull(result);
         assertEquals(0, result.size());
         verify(filterWidgetMock, aaclUsageService, filterController);
+    }
+
+    @Test
+    public void testIsValidFilteredUsageStatus() {
+        usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(aaclUsageService.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND))
+            .andReturn(true).once();
+        replay(filterController, filterWidgetMock, aaclUsageService);
+        assertTrue(controller.isValidFilteredUsageStatus(UsageStatusEnum.RH_FOUND));
+        verify(filterController, filterWidgetMock, aaclUsageService);
     }
 
     @Test

@@ -137,22 +137,22 @@ public class CommonUsageControllerTest {
     }
 
     @Test
-    public void testIsValidUsagesState() {
-        usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
-        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
-        expect(usageService.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND)).andReturn(true).once();
-        replay(filterController, filterWidgetMock, usageService);
-        assertTrue(controller.isValidUsagesState(UsageStatusEnum.WORK_NOT_FOUND));
-        verify(filterController, filterWidgetMock, usageService);
-    }
-
-    @Test
     public void testScenarioExists() {
         expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(true).once();
         replay(scenarioService);
         assertTrue(controller.scenarioExists(SCENARIO_NAME));
         verify(scenarioService);
+    }
+
+    @Test
+    public void testGetInvalidRightsholders() {
+        List<Long> invalidRhs = Collections.singletonList(1000017527L);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(usageService.getInvalidRightsholdersByFilter(usageFilter)).andReturn(invalidRhs).once();
+        replay(filterController, filterWidgetMock, usageService);
+        assertEquals(invalidRhs, controller.getInvalidRightsholders());
+        verify(filterController, filterWidgetMock, usageService);
     }
 
     private interface ITestUsageWidget extends ICommonUsageWidget {
@@ -191,6 +191,11 @@ public class CommonUsageControllerTest {
         @Override
         public int getBeansCount() {
             return 0;
+        }
+
+        @Override
+        public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
+            return true;
         }
 
         @Override

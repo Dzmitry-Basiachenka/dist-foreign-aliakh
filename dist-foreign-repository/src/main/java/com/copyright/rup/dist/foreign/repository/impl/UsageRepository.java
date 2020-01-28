@@ -459,11 +459,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status) {
+    public boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put(FILTER_KEY, Objects.requireNonNull(filter));
         params.put(STATUS_KEY, Objects.requireNonNull(status));
-        return selectOne("IUsageMapper.isValidUsagesState", params);
+        return selectOne("IUsageMapper.isValidFilteredUsageStatus", params);
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -87,6 +88,12 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
         getUsageBatchService().sendForGettingRights(usages, usageBatch.getName());
         getUsageFilterController().getWidget().clearFilter();
         return result;
+    }
+
+    @Override
+    public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
+        return getUsageService()
+            .isValidFilteredUsageStatus(getUsageFilterController().getWidget().getAppliedFilter(), status);
     }
 
     @Override

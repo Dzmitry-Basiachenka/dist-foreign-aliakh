@@ -1527,7 +1527,7 @@
         returning df_usage_uid
     </select>
 
-    <select id="isValidUsagesState" parameterType="map" resultType="boolean">
+    <select id="isValidFilteredUsageStatus" parameterType="map" resultType="boolean">
         select not exists (
             select 1
             from ${schema}.df_usage u

@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -97,5 +98,10 @@ public class AaclUsageService implements IAaclUsageService {
     public void deleteById(String usageId) {
         usageAuditService.deleteActionsByUsageId(usageId);
         aaclUsageRepository.deleteById(usageId);
+    }
+
+    @Override
+    public boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status) {
+        return aaclUsageRepository.isValidFilteredUsageStatus(filter, status);
     }
 }

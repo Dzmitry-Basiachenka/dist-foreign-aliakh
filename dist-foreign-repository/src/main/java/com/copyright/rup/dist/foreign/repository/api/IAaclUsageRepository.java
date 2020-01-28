@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
@@ -81,4 +82,14 @@ public interface IAaclUsageRepository {
      * @return list of AACL usage periods
      */
     List<Integer> findUsagePeriods();
+
+    /**
+     * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.
+     *
+     * @param filter {@link UsageFilter} instance
+     * @param status {@link UsageStatusEnum} instance
+     * @return {@code true} - if there are no {@link Usage}s found by defined {@link UsageFilter}
+     * with status different from specified , {@code false} - otherwise
+     */
+    boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
 }

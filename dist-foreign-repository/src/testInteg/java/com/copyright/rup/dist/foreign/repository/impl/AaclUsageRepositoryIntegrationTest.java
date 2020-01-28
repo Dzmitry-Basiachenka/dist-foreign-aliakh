@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -54,11 +55,12 @@ public class AaclUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_1 = "0b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_2 = "6c91f04e-60dc-49e0-9cdc-e782e0b923e2";
     private static final String USAGE_ID_3 = "5b41d618-0a2f-4736-bb75-29da627ad677";
-    private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
+    private static final String BATCH_ID_3 = "adcc460c-c4ae-4750-99e8-b9fe91787ce1";
     private static final String SYSTEM_TITLE = "Wissenschaft & Forschung Japan";
     private static final String STANDARD_NUMBER = "2192-3558";
     private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
     private static final String RIGHT_LIMITATION = "ALL";
+    private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -141,7 +143,8 @@ public class AaclUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
         verifyUsageDtos(
-            Arrays.asList("json/aacl/aacl_usage_dto_0b5ac9fc.json", "json/aacl/aacl_usage_dto_6c91f04e.json"),
+            Arrays.asList("json/aacl/aacl_usage_dto_44600a96.json", "json/aacl/aacl_usage_dto_67750f86.json",
+                "json/aacl/aacl_usage_dto_0b5ac9fc.json", "json/aacl/aacl_usage_dto_6c91f04e.json"),
             aaclUsageRepository.findDtosByFilter(usageFilter, null, null));
     }
 
@@ -161,11 +164,75 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testIsValidFilteredUsageStatusFilteringByBatchWithUsagesInCorrectStatusOnly() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("6e6f656a-e080-4426-b8ea-985b69f8814d"));
+        assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
+    }
+
+    @Test
+    public void testIsValidFilteredUsageStatusFilteringByBatchWithUsagesInDifferentStatusOnly() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("38e3190a-cf2b-4a2a-8a14-1f6e5f09011c"));
+        assertFalse(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
+    }
+
+    @Test
+    public void testIsValidFilteredUsageStatusFilteringByBatchWithMixedUsageStatuses() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        assertFalse(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
+    }
+
+    @Test
+    public void testIsValidFilteredUsageStatusFilteringByBatchAndCorrectStatus() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
+        assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
+    }
+
+    @Test
+    public void testIsValidFilteredUsageStatusFilteringByBatchAndDifferentStatus() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
+        assertFalse(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
+    }
+
+    @Test
+    public void testIsValidFilteredUsageStatusFilteringByBatchAndStatusAndCorrectUsagePeriod() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
+        usageFilter.setUsagePeriod(2020);
+        assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
+    }
+
+    @Test
+    public void testIsValidFilteredUsageStatusFilteringByBatchAndStatusAndDifferentUsagePeriod() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
+        usageFilter.setUsagePeriod(2012);
+        assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
+    }
+
+    @Test
+    public void testIsValidFilteredUsageStatusFilteringByBatchAndStatusWithNoUsages() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
+    }
+
+    @Test
     public void testFindUsagePeriods() {
         List<Integer> usagePeriods = aaclUsageRepository.findUsagePeriods();
-        assertEquals(2, usagePeriods.size());
+        assertEquals(3, usagePeriods.size());
         assertEquals(2018, usagePeriods.get(0).longValue());
         assertEquals(2019, usagePeriods.get(1).longValue());
+        assertEquals(2020, usagePeriods.get(2).longValue());
     }
 
     private void verifyUsages(List<String> usageIds, List<Usage> actualUsages) {
