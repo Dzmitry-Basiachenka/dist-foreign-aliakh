@@ -150,7 +150,7 @@
             u.distribution_date,
             u.period_end_date
         from ${schema}.df_usage_archive u
-        left join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
+        join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
@@ -197,7 +197,7 @@
             u.df_usage_archive_uid df_usage_uid,
             <include refid="IUsageMapper.usageDtoColumns"/>
         from ${schema}.df_usage_archive u
-        left join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
+        join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number

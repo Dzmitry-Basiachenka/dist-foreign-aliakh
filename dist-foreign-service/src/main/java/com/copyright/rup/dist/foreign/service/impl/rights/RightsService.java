@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
@@ -66,6 +67,8 @@ public class RightsService implements IRightsService {
     private IUsageBatchService usageBatchService;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IAaclUsageService aaclUsageService;
     @Autowired
     private IUsageAuditService auditService;
     @Autowired
@@ -198,7 +201,7 @@ public class RightsService implements IRightsService {
             usage.setStatus(UsageStatusEnum.RH_FOUND);
             usage.getAaclUsage()
                 .setRightLimitation(DIGITAL_TYPE_OF_USE.equals(result.getTypeOfUse()) ? "ALL" : PRINT_TYPE_OF_USE);
-            usageService.updateProcessedUsage(usage);
+            aaclUsageService.updateProcessedUsage(usage);
             logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber), true);
         } else {

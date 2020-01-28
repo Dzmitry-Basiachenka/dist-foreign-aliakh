@@ -18,12 +18,16 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
-
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
+
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -51,6 +55,9 @@ public class AaclUsageServiceTest {
     private IUsageAuditService usageAuditService;
     private IAaclUsageRepository aaclUsageRepository;
 
+    @Rule
+    private final ExpectedException exception = ExpectedException.none();
+
     @Before
     public void setUp() {
         usageAuditService = createMock(IUsageAuditService.class);
@@ -77,6 +84,32 @@ public class AaclUsageServiceTest {
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
         assertEquals(1, aaclUsageService.insertUsages(usageBatch, Collections.singleton(usage)));
         verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testUpdateProcessedUsageProductFamily() {
+        Usage usage = new Usage();
+        usage.setProductFamily("AACL");
+        expect(aaclUsageRepository.updateProcessedUsage(usage))
+            .andReturn("fbf3b27f-2031-41a0-812e-111bb668e180").once();
+        replay(aaclUsageRepository);
+        aaclUsageService.updateProcessedUsage(usage);
+        verify(aaclUsageRepository);
+    }
+
+    @Test
+    public void testUpdateProcessedUsageWrongVersion() {
+        Usage usage = new Usage();
+        usage.setStatus(UsageStatusEnum.NEW);
+        usage.setId("ca62ea7e-4185-4c56-b12b-c53fbad1d6b8");
+        usage.setVersion(2);
+        exception.expect(InconsistentUsageStateException.class);
+        exception.expectMessage("Usage is in inconsistent state. UsageId=ca62ea7e-4185-4c56-b12b-c53fbad1d6b8," +
+            " Status=NEW, RecordVersion=2");
+        expect(aaclUsageRepository.updateProcessedUsage(usage)).andReturn(null).once();
+        replay(aaclUsageRepository);
+        aaclUsageService.updateProcessedUsage(usage);
+        verify(aaclUsageRepository);
     }
 
     @Test

@@ -144,7 +144,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String USAGE_ID_34 = "ade68eac-0d79-4d23-861b-499a0c6e91d3";
-    private static final String USAGE_ID_35 = "5d422f76-7d20-4e04-bdd2-810ca930a50d";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String NTS_BATCH_ID = "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa";
     private static final String NTS_SCENARIO_ID = "ca163655-8978-4a45-8fe3-c3b5572c6879";
@@ -1229,29 +1228,6 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(STANDARD_NUMBER, updatedUsage.getStandardNumber());
         assertEquals("Wissenschaft & Forschung Italy", updatedUsage.getWorkTitle());
         assertEquals("Wissenschaft & Forschung France", updatedUsage.getSystemTitle());
-    }
-
-    @Test
-    public void testUpdateProcessedAaclUsage() {
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_35));
-        assertEquals(1, CollectionUtils.size(usages));
-        Usage usage = usages.get(0);
-        usage.setStatus(UsageStatusEnum.RH_FOUND);
-        usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
-        usage.setSystemTitle(WORK_TITLE_1);
-        usage.setStandardNumberType(STANDARD_NUMBER_TYPE);
-        usage.setStandardNumber(STANDARD_NUMBER);
-        usage.getAaclUsage().setRightLimitation("ALL");
-        assertNotNull(usageRepository.updateProcessedAaclUsage(usage));
-        List<Usage> updatedUsages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_35));
-        assertEquals(1, CollectionUtils.size(updatedUsages));
-        Usage updatedUsage = updatedUsages.get(0);
-        assertEquals(RH_ACCOUNT_NUMBER, updatedUsage.getRightsholder().getAccountNumber());
-        assertEquals(UsageStatusEnum.RH_FOUND, updatedUsage.getStatus());
-        assertEquals(STANDARD_NUMBER_TYPE, updatedUsage.getStandardNumberType());
-        assertEquals(STANDARD_NUMBER, updatedUsage.getStandardNumber());
-        assertEquals(WORK_TITLE_1, updatedUsage.getSystemTitle());
-        assertEquals("ALL", updatedUsage.getAaclUsage().getRightLimitation());
     }
 
     @Test

@@ -34,6 +34,14 @@ public interface IAaclUsageRepository {
     void deleteById(String usageId);
 
     /**
+     * Updates given AACL {@link Usage} in case of its version is the same as in database.
+     *
+     * @param usage {@link Usage} to update
+     * @return id of updated record, otherwise {@code null}
+     */
+    String updateProcessedUsage(Usage usage);
+
+    /**
      * Finds list of AACL {@link Usage}s by their ids.
      *
      * @param usageIds list of {@link Usage}s identifiers

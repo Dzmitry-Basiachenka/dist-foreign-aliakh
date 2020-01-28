@@ -242,6 +242,27 @@
         )
     </insert>
 
+    <select id="updateProcessedUsage" parameterType="map" resultType="string">
+        with u as (
+            update ${schema}.df_usage_aacl
+            set
+                right_limitation = #{aaclUsage.rightLimitation},
+                <include refid="StoredEntityMapper.update"/>
+            where df_usage_aacl_uid = #{id}
+        )
+        update ${schema}.df_usage
+        set
+            status_ind = #{status},
+            rh_account_number = #{rightsholder.accountNumber},
+            system_title = #{systemTitle},
+            standard_number = #{standardNumber},
+            standard_number_type = #{standardNumberType},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid = #{id}
+            and record_version = #{version}
+        returning df_usage_uid
+    </select>
+
     <delete id="deleteById" parameterType="string">
         with u as (
             delete from ${schema}.df_usage

@@ -269,7 +269,7 @@
         from ${schema}.df_scenario s
         join ${schema}.df_scenario_usage_filter f on s.df_scenario_uid = f.df_scenario_uid
         left join ${schema}.df_usage u on u.df_scenario_uid = s.df_scenario_uid
-        left join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_fund_pool fund on (s.nts_fields->>'pre_service_fee_fund_uid') = fund.df_fund_pool_uid
         left join ${schema}.df_scenario_audit a1 on s.df_scenario_uid = a1.df_scenario_uid
         left join ${schema}.df_scenario_audit a2 on s.df_scenario_uid = a2.df_scenario_uid
