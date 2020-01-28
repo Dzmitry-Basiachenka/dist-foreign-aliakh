@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -13,6 +15,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -43,6 +46,12 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     @Override
     public void insert(Usage usage) {
         insert("IAaclUsageMapper.insert", Objects.requireNonNull(usage));
+    }
+
+    @Override
+    public void update(List<Usage> usages) {
+        checkArgument(CollectionUtils.isNotEmpty(usages));
+        usages.forEach(usage -> update("IAaclUsageMapper.update", usage));
     }
 
     @Override

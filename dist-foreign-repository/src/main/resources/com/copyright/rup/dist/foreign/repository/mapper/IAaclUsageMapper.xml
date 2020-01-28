@@ -24,6 +24,10 @@
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
+        <result property="aaclUsage.discipline" column="discipline"/>
+        <result property="aaclUsage.enrollmentProfile" column="enrollment_profile"/>
+        <result property="aaclUsage.publicationType" column="name"/>
+        <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
     </resultMap>
 
     <resultMap id="aaclUsageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
@@ -45,6 +49,10 @@
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
+        <result property="aaclUsage.discipline" column="discipline"/>
+        <result property="aaclUsage.enrollmentProfile" column="enrollment_profile"/>
+        <result property="aaclUsage.publicationType" column="name"/>
+        <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
     </resultMap>
 
     <sql id="aaclUsageColumns">
@@ -67,6 +75,10 @@
         uaacl.usage_source,
         uaacl.number_of_pages,
         uaacl.right_limitation,
+        uaacl.detail_licensee_class_id,
+        dlc.discipline,
+        dlc.enrollment_profile,
+        pt.name,
         u.created_datetime,
         u.updated_datetime,
         u.created_by_user,
@@ -150,6 +162,18 @@
             <when test="sort.property == 'comment'">
                 u.comment <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'discipline'">
+                dlc.discipline <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'enrollmentProfile'">
+                dlc.enrollment_profile <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'publicationType'">
+                pt.name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'detailLicenseeClassId'">
+                uaacl.detail_licensee_class_id <include refid="IUsageMapper.direction"/>
+            </when>
         </choose>
     </sql>
 
@@ -160,6 +184,8 @@
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+        left join ${schema}.df_publication_type pt on uaacl.publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         <include refid="IAaclUsageMapper.aaclUsageFilter"/>
         order by
@@ -278,6 +304,8 @@
         from ${schema}.df_usage u
         join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_publication_type pt on uaacl.publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         where u.df_usage_uid in
         <foreach collection="list" item="usageId" open="(" separator="," close=")">
@@ -312,4 +340,27 @@
                 and u.status_ind != #{status}
         )
     </select>
+
+    <update id="update" parameterType="Usage">
+        with u as (
+            update ${schema}.df_usage
+            set
+                status_ind = #{status},
+                wr_wrk_inst = #{wrWrkInst},
+                <include refid="StoredEntityMapper.update"/>
+            where df_usage_uid = #{id}
+        )
+        update ${schema}.df_usage_aacl
+        set
+            detail_licensee_class_id = dlc.detail_licensee_class_id,
+            publication_type_uid = pt.df_publication_type_uid,
+            updated_by_user = #{updateUser},
+            updated_datetime = now(),
+            record_version = ua.record_version + 1
+        from ${schema}.df_usage_aacl ua
+        join ${schema}.df_publication_type pt on pt.name = #{aaclUsage.publicationType}
+        join ${schema}.df_detail_licensee_class dlc on dlc.enrollment_profile = #{aaclUsage.enrollmentProfile}
+            and dlc.discipline = #{aaclUsage.discipline}
+        where ua.df_usage_aacl_uid = #{id}
+    </update>
 </mapper>

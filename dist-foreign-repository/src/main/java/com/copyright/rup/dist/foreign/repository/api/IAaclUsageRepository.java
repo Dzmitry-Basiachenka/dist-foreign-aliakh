@@ -28,6 +28,13 @@ public interface IAaclUsageRepository {
     void insert(Usage usage);
 
     /**
+     * Updates classified fields for AACL usages in database.
+     *
+     * @param usages {@link Usage} instance
+     */
+    void update(List<Usage> usages);
+
+    /**
      * Deletes AACL {@link Usage} by given id.
      *
      * @param usageId usage identifier

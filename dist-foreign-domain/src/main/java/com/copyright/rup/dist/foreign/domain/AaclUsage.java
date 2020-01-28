@@ -17,7 +17,7 @@ import java.time.LocalDate;
  */
 public class AaclUsage {
 
-    private String detailLicenseeClass;
+    private String detailLicenseeClassId;
     private String enrollmentProfile;
     private String discipline;
     private String publicationType;
@@ -28,12 +28,12 @@ public class AaclUsage {
     private Integer numberOfPages;
     private LocalDate batchPeriodEndDate;
 
-    public String getDetailLicenseeClass() {
-        return detailLicenseeClass;
+    public String getDetailLicenseeClassId() {
+        return detailLicenseeClassId;
     }
 
-    public void setDetailLicenseeClass(String detailLicenseeClass) {
-        this.detailLicenseeClass = detailLicenseeClass;
+    public void setDetailLicenseeClassId(String detailLicenseeClassId) {
+        this.detailLicenseeClassId = detailLicenseeClassId;
     }
 
     public String getEnrollmentProfile() {
@@ -118,7 +118,7 @@ public class AaclUsage {
         }
         AaclUsage that = (AaclUsage) obj;
         return new EqualsBuilder()
-            .append(detailLicenseeClass, that.detailLicenseeClass)
+            .append(detailLicenseeClassId, that.detailLicenseeClassId)
             .append(enrollmentProfile, that.enrollmentProfile)
             .append(discipline, that.discipline)
             .append(publicationType, that.publicationType)
@@ -134,7 +134,7 @@ public class AaclUsage {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(detailLicenseeClass)
+            .append(detailLicenseeClassId)
             .append(enrollmentProfile)
             .append(discipline)
             .append(publicationType)
@@ -150,7 +150,7 @@ public class AaclUsage {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-            .append("detailLicenseeClass", detailLicenseeClass)
+            .append("detailLicenseeClassId", detailLicenseeClassId)
             .append("enrollmentProfile", enrollmentProfile)
             .append("discipline", discipline)
             .append("publicationType", publicationType)
