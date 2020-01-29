@@ -44,14 +44,6 @@ public interface IUsageService {
     int insertUsages(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
-     * Inserts NTS usages.
-     *
-     * @param usageBatch usage batch
-     * @return list of NTS usages' ids
-     */
-    List<String> insertNtsUsages(UsageBatch usageBatch);
-
-    /**
      * Deletes all {@link Usage}s associated with the given {@link UsageBatch}.
      *
      * @param usageBatch {@link UsageBatch} to delete usages from

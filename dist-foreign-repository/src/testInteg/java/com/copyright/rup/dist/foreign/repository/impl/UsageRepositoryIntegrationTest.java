@@ -11,12 +11,10 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
@@ -89,8 +87,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS2_PRODUCT_FAMILY = "FAS2";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
-    private static final String BUS_MARKET = "Bus";
-    private static final String DOC_DEL_MARKET = "Doc Del";
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String WORK_TITLE_KEY = "workTitle";
     private static final String BATCH_NAME_KEY = "batchName";
@@ -145,7 +141,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String USAGE_ID_34 = "ade68eac-0d79-4d23-861b-499a0c6e91d3";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
-    private static final String NTS_BATCH_ID = "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa";
     private static final String NTS_SCENARIO_ID = "ca163655-8978-4a45-8fe3-c3b5572c6879";
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
@@ -155,8 +150,6 @@ public class UsageRepositoryIntegrationTest {
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.00");
     private static final BigDecimal DEFAULT_ZERO_AMOUNT = new BigDecimal("0.0000000000");
     private static final BigDecimal HUNDRED_AMOUNT = new BigDecimal("100.00");
-    private static final BigDecimal STM_MIN_AMOUNT = new BigDecimal("50.00");
-    private static final BigDecimal NON_STM_MIN_AMOUNT = new BigDecimal("7.00");
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -598,9 +591,8 @@ public class UsageRepositoryIntegrationTest {
     public void testFindUsageIdsForClassificationUpdate() {
         List<String> actualUsageIds = usageRepository.findUsageIdsForClassificationUpdate();
         assertNotNull(actualUsageIds);
-        assertEquals(2, actualUsageIds.size());
+        assertEquals(1, actualUsageIds.size());
         assertEquals("c6cb5b07-45c0-4188-9da3-920046eec4cf", actualUsageIds.get(0));
-        assertEquals("6dc54058-5566-4aa2-8cd4-d1a09805ae20", actualUsageIds.get(1));
     }
 
     @Test
@@ -926,16 +918,13 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamily(FAS_PRODUCT_FAMILY);
-        assertEquals(32, usageRepository.findCountForAudit(filter));
+        assertEquals(26, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages =
             usageRepository.findForAudit(filter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));
-        verifyUsageDtos(usages, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_27,
-            "33113b79-791a-4aa9-b192-12b292c32823", USAGE_ID_1, USAGE_ID_23, USAGE_ID_21, USAGE_ID_12,
-            "5b8c2754-2f63-425a-a95f-dbd744e815fc", USAGE_ID_3, USAGE_ID_6, USAGE_ID_13,
-            USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19, USAGE_ID_5, "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1",
-            USAGE_ID_8, USAGE_ID_17, "b6fc6063-a0ea-4e4d-832d-b1cbc896963d", "bc0fe9bc-9b24-4324-b624-eed0d9773e19",
-            USAGE_ID_22, USAGE_ID_28, POST_DISTRIBUTION_USAGE_ID, USAGE_ID_7, USAGE_ID_29, USAGE_ID_4, USAGE_ID_20,
-            USAGE_ID_30, "f06de87a-511e-46ae-88a8-fc9778efc194");
+        verifyUsageDtos(usages, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_27, USAGE_ID_1, USAGE_ID_23,
+            USAGE_ID_21, USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2,
+            USAGE_ID_19, USAGE_ID_5, USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, USAGE_ID_28, POST_DISTRIBUTION_USAGE_ID,
+            USAGE_ID_7, USAGE_ID_29, USAGE_ID_4, USAGE_ID_20, USAGE_ID_30);
     }
 
     @Test
@@ -1231,38 +1220,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testInsertNtsUsages() {
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(NTS_BATCH_ID);
-        usageBatch.setFundPool(buildNtsFundPool(HUNDRED_AMOUNT));
-        List<String> insertedUsageIds = usageRepository.insertNtsUsages(usageBatch, USER_NAME);
-        assertNotNull(insertedUsageIds);
-        assertEquals(3, insertedUsageIds.size());
-        List<Usage> insertedUsages = usageRepository.findByIds(insertedUsageIds);
-        insertedUsages.sort(Comparator.comparing(Usage::getMarketPeriodFrom));
-        verifyInsertedFundPoolUsage(243904752L, WORK_TITLE_2, DOC_DEL_MARKET, 2013, new BigDecimal("1176.92"),
-            insertedUsages.get(0));
-        verifyInsertedFundPoolUsage(105062654L, "Our fathers lies", BUS_MARKET, 2014, new BigDecimal("500.00"),
-            insertedUsages.get(1));
-        verifyInsertedFundPoolUsage(243904752L, WORK_TITLE_2, BUS_MARKET, 2016, new BigDecimal("500.00"),
-            insertedUsages.get(2));
-    }
-
-    @Test
-    public void testInsertNtsUsagesZeroFundPoolAmount() {
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(NTS_BATCH_ID);
-        usageBatch.setFundPool(buildNtsFundPool(BigDecimal.ZERO));
-        List<String> insertedUsageIds = usageRepository.insertNtsUsages(usageBatch, USER_NAME);
-        assertNotNull(insertedUsageIds);
-        assertEquals(1, insertedUsageIds.size());
-        List<Usage> insertedUsages = usageRepository.findByIds(insertedUsageIds);
-        insertedUsages.sort(Comparator.comparing(Usage::getMarketPeriodFrom));
-        verifyInsertedFundPoolUsage(105062654L, "Our fathers lies", BUS_MARKET, 2014, new BigDecimal("500.00"),
-            insertedUsages.get(0));
-    }
-
-    @Test
     public void testAddWithdrawnUsagesToPreServiceFeeFund() {
         List<String> usageIds = Collections.singletonList("4dd8cdf8-ca10-422e-bdd5-3220105e6379");
         List<Usage> usages = usageRepository.findByIds(usageIds);
@@ -1365,18 +1322,6 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
     }
 
-    private FundPool buildNtsFundPool(BigDecimal nonStmAmount) {
-        FundPool fundPool = new FundPool();
-        fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));
-        fundPool.setFundPoolPeriodFrom(2015);
-        fundPool.setFundPoolPeriodTo(2016);
-        fundPool.setStmAmount(HUNDRED_AMOUNT);
-        fundPool.setStmMinimumAmount(STM_MIN_AMOUNT);
-        fundPool.setNonStmAmount(nonStmAmount);
-        fundPool.setNonStmMinimumAmount(NON_STM_MIN_AMOUNT);
-        return fundPool;
-    }
-
     private ResearchedUsage buildResearchedUsage(String id, String title, Long wrWrkInst, String standardNumber,
                                                  String standardNumberType) {
         ResearchedUsage researchedUsage = new ResearchedUsage();
@@ -1442,25 +1387,6 @@ public class UsageRepositoryIntegrationTest {
         verifyUsage(usage, status, scenarioId, username, null);
         assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
         assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
-    }
-
-    private void verifyInsertedFundPoolUsage(Long wrWrkInst, String workTitle, String market, Integer marketPeriodFrom,
-                                             BigDecimal reportedValue, Usage actualUsage) {
-        assertEquals(actualUsage.getBatchId(), NTS_BATCH_ID);
-        assertEquals(wrWrkInst, actualUsage.getWrWrkInst(), 0);
-        assertEquals(workTitle, actualUsage.getWorkTitle());
-        assertEquals(workTitle, actualUsage.getSystemTitle());
-        assertEquals(UsageStatusEnum.WORK_FOUND, actualUsage.getStatus());
-        assertEquals(NTS_PRODUCT_FAMILY, actualUsage.getProductFamily());
-        assertEquals("1008902112317555XX", actualUsage.getStandardNumber());
-        assertEquals(STANDARD_NUMBER_TYPE, actualUsage.getStandardNumberType());
-        assertEquals(market, actualUsage.getMarket());
-        assertEquals(marketPeriodFrom, actualUsage.getMarketPeriodFrom());
-        assertEquals(Integer.valueOf(2017), actualUsage.getMarketPeriodTo());
-        assertEquals(DEFAULT_ZERO_AMOUNT, actualUsage.getGrossAmount());
-        assertEquals(reportedValue, actualUsage.getReportedValue());
-        assertEquals("for nts batch", actualUsage.getComment());
-        assertEquals(USER_NAME, actualUsage.getCreateUser());
     }
 
     private void verifyUsageExcludedFromScenario(Usage usage, String productFamily, UsageStatusEnum status) {

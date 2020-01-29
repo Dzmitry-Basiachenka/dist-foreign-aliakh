@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableMap;
@@ -69,9 +70,11 @@ public class UsageBatchServiceTest {
     private static final Long RRO_ACCOUNT_NUMBER = 123456789L;
     private static final String RRO_NAME = "RRO Name";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
 
     private IUsageBatchRepository usageBatchRepository;
     private IUsageService usageService;
+    private INtsUsageService ntsUsageService;
     private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
     private IChainExecutor<Usage> chainExecutor;
@@ -83,17 +86,19 @@ public class UsageBatchServiceTest {
     public void setUp() {
         usageBatchRepository = createMock(IUsageBatchRepository.class);
         usageService = createMock(IUsageService.class);
+        ntsUsageService = createMock(INtsUsageService.class);
         rightsholderService = createMock(IRightsholderService.class);
         chainExecutor = createMock(IChainExecutor.class);
         executorService = createMock(ExecutorService.class);
         piIntegrationService = createMock(IPiIntegrationService.class);
         usageBatchService = new UsageBatchService();
-        Whitebox.setInternalState(usageBatchService, "piIntegrationService", piIntegrationService);
-        Whitebox.setInternalState(usageBatchService, "usageBatchRepository", usageBatchRepository);
-        Whitebox.setInternalState(usageBatchService, "usageService", usageService);
-        Whitebox.setInternalState(usageBatchService, "rightsholderService", rightsholderService);
-        Whitebox.setInternalState(usageBatchService, "chainExecutor", chainExecutor);
-        Whitebox.setInternalState(usageBatchService, "executorService", executorService);
+        Whitebox.setInternalState(usageBatchService, piIntegrationService);
+        Whitebox.setInternalState(usageBatchService, usageBatchRepository);
+        Whitebox.setInternalState(usageBatchService, usageService);
+        Whitebox.setInternalState(usageBatchService, ntsUsageService);
+        Whitebox.setInternalState(usageBatchService, rightsholderService);
+        Whitebox.setInternalState(usageBatchService, chainExecutor);
+        Whitebox.setInternalState(usageBatchService, executorService);
         Whitebox.setInternalState(usageBatchService, "usagesBatchSize", 100);
     }
 
@@ -189,6 +194,28 @@ public class UsageBatchServiceTest {
         assertNull(usage2.getStandardNumberType());
         assertNull(usage2.getStandardNumberType());
         verifyAll();
+    }
+
+    @Test
+    public void testInsertNtsBatch() {
+        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setRro(buildRro());
+        List<String> usageIds = Collections.singletonList("c1965b73-7800-455c-beb3-98a430512f20");
+        usageBatchRepository.insert(capture(captureUsageBatch));
+        expectLastCall().once();
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(RRO_ACCOUNT_NUMBER));
+        expectLastCall().once();
+        expect(ntsUsageService.insertUsages(usageBatch)).andReturn(usageIds).once();
+        replay(usageBatchRepository, rightsholderService, ntsUsageService);
+        assertEquals(usageIds, usageBatchService.insertNtsBatch(usageBatch, USER_NAME));
+        UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
+        assertNotNull(insertedUsageBatch);
+        assertNotNull(insertedUsageBatch.getId());
+        assertEquals(NTS_PRODUCT_FAMILY, insertedUsageBatch.getProductFamily());
+        assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
+        assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
+        verify(usageBatchRepository, rightsholderService, ntsUsageService);
     }
 
     @Test

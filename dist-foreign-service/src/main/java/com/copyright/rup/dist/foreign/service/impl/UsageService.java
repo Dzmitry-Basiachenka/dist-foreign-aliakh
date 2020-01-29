@@ -158,17 +158,6 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
-    public List<String> insertNtsUsages(UsageBatch usageBatch) {
-        String userName = RupContextUtils.getUserName();
-        LOGGER.info("Insert NTS usages. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
-        List<String> usageIds = usageRepository.insertNtsUsages(usageBatch, userName);
-        LOGGER.info("Insert NTS usages. Finished. UsageBatchName={}, UserName={}, InsertedUsageCount={}",
-            usageBatch.getName(), userName, LogUtils.size(usageIds));
-        return usageIds;
-    }
-
-    @Override
-    @Transactional
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         usageAuditService.deleteActionsByBatchId(usageBatch.getId());
         usageRepository.deleteByBatchId(usageBatch.getId());
