@@ -2,14 +2,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="
-            http://www.springframework.org/schema/beans
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
             http://www.springframework.org/schema/context
-            http://www.springframework.org/schema/context/spring-context-4.3.xsd
-            http://www.springframework.org/schema/tx
-            http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+            http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
     <import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-discrepancy-service-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-context.xml"/>
@@ -18,13 +14,6 @@
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-camel-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-chain-processors-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-performance-aspect-context.xml"/>
-
-    <!--Transaction manager configuration-->
-    <tx:annotation-driven transaction-manager="txManager"/>
-
-    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dfDataSource"/>
-    </bean>
 
     <bean id="df.service.rmsCacheService" class="com.copyright.rup.dist.foreign.integration.rms.impl.RmsRightsCacheService">
         <constructor-arg ref="dist.common.integration.rmsRightsService"/>
