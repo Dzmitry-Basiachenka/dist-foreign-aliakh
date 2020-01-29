@@ -46,7 +46,7 @@ public class ClassifiedPubTypeValidatorTest {
 
     @Test
     public void testIsValidDisqualified() {
-        AaclClassifiedUsage usage = buildClassifiedAaclUsage("disqualified");
+        AaclClassifiedUsage usage = buildClassifiedAaclUsage("DisquaLified");
         replay(publicationTypeService);
         assertTrue(validator.isValid(usage));
         verify(publicationTypeService);

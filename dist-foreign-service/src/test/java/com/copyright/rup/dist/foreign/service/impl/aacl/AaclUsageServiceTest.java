@@ -13,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -34,6 +35,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -83,6 +85,26 @@ public class AaclUsageServiceTest {
         expectLastCall().once();
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
         assertEquals(1, aaclUsageService.insertUsages(usageBatch, Collections.singleton(usage)));
+        verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testUpdateClassifiedUsages() {
+        mockStatic(RupContextUtils.class);
+        AaclClassifiedUsage usage1 = buildUsage();
+        AaclClassifiedUsage usage2 = buildUsage();
+        usage2.setPublicationType("disqualified");
+        usage2.setDetailId("d7d15c9f-39f5-4d51-b72b-48a80f7f5388");
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        aaclUsageRepository.deleteById("d7d15c9f-39f5-4d51-b72b-48a80f7f5388");
+        expectLastCall().once();
+        aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(usage1), USER_NAME);
+        expectLastCall().once();
+        usageAuditService.logAction(usage1.getDetailId(), UsageActionTypeEnum.ELIGIBLE,
+            "Usages has become eligible after classification");
+        expectLastCall().once();
+        replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
+        assertEquals(1, aaclUsageService.updateClassifiedUsages(Arrays.asList(usage1, usage2)));
         verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
     }
 
@@ -168,5 +190,15 @@ public class AaclUsageServiceTest {
         replay(aaclUsageRepository, usageAuditService);
         aaclUsageService.deleteById(usageId);
         verify(aaclUsageRepository, usageAuditService);
+    }
+
+    private AaclClassifiedUsage buildUsage() {
+        AaclClassifiedUsage usage = new AaclClassifiedUsage();
+        usage.setDetailId("d7d15c9f-39f5-4d51-b72b-48a80f7f5388");
+        usage.setPublicationType("Book");
+        usage.setDiscipline("Life Sciences");
+        usage.setEnrollmentProfile("EXGP");
+        usage.setWrWrkInst(122830308L);
+        return usage;
     }
 }

@@ -4,6 +4,8 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -24,6 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IAaclUsageService}.
@@ -38,6 +41,7 @@ import java.util.Objects;
 public class AaclUsageService implements IAaclUsageService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
+    private static final String DISQUALIFIED_USAGE = "disqualified";
 
     @Autowired
     private IUsageAuditService usageAuditService;
@@ -64,6 +68,28 @@ public class AaclUsageService implements IAaclUsageService {
         LOGGER.info("Insert AACL usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}",
             usageBatch.getName(), size, userName);
         return size;
+    }
+
+    @Override
+    @Transactional
+    public int updateClassifiedUsages(Collection<AaclClassifiedUsage> usages) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Update Classified AACL usages. Started. UsagesCount={}, UserName={}", LogUtils.size(usages),
+            userName);
+        long disqualifiedCount = usages.stream()
+            .filter(this::isUsageDisqualified)
+            .peek(usage -> aaclUsageRepository.deleteById(usage.getDetailId()))
+            .count();
+        List<AaclClassifiedUsage> updateUsages = usages.stream()
+            .filter(usage -> !isUsageDisqualified(usage))
+            .collect(Collectors.toList());
+        int updatedCount = updateUsages.size();
+        aaclUsageRepository.updateClassifiedUsages(updateUsages, userName);
+        updateUsages.forEach(usage -> usageAuditService.logAction(usage.getDetailId(), UsageActionTypeEnum.ELIGIBLE,
+            "Usages has become eligible after classification"));
+        LOGGER.info("Update Classified AACL usages. Finished. UsagesCount={}, UserName={}, DisqualifiedCount={}",
+            updatedCount, userName, disqualifiedCount);
+        return updatedCount;
     }
 
     @Override
@@ -103,5 +129,11 @@ public class AaclUsageService implements IAaclUsageService {
     @Override
     public boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status) {
         return aaclUsageRepository.isValidFilteredUsageStatus(filter, status);
+    }
+
+    private boolean isUsageDisqualified(AaclClassifiedUsage usage) {
+        return DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getDiscipline())
+            || DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getEnrollmentProfile())
+            || DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getPublicationType());
     }
 }

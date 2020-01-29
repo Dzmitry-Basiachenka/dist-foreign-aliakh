@@ -341,14 +341,14 @@
         )
     </select>
 
-    <update id="update" parameterType="Usage">
+    <update id="updateClassifiedUsages" parameterType="map">
         with u as (
             update ${schema}.df_usage
             set
                 status_ind = #{status},
-                wr_wrk_inst = #{wrWrkInst},
+                wr_wrk_inst = #{aaclUsage.wrWrkInst},
                 <include refid="StoredEntityMapper.update"/>
-            where df_usage_uid = #{id}
+            where df_usage_uid = #{aaclUsage.detailId}
         )
         update ${schema}.df_usage_aacl
         set
@@ -358,9 +358,9 @@
             updated_datetime = now(),
             record_version = ua.record_version + 1
         from ${schema}.df_usage_aacl ua
-        join ${schema}.df_publication_type pt on pt.name = #{aaclUsage.publicationType}
-        join ${schema}.df_detail_licensee_class dlc on dlc.enrollment_profile = #{aaclUsage.enrollmentProfile}
-            and dlc.discipline = #{aaclUsage.discipline}
-        where ua.df_usage_aacl_uid = #{id}
+        join ${schema}.df_publication_type pt on pt.name ilike #{aaclUsage.publicationType}
+        join ${schema}.df_detail_licensee_class dlc on dlc.enrollment_profile ilike #{aaclUsage.enrollmentProfile}
+            and dlc.discipline ilike #{aaclUsage.discipline}
+        where ua.df_usage_aacl_uid = #{aaclUsage.detailId}
     </update>
 </mapper>
