@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -73,7 +72,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public void insert(Usage usage) {
         insert("IUsageMapper.insert", Objects.requireNonNull(usage));
     }
-
 
     @Override
     public List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -464,28 +462,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         params.put(FILTER_KEY, Objects.requireNonNull(filter));
         params.put(STATUS_KEY, Objects.requireNonNull(status));
         return selectOne("IUsageMapper.isValidFilteredUsageStatus", params);
-    }
-
-    @Override
-    public List<String> insertNtsUsages(UsageBatch usageBatch, String userName) {
-        Objects.requireNonNull(usageBatch);
-        Objects.requireNonNull(usageBatch.getFundPool());
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(13);
-        params.put(BATCH_ID_KEY, Objects.requireNonNull(usageBatch.getId()));
-        params.put("marketPeriodFrom", Objects.requireNonNull(usageBatch.getFundPool().getFundPoolPeriodFrom()));
-        params.put("marketPeriodTo", Objects.requireNonNull(usageBatch.getFundPool().getFundPoolPeriodTo()));
-        params.put("markets", Objects.requireNonNull(usageBatch.getFundPool().getMarkets()));
-        params.put(STATUS_KEY, UsageStatusEnum.ARCHIVED);
-        params.put("createUser", Objects.requireNonNull(userName));
-        params.put("updateUser", Objects.requireNonNull(userName));
-        params.put("excludeClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
-        params.put("fundPoolPeriodDividend", Objects.requireNonNull(usageBatch.getFundPool()).getFundPoolPeriodTo() -
-            usageBatch.getFundPool().getFundPoolPeriodFrom() + 1);
-        params.put("stmMinAmount", usageBatch.getFundPool().getStmMinimumAmount());
-        params.put("stmAmount", usageBatch.getFundPool().getStmAmount());
-        params.put("nonStmMinAmount", usageBatch.getFundPool().getNonStmMinimumAmount());
-        params.put("nonStmAmount", usageBatch.getFundPool().getNonStmAmount());
-        return selectList("IUsageMapper.insertNtsUsages", params);
     }
 
     @Override

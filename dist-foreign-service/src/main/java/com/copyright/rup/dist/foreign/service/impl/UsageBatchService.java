@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Iterables;
@@ -68,6 +69,8 @@ public class UsageBatchService implements IUsageBatchService {
     private IUsageBatchRepository usageBatchRepository;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private INtsUsageService ntsUsageService;
     @Autowired
     private IAaclUsageService aaclUsageService;
     @Autowired
@@ -142,7 +145,7 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatch.setUpdateUser(userName);
         usageBatchRepository.insert(usageBatch);
         rightsholderService.updateRighstholdersAsync(Collections.singleton(usageBatch.getRro().getAccountNumber()));
-        List<String> ntsUsageIds = usageService.insertNtsUsages(usageBatch);
+        List<String> ntsUsageIds = ntsUsageService.insertUsages(usageBatch);
         LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
             usageBatch.getName(), userName, LogUtils.size(ntsUsageIds));
         return ntsUsageIds;

@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -434,16 +433,6 @@ public interface IUsageRepository {
      * with status different from specified , {@code false} - otherwise
      */
     boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
-
-    /**
-     * Inserts usages from archived FAS usages based on NTS Batch criteria (Market Period From/To, Markets).
-     * Belletristic usages and usages that do not meet minimum Cutoff Amounts will not be inserted.
-     *
-     * @param usageBatch instance of {@link UsageBatch}
-     * @param userName   user name
-     * @return list of inserted usage uids
-     */
-    List<String> insertNtsUsages(UsageBatch usageBatch, String userName);
 
     /**
      * Updates usages with status NTS_WITHDRAWN from given batches to status TO_BE_DISTRIBUTED
