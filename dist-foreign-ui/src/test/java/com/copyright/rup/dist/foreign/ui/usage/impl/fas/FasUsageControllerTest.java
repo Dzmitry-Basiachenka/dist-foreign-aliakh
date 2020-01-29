@@ -2,14 +2,15 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -33,6 +34,8 @@ import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
+import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
@@ -92,6 +95,7 @@ public class FasUsageControllerTest {
     private IResearchService researchService;
     private IReportService reportService;
     private IStreamSourceHandler streamSourceHandler;
+    private CsvProcessorFactory csvProcessorFactory;
     private UsageFilter usageFilter;
 
     @Before
@@ -107,6 +111,7 @@ public class FasUsageControllerTest {
         filterWidgetMock = createMock(IFasNtsUsageFilterWidget.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
+        csvProcessorFactory = createMock(CsvProcessorFactory.class);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, fasUsageService);
@@ -116,6 +121,7 @@ public class FasUsageControllerTest {
         Whitebox.setInternalState(controller, researchService);
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
+        Whitebox.setInternalState(controller, csvProcessorFactory);
         usageFilter = new UsageFilter();
     }
 
@@ -181,6 +187,15 @@ public class FasUsageControllerTest {
         assertEquals("send_for_research_01_02_2019_03_04.csv",
             controller.getSendForResearchUsagesStreamSource().getSource().getKey().get());
         verify(OffsetDateTime.class);
+    }
+
+    @Test
+    public void testGetResearchedUsagesCsvProcessor() {
+        ResearchedUsagesCsvProcessor processorMock = createMock(ResearchedUsagesCsvProcessor.class);
+        expect(csvProcessorFactory.getResearchedUsagesCsvProcessor()).andReturn(processorMock).once();
+        replay(csvProcessorFactory);
+        assertSame(processorMock, controller.getResearchedUsagesCsvProcessor());
+        replay(csvProcessorFactory);
     }
 
     @Test

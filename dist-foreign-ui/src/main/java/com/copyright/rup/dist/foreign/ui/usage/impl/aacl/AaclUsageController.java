@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -13,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
@@ -85,6 +87,11 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
+    public ClassifiedUsageCsvProcessor getClassifiedUsageCsvProcessor() {
+        return csvProcessorFactory.getClassifiedUsageCsvProcessor();
+    }
+
+    @Override
     public int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
         int result = getUsageBatchService().insertAaclBatch(usageBatch, usages);
         getUsageBatchService().sendForMatching(usages);
@@ -103,6 +110,12 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
         return new ByteArrayStreamSource("send_for_classification_",
             pipedStream -> researchService.sendForClassification(
                 getUsageFilterController().getWidget().getAppliedFilter(), pipedStream));
+    }
+
+    @Override
+    public int loadClassifiedUsages(List<AaclClassifiedUsage> classifiedUsages) {
+        // TODO {srudak} implement when service logic is ready
+        return 0;
     }
 
     @Override
