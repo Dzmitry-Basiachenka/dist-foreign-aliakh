@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -83,6 +85,26 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testUpdate() {
+        List<Usage> usages =
+            aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84"));
+        assertEquals(1, usages.size());
+        Usage expectedUsage = usages.get(0);
+        assertEquals(UsageStatusEnum.RH_FOUND, expectedUsage.getStatus());
+        assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
+        assertNull(expectedUsage.getAaclUsage().getDiscipline());
+        assertNull(expectedUsage.getAaclUsage().getEnrollmentProfile());
+        expectedUsage.setStatus(UsageStatusEnum.ELIGIBLE);
+        expectedUsage.getAaclUsage().setPublicationType("Book");
+        expectedUsage.getAaclUsage().setDetailLicenseeClassId("108");
+        expectedUsage.getAaclUsage().setEnrollmentProfile("EXGP");
+        expectedUsage.getAaclUsage().setDiscipline("Life Sciences");
+        aaclUsageRepository.update(Collections.singletonList(expectedUsage));
+        verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
+            aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")));
+    }
+
+    @Test
     public void testDeleteById() {
         Usage expectedUsage =
             loadExpectedUsages(Collections.singletonList("json/aacl/aacl_usage_5b41d618.json")).get(0);
@@ -139,9 +161,11 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindDtosByStatusFilter() {
+    public void testFindDtosByStatusAndBatchesIdFilter() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
+        usageFilter.setUsageBatchesIds(
+            Sets.newHashSet("adcc460c-c4ae-4750-99e8-b9fe91787ce1", "6e6f656a-e080-4426-b8ea-985b69f8814d"));
         verifyUsageDtos(
             Arrays.asList("json/aacl/aacl_usage_dto_44600a96.json", "json/aacl/aacl_usage_dto_67750f86.json",
                 "json/aacl/aacl_usage_dto_0b5ac9fc.json", "json/aacl/aacl_usage_dto_6c91f04e.json"),
@@ -287,6 +311,7 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
         assertEquals(expectedAaclUsage.getDiscipline(), actualAaclUsage.getDiscipline());
         assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
     }
 
     private List<Usage> loadExpectedUsages(List<String> fileNames) {
