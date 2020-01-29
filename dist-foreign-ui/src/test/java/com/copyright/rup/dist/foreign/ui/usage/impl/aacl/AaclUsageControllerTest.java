@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import static org.easymock.EasyMock.capture;
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -9,7 +8,9 @@ import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -24,6 +25,8 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterController;
@@ -66,8 +69,9 @@ public class AaclUsageControllerTest {
     private IAaclUsageFilterWidget filterWidgetMock;
     private IUsageBatchService usageBatchService;
     private IResearchService researchService;
-    private UsageFilter usageFilter;
     private IAaclUsageService aaclUsageService;
+    private CsvProcessorFactory csvProcessorFactory;
+    private UsageFilter usageFilter;
 
     @Before
     public void setUp() {
@@ -78,12 +82,14 @@ public class AaclUsageControllerTest {
         filterWidgetMock = createMock(IAaclUsageFilterWidget.class);
         researchService = createMock(IResearchService.class);
         aaclUsageService = createMock(IAaclUsageService.class);
+        csvProcessorFactory = createMock(CsvProcessorFactory.class);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, researchService);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, aaclUsageService);
+        Whitebox.setInternalState(controller, csvProcessorFactory);
         usageFilter = new UsageFilter();
     }
 
@@ -180,5 +186,19 @@ public class AaclUsageControllerTest {
         assertEquals("send_for_classification_01_21_2020_02_10.csv", streamSource.getSource().getKey().get());
         assertEquals("report content", IOUtils.toString(streamSource.getSource().getValue().get()));
         verify(OffsetDateTime.class, usageBatchService, filterController, filterWidgetMock, researchService);
+    }
+
+    @Test
+    public void testGetClassifiedUsageCsvProcessor() {
+        ClassifiedUsageCsvProcessor processorMock = createMock(ClassifiedUsageCsvProcessor.class);
+        expect(csvProcessorFactory.getClassifiedUsageCsvProcessor()).andReturn(processorMock).once();
+        replay(csvProcessorFactory);
+        assertSame(processorMock, controller.getClassifiedUsageCsvProcessor());
+        replay(csvProcessorFactory);
+    }
+
+    @Test
+    public void testLoadClassifiedUsages() {
+        // TODO {srudak} implement test once service logic is ready
     }
 }
