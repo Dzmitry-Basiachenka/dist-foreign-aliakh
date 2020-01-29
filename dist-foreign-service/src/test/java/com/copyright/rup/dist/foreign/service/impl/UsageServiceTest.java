@@ -134,14 +134,14 @@ public class UsageServiceTest {
         chainExecutor = createMock(IChainExecutor.class);
         piIntegrationService = createMock(IPiIntegrationService.class);
         usageService = new UsageService();
-        Whitebox.setInternalState(usageService, "piIntegrationService", piIntegrationService);
-        Whitebox.setInternalState(usageService, "chainExecutor", chainExecutor);
-        Whitebox.setInternalState(usageService, "usageRepository", usageRepository);
-        Whitebox.setInternalState(usageService, "usageAuditService", usageAuditService);
-        Whitebox.setInternalState(usageService, "prmIntegrationService", prmIntegrationService);
-        Whitebox.setInternalState(usageService, "usageArchiveRepository", usageArchiveRepository);
-        Whitebox.setInternalState(usageService, "scenarioAuditService", scenarioAuditService);
-        Whitebox.setInternalState(usageService, "rightsholderService", rightsholderService);
+        Whitebox.setInternalState(usageService, piIntegrationService);
+        Whitebox.setInternalState(usageService, chainExecutor);
+        Whitebox.setInternalState(usageService, usageRepository);
+        Whitebox.setInternalState(usageService, usageAuditService);
+        Whitebox.setInternalState(usageService, prmIntegrationService);
+        Whitebox.setInternalState(usageService, usageArchiveRepository);
+        Whitebox.setInternalState(usageService, scenarioAuditService);
+        Whitebox.setInternalState(usageService, rightsholderService);
         Whitebox.setInternalState(usageService, "claAccountNumber", 2000017000L);
     }
 
@@ -216,18 +216,6 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testDeleteFromPreServiceFeeFund() {
-        mockStatic(RupContextUtils.class);
-        String fundPoolId = RupPersistUtils.generateUuid();
-        usageRepository.deleteFromPreServiceFeeFund(fundPoolId, USER_NAME);
-        expectLastCall().once();
-        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        replay(usageRepository, RupContextUtils.class);
-        usageService.deleteFromPreServiceFeeFund(fundPoolId);
-        verify(usageRepository, RupContextUtils.class);
-    }
-
-    @Test
     public void testDeleteById() {
         String usageId = RupPersistUtils.generateUuid();
         usageAuditService.deleteActionsByUsageId(usageId);
@@ -237,16 +225,6 @@ public class UsageServiceTest {
         replay(usageRepository, usageAuditService);
         usageService.deleteById(usageId);
         verify(usageRepository, usageAuditService);
-    }
-
-    @Test
-    public void testDeleteBelletristicByScenarioId() {
-        String scenarioId = RupPersistUtils.generateUuid();
-        usageRepository.deleteBelletristicByScenarioId(scenarioId);
-        expectLastCall().once();
-        replay(usageRepository);
-        usageService.deleteBelletristicByScenarioId(scenarioId);
-        verify(usageRepository);
     }
 
     @Test
@@ -429,17 +407,6 @@ public class UsageServiceTest {
         expectLastCall().once();
         replay(usageRepository, RupContextUtils.class);
         usageService.deleteFromScenario(SCENARIO_ID);
-        verify(usageRepository, RupContextUtils.class);
-    }
-
-    @Test
-    public void testDeleteUsagesFromNtsScenario() {
-        mockStatic(RupContextUtils.class);
-        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        usageRepository.deleteFromNtsScenario(SCENARIO_ID, USER_NAME);
-        expectLastCall().once();
-        replay(usageRepository, RupContextUtils.class);
-        usageService.deleteFromNtsScenario(SCENARIO_ID);
         verify(usageRepository, RupContextUtils.class);
     }
 

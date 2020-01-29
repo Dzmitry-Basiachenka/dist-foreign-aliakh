@@ -164,11 +164,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void deleteFromPreServiceFeeFund(String fundPoolId) {
-        usageRepository.deleteFromPreServiceFeeFund(fundPoolId, RupContextUtils.getUserName());
-    }
-
-    @Override
     @Transactional
     public void deleteArchivedByBatchId(String batchId) {
         usageAuditService.deleteActionsForArchivedByBatchId(batchId);
@@ -180,11 +175,6 @@ public class UsageService implements IUsageService {
     public void deleteById(String usageId) {
         usageAuditService.deleteActionsByUsageId(usageId);
         usageRepository.deleteById(usageId);
-    }
-
-    @Override
-    public void deleteBelletristicByScenarioId(String scenarioId) {
-        usageRepository.deleteBelletristicByScenarioId(scenarioId);
     }
 
     @Override
@@ -321,11 +311,6 @@ public class UsageService implements IUsageService {
     @Override
     public void deleteFromScenario(String scenarioId) {
         usageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
-    }
-
-    @Override
-    public void deleteFromNtsScenario(String scenarioId) {
-        usageRepository.deleteFromNtsScenario(scenarioId, RupContextUtils.getUserName());
     }
 
     @Override

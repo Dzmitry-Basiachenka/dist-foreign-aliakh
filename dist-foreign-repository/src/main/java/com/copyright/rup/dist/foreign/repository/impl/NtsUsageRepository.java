@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.springframework.stereotype.Repository;
 
@@ -46,5 +47,33 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         params.put("createUser", Objects.requireNonNull(userName));
         params.put("updateUser", Objects.requireNonNull(userName));
         return selectList("INtsUsageMapper.insertUsages", params);
+    }
+
+    @Override
+    public void deleteFromPreServiceFeeFund(String fundPoolId, String updateUser) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("fundPoolId", Objects.requireNonNull(fundPoolId));
+        params.put("status", UsageStatusEnum.NTS_WITHDRAWN);
+        params.put("updateUser", Objects.requireNonNull(updateUser));
+        update("INtsUsageMapper.deleteFromPreServiceFeeFund", params);
+    }
+
+    @Override
+    public void deleteBelletristicByScenarioId(String usageId) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("scenarioId", Objects.requireNonNull(usageId));
+        params.put("belletristicClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
+        delete("INtsUsageMapper.deleteBelletristicByScenarioId", params);
+    }
+
+    @Override
+    public void deleteFromScenario(String scenarioId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put("eligibleStatus", UsageStatusEnum.ELIGIBLE);
+        params.put("unclassifiedStatus", UsageStatusEnum.UNCLASSIFIED);
+        params.put("statusesToUpdate", Sets.newHashSet(UsageStatusEnum.NTS_EXCLUDED, UsageStatusEnum.LOCKED));
+        params.put("updateUser", Objects.requireNonNull(userName));
+        update("INtsUsageMapper.deleteFromScenario", params);
     }
 }

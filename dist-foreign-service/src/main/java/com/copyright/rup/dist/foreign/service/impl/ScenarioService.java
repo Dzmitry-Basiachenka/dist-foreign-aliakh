@@ -33,6 +33,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
@@ -77,6 +78,8 @@ public class ScenarioService implements IScenarioService {
     private IScenarioRepository scenarioRepository;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private INtsUsageService ntsUsageService;
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
@@ -153,8 +156,8 @@ public class ScenarioService implements IScenarioService {
         LOGGER.info("Delete scenario. Started. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
         String scenarioId = scenario.getId();
         if (FdaConstants.NTS_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
-            usageService.deleteBelletristicByScenarioId(scenarioId);
-            usageService.deleteFromNtsScenario(scenarioId);
+            ntsUsageService.deleteBelletristicByScenarioId(scenarioId);
+            ntsUsageService.deleteFromScenario(scenarioId);
         } else {
             usageService.deleteFromScenario(scenarioId);
             rightsholderDiscrepancyService.deleteByScenarioId(scenarioId);

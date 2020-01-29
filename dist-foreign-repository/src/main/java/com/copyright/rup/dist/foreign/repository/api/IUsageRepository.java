@@ -138,15 +138,6 @@ public interface IUsageRepository {
     void deleteById(String usageId);
 
     /**
-     * Deletes {@link Usage}s from Pre-Service fee fund.
-     * Updates {@link Usage}s status to {@link UsageStatusEnum#NTS_WITHDRAWN}.
-     *
-     * @param fundPoolId identifier of fund pool
-     * @param userName   user name
-     */
-    void deleteFromPreServiceFeeFund(String fundPoolId, String userName);
-
-    /**
      * Calculates total gross amount by standard number and batch identifier for PI matching.
      *
      * @param standardNumber standard number for calculation
@@ -222,13 +213,6 @@ public interface IUsageRepository {
     void deleteFromScenario(String scenarioId, String updateUser);
 
     /**
-     * Deletes {@link Usage}s with Wr Wrk Insts that were classified as BELLETRISTIC by scenario identifier.
-     *
-     * @param scenarioId scenario identifier
-     */
-    void deleteBelletristicByScenarioId(String scenarioId);
-
-    /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
      * sets scenario id, payee account number, service fee to {@code null}, sets rh and payee participating flags to
      * {@code false}, service fee amount and net amount to 0 for usages with payees from given list of account numbers.
@@ -262,16 +246,6 @@ public interface IUsageRepository {
      * @param userName  user name
      */
     void deleteFromScenario(List<String> usagesIds, String userName);
-
-    /**
-     * Deletes {@link Usage}s from NTS scenario. Updates {@link Usage}s associated with scenario in
-     * {@link UsageStatusEnum#NTS_EXCLUDED} and {@link UsageStatusEnum#LOCKED} statuses.
-     * Reverts status to {@link UsageStatusEnum#ELIGIBLE}, sets scenario id to {@code null}, sets gross amount to 0.
-     *
-     * @param scenarioId scenario identifier
-     * @param userName   user name
-     */
-    void deleteFromNtsScenario(String scenarioId, String userName);
 
     /**
      * Finds count of all usages by usage id and status.
