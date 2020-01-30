@@ -114,8 +114,9 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public int loadClassifiedUsages(List<AaclClassifiedUsage> classifiedUsages) {
-        // TODO {srudak} implement when service logic is ready
-        return 0;
+        int updatedCount = aaclUsageService.updateClassifiedUsages(classifiedUsages);
+        getUsageFilterController().getWidget().clearFilter();
+        return updatedCount;
     }
 
     @Override
