@@ -136,6 +136,8 @@ public class AaclUsageWidgetTest {
         expectLastCall().once();
         mediator.setSendForClassificationButton(anyObject(Button.class));
         expectLastCall().once();
+        mediator.setLoadClassifiedUsagesButton(anyObject(Button.class));
+        expectLastCall().once();
         replay(AaclUsageMediator.class, mediator, controller);
         assertNotNull(usagesWidget.initMediator());
         verify(AaclUsageMediator.class, mediator, controller);
@@ -191,13 +193,33 @@ public class AaclUsageWidgetTest {
         verify(controller, clickEvent, Windows.class);
     }
 
+    @Test
+    public void testLoadClassifiedUsagesButtonClickListener() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button loadClassifiedUsagesButton =
+            (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+                .getComponent(0)).getComponent(2);
+        assertTrue(loadClassifiedUsagesButton.isDisableOnClick());
+        Windows.showModalWindow(anyObject(ClassifiedUsagesUploadWindow.class));
+        expectLastCall().once();
+        replay(clickEvent, Windows.class, controller);
+        Collection<?> listeners = loadClassifiedUsagesButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(clickEvent, Windows.class, controller);
+    }
+
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(2, layout.getComponentCount());
+        assertEquals(3, layout.getComponentCount());
         verifyUsageBatchMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load"));
         Button sendForClassificationButton = (Button) layout.getComponent(1);
         assertEquals("Send for Classification", sendForClassificationButton.getCaption());
+        Button loadClassifiedUsagesButton = (Button) layout.getComponent(2);
+        assertEquals("Load Classified Details", loadClassifiedUsagesButton.getCaption());
     }
 
     private void verifyUsageBatchMenuBar(Component component, String menuBarName, List<String> menuItems) {

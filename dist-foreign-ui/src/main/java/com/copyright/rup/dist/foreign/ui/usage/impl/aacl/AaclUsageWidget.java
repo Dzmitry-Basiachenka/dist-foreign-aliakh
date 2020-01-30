@@ -35,6 +35,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
     private Button sendForClassificationButton;
+    private Button loadClassifiedUsagesButton;
     private final IAaclUsageController controller;
 
     /**
@@ -51,6 +52,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         AaclUsageMediator mediator = new AaclUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
         mediator.setSendForClassificationButton(sendForClassificationButton);
+        mediator.setLoadClassifiedUsagesButton(loadClassifiedUsagesButton);
         return mediator;
     }
 
@@ -95,7 +97,10 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     protected HorizontalLayout initButtonsLayout() {
         initUsageBatchMenuBar();
         initSendForClassificationButton();
-        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, sendForClassificationButton);
+        initLoadClassifiedUsagesButton();
+        VaadinUtils.setButtonsAutoDisabled(loadClassifiedUsagesButton);
+        HorizontalLayout layout =
+            new HorizontalLayout(usageBatchMenuBar, sendForClassificationButton, loadClassifiedUsagesButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -130,6 +135,12 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
                 Windows.showModalWindow(window);
             }
         });
+    }
+
+    private void initLoadClassifiedUsagesButton() {
+        loadClassifiedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_classified_details"));
+        loadClassifiedUsagesButton.addClickListener(event ->
+            Windows.showModalWindow(new ClassifiedUsagesUploadWindow(controller)));
     }
 
     private static class SendForClassificationFileDownloader extends OnDemandFileDownloader {

@@ -77,6 +77,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to load classified usages.
+     */
+    public static boolean hasLoadClassifiedUsagePermission() {
+        return SecurityUtils.hasPermission("FDA_LOAD_CLASSIFIED_USAGE");
+    }
+
+    /**
      * @return {@code true} if user has permission to create and delete Pre-Service fee funds.
      */
     public static boolean hasCreateDeleteFundPermission() {
