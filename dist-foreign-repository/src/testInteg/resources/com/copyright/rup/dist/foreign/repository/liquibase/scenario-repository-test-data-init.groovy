@@ -74,9 +74,9 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
-            column(name: 'name', value: 'Scenario name')
-            column(name: 'status_ind', value: 'APPROVED')
-            column(name: 'description', value: 'The description of scenario')
+            column(name: 'name', value: 'Scenario name 9')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'description', value: 'The description of scenario 9')
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2017-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
@@ -343,8 +343,8 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
             column(name: 'df_scenario_audit_uid', value: 'f6368ad8-4c70-4877-9a34-00a03fc7ec26')
             column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
-            column(name: 'action_type_ind', value: 'APPROVED')
-            column(name: 'action_reason', value: 'Scenario approved by manager')
+            column(name: 'action_type_ind', value: 'REJECTED')
+            column(name: 'action_reason', value: 'Scenario rejected by manager')
             column(name: 'created_datetime', value: '2017-04-10 11:28:58.735531+03')
         }
 
@@ -1089,8 +1089,8 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '2369313c-dd17-45ed-a6e9-9461b9232ffd')
-            column(name: 'name', value: 'Approved NTS scenario with audit')
-            column(name: 'status_ind', value: 'APPROVED')
+            column(name: 'name', value: 'Rejected NTS scenario with audit')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario 7')
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2017-02-14 12:00:00+00')
@@ -1178,8 +1178,8 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
             column(name: 'df_scenario_audit_uid', value: 'd0e42478-b41e-441e-8d7d-e3851f741a37')
             column(name: 'df_scenario_uid', value: '2369313c-dd17-45ed-a6e9-9461b9232ffd')
-            column(name: 'action_type_ind', value: 'APPROVED')
-            column(name: 'action_reason', value: 'Scenario approved by manager')
+            column(name: 'action_type_ind', value: 'REJECTED')
+            column(name: 'action_reason', value: 'Scenario rejected by manager')
             column(name: 'created_datetime', value: '2017-04-10 11:28:58.735531+03')
         }
 
