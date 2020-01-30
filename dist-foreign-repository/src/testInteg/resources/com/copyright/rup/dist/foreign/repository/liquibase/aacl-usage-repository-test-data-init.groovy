@@ -183,7 +183,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '8315e53b-0a7e-452a-a62c-17fe959f3f84')
             column(name: 'df_usage_batch_uid', value: '600ad926-e7dd-4086-b283-87e6579395ce')
             column(name: 'wr_wrk_inst', value: '122830308')
-            column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'rh_account_number', value: '1000011451')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '20')

@@ -32,7 +32,7 @@ public class ClassifiedUsageValidator implements DistCsvProcessor.IValidator<Aac
     @Override
     public boolean isValid(AaclClassifiedUsage usage) {
         return usageService.isUsageIdExists(Objects.requireNonNull(usage).getDetailId(),
-            UsageStatusEnum.RH_FOUND);
+            UsageStatusEnum.WORK_RESEARCH);
     }
 
     @Override

@@ -18,7 +18,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -88,7 +87,7 @@ public class AaclUsageRepositoryIntegrationTest {
             aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84"));
         assertEquals(1, usages.size());
         Usage expectedUsage = usages.get(0);
-        assertEquals(UsageStatusEnum.RH_FOUND, expectedUsage.getStatus());
+        assertEquals(UsageStatusEnum.WORK_RESEARCH, expectedUsage.getStatus());
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
         assertNull(expectedUsage.getAaclUsage().getDiscipline());
         assertNull(expectedUsage.getAaclUsage().getEnrollmentProfile());
@@ -159,11 +158,9 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindDtosByStatusAndBatchesIdFilter() {
+    public void testFindDtosByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
-        usageFilter.setUsageBatchesIds(
-            Sets.newHashSet("adcc460c-c4ae-4750-99e8-b9fe91787ce1", "6e6f656a-e080-4426-b8ea-985b69f8814d"));
         verifyUsageDtos(
             Arrays.asList("json/aacl/aacl_usage_dto_44600a96.json", "json/aacl/aacl_usage_dto_67750f86.json",
                 "json/aacl/aacl_usage_dto_0b5ac9fc.json", "json/aacl/aacl_usage_dto_6c91f04e.json"),
