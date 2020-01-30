@@ -260,7 +260,7 @@
         join ${schema}.df_usage_batch b on b.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_rightsholder r on r.rh_account_number = b.rro_account_number
         where u.df_scenario_uid = #{scenarioId}
-        order by r.name asc
+        order by r.name
     </select>
 
     <select id="findWithAmountsAndLastAction" parameterType="string" resultMap="scenarioResultMap">
