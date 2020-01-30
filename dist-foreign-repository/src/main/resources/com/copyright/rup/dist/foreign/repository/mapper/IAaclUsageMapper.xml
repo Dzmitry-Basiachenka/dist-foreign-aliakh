@@ -196,9 +196,10 @@
                 </include>
             </when>
             <otherwise>
-                updated_datetime desc, df_usage_uid
+                updated_datetime desc
             </otherwise>
-        </choose>
+        </choose>,
+        df_usage_uid
         <include refid="IUsageMapper.ifPageable"/>
     </sql>
 

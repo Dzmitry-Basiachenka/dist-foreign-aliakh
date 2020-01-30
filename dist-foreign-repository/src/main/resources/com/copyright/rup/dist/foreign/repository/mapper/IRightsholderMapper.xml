@@ -101,6 +101,7 @@
         <if test="null != searchValue">
             and <include refid="IUsageMapper.searchWhereClause"/>
         </if>
+        order by rh_account_number
         <if test="null != pageable">
             limit #{pageable.limit}
             offset #{pageable.offset}
