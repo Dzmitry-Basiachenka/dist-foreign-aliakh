@@ -19,11 +19,13 @@ class AaclUsageMediator implements IMediator {
 
     private MenuBar.MenuItem loadUsageBatchMenuItem;
     private Button sendForClassificationButton;
+    private Button loadClassifiedUsagesButton;
 
     @Override
     public void applyPermissions() {
         loadUsageBatchMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
         sendForClassificationButton.setVisible(ForeignSecurityUtils.hasSendForClassificationPermission());
+        loadClassifiedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadClassifiedUsagePermission());
     }
 
     void setLoadUsageBatchMenuItem(MenuBar.MenuItem loadUsageBatchMenuItem) {
@@ -32,5 +34,9 @@ class AaclUsageMediator implements IMediator {
 
     void setSendForClassificationButton(Button sendForClassificationButton) {
         this.sendForClassificationButton = sendForClassificationButton;
+    }
+
+    void setLoadClassifiedUsagesButton(Button loadClassifiedUsagesButton) {
+        this.loadClassifiedUsagesButton = loadClassifiedUsagesButton;
     }
 }
