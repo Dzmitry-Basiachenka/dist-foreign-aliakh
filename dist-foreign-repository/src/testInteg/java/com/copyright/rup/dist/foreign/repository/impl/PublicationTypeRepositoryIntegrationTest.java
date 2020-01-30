@@ -36,6 +36,11 @@ public class PublicationTypeRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindIdByNameInMixedCase() {
+        assertEquals("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", publicationTypeRepository.findIdByName("boOK"));
+    }
+
+    @Test
     public void testFindIdByNameNotExist() {
         assertNull(publicationTypeRepository.findIdByName("Books"));
     }

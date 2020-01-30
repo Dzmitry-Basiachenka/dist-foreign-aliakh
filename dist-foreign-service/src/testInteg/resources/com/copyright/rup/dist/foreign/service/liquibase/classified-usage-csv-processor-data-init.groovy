@@ -85,7 +85,7 @@ databaseChangeLog {
             column(name: 'right_limitation', value: 'PRINT')
         }
 
-        // Usage with 'disqualified' Discipline in CSV
+        // Usage with 'Disqualified' Discipline in CSV
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '195af195-8cde-4129-a961-c410ec010549')
             column(name: 'df_usage_batch_uid', value: 'd716d5e5-b21f-4fa9-9558-63859f166315')
@@ -97,7 +97,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '10')
-            column(name: 'comment', value: 'Valid usage with \'disqualified\' Discipline in CSV')
+            column(name: 'comment', value: 'Valid usage with \'Disqualified\' Discipline in CSV')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
@@ -109,7 +109,7 @@ databaseChangeLog {
             column(name: 'right_limitation', value: 'PRINT')
         }
 
-        // Usage with 'disqualified' Enrollment Profile in CSV
+        // Usage with 'DISQUALIFIED' Enrollment Profile in CSV
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '4b83a43a-b5fe-4ad3-a8ad-f491a4e58dbc')
             column(name: 'df_usage_batch_uid', value: 'd716d5e5-b21f-4fa9-9558-63859f166315')
@@ -121,7 +121,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '10')
-            column(name: 'comment', value: 'Valid usage with \'disqualified\' Enrollment Profile in CSV')
+            column(name: 'comment', value: 'Valid usage with \'DISQUALIFIED\' Enrollment Profile in CSV')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {

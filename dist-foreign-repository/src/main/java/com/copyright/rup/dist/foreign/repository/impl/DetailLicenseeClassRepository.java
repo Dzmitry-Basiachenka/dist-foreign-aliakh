@@ -25,8 +25,8 @@ public class DetailLicenseeClassRepository extends BaseRepository implements IDe
     @Override
     public String findLicenseeClassIdByDisciplineAndEnrollmentProfile(String enrollmentProfile, String discipline) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("enrollmentProfile", Objects.requireNonNull(enrollmentProfile));
-        parameters.put("discipline", Objects.requireNonNull(discipline));
+        parameters.put("enrollmentProfile", escapeSqlLikePattern(Objects.requireNonNull(enrollmentProfile)));
+        parameters.put("discipline", escapeSqlLikePattern(Objects.requireNonNull(discipline)));
         return selectOne("IDetailLicenseeClassMapper.findLicenseeClassIdByDisciplineAndEnrollmentProfile", parameters);
     }
 }

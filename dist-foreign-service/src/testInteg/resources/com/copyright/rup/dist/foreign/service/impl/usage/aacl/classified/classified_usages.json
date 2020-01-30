@@ -9,9 +9,9 @@
   {
     "detailId": "a65d100a-3e7c-4b35-903e-2463fb53f41d",
     "wrWrkInst": 123456789,
-    "enrollmentProfile": "EXGP",
-    "discipline": "Life Sciences",
-    "publicationType": "Book"
+    "enrollmentProfile": "exGP",
+    "discipline": "life sciences",
+    "publicationType": "BOOK"
   },
   {
     "detailId": "10253f6a-bb89-4738-a0d2-ea49fdd94d66",
@@ -24,13 +24,13 @@
     "detailId": "195af195-8cde-4129-a961-c410ec010549",
     "wrWrkInst": 123456789,
     "enrollmentProfile": "EXGP",
-    "discipline": "disqualified",
+    "discipline": "Disqualified",
     "publicationType": "Book"
   },
   {
     "detailId": "4b83a43a-b5fe-4ad3-a8ad-f491a4e58dbc",
     "wrWrkInst": 123456789,
-    "enrollmentProfile": "disqualified",
+    "enrollmentProfile": "DISQUALIFIED",
     "discipline": "Life Sciences",
     "publicationType": "Book"
   }
