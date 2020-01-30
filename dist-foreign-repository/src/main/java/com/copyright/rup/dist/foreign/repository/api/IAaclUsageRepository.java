@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -30,9 +31,10 @@ public interface IAaclUsageRepository {
     /**
      * Updates classified fields for AACL usages in database.
      *
-     * @param usages {@link Usage} instance
+     * @param usages   {@link AaclClassifiedUsage} instance
+     * @param userName name of user
      */
-    void update(List<Usage> usages);
+    void updateClassifiedUsages(List<AaclClassifiedUsage> usages, String userName);
 
     /**
      * Deletes AACL {@link Usage} by given id.

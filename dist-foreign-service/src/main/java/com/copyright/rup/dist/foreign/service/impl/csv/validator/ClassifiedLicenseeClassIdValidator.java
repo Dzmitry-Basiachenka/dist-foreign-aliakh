@@ -43,7 +43,7 @@ public class ClassifiedLicenseeClassIdValidator implements DistCsvProcessor.IVal
     }
 
     private boolean isUsageDisqualified(AaclClassifiedUsage aaclClassifiedUsage) {
-        return "disqualified".equals(aaclClassifiedUsage.getEnrollmentProfile())
-            || "disqualified".equals(aaclClassifiedUsage.getDiscipline());
+        return "disqualified".equalsIgnoreCase(aaclClassifiedUsage.getEnrollmentProfile())
+            || "disqualified".equalsIgnoreCase(aaclClassifiedUsage.getDiscipline());
     }
 }

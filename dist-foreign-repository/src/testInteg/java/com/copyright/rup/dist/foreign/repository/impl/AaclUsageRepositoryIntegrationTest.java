@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -56,6 +57,7 @@ public class AaclUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_3 = "5b41d618-0a2f-4736-bb75-29da627ad677";
     private static final String BATCH_ID_3 = "adcc460c-c4ae-4750-99e8-b9fe91787ce1";
     private static final String SYSTEM_TITLE = "Wissenschaft & Forschung Japan";
+    private static final String USER_NAME = "user@mail.com";
     private static final String STANDARD_NUMBER = "2192-3558";
     private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
     private static final String RIGHT_LIMITATION = "ALL";
@@ -82,7 +84,7 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdate() {
+    public void testUpdateClassifiedUsages() {
         List<Usage> usages =
             aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84"));
         assertEquals(1, usages.size());
@@ -91,12 +93,7 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
         assertNull(expectedUsage.getAaclUsage().getDiscipline());
         assertNull(expectedUsage.getAaclUsage().getEnrollmentProfile());
-        expectedUsage.setStatus(UsageStatusEnum.ELIGIBLE);
-        expectedUsage.getAaclUsage().setPublicationType("Book");
-        expectedUsage.getAaclUsage().setDetailLicenseeClassId("108");
-        expectedUsage.getAaclUsage().setEnrollmentProfile("EXGP");
-        expectedUsage.getAaclUsage().setDiscipline("Life Sciences");
-        aaclUsageRepository.update(Collections.singletonList(expectedUsage));
+        aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
         verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
             aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")));
     }
@@ -341,5 +338,15 @@ public class AaclUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setProductFamily("AACL");
         return usageFilter;
+    }
+
+    private AaclClassifiedUsage buildAaclClassifiedUsage() {
+        AaclClassifiedUsage usage = new AaclClassifiedUsage();
+        usage.setDetailId("8315e53b-0a7e-452a-a62c-17fe959f3f84");
+        usage.setPublicationType("book");
+        usage.setDiscipline("LIFE Sciences");
+        usage.setEnrollmentProfile("EXGP");
+        usage.setWrWrkInst(122830308L);
+        return usage;
     }
 }

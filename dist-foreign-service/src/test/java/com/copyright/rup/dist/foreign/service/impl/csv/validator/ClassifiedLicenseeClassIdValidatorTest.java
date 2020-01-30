@@ -28,7 +28,7 @@ public class ClassifiedLicenseeClassIdValidatorTest {
     private static final String ENROLLMENT_PROFILE = "EXGP";
     private static final String DISCIPLINE = "Physical Sciences & Mathematics";
     private static final String NO_VALID_DATA = "no valid";
-    private static final String DISQUALIFIED = "disqualified";
+    private static final String DISQUALIFIED = "Disqualified";
     private ClassifiedLicenseeClassIdValidator validator;
     private IDetailLicenseeClassService licenseeClassService;
 

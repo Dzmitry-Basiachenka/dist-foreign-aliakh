@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.api.aacl;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -30,6 +31,14 @@ public interface IAaclUsageService {
      * @return count of inserted usages
      */
     int insertUsages(UsageBatch usageBatch, Collection<Usage> usages);
+
+    /**
+     * Updates classified AACL usages.
+     *
+     * @param usages list of {@link AaclClassifiedUsage}s
+     * @return count of updated usages
+     */
+    int updateClassifiedUsages(Collection<AaclClassifiedUsage> usages);
 
     /**
      * Gets list of AACL {@link UsageDto}s based on applied filter.

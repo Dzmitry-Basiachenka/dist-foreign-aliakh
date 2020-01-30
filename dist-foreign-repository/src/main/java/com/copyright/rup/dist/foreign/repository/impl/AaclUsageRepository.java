@@ -1,10 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -15,7 +14,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -42,6 +40,8 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
+    private static final String UPDATE_USER_KEY = "updateUser";
+    private static final String STATUS_KEY = "status";
 
     @Override
     public void insert(Usage usage) {
@@ -49,9 +49,15 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
-    public void update(List<Usage> usages) {
-        checkArgument(CollectionUtils.isNotEmpty(usages));
-        usages.forEach(usage -> update("IAaclUsageMapper.update", usage));
+    public void updateClassifiedUsages(List<AaclClassifiedUsage> aaclClassifiedUsages, String userName) {
+        Objects.requireNonNull(aaclClassifiedUsages);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        aaclClassifiedUsages.forEach(aaclUsage -> {
+            parameters.put("aaclUsage", aaclUsage);
+            update("IAaclUsageMapper.updateClassifiedUsages", parameters);
+        });
     }
 
     @Override
@@ -103,7 +109,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     public boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put(FILTER_KEY, Objects.requireNonNull(filter));
-        params.put("status", Objects.requireNonNull(status));
+        params.put(STATUS_KEY, Objects.requireNonNull(status));
         return selectOne("IAaclUsageMapper.isValidFilteredUsageStatus", params);
     }
 }

@@ -32,7 +32,7 @@ public class ClassifiedPubTypeValidator implements DistCsvProcessor.IValidator<A
     @Override
     public boolean isValid(AaclClassifiedUsage aaclClassifiedUsage) {
         checkNotNull(aaclClassifiedUsage);
-        return "disqualified".equals(aaclClassifiedUsage.getPublicationType())
+        return "disqualified".equalsIgnoreCase(aaclClassifiedUsage.getPublicationType())
             || pubTypeService.isPublicationTypeExist(aaclClassifiedUsage.getPublicationType());
     }
 
