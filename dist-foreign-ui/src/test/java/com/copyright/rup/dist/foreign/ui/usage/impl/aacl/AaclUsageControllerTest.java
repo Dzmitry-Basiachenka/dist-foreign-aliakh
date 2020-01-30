@@ -17,6 +17,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -47,6 +48,7 @@ import org.powermock.reflect.Whitebox;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -199,6 +201,14 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testLoadClassifiedUsages() {
-        // TODO {srudak} implement test once service logic is ready
+        List<AaclClassifiedUsage> classifiedUsages =
+            Arrays.asList(new AaclClassifiedUsage(), new AaclClassifiedUsage());
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        filterWidgetMock.clearFilter();
+        expectLastCall().once();
+        expect(aaclUsageService.updateClassifiedUsages(classifiedUsages)).andReturn(1).once();
+        replay(aaclUsageService, filterController, filterWidgetMock);
+        controller.loadClassifiedUsages(classifiedUsages);
+        verify(aaclUsageService, filterController, filterWidgetMock);
     }
 }
