@@ -19,6 +19,6 @@ public class PublicationTypeRepository extends BaseRepository implements IPublic
 
     @Override
     public String findIdByName(String pubTypeName) {
-        return selectOne("IPublicationTypeMapper.findIdByName", pubTypeName);
+        return selectOne("IPublicationTypeMapper.findIdByName", escapeSqlLikePattern(pubTypeName));
     }
 }

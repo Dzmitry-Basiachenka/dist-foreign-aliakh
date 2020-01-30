@@ -12,9 +12,9 @@ package com.copyright.rup.dist.foreign.repository.api;
 public interface IPublicationTypeRepository {
 
     /**
-     * Find publication type id by name.
+     * Find publication type id by name ignoring case.
      *
-     * @param pubTypeName name of publication type
+     * @param pubTypeName name of publication type in any case
      * @return publication type id
      */
     String findIdByName(String pubTypeName);

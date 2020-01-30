@@ -12,6 +12,6 @@
     <select id="findIdByName" parameterType="string" resultType="string">
         select df_publication_type_uid
         from ${schema}.df_publication_type
-        where name = #{pubTypeName}
+        where name ilike #{pubTypeName}
     </select>
 </mapper>

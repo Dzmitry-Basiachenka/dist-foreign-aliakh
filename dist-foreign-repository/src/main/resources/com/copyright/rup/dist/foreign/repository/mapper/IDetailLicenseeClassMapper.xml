@@ -7,7 +7,7 @@
     <select id="findLicenseeClassIdByDisciplineAndEnrollmentProfile" parameterType="string" resultType="string">
         select detail_licensee_class_id
         from ${schema}.df_detail_licensee_class
-        where enrollment_profile = #{enrollmentProfile}
-            and discipline = #{discipline}
+        where enrollment_profile ilike #{enrollmentProfile}
+            and discipline ilike #{discipline}
     </select>
 </mapper>

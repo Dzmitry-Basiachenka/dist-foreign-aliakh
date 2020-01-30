@@ -37,6 +37,12 @@ public class DetailLicenseeClassRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindClassIdByMixedCaseDisciplineAndEnrollmentProfile() {
+        assertEquals("173", detailLicenseeClassRepository.findLicenseeClassIdByDisciplineAndEnrollmentProfile("exU4",
+            "ARTS & HUMANITIES"));
+    }
+
+    @Test
     public void testFindClassIdRecordNotExist() {
         assertNull(detailLicenseeClassRepository.findLicenseeClassIdByDisciplineAndEnrollmentProfile("Null",
             "Arts & Humanities"));
