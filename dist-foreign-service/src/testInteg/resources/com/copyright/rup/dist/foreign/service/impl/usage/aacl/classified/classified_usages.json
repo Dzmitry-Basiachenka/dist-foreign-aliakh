@@ -1,16 +1,37 @@
 [
   {
-    "detailId": "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0",
-    "wrWrkInst": 122820420,
+    "detailId": "455e2dd0-4107-434f-ba3c-fb5ccd6f2585",
+    "wrWrkInst": 123456789,
     "enrollmentProfile": "EXGP",
     "discipline": "Life Sciences",
     "publicationType": "Book"
   },
   {
-    "detailId": "1208f434-3d98-49d5-bdc6-baa611d2d006",
-    "wrWrkInst": 122825976,
-    "enrollmentProfile": "EXU4",
-    "discipline": "Business Management",
-    "publicationType": "Business or Trade Journal"
+    "detailId": "a65d100a-3e7c-4b35-903e-2463fb53f41d",
+    "wrWrkInst": 123456789,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Life Sciences",
+    "publicationType": "Book"
+  },
+  {
+    "detailId": "10253f6a-bb89-4738-a0d2-ea49fdd94d66",
+    "wrWrkInst": 123456789,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Life Sciences",
+    "publicationType": "disqualified"
+  },
+  {
+    "detailId": "195af195-8cde-4129-a961-c410ec010549",
+    "wrWrkInst": 123456789,
+    "enrollmentProfile": "EXGP",
+    "discipline": "disqualified",
+    "publicationType": "Book"
+  },
+  {
+    "detailId": "4b83a43a-b5fe-4ad3-a8ad-f491a4e58dbc",
+    "wrWrkInst": 123456789,
+    "enrollmentProfile": "disqualified",
+    "discipline": "Life Sciences",
+    "publicationType": "Book"
   }
 ]

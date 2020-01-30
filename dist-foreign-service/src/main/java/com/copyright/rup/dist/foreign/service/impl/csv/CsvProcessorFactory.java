@@ -1,8 +1,13 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
+import com.copyright.rup.dist.foreign.service.api.IDetailLicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedLicenseeClassIdValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedPubTypeValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedWrWrkInstValidator;
@@ -31,6 +36,10 @@ public class CsvProcessorFactory {
     @Autowired
     @Qualifier("df.integration.piIntegrationCacheService")
     private IPiIntegrationService piIntegrationService;
+    @Autowired
+    private IDetailLicenseeClassService detailLicenseeClassService;
+    @Autowired
+    private IPublicationTypeService publicationTypeService;
 
     /**
      * Initialized UsageCsvProcessor.
@@ -67,7 +76,11 @@ public class CsvProcessorFactory {
      */
     public ClassifiedUsageCsvProcessor getClassifiedUsageCsvProcessor() {
         ClassifiedUsageCsvProcessor processor = new ClassifiedUsageCsvProcessor();
-        processor.addBusinessValidators(new ClassifiedUsageValidator(usageService));
+        processor.addBusinessValidators(
+            new ClassifiedUsageValidator(usageService),
+            new ClassifiedWrWrkInstValidator(piIntegrationService),
+            new ClassifiedLicenseeClassIdValidator(detailLicenseeClassService),
+            new ClassifiedPubTypeValidator(publicationTypeService));
         return processor;
     }
 }

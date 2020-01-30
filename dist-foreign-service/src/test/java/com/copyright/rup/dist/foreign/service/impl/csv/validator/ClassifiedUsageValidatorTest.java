@@ -40,7 +40,7 @@ public class ClassifiedUsageValidatorTest {
     @Test
     public void testIsValid() {
         AaclClassifiedUsage usage = buildClassifiedAaclUsage(DETAIL_ID);
-        expect(usageService.isUsageIdExists(DETAIL_ID, UsageStatusEnum.RH_FOUND)).andReturn(true).once();
+        expect(usageService.isUsageIdExists(DETAIL_ID, UsageStatusEnum.WORK_RESEARCH)).andReturn(true).once();
         replay(usageService);
         assertTrue(validator.isValid(usage));
         verify(usageService);
@@ -49,7 +49,7 @@ public class ClassifiedUsageValidatorTest {
     @Test
     public void testIsValidUsageIdNull() {
         AaclClassifiedUsage usage = buildClassifiedAaclUsage(null);
-        expect(usageService.isUsageIdExists(null, UsageStatusEnum.RH_FOUND)).andReturn(false).once();
+        expect(usageService.isUsageIdExists(null, UsageStatusEnum.WORK_RESEARCH)).andReturn(false).once();
         replay(usageService);
         assertFalse(validator.isValid(usage));
         verify(usageService);
