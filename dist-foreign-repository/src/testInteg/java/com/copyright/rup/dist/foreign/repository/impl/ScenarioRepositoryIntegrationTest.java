@@ -66,7 +66,8 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String DESCRIPTION = "description";
     private static final String USAGE_BATCH_ID = "a5b64c3a-55d2-462e-b169-362dca6a4dd6";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
-    private static final String SCENARIO_WITH_AUDIT_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
+    private static final String SCENARIO_ID_2 = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
+    private static final String SCENARIO_ID_3 = "2369313c-dd17-45ed-a6e9-9461b9232ffd";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USER = "user@copyright.com";
@@ -95,8 +96,8 @@ public class ScenarioRepositoryIntegrationTest {
             "The description of scenario 6", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
         verifyScenario(fasScenarios.get(1), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
             "The description of scenario 2", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(fasScenarios.get(2), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
-            "The description of scenario", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.APPROVED);
+        verifyScenario(fasScenarios.get(2), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name 9",
+            "The description of scenario 9", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
         verifyScenario(fasScenarios.get(3), "1230b236-1239-4a60-9fab-123b84199123", "Scenario name 4",
             "The description of scenario 4", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
         verifyScenario(fasScenarios.get(4), "8a6a6b15-6922-4fda-b40c-5097fcbd256e", "Scenario name 5",
@@ -115,8 +116,8 @@ public class ScenarioRepositoryIntegrationTest {
             "Sent to LM NTS scenario with audit", "The description of scenario 8", NTS_PRODUCT_FAMILY,
             ScenarioStatusEnum.SENT_TO_LM);
         assertNotNull(ntsScenarios.get(0).getNtsFields());
-        verifyScenario(ntsScenarios.get(1), "2369313c-dd17-45ed-a6e9-9461b9232ffd", "Approved NTS scenario with audit",
-            "The description of scenario 7", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.APPROVED);
+        verifyScenario(ntsScenarios.get(1), SCENARIO_ID_3, "Rejected NTS scenario with audit",
+            "The description of scenario 7", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
         Scenario ntsScenario = ntsScenarios.get(2);
         verifyScenario(ntsScenario, "1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b", "Test NTS scenario",
             "Description for test NTS scenario", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
@@ -127,17 +128,27 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindWithAmountsAndLastActionForFasScenario() {
-        Scenario scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_WITH_AUDIT_ID);
-        verifyScenario(scenario, "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
-            "The description of scenario", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.APPROVED);
+        Scenario scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_2);
+        verifyScenario(scenario, SCENARIO_ID_2, "Scenario name 9",
+            "The description of scenario 9", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
         ScenarioAuditItem scenarioAuditItem = scenario.getAuditItem();
-        assertEquals(ScenarioActionTypeEnum.APPROVED, scenarioAuditItem.getActionType());
-        assertEquals("Scenario approved by manager", scenarioAuditItem.getActionReason());
+        assertEquals(ScenarioActionTypeEnum.REJECTED, scenarioAuditItem.getActionType());
+        assertEquals("Scenario rejected by manager", scenarioAuditItem.getActionReason());
         assertEquals(new BigDecimal("32874.8000000000"), scenario.getGrossTotal());
         assertEquals(new BigDecimal("22354.8000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("10520.0000000000"), scenario.getServiceFeeTotal());
         assertEquals(new BigDecimal("19800.00"), scenario.getReportedTotal());
         assertNull(scenario.getNtsFields());
+        List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID_2);
+        usageRepository.deleteFromScenario(usages.stream().map(Usage::getId).collect(Collectors.toList()), USER);
+        scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_2);
+        assertNotNull(scenario);
+        verifyScenario(scenario, SCENARIO_ID_2, "Scenario name 9",
+            "The description of scenario 9", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
+        assertEquals(BigDecimal.ZERO, scenario.getGrossTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getNetTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getServiceFeeTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getReportedTotal());
     }
 
     @Test
@@ -158,12 +169,12 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindWithAmountsAndLastActionForNtsScenario() {
-        Scenario scenario = scenarioRepository.findWithAmountsAndLastAction("2369313c-dd17-45ed-a6e9-9461b9232ffd");
-        verifyScenario(scenario, "2369313c-dd17-45ed-a6e9-9461b9232ffd", "Approved NTS scenario with audit",
-            "The description of scenario 7", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.APPROVED);
+        Scenario scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_3);
+        verifyScenario(scenario, SCENARIO_ID_3, "Rejected NTS scenario with audit",
+            "The description of scenario 7", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
         ScenarioAuditItem scenarioAuditItem = scenario.getAuditItem();
-        assertEquals(ScenarioActionTypeEnum.APPROVED, scenarioAuditItem.getActionType());
-        assertEquals("Scenario approved by manager", scenarioAuditItem.getActionReason());
+        assertEquals(ScenarioActionTypeEnum.REJECTED, scenarioAuditItem.getActionType());
+        assertEquals("Scenario rejected by manager", scenarioAuditItem.getActionReason());
         assertEquals(new BigDecimal("1100.0000000000"), scenario.getGrossTotal());
         assertEquals(new BigDecimal("780.0000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("320.0000000000"), scenario.getServiceFeeTotal());
@@ -179,6 +190,16 @@ public class ScenarioRepositoryIntegrationTest {
             scenario.getCreateDate());
         assertEquals(Date.from(OffsetDateTime.parse("2018-05-14T11:41:52.735531+03:00").toInstant()),
             scenario.getUpdateDate());
+        List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID_3);
+        usageRepository.deleteFromScenario(usages.stream().map(Usage::getId).collect(Collectors.toList()), USER);
+        scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_3);
+        assertNotNull(scenario);
+        verifyScenario(scenario, SCENARIO_ID_3, "Rejected NTS scenario with audit",
+            "The description of scenario 7", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
+        assertEquals(BigDecimal.ZERO, scenario.getGrossTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getNetTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getServiceFeeTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getReportedTotal());
     }
 
     @Test
