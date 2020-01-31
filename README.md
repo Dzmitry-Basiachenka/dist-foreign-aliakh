@@ -1,3 +1,21 @@
+8.1.20
+-
+* B-52239 FDA: Load classified AACL usages: implement service logic to handle uploaded classified usage
+* B-52329 FDA: Load classified AACL usages: add button for uploading classified AACL usages
+* B-52329 FDA: Load classified AACL usages: adjust query in IAaclUsageMapper related to update usages
+* B-52329 FDA: Load classified AACL usages: apply classified usage validators
+* B-52329 FDA: Load classified AACL usages: enable sorting for Detail Licensee Class Id, Enrollment Profile, Discipline and Publication Type columns on UI
+* B-52329 FDA: Load classified AACL usages: implement repository logic to handle uploaded classified usage
+* B-52329 FDA: Load classified AACL usages: implement window for uploading classified AACL usages
+* B-52329 FDA: Load classified AACL usages: make classified AACL usage validator case insensitive
+* B-52329 FDA: Load classified AACL usages: use service method in controller to process classified AACL usages
+* B-56092 Tech Debt: FDA: OWASP Dependency Check: Security Vulnerabilities in jackson-databind
+* B-56092 Tech Debt: FDA: implement templates for NTS mapper, repository, service
+* B-56092 Tech Debt: FDA: move NTS insert methods to separate service and repository
+* B-56092 Tech Debt: FDA: replace deprecated @TransactionConfiguration with @Rollback in integration tests
+* CDP-881 FDA: Incorrect data set presented in scenario's details report for NTS distribution in production
+* CDP-882 FDA: Scenarios tab: Exception occurs after selecting empty scenario (which doesn't have any usage)
+
 8.1.19
 -
 * B-52329 FDA: FDA: Load classified AACL usages: implement Discipline and Enrollment Profile validator
