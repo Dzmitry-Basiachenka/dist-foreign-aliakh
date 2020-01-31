@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +94,9 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
         assertNull(expectedUsage.getAaclUsage().getDiscipline());
         assertNull(expectedUsage.getAaclUsage().getEnrollmentProfile());
+        assertEquals(0, getNumberOfUsagesWithNotEmptyClassificationData());
         aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
+        assertEquals(1, getNumberOfUsagesWithNotEmptyClassificationData());
         verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
             aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")));
     }
@@ -338,6 +341,15 @@ public class AaclUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setProductFamily("AACL");
         return usageFilter;
+    }
+
+    private long getNumberOfUsagesWithNotEmptyClassificationData() {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setProductFamily("AACL");
+        return aaclUsageRepository.findDtosByFilter(usageFilter, null, null).stream()
+            .filter(usage -> StringUtils.isNotBlank(usage.getAaclUsage().getPublicationType())
+                && StringUtils.isNotBlank(usage.getAaclUsage().getDetailLicenseeClassId()))
+            .count();
     }
 
     private AaclClassifiedUsage buildAaclClassifiedUsage() {

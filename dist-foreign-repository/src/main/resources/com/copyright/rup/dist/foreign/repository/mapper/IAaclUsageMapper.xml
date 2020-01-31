@@ -351,17 +351,17 @@
                 <include refid="StoredEntityMapper.update"/>
             where df_usage_uid = #{aaclUsage.detailId}
         )
-        update ${schema}.df_usage_aacl
+        update ${schema}.df_usage_aacl uaacl
         set
             detail_licensee_class_id = dlc.detail_licensee_class_id,
             publication_type_uid = pt.df_publication_type_uid,
             updated_by_user = #{updateUser},
             updated_datetime = now(),
-            record_version = ua.record_version + 1
-        from ${schema}.df_usage_aacl ua
-        join ${schema}.df_publication_type pt on pt.name ilike #{aaclUsage.publicationType}
-        join ${schema}.df_detail_licensee_class dlc on dlc.enrollment_profile ilike #{aaclUsage.enrollmentProfile}
+            record_version = uaacl.record_version + 1
+        from ${schema}.df_publication_type pt, ${schema}.df_detail_licensee_class dlc
+        where df_usage_aacl_uid = #{aaclUsage.detailId}
+            and pt.name ilike #{aaclUsage.publicationType}
+            and dlc.enrollment_profile ilike #{aaclUsage.enrollmentProfile}
             and dlc.discipline ilike #{aaclUsage.discipline}
-        where ua.df_usage_aacl_uid = #{aaclUsage.detailId}
     </update>
 </mapper>
