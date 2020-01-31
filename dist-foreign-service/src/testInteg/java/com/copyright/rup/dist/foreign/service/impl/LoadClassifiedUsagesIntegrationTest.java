@@ -7,13 +7,17 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.ImmutableMap;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +28,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 /**
@@ -48,17 +55,48 @@ public class LoadClassifiedUsagesIntegrationTest {
     private IAaclUsageService aaclUsageService;
     @Autowired
     private IAaclUsageRepository aaclUsageRepository;
+    @Autowired
+    private IUsageAuditService auditService;
+    @Autowired
+    private ServiceTestHelper testHelper;
 
     private static final String USAGE_ID_1 = "d5973116-2ea0-4808-80f5-93016e24cfa4";
     private static final String USAGE_ID_2 = "833aa413-ee36-4f1c-bea1-ec7a0f6e507d";
+    private static final String UPLOADED_REASON = "Uploaded in 'Test Batch'";
 
     @Test
     public void testLoadClassifiedUsages() throws IOException {
         List<AaclClassifiedUsage> usages = Arrays.asList(
             buildUsage(USAGE_ID_1, "booK", "life sciences", "exgp"),
             buildUsage(USAGE_ID_2, "DisQualified", "engineering", "Mu"));
+        testHelper.assertAudit(USAGE_ID_1, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
+            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 7001413934 was found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 122825976 was found in PI",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(USAGE_ID_2, buildUsageAuditItems(USAGE_ID_2, ImmutableMap.of(
+            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 7001413934 was found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 122825976 was found in PI",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         aaclUsageService.updateClassifiedUsages(usages);
         assertUsages();
+        testHelper.assertAudit(USAGE_ID_1, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
+            UsageActionTypeEnum.ELIGIBLE, "Usages has become eligible after classification",
+            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 7001413934 was found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 122825976 was found in PI",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        assertEquals(Collections.emptyList(), auditService.getUsageAudit(USAGE_ID_2));
+    }
+
+    private List<UsageAuditItem> buildUsageAuditItems(String usageId, Map<UsageActionTypeEnum, String> map) {
+        List<UsageAuditItem> usageAuditItems = new ArrayList<>();
+        map.forEach((actionTypeEnum, detail) -> {
+            UsageAuditItem usageAuditItem = new UsageAuditItem();
+            usageAuditItem.setUsageId(usageId);
+            usageAuditItem.setActionType(actionTypeEnum);
+            usageAuditItem.setActionReason(detail);
+            usageAuditItems.add(usageAuditItem);
+        });
+        return usageAuditItems;
     }
 
     private void assertUsages() throws IOException {

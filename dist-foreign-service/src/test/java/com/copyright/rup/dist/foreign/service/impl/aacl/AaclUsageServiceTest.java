@@ -53,6 +53,7 @@ import java.util.List;
 public class AaclUsageServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
+    private static final String USAGE_ID = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
     private final AaclUsageService aaclUsageService = new AaclUsageService();
     private IUsageAuditService usageAuditService;
     private IAaclUsageRepository aaclUsageRepository;
@@ -94,9 +95,11 @@ public class AaclUsageServiceTest {
         AaclClassifiedUsage usage1 = buildUsage();
         AaclClassifiedUsage usage2 = buildUsage();
         usage2.setPublicationType("disqualified");
-        usage2.setDetailId("d7d15c9f-39f5-4d51-b72b-48a80f7f5388");
+        usage2.setDetailId(USAGE_ID);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        aaclUsageRepository.deleteById("d7d15c9f-39f5-4d51-b72b-48a80f7f5388");
+        aaclUsageRepository.deleteById(USAGE_ID);
+        expectLastCall().once();
+        usageAuditService.deleteActionsByUsageId(USAGE_ID);
         expectLastCall().once();
         aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(usage1), USER_NAME);
         expectLastCall().once();
@@ -194,7 +197,7 @@ public class AaclUsageServiceTest {
 
     private AaclClassifiedUsage buildUsage() {
         AaclClassifiedUsage usage = new AaclClassifiedUsage();
-        usage.setDetailId("d7d15c9f-39f5-4d51-b72b-48a80f7f5388");
+        usage.setDetailId(USAGE_ID);
         usage.setPublicationType("Book");
         usage.setDiscipline("Life Sciences");
         usage.setEnrollmentProfile("EXGP");

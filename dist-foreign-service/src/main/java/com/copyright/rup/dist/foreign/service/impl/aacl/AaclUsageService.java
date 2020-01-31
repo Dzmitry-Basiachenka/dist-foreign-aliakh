@@ -78,8 +78,10 @@ public class AaclUsageService implements IAaclUsageService {
             userName);
         long disqualifiedCount = usages.stream()
             .filter(this::isUsageDisqualified)
-            .peek(usage -> aaclUsageRepository.deleteById(usage.getDetailId()))
-            .count();
+            .peek(usage -> {
+                aaclUsageRepository.deleteById(usage.getDetailId());
+                usageAuditService.deleteActionsByUsageId(usage.getDetailId());
+            }).count();
         List<AaclClassifiedUsage> updateUsages = usages.stream()
             .filter(usage -> !isUsageDisqualified(usage))
             .collect(Collectors.toList());
