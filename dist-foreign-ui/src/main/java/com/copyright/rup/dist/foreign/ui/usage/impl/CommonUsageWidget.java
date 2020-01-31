@@ -112,23 +112,6 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
     }
 
     /**
-     * Adds column without sorting to the grid.
-     *
-     * @param provider        value provider
-     * @param captionProperty property of the column's caption
-     * @param isHidable       sets whether this column can be hidden by the user
-     * @param width           width of the column
-     */
-    protected void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, boolean isHidable,
-                             double width) {
-        usagesGrid.addColumn(provider)
-            .setCaption(ForeignUi.getMessage(captionProperty))
-            .setSortable(false)
-            .setHidable(isHidable)
-            .setWidth(width);
-    }
-
-    /**
      * Adds amount column to the grid.
      *
      * @param function        function to get value
