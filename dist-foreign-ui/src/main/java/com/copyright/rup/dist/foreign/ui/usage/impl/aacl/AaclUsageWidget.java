@@ -72,13 +72,12 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", true,
             155);
         addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClassId(), "table.column.detail_licensee_class_id",
-            true, 140);
+            "detailLicenseeClassId", true, 140);
         addColumn(usage -> usage.getAaclUsage().getEnrollmentProfile(), "table.column.enrollment_profile",
-            true, 140);
-        addColumn(usage -> usage.getAaclUsage().getDiscipline(), "table.column.discipline",
-            true, 140);
+            "enrollmentProfile", true, 140);
+        addColumn(usage -> usage.getAaclUsage().getDiscipline(), "table.column.discipline", "discipline", true, 140);
         addColumn(usage -> usage.getAaclUsage().getPublicationType(), "table.column.publication_type",
-            true, 140);
+            "publicationType", true, 140);
         addColumn(usage -> usage.getAaclUsage().getInstitution(), "table.column.institution", "institution",
             true, 140);
         addColumn(usage -> usage.getAaclUsage().getUsagePeriod(), "table.column.usage_period", "usagePeriod",
