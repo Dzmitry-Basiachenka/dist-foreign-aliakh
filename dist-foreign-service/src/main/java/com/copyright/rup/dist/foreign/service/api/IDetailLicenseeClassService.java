@@ -12,11 +12,12 @@ package com.copyright.rup.dist.foreign.service.api;
 public interface IDetailLicenseeClassService {
 
     /**
-     * Checks if detail licensee class exist in database with enrollment profile and discipline.
+     * Checks whether detail licensee class exist id with provided enrollment profile and discipline ignoring case
+     * in database.
      *
      * @param enrollmentProfile enrollment profile
-     * @param discipline        dicipline
+     * @param discipline        discipline
      * @return {@code true} if detail licensee class is present, {@code false} otherwise
      */
-    boolean isDetailLicenceClassExist(String enrollmentProfile, String discipline);
+    boolean detailLicenceClassIdExist(String enrollmentProfile, String discipline);
 }

@@ -6,8 +6,6 @@ import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 /**
  * Implements {@link IPublicationTypeService}.
  * <p>
@@ -24,7 +22,7 @@ public class PublicationTypeService implements IPublicationTypeService {
     private IPublicationTypeRepository pubTypeRepository;
 
     @Override
-    public boolean isPublicationTypeExist(String pubTypeName) {
-        return Objects.nonNull(pubTypeRepository.findIdByName(pubTypeName));
+    public boolean publicationTypeExist(String pubTypeName) {
+        return pubTypeRepository.isPublicationTypeExist(pubTypeName);
     }
 }

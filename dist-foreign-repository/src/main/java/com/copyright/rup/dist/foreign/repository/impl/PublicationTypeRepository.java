@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 public class PublicationTypeRepository extends BaseRepository implements IPublicationTypeRepository {
 
     @Override
-    public String findIdByName(String pubTypeName) {
-        return selectOne("IPublicationTypeMapper.findIdByName", escapeSqlLikePattern(pubTypeName));
+    public boolean isPublicationTypeExist(String pubTypeName) {
+        return selectOne("IPublicationTypeMapper.isPublicationTypeExist", escapeSqlLikePattern(pubTypeName));
     }
 }

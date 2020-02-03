@@ -4,10 +4,12 @@
 
 <mapper namespace="IDetailLicenseeClassMapper">
 
-    <select id="findLicenseeClassIdByDisciplineAndEnrollmentProfile" parameterType="string" resultType="string">
-        select detail_licensee_class_id
-        from ${schema}.df_detail_licensee_class
-        where enrollment_profile ilike #{enrollmentProfile}
-            and discipline ilike #{discipline}
+    <select id="isLicenseeClassIdExist" parameterType="string" resultType="boolean">
+        select exists (
+            select
+            from ${schema}.df_detail_licensee_class
+            where enrollment_profile ilike #{enrollmentProfile}
+                and discipline ilike #{discipline}
+        )
     </select>
 </mapper>

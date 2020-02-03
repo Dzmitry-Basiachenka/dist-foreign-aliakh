@@ -16,7 +16,7 @@ import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
  *
  * @author Anton Azarenka
  */
-public class ClassifiedPubTypeValidator implements DistCsvProcessor.IValidator<AaclClassifiedUsage> {
+public class PublicationTypeValidator implements DistCsvProcessor.IValidator<AaclClassifiedUsage> {
 
     private final IPublicationTypeService pubTypeService;
 
@@ -25,7 +25,7 @@ public class ClassifiedPubTypeValidator implements DistCsvProcessor.IValidator<A
      *
      * @param pubTypeService instance of {@link IPublicationTypeService}
      */
-    public ClassifiedPubTypeValidator(IPublicationTypeService pubTypeService) {
+    public PublicationTypeValidator(IPublicationTypeService pubTypeService) {
         this.pubTypeService = pubTypeService;
     }
 
@@ -33,7 +33,7 @@ public class ClassifiedPubTypeValidator implements DistCsvProcessor.IValidator<A
     public boolean isValid(AaclClassifiedUsage aaclClassifiedUsage) {
         checkNotNull(aaclClassifiedUsage);
         return "disqualified".equalsIgnoreCase(aaclClassifiedUsage.getPublicationType())
-            || pubTypeService.isPublicationTypeExist(aaclClassifiedUsage.getPublicationType());
+            || pubTypeService.publicationTypeExist(aaclClassifiedUsage.getPublicationType());
     }
 
     @Override

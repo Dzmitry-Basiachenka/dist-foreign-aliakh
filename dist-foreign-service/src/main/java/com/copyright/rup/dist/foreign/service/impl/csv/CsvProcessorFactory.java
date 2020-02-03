@@ -4,11 +4,11 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IDetailLicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedLicenseeClassIdValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedPubTypeValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedWrWrkInstValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.DetailLicenseeClassValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.PublicationTypeValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.RightsholderWrWrkInstValidator;
@@ -79,8 +79,8 @@ public class CsvProcessorFactory {
         processor.addBusinessValidators(
             new ClassifiedUsageValidator(usageService),
             new ClassifiedWrWrkInstValidator(piIntegrationService),
-            new ClassifiedLicenseeClassIdValidator(detailLicenseeClassService),
-            new ClassifiedPubTypeValidator(publicationTypeService));
+            new DetailLicenseeClassValidator(detailLicenseeClassService),
+            new PublicationTypeValidator(publicationTypeService));
         return processor;
     }
 }

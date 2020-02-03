@@ -12,10 +12,10 @@ package com.copyright.rup.dist.foreign.repository.api;
 public interface IPublicationTypeRepository {
 
     /**
-     * Find publication type id by name ignoring case.
+     * Checks whether publication type id exist with provided name ignoring case in database.
      *
-     * @param pubTypeName name of publication type in any case
-     * @return publication type id
+     * @param pubTypeName name of publication type (case insensitive)
+     * @return {@code true} if publication type name is present, {@code false} otherwise
      */
-    String findIdByName(String pubTypeName);
+    boolean isPublicationTypeExist(String pubTypeName);
 }

@@ -41,37 +41,37 @@ public class DetailLicenseeClassServiceTest {
 
     @Test
     public void testIsDetailLicenceClassExist() {
-        expect(detailLicenseeClassRepository.findLicenseeClassIdByDisciplineAndEnrollmentProfile(ENROLLMENT_PROFILE,
-            DISCIPLINE)).andReturn("206").once();
+        expect(detailLicenseeClassRepository.isLicenseeClassIdExist(ENROLLMENT_PROFILE,
+            DISCIPLINE)).andReturn(true).once();
         replay(detailLicenseeClassRepository);
-        assertTrue(detailLicenseeClassService.isDetailLicenceClassExist(ENROLLMENT_PROFILE, DISCIPLINE));
+        assertTrue(detailLicenseeClassService.detailLicenceClassIdExist(ENROLLMENT_PROFILE, DISCIPLINE));
         verify(detailLicenseeClassRepository);
     }
 
     @Test
     public void testIsDetailLicenceClassExistWithDisciplineNull() {
-        expect(detailLicenseeClassRepository.findLicenseeClassIdByDisciplineAndEnrollmentProfile(ENROLLMENT_PROFILE,
-            null)).andReturn(null).once();
+        expect(detailLicenseeClassRepository.isLicenseeClassIdExist(ENROLLMENT_PROFILE,
+            null)).andReturn(false).once();
         replay(detailLicenseeClassRepository);
-        assertFalse(detailLicenseeClassService.isDetailLicenceClassExist(ENROLLMENT_PROFILE, null));
+        assertFalse(detailLicenseeClassService.detailLicenceClassIdExist(ENROLLMENT_PROFILE, null));
         verify(detailLicenseeClassRepository);
     }
 
     @Test
     public void testIsDetailLicenceClassExistWithEnrollmentProfileNull() {
-        expect(detailLicenseeClassRepository.findLicenseeClassIdByDisciplineAndEnrollmentProfile(null,
-            DISCIPLINE)).andReturn(null).once();
+        expect(detailLicenseeClassRepository.isLicenseeClassIdExist(null,
+            DISCIPLINE)).andReturn(false).once();
         replay(detailLicenseeClassRepository);
-        assertFalse(detailLicenseeClassService.isDetailLicenceClassExist(null, DISCIPLINE));
+        assertFalse(detailLicenseeClassService.detailLicenceClassIdExist(null, DISCIPLINE));
         verify(detailLicenseeClassRepository);
     }
 
     @Test
     public void testIsDetailLicenceClassExistWithEnrollmentProfileAndDisciplineNull() {
-        expect(detailLicenseeClassRepository.findLicenseeClassIdByDisciplineAndEnrollmentProfile(null,
-            null)).andReturn(null).once();
+        expect(detailLicenseeClassRepository.isLicenseeClassIdExist(null,
+            null)).andReturn(false).once();
         replay(detailLicenseeClassRepository);
-        assertFalse(detailLicenseeClassService.isDetailLicenceClassExist(null, null));
+        assertFalse(detailLicenseeClassService.detailLicenceClassIdExist(null, null));
         verify(detailLicenseeClassRepository);
     }
 }

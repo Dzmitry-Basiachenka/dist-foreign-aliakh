@@ -39,18 +39,18 @@ public class PublicationTypeServiceTest {
 
     @Test
     public void testIsPublicationTypeExist() {
-        expect(publicationTypeRepository.findIdByName(PUB_TYPE)).andReturn("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e")
+        expect(publicationTypeRepository.isPublicationTypeExist(PUB_TYPE)).andReturn(true)
             .once();
         replay(publicationTypeRepository);
-        assertTrue(publicationTypeService.isPublicationTypeExist(PUB_TYPE));
+        assertTrue(publicationTypeService.publicationTypeExist(PUB_TYPE));
         verify(publicationTypeRepository);
     }
 
     @Test
     public void testIsPublicationTypeExistNameNull() {
-        expect(publicationTypeRepository.findIdByName(null)).andReturn(null).once();
+        expect(publicationTypeRepository.isPublicationTypeExist(null)).andReturn(false).once();
         replay(publicationTypeRepository);
-        assertFalse(publicationTypeService.isPublicationTypeExist(null));
+        assertFalse(publicationTypeService.publicationTypeExist(null));
         verify(publicationTypeRepository);
     }
 }

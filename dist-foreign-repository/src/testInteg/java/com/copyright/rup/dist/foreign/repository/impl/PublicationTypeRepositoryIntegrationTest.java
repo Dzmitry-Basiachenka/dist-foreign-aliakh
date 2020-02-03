@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.repository.api.IPublicationTypeRepository;
 
@@ -31,17 +31,17 @@ public class PublicationTypeRepositoryIntegrationTest {
     private IPublicationTypeRepository publicationTypeRepository;
 
     @Test
-    public void testFindIdByName() {
-        assertEquals("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", publicationTypeRepository.findIdByName("Book"));
+    public void testIsExistByName() {
+        assertTrue(publicationTypeRepository.isPublicationTypeExist("Book"));
     }
 
     @Test
-    public void testFindIdByNameInMixedCase() {
-        assertEquals("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", publicationTypeRepository.findIdByName("boOK"));
+    public void testIsExistByNameInMixedCase() {
+        assertTrue(publicationTypeRepository.isPublicationTypeExist("boOK"));
     }
 
     @Test
-    public void testFindIdByNameNotExist() {
-        assertNull(publicationTypeRepository.findIdByName("Books"));
+    public void testIsExistByNameNotExist() {
+        assertFalse(publicationTypeRepository.isPublicationTypeExist("Books"));
     }
 }
