@@ -24,6 +24,14 @@ public interface INtsUsageService {
     List<String> insertUsages(UsageBatch usageBatch);
 
     /**
+     * Gets count of archived usages based on fund pool information.
+     *
+     * @param usageBatch instance of {@link UsageBatch}
+     * @return usages count
+     */
+    int getUsagesCountForBatch(UsageBatch usageBatch);
+
+    /**
      * Deletes usages from Pre-Service fee fund.
      * Reverts status of usages to {@link UsageStatusEnum#NTS_WITHDRAWN}.
      *

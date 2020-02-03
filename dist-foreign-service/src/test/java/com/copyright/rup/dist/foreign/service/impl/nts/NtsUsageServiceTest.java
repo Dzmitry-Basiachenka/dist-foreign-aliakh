@@ -9,6 +9,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 
@@ -57,6 +58,21 @@ public class NtsUsageServiceTest {
         replay(RupContextUtils.class, ntsUsageRepository);
         assertEquals(usageIds, ntsUsageService.insertUsages(usageBatch));
         verify(RupContextUtils.class, ntsUsageRepository);
+    }
+
+    @Test
+    public void testGetUsagesCountForBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        FundPool fundPool = new FundPool();
+        fundPool.setFundPoolPeriodFrom(2019);
+        fundPool.setFundPoolPeriodTo(2020);
+        fundPool.setMarkets(Collections.singleton("Edu"));
+        usageBatch.setFundPool(fundPool);
+        expect(ntsUsageRepository.findCountForBatch(2019, 2020, Collections.singleton("Edu")))
+            .andReturn(1).once();
+        replay(ntsUsageRepository);
+        assertEquals(1, ntsUsageService.getUsagesCountForBatch(usageBatch));
+        verify(ntsUsageRepository);
     }
 
     @Test

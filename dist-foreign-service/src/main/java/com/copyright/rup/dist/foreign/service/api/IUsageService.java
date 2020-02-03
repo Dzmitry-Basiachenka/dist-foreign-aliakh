@@ -74,14 +74,6 @@ public interface IUsageService {
     List<Usage> getUsagesWithAmounts(UsageFilter filter);
 
     /**
-     * Gets count of archived {@link Usage}s based on fund pool information.
-     *
-     * @param usageBatch instance of {@link UsageBatch}
-     * @return usages count
-     */
-    int getUsagesCountForNtsBatch(UsageBatch usageBatch);
-
-    /**
      * Updates under minimum usages grouped by Wr Wrk Inst in {@link UsageStatusEnum#RH_NOT_FOUND} status.
      * Sets NTS product family and {@link UsageStatusEnum#NTS_WITHDRAWN} status.
      *

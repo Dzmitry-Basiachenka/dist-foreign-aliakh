@@ -6,7 +6,6 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -120,17 +119,6 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         parameters.put(STATUS_KEY, status);
         parameters.put("usageIds", Objects.requireNonNull(usageIds));
         return selectList("IUsageArchiveMapper.findByIdAndStatus", parameters);
-    }
-
-    @Override
-    public int findCountForNtsBatch(Integer marketPeriodFrom, Integer marketPeriodTo, Set<String> markets) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
-        params.put("marketPeriodFrom", Objects.requireNonNull(marketPeriodFrom));
-        params.put("marketPeriodTo", Objects.requireNonNull(marketPeriodTo));
-        params.put("markets", Objects.requireNonNull(markets));
-        params.put(STATUS_KEY, UsageStatusEnum.ARCHIVED);
-        params.put("excludeClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
-        return selectOne("IUsageArchiveMapper.findCountForNtsBatch", params);
     }
 
     @Override

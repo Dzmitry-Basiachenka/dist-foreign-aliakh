@@ -60,8 +60,8 @@ public class NtsUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_STM = "83a26087-a3b3-43ca-8b34-c66134fb6edf";
     private static final String WORK_TITLE_1 = "Our fathers lies";
     private static final String WORK_TITLE_2 = "100 ROAD MOVIES";
-    private static final String BUS_MARKET = "Bus";
-    private static final String DOC_DEL_MARKET = "Doc Del";
+    private static final String EDU_MARKET = "Edu";
+    private static final String GOV_MARKET = "Gov";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.0000000000");
     private static final BigDecimal HUNDRED_AMOUNT = new BigDecimal("100.00");
@@ -88,11 +88,11 @@ public class NtsUsageRepositoryIntegrationTest {
         assertEquals(3, insertedUsageIds.size());
         List<Usage> insertedUsages = usageRepository.findByIds(insertedUsageIds);
         insertedUsages.sort(Comparator.comparing(Usage::getMarketPeriodFrom));
-        verifyInsertedUsage(243904752L, WORK_TITLE_2, DOC_DEL_MARKET, 2013, new BigDecimal("1176.92"),
+        verifyInsertedUsage(243904752L, WORK_TITLE_2, GOV_MARKET, 2013, new BigDecimal("1176.92"),
             insertedUsages.get(0));
-        verifyInsertedUsage(105062654L, WORK_TITLE_1, BUS_MARKET, 2014, new BigDecimal("500.00"),
+        verifyInsertedUsage(105062654L, WORK_TITLE_1, EDU_MARKET, 2014, new BigDecimal("500.00"),
             insertedUsages.get(1));
-        verifyInsertedUsage(243904752L, WORK_TITLE_2, BUS_MARKET, 2016, new BigDecimal("500.00"),
+        verifyInsertedUsage(243904752L, WORK_TITLE_2, EDU_MARKET, 2016, new BigDecimal("500.00"),
             insertedUsages.get(2));
     }
 
@@ -105,8 +105,13 @@ public class NtsUsageRepositoryIntegrationTest {
         assertEquals(1, insertedUsageIds.size());
         List<Usage> insertedUsages = usageRepository.findByIds(insertedUsageIds);
         insertedUsages.sort(Comparator.comparing(Usage::getMarketPeriodFrom));
-        verifyInsertedUsage(105062654L, WORK_TITLE_1, BUS_MARKET, 2014, new BigDecimal("500.00"),
+        verifyInsertedUsage(105062654L, WORK_TITLE_1, EDU_MARKET, 2014, new BigDecimal("500.00"),
             insertedUsages.get(0));
+    }
+
+    @Test
+    public void testFindCountForBatch() {
+        assertEquals(2, ntsUsageRepository.findCountForBatch(2015, 2016, Sets.newHashSet("Bus", "Doc Del")));
     }
 
     @Test
@@ -154,7 +159,7 @@ public class NtsUsageRepositoryIntegrationTest {
 
     private FundPool buildFundPool(BigDecimal nonStmAmount) {
         FundPool fundPool = new FundPool();
-        fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));
+        fundPool.setMarkets(Sets.newHashSet(EDU_MARKET, GOV_MARKET));
         fundPool.setFundPoolPeriodFrom(2015);
         fundPool.setFundPoolPeriodTo(2016);
         fundPool.setStmAmount(HUNDRED_AMOUNT);

@@ -135,7 +135,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public int getUsagesCountForNtsBatch(UsageBatch usageBatch) {
-        return getUsageService().getUsagesCountForNtsBatch(usageBatch);
+        return getNtsUsageService().getUsagesCountForBatch(usageBatch);
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link INtsUsageRepository}.
@@ -47,6 +48,17 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         params.put("createUser", Objects.requireNonNull(userName));
         params.put("updateUser", Objects.requireNonNull(userName));
         return selectList("INtsUsageMapper.insertUsages", params);
+    }
+
+    @Override
+    public int findCountForBatch(Integer marketPeriodFrom, Integer marketPeriodTo, Set<String> markets) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+        params.put("marketPeriodFrom", Objects.requireNonNull(marketPeriodFrom));
+        params.put("marketPeriodTo", Objects.requireNonNull(marketPeriodTo));
+        params.put("markets", Objects.requireNonNull(markets));
+        params.put("status", UsageStatusEnum.ARCHIVED);
+        params.put("excludeClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
+        return selectOne("INtsUsageMapper.findCountForBatch", params);
     }
 
     @Override

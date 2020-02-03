@@ -13,7 +13,6 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
@@ -180,13 +179,6 @@ public class UsageService implements IUsageService {
     @Override
     public List<Usage> getUsagesWithAmounts(UsageFilter filter) {
         return usageRepository.findWithAmountsAndRightsholders(filter);
-    }
-
-    @Override
-    public int getUsagesCountForNtsBatch(UsageBatch usageBatch) {
-        FundPool fundPool = usageBatch.getFundPool();
-        return usageArchiveRepository.findCountForNtsBatch(fundPool.getFundPoolPeriodFrom(),
-            fundPool.getFundPoolPeriodTo(), fundPool.getMarkets());
     }
 
     @Override
