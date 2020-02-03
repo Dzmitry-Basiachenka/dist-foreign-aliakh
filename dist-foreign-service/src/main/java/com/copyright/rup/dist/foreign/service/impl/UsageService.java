@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
@@ -62,7 +61,6 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -182,11 +180,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public List<String> updateNtsWithdrawnUsagesAndGetIds() {
-        return usageRepository.updateNtsWithdrawnUsagesAndGetIds();
-    }
-
-    @Override
     public List<Long> getInvalidRightsholdersByFilter(UsageFilter filter) {
         return usageRepository.findInvalidRightsholdersByFilter(filter);
     }
@@ -254,33 +247,6 @@ public class UsageService implements IUsageService {
         });
         usageRepository.addToScenario(usages);
         rightsholderService.updateUsagesPayeesAsync(usages);
-    }
-
-    @Override
-    @Transactional
-    public void populatePayeeAndCalculateAmountsForNtsScenarioUsages(Scenario scenario) {
-        String userName = RupContextUtils.getUserName();
-        Set<Long> payeeAccountNumbers = new HashSet<>();
-        List<Rightsholder> rightsholders = rightsholderService.getByScenarioId(scenario.getId());
-        Set<String> rightsholdersIds = rightsholders.stream().map(BaseEntity::getId).collect(Collectors.toSet());
-        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
-        Map<String, Table<String, String, Object>> preferencesMap =
-            prmIntegrationService.getPreferences(rightsholdersIds);
-        rightsholders.forEach(rightsholder -> {
-            Long payeeAccountNumber = PrmRollUpService.getPayee(rollUps, rightsholder, FdaConstants.NTS_PRODUCT_FAMILY)
-                .getAccountNumber();
-            payeeAccountNumbers.add(payeeAccountNumber);
-            boolean rhParticipating =
-                prmIntegrationService.isRightsholderParticipating(preferencesMap, rightsholder.getId(),
-                    FdaConstants.NTS_PRODUCT_FAMILY);
-            BigDecimal serviceFee = prmIntegrationService.getRhParticipatingServiceFee(rhParticipating);
-            usageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(rightsholder.getAccountNumber(),
-                scenario.getId(), serviceFee, rhParticipating, payeeAccountNumber, userName);
-        });
-        if (0 != BigDecimal.ZERO.compareTo(scenario.getNtsFields().getPostServiceFeeAmount())) {
-            usageRepository.applyPostServiceFeeAmount(scenario.getId());
-        }
-        rightsholderService.updateRighstholdersAsync(payeeAccountNumbers);
     }
 
     @Override

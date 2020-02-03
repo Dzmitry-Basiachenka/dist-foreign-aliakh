@@ -1,19 +1,33 @@
 package com.copyright.rup.dist.foreign.service.impl.nts;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
+
+import com.google.common.collect.Table;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link INtsUsageService}.
@@ -32,6 +46,12 @@ public class NtsUsageService implements INtsUsageService {
     @Autowired
     private INtsUsageRepository ntsUsageRepository;
 
+    @Autowired
+    private IPrmIntegrationService prmIntegrationService;
+
+    @Autowired
+    private IRightsholderService rightsholderService;
+
     @Override
     @Transactional
     public List<String> insertUsages(UsageBatch usageBatch) {
@@ -48,6 +68,36 @@ public class NtsUsageService implements INtsUsageService {
         FundPool fundPool = usageBatch.getFundPool();
         return ntsUsageRepository.findCountForBatch(fundPool.getFundPoolPeriodFrom(),
             fundPool.getFundPoolPeriodTo(), fundPool.getMarkets());
+    }
+
+    @Override
+    public List<String> updateNtsWithdrawnUsagesAndGetIds() {
+        return ntsUsageRepository.updateNtsWithdrawnUsagesAndGetIds();
+    }
+
+    @Override
+    @Transactional
+    public void populatePayeeAndCalculateAmountsForScenarioUsages(Scenario scenario) {
+        String userName = RupContextUtils.getUserName();
+        Set<Long> payeeAccountNumbers = new HashSet<>();
+        List<Rightsholder> rightsholders = rightsholderService.getByScenarioId(scenario.getId());
+        Set<String> rightsholdersIds = rightsholders.stream().map(BaseEntity::getId).collect(Collectors.toSet());
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        Map<String, Table<String, String, Object>> preferences = prmIntegrationService.getPreferences(rightsholdersIds);
+        rightsholders.forEach(rightsholder -> {
+            Long payeeAccountNumber = PrmRollUpService.getPayee(rollUps, rightsholder, FdaConstants.NTS_PRODUCT_FAMILY)
+                .getAccountNumber();
+            payeeAccountNumbers.add(payeeAccountNumber);
+            boolean rhParticipating = prmIntegrationService.isRightsholderParticipating(preferences,
+                rightsholder.getId(), FdaConstants.NTS_PRODUCT_FAMILY);
+            BigDecimal serviceFee = prmIntegrationService.getRhParticipatingServiceFee(rhParticipating);
+            ntsUsageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(rightsholder.getAccountNumber(),
+                scenario.getId(), serviceFee, rhParticipating, payeeAccountNumber, userName);
+        });
+        if (0 != BigDecimal.ZERO.compareTo(scenario.getNtsFields().getPostServiceFeeAmount())) {
+            ntsUsageRepository.applyPostServiceFeeAmount(scenario.getId());
+        }
+        rightsholderService.updateRighstholdersAsync(payeeAccountNumbers);
     }
 
     @Override

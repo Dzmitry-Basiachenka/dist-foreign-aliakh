@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
@@ -12,6 +13,7 @@ import com.google.common.collect.Sets;
 
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +30,8 @@ import java.util.Set;
  */
 @Repository
 public class NtsUsageRepository extends BaseRepository implements INtsUsageRepository {
+
+    private static final String UPDATE_USER_KEY = "updateUser";
 
     @Override
     public List<String> insertUsages(UsageBatch usageBatch, String userName) {
@@ -46,7 +50,7 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         params.put("nonStmMinAmount", fundPool.getNonStmMinimumAmount());
         params.put("nonStmAmount", fundPool.getNonStmAmount());
         params.put("createUser", Objects.requireNonNull(userName));
-        params.put("updateUser", Objects.requireNonNull(userName));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         return selectList("INtsUsageMapper.insertUsages", params);
     }
 
@@ -62,11 +66,41 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
     }
 
     @Override
+    public List<String> updateNtsWithdrawnUsagesAndGetIds() {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+        params.put("statusToFind", UsageStatusEnum.RH_NOT_FOUND);
+        params.put("statusToSet", UsageStatusEnum.NTS_WITHDRAWN);
+        params.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
+        params.put("minimumTotal", new BigDecimal("100"));
+        params.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
+        return selectList("INtsUsageMapper.updateNtsWithdrawnUsagesAndGetIds", params);
+    }
+
+    @Override
+    public void calculateAmountsAndUpdatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId,
+                                                              BigDecimal serviceFee, boolean rhParticipating,
+                                                              Long payeeAccountNumber, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(6);
+        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put("rhAccountNumber", Objects.requireNonNull(rhAccountNumber));
+        params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
+        params.put("serviceFee", Objects.requireNonNull(serviceFee));
+        params.put("rhParticipating", rhParticipating);
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        update("INtsUsageMapper.calculateAmountsAndUpdatePayeeByAccountNumber", params);
+    }
+
+    @Override
+    public void applyPostServiceFeeAmount(String scenarioId) {
+        update("INtsUsageMapper.applyPostServiceFeeAmount", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
     public void deleteFromPreServiceFeeFund(String fundPoolId, String updateUser) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put("fundPoolId", Objects.requireNonNull(fundPoolId));
         params.put("status", UsageStatusEnum.NTS_WITHDRAWN);
-        params.put("updateUser", Objects.requireNonNull(updateUser));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
         update("INtsUsageMapper.deleteFromPreServiceFeeFund", params);
     }
 
@@ -85,7 +119,7 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         params.put("eligibleStatus", UsageStatusEnum.ELIGIBLE);
         params.put("unclassifiedStatus", UsageStatusEnum.UNCLASSIFIED);
         params.put("statusesToUpdate", Sets.newHashSet(UsageStatusEnum.NTS_EXCLUDED, UsageStatusEnum.LOCKED));
-        params.put("updateUser", Objects.requireNonNull(userName));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("INtsUsageMapper.deleteFromScenario", params);
     }
 }
