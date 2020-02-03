@@ -14,6 +14,7 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,6 +48,7 @@ public class FundPoolServiceTest {
 
     private FundPoolService fundPoolService;
     private IUsageService usageService;
+    private INtsUsageService ntsUsageService;
     private IFundPoolRepository fundPoolRepository;
 
     @Before
@@ -54,7 +56,9 @@ public class FundPoolServiceTest {
         fundPoolService = new FundPoolService();
         fundPoolRepository = createMock(IFundPoolRepository.class);
         usageService = createMock(IUsageService.class);
+        ntsUsageService = createMock(INtsUsageService.class);
         Whitebox.setInternalState(fundPoolService, usageService);
+        Whitebox.setInternalState(fundPoolService, ntsUsageService);
         Whitebox.setInternalState(fundPoolService, fundPoolRepository);
     }
 
@@ -93,12 +97,12 @@ public class FundPoolServiceTest {
 
     @Test
     public void testDeleteAdditionalFund() {
-        usageService.deleteFromPreServiceFeeFund(FUND_UID);
+        ntsUsageService.deleteFromPreServiceFeeFund(FUND_UID);
         expectLastCall().once();
         expect(fundPoolRepository.delete(FUND_UID)).andReturn(2).once();
-        replay(fundPoolRepository, usageService);
+        replay(fundPoolRepository, ntsUsageService);
         fundPoolService.deletePreServiceFeeFund(buildPreServiceFeeFund());
-        verify(fundPoolRepository, usageService);
+        verify(fundPoolRepository, ntsUsageService);
     }
 
     @Test

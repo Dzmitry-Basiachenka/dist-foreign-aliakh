@@ -132,9 +132,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_31 = "3cf274c5-8eac-4d4a-96be-5921ae026840";
     private static final String USAGE_ID_32 = "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15";
     private static final String USAGE_ID_33 = "45445974-5bee-477a-858b-e9e8c1a642b8";
-    private static final String USAGE_ID_BELLETRISTIC = "bbbd64db-2668-499a-9d18-be8b3f87fbf5";
-    private static final String USAGE_ID_UNCLASSIFIED = "6cad4cf2-6a19-4e5b-b4e0-f2f7a62ff91c";
-    private static final String USAGE_ID_STM = "83a26087-a3b3-43ca-8b34-c66134fb6edf";
     private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String USAGE_ID_34 = "ade68eac-0d79-4d23-861b-499a0c6e91d3";
@@ -147,7 +144,6 @@ public class UsageRepositoryIntegrationTest {
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.00");
     private static final BigDecimal DEFAULT_ZERO_AMOUNT = new BigDecimal("0.0000000000");
-    private static final BigDecimal HUNDRED_AMOUNT = new BigDecimal("100.00");
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -495,22 +491,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testDeleteFromAdditionalFund() {
-        String fundPoolId = "3fef25b0-c0d1-4819-887f-4c6acc01390e";
-        List<Usage> usages =
-            usageRepository.findByIds(Collections.singletonList("ba95f0b3-dc94-4925-96f2-93d05db9c469"));
-        assertEquals(1, CollectionUtils.size(usages));
-        Usage usage = usages.get(0);
-        assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
-        assertEquals(fundPoolId, usage.getFundPoolId());
-        usageRepository.deleteFromPreServiceFeeFund(fundPoolId, USER_NAME);
-        usage =
-            usageRepository.findByIds(Collections.singletonList("ba95f0b3-dc94-4925-96f2-93d05db9c469")).get(0);
-        assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
-        assertNull(usage.getFundPoolId());
-    }
-
-    @Test
     public void testFindByScenarioId() {
         List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID);
         assertEquals(2, usages.size());
@@ -562,19 +542,6 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
         assertEquals(1,
             usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_34, USAGE_ID_33));
-    }
-
-    @Test
-    public void testDeleteBelletristicByScenarioId() {
-        String scenarioId = "dd4fca1d-eac8-4b76-85e4-121b7971d049";
-        verifyUsageIdsInScenario(Arrays.asList(USAGE_ID_BELLETRISTIC, USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
-        assertTrue(CollectionUtils.isNotEmpty(
-            usageRepository.findByIds(Collections.singletonList(USAGE_ID_BELLETRISTIC))));
-        usageRepository.deleteBelletristicByScenarioId(scenarioId);
-        verifyUsageIdsInScenario(Arrays.asList(USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
-        assertTrue(CollectionUtils.isEmpty(
-            usageRepository.findByIds(Collections.singletonList(USAGE_ID_BELLETRISTIC))));
-        assertEquals(0, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_BELLETRISTIC));
     }
 
     @Test
@@ -715,27 +682,6 @@ public class UsageRepositoryIntegrationTest {
         usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
         verifyUsageExcludedFromScenario(usageRepository.findByIds(Collections.singletonList(USAGE_ID_8)).get(0),
             FAS_PRODUCT_FAMILY, UsageStatusEnum.ELIGIBLE);
-    }
-
-    @Test
-    public void testDeleteFromNtsScenario() {
-        List<Usage> usages = usageRepository.findByIds(
-            Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", USAGE_ID_33));
-        assertEquals(2, CollectionUtils.size(usages));
-        BigDecimal reportedValue = new BigDecimal("900.00");
-        verifyNtsUsage(usages.get(0), UsageStatusEnum.NTS_EXCLUDED, null, StoredEntity.DEFAULT_USER,
-            DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT, null, DEFAULT_ZERO_AMOUNT, DEFAULT_ZERO_AMOUNT);
-        verifyNtsUsage(usages.get(1), UsageStatusEnum.LOCKED, NTS_SCENARIO_ID, StoredEntity.DEFAULT_USER,
-            new BigDecimal("900.0000000000"), reportedValue, SERVICE_FEE, new BigDecimal("288.0000000000"),
-            new BigDecimal("612.0000000000"));
-        usageRepository.deleteFromNtsScenario(NTS_SCENARIO_ID, USER_NAME);
-        usages = usageRepository.findByIds(
-            Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", USAGE_ID_33));
-        assertEquals(2, CollectionUtils.size(usages));
-        verifyNtsUsage(usages.get(0), UsageStatusEnum.ELIGIBLE, null, USER_NAME, DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT,
-            null, DEFAULT_ZERO_AMOUNT, DEFAULT_ZERO_AMOUNT);
-        verifyNtsUsage(usages.get(1), UsageStatusEnum.UNCLASSIFIED, null, USER_NAME, DEFAULT_ZERO_AMOUNT,
-            reportedValue, null, DEFAULT_ZERO_AMOUNT, DEFAULT_ZERO_AMOUNT);
     }
 
     @Test
@@ -1379,14 +1325,6 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(FAS_PRODUCT_FAMILY, usage.getProductFamily());
     }
 
-    private void verifyNtsUsage(Usage usage, UsageStatusEnum status, String scenarioId, String username,
-                                BigDecimal grossAmount, BigDecimal reportedValue, BigDecimal serviceFee,
-                                BigDecimal serviceFeeAmount, BigDecimal netAmount) {
-        verifyUsage(usage, status, scenarioId, username, null);
-        assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
-        assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
-    }
-
     private void verifyUsageExcludedFromScenario(Usage usage, String productFamily, UsageStatusEnum status) {
         assertEquals(status, usage.getStatus());
         assertNull(usage.getScenarioId());
@@ -1590,15 +1528,6 @@ public class UsageRepositoryIntegrationTest {
         filter.setDistributionName(distributionName);
         assertEquals(usageIds.length, usageRepository.findCountForAudit(filter));
         verifyUsageDtos(usageRepository.findForAudit(filter, null, null), usageIds);
-    }
-
-    private void verifyUsageIdsInScenario(List<String> expectedUsageIds, String scenarioId) {
-        List<Usage> actualUsages = usageRepository.findByScenarioId(scenarioId);
-        assertEquals(CollectionUtils.size(expectedUsageIds), CollectionUtils.size(actualUsages));
-        List<String> usagesIdsBeforeDeletion = actualUsages.stream()
-            .map(Usage::getId)
-            .collect(Collectors.toList());
-        assertTrue(CollectionUtils.containsAll(usagesIdsBeforeDeletion, expectedUsageIds));
     }
 
     private void verifyUsageAmountsAccountNumberAndParticipating(long accountNumber, BigDecimal grossAmount,

@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class FundPoolService implements IFundPoolService {
     private IFundPoolRepository fundPoolRepository;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private INtsUsageService ntsUsageService;
 
     @Override
     @Transactional
@@ -66,7 +69,7 @@ public class FundPoolService implements IFundPoolService {
     public void deletePreServiceFeeFund(PreServiceFeeFund fund) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete Pre-Service fee fund. Started. FundPoolName={}, UserName={}", fund.getName(), userName);
-        usageService.deleteFromPreServiceFeeFund(fund.getId());
+        ntsUsageService.deleteFromPreServiceFeeFund(fund.getId());
         fundPoolRepository.delete(fund.getId());
         LOGGER.info("Delete Pre-Service fee fund. Finished. FundPoolName={}, UserName={}", fund.getName(), userName);
     }

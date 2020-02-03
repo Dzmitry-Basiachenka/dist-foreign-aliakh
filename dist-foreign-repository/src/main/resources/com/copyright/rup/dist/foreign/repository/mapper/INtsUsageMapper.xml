@@ -125,4 +125,71 @@
         returning df_usage_fas_uid
     </select>
 
+    <update id="deleteFromPreServiceFeeFund" parameterType="map">
+        with ufas as (
+            update
+                ${schema}.df_usage_fas
+            set
+                df_fund_pool_uid = null,
+                <include refid="StoredEntityMapper.update"/>
+            where df_fund_pool_uid = #{fundPoolId}
+            returning df_usage_fas_uid
+        )
+        update ${schema}.df_usage
+        set
+            status_ind = #{status},
+            <include refid="StoredEntityMapper.update"/>
+        from ufas
+        where df_usage_uid = ufas.df_usage_fas_uid
+    </update>
+
+    <delete id="deleteBelletristicByScenarioId" parameterType="map">
+        with u as (
+            delete from ${schema}.df_usage
+            where df_usage_uid in (
+                select u.df_usage_uid
+                from ${schema}.df_usage u
+                join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
+                    and wc.classification = #{belletristicClassification}
+                where <include refid="IUsageMapper.scenarioBatchesFilter"/>)
+            returning df_usage_uid
+        )
+        delete from ${schema}.df_usage_fas
+        where df_usage_fas_uid in (select df_usage_uid from u)
+    </delete>
+
+    <update id="deleteFromScenario" parameterType="map">
+        with usage_ids as (
+            update
+                ${schema}.df_usage u
+            set
+                status_ind = case when usage_with_classification.classification is not null then #{eligibleStatus} else #{unclassifiedStatus} end,
+                df_scenario_uid = null,
+                service_fee = null,
+                service_fee_amount = 0,
+                net_amount = 0,
+                gross_amount = 0,
+                <include refid="StoredEntityMapper.update"/>
+            from (
+                select
+                    u.df_usage_uid,
+                    wc.classification
+                from ${schema}.df_usage u
+                left join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
+                where <include refid="IUsageMapper.scenarioBatchesFilter"/>
+                    and status_ind in
+                    <foreach collection="statusesToUpdate" item="statusToUpdate" separator="," open="(" close=")">
+                        #{statusToUpdate}
+                    </foreach>) as usage_with_classification
+            where u.df_usage_uid = usage_with_classification.df_usage_uid
+            returning u.df_usage_uid
+        )
+        update ${schema}.df_usage_fas
+        set
+            is_rh_participating_flag = false,
+            <include refid="StoredEntityMapper.update"/>
+        from usage_ids
+        where df_usage_fas_uid = usage_ids.df_usage_uid
+    </update>
+
 </mapper>

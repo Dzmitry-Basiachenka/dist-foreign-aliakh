@@ -202,15 +202,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void deleteFromPreServiceFeeFund(String fundPoolId, String updateUser) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("fundPoolId", Objects.requireNonNull(fundPoolId));
-        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
-        parameters.put(STATUS_KEY, UsageStatusEnum.NTS_WITHDRAWN);
-        update("IUsageMapper.deleteFromPreServiceFeeFund", parameters);
-    }
-
-    @Override
     public void deleteByScenarioId(String scenarioId) {
         delete("IUsageMapper.deleteByScenarioId", Objects.requireNonNull(scenarioId));
     }
@@ -221,14 +212,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(STATUS_KEY, UsageStatusEnum.NTS_EXCLUDED);
         delete("IUsageMapper.deleteNtsByScenarioId", parameters);
-    }
-
-    @Override
-    public void deleteBelletristicByScenarioId(String usageId) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(usageId));
-        parameters.put("belletristicClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
-        delete("IUsageMapper.deleteBelletristicByScenarioId", parameters);
     }
 
     @Override
@@ -301,17 +284,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             params.put(USAGE_ID_KEY, usageId);
             update("IUsageMapper.deleteFromScenarioByUsageId", params);
         });
-    }
-
-    @Override
-    public void deleteFromNtsScenario(String scenarioId, String userName) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
-        parameters.put("eligibleStatus", UsageStatusEnum.ELIGIBLE);
-        parameters.put("unclassifiedStatus", UsageStatusEnum.UNCLASSIFIED);
-        parameters.put("statusesToUpdate", Sets.newHashSet(UsageStatusEnum.NTS_EXCLUDED, UsageStatusEnum.LOCKED));
-        update("IUsageMapper.deleteFromNtsScenario", parameters);
     }
 
     @Override

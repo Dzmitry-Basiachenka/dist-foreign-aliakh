@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyServic
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import com.google.common.collect.Lists;
 
@@ -63,6 +64,7 @@ public class ScenarioServiceTest {
     private ScenarioService scenarioService;
     private IScenarioRepository scenarioRepository;
     private IUsageService usageService;
+    private INtsUsageService ntsUsageService;
     private IScenarioAuditService scenarioAuditService;
     private ILmIntegrationService lmIntegrationService;
     private IScenarioUsageFilterService scenarioUsageFilterService;
@@ -74,17 +76,19 @@ public class ScenarioServiceTest {
         scenario.setProductFamily("FAS");
         scenarioRepository = createMock(IScenarioRepository.class);
         usageService = createMock(IUsageService.class);
+        ntsUsageService = createMock(INtsUsageService.class);
         lmIntegrationService = createMock(ILmIntegrationService.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
         scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
         rightsholderDiscrepancyService = createMock(IRightsholderDiscrepancyService.class);
         scenarioService = new ScenarioService();
-        Whitebox.setInternalState(scenarioService, "scenarioRepository", scenarioRepository);
-        Whitebox.setInternalState(scenarioService, "usageService", usageService);
-        Whitebox.setInternalState(scenarioService, "scenarioAuditService", scenarioAuditService);
-        Whitebox.setInternalState(scenarioService, "lmIntegrationService", lmIntegrationService);
-        Whitebox.setInternalState(scenarioService, "scenarioUsageFilterService", scenarioUsageFilterService);
-        Whitebox.setInternalState(scenarioService, "rightsholderDiscrepancyService", rightsholderDiscrepancyService);
+        Whitebox.setInternalState(scenarioService, scenarioRepository);
+        Whitebox.setInternalState(scenarioService, usageService);
+        Whitebox.setInternalState(scenarioService, ntsUsageService);
+        Whitebox.setInternalState(scenarioService, scenarioAuditService);
+        Whitebox.setInternalState(scenarioService, lmIntegrationService);
+        Whitebox.setInternalState(scenarioService, scenarioUsageFilterService);
+        Whitebox.setInternalState(scenarioService, rightsholderDiscrepancyService);
         Whitebox.setInternalState(scenarioService, "batchSize", 1);
     }
 
@@ -157,9 +161,9 @@ public class ScenarioServiceTest {
     @Test
     public void testDeleteNtsScenario() {
         scenario.setProductFamily("NTS");
-        usageService.deleteBelletristicByScenarioId(SCENARIO_ID);
+        ntsUsageService.deleteBelletristicByScenarioId(SCENARIO_ID);
         expectLastCall().once();
-        usageService.deleteFromNtsScenario(SCENARIO_ID);
+        ntsUsageService.deleteFromScenario(SCENARIO_ID);
         expectLastCall().once();
         scenarioRepository.remove(SCENARIO_ID);
         expectLastCall().once();
@@ -167,9 +171,9 @@ public class ScenarioServiceTest {
         expectLastCall().once();
         scenarioAuditService.deleteActions(SCENARIO_ID);
         expectLastCall().once();
-        replay(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
+        replay(ntsUsageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
         scenarioService.deleteScenario(scenario);
-        verify(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
+        verify(ntsUsageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
     }
 
     @Test

@@ -1329,6 +1329,7 @@ databaseChangeLog {
         rollback ""
     }
 
+    // TODO {aliakh} delete after migration all NTS methods into separate repository
     changeSet(id: '2019-03-29-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
         comment('Inserting test data for testDeleteFromAdditionalFund')
 
@@ -1375,6 +1376,7 @@ databaseChangeLog {
         }
     }
 
+    // TODO {aliakh} delete after migration all NTS methods into separate repository
     changeSet(id: '2019-04-22-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
         comment('Inserting test data for testDeleteFromNtsScenario')
 
@@ -1542,6 +1544,7 @@ databaseChangeLog {
         }
     }
 
+    // TODO {aliakh} delete after migration all NTS methods into separate repository
     changeSet(id: '2019-04-30-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
         comment('Inserting test data for testDeleteBelletristicByScenarioId')
 

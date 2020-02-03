@@ -41,4 +41,19 @@ public class NtsUsageService implements INtsUsageService {
             usageBatch.getName(), userName, LogUtils.size(usageIds));
         return usageIds;
     }
+
+    @Override
+    public void deleteFromPreServiceFeeFund(String fundPoolId) {
+        ntsUsageRepository.deleteFromPreServiceFeeFund(fundPoolId, RupContextUtils.getUserName());
+    }
+
+    @Override
+    public void deleteBelletristicByScenarioId(String scenarioId) {
+        ntsUsageRepository.deleteBelletristicByScenarioId(scenarioId);
+    }
+
+    @Override
+    public void deleteFromScenario(String scenarioId) {
+        ntsUsageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
+    }
 }

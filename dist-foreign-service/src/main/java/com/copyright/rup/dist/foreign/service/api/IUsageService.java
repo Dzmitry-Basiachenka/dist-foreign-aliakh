@@ -51,14 +51,6 @@ public interface IUsageService {
     void deleteUsageBatchDetails(UsageBatch usageBatch);
 
     /**
-     * Deletes {@link Usage}s from Pre-Service fee fund.
-     * Reverts status of {@link Usage}s to {@link UsageStatusEnum#NTS_WITHDRAWN}.
-     *
-     * @param fundPoolId identifier of fund pool
-     */
-    void deleteFromPreServiceFeeFund(String fundPoolId);
-
-    /**
      * Deletes all archived {@link Usage}s and it's audit by provided batch id.
      *
      * @param batchId batch identifier
@@ -71,13 +63,6 @@ public interface IUsageService {
      * @param usageId usage identifier
      */
     void deleteById(String usageId);
-
-    /**
-     * Deletes {@link Usage}s with Wr Wrk Insts that were classified as BELLETRISTIC by scenario identifier.
-     *
-     * @param scenarioId scenario identifier
-     */
-    void deleteBelletristicByScenarioId(String scenarioId);
 
     /**
      * Gets the {@link Usage}s based on {@link UsageFilter}.
@@ -180,14 +165,6 @@ public interface IUsageService {
      * @param scenarioId scenario identifier
      */
     void deleteFromScenario(String scenarioId);
-
-    /**
-     * Deletes {@link Usage}s from NTS scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
-     * sets scenario id to {@code null}, sets gross amount to 0.
-     *
-     * @param scenarioId scenario identifier
-     */
-    void deleteFromNtsScenario(String scenarioId);
 
     /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
