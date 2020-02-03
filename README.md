@@ -1,5 +1,8 @@
 8.1.21
 -
+* B-56092 Tech Debt: FDA: move NTS delete methods to separate service and repository
+* B-56092 Tech Debt: FDA: apply 49.3.+ version of dist-common
+* CDP-884 FDA: Load classified AACL details: Audit records are not deleted from FDA database for disqualified usages
 
 8.1.20
 -
