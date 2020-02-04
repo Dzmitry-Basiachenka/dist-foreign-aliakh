@@ -34,6 +34,8 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
 
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private MenuBar fundPoolMenuBar;
+    private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button sendForClassificationButton;
     private Button loadClassifiedUsagesButton;
     private final IAaclUsageController controller;
@@ -51,6 +53,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     public IMediator initMediator() {
         AaclUsageMediator mediator = new AaclUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
+        mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         mediator.setSendForClassificationButton(sendForClassificationButton);
         mediator.setLoadClassifiedUsagesButton(loadClassifiedUsagesButton);
         return mediator;
@@ -95,11 +98,12 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     @Override
     protected HorizontalLayout initButtonsLayout() {
         initUsageBatchMenuBar();
+        initFundPoolMenuBar();
         initSendForClassificationButton();
         initLoadClassifiedUsagesButton();
         VaadinUtils.setButtonsAutoDisabled(loadClassifiedUsagesButton);
-        HorizontalLayout layout =
-            new HorizontalLayout(usageBatchMenuBar, sendForClassificationButton, loadClassifiedUsagesButton);
+        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, sendForClassificationButton,
+            loadClassifiedUsagesButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -113,6 +117,16 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
             item -> Windows.showModalWindow(new AaclUsageBatchUploadWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
+    }
+
+    private void initFundPoolMenuBar() {
+        fundPoolMenuBar = new MenuBar();
+        MenuBar.MenuItem menuItem =
+            fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
+        loadFundPoolMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
+            item -> {/*TODO {aliakh} load the window when it's implemented*/});
+        VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
+        VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
     }
 
     private void initSendForClassificationButton() {
