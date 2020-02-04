@@ -56,7 +56,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         aaclClassifiedUsages.forEach(aaclUsage -> {
             parameters.put("aaclUsage", aaclUsage);
-            update("IAaclUsageMapper.updateClassifiedUsages", parameters);
+            update("IAaclUsageMapper.updateClassifiedUsage", parameters);
         });
     }
 

@@ -12,10 +12,10 @@ package com.copyright.rup.dist.foreign.service.api;
 public interface IPublicationTypeService {
 
     /**
-     * Checks if publication type with publication type name is exist in database.
+     * Checks whether publication type id exist with provided name ignoring case in database.
      *
      * @param pubTypeName name of publication type
      * @return {@code true} if publication type name is present, {@code false} otherwise
      */
-    boolean isPublicationTypeExist(String pubTypeName);
+    boolean publicationTypeExist(String pubTypeName);
 }

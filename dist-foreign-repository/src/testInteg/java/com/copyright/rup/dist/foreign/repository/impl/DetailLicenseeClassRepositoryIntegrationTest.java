@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.repository.api.IDetailLicenseeClassRepository;
 
@@ -32,19 +32,16 @@ public class DetailLicenseeClassRepositoryIntegrationTest {
 
     @Test
     public void testFindClassIdByDisciplineAndEnrollmentProfile() {
-        assertEquals("173", detailLicenseeClassRepository.findLicenseeClassIdByDisciplineAndEnrollmentProfile("EXU4",
-            "Arts & Humanities"));
+        assertTrue(detailLicenseeClassRepository.isLicenseeClassIdExist("EXU4", "Arts & Humanities"));
     }
 
     @Test
     public void testFindClassIdByMixedCaseDisciplineAndEnrollmentProfile() {
-        assertEquals("173", detailLicenseeClassRepository.findLicenseeClassIdByDisciplineAndEnrollmentProfile("exU4",
-            "ARTS & HUMANITIES"));
+        assertTrue(detailLicenseeClassRepository.isLicenseeClassIdExist("exU4", "ARTS & HUMANITIES"));
     }
 
     @Test
     public void testFindClassIdRecordNotExist() {
-        assertNull(detailLicenseeClassRepository.findLicenseeClassIdByDisciplineAndEnrollmentProfile("Null",
-            "Arts & Humanities"));
+        assertFalse(detailLicenseeClassRepository.isLicenseeClassIdExist("Null", "Arts & Humanities"));
     }
 }

@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Validates {@link ClassifiedPubTypeValidator}.
+ * Validates {@link PublicationTypeValidator}.
  * <p/>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -23,22 +23,22 @@ import org.junit.Test;
  *
  * @author Anton Azarenka
  */
-public class ClassifiedPubTypeValidatorTest {
+public class PublicationTypeValidatorTest {
 
     private static final String PUB_TYPE = "Book";
     private IPublicationTypeService publicationTypeService;
-    private ClassifiedPubTypeValidator validator;
+    private PublicationTypeValidator validator;
 
     @Before
     public void setUp() {
         publicationTypeService = createMock(IPublicationTypeService.class);
-        validator = new ClassifiedPubTypeValidator(publicationTypeService);
+        validator = new PublicationTypeValidator(publicationTypeService);
     }
 
     @Test
     public void testIsValid() {
         AaclClassifiedUsage usage = buildClassifiedAaclUsage(PUB_TYPE);
-        expect(publicationTypeService.isPublicationTypeExist(PUB_TYPE)).andReturn(true).once();
+        expect(publicationTypeService.publicationTypeExist(PUB_TYPE)).andReturn(true).once();
         replay(publicationTypeService);
         assertTrue(validator.isValid(usage));
         verify(publicationTypeService);
@@ -55,7 +55,7 @@ public class ClassifiedPubTypeValidatorTest {
     @Test
     public void testIsValidPubTypeNotExist() {
         AaclClassifiedUsage usage = buildClassifiedAaclUsage(null);
-        expect(publicationTypeService.isPublicationTypeExist(null)).andReturn(false).once();
+        expect(publicationTypeService.publicationTypeExist(null)).andReturn(false).once();
         replay(publicationTypeService);
         assertFalse(validator.isValid(usage));
         verify(publicationTypeService);

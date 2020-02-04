@@ -6,8 +6,6 @@ import com.copyright.rup.dist.foreign.service.api.IDetailLicenseeClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 /**
  * Implements {@link IDetailLicenseeClassService}.
  * <p>
@@ -24,9 +22,7 @@ public class DetailLicenseeClassService implements IDetailLicenseeClassService {
     private IDetailLicenseeClassRepository detailLicenseeClassRepository;
 
     @Override
-    public boolean isDetailLicenceClassExist(String enrollmentProfile, String discipline) {
-        return Objects.nonNull(
-            detailLicenseeClassRepository.findLicenseeClassIdByDisciplineAndEnrollmentProfile(enrollmentProfile,
-                discipline));
+    public boolean detailLicenceClassIdExist(String enrollmentProfile, String discipline) {
+        return detailLicenseeClassRepository.isLicenseeClassIdExist(enrollmentProfile, discipline);
     }
 }

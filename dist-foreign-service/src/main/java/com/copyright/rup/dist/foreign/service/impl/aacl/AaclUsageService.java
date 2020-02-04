@@ -40,8 +40,8 @@ import java.util.stream.Collectors;
 @Service
 public class AaclUsageService implements IAaclUsageService {
 
-    private static final Logger LOGGER = RupLogUtils.getLogger();
     private static final String DISQUALIFIED_USAGE = "disqualified";
+    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     private IUsageAuditService usageAuditService;

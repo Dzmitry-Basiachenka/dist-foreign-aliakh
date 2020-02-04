@@ -16,7 +16,7 @@ import com.copyright.rup.dist.foreign.service.api.IDetailLicenseeClassService;
  *
  * @author Anton Azarenka
  */
-public class ClassifiedLicenseeClassIdValidator implements DistCsvProcessor.IValidator<AaclClassifiedUsage> {
+public class DetailLicenseeClassValidator implements DistCsvProcessor.IValidator<AaclClassifiedUsage> {
 
     private final IDetailLicenseeClassService detailLicenseeClassService;
 
@@ -25,7 +25,7 @@ public class ClassifiedLicenseeClassIdValidator implements DistCsvProcessor.IVal
      *
      * @param detailLicenseeClassService instance of {@link IDetailLicenseeClassService}
      */
-    public ClassifiedLicenseeClassIdValidator(IDetailLicenseeClassService detailLicenseeClassService) {
+    public DetailLicenseeClassValidator(IDetailLicenseeClassService detailLicenseeClassService) {
         this.detailLicenseeClassService = detailLicenseeClassService;
     }
 
@@ -33,7 +33,7 @@ public class ClassifiedLicenseeClassIdValidator implements DistCsvProcessor.IVal
     public boolean isValid(AaclClassifiedUsage aaclClassifiedUsage) {
         checkNotNull(aaclClassifiedUsage);
         return isUsageDisqualified(aaclClassifiedUsage)
-            || detailLicenseeClassService.isDetailLicenceClassExist(aaclClassifiedUsage.getEnrollmentProfile(),
+            || detailLicenseeClassService.detailLicenceClassIdExist(aaclClassifiedUsage.getEnrollmentProfile(),
             aaclClassifiedUsage.getDiscipline());
     }
 

@@ -342,7 +342,7 @@
         )
     </select>
 
-    <update id="updateClassifiedUsages" parameterType="map">
+    <update id="updateClassifiedUsage" parameterType="map">
         with u as (
             update ${schema}.df_usage
             set

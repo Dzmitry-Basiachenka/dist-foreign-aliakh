@@ -12,11 +12,12 @@ package com.copyright.rup.dist.foreign.repository.api;
 public interface IDetailLicenseeClassRepository {
 
     /**
-     * Finds detail licensee class id by enrollment profile and discipline ignoring case.
+     * Checks whether detail licensee class id exist with provided enrollment profile and discipline ignoring case
+     * in database.
      *
-     * @param enrollmentProfile enrollment profile in any case
-     * @param discipline        discipline in any case
-     * @return detail licensee class id
+     * @param enrollmentProfile enrollment profile case insensitive
+     * @param discipline        discipline (case insensitive)
+     * @return {@code true} if detail licensee class is present, {@code false} otherwise
      */
-    String findLicenseeClassIdByDisciplineAndEnrollmentProfile(String enrollmentProfile, String discipline);
+    boolean isLicenseeClassIdExist(String enrollmentProfile, String discipline);
 }

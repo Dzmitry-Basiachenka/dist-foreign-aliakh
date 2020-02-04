@@ -9,9 +9,11 @@
         <result property="name" column="name"/>
     </resultMap>
 
-    <select id="findIdByName" parameterType="string" resultType="string">
-        select df_publication_type_uid
-        from ${schema}.df_publication_type
-        where name ilike #{pubTypeName}
+    <select id="isPublicationTypeExist" parameterType="string" resultType="boolean">
+        select exists (
+            select
+            from ${schema}.df_publication_type
+            where name ilike #{pubTypeName}
+        )
     </select>
 </mapper>

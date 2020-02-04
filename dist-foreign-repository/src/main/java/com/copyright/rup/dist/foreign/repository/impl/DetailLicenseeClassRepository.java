@@ -23,10 +23,10 @@ import java.util.Objects;
 public class DetailLicenseeClassRepository extends BaseRepository implements IDetailLicenseeClassRepository {
 
     @Override
-    public String findLicenseeClassIdByDisciplineAndEnrollmentProfile(String enrollmentProfile, String discipline) {
+    public boolean isLicenseeClassIdExist(String enrollmentProfile, String discipline) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("enrollmentProfile", escapeSqlLikePattern(Objects.requireNonNull(enrollmentProfile)));
         parameters.put("discipline", escapeSqlLikePattern(Objects.requireNonNull(discipline)));
-        return selectOne("IDetailLicenseeClassMapper.findLicenseeClassIdByDisciplineAndEnrollmentProfile", parameters);
+        return selectOne("IDetailLicenseeClassMapper.isLicenseeClassIdExist", parameters);
     }
 }
