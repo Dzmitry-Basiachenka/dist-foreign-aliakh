@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.nts;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
@@ -40,6 +41,13 @@ public class NtsUsageService implements INtsUsageService {
         LOGGER.info("Insert NTS usages. Finished. UsageBatchName={}, UserName={}, InsertedUsageCount={}",
             usageBatch.getName(), userName, LogUtils.size(usageIds));
         return usageIds;
+    }
+
+    @Override
+    public int getUsagesCountForBatch(UsageBatch usageBatch) {
+        FundPool fundPool = usageBatch.getFundPool();
+        return ntsUsageRepository.findCountForBatch(fundPool.getFundPoolPeriodFrom(),
+            fundPool.getFundPoolPeriodTo(), fundPool.getMarkets());
     }
 
     @Override

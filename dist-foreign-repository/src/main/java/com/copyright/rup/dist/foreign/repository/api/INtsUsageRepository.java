@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for NTS usage repository.
@@ -24,6 +25,16 @@ public interface INtsUsageRepository {
      * @return list of inserted usages' ids
      */
     List<String> insertUsages(UsageBatch usageBatch, String userName);
+
+    /**
+     * Gets count of archived usages based on markets and period for batch creation.
+     *
+     * @param marketPeriodFrom market period from
+     * @param marketPeriodTo   market period to
+     * @param markets          set of selected markets
+     * @return usages count
+     */
+    int findCountForBatch(Integer marketPeriodFrom, Integer marketPeriodTo, Set<String> markets);
 
     /**
      * Deletes usages from Pre-Service fee fund.

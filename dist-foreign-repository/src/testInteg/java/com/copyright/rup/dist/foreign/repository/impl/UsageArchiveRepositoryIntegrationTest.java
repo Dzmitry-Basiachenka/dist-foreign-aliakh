@@ -21,7 +21,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -323,11 +322,6 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isEmpty(
             usageArchiveRepository.findByIdAndStatus(Collections.singletonList(PAID_USAGE_ID),
                 UsageStatusEnum.ARCHIVED)));
-    }
-
-    @Test
-    public void testFindCountForNtsBatch() {
-        assertEquals(2, usageArchiveRepository.findCountForNtsBatch(2015, 2016, Sets.newHashSet("Bus", "Doc Del")));
     }
 
     @Test

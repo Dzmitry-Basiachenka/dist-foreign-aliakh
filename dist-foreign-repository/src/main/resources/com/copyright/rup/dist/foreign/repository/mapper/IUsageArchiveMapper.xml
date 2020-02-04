@@ -207,25 +207,6 @@
         order by u.rh_account_number, u.df_usage_archive_uid
     </sql>
 
-    <select id="findCountForNtsBatch" parameterType="map" resultType="int">
-        select count(1)
-        from ${schema}.df_usage_archive ua
-        join ${schema}.df_usage_fas ufas on ua.df_usage_archive_uid = ufas.df_usage_fas_uid
-        left join ${schema}.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
-        <include refid="ntsBatchWhereClause"/>
-    </select>
-
-    <sql id="ntsBatchWhereClause">
-        where
-            <foreach collection="markets" item="market" separator="or" open="(" close=")">
-                ufas.market ilike '%' || #{market} || '%'
-            </foreach>
-            and <![CDATA[ufas.market_period_from <= #{marketPeriodTo}]]>
-            and <![CDATA[ufas.market_period_to >= #{marketPeriodFrom}]]>
-            and status_ind = #{status}
-            and coalesce(wc.classification, '') != #{excludeClassification}
-    </sql>
-
     <update id="updatePaidInfo" parameterType="PaidUsage">
         update ${schema}.df_usage_archive
         set

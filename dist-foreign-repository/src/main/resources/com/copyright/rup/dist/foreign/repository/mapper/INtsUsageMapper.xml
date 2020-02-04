@@ -25,7 +25,7 @@
             from ${schema}.df_usage_archive ua
             join ${schema}.df_usage_fas ufas on ua.df_usage_archive_uid = ufas.df_usage_fas_uid
             left join ${schema}.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
-            <include refid="IUsageArchiveMapper.ntsBatchWhereClause"/>
+            <include refid="batchWhereClause"/>
                 <if test="0 == stmAmount">
                     and (wc.classification = 'NON-STM' or wc.classification is null)
                 </if>
@@ -124,6 +124,25 @@
         where df_usage_uid::text in (select df_usage_uid from usage_ids)
         returning df_usage_fas_uid
     </select>
+
+    <select id="findCountForBatch" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage_archive ua
+        join ${schema}.df_usage_fas ufas on ua.df_usage_archive_uid = ufas.df_usage_fas_uid
+        left join ${schema}.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
+        <include refid="batchWhereClause"/>
+    </select>
+
+    <sql id="batchWhereClause">
+        where
+            <foreach collection="markets" item="market" separator="or" open="(" close=")">
+                ufas.market ilike '%' || #{market} || '%'
+            </foreach>
+            and <![CDATA[ufas.market_period_from <= #{marketPeriodTo}]]>
+            and <![CDATA[ufas.market_period_to >= #{marketPeriodFrom}]]>
+            and status_ind = #{status}
+            and coalesce(wc.classification, '') != #{excludeClassification}
+    </sql>
 
     <update id="deleteFromPreServiceFeeFund" parameterType="map">
         with ufas as (

@@ -34,6 +34,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
@@ -91,6 +92,7 @@ public class NtsUsageControllerTest {
     private NtsUsageController controller;
     private IUsageService usageService;
     private IFasUsageService fasUsageService;
+    private INtsUsageService ntsUsageService;
     private IFasNtsUsageFilterController filterController;
     private IFasNtsUsageFilterWidget filterWidgetMock;
     private INtsUsageWidget usagesWidget;
@@ -107,6 +109,7 @@ public class NtsUsageControllerTest {
         controller = new NtsUsageController();
         usageService = createMock(IUsageService.class);
         fasUsageService = createMock(IFasUsageService.class);
+        ntsUsageService = createMock(INtsUsageService.class);
         usageBatchService = createMock(IUsageBatchService.class);
         filterController = createMock(IFasNtsUsageFilterController.class);
         usagesWidget = createMock(INtsUsageWidget.class);
@@ -119,6 +122,7 @@ public class NtsUsageControllerTest {
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, fasUsageService);
+        Whitebox.setInternalState(controller, ntsUsageService);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, prmIntegrationService);
@@ -305,10 +309,10 @@ public class NtsUsageControllerTest {
     @Test
     public void testGetUsagesCountForNtsBatch() {
         UsageBatch usageBatch = new UsageBatch();
-        expect(usageService.getUsagesCountForNtsBatch(usageBatch)).andReturn(5).once();
-        replay(usageService);
+        expect(ntsUsageService.getUsagesCountForBatch(usageBatch)).andReturn(5).once();
+        replay(ntsUsageService);
         assertEquals(5, controller.getUsagesCountForNtsBatch(usageBatch));
-        verify(usageService);
+        verify(ntsUsageService);
     }
 
     @Test
