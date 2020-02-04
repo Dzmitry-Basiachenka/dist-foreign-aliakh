@@ -156,14 +156,6 @@ public interface IUsageRepository {
     BigDecimal getTotalAmountByTitleAndBatchId(String title, String batchId);
 
     /**
-     * Updates under minimum usages grouped by Wr Wrk Inst in {@link UsageStatusEnum#RH_NOT_FOUND} status.
-     * Sets NTS product family and {@link UsageStatusEnum#NTS_WITHDRAWN} status.
-     *
-     * @return updated usages ids
-     */
-    List<String> updateNtsWithdrawnUsagesAndGetIds();
-
-    /**
      * Deletes all {@link Usage}s for specified scenario.
      *
      * @param scenarioId scenario identifier
@@ -434,28 +426,6 @@ public interface IUsageRepository {
      * @return map where key - Wr Wrk Inst, value - set of usage ids related to Wr Wrk Inst
      */
     Map<Long, Set<String>> findWrWrkInstToUsageIdsByBatchNameAndUsageStatus(String batchName, UsageStatusEnum status);
-
-    /**
-     * Calculates service fee and net amounts for usages with given RH account number and scenario uid.
-     * Sets payee account number, participating flag and service fee percent.
-     *
-     * @param rhAccountNumber    rightsholder account number
-     * @param scenarioId         identifier of scenario
-     * @param serviceFee         service fee
-     * @param rhParticipating    RH participating flag
-     * @param payeeAccountNumber payee account number
-     * @param userName           user name
-     */
-    void calculateAmountsAndUpdatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, BigDecimal serviceFee,
-                                                       boolean rhParticipating, Long payeeAccountNumber,
-                                                       String userName);
-
-    /**
-     * Proportionally distributes Post Service Fee Amount among scenario usages above minimum.
-     *
-     * @param scenarioId identifier of scenario
-     */
-    void applyPostServiceFeeAmount(String scenarioId);
 
     /**
      * Finds count of referenced usages in the df_usage_fas table by ids.

@@ -8,10 +8,20 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
+import com.google.common.collect.Table;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,8 +30,13 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Verifies {@link NtsUsageService}.
@@ -36,16 +51,25 @@ import java.util.List;
 @PrepareForTest({RupContextUtils.class})
 public class NtsUsageServiceTest {
 
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USER_NAME = "user@copyright.com";
+    private static final String SCENARIO_ID = "78179a10-ad9e-432e-8aae-30b91fd14ed1";
+    private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
 
     private final NtsUsageService ntsUsageService = new NtsUsageService();
 
     private INtsUsageRepository ntsUsageRepository;
+    private IRightsholderService rightsholderService;
+    private IPrmIntegrationService prmIntegrationService;
 
     @Before
     public void setUp() {
         ntsUsageRepository = createMock(INtsUsageRepository.class);
+        rightsholderService = createMock(IRightsholderService.class);
+        prmIntegrationService = createMock(IPrmIntegrationService.class);
         Whitebox.setInternalState(ntsUsageService, ntsUsageRepository);
+        Whitebox.setInternalState(ntsUsageService, rightsholderService);
+        Whitebox.setInternalState(ntsUsageService, prmIntegrationService);
     }
 
     @Test
@@ -73,6 +97,57 @@ public class NtsUsageServiceTest {
         replay(ntsUsageRepository);
         assertEquals(1, ntsUsageService.getUsagesCountForBatch(usageBatch));
         verify(ntsUsageRepository);
+    }
+
+    @Test
+    public void testUpdateNtsWithdrawnUsagesAndGetIds() {
+        List<String> ids = Collections.singletonList("55e6ab53-3fb2-494f-8cb2-94ebf8a9f8d3");
+        expect(ntsUsageRepository.updateNtsWithdrawnUsagesAndGetIds()).andReturn(ids).once();
+        replay(ntsUsageRepository);
+        assertEquals(ids, ntsUsageService.updateNtsWithdrawnUsagesAndGetIds());
+        verify(ntsUsageRepository);
+    }
+
+    @Test
+    public void testPopulatePayeeAndCalculateAmountsForScenarioUsages() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setPostServiceFeeAmount(new BigDecimal("100.500"));
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setNtsFields(ntsFields);
+        Rightsholder rh1 = buildRightsholder(1000009522L);
+        Rightsholder rh2 = buildRightsholder(2000009522L);
+        Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
+        Rightsholder payee1 = buildRightsholder(1000004422L);
+        Rightsholder payee2 = buildRightsholder(2000004422L);
+        rollUps.put(rh1.getId(), ImmutableMap.of(NTS_PRODUCT_FAMILY, payee1));
+        rollUps.put(rh2.getId(), ImmutableMap.of(NTS_PRODUCT_FAMILY, payee2));
+        Set<String> rhIds = Sets.newHashSet(rh2.getId(), rh1.getId());
+        expect(prmIntegrationService.getRollUps(rhIds)).andReturn(rollUps).once();
+        Map<String, Table<String, String, Object>> preferences = new HashMap<>();
+        expect(prmIntegrationService.getPreferences(rhIds)).andReturn(preferences).once();
+        expect(rightsholderService.getByScenarioId(SCENARIO_ID)).andReturn(Arrays.asList(rh1, rh2)).once();
+        expect(prmIntegrationService.isRightsholderParticipating(preferences, rh1.getId(), NTS_PRODUCT_FAMILY))
+            .andReturn(true).once();
+        expect(prmIntegrationService.isRightsholderParticipating(preferences, rh2.getId(), NTS_PRODUCT_FAMILY))
+            .andReturn(false).once();
+        expect(prmIntegrationService.getRhParticipatingServiceFee(true)).andReturn(SERVICE_FEE).once();
+        expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(SERVICE_FEE).once();
+        ntsUsageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(rh1.getAccountNumber(), SCENARIO_ID,
+            SERVICE_FEE, true, 1000004422L, USER_NAME);
+        expectLastCall().once();
+        ntsUsageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(rh2.getAccountNumber(), SCENARIO_ID,
+            SERVICE_FEE, false, 2000004422L, USER_NAME);
+        expectLastCall().once();
+        ntsUsageRepository.applyPostServiceFeeAmount(scenario.getId());
+        expectLastCall().once();
+        rightsholderService.updateRighstholdersAsync(Sets.newHashSet(2000004422L, 1000004422L));
+        expectLastCall().once();
+        replay(RupContextUtils.class, ntsUsageRepository, prmIntegrationService, rightsholderService);
+        ntsUsageService.populatePayeeAndCalculateAmountsForScenarioUsages(scenario);
+        verify(RupContextUtils.class, ntsUsageRepository, prmIntegrationService, rightsholderService);
     }
 
     @Test
@@ -107,5 +182,12 @@ public class NtsUsageServiceTest {
         replay(RupContextUtils.class, ntsUsageRepository);
         ntsUsageService.deleteFromScenario(scenarioId);
         verify(RupContextUtils.class, ntsUsageRepository);
+    }
+
+    private Rightsholder buildRightsholder(Long accountNUmber) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId(RupPersistUtils.generateUuid());
+        rightsholder.setAccountNumber(accountNUmber);
+        return rightsholder;
     }
 }

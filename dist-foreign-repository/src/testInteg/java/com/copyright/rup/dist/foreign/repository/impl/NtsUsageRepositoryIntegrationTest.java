@@ -55,6 +55,7 @@ public class NtsUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_1 = "ba95f0b3-dc94-4925-96f2-93d05db9c469";
     private static final String USAGE_ID_2 = "c09aa888-85a5-4377-8c7a-85d84d255b5a";
     private static final String USAGE_ID_3 = "45445974-5bee-477a-858b-e9e8c1a642b8";
+    private static final String USAGE_ID_4 = "ade68eac-0d79-4d23-861b-499a0c6e91d3";
     private static final String USAGE_ID_BELLETRISTIC = "bbbd64db-2668-499a-9d18-be8b3f87fbf5";
     private static final String USAGE_ID_UNCLASSIFIED = "6cad4cf2-6a19-4e5b-b4e0-f2f7a62ff91c";
     private static final String USAGE_ID_STM = "83a26087-a3b3-43ca-8b34-c66134fb6edf";
@@ -63,6 +64,7 @@ public class NtsUsageRepositoryIntegrationTest {
     private static final String EDU_MARKET = "Edu";
     private static final String GOV_MARKET = "Gov";
     private static final String USER_NAME = "user@copyright.com";
+    private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.0000000000");
     private static final BigDecimal HUNDRED_AMOUNT = new BigDecimal("100.00");
 
@@ -112,6 +114,55 @@ public class NtsUsageRepositoryIntegrationTest {
     @Test
     public void testFindCountForBatch() {
         assertEquals(2, ntsUsageRepository.findCountForBatch(2015, 2016, Sets.newHashSet("Bus", "Doc Del")));
+    }
+
+    @Test
+    public void testUpdateNtsWithdrawnUsagesAndGetIds() {
+        List<String> ids = ntsUsageRepository.updateNtsWithdrawnUsagesAndGetIds();
+        assertEquals(3, ids.size());
+        assertTrue(ids.containsAll(Arrays.asList("2f2ca785-a7d3-4a7f-abd9-2bad80ac71dd",
+            "cbd6768d-a424-476e-b502-a832d9dbe85e", "d5e3c637-155a-4c05-999a-31a07e335491")));
+        usageRepository.findByIds(ids).forEach(usage -> {
+            assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
+            assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
+        });
+    }
+
+    @Test
+    public void testCalculateAmountsAndUpdatePayeeByAccountNumber() {
+        assertUsageAfterServiceFeeCalculation("8a80a2e7-4758-4e43-ae42-e8b29802a210",
+            new BigDecimal("256.0000000000"), ZERO_AMOUNT, null,
+            ZERO_AMOUNT, new BigDecimal("296.72"), null, false);
+        assertUsageAfterServiceFeeCalculation("bfc9e375-c489-4600-9308-daa101eed97c",
+            new BigDecimal("145.2000000000"), ZERO_AMOUNT, null,
+            ZERO_AMOUNT, new BigDecimal("16.24"), null, false);
+        assertUsageAfterServiceFeeCalculation("085268cd-7a0c-414e-8b28-2acb299d9698",
+            new BigDecimal("1452.0000000000"), ZERO_AMOUNT, null,
+            ZERO_AMOUNT, new BigDecimal("162.41"), null, false);
+        ntsUsageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(1000002859L,
+            "d7e9bae8-6b10-4675-9668-8e3605a47dad", SERVICE_FEE, true, 243904752L, "SYSTEM");
+        assertUsageAfterServiceFeeCalculation("8a80a2e7-4758-4e43-ae42-e8b29802a210",
+            new BigDecimal("256.0000000000"), new BigDecimal("174.0800000000"), SERVICE_FEE,
+            new BigDecimal("81.9200000000"), new BigDecimal("296.72"), 243904752L, true);
+        assertUsageAfterServiceFeeCalculation("bfc9e375-c489-4600-9308-daa101eed97c",
+            new BigDecimal("145.2000000000"), new BigDecimal("98.7360000000"), SERVICE_FEE,
+            new BigDecimal("46.4640000000"), new BigDecimal("16.24"), 243904752L, true);
+        assertUsageAfterServiceFeeCalculation("085268cd-7a0c-414e-8b28-2acb299d9698",
+            new BigDecimal("1452.0000000000"), ZERO_AMOUNT, null, ZERO_AMOUNT,
+            new BigDecimal("162.41"), null, false);
+    }
+
+    @Test
+    public void testApplyPostServiceFeeAmount() {
+        // Post Service Fee Amount = 100
+        ntsUsageRepository.applyPostServiceFeeAmount("c4bc09c1-eb9b-41f3-ac93-9cd088dff408");
+        assertUsageAmounts("7778a37d-6184-42c1-8e23-5841837c5411", new BigDecimal("71.1818181818"),
+            new BigDecimal("65.9018181818"), new BigDecimal("0.16000"), new BigDecimal("5.2800000000"),
+            new BigDecimal("33.00"));
+        assertUsageAmounts("54247c55-bf6b-4ad6-9369-fb4baea6b19b", new BigDecimal("127.8181818182"),
+            new BigDecimal("106.6981818182"), SERVICE_FEE, new BigDecimal("21.1200000000"), new BigDecimal("66.00"));
+        assertUsageAmounts(USAGE_ID_4, new BigDecimal("11.0000000000"),
+            ZERO_AMOUNT, null, ZERO_AMOUNT, new BigDecimal("11.00"));
     }
 
     @Test
@@ -205,11 +256,32 @@ public class NtsUsageRepositoryIntegrationTest {
         assertEquals(scenarioId, usage.getScenarioId());
         assertEquals(null, usage.getPayee().getAccountNumber());
         assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
+        assertEquals(username, usage.getUpdateUser());
+        assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
+    }
+
+    private void assertUsageAmounts(String usageId, BigDecimal grossAmount, BigDecimal netAmount,
+                                    BigDecimal serviceFee, BigDecimal serviceFeeAmount, BigDecimal reportedValue) {
+        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
+    }
+
+    private void assertUsageAfterServiceFeeCalculation(String usageId, BigDecimal grossAmount, BigDecimal netAmount,
+                                                       BigDecimal serviceFee, BigDecimal serviceFeeAmount,
+                                                       BigDecimal reportedValue, Long payeeAccountNumber,
+                                                       boolean rhParticipating) {
+        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        assertEquals(rhParticipating, usage.isRhParticipating());
+        assertEquals(payeeAccountNumber, usage.getPayee().getAccountNumber());
+        assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
+    }
+
+    private void assertAmounts(Usage usage, BigDecimal grossAmount, BigDecimal netAmount, BigDecimal serviceFee,
+                               BigDecimal serviceFeeAmount, BigDecimal reportedValue) {
         assertEquals(reportedValue, usage.getReportedValue());
         assertEquals(grossAmount, usage.getGrossAmount());
         assertEquals(netAmount, usage.getNetAmount());
         assertEquals(serviceFee, usage.getServiceFee());
         assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
-        assertEquals(username, usage.getUpdateUser());
     }
 }

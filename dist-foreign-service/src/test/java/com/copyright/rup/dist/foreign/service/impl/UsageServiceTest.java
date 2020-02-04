@@ -25,7 +25,6 @@ import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -86,7 +85,6 @@ import java.util.Set;
 @PrepareForTest({RupContextUtils.class, RupPersistUtils.class, CalculationUtils.class})
 public class UsageServiceTest {
 
-    private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final String REASON = "reason";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
@@ -104,6 +102,7 @@ public class UsageServiceTest {
     private static final Set<String> RH_IDS = Sets.newHashSet(RH_ID, PAYEE_ID);
     private static final Map<String, Long> IDS_TO_ACCOUNT_NUMBER_MAP =
         ImmutableMap.of(RH_ID, RH_ACCOUNT_NUMBER, PAYEE_ID, PAYEE_ACCOUNT_NUMBER);
+
     private Scenario scenario;
     private IUsageRepository usageRepository;
     private IUsageArchiveRepository usageArchiveRepository;
@@ -251,15 +250,6 @@ public class UsageServiceTest {
         expect(usageRepository.findForReconcile(scenario.getId())).andReturn(usages).once();
         replay(usageRepository);
         assertSame(usages, usageService.getUsagesForReconcile(scenario.getId()));
-        verify(usageRepository);
-    }
-
-    @Test
-    public void testGetTotalAmountByWrWrkInstAndBatchId() {
-        List<String> ids = Arrays.asList(USAGE_ID_1, USAGE_ID_2);
-        expect(usageRepository.updateNtsWithdrawnUsagesAndGetIds()).andReturn(ids).once();
-        replay(usageRepository);
-        assertEquals(ids, usageService.updateNtsWithdrawnUsagesAndGetIds());
         verify(usageRepository);
     }
 
@@ -862,49 +852,6 @@ public class UsageServiceTest {
         replay(usageRepository);
         usageService.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, USER_NAME);
         verify(usageRepository);
-    }
-
-    @Test
-    public void testPopulatePayeeAndCalculateAmountsForNtsScenarioUsages() {
-        mockStatic(RupContextUtils.class);
-        NtsFields ntsFields = new NtsFields();
-        ntsFields.setPostServiceFeeAmount(new BigDecimal("100.500"));
-        scenario.setNtsFields(ntsFields);
-        Rightsholder rightsholder1 = buildRightsholder(1000009522L);
-        Rightsholder rightsholder2 = buildRightsholder(2000009522L);
-        Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
-        Rightsholder payee1 = buildRightsholder(1000004422L);
-        Rightsholder payee2 = buildRightsholder(2000004422L);
-        rollUps.put(rightsholder1.getId(), ImmutableMap.of(NTS_PRODUCT_FAMILY, payee1));
-        rollUps.put(rightsholder2.getId(), ImmutableMap.of(NTS_PRODUCT_FAMILY, payee2));
-        Set<String> rightsholderIds = Sets.newHashSet(rightsholder2.getId(), rightsholder1.getId());
-        expect(prmIntegrationService.getRollUps(rightsholderIds)).andReturn(rollUps).once();
-        Map<String, Table<String, String, Object>> preferences = new HashMap<>();
-        expect(prmIntegrationService.getPreferences(rightsholderIds)).andReturn(preferences).once();
-        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        expect(rightsholderService.getByScenarioId(SCENARIO_ID))
-            .andReturn(Arrays.asList(rightsholder1, rightsholder2)).once();
-        expect(
-            prmIntegrationService.isRightsholderParticipating(preferences, rightsholder1.getId(), NTS_PRODUCT_FAMILY))
-            .andReturn(true).once();
-        expect(
-            prmIntegrationService.isRightsholderParticipating(preferences, rightsholder2.getId(), NTS_PRODUCT_FAMILY))
-            .andReturn(false).once();
-        expect(prmIntegrationService.getRhParticipatingServiceFee(true)).andReturn(SERVICE_FEE).once();
-        expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(SERVICE_FEE).once();
-        usageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(rightsholder1.getAccountNumber(), SCENARIO_ID,
-            SERVICE_FEE, true, 1000004422L, USER_NAME);
-        expectLastCall().once();
-        usageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(rightsholder2.getAccountNumber(), SCENARIO_ID,
-            SERVICE_FEE, false, 2000004422L, USER_NAME);
-        expectLastCall().once();
-        usageRepository.applyPostServiceFeeAmount(scenario.getId());
-        expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Sets.newHashSet(2000004422L, 1000004422L));
-        expectLastCall().once();
-        replay(usageRepository, prmIntegrationService, rightsholderService, RupContextUtils.class);
-        usageService.populatePayeeAndCalculateAmountsForNtsScenarioUsages(scenario);
-        verify(usageRepository, prmIntegrationService, rightsholderService, RupContextUtils.class);
     }
 
     private Work buildWork(String standardNumberType) {

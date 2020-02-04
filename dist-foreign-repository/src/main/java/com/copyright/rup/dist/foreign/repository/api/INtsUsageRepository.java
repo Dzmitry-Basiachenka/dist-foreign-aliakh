@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +36,36 @@ public interface INtsUsageRepository {
      * @return usages count
      */
     int findCountForBatch(Integer marketPeriodFrom, Integer marketPeriodTo, Set<String> markets);
+
+    /**
+     * Updates under minimum usages grouped by Wr Wrk Inst in {@link UsageStatusEnum#RH_NOT_FOUND} status.
+     * Sets NTS product family and {@link UsageStatusEnum#NTS_WITHDRAWN} status.
+     *
+     * @return updated usages ids
+     */
+    List<String> updateNtsWithdrawnUsagesAndGetIds();
+
+    /**
+     * Calculates service fee and net amounts for usages with given RH account number and scenario id.
+     * Sets payee account number, participating flag and service fee percent.
+     *
+     * @param rhAccountNumber    RH account number
+     * @param scenarioId         scenario id
+     * @param serviceFee         service fee
+     * @param rhParticipating    RH participating flag
+     * @param payeeAccountNumber payee account number
+     * @param userName           user name
+     */
+    void calculateAmountsAndUpdatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, BigDecimal serviceFee,
+                                                       boolean rhParticipating, Long payeeAccountNumber,
+                                                       String userName);
+
+    /**
+     * Proportionally distributes Post Service Fee Amount among scenario usages above minimum.
+     *
+     * @param scenarioId scenario id
+     */
+    void applyPostServiceFeeAmount(String scenarioId);
 
     /**
      * Deletes usages from Pre-Service fee fund.

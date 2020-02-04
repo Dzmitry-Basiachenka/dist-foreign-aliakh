@@ -74,14 +74,6 @@ public interface IUsageService {
     List<Usage> getUsagesWithAmounts(UsageFilter filter);
 
     /**
-     * Updates under minimum usages grouped by Wr Wrk Inst in {@link UsageStatusEnum#RH_NOT_FOUND} status.
-     * Sets NTS product family and {@link UsageStatusEnum#NTS_WITHDRAWN} status.
-     *
-     * @return updated usages ids
-     */
-    List<String> updateNtsWithdrawnUsagesAndGetIds();
-
-    /**
      * Gets rightsholders account numbers that are not presented in database based on {@link UsageFilter}.
      *
      * @param filter instance of {@link UsageFilter}
@@ -129,16 +121,6 @@ public interface IUsageService {
      * @param scenario {@link Scenario}
      */
     void addUsagesToScenario(List<Usage> usages, Scenario scenario);
-
-    /**
-     * Populates payee and calculates amounts for usages of given NTS scenario.
-     * Calculates service fee and service fee amount based on RHs participation status,
-     * proportionally distributes Post Service Fee Amount among usages and updates gross and net amounts,
-     * sets participation status.
-     *
-     * @param scenario scenario
-     */
-    void populatePayeeAndCalculateAmountsForNtsScenarioUsages(Scenario scenario);
 
     /**
      * Updates RH account number, payee account number, net amount, service fee amount and

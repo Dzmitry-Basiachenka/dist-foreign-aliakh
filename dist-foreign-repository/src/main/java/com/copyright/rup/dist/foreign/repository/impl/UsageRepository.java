@@ -181,17 +181,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<String> updateNtsWithdrawnUsagesAndGetIds() {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-        parameters.put("statusToFind", UsageStatusEnum.RH_NOT_FOUND);
-        parameters.put("statusToSet", UsageStatusEnum.NTS_WITHDRAWN);
-        parameters.put(PRODUCT_FAMILY_KEY, FdaConstants.NTS_PRODUCT_FAMILY);
-        parameters.put("minimumTotal", new BigDecimal("100"));
-        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
-        return selectList("IUsageMapper.updateNtsWithdrawnUsagesAndGetIds", parameters);
-    }
-
-    @Override
     public void deleteByBatchId(String batchId) {
         delete("IUsageMapper.deleteByBatchId", Objects.requireNonNull(batchId));
     }
@@ -471,25 +460,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         WrWrkInstToUsageIdResultHandler handler = new WrWrkInstToUsageIdResultHandler();
         getTemplate().select("IUsageMapper.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus", params, handler);
         return handler.getWrWrkInstToUsageIdsMap();
-    }
-
-    @Override
-    public void calculateAmountsAndUpdatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId,
-                                                              BigDecimal serviceFee, boolean rhParticipating,
-                                                              Long payeeAccountNumber, String userName) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(6);
-        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        params.put(RH_ACCOUNT_NUMBER_KEY, Objects.requireNonNull(rhAccountNumber));
-        params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
-        params.put("serviceFee", Objects.requireNonNull(serviceFee));
-        params.put("rhParticipating", rhParticipating);
-        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
-        update("IUsageMapper.calculateAmountsAndUpdatePayeeByAccountNumber", params);
-    }
-
-    @Override
-    public void applyPostServiceFeeAmount(String scenarioId) {
-        update("IUsageMapper.applyPostServiceFeeAmount", Objects.requireNonNull(scenarioId));
     }
 
     @Override

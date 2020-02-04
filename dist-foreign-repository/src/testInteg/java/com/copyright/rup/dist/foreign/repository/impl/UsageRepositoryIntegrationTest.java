@@ -125,18 +125,12 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
     private static final String USAGE_ID_25 = "f6cb5b07-45c0-4188-9da3-920046eec4c0";
     private static final String USAGE_ID_26 = "f255188f-d582-4516-8c08-835cfe1d68c3";
-    private static final String USAGE_ID_27 = "2f2ca785-a7d3-4a7f-abd9-2bad80ac71dd";
-    private static final String USAGE_ID_28 = "cbd6768d-a424-476e-b502-a832d9dbe85e";
-    private static final String USAGE_ID_29 = "d5e3c637-155a-4c05-999a-31a07e335491";
-    private static final String USAGE_ID_30 = "e2834925-ede5-4796-a30b-05770a6f04be";
     private static final String USAGE_ID_31 = "3cf274c5-8eac-4d4a-96be-5921ae026840";
     private static final String USAGE_ID_32 = "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15";
-    private static final String USAGE_ID_33 = "45445974-5bee-477a-858b-e9e8c1a642b8";
     private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String USAGE_ID_34 = "ade68eac-0d79-4d23-861b-499a0c6e91d3";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
-    private static final String NTS_SCENARIO_ID = "ca163655-8978-4a45-8fe3-c3b5572c6879";
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
     private static final String PERCENT = "%";
@@ -217,9 +211,9 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             FAS_PRODUCT_FAMILY, null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
-            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_14, USAGE_ID_27, USAGE_ID_1, USAGE_ID_23,
-            USAGE_ID_21, USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2,
-            USAGE_ID_19, USAGE_ID_17, USAGE_ID_22, USAGE_ID_28, USAGE_ID_29, USAGE_ID_4, USAGE_ID_20, USAGE_ID_30);
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_14, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21,
+            USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
+            USAGE_ID_17, USAGE_ID_22, USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
@@ -237,11 +231,10 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), "0f86df24-39a0-4420-8e9b-327713ddd2b9",
             "2255188f-d582-4516-8c08-835cfe1d68c2", "3adb01b0-6dc0-4f3c-ba71-c47a1f8d69b8",
-            "3cf274c5-8eac-4d4a-96be-5921ae026840", "45445974-5bee-477a-858b-e9e8c1a642b8",
-            "463e2239-1a36-41cc-9a51-ee2a80eae0c7", "4dd8cdf8-ca10-422e-bdd5-3220105e6379",
-            "6dc54058-5566-4aa2-8cd4-d1a09805ae20", "775ceaf9-125f-4387-b076-459eb4673d92",
-            "a86308b1-7f89-474b-9390-fc926c5b218b", USAGE_ID_34,
-            "af1f25e5-75ca-463f-8c9f-1f1e4b92f699", "ba95f0b3-dc94-4925-96f2-93d05db9c469",
+            "3cf274c5-8eac-4d4a-96be-5921ae026840", "463e2239-1a36-41cc-9a51-ee2a80eae0c7",
+            "4dd8cdf8-ca10-422e-bdd5-3220105e6379", "6dc54058-5566-4aa2-8cd4-d1a09805ae20",
+            "775ceaf9-125f-4387-b076-459eb4673d92", "a86308b1-7f89-474b-9390-fc926c5b218b",
+            "ade68eac-0d79-4d23-861b-499a0c6e91d3", "af1f25e5-75ca-463f-8c9f-1f1e4b92f699",
             "bd407b50-6101-4304-8316-6404fe32a800", "c6cb5b07-45c0-4188-9da3-920046eec4cf",
             "f255188f-d582-4516-8c08-835cfe1d68c3", "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15",
             "f6cb5b07-45c0-4188-9da3-920046eec4c0", "f9ddb072-a411-443b-89ca-1bb5a63425a4");
@@ -535,13 +528,11 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testDeleteByScenarioIdNtsExcluded() {
-        assertEquals(2, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
-        assertEquals(2,
-            usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_34, USAGE_ID_33));
-        usageRepository.deleteNtsByScenarioId(NTS_SCENARIO_ID);
         assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
-        assertEquals(1,
-            usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_34, USAGE_ID_33));
+        assertEquals(1, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_34));
+        usageRepository.deleteNtsByScenarioId("c4bc09c1-eb9b-41f3-ac93-9cd088dff408");
+        assertEquals(0, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
+        assertEquals(0, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_34));
     }
 
     @Test
@@ -789,17 +780,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdateNtsWithdrawnUsagesAndGetIds() {
-        List<String> actualIds = usageRepository.updateNtsWithdrawnUsagesAndGetIds();
-        assertEquals(3, actualIds.size());
-        assertTrue(actualIds.containsAll(Arrays.asList(USAGE_ID_27, USAGE_ID_28, USAGE_ID_29)));
-        usageRepository.findByIds(actualIds).forEach(usage -> {
-            assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
-            assertEquals("NTS", usage.getProductFamily());
-        });
-    }
-
-    @Test
     public void testFindForAuditFas() throws IOException {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(USAGE_ID_8);
@@ -862,13 +842,13 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamily(FAS_PRODUCT_FAMILY);
-        assertEquals(26, usageRepository.findCountForAudit(filter));
+        assertEquals(22, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages =
             usageRepository.findForAudit(filter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));
-        verifyUsageDtos(usages, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_27, USAGE_ID_1, USAGE_ID_23,
-            USAGE_ID_21, USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2,
-            USAGE_ID_19, USAGE_ID_5, USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, USAGE_ID_28, POST_DISTRIBUTION_USAGE_ID,
-            USAGE_ID_7, USAGE_ID_29, USAGE_ID_4, USAGE_ID_20, USAGE_ID_30);
+        verifyUsageDtos(usages, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21,
+            USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
+            USAGE_ID_5, USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, POST_DISTRIBUTION_USAGE_ID, USAGE_ID_7, USAGE_ID_4,
+            USAGE_ID_20);
     }
 
     @Test
@@ -1202,68 +1182,6 @@ public class UsageRepositoryIntegrationTest {
             ImmutableMap.of(243904752L, Sets.newHashSet(USAGE_ID_7, USAGE_ID_8));
         assertEquals(wrWrkInstToUsageIdsMap,
             usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus("JAACC_11Dec16", UsageStatusEnum.LOCKED));
-    }
-
-    @Test
-    public void testCalculateAmountsAndUpdatePayeeByAccountNumber() {
-        assertNtsUsageAfterServiceFeeCalculation("8a80a2e7-4758-4e43-ae42-e8b29802a210",
-            new BigDecimal("256.0000000000"), DEFAULT_ZERO_AMOUNT, null,
-            DEFAULT_ZERO_AMOUNT, new BigDecimal("296.72"), null, false);
-        assertNtsUsageAfterServiceFeeCalculation("bfc9e375-c489-4600-9308-daa101eed97c",
-            new BigDecimal("145.2000000000"), DEFAULT_ZERO_AMOUNT, null,
-            DEFAULT_ZERO_AMOUNT, new BigDecimal("16.24"), null, false);
-        assertNtsUsageAfterServiceFeeCalculation("085268cd-7a0c-414e-8b28-2acb299d9698",
-            new BigDecimal("1452.0000000000"), DEFAULT_ZERO_AMOUNT, null,
-            DEFAULT_ZERO_AMOUNT, new BigDecimal("162.41"), null, false);
-        usageRepository.calculateAmountsAndUpdatePayeeByAccountNumber(1000002859L,
-            "d7e9bae8-6b10-4675-9668-8e3605a47dad", SERVICE_FEE, true, 243904752L, "SYSTEM");
-        assertNtsUsageAfterServiceFeeCalculation("8a80a2e7-4758-4e43-ae42-e8b29802a210",
-            new BigDecimal("256.0000000000"), new BigDecimal("174.0800000000"), SERVICE_FEE,
-            new BigDecimal("81.9200000000"), new BigDecimal("296.72"), 243904752L, true);
-        assertNtsUsageAfterServiceFeeCalculation("bfc9e375-c489-4600-9308-daa101eed97c",
-            new BigDecimal("145.2000000000"), new BigDecimal("98.7360000000"), SERVICE_FEE,
-            new BigDecimal("46.4640000000"), new BigDecimal("16.24"), 243904752L, true);
-        assertNtsUsageAfterServiceFeeCalculation("085268cd-7a0c-414e-8b28-2acb299d9698",
-            new BigDecimal("1452.0000000000"), DEFAULT_ZERO_AMOUNT, null, DEFAULT_ZERO_AMOUNT,
-            new BigDecimal("162.41"), null, false);
-    }
-
-    @Test
-    public void testApplyPostServiceFeeAmount() {
-        // Post Service Fee Amount = 100
-        usageRepository.applyPostServiceFeeAmount("c4bc09c1-eb9b-41f3-ac93-9cd088dff408");
-        assertNtsUsageAmounts("7778a37d-6184-42c1-8e23-5841837c5411", new BigDecimal("71.1818181818"),
-            new BigDecimal("65.9018181818"), new BigDecimal("0.16000"), new BigDecimal("5.2800000000"),
-            new BigDecimal("33.00"));
-        assertNtsUsageAmounts("54247c55-bf6b-4ad6-9369-fb4baea6b19b", new BigDecimal("127.8181818182"),
-            new BigDecimal("106.6981818182"), SERVICE_FEE, new BigDecimal("21.1200000000"), new BigDecimal("66.00"));
-        assertNtsUsageAmounts(USAGE_ID_34, new BigDecimal("11.0000000000"),
-            DEFAULT_ZERO_AMOUNT, null, DEFAULT_ZERO_AMOUNT, new BigDecimal("11.00"));
-    }
-
-    private void assertNtsUsageAmounts(String usageId, BigDecimal grossAmount, BigDecimal netAmount,
-                                       BigDecimal serviceFee, BigDecimal serviceFeeAmount, BigDecimal reportedValue) {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
-        assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
-    }
-
-    private void assertNtsUsageAfterServiceFeeCalculation(String usageId, BigDecimal grossAmount, BigDecimal netAmount,
-                                                          BigDecimal serviceFee, BigDecimal serviceFeeAmount,
-                                                          BigDecimal reportedValue, Long payeeAccountNumber,
-                                                          boolean rhParticipating) {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
-        assertEquals(rhParticipating, usage.isRhParticipating());
-        assertEquals(payeeAccountNumber, usage.getPayee().getAccountNumber());
-        assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
-    }
-
-    private void assertAmounts(Usage usage, BigDecimal grossAmount, BigDecimal netAmount, BigDecimal serviceFee,
-                               BigDecimal serviceFeeAmount, BigDecimal reportedValue) {
-        assertEquals(reportedValue, usage.getReportedValue());
-        assertEquals(grossAmount, usage.getGrossAmount());
-        assertEquals(netAmount, usage.getNetAmount());
-        assertEquals(serviceFee, usage.getServiceFee());
-        assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
     }
 
     private ResearchedUsage buildResearchedUsage(String id, String title, Long wrWrkInst, String standardNumber,

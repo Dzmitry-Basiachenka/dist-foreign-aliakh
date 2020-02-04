@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableList;
@@ -67,6 +68,8 @@ public class RightsService implements IRightsService {
     private IUsageBatchService usageBatchService;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private INtsUsageService ntsUsageService;
     @Autowired
     private IAaclUsageService aaclUsageService;
     @Autowired
@@ -215,7 +218,7 @@ public class RightsService implements IRightsService {
 
     private void updateNtsWithdrawnUsages() {
         LOGGER.info("Update RH_NOT_FOUND usages to NTS_WITHDRAWN status. Started.");
-        List<String> updatedIds = usageService.updateNtsWithdrawnUsagesAndGetIds();
+        List<String> updatedIds = ntsUsageService.updateNtsWithdrawnUsagesAndGetIds();
         if (CollectionUtils.isNotEmpty(updatedIds)) {
             updatedIds.forEach(usageId ->
                 auditService.logAction(usageId, UsageActionTypeEnum.ELIGIBLE_FOR_NTS, NTS_WITHDRAWN_AUDIT_MESSAGE)
