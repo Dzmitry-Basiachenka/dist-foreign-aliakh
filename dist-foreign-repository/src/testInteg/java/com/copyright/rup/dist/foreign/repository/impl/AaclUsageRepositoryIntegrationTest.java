@@ -358,7 +358,8 @@ public class AaclUsageRepositoryIntegrationTest {
         usage.setPublicationType("book");
         usage.setDiscipline("LIFE Sciences");
         usage.setEnrollmentProfile("EXGP");
-        usage.setWrWrkInst(122830308L);
+        usage.setWrWrkInst(123456789L);
+        usage.setComment("updated comment for AACL classified usage 1");
         return usage;
     }
 }

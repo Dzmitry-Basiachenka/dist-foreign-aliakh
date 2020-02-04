@@ -51,6 +51,7 @@ public class ClassifiedUsageCsvProcessor extends DistCsvProcessor<AaclClassified
         addPlainValidators(Header.ENROLLMENT_PROFILE, requiredValidator, new LengthValidator(20));
         addPlainValidators(Header.DISCIPLINE, requiredValidator, new LengthValidator(100));
         addPlainValidators(Header.PUBLICATION_TYPE, requiredValidator, new LengthValidator(255));
+        addPlainValidators(Header.COMMENT, new LengthValidator(100));
     }
 
     /**
@@ -112,6 +113,7 @@ public class ClassifiedUsageCsvProcessor extends DistCsvProcessor<AaclClassified
             classifiedUsage.setEnrollmentProfile(getString(row, Header.ENROLLMENT_PROFILE, headers));
             classifiedUsage.setDiscipline(getString(row, Header.DISCIPLINE, headers));
             classifiedUsage.setPublicationType(getString(row, Header.PUBLICATION_TYPE, headers));
+            classifiedUsage.setComment(getString(row, Header.COMMENT, headers));
             return classifiedUsage;
         }
     }

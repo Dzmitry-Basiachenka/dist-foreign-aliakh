@@ -348,6 +348,7 @@
             set
                 status_ind = #{status},
                 wr_wrk_inst = #{aaclUsage.wrWrkInst},
+                comment = #{aaclUsage.comment},
                 <include refid="StoredEntityMapper.update"/>
             where df_usage_uid = #{aaclUsage.detailId}
         )

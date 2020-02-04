@@ -4,34 +4,39 @@
     "wrWrkInst": 123456789,
     "enrollmentProfile": "EXGP",
     "discipline": "Life Sciences",
-    "publicationType": "Book"
+    "publicationType": "Book",
+    "comment": "Valid usage with Detail Licensee Class Id missing in CSV"
   },
   {
     "detailId": "a65d100a-3e7c-4b35-903e-2463fb53f41d",
     "wrWrkInst": 123456789,
     "enrollmentProfile": "exGP",
     "discipline": "life sciences",
-    "publicationType": "BOOK"
+    "publicationType": "BOOK",
+    "comment": "Valid usage with  Detail Licensee Class Id present in CSV"
   },
   {
     "detailId": "10253f6a-bb89-4738-a0d2-ea49fdd94d66",
     "wrWrkInst": 123456789,
     "enrollmentProfile": "EXGP",
     "discipline": "Life Sciences",
-    "publicationType": "disqualified"
+    "publicationType": "disqualified",
+    "comment": "Usage with 'disqualified' Publication Type in CSV"
   },
   {
     "detailId": "195af195-8cde-4129-a961-c410ec010549",
     "wrWrkInst": 123456789,
     "enrollmentProfile": "EXGP",
     "discipline": "Disqualified",
-    "publicationType": "Book"
+    "publicationType": "Book",
+    "comment": "Usage with 'Disqualified' Discipline in CSV"
   },
   {
     "detailId": "4b83a43a-b5fe-4ad3-a8ad-f491a4e58dbc",
     "wrWrkInst": 123456789,
     "enrollmentProfile": "DISQUALIFIED",
     "discipline": "Life Sciences",
-    "publicationType": "Book"
+    "publicationType": "Book",
+    "comment": "Usage with 'DISQUALIFIED' Enrollment Profile in CSV"
   }
 ]

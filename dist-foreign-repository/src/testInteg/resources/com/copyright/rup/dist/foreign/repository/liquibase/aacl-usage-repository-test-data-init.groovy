@@ -186,7 +186,7 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000011451')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '20')
-            column(name: 'comment', value: 'AACL classified usege 1')
+            column(name: 'comment', value: 'AACL classified usage 1')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
