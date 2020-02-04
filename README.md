@@ -1,3 +1,8 @@
+8.1.22
+-
+* B-52329 FDA: Load classified AACL usages: make changes based on CR-DIST-FOREIGN-143
+* B-56092 Tech Debt: FDA: move NTS select methods to separate service and repository
+
 8.1.21
 -
 * B-56092 Tech Debt: FDA: move NTS delete methods to separate service and repository
