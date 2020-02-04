@@ -127,6 +127,11 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
+    public boolean aaclFundPoolExists(String name) {
+        return true; // TODO {aliakh} to implement
+    }
+
+    @Override
     protected ICommonUsageWidget instantiateWidget() {
         return new AaclUsageWidget(this);
     }

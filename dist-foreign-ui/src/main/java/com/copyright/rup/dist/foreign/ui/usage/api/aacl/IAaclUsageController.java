@@ -67,4 +67,12 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return instance of {@link IStreamSource}
      */
     IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult processingResult);
+
+    /**
+     * Checks whether AACL fund pool with provided name already exists or not.
+     *
+     * @param name AACL fund pool name
+     * @return {@code true} - if AACL fund pool exists, {@code false} - otherwise
+     */
+    boolean aaclFundPoolExists(String name);
 }
