@@ -21,6 +21,7 @@ public class AaclClassifiedUsage {
     private String enrollmentProfile;
     private String discipline;
     private String publicationType;
+    private String comment;
 
     public String getDetailId() {
         return detailId;
@@ -62,24 +63,30 @@ public class AaclClassifiedUsage {
         this.publicationType = publicationType;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-
         AaclClassifiedUsage that = (AaclClassifiedUsage) obj;
-
         return new EqualsBuilder()
             .append(detailId, that.detailId)
             .append(wrWrkInst, that.wrWrkInst)
             .append(enrollmentProfile, that.enrollmentProfile)
             .append(discipline, that.discipline)
             .append(publicationType, that.publicationType)
+            .append(comment, that.comment)
             .isEquals();
     }
 
@@ -91,6 +98,7 @@ public class AaclClassifiedUsage {
             .append(enrollmentProfile)
             .append(discipline)
             .append(publicationType)
+            .append(comment)
             .toHashCode();
     }
 
@@ -101,7 +109,7 @@ public class AaclClassifiedUsage {
             .append("wrWrkInst", wrWrkInst)
             .append("enrollmentProfile", enrollmentProfile)
             .append("discipline", discipline)
-            .append("publicationType", publicationType)
+            .append("comment", comment)
             .toString();
     }
 }

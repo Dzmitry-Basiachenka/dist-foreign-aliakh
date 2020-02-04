@@ -31,8 +31,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -51,6 +53,13 @@ import java.util.stream.IntStream;
 @Transactional
 public class LoadClassifiedUsagesIntegrationTest {
 
+    private static final String USAGE_ID_1 = "d5973116-2ea0-4808-80f5-93016e24cfa4";
+    private static final String USAGE_ID_2 = "833aa413-ee36-4f1c-bea1-ec7a0f6e507d";
+    private static final String USAGE_ID_3 = "9e4c3be6-fafd-44f3-af7f-915e861e31c7";
+    private static final String UPLOADED_REASON = "Uploaded in 'Test Batch'";
+    private static final String WORK_FOUND_REASON = "Wr Wrk Inst 122825976 was found in PI";
+    private static final String RH_FOUND_REASON = "Rightsholder account 7001413934 was found in RMS";
+
     @Autowired
     private IAaclUsageService aaclUsageService;
     @Autowired
@@ -60,29 +69,35 @@ public class LoadClassifiedUsagesIntegrationTest {
     @Autowired
     private ServiceTestHelper testHelper;
 
-    private static final String USAGE_ID_1 = "d5973116-2ea0-4808-80f5-93016e24cfa4";
-    private static final String USAGE_ID_2 = "833aa413-ee36-4f1c-bea1-ec7a0f6e507d";
-    private static final String UPLOADED_REASON = "Uploaded in 'Test Batch'";
-
     @Test
     public void testLoadClassifiedUsages() throws IOException {
         List<AaclClassifiedUsage> usages = Arrays.asList(
-            buildUsage(USAGE_ID_1, "booK", "life sciences", "exgp"),
-            buildUsage(USAGE_ID_2, "DisQualified", "engineering", "Mu"));
+            buildUsage(USAGE_ID_1, 122825976L, "booK", "life sciences", "exgp", "comment"),
+            buildUsage(USAGE_ID_2, 122825976L, "DisQualified", "engineering", "Mu", "comment"),
+            buildUsage(USAGE_ID_3, 123456789L, "Book", "life sciences", "exgp", "updated comment"));
         testHelper.assertAudit(USAGE_ID_1, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
-            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 7001413934 was found in RMS",
-            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 122825976 was found in PI",
+            UsageActionTypeEnum.RH_FOUND, RH_FOUND_REASON,
+            UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON,
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.assertAudit(USAGE_ID_2, buildUsageAuditItems(USAGE_ID_2, ImmutableMap.of(
-            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 7001413934 was found in RMS",
-            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 122825976 was found in PI",
+            UsageActionTypeEnum.RH_FOUND, RH_FOUND_REASON,
+            UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON,
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(USAGE_ID_3, buildUsageAuditItems(USAGE_ID_3, ImmutableMap.of(
+            UsageActionTypeEnum.RH_FOUND, RH_FOUND_REASON,
+            UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON,
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         aaclUsageService.updateClassifiedUsages(usages);
         assertUsages();
         testHelper.assertAudit(USAGE_ID_1, buildUsageAuditItems(USAGE_ID_1, ImmutableMap.of(
             UsageActionTypeEnum.ELIGIBLE, "Usages has become eligible after classification",
-            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 7001413934 was found in RMS",
-            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 122825976 was found in PI",
+            UsageActionTypeEnum.RH_FOUND, RH_FOUND_REASON,
+            UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON,
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(USAGE_ID_3, buildUsageAuditItems(USAGE_ID_3, ImmutableMap.of(
+            UsageActionTypeEnum.ELIGIBLE, "Usages has become eligible after classification",
+            UsageActionTypeEnum.RH_FOUND, RH_FOUND_REASON,
+            UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON,
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         assertEquals(Collections.emptyList(), auditService.getUsageAudit(USAGE_ID_2));
     }
@@ -100,9 +115,14 @@ public class LoadClassifiedUsagesIntegrationTest {
     }
 
     private void assertUsages() throws IOException {
-        List<Usage> actualUsages = aaclUsageRepository.findByIds(Arrays.asList(USAGE_ID_1, USAGE_ID_2));
-        List<Usage> expectedUsages =
-            loadExpectedUsages("usage/aacl/classified/expected_classified_usages.json");
+        List<Usage> actualUsages = aaclUsageRepository.findByIds(Arrays.asList(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3))
+            .stream()
+            .sorted(Comparator.comparing(Usage::getId))
+            .collect(Collectors.toList());
+        List<Usage> expectedUsages = loadExpectedUsages("usage/aacl/classified/expected_classified_usages.json")
+            .stream()
+            .sorted(Comparator.comparing(Usage::getId))
+            .collect(Collectors.toList());
         assertEquals(expectedUsages.size(), actualUsages.size());
         IntStream.range(0, expectedUsages.size()).forEach(i -> assertUsage(expectedUsages.get(i), actualUsages.get(i)));
     }
@@ -116,13 +136,15 @@ public class LoadClassifiedUsagesIntegrationTest {
         });
     }
 
-    private AaclClassifiedUsage buildUsage(String id, String pubType, String discipline, String enrollmentProfile) {
+    private AaclClassifiedUsage buildUsage(String id, Long wrWrkInst, String pubType, String discipline,
+                                           String enrollmentProfile, String comment) {
         AaclClassifiedUsage usage = new AaclClassifiedUsage();
         usage.setDetailId(id);
         usage.setPublicationType(pubType);
         usage.setDiscipline(discipline);
         usage.setEnrollmentProfile(enrollmentProfile);
-        usage.setWrWrkInst(122825976L);
+        usage.setWrWrkInst(wrWrkInst);
+        usage.setComment(comment);
         return usage;
     }
 

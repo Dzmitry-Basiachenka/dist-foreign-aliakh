@@ -202,6 +202,7 @@ public class AaclUsageServiceTest {
         usage.setDiscipline("Life Sciences");
         usage.setEnrollmentProfile("EXGP");
         usage.setWrWrkInst(122830308L);
+        usage.setComment("Comment");
         return usage;
     }
 }

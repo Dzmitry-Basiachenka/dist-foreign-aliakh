@@ -151,6 +151,7 @@ public class ClassifiedUsageCsvProcessorIntegrationTest {
         assertEquals(expectedUsage.getDiscipline(), actualUsage.getDiscipline());
         assertEquals(expectedUsage.getEnrollmentProfile(), actualUsage.getEnrollmentProfile());
         assertEquals(expectedUsage.getPublicationType(), actualUsage.getPublicationType());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
     }
 
     private List<AaclClassifiedUsage> loadExpectedUsages() throws IOException {

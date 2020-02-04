@@ -24,5 +24,31 @@
       "accountNumber": 7001413934
     },
     "comment": "comment"
+  },
+  {
+    "id": "9e4c3be6-fafd-44f3-af7f-915e861e31c7",
+    "batchId": "a7e971e0-2bd1-484e-b769-4712752a5441",
+    "wrWrkInst": 123456789,
+    "status": "ELIGIBLE",
+    "productFamily": "AACL",
+    "numberOfCopies": 20,
+    "aaclUsage": {
+      "institution": "BIOLA UNIVERSITY",
+      "usagePeriod": 2019,
+      "batchPeriodEndDate": "2019-06-30",
+      "usageSource": "Aug 2018 TUR",
+      "rightLimitation": "PRINT",
+      "numberOfPages": 12,
+      "detailLicenseeClassId":"108",
+      "publicationType": "Book",
+      "discipline": "Life Sciences",
+      "enrollmentProfile": "EXGP"
+    },
+    "rightsholder": {
+      "id": "77cfa2dd-efac-48a9-bd5b-98659ff2265a",
+      "name": "Delmar Learning, a division of Cengage Learning",
+      "accountNumber": 7001413934
+    },
+    "comment": "updated comment"
   }
 ]

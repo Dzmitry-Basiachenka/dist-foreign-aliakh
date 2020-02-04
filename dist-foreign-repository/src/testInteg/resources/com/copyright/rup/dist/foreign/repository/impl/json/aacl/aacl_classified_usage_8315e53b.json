@@ -2,7 +2,7 @@
   {
     "id": "8315e53b-0a7e-452a-a62c-17fe959f3f84",
     "batchId": "600ad926-e7dd-4086-b283-87e6579395ce",
-    "wrWrkInst": 122830308,
+    "wrWrkInst": 123456789,
     "status": "ELIGIBLE",
     "productFamily": "AACL",
     "numberOfCopies": 20,
@@ -23,6 +23,6 @@
       "name": "Delmar Learning, a division of Cengage Learning",
       "accountNumber": 1000011451
     },
-    "comment": "AACL classified usege 1"
+    "comment": "updated comment for AACL classified usage 1"
   }
 ]
