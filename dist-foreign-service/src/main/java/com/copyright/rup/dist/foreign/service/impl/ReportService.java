@@ -56,6 +56,11 @@ public class ReportService implements IReportService {
     }
 
     @Override
+    public void writeAaclUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        reportRepository.writeAaclUsagesCsvReport(filter, pipedOutputStream);
+    }
+
+    @Override
     public void writeFasScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream outputStream) {
         if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
             reportRepository.writeArchivedFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
