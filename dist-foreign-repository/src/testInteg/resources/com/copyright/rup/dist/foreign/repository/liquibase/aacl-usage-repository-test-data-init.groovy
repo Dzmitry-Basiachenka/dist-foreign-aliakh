@@ -1,7 +1,6 @@
 databaseChangeLog {
     property(file: 'database.properties')
 
-
     changeSet(id: '2019-12-27-01', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
         comment("Insert test data for testFindDtosByFilter")
 

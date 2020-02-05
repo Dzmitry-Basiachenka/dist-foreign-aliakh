@@ -64,6 +64,7 @@
         <mapper resource="com/copyright/rup/dist/common/repository/StoredEntityMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/common/repository/RightsholderMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAaclUsageMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAaclFundPoolMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/INtsUsageMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageArchiveMapper.xml"/>
