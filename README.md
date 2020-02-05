@@ -1,3 +1,9 @@
+8.1.23
+-
+* B-52329 FDA: Load classified AACL usages: add publication type to AaclClassifiedUsage toString() method
+* B-52329 FDA: Load classified AACL usages: adjust logic so Comment field is updated during the upload
+* B-56092 Tech Debt: FDA: move NTS update methods to separate service and repository
+
 8.1.22
 -
 * B-52329 FDA: Load classified AACL usages: make changes based on CR-DIST-FOREIGN-143
