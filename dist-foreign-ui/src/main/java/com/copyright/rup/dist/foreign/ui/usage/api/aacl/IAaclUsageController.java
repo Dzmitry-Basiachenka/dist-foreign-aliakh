@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.api.aacl;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.AaclFundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
@@ -31,6 +32,18 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return count of inserted usages
      */
     int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
+
+    /**
+     * @return list of existing {@link AaclFundPool}s.
+     */
+    List<AaclFundPool> getFundPools();
+
+    /**
+     * Deletes {@link AaclFundPool}.
+     *
+     * @param fundPool an {@link AaclFundPool} to delete
+     */
+    void deleteFundPool(AaclFundPool fundPool);
 
     /**
      * Gets instance of CSV processor.
