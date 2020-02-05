@@ -109,6 +109,7 @@ public class AaclClassifiedUsage {
             .append("wrWrkInst", wrWrkInst)
             .append("enrollmentProfile", enrollmentProfile)
             .append("discipline", discipline)
+            .append("publicationType", publicationType)
             .append("comment", comment)
             .toString();
     }
