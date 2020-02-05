@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.AaclFundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -34,6 +35,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -97,6 +99,17 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
         getUsageBatchService().sendForMatching(usages);
         aaclUsageFilterController.getWidget().clearFilter();
         return result;
+    }
+
+    @Override
+    public List<AaclFundPool> getFundPools() {
+        // TODO {srudak} implement
+        return Collections.emptyList();
+    }
+
+    @Override
+    public void deleteFundPool(AaclFundPool fundPool) {
+        // TODO {srudak} implement
     }
 
     @Override

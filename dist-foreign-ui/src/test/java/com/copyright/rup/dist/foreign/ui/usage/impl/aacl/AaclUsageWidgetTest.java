@@ -69,7 +69,7 @@ import java.util.stream.IntStream;
  * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AaclUsageWidget.class, Windows.class, ForeignSecurityUtils.class})
+@PrepareForTest({AaclUsageWidget.class, Windows.class, ForeignSecurityUtils.class, ViewAaclFundPoolWindow.class})
 public class AaclUsageWidgetTest {
 
     private AaclUsageWidget usagesWidget;
@@ -176,6 +176,21 @@ public class AaclUsageWidgetTest {
     }
 
     @Test
+    public void testViewFundPool() throws Exception {
+        mockStatic(Windows.class);
+        MenuItem viewFundPoolMenuItem =
+            ((MenuBar) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+                .getComponent(0)).getComponent(1)).getItems().get(0).getChildren().get(1);
+        ViewAaclFundPoolWindow viewFundPoolWindowMock = createMock(ViewAaclFundPoolWindow.class);
+        expectNew(ViewAaclFundPoolWindow.class, controller).andReturn(viewFundPoolWindowMock).once();
+        Windows.showModalWindow(viewFundPoolWindowMock);
+        expectLastCall().once();
+        replay(controller, Windows.class, ViewAaclFundPoolWindow.class);
+        viewFundPoolMenuItem.getCommand().menuSelected(viewFundPoolMenuItem);
+        verify(controller, Windows.class, ViewAaclFundPoolWindow.class);
+    }
+
+    @Test
     public void testSendForClassificationInvalidUsagesState() {
         mockStatic(Windows.class);
         Grid grid = new Grid();
@@ -218,7 +233,7 @@ public class AaclUsageWidgetTest {
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(4, layout.getComponentCount());
         verifyUsageBatchMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load"));
-        verifyFundPoolMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load"));
+        verifyFundPoolMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
         Button sendForClassificationButton = (Button) layout.getComponent(2);
         assertEquals("Send for Classification", sendForClassificationButton.getCaption());
         Button loadClassifiedUsagesButton = (Button) layout.getComponent(3);

@@ -49,6 +49,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to delete AACL fund pool.
+     */
+    public static boolean hasDeleteAaclFundPoolPermission() {
+        return SecurityUtils.hasPermission("FDA_DELETE_AACL_FUND_POOL");
+    }
+
+    /**
      * @return {@code true} if user has permission to load researched usages.
      */
     public static boolean hasLoadResearchedUsagePermission() {
