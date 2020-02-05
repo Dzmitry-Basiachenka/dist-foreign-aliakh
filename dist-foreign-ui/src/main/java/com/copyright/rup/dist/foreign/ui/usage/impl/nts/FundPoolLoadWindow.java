@@ -75,7 +75,7 @@ class FundPoolLoadWindow extends Window {
     FundPoolLoadWindow(INtsUsageController usagesController) {
         this.usagesController = usagesController;
         setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.upload_fund_pool"));
+        setCaption(ForeignUi.getMessage("window.load_fund_pool"));
         setResizable(false);
         setWidth(440, Unit.PIXELS);
         setHeight(360, Unit.PIXELS);

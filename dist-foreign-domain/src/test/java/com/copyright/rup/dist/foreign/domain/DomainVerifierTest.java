@@ -50,6 +50,7 @@ public class DomainVerifierTest {
             {UsageBatch.class},
             {Usage.class},
             {AaclUsage.class},
+            {AaclFundPool.class},
             {UsageDto.class},
             {PaidUsage.class},
             {Scenario.class},
