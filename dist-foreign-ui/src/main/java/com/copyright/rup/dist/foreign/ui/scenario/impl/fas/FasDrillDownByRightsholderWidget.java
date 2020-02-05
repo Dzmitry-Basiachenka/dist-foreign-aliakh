@@ -42,7 +42,7 @@ public class FasDrillDownByRightsholderWidget extends CommonDrillDownByRightshol
             RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.publication_date", "publicationDate", true, 90);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
         addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", 130);
-        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount", "grossAmount", 110);
+        addAmountColumn(UsageDto::getGrossAmount, "table.column.amount_in_usd", "grossAmount", 110);
         addAmountColumn(UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", 135);
         addAmountColumn(UsageDto::getServiceFeeAmount, "table.column.service_fee_amount", "serviceFeeAmount", 150);
         addAmountColumn(UsageDto::getNetAmount, "table.column.net_amount", "netAmount", 120);

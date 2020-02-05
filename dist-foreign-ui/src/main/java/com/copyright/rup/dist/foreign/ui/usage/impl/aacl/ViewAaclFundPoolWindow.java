@@ -49,7 +49,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
      */
     public ViewAaclFundPoolWindow(IAaclUsageController controller) {
         this.controller = controller;
-        setWidth(600, Unit.PIXELS);
+        setWidth(900, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_fund_pool.search.aacl"));
@@ -98,7 +98,10 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
         });
         deleteButton.setEnabled(false);
         viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
-        viewButton.addClickListener(event -> {/*TODO {srudak} show fund pool detail window*/});
+        viewButton.addClickListener(event -> {
+            AaclFundPool selectedFundPool = grid.getSelectedItems().stream().findFirst().orElse(null);
+            Windows.showModalWindow(new ViewAaclFundPoolDetailsWindow(selectedFundPool, controller));
+        });
         viewButton.setEnabled(false);
         HorizontalLayout layout = new HorizontalLayout(viewButton, deleteButton, closeButton);
         layout.setSpacing(true);
@@ -123,7 +126,12 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
         grid.addColumn(AaclFundPool::getName)
             .setCaption(ForeignUi.getMessage("table.column.fund_pool_name"))
             .setComparator((fundPool1, fundPool2) -> fundPool1.getName().compareToIgnoreCase(fundPool2.getName()))
-            .setWidth(150);
+            .setExpandRatio(1);
+        grid.addColumn(AaclFundPool::getTotalGrossAmount)
+            .setCaption(ForeignUi.getMessage("table.column.gross_fund_pool_total"))
+            .setComparator((fundPool1, fundPool2) ->
+                fundPool1.getTotalGrossAmount().compareTo(fundPool2.getTotalGrossAmount()))
+            .setWidth(170);
         grid.addColumn(AaclFundPool::getCreateUser)
             .setCaption(ForeignUi.getMessage("table.column.create_user"))
             .setComparator(
@@ -131,7 +139,8 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
             .setWidth(170);
         grid.addColumn(fundPool -> getStringFromDate(fundPool.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.create_date"))
-            .setComparator((fundPool1, fundPool2) -> fundPool1.getCreateDate().compareTo(fundPool2.getCreateDate()));
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getCreateDate().compareTo(fundPool2.getCreateDate()))
+            .setExpandRatio(0);
     }
 
     private String getStringFromDate(Date date) {

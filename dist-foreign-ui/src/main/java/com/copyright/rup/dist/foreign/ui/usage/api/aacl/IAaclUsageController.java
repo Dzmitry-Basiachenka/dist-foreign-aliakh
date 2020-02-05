@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclFundPool;
+import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
@@ -37,6 +38,14 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return list of existing {@link AaclFundPool}s.
      */
     List<AaclFundPool> getFundPools();
+
+    /**
+     * Gets {@link AaclFundPoolDetail}s by {@link AaclFundPool} id.
+     *
+     * @param fundPoolId {@link AaclFundPool} id
+     * @return list of {@link AaclFundPoolDetail}s
+     */
+    List<AaclFundPoolDetail> getFundPoolDetails(String fundPoolId);
 
     /**
      * Deletes {@link AaclFundPool}.

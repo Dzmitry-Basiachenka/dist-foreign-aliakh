@@ -5,24 +5,20 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
-import java.math.BigDecimal;
 
 /**
- * Represents AACL fund pool.
+ * Domain object for aggregate licensee class.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 04/02/2020
+ * Date: 2/5/20
  *
- * @author Aliaksandr Liakh
+ * @author Stanislau Rudak
  */
-// TODO {aliakh} add additional fields
-public class AaclFundPool extends StoredEntity<String> {
+// TODO {srudak} check if we really can use Integer here
+public class AggregateLicenseeClass extends StoredEntity<Integer> {
 
     private String name;
-    private BigDecimal totalGrossAmount;
 
     public String getName() {
         return name;
@@ -30,14 +26,6 @@ public class AaclFundPool extends StoredEntity<String> {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public BigDecimal getTotalGrossAmount() {
-        return totalGrossAmount;
-    }
-
-    public void setTotalGrossAmount(BigDecimal totalGrossAmount) {
-        this.totalGrossAmount = totalGrossAmount;
     }
 
     @Override
@@ -48,11 +36,10 @@ public class AaclFundPool extends StoredEntity<String> {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        AaclFundPool that = (AaclFundPool) obj;
+        AggregateLicenseeClass that = (AggregateLicenseeClass) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(name, that.name)
-            .append(totalGrossAmount, that.totalGrossAmount)
             .isEquals();
     }
 
@@ -61,16 +48,13 @@ public class AaclFundPool extends StoredEntity<String> {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(name)
-            .append(totalGrossAmount)
             .toHashCode();
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .appendSuper(super.toString())
+        return new ToStringBuilder(this)
             .append("name", name)
-            .append("totalGrossAmount", totalGrossAmount)
             .toString();
     }
 }

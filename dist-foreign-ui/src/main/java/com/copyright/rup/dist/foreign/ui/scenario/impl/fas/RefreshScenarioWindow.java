@@ -131,7 +131,7 @@ public class RefreshScenarioWindow extends Window {
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies");
         addAmountColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
             "reportedValue", 113);
-        addAmountColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount",
+        addAmountColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.amount_in_usd",
             "grossAmount", 120);
         addAmountColumn(usage -> CurrencyUtils.format(usage.getBatchGrossAmount(), null),
             "table.column.batch_gross_amount", "batchGrossAmount", 120);
