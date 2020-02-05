@@ -35,6 +35,8 @@ public class AaclUsageMediatorTest {
 
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private MenuBar fundPoolMenuBar;
+    private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button sendForClassificationButton;
     private Button loadClassifiedUsagesButton;
     private AaclUsageMediator mediator;
@@ -42,11 +44,14 @@ public class AaclUsageMediatorTest {
     @Before
     public void setUp() {
         usageBatchMenuBar = new MenuBar();
+        loadUsageBatchMenuItem = usageBatchMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
+        fundPoolMenuBar = new MenuBar();
+        loadFundPoolMenuItem = fundPoolMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
         sendForClassificationButton = new Button();
         loadClassifiedUsagesButton = new Button();
-        loadUsageBatchMenuItem = usageBatchMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
         mediator = new AaclUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
+        mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         mediator.setSendForClassificationButton(sendForClassificationButton);
         mediator.setLoadClassifiedUsagesButton(loadClassifiedUsagesButton);
     }
@@ -58,6 +63,8 @@ public class AaclUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
+        assertTrue(fundPoolMenuBar.isVisible());
+        assertFalse(loadFundPoolMenuItem.isVisible());
         assertFalse(sendForClassificationButton.isVisible());
         assertFalse(loadClassifiedUsagesButton.isVisible());
         verify(SecurityUtils.class);
@@ -70,6 +77,8 @@ public class AaclUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
+        assertTrue(fundPoolMenuBar.isVisible());
+        assertFalse(loadFundPoolMenuItem.isVisible());
         assertFalse(sendForClassificationButton.isVisible());
         assertFalse(loadClassifiedUsagesButton.isVisible());
         verify(SecurityUtils.class);
@@ -82,6 +91,8 @@ public class AaclUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(usageBatchMenuBar.isVisible());
         assertTrue(loadUsageBatchMenuItem.isVisible());
+        assertTrue(fundPoolMenuBar.isVisible());
+        assertTrue(loadFundPoolMenuItem.isVisible());        
         assertTrue(sendForClassificationButton.isVisible());
         assertTrue(loadClassifiedUsagesButton.isVisible());
         verify(SecurityUtils.class);
@@ -103,6 +114,7 @@ public class AaclUsageMediatorTest {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_USAGE")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_LOAD_AACL_FUND_POOL")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_RESEARCHED_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_CREATE_EDIT_SCENARIO")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_SEND_FOR_WORK_RESEARCH")).andReturn(true).anyTimes();

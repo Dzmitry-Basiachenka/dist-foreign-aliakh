@@ -42,6 +42,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to load AACL fund pool.
+     */
+    public static boolean hasLoadAaclFundPoolPermission() {
+        return SecurityUtils.hasPermission("FDA_LOAD_AACL_FUND_POOL");
+    }
+
+    /**
      * @return {@code true} if user has permission to load researched usages.
      */
     public static boolean hasLoadResearchedUsagePermission() {

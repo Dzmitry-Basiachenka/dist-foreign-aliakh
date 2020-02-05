@@ -134,6 +134,8 @@ public class AaclUsageWidgetTest {
         expectNew(AaclUsageMediator.class).andReturn(mediator).once();
         mediator.setLoadUsageBatchMenuItem(anyObject(MenuItem.class));
         expectLastCall().once();
+        mediator.setLoadFundPoolMenuItem(anyObject(MenuItem.class));
+        expectLastCall().once();
         mediator.setSendForClassificationButton(anyObject(Button.class));
         expectLastCall().once();
         mediator.setLoadClassifiedUsagesButton(anyObject(Button.class));
@@ -153,7 +155,7 @@ public class AaclUsageWidgetTest {
         Capture<Window> notificationWindowCapture = new Capture<>();
         Button sendForClassificationButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-                .getComponent(0)).getComponent(1);
+                .getComponent(0)).getComponent(2);
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.RH_FOUND)).andReturn(true).once();
         Windows.showModalWindow(capture(notificationWindowCapture));
         expectLastCall().once();
@@ -181,7 +183,7 @@ public class AaclUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button sendForClassificationButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-                .getComponent(0)).getComponent(1);
+                .getComponent(0)).getComponent(2);
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.RH_FOUND)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in RH_FOUND status can be sent for classification");
         expectLastCall().once();
@@ -199,7 +201,7 @@ public class AaclUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button loadClassifiedUsagesButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-                .getComponent(0)).getComponent(2);
+                .getComponent(0)).getComponent(3);
         assertTrue(loadClassifiedUsagesButton.isDisableOnClick());
         Windows.showModalWindow(anyObject(ClassifiedUsagesUploadWindow.class));
         expectLastCall().once();
@@ -214,15 +216,29 @@ public class AaclUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(3, layout.getComponentCount());
+        assertEquals(4, layout.getComponentCount());
         verifyUsageBatchMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load"));
-        Button sendForClassificationButton = (Button) layout.getComponent(1);
+        verifyFundPoolMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load"));
+        Button sendForClassificationButton = (Button) layout.getComponent(2);
         assertEquals("Send for Classification", sendForClassificationButton.getCaption());
-        Button loadClassifiedUsagesButton = (Button) layout.getComponent(2);
+        Button loadClassifiedUsagesButton = (Button) layout.getComponent(3);
         assertEquals("Load Classified Details", loadClassifiedUsagesButton.getCaption());
     }
 
     private void verifyUsageBatchMenuBar(Component component, String menuBarName, List<String> menuItems) {
+        assertTrue(component instanceof MenuBar);
+        MenuBar menuBar = (MenuBar) component;
+        List<MenuItem> parentItems = menuBar.getItems();
+        assertEquals(1, parentItems.size());
+        MenuItem item = parentItems.get(0);
+        assertEquals(menuBarName, item.getText());
+        List<MenuItem> childItems = item.getChildren();
+        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
+        IntStream.range(0, menuItems.size())
+            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
+    }
+
+    private void verifyFundPoolMenuBar(Component component, String menuBarName, List<String> menuItems) {
         assertTrue(component instanceof MenuBar);
         MenuBar menuBar = (MenuBar) component;
         List<MenuItem> parentItems = menuBar.getItems();
