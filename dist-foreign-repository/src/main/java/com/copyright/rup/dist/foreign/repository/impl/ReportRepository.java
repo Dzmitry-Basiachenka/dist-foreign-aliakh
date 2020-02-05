@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.SendForClassificationCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.AuditFasCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasBatchSummaryReportHandler;
@@ -218,6 +219,15 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
         writeCsvReportByParts(FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME, FIND_USAGE_REPORT_DTOS_METHOD_NAME, parameters,
             !filter.isEmpty(), () -> new NtsUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeAaclUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        writeCsvReportByParts("IReportMapper.findAaclUsagesCountByFilter", "IReportMapper.findAaclUsageReportDtos",
+            parameters, !filter.isEmpty(),
+            () -> new AaclUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override

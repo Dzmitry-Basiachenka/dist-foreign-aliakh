@@ -163,6 +163,21 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    public void testWriteAaclUsagesCsvReport() throws IOException {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(Sets.newHashSet("600ad926-e7dd-4086-b283-87e6579395ce"));
+        usageFilter.setProductFamily("AACL");
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAaclUsagesCsvReport(usageFilter, outputStream),
+            "usages_report_aacl.csv");
+    }
+
+    @Test
+    public void testWriteAaclUsagesEmptyCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeAaclUsagesCsvReport(new UsageFilter(), outputStream), "usages_report_aacl_empty.csv");
+    }
+
+    @Test
     public void testWriteNtsUsagesCsvReport() throws IOException {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Sets.newHashSet("f20ac1a3-eee4-4027-b5fb-def9adf0f871",
@@ -347,7 +362,6 @@ public class CsvReportsIntegrationTest {
             outputStream -> reportRepository.writeWorkClassificationCsvReport("99999999", outputStream),
             "work_classification_report_empty.csv");
     }
-
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         reportWriter.accept(outputStream);
