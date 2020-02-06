@@ -8,6 +8,7 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclFundPool;
+import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -113,6 +114,12 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Override
     public void deleteFundPool(AaclFundPool fundPool) {
         // TODO {srudak} implement
+    }
+
+    @Override
+    public List<AaclFundPoolDetail> getFundPoolDetails(String fundPoolId) {
+        // TODO {srudak} implement
+        return Collections.emptyList();
     }
 
     @Override

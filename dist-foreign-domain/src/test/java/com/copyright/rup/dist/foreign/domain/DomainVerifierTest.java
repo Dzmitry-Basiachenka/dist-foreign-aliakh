@@ -72,7 +72,9 @@ public class DomainVerifierTest {
             {ExcludePayeeFilter.class},
             {PayeeTotalHolder.class},
             {AaclClassifiedUsage.class},
-            {PublicationType.class}
+            {PublicationType.class},
+            {AggregateLicenseeClass.class},
+            {AaclFundPoolDetail.class}
         };
         return Arrays.asList(testData);
     }

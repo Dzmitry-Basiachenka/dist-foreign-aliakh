@@ -66,7 +66,7 @@ public class FasAuditWidget extends CommonAuditWidget implements IFasAuditWidget
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
         addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", 155);
         addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", 115);
-        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount", "grossAmount", 100);
+        addAmountColumn(UsageDto::getGrossAmount, "table.column.amount_in_usd", "grossAmount", 100);
         addAmountColumn(UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", 120);
         addColumn(usage -> {
             BigDecimal value = usage.getServiceFee();

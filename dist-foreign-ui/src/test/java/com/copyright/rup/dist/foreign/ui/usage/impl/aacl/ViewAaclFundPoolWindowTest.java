@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
@@ -26,6 +27,7 @@ import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -56,7 +58,8 @@ import java.util.stream.Collectors;
  * @author Stanislau Rudak
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class,
+    ViewAaclFundPoolDetailsWindow.class, ViewAaclFundPoolWindow.class})
 public class ViewAaclFundPoolWindowTest {
 
     private static final String FUND_POOL_ID = RupPersistUtils.generateUuid();
@@ -100,6 +103,22 @@ public class ViewAaclFundPoolWindowTest {
     }
 
     @Test
+    public void testViewClickListener() throws Exception {
+        mockStatic(Windows.class);
+        ViewAaclFundPoolDetailsWindow viewDetailsWindowMock = createMock(ViewAaclFundPoolDetailsWindow.class);
+        Grid<AaclFundPool> grid = createMock(Grid.class);
+        Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
+        Button.ClickListener listener = getButtonClickListener(0);
+        expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
+        expectNew(ViewAaclFundPoolDetailsWindow.class, fundPool, controller).andReturn(viewDetailsWindowMock).once();
+        Windows.showModalWindow(viewDetailsWindowMock);
+        expectLastCall().once();
+        replay(controller, grid, Windows.class, ViewAaclFundPoolDetailsWindow.class);
+        listener.buttonClick(createMock(ClickEvent.class));
+        verify(controller, grid, Windows.class, ViewAaclFundPoolDetailsWindow.class);
+    }
+
+    @Test
     @SuppressWarnings(UNCHECKED)
     public void testDeleteClickListener() {
         mockStatic(Windows.class);
@@ -113,7 +132,7 @@ public class ViewAaclFundPoolWindowTest {
                 eq("Are you sure you want to delete <i><b>'AACL Fund Pool'</b></i> fund pool?"), anyObject()))
             .andReturn(confirmWindowMock).once();
         replay(controller, confirmWindowMock, grid, Windows.class);
-        listener.buttonClick(null);
+        listener.buttonClick(createMock(ClickEvent.class));
         verify(controller, confirmWindowMock, grid, Windows.class);
     }
 
@@ -150,7 +169,7 @@ public class ViewAaclFundPoolWindowTest {
     }
 
     private void verifySize(Component component) {
-        assertEquals(600, component.getWidth(), 0);
+        assertEquals(900, component.getWidth(), 0);
         assertEquals(550, component.getHeight(), 0);
         assertEquals(Sizeable.Unit.PIXELS, component.getHeightUnits());
         assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
@@ -160,11 +179,13 @@ public class ViewAaclFundPoolWindowTest {
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Grid.Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Fund Pool Name", "Create User", "Create Date"),
+        assertEquals(Arrays.asList("Fund Pool Name", "Gross Fund Pool Total", "Create User", "Create Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(150.0, 170.0, -1.0),
+        assertEquals(Arrays.asList(-1.0, 170.0, 170.0, -1.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
-        Grid.Column createDateColumn = columns.get(2);
+        assertEquals(Arrays.asList(1, -1, -1, 0),
+            columns.stream().map(Grid.Column::getExpandRatio).collect(Collectors.toList()));
+        Grid.Column createDateColumn = columns.get(3);
         assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));
     }
 
