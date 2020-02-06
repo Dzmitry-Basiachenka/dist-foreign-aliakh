@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -65,6 +66,8 @@ import java.util.List;
 @PrepareForTest({ByteArrayStreamSource.class, OffsetDateTime.class})
 public class AaclUsageControllerTest {
 
+    private static final String FUND_POOL_NAME = "fund pool name";
+
     private AaclUsageController controller;
     private IAaclUsageWidget usagesWidget;
     private IAaclUsageFilterController filterController;
@@ -72,6 +75,7 @@ public class AaclUsageControllerTest {
     private IUsageBatchService usageBatchService;
     private IResearchService researchService;
     private IAaclUsageService aaclUsageService;
+    private IAaclFundPoolService aaclFundPoolService;
     private CsvProcessorFactory csvProcessorFactory;
     private UsageFilter usageFilter;
 
@@ -84,6 +88,7 @@ public class AaclUsageControllerTest {
         filterWidgetMock = createMock(IAaclUsageFilterWidget.class);
         researchService = createMock(IResearchService.class);
         aaclUsageService = createMock(IAaclUsageService.class);
+        aaclFundPoolService = createMock(IAaclFundPoolService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, usageBatchService);
@@ -91,6 +96,7 @@ public class AaclUsageControllerTest {
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, aaclUsageService);
+        Whitebox.setInternalState(controller, aaclFundPoolService);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         usageFilter = new UsageFilter();
     }
@@ -210,5 +216,13 @@ public class AaclUsageControllerTest {
         replay(aaclUsageService, filterController, filterWidgetMock);
         controller.loadClassifiedUsages(classifiedUsages);
         verify(aaclUsageService, filterController, filterWidgetMock);
+    }
+
+    @Test
+    public void testAaclFundPoolExists() {
+        expect(aaclFundPoolService.aaclFundPoolExists(FUND_POOL_NAME)).andReturn(true).once();
+        replay(aaclFundPoolService);
+        assertTrue(controller.aaclFundPoolExists(FUND_POOL_NAME));
+        verify(aaclFundPoolService);
     }
 }

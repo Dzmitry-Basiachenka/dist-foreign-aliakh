@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
@@ -61,6 +62,8 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     private IResearchService researchService;
     @Autowired
     private IAaclUsageService aaclUsageService;
+    @Autowired
+    private IAaclFundPoolService aaclFundPoolService;
 
     @Override
     public ICommonUsageFilterController getUsageFilterController() {
@@ -141,7 +144,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public boolean aaclFundPoolExists(String name) {
-        return true; // TODO {aliakh} to implement
+        return aaclFundPoolService.aaclFundPoolExists(name);
     }
 
     @Override

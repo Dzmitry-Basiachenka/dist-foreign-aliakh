@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -72,7 +73,7 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Autowired
-    private AaclUsageRepository aaclUsageRepository;
+    private IAaclUsageRepository aaclUsageRepository;
 
     @Test
     public void testInsert() {

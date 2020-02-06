@@ -34,7 +34,7 @@ public class AaclFundPoolUploadWindow extends Window {
 
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
 
-    private final IAaclUsageController usagesController;
+    private final IAaclUsageController aaclUsageController;
     private final Binder<AaclFundPool> binder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
     private TextField fundPoolNameField;
@@ -43,10 +43,10 @@ public class AaclFundPoolUploadWindow extends Window {
     /**
      * Constructor.
      *
-     * @param usagesController {@link IAaclUsageController} instance
+     * @param aaclUsageController {@link IAaclUsageController} instance
      */
-    public AaclFundPoolUploadWindow(IAaclUsageController usagesController) {
-        this.usagesController = usagesController;
+    public AaclFundPoolUploadWindow(IAaclUsageController aaclUsageController) {
+        this.aaclUsageController = aaclUsageController;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_fund_pool"));
         setResizable(false);
@@ -109,7 +109,7 @@ public class AaclFundPoolUploadWindow extends Window {
         binder.forField(fundPoolNameField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !usagesController.aaclFundPoolExists(StringUtils.trimToEmpty(value)),
+            .withValidator(value -> !aaclUsageController.aaclFundPoolExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Fund Pool"))
             .bind(AaclFundPool::getName, AaclFundPool::setName);
         fundPoolNameField.setSizeFull();
