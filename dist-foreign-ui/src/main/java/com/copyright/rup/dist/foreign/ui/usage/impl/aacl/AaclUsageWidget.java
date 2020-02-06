@@ -38,6 +38,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button sendForClassificationButton;
     private Button loadClassifiedUsagesButton;
+    private Button exportButton;
     private final IAaclUsageController controller;
 
     /**
@@ -101,9 +102,10 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         initFundPoolMenuBar();
         initSendForClassificationButton();
         initLoadClassifiedUsagesButton();
+        initExportButton();
         VaadinUtils.setButtonsAutoDisabled(loadClassifiedUsagesButton);
         HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, sendForClassificationButton,
-            loadClassifiedUsagesButton);
+            loadClassifiedUsagesButton, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -156,6 +158,13 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         loadClassifiedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_classified_details"));
         loadClassifiedUsagesButton.addClickListener(event ->
             Windows.showModalWindow(new ClassifiedUsagesUploadWindow(controller)));
+    }
+
+    private void initExportButton() {
+        exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
+        fileDownloader.extend(exportButton);
     }
 
     private static class SendForClassificationFileDownloader extends OnDemandFileDownloader {
