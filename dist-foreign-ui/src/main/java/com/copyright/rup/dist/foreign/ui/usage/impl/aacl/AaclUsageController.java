@@ -129,6 +129,13 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
+    public IStreamSource getExportUsagesStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "export_usage_",
+            pos -> getReportService().writeAaclUsageCsvReport(
+                getUsageFilterController().getWidget().getAppliedFilter(), pos));
+    }
+
+    @Override
     public int loadClassifiedUsages(List<AaclClassifiedUsage> classifiedUsages) {
         int updatedCount = aaclUsageService.updateClassifiedUsages(classifiedUsages);
         getUsageFilterController().getWidget().clearFilter();

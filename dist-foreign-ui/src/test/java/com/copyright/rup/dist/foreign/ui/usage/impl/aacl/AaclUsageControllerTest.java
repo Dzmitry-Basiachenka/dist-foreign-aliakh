@@ -16,6 +16,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -23,6 +25,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclFundPoolService;
@@ -38,6 +41,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,11 +51,17 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PipedOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link AaclUsageController}.
@@ -63,10 +73,12 @@ import java.util.List;
  * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ByteArrayStreamSource.class, OffsetDateTime.class})
+@PrepareForTest({ByteArrayStreamSource.class, OffsetDateTime.class, StreamSource.class})
 public class AaclUsageControllerTest {
 
+
     private static final String FUND_POOL_NAME = "fund pool name";
+    private static final OffsetDateTime DATE = OffsetDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
 
     private AaclUsageController controller;
     private IAaclUsageWidget usagesWidget;
@@ -78,6 +90,8 @@ public class AaclUsageControllerTest {
     private IAaclFundPoolService aaclFundPoolService;
     private CsvProcessorFactory csvProcessorFactory;
     private UsageFilter usageFilter;
+    private IStreamSourceHandler streamSourceHandler;
+    private IReportService reportService;
 
     @Before
     public void setUp() {
@@ -90,6 +104,8 @@ public class AaclUsageControllerTest {
         aaclUsageService = createMock(IAaclUsageService.class);
         aaclFundPoolService = createMock(IAaclFundPoolService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
+        streamSourceHandler = createMock(IStreamSourceHandler.class);
+        reportService = createMock(IReportService.class);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, researchService);
@@ -98,6 +114,8 @@ public class AaclUsageControllerTest {
         Whitebox.setInternalState(controller, aaclUsageService);
         Whitebox.setInternalState(controller, aaclFundPoolService);
         Whitebox.setInternalState(controller, csvProcessorFactory);
+        Whitebox.setInternalState(controller, streamSourceHandler);
+        Whitebox.setInternalState(controller, reportService);
         usageFilter = new UsageFilter();
     }
 
@@ -194,6 +212,33 @@ public class AaclUsageControllerTest {
         assertEquals("send_for_classification_01_21_2020_02_10.csv", streamSource.getSource().getKey().get());
         assertEquals("report content", IOUtils.toString(streamSource.getSource().getValue().get()));
         verify(OffsetDateTime.class, usageBatchService, filterController, filterWidgetMock, researchService);
+    }
+
+    @Test
+    public void testGetExportUsagesStreamSource() {
+        mockStatic(OffsetDateTime.class);
+        usageFilter.setProductFamily("AACL");
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        String fileName = "export_usage_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(DATE).once();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        reportService.writeAaclUsageCsvReport(usageFilter, pos);
+        expectLastCall().once();
+        replay(OffsetDateTime.class, filterWidgetMock, filterController, streamSourceHandler, reportService);
+        IStreamSource streamSource = controller.getExportUsagesStreamSource();
+        assertEquals("export_usage_01_02_2020_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        assertNotNull(posConsumer);
+        verify(OffsetDateTime.class, filterWidgetMock, filterController, streamSourceHandler, reportService);
     }
 
     @Test
