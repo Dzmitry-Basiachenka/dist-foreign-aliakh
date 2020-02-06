@@ -57,6 +57,14 @@ public interface IReportService {
     void writeNtsUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
+     * Writes AACL usages found by filter into CSV output stream.
+     *
+     * @param filter            instance of {@link UsageFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeAaclUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
      * Writes FAS scenario usages into csv output stream.
      *
      * @param scenario          {@link Scenario}

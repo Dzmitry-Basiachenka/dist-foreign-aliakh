@@ -134,6 +134,17 @@ public class ReportServiceTest {
     }
 
     @Test
+    public void testWriteAaclUsageCsvReport() {
+        UsageFilter filter = createMock(UsageFilter.class);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeAaclUsagesCsvReport(filter, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeAaclUsageCsvReport(filter, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
     public void testWriteFasScenarioUsagesCsvReportStatusSentToLM() {
         Scenario scenario = buildScenario(ScenarioStatusEnum.SENT_TO_LM);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
