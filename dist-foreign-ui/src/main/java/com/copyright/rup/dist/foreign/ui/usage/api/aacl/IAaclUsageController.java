@@ -65,6 +65,11 @@ public interface IAaclUsageController extends ICommonUsageController {
     IStreamSource getSendForClassificationUsagesStreamSource();
 
     /**
+     * @return instance of {@link IStreamSource} for export.
+     */
+    IStreamSource getExportUsagesStreamSource();
+
+    /**
      * Updates classified usage details.
      *
      * @param classifiedUsages list of {@link AaclClassifiedUsage}s
