@@ -12,4 +12,9 @@
         )
     </select>
 
+    <select id="findAggregateLicenseeClassIds" resultType="int">
+        select aggregate_licensee_class_id
+        from ${schema}.df_aggregate_licensee_class
+    </select>
+
 </mapper>

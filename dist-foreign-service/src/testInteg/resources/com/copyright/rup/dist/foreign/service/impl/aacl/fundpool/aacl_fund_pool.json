@@ -1,0 +1,44 @@
+[
+  {
+    "aggregateLicenseeClass": {
+      "id": 108
+    },
+    "grossAmount": 1256.33
+  },
+  {
+    "aggregateLicenseeClass": {
+      "id": 111
+    },
+    "grossAmount": 654.00
+  },
+  {
+    "aggregateLicenseeClass": {
+      "id": 136
+    },
+    "grossAmount": 0.55
+  },
+  {
+    "aggregateLicenseeClass": {
+      "id": 146
+    },
+    "grossAmount": 987.00
+  },
+  {
+    "aggregateLicenseeClass": {
+      "id": 171
+    },
+    "grossAmount": 100.00
+  },
+  {
+    "aggregateLicenseeClass": {
+      "id": 195
+    },
+    "grossAmount": 99.00
+  },
+  {
+    "aggregateLicenseeClass": {
+      "id": 232
+    },
+    "grossAmount": 73.01
+  }
+]

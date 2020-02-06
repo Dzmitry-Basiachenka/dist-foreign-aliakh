@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 
 /**
  * The validator for Classified AACL usages to check if Wr Wrk Inst exists in PI.
- *
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>

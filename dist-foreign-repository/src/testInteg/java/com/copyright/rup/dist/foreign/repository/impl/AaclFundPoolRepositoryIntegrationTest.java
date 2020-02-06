@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -12,6 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
 
 /**
  * Integration test for {@link AaclFundPoolRepository}.
@@ -37,5 +40,12 @@ public class AaclFundPoolRepositoryIntegrationTest {
         assertTrue(aaclFundPoolRepository.aaclFundPoolExists("fund_pool_name 100%"));
         assertTrue(aaclFundPoolRepository.aaclFundPoolExists("FUND_POOL_NAME 100%"));
         assertFalse(aaclFundPoolRepository.aaclFundPoolExists("fund_pool_name"));
+    }
+
+    @Test
+    public void testFindAggregateLicenseeClassIds() {
+        Set<Integer> aggregateLicenseeClassIds = aaclFundPoolRepository.findAggregateLicenseeClassIds();
+        assertEquals(36, aggregateLicenseeClassIds.size());
+        aggregateLicenseeClassIds.forEach(aggregateLicenseeClassId -> assertTrue(aggregateLicenseeClassId > 0));
     }
 }

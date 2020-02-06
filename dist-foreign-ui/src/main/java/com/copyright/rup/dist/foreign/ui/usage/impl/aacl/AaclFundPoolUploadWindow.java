@@ -1,10 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
 import com.copyright.rup.dist.foreign.domain.AaclFundPool;
+import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
@@ -20,6 +26,8 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+
 /**
  * Window for uploading {@link AaclFundPool}.
  * <p>
@@ -29,7 +37,6 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Aliaksandr Liakh
  */
-@SuppressWarnings("all") // TODO {aliakh} to remove when the class is fully implemented
 public class AaclFundPoolUploadWindow extends Window {
 
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
@@ -59,7 +66,26 @@ public class AaclFundPoolUploadWindow extends Window {
      * Initiates file uploading.
      */
     void onUploadClicked() {
-        // TODO {aliakh} to implement
+        if (isValid()) {
+            try {
+                AaclFundPoolCsvProcessor processor = aaclUsageController.getAaclFundPoolCsvProcessor();
+                ProcessingResult<AaclFundPoolDetail> result = processor.process(uploadField.getStreamToUploadedFile());
+                if (result.isSuccessful()) {
+                    int usagesCount = 0; // TODO {aliakh} to implement aaclUsageController.loadAaclFundPool
+                    close();
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
+                } else {
+                    Windows.showModalWindow(
+                        new ErrorUploadWindow(
+                            aaclUsageController.getErrorResultStreamSource(uploadField.getValue(), result),
+                            "<br>Press Download button to see detailed list of errors"));
+                }
+            } catch (ValidationException e) {
+                Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
+            }
+        } else {
+            Windows.showValidationErrorWindow(Arrays.asList(fundPoolNameField, uploadField));
+        }
     }
 
     /**

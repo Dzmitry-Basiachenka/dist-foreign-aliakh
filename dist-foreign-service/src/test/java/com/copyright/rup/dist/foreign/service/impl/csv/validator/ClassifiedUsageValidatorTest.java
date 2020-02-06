@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.UsageService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +32,7 @@ public class ClassifiedUsageValidatorTest {
 
     @Before
     public void setUp() {
-        usageService = createMock(UsageService.class);
+        usageService = createMock(IUsageService.class);
         validator = new ClassifiedUsageValidator(usageService);
     }
 

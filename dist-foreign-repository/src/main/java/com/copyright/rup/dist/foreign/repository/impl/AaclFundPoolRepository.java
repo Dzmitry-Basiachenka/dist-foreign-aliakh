@@ -8,6 +8,8 @@ import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
+import java.util.Set;
+
 /**
  * Implementation of {@link IAaclFundPoolRepository}.
  * <p>
@@ -24,5 +26,10 @@ public class AaclFundPoolRepository extends BaseRepository implements IAaclFundP
     public boolean aaclFundPoolExists(String name) {
         checkArgument(StringUtils.isNotBlank(name));
         return selectOne("IAaclFundPoolMapper.aaclFundPoolExists", escapeSqlLikePattern(name));
+    }
+
+    @Override
+    public Set<Integer> findAggregateLicenseeClassIds() {
+        return selectSet("IAaclFundPoolMapper.findAggregateLicenseeClassIds");
     }
 }

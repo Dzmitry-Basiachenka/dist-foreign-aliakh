@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
+import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.IDetailLicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.AggregateLicenseeClassValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DetailLicenseeClassValidator;
@@ -40,6 +42,8 @@ public class CsvProcessorFactory {
     private IDetailLicenseeClassService detailLicenseeClassService;
     @Autowired
     private IPublicationTypeService publicationTypeService;
+    @Autowired
+    private IAaclFundPoolRepository aaclFundPoolRepository;
 
     /**
      * Initialized UsageCsvProcessor.
@@ -59,6 +63,15 @@ public class CsvProcessorFactory {
      */
     public AaclUsageCsvProcessor getAaclUsageCsvProcessor() {
         return new AaclUsageCsvProcessor();
+    }
+
+    /**
+     * @return instance of {@link AaclFundPoolCsvProcessor}.
+     */
+    public AaclFundPoolCsvProcessor getAaclFundPoolCsvProcessor() {
+        AaclFundPoolCsvProcessor processor = new AaclFundPoolCsvProcessor();
+        processor.addBusinessValidators(new AggregateLicenseeClassValidator(aaclFundPoolRepository));
+        return processor;
     }
 
     /**
