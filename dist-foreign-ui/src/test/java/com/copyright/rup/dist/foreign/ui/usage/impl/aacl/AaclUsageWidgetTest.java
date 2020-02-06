@@ -86,7 +86,8 @@ public class AaclUsageWidgetTest {
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
-            createMock(Supplier.class))).once();
+            createMock(Supplier.class))).times(2);
+        expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
         expect(controller.getSendForClassificationUsagesStreamSource()).andReturn(streamSource).once();
         replay(controller, streamSource);
         usagesWidget.init();
@@ -231,13 +232,14 @@ public class AaclUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(4, layout.getComponentCount());
+        assertEquals(5, layout.getComponentCount());
         verifyUsageBatchMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load"));
         verifyFundPoolMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
         Button sendForClassificationButton = (Button) layout.getComponent(2);
         assertEquals("Send for Classification", sendForClassificationButton.getCaption());
         Button loadClassifiedUsagesButton = (Button) layout.getComponent(3);
         assertEquals("Load Classified Details", loadClassifiedUsagesButton.getCaption());
+        assertEquals("Export", layout.getComponent(4).getCaption());
     }
 
     private void verifyUsageBatchMenuBar(Component component, String menuBarName, List<String> menuItems) {
