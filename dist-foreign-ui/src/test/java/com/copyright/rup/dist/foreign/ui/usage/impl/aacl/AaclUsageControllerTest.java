@@ -30,6 +30,7 @@ import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
@@ -269,5 +270,14 @@ public class AaclUsageControllerTest {
         replay(aaclFundPoolService);
         assertTrue(controller.aaclFundPoolExists(FUND_POOL_NAME));
         verify(aaclFundPoolService);
+    }
+
+    @Test
+    public void testGetResearchedUsagesCsvProcessor() {
+        AaclFundPoolCsvProcessor processor = createMock(AaclFundPoolCsvProcessor.class);
+        expect(csvProcessorFactory.getAaclFundPoolCsvProcessor()).andReturn(processor).once();
+        replay(csvProcessorFactory);
+        assertSame(processor, controller.getAaclFundPoolCsvProcessor());
+        replay(csvProcessorFactory);
     }
 }

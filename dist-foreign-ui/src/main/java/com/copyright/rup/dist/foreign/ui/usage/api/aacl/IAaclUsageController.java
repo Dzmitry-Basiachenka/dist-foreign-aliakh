@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.AaclFundPool;
 import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
@@ -102,4 +103,11 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return {@code true} - if AACL fund pool exists, {@code false} - otherwise
      */
     boolean aaclFundPoolExists(String name);
+
+    /**
+     * Gets instance of AACL fund pool CSV processor.
+     *
+     * @return instance of {@link AaclFundPoolCsvProcessor}
+     */
+    AaclFundPoolCsvProcessor getAaclFundPoolCsvProcessor();
 }

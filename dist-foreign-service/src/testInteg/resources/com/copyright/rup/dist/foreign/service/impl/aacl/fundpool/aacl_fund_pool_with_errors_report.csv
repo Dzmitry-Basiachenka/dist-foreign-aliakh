@@ -1,0 +1,10 @@
+Aggregate Licensee Class ID,Gross Amount,Line,Error Reason
+,,5,Aggregate Licensee Class ID: Field is required and cannot be null or empty; Gross Amount: Field is required and cannot be null or empty
+a,z,6,Aggregate Licensee Class ID: Field value should be positive number; Gross Amount: Field value should be greater than 0 after rounding
+-1,,7,Aggregate Licensee Class ID: Field value should be positive number; Gross Amount: Field is required and cannot be null or empty
+999,1,8,Aggregate Licensee Class with such ID doesn't exist in the system
+1234567890,,9,Aggregate Licensee Class ID: Field value should not exceed 9 characters; Gross Amount: Field is required and cannot be null or empty
+111,0,10,Gross Amount: Field value should be greater than 0 after rounding
+111,-1,11,Gross Amount: Field value should be greater than 0 after rounding
+111,-1.0,12,Gross Amount: Field value should be greater than 0 after rounding
+111,-0.1,13,Gross Amount: Field value should be greater than 0 after rounding

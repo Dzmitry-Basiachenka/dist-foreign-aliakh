@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import java.util.Set;
+
 /**
  * Interface for AACL fund pool repository.
  * <p>
@@ -18,4 +20,11 @@ public interface IAaclFundPoolRepository {
      * @return {@code true} - if AACL fund pool exists, {@code false} - otherwise
      */
     boolean aaclFundPoolExists(String name);
+
+    /**
+     * Finds Aggregate Licensee Class ids.
+     *
+     * @return set of Aggregate Licensee Class ids
+     */
+    Set<Integer> findAggregateLicenseeClassIds();
 }

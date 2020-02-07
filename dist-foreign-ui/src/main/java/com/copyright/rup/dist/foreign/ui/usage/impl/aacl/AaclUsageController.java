@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -159,6 +160,11 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Override
     public boolean aaclFundPoolExists(String name) {
         return aaclFundPoolService.aaclFundPoolExists(name);
+    }
+
+    @Override
+    public AaclFundPoolCsvProcessor getAaclFundPoolCsvProcessor() {
+        return csvProcessorFactory.getAaclFundPoolCsvProcessor();
     }
 
     @Override
