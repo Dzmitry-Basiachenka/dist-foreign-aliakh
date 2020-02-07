@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +39,7 @@ public class FundPoolRepositoryIntegrationTest {
     private static final String NAME_2 = "FAS Q2 2019";
     private static final String COMMENT_1 = "some comment";
     private static final String COMMENT_2 = "other comment";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
 
     @Autowired
     private FundPoolRepository fundPoolRepository;
@@ -46,12 +47,12 @@ public class FundPoolRepositoryIntegrationTest {
     @Test
     public void testInsert() {
         assertNull(fundPoolRepository.findById(ID_2));
-        PreServiceFeeFund fundPool = new PreServiceFeeFund();
+        FundPool fundPool = new FundPool();
         fundPool.setId(ID_2);
         fundPool.setName(NAME_2);
         fundPool.setComment(COMMENT_2);
         fundPoolRepository.insert(fundPool);
-        PreServiceFeeFund actualFundPool = fundPoolRepository.findById(ID_2);
+        FundPool actualFundPool = fundPoolRepository.findById(ID_2);
         assertNotNull(actualFundPool);
         assertEquals(ID_2, actualFundPool.getId());
         assertEquals(NAME_2, actualFundPool.getName());
@@ -60,7 +61,7 @@ public class FundPoolRepositoryIntegrationTest {
 
     @Test
     public void testFindById() {
-        PreServiceFeeFund fundPool = fundPoolRepository.findById(ID_1);
+        FundPool fundPool = fundPoolRepository.findById(ID_1);
         assertNotNull(fundPool);
         assertEquals(ID_1, fundPool.getId());
         assertEquals(NAME_1, fundPool.getName());
@@ -68,19 +69,20 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindAll() {
-        List<PreServiceFeeFund> fundPools = fundPoolRepository.findAll();
+    public void testFindByProductFamily() {
+        List<FundPool> fundPools = fundPoolRepository.findByProductFamily("NTS");
         assertEquals(3, fundPools.size());
-        assertFundPool(fundPools.get(0), ID_1, "FAS Q1 2019", new BigDecimal("50.00"), "some comment");
-        assertFundPool(fundPools.get(1), "49060c9b-9cc2-4b93-b701-fffc82eb28b0", "Test fund", new BigDecimal("10.00"),
-            "test comment");
-        assertFundPool(fundPools.get(2), "a40132c0-d724-4450-81d2-456e67ff6f64", "Archived Pre-Service fee fund",
-            new BigDecimal("99.00"), null);
+        assertFundPool(fundPools.get(0), ID_1, NTS_PRODUCT_FAMILY, "FAS Q1 2019", new BigDecimal("50.00"),
+            "some comment");
+        assertFundPool(fundPools.get(1), "49060c9b-9cc2-4b93-b701-fffc82eb28b0", NTS_PRODUCT_FAMILY, "Test fund",
+            new BigDecimal("10.00"), "test comment");
+        assertFundPool(fundPools.get(2), "a40132c0-d724-4450-81d2-456e67ff6f64", NTS_PRODUCT_FAMILY,
+            "Archived Pre-Service fee fund", new BigDecimal("99.00"), null);
     }
 
     @Test
     public void testFindNotAttachedToScenario() {
-        List<PreServiceFeeFund> fundPools = fundPoolRepository.findNotAttachedToScenario();
+        List<FundPool> fundPools = fundPoolRepository.findNotAttachedToScenario();
         assertEquals(1, fundPools.size());
         assertEquals(fundPools.get(0).getId(), "49060c9b-9cc2-4b93-b701-fffc82eb28b0");
     }
@@ -113,10 +115,12 @@ public class FundPoolRepositoryIntegrationTest {
         assertEquals(0, fundPoolRepository.findCountByName("missing fund pool name"));
     }
 
-    private void assertFundPool(PreServiceFeeFund fundPool, String id, String name, BigDecimal amount, String comment) {
+    private void assertFundPool(FundPool fundPool, String id, String productFamily, String name, BigDecimal amount,
+                                String comment) {
         assertEquals(id, fundPool.getId());
+        assertEquals(productFamily, fundPool.getProductFamily());
         assertEquals(name, fundPool.getName());
-        assertEquals(amount, fundPool.getAmount());
+        assertEquals(amount, fundPool.getTotalAmount());
         assertEquals(comment, fundPool.getComment());
     }
 }

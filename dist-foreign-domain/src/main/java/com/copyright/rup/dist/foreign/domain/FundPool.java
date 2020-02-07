@@ -1,96 +1,60 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
- * Represents fund pool.
- * <p/>
- * Copyright (C) 2018 copyright.com
- * <p/>
- * Date: 12/03/2018
+ * Domain object to represent Fund Pool.
  *
- * @author Aliaksandr Liakh
+ * <p>
+ * Copyright (C) 2020 copyright.com
+ * <p>
+ * Date: 02/07/20
+ *
+ * @author Darya Baraukova
  */
-public class FundPool {
+public class FundPool extends StoredEntity<String> {
 
-    private Integer fundPoolPeriodFrom;
-    private Integer fundPoolPeriodTo;
-    private BigDecimal stmAmount;
-    private BigDecimal nonStmAmount;
-    private BigDecimal stmMinimumAmount;
-    private BigDecimal nonStmMinimumAmount;
-    private Set<String> markets = new HashSet<>();
-    private boolean excludingStm;
+    private String productFamily;
+    private String name;
+    private String comment;
+    private BigDecimal totalAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-    public Integer getFundPoolPeriodFrom() {
-        return fundPoolPeriodFrom;
+    public String getProductFamily() {
+        return productFamily;
     }
 
-    public void setFundPoolPeriodFrom(Integer fundPoolPeriodFrom) {
-        this.fundPoolPeriodFrom = fundPoolPeriodFrom;
+    public void setProductFamily(String productFamily) {
+        this.productFamily = productFamily;
     }
 
-    public Integer getFundPoolPeriodTo() {
-        return fundPoolPeriodTo;
+    public String getName() {
+        return name;
     }
 
-    public void setFundPoolPeriodTo(Integer fundPoolPeriodTo) {
-        this.fundPoolPeriodTo = fundPoolPeriodTo;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public BigDecimal getStmAmount() {
-        return stmAmount;
+    public String getComment() {
+        return comment;
     }
 
-    public void setStmAmount(BigDecimal stmAmount) {
-        this.stmAmount = stmAmount;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public BigDecimal getNonStmAmount() {
-        return nonStmAmount;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setNonStmAmount(BigDecimal nonStmAmount) {
-        this.nonStmAmount = nonStmAmount;
-    }
-
-    public BigDecimal getStmMinimumAmount() {
-        return stmMinimumAmount;
-    }
-
-    public void setStmMinimumAmount(BigDecimal stmMinimumAmount) {
-        this.stmMinimumAmount = stmMinimumAmount;
-    }
-
-    public BigDecimal getNonStmMinimumAmount() {
-        return nonStmMinimumAmount;
-    }
-
-    public void setNonStmMinimumAmount(BigDecimal nonStmMinimumAmount) {
-        this.nonStmMinimumAmount = nonStmMinimumAmount;
-    }
-
-    public Set<String> getMarkets() {
-        return markets;
-    }
-
-    public void setMarkets(Set<String> markets) {
-        this.markets = markets;
-    }
-
-    public boolean isExcludingStm() {
-        return excludingStm;
-    }
-
-    public void setExcludingStm(boolean excludingStm) {
-        this.excludingStm = excludingStm;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     @Override
@@ -103,42 +67,33 @@ public class FundPool {
         }
         FundPool that = (FundPool) obj;
         return new EqualsBuilder()
-            .append(fundPoolPeriodFrom, that.fundPoolPeriodFrom)
-            .append(fundPoolPeriodTo, that.fundPoolPeriodTo)
-            .append(stmAmount, that.stmAmount)
-            .append(nonStmAmount, that.nonStmAmount)
-            .append(stmMinimumAmount, that.stmMinimumAmount)
-            .append(nonStmMinimumAmount, that.nonStmMinimumAmount)
-            .append(markets, that.markets)
-            .append(excludingStm, that.excludingStm)
+            .appendSuper(super.equals(obj))
+            .append(productFamily, that.productFamily)
+            .append(name, that.name)
+            .append(comment, that.comment)
+            .append(totalAmount, that.totalAmount)
             .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(fundPoolPeriodFrom)
-            .append(fundPoolPeriodTo)
-            .append(stmAmount)
-            .append(nonStmAmount)
-            .append(stmMinimumAmount)
-            .append(nonStmMinimumAmount)
-            .append(markets)
-            .append(excludingStm)
+            .appendSuper(super.hashCode())
+            .append(productFamily)
+            .append(name)
+            .append(comment)
+            .append(totalAmount)
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("fundPoolPeriodFrom", fundPoolPeriodFrom)
-            .append("fundPoolPeriodTo", fundPoolPeriodTo)
-            .append("stmAmount", stmAmount)
-            .append("nonStmAmount", nonStmAmount)
-            .append("stmMinimumAmount", stmMinimumAmount)
-            .append("nonStmMinimumAmount", nonStmMinimumAmount)
-            .append("markets", markets)
-            .append("excludingStm", excludingStm)
+            .appendSuper(super.toString())
+            .append("productFamily", productFamily)
+            .append("name", name)
+            .append("comment", comment)
+            .append("totalAmount", totalAmount)
             .toString();
     }
 }

@@ -1,6 +1,35 @@
 databaseChangeLog {
     property(file: 'database.properties')
 
+    changeSet(id: '2020-02-04-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment("B-52334 FDA: Load AACL Fund Pool: add product_family column into df_fund_pool table " +
+                "and rename withdrawn_amount to total_amount")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'product_family', type: 'VARCHAR(128)', remarks: 'Product Family')
+        }
+
+        renameColumn(schemaName: dbAppsSchema,
+                tableName: 'df_fund_pool',
+                oldColumnName: 'withdrawn_amount',
+                newColumnName: 'total_amount',
+                columnDataType: 'DECIMAL(38,2)')
+
+        update(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'product_family', value: 'NTS')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_fund_pool', columnName: 'product_family')
+
+            renameColumn(schemaName: dbAppsSchema,
+                    tableName: 'df_fund_pool',
+                    oldColumnName: 'total_amount',
+                    newColumnName: 'withdrawn_amount',
+                    columnDataType: 'DECIMAL(38,2)')
+        }
+    }
+
     changeSet(id: '2020-02-05-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
         comment("B-52334 FDA: Load AACL Fund Pool: create df_fund_pool_aacl, df_fund_pool_detail_aacl tables")
 

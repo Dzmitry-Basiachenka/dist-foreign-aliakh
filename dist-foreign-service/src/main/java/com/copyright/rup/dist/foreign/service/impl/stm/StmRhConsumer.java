@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.stm;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IStmRhService;
@@ -44,9 +44,9 @@ public class StmRhConsumer implements IConsumer<Usage> {
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
             LOGGER.trace("Consume usage for processing STM RH. Started. UsageId={}", usage.getId());
-            FundPool fundPool =
-                Objects.requireNonNull(batchService.getUsageBatchById(usage.getBatchId()).getFundPool());
-            if (fundPool.isExcludingStm()) {
+            NtsFundPool ntsFundPool =
+                Objects.requireNonNull(batchService.getUsageBatchById(usage.getBatchId()).getNtsFundPool());
+            if (ntsFundPool.isExcludingStm()) {
                 stmRhService.processStmRh(usage);
                 stmRhProcessor.executeNextProcessor(usage, (obj) -> UsageStatusEnum.NON_STM_RH == obj.getStatus());
                 LOGGER.trace("Consume usage for processing STM RH. Finished. UsageId={}, UsageStatus={}", usage.getId(),

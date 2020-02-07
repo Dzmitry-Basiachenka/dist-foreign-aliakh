@@ -11,7 +11,7 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
@@ -57,7 +57,7 @@ public class CreateNtsScenarioWindowTest {
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String SCENARIO_NAME = "NTS Distribution " + DATE;
     private static final String NTS_PRODUCT_FAMILY = "NTS";
-    private PreServiceFeeFund preServiceFeeFund;
+    private FundPool preServiceFeeFund;
 
     private INtsUsageController controller;
     private CreateNtsScenarioWindow window;
@@ -65,7 +65,7 @@ public class CreateNtsScenarioWindowTest {
     @Before
     public void setUp() {
         controller = createMock(INtsUsageController.class);
-        preServiceFeeFund = new PreServiceFeeFund();
+        preServiceFeeFund = new FundPool();
         preServiceFeeFund.setName("Pre-Service Fee Fund 1");
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).anyTimes();
         expect(controller.getPreServiceFeeFundsNotAttachedToScenario())
@@ -185,12 +185,12 @@ public class CreateNtsScenarioWindowTest {
         assertEquals("0", postServiceFeeAmountField.getValue());
     }
 
-    private void verifyFundsComboBox(Component component, PreServiceFeeFund preServiceFeeFunds) {
+    private void verifyFundsComboBox(Component component, FundPool preServiceFeeFunds) {
         assertNotNull(component);
-        ComboBox<PreServiceFeeFund> fundsComboBox = (ComboBox<PreServiceFeeFund>) component;
+        ComboBox<FundPool> fundsComboBox = (ComboBox<FundPool>) component;
         assertEquals("Pre-Service Fee Funds", fundsComboBox.getCaption());
-        ListDataProvider<PreServiceFeeFund> listDataProvider =
-            (ListDataProvider<PreServiceFeeFund>) fundsComboBox.getDataProvider();
+        ListDataProvider<FundPool> listDataProvider =
+            (ListDataProvider<FundPool>) fundsComboBox.getDataProvider();
         Collection<?> actualFeeFund = listDataProvider.getItems();
         assertEquals(1, actualFeeFund.size());
         assertEquals(preServiceFeeFunds.getName(), fundsComboBox.getItemCaptionGenerator().apply(preServiceFeeFunds));

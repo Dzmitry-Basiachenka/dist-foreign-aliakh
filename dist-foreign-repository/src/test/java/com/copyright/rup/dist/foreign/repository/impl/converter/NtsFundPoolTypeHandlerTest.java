@@ -8,7 +8,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -30,7 +30,7 @@ import java.sql.SQLException;
  *
  * @author Aliaksandr Liakh
  */
-public class FundPoolTypeHandlerTest {
+public class NtsFundPoolTypeHandlerTest {
 
     private static final String COLUMN_NAME = "fund_pool";
     private static final int COLUMN_INDEX = 1;
@@ -42,14 +42,14 @@ public class FundPoolTypeHandlerTest {
     public void testSetNonNullParameterPreparedStatement() throws SQLException {
         PreparedStatement ps = createMock(PreparedStatement.class);
         PGobject pgobject = new PGobject();
-        FundPool fundPool = buildFundPool();
-        String json = typeHandler.serialize(fundPool);
+        NtsFundPool ntsFundPool = buildFundPool();
+        String json = typeHandler.serialize(ntsFundPool);
         pgobject.setValue(json);
         pgobject.setType("jsonb");
         ps.setObject(PARAMETER_INDEX, pgobject);
         expectLastCall().once();
         replay(ps);
-        typeHandler.setNonNullParameter(ps, PARAMETER_INDEX, fundPool, null);
+        typeHandler.setNonNullParameter(ps, PARAMETER_INDEX, ntsFundPool, null);
         verify(ps);
     }
 
@@ -72,13 +72,13 @@ public class FundPoolTypeHandlerTest {
     public void testGetNullableResultColumnIndex() throws SQLException {
         ResultSet rs = createMock(ResultSet.class);
         try {
-            FundPool fundPool = buildFundPool();
-            String json = typeHandler.serialize(fundPool);
+            NtsFundPool ntsFundPool = buildFundPool();
+            String json = typeHandler.serialize(ntsFundPool);
             expect(rs.getString(COLUMN_INDEX)).andReturn(json).once();
             rs.close();
             expectLastCall().once();
             replay(rs);
-            assertEquals(fundPool, typeHandler.getNullableResult(rs, COLUMN_INDEX));
+            assertEquals(ntsFundPool, typeHandler.getNullableResult(rs, COLUMN_INDEX));
         } finally {
             rs.close();
         }
@@ -88,23 +88,23 @@ public class FundPoolTypeHandlerTest {
     @Test
     public void testGetNullableResultCallableStatement() throws SQLException {
         CallableStatement cs = createMock(CallableStatement.class);
-        FundPool fundPool = buildFundPool();
-        String json = typeHandler.serialize(fundPool);
+        NtsFundPool ntsFundPool = buildFundPool();
+        String json = typeHandler.serialize(ntsFundPool);
         expect(cs.getString(PARAMETER_INDEX)).andReturn(json).once();
         replay(cs);
-        assertEquals(fundPool, typeHandler.getNullableResult(cs, COLUMN_INDEX));
+        assertEquals(ntsFundPool, typeHandler.getNullableResult(cs, COLUMN_INDEX));
         verify(cs);
     }
 
-    private FundPool buildFundPool() {
-        FundPool fundPool = new FundPool();
-        fundPool.setFundPoolPeriodFrom(2017);
-        fundPool.setFundPoolPeriodTo(2018);
-        fundPool.setStmAmount(new BigDecimal(100));
-        fundPool.setNonStmAmount(new BigDecimal(200));
-        fundPool.setStmMinimumAmount(new BigDecimal(300));
-        fundPool.setNonStmMinimumAmount(new BigDecimal(400));
-        fundPool.setMarkets(ImmutableSet.of("Edu", "Gov"));
-        return fundPool;
+    private NtsFundPool buildFundPool() {
+        NtsFundPool ntsFundPool = new NtsFundPool();
+        ntsFundPool.setFundPoolPeriodFrom(2017);
+        ntsFundPool.setFundPoolPeriodTo(2018);
+        ntsFundPool.setStmAmount(new BigDecimal(100));
+        ntsFundPool.setNonStmAmount(new BigDecimal(200));
+        ntsFundPool.setStmMinimumAmount(new BigDecimal(300));
+        ntsFundPool.setNonStmMinimumAmount(new BigDecimal(400));
+        ntsFundPool.setMarkets(ImmutableSet.of("Edu", "Gov"));
+        return ntsFundPool;
     }
 }

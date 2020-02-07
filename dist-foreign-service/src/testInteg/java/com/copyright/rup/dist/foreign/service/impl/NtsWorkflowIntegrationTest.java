@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
@@ -64,7 +64,7 @@ public class NtsWorkflowIntegrationTest {
     @Test
     public void testNtsWorkflow() throws InterruptedException {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool()))
+            .withUsageBatch(buildUsageBatch(buildNtsFundPool()))
             .expectRollups("prm/nts_rollups_response.json", RH_ID)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, "rights/rms_grants_658824345_response.json")
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
@@ -90,14 +90,14 @@ public class NtsWorkflowIntegrationTest {
         return scenario;
     }
 
-    private UsageBatch buildUsageBatch(FundPool fundPool) {
+    private UsageBatch buildUsageBatch(NtsFundPool ntsFundPool) {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName("Batch name");
         usageBatch.setFiscalYear(2017);
         usageBatch.setPaymentDate(DATE);
         usageBatch.setRro(buildRightsholder(2000017001L, "CFC, Centre Francais d'exploitation du droit de Copie"));
         usageBatch.setProductFamily("NTS");
-        usageBatch.setFundPool(fundPool);
+        usageBatch.setNtsFundPool(ntsFundPool);
         return usageBatch;
     }
 
@@ -108,16 +108,16 @@ public class NtsWorkflowIntegrationTest {
         return rightsholder;
     }
 
-    private FundPool buildFundPool() {
-        FundPool fundPool = new FundPool();
-        fundPool.setFundPoolPeriodFrom(2013);
-        fundPool.setFundPoolPeriodTo(2016);
-        fundPool.setStmAmount(STM_AMOUNT);
-        fundPool.setNonStmAmount(new BigDecimal("400.44"));
-        fundPool.setStmMinimumAmount(new BigDecimal("300.3"));
-        fundPool.setNonStmMinimumAmount(new BigDecimal("200."));
-        fundPool.setMarkets(ImmutableSet.of(BUS_MARKET));
-        return fundPool;
+    private NtsFundPool buildNtsFundPool() {
+        NtsFundPool ntsFundPool = new NtsFundPool();
+        ntsFundPool.setFundPoolPeriodFrom(2013);
+        ntsFundPool.setFundPoolPeriodTo(2016);
+        ntsFundPool.setStmAmount(STM_AMOUNT);
+        ntsFundPool.setNonStmAmount(new BigDecimal("400.44"));
+        ntsFundPool.setStmMinimumAmount(new BigDecimal("300.3"));
+        ntsFundPool.setNonStmMinimumAmount(new BigDecimal("200."));
+        ntsFundPool.setMarkets(ImmutableSet.of(BUS_MARKET));
+        return ntsFundPool;
     }
 
     private PaidUsage buildPaidUsage() {

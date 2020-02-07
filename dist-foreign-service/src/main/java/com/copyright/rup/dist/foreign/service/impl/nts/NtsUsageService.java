@@ -7,7 +7,7 @@ import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -65,9 +65,9 @@ public class NtsUsageService implements INtsUsageService {
 
     @Override
     public int getUsagesCountForBatch(UsageBatch usageBatch) {
-        FundPool fundPool = usageBatch.getFundPool();
-        return ntsUsageRepository.findCountForBatch(fundPool.getFundPoolPeriodFrom(),
-            fundPool.getFundPoolPeriodTo(), fundPool.getMarkets());
+        NtsFundPool ntsFundPool = usageBatch.getNtsFundPool();
+        return ntsUsageRepository.findCountForBatch(ntsFundPool.getFundPoolPeriodFrom(),
+            ntsFundPool.getFundPoolPeriodTo(), ntsFundPool.getMarkets());
     }
 
     @Override

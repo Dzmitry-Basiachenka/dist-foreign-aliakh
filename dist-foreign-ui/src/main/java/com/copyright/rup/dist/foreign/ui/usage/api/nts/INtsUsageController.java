@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.nts;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
@@ -38,10 +38,10 @@ public interface INtsUsageController extends ICommonUsageController {
     /**
      * Creates Pre-Service Fee Fund.
      *
-     * @param fundPool {@link PreServiceFeeFund} instance
+     * @param fundPool {@link FundPool} instance
      * @param batchIds set of batch ids
      */
-    void createPreServiceFeeFund(PreServiceFeeFund fundPool, Set<String> batchIds);
+    void createPreServiceFeeFund(FundPool fundPool, Set<String> batchIds);
 
     /**
      * Checks whether Fund Pool with provided name exists in databse.
@@ -52,11 +52,11 @@ public interface INtsUsageController extends ICommonUsageController {
     boolean fundPoolExists(String name);
 
     /**
-     * Gets all {@link PreServiceFeeFund}s.
+     * Gets all {@link FundPool}s.
      *
-     * @return list of {@link PreServiceFeeFund}s
+     * @return list of {@link FundPool}s
      */
-    List<PreServiceFeeFund> getPreServiceSeeFunds();
+    List<FundPool> getPreServiceSeeFunds();
 
     /**
      * @return list of available markets.
@@ -71,18 +71,18 @@ public interface INtsUsageController extends ICommonUsageController {
     List<UsageBatch> getUsageBatchesForPreServiceFeeFunds();
 
     /**
-     * Gets {@link PreServiceFeeFund}s not attached to scenario.
+     * Gets {@link FundPool}s not attached to scenario.
      *
-     * @return list of {@link PreServiceFeeFund}s
+     * @return list of {@link FundPool}s
      */
-    List<PreServiceFeeFund> getPreServiceFeeFundsNotAttachedToScenario();
+    List<FundPool> getPreServiceFeeFundsNotAttachedToScenario();
 
     /**
      * Deletes Pre-Service fee fund.
      *
-     * @param fundPool {@link PreServiceFeeFund} to delete
+     * @param fundPool {@link FundPool} to delete
      */
-    void deletePreServiceFeeFund(PreServiceFeeFund fundPool);
+    void deletePreServiceFeeFund(FundPool fundPool);
 
     /**
      * Gets count of archived usages based on batch information.

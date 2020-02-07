@@ -725,9 +725,10 @@ databaseChangeLog {
         // Undistributed Liabilities reconciliation report TO_BE_DISTRIBUTED status
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '49060c9b-9cc2-4b93-b701-fffc82eb28b0')
+            column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Test fund')
             column(name: 'comment', value: 'test comment')
-            column(name: 'withdrawn_amount', value: '155.00')
+            column(name: 'total_amount', value: '155.00')
             column(name: 'updated_datetime', value: '2019-03-26 16:35:52.735531+03')
         }
 
@@ -5409,23 +5410,26 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '3fef25b0-c0d1-4819-887f-4c6acc01390e')
+            column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Test fund1')
             column(name: 'comment', value: 'test comment')
-            column(name: 'withdrawn_amount', value: '10.00')
+            column(name: 'total_amount', value: '10.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '4fef25b0-c0d1-4819-887f-4c6acc01390e')
+            column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Test fund2')
             column(name: 'comment', value: 'test comment')
-            column(name: 'withdrawn_amount', value: '10.00')
+            column(name: 'total_amount', value: '10.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '5fef25b0-c0d1-4819-887f-4c6acc01390e')
+            column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Test fund3')
             column(name: 'comment', value: 'test comment')
-            column(name: 'withdrawn_amount', value: '10.00')
+            column(name: 'total_amount', value: '10.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {

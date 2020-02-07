@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 
 /**
- * Implementation of {@link StdSerializer} for {@link FundPool}.
+ * Implementation of {@link StdSerializer} for {@link NtsFundPool}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -17,41 +17,41 @@ import java.io.IOException;
  *
  * @author Aliaksandr Liakh
  */
-public class FundPoolSerializer extends StdSerializer<FundPool> {
+public class FundPoolSerializer extends StdSerializer<NtsFundPool> {
 
     /**
      * Default constructor.
      */
     FundPoolSerializer() {
-        super(FundPool.class);
+        super(NtsFundPool.class);
     }
 
     @Override
-    public void serialize(FundPool fundPool, JsonGenerator jg, SerializerProvider provider) throws IOException {
+    public void serialize(NtsFundPool ntsFundPool, JsonGenerator jg, SerializerProvider provider) throws IOException {
         jg.writeStartObject();
-        writePeriods(jg, fundPool);
-        writeAmounts(jg, fundPool);
-        writeMarkets(jg, fundPool);
-        jg.writeBooleanField("excluding_stm", fundPool.isExcludingStm());
+        writePeriods(jg, ntsFundPool);
+        writeAmounts(jg, ntsFundPool);
+        writeMarkets(jg, ntsFundPool);
+        jg.writeBooleanField("excluding_stm", ntsFundPool.isExcludingStm());
         jg.writeEndObject();
     }
 
-    private void writePeriods(JsonGenerator jg, FundPool fundPool) throws IOException {
-        jg.writeNumberField("fund_pool_period_from", fundPool.getFundPoolPeriodFrom());
-        jg.writeNumberField("fund_pool_period_to", fundPool.getFundPoolPeriodTo());
+    private void writePeriods(JsonGenerator jg, NtsFundPool ntsFundPool) throws IOException {
+        jg.writeNumberField("fund_pool_period_from", ntsFundPool.getFundPoolPeriodFrom());
+        jg.writeNumberField("fund_pool_period_to", ntsFundPool.getFundPoolPeriodTo());
     }
 
-    private void writeAmounts(JsonGenerator jg, FundPool fundPool) throws IOException {
-        jg.writeNumberField("stm_amount", fundPool.getStmAmount());
-        jg.writeNumberField("non_stm_amount", fundPool.getNonStmAmount());
-        jg.writeNumberField("stm_minimum_amount", fundPool.getStmMinimumAmount());
-        jg.writeNumberField("non_stm_minimum_amount", fundPool.getNonStmMinimumAmount());
+    private void writeAmounts(JsonGenerator jg, NtsFundPool ntsFundPool) throws IOException {
+        jg.writeNumberField("stm_amount", ntsFundPool.getStmAmount());
+        jg.writeNumberField("non_stm_amount", ntsFundPool.getNonStmAmount());
+        jg.writeNumberField("stm_minimum_amount", ntsFundPool.getStmMinimumAmount());
+        jg.writeNumberField("non_stm_minimum_amount", ntsFundPool.getNonStmMinimumAmount());
     }
 
-    private void writeMarkets(JsonGenerator jg, FundPool fundPool) throws IOException {
-        if (null != fundPool.getMarkets()) {
+    private void writeMarkets(JsonGenerator jg, NtsFundPool ntsFundPool) throws IOException {
+        if (null != ntsFundPool.getMarkets()) {
             jg.writeArrayFieldStart("markets");
-            for (String market : fundPool.getMarkets()) {
+            for (String market : ntsFundPool.getMarkets()) {
                 jg.writeString(market);
             }
             jg.writeEndArray();

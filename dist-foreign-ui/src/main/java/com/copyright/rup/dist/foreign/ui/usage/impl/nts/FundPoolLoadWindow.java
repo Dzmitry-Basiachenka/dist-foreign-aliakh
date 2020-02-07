@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -120,16 +120,16 @@ class FundPoolLoadWindow extends Window {
         usageBatch.setProductFamily("NTS");
         usageBatch.setPaymentDate(paymentDateWidget.getValue());
         usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
-        FundPool fundPool = new FundPool();
-        fundPool.setMarkets(selectedMarkets);
-        fundPool.setFundPoolPeriodFrom(Integer.parseInt(fundPoolPeriodFromField.getValue()));
-        fundPool.setFundPoolPeriodTo(Integer.parseInt(fundPoolPeriodToField.getValue()));
-        fundPool.setStmAmount(new BigDecimal(stmAmountField.getValue()));
-        fundPool.setNonStmAmount(new BigDecimal(nonStmAmountField.getValue()));
-        fundPool.setStmMinimumAmount(new BigDecimal(stmMinAmountField.getValue()));
-        fundPool.setNonStmMinimumAmount(new BigDecimal(nonStmMinAmountField.getValue()));
-        fundPool.setExcludingStm(excludeStmCheckBox.getValue());
-        usageBatch.setFundPool(fundPool);
+        NtsFundPool ntsFundPool = new NtsFundPool();
+        ntsFundPool.setMarkets(selectedMarkets);
+        ntsFundPool.setFundPoolPeriodFrom(Integer.parseInt(fundPoolPeriodFromField.getValue()));
+        ntsFundPool.setFundPoolPeriodTo(Integer.parseInt(fundPoolPeriodToField.getValue()));
+        ntsFundPool.setStmAmount(new BigDecimal(stmAmountField.getValue()));
+        ntsFundPool.setNonStmAmount(new BigDecimal(nonStmAmountField.getValue()));
+        ntsFundPool.setStmMinimumAmount(new BigDecimal(stmMinAmountField.getValue()));
+        ntsFundPool.setNonStmMinimumAmount(new BigDecimal(nonStmMinAmountField.getValue()));
+        ntsFundPool.setExcludingStm(excludeStmCheckBox.getValue());
+        usageBatch.setNtsFundPool(ntsFundPool);
         return usageBatch;
     }
 

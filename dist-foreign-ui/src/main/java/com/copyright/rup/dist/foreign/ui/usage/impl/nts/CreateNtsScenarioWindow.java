@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -47,12 +47,12 @@ class CreateNtsScenarioWindow extends Window {
 
     private final INtsUsageController controller;
     private final Binder<Scenario> scenarioBinder = new Binder<>();
-    private final Binder<PreServiceFeeFund> fundBinder = new Binder<>();
+    private final Binder<FundPool> fundBinder = new Binder<>();
     private TextField scenarioNameField;
     private TextField rhMinimumAmountField;
     private TextField preServiceFeeAmountField;
     private TextField postServiceFeeAmountField;
-    private ComboBox<PreServiceFeeFund> fundsComboBox;
+    private ComboBox<FundPool> fundsComboBox;
     private TextArea descriptionArea;
 
     /**
@@ -120,20 +120,20 @@ class CreateNtsScenarioWindow extends Window {
     private void initPreServiceFeeAmountField() {
         preServiceFeeAmountField = new TextField(ForeignUi.getMessage("field.pre_service_fee_amount"));
         initFundAmountField(preServiceFeeAmountField, "pre-service-fee-amount-field",
-            (ValueProvider<PreServiceFeeFund, BigDecimal>) PreServiceFeeFund::getAmount,
-            (Setter<PreServiceFeeFund, BigDecimal>) PreServiceFeeFund::setAmount);
+            (ValueProvider<FundPool, BigDecimal>) FundPool::getTotalAmount,
+            (Setter<FundPool, BigDecimal>) FundPool::setTotalAmount);
     }
 
     private void initPostServiceFeeAmountField() {
         postServiceFeeAmountField = new TextField(ForeignUi.getMessage("field.post_service_fee_amount"));
         initFundAmountField(postServiceFeeAmountField, "post-service-fee-amount-field",
-            (ValueProvider<PreServiceFeeFund, BigDecimal>) PreServiceFeeFund::getAmount,
-            (Setter<PreServiceFeeFund, BigDecimal>) PreServiceFeeFund::setAmount);
+            (ValueProvider<FundPool, BigDecimal>) FundPool::getTotalAmount,
+            (Setter<FundPool, BigDecimal>) FundPool::setTotalAmount);
     }
 
     private void initFundAmountField(TextField amountField, String fieldId,
-                                     ValueProvider<PreServiceFeeFund, BigDecimal> getter,
-                                     Setter<PreServiceFeeFund, BigDecimal> setter) {
+                                     ValueProvider<FundPool, BigDecimal> getter,
+                                     Setter<FundPool, BigDecimal> setter) {
         amountField.setRequiredIndicatorVisible(true);
         amountField.setValue("0");
         fundBinder.forField(amountField)
@@ -149,7 +149,7 @@ class CreateNtsScenarioWindow extends Window {
     private void initPreServiceFeeFundsCombobox() {
         fundsComboBox = new ComboBox<>(ForeignUi.getMessage("label.pre_service_fee_funds"));
         fundsComboBox.setItems(controller.getPreServiceFeeFundsNotAttachedToScenario());
-        fundsComboBox.setItemCaptionGenerator(PreServiceFeeFund::getName);
+        fundsComboBox.setItemCaptionGenerator(FundPool::getName);
         VaadinUtils.setMaxComponentsWidth(fundsComboBox);
         VaadinUtils.addComponentStyle(fundsComboBox, "pre-service-fee-funds-filter");
     }
@@ -177,7 +177,7 @@ class CreateNtsScenarioWindow extends Window {
             ntsFields.setRhMinimumAmount(getAmountFromTextField(rhMinimumAmountField));
             ntsFields.setPreServiceFeeAmount(getAmountFromTextField(preServiceFeeAmountField));
             ntsFields.setPostServiceFeeAmount(getAmountFromTextField(postServiceFeeAmountField));
-            PreServiceFeeFund selectedFund = fundsComboBox.getValue();
+            FundPool selectedFund = fundsComboBox.getValue();
             if (Objects.nonNull(selectedFund)) {
                 ntsFields.setPreServiceFeeFundId(selectedFund.getId());
                 ntsFields.setPreServiceFeeFundName(selectedFund.getName());

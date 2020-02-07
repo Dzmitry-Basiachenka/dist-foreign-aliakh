@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.repository.impl.converter.json.FundPoolJsonMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,7 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Implementation of {@link BaseTypeHandler} for {@link FundPool}.
+ * Implementation of {@link BaseTypeHandler} for {@link NtsFundPool}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -26,12 +26,12 @@ import java.sql.SQLException;
  *
  * @author Aliaksandr Liakh
  */
-public class FundPoolTypeHandler extends BaseTypeHandler<FundPool> {
+public class FundPoolTypeHandler extends BaseTypeHandler<NtsFundPool> {
 
     private static final FundPoolJsonMapper JSON_MAPPER = new FundPoolJsonMapper();
 
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, FundPool parameter, JdbcType jdbcType)
+    public void setNonNullParameter(PreparedStatement ps, int i, NtsFundPool parameter, JdbcType jdbcType)
         throws SQLException {
         PGobject pgobject = new PGobject();
         pgobject.setValue(serialize(parameter));
@@ -40,43 +40,43 @@ public class FundPoolTypeHandler extends BaseTypeHandler<FundPool> {
     }
 
     @Override
-    public FundPool getNullableResult(ResultSet rs, String columnName) throws SQLException {
+    public NtsFundPool getNullableResult(ResultSet rs, String columnName) throws SQLException {
         return deserialize(rs.getString(columnName));
     }
 
     @Override
-    public FundPool getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+    public NtsFundPool getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
         return deserialize(rs.getString(columnIndex));
     }
 
     @Override
-    public FundPool getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+    public NtsFundPool getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
         return deserialize(cs.getString(columnIndex));
     }
 
     /**
-     * Serializes an instance of {@link FundPool} into a string JSON.
+     * Serializes an instance of {@link NtsFundPool} into a string JSON.
      * If the argument is {@code null}, the method returns {@code null}.
      *
-     * @param fundPool the instance of {@link FundPool}
+     * @param ntsFundPool the instance of {@link NtsFundPool}
      * @return the string JSON
      */
-    String serialize(FundPool fundPool) {
+    String serialize(NtsFundPool ntsFundPool) {
         try {
-            return JSON_MAPPER.serialize(fundPool);
+            return JSON_MAPPER.serialize(ntsFundPool);
         } catch (JsonProcessingException e) {
             throw new RupRuntimeException("Unable to serialize fund pool", e);
         }
     }
 
     /**
-     * Deserializes a string JSON into an instance of {@link FundPool}.
+     * Deserializes a string JSON into an instance of {@link NtsFundPool}.
      * If the argument is {@code null}, the method returns {@code null}.
      *
      * @param json the string JSON
-     * @return the instance of {@link FundPool}
+     * @return the instance of {@link NtsFundPool}
      */
-    FundPool deserialize(String json) {
+    NtsFundPool deserialize(String json) {
         if (StringUtils.isEmpty(json)) {
             return null;
         }

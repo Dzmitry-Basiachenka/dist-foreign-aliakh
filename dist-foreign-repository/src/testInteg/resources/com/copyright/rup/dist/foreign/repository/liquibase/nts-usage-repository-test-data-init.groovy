@@ -293,9 +293,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '3fef25b0-c0d1-4819-887f-4c6acc01390e')
+            column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Test fund')
             column(name: 'comment', value: 'test comment')
-            column(name: 'withdrawn_amount', value: '10.00')
+            column(name: 'total_amount', value: '10.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
