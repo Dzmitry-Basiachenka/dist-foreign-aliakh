@@ -102,7 +102,6 @@ public class ViewAaclFundPoolDetailsWindowTest {
     private AaclFundPoolDetail buildFundPoolDetail() {
         AaclFundPoolDetail detail = new AaclFundPoolDetail();
         detail.setId(RupPersistUtils.generateUuid());
-        detail.setFundPoolId(FUND_POOL_ID);
         detail.setAggregateLicenseeClass(buildAggregateLicenseeClass(108, "EXGP - Life Sciences"));
         detail.setGrossAmount(BigDecimal.ONE);
         return detail;
