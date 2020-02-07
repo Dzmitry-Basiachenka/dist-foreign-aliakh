@@ -2,8 +2,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
@@ -29,7 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Arrays;
 
 /**
- * Window for uploading {@link AaclFundPool}.
+ * Window for uploading {@link FundPool}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -42,7 +43,7 @@ public class AaclFundPoolUploadWindow extends Window {
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
 
     private final IAaclUsageController aaclUsageController;
-    private final Binder<AaclFundPool> binder = new Binder<>();
+    private final Binder<FundPool> binder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
     private TextField fundPoolNameField;
     private UploadField uploadField;
@@ -69,9 +70,9 @@ public class AaclFundPoolUploadWindow extends Window {
         if (isValid()) {
             try {
                 AaclFundPoolCsvProcessor processor = aaclUsageController.getAaclFundPoolCsvProcessor();
-                ProcessingResult<AaclFundPoolDetail> result = processor.process(uploadField.getStreamToUploadedFile());
+                ProcessingResult<FundPoolDetail> result = processor.process(uploadField.getStreamToUploadedFile());
                 if (result.isSuccessful()) {
-                    int usagesCount = 0; // TODO {aliakh} to implement aaclUsageController.loadAaclFundPool
+                    int usagesCount = aaclUsageController.insertFundPool(buildFundPool(), result.get());
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
                 } else {
@@ -135,12 +136,19 @@ public class AaclFundPoolUploadWindow extends Window {
         binder.forField(fundPoolNameField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !aaclUsageController.aaclFundPoolExists(StringUtils.trimToEmpty(value)),
+            .withValidator(value -> !aaclUsageController.fundPoolExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Fund Pool"))
-            .bind(AaclFundPool::getName, AaclFundPool::setName);
+            .bind(FundPool::getName, FundPool::setName);
         fundPoolNameField.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(fundPoolNameField);
         VaadinUtils.addComponentStyle(fundPoolNameField, "aac-fund-pool-name-field");
         return fundPoolNameField;
+    }
+
+    private FundPool buildFundPool() {
+        FundPool fundPool = new FundPool();
+        fundPool.setProductFamily(FdaConstants.AACL_PRODUCT_FAMILY);
+        fundPool.setName(StringUtils.trim(fundPoolNameField.getValue()));
+        return fundPool;
     }
 }

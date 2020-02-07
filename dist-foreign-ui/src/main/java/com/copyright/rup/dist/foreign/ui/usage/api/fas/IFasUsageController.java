@@ -29,7 +29,7 @@ public interface IFasUsageController extends ICommonUsageController {
     IStreamSource getExportUsagesStreamSource();
 
     /**
-     * Inserts usage batch and it's usages.
+     * Inserts usage batch and its usages.
      *
      * @param usageBatch {@link UsageBatch} instance
      * @param usages     list of {@link Usage}s

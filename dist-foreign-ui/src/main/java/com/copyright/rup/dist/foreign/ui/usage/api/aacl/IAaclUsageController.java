@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.ui.usage.api.aacl;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
@@ -27,7 +27,7 @@ import java.util.List;
 public interface IAaclUsageController extends ICommonUsageController {
 
     /**
-     * Inserts usage batch and it's usages.
+     * Inserts usage batch and its usages.
      *
      * @param usageBatch {@link UsageBatch} instance
      * @param usages     list of {@link Usage}s
@@ -36,17 +36,17 @@ public interface IAaclUsageController extends ICommonUsageController {
     int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
-     * @return list of existing {@link AaclFundPool}s.
+     * @return list of existing {@link FundPool}s.
      */
-    List<AaclFundPool> getFundPools();
+    List<FundPool> getFundPools();
 
     /**
-     * Gets {@link AaclFundPoolDetail}s by {@link AaclFundPool} id.
+     * Gets {@link FundPoolDetail}s by {@link FundPool} id.
      *
-     * @param fundPoolId {@link AaclFundPool} id
-     * @return list of {@link AaclFundPoolDetail}s
+     * @param fundPoolId {@link FundPool} id
+     * @return list of {@link FundPoolDetail}s
      */
-    List<AaclFundPoolDetail> getFundPoolDetails(String fundPoolId);
+    List<FundPoolDetail> getFundPoolDetails(String fundPoolId);
 
     /**
      * Deletes {@link AaclFundPool} by id.
@@ -102,7 +102,7 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @param name AACL fund pool name
      * @return {@code true} - if AACL fund pool exists, {@code false} - otherwise
      */
-    boolean aaclFundPoolExists(String name);
+    boolean fundPoolExists(String name);
 
     /**
      * Gets instance of AACL fund pool CSV processor.
@@ -110,4 +110,13 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return instance of {@link AaclFundPoolCsvProcessor}
      */
     AaclFundPoolCsvProcessor getAaclFundPoolCsvProcessor();
+
+    /**
+     * Inserts AACL fund pool and its details.
+     *
+     * @param fundPool instance of {@link FundPool}
+     * @param details  list of {@link FundPoolDetail}s
+     * @return count of inserted details
+     */
+    int insertFundPool(FundPool fundPool, Collection<FundPoolDetail> details);
 }

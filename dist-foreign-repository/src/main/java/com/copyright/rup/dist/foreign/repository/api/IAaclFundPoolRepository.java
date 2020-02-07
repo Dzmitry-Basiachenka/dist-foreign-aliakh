@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 
 import java.util.List;
 import java.util.Set;
@@ -18,14 +18,6 @@ import java.util.Set;
 public interface IAaclFundPoolRepository {
 
     /**
-     * Checks whether AACL fund pool with provided name already exists or not.
-     *
-     * @param name AACL fund pool name
-     * @return {@code true} - if AACL fund pool exists, {@code false} - otherwise
-     */
-    boolean aaclFundPoolExists(String name);
-
-    /**
      * Finds Aggregate Licensee Class ids.
      *
      * @return set of Aggregate Licensee Class ids
@@ -33,31 +25,31 @@ public interface IAaclFundPoolRepository {
     Set<Integer> findAggregateLicenseeClassIds();
 
     /**
-     * Finds all {@link AaclFundPool}s.
+     * Finds all {@link FundPool}s.
      *
-     * @return list of {@link AaclFundPool}s
+     * @return list of {@link FundPool}s
      */
-    List<AaclFundPool> findAll();
+    List<FundPool> findAll();
 
     /**
-     * Finds {@link AaclFundPoolDetail}s by {@link AaclFundPool} id.
+     * Finds {@link FundPoolDetail}s by {@link FundPool} id.
      *
-     * @param fundPoolId {@link AaclFundPool} id
-     * @return list of {@link AaclFundPoolDetail}s
+     * @param fundPoolId {@link FundPool} id
+     * @return list of {@link FundPoolDetail}s
      */
-    List<AaclFundPoolDetail> findDetailsByFundPoolId(String fundPoolId);
+    List<FundPoolDetail> findDetailsByFundPoolId(String fundPoolId);
 
     /**
-     * Deletes {@link AaclFundPool} by id.
+     * Deletes {@link FundPool} by id.
      *
-     * @param fundPoolId {@link AaclFundPool} id
+     * @param fundPoolId {@link FundPool} id
      */
     void deleteById(String fundPoolId);
 
     /**
-     * Deletes {@link AaclFundPoolDetail}s by {@link AaclFundPool} id.
+     * Deletes {@link FundPoolDetail}s by {@link FundPool} id.
      *
-     * @param fundPoolId {@link AaclFundPool} id
+     * @param fundPoolId {@link FundPool} id
      */
     void deleteDetailsByFundPoolId(String fundPoolId);
 }

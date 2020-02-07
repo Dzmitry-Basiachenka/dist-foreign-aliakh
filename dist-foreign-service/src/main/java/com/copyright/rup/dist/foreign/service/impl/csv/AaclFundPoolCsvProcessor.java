@@ -7,15 +7,15 @@ import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Processor for {@link AaclFundPoolDetail}.
+ * Processor for {@link FundPoolDetail}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  *
  * @author Aliaksandr Liakh
  */
-public class AaclFundPoolCsvProcessor extends DistCsvProcessor<AaclFundPoolDetail> {
+public class AaclFundPoolCsvProcessor extends DistCsvProcessor<FundPoolDetail> {
 
     @Override
     public List<String> getHeadersForValidation() {
@@ -31,7 +31,7 @@ public class AaclFundPoolCsvProcessor extends DistCsvProcessor<AaclFundPoolDetai
     }
 
     @Override
-    public ICsvConverter<AaclFundPoolDetail> getConverter() {
+    public ICsvConverter<FundPoolDetail> getConverter() {
         return new AaclFundPoolDetailConverter();
     }
 
@@ -64,7 +64,7 @@ public class AaclFundPoolCsvProcessor extends DistCsvProcessor<AaclFundPoolDetai
     }
 
     /**
-     * Converts row to {@link AaclFundPoolDetail}.
+     * Converts row to {@link FundPoolDetail}.
      * <p/>
      * Copyright (C) 2020 copyright.com
      * <p>
@@ -72,11 +72,11 @@ public class AaclFundPoolCsvProcessor extends DistCsvProcessor<AaclFundPoolDetai
      *
      * @author Aliaksandr Liakh
      */
-    private class AaclFundPoolDetailConverter extends CommonCsvConverter<AaclFundPoolDetail> {
+    private class AaclFundPoolDetailConverter extends CommonCsvConverter<FundPoolDetail> {
 
         @Override
-        public AaclFundPoolDetail convert(String... row) {
-            AaclFundPoolDetail detail = new AaclFundPoolDetail();
+        public FundPoolDetail convert(String... row) {
+            FundPoolDetail detail = new FundPoolDetail();
             AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
             detail.setAggregateLicenseeClass(aggregateLicenseeClass);
             List<String> headers = getActualHeaders();

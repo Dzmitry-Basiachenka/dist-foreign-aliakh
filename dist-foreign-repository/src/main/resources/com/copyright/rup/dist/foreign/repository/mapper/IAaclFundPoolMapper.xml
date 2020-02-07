@@ -4,73 +4,68 @@
 
 <mapper namespace="IAaclFundPoolMapper">
 
-    <resultMap id="aaclFundPoolResultMap" type="AaclFundPool" extends="StoredEntityMapper.storedEntityResult">
-        <result property="id" column="df_fund_pool_aacl_uid"/>
+    <resultMap id="fundPoolResultMap" type="FundPool" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_fund_pool_uid"/>
+        <result property="productFamily" column="product_family"/>
         <result property="name" column="name"/>
-        <result property="totalGrossAmount" column="total_gross_amount"/>
+        <result property="totalAmount" column="total_amount"/>
     </resultMap>
 
-    <resultMap id="aaclFundPoolDetailResultMap" type="AaclFundPoolDetail" extends="StoredEntityMapper.storedEntityResult">
-        <result property="id" column="df_fund_pool_detail_aacl_uid"/>
+    <resultMap id="aaclFundPoolDetailResultMap" type="FundPoolDetail" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_fund_pool_detail_uid"/>
         <result property="grossAmount" column="gross_amount"/>
         <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id" javaType="java.lang.Integer"/>
         <result property="aggregateLicenseeClass.name" column="aggregate_licensee_class_name"/>
     </resultMap>
-
-    <select id="aaclFundPoolExists" parameterType="string" resultType="boolean">
-        select exists (
-            select 1
-            from ${schema}.df_fund_pool_aacl
-            where name ilike #{name}
-        )
-    </select>
 
     <select id="findAggregateLicenseeClassIds" resultType="int">
         select aggregate_licensee_class_id
         from ${schema}.df_aggregate_licensee_class
     </select>
 
-    <select id="findAll" resultMap="aaclFundPoolResultMap">
+    <select id="findAll" resultMap="fundPoolResultMap" parameterType="string">
         select
-            fpa.df_fund_pool_aacl_uid,
-            fpa.name,
-            sum(coalesce(fpda.gross_amount, 0)) total_gross_amount,
-            fpa.created_datetime,
-            fpa.updated_datetime,
-            fpa.created_by_user,
-            fpa.updated_by_user,
-            fpa.record_version
-        from ${schema}.df_fund_pool_aacl fpa
-        left join ${schema}.df_fund_pool_detail_aacl fpda on fpda.df_fund_pool_aacl_uid = fpa.df_fund_pool_aacl_uid
-        group by fpa.df_fund_pool_aacl_uid
-        order by fpa.updated_datetime desc
+            pf.df_fund_pool_uid,
+            pf.product_family,
+            pf.name,
+            sum(coalesce(fpd.gross_amount, 0)) total_amount,
+            pf.created_datetime,
+            pf.updated_datetime,
+            pf.created_by_user,
+            pf.updated_by_user,
+            pf.record_version
+        from ${schema}.df_fund_pool pf
+        left join ${schema}.df_fund_pool_detail fpd on fpd.df_fund_pool_uid = pf.df_fund_pool_uid
+        where pf.product_family = #{productFamily}
+        group by pf.df_fund_pool_uid
+        order by pf.updated_datetime desc
     </select>
 
     <select id="findDetailsByFundPoolId" parameterType="string" resultMap="aaclFundPoolDetailResultMap">
         select
-            fpda.df_fund_pool_detail_aacl_uid,
+            fpd.df_fund_pool_detail_uid,
             alc.aggregate_licensee_class_id,
             alc.aggregate_licensee_class_name,
-            coalesce(fpda.gross_amount, 0) gross_amount,
-            fpda.created_datetime,
-            fpda.updated_datetime,
-            fpda.created_by_user,
-            fpda.updated_by_user,
-            fpda.record_version
-        from ${schema}.df_fund_pool_detail_aacl fpda
+            coalesce(fpd.gross_amount, 0) gross_amount,
+            fpd.created_datetime,
+            fpd.updated_datetime,
+            fpd.created_by_user,
+            fpd.updated_by_user,
+            fpd.record_version
+        from ${schema}.df_fund_pool_detail fpd
         right join ${schema}.df_aggregate_licensee_class alc
-            on alc.aggregate_licensee_class_id = fpda.df_aggregate_licensee_class_id
-        where fpda.df_fund_pool_aacl_uid = #{fundPoolId} or fpda.df_fund_pool_aacl_uid is null
+            on alc.aggregate_licensee_class_id = fpd.df_aggregate_licensee_class_id
+        where fpd.df_fund_pool_uid = #{fundPoolId} or fpd.df_fund_pool_uid is null
         order by alc.aggregate_licensee_class_id
     </select>
 
     <delete id="deleteById" parameterType="string">
-        delete from ${schema}.df_fund_pool_aacl
-        where df_fund_pool_aacl_uid = #{fundPoolId}
+        delete from ${schema}.df_fund_pool
+        where df_fund_pool_uid = #{fundPoolId}
     </delete>
 
     <delete id="deleteDetailsByFundPoolId" parameterType="string">
-        delete from ${schema}.df_fund_pool_detail_aacl
-        where df_fund_pool_aacl_uid = #{fundPoolId}
+        delete from ${schema}.df_fund_pool_detail
+        where df_fund_pool_uid = #{fundPoolId}
     </delete>
 </mapper>

@@ -106,7 +106,7 @@ public interface IUsageBatchService {
     List<String> insertNtsBatch(UsageBatch usageBatch, String userName);
 
     /**
-     * Inserts AACL batch and it's usages.
+     * Inserts AACL batch and its usages.
      *
      * @param usageBatch {@link UsageBatch} to insert
      * @param usages     list of {@link Usage}s

@@ -9,9 +9,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 
 import com.vaadin.server.Sizeable;
@@ -91,16 +91,16 @@ public class ViewAaclFundPoolDetailsWindowTest {
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
     }
 
-    private AaclFundPool buildFundPool() {
-        AaclFundPool fundPool = new AaclFundPool();
+    private FundPool buildFundPool() {
+        FundPool fundPool = new FundPool();
         fundPool.setId(FUND_POOL_ID);
         fundPool.setName("AACL Fund Pool");
-        fundPool.setTotalGrossAmount(BigDecimal.ONE);
+        fundPool.setTotalAmount(BigDecimal.ONE);
         return fundPool;
     }
 
-    private AaclFundPoolDetail buildFundPoolDetail() {
-        AaclFundPoolDetail detail = new AaclFundPoolDetail();
+    private FundPoolDetail buildFundPoolDetail() {
+        FundPoolDetail detail = new FundPoolDetail();
         detail.setId(RupPersistUtils.generateUuid());
         detail.setAggregateLicenseeClass(buildAggregateLicenseeClass(108, "EXGP - Life Sciences"));
         detail.setGrossAmount(BigDecimal.ONE);

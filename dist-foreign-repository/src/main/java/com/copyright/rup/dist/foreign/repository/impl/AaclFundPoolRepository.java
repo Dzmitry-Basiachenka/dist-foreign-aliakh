@@ -1,13 +1,11 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import com.copyright.rup.dist.common.repository.BaseRepository;
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,23 +25,17 @@ import java.util.Set;
 public class AaclFundPoolRepository extends BaseRepository implements IAaclFundPoolRepository {
 
     @Override
-    public boolean aaclFundPoolExists(String name) {
-        checkArgument(StringUtils.isNotBlank(name));
-        return selectOne("IAaclFundPoolMapper.aaclFundPoolExists", escapeSqlLikePattern(name));
-    }
-
-    @Override
     public Set<Integer> findAggregateLicenseeClassIds() {
         return selectSet("IAaclFundPoolMapper.findAggregateLicenseeClassIds");
     }
 
     @Override
-    public List<AaclFundPool> findAll() {
-        return selectList("IAaclFundPoolMapper.findAll");
+    public List<FundPool> findAll() {
+        return selectList("IAaclFundPoolMapper.findAll", FdaConstants.AACL_PRODUCT_FAMILY);
     }
 
     @Override
-    public List<AaclFundPoolDetail> findDetailsByFundPoolId(String fundPoolId) {
+    public List<FundPoolDetail> findDetailsByFundPoolId(String fundPoolId) {
         return selectList("IAaclFundPoolMapper.findDetailsByFundPoolId", Objects.requireNonNull(fundPoolId));
     }
 

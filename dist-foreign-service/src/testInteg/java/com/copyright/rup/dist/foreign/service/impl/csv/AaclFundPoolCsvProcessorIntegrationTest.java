@@ -8,7 +8,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.HeaderVal
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,7 +70,7 @@ public class AaclFundPoolCsvProcessorIntegrationTest {
 
     @Test
     public void testProcessorWithErrors() throws Exception {
-        ProcessingResult<AaclFundPoolDetail> result = processFile("aacl_fund_pool_with_errors.csv");
+        ProcessingResult<FundPoolDetail> result = processFile("aacl_fund_pool_with_errors.csv");
         PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream(pos);
         Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(pos));
@@ -94,10 +94,10 @@ public class AaclFundPoolCsvProcessorIntegrationTest {
     }
 
     private void verifyProcessorResult(String fileName) throws IOException {
-        ProcessingResult<AaclFundPoolDetail> result = processFile(fileName);
+        ProcessingResult<FundPoolDetail> result = processFile(fileName);
         assertNotNull(result);
-        List<AaclFundPoolDetail> actualDetails = result.get();
-        List<AaclFundPoolDetail> expectedDetails = loadExpectedDetails();
+        List<FundPoolDetail> actualDetails = result.get();
+        List<FundPoolDetail> expectedDetails = loadExpectedDetails();
         int expectedSize = 7;
         assertEquals(expectedSize, actualDetails.size());
         assertEquals(expectedSize, expectedDetails.size());
@@ -106,8 +106,8 @@ public class AaclFundPoolCsvProcessorIntegrationTest {
         );
     }
 
-    private ProcessingResult<AaclFundPoolDetail> processFile(String file) throws IOException {
-        ProcessingResult<AaclFundPoolDetail> result;
+    private ProcessingResult<FundPoolDetail> processFile(String file) throws IOException {
+        ProcessingResult<FundPoolDetail> result;
         try (InputStream is = this.getClass().getResourceAsStream(BASE_PATH + "/" + file);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             IOUtils.copy(is, baos);
@@ -117,17 +117,17 @@ public class AaclFundPoolCsvProcessorIntegrationTest {
         return result;
     }
 
-    private void assertDetail(AaclFundPoolDetail expectedDetail, AaclFundPoolDetail actualDetail) {
+    private void assertDetail(FundPoolDetail expectedDetail, FundPoolDetail actualDetail) {
         assertEquals(expectedDetail.getAggregateLicenseeClass().getId(),
             actualDetail.getAggregateLicenseeClass().getId());
         assertEquals(expectedDetail.getGrossAmount(), actualDetail.getGrossAmount());
     }
 
-    private List<AaclFundPoolDetail> loadExpectedDetails() throws IOException {
+    private List<FundPoolDetail> loadExpectedDetails() throws IOException {
         String content = TestUtils.fileToString(this.getClass(), BASE_PATH + "aacl_fund_pool.json");
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        return mapper.readValue(content, new TypeReference<List<AaclFundPoolDetail>>() {
+        return mapper.readValue(content, new TypeReference<List<FundPoolDetail>>() {
         });
     }
 }

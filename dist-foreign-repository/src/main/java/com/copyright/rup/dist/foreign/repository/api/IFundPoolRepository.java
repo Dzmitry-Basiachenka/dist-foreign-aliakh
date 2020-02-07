@@ -63,10 +63,11 @@ public interface IFundPoolRepository {
     List<String> findNamesByUsageBatchId(String batchId);
 
     /**
-     * Finds {@link FundPool}s count by the name.
+     * Checks whether {@link FundPool} with the name already exists.
      *
-     * @param fundPoolName {@link FundPool} name
-     * @return count of found {@link FundPool}s
+     * @param productFamily fund pool product family
+     * @param name          fund pool name
+     * @return {@code true} - if fund pool exists, {@code false} - otherwise
      */
-    int findCountByName(String fundPoolName);
+    boolean fundPoolExists(String productFamily, String name);
 }

@@ -83,9 +83,12 @@
         order by fund.updated_datetime desc
     </select>
 
-    <select id="findCountByName" parameterType="string" resultType="int">
-        select count(name)
-        from ${schema}.df_fund_pool
-        where upper(name) = upper(#{name})
+    <select id="fundPoolExists" parameterType="map" resultType="boolean">
+        select exists (
+            select 1
+            from ${schema}.df_fund_pool
+            where product_family = #{productFamily}
+                and name ilike #{name}
+        )
     </select>
 </mapper>

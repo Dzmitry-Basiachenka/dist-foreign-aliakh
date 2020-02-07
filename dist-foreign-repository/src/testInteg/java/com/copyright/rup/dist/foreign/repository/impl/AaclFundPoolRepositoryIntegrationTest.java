@@ -6,8 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -50,13 +50,6 @@ public class AaclFundPoolRepositoryIntegrationTest {
     private IAaclFundPoolRepository aaclFundPoolRepository;
 
     @Test
-    public void testAaclFundPoolExists() {
-        assertTrue(aaclFundPoolRepository.aaclFundPoolExists("fund_pool_name 100%"));
-        assertTrue(aaclFundPoolRepository.aaclFundPoolExists("FUND_POOL_NAME 100%"));
-        assertFalse(aaclFundPoolRepository.aaclFundPoolExists("fund_pool_name"));
-    }
-
-    @Test
     public void testFindAggregateLicenseeClassIds() {
         Set<Integer> aggregateLicenseeClassIds = aaclFundPoolRepository.findAggregateLicenseeClassIds();
         assertEquals(36, aggregateLicenseeClassIds.size());
@@ -65,8 +58,8 @@ public class AaclFundPoolRepositoryIntegrationTest {
 
     @Test
     public void testFindAll() throws IOException {
-        List<AaclFundPool> expectedFundPools = loadExpectedFundPools("expected_aacl_fund_pool.json");
-        List<AaclFundPool> actualFundPools = aaclFundPoolRepository.findAll();
+        List<FundPool> expectedFundPools = loadExpectedFundPools("expected_aacl_fund_pool.json");
+        List<FundPool> actualFundPools = aaclFundPoolRepository.findAll();
         assertEquals(expectedFundPools.size(), actualFundPools.size());
         IntStream.range(0, expectedFundPools.size())
             .forEach(i -> verifyFundPool(expectedFundPools.get(i), actualFundPools.get(i)));
@@ -74,8 +67,8 @@ public class AaclFundPoolRepositoryIntegrationTest {
 
     @Test
     public void testFindDetailsByFundPoolId() throws IOException {
-        List<AaclFundPoolDetail> expectedDetails = loadExpectedFundPoolDetails("expected_aacl_fund_pool_details.json");
-        List<AaclFundPoolDetail> actualDetails =
+        List<FundPoolDetail> expectedDetails = loadExpectedFundPoolDetails("expected_aacl_fund_pool_details.json");
+        List<FundPoolDetail> actualDetails =
             aaclFundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID);
         assertEquals(expectedDetails.size(), actualDetails.size());
         IntStream.range(0, expectedDetails.size())
@@ -84,7 +77,7 @@ public class AaclFundPoolRepositoryIntegrationTest {
 
     @Test
     public void testDeleteById() {
-        List<AaclFundPool> actualFundPools = aaclFundPoolRepository.findAll();
+        List<FundPool> actualFundPools = aaclFundPoolRepository.findAll();
         assertEquals(3, actualFundPools.size());
         assertTrue(actualFundPools.stream().anyMatch(fundPool -> Objects.equals(FUND_POOL_ID, fundPool.getId())));
         aaclFundPoolRepository.deleteDetailsByFundPoolId(FUND_POOL_ID);
@@ -101,31 +94,31 @@ public class AaclFundPoolRepositoryIntegrationTest {
         assertEquals(0, getCountOfExistingDetailsByFundPoolId(FUND_POOL_ID));
     }
 
-    private List<AaclFundPool> loadExpectedFundPools(String fileName) throws IOException {
+    private List<FundPool> loadExpectedFundPools(String fileName) throws IOException {
         String content = TestUtils.fileToString(this.getClass(), "json/aacl/" + fileName);
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper.readValue(content, new TypeReference<List<AaclFundPool>>() {});
+        return mapper.readValue(content, new TypeReference<List<FundPool>>() {});
     }
 
-    private List<AaclFundPoolDetail> loadExpectedFundPoolDetails(String fileName) throws IOException {
+    private List<FundPoolDetail> loadExpectedFundPoolDetails(String fileName) throws IOException {
         String content = TestUtils.fileToString(this.getClass(), "json/aacl/" + fileName);
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper.readValue(content, new TypeReference<List<AaclFundPoolDetail>>() {});
+        return mapper.readValue(content, new TypeReference<List<FundPoolDetail>>() {});
     }
 
-    private void verifyFundPool(AaclFundPool expected, AaclFundPool actual) {
+    private void verifyFundPool(FundPool expected, FundPool actual) {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getTotalGrossAmount(), actual.getTotalGrossAmount());
+        assertEquals(expected.getTotalAmount(), actual.getTotalAmount());
         assertEquals(expected.getCreateDate(), actual.getCreateDate());
         assertEquals(expected.getCreateUser(), actual.getCreateUser());
     }
 
-    private void verifyFundPoolDetail(AaclFundPoolDetail expected, AaclFundPoolDetail actual) {
+    private void verifyFundPoolDetail(FundPoolDetail expected, FundPoolDetail actual) {
         assertEquals(expected.getId(), actual.getId());
         assertNotNull(actual.getAggregateLicenseeClass());
         assertEquals(expected.getAggregateLicenseeClass().getId(), actual.getAggregateLicenseeClass().getId());
@@ -135,7 +128,7 @@ public class AaclFundPoolRepositoryIntegrationTest {
 
     private long getCountOfExistingDetailsByFundPoolId(String fundPoolId) {
         return aaclFundPoolRepository.findDetailsByFundPoolId(fundPoolId).stream()
-            .map(AaclFundPoolDetail::getId)
+            .map(FundPoolDetail::getId)
             .filter(Objects::nonNull)
             .count();
     }

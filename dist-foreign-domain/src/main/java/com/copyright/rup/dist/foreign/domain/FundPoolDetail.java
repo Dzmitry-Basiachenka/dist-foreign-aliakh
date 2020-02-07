@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.math.BigDecimal;
 
 /**
- * Represents AACL Fund Pool detail.
+ * Represents {@link FundPool} detail.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  *
  * @author Stanislau Rudak
  */
-public class AaclFundPoolDetail extends StoredEntity<String> {
+public class FundPoolDetail extends StoredEntity<String> {
 
     private AggregateLicenseeClass aggregateLicenseeClass;
     private BigDecimal grossAmount;
@@ -47,7 +47,7 @@ public class AaclFundPoolDetail extends StoredEntity<String> {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        AaclFundPoolDetail that = (AaclFundPoolDetail) obj;
+        FundPoolDetail that = (FundPoolDetail) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(aggregateLicenseeClass, that.aggregateLicenseeClass)

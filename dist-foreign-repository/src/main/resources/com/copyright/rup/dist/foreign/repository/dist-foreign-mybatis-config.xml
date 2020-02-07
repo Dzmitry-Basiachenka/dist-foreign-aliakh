@@ -51,8 +51,7 @@
         <typeAlias alias="PayeeTotalHolder" type="com.copyright.rup.dist.foreign.domain.PayeeTotalHolder"/>
         <typeAlias alias="PubType" type="com.copyright.rup.dist.foreign.domain.PublicationType"/>
         <typeAlias alias="AggregateLicenseeClass" type="com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass"/>
-        <typeAlias alias="AaclFundPool" type="com.copyright.rup.dist.foreign.domain.AaclFundPool"/>
-        <typeAlias alias="AaclFundPoolDetail" type="com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail"/>
+        <typeAlias alias="FundPoolDetail" type="com.copyright.rup.dist.foreign.domain.FundPoolDetail"/>
     </typeAliases>
 
     <typeHandlers>

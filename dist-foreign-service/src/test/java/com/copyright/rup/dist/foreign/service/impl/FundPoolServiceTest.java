@@ -43,6 +43,7 @@ public class FundPoolServiceTest {
 
     private static final String FUND_UID = RupPersistUtils.generateUuid();
     private static final String BATCH_UID = RupPersistUtils.generateUuid();
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FUND_POOL_NAME = "FAS Q3 2019";
     private static final String USER_NAME = "User Name";
 
@@ -115,10 +116,10 @@ public class FundPoolServiceTest {
     }
 
     @Test
-    public void testFundPoolNameExists() {
-        expect(fundPoolRepository.findCountByName(FUND_POOL_NAME)).andReturn(1).once();
+    public void testFundPoolExists() {
+        expect(fundPoolRepository.fundPoolExists(FAS_PRODUCT_FAMILY, FUND_POOL_NAME)).andReturn(true).once();
         replay(fundPoolRepository);
-        assertTrue(fundPoolService.fundPoolNameExists(FUND_POOL_NAME));
+        assertTrue(fundPoolService.fundPoolExists(FAS_PRODUCT_FAMILY, FUND_POOL_NAME));
         verify(fundPoolRepository);
     }
 

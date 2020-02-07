@@ -57,8 +57,9 @@ public interface IFundPoolService {
     /**
      * Checks whether {@link FundPool} with the name already exists.
      *
-     * @param fundPoolName name of {@link FundPool} to check
-     * @return {@code true} if {@link FundPool} with the name already exists, {@code false} otherwise
+     * @param productFamily fund pool product family
+     * @param name          fund pool name
+     * @return {@code true} - if fund pool exists, {@code false} - otherwise
      */
-    boolean fundPoolNameExists(String fundPoolName);
+    boolean fundPoolExists(String productFamily, String name);
 }

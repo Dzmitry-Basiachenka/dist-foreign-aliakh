@@ -1,8 +1,9 @@
 package com.copyright.rup.dist.foreign.service.api.aacl;
 
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -17,25 +18,17 @@ import java.util.List;
 public interface IAaclFundPoolService {
 
     /**
-     * Checks whether AACL fund pool with provided name already exists or not.
-     *
-     * @param name AACL fund pool name
-     * @return {@code true} - if AACL fund pool exists, {@code false} - otherwise
+     * @return list of all existing {@link FundPool}s.
      */
-    boolean aaclFundPoolExists(String name);
+    List<FundPool> getFundPools();
 
     /**
-     * @return list of all existing {@link AaclFundPool}s.
-     */
-    List<AaclFundPool> getFundPools();
-
-    /**
-     * Gets {@link AaclFundPoolDetail}s by {@link AaclFundPool} id.
+     * Gets {@link FundPoolDetail}s by {@link FundPool} id.
      *
-     * @param fundPoolId {@link AaclFundPool} id
-     * @return list of {@link AaclFundPoolDetail}s
+     * @param fundPoolId {@link FundPool} id
+     * @return list of {@link FundPoolDetail}s
      */
-    List<AaclFundPoolDetail> getDetailsByFundPoolId(String fundPoolId);
+    List<FundPoolDetail> getDetailsByFundPoolId(String fundPoolId);
 
     /**
      * Deletes {@link AaclFundPool} by id.
@@ -43,4 +36,13 @@ public interface IAaclFundPoolService {
      * @param fundPoolId {@link AaclFundPool} id
      */
     void deleteFundPoolById(String fundPoolId);
+
+    /**
+     * Inserts AACL fund pool and its details.
+     *
+     * @param fundPool instance of {@link FundPool}
+     * @param details  list of {@link FundPoolDetail}s
+     * @return count of inserted details
+     */
+    int insertFundPool(FundPool fundPool, Collection<FundPoolDetail> details);
 }

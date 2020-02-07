@@ -7,12 +7,14 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
@@ -65,6 +67,8 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     private IAaclUsageService aaclUsageService;
     @Autowired
     private IAaclFundPoolService aaclFundPoolService;
+    @Autowired
+    private IFundPoolService fundPoolService;
 
     @Override
     public ICommonUsageFilterController getUsageFilterController() {
@@ -106,12 +110,12 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
-    public List<AaclFundPool> getFundPools() {
+    public List<FundPool> getFundPools() {
         return aaclFundPoolService.getFundPools();
     }
 
     @Override
-    public List<AaclFundPoolDetail> getFundPoolDetails(String fundPoolId) {
+    public List<FundPoolDetail> getFundPoolDetails(String fundPoolId) {
         return aaclFundPoolService.getDetailsByFundPoolId(fundPoolId);
     }
 
@@ -155,13 +159,18 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
-    public boolean aaclFundPoolExists(String name) {
-        return aaclFundPoolService.aaclFundPoolExists(name);
+    public boolean fundPoolExists(String name) {
+        return fundPoolService.fundPoolExists(FdaConstants.AACL_PRODUCT_FAMILY, name);
     }
 
     @Override
     public AaclFundPoolCsvProcessor getAaclFundPoolCsvProcessor() {
         return csvProcessorFactory.getAaclFundPoolCsvProcessor();
+    }
+
+    @Override
+    public int insertFundPool(FundPool fundPool, Collection<FundPoolDetail> details) {
+        return aaclFundPoolService.insertFundPool(fundPool, details);
     }
 
     @Override

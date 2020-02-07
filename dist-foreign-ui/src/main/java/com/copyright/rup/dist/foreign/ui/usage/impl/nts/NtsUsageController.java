@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -105,7 +106,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public boolean fundPoolExists(String name) {
-        return getFundPoolService().fundPoolNameExists(name);
+        return getFundPoolService().fundPoolExists(FdaConstants.NTS_PRODUCT_FAMILY, name);
     }
 
     @Override
