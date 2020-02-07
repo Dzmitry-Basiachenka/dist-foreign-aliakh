@@ -38,7 +38,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -108,8 +107,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public List<AaclFundPool> getFundPools() {
-        // TODO {srudak} implement
-        return Collections.emptyList();
+        return aaclFundPoolService.getFundPools();
     }
 
     @Override
@@ -119,8 +117,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public List<AaclFundPoolDetail> getFundPoolDetails(String fundPoolId) {
-        // TODO {srudak} implement
-        return Collections.emptyList();
+        return aaclFundPoolService.getDetailsByFundPoolId(fundPoolId);
     }
 
     @Override

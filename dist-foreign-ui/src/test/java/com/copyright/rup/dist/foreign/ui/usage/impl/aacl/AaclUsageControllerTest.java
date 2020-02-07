@@ -20,6 +20,8 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.AaclFundPool;
+import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -78,6 +80,7 @@ import java.util.function.Supplier;
 public class AaclUsageControllerTest {
 
 
+    private static final String FUND_POOL_ID = "76b16c8d-0bea-4135-9611-6c52e53bfbea";
     private static final String FUND_POOL_NAME = "fund pool name";
     private static final OffsetDateTime DATE = OffsetDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
 
@@ -189,6 +192,24 @@ public class AaclUsageControllerTest {
         replay(usageBatchService, filterController, filterWidgetMock, researchService);
         assertEquals(1, controller.loadUsageBatch(usageBatch, usages));
         verify(usageBatchService, filterController, filterWidgetMock, researchService);
+    }
+
+    @Test
+    public void testGetFundPools() {
+        List<AaclFundPool> fundPools = Collections.singletonList(new AaclFundPool());
+        expect(aaclFundPoolService.getFundPools()).andReturn(fundPools).once();
+        replay(aaclFundPoolService);
+        assertEquals(fundPools, controller.getFundPools());
+        verify(aaclFundPoolService);
+    }
+
+    @Test
+    public void testGetFundPoolDetails() {
+        List<AaclFundPoolDetail> details = Collections.singletonList(new AaclFundPoolDetail());
+        expect(aaclFundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(details).once();
+        replay(aaclFundPoolService);
+        assertEquals(details, controller.getFundPoolDetails(FUND_POOL_ID));
+        verify(aaclFundPoolService);
     }
 
     @Test

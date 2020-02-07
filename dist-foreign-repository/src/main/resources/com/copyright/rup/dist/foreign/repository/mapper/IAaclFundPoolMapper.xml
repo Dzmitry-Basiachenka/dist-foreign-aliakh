@@ -4,6 +4,19 @@
 
 <mapper namespace="IAaclFundPoolMapper">
 
+    <resultMap id="aaclFundPoolResultMap" type="AaclFundPool" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_fund_pool_aacl_uid"/>
+        <result property="name" column="name"/>
+        <result property="totalGrossAmount" column="total_gross_amount"/>
+    </resultMap>
+
+    <resultMap id="aaclFundPoolDetailResultMap" type="AaclFundPoolDetail" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_fund_pool_detail_aacl_uid"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id" javaType="java.lang.Integer"/>
+        <result property="aggregateLicenseeClass.name" column="aggregate_licensee_class_name"/>
+    </resultMap>
+
     <select id="aaclFundPoolExists" parameterType="string" resultType="boolean">
         select exists (
             select 1
@@ -17,4 +30,37 @@
         from ${schema}.df_aggregate_licensee_class
     </select>
 
+    <select id="findAll" resultMap="aaclFundPoolResultMap">
+        select
+            fpa.df_fund_pool_aacl_uid,
+            fpa.name,
+            sum(coalesce(fpda.gross_amount, 0)) total_gross_amount,
+            fpa.created_datetime,
+            fpa.updated_datetime,
+            fpa.created_by_user,
+            fpa.updated_by_user,
+            fpa.record_version
+        from ${schema}.df_fund_pool_aacl fpa
+        left join ${schema}.df_fund_pool_detail_aacl fpda on fpda.df_fund_pool_aacl_uid = fpa.df_fund_pool_aacl_uid
+        group by fpa.df_fund_pool_aacl_uid
+        order by fpa.updated_datetime desc
+    </select>
+
+    <select id="findDetailsByFundPoolId" parameterType="string" resultMap="aaclFundPoolDetailResultMap">
+        select
+            fpda.df_fund_pool_detail_aacl_uid,
+            alc.aggregate_licensee_class_id,
+            alc.aggregate_licensee_class_name,
+            coalesce(fpda.gross_amount, 0) gross_amount,
+            fpda.created_datetime,
+            fpda.updated_datetime,
+            fpda.created_by_user,
+            fpda.updated_by_user,
+            fpda.record_version
+        from ${schema}.df_fund_pool_detail_aacl fpda
+        right join ${schema}.df_aggregate_licensee_class alc
+            on alc.aggregate_licensee_class_id = fpda.df_aggregate_licensee_class_id
+        where fpda.df_fund_pool_aacl_uid = #{fundPoolId} or fpda.df_fund_pool_aacl_uid is null
+        order by alc.aggregate_licensee_class_id
+    </select>
 </mapper>

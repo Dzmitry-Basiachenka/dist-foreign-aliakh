@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.Alignment;
@@ -72,7 +73,7 @@ public class ViewAaclFundPoolDetailsWindow extends Window {
             .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_name"))
             .setComparator((detail1, detail2) -> detail1.getAggregateLicenseeClass().getName()
                 .compareTo(detail2.getAggregateLicenseeClass().getName()));
-        grid.addColumn(AaclFundPoolDetail::getGrossAmount)
+        grid.addColumn(detail -> CurrencyUtils.format(detail.getGrossAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.gross_amount"))
             .setComparator((detail1, detail2) -> detail1.getGrossAmount().compareTo(detail2.getGrossAmount()))
             .setStyleGenerator(item -> "v-align-right")

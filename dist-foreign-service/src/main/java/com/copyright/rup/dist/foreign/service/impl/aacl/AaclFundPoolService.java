@@ -1,10 +1,14 @@
 package com.copyright.rup.dist.foreign.service.impl.aacl;
 
+import com.copyright.rup.dist.foreign.domain.AaclFundPool;
+import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclFundPoolService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Implementation of {@link IAaclFundPoolService}.
@@ -24,5 +28,15 @@ public class AaclFundPoolService implements IAaclFundPoolService {
     @Override
     public boolean aaclFundPoolExists(String name) {
         return aaclFundPoolRepository.aaclFundPoolExists(name);
+    }
+
+    @Override
+    public List<AaclFundPool> getFundPools() {
+        return aaclFundPoolRepository.findAll();
+    }
+
+    @Override
+    public List<AaclFundPoolDetail> getDetailsByFundPoolId(String fundPoolId) {
+        return aaclFundPoolRepository.findDetailsByFundPoolId(fundPoolId);
     }
 }

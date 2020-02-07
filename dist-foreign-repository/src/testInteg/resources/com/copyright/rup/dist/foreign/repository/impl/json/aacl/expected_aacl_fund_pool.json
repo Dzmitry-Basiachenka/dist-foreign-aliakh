@@ -1,0 +1,23 @@
+[
+  {
+    "id": "100ce91c-49c1-4197-9f7a-23a8210d5706",
+    "name": "AACL Fund Pool 2",
+    "totalGrossAmount": 71.1000000000,
+    "createUser": "coordinator@copyright.com",
+    "createDate": "2020-01-03T11:00:00-04:00"
+  },
+  {
+    "id": "ce9c1258-6d29-4224-a4e6-6f03b6aeef53",
+    "name": "AACL Fund Pool 1",
+    "totalGrossAmount": 31.2000000000,
+    "createUser": "coordinator@copyright.com",
+    "createDate": "2020-01-02T11:00:00-04:00"
+  },
+  {
+    "id": "5376a3c0-23df-41f9-b2fb-21de6d2fb707",
+    "name": "fund_pool_name 100%",
+    "totalGrossAmount": 56.5000000000,
+    "createUser": "coordinator@copyright.com",
+    "createDate": "2020-01-01T11:00:00-04:00"
+  }
+]

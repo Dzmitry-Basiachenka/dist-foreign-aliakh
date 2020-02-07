@@ -50,6 +50,9 @@
         <typeAlias alias="WrWrkInstUsageIdPair" type="com.copyright.rup.dist.foreign.repository.impl.WrWrkInstToUsageIdResultHandler$WrWrkInstUsageIdPair"/>
         <typeAlias alias="PayeeTotalHolder" type="com.copyright.rup.dist.foreign.domain.PayeeTotalHolder"/>
         <typeAlias alias="PubType" type="com.copyright.rup.dist.foreign.domain.PublicationType"/>
+        <typeAlias alias="AggregateLicenseeClass" type="com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass"/>
+        <typeAlias alias="AaclFundPool" type="com.copyright.rup.dist.foreign.domain.AaclFundPool"/>
+        <typeAlias alias="AaclFundPoolDetail" type="com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail"/>
     </typeAliases>
 
     <typeHandlers>
