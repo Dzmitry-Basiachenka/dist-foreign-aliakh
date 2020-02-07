@@ -1,5 +1,10 @@
 package com.copyright.rup.dist.foreign.service.api.aacl;
 
+import com.copyright.rup.dist.foreign.domain.AaclFundPool;
+import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+
+import java.util.List;
+
 /**
  * Interface for AACL fund pool service.
  * <p>
@@ -18,4 +23,17 @@ public interface IAaclFundPoolService {
      * @return {@code true} - if AACL fund pool exists, {@code false} - otherwise
      */
     boolean aaclFundPoolExists(String name);
+
+    /**
+     * @return list of all existing {@link AaclFundPool}s.
+     */
+    List<AaclFundPool> getFundPools();
+
+    /**
+     * Gets {@link AaclFundPoolDetail}s by {@link AaclFundPool} id.
+     *
+     * @param fundPoolId {@link AaclFundPool} id
+     * @return list of {@link AaclFundPoolDetail}s
+     */
+    List<AaclFundPoolDetail> getDetailsByFundPoolId(String fundPoolId);
 }

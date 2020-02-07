@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.foreign.domain.AaclFundPool;
+import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,4 +31,19 @@ public interface IAaclFundPoolRepository {
      * @return set of Aggregate Licensee Class ids
      */
     Set<Integer> findAggregateLicenseeClassIds();
+
+    /**
+     * Finds all {@link AaclFundPool}s.
+     *
+     * @return list of {@link AaclFundPool}s
+     */
+    List<AaclFundPool> findAll();
+
+    /**
+     * Finds {@link AaclFundPoolDetail}s by {@link AaclFundPool} id.
+     *
+     * @param fundPoolId {@link AaclFundPool} id
+     * @return list of {@link AaclFundPoolDetail}s
+     */
+    List<AaclFundPoolDetail> findDetailsByFundPoolId(String fundPoolId);
 }

@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -127,7 +128,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
             .setCaption(ForeignUi.getMessage("table.column.fund_pool_name"))
             .setComparator((fundPool1, fundPool2) -> fundPool1.getName().compareToIgnoreCase(fundPool2.getName()))
             .setExpandRatio(1);
-        grid.addColumn(AaclFundPool::getTotalGrossAmount)
+        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getTotalGrossAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.gross_fund_pool_total"))
             .setComparator((fundPool1, fundPool2) ->
                 fundPool1.getTotalGrossAmount().compareTo(fundPool2.getTotalGrossAmount()))
