@@ -98,8 +98,10 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream) {
-        reportRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, defaultEstimatedServiceFee);
+    public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
+                                                       Set<String> productFamilies) {
+        reportRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, defaultEstimatedServiceFee,
+            productFamilies);
     }
 
     @Override

@@ -369,6 +369,46 @@ databaseChangeLog {
             column(name: 'name', value: 'CLASS, The Copyright Licensing and Administration Society of Singapore Ltd')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '066d2add-cff0-4007-83df-4b77c3e4b00e')
+            column(name: 'rh_account_number', value: '7001226021')
+            column(name: 'name', value: 'Zynga')
+        }
+
+        // Record for this batch should't be included into report.
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'a1cdd210-b256-44f6-bb18-96fbe6bf40c9')
+            column(name: 'name', value: 'Undistributed Liabilities Reconciliation Report Batch 10')
+            column(name: 'rro_account_number', value: '7001226021')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'payment_date', value: '2010-01-01')
+            column(name: 'fiscal_year', value: '2010')
+            column(name: 'gross_amount', value: '500.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '9f15966c-b368-4449-bcb1-ff4945e2e033')
+            column(name: 'df_usage_batch_uid', value: 'a1cdd210-b256-44f6-bb18-96fbe6bf40c9')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'system_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '7001226021')
+            column(name: 'payee_account_number', value: '1000009522')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'gross_amount', value: '249.9999999988')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '9f15966c-b368-4449-bcb1-ff4945e2e033')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
+        }
+
         // Record in Undistributed Liabilities Reconciliation Report that includes amounts for batch with usages that were sent to lm
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'd016d9c2-5460-41bf-837c-8598cf00b654')
