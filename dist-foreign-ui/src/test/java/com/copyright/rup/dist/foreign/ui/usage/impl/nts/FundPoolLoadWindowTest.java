@@ -16,7 +16,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.MarketFilterWidget;
@@ -211,15 +211,15 @@ public class FundPoolLoadWindowTest {
         assertEquals(Long.valueOf(ACCOUNT_NUMBER), usageBatch.getRro().getAccountNumber());
         assertEquals(RRO_NAME, usageBatch.getRro().getName());
         assertEquals(Integer.valueOf(2019), usageBatch.getFiscalYear());
-        FundPool fundPool = usageBatch.getFundPool();
-        assertEquals(Integer.valueOf(PERIOD_FROM), fundPool.getFundPoolPeriodFrom());
-        assertEquals(Integer.valueOf(PERIOD_TO), fundPool.getFundPoolPeriodTo());
-        assertEquals(new BigDecimal(AMOUNT), fundPool.getStmAmount());
-        assertEquals(new BigDecimal(AMOUNT), fundPool.getNonStmAmount());
-        assertEquals(new BigDecimal(MIN_AMOUNT), fundPool.getStmMinimumAmount());
-        assertEquals(new BigDecimal(MIN_AMOUNT), fundPool.getNonStmMinimumAmount());
-        assertEquals(new BigDecimal(MIN_AMOUNT), fundPool.getNonStmMinimumAmount());
-        assertTrue(fundPool.isExcludingStm());
+        NtsFundPool ntsFundPool = usageBatch.getNtsFundPool();
+        assertEquals(Integer.valueOf(PERIOD_FROM), ntsFundPool.getFundPoolPeriodFrom());
+        assertEquals(Integer.valueOf(PERIOD_TO), ntsFundPool.getFundPoolPeriodTo());
+        assertEquals(new BigDecimal(AMOUNT), ntsFundPool.getStmAmount());
+        assertEquals(new BigDecimal(AMOUNT), ntsFundPool.getNonStmAmount());
+        assertEquals(new BigDecimal(MIN_AMOUNT), ntsFundPool.getStmMinimumAmount());
+        assertEquals(new BigDecimal(MIN_AMOUNT), ntsFundPool.getNonStmMinimumAmount());
+        assertEquals(new BigDecimal(MIN_AMOUNT), ntsFundPool.getNonStmMinimumAmount());
+        assertTrue(ntsFundPool.isExcludingStm());
         assertNotNull(usageBatch);
         verify(window, usagesController, Windows.class);
     }

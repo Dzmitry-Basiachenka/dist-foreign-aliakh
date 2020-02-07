@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
@@ -36,19 +36,20 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
     @Override
     public List<String> insertUsages(UsageBatch usageBatch, String userName) {
         Objects.requireNonNull(usageBatch);
-        FundPool fundPool = Objects.requireNonNull(usageBatch.getFundPool());
+        NtsFundPool ntsFundPool = Objects.requireNonNull(usageBatch.getNtsFundPool());
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(13);
         params.put("batchId", Objects.requireNonNull(usageBatch.getId()));
-        params.put("marketPeriodFrom", Objects.requireNonNull(fundPool.getFundPoolPeriodFrom()));
-        params.put("marketPeriodTo", Objects.requireNonNull(fundPool.getFundPoolPeriodTo()));
-        params.put("markets", Objects.requireNonNull(fundPool.getMarkets()));
+        params.put("marketPeriodFrom", Objects.requireNonNull(ntsFundPool.getFundPoolPeriodFrom()));
+        params.put("marketPeriodTo", Objects.requireNonNull(ntsFundPool.getFundPoolPeriodTo()));
+        params.put("markets", Objects.requireNonNull(ntsFundPool.getMarkets()));
         params.put("status", UsageStatusEnum.ARCHIVED);
         params.put("excludeClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
-        params.put("fundPoolPeriodDividend", fundPool.getFundPoolPeriodTo() - fundPool.getFundPoolPeriodFrom() + 1);
-        params.put("stmMinAmount", fundPool.getStmMinimumAmount());
-        params.put("stmAmount", fundPool.getStmAmount());
-        params.put("nonStmMinAmount", fundPool.getNonStmMinimumAmount());
-        params.put("nonStmAmount", fundPool.getNonStmAmount());
+        params.put("fundPoolPeriodDividend",
+            ntsFundPool.getFundPoolPeriodTo() - ntsFundPool.getFundPoolPeriodFrom() + 1);
+        params.put("stmMinAmount", ntsFundPool.getStmMinimumAmount());
+        params.put("stmAmount", ntsFundPool.getStmAmount());
+        params.put("nonStmMinAmount", ntsFundPool.getNonStmMinimumAmount());
+        params.put("nonStmAmount", ntsFundPool.getNonStmAmount());
         params.put("createUser", Objects.requireNonNull(userName));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         return selectList("INtsUsageMapper.insertUsages", params);

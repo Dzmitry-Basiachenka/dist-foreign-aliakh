@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
@@ -94,7 +94,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
         assertEquals(GROSS_AMOUNT, usageBatch.getGrossAmount());
-        assertNull(usageBatch.getFundPool());
+        assertNull(usageBatch.getNtsFundPool());
     }
 
     @Test
@@ -106,15 +106,15 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
-        FundPool fundPool = usageBatch.getFundPool();
-        assertEquals(2017, fundPool.getFundPoolPeriodFrom().intValue());
-        assertEquals(2018, fundPool.getFundPoolPeriodTo().intValue());
-        assertEquals(new BigDecimal("100"), fundPool.getStmAmount());
-        assertEquals(new BigDecimal("200."), fundPool.getNonStmAmount());
-        assertEquals(new BigDecimal("300.3"), fundPool.getStmMinimumAmount());
-        assertEquals(new BigDecimal("400.44"), fundPool.getNonStmMinimumAmount());
-        assertEquals(ImmutableSet.of("Edu", "Gov"), fundPool.getMarkets());
-        assertTrue(fundPool.isExcludingStm());
+        NtsFundPool ntsFundPool = usageBatch.getNtsFundPool();
+        assertEquals(2017, ntsFundPool.getFundPoolPeriodFrom().intValue());
+        assertEquals(2018, ntsFundPool.getFundPoolPeriodTo().intValue());
+        assertEquals(new BigDecimal("100"), ntsFundPool.getStmAmount());
+        assertEquals(new BigDecimal("200."), ntsFundPool.getNonStmAmount());
+        assertEquals(new BigDecimal("300.3"), ntsFundPool.getStmMinimumAmount());
+        assertEquals(new BigDecimal("400.44"), ntsFundPool.getNonStmMinimumAmount());
+        assertEquals(ImmutableSet.of("Edu", "Gov"), ntsFundPool.getMarkets());
+        assertTrue(ntsFundPool.isExcludingStm());
     }
 
     @Test
@@ -151,15 +151,15 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(LocalDate.of(2019, 1, 11), usageBatch.getPaymentDate());
         assertEquals(2020, usageBatch.getFiscalYear().intValue());
-        FundPool fundPool = usageBatch.getFundPool();
-        assertEquals(2013, fundPool.getFundPoolPeriodFrom().intValue());
-        assertEquals(2017, fundPool.getFundPoolPeriodTo().intValue());
-        assertEquals(new BigDecimal("100"), fundPool.getStmAmount());
-        assertEquals(BigDecimal.ZERO, fundPool.getNonStmAmount());
-        assertEquals(new BigDecimal("50"), fundPool.getStmMinimumAmount());
-        assertEquals(new BigDecimal("7"), fundPool.getNonStmMinimumAmount());
-        assertEquals(Collections.singleton("Univ"), fundPool.getMarkets());
-        assertTrue(fundPool.isExcludingStm());
+        NtsFundPool ntsFundPool = usageBatch.getNtsFundPool();
+        assertEquals(2013, ntsFundPool.getFundPoolPeriodFrom().intValue());
+        assertEquals(2017, ntsFundPool.getFundPoolPeriodTo().intValue());
+        assertEquals(new BigDecimal("100"), ntsFundPool.getStmAmount());
+        assertEquals(BigDecimal.ZERO, ntsFundPool.getNonStmAmount());
+        assertEquals(new BigDecimal("50"), ntsFundPool.getStmMinimumAmount());
+        assertEquals(new BigDecimal("7"), ntsFundPool.getNonStmMinimumAmount());
+        assertEquals(Collections.singleton("Univ"), ntsFundPool.getMarkets());
+        assertTrue(ntsFundPool.isExcludingStm());
     }
 
     @Test
@@ -271,20 +271,20 @@ public class UsageBatchRepositoryIntegrationTest {
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
         usageBatch.setRro(rightsholder);
         usageBatch.setPaymentDate(PAYMENT_DATE);
-        usageBatch.setFundPool(buildFundPool());
+        usageBatch.setNtsFundPool(buildFundPool());
         return usageBatch;
     }
 
-    private FundPool buildFundPool() {
-        FundPool fundPool = new FundPool();
-        fundPool.setFundPoolPeriodFrom(2017);
-        fundPool.setFundPoolPeriodTo(2018);
-        fundPool.setStmAmount(new BigDecimal("100"));
-        fundPool.setNonStmAmount(new BigDecimal("200."));
-        fundPool.setStmMinimumAmount(new BigDecimal("300.3"));
-        fundPool.setNonStmMinimumAmount(new BigDecimal("400.44"));
-        fundPool.setMarkets(ImmutableSet.of("Edu", "Gov"));
-        fundPool.setExcludingStm(true);
-        return fundPool;
+    private NtsFundPool buildFundPool() {
+        NtsFundPool ntsFundPool = new NtsFundPool();
+        ntsFundPool.setFundPoolPeriodFrom(2017);
+        ntsFundPool.setFundPoolPeriodTo(2018);
+        ntsFundPool.setStmAmount(new BigDecimal("100"));
+        ntsFundPool.setNonStmAmount(new BigDecimal("200."));
+        ntsFundPool.setStmMinimumAmount(new BigDecimal("300.3"));
+        ntsFundPool.setNonStmMinimumAmount(new BigDecimal("400.44"));
+        ntsFundPool.setMarkets(ImmutableSet.of("Edu", "Gov"));
+        ntsFundPool.setExcludingStm(true);
+        return ntsFundPool;
     }
 }

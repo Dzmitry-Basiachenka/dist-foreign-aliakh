@@ -419,9 +419,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: 'f00b5ee9-c75e-499d-aa41-ae56b3d68211')
+            column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Pre-Service fee fund')
             column(name: 'comment', value: 'test comment')
-            column(name: 'withdrawn_amount', value: '199.98')
+            column(name: 'total_amount', value: '199.98')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {

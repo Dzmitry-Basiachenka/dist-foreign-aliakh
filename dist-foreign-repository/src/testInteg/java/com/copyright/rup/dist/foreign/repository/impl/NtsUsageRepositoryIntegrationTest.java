@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -85,7 +85,7 @@ public class NtsUsageRepositoryIntegrationTest {
     public void testInsertUsages() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(BATCH_ID);
-        usageBatch.setFundPool(buildFundPool(HUNDRED_AMOUNT));
+        usageBatch.setNtsFundPool(buildFundPool(HUNDRED_AMOUNT));
         List<String> insertedUsageIds = ntsUsageRepository.insertUsages(usageBatch, USER_NAME);
         assertEquals(3, insertedUsageIds.size());
         List<Usage> insertedUsages = usageRepository.findByIds(insertedUsageIds);
@@ -102,7 +102,7 @@ public class NtsUsageRepositoryIntegrationTest {
     public void testInsertUsagesZeroFundPoolAmount() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(BATCH_ID);
-        usageBatch.setFundPool(buildFundPool(BigDecimal.ZERO));
+        usageBatch.setNtsFundPool(buildFundPool(BigDecimal.ZERO));
         List<String> insertedUsageIds = ntsUsageRepository.insertUsages(usageBatch, USER_NAME);
         assertEquals(1, insertedUsageIds.size());
         List<Usage> insertedUsages = usageRepository.findByIds(insertedUsageIds);
@@ -208,16 +208,16 @@ public class NtsUsageRepositoryIntegrationTest {
             null, ZERO_AMOUNT, ZERO_AMOUNT);
     }
 
-    private FundPool buildFundPool(BigDecimal nonStmAmount) {
-        FundPool fundPool = new FundPool();
-        fundPool.setMarkets(Sets.newHashSet(EDU_MARKET, GOV_MARKET));
-        fundPool.setFundPoolPeriodFrom(2015);
-        fundPool.setFundPoolPeriodTo(2016);
-        fundPool.setStmAmount(HUNDRED_AMOUNT);
-        fundPool.setStmMinimumAmount(new BigDecimal("50.00"));
-        fundPool.setNonStmAmount(nonStmAmount);
-        fundPool.setNonStmMinimumAmount(new BigDecimal("7.00"));
-        return fundPool;
+    private NtsFundPool buildFundPool(BigDecimal nonStmAmount) {
+        NtsFundPool ntsFundPool = new NtsFundPool();
+        ntsFundPool.setMarkets(Sets.newHashSet(EDU_MARKET, GOV_MARKET));
+        ntsFundPool.setFundPoolPeriodFrom(2015);
+        ntsFundPool.setFundPoolPeriodTo(2016);
+        ntsFundPool.setStmAmount(HUNDRED_AMOUNT);
+        ntsFundPool.setStmMinimumAmount(new BigDecimal("50.00"));
+        ntsFundPool.setNonStmAmount(nonStmAmount);
+        ntsFundPool.setNonStmMinimumAmount(new BigDecimal("7.00"));
+        return ntsFundPool;
     }
 
     private void verifyInsertedUsage(Long wrWrkInst, String workTitle, String market, Integer marketPeriodFrom,

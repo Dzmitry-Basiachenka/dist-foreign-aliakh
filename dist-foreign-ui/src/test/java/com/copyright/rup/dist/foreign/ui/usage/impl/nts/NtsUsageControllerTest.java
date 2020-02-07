@@ -19,7 +19,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -36,6 +36,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
@@ -279,17 +280,20 @@ public class NtsUsageControllerTest {
     }
 
     @Test
-    public void testGetAdditionalFunds() {
-        List<PreServiceFeeFund> additionalFunds = Collections.singletonList(new PreServiceFeeFund());
-        expect(fundPoolService.getPreServiceFeeFunds()).andReturn(additionalFunds).once();
-        replay(fundPoolService);
+    public void testGetPreServiceSeeFunds() {
+        List<FundPool> additionalFunds = Collections.singletonList(new FundPool());
+        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
+        Whitebox.setInternalState(controller, productFamilyProvider);
+        expect(controller.getSelectedProductFamily()).andReturn("NTS").once();
+        expect(fundPoolService.getPreServiceFeeFunds("NTS")).andReturn(additionalFunds).once();
+        replay(productFamilyProvider, fundPoolService);
         assertEquals(additionalFunds, controller.getPreServiceSeeFunds());
-        verify(fundPoolService);
+        verify(productFamilyProvider, fundPoolService);
     }
 
     @Test
     public void testGetPreServiceFeeFundsNotAttachedToScenario() {
-        List<PreServiceFeeFund> additionalFunds = Collections.singletonList(new PreServiceFeeFund());
+        List<FundPool> additionalFunds = Collections.singletonList(new FundPool());
         expect(fundPoolService.getPreServiceFeeFundsNotAttachedToScenario()).andReturn(additionalFunds).once();
         replay(fundPoolService);
         assertEquals(additionalFunds, controller.getPreServiceFeeFundsNotAttachedToScenario());
@@ -298,7 +302,7 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testDeleteAdditionalFund() {
-        PreServiceFeeFund fund = new PreServiceFeeFund();
+        FundPool fund = new FundPool();
         fundPoolService.deletePreServiceFeeFund(fund);
         expectLastCall().once();
         replay(fundPoolService);

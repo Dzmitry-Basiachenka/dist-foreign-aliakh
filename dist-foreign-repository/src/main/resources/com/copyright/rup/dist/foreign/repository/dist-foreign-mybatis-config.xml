@@ -44,7 +44,7 @@
         <typeAlias alias="FundPoolTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.FundPoolTypeHandler"/>
         <typeAlias alias="UsageStatistic" type="com.copyright.rup.dist.foreign.domain.report.UsageStatistic"/>
         <typeAlias alias="WorkClassification" type="com.copyright.rup.dist.foreign.domain.WorkClassification"/>
-        <typeAlias alias="PreServiceFeeFund" type="com.copyright.rup.dist.foreign.domain.PreServiceFeeFund"/>
+        <typeAlias alias="FundPool" type="com.copyright.rup.dist.foreign.domain.FundPool"/>
         <typeAlias alias="NtsFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.NtsFieldsTypeHandler"/>
         <typeAlias alias="batchNameScenarioNamePair" type="com.copyright.rup.dist.foreign.repository.impl.BatchesNamesToScenariosNamesResultHandler$BatchNameScenarioNamePair"/>
         <typeAlias alias="WrWrkInstUsageIdPair" type="com.copyright.rup.dist.foreign.repository.impl.WrWrkInstToUsageIdResultHandler$WrWrkInstUsageIdPair"/>
@@ -58,7 +58,7 @@
     <typeHandlers>
         <typeHandler handler="org.apache.ibatis.type.LocalDateTypeHandler"/>
         <typeHandler handler="org.apache.ibatis.type.OffsetDateTimeTypeHandler"/>
-        <typeHandler handler="FundPoolTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.FundPool"/>
+        <typeHandler handler="FundPoolTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.NtsFundPool"/>
         <typeHandler handler="NtsFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.Scenario$NtsFields"/>
     </typeHandlers>
 

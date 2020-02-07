@@ -6,7 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -99,7 +99,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     }
 
     @Override
-    public void createPreServiceFeeFund(PreServiceFeeFund fundPool, Set<String> batchIds) {
+    public void createPreServiceFeeFund(FundPool fundPool, Set<String> batchIds) {
         getFundPoolService().create(fundPool, batchIds);
     }
 
@@ -109,8 +109,8 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     }
 
     @Override
-    public List<PreServiceFeeFund> getPreServiceSeeFunds() {
-        return getFundPoolService().getPreServiceFeeFunds();
+    public List<FundPool> getPreServiceSeeFunds() {
+        return getFundPoolService().getPreServiceFeeFunds(getSelectedProductFamily());
     }
 
     @Override
@@ -124,12 +124,12 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     }
 
     @Override
-    public List<PreServiceFeeFund> getPreServiceFeeFundsNotAttachedToScenario() {
+    public List<FundPool> getPreServiceFeeFundsNotAttachedToScenario() {
         return getFundPoolService().getPreServiceFeeFundsNotAttachedToScenario();
     }
 
     @Override
-    public void deletePreServiceFeeFund(PreServiceFeeFund fundPool) {
+    public void deletePreServiceFeeFund(FundPool fundPool) {
         getFundPoolService().deletePreServiceFeeFund(fundPool);
     }
 

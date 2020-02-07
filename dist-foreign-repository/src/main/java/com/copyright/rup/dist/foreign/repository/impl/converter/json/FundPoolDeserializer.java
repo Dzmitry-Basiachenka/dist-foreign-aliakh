@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
-import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Set;
 
 /**
- * Implementation of {@link StdDeserializer} for {@link FundPool}.
+ * Implementation of {@link StdDeserializer} for {@link NtsFundPool}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -19,80 +19,80 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public class FundPoolDeserializer extends StdDeserializer<FundPool> {
+public class FundPoolDeserializer extends StdDeserializer<NtsFundPool> {
 
     /**
      * Default constructor.
      */
     FundPoolDeserializer() {
-        super(FundPool.class);
+        super(NtsFundPool.class);
     }
 
     @Override
-    public FundPool deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-        FundPool fundPool = new FundPool();
+    public NtsFundPool deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+        NtsFundPool ntsFundPool = new NtsFundPool();
         JsonToken currentToken;
         while (null != (currentToken = jp.nextValue())) {
             if (JsonToken.VALUE_NUMBER_INT == currentToken) {
-                readPeriods(jp, fundPool);
+                readPeriods(jp, ntsFundPool);
             }
             if (JsonToken.VALUE_NUMBER_INT == currentToken || JsonToken.VALUE_NUMBER_FLOAT == currentToken) {
-                readAmounts(jp, fundPool);
+                readAmounts(jp, ntsFundPool);
             }
             if (JsonToken.START_ARRAY == currentToken) {
-                readMarkets(jp, fundPool);
+                readMarkets(jp, ntsFundPool);
             }
             if (JsonToken.VALUE_TRUE == currentToken || JsonToken.VALUE_FALSE == currentToken) {
-                readExcludingStmFlag(jp, fundPool);
+                readExcludingStmFlag(jp, ntsFundPool);
             }
         }
-        return fundPool;
+        return ntsFundPool;
     }
 
-    private void readPeriods(JsonParser jp, FundPool fundPool) throws IOException {
+    private void readPeriods(JsonParser jp, NtsFundPool ntsFundPool) throws IOException {
         switch (jp.getCurrentName()) {
             case "fund_pool_period_from":
-                fundPool.setFundPoolPeriodFrom(jp.getIntValue());
+                ntsFundPool.setFundPoolPeriodFrom(jp.getIntValue());
                 break;
             case "fund_pool_period_to":
-                fundPool.setFundPoolPeriodTo(jp.getIntValue());
+                ntsFundPool.setFundPoolPeriodTo(jp.getIntValue());
                 break;
             default:
                 break;
         }
     }
 
-    private void readAmounts(JsonParser jp, FundPool fundPool) throws IOException {
+    private void readAmounts(JsonParser jp, NtsFundPool ntsFundPool) throws IOException {
         switch (jp.getCurrentName()) {
             case "stm_amount":
-                fundPool.setStmAmount(jp.getDecimalValue());
+                ntsFundPool.setStmAmount(jp.getDecimalValue());
                 break;
             case "non_stm_amount":
-                fundPool.setNonStmAmount(jp.getDecimalValue());
+                ntsFundPool.setNonStmAmount(jp.getDecimalValue());
                 break;
             case "stm_minimum_amount":
-                fundPool.setStmMinimumAmount(jp.getDecimalValue());
+                ntsFundPool.setStmMinimumAmount(jp.getDecimalValue());
                 break;
             case "non_stm_minimum_amount":
-                fundPool.setNonStmMinimumAmount(jp.getDecimalValue());
+                ntsFundPool.setNonStmMinimumAmount(jp.getDecimalValue());
                 break;
             default:
                 break;
         }
     }
 
-    private void readMarkets(JsonParser jp, FundPool fundPool) throws IOException {
+    private void readMarkets(JsonParser jp, NtsFundPool ntsFundPool) throws IOException {
         if ("markets".equals(jp.getCurrentName())) {
             while (jp.nextToken() != JsonToken.END_ARRAY) {
-                Set<String> markets = fundPool.getMarkets();
+                Set<String> markets = ntsFundPool.getMarkets();
                 markets.add(jp.getValueAsString());
             }
         }
     }
 
-    private void readExcludingStmFlag(JsonParser jp, FundPool fundPool) throws IOException {
+    private void readExcludingStmFlag(JsonParser jp, NtsFundPool ntsFundPool) throws IOException {
         if ("excluding_stm".equals(jp.getCurrentName())) {
-            fundPool.setExcludingStm(jp.getValueAsBoolean());
+            ntsFundPool.setExcludingStm(jp.getValueAsBoolean());
         }
     }
 }

@@ -4,44 +4,48 @@
 
 <mapper namespace="IFundPoolMapper">
 
-    <resultMap id="preServiceFeeFundResultMap" type="PreServiceFeeFund" extends="StoredEntityMapper.storedEntityResult">
+    <resultMap id="fundPoolResultMap" type="FundPool" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_fund_pool_uid"/>
+        <result property="productFamily" column="product_family"/>
         <result property="name" column="name"/>
-        <result property="amount" column="withdrawn_amount"/>
+        <result property="totalAmount" column="total_amount"/>
         <result property="comment" column="comment"/>
     </resultMap>
 
-    <sql id="preServiceFeeFundColumns">
+    <sql id="fundPoolColumns">
         df_fund_pool_uid,
+        product_family,
         name,
-        withdrawn_amount,
+        total_amount,
         comment,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
 
-    <insert id="insert" parameterType="PreServiceFeeFund">
+    <insert id="insert" parameterType="FundPool">
         insert into ${schema}.df_fund_pool (
-            <include refid="preServiceFeeFundColumns"/>
+            <include refid="fundPoolColumns"/>
         ) values (
             #{id},
+            #{productFamily},
             #{name},
-            #{amount},
+            #{totalAmount},
             #{comment},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
 
-    <select id="findById" resultMap="preServiceFeeFundResultMap" parameterType="string">
+    <select id="findById" resultMap="fundPoolResultMap" parameterType="string">
         select
-            <include refid="preServiceFeeFundColumns"/>
+            <include refid="fundPoolColumns"/>
         from ${schema}.df_fund_pool
         where df_fund_pool_uid = #{fundPoolId}
     </select>
 
-    <select id="findAll" resultMap="preServiceFeeFundResultMap">
+    <select id="findByProductFamily" resultMap="fundPoolResultMap">
         select
-            <include refid="preServiceFeeFundColumns"/>
+            <include refid="fundPoolColumns"/>
         from ${schema}.df_fund_pool
+        where product_family = #{productFamily}
         order by updated_datetime desc
     </select>
 
@@ -66,7 +70,7 @@
         )
     </select>
 
-    <select id="findNotAttachedToScenario" resultMap="preServiceFeeFundResultMap">
+    <select id="findNotAttachedToScenario" resultMap="fundPoolResultMap">
         select
             fund.df_fund_pool_uid,
             fund.name

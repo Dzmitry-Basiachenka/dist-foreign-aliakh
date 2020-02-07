@@ -9,7 +9,7 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 
 import com.vaadin.data.Binder;
@@ -73,7 +73,7 @@ public class CreatePreServiceFeeFundWindowTest {
         TextField fundNameField = (TextField) component;
         assertEquals("Fund Name", fundNameField.getCaption());
         assertEquals(StringUtils.EMPTY, fundNameField.getValue());
-        Binder<PreServiceFeeFund> binder  = Whitebox.getInternalState(window, "binder");
+        Binder<FundPool> binder  = Whitebox.getInternalState(window, "binder");
         assertFalse(binder.isValid());
         ((TextField) Whitebox.getInternalState(window, "fundNameField")).setValue(FUND_POOL_NAME_INVALID);
         assertTrue(binder.isValid());

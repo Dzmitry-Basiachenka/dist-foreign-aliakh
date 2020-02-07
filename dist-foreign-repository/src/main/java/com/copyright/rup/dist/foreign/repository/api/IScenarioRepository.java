@@ -68,7 +68,7 @@ public interface IScenarioRepository {
     List<String> findNamesByUsageBatchId(String usageBatchId);
 
     /**
-     * Finds {@link Scenario} name associated with {@link com.copyright.rup.dist.foreign.domain.PreServiceFeeFund}.
+     * Finds {@link Scenario} name associated with {@link com.copyright.rup.dist.foreign.domain.FundPool}.
      *
      * @param fundId fund pool identifier
      * @return {@link Scenario} name

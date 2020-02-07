@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -40,33 +40,33 @@ public class FundPoolService implements IFundPoolService {
 
     @Override
     @Transactional
-    public void create(PreServiceFeeFund fundPool, Set<String> batchIds) {
+    public void create(FundPool fundPool, Set<String> batchIds) {
         String userName = RupContextUtils.getUserName();
         fundPool.setCreateUser(userName);
         fundPool.setUpdateUser(userName);
         LOGGER.info(
             "Create Pre-Service fee fund. Started. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
-            fundPool.getName(), fundPool.getAmount(), LogUtils.size(batchIds), userName);
+            fundPool.getName(), fundPool.getTotalAmount(), LogUtils.size(batchIds), userName);
         fundPoolRepository.insert(fundPool);
         usageService.addWithdrawnUsagesToPreServiceFeeFund(fundPool.getId(), batchIds, userName);
         LOGGER.info(
             "Create Pre-Service fee fund. Finished. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
-            fundPool.getName(), fundPool.getAmount(), LogUtils.size(batchIds), userName);
+            fundPool.getName(), fundPool.getTotalAmount(), LogUtils.size(batchIds), userName);
     }
 
     @Override
-    public List<PreServiceFeeFund> getPreServiceFeeFunds() {
-        return fundPoolRepository.findAll();
+    public List<FundPool> getPreServiceFeeFunds(String productFamily) {
+        return fundPoolRepository.findByProductFamily(productFamily);
     }
 
     @Override
-    public List<PreServiceFeeFund> getPreServiceFeeFundsNotAttachedToScenario() {
+    public List<FundPool> getPreServiceFeeFundsNotAttachedToScenario() {
         return fundPoolRepository.findNotAttachedToScenario();
     }
 
     @Override
     @Transactional
-    public void deletePreServiceFeeFund(PreServiceFeeFund fund) {
+    public void deletePreServiceFeeFund(FundPool fund) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete Pre-Service fee fund. Started. FundPoolName={}, UserName={}", fund.getName(), userName);
         ntsUsageService.deleteFromPreServiceFeeFund(fund.getId());

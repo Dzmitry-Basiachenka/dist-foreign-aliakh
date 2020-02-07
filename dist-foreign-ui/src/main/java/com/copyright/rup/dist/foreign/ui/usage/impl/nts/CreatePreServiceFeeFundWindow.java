@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -40,7 +40,7 @@ class CreatePreServiceFeeFundWindow extends Window {
     private final BigDecimal amount;
     private final PreServiceFeeFundBatchesFilterWindow batchesFilterWindow;
     private final PreServiceFeeFundFilteredBatchesWindow filteredBatchesWindow;
-    private final Binder<PreServiceFeeFund> binder = new Binder<>();
+    private final Binder<FundPool> binder = new Binder<>();
 
     private TextField fundNameField;
     private TextArea commentsArea;
@@ -84,7 +84,7 @@ class CreatePreServiceFeeFundWindow extends Window {
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.fundPoolExists(StringUtils.trim(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Fund"))
-            .bind(PreServiceFeeFund::getName, PreServiceFeeFund::setName);
+            .bind(FundPool::getName, FundPool::setName);
         VaadinUtils.setMaxComponentsWidth(fundNameField);
     }
 
@@ -92,7 +92,7 @@ class CreatePreServiceFeeFundWindow extends Window {
         commentsArea = new TextArea(ForeignUi.getMessage("field.comments"));
         binder.forField(commentsArea)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000))
-            .bind(PreServiceFeeFund::getComment, PreServiceFeeFund::setComment);
+            .bind(FundPool::getComment, FundPool::setComment);
         VaadinUtils.setMaxComponentsWidth(commentsArea);
     }
 
@@ -116,11 +116,11 @@ class CreatePreServiceFeeFundWindow extends Window {
 
     private void onConfirmButtonClicked() {
         if (binder.isValid()) {
-            PreServiceFeeFund fundPool = new PreServiceFeeFund();
+            FundPool fundPool = new FundPool();
             fundPool.setId(RupPersistUtils.generateUuid());
             fundPool.setName(StringUtils.trimToEmpty(fundNameField.getValue()));
             fundPool.setComment(StringUtils.trimToEmpty(commentsArea.getValue()));
-            fundPool.setAmount(amount);
+            fundPool.setTotalAmount(amount);
             controller.createPreServiceFeeFund(fundPool, batchIds);
             closeAllWindows();
         } else {

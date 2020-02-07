@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,12 +25,12 @@ import java.util.Objects;
 public class FundPoolRepository extends BaseRepository implements IFundPoolRepository {
 
     @Override
-    public void insert(PreServiceFeeFund fundPool) {
+    public void insert(FundPool fundPool) {
         insert("IFundPoolMapper.insert", Objects.requireNonNull(fundPool));
     }
 
     @Override
-    public PreServiceFeeFund findById(String fundPoolId) {
+    public FundPool findById(String fundPoolId) {
         checkArgument(StringUtils.isNotBlank(fundPoolId));
         return selectOne("IFundPoolMapper.findById", fundPoolId);
     }
@@ -48,12 +48,12 @@ public class FundPoolRepository extends BaseRepository implements IFundPoolRepos
     }
 
     @Override
-    public List<PreServiceFeeFund> findAll() {
-        return selectList("IFundPoolMapper.findAll");
+    public List<FundPool> findByProductFamily(String productFamily) {
+        return selectList("IFundPoolMapper.findByProductFamily", Objects.requireNonNull(productFamily));
     }
 
     @Override
-    public List<PreServiceFeeFund> findNotAttachedToScenario() {
+    public List<FundPool> findNotAttachedToScenario() {
         return selectList("IFundPoolMapper.findNotAttachedToScenario");
     }
 

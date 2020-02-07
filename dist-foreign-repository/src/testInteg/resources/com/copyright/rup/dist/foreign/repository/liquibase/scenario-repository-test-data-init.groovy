@@ -114,8 +114,9 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '5210b859-1239-4a60-9fab-999b84199321')
+            column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Pre-Service Fee Additional Fund 1')
-            column(name: 'withdrawn_amount', value: '500.00')
+            column(name: 'total_amount', value: '500.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -144,8 +145,9 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: 'a7131cd2-c7cd-4d70-a78f-9554e9598693')
+            column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Pre-Service Fee Additional Fund 2')
-            column(name: 'withdrawn_amount', value: '500.00')
+            column(name: 'total_amount', value: '500.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1101,8 +1103,9 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '7141290b-7042-4cc6-975f-10546370adce')
+            column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Pre-Service Fee Additional Fund 3')
-            column(name: 'withdrawn_amount', value: '50.00')
+            column(name: 'total_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1236,8 +1239,9 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '815d6736-a34e-4fc8-96c3-662a114fa7f2')
+            column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Pre-Service Fee Additional Fund 4')
-            column(name: 'withdrawn_amount', value: '50.00')
+            column(name: 'total_amount', value: '50.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {

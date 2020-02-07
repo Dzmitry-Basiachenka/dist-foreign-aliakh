@@ -11,7 +11,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
@@ -65,7 +65,7 @@ public class FundPoolServiceTest {
     @Test
     public void testCreate() {
         mockStatic(RupContextUtils.class);
-        PreServiceFeeFund fund = buildPreServiceFeeFund();
+        FundPool fund = buildPreServiceFeeFund();
         Set<String> batchIds = Collections.singleton(RupPersistUtils.generateUuid());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         fundPoolRepository.insert(fund);
@@ -78,17 +78,17 @@ public class FundPoolServiceTest {
     }
 
     @Test
-    public void testFindAll() {
-        List<PreServiceFeeFund> funds = Collections.singletonList(buildPreServiceFeeFund());
-        expect(fundPoolRepository.findAll()).andReturn(funds).once();
+    public void testGetPreServiceFeeFunds() {
+        List<FundPool> funds = Collections.singletonList(buildPreServiceFeeFund());
+        expect(fundPoolRepository.findByProductFamily("NTS")).andReturn(funds).once();
         replay(fundPoolRepository);
-        assertEquals(funds, fundPoolService.getPreServiceFeeFunds());
+        assertEquals(funds, fundPoolService.getPreServiceFeeFunds("NTS"));
         verify(fundPoolRepository);
     }
 
     @Test
     public void testGetPreServiceFeeFundsNotAttachedToScenario() {
-        List<PreServiceFeeFund> funds = Collections.singletonList(buildPreServiceFeeFund());
+        List<FundPool> funds = Collections.singletonList(buildPreServiceFeeFund());
         expect(fundPoolRepository.findNotAttachedToScenario()).andReturn(funds).once();
         replay(fundPoolRepository);
         assertEquals(funds, fundPoolService.getPreServiceFeeFundsNotAttachedToScenario());
@@ -122,8 +122,8 @@ public class FundPoolServiceTest {
         verify(fundPoolRepository);
     }
 
-    private PreServiceFeeFund buildPreServiceFeeFund() {
-        PreServiceFeeFund preServiceFeeFund = new PreServiceFeeFund();
+    private FundPool buildPreServiceFeeFund() {
+        FundPool preServiceFeeFund = new FundPool();
         preServiceFeeFund.setId(FUND_UID);
         preServiceFeeFund.setName("Additional Fund");
         return preServiceFeeFund;

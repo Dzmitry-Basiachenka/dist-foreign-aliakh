@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 
 import java.util.List;
 
@@ -13,22 +13,23 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
+//TODO {dbaraukova} align methods names with UI and service logic
 public interface IFundPoolRepository {
 
     /**
      * Inserts Pre-Service fee fund.
      *
-     * @param fundPool instance of {@link PreServiceFeeFund}
+     * @param fundPool instance of {@link FundPool}
      */
-    void insert(PreServiceFeeFund fundPool);
+    void insert(FundPool fundPool);
 
     /**
      * Finds Pre-Service fee fund by id.
      *
      * @param fundPoolId fund pool id
-     * @return instance of {@link PreServiceFeeFund} or null if nothing found
+     * @return instance of {@link FundPool} or null if nothing found
      */
-    PreServiceFeeFund findById(String fundPoolId);
+    FundPool findById(String fundPoolId);
 
     /**
      * Deletes Pre-Service fee fund by id.
@@ -39,18 +40,19 @@ public interface IFundPoolRepository {
     int delete(String fundId);
 
     /**
-     * Finds all {@link PreServiceFeeFund}s.
+     * Finds list of {@link FundPool} by specified product family.
      *
-     * @return list of {@link PreServiceFeeFund}s
+     * @param productFamily product family
+     * @return list of found {@link FundPool}s
      */
-    List<PreServiceFeeFund> findAll();
+    List<FundPool> findByProductFamily(String productFamily);
 
     /**
-     * Finds {@link PreServiceFeeFund}s not attached to scenario.
+     * Finds {@link FundPool}s not attached to scenario.
      *
-     * @return list of {@link PreServiceFeeFund}s
+     * @return list of {@link FundPool}s
      */
-    List<PreServiceFeeFund> findNotAttachedToScenario();
+    List<FundPool> findNotAttachedToScenario();
 
     /**
      * Find Pre-Service fee fund names associated with batch identifier.
@@ -61,10 +63,10 @@ public interface IFundPoolRepository {
     List<String> findNamesByUsageBatchId(String batchId);
 
     /**
-     * Finds {@link PreServiceFeeFund}s count by the name.
+     * Finds {@link FundPool}s count by the name.
      *
-     * @param fundPoolName {@link PreServiceFeeFund} name
-     * @return count of found {@link PreServiceFeeFund}s
+     * @param fundPoolName {@link FundPool} name
+     * @return count of found {@link FundPool}s
      */
     int findCountByName(String fundPoolName);
 }

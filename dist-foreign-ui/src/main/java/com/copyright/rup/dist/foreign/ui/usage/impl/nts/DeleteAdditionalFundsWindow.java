@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
-import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 /**
- * Modal window that provides functionality for deleting {@link PreServiceFeeFund}s.
+ * Modal window that provides functionality for deleting {@link FundPool}s.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -36,7 +36,7 @@ class DeleteAdditionalFundsWindow extends Window {
 
     private final SearchWidget searchWidget;
     private final INtsUsageController controller;
-    private Grid<PreServiceFeeFund> grid;
+    private Grid<FundPool> grid;
 
     /**
      * Constructor.
@@ -64,20 +64,20 @@ class DeleteAdditionalFundsWindow extends Window {
         grid.setItems(controller.getPreServiceSeeFunds());
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
-        grid.addColumn(PreServiceFeeFund::getName)
+        grid.addColumn(FundPool::getName)
             .setCaption(ForeignUi.getMessage("table.column.fund_name"))
-            .setComparator((SerializableComparator<PreServiceFeeFund>) (fund1, fund2) ->
+            .setComparator((SerializableComparator<FundPool>) (fund1, fund2) ->
                 fund1.getName().compareToIgnoreCase(fund2.getName()))
             .setSortProperty("name")
             .setExpandRatio(1);
-        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getAmount(), null))
+        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getTotalAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.fund_amount"))
-            .setComparator((SerializableComparator<PreServiceFeeFund>) (fund1, fund2) ->
-                fund1.getAmount().compareTo(fund2.getAmount()))
+            .setComparator((SerializableComparator<FundPool>) (fund1, fund2) ->
+                fund1.getTotalAmount().compareTo(fund2.getTotalAmount()))
             .setSortProperty("amount")
             .setStyleGenerator(item -> "v-align-right")
             .setWidth(100);
-        grid.addColumn(PreServiceFeeFund::getCreateUser)
+        grid.addColumn(FundPool::getCreateUser)
             .setCaption(ForeignUi.getMessage("table.column.create_user"))
             .setSortProperty("createUser")
             .setWidth(140);
@@ -92,7 +92,7 @@ class DeleteAdditionalFundsWindow extends Window {
         VaadinUtils.addComponentStyle(grid, "delete-fund-pool-grid");
     }
 
-    private void deleteFund(PreServiceFeeFund fundPool) {
+    private void deleteFund(FundPool fundPool) {
         String scenarioName = controller.getScenarioNameAssociatedWithPreServiceFeeFund(fundPool.getId());
         if (Objects.nonNull(scenarioName)) {
             Windows.showNotificationWindow(
@@ -105,7 +105,7 @@ class DeleteAdditionalFundsWindow extends Window {
         }
     }
 
-    private void performDelete(PreServiceFeeFund fundPool) {
+    private void performDelete(FundPool fundPool) {
         controller.deletePreServiceFeeFund(fundPool);
         grid.setItems(controller.getPreServiceSeeFunds());
     }
@@ -117,8 +117,8 @@ class DeleteAdditionalFundsWindow extends Window {
 
         @Override
         public void performSearch() {
-            ListDataProvider<PreServiceFeeFund> dataProvider =
-                (ListDataProvider<PreServiceFeeFund>) grid.getDataProvider();
+            ListDataProvider<FundPool> dataProvider =
+                (ListDataProvider<FundPool>) grid.getDataProvider();
             dataProvider.clearFilters();
             String searchValue = searchWidget.getSearchValue();
             if (StringUtils.isNotBlank(searchValue)) {

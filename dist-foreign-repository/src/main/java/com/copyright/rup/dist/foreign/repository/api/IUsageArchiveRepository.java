@@ -123,7 +123,7 @@ public interface IUsageArchiveRepository {
     void insertPaid(PaidUsage paidUsage);
 
     /**
-     * Moves usages from {@link com.copyright.rup.dist.foreign.domain.PreServiceFeeFund} related to selected
+     * Moves usages from {@link com.copyright.rup.dist.foreign.domain.FundPool} related to selected
      * {@link com.copyright.rup.dist.foreign.domain.Scenario} to archive table.
      *
      * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier

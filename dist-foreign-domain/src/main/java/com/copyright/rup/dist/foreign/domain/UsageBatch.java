@@ -28,7 +28,7 @@ public class UsageBatch extends StoredEntity<String> {
     private LocalDate paymentDate;
     private Integer fiscalYear;
     private BigDecimal grossAmount;
-    private FundPool fundPool;
+    private NtsFundPool ntsFundPool;
 
     public String getName() {
         return name;
@@ -78,12 +78,12 @@ public class UsageBatch extends StoredEntity<String> {
         this.grossAmount = grossAmount;
     }
 
-    public FundPool getFundPool() {
-        return fundPool;
+    public NtsFundPool getNtsFundPool() {
+        return ntsFundPool;
     }
 
-    public void setFundPool(FundPool fundPool) {
-        this.fundPool = fundPool;
+    public void setNtsFundPool(NtsFundPool ntsFundPool) {
+        this.ntsFundPool = ntsFundPool;
     }
 
     @Override
@@ -103,7 +103,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(this.paymentDate, that.paymentDate)
             .append(this.fiscalYear, that.fiscalYear)
             .append(this.grossAmount, that.grossAmount)
-            .append(this.fundPool, that.fundPool)
+            .append(this.ntsFundPool, that.ntsFundPool)
             .isEquals();
     }
 
@@ -117,7 +117,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(paymentDate)
             .append(fiscalYear)
             .append(grossAmount)
-            .append(fundPool)
+            .append(ntsFundPool)
             .toHashCode();
     }
 
@@ -131,7 +131,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append("paymentDate", paymentDate)
             .append("fiscalYear", fiscalYear)
             .append("grossAmount", grossAmount)
-            .append("fundPool", fundPool)
+            .append("ntsFundPool", ntsFundPool)
             .toString();
     }
 }
