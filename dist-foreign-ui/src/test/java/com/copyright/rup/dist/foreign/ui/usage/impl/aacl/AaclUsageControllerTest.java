@@ -213,6 +213,15 @@ public class AaclUsageControllerTest {
     }
 
     @Test
+    public void testDeleteFundPool() {
+        aaclFundPoolService.deleteFundPoolById(FUND_POOL_ID);
+        expectLastCall().once();
+        replay(aaclFundPoolService);
+        controller.deleteFundPoolById(FUND_POOL_ID);
+        verify(aaclFundPoolService);
+    }
+
+    @Test
     public void testGetSendForClassificationUsagesStreamSource() throws IOException {
         UsageFilter filter = new UsageFilter();
         filter.setProductFamily("FAS");

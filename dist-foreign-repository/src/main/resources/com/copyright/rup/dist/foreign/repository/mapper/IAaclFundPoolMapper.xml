@@ -63,4 +63,14 @@
         where fpda.df_fund_pool_aacl_uid = #{fundPoolId} or fpda.df_fund_pool_aacl_uid is null
         order by alc.aggregate_licensee_class_id
     </select>
+
+    <delete id="deleteById" parameterType="string">
+        delete from ${schema}.df_fund_pool_aacl
+        where df_fund_pool_aacl_uid = #{fundPoolId}
+    </delete>
+
+    <delete id="deleteDetailsByFundPoolId" parameterType="string">
+        delete from ${schema}.df_fund_pool_detail_aacl
+        where df_fund_pool_aacl_uid = #{fundPoolId}
+    </delete>
 </mapper>

@@ -46,4 +46,14 @@ public class AaclFundPoolRepository extends BaseRepository implements IAaclFundP
     public List<AaclFundPoolDetail> findDetailsByFundPoolId(String fundPoolId) {
         return selectList("IAaclFundPoolMapper.findDetailsByFundPoolId", Objects.requireNonNull(fundPoolId));
     }
+
+    @Override
+    public void deleteById(String fundPoolId) {
+        delete("IAaclFundPoolMapper.deleteById", Objects.requireNonNull(fundPoolId));
+    }
+
+    @Override
+    public void deleteDetailsByFundPoolId(String fundPoolId) {
+        delete("IAaclFundPoolMapper.deleteDetailsByFundPoolId", Objects.requireNonNull(fundPoolId));
+    }
 }

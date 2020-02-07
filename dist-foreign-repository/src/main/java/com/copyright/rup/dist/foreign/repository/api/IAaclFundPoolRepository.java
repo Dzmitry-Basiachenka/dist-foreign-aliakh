@@ -46,4 +46,18 @@ public interface IAaclFundPoolRepository {
      * @return list of {@link AaclFundPoolDetail}s
      */
     List<AaclFundPoolDetail> findDetailsByFundPoolId(String fundPoolId);
+
+    /**
+     * Deletes {@link AaclFundPool} by id.
+     *
+     * @param fundPoolId {@link AaclFundPool} id
+     */
+    void deleteById(String fundPoolId);
+
+    /**
+     * Deletes {@link AaclFundPoolDetail}s by {@link AaclFundPool} id.
+     *
+     * @param fundPoolId {@link AaclFundPool} id
+     */
+    void deleteDetailsByFundPoolId(String fundPoolId);
 }

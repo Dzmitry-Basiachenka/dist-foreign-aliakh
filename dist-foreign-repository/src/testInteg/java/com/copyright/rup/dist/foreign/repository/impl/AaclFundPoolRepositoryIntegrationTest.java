@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -44,6 +45,7 @@ import java.util.stream.IntStream;
 @Transactional
 public class AaclFundPoolRepositoryIntegrationTest {
 
+    private static final String FUND_POOL_ID = "ce9c1258-6d29-4224-a4e6-6f03b6aeef53";
     @Autowired
     private IAaclFundPoolRepository aaclFundPoolRepository;
 
@@ -74,10 +76,29 @@ public class AaclFundPoolRepositoryIntegrationTest {
     public void testFindDetailsByFundPoolId() throws IOException {
         List<AaclFundPoolDetail> expectedDetails = loadExpectedFundPoolDetails("expected_aacl_fund_pool_details.json");
         List<AaclFundPoolDetail> actualDetails =
-            aaclFundPoolRepository.findDetailsByFundPoolId("ce9c1258-6d29-4224-a4e6-6f03b6aeef53");
+            aaclFundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID);
         assertEquals(expectedDetails.size(), actualDetails.size());
         IntStream.range(0, expectedDetails.size())
             .forEach(i -> verifyFundPoolDetail(expectedDetails.get(i), actualDetails.get(i)));
+    }
+
+    @Test
+    public void testDeleteById() {
+        List<AaclFundPool> actualFundPools = aaclFundPoolRepository.findAll();
+        assertEquals(3, actualFundPools.size());
+        assertTrue(actualFundPools.stream().anyMatch(fundPool -> Objects.equals(FUND_POOL_ID, fundPool.getId())));
+        aaclFundPoolRepository.deleteDetailsByFundPoolId(FUND_POOL_ID);
+        aaclFundPoolRepository.deleteById(FUND_POOL_ID);
+        actualFundPools = aaclFundPoolRepository.findAll();
+        assertEquals(2, actualFundPools.size());
+        assertFalse(actualFundPools.stream().anyMatch(fundPool -> Objects.equals(FUND_POOL_ID, fundPool.getId())));
+    }
+
+    @Test
+    public void testDeleteDetailsByFundPoolId() {
+        assertEquals(2, getCountOfExistingDetailsByFundPoolId(FUND_POOL_ID));
+        aaclFundPoolRepository.deleteDetailsByFundPoolId(FUND_POOL_ID);
+        assertEquals(0, getCountOfExistingDetailsByFundPoolId(FUND_POOL_ID));
     }
 
     private List<AaclFundPool> loadExpectedFundPools(String fileName) throws IOException {
@@ -110,5 +131,12 @@ public class AaclFundPoolRepositoryIntegrationTest {
         assertEquals(expected.getAggregateLicenseeClass().getId(), actual.getAggregateLicenseeClass().getId());
         assertEquals(expected.getAggregateLicenseeClass().getName(), actual.getAggregateLicenseeClass().getName());
         assertEquals(expected.getGrossAmount(), actual.getGrossAmount());
+    }
+
+    private long getCountOfExistingDetailsByFundPoolId(String fundPoolId) {
+        return aaclFundPoolRepository.findDetailsByFundPoolId(fundPoolId).stream()
+            .map(AaclFundPoolDetail::getId)
+            .filter(Objects::nonNull)
+            .count();
     }
 }

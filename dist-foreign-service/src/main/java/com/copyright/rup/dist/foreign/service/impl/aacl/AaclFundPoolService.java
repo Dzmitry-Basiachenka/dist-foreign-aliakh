@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.service.api.aacl.IAaclFundPoolService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,5 +39,12 @@ public class AaclFundPoolService implements IAaclFundPoolService {
     @Override
     public List<AaclFundPoolDetail> getDetailsByFundPoolId(String fundPoolId) {
         return aaclFundPoolRepository.findDetailsByFundPoolId(fundPoolId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteFundPoolById(String fundPoolId) {
+        aaclFundPoolRepository.deleteDetailsByFundPoolId(fundPoolId);
+        aaclFundPoolRepository.deleteById(fundPoolId);
     }
 }
