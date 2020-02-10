@@ -98,7 +98,7 @@ public interface IReportRepository {
     void writeNtsUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
-     * Finds AACL usages according to given {@link AuditFilter} and writes them to the output stream
+     * Finds AACL usages according to given {@link UsageFilter} and writes them to the output stream
      * in CSV format.
      *
      * @param filter            filter

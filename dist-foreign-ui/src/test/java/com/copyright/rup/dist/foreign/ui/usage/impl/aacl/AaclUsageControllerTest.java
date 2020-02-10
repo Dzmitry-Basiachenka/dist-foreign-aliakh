@@ -272,8 +272,8 @@ public class AaclUsageControllerTest {
         assertEquals("export_usage_01_02_2020_03_04.csv", streamSource.getSource().getKey().get());
         assertEquals(fileName, fileNameSupplierCapture.getValue().get());
         Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
-        posConsumer.accept(pos);
         assertNotNull(posConsumer);
+        posConsumer.accept(pos);
         verify(OffsetDateTime.class, filterWidgetMock, filterController, streamSourceHandler, reportService);
     }
 

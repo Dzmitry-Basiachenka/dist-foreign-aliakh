@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -42,6 +43,11 @@ public interface ICommonUsageController extends IController<ICommonUsageWidget> 
      * @return instance of {@link ICommonUsageFilterController}
      */
     ICommonUsageFilterController getUsageFilterController();
+
+    /**
+     * @return instance of {@link IStreamSource} for export.
+     */
+    IStreamSource getExportUsagesStreamSource();
 
     /**
      * Initializes {@link ICommonUsageFilterWidget}.

@@ -23,11 +23,6 @@ import java.util.Set;
 public interface INtsUsageController extends ICommonUsageController {
 
     /**
-     * @return instance of {@link IStreamSource} for export.
-     */
-    IStreamSource getExportUsagesStreamSource();
-
-    /**
      * Inserts NTS batch and assigns eligible for NTS usages to it based on fund pool information.
      *
      * @param usageBatch {@link UsageBatch} to insert

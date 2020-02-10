@@ -11,6 +11,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -173,6 +174,11 @@ public class CommonUsageControllerTest {
         @Override
         public ICommonUsageFilterController getUsageFilterController() {
             return usageFilterController;
+        }
+
+        @Override
+        public IStreamSource getExportUsagesStreamSource() {
+            return null;
         }
 
         @Override
