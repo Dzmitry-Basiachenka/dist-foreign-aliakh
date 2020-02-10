@@ -285,7 +285,7 @@ public class NtsUsageControllerTest {
         IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(controller, productFamilyProvider);
         expect(controller.getSelectedProductFamily()).andReturn("NTS").once();
-        expect(fundPoolService.getPreServiceFeeFunds("NTS")).andReturn(additionalFunds).once();
+        expect(fundPoolService.getFundPools("NTS")).andReturn(additionalFunds).once();
         replay(productFamilyProvider, fundPoolService);
         assertEquals(additionalFunds, controller.getPreServiceSeeFunds());
         verify(productFamilyProvider, fundPoolService);
@@ -294,7 +294,7 @@ public class NtsUsageControllerTest {
     @Test
     public void testGetPreServiceFeeFundsNotAttachedToScenario() {
         List<FundPool> additionalFunds = Collections.singletonList(new FundPool());
-        expect(fundPoolService.getPreServiceFeeFundsNotAttachedToScenario()).andReturn(additionalFunds).once();
+        expect(fundPoolService.getNtsNotAttachedToScenario()).andReturn(additionalFunds).once();
         replay(fundPoolService);
         assertEquals(additionalFunds, controller.getPreServiceFeeFundsNotAttachedToScenario());
         verify(fundPoolService);
@@ -303,7 +303,7 @@ public class NtsUsageControllerTest {
     @Test
     public void testDeleteAdditionalFund() {
         FundPool fund = new FundPool();
-        fundPoolService.deletePreServiceFeeFund(fund);
+        fundPoolService.deleteNtsFundPool(fund);
         expectLastCall().once();
         replay(fundPoolService);
         controller.deletePreServiceFeeFund(fund);

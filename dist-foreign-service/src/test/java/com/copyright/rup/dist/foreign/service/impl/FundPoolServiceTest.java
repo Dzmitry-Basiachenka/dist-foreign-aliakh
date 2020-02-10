@@ -64,7 +64,7 @@ public class FundPoolServiceTest {
     }
 
     @Test
-    public void testCreate() {
+    public void testCreateNtsFundPool() {
         mockStatic(RupContextUtils.class);
         FundPool fund = buildPreServiceFeeFund();
         Set<String> batchIds = Collections.singleton(RupPersistUtils.generateUuid());
@@ -74,44 +74,44 @@ public class FundPoolServiceTest {
         usageService.addWithdrawnUsagesToPreServiceFeeFund(fund.getId(), batchIds, USER_NAME);
         expectLastCall().once();
         replay(RupContextUtils.class, fundPoolRepository, usageService);
-        fundPoolService.create(fund, batchIds);
+        fundPoolService.createNtsFundPool(fund, batchIds);
         verify(RupContextUtils.class, fundPoolRepository, usageService);
     }
 
     @Test
-    public void testGetPreServiceFeeFunds() {
+    public void testGetFundPools() {
         List<FundPool> funds = Collections.singletonList(buildPreServiceFeeFund());
         expect(fundPoolRepository.findByProductFamily("NTS")).andReturn(funds).once();
         replay(fundPoolRepository);
-        assertEquals(funds, fundPoolService.getPreServiceFeeFunds("NTS"));
+        assertEquals(funds, fundPoolService.getFundPools("NTS"));
         verify(fundPoolRepository);
     }
 
     @Test
-    public void testGetPreServiceFeeFundsNotAttachedToScenario() {
+    public void testGetNtsNotAttachedToScenario() {
         List<FundPool> funds = Collections.singletonList(buildPreServiceFeeFund());
-        expect(fundPoolRepository.findNotAttachedToScenario()).andReturn(funds).once();
+        expect(fundPoolRepository.findNtsNotAttachedToScenario()).andReturn(funds).once();
         replay(fundPoolRepository);
-        assertEquals(funds, fundPoolService.getPreServiceFeeFundsNotAttachedToScenario());
+        assertEquals(funds, fundPoolService.getNtsNotAttachedToScenario());
         verify(fundPoolRepository);
     }
 
     @Test
-    public void testDeleteAdditionalFund() {
+    public void testDeleteNtsFundPool() {
         ntsUsageService.deleteFromPreServiceFeeFund(FUND_UID);
         expectLastCall().once();
         expect(fundPoolRepository.delete(FUND_UID)).andReturn(2).once();
         replay(fundPoolRepository, ntsUsageService);
-        fundPoolService.deletePreServiceFeeFund(buildPreServiceFeeFund());
+        fundPoolService.deleteNtsFundPool(buildPreServiceFeeFund());
         verify(fundPoolRepository, ntsUsageService);
     }
 
     @Test
-    public void testGetAdditionalFundNamesByUsageBatchId() {
+    public void testGetNtsFundPoolNamesByUsageBatchId() {
         List<String> names = Arrays.asList("Test 1", "Test 2");
         expect(fundPoolRepository.findNamesByUsageBatchId(BATCH_UID)).andReturn(names).once();
         replay(fundPoolRepository);
-        assertEquals(names, fundPoolService.getPreServiceFeeFundNamesByUsageBatchId(BATCH_UID));
+        assertEquals(names, fundPoolService.getNtsFundPoolNamesByUsageBatchId(BATCH_UID));
         verify(fundPoolRepository);
     }
 

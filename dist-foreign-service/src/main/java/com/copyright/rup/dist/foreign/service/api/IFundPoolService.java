@@ -17,49 +17,49 @@ import java.util.Set;
 public interface IFundPoolService {
 
     /**
-     * Creates Pre-Service fee fund.
-     *
-     * @param fundPool instance of {@link FundPool}
-     * @param batchIds set of ids of usage batches
-     */
-    void create(FundPool fundPool, Set<String> batchIds);
-
-    /**
      * Gets all {@link FundPool}s related to selected product family.
      *
      * @param productFamily product family
      * @return list of {@link FundPool}s
      */
-    List<FundPool> getPreServiceFeeFunds(String productFamily);
+    List<FundPool> getFundPools(String productFamily);
 
     /**
-     * Gets {@link FundPool}s not attached to scenario.
-     *
-     * @return list of {@link FundPool}s
-     */
-    List<FundPool> getPreServiceFeeFundsNotAttachedToScenario();
-
-    /**
-     * Deletes Pre-Service fee fund.
-     *
-     * @param preServiceFeeFund {@link FundPool} to delete
-     */
-    void deletePreServiceFeeFund(FundPool preServiceFeeFund);
-
-    /**
-     * Gets Pre-Service fee fund names associated with batch identifier.
-     *
-     * @param batchId batch identifier
-     * @return list of names
-     */
-    List<String> getPreServiceFeeFundNamesByUsageBatchId(String batchId);
-
-    /**
-     * Checks whether {@link FundPool} with the name already exists.
+     * Checks whether {@link FundPool} with provided name already exists.
      *
      * @param productFamily fund pool product family
      * @param name          fund pool name
      * @return {@code true} - if fund pool exists, {@code false} - otherwise
      */
     boolean fundPoolExists(String productFamily, String name);
+
+    /**
+     * Creates NTS fund pool.
+     *
+     * @param fundPool instance of {@link FundPool}
+     * @param batchIds set of ids of usage batches
+     */
+    void createNtsFundPool(FundPool fundPool, Set<String> batchIds);
+
+    /**
+     * Gets NTS {@link FundPool}s not attached to scenario.
+     *
+     * @return list of {@link FundPool}s
+     */
+    List<FundPool> getNtsNotAttachedToScenario();
+
+    /**
+     * Deletes NTS {@link FundPool}.
+     *
+     * @param fundPool {@link FundPool} to delete
+     */
+    void deleteNtsFundPool(FundPool fundPool);
+
+    /**
+     * Gets NTS fund pool names associated with batch identifier.
+     *
+     * @param batchId batch identifier
+     * @return list of names
+     */
+    List<String> getNtsFundPoolNamesByUsageBatchId(String batchId);
 }

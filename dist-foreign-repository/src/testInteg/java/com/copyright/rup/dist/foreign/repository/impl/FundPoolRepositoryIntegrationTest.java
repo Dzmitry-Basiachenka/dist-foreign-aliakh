@@ -83,8 +83,8 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindNotAttachedToScenario() {
-        List<FundPool> fundPools = fundPoolRepository.findNotAttachedToScenario();
+    public void testFindNtsNotAttachedToScenario() {
+        List<FundPool> fundPools = fundPoolRepository.findNtsNotAttachedToScenario();
         assertEquals(1, fundPools.size());
         assertEquals(fundPools.get(0).getId(), "49060c9b-9cc2-4b93-b701-fffc82eb28b0");
     }

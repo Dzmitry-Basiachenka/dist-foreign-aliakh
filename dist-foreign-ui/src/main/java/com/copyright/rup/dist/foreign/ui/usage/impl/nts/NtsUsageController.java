@@ -101,17 +101,17 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public void createPreServiceFeeFund(FundPool fundPool, Set<String> batchIds) {
-        getFundPoolService().create(fundPool, batchIds);
+        getFundPoolService().createNtsFundPool(fundPool, batchIds);
     }
 
     @Override
-    public boolean fundPoolExists(String name) {
+    public boolean preServiceFeeFundExists(String name) {
         return getFundPoolService().fundPoolExists(FdaConstants.NTS_PRODUCT_FAMILY, name);
     }
 
     @Override
     public List<FundPool> getPreServiceSeeFunds() {
-        return getFundPoolService().getPreServiceFeeFunds(getSelectedProductFamily());
+        return getFundPoolService().getFundPools(getSelectedProductFamily());
     }
 
     @Override
@@ -126,12 +126,12 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public List<FundPool> getPreServiceFeeFundsNotAttachedToScenario() {
-        return getFundPoolService().getPreServiceFeeFundsNotAttachedToScenario();
+        return getFundPoolService().getNtsNotAttachedToScenario();
     }
 
     @Override
     public void deletePreServiceFeeFund(FundPool fundPool) {
-        getFundPoolService().deletePreServiceFeeFund(fundPool);
+        getFundPoolService().deleteNtsFundPool(fundPool);
     }
 
     @Override

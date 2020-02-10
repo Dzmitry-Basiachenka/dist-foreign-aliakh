@@ -65,7 +65,7 @@ class CreatePreServiceFeeFundWindow extends Window {
         setResizable(false);
         setWidth(320, Unit.PIXELS);
         setCaption(ForeignUi.getMessage("window.create_fund"));
-        initFundPoolNameField();
+        initPreServiceFeeFundNameField();
         initCommentsArea();
         binder.validate();
         HorizontalLayout buttonsLayout = initButtonsLayout();
@@ -77,12 +77,12 @@ class CreatePreServiceFeeFundWindow extends Window {
         setContent(layout);
     }
 
-    private void initFundPoolNameField() {
+    private void initPreServiceFeeFundNameField() {
         fundNameField = new TextField(ForeignUi.getMessage("field.fund_name"));
         binder.forField(fundNameField)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !controller.fundPoolExists(StringUtils.trim(value)),
+            .withValidator(value -> !controller.preServiceFeeFundExists(StringUtils.trim(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Fund"))
             .bind(FundPool::getName, FundPool::setName);
         VaadinUtils.setMaxComponentsWidth(fundNameField);
