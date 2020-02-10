@@ -4,12 +4,11 @@ import static org.easymock.EasyMock.createStrictMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
 
 import org.junit.Before;
@@ -31,7 +30,6 @@ import java.util.List;
 public class AaclFundPoolServiceTest {
 
     private static final String FUND_POOL_ID = "5a40ff60-31d2-4bab-9871-60cff88b7889";
-    private static final String FUND_POOL_NAME = "fund pool name";
 
     private final AaclFundPoolService aaclFundPoolService = new AaclFundPoolService();
 
@@ -44,16 +42,8 @@ public class AaclFundPoolServiceTest {
     }
 
     @Test
-    public void testAaclFundPoolExists() {
-        expect(aaclFundPoolRepository.aaclFundPoolExists(FUND_POOL_NAME)).andReturn(true).once();
-        replay(aaclFundPoolRepository);
-        assertTrue(aaclFundPoolService.aaclFundPoolExists(FUND_POOL_NAME));
-        verify(aaclFundPoolRepository);
-    }
-
-    @Test
     public void testGetFundPools() {
-        List<AaclFundPool> fundPools = Collections.singletonList(new AaclFundPool());
+        List<FundPool> fundPools = Collections.singletonList(new FundPool());
         expect(aaclFundPoolRepository.findAll()).andReturn(fundPools).once();
         replay(aaclFundPoolRepository);
         assertEquals(fundPools, aaclFundPoolService.getFundPools());
@@ -62,7 +52,7 @@ public class AaclFundPoolServiceTest {
 
     @Test
     public void testGetDetailsByFundPoolId() {
-        List<AaclFundPoolDetail> details = Collections.singletonList(new AaclFundPoolDetail());
+        List<FundPoolDetail> details = Collections.singletonList(new FundPoolDetail());
         expect(aaclFundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID)).andReturn(details).once();
         replay(aaclFundPoolRepository);
         assertEquals(details, aaclFundPoolService.getDetailsByFundPoolId(FUND_POOL_ID));

@@ -17,7 +17,7 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -67,7 +67,7 @@ public class ViewAaclFundPoolWindowTest {
 
     private ViewAaclFundPoolWindow viewAaclFundPoolWindow;
     private IAaclUsageController controller;
-    private final AaclFundPool fundPool = buildFundPool();
+    private final FundPool fundPool = buildFundPool();
 
     @Before
     public void setUp() {
@@ -106,7 +106,7 @@ public class ViewAaclFundPoolWindowTest {
     public void testViewClickListener() throws Exception {
         mockStatic(Windows.class);
         ViewAaclFundPoolDetailsWindow viewDetailsWindowMock = createMock(ViewAaclFundPoolDetailsWindow.class);
-        Grid<AaclFundPool> grid = createMock(Grid.class);
+        Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getButtonClickListener(0);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
@@ -123,7 +123,7 @@ public class ViewAaclFundPoolWindowTest {
     public void testDeleteClickListener() {
         mockStatic(Windows.class);
         Window confirmWindowMock = createMock(Window.class);
-        Grid<AaclFundPool> grid = createMock(Grid.class);
+        Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getButtonClickListener(1);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
@@ -143,7 +143,7 @@ public class ViewAaclFundPoolWindowTest {
         Button deleteButton = getButton(1);
         assertFalse(viewButton.isEnabled());
         assertFalse(deleteButton.isEnabled());
-        Grid<AaclFundPool> grid = (Grid) ((VerticalLayout) viewAaclFundPoolWindow.getContent()).getComponent(1);
+        Grid<FundPool> grid = (Grid) ((VerticalLayout) viewAaclFundPoolWindow.getContent()).getComponent(1);
         grid.select(fundPool);
         assertTrue(viewButton.isEnabled());
         assertTrue(deleteButton.isEnabled());
@@ -201,8 +201,8 @@ public class ViewAaclFundPoolWindowTest {
         return (Button.ClickListener) listeners.iterator().next();
     }
 
-    private AaclFundPool buildFundPool() {
-        AaclFundPool aaclFundPool = new AaclFundPool();
+    private FundPool buildFundPool() {
+        FundPool aaclFundPool = new FundPool();
         aaclFundPool.setId(FUND_POOL_ID);
         aaclFundPool.setName("AACL Fund Pool");
         return aaclFundPool;

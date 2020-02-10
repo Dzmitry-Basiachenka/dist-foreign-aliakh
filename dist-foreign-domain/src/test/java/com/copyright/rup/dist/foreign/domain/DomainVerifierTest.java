@@ -50,7 +50,6 @@ public class DomainVerifierTest {
             {UsageBatch.class},
             {Usage.class},
             {AaclUsage.class},
-            {AaclFundPool.class},
             {UsageDto.class},
             {PaidUsage.class},
             {Scenario.class},
@@ -75,7 +74,7 @@ public class DomainVerifierTest {
             {AaclClassifiedUsage.class},
             {PublicationType.class},
             {AggregateLicenseeClass.class},
-            {AaclFundPoolDetail.class}
+            {FundPoolDetail.class}
         };
         return Arrays.asList(testData);
     }

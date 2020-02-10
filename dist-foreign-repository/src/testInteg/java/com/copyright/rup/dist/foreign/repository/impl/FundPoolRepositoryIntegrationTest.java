@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.FundPool;
 
@@ -35,7 +37,7 @@ public class FundPoolRepositoryIntegrationTest {
 
     private static final String ID_1 = "b5b64c3a-55d2-462e-b169-362dca6a4dd7";
     private static final String ID_2 = "76282dbc-2468-48d4-b926-93d3458a656b";
-    private static final String NAME_1 = "FAS Q1 2019";
+    private static final String NAME_1 = "FAS Q1 2019 100%";
     private static final String NAME_2 = "FAS Q2 2019";
     private static final String COMMENT_1 = "some comment";
     private static final String COMMENT_2 = "other comment";
@@ -72,7 +74,7 @@ public class FundPoolRepositoryIntegrationTest {
     public void testFindByProductFamily() {
         List<FundPool> fundPools = fundPoolRepository.findByProductFamily("NTS");
         assertEquals(3, fundPools.size());
-        assertFundPool(fundPools.get(0), ID_1, NTS_PRODUCT_FAMILY, "FAS Q1 2019", new BigDecimal("50.00"),
+        assertFundPool(fundPools.get(0), ID_1, NTS_PRODUCT_FAMILY, NAME_1, new BigDecimal("50.00"),
             "some comment");
         assertFundPool(fundPools.get(1), "49060c9b-9cc2-4b93-b701-fffc82eb28b0", NTS_PRODUCT_FAMILY, "Test fund",
             new BigDecimal("10.00"), "test comment");
@@ -110,9 +112,10 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindCountByName() {
-        assertEquals(1, fundPoolRepository.findCountByName(NAME_1));
-        assertEquals(0, fundPoolRepository.findCountByName("missing fund pool name"));
+    public void testFundPoolExists() {
+        assertTrue(fundPoolRepository.fundPoolExists(NTS_PRODUCT_FAMILY, NAME_1));
+        assertTrue(fundPoolRepository.fundPoolExists(NTS_PRODUCT_FAMILY, "FAS q1 2019 100%"));
+        assertFalse(fundPoolRepository.fundPoolExists(NTS_PRODUCT_FAMILY, "FAS Q1 2019"));
     }
 
     private void assertFundPool(FundPool fundPool, String id, String productFamily, String name, BigDecimal amount,

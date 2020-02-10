@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.Month;
 
 /**
- * Utils class for working with Usage Batch and it's properties.
+ * Utils class for working with Usage Batch and its properties.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>

@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
 
 import java.util.Set;
@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public class AggregateLicenseeClassValidator implements DistCsvProcessor.IValidator<AaclFundPoolDetail> {
+public class AggregateLicenseeClassValidator implements DistCsvProcessor.IValidator<FundPoolDetail> {
 
     private final Set<Integer> aggregateLicenseeClassIds;
 
@@ -29,7 +29,7 @@ public class AggregateLicenseeClassValidator implements DistCsvProcessor.IValida
     }
 
     @Override
-    public boolean isValid(AaclFundPoolDetail detail) {
+    public boolean isValid(FundPoolDetail detail) {
         return aggregateLicenseeClassIds.contains(detail.getAggregateLicenseeClass().getId());
     }
 

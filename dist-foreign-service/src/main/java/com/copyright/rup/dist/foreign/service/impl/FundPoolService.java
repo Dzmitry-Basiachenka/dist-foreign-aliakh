@@ -80,7 +80,7 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
-    public boolean fundPoolNameExists(String fundPoolName) {
-        return 0 < fundPoolRepository.findCountByName(fundPoolName);
+    public boolean fundPoolExists(String productFamily, String name) {
+        return fundPoolRepository.fundPoolExists(productFamily, name);
     }
 }

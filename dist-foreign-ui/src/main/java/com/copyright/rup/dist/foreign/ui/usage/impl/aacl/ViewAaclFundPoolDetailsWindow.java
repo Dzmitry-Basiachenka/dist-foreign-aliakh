@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -29,15 +29,15 @@ import java.util.Objects;
  */
 public class ViewAaclFundPoolDetailsWindow extends Window {
 
-    private Grid<AaclFundPoolDetail> grid;
+    private Grid<FundPoolDetail> grid;
 
     /**
      * Constructor.
      *
-     * @param fundPool   an {@link AaclFundPool} to view
+     * @param fundPool   an {@link FundPool} to view
      * @param controller an {@link IAaclUsageController} instance
      */
-    public ViewAaclFundPoolDetailsWindow(AaclFundPool fundPool, IAaclUsageController controller) {
+    public ViewAaclFundPoolDetailsWindow(FundPool fundPool, IAaclUsageController controller) {
         setWidth(600, Unit.PIXELS);
         setHeight(600, Unit.PIXELS);
         initGrid(Objects.requireNonNull(fundPool), Objects.requireNonNull(controller));
@@ -59,7 +59,7 @@ public class ViewAaclFundPoolDetailsWindow extends Window {
         return layout;
     }
 
-    private void initGrid(AaclFundPool fundPool, IAaclUsageController controller) {
+    private void initGrid(FundPool fundPool, IAaclUsageController controller) {
         grid = new Grid<>();
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setItems(controller.getFundPoolDetails(fundPool.getId()));

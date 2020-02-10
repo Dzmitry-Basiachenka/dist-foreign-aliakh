@@ -8,8 +8,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.foreign.domain.AaclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
 
 import org.junit.Before;
@@ -41,7 +41,7 @@ public class AggregateLicenseeClassValidatorTest {
 
     @Test
     public void testIsValidTrue() {
-        AaclFundPoolDetail detail = new AaclFundPoolDetail();
+        FundPoolDetail detail = new FundPoolDetail();
         AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
         detail.setAggregateLicenseeClass(aggregateLicenseeClass);
         aggregateLicenseeClass.setId(1);
@@ -51,7 +51,7 @@ public class AggregateLicenseeClassValidatorTest {
 
     @Test
     public void testIsValidFalse() {
-        AaclFundPoolDetail detail = new AaclFundPoolDetail();
+        FundPoolDetail detail = new FundPoolDetail();
         AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
         detail.setAggregateLicenseeClass(aggregateLicenseeClass);
         aggregateLicenseeClass.setId(2);

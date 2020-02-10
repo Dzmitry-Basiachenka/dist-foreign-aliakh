@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.dist.foreign.domain.AaclFundPool;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -27,7 +27,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 /**
- * Modal window that provides functionality for viewing and deleting {@link AaclFundPool}s.
+ * Modal window that provides functionality for viewing and deleting {@link FundPool}s.
  * <p/>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -39,7 +39,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
 
     private final SearchWidget searchWidget;
     private final IAaclUsageController controller;
-    private Grid<AaclFundPool> grid;
+    private Grid<FundPool> grid;
     private Button deleteButton;
     private Button viewButton;
 
@@ -69,7 +69,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
     @Override
     @SuppressWarnings("unchecked")
     public void performSearch() {
-        ListDataProvider<AaclFundPool> dataProvider = (ListDataProvider<AaclFundPool>) grid.getDataProvider();
+        ListDataProvider<FundPool> dataProvider = (ListDataProvider<FundPool>) grid.getDataProvider();
         dataProvider.clearFilters();
         String search = searchWidget.getSearchValue();
         if (StringUtils.isNotBlank(search)) {
@@ -89,7 +89,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
         Button closeButton = Buttons.createCloseButton(this);
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
         deleteButton.addClickListener(event -> {
-            AaclFundPool selectedFundPool = grid.getSelectedItems().stream().findFirst().orElse(null);
+            FundPool selectedFundPool = grid.getSelectedItems().stream().findFirst().orElse(null);
             Windows.showConfirmDialog(
                 ForeignUi.getMessage("message.confirm.delete_action", selectedFundPool.getName(), "fund pool"),
                 () -> {
@@ -100,7 +100,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
         deleteButton.setEnabled(false);
         viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
         viewButton.addClickListener(event -> {
-            AaclFundPool selectedFundPool = grid.getSelectedItems().stream().findFirst().orElse(null);
+            FundPool selectedFundPool = grid.getSelectedItems().stream().findFirst().orElse(null);
             Windows.showModalWindow(new ViewAaclFundPoolDetailsWindow(selectedFundPool, controller));
         });
         viewButton.setEnabled(false);
@@ -124,16 +124,16 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
     }
 
     private void addGridColumns() {
-        grid.addColumn(AaclFundPool::getName)
+        grid.addColumn(FundPool::getName)
             .setCaption(ForeignUi.getMessage("table.column.fund_pool_name"))
             .setComparator((fundPool1, fundPool2) -> fundPool1.getName().compareToIgnoreCase(fundPool2.getName()))
             .setExpandRatio(1);
-        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getTotalGrossAmount(), null))
+        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getTotalAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.gross_fund_pool_total"))
             .setComparator((fundPool1, fundPool2) ->
-                fundPool1.getTotalGrossAmount().compareTo(fundPool2.getTotalGrossAmount()))
+                fundPool1.getTotalAmount().compareTo(fundPool2.getTotalAmount()))
             .setWidth(170);
-        grid.addColumn(AaclFundPool::getCreateUser)
+        grid.addColumn(FundPool::getCreateUser)
             .setCaption(ForeignUi.getMessage("table.column.create_user"))
             .setComparator(
                 (fundPool1, fundPool2) -> fundPool1.getCreateUser().compareToIgnoreCase(fundPool2.getCreateUser()))

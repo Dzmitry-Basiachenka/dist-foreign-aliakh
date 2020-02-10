@@ -6,10 +6,13 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 
+import com.google.common.collect.Maps;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -58,8 +61,11 @@ public class FundPoolRepository extends BaseRepository implements IFundPoolRepos
     }
 
     @Override
-    public int findCountByName(String fundPoolName) {
-        checkArgument(StringUtils.isNotBlank(fundPoolName));
-        return selectOne("IFundPoolMapper.findCountByName", fundPoolName);
+    public boolean fundPoolExists(String productFamily, String name) {
+        checkArgument(StringUtils.isNotBlank(name));
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("productFamily", Objects.requireNonNull(productFamily));
+        params.put("name", escapeSqlLikePattern(name));
+        return selectOne("IFundPoolMapper.fundPoolExists", params);
     }
 }
