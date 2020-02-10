@@ -116,7 +116,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public List<String> getMarkets() {
-        return getUsageService().getMarkets();
+        return getNtsUsageService().getMarkets();
     }
 
     @Override

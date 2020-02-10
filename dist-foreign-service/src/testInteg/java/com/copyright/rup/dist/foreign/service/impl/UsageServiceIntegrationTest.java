@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import com.google.common.collect.Lists;
 
@@ -46,6 +47,8 @@ public class UsageServiceIntegrationTest {
 
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private INtsUsageService ntsUsageService;
     @Autowired
     private IUsageAuditRepository auditRepository;
     @Autowired
@@ -83,13 +86,13 @@ public class UsageServiceIntegrationTest {
     }
 
     @Test
-    public void testGetMarkets() {
-        assertEquals(Arrays.asList("Bus", "Doc Del", "Edu", "Gov", "Lib", "Sch", "Univ"), usageService.getMarkets());
+    public void testClaAccountNumber() {
+        assertEquals(2000017000L, usageService.getClaAccountNumber(), 0);
     }
 
     @Test
-    public void testClaAccountNumber() {
-        assertEquals(2000017000L, usageService.getClaAccountNumber(), 0);
+    public void testGetMarkets() {
+        assertEquals(Arrays.asList("Bus", "Doc Del", "Edu", "Gov", "Lib", "Sch", "Univ"), ntsUsageService.getMarkets());
     }
 
     private void verifyExcludedUsages(Scenario scenario, boolean excluded, Long... accountNumbers) {

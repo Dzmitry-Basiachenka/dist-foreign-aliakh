@@ -33,6 +33,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import com.google.common.collect.Iterables;
@@ -80,6 +81,8 @@ public class ScenarioService implements IScenarioService {
     private IUsageService usageService;
     @Autowired
     private INtsUsageService ntsUsageService;
+    @Autowired
+    private IFasUsageService fasUsageService;
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
@@ -219,21 +222,39 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
-    public void sendToLm(Scenario scenario) {
+    public void sendFasToLm(Scenario scenario) {
         LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
             RupContextUtils.getUserName());
-        List<String> usageIds = usageService.moveToArchive(scenario);
+        List<String> usageIds = fasUsageService.moveToArchive(scenario);
+        if (CollectionUtils.isNotEmpty(usageIds)) {
+            Iterables.partition(usageIds, batchSize)
+                .forEach(partition -> lmIntegrationService.sendToLm(usageService.getArchivedUsagesByIds(partition)
+                    .stream().map(ExternalUsage::new).collect(Collectors.toList())));
+            changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
+                StringUtils.EMPTY);
+            LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
+                RupContextUtils.getUserName());
+        } else {
+            throw new RupRuntimeException(String.format("Send scenario to LM. Failed. %s. Reason=Scenario is empty",
+                ForeignLogUtils.scenario(scenario)));
+        }
+    }
+
+    @Override
+    @Transactional
+    public void sendNtsToLm(Scenario scenario) {
+        LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
+            RupContextUtils.getUserName());
+        List<String> usageIds = ntsUsageService.moveToArchive(scenario);
         if (CollectionUtils.isNotEmpty(usageIds)) {
             Iterables.partition(usageIds, batchSize)
                 .forEach(partition -> {
                     List<Usage> usages = usageService.getArchivedUsagesByIds(partition);
-                    if (FdaConstants.NTS_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
-                        usages.forEach(usage -> {
-                            //for NTS usages System should not send work information to LM
-                            usage.setWrWrkInst(null);
-                            usage.setSystemTitle(null);
-                        });
-                    }
+                    usages.forEach(usage -> {
+                        //for NTS usages System should not send work information to LM
+                        usage.setWrWrkInst(null);
+                        usage.setSystemTitle(null);
+                    });
                     lmIntegrationService.sendToLm(usages.stream().map(ExternalUsage::new).collect(Collectors.toList()));
                 });
             changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,

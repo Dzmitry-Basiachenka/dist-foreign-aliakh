@@ -141,11 +141,18 @@ public interface IScenarioService {
     void approve(Scenario scenario, String reason);
 
     /**
-     * Sends given {@link Scenario} to LM.
+     * Sends given FAS {@link Scenario} to LM.
      *
      * @param scenario {@link Scenario} instance
      */
-    void sendToLm(Scenario scenario);
+    void sendFasToLm(Scenario scenario);
+
+    /**
+     * Sends given NTS {@link Scenario} to LM.
+     *
+     * @param scenario {@link Scenario} instance
+     */
+    void sendNtsToLm(Scenario scenario);
 
     /**
      * Gets ownership changes for specified {@link Scenario} using RMS service and saves in database.

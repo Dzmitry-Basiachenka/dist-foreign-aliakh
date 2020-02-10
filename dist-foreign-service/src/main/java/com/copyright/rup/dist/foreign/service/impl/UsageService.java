@@ -25,7 +25,6 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
-import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
@@ -82,6 +81,7 @@ import java.util.stream.Stream;
  */
 @Service
 public class UsageService implements IUsageService {
+
     private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
         "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
     private static final String SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
@@ -93,8 +93,6 @@ public class UsageService implements IUsageService {
     private static final Logger LOGGER = RupLogUtils.getLogger();
     @Value("$RUP{dist.foreign.service_fee.cla_payee}")
     private BigDecimal claPayeeServiceFee;
-    @Value("$RUP{dist.foreign.markets}")
-    private List<String> supportedMarkets;
     @Value("$RUP{dist.foreign.cla_account_number}")
     private Long claAccountNumber;
     @Autowired
@@ -304,27 +302,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Transactional
-    public List<String> moveToArchive(Scenario scenario) {
-        LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
-        List<String> usageIds;
-        if (FdaConstants.NTS_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
-            usageIds =
-                usageArchiveRepository.copyNtsToArchiveByScenarioId(scenario.getId(), RupContextUtils.getUserName());
-            usageArchiveRepository.moveFundUsagesToArchive(scenario.getId());
-            usageAuditService.deleteActionsByScenarioId(scenario.getId());
-            usageRepository.deleteNtsByScenarioId(scenario.getId());
-        } else {
-            usageIds =
-                usageArchiveRepository.copyToArchiveByScenarioId(scenario.getId(), RupContextUtils.getUserName());
-            usageRepository.deleteByScenarioId(scenario.getId());
-        }
-        LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
-            LogUtils.size(usageIds));
-        return usageIds;
-    }
-
-    @Override
     public List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenario(Scenario scenario,
                                                                                  String searchValue,
                                                                                  Pageable pageable, Sort sort) {
@@ -378,11 +355,6 @@ public class UsageService implements IUsageService {
     @Override
     public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         return usageRepository.findForAudit(filter, pageable, sort);
-    }
-
-    @Override
-    public List<String> getMarkets() {
-        return supportedMarkets;
     }
 
     @Override

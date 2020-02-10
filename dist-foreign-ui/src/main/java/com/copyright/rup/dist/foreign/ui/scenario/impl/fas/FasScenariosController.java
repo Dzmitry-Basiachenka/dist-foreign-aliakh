@@ -101,6 +101,20 @@ public class FasScenariosController extends CommonScenariosController implements
     }
 
     @Override
+    public void sendToLm() {
+        Scenario scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenario", scenario.getName()),
+            () -> {
+                try {
+                    getScenarioService().sendFasToLm(scenario);
+                } catch (RuntimeException e) {
+                    Windows.showNotificationWindow(e.getMessage());
+                }
+                getWidget().refresh();
+            });
+    }
+
+    @Override
     public List<Long> getInvalidRightsholders() {
         return getUsageService().getInvalidRightsholdersByFilter(
             new UsageFilter(

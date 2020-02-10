@@ -252,7 +252,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         void sendScenarioToLm() {
-            scenarioService.sendToLm(scenario);
+            scenarioService.sendFasToLm(scenario);
             List<String> lmUsageMessages = Lists.newArrayListWithExpectedSize(expecteLmDetailsMessagesCount);
             expectedLmDetailsJsonFiles.forEach(lmDetailsFile ->
                 lmUsageMessages.add(TestUtils.fileToString(this.getClass(), lmDetailsFile)));

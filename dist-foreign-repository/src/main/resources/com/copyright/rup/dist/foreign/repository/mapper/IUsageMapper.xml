@@ -732,17 +732,6 @@
         where df_scenario_uid = #{scenarioId}
     </delete>
 
-    <delete id="deleteNtsByScenarioId" parameterType="map">
-        with u as (
-            delete from ${schema}.df_usage
-            where df_scenario_uid = #{scenarioId}
-                or (<include refid="scenarioBatchesFilter"/> and status_ind = #{status})
-            returning df_usage_uid
-        )
-        delete from ${schema}.df_usage_fas
-        where df_usage_fas_uid in (select df_usage_uid from u)
-    </delete>
-
     <select id="findWithAmountsAndRightsholders" parameterType="map" resultMap="usageAmountResultMap">
         select
             u.df_usage_uid,

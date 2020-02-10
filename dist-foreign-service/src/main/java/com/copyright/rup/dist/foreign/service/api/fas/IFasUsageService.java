@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.api.fas;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
@@ -35,4 +36,12 @@ public interface IFasUsageService {
      * @return count of usages
      */
     int getUsagesCount(UsageFilter filter);
+
+    /**
+     * Moves FAS {@link com.copyright.rup.dist.foreign.domain.Usage}s to the archive for given {@link Scenario}.
+     *
+     * @param scenario {@link Scenario}
+     * @return list of moved to archive {@link com.copyright.rup.dist.foreign.domain.Usage}s ids
+     */
+    List<String> moveToArchive(Scenario scenario);
 }
