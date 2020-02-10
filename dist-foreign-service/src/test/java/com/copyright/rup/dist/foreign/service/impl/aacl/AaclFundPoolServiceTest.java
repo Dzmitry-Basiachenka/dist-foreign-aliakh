@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.aacl;
 
+import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.createStrictMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -7,16 +8,22 @@ import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link AaclFundPoolService}.
@@ -29,16 +36,34 @@ import java.util.List;
  */
 public class AaclFundPoolServiceTest {
 
+    private static final AggregateLicenseeClass AGG_LICENSEE_CLASS_108 =
+        buildAggregateLicenseeClass(108, "EXGP - Life Sciences");
+    private static final AggregateLicenseeClass AGG_LICENSEE_CLASS_110 =
+        buildAggregateLicenseeClass(110, "EXU4 - Life Sciences");
+    private static final AggregateLicenseeClass AGG_LICENSEE_CLASS_111 =
+        buildAggregateLicenseeClass(111, "HGP - Life Sciences");
+    private static final AggregateLicenseeClass AGG_LICENSEE_CLASS_113 =
+        buildAggregateLicenseeClass(113, "MU - Life Sciences");
     private static final String FUND_POOL_ID = "5a40ff60-31d2-4bab-9871-60cff88b7889";
 
-    private final AaclFundPoolService aaclFundPoolService = new AaclFundPoolService();
-
+    private AaclFundPoolService aaclFundPoolService;
     private IAaclFundPoolRepository aaclFundPoolRepository;
+    private ILicenseeClassService licenseeClassService;
+
+    private static AggregateLicenseeClass buildAggregateLicenseeClass(Integer id, String name) {
+        AggregateLicenseeClass alc = new AggregateLicenseeClass();
+        alc.setId(id);
+        alc.setName(name);
+        return alc;
+    }
 
     @Before
     public void setUp() {
         aaclFundPoolRepository = createStrictMock(IAaclFundPoolRepository.class);
+        licenseeClassService = createMock(ILicenseeClassService.class);
+        aaclFundPoolService = new AaclFundPoolService();
         Whitebox.setInternalState(aaclFundPoolService, aaclFundPoolRepository);
+        Whitebox.setInternalState(aaclFundPoolService, licenseeClassService);
     }
 
     @Test
@@ -52,11 +77,24 @@ public class AaclFundPoolServiceTest {
 
     @Test
     public void testGetDetailsByFundPoolId() {
-        List<FundPoolDetail> details = Collections.singletonList(new FundPoolDetail());
-        expect(aaclFundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID)).andReturn(details).once();
-        replay(aaclFundPoolRepository);
-        assertEquals(details, aaclFundPoolService.getDetailsByFundPoolId(FUND_POOL_ID));
-        verify(aaclFundPoolRepository);
+        FundPoolDetail detail1 =
+            buildDetail("c6fa3d97-2b70-4a7e-a4ee-e8c405caf54c", AGG_LICENSEE_CLASS_108, BigDecimal.ONE);
+        FundPoolDetail detail2 =
+            buildDetail("9ce7ad63-c335-477a-a39b-43d5cc9c4cd8", AGG_LICENSEE_CLASS_111, BigDecimal.TEN);
+        List<FundPoolDetail> expectedDetails =
+            Arrays.asList(detail1, buildZeroDetail(AGG_LICENSEE_CLASS_110), detail2, buildZeroDetail(
+                AGG_LICENSEE_CLASS_113));
+        expect(licenseeClassService.getAggregateLicenseeClasses())
+            .andReturn(Arrays.asList(AGG_LICENSEE_CLASS_108, AGG_LICENSEE_CLASS_110,
+                AGG_LICENSEE_CLASS_111, AGG_LICENSEE_CLASS_113)).once();
+        expect(aaclFundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID))
+            .andReturn(Arrays.asList(detail1, detail2)).once();
+        replay(aaclFundPoolRepository, licenseeClassService);
+        List<FundPoolDetail> actualDetails = aaclFundPoolService.getDetailsByFundPoolId(FUND_POOL_ID);
+        verify(aaclFundPoolRepository, licenseeClassService);
+        assertEquals(expectedDetails.size(), actualDetails.size());
+        IntStream.range(0, expectedDetails.size())
+            .forEach(i -> verifyDetail(expectedDetails.get(i), actualDetails.get(i)));
     }
 
     @Test
@@ -68,5 +106,27 @@ public class AaclFundPoolServiceTest {
         replay(aaclFundPoolRepository);
         aaclFundPoolService.deleteFundPoolById(FUND_POOL_ID);
         verify(aaclFundPoolRepository);
+    }
+
+    private void verifyDetail(FundPoolDetail expected, FundPoolDetail actual) {
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getAggregateLicenseeClass().getId(), actual.getAggregateLicenseeClass().getId());
+        assertEquals(expected.getAggregateLicenseeClass().getName(), actual.getAggregateLicenseeClass().getName());
+        assertEquals(expected.getGrossAmount(), actual.getGrossAmount());
+    }
+
+    private FundPoolDetail buildDetail(String id, AggregateLicenseeClass alc, BigDecimal grossAmount) {
+        FundPoolDetail detail = new FundPoolDetail();
+        detail.setId(id);
+        detail.setAggregateLicenseeClass(alc);
+        detail.setGrossAmount(grossAmount);
+        return detail;
+    }
+
+    private FundPoolDetail buildZeroDetail(AggregateLicenseeClass alc) {
+        FundPoolDetail detail = new FundPoolDetail();
+        detail.setAggregateLicenseeClass(alc);
+        detail.setGrossAmount(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP));
+        return detail;
     }
 }

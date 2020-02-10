@@ -46,6 +46,7 @@ import java.util.stream.IntStream;
 public class AaclFundPoolRepositoryIntegrationTest {
 
     private static final String FUND_POOL_ID = "ce9c1258-6d29-4224-a4e6-6f03b6aeef53";
+
     @Autowired
     private IAaclFundPoolRepository aaclFundPoolRepository;
 
@@ -89,9 +90,9 @@ public class AaclFundPoolRepositoryIntegrationTest {
 
     @Test
     public void testDeleteDetailsByFundPoolId() {
-        assertEquals(2, getCountOfExistingDetailsByFundPoolId(FUND_POOL_ID));
+        assertEquals(2, aaclFundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID).size());
         aaclFundPoolRepository.deleteDetailsByFundPoolId(FUND_POOL_ID);
-        assertEquals(0, getCountOfExistingDetailsByFundPoolId(FUND_POOL_ID));
+        assertEquals(0, aaclFundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID).size());
     }
 
     private List<FundPool> loadExpectedFundPools(String fileName) throws IOException {
@@ -124,12 +125,5 @@ public class AaclFundPoolRepositoryIntegrationTest {
         assertEquals(expected.getAggregateLicenseeClass().getId(), actual.getAggregateLicenseeClass().getId());
         assertEquals(expected.getAggregateLicenseeClass().getName(), actual.getAggregateLicenseeClass().getName());
         assertEquals(expected.getGrossAmount(), actual.getGrossAmount());
-    }
-
-    private long getCountOfExistingDetailsByFundPoolId(String fundPoolId) {
-        return aaclFundPoolRepository.findDetailsByFundPoolId(fundPoolId).stream()
-            .map(FundPoolDetail::getId)
-            .filter(Objects::nonNull)
-            .count();
     }
 }

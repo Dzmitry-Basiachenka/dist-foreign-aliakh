@@ -19,8 +19,8 @@ import java.math.BigDecimal;
  */
 public class FundPoolDetail extends StoredEntity<String> {
 
-    private AggregateLicenseeClass aggregateLicenseeClass;
-    private BigDecimal grossAmount;
+    private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+    private BigDecimal grossAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 
     public AggregateLicenseeClass getAggregateLicenseeClass() {
         return aggregateLicenseeClass;

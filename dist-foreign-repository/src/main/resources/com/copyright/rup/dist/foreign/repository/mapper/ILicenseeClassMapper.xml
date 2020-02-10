@@ -1,0 +1,29 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ILicenseeClassMapper">
+
+    <resultMap id="aggregateLicenseeClassResultMap" type="AggregateLicenseeClass" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="aggregate_licensee_class_id" javaType="java.lang.Integer"/>
+        <result property="name" column="aggregate_licensee_class_name"/>
+    </resultMap>
+
+    <select id="detailLicenseeClassExists" parameterType="string" resultType="boolean">
+        select exists (
+            select
+            from ${schema}.df_detail_licensee_class
+            where enrollment_profile ilike #{enrollmentProfile}
+                and discipline ilike #{discipline}
+        )
+    </select>
+
+    <select id="findAggregateLicenseeClasses" resultMap="aggregateLicenseeClassResultMap">
+        select
+            aggregate_licensee_class_id,
+            aggregate_licensee_class_name,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        from ${schema}.df_aggregate_licensee_class
+        order by aggregate_licensee_class_id
+    </select>
+</mapper>

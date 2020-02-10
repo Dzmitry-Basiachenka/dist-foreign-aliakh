@@ -46,16 +46,16 @@
             fpd.df_fund_pool_detail_uid,
             alc.aggregate_licensee_class_id,
             alc.aggregate_licensee_class_name,
-            coalesce(fpd.gross_amount, 0) gross_amount,
+            fpd.gross_amount,
             fpd.created_datetime,
             fpd.updated_datetime,
             fpd.created_by_user,
             fpd.updated_by_user,
             fpd.record_version
         from ${schema}.df_fund_pool_detail fpd
-        right join ${schema}.df_aggregate_licensee_class alc
+        join ${schema}.df_aggregate_licensee_class alc
             on alc.aggregate_licensee_class_id = fpd.df_aggregate_licensee_class_id
-        where fpd.df_fund_pool_uid = #{fundPoolId} or fpd.df_fund_pool_uid is null
+        where fpd.df_fund_pool_uid = #{fundPoolId}
         order by alc.aggregate_licensee_class_id
     </select>
 

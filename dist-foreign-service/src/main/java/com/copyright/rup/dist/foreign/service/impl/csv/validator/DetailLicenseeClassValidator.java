@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
-import com.copyright.rup.dist.foreign.service.api.IDetailLicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 
 /**
  * The validator for Classified AACL usages to check if licensee class id exists in
@@ -18,22 +18,22 @@ import com.copyright.rup.dist.foreign.service.api.IDetailLicenseeClassService;
  */
 public class DetailLicenseeClassValidator implements DistCsvProcessor.IValidator<AaclClassifiedUsage> {
 
-    private final IDetailLicenseeClassService detailLicenseeClassService;
+    private final ILicenseeClassService licenseeClassService;
 
     /**
      * Constructor.
      *
-     * @param detailLicenseeClassService instance of {@link IDetailLicenseeClassService}
+     * @param licenseeClassService instance of {@link ILicenseeClassService}
      */
-    public DetailLicenseeClassValidator(IDetailLicenseeClassService detailLicenseeClassService) {
-        this.detailLicenseeClassService = detailLicenseeClassService;
+    public DetailLicenseeClassValidator(ILicenseeClassService licenseeClassService) {
+        this.licenseeClassService = licenseeClassService;
     }
 
     @Override
     public boolean isValid(AaclClassifiedUsage aaclClassifiedUsage) {
         checkNotNull(aaclClassifiedUsage);
         return isUsageDisqualified(aaclClassifiedUsage)
-            || detailLicenseeClassService.detailLicenceClassIdExist(aaclClassifiedUsage.getEnrollmentProfile(),
+            || licenseeClassService.detailLicenceClassExists(aaclClassifiedUsage.getEnrollmentProfile(),
             aaclClassifiedUsage.getDiscipline());
     }
 

@@ -81,6 +81,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IFundPoolMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IReportMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IPublicationTypeMapper.xml"/>
-        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IDetailLicenseeClassMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/ILicenseeClassMapper.xml"/>
     </mappers>
 </configuration>
