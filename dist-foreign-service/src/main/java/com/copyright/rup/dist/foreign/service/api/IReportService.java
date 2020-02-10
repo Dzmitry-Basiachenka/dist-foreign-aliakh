@@ -91,10 +91,12 @@ public interface IReportService {
     /**
      * Writes Undistributed Liabilities Reconciliation Report into the output stream in csv format.
      *
-     * @param paymentDate  payment date
-     * @param outputStream instance of {@link OutputStream}
+     * @param paymentDate     payment date
+     * @param outputStream    instance of {@link OutputStream}
+     * @param productFamilies product families
      */
-    void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream);
+    void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
+                                                Set<String> productFamilies);
 
     /**
      * Writes FAS/FAS2 Batch Summary Report into the output stream in csv format.

@@ -73,12 +73,14 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
 
     @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
-                                                       BigDecimal defaultEstimatedServiceFee) {
+                                                       BigDecimal defaultEstimatedServiceFee,
+                                                       Set<String> productFamilies) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("paymentDate", Objects.requireNonNull(paymentDate));
         parameters.put("withdrawnStatuses",
             Arrays.asList(UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED));
         parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
+        parameters.put("productFamilies", productFamilies);
         try (UndistributedLiabilitiesReportHandler handler =
                  new UndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IReportMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);

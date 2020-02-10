@@ -268,13 +268,15 @@ public class CsvReportsIntegrationTest {
     @Test
     public void testWriteUndistributedLiabilitiesCsvReport() throws Exception {
         assertFiles(outputStream -> reportRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2011, 5, 5),
-            outputStream, DEFAULT_ESTIMATED_SERVICE_FEE), "undistributed_liabilities_report.csv");
+            outputStream, DEFAULT_ESTIMATED_SERVICE_FEE, Sets.newHashSet("FAS", "FAS2")),
+            "undistributed_liabilities_report.csv");
     }
 
     @Test
     public void testWriteUndistributedLiabilitiesCsvEmptyReport() throws IOException {
         assertFiles(outputStream -> reportRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2001, 5, 5),
-            outputStream, DEFAULT_ESTIMATED_SERVICE_FEE), "undistributed_liabilities_report_empty.csv");
+            outputStream, DEFAULT_ESTIMATED_SERVICE_FEE, Sets.newHashSet("FAS", "FAS2")),
+            "undistributed_liabilities_report_empty.csv");
     }
 
     @Test

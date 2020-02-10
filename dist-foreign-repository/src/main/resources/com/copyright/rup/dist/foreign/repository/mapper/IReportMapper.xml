@@ -117,6 +117,10 @@
                 then gross_amount else 0 end withdrawn_gross_amount
             from ${schema}.df_usage) u on u.df_usage_batch_uid = batch.df_usage_batch_uid
             where <![CDATA[batch.payment_date <= #{paymentDate}]]>
+                and batch.product_family in
+                    <foreach collection="productFamilies" item="productFamily" separator="," open="(" close=")">
+                        #{productFamily}
+                    </foreach>
             group by payment_date, batch.rro_account_number, fee.estimated_service_fee
         ) as reportInfo
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = reportInfo.rro_account_number

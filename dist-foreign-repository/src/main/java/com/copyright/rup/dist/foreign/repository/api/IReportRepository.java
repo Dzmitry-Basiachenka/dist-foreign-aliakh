@@ -29,9 +29,10 @@ public interface IReportRepository {
      * @param paymentDate                payment date
      * @param outputStream               instance of {@link OutputStream}
      * @param defaultEstimatedServiceFee default estimated service fee
+     * @param productFamilies            product families
      */
     void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
-                                                BigDecimal defaultEstimatedServiceFee);
+                                                BigDecimal defaultEstimatedServiceFee, Set<String> productFamilies);
 
     /**
      * Writes Service Fee True-up Report into the output stream in csv format.

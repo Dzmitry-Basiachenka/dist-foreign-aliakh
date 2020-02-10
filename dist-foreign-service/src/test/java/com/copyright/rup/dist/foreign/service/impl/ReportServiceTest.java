@@ -18,6 +18,8 @@ import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
+import com.google.common.collect.Sets;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -65,10 +67,12 @@ public class ReportServiceTest {
         LocalDate paymentDate = LocalDate.now();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         reportRepository
-            .writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, DEFAULT_ESTIMATED_SERVICE_FEE);
+            .writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, DEFAULT_ESTIMATED_SERVICE_FEE,
+                Sets.newHashSet("FAS", "FAS2"));
         expectLastCall().once();
         replay(reportRepository);
-        reportService.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream);
+        reportService.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream,
+            Sets.newHashSet("FAS", "FAS2"));
         verify(reportRepository);
     }
 

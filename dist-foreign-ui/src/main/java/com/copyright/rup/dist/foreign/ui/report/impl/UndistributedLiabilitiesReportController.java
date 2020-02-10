@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
@@ -32,7 +33,8 @@ public class UndistributedLiabilitiesReportController extends CommonController<I
     @Override
     public IStreamSource getCsvStreamSource() {
         return new ByteArrayStreamSource("undistributed_liabilities_",
-            os -> reportService.writeUndistributedLiabilitiesCsvReport(getWidget().getPaymentDate(), os));
+            os -> reportService.writeUndistributedLiabilitiesCsvReport(getWidget().getPaymentDate(), os,
+                FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
@@ -14,6 +15,8 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportWidget;
+
+import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -69,7 +72,8 @@ public class UndistributedLiabilitiesReportControllerTest {
         Capture<OutputStream> osCapture = new Capture<>();
         expect(OffsetDateTime.now()).andReturn(now).once();
         expect(widget.getPaymentDate()).andReturn(paymentDate).once();
-        reportService.writeUndistributedLiabilitiesCsvReport(capture(paymentDateCapture), capture(osCapture));
+        reportService.writeUndistributedLiabilitiesCsvReport(capture(paymentDateCapture), capture(osCapture),
+            eq(Sets.newHashSet("FAS", "FAS2")));
         expectLastCall().once();
         replay(OffsetDateTime.class, widget, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
