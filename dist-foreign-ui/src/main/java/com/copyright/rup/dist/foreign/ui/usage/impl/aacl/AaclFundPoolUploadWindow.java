@@ -43,7 +43,7 @@ public class AaclFundPoolUploadWindow extends Window {
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
 
     private final IAaclUsageController aaclUsageController;
-    private final Binder<FundPool> binder = new Binder<>();
+    private final Binder<FundPool> fundPoolBinder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
     private TextField fundPoolNameField;
     private UploadField uploadField;
@@ -95,7 +95,7 @@ public class AaclFundPoolUploadWindow extends Window {
      * @return {@code true} if all inputs are valid, {@code false} - otherwise
      */
     boolean isValid() {
-        return binder.isValid() && uploadBinder.isValid();
+        return fundPoolBinder.isValid() && uploadBinder.isValid();
     }
 
     private ComponentContainer initRootLayout() {
@@ -105,17 +105,19 @@ public class AaclFundPoolUploadWindow extends Window {
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
-        binder.validate();
+        fundPoolBinder.validate();
         return rootLayout;
     }
 
     private UploadField initUploadField() {
         uploadField = new UploadField();
         uploadField.setSizeFull();
+        uploadField.setRequiredIndicatorVisible(true);
         uploadBinder.forField(uploadField)
-            .withValidator(value -> StringUtils.isEmpty(value)
-                || StringUtils.endsWith(value, ".csv"), ForeignUi.getMessage("error.upload_file.invalid_extension"))
-            .bind(s -> s, (s, v) -> s = v).validate();
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(value -> StringUtils.endsWith(value, ".csv"),
+                ForeignUi.getMessage("error.upload_file.invalid_extension"))
+            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue).validate();
         uploadField.addSucceededListener(event -> uploadBinder.validate());
         VaadinUtils.addComponentStyle(uploadField, "aacl-fund-pool-upload-component");
         return uploadField;
@@ -132,14 +134,14 @@ public class AaclFundPoolUploadWindow extends Window {
 
     private TextField initFundPoolNameField() {
         fundPoolNameField = new TextField(ForeignUi.getMessage("label.fund_pool.name"));
+        fundPoolNameField.setSizeFull();
         fundPoolNameField.setRequiredIndicatorVisible(true);
-        binder.forField(fundPoolNameField)
+        fundPoolBinder.forField(fundPoolNameField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !aaclUsageController.fundPoolExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Fund Pool"))
             .bind(FundPool::getName, FundPool::setName);
-        fundPoolNameField.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(fundPoolNameField);
         VaadinUtils.addComponentStyle(fundPoolNameField, "aac-fund-pool-name-field");
         return fundPoolNameField;

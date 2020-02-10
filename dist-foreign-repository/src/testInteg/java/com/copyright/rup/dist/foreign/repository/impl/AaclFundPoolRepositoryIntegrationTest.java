@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
@@ -24,6 +25,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -45,6 +47,7 @@ import java.util.stream.IntStream;
 @Transactional
 public class AaclFundPoolRepositoryIntegrationTest {
 
+    private static final String USER_NAME = "user@copyright.com";
     private static final String FUND_POOL_ID = "ce9c1258-6d29-4224-a4e6-6f03b6aeef53";
 
     @Autowired
@@ -93,6 +96,29 @@ public class AaclFundPoolRepositoryIntegrationTest {
         assertEquals(2, aaclFundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID).size());
         aaclFundPoolRepository.deleteDetailsByFundPoolId(FUND_POOL_ID);
         assertEquals(0, aaclFundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID).size());
+    }
+
+    @Test
+    public void testInsertDetail() {
+        String fundPoolId = "6d38454b-ce71-4b0e-8ecf-436d23dc6c3e";
+        FundPoolDetail detail = new FundPoolDetail();
+        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+        aggregateLicenseeClass.setId(111);
+        detail.setId("5f2da414-5ac1-44ce-9060-30219a6aca93");
+        detail.setFundPoolId(fundPoolId);
+        detail.setAggregateLicenseeClass(aggregateLicenseeClass);
+        detail.setGrossAmount(BigDecimal.ONE);
+        detail.setCreateUser(USER_NAME);
+        detail.setUpdateUser(USER_NAME);
+        aaclFundPoolRepository.insertDetail(detail);
+        List<FundPoolDetail> details = aaclFundPoolRepository.findDetailsByFundPoolId(fundPoolId);
+        assertEquals(1, details.size());
+        FundPoolDetail actualDetail = details.get(0);
+        assertEquals(detail.getId(), actualDetail.getId());
+        assertEquals(detail.getAggregateLicenseeClass().getId(), actualDetail.getAggregateLicenseeClass().getId());
+        assertEquals(new BigDecimal("1.0000000000"), actualDetail.getGrossAmount());
+        assertEquals(USER_NAME, actualDetail.getCreateUser());
+        assertEquals(USER_NAME, actualDetail.getUpdateUser());
     }
 
     private List<FundPool> loadExpectedFundPools(String fileName) throws IOException {

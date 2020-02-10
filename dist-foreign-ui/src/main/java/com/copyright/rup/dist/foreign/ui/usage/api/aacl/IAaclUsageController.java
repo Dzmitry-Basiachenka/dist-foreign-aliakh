@@ -49,9 +49,9 @@ public interface IAaclUsageController extends ICommonUsageController {
     List<FundPoolDetail> getFundPoolDetails(String fundPoolId);
 
     /**
-     * Deletes {@link AaclFundPool} by id.
+     * Deletes {@link FundPool} by id.
      *
-     * @param fundPoolId {@link AaclFundPool} id
+     * @param fundPoolId {@link FundPool} id
      */
     void deleteFundPoolById(String fundPoolId);
 
