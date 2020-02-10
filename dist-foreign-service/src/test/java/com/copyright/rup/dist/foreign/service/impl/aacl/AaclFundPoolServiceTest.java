@@ -1,7 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.aacl;
 
-import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.createStrictMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -38,7 +39,7 @@ public class AaclFundPoolServiceTest {
 
     @Before
     public void setUp() {
-        aaclFundPoolRepository = createMock(IAaclFundPoolRepository.class);
+        aaclFundPoolRepository = createStrictMock(IAaclFundPoolRepository.class);
         Whitebox.setInternalState(aaclFundPoolService, aaclFundPoolRepository);
     }
 
@@ -65,6 +66,17 @@ public class AaclFundPoolServiceTest {
         expect(aaclFundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID)).andReturn(details).once();
         replay(aaclFundPoolRepository);
         assertEquals(details, aaclFundPoolService.getDetailsByFundPoolId(FUND_POOL_ID));
+        verify(aaclFundPoolRepository);
+    }
+
+    @Test
+    public void testDeleteFundPoolById() {
+        aaclFundPoolRepository.deleteDetailsByFundPoolId(FUND_POOL_ID);
+        expectLastCall().once();
+        aaclFundPoolRepository.deleteById(FUND_POOL_ID);
+        expectLastCall().once();
+        replay(aaclFundPoolRepository);
+        aaclFundPoolService.deleteFundPoolById(FUND_POOL_ID);
         verify(aaclFundPoolRepository);
     }
 }

@@ -93,7 +93,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
             Windows.showConfirmDialog(
                 ForeignUi.getMessage("message.confirm.delete_action", selectedFundPool.getName(), "fund pool"),
                 () -> {
-                    controller.deleteFundPool(selectedFundPool);
+                    controller.deleteFundPoolById(selectedFundPool.getId());
                     grid.setItems(controller.getFundPools());
                 });
         });

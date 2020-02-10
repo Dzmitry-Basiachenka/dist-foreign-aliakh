@@ -111,13 +111,13 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
-    public void deleteFundPool(AaclFundPool fundPool) {
-        // TODO {srudak} implement
+    public List<AaclFundPoolDetail> getFundPoolDetails(String fundPoolId) {
+        return aaclFundPoolService.getDetailsByFundPoolId(fundPoolId);
     }
 
     @Override
-    public List<AaclFundPoolDetail> getFundPoolDetails(String fundPoolId) {
-        return aaclFundPoolService.getDetailsByFundPoolId(fundPoolId);
+    public void deleteFundPoolById(String fundPoolId) {
+        aaclFundPoolService.deleteFundPoolById(fundPoolId);
     }
 
     @Override
