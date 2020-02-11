@@ -117,7 +117,7 @@ public class CommonUsageControllerTest {
     public void testGetAdditionalFundNamesByUsageBatchId() {
         String batchId = RupPersistUtils.generateUuid();
         List<String> names = Arrays.asList("Test 1", "Test 2");
-        expect(fundPoolService.getPreServiceFeeFundNamesByUsageBatchId(batchId)).andReturn(names).once();
+        expect(fundPoolService.getNtsFundPoolNamesByUsageBatchId(batchId)).andReturn(names).once();
         replay(fundPoolService);
         assertEquals(names, controller.getPreServiceFeeFundNamesByUsageBatchId(batchId));
         verify(fundPoolService);

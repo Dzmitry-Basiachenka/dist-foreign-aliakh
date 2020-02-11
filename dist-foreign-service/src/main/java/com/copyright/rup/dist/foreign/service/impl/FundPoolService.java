@@ -39,8 +39,18 @@ public class FundPoolService implements IFundPoolService {
     private INtsUsageService ntsUsageService;
 
     @Override
+    public List<FundPool> getFundPools(String productFamily) {
+        return fundPoolRepository.findByProductFamily(productFamily);
+    }
+
+    @Override
+    public boolean fundPoolExists(String productFamily, String name) {
+        return fundPoolRepository.fundPoolExists(productFamily, name);
+    }
+
+    @Override
     @Transactional
-    public void create(FundPool fundPool, Set<String> batchIds) {
+    public void createNtsFundPool(FundPool fundPool, Set<String> batchIds) {
         String userName = RupContextUtils.getUserName();
         fundPool.setCreateUser(userName);
         fundPool.setUpdateUser(userName);
@@ -55,32 +65,23 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
-    public List<FundPool> getPreServiceFeeFunds(String productFamily) {
-        return fundPoolRepository.findByProductFamily(productFamily);
-    }
-
-    @Override
-    public List<FundPool> getPreServiceFeeFundsNotAttachedToScenario() {
-        return fundPoolRepository.findNotAttachedToScenario();
+    public List<FundPool> getNtsNotAttachedToScenario() {
+        return fundPoolRepository.findNtsNotAttachedToScenario();
     }
 
     @Override
     @Transactional
-    public void deletePreServiceFeeFund(FundPool fund) {
+    public void deleteNtsFundPool(FundPool fundPool) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.info("Delete Pre-Service fee fund. Started. FundPoolName={}, UserName={}", fund.getName(), userName);
-        ntsUsageService.deleteFromPreServiceFeeFund(fund.getId());
-        fundPoolRepository.delete(fund.getId());
-        LOGGER.info("Delete Pre-Service fee fund. Finished. FundPoolName={}, UserName={}", fund.getName(), userName);
+        LOGGER.info("Delete Pre-Service fee fund. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+        ntsUsageService.deleteFromPreServiceFeeFund(fundPool.getId());
+        fundPoolRepository.delete(fundPool.getId());
+        LOGGER.info("Delete Pre-Service fee fund. Finished. FundPoolName={}, UserName={}", fundPool.getName(),
+            userName);
     }
 
     @Override
-    public List<String> getPreServiceFeeFundNamesByUsageBatchId(String batchId) {
+    public List<String> getNtsFundPoolNamesByUsageBatchId(String batchId) {
         return fundPoolRepository.findNamesByUsageBatchId(batchId);
-    }
-
-    @Override
-    public boolean fundPoolExists(String productFamily, String name) {
-        return fundPoolRepository.fundPoolExists(productFamily, name);
     }
 }

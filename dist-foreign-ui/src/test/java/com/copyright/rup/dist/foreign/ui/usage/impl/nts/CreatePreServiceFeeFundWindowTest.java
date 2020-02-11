@@ -57,14 +57,13 @@ public class CreatePreServiceFeeFundWindowTest {
         assertNotNull(content);
         assertTrue(content.isSpacing());
         assertEquals(3, content.getComponentCount());
-        verifyFundPoolNameField(content.getComponent(0));
+        verifyPreServiceFeeFundNameField(content.getComponent(0));
         verifyCommentsArea(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2));
     }
 
-    //TODO introduce separate test to cover validation
-    private void verifyFundPoolNameField(Component component) {
-        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).anyTimes();
+    private void verifyPreServiceFeeFundNameField(Component component) {
+        expect(usagesController.preServiceFeeFundExists(FUND_POOL_NAME)).andReturn(false).anyTimes();
         replay(usagesController);
         window = new CreatePreServiceFeeFundWindow(usagesController,
             Collections.emptySet(), BigDecimal.ONE, createMock(PreServiceFeeFundBatchesFilterWindow.class),

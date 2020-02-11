@@ -70,7 +70,7 @@
         )
     </select>
 
-    <select id="findNotAttachedToScenario" resultMap="fundPoolResultMap">
+    <select id="findNtsNotAttachedToScenario" resultMap="fundPoolResultMap">
         select
             fund.df_fund_pool_uid,
             fund.name

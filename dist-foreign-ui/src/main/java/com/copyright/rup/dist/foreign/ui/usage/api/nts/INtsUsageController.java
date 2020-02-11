@@ -44,12 +44,12 @@ public interface INtsUsageController extends ICommonUsageController {
     void createPreServiceFeeFund(FundPool fundPool, Set<String> batchIds);
 
     /**
-     * Checks whether Fund Pool with provided name exists in databse.
+     * Checks whether Pre-Service Fee Fund with provided name exists in databse.
      *
      * @param name fund pool name
      * @return {@code true} - if Fund Pool exists, {@code false} - otherwise
      */
-    boolean fundPoolExists(String name);
+    boolean preServiceFeeFundExists(String name);
 
     /**
      * Gets all {@link FundPool}s.

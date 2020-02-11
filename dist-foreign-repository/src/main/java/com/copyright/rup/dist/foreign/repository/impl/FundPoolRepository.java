@@ -56,8 +56,8 @@ public class FundPoolRepository extends BaseRepository implements IFundPoolRepos
     }
 
     @Override
-    public List<FundPool> findNotAttachedToScenario() {
-        return selectList("IFundPoolMapper.findNotAttachedToScenario");
+    public List<FundPool> findNtsNotAttachedToScenario() {
+        return selectList("IFundPoolMapper.findNtsNotAttachedToScenario");
     }
 
     @Override

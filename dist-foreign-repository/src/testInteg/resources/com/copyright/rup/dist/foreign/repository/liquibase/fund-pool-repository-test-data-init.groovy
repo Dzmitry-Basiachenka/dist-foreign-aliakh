@@ -59,7 +59,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-06-17-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment("Inserting test data for findNotAttachedToScenario")
+        comment("Inserting test data for findNtsNotAttachedToScenario")
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '62760b59-40af-461d-b145-5536e6ef481b')

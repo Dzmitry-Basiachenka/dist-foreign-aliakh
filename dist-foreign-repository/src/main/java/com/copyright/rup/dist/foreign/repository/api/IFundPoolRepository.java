@@ -48,11 +48,11 @@ public interface IFundPoolRepository {
     List<FundPool> findByProductFamily(String productFamily);
 
     /**
-     * Finds {@link FundPool}s not attached to scenario.
+     * Finds NTS {@link FundPool}s not attached to scenario.
      *
      * @return list of {@link FundPool}s
      */
-    List<FundPool> findNotAttachedToScenario();
+    List<FundPool> findNtsNotAttachedToScenario();
 
     /**
      * Find Pre-Service fee fund names associated with batch identifier.
