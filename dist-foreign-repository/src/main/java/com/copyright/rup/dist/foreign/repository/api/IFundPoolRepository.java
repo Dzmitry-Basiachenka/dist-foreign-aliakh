@@ -13,7 +13,6 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-//TODO {dbaraukova} align methods names with UI and service logic
 public interface IFundPoolRepository {
 
     /**
