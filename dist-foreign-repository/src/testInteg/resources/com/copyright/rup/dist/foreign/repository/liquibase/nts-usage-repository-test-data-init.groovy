@@ -1127,6 +1127,32 @@ databaseChangeLog {
             column(name: 'reported_value', value: '2500')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '2255188f-d582-4516-8c08-835cfe1d68c2')
+            column(name: 'df_usage_batch_uid', value: '73027b25-f269-4bec-a8ea-b126431eedbe')
+            column(name: 'wr_wrk_inst', value: '12318778798')
+            column(name: 'work_title', value: 'Cell Biology')
+            column(name: 'system_title', value: 'Cell Biology')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'UNCLASSIFIED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '2255188f-d582-4516-8c08-835cfe1d68c2')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2019-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '2500')
+        }
+
         //testFindProductFamilies
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'cb597f4e-f636-447f-8710-0436d8994d10')

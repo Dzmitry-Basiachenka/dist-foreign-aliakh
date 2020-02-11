@@ -38,9 +38,18 @@ public interface INtsUsageRepository {
     int findCountForBatch(Integer marketPeriodFrom, Integer marketPeriodTo, Set<String> markets);
 
     /**
+     * Finds count of unclassified usages to be updated based on set of Wr Wrk Insts.
+     *
+     * @param wrWrkInsts set of Wr Wrk Insts
+     * @return count of usages
+     */
+    int findUnclassifiedUsagesCountByWrWrkInsts(Set<Long> wrWrkInsts);
+
+    /**
      * Updates under minimum usages grouped by Wr Wrk Inst in
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} status.
-     * Sets NTS product family and {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN} status.
+     * Sets NTS product family and
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN} status.
      *
      * @return updated usages ids
      */
@@ -124,9 +133,9 @@ public interface INtsUsageRepository {
      * Updates usages with status NTS_WITHDRAWN from given batches to status TO_BE_DISTRIBUTED
      * and adds the usages to the fund pool.
      *
-     * @param fundPoolId   id of fund pool
-     * @param batchIds set of ids of usage batches
-     * @param userName user name
+     * @param fundPoolId id of fund pool
+     * @param batchIds   set of ids of usage batches
+     * @param userName   user name
      */
     void addWithdrawnUsagesToFundPool(String fundPoolId, Set<String> batchIds, String userName);
 }

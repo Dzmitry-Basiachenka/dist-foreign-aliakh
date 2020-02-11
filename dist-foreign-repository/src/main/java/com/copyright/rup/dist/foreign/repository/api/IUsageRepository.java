@@ -88,15 +88,6 @@ public interface IUsageRepository {
     List<Usage> findByIds(List<String> usageIds);
 
     /**
-     * Finds count of usages based on set of Wr Wrk Insts and status.
-     *
-     * @param status     usage status
-     * @param wrWrkInsts set of Wr Wrk Insts
-     * @return count of usages
-     */
-    int findCountByStatusAndWrWrkInsts(UsageStatusEnum status, Set<Long> wrWrkInsts);
-
-    /**
      * Finds {@link Usage}s for reconcile based on scenario identifier.
      *
      * @param scenarioId scenario identifier

@@ -135,6 +135,15 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindUnclassifiedUsagesCountByWrWrkInsts() {
+        assertEquals(2,
+            ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(
+                Sets.newHashSet(987632764L, 12318778798L)));
+        assertEquals(0,
+            ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(Collections.singleton(1L)));
+    }
+
+    @Test
     public void testCalculateAmountsAndUpdatePayeeByAccountNumber() {
         assertUsageAfterServiceFeeCalculation("8a80a2e7-4758-4e43-ae42-e8b29802a210",
             new BigDecimal("256.0000000000"), ZERO_AMOUNT, null,

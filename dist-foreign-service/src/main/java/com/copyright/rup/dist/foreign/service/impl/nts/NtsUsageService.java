@@ -80,6 +80,11 @@ public class NtsUsageService implements INtsUsageService {
     }
 
     @Override
+    public int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts) {
+        return ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(wrWrkInsts);
+    }
+
+    @Override
     public List<String> updateNtsWithdrawnUsagesAndGetIds() {
         return ntsUsageRepository.updateNtsWithdrawnUsagesAndGetIds();
     }
