@@ -129,7 +129,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_32 = "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15";
     private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
-    private static final String USAGE_ID_34 = "ade68eac-0d79-4d23-861b-499a0c6e91d3";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
@@ -234,10 +233,10 @@ public class UsageRepositoryIntegrationTest {
             "3cf274c5-8eac-4d4a-96be-5921ae026840", "463e2239-1a36-41cc-9a51-ee2a80eae0c7",
             "4dd8cdf8-ca10-422e-bdd5-3220105e6379", "6dc54058-5566-4aa2-8cd4-d1a09805ae20",
             "775ceaf9-125f-4387-b076-459eb4673d92", "a86308b1-7f89-474b-9390-fc926c5b218b",
-            "ade68eac-0d79-4d23-861b-499a0c6e91d3", "af1f25e5-75ca-463f-8c9f-1f1e4b92f699",
-            "bd407b50-6101-4304-8316-6404fe32a800", "c6cb5b07-45c0-4188-9da3-920046eec4cf",
-            "f255188f-d582-4516-8c08-835cfe1d68c3", "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15",
-            "f6cb5b07-45c0-4188-9da3-920046eec4c0", "f9ddb072-a411-443b-89ca-1bb5a63425a4");
+            "af1f25e5-75ca-463f-8c9f-1f1e4b92f699", "bd407b50-6101-4304-8316-6404fe32a800",
+            "c6cb5b07-45c0-4188-9da3-920046eec4cf", "f255188f-d582-4516-8c08-835cfe1d68c3",
+            "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15", "f6cb5b07-45c0-4188-9da3-920046eec4c0",
+            "f9ddb072-a411-443b-89ca-1bb5a63425a4");
     }
 
     @Test
@@ -524,15 +523,6 @@ public class UsageRepositoryIntegrationTest {
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         assertTrue(usageRepository.findByScenarioId(SCENARIO_ID).isEmpty());
         assertEquals(2, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_7, USAGE_ID_8));
-    }
-
-    @Test
-    public void testDeleteByScenarioIdNtsExcluded() {
-        assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
-        assertEquals(1, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_34));
-        usageRepository.deleteNtsByScenarioId("c4bc09c1-eb9b-41f3-ac93-9cd088dff408");
-        assertEquals(0, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
-        assertEquals(0, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_34));
     }
 
     @Test

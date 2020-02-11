@@ -356,13 +356,20 @@ public class FasScenariosControllerTest {
 
     @Test
     public void testSendScenarioToLm() {
+        mockStatic(Windows.class);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        Capture<ConfirmDialogWindow.IListener> listenerCapture = new Capture<>();
+        expect(Windows.showConfirmDialog(
+            eq("Are you sure that you want to send scenario <i><b>" + SCENARIO_NAME + "</b></i> to Liability Manager?"),
+            capture(listenerCapture))).andReturn(new Window());
+        scenarioService.sendFasToLm(scenario);
+        expectLastCall().once();
         scenariosWidget.refresh();
         expectLastCall().once();
-        scenarioService.sendToLm(scenario);
-        expectLastCall().once();
-        replay(scenariosWidget, scenarioService);
-        scenariosController.sendToLM(scenario);
-        verify(scenariosWidget, scenarioService);
+        replay(scenariosWidget, scenarioService, Windows.class);
+        scenariosController.sendToLm();
+        listenerCapture.getValue().onActionConfirmed();
+        verify(scenariosWidget, scenarioService, Windows.class);
     }
 
     private void buildScenario() {

@@ -186,14 +186,6 @@ public interface IUsageService {
     boolean isUsageIdExists(String usageId, UsageStatusEnum statusEnum);
 
     /**
-     * Moves {@link Usage}s to the archive for given {@link Scenario}.
-     *
-     * @param scenario {@link Scenario}
-     * @return list of moved to archive {@link Usage}s ids
-     */
-    List<String> moveToArchive(Scenario scenario);
-
-    /**
      * Gets {@link RightsholderTotalsHolder}s based on {@link Scenario}.
      *
      * @param scenario    instance of {@link Scenario}
@@ -270,11 +262,6 @@ public interface IUsageService {
      * @return list of {@link UsageDto}s
      */
     List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
-
-    /**
-     * @return list of supported markets.
-     */
-    List<String> getMarkets();
 
     /**
      * @return CLA account number.

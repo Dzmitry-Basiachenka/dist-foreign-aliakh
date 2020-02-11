@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyServic
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import com.google.common.collect.Lists;
@@ -64,6 +65,7 @@ public class ScenarioServiceTest {
     private ScenarioService scenarioService;
     private IScenarioRepository scenarioRepository;
     private IUsageService usageService;
+    private IFasUsageService fasUsageService;
     private INtsUsageService ntsUsageService;
     private IScenarioAuditService scenarioAuditService;
     private ILmIntegrationService lmIntegrationService;
@@ -77,6 +79,7 @@ public class ScenarioServiceTest {
         scenarioRepository = createMock(IScenarioRepository.class);
         usageService = createMock(IUsageService.class);
         ntsUsageService = createMock(INtsUsageService.class);
+        fasUsageService = createMock(IFasUsageService.class);
         lmIntegrationService = createMock(ILmIntegrationService.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
         scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
@@ -85,6 +88,7 @@ public class ScenarioServiceTest {
         Whitebox.setInternalState(scenarioService, scenarioRepository);
         Whitebox.setInternalState(scenarioService, usageService);
         Whitebox.setInternalState(scenarioService, ntsUsageService);
+        Whitebox.setInternalState(scenarioService, fasUsageService);
         Whitebox.setInternalState(scenarioService, scenarioAuditService);
         Whitebox.setInternalState(scenarioService, lmIntegrationService);
         Whitebox.setInternalState(scenarioService, scenarioUsageFilterService);
@@ -224,10 +228,10 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testSendToLm() {
+    public void testSendFasToLm() {
         List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
         Usage usage = new Usage();
-        expect(usageService.moveToArchive(scenario)).andReturn(usageIds).once();
+        expect(fasUsageService.moveToArchive(scenario)).andReturn(usageIds).once();
         expect(usageService.getArchivedUsagesByIds(usageIds)).andReturn(Collections.singletonList(usage));
         lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(usage)));
         expectLastCall().once();
@@ -235,10 +239,28 @@ public class ScenarioServiceTest {
         expectLastCall().once();
         scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
         expectLastCall().once();
-        replay(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService);
-        scenarioService.sendToLm(scenario);
+        replay(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, fasUsageService);
+        scenarioService.sendFasToLm(scenario);
         assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
-        verify(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService);
+        verify(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, fasUsageService);
+    }
+
+    @Test
+    public void testSendNtsToLm() {
+        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
+        Usage usage = new Usage();
+        expect(ntsUsageService.moveToArchive(scenario)).andReturn(usageIds).once();
+        expect(usageService.getArchivedUsagesByIds(usageIds)).andReturn(Collections.singletonList(usage)).once();
+        lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(usage)));
+        expectLastCall().once();
+        scenarioRepository.updateStatus(scenario);
+        expectLastCall().once();
+        scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
+        expectLastCall().once();
+        replay(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, ntsUsageService);
+        scenarioService.sendNtsToLm(scenario);
+        assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
+        verify(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, ntsUsageService);
     }
 
     @Test

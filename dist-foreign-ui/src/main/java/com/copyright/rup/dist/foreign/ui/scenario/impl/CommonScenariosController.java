@@ -110,13 +110,6 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     }
 
     @Override
-    public void sendToLm() {
-        Scenario scenario = getWidget().getSelectedScenario();
-        Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenario", scenario.getName()),
-            () -> sendToLM(scenario));
-    }
-
-    @Override
     public void refreshScenario() {
         scenarioService.refreshScenario(getWidget().getSelectedScenario());
         getWidget().refreshSelectedScenario();
@@ -182,20 +175,6 @@ public abstract class CommonScenariosController extends CommonController<ICommon
         scenario.setUpdateUser(SecurityUtils.getUserName());
         actionHandler.handleAction(scenario, reason);
         widget.refresh();
-    }
-
-    /**
-     * Sends specified scenario to LM.
-     *
-     * @param scenario selected {@link Scenario}
-     */
-    public void sendToLM(Scenario scenario) {
-        try {
-            scenarioService.sendToLm(scenario);
-        } catch (RuntimeException e) {
-            Windows.showNotificationWindow(e.getMessage());
-        }
-        getWidget().refresh();
     }
 
     protected IUsageService getUsageService() {

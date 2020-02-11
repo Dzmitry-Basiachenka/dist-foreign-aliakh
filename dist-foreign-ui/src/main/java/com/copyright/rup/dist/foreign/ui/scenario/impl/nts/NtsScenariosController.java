@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioController;
@@ -39,6 +41,20 @@ public class NtsScenariosController extends CommonScenariosController implements
         Window scenarioWindow = (Window) scenarioController.initWidget();
         Windows.showModalWindow(scenarioWindow);
         scenarioWindow.setPositionY(30);
+    }
+
+    @Override
+    public void sendToLm() {
+        Scenario scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenario", scenario.getName()),
+            () -> {
+                try {
+                    getScenarioService().sendNtsToLm(scenario);
+                } catch (RuntimeException e) {
+                    Windows.showNotificationWindow(e.getMessage());
+                }
+                getWidget().refresh();
+            });
     }
 
     @Override

@@ -10,15 +10,19 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import com.google.common.collect.Table;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,12 +47,17 @@ public class NtsUsageService implements INtsUsageService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
+    @Value("$RUP{dist.foreign.markets}")
+    private List<String> supportedMarkets;
+
     @Autowired
     private INtsUsageRepository ntsUsageRepository;
-
+    @Autowired
+    private IUsageAuditService usageAuditService;
+    @Autowired
+    private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
-
     @Autowired
     private IRightsholderService rightsholderService;
 
@@ -98,6 +107,25 @@ public class NtsUsageService implements INtsUsageService {
             ntsUsageRepository.applyPostServiceFeeAmount(scenario.getId());
         }
         rightsholderService.updateRighstholdersAsync(payeeAccountNumbers);
+    }
+
+    @Override
+    @Transactional
+    public List<String> moveToArchive(Scenario scenario) {
+        LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
+        List<String> usageIds =
+            usageArchiveRepository.copyNtsToArchiveByScenarioId(scenario.getId(), RupContextUtils.getUserName());
+        usageArchiveRepository.moveFundUsagesToArchive(scenario.getId());
+        usageAuditService.deleteActionsByScenarioId(scenario.getId());
+        ntsUsageRepository.deleteByScenarioId(scenario.getId());
+        LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
+            LogUtils.size(usageIds));
+        return usageIds;
+    }
+
+    @Override
+    public List<String> getMarkets() {
+        return supportedMarkets;
     }
 
     @Override

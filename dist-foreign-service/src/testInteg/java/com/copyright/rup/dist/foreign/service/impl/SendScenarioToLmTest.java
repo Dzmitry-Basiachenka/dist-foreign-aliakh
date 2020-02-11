@@ -70,7 +70,7 @@ public class SendScenarioToLmTest {
         Scenario scenario = new Scenario();
         scenario.setId(FAS_SCENARIO_ID);
         scenario.setProductFamily("FAS");
-        scenarioService.sendToLm(scenario);
+        scenarioService.sendFasToLm(scenario);
         sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_fas.json")),
             Collections.emptyList(), ImmutableMap.of("source", "FDA"));
@@ -88,7 +88,7 @@ public class SendScenarioToLmTest {
         Scenario scenario = new Scenario();
         scenario.setId(NTS_SCENARIO_ID);
         scenario.setProductFamily("NTS");
-        scenarioService.sendToLm(scenario);
+        scenarioService.sendNtsToLm(scenario);
         sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_nts.json")),
             Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));

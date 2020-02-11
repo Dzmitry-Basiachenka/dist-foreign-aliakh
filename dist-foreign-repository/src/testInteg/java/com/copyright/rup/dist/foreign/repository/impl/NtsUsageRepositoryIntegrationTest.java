@@ -166,6 +166,15 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testDeleteByScenarioIdNtsExcluded() {
+        assertEquals(2, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
+        assertEquals(1, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_4));
+        ntsUsageRepository.deleteByScenarioId("c4bc09c1-eb9b-41f3-ac93-9cd088dff408");
+        assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
+        assertEquals(0, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_4));
+    }
+
+    @Test
     public void testDeleteFromAdditionalFund() {
         String fundPoolId = "3fef25b0-c0d1-4819-887f-4c6acc01390e";
         List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_1));
@@ -254,7 +263,7 @@ public class NtsUsageRepositoryIntegrationTest {
                              BigDecimal serviceFeeAmount, BigDecimal netAmount) {
         assertEquals(status, usage.getStatus());
         assertEquals(scenarioId, usage.getScenarioId());
-        assertEquals(null, usage.getPayee().getAccountNumber());
+        assertNull(usage.getPayee().getAccountNumber());
         assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
         assertEquals(username, usage.getUpdateUser());
         assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);

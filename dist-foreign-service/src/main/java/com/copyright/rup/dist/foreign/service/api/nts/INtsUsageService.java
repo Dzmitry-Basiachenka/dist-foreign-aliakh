@@ -33,8 +33,9 @@ public interface INtsUsageService {
     int getUsagesCountForBatch(UsageBatch usageBatch);
 
     /**
-     * Updates under minimum usages grouped by Wr Wrk Inst in {@link UsageStatusEnum#RH_NOT_FOUND} status.
-     * Sets product family and {@link UsageStatusEnum#NTS_WITHDRAWN} status.
+     * Updates under minimum usages grouped by Wr Wrk Inst in
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} status.
+     * Sets product family and {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN} status.
      *
      * @return updated usages ids
      */
@@ -52,7 +53,7 @@ public interface INtsUsageService {
 
     /**
      * Deletes usages from Pre-Service fee fund.
-     * Reverts status of usages to {@link UsageStatusEnum#NTS_WITHDRAWN}.
+     * Reverts status of usages to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN}.
      *
      * @param fundPoolId fund pool id
      */
@@ -66,10 +67,24 @@ public interface INtsUsageService {
     void deleteBelletristicByScenarioId(String scenarioId);
 
     /**
-     * Deletes usages from NTS scenario. Reverts status of usages to {@link UsageStatusEnum#ELIGIBLE},
-     * sets scenario id to {@code null}, sets gross amount to 0.
+     * Deletes usages from NTS scenario. Reverts status of usages to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, sets scenario id to {@code null},
+     * sets gross amount to 0.
      *
      * @param scenarioId scenario id
      */
     void deleteFromScenario(String scenarioId);
+
+    /**
+     * Moves NTS {@link com.copyright.rup.dist.foreign.domain.Usage}s to the archive for given {@link Scenario}.
+     *
+     * @param scenario {@link Scenario}
+     * @return list of moved to archive {@link com.copyright.rup.dist.foreign.domain.Usage}s ids
+     */
+    List<String> moveToArchive(Scenario scenario);
+
+    /**
+     * @return list of supported markets.
+     */
+    List<String> getMarkets();
 }

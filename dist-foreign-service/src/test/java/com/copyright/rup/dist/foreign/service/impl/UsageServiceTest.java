@@ -87,7 +87,6 @@ public class UsageServiceTest {
 
     private static final String REASON = "reason";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
-    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final String USAGE_ID_2 = "Usage id 2";
     private static final String SCENARIO_ID = "78179a10-ad9e-432e-8aae-30b91fd14ed1";
@@ -419,40 +418,6 @@ public class UsageServiceTest {
         replay(usageRepository, usageAuditService, RupContextUtils.class);
         usageService.deleteFromScenario(scenario.getId(), 2000017011L, accountNumbers, "Action reason");
         verify(usageRepository, usageAuditService, RupContextUtils.class);
-    }
-
-    @Test
-    public void testMoveToArchivedFas() {
-        mockStatic(RupContextUtils.class);
-        scenario.setProductFamily(FAS_PRODUCT_FAMILY);
-        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
-        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        expect(usageArchiveRepository.copyToArchiveByScenarioId(scenario.getId(), USER_NAME))
-            .andReturn(usageIds).once();
-        usageRepository.deleteByScenarioId(SCENARIO_ID);
-        expectLastCall().once();
-        replay(usageRepository, usageArchiveRepository, RupContextUtils.class);
-        usageService.moveToArchive(scenario);
-        verify(usageRepository, usageArchiveRepository, RupContextUtils.class);
-    }
-
-    @Test
-    public void testMoveToArchivedNts() {
-        mockStatic(RupContextUtils.class);
-        scenario.setProductFamily(NTS_PRODUCT_FAMILY);
-        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
-        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        expect(usageArchiveRepository.copyNtsToArchiveByScenarioId(scenario.getId(), USER_NAME))
-            .andReturn(usageIds).once();
-        usageAuditService.deleteActionsByScenarioId(scenario.getId());
-        expectLastCall().once();
-        usageRepository.deleteNtsByScenarioId(SCENARIO_ID);
-        expectLastCall().once();
-        usageArchiveRepository.moveFundUsagesToArchive(SCENARIO_ID);
-        expectLastCall().once();
-        replay(usageRepository, usageArchiveRepository, usageAuditService, RupContextUtils.class);
-        usageService.moveToArchive(scenario);
-        verify(usageRepository, usageArchiveRepository, usageAuditService, RupContextUtils.class);
     }
 
     @Test

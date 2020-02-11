@@ -17,7 +17,9 @@ import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
@@ -61,15 +63,21 @@ public class NtsUsageServiceTest {
     private INtsUsageRepository ntsUsageRepository;
     private IRightsholderService rightsholderService;
     private IPrmIntegrationService prmIntegrationService;
+    private IUsageArchiveRepository usageArchiveRepository;
+    private IUsageAuditService usageAuditService;
 
     @Before
     public void setUp() {
         ntsUsageRepository = createMock(INtsUsageRepository.class);
         rightsholderService = createMock(IRightsholderService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
+        usageAuditService = createMock(IUsageAuditService.class);
+        usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         Whitebox.setInternalState(ntsUsageService, ntsUsageRepository);
         Whitebox.setInternalState(ntsUsageService, rightsholderService);
         Whitebox.setInternalState(ntsUsageService, prmIntegrationService);
+        Whitebox.setInternalState(ntsUsageService, usageArchiveRepository);
+        Whitebox.setInternalState(ntsUsageService, usageAuditService);
     }
 
     @Test
@@ -182,6 +190,26 @@ public class NtsUsageServiceTest {
         replay(RupContextUtils.class, ntsUsageRepository);
         ntsUsageService.deleteFromScenario(scenarioId);
         verify(RupContextUtils.class, ntsUsageRepository);
+    }
+
+    @Test
+    public void testMoveToArchivedNts() {
+        mockStatic(RupContextUtils.class);
+        Scenario scenario = new Scenario();
+        scenario.setId("96768299-4996-4ad1-b0af-7580412a72ea");
+        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(usageArchiveRepository.copyNtsToArchiveByScenarioId(scenario.getId(), USER_NAME))
+            .andReturn(usageIds).once();
+        usageAuditService.deleteActionsByScenarioId(scenario.getId());
+        expectLastCall().once();
+        ntsUsageRepository.deleteByScenarioId("96768299-4996-4ad1-b0af-7580412a72ea");
+        expectLastCall().once();
+        usageArchiveRepository.moveFundUsagesToArchive("96768299-4996-4ad1-b0af-7580412a72ea");
+        expectLastCall().once();
+        replay(ntsUsageRepository, usageArchiveRepository, usageAuditService, RupContextUtils.class);
+        ntsUsageService.moveToArchive(scenario);
+        verify(ntsUsageRepository, usageArchiveRepository, usageAuditService, RupContextUtils.class);
     }
 
     private Rightsholder buildRightsholder(Long accountNUmber) {

@@ -223,7 +223,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void sendScenarioToLm() {
-            scenarioService.sendToLm(actualScenario);
+            scenarioService.sendNtsToLm(actualScenario);
             sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
                 Collections.singletonList(TestUtils.fileToString(this.getClass(), expectedLmDetailsJsonFile)),
                 Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));

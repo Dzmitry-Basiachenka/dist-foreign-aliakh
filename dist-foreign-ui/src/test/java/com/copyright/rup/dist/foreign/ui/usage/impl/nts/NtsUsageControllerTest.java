@@ -251,10 +251,10 @@ public class NtsUsageControllerTest {
     @Test
     public void testGetMarkets() {
         List<String> markets = Collections.singletonList("Bus");
-        expect(usageService.getMarkets()).andReturn(markets).once();
-        replay(usageService);
+        expect(ntsUsageService.getMarkets()).andReturn(markets).once();
+        replay(ntsUsageService);
         assertEquals(markets, controller.getMarkets());
-        verify(usageService);
+        verify(ntsUsageService);
     }
 
     @Test

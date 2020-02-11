@@ -38,8 +38,9 @@ public interface INtsUsageRepository {
     int findCountForBatch(Integer marketPeriodFrom, Integer marketPeriodTo, Set<String> markets);
 
     /**
-     * Updates under minimum usages grouped by Wr Wrk Inst in {@link UsageStatusEnum#RH_NOT_FOUND} status.
-     * Sets NTS product family and {@link UsageStatusEnum#NTS_WITHDRAWN} status.
+     * Updates under minimum usages grouped by Wr Wrk Inst in
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} status.
+     * Sets NTS product family and {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN} status.
      *
      * @return updated usages ids
      */
@@ -68,8 +69,15 @@ public interface INtsUsageRepository {
     void applyPostServiceFeeAmount(String scenarioId);
 
     /**
+     * Deletes all NTS {@link com.copyright.rup.dist.foreign.domain.Usage}s for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteByScenarioId(String scenarioId);
+
+    /**
      * Deletes usages from Pre-Service fee fund.
-     * Updates usages status to {@link UsageStatusEnum#NTS_WITHDRAWN}.
+     * Updates usages status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN}.
      *
      * @param fundPoolId fund pool id
      * @param userName   user name
@@ -85,8 +93,10 @@ public interface INtsUsageRepository {
 
     /**
      * Deletes usages from scenario. Updates usages associated with scenario in
-     * {@link UsageStatusEnum#NTS_EXCLUDED} and {@link UsageStatusEnum#LOCKED} statuses.
-     * Reverts status to {@link UsageStatusEnum#ELIGIBLE}, sets scenario id to {@code null}, sets gross amount to 0.
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_EXCLUDED} and
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#LOCKED} statuses.
+     * Reverts status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE},
+     * sets scenario id to {@code null}, sets gross amount to 0.
      *
      * @param scenarioId scenario id
      * @param userName   user name

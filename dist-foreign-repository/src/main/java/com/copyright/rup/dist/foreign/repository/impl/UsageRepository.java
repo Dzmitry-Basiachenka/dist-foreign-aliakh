@@ -194,15 +194,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public void deleteByScenarioId(String scenarioId) {
         delete("IUsageMapper.deleteByScenarioId", Objects.requireNonNull(scenarioId));
     }
-
-    @Override
-    public void deleteNtsByScenarioId(String scenarioId) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(STATUS_KEY, UsageStatusEnum.NTS_EXCLUDED);
-        delete("IUsageMapper.deleteNtsByScenarioId", parameters);
-    }
-
     @Override
     public Set<String> deleteFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String userName) {
         Set<String> result = new HashSet<>();
