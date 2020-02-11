@@ -24,11 +24,6 @@ import java.util.List;
 public interface IFasUsageController extends ICommonUsageController {
 
     /**
-     * @return instance of {@link IStreamSource} for export.
-     */
-    IStreamSource getExportUsagesStreamSource();
-
-    /**
      * Inserts usage batch and its usages.
      *
      * @param usageBatch {@link UsageBatch} instance

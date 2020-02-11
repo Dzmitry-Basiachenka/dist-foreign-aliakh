@@ -364,6 +364,7 @@ public class CsvReportsIntegrationTest {
             outputStream -> reportRepository.writeWorkClassificationCsvReport("99999999", outputStream),
             "work_classification_report_empty.csv");
     }
+
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         reportWriter.accept(outputStream);
