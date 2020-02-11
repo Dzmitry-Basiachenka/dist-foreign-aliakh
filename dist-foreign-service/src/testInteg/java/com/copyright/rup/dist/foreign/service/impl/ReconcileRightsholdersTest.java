@@ -40,7 +40,7 @@ import java.util.List;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=reconcile-rightsholders-data-init.groovy"})
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ReconcileRightsholdersTest {
 
     private static final String SERVICE_FEE_16 = "0.16000";
