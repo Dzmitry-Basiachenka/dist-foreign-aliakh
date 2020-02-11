@@ -22,6 +22,7 @@ public interface IAaclFundPoolRepository {
      *
      * @return set of Aggregate Licensee Class ids
      */
+    // TODO {srudak} replace with ILicenseeClassService#getAggregateLicenseeClasses()
     Set<Integer> findAggregateLicenseeClassIds();
 
     /**

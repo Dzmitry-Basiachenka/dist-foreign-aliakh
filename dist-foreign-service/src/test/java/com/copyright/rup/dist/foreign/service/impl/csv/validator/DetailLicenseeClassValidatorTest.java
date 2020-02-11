@@ -9,7 +9,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
-import com.copyright.rup.dist.foreign.service.api.IDetailLicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,18 +30,18 @@ public class DetailLicenseeClassValidatorTest {
     private static final String NO_VALID_DATA = "no valid";
     private static final String DISQUALIFIED = "Disqualified";
     private DetailLicenseeClassValidator validator;
-    private IDetailLicenseeClassService licenseeClassService;
+    private ILicenseeClassService licenseeClassService;
 
     @Before
     public void setUp() {
-        licenseeClassService = createMock(IDetailLicenseeClassService.class);
+        licenseeClassService = createMock(ILicenseeClassService.class);
         validator = new DetailLicenseeClassValidator(licenseeClassService);
     }
 
     @Test
     public void testIsValid() {
         AaclClassifiedUsage usage = buildClassifiedAaclUsage(ENROLLMENT_PROFILE, DISCIPLINE);
-        expect(licenseeClassService.detailLicenceClassIdExist(ENROLLMENT_PROFILE, DISCIPLINE)).andReturn(true).once();
+        expect(licenseeClassService.detailLicenceClassExists(ENROLLMENT_PROFILE, DISCIPLINE)).andReturn(true).once();
         replay(licenseeClassService);
         assertTrue(validator.isValid(usage));
         verify(licenseeClassService);
@@ -50,7 +50,7 @@ public class DetailLicenseeClassValidatorTest {
     @Test
     public void testIsValidEnrollmentProfileNotExist() {
         AaclClassifiedUsage usage = buildClassifiedAaclUsage(NO_VALID_DATA, DISCIPLINE);
-        expect(licenseeClassService.detailLicenceClassIdExist(NO_VALID_DATA, DISCIPLINE)).andReturn(false).once();
+        expect(licenseeClassService.detailLicenceClassExists(NO_VALID_DATA, DISCIPLINE)).andReturn(false).once();
         replay(licenseeClassService);
         assertFalse(validator.isValid(usage));
         verify(licenseeClassService);
@@ -59,7 +59,7 @@ public class DetailLicenseeClassValidatorTest {
     @Test
     public void testIsValidDisciplineProfileNotExist() {
         AaclClassifiedUsage usage = buildClassifiedAaclUsage(ENROLLMENT_PROFILE, NO_VALID_DATA);
-        expect(licenseeClassService.detailLicenceClassIdExist(ENROLLMENT_PROFILE, NO_VALID_DATA)).andReturn(false)
+        expect(licenseeClassService.detailLicenceClassExists(ENROLLMENT_PROFILE, NO_VALID_DATA)).andReturn(false)
             .once();
         replay(licenseeClassService);
         assertFalse(validator.isValid(usage));

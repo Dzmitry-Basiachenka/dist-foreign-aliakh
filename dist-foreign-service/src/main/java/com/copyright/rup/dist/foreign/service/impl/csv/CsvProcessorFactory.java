@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
-import com.copyright.rup.dist.foreign.service.api.IDetailLicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AggregateLicenseeClassValidator;
@@ -39,7 +39,7 @@ public class CsvProcessorFactory {
     @Qualifier("df.integration.piIntegrationCacheService")
     private IPiIntegrationService piIntegrationService;
     @Autowired
-    private IDetailLicenseeClassService detailLicenseeClassService;
+    private ILicenseeClassService licenseeClassService;
     @Autowired
     private IPublicationTypeService publicationTypeService;
     @Autowired
@@ -92,7 +92,7 @@ public class CsvProcessorFactory {
         processor.addBusinessValidators(
             new ClassifiedUsageValidator(usageService),
             new ClassifiedWrWrkInstValidator(piIntegrationService),
-            new DetailLicenseeClassValidator(detailLicenseeClassService),
+            new DetailLicenseeClassValidator(licenseeClassService),
             new PublicationTypeValidator(publicationTypeService));
         return processor;
     }

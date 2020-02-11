@@ -1,0 +1,146 @@
+[
+  {
+    "id": 108,
+    "name": "EXGP - Life Sciences"
+  },
+  {
+    "id": 110,
+    "name": "EXU4 - Life Sciences"
+  },
+  {
+    "id": 111,
+    "name": "HGP - Life Sciences"
+  },
+  {
+    "id": 113,
+    "name": "MU - Life Sciences"
+  },
+  {
+    "id": 115,
+    "name": "EXGP - Business Management"
+  },
+  {
+    "id": 117,
+    "name": "EXU4 - Business Management"
+  },
+  {
+    "id": 118,
+    "name": "HGP - Business Management"
+  },
+  {
+    "id": 120,
+    "name": "MU - Business Management"
+  },
+  {
+    "id": 136,
+    "name": "EXGP - Education"
+  },
+  {
+    "id": 138,
+    "name": "EXU4 - Education"
+  },
+  {
+    "id": 139,
+    "name": "HGP - Education"
+  },
+  {
+    "id": 141,
+    "name": "MU - Education"
+  },
+  {
+    "id": 143,
+    "name": "EXGP - Engineering"
+  },
+  {
+    "id": 145,
+    "name": "EXU4 - Engineering"
+  },
+  {
+    "id": 146,
+    "name": "HGP - Engineering"
+  },
+  {
+    "id": 148,
+    "name": "MU - Engineering"
+  },
+  {
+    "id": 164,
+    "name": "EXGP - Law & Legal Studies"
+  },
+  {
+    "id": 166,
+    "name": "EXU4 - Law & Legal Studies"
+  },
+  {
+    "id": 167,
+    "name": "HGP - Law & Legal Studies"
+  },
+  {
+    "id": 169,
+    "name": "MU - Law & Legal Studies"
+  },
+  {
+    "id": 171,
+    "name": "EXGP - Arts & Humanities"
+  },
+  {
+    "id": 173,
+    "name": "EXU4 - Arts & Humanities"
+  },
+  {
+    "id": 174,
+    "name": "HGP - Arts & Humanities"
+  },
+  {
+    "id": 176,
+    "name": "MU - Arts & Humanities"
+  },
+  {
+    "id": 192,
+    "name": "EXGP - Medical & Health"
+  },
+  {
+    "id": 194,
+    "name": "EXU4 - Medical & Health"
+  },
+  {
+    "id": 195,
+    "name": "HGP - Medical & Health"
+  },
+  {
+    "id": 197,
+    "name": "MU - Medical & Health"
+  },
+  {
+    "id": 206,
+    "name": "EXGP - Physical Sciences & Mathematics"
+  },
+  {
+    "id": 208,
+    "name": "EXU4 - Physical Sciences & Mathematics"
+  },
+  {
+    "id": 209,
+    "name": "HGP - Physical Sciences & Mathematics"
+  },
+  {
+    "id": 211,
+    "name": "MU - Physical Sciences & Mathematics"
+  },
+  {
+    "id": 227,
+    "name": "EXGP - Social & Behavioral Sciences"
+  },
+  {
+    "id": 229,
+    "name": "EXU4 - Social & Behavioral Sciences"
+  },
+  {
+    "id": 230,
+    "name": "HGP - Social & Behavioral Sciences"
+  },
+  {
+    "id": 232,
+    "name": "MU - Social & Behavioral Sciences"
+  }
+]

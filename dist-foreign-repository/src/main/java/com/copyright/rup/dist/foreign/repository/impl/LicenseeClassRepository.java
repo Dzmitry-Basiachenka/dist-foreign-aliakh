@@ -1,17 +1,19 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
-import com.copyright.rup.dist.foreign.repository.api.IDetailLicenseeClassRepository;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.repository.api.ILicenseeClassRepository;
 
 import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 /**
- * Implementation of {@link IDetailLicenseeClassRepository}.
+ * Implementation of {@link ILicenseeClassRepository}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -20,13 +22,18 @@ import java.util.Objects;
  * @author Anton Azarenka
  */
 @Repository
-public class DetailLicenseeClassRepository extends BaseRepository implements IDetailLicenseeClassRepository {
+public class LicenseeClassRepository extends BaseRepository implements ILicenseeClassRepository {
 
     @Override
-    public boolean isLicenseeClassIdExist(String enrollmentProfile, String discipline) {
+    public boolean detailLicenseeClassExists(String enrollmentProfile, String discipline) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("enrollmentProfile", escapeSqlLikePattern(Objects.requireNonNull(enrollmentProfile)));
         parameters.put("discipline", escapeSqlLikePattern(Objects.requireNonNull(discipline)));
-        return selectOne("IDetailLicenseeClassMapper.isLicenseeClassIdExist", parameters);
+        return selectOne("ILicenseeClassMapper.detailLicenseeClassExists", parameters);
+    }
+
+    @Override
+    public List<AggregateLicenseeClass> findAggregateLicenseeClasses() {
+        return selectList("ILicenseeClassMapper.findAggregateLicenseeClasses");
     }
 }
