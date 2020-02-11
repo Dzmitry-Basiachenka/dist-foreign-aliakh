@@ -68,4 +68,20 @@
         delete from ${schema}.df_fund_pool_detail
         where df_fund_pool_uid = #{fundPoolId}
     </delete>
+
+    <insert id="insertDetail" parameterType="FundPoolDetail">
+        insert into ${schema}.df_fund_pool_detail (
+            df_fund_pool_detail_uid,
+            df_fund_pool_uid,
+            df_aggregate_licensee_class_id,
+            gross_amount,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        ) values (
+            #{id},
+            #{fundPoolId},
+            #{aggregateLicenseeClass.id},
+            #{grossAmount},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
 </mapper>

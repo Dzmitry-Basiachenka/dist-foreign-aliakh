@@ -19,8 +19,17 @@ import java.math.BigDecimal;
  */
 public class FundPoolDetail extends StoredEntity<String> {
 
+    private String fundPoolId;
     private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
     private BigDecimal grossAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+    public String getFundPoolId() {
+        return fundPoolId;
+    }
+
+    public void setFundPoolId(String fundPoolId) {
+        this.fundPoolId = fundPoolId;
+    }
 
     public AggregateLicenseeClass getAggregateLicenseeClass() {
         return aggregateLicenseeClass;
@@ -50,6 +59,7 @@ public class FundPoolDetail extends StoredEntity<String> {
         FundPoolDetail that = (FundPoolDetail) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
+            .append(fundPoolId, that.fundPoolId)
             .append(aggregateLicenseeClass, that.aggregateLicenseeClass)
             .append(grossAmount, that.grossAmount)
             .isEquals();
@@ -59,6 +69,7 @@ public class FundPoolDetail extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
+            .append(fundPoolId)
             .append(aggregateLicenseeClass)
             .append(grossAmount)
             .toHashCode();
@@ -67,6 +78,8 @@ public class FundPoolDetail extends StoredEntity<String> {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+            .appendSuper(super.toString())
+            .append("fundPoolId", fundPoolId)
             .append("aggregateLicenseeClass", aggregateLicenseeClass)
             .append("grossAmount", grossAmount)
             .toString();

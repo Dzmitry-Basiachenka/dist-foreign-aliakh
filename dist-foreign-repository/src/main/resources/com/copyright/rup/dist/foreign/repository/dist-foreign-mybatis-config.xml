@@ -45,13 +45,13 @@
         <typeAlias alias="UsageStatistic" type="com.copyright.rup.dist.foreign.domain.report.UsageStatistic"/>
         <typeAlias alias="WorkClassification" type="com.copyright.rup.dist.foreign.domain.WorkClassification"/>
         <typeAlias alias="FundPool" type="com.copyright.rup.dist.foreign.domain.FundPool"/>
+        <typeAlias alias="FundPoolDetail" type="com.copyright.rup.dist.foreign.domain.FundPoolDetail"/>
         <typeAlias alias="NtsFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.NtsFieldsTypeHandler"/>
         <typeAlias alias="batchNameScenarioNamePair" type="com.copyright.rup.dist.foreign.repository.impl.BatchesNamesToScenariosNamesResultHandler$BatchNameScenarioNamePair"/>
         <typeAlias alias="WrWrkInstUsageIdPair" type="com.copyright.rup.dist.foreign.repository.impl.WrWrkInstToUsageIdResultHandler$WrWrkInstUsageIdPair"/>
         <typeAlias alias="PayeeTotalHolder" type="com.copyright.rup.dist.foreign.domain.PayeeTotalHolder"/>
         <typeAlias alias="PubType" type="com.copyright.rup.dist.foreign.domain.PublicationType"/>
         <typeAlias alias="AggregateLicenseeClass" type="com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass"/>
-        <typeAlias alias="FundPoolDetail" type="com.copyright.rup.dist.foreign.domain.FundPoolDetail"/>
     </typeAliases>
 
     <typeHandlers>

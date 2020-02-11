@@ -64,7 +64,6 @@ public class AaclFundPoolService implements IAaclFundPoolService {
         aaclFundPoolRepository.deleteById(fundPoolId);
     }
 
-
     @Override
     @Transactional
     public int insertFundPool(FundPool fundPool, Collection<FundPoolDetail> details) {
@@ -73,8 +72,15 @@ public class AaclFundPoolService implements IAaclFundPoolService {
         fundPool.setId(RupPersistUtils.generateUuid());
         fundPool.setCreateUser(userName);
         fundPool.setUpdateUser(userName);
-        int count = details.size();
         fundPoolRepository.insert(fundPool);
+        details.forEach(detail -> {
+            detail.setId(RupPersistUtils.generateUuid());
+            detail.setFundPoolId(fundPool.getId());
+            detail.setCreateUser(userName);
+            detail.setUpdateUser(userName);
+            aaclFundPoolRepository.insertDetail(detail);
+        });
+        int count = details.size();
         LOGGER.info("Insert AACL fund pool. Finished. FundPoolName={}, UserName={}, UsagesCount={}",
             fundPool.getName(), userName, count);
         return count;

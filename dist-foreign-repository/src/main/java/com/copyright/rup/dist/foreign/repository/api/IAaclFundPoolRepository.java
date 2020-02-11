@@ -53,4 +53,11 @@ public interface IAaclFundPoolRepository {
      * @param fundPoolId {@link FundPool} id
      */
     void deleteDetailsByFundPoolId(String fundPoolId);
+
+    /**
+     * Inserts {@link FundPoolDetail}.
+     *
+     * @param detail instance of {@link FundPoolDetail}
+     */
+    void insertDetail(FundPoolDetail detail);
 }
