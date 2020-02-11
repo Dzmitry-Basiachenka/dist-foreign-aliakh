@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
-import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -12,7 +11,6 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -199,31 +197,6 @@ public interface IUsageRepository {
 
     /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
-     * sets scenario id, payee account number, service fee to {@code null}, sets rh and payee participating flags to
-     * {@code false}, service fee amount and net amount to 0 for usages with payees from given list of account numbers.
-     *
-     * @param scenarioId     {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
-     * @param accountNumbers set of payees' account numbers
-     * @param userName       user name
-     * @return set of excluded usages' identifiers
-     */
-    Set<String> deleteFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String userName);
-
-    /**
-     * Redesignates {@link Usage}s. Sets status of {@link Usage}s to {@link UsageStatusEnum#NTS_WITHDRAWN},
-     * sets product family to NTS, sets scenario id, payee account number, service fee to {@code null},
-     * sets rh and payee participating flags to {@code false}, service fee amount and net amount to 0
-     * for usages with payees from given list of account numbers and in given scenario.
-     *
-     * @param scenarioId     {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
-     * @param accountNumbers set of payees' account numbers
-     * @param userName       user name
-     * @return set of redesignated usages' identifiers
-     */
-    Set<String> redesignateToNtsWithdrawnByPayees(String scenarioId, Set<Long> accountNumbers, String userName);
-
-    /**
-     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
      * sets scenario id, payee account number, service fee to {@code null}, sets rh participating flag to {@code false},
      * service fee amount and net amount to 0 for usages with given ids.
      *
@@ -375,13 +348,6 @@ public interface IUsageRepository {
      * @return id of updated record, otherwise {@code null}
      */
     String updateProcessedUsage(Usage usage);
-
-    /**
-     * Updates researched usage details.
-     *
-     * @param researchedUsages collection of {@link ResearchedUsage}s
-     */
-    void updateResearchedUsages(Collection<ResearchedUsage> researchedUsages);
 
     /**
      * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.

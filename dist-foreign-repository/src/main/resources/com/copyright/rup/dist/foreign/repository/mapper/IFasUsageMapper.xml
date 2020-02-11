@@ -1,0 +1,75 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IFasUsageMapper">
+
+    <update id="updateResearchedUsage" parameterType="map">
+        update ${schema}.df_usage
+        set
+            standard_number = #{usage.standardNumber},
+            standard_number_type = #{usage.standardNumberType},
+            system_title = #{usage.systemTitle},
+            wr_wrk_inst = #{usage.wrWrkInst},
+            status_ind = #{status},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid = #{usage.usageId}
+    </update>
+
+    <select id="deleteFromScenarioByPayees" parameterType="map" resultType="string">
+        with u as (
+            update ${schema}.df_usage
+            set
+                status_ind = #{status},
+                df_scenario_uid = null,
+                payee_account_number = null,
+                service_fee = null,
+                service_fee_amount = 0,
+                net_amount = 0,
+                <include refid="StoredEntityMapper.update"/>
+            where df_scenario_uid = #{scenarioId}
+                and payee_account_number in
+                <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
+                    #{accountNumber}
+                </foreach>
+            returning df_usage_uid
+        )
+        update ${schema}.df_usage_fas
+        set
+            is_rh_participating_flag = false,
+            is_payee_participating_flag = false,
+            <include refid="StoredEntityMapper.update"/>
+        from u
+        where df_usage_fas_uid = u.df_usage_uid
+        returning u.df_usage_uid
+    </select>
+
+    <select id="redesignateToNtsWithdrawnByPayees" parameterType="map" resultType="string">
+        with u as (
+            update ${schema}.df_usage
+            set
+                status_ind = #{status},
+                product_family = #{productFamily},
+                df_scenario_uid = null,
+                payee_account_number = null,
+                service_fee = null,
+                service_fee_amount = 0,
+                net_amount = 0,
+                <include refid="StoredEntityMapper.update"/>
+            where df_scenario_uid = #{scenarioId}
+                and payee_account_number in
+                <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
+                    #{accountNumber}
+                </foreach>
+            returning df_usage_uid
+        )
+        update ${schema}.df_usage_fas
+        set
+            is_rh_participating_flag = false,
+            is_payee_participating_flag = false,
+            <include refid="StoredEntityMapper.update"/>
+        from u
+        where df_usage_fas_uid = u.df_usage_uid
+        returning u.df_usage_uid
+    </select>
+</mapper>

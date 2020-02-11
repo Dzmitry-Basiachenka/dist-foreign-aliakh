@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
@@ -34,6 +35,8 @@ public class ExcludePayeeController extends CommonController<IExcludePayeeWidget
     @Autowired
     private IUsageService usageService;
     @Autowired
+    private IFasUsageService fasUsageService;
+    @Autowired
     private IExcludePayeeFilterController payeesFilterController;
 
     @Override
@@ -53,12 +56,12 @@ public class ExcludePayeeController extends CommonController<IExcludePayeeWidget
 
     @Override
     public void excludeDetails(Set<Long> payeeAccountNumbers, String reason) {
-        usageService.deleteFromScenarioByPayees(scenario.getId(), payeeAccountNumbers, reason);
+        fasUsageService.deleteFromScenarioByPayees(scenario.getId(), payeeAccountNumbers, reason);
     }
 
     @Override
     public void redesignateDetails(Set<Long> payeeAccountNumbers, String reason) {
-        usageService.redesignateToNtsWithdrawnByPayees(scenario.getId(), payeeAccountNumbers, reason);
+        fasUsageService.redesignateToNtsWithdrawnByPayees(scenario.getId(), payeeAccountNumbers, reason);
     }
 
     @Override

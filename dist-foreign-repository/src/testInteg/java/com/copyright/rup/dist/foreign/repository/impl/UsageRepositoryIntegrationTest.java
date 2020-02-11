@@ -12,7 +12,6 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
-import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -80,8 +79,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String RH_ACCOUNT_NAME_1 = "IEEE - Inst of Electrical and Electronics Engrs";
     private static final String RH_ACCOUNT_NAME_2 = "John Wiley & Sons - Books";
     private static final String RH_ACCOUNT_NAME_3 = "Kluwer Academic Publishers - Dordrecht";
-    private static final String WORK_TITLE_1 = "Wissenschaft & Forschung Japan";
-    private static final String WORK_TITLE_2 = "100 ROAD MOVIES";
+    private static final String WORK_TITLE = "100 ROAD MOVIES";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS2_PRODUCT_FAMILY = "FAS2";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
@@ -100,7 +98,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String COMMENT_KEY = "comment";
     private static final String STATUS_KEY = "status";
     private static final String STANDARD_NUMBER = "2192-3558";
-    private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
     private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_ID_2 = "8a06905f-37ae-4e1f-8550-245277f8165c";
     private static final String USAGE_ID_3 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
@@ -116,8 +113,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_15 = "0d85f51d-212b-4181-9972-3154cad74bd0";
     private static final String USAGE_ID_16 = "1cb766c6-7c49-489a-bd8f-9b8b052f5785";
     private static final String USAGE_ID_17 = "b53bb4f3-9eee-4732-8e3d-0c88722081d8";
-    private static final String USAGE_ID_18 = "721ca627-09bc-4204-99f4-6acae415fa5d";
-    private static final String USAGE_ID_19 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
     private static final String USAGE_ID_20 = "dcc794ba-42aa-481d-937b-8f431929a611";
     private static final String USAGE_ID_21 = "47d48889-76b5-4957-aca0-2a7850a09f92";
     private static final String USAGE_ID_22 = "c5ea47b0-b269-4791-9aa7-76308fe835e6";
@@ -211,8 +206,8 @@ public class UsageRepositoryIntegrationTest {
             FAS_PRODUCT_FAMILY, null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), USAGE_ID_14, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21,
-            USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
-            USAGE_ID_17, USAGE_ID_22, USAGE_ID_4, USAGE_ID_20);
+            USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_11, USAGE_ID_2, USAGE_ID_17, USAGE_ID_22,
+            USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
@@ -499,7 +494,7 @@ public class UsageRepositoryIntegrationTest {
             assertEquals(243904752L, usage.getWrWrkInst(), 0);
             assertEquals(1000002859L, usage.getRightsholder().getAccountNumber(), 0);
             assertEquals("John Wiley & Sons - Books", usage.getRightsholder().getName());
-            assertEquals(WORK_TITLE_2, usage.getWorkTitle());
+            assertEquals(WORK_TITLE, usage.getWorkTitle());
             assertEquals(FAS_PRODUCT_FAMILY, usage.getProductFamily());
             assertNotNull(usage.getGrossAmount());
         });
@@ -673,54 +668,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testDeleteFromScenarioByPayees() {
-        List<Usage> usagesBeforeExclude = usageRepository.findByIds(
-            Arrays.asList("7234feb4-a59e-483b-985a-e8de2e3eb190", "582c86e2-213e-48ad-a885-f9ff49d48a69",
-                "730d7964-f399-4971-9403-dbedc9d7a180"));
-        assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
-        usagesBeforeExclude.forEach(usage ->
-            assertEquals("edbcc8b3-8fa4-4c58-9244-a91627cac7a9", usage.getScenarioId()));
-        Set<String> excludedIds = usageRepository.deleteFromScenarioByPayees("edbcc8b3-8fa4-4c58-9244-a91627cac7a9",
-            Collections.singleton(7000813806L), USER_NAME);
-        assertEquals(2, CollectionUtils.size(excludedIds));
-        assertTrue(excludedIds.contains("730d7964-f399-4971-9403-dbedc9d7a180"));
-        List<Usage> usages = usageRepository.findByIds(
-            Arrays.asList("730d7964-f399-4971-9403-dbedc9d7a180", "582c86e2-213e-48ad-a885-f9ff49d48a69"));
-        assertEquals(2, CollectionUtils.size(usages));
-        usages.forEach(usage -> verifyUsageExcludedFromScenario(usage, "FAS2", UsageStatusEnum.ELIGIBLE));
-        List<String> usageIds = usageRepository.findByScenarioId("edbcc8b3-8fa4-4c58-9244-a91627cac7a9")
-            .stream()
-            .map(Usage::getId)
-            .collect(Collectors.toList());
-        assertEquals(1, CollectionUtils.size(usageIds));
-        assertTrue(usageIds.contains("7234feb4-a59e-483b-985a-e8de2e3eb190"));
-    }
-
-    @Test
-    public void testRedisignateToNtsWithdrawnByPayees() {
-        List<Usage> usagesBeforeExclude = usageRepository.findByIds(
-            Arrays.asList("209a960f-5896-43da-b020-fc52981b9633", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a",
-                "72f6abdb-c82d-4cee-aadf-570942cf0093"));
-        assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
-        usagesBeforeExclude.forEach(usage ->
-            assertEquals("767a2647-7e6e-4479-b381-e642de480863", usage.getScenarioId()));
-        Set<String> excludedIds = usageRepository.redesignateToNtsWithdrawnByPayees(
-            "767a2647-7e6e-4479-b381-e642de480863", Collections.singleton(7000813806L), USER_NAME);
-        assertEquals(2, CollectionUtils.size(excludedIds));
-        assertTrue(excludedIds.contains("72f6abdb-c82d-4cee-aadf-570942cf0093"));
-        List<Usage> usages = usageRepository.findByIds(
-            Arrays.asList("72f6abdb-c82d-4cee-aadf-570942cf0093", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a"));
-        assertEquals(2, CollectionUtils.size(usages));
-        usages.forEach(usage -> verifyUsageExcludedFromScenario(usage, "NTS", UsageStatusEnum.NTS_WITHDRAWN));
-        List<String> usageIds = usageRepository.findByScenarioId("767a2647-7e6e-4479-b381-e642de480863")
-            .stream()
-            .map(Usage::getId)
-            .collect(Collectors.toList());
-        assertEquals(1, CollectionUtils.size(usageIds));
-        assertTrue(usageIds.contains("209a960f-5896-43da-b020-fc52981b9633"));
-    }
-
-    @Test
     public void testDeleteFromScenarioByAccountNumbers() throws IOException {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_8, USAGE_ID_7));
         assertEquals(2, CollectionUtils.size(usages));
@@ -764,9 +711,9 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(new BigDecimal("2000.00"),
             usageRepository.getTotalAmountByTitleAndBatchId("Wissenschaft & Forschung Japan",
                 "9776da8d-098d-4f39-99fd-85405c339e9b"));
-        assertEquals(ZERO_AMOUNT, usageRepository.getTotalAmountByTitleAndBatchId(WORK_TITLE_2,
+        assertEquals(ZERO_AMOUNT, usageRepository.getTotalAmountByTitleAndBatchId(WORK_TITLE,
             "cb597f4e-f636-447f-8710-0436d8994d10"));
-        assertEquals(ZERO_AMOUNT, usageRepository.getTotalAmountByTitleAndBatchId(WORK_TITLE_2, "invalid id"));
+        assertEquals(ZERO_AMOUNT, usageRepository.getTotalAmountByTitleAndBatchId(WORK_TITLE, "invalid id"));
     }
 
     @Test
@@ -832,13 +779,12 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamily(FAS_PRODUCT_FAMILY);
-        assertEquals(22, usageRepository.findCountForAudit(filter));
+        assertEquals(20, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages =
             usageRepository.findForAudit(filter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));
         verifyUsageDtos(usages, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21,
-            USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
-            USAGE_ID_5, USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, POST_DISTRIBUTION_USAGE_ID, USAGE_ID_7, USAGE_ID_4,
-            USAGE_ID_20);
+            USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_11, USAGE_ID_2, USAGE_ID_5, USAGE_ID_8,
+            USAGE_ID_17, USAGE_ID_22, POST_DISTRIBUTION_USAGE_ID, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
@@ -1084,21 +1030,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdateResearchedUsages() {
-        String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
-        String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
-        verifyFasUsage(usageId1, null, null, STANDARD_NUMBER, null, UsageStatusEnum.WORK_RESEARCH);
-        verifyFasUsage(usageId2, null, null, null, null, UsageStatusEnum.WORK_RESEARCH);
-        usageRepository.updateResearchedUsages(Arrays.asList(
-            buildResearchedUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN"),
-            buildResearchedUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", STANDARD_NUMBER_TYPE)));
-        verifyFasUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN",
-            UsageStatusEnum.WORK_FOUND);
-        verifyFasUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", STANDARD_NUMBER_TYPE,
-            UsageStatusEnum.WORK_FOUND);
-    }
-
-    @Test
     public void testIsValidFilteredUsageStatus() {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("ee575916-f6d0-4c3c-b589-32663e0f4793"));
@@ -1172,30 +1103,6 @@ public class UsageRepositoryIntegrationTest {
             ImmutableMap.of(243904752L, Sets.newHashSet(USAGE_ID_7, USAGE_ID_8));
         assertEquals(wrWrkInstToUsageIdsMap,
             usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus("JAACC_11Dec16", UsageStatusEnum.LOCKED));
-    }
-
-    private ResearchedUsage buildResearchedUsage(String id, String title, Long wrWrkInst, String standardNumber,
-                                                 String standardNumberType) {
-        ResearchedUsage researchedUsage = new ResearchedUsage();
-        researchedUsage.setUsageId(id);
-        researchedUsage.setSystemTitle(title);
-        researchedUsage.setWrWrkInst(wrWrkInst);
-        researchedUsage.setStandardNumber(standardNumber);
-        researchedUsage.setStandardNumberType(standardNumberType);
-        return researchedUsage;
-    }
-
-    private void verifyFasUsage(String usageId, String title, Long wrWrkInst, String standardNumber,
-                                String standardNumberType, UsageStatusEnum status) {
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(usageId));
-        assertEquals(1, CollectionUtils.size(usages));
-        Usage usage = usages.get(0);
-        assertEquals(status, usage.getStatus());
-        assertEquals(WORK_TITLE_1, usage.getWorkTitle());
-        assertEquals(title, usage.getSystemTitle());
-        assertEquals(wrWrkInst, usage.getWrWrkInst());
-        assertEquals(standardNumber, usage.getStandardNumber());
-        assertEquals(standardNumberType, usage.getStandardNumberType());
     }
 
     private void verifyFindForAuditSort(AuditFilter filter, String property, Direction direction,

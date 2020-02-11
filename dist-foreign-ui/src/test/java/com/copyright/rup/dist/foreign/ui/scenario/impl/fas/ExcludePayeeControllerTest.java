@@ -11,6 +11,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
 
 import org.junit.Before;
@@ -35,35 +36,38 @@ public class ExcludePayeeControllerTest {
     private static final String REASON = "reason";
     private IExcludePayeeController controller;
     private IUsageService usageService;
+    private IFasUsageService fasUsageService;
     private Scenario scenario;
 
     @Before
     public void setUp() {
         usageService = createMock(IUsageService.class);
+        fasUsageService = createMock(IFasUsageService.class);
         controller = new ExcludePayeeController();
         scenario = buildScenario();
         Whitebox.setInternalState(controller, usageService);
+        Whitebox.setInternalState(controller, fasUsageService);
         Whitebox.setInternalState(controller, scenario);
     }
 
     @Test
     public void testRedesignateDetails() {
         Set<Long> accountNumbers = Collections.singleton(2000017566L);
-        usageService.redesignateToNtsWithdrawnByPayees(scenario.getId(), accountNumbers, REASON);
+        fasUsageService.redesignateToNtsWithdrawnByPayees(scenario.getId(), accountNumbers, REASON);
         expectLastCall().once();
-        replay(usageService);
+        replay(fasUsageService);
         controller.redesignateDetails(accountNumbers, REASON);
-        verify(usageService);
+        verify(fasUsageService);
     }
 
     @Test
     public void testExcludeDetails() {
         Set<Long> accountNumbers = Collections.singleton(2000017566L);
-        usageService.deleteFromScenarioByPayees(scenario.getId(), accountNumbers, REASON);
+        fasUsageService.deleteFromScenarioByPayees(scenario.getId(), accountNumbers, REASON);
         expectLastCall().once();
-        replay(usageService);
+        replay(fasUsageService);
         controller.excludeDetails(accountNumbers, REASON);
-        verify(usageService);
+        verify(fasUsageService);
     }
 
     @Test

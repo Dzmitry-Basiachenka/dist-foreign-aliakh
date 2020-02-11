@@ -8,7 +8,6 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
-import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -30,8 +29,6 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -193,36 +190,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public void deleteByScenarioId(String scenarioId) {
         delete("IUsageMapper.deleteByScenarioId", Objects.requireNonNull(scenarioId));
-    }
-    @Override
-    public Set<String> deleteFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String userName) {
-        Set<String> result = new HashSet<>();
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
-        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
-        Iterables.partition(Objects.requireNonNull(accountNumbers), MAX_VARIABLES_COUNT)
-            .forEach(partition -> {
-                parameters.put("accountNumbers", partition);
-                result.addAll(selectList("IUsageMapper.deleteFromScenarioByPayees", parameters));
-            });
-        return result;
-    }
-
-    @Override
-    public Set<String> redesignateToNtsWithdrawnByPayees(String scenarioId, Set<Long> accountNumbers, String userName) {
-        Set<String> result = new HashSet<>();
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(STATUS_KEY, UsageStatusEnum.NTS_WITHDRAWN);
-        parameters.put(PRODUCT_FAMILY_KEY, FdaConstants.NTS_PRODUCT_FAMILY);
-        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
-        Iterables.partition(Objects.requireNonNull(accountNumbers), MAX_VARIABLES_COUNT)
-            .forEach(partition -> {
-                parameters.put("accountNumbers", partition);
-                result.addAll(selectList("IUsageMapper.redesignateToNtsWithdrawnByPayees", parameters));
-            });
-        return result;
     }
 
     @Override
@@ -394,18 +361,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public String updateProcessedUsage(Usage usage) {
         return selectOne("IUsageMapper.updateProcessedUsage", Objects.requireNonNull(usage));
-    }
-
-    @Override
-    public void updateResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
-        Objects.requireNonNull(researchedUsages);
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
-        parameters.put(STATUS_KEY, UsageStatusEnum.WORK_FOUND);
-        researchedUsages.forEach(researchedUsage -> {
-            parameters.put("usage", researchedUsage);
-            update("IUsageMapper.updateResearchedUsage", parameters);
-        });
     }
 
     @Override
