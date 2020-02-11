@@ -8,7 +8,7 @@ import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.api.IWorkClassificationService;
+import com.copyright.rup.dist.foreign.service.api.nts.IWorkClassificationService;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.junit.Before;

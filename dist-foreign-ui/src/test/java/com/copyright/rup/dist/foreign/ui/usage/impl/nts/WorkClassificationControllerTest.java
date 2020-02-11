@@ -13,7 +13,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
-import com.copyright.rup.dist.foreign.service.api.IWorkClassificationService;
+import com.copyright.rup.dist.foreign.service.api.nts.IWorkClassificationService;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.IWorkClassificationController;
 
 import org.easymock.Capture;

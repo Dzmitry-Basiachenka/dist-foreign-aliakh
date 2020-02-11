@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl;
+package com.copyright.rup.dist.foreign.service.impl.nts;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -12,7 +12,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IWorkClassificationRepository;
-import com.copyright.rup.dist.foreign.service.api.IWorkClassificationService;
+import com.copyright.rup.dist.foreign.service.api.nts.IWorkClassificationService;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import com.google.common.collect.ImmutableSet;

@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl;
+package com.copyright.rup.dist.foreign.service.impl.nts;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;

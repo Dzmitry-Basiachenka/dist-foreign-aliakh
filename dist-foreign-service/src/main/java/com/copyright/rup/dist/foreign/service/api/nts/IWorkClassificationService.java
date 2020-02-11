@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.api;
+package com.copyright.rup.dist.foreign.service.api.nts;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
