@@ -1,11 +1,11 @@
-package com.copyright.rup.dist.foreign.service.impl;
+package com.copyright.rup.dist.foreign.service.impl.fas;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRepository;
-import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
+import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
