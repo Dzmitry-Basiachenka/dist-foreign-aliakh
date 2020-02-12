@@ -8,7 +8,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: 'b5b64c3a-55d2-462e-b169-362dca6a4dd7')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'name', value: 'FAS Q1 2019 100%')
+            column(name: 'name', value: 'Q1 2019 100%')
             column(name: 'comment', value: 'some comment')
             column(name: 'total_amount', value: '50.00')
             column(name: 'updated_datetime', value: '2019-03-27 16:35:52.735531+03')

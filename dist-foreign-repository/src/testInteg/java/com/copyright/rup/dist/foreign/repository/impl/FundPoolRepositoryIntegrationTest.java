@@ -37,10 +37,12 @@ public class FundPoolRepositoryIntegrationTest {
 
     private static final String ID_1 = "b5b64c3a-55d2-462e-b169-362dca6a4dd7";
     private static final String ID_2 = "76282dbc-2468-48d4-b926-93d3458a656b";
-    private static final String NAME_1 = "FAS Q1 2019 100%";
-    private static final String NAME_2 = "FAS Q2 2019";
+    private static final String ID_3 = "6fe5044d-15a3-47fe-913e-69f3bf353bef";
+    private static final String NAME_1 = "Q1 2019 100%";
+    private static final String NAME_2 = "NTS Q2 2019";
     private static final String COMMENT_1 = "some comment";
     private static final String COMMENT_2 = "other comment";
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
 
     @Autowired
@@ -116,8 +118,17 @@ public class FundPoolRepositoryIntegrationTest {
     @Test
     public void testFundPoolExists() {
         assertTrue(fundPoolRepository.fundPoolExists(NTS_PRODUCT_FAMILY, NAME_1));
-        assertTrue(fundPoolRepository.fundPoolExists(NTS_PRODUCT_FAMILY, "FAS q1 2019 100%"));
-        assertFalse(fundPoolRepository.fundPoolExists(NTS_PRODUCT_FAMILY, "FAS Q1 2019"));
+        assertTrue(fundPoolRepository.fundPoolExists(NTS_PRODUCT_FAMILY, "q1 2019 100%"));
+        assertFalse(fundPoolRepository.fundPoolExists(NTS_PRODUCT_FAMILY, "Q1 2019"));
+        assertFalse(fundPoolRepository.fundPoolExists(AACL_PRODUCT_FAMILY, NAME_1));
+        FundPool fundPool = new FundPool();
+        fundPool.setId(ID_3);
+        fundPool.setProductFamily(AACL_PRODUCT_FAMILY);
+        fundPool.setName(NAME_1);
+        fundPoolRepository.insert(fundPool);
+        assertTrue(fundPoolRepository.fundPoolExists(AACL_PRODUCT_FAMILY, NAME_1));
+        assertTrue(fundPoolRepository.fundPoolExists(AACL_PRODUCT_FAMILY, "q1 2019 100%"));
+        assertFalse(fundPoolRepository.fundPoolExists(AACL_PRODUCT_FAMILY, "Q1 2019"));
     }
 
     private void assertFundPool(FundPool fundPool, String id, String productFamily, String name, BigDecimal amount,
