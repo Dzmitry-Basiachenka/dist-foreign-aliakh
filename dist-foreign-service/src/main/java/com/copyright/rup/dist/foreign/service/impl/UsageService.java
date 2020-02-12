@@ -512,11 +512,6 @@ public class UsageService implements IUsageService {
             UsageStatusEnum.RH_NOT_FOUND);
     }
 
-    @Override
-    public void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName) {
-        usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, userName);
-    }
-
     private Set<String> getPayeeAndRhIds(Map<String, Map<String, Rightsholder>> rollUps) {
         return rollUps.values()
             .stream()

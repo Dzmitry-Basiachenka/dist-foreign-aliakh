@@ -119,4 +119,14 @@ public interface INtsUsageRepository {
      * @param userName   user name
      */
     void updateUsagesStatusToUnclassified(List<Long> wrWrkInsts, String userName);
+
+    /**
+     * Updates usages with status NTS_WITHDRAWN from given batches to status TO_BE_DISTRIBUTED
+     * and adds the usages to the fund pool.
+     *
+     * @param fundPoolId   id of fund pool
+     * @param batchIds set of ids of usage batches
+     * @param userName user name
+     */
+    void addWithdrawnUsagesToFundPool(String fundPoolId, Set<String> batchIds, String userName);
 }

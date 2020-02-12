@@ -1053,24 +1053,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testAddWithdrawnUsagesToPreServiceFeeFund() {
-        List<String> usageIds = Collections.singletonList("4dd8cdf8-ca10-422e-bdd5-3220105e6379");
-        List<Usage> usages = usageRepository.findByIds(usageIds);
-        assertEquals(1, usages.size());
-        Usage usage = usages.get(0);
-        assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
-        assertNull(usage.getFundPoolId());
-        String fundPoolId = "3fef25b0-c0d1-4819-887f-4c6acc01390e";
-        Set<String> batchIds = Collections.singleton("cb597f4e-f636-447f-8710-0436d8994d10");
-        usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundPoolId, batchIds, StoredEntity.DEFAULT_USER);
-        usages = usageRepository.findByIds(usageIds);
-        assertEquals(1, usages.size());
-        usage = usages.get(0);
-        assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
-        assertEquals(fundPoolId, usage.getFundPoolId());
-    }
-
-    @Test
     public void testFindWrWrkInstToUsageIdsByBatchNameAndUsageStatus() {
         Map<Long, Set<String>> wrWrkInstToUsageIdsMap =
             ImmutableMap.of(243904752L, Sets.newHashSet(USAGE_ID_7, USAGE_ID_8));

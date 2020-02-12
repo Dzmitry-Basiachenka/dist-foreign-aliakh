@@ -13,7 +13,6 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import org.junit.Before;
@@ -48,7 +47,6 @@ public class FundPoolServiceTest {
     private static final String USER_NAME = "User Name";
 
     private FundPoolService fundPoolService;
-    private IUsageService usageService;
     private INtsUsageService ntsUsageService;
     private IFundPoolRepository fundPoolRepository;
 
@@ -56,9 +54,7 @@ public class FundPoolServiceTest {
     public void setUp() {
         fundPoolService = new FundPoolService();
         fundPoolRepository = createMock(IFundPoolRepository.class);
-        usageService = createMock(IUsageService.class);
         ntsUsageService = createMock(INtsUsageService.class);
-        Whitebox.setInternalState(fundPoolService, usageService);
         Whitebox.setInternalState(fundPoolService, ntsUsageService);
         Whitebox.setInternalState(fundPoolService, fundPoolRepository);
     }
@@ -71,11 +67,11 @@ public class FundPoolServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         fundPoolRepository.insert(fund);
         expectLastCall().once();
-        usageService.addWithdrawnUsagesToPreServiceFeeFund(fund.getId(), batchIds, USER_NAME);
+        ntsUsageService.addWithdrawnUsagesToFundPool(fund.getId(), batchIds, USER_NAME);
         expectLastCall().once();
-        replay(RupContextUtils.class, fundPoolRepository, usageService);
+        replay(RupContextUtils.class, fundPoolRepository, ntsUsageService);
         fundPoolService.createNtsFundPool(fund, batchIds);
-        verify(RupContextUtils.class, fundPoolRepository, usageService);
+        verify(RupContextUtils.class, fundPoolRepository, ntsUsageService);
     }
 
     @Test

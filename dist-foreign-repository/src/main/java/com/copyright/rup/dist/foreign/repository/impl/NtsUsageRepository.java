@@ -15,6 +15,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -165,5 +166,17 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
             params.put("wrWrkInsts", Objects.requireNonNull(partition));
             update("INtsUsageMapper.updateUsagesStatusToUnclassified", params);
         });
+    }
+
+    @Override
+    public void addWithdrawnUsagesToFundPool(String fundPoolId, Set<String> batchIds, String userName) {
+        checkArgument(StringUtils.isNotBlank(fundPoolId));
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+        params.put("fundPoolId", fundPoolId);
+        params.put("statusToFind", UsageStatusEnum.NTS_WITHDRAWN);
+        params.put("statusToSet", UsageStatusEnum.TO_BE_DISTRIBUTED);
+        params.put("batchIds", Objects.requireNonNull(batchIds));
+        params.put("updateUser", Objects.requireNonNull(userName));
+        update("INtsUsageMapper.addWithdrawnUsagesToFundPool", params);
     }
 }

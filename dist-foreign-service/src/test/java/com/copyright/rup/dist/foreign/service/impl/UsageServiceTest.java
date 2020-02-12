@@ -736,17 +736,6 @@ public class UsageServiceTest {
         verify(usageRepository);
     }
 
-    @Test
-    public void testAddWithdrawnUsagesToPreServiceFeeFund() {
-        String fundId = RupPersistUtils.generateUuid();
-        Set<String> batchIds = Collections.singleton(BATCH_ID);
-        usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, USER_NAME);
-        expectLastCall().once();
-        replay(usageRepository);
-        usageService.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, USER_NAME);
-        verify(usageRepository);
-    }
-
     private void assertResult(List<?> result, int size) {
         assertNotNull(result);
         assertEquals(size, result.size());
