@@ -6,9 +6,7 @@ databaseChangeLog {
                 "and rename withdrawn_amount to total_amount")
 
         addColumn(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
-            column(name: 'product_family', type: 'VARCHAR(128)', remarks: 'Product Family') {
-                constraints(nullable: false)
-            }
+            column(name: 'product_family', type: 'VARCHAR(128)', remarks: 'Product Family')
         }
 
         renameColumn(schemaName: dbAppsSchema,
@@ -20,6 +18,9 @@ databaseChangeLog {
         update(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'product_family', value: 'NTS')
         }
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_fund_pool',
+                columnName: 'product_family', columnDataType: 'VARCHAR(128)')
 
         rollback {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_fund_pool', columnName: 'product_family')

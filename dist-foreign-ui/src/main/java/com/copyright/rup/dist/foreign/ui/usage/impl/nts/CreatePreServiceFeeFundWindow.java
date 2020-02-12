@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
@@ -118,6 +119,7 @@ class CreatePreServiceFeeFundWindow extends Window {
         if (binder.isValid()) {
             FundPool fundPool = new FundPool();
             fundPool.setId(RupPersistUtils.generateUuid());
+            fundPool.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
             fundPool.setName(StringUtils.trimToEmpty(fundNameField.getValue()));
             fundPool.setComment(StringUtils.trimToEmpty(commentsArea.getValue()));
             fundPool.setTotalAmount(amount);

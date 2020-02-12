@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.api.aacl;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -44,5 +43,5 @@ public interface IAaclFundPoolService {
      * @param details  list of {@link FundPoolDetail}s
      * @return count of inserted details
      */
-    int insertFundPool(FundPool fundPool, Collection<FundPoolDetail> details);
+    int insertFundPool(FundPool fundPool, List<FundPoolDetail> details);
 }

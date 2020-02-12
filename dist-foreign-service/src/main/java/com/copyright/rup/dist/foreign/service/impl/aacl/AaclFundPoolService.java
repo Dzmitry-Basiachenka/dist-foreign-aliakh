@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,10 +66,13 @@ public class AaclFundPoolService implements IAaclFundPoolService {
 
     @Override
     @Transactional
-    public int insertFundPool(FundPool fundPool, Collection<FundPoolDetail> details) {
+    public int insertFundPool(FundPool fundPool, List<FundPoolDetail> details) {
         LOGGER.info("Insert AACL fund pool. Started. FundPoolName={}", fundPool.getName());
         String userName = RupContextUtils.getUserName();
         fundPool.setId(RupPersistUtils.generateUuid());
+        fundPool.setTotalAmount(details.stream()
+            .map(FundPoolDetail::getGrossAmount)
+            .reduce(BigDecimal.ZERO, BigDecimal::add));
         fundPool.setCreateUser(userName);
         fundPool.setUpdateUser(userName);
         fundPoolRepository.insert(fundPool);
