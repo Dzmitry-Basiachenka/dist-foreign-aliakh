@@ -6,7 +6,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -42,7 +42,7 @@ import java.util.Map;
 public class LoadResearchedUsagesIntegrationTest {
 
     @Autowired
-    private IUsageService usageService;
+    private IFasUsageService fasUsageService;
     @Autowired
     private ServiceTestHelper testHelper;
 
@@ -58,7 +58,7 @@ public class LoadResearchedUsagesIntegrationTest {
         testHelper.expectGetRmsRights("rights/rms_grants_658824345_request.json",
             "rights/rms_grants_658824345_response.json");
         testHelper.expectPrmCall("prm/rightsholder_1000023401_response.json", 1000023401L);
-        usageService.loadResearchedUsages(Arrays.asList(
+        fasUsageService.loadResearchedUsages(Arrays.asList(
             buildResearchedUsage(USAGE_ID_1, 658824345L, "1008902112377654XX", "VALISBN13", "Medical Journal"),
             buildResearchedUsage(USAGE_ID_2, 854030732L, null, null, "Technical Journal")));
         testHelper.assertUsages(Arrays.asList(buildUsage(USAGE_ID_1, UsageStatusEnum.ELIGIBLE, 658824345L,

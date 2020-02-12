@@ -7,7 +7,6 @@ import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -22,7 +21,6 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
-import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -32,19 +30,15 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
-import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
-import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -85,7 +79,6 @@ import java.util.Set;
 @PrepareForTest({RupContextUtils.class, RupPersistUtils.class, CalculationUtils.class})
 public class UsageServiceTest {
 
-    private static final String REASON = "reason";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final String USAGE_ID_2 = "Usage id 2";
@@ -110,14 +103,11 @@ public class UsageServiceTest {
     private IRightsholderService rightsholderService;
     private UsageService usageService;
     private IPrmIntegrationService prmIntegrationService;
-    private IChainExecutor<Usage> chainExecutor;
-    private IPiIntegrationService piIntegrationService;
 
     @Rule
     private final ExpectedException exception = ExpectedException.none();
 
     @Before
-    @SuppressWarnings("unchecked")
     public void setUp() {
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
@@ -129,11 +119,7 @@ public class UsageServiceTest {
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
         rightsholderService = createMock(IRightsholderService.class);
-        chainExecutor = createMock(IChainExecutor.class);
-        piIntegrationService = createMock(IPiIntegrationService.class);
         usageService = new UsageService();
-        Whitebox.setInternalState(usageService, piIntegrationService);
-        Whitebox.setInternalState(usageService, chainExecutor);
         Whitebox.setInternalState(usageService, usageRepository);
         Whitebox.setInternalState(usageService, usageAuditService);
         Whitebox.setInternalState(usageService, prmIntegrationService);
@@ -141,34 +127,6 @@ public class UsageServiceTest {
         Whitebox.setInternalState(usageService, scenarioAuditService);
         Whitebox.setInternalState(usageService, rightsholderService);
         Whitebox.setInternalState(usageService, "claAccountNumber", 2000017000L);
-    }
-
-    @Test
-    public void testDeleteFromScenarioByPayees() {
-        Set<String> usageIds = Sets.newHashSet(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
-        Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
-        expect(usageRepository.deleteFromScenarioByPayees(scenario.getId(), accountNumbers, "SYSTEM"))
-            .andReturn(usageIds)
-            .once();
-        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, REASON);
-        expectLastCall().once();
-        replay(usageRepository, usageAuditService);
-        usageService.deleteFromScenarioByPayees(scenario.getId(), accountNumbers, REASON);
-        verify(usageRepository, usageAuditService);
-    }
-
-    @Test
-    public void testRedisignateToNtsWithdrawnByPayees() {
-        Set<String> usageIds = Sets.newHashSet(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
-        Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
-        expect(usageRepository.redesignateToNtsWithdrawnByPayees(scenario.getId(), accountNumbers, "SYSTEM"))
-            .andReturn(usageIds)
-            .once();
-        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, REASON);
-        expectLastCall().once();
-        replay(usageRepository, usageAuditService);
-        usageService.redesignateToNtsWithdrawnByPayees(scenario.getId(), accountNumbers, REASON);
-        verify(usageRepository, usageAuditService);
     }
 
     @Test
@@ -686,36 +644,6 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testLoadResearchedUsages() {
-        String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
-        String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
-        ResearchedUsage researchedUsage1 = buildResearchedUsage(usageId1, "Title1", "742354894", 987654321L);
-        ResearchedUsage researchedUsage2 = buildResearchedUsage(usageId2, "Title2", "879456165", 876543210L);
-        List<ResearchedUsage> researchedUsages = ImmutableList.of(researchedUsage1, researchedUsage2);
-        expect(piIntegrationService.findWorkByWrWrkInst(987654321L)).andReturn(buildWork("VALISSN")).once();
-        expect(piIntegrationService.findWorkByWrWrkInst(876543210L)).andReturn(new Work()).once();
-        usageRepository.updateResearchedUsages(researchedUsages);
-        expectLastCall().once();
-        usageAuditService.logAction(usageId1, UsageActionTypeEnum.WORK_FOUND,
-            "Wr Wrk Inst 987654321 was added based on research");
-        expectLastCall().once();
-        usageAuditService.logAction(usageId2, UsageActionTypeEnum.WORK_FOUND,
-            "Wr Wrk Inst 876543210 was added based on research");
-        expectLastCall().once();
-        List<Usage> usages = Arrays.asList(buildUsage(usageId1), buildUsage(usageId2));
-        expect(usageRepository.findByIds(Arrays.asList(usageId1, usageId2)))
-            .andReturn(usages)
-            .once();
-        chainExecutor.execute(usages, ChainProcessorTypeEnum.RIGHTS);
-        expectLastCall().once();
-        replay(usageRepository, usageAuditService, chainExecutor, piIntegrationService);
-        usageService.loadResearchedUsages(researchedUsages);
-        assertEquals("VALISSN", researchedUsage1.getStandardNumberType());
-        assertNull(researchedUsage2.getStandardNumberType());
-        verify(usageRepository, usageAuditService, chainExecutor, piIntegrationService);
-    }
-
-    @Test
     public void testGetUsagesByIds() {
         List<String> usageIds = Collections.singletonList(USAGE_ID_1);
         List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
@@ -817,21 +745,6 @@ public class UsageServiceTest {
         replay(usageRepository);
         usageService.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, USER_NAME);
         verify(usageRepository);
-    }
-
-    private Work buildWork(String standardNumberType) {
-        Work work = new Work();
-        work.setMainIdnoType(standardNumberType);
-        return work;
-    }
-
-    private ResearchedUsage buildResearchedUsage(String usageId, String title, String standardNumber, Long wrWrkInst) {
-        ResearchedUsage researchedUsage = new ResearchedUsage();
-        researchedUsage.setUsageId(usageId);
-        researchedUsage.setSystemTitle(title);
-        researchedUsage.setStandardNumber(standardNumber);
-        researchedUsage.setWrWrkInst(wrWrkInst);
-        return researchedUsage;
     }
 
     private void assertResult(List<?> result, int size) {

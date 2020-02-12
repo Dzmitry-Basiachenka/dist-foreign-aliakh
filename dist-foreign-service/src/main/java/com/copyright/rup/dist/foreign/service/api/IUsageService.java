@@ -6,7 +6,6 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
-import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -154,29 +153,6 @@ public interface IUsageService {
     void deleteFromScenario(String scenarioId, Long rroAccountNumber, List<Long> accountNumbers, String reason);
 
     /**
-     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
-     * sets scenario id, payee account number, service fee to {@code null}, sets rh and payee participating flags to
-     * {@code false}, service fee amount and net amount to 0 for usages with payees from given list of account numbers.
-     *
-     * @param scenarioId     {@link Scenario} identifier
-     * @param accountNumbers set of payees' account numbers
-     * @param reason         reason provided by user
-     */
-    void deleteFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String reason);
-
-    /**
-     * Redesignates {@link Usage}s. Sets status of {@link Usage}s to {@link UsageStatusEnum#NTS_WITHDRAWN},
-     * sets product family to NTS, sets scenario id, payee account number, service fee to {@code null},
-     * sets rh and payee participating flags to {@code false}, service fee amount and net amount to 0
-     * for usages with payees from given list of account numbers and in given scenario.
-     *
-     * @param scenarioId     {@link Scenario} identifier
-     * @param accountNumbers set of payees' account numbers
-     * @param reason         reason provided by user
-     */
-    void redesignateToNtsWithdrawnByPayees(String scenarioId, Set<Long> accountNumbers, String reason);
-
-    /**
      * Checks if usage with usage id and status exists in database.
      *
      * @param usageId    usage id
@@ -275,23 +251,6 @@ public interface IUsageService {
      * @param usages list of {@link PaidUsage}s to update
      */
     void updatePaidInfo(List<PaidUsage> usages);
-
-    /**
-     * Updates researched usage details.
-     *
-     * @param researchedUsages list of {@link ResearchedUsage}s
-     */
-    void loadResearchedUsages(List<ResearchedUsage> researchedUsages);
-
-    /**
-     * Updates researched usage details, sets WORK_FOUND status and adds log action.
-     * Is used only by {@link IUsageService#loadResearchedUsages(List)}.
-     * Due to the fact that default mechanisms of proxying in Spring are Dynamic Proxy and CGLIB,
-     * it was implemented as public method to support declarative transaction.
-     *
-     * @param researchedUsages list of {@link ResearchedUsage}s
-     */
-    void markAsWorkFound(List<ResearchedUsage> researchedUsages);
 
     /**
      * Gets list of {@link PaidUsage} available for sending to CRM.

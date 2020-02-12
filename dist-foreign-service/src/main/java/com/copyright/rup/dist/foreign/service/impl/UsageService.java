@@ -14,7 +14,6 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
-import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -23,14 +22,12 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
 import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService;
-import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
@@ -40,8 +37,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
-import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -51,7 +46,6 @@ import com.google.common.collect.Table;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,12 +106,7 @@ public class UsageService implements IUsageService {
     @Autowired
     private IScenarioAuditService scenarioAuditService;
     @Autowired
-    private IChainExecutor<Usage> chainExecutor;
-    @Autowired
     private IRightsholderService rightsholderService;
-    @Autowired
-    @Qualifier("df.integration.piIntegrationCacheService")
-    private IPiIntegrationService piIntegrationService;
 
     @Override
     public int insertUsages(UsageBatch usageBatch, Collection<Usage> usages) {
@@ -281,22 +270,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Transactional
-    public void deleteFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String reason) {
-        Set<String> usageIds = usageRepository
-            .deleteFromScenarioByPayees(scenarioId, accountNumbers, RupContextUtils.getUserName());
-        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
-    }
-
-    @Override
-    @Transactional
-    public void redesignateToNtsWithdrawnByPayees(String scenarioId, Set<Long> accountNumbers, String reason) {
-        Set<String> usageIds = usageRepository
-            .redesignateToNtsWithdrawnByPayees(scenarioId, accountNumbers, RupContextUtils.getUserName());
-        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
-    }
-
-    @Override
     public boolean isUsageIdExists(String usageId, UsageStatusEnum statusEnum) {
         return 0 != usageRepository.findCountByUsageIdAndStatus(usageId, statusEnum);
     }
@@ -411,30 +384,6 @@ public class UsageService implements IUsageService {
         }
         LOGGER.info("Update paid information. Finished. UsagesCount={}, CreatedCount={}, UpdatedCount={}",
             paidUsagesCount, newUsagesCount, updatedUsagesCount);
-    }
-
-    @Override
-    public void loadResearchedUsages(List<ResearchedUsage> researchedUsages) {
-        LogUtils.ILogWrapper researchedUsagesCount = LogUtils.size(researchedUsages);
-        LOGGER.info("Load researched usages. Started. ResearchedUsagesCount={}", researchedUsagesCount);
-        populateTitlesStandardNumberAndType(researchedUsages);
-        markAsWorkFound(researchedUsages);
-        List<String> usageIds = researchedUsages.stream()
-            .map(ResearchedUsage::getUsageId)
-            .collect(Collectors.toList());
-        chainExecutor.execute(usageRepository.findByIds(usageIds), ChainProcessorTypeEnum.RIGHTS);
-        LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", researchedUsagesCount);
-    }
-
-    @Override
-    @Transactional
-    public void markAsWorkFound(List<ResearchedUsage> researchedUsages) {
-        usageRepository.updateResearchedUsages(researchedUsages);
-        researchedUsages.forEach(
-            researchedUsage -> usageAuditService.logAction(researchedUsage.getUsageId(),
-                UsageActionTypeEnum.WORK_FOUND,
-                String.format("Wr Wrk Inst %s was added based on research", researchedUsage.getWrWrkInst()))
-        );
     }
 
     @Override
@@ -573,15 +522,6 @@ public class UsageService implements IUsageService {
             .stream()
             .flatMap(map -> map.values().stream().map(Rightsholder::getId))
             .collect(Collectors.toSet());
-    }
-
-    private void populateTitlesStandardNumberAndType(Collection<ResearchedUsage> researchedUsages) {
-        researchedUsages.forEach(researchedUsage -> {
-            Work work = piIntegrationService.findWorkByWrWrkInst(researchedUsage.getWrWrkInst());
-            researchedUsage.setStandardNumberType(work.getMainIdnoType());
-            researchedUsage.setStandardNumber(work.getMainIdno());
-            researchedUsage.setSystemTitle(work.getMainTitle());
-        });
     }
 
     private void populateAccountNumbers(List<PaidUsage> paidUsages) {

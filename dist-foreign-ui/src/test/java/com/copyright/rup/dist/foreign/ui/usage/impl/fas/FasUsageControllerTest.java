@@ -256,11 +256,11 @@ public class FasUsageControllerTest {
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
-        usageService.loadResearchedUsages(researchedUsages);
+        fasUsageService.loadResearchedUsages(researchedUsages);
         expectLastCall().once();
-        replay(usageService, filterController, filterWidgetMock);
+        replay(fasUsageService, filterController, filterWidgetMock);
         controller.loadResearchedUsages(researchedUsages);
-        verify(usageService, filterController, filterWidgetMock);
+        verify(fasUsageService, filterController, filterWidgetMock);
     }
 
     @Test
