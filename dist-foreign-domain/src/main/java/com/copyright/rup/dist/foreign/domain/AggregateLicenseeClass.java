@@ -54,6 +54,7 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+            .appendSuper(super.toString())
             .append("name", name)
             .toString();
     }

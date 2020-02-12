@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberVa
 import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateInFileValidator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public class AaclFundPoolCsvProcessor extends DistCsvProcessor<FundPoolDetail> {
     public void initPlainValidators() {
         RequiredValidator requiredValidator = new RequiredValidator();
         addPlainValidators(Header.AGGREGATE_LICENSEE_CLASS_ID, requiredValidator, new PositiveNumberValidator(),
-            new LengthValidator(9));
+            new DuplicateInFileValidator(), new LengthValidator(9));
         addPlainValidators(Header.GROSS_AMOUNT, requiredValidator, new AmountValidator());
     }
 

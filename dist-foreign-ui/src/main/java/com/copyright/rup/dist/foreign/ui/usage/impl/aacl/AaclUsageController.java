@@ -169,7 +169,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
-    public int insertFundPool(FundPool fundPool, Collection<FundPoolDetail> details) {
+    public int insertFundPool(FundPool fundPool, List<FundPoolDetail> details) {
         return aaclFundPoolService.insertFundPool(fundPool, details);
     }
 

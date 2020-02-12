@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -28,24 +27,16 @@ import java.util.Collections;
  */
 public class AggregateLicenseeClassValidatorTest {
 
-    private IAaclFundPoolRepository aaclFundPoolRepository;
-    private AggregateLicenseeClassValidator validator;
-
-    @Before
-    public void setUp() {
-        aaclFundPoolRepository = createMock(IAaclFundPoolRepository.class);
-        expect(aaclFundPoolRepository.findAggregateLicenseeClassIds()).andReturn(Collections.singleton(1)).once();
-        replay(aaclFundPoolRepository);
-        validator = new AggregateLicenseeClassValidator(aaclFundPoolRepository);
-    }
-
     @Test
     public void testIsValidTrue() {
         FundPoolDetail detail = new FundPoolDetail();
         AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
         detail.setAggregateLicenseeClass(aggregateLicenseeClass);
         aggregateLicenseeClass.setId(1);
-        assertTrue(validator.isValid(detail));
+        IAaclFundPoolRepository aaclFundPoolRepository = createMock(IAaclFundPoolRepository.class);
+        expect(aaclFundPoolRepository.findAggregateLicenseeClassIds()).andReturn(Collections.singleton(1)).once();
+        replay(aaclFundPoolRepository);
+        assertTrue(new AggregateLicenseeClassValidator(aaclFundPoolRepository).isValid(detail));
         verify(aaclFundPoolRepository);
     }
 
@@ -55,13 +46,17 @@ public class AggregateLicenseeClassValidatorTest {
         AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
         detail.setAggregateLicenseeClass(aggregateLicenseeClass);
         aggregateLicenseeClass.setId(2);
-        assertFalse(validator.isValid(detail));
+        IAaclFundPoolRepository aaclFundPoolRepository = createMock(IAaclFundPoolRepository.class);
+        expect(aaclFundPoolRepository.findAggregateLicenseeClassIds()).andReturn(Collections.singleton(1)).once();
+        replay(aaclFundPoolRepository);
+        assertFalse(new AggregateLicenseeClassValidator(aaclFundPoolRepository).isValid(detail));
         verify(aaclFundPoolRepository);
     }
 
     @Test
     public void testGetErrorMessage() {
+        IAaclFundPoolRepository aaclFundPoolRepository = createMock(IAaclFundPoolRepository.class);
         assertEquals("Aggregate Licensee Class with such ID doesn't exist in the system",
-            validator.getErrorMessage());
+            new AggregateLicenseeClassValidator(aaclFundPoolRepository).getErrorMessage());
     }
 }

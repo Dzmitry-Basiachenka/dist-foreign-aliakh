@@ -82,7 +82,7 @@ public class AaclFundPoolUploadWindowTest {
 
     @Test
     public void testIsValid() {
-        expect(aaclUsageController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).anyTimes();
+        expect(aaclUsageController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(2);
         replay(aaclUsageController);
         window = new AaclFundPoolUploadWindow(aaclUsageController);
         assertFalse(window.isValid());

@@ -51,12 +51,14 @@ public class FundPoolRepositoryIntegrationTest {
         assertNull(fundPoolRepository.findById(ID_2));
         FundPool fundPool = new FundPool();
         fundPool.setId(ID_2);
+        fundPool.setProductFamily(NTS_PRODUCT_FAMILY);
         fundPool.setName(NAME_2);
         fundPool.setComment(COMMENT_2);
         fundPoolRepository.insert(fundPool);
         FundPool actualFundPool = fundPoolRepository.findById(ID_2);
         assertNotNull(actualFundPool);
         assertEquals(ID_2, actualFundPool.getId());
+        assertEquals(NTS_PRODUCT_FAMILY, actualFundPool.getProductFamily());
         assertEquals(NAME_2, actualFundPool.getName());
         assertEquals(COMMENT_2, actualFundPool.getComment());
     }
