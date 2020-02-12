@@ -125,10 +125,10 @@ public class ScenarioService implements IScenarioService {
     public Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter) {
         LOGGER.info("Insert scenario. Started. Name={}, Description={}, UsageFilter={}",
             scenarioName, description, usageFilter);
-        List<Usage> usages = usageService.getUsagesWithAmounts(usageFilter);
+        List<Usage> usages = fasUsageService.getUsagesWithAmounts(usageFilter);
         Scenario scenario = buildScenario(scenarioName, description, usageFilter);
         scenarioRepository.insert(scenario);
-        usageService.addUsagesToScenario(usages, scenario);
+        fasUsageService.addUsagesToScenario(usages, scenario);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         LOGGER.info("Insert scenario. Finished. Name={}, Description={}, UsageFilter={}",
@@ -176,7 +176,7 @@ public class ScenarioService implements IScenarioService {
     public void refreshScenario(Scenario scenario) {
         ScenarioUsageFilter usageFilter = scenarioUsageFilterService.getByScenarioId(scenario.getId());
         if (null != usageFilter) {
-            usageService.recalculateUsagesForRefresh(new UsageFilter(usageFilter), scenario);
+            fasUsageService.recalculateUsagesForRefresh(new UsageFilter(usageFilter), scenario);
             scenarioRepository.refresh(scenario);
             scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         }
@@ -273,7 +273,7 @@ public class ScenarioService implements IScenarioService {
         LOGGER.info("Reconcile rightsholders. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
         rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenario.getId(),
             RightsholderDiscrepancyStatusEnum.DRAFT);
-        List<Usage> usagesForReconcile = usageService.getUsagesForReconcile(scenario.getId());
+        List<Usage> usagesForReconcile = fasUsageService.getUsagesForReconcile(scenario.getId());
         Map<Long, List<Usage>> groupedByWrWrkInstUsages =
             usagesForReconcile.stream().collect(Collectors.groupingBy(Usage::getWrWrkInst));
         String productFamily = usagesForReconcile.iterator().next().getProductFamily();
@@ -300,7 +300,7 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     public void updateRhPayeeParticipating(Scenario scenario) {
-        usageService.updateRhPayeeAmountsAndParticipating(usageService.getUsagesByScenarioId(scenario.getId()));
+        fasUsageService.updateRhPayeeAmountsAndParticipating(usageService.getUsagesByScenarioId(scenario.getId()));
     }
 
     @Override
@@ -311,7 +311,7 @@ public class ScenarioService implements IScenarioService {
                 Objects.requireNonNull(scenario).getId(), RightsholderDiscrepancyStatusEnum.DRAFT, null, null);
         LOGGER.info("Approve Ownership Changes. Started. {}, RhDiscrepanciesCount={}",
             ForeignLogUtils.scenario(scenario), LogUtils.size(discrepancies));
-        Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
+        Map<Long, List<Usage>> groupedByWrWrkInstUsages = fasUsageService.getUsagesForReconcile(scenario.getId())
             .stream()
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));
         Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(discrepancies.stream()
@@ -331,7 +331,7 @@ public class ScenarioService implements IScenarioService {
         List<Usage> usages = groupedByWrWrkInstUsages.values().stream()
             .flatMap(Collection::stream)
             .collect(Collectors.toList());
-        usageService.updateRhPayeeAmountsAndParticipating(usages);
+        fasUsageService.updateRhPayeeAmountsAndParticipating(usages);
         rightsholderService.updateUsagesPayeesAsync(usages);
         rightsholderDiscrepancyService.approveByScenarioId(scenario.getId());
         LOGGER.info("Approve Ownership Changes. Finished. {}, RhDiscrepanciesCount={}",

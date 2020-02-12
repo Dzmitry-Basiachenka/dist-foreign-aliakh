@@ -88,11 +88,6 @@ public class UsageServiceIntegrationTest {
     }
 
     @Test
-    public void testClaAccountNumber() {
-        assertEquals(2000017000L, usageService.getClaAccountNumber(), 0);
-    }
-
-    @Test
     public void testGetMarkets() {
         assertEquals(Arrays.asList("Bus", "Doc Del", "Edu", "Gov", "Lib", "Sch", "Univ"), ntsUsageService.getMarkets());
     }

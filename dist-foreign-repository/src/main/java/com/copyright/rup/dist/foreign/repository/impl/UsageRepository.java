@@ -106,18 +106,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<Usage> findForReconcile(String scenarioId) {
-        return selectList("IUsageMapper.findForReconcile", Objects.requireNonNull(scenarioId));
-    }
-
-    @Override
-    public Map<Long, Usage> findRightsholdersInformation(String scenarioId) {
-        RightsholdersInfoResultHandler handler = new RightsholdersInfoResultHandler();
-        getTemplate().select("IUsageMapper.findRightsholdersInformation", Objects.requireNonNull(scenarioId), handler);
-        return handler.getRhToUsageMap();
-    }
-
-    @Override
     public int findCountByFilter(UsageFilter filter) {
         return selectOne("IUsageMapper.findCountByFilter", ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
     }
@@ -163,14 +151,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public void deleteByScenarioId(String scenarioId) {
         delete("IUsageMapper.deleteByScenarioId", Objects.requireNonNull(scenarioId));
-    }
-
-    @Override
-    public List<Usage> findWithAmountsAndRightsholders(UsageFilter filter) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
-        return selectList("IUsageMapper.findWithAmountsAndRightsholders", parameters);
     }
 
     @Override

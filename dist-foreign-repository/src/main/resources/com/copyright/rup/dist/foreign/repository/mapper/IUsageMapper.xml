@@ -566,43 +566,6 @@
         where df_scenario_uid = #{scenarioId}
     </select>
 
-    <select id="findForReconcile" resultMap="usageResultMap" parameterType="string">
-        select
-            u.df_usage_uid,
-            u.wr_wrk_inst,
-            u.work_title,
-            u.system_title,
-            u.rh_account_number,
-            rh.df_rightsholder_uid rh_id,
-            rh.name rh_name,
-            u.payee_account_number,
-            p.df_rightsholder_uid payee_id,
-            p.name payee_name,
-            u.product_family,
-            u.status_ind,
-            u.gross_amount
-        from ${schema}.df_usage u
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
-        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
-        where df_scenario_uid = #{scenarioId}
-        order by df_usage_uid
-    </select>
-
-    <select id="findRightsholdersInformation" resultMap="usageResultMap" parameterType="string">
-        select distinct
-            u.rh_account_number,
-            rh.df_rightsholder_uid rh_id,
-            p.df_rightsholder_uid payee_id,
-            u.payee_account_number,
-            ufas.is_rh_participating_flag,
-            ufas.is_payee_participating_flag
-        from ${schema}.df_usage u
-        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
-        join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
-        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
-        where df_scenario_uid = #{scenarioId}
-    </select>
-
     <sql id="selectDtoByScenarioIdSql">
         <include refid="IUsageMapper.selectUsageDtos"/>
         where df_scenario_uid = #{scenarioId}
@@ -710,33 +673,6 @@
         delete from ${schema}.df_usage
         where df_scenario_uid = #{scenarioId}
     </delete>
-
-    <select id="findWithAmountsAndRightsholders" parameterType="map" resultMap="usageAmountResultMap">
-        select
-            u.df_usage_uid,
-            u.gross_amount,
-            u.net_amount,
-            u.service_fee,
-            u.service_fee_amount,
-            ufas.reported_value,
-            u.service_fee,
-            u.created_datetime,
-            u.updated_datetime,
-            u.created_by_user,
-            u.updated_by_user,
-            u.record_version,
-            u.status_ind,
-            u.product_family,
-            r.df_rightsholder_uid rh_id,
-            u.rh_account_number,
-            r.name rh_name
-        from ${schema}.df_usage u
-        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
-        <include refid="usageFilter"/>
-        and u.status_ind = #{status}
-    </select>
 
     <select id="findInvalidRightsholdersByFilter" parameterType="map" resultType="long">
         select distinct

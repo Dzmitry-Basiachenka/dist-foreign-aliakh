@@ -240,10 +240,10 @@ public class FasUsageControllerTest {
     @Test
     public void testGetClaAccountNumber() {
         Long claAccountNumber = 2000017000L;
-        expect(usageService.getClaAccountNumber()).andReturn(claAccountNumber).once();
-        replay(usageService);
+        expect(fasUsageService.getClaAccountNumber()).andReturn(claAccountNumber).once();
+        replay(fasUsageService);
         assertEquals(claAccountNumber, controller.getClaAccountNumber());
-        verify(usageService);
+        verify(fasUsageService);
     }
 
     @Test

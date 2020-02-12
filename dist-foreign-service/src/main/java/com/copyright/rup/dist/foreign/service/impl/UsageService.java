@@ -2,10 +2,8 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
-import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -28,7 +26,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
 import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService;
-import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -41,12 +38,10 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,10 +80,6 @@ public class UsageService implements IUsageService {
     private static final String UPDATE_PAID_NOT_FOUND_WARN_LOG_MESSAGE = "Update paid information. Not found usages. " +
         "UsagesCount={}, CreatedCount={}, UpdatedCount={}, NotFoundUsageIds={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
-    @Value("$RUP{dist.foreign.service_fee.cla_payee}")
-    private BigDecimal claPayeeServiceFee;
-    @Value("$RUP{dist.foreign.cla_account_number}")
-    private Long claAccountNumber;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -97,8 +88,6 @@ public class UsageService implements IUsageService {
     private IUsageAuditService usageAuditService;
     @Autowired
     private IScenarioService scenarioService;
-    @Autowired
-    private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private ICrmIntegrationService crmIntegrationService;
     @Autowired
@@ -162,95 +151,13 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public List<Usage> getUsagesWithAmounts(UsageFilter filter) {
-        return usageRepository.findWithAmountsAndRightsholders(filter);
-    }
-
-    @Override
     public List<Long> getInvalidRightsholdersByFilter(UsageFilter filter) {
         return usageRepository.findInvalidRightsholdersByFilter(filter);
     }
 
     @Override
-    public void recalculateUsagesForRefresh(UsageFilter filter, Scenario scenario) {
-        Map<Long, Usage> rhToUsageMap = getRightsholdersInformation(scenario.getId());
-        List<Usage> newUsages = usageRepository.findWithAmountsAndRightsholders(filter);
-        Set<String> rightsholdersIds = newUsages.stream().map(usage -> usage.getRightsholder().getId())
-            .collect(Collectors.toSet());
-        rightsholdersIds.removeAll(
-            rhToUsageMap.values().stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
-        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
-        rightsholdersIds.addAll(getPayeeAndRhIds(rollUps));
-        Map<String, Table<String, String, Object>> preferencesMap =
-            prmIntegrationService.getPreferences(rightsholdersIds);
-        newUsages.forEach(usage -> {
-            final long rhAccountNumber = usage.getRightsholder().getAccountNumber();
-            Usage scenarioUsage = rhToUsageMap.get(rhAccountNumber);
-            Rightsholder payee = Objects.isNull(scenarioUsage)
-                ? PrmRollUpService.getPayee(rollUps, usage.getRightsholder(), usage.getProductFamily())
-                : scenarioUsage.getPayee();
-            usage.setPayee(payee);
-            addScenarioInfo(usage, scenario);
-            calculateAmounts(usage, Objects.isNull(scenarioUsage)
-                ? prmIntegrationService.isRightsholderParticipating(preferencesMap,
-                usage.getRightsholder().getId(), usage.getProductFamily())
-                : scenarioUsage.isRhParticipating());
-            fillPayeeParticipatingForRefresh(preferencesMap, usage, scenarioUsage);
-        });
-        usageRepository.addToScenario(newUsages);
-        rightsholderService.updateUsagesPayeesAsync(newUsages);
-    }
-
-    @Override
     public List<Usage> getUsagesByScenarioId(String scenarioId) {
         return usageRepository.findByScenarioId(scenarioId);
-    }
-
-    @Override
-    public List<Usage> getUsagesForReconcile(String scenarioId) {
-        return usageRepository.findForReconcile(scenarioId);
-    }
-
-    @Override
-    public Map<Long, Usage> getRightsholdersInformation(String scenarioId) {
-        return usageRepository.findRightsholdersInformation(scenarioId);
-    }
-
-    @Override
-    public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
-        Set<String> rightsholdersIds =
-            usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet());
-        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
-        rightsholdersIds.addAll(getPayeeAndRhIds(rollUps));
-        Map<String, Table<String, String, Object>> preferencesMap =
-            prmIntegrationService.getPreferences(rightsholdersIds);
-        usages.forEach(usage -> {
-            usage.setPayee(PrmRollUpService.getPayee(rollUps, usage.getRightsholder(), usage.getProductFamily()));
-            addScenarioInfo(usage, scenario);
-            calculateAmounts(usage,
-                prmIntegrationService.isRightsholderParticipating(preferencesMap, usage.getRightsholder().getId(),
-                    usage.getProductFamily()));
-            fillPayeeParticipating(preferencesMap, usage);
-        });
-        usageRepository.addToScenario(usages);
-        rightsholderService.updateUsagesPayeesAsync(usages);
-    }
-
-    @Override
-    public void updateRhPayeeAmountsAndParticipating(List<Usage> usages) {
-        String userName = RupContextUtils.getUserName();
-        Map<String, Table<String, String, Object>> preferencesMap =
-            prmIntegrationService.getPreferences(usages.stream()
-                .flatMap(usage -> Stream.of(usage.getRightsholder().getId(), usage.getPayee().getId()))
-                .collect(Collectors.toSet()));
-        usages.forEach(usage -> {
-            calculateAmounts(usage,
-                prmIntegrationService.isRightsholderParticipating(preferencesMap, usage.getRightsholder().getId(),
-                    usage.getProductFamily()));
-            usage.setUpdateUser(userName);
-            fillPayeeParticipating(preferencesMap, usage);
-        });
-        usageRepository.update(usages);
     }
 
     @Override
@@ -328,11 +235,6 @@ public class UsageService implements IUsageService {
     @Override
     public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         return usageRepository.findForAudit(filter, pageable, sort);
-    }
-
-    @Override
-    public Long getClaAccountNumber() {
-        return claAccountNumber;
     }
 
     @Override
@@ -507,13 +409,6 @@ public class UsageService implements IUsageService {
             UsageStatusEnum.RH_NOT_FOUND);
     }
 
-    private Set<String> getPayeeAndRhIds(Map<String, Map<String, Rightsholder>> rollUps) {
-        return rollUps.values()
-            .stream()
-            .flatMap(map -> map.values().stream().map(Rightsholder::getId))
-            .collect(Collectors.toSet());
-    }
-
     private void populateAccountNumbers(List<PaidUsage> paidUsages) {
         Set<String> rhIds = paidUsages.stream()
             .flatMap(usage -> Stream.of(usage.getRightsholder().getId(), usage.getPayee().getId()))
@@ -539,15 +434,6 @@ public class UsageService implements IUsageService {
     private void insertPaidUsage(PaidUsage paidUsage, String actionReason) {
         usageArchiveRepository.insertPaid(paidUsage);
         usageAuditService.logAction(paidUsage.getId(), UsageActionTypeEnum.PAID, actionReason);
-    }
-
-    private void calculateAmounts(Usage usage, boolean rhParticipatingFlag) {
-        //usages that have CLA as Payee should get 10% service fee
-        CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
-            claAccountNumber.equals(usage.getPayee().getAccountNumber())
-                && FdaConstants.CLA_FAS_PRODUCT_FAMILY.equals(usage.getProductFamily())
-                ? claPayeeServiceFee
-                : prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
     }
 
     private PaidUsage buildPaidUsage(Usage originalUsage, PaidUsage paidUsage) {
@@ -608,32 +494,9 @@ public class UsageService implements IUsageService {
             conversionRate);
     }
 
-    private void addScenarioInfo(Usage usage, Scenario scenario) {
-        usage.setScenarioId(scenario.getId());
-        usage.setStatus(UsageStatusEnum.LOCKED);
-        usage.setUpdateUser(scenario.getCreateUser());
-    }
-
     private String buildActionReason(Long oldAccountNumber, Long newAccountNumber, String actionReason) {
         return oldAccountNumber.equals(newAccountNumber)
             ? actionReason
             : actionReason + String.format(" with RH change from %d to %d", oldAccountNumber, newAccountNumber);
-    }
-
-    private void fillPayeeParticipating(Map<String, Table<String, String, Object>> preferencesMap, Usage usage) {
-        boolean payeeParticipating = !usage.getRightsholder().getId().equals(usage.getPayee().getId())
-            ? prmIntegrationService.isRightsholderParticipating(preferencesMap, usage.getPayee().getId(),
-            usage.getProductFamily())
-            : usage.isRhParticipating();
-        usage.setPayeeParticipating(payeeParticipating);
-    }
-
-    private void fillPayeeParticipatingForRefresh(Map<String, Table<String, String, Object>> preferencesMap,
-                                                  Usage newUsage, Usage scenarioUsage) {
-        if (Objects.nonNull(scenarioUsage)) {
-            newUsage.setPayeeParticipating(scenarioUsage.isPayeeParticipating());
-        } else {
-            fillPayeeParticipating(preferencesMap, newUsage);
-        }
     }
 }
