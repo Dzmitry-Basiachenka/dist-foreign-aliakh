@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl.converter;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.NtsFundPool;
-import com.copyright.rup.dist.foreign.repository.impl.converter.json.FundPoolJsonMapper;
+import com.copyright.rup.dist.foreign.repository.impl.converter.json.NtsFundPoolJsonMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -26,9 +26,9 @@ import java.sql.SQLException;
  *
  * @author Aliaksandr Liakh
  */
-public class FundPoolTypeHandler extends BaseTypeHandler<NtsFundPool> {
+public class NtsFundPoolTypeHandler extends BaseTypeHandler<NtsFundPool> {
 
-    private static final FundPoolJsonMapper JSON_MAPPER = new FundPoolJsonMapper();
+    private static final NtsFundPoolJsonMapper JSON_MAPPER = new NtsFundPoolJsonMapper();
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, NtsFundPool parameter, JdbcType jdbcType)

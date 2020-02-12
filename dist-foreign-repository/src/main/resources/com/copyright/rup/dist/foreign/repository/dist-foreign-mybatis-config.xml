@@ -41,7 +41,7 @@
         <typeAlias alias="ServiceFeeTrueUpReportDto" type="com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto"/>
         <typeAlias alias="SummaryMarketReportDto" type="com.copyright.rup.dist.foreign.domain.report.SummaryMarketReportDto"/>
         <typeAlias alias="BatchStatistic" type="com.copyright.rup.dist.foreign.domain.report.BatchStatistic"/>
-        <typeAlias alias="FundPoolTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.FundPoolTypeHandler"/>
+        <typeAlias alias="NtsFundPoolTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.NtsFundPoolTypeHandler"/>
         <typeAlias alias="UsageStatistic" type="com.copyright.rup.dist.foreign.domain.report.UsageStatistic"/>
         <typeAlias alias="WorkClassification" type="com.copyright.rup.dist.foreign.domain.WorkClassification"/>
         <typeAlias alias="FundPool" type="com.copyright.rup.dist.foreign.domain.FundPool"/>
@@ -57,7 +57,7 @@
     <typeHandlers>
         <typeHandler handler="org.apache.ibatis.type.LocalDateTypeHandler"/>
         <typeHandler handler="org.apache.ibatis.type.OffsetDateTimeTypeHandler"/>
-        <typeHandler handler="FundPoolTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.NtsFundPool"/>
+        <typeHandler handler="NtsFundPoolTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.NtsFundPool"/>
         <typeHandler handler="NtsFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.Scenario$NtsFields"/>
     </typeHandlers>
 

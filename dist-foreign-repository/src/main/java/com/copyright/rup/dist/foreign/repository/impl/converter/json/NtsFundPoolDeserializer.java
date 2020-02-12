@@ -19,12 +19,12 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public class FundPoolDeserializer extends StdDeserializer<NtsFundPool> {
+public class NtsFundPoolDeserializer extends StdDeserializer<NtsFundPool> {
 
     /**
      * Default constructor.
      */
-    FundPoolDeserializer() {
+    NtsFundPoolDeserializer() {
         super(NtsFundPool.class);
     }
 
