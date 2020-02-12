@@ -88,4 +88,33 @@ databaseChangeLog {
             dropTable(tableName: 'df_fund_pool_detail', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2020-02-12-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-52334 FDA: Load AACL Fund Pool: make Fund Pool name unique across product family")
+
+        addUniqueConstraint(constraintName: 'uk_df_fund_pool_name_product_family',
+                schemaName: dbAppsSchema,
+                tablespace: dbDataTablespace,
+                tableName: 'df_fund_pool',
+                columnNames: 'name, product_family')
+
+        dropUniqueConstraint(constraintName: 'df_fund_pool_name_key',
+                schemaName: dbAppsSchema,
+                tablespace: dbDataTablespace,
+                tableName: 'df_fund_pool',
+                columnNames: 'name')
+        rollback {
+            addUniqueConstraint(constraintName: 'df_fund_pool_name_key',
+                    schemaName: dbAppsSchema,
+                    tablespace: dbDataTablespace,
+                    tableName: 'df_fund_pool',
+                    columnNames: 'name')
+
+            dropUniqueConstraint(constraintName: 'uk_df_fund_pool_name_product_family',
+                    schemaName: dbAppsSchema,
+                    tablespace: dbDataTablespace,
+                    tableName: 'df_fund_pool',
+                    columnNames: 'name, product_family')
+        }
+    }
 }
