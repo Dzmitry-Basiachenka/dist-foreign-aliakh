@@ -1127,6 +1127,41 @@ databaseChangeLog {
             column(name: 'reported_value', value: '2500')
         }
 
+        //testFindProductFamilies
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'cb597f4e-f636-447f-8710-0436d8994d10')
+            column(name: 'name', value: 'Batch with usages in WORK_NOT_FOUND status')
+            column(name: 'rro_account_number', value: '2000017010')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'payment_date', value: '2021-02-12')
+            column(name: 'fiscal_year', value: '2020')
+            column(name: 'gross_amount', value: '10.00')
+        }
+
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '4dd8cdf8-ca10-422e-bdd5-3220105e6379')
+            column(name: 'df_usage_batch_uid', value: 'cb597f4e-f636-447f-8710-0436d8994d10')
+            column(name: 'status_ind', value: 'NTS_WITHDRAWN')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '5475802112214578XX')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'gross_amount', value: '16.40')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '4dd8cdf8-ca10-422e-bdd5-3220105e6379')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '30.86')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'f6cb5b07-45c0-4188-9da3-920046eec4c0')
             column(name: 'df_usage_batch_uid', value: '83027b25-f269-4bec-a8ea-b126431eedbf')

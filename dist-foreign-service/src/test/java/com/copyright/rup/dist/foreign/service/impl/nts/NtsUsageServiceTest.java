@@ -55,6 +55,7 @@ public class NtsUsageServiceTest {
 
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USER_NAME = "user@copyright.com";
+    private static final String BATCH_ID = "3e2d710d-8753-4432-ad7b-25e327c97e94";
     private static final String SCENARIO_ID = "78179a10-ad9e-432e-8aae-30b91fd14ed1";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
 
@@ -210,6 +211,17 @@ public class NtsUsageServiceTest {
         replay(ntsUsageRepository, usageArchiveRepository, usageAuditService, RupContextUtils.class);
         ntsUsageService.moveToArchive(scenario);
         verify(ntsUsageRepository, usageArchiveRepository, usageAuditService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testAddWithdrawnUsagesToPreServiceFeeFund() {
+        String fundId = "e6042ad1-51e8-48d8-8b06-f8b2e684d993";
+        Set<String> batchIds = Collections.singleton(BATCH_ID);
+        ntsUsageRepository.addWithdrawnUsagesToFundPool(fundId, batchIds, USER_NAME);
+        expectLastCall().once();
+        replay(ntsUsageRepository);
+        ntsUsageRepository.addWithdrawnUsagesToFundPool(fundId, batchIds, USER_NAME);
+        verify(ntsUsageRepository);
     }
 
     private Rightsholder buildRightsholder(Long accountNUmber) {

@@ -312,4 +312,25 @@
             and status_ind = #{statusToFind}
             and product_family = #{productFamily}
     </update>
+
+    <update id="addWithdrawnUsagesToFundPool" parameterType="map">
+        with u as (
+            update ${schema}.df_usage
+            set
+                status_ind = #{statusToSet},
+                <include refid="StoredEntityMapper.update"/>
+            where df_usage_batch_uid in
+                <foreach collection="batchIds" item="batchId" separator="," open="(" close=")">
+                    #{batchId}
+                </foreach>
+                and status_ind = #{statusToFind}
+                returning df_usage_uid
+        )
+        update ${schema}.df_usage_fas
+        set
+            df_fund_pool_uid = #{fundPoolId},
+            <include refid="StoredEntityMapper.update"/>
+        from u
+        where df_usage_fas_uid = u.df_usage_uid
+    </update>
 </mapper>

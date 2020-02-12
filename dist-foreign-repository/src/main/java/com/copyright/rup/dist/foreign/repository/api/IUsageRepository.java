@@ -352,16 +352,6 @@ public interface IUsageRepository {
     boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
 
     /**
-     * Updates usages with status NTS_WITHDRAWN from given batches to status TO_BE_DISTRIBUTED
-     * and adds the usages to the pre-service fee fund.
-     *
-     * @param fundId   id of pre-service fee fund
-     * @param batchIds set of ids of usage batches
-     * @param userName user name
-     */
-    void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName);
-
-    /**
      * Finds map of Wr Wrk Insts to usage ids related to specified batch and having specified status.
      *
      * @param batchName batch name

@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents service interface for NTS specific usages business logic.
@@ -87,4 +88,15 @@ public interface INtsUsageService {
      * @return list of supported markets.
      */
     List<String> getMarkets();
+
+    /**
+     * Updates usages with status {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN}
+     * from given batches to status TO_BE_DISTRIBUTED
+     * and adds the usages to the fund pool.
+     *
+     * @param fundPoolId id of fund pool
+     * @param batchIds   set of ids of usage batches
+     * @param userName   user name
+     */
+    void addWithdrawnUsagesToFundPool(String fundPoolId, Set<String> batchIds, String userName);
 }

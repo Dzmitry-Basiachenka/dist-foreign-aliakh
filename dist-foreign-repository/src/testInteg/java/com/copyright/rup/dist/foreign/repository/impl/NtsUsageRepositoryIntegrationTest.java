@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -243,6 +244,24 @@ public class NtsUsageRepositoryIntegrationTest {
         assertEquals(2, usages.size());
         assertEquals(UsageStatusEnum.UNCLASSIFIED, usages.get(0).getStatus());
         assertEquals(UsageStatusEnum.UNCLASSIFIED, usages.get(1).getStatus());
+    }
+
+    @Test
+    public void testAddWithdrawnUsagesToPreServiceFeeFund() {
+        List<String> usageIds = Collections.singletonList("4dd8cdf8-ca10-422e-bdd5-3220105e6379");
+        List<Usage> usages = usageRepository.findByIds(usageIds);
+        assertEquals(1, usages.size());
+        Usage usage = usages.get(0);
+        assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
+        assertNull(usage.getFundPoolId());
+        String fundPoolId = "3fef25b0-c0d1-4819-887f-4c6acc01390e";
+        Set<String> batchIds = Collections.singleton("cb597f4e-f636-447f-8710-0436d8994d10");
+        ntsUsageRepository.addWithdrawnUsagesToFundPool(fundPoolId, batchIds, StoredEntity.DEFAULT_USER);
+        usages = usageRepository.findByIds(usageIds);
+        assertEquals(1, usages.size());
+        usage = usages.get(0);
+        assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
+        assertEquals(fundPoolId, usage.getFundPoolId());
     }
 
     private NtsFundPool buildFundPool(BigDecimal nonStmAmount) {

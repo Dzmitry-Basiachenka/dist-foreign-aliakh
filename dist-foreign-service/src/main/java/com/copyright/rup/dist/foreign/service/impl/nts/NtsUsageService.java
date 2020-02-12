@@ -129,6 +129,11 @@ public class NtsUsageService implements INtsUsageService {
     }
 
     @Override
+    public void addWithdrawnUsagesToFundPool(String fundPoolId, Set<String> batchIds, String userName) {
+        ntsUsageRepository.addWithdrawnUsagesToFundPool(fundPoolId, batchIds, userName);
+    }
+
+    @Override
     public void deleteFromPreServiceFeeFund(String fundPoolId) {
         ntsUsageRepository.deleteFromPreServiceFeeFund(fundPoolId, RupContextUtils.getUserName());
     }

@@ -352,14 +352,4 @@ public interface IUsageService {
      * @return map where key - Wr Wrk Inst, value - set of usage ids related to Wr Wrk Inst
      */
     Map<Long, Set<String>> getWrWrkInstToUsageIdsForRightsAssignment(String batchName);
-
-    /**
-     * Updates usages with status {@link UsageStatusEnum#NTS_WITHDRAWN} from given batches to status TO_BE_DISTRIBUTED
-     * and adds the usages to the pre-service fee fund.
-     *
-     * @param fundId   id of pre-service fee fund
-     * @param batchIds set of ids of usage batches
-     * @param userName user name
-     */
-    void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName);
 }

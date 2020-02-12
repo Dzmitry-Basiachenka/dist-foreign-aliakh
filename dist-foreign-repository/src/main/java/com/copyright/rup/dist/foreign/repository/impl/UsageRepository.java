@@ -6,7 +6,6 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -23,7 +22,6 @@ import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -359,18 +357,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         params.put(FILTER_KEY, Objects.requireNonNull(filter));
         params.put(STATUS_KEY, Objects.requireNonNull(status));
         return selectOne("IUsageMapper.isValidFilteredUsageStatus", params);
-    }
-
-    @Override
-    public void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName) {
-        checkArgument(StringUtils.isNotBlank(fundId));
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
-        params.put("fundId", fundId);
-        params.put("statusToFind", UsageStatusEnum.NTS_WITHDRAWN);
-        params.put("statusToSet", UsageStatusEnum.TO_BE_DISTRIBUTED);
-        params.put("batchIds", Objects.requireNonNull(batchIds));
-        params.put("updateUser", Objects.requireNonNull(userName));
-        update("IUsageMapper.addWithdrawnUsagesToPreServiceFeeFund", params);
     }
 
     @Override

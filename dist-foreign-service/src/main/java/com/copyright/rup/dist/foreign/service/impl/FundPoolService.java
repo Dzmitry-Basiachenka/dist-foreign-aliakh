@@ -6,7 +6,6 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import org.slf4j.Logger;
@@ -34,8 +33,6 @@ public class FundPoolService implements IFundPoolService {
     @Autowired
     private IFundPoolRepository fundPoolRepository;
     @Autowired
-    private IUsageService usageService;
-    @Autowired
     private INtsUsageService ntsUsageService;
 
     @Override
@@ -58,7 +55,7 @@ public class FundPoolService implements IFundPoolService {
             "Create Pre-Service fee fund. Started. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
             fundPool.getName(), fundPool.getTotalAmount(), LogUtils.size(batchIds), userName);
         fundPoolRepository.insert(fundPool);
-        usageService.addWithdrawnUsagesToPreServiceFeeFund(fundPool.getId(), batchIds, userName);
+        ntsUsageService.addWithdrawnUsagesToFundPool(fundPool.getId(), batchIds, userName);
         LOGGER.info(
             "Create Pre-Service fee fund. Finished. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
             fundPool.getName(), fundPool.getTotalAmount(), LogUtils.size(batchIds), userName);
