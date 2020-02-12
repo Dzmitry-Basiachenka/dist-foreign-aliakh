@@ -49,11 +49,11 @@ public interface IAaclUsageController extends ICommonUsageController {
     List<FundPoolDetail> getFundPoolDetails(String fundPoolId);
 
     /**
-     * Deletes {@link FundPool} by id.
+     * Deletes {@link FundPool}.
      *
-     * @param fundPoolId {@link FundPool} id
+     * @param fundPool a {@link FundPool} to delete
      */
-    void deleteFundPoolById(String fundPoolId);
+    void deleteFundPool(FundPool fundPool);
 
     /**
      * Gets instance of CSV processor.

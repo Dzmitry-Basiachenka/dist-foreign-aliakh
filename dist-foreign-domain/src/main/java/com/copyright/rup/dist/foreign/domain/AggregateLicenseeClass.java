@@ -15,7 +15,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  * @author Stanislau Rudak
  */
-// TODO {srudak} check if we really can use Integer here
 public class AggregateLicenseeClass extends StoredEntity<Integer> {
 
     private String name;

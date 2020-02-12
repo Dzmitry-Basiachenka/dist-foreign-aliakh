@@ -3,7 +3,9 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 
 import com.google.common.collect.Maps;
@@ -57,7 +59,7 @@ public class FundPoolRepository extends BaseRepository implements IFundPoolRepos
 
     @Override
     public List<FundPool> findNtsNotAttachedToScenario() {
-        return selectList("IFundPoolMapper.findNtsNotAttachedToScenario");
+        return selectList("IFundPoolMapper.findNtsNotAttachedToScenario", FdaConstants.NTS_PRODUCT_FAMILY);
     }
 
     @Override
@@ -67,5 +69,20 @@ public class FundPoolRepository extends BaseRepository implements IFundPoolRepos
         params.put("productFamily", Objects.requireNonNull(productFamily));
         params.put("name", escapeSqlLikePattern(name));
         return selectOne("IFundPoolMapper.fundPoolExists", params);
+    }
+
+    @Override
+    public void insertDetail(FundPoolDetail detail) {
+        insert("IFundPoolMapper.insertDetail", Objects.requireNonNull(detail));
+    }
+
+    @Override
+    public List<FundPoolDetail> findDetailsByFundPoolId(String fundPoolId) {
+        return selectList("IFundPoolMapper.findDetailsByFundPoolId", Objects.requireNonNull(fundPoolId));
+    }
+
+    @Override
+    public void deleteDetailsByFundPoolId(String fundPoolId) {
+        delete("IFundPoolMapper.deleteDetailsByFundPoolId", Objects.requireNonNull(fundPoolId));
     }
 }

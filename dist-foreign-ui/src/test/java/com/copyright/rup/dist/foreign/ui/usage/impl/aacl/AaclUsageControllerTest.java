@@ -32,7 +32,6 @@ import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.service.api.aacl.IAaclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
@@ -93,7 +92,6 @@ public class AaclUsageControllerTest {
     private IUsageBatchService usageBatchService;
     private IResearchService researchService;
     private IAaclUsageService aaclUsageService;
-    private IAaclFundPoolService aaclFundPoolService;
     private IFundPoolService fundPoolService;
     private CsvProcessorFactory csvProcessorFactory;
     private UsageFilter usageFilter;
@@ -109,7 +107,6 @@ public class AaclUsageControllerTest {
         filterWidgetMock = createMock(IAaclUsageFilterWidget.class);
         researchService = createMock(IResearchService.class);
         aaclUsageService = createMock(IAaclUsageService.class);
-        aaclFundPoolService = createMock(IAaclFundPoolService.class);
         fundPoolService = createMock(IFundPoolService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
@@ -120,7 +117,6 @@ public class AaclUsageControllerTest {
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, aaclUsageService);
-        Whitebox.setInternalState(controller, aaclFundPoolService);
         Whitebox.setInternalState(controller, fundPoolService);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, streamSourceHandler);
@@ -202,28 +198,29 @@ public class AaclUsageControllerTest {
     @Test
     public void testGetFundPools() {
         List<FundPool> fundPools = Collections.singletonList(new FundPool());
-        expect(aaclFundPoolService.getFundPools()).andReturn(fundPools).once();
-        replay(aaclFundPoolService);
+        expect(fundPoolService.getFundPools("AACL")).andReturn(fundPools).once();
+        replay(fundPoolService);
         assertEquals(fundPools, controller.getFundPools());
-        verify(aaclFundPoolService);
+        verify(fundPoolService);
     }
 
     @Test
     public void testGetFundPoolDetails() {
         List<FundPoolDetail> details = Collections.singletonList(new FundPoolDetail());
-        expect(aaclFundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(details).once();
-        replay(aaclFundPoolService);
+        expect(fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(details).once();
+        replay(fundPoolService);
         assertEquals(details, controller.getFundPoolDetails(FUND_POOL_ID));
-        verify(aaclFundPoolService);
+        verify(fundPoolService);
     }
 
     @Test
     public void testDeleteFundPool() {
-        aaclFundPoolService.deleteFundPoolById(FUND_POOL_ID);
+        FundPool fundPool = new FundPool();
+        fundPoolService.deleteAaclFundPool(fundPool);
         expectLastCall().once();
-        replay(aaclFundPoolService);
-        controller.deleteFundPoolById(FUND_POOL_ID);
-        verify(aaclFundPoolService);
+        replay(fundPoolService);
+        controller.deleteFundPool(fundPool);
+        verify(fundPoolService);
     }
 
     @Test
@@ -320,9 +317,9 @@ public class AaclUsageControllerTest {
     public void testInsertFundPool() {
         FundPool fundPool = new FundPool();
         List<FundPoolDetail> details = Collections.singletonList(new FundPoolDetail());
-        expect(aaclFundPoolService.insertFundPool(fundPool, details)).andReturn(1).once();
-        replay(aaclFundPoolService);
+        expect(fundPoolService.createAaclFundPool(fundPool, details)).andReturn(1).once();
+        replay(fundPoolService);
         assertEquals(1, controller.insertFundPool(fundPool, details));
-        verify(aaclFundPoolService);
+        verify(fundPoolService);
     }
 }

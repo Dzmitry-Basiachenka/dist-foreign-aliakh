@@ -1,11 +1,15 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import org.slf4j.Logger;
@@ -13,8 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IFundPoolService}.
@@ -34,6 +41,8 @@ public class FundPoolService implements IFundPoolService {
     private IFundPoolRepository fundPoolRepository;
     @Autowired
     private INtsUsageService ntsUsageService;
+    @Autowired
+    private ILicenseeClassService licenseeClassService;
 
     @Override
     public List<FundPool> getFundPools(String productFamily) {
@@ -62,6 +71,32 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    @Transactional
+    public int createAaclFundPool(FundPool fundPool, List<FundPoolDetail> details) {
+        String userName = RupContextUtils.getUserName();
+        int count = details.size();
+        LOGGER.info("Insert AACL fund pool. Started. FundPoolName={}, UserName={}, UsagesCount={}",
+            fundPool.getName(), userName, count);
+        fundPool.setId(RupPersistUtils.generateUuid());
+        fundPool.setTotalAmount(details.stream()
+            .map(FundPoolDetail::getGrossAmount)
+            .reduce(BigDecimal.ZERO, BigDecimal::add));
+        fundPool.setCreateUser(userName);
+        fundPool.setUpdateUser(userName);
+        fundPoolRepository.insert(fundPool);
+        details.forEach(detail -> {
+            detail.setId(RupPersistUtils.generateUuid());
+            detail.setFundPoolId(fundPool.getId());
+            detail.setCreateUser(userName);
+            detail.setUpdateUser(userName);
+            fundPoolRepository.insertDetail(detail);
+        });
+        LOGGER.info("Insert AACL fund pool. Finished. FundPoolName={}, UserName={}, UsagesCount={}",
+            fundPool.getName(), userName, count);
+        return count;
+    }
+
+    @Override
     public List<FundPool> getNtsNotAttachedToScenario() {
         return fundPoolRepository.findNtsNotAttachedToScenario();
     }
@@ -78,7 +113,33 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    @Transactional
+    public void deleteAaclFundPool(FundPool fundPool) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Delete AACL fund pool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+        fundPoolRepository.deleteDetailsByFundPoolId(fundPool.getId());
+        fundPoolRepository.delete(fundPool.getId());
+        LOGGER.info("Delete AACL fund pool. Finished. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+    }
+
+    @Override
     public List<String> getNtsFundPoolNamesByUsageBatchId(String batchId) {
         return fundPoolRepository.findNamesByUsageBatchId(batchId);
+    }
+
+    @Override
+    public List<FundPoolDetail> getDetailsByFundPoolId(String fundPoolId) {
+        Map<Integer, FundPoolDetail> classIdToDetail =
+            fundPoolRepository.findDetailsByFundPoolId(fundPoolId).stream()
+                .collect(Collectors.toMap(detail -> detail.getAggregateLicenseeClass().getId(), detail -> detail));
+        return licenseeClassService.getAggregateLicenseeClasses().stream()
+            .map(alc -> classIdToDetail.getOrDefault(alc.getId(), buildZeroFundPoolDetail(alc)))
+            .collect(Collectors.toList());
+    }
+
+    private FundPoolDetail buildZeroFundPoolDetail(AggregateLicenseeClass aggregateLicenseeClass) {
+        FundPoolDetail detail = new FundPoolDetail();
+        detail.setAggregateLicenseeClass(aggregateLicenseeClass);
+        return detail;
     }
 }
