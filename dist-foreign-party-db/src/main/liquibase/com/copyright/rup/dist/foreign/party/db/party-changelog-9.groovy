@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2020-02-04-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("B-52334 FDA: Load AACL Fund Pool: implement Upload button")
+        comment("B-52334 FDA: Load AACL Fund Pool: add permission to load AACL Fund Pool")
 
         insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
             column(name: 'cm_permission_uid', value: 'baseline-fda-load-aacl-fund-pool')
@@ -39,7 +39,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-02-04-01', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("B-54725 FDA: View/Delete AACL Fund Pool: add Delete AACL Fund Pool permission")
+        comment("B-54725 FDA: View/Delete AACL Fund Pool: add permission to delete AACL Fund Pool")
 
         insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
             column(name: 'cm_permission_uid', value: 'baseline-fda-delete-aacl-fund-pool')

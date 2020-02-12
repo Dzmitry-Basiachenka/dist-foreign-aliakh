@@ -6,7 +6,9 @@ databaseChangeLog {
                 "and rename withdrawn_amount to total_amount")
 
         addColumn(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
-            column(name: 'product_family', type: 'VARCHAR(128)', remarks: 'Product Family')
+            column(name: 'product_family', type: 'VARCHAR(128)', remarks: 'Product Family') {
+                constraints(nullable: false)
+            }
         }
 
         renameColumn(schemaName: dbAppsSchema,
@@ -38,7 +40,7 @@ databaseChangeLog {
 
             column(name: 'df_fund_pool_detail_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool detail')
             column(name: 'df_fund_pool_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool')
-            column(name: 'gross_amount', type: 'NUMERIC(38,10)', remarks: 'The gross amount')
+            column(name: 'gross_amount', type: 'NUMERIC(38,2)', remarks: 'The gross amount')
             column(name: 'df_aggregate_licensee_class_id', type: 'NUMERIC(38)', remarks: 'Aggregate Licensee Class Id')
             column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
                     remarks: 'The latest version of this record, used for optimistic locking') {

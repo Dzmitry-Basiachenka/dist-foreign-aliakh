@@ -113,5 +113,5 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @param details  list of {@link FundPoolDetail}s
      * @return count of inserted details
      */
-    int insertFundPool(FundPool fundPool, Collection<FundPoolDetail> details);
+    int insertFundPool(FundPool fundPool, List<FundPoolDetail> details);
 }

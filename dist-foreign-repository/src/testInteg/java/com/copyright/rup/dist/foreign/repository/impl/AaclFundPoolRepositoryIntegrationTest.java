@@ -116,7 +116,7 @@ public class AaclFundPoolRepositoryIntegrationTest {
         FundPoolDetail actualDetail = details.get(0);
         assertEquals(detail.getId(), actualDetail.getId());
         assertEquals(detail.getAggregateLicenseeClass().getId(), actualDetail.getAggregateLicenseeClass().getId());
-        assertEquals(new BigDecimal("1.0000000000"), actualDetail.getGrossAmount());
+        assertEquals(new BigDecimal("1.00"), actualDetail.getGrossAmount());
         assertEquals(USER_NAME, actualDetail.getCreateUser());
         assertEquals(USER_NAME, actualDetail.getUpdateUser());
     }

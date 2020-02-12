@@ -9,14 +9,14 @@
   {
     "id": "100ce91c-49c1-4197-9f7a-23a8210d5706",
     "name": "AACL Fund Pool 2",
-    "totalAmount": 71.1000000000,
+    "totalAmount": 71.10,
     "createUser": "coordinator@copyright.com",
     "createDate": "2020-01-03T11:00:00-04:00"
   },
   {
     "id": "ce9c1258-6d29-4224-a4e6-6f03b6aeef53",
     "name": "AACL Fund Pool 1",
-    "totalAmount": 31.2000000000,
+    "totalAmount": 31.20,
     "createUser": "coordinator@copyright.com",
     "createDate": "2020-01-02T11:00:00-04:00"
   }
