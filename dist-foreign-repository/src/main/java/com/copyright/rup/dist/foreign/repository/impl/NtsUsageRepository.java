@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
@@ -8,9 +10,11 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -31,6 +35,11 @@ import java.util.Set;
 @Repository
 public class NtsUsageRepository extends BaseRepository implements INtsUsageRepository {
 
+    /**
+     * It's a max value for count of variables in statement.
+     */
+    private static final int MAX_VARIABLES_COUNT = 32000;
+    private static final String PRODUCT_FAMILY_KEY = "productFamily";
     private static final String UPDATE_USER_KEY = "updateUser";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String STATUS_KEY = "status";
@@ -132,5 +141,29 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         params.put("statusesToUpdate", Sets.newHashSet(UsageStatusEnum.NTS_EXCLUDED, UsageStatusEnum.LOCKED));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("INtsUsageMapper.deleteFromScenario", params);
+    }
+
+    @Override
+    public List<String> findUsageIdsForClassificationUpdate() {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put("unclassifiedStatus", UsageStatusEnum.UNCLASSIFIED);
+        params.put("belletristicClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
+        params.put("eligibleStatus", UsageStatusEnum.ELIGIBLE);
+        params.put(PRODUCT_FAMILY_KEY, FdaConstants.NTS_PRODUCT_FAMILY);
+        return selectList("INtsUsageMapper.findUsageIdsForClassificationUpdate", params);
+    }
+
+    @Override
+    public void updateUsagesStatusToUnclassified(List<Long> wrWrkInsts, String userName) {
+        checkArgument(CollectionUtils.isNotEmpty(wrWrkInsts));
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+        params.put("statusToFind", UsageStatusEnum.ELIGIBLE);
+        params.put("statusToSet", UsageStatusEnum.UNCLASSIFIED);
+        params.put(PRODUCT_FAMILY_KEY, FdaConstants.NTS_PRODUCT_FAMILY);
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        Iterables.partition(wrWrkInsts, MAX_VARIABLES_COUNT).forEach(partition -> {
+            params.put("wrWrkInsts", Objects.requireNonNull(partition));
+            update("INtsUsageMapper.updateUsagesStatusToUnclassified", params);
+        });
     }
 }

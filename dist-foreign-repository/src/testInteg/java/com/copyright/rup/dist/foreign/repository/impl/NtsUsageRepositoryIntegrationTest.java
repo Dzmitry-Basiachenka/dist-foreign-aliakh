@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -13,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -26,6 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -56,6 +59,8 @@ public class NtsUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_2 = "c09aa888-85a5-4377-8c7a-85d84d255b5a";
     private static final String USAGE_ID_3 = "45445974-5bee-477a-858b-e9e8c1a642b8";
     private static final String USAGE_ID_4 = "ade68eac-0d79-4d23-861b-499a0c6e91d3";
+    private static final String USAGE_ID_5 = "f6cb5b07-45c0-4188-9da3-920046eec4c0";
+    private static final String USAGE_ID_6 = "f255188f-d582-4516-8c08-835cfe1d68c3";
     private static final String USAGE_ID_BELLETRISTIC = "bbbd64db-2668-499a-9d18-be8b3f87fbf5";
     private static final String USAGE_ID_UNCLASSIFIED = "6cad4cf2-6a19-4e5b-b4e0-f2f7a62ff91c";
     private static final String USAGE_ID_STM = "83a26087-a3b3-43ca-8b34-c66134fb6edf";
@@ -215,6 +220,29 @@ public class NtsUsageRepositoryIntegrationTest {
             ZERO_AMOUNT, ZERO_AMOUNT);
         verifyUsage(usages.get(1), UsageStatusEnum.UNCLASSIFIED, null, USER_NAME, ZERO_AMOUNT, new BigDecimal("900.00"),
             null, ZERO_AMOUNT, ZERO_AMOUNT);
+    }
+
+    @Test
+    public void testFindUsageIdsForClassificationUpdate() {
+        List<String> actualUsageIds = ntsUsageRepository.findUsageIdsForClassificationUpdate();
+        assertNotNull(actualUsageIds);
+        assertEquals(1, actualUsageIds.size());
+        assertEquals("c6cb5b07-45c0-4188-9da3-920046eec4cf", actualUsageIds.get(0));
+    }
+
+    @Test
+    public void testUpdateUsagesStatusToUnclassified() {
+        ArrayList<String> usageIds = Lists.newArrayList(USAGE_ID_5, USAGE_ID_6);
+        List<Usage> usages = usageRepository.findByIds(usageIds);
+        assertEquals(2, usages.size());
+        assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(0).getStatus());
+        assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(1).getStatus());
+        ntsUsageRepository.updateUsagesStatusToUnclassified(Lists.newArrayList(122267671L, 159526526L),
+            StoredEntity.DEFAULT_USER);
+        usages = usageRepository.findByIds(usageIds);
+        assertEquals(2, usages.size());
+        assertEquals(UsageStatusEnum.UNCLASSIFIED, usages.get(0).getStatus());
+        assertEquals(UsageStatusEnum.UNCLASSIFIED, usages.get(1).getStatus());
     }
 
     private NtsFundPool buildFundPool(BigDecimal nonStmAmount) {

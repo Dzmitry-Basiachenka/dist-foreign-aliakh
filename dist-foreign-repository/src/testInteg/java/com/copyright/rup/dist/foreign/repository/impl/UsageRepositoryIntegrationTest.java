@@ -43,7 +43,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -118,8 +117,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_22 = "c5ea47b0-b269-4791-9aa7-76308fe835e6";
     private static final String USAGE_ID_23 = "3b6892a9-49b2-41a2-aa3a-8705ea6640cc";
     private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
-    private static final String USAGE_ID_25 = "f6cb5b07-45c0-4188-9da3-920046eec4c0";
-    private static final String USAGE_ID_26 = "f255188f-d582-4516-8c08-835cfe1d68c3";
     private static final String USAGE_ID_31 = "3cf274c5-8eac-4d4a-96be-5921ae026840";
     private static final String USAGE_ID_32 = "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15";
     private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
@@ -229,8 +226,7 @@ public class UsageRepositoryIntegrationTest {
             "4dd8cdf8-ca10-422e-bdd5-3220105e6379", "6dc54058-5566-4aa2-8cd4-d1a09805ae20",
             "775ceaf9-125f-4387-b076-459eb4673d92", "a86308b1-7f89-474b-9390-fc926c5b218b",
             "af1f25e5-75ca-463f-8c9f-1f1e4b92f699", "bd407b50-6101-4304-8316-6404fe32a800",
-            "c6cb5b07-45c0-4188-9da3-920046eec4cf", "f255188f-d582-4516-8c08-835cfe1d68c3",
-            "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15", "f6cb5b07-45c0-4188-9da3-920046eec4c0",
+            "c6cb5b07-45c0-4188-9da3-920046eec4cf", "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15",
             "f9ddb072-a411-443b-89ca-1bb5a63425a4");
     }
 
@@ -239,7 +235,7 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             null, UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY,
-            Sort.Direction.ASC)), USAGE_ID_1, USAGE_ID_3, NTS_USAGE_ID, USAGE_ID_2, USAGE_ID_26, USAGE_ID_25);
+            Sort.Direction.ASC)), USAGE_ID_1, USAGE_ID_3, NTS_USAGE_ID, USAGE_ID_2);
     }
 
     @Test
@@ -529,14 +525,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindUsageIdsForClassificationUpdate() {
-        List<String> actualUsageIds = usageRepository.findUsageIdsForClassificationUpdate();
-        assertNotNull(actualUsageIds);
-        assertEquals(1, actualUsageIds.size());
-        assertEquals("c6cb5b07-45c0-4188-9da3-920046eec4cf", actualUsageIds.get(0));
-    }
-
-    @Test
     public void testFindByStatusAndWrWrkInsts() {
         assertEquals(2, usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED,
             Sets.newHashSet(987632764L, 12318778798L)));
@@ -602,8 +590,8 @@ public class UsageRepositoryIntegrationTest {
     public void testFindWithAmountsAndRightsholdersByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             null, UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 6, USAGE_ID_1,
-            USAGE_ID_2, USAGE_ID_3, NTS_USAGE_ID, USAGE_ID_25, USAGE_ID_26);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 4, USAGE_ID_1,
+            USAGE_ID_2, USAGE_ID_3, NTS_USAGE_ID);
     }
 
     @Test
@@ -1080,21 +1068,6 @@ public class UsageRepositoryIntegrationTest {
         usage = usages.get(0);
         assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
         assertEquals(fundPoolId, usage.getFundPoolId());
-    }
-
-    @Test
-    public void testUpdateUsagesStatusToUnclassified() {
-        ArrayList<String> usageIds = Lists.newArrayList(USAGE_ID_25, USAGE_ID_26);
-        List<Usage> usages = usageRepository.findByIds(usageIds);
-        assertEquals(2, usages.size());
-        assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(0).getStatus());
-        assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(1).getStatus());
-        usageRepository.updateUsagesStatusToUnclassified(Lists.newArrayList(122267671L, 159526526L),
-            StoredEntity.DEFAULT_USER);
-        usages = usageRepository.findByIds(usageIds);
-        assertEquals(2, usages.size());
-        assertEquals(UsageStatusEnum.UNCLASSIFIED, usages.get(0).getStatus());
-        assertEquals(UsageStatusEnum.UNCLASSIFIED, usages.get(1).getStatus());
     }
 
     @Test

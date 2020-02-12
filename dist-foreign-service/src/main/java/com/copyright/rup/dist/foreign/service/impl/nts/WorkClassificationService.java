@@ -10,6 +10,7 @@ import com.copyright.rup.dist.common.util.LogUtils.ILogWrapper;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
+import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IWorkClassificationRepository;
 import com.copyright.rup.dist.foreign.service.api.nts.IWorkClassificationService;
@@ -54,6 +55,8 @@ public class WorkClassificationService implements IWorkClassificationService {
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
+    private INtsUsageRepository ntsUsageRepository;
+    @Autowired
     @Qualifier("df.service.ntsNonBelletristicProcessor")
     private IChainProcessor<Usage> nonBelletristicProcessor;
     @Value("$RUP{dist.foreign.usages.batch_size}")
@@ -96,7 +99,7 @@ public class WorkClassificationService implements IWorkClassificationService {
             }
         });
         if (!wrWrkInsts.isEmpty()) {
-            usageRepository.updateUsagesStatusToUnclassified(wrWrkInsts, userName);
+            ntsUsageRepository.updateUsagesStatusToUnclassified(wrWrkInsts, userName);
         }
         LOGGER.debug("Delete classification. Finished. ClassificationsCount={}, UserName={}", classificationsCount,
             userName);
@@ -144,7 +147,7 @@ public class WorkClassificationService implements IWorkClassificationService {
     }
 
     private void updateClassifiedUsages() {
-        List<String> usageIdsToUpdate = usageRepository.findUsageIdsForClassificationUpdate();
+        List<String> usageIdsToUpdate = ntsUsageRepository.findUsageIdsForClassificationUpdate();
         if (CollectionUtils.isNotEmpty(usageIdsToUpdate)) {
             LOGGER.debug("Update usages based on classification. Started. UsagesCount={}",
                 LogUtils.size(usageIdsToUpdate));
