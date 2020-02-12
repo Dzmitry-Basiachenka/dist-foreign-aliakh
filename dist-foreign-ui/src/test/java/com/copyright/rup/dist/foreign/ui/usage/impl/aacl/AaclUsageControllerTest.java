@@ -316,7 +316,6 @@ public class AaclUsageControllerTest {
         replay(csvProcessorFactory);
     }
 
-
     @Test
     public void testInsertFundPool() {
         FundPool fundPool = new FundPool();

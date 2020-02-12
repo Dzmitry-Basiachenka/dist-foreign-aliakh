@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl.aacl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.createStrictMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
@@ -12,8 +14,12 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
+import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 
+import com.google.common.collect.Lists;
+
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -45,9 +51,11 @@ public class AaclFundPoolServiceTest {
     private static final AggregateLicenseeClass AGG_LICENSEE_CLASS_113 =
         buildAggregateLicenseeClass(113, "MU - Life Sciences");
     private static final String FUND_POOL_ID = "5a40ff60-31d2-4bab-9871-60cff88b7889";
+    private static final String USER_NAME = "SYSTEM";
 
     private AaclFundPoolService aaclFundPoolService;
     private IAaclFundPoolRepository aaclFundPoolRepository;
+    private IFundPoolRepository fundPoolRepository;
     private ILicenseeClassService licenseeClassService;
 
     private static AggregateLicenseeClass buildAggregateLicenseeClass(Integer id, String name) {
@@ -60,9 +68,11 @@ public class AaclFundPoolServiceTest {
     @Before
     public void setUp() {
         aaclFundPoolRepository = createStrictMock(IAaclFundPoolRepository.class);
+        fundPoolRepository = createMock(IFundPoolRepository.class);
         licenseeClassService = createMock(ILicenseeClassService.class);
         aaclFundPoolService = new AaclFundPoolService();
         Whitebox.setInternalState(aaclFundPoolService, aaclFundPoolRepository);
+        Whitebox.setInternalState(aaclFundPoolService, fundPoolRepository);
         Whitebox.setInternalState(aaclFundPoolService, licenseeClassService);
     }
 
@@ -106,6 +116,44 @@ public class AaclFundPoolServiceTest {
         replay(aaclFundPoolRepository);
         aaclFundPoolService.deleteFundPoolById(FUND_POOL_ID);
         verify(aaclFundPoolRepository);
+    }
+
+    @Test
+    public void testInsertFundPool() {
+        FundPool fundPool = new FundPool();
+        fundPool.setId("5b3aae10-df25-43d3-8a7a-1cce60030827");
+        FundPoolDetail detail1 = new FundPoolDetail();
+        detail1.setGrossAmount(BigDecimal.ONE);
+        FundPoolDetail detail2 = new FundPoolDetail();
+        detail2.setGrossAmount(BigDecimal.ONE);
+        List<FundPoolDetail> details = Lists.newArrayList(detail1, detail2);
+        Capture<FundPool> fundPoolCapture = new Capture<>();
+        Capture<FundPoolDetail> detailCapture1 = new Capture<>();
+        Capture<FundPoolDetail> detailCapture2 = new Capture<>();
+        fundPoolRepository.insert(capture(fundPoolCapture));
+        expectLastCall().once();
+        aaclFundPoolRepository.insertDetail(capture(detailCapture1));
+        expectLastCall().once();
+        aaclFundPoolRepository.insertDetail(capture(detailCapture2));
+        expectLastCall().once();
+        replay(fundPoolRepository, aaclFundPoolRepository);
+        assertEquals(2, aaclFundPoolService.insertFundPool(fundPool, details));
+        verify(fundPoolRepository, aaclFundPoolRepository);
+        FundPool fundPoolActual = fundPoolCapture.getValue();
+        assertNotNull(fundPoolActual.getId());
+        assertEquals(new BigDecimal(2), fundPoolActual.getTotalAmount());
+        assertEquals(USER_NAME, fundPoolActual.getCreateUser());
+        assertEquals(USER_NAME, fundPoolActual.getUpdateUser());
+        FundPoolDetail detailActual1 = detailCapture1.getValue();
+        assertNotNull(detailActual1.getId());
+        assertEquals(fundPool.getId(), detailActual1.getFundPoolId());
+        assertEquals(USER_NAME, detailActual1.getCreateUser());
+        assertEquals(USER_NAME, detailActual1.getUpdateUser());
+        FundPoolDetail detailActual2 = detailCapture2.getValue();
+        assertNotNull(detailActual2.getId());
+        assertEquals(fundPool.getId(), detailActual2.getFundPoolId());
+        assertEquals(USER_NAME, detailActual2.getCreateUser());
+        assertEquals(USER_NAME, detailActual2.getUpdateUser());
     }
 
     private void verifyDetail(FundPoolDetail expected, FundPoolDetail actual) {
