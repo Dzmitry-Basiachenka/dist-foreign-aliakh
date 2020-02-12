@@ -102,4 +102,21 @@ public interface INtsUsageRepository {
      * @param userName   user name
      */
     void deleteFromScenario(String scenarioId, String userName);
+
+    /**
+     * Finds {@link com.copyright.rup.dist.foreign.domain.Usage} ids with belletristic classification or
+     * classified usages in
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#UNCLASSIFIED} status.
+     *
+     * @return list of {@link com.copyright.rup.dist.foreign.domain.Usage} ids
+     */
+    List<String> findUsageIdsForClassificationUpdate();
+
+    /**
+     * Updates status to UNCLASSIFIED for ELIGIBLE usages with defined works without classification.
+     *
+     * @param wrWrkInsts list of Wr Wrk Insts
+     * @param userName   user name
+     */
+    void updateUsagesStatusToUnclassified(List<Long> wrWrkInsts, String userName);
 }

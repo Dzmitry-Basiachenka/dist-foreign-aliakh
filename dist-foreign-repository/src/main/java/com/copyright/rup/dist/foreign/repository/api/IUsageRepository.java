@@ -88,14 +88,6 @@ public interface IUsageRepository {
     List<Usage> findByIds(List<String> usageIds);
 
     /**
-     * Finds {@link Usage} ids with belletristic classification or classified usages in
-     * {@link UsageStatusEnum#UNCLASSIFIED} status.
-     *
-     * @return list of {@link Usage} ids
-     */
-    List<String> findUsageIdsForClassificationUpdate();
-
-    /**
      * Finds count of usages based on set of Wr Wrk Insts and status.
      *
      * @param status     usage status
@@ -368,14 +360,6 @@ public interface IUsageRepository {
      * @param userName user name
      */
     void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName);
-
-    /**
-     * Updates status to UNCLASSIFIED for ELIGIBLE usages with defined works without classification.
-     *
-     * @param wrWrkInsts list of Wr Wrk Insts
-     * @param userName   user name
-     */
-    void updateUsagesStatusToUnclassified(List<Long> wrWrkInsts, String userName);
 
     /**
      * Finds map of Wr Wrk Insts to usage ids related to specified batch and having specified status.

@@ -109,16 +109,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<String> findUsageIdsForClassificationUpdate() {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
-        params.put("unclassifiedStatus", UsageStatusEnum.UNCLASSIFIED);
-        params.put("belletristicClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
-        params.put("eligibleStatus", UsageStatusEnum.ELIGIBLE);
-        params.put(PRODUCT_FAMILY_KEY, FdaConstants.NTS_PRODUCT_FAMILY);
-        return selectList("IUsageMapper.findUsageIdsForClassificationUpdate", params);
-    }
-
-    @Override
     public int findCountByStatusAndWrWrkInsts(UsageStatusEnum status, Set<Long> wrWrkInsts) {
         AtomicInteger count = new AtomicInteger(0);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
@@ -381,20 +371,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         params.put("batchIds", Objects.requireNonNull(batchIds));
         params.put("updateUser", Objects.requireNonNull(userName));
         update("IUsageMapper.addWithdrawnUsagesToPreServiceFeeFund", params);
-    }
-
-    @Override
-    public void updateUsagesStatusToUnclassified(List<Long> wrWrkInsts, String userName) {
-        checkArgument(CollectionUtils.isNotEmpty(wrWrkInsts));
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
-        params.put("statusToFind", UsageStatusEnum.ELIGIBLE);
-        params.put("statusToSet", UsageStatusEnum.UNCLASSIFIED);
-        params.put(PRODUCT_FAMILY_KEY, FdaConstants.NTS_PRODUCT_FAMILY);
-        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
-        Iterables.partition(wrWrkInsts, MAX_VARIABLES_COUNT).forEach(partition -> {
-            params.put("wrWrkInsts", Objects.requireNonNull(partition));
-            update("IUsageMapper.updateUsagesStatusToUnclassified", params);
-        });
     }
 
     @Override

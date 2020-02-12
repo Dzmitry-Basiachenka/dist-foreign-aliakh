@@ -15,6 +15,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
+import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IWorkClassificationRepository;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
@@ -63,6 +64,7 @@ public class WorkClassificationServiceTest {
     private WorkClassificationService workClassificationService;
     private IWorkClassificationRepository workClassificationRepository;
     private IUsageRepository usageRepository;
+    private INtsUsageRepository ntsUsageRepository;
     private IChainProcessor<Usage> nonBelletristicProcessorMock;
 
     @Before
@@ -70,11 +72,13 @@ public class WorkClassificationServiceTest {
         workClassificationService = new WorkClassificationService();
         workClassificationRepository = createMock(IWorkClassificationRepository.class);
         usageRepository = createMock(IUsageRepository.class);
+        ntsUsageRepository = createMock(INtsUsageRepository.class);
         nonBelletristicProcessorMock = createMock(IChainProcessor.class);
         workClassificationService.setWorkClassificationRepository(workClassificationRepository);
         workClassificationService.setUsageRepository(usageRepository);
         workClassificationService.setNonBelletristicProcessor(nonBelletristicProcessorMock);
         Whitebox.setInternalState(workClassificationService, "usagesBatchSize", 100);
+        Whitebox.setInternalState(workClassificationService, "ntsUsageRepository", ntsUsageRepository);
     }
 
     @Test
@@ -98,7 +102,7 @@ public class WorkClassificationServiceTest {
         usage1.setId(RupPersistUtils.generateUuid());
         Usage usage2 = new Usage();
         usage1.setId(RupPersistUtils.generateUuid());
-        expect(usageRepository.findUsageIdsForClassificationUpdate())
+        expect(ntsUsageRepository.findUsageIdsForClassificationUpdate())
             .andReturn(Arrays.asList(usage1.getId(), usage2.getId())).once();
         expect(usageRepository.findByIds(Collections.singletonList(usage1.getId())))
             .andReturn(Collections.singletonList(usage1)).once();
@@ -108,7 +112,7 @@ public class WorkClassificationServiceTest {
             .andReturn(Collections.singletonList(usage2)).once();
         nonBelletristicProcessorMock.process(usage2);
         expectLastCall().once();
-        replay(workClassificationRepository, usageRepository, nonBelletristicProcessorMock);
+        replay(workClassificationRepository, ntsUsageRepository, usageRepository, nonBelletristicProcessorMock);
         workClassificationService.insertOrUpdateClassifications(
             Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), STM);
         WorkClassification classification1 = classificationCapture1.getValue();
@@ -119,7 +123,7 @@ public class WorkClassificationServiceTest {
         WorkClassification classification2 = classificationCapture2.getValue();
         assertNotNull(classification2.getWrWrkInst());
         assertEquals(STM, classification2.getClassification());
-        verify(workClassificationRepository, usageRepository, nonBelletristicProcessorMock);
+        verify(workClassificationRepository, ntsUsageRepository, usageRepository, nonBelletristicProcessorMock);
     }
 
     @Test
@@ -130,7 +134,8 @@ public class WorkClassificationServiceTest {
         expectLastCall().once();
         workClassificationRepository.deleteByWrWrkInst(WR_WRK_INST_2);
         expectLastCall().once();
-        usageRepository.updateUsagesStatusToUnclassified(Lists.newArrayList(WR_WRK_INST_1, WR_WRK_INST_2), USER_NAME);
+        ntsUsageRepository.updateUsagesStatusToUnclassified(Lists.newArrayList(WR_WRK_INST_1, WR_WRK_INST_2),
+            USER_NAME);
         expectLastCall().once();
         replay(RupContextUtils.class, workClassificationRepository, usageRepository);
         HashSet<WorkClassification> classifications = Sets.newLinkedHashSet();

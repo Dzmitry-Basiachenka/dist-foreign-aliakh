@@ -687,17 +687,6 @@
         order by u.df_usage_uid
     </select>
 
-    <select id="findUsageIdsForClassificationUpdate" parameterType="map" resultType="string">
-        select u.df_usage_uid
-        from ${schema}.df_usage u
-        join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
-        where u.status_ind = #{unclassifiedStatus}
-            or (wc.classification = #{belletristicClassification}
-                and product_family = #{productFamily}
-                and status_ind = #{eligibleStatus}
-            )
-    </select>
-
     <select id="findCountByStatusAndWrWrkInsts" resultType="int">
         select count(1)
         from ${schema}.df_usage
@@ -1376,19 +1365,6 @@
             <include refid="StoredEntityMapper.update"/>
         from u
         where df_usage_fas_uid = u.df_usage_uid
-    </update>
-
-    <update id="updateUsagesStatusToUnclassified" parameterType="map">
-        update ${schema}.df_usage
-        set
-            status_ind = #{statusToSet},
-            <include refid="StoredEntityMapper.update"/>
-        where wr_wrk_inst in
-            <foreach collection="wrWrkInsts" item="wrWrkInst" separator="," open="(" close=")">
-                #{wrWrkInst}
-            </foreach>
-            and status_ind = #{statusToFind}
-            and product_family = #{productFamily}
     </update>
 
     <select id="findWrWrkInstToUsageIdsByBatchNameAndUsageStatus" resultMap="wrWrkInstToUsageIdResultMap">
