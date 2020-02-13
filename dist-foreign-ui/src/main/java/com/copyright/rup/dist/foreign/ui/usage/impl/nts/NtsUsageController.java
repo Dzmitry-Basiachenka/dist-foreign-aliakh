@@ -78,6 +78,12 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     }
 
     @Override
+    public void deleteUsageBatch(UsageBatch usageBatch) {
+        getUsageBatchService().deleteUsageBatch(usageBatch);
+        getUsageFilterController().getWidget().clearFilter();
+    }
+
+    @Override
     public IStreamSource getExportUsagesStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_usage_",
             pos -> getReportService().writeNtsUsageCsvReport(

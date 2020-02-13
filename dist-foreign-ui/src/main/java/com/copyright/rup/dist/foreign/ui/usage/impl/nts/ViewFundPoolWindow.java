@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -9,6 +10,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.AbstractViewUsageBatchWindow
 
 import com.vaadin.server.SerializableComparator;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.renderers.LocalDateRenderer;
 
 /**
  * Modal window that provides functionality for viewing and deleting {@link UsageBatch}es.
@@ -59,7 +61,10 @@ class ViewFundPoolWindow extends AbstractViewUsageBatchWindow {
         addColumn(batch -> batch.getRro().getAccountNumber(), "table.column.rro_account_number", 120);
         addColumn(batch -> batch.getRro().getName(), "table.column.rro_account_name", 150,
             (batch1, batch2) -> batch1.getRro().getName().compareToIgnoreCase(batch2.getRro().getName()));
-        addColumn(UsageBatch::getPaymentDate, "table.column.payment_date", 100);
+        grid.addColumn(UsageBatch::getPaymentDate)
+            .setCaption(ForeignUi.getMessage("table.column.payment_date"))
+            .setRenderer(new LocalDateRenderer(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))
+            .setWidth(100);
         addColumn(batch -> UsageBatchUtils.getFiscalYear(batch.getFiscalYear()), "table.column.fiscal_year", 90);
         addAmountColumn(batch -> batch.getNtsFundPool().getStmAmount(), "table.column.stm_amount", 100,
             (batch1, batch2) -> batch1.getNtsFundPool().getStmAmount()

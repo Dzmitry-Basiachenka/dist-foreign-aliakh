@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
@@ -30,7 +29,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 
 import com.vaadin.data.provider.QuerySortOrder;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -125,19 +123,6 @@ public class CommonUsageControllerTest {
     }
 
     @Test
-    public void testDeleteUsageBatch() {
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatchService.deleteUsageBatch(usageBatch);
-        expectLastCall().once();
-        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
-        filterWidgetMock.clearFilter();
-        expectLastCall().once();
-        replay(usageBatchService, filterController, filterWidgetMock);
-        controller.deleteUsageBatch(usageBatch);
-        verify(usageBatchService, filterController, filterWidgetMock);
-    }
-
-    @Test
     public void testScenarioExists() {
         expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(true).once();
         replay(scenarioService);
@@ -187,6 +172,10 @@ public class CommonUsageControllerTest {
 
         @Override
         public void onScenarioCreated(ScenarioCreateEvent event) {
+        }
+
+        @Override
+        public void deleteUsageBatch(UsageBatch usageBatch) {
         }
 
         @Override

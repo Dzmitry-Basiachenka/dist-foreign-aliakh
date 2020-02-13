@@ -164,6 +164,19 @@ public class NtsUsageControllerTest {
     }
 
     @Test
+    public void testDeleteUsageBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatchService.deleteUsageBatch(usageBatch);
+        expectLastCall().once();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        filterWidgetMock.clearFilter();
+        expectLastCall().once();
+        replay(usageBatchService, filterController, filterWidgetMock);
+        controller.deleteUsageBatch(usageBatch);
+        verify(usageBatchService, filterController, filterWidgetMock);
+    }
+
+    @Test
     public void testIsValidFilteredUsageStatus() {
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();

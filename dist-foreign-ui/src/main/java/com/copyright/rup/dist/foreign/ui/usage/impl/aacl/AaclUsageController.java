@@ -122,6 +122,12 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
+    public void deleteUsageBatch(UsageBatch usageBatch) {
+        //TODO: use service logic to delete batch
+        getUsageFilterController().getWidget().clearFilter();
+    }
+
+    @Override
     public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
         return aaclUsageService
             .isValidFilteredUsageStatus(getUsageFilterController().getWidget().getAppliedFilter(), status);

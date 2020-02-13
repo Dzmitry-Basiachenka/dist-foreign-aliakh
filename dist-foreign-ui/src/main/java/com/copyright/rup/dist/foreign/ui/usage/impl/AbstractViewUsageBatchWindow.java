@@ -77,7 +77,8 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
             dataProvider.setFilter(batch -> StringUtils.containsIgnoreCase(batch.getName(), search)
                 || StringUtils.containsIgnoreCase(batch.getRro().getName(), search)
                 || StringUtils.containsIgnoreCase(batch.getRro().getAccountNumber().toString(), search)
-                || StringUtils.containsIgnoreCase(batch.getPaymentDate().format(DateTimeFormatter.ISO_DATE), search));
+                || StringUtils.containsIgnoreCase(batch.getPaymentDate()
+                .format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)), search));
         }
         // Gets round an issue when Vaadin do not recalculates columns widths once vertical scroll is disappeared
         grid.recalculateColumnWidths();

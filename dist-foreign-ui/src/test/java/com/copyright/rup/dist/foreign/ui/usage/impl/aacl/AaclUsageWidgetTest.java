@@ -233,7 +233,7 @@ public class AaclUsageWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(5, layout.getComponentCount());
-        verifyUsageBatchMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load"));
+        verifyUsageBatchMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load", "View"));
         verifyFundPoolMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
         Button sendForClassificationButton = (Button) layout.getComponent(2);
         assertEquals("Send for Classification", sendForClassificationButton.getCaption());

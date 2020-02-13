@@ -13,7 +13,7 @@ import com.vaadin.ui.Button;
  *
  * @author Uladzislau Shalamitski
  */
-class ViewUsageBatchMediator implements IMediator {
+public class ViewUsageBatchMediator implements IMediator {
 
     private Button deleteButton;
 
