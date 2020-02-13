@@ -12,6 +12,13 @@
         <result property="comment" column="comment"/>
     </resultMap>
 
+    <resultMap id="aaclFundPoolDetailResultMap" type="FundPoolDetail" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_fund_pool_detail_uid"/>
+        <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id" javaType="java.lang.Integer"/>
+        <result property="aggregateLicenseeClass.name" column="aggregate_licensee_class_name"/>
+        <result property="grossAmount" column="gross_amount"/>
+    </resultMap>
+
     <sql id="fundPoolColumns">
         df_fund_pool_uid,
         product_family,
@@ -75,11 +82,12 @@
             fund.df_fund_pool_uid,
             fund.name
         from ${schema}.df_fund_pool fund
-        where df_fund_pool_uid not in (
-            select nts_fields->>'pre_service_fee_fund_uid'
-            from ${schema}.df_scenario
-            where nts_fields->>'pre_service_fee_fund_uid' is not null
-        )
+        where product_family = #{productFamily}
+            and df_fund_pool_uid not in (
+                select nts_fields->>'pre_service_fee_fund_uid'
+                from ${schema}.df_scenario
+                where nts_fields->>'pre_service_fee_fund_uid' is not null
+            )
         order by fund.updated_datetime desc
     </select>
 
@@ -91,4 +99,43 @@
                 and name ilike #{name}
         )
     </select>
+
+    <insert id="insertDetail" parameterType="FundPoolDetail">
+        insert into ${schema}.df_fund_pool_detail (
+            df_fund_pool_detail_uid,
+            df_fund_pool_uid,
+            df_aggregate_licensee_class_id,
+            gross_amount,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        ) values (
+            #{id},
+            #{fundPoolId},
+            #{aggregateLicenseeClass.id},
+            #{grossAmount},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findDetailsByFundPoolId" parameterType="string" resultMap="aaclFundPoolDetailResultMap">
+        select
+            fpd.df_fund_pool_detail_uid,
+            alc.aggregate_licensee_class_id,
+            alc.aggregate_licensee_class_name,
+            fpd.gross_amount,
+            fpd.created_datetime,
+            fpd.updated_datetime,
+            fpd.created_by_user,
+            fpd.updated_by_user,
+            fpd.record_version
+        from ${schema}.df_fund_pool_detail fpd
+        join ${schema}.df_aggregate_licensee_class alc
+            on alc.aggregate_licensee_class_id = fpd.df_aggregate_licensee_class_id
+        where fpd.df_fund_pool_uid = #{fundPoolId}
+        order by alc.aggregate_licensee_class_id
+    </select>
+
+    <delete id="deleteDetailsByFundPoolId" parameterType="string">
+        delete from ${schema}.df_fund_pool_detail
+        where df_fund_pool_uid = #{fundPoolId}
+    </delete>
 </mapper>

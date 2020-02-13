@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
-import com.copyright.rup.dist.foreign.repository.api.IAaclFundPoolRepository;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The validator for Aggregate Licensee Class Id.
@@ -22,10 +24,12 @@ public class AggregateLicenseeClassValidator implements DistCsvProcessor.IValida
     /**
      * Constructor.
      *
-     * @param aaclFundPoolRepository instance of {@link IAaclFundPoolRepository}
+     * @param licenseeClassService instance of {@link ILicenseeClassService}
      */
-    public AggregateLicenseeClassValidator(IAaclFundPoolRepository aaclFundPoolRepository) {
-        this.aggregateLicenseeClassIds = aaclFundPoolRepository.findAggregateLicenseeClassIds();
+    public AggregateLicenseeClassValidator(ILicenseeClassService licenseeClassService) {
+        this.aggregateLicenseeClassIds = licenseeClassService.getAggregateLicenseeClasses().stream()
+            .map(AggregateLicenseeClass::getId)
+            .collect(Collectors.toSet());
     }
 
     @Override

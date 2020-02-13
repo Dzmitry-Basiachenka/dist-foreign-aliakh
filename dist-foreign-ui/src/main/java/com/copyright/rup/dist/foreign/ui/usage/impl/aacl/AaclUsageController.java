@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
-import com.copyright.rup.dist.foreign.service.api.aacl.IAaclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
@@ -66,8 +65,6 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Autowired
     private IAaclUsageService aaclUsageService;
     @Autowired
-    private IAaclFundPoolService aaclFundPoolService;
-    @Autowired
     private IFundPoolService fundPoolService;
 
     @Override
@@ -111,17 +108,17 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public List<FundPool> getFundPools() {
-        return aaclFundPoolService.getFundPools();
+        return fundPoolService.getFundPools(FdaConstants.AACL_PRODUCT_FAMILY);
     }
 
     @Override
     public List<FundPoolDetail> getFundPoolDetails(String fundPoolId) {
-        return aaclFundPoolService.getDetailsByFundPoolId(fundPoolId);
+        return fundPoolService.getDetailsByFundPoolId(fundPoolId);
     }
 
     @Override
-    public void deleteFundPoolById(String fundPoolId) {
-        aaclFundPoolService.deleteFundPoolById(fundPoolId);
+    public void deleteFundPool(FundPool fundPool) {
+        fundPoolService.deleteAaclFundPool(fundPool);
     }
 
     @Override
@@ -170,7 +167,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public int insertFundPool(FundPool fundPool, List<FundPoolDetail> details) {
-        return aaclFundPoolService.insertFundPool(fundPool, details);
+        return fundPoolService.createAaclFundPool(fundPool, details);
     }
 
     @Override

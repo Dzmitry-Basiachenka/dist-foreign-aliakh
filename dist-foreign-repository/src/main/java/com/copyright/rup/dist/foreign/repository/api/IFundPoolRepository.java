@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 
 import java.util.List;
 
@@ -69,4 +70,26 @@ public interface IFundPoolRepository {
      * @return {@code true} - if fund pool exists, {@code false} - otherwise
      */
     boolean fundPoolExists(String productFamily, String name);
+
+    /**
+     * Inserts {@link FundPoolDetail}.
+     *
+     * @param detail instance of {@link FundPoolDetail}
+     */
+    void insertDetail(FundPoolDetail detail);
+
+    /**
+     * Finds {@link FundPoolDetail}s by {@link FundPool} id.
+     *
+     * @param fundPoolId {@link FundPool} id
+     * @return list of {@link FundPoolDetail}s
+     */
+    List<FundPoolDetail> findDetailsByFundPoolId(String fundPoolId);
+
+    /**
+     * Deletes {@link FundPoolDetail}s by {@link FundPool} id.
+     *
+     * @param fundPoolId {@link FundPool} id
+     */
+    void deleteDetailsByFundPoolId(String fundPoolId);
 }

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 
 import java.util.List;
 import java.util.Set;
@@ -42,6 +43,15 @@ public interface IFundPoolService {
     void createNtsFundPool(FundPool fundPool, Set<String> batchIds);
 
     /**
+     * Creates AACL fund pool and its details.
+     *
+     * @param fundPool instance of {@link FundPool}
+     * @param details  list of {@link FundPoolDetail}s
+     * @return count of inserted details
+     */
+    int createAaclFundPool(FundPool fundPool, List<FundPoolDetail> details);
+
+    /**
      * Gets NTS {@link FundPool}s not attached to scenario.
      *
      * @return list of {@link FundPool}s
@@ -56,10 +66,25 @@ public interface IFundPoolService {
     void deleteNtsFundPool(FundPool fundPool);
 
     /**
+     * Deletes AACL {@link FundPool}.
+     *
+     * @param fundPool {@link FundPool} to delete
+     */
+    void deleteAaclFundPool(FundPool fundPool);
+
+    /**
      * Gets NTS fund pool names associated with batch identifier.
      *
      * @param batchId batch identifier
      * @return list of names
      */
     List<String> getNtsFundPoolNamesByUsageBatchId(String batchId);
+
+    /**
+     * Gets {@link FundPoolDetail}s by {@link FundPool} id.
+     *
+     * @param fundPoolId {@link FundPool} id
+     * @return list of {@link FundPoolDetail}s
+     */
+    List<FundPoolDetail> getDetailsByFundPoolId(String fundPoolId);
 }

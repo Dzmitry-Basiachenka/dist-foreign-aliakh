@@ -53,7 +53,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
         setWidth(900, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
-        searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_fund_pool.search.aacl"));
+        searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_fund_pool.search"));
         initGrid();
         HorizontalLayout buttonsLayout = initButtons();
         initMediator();
@@ -93,7 +93,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
             Windows.showConfirmDialog(
                 ForeignUi.getMessage("message.confirm.delete_action", selectedFundPool.getName(), "fund pool"),
                 () -> {
-                    controller.deleteFundPoolById(selectedFundPool.getId());
+                    controller.deleteFundPool(selectedFundPool);
                     grid.setItems(controller.getFundPools());
                 });
         });
