@@ -17,14 +17,14 @@ import java.io.IOException;
  *
  * @author Aliaksandr Liakh
  */
-public class FundPoolJsonMapper {
+public class NtsFundPoolJsonMapper {
 
     private static final ObjectMapper OBJECT_MAPPER = buildObjectMapper();
 
     private static ObjectMapper buildObjectMapper() {
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(NtsFundPool.class, new FundPoolSerializer());
-        simpleModule.addDeserializer(NtsFundPool.class, new FundPoolDeserializer());
+        simpleModule.addSerializer(NtsFundPool.class, new NtsFundPoolSerializer());
+        simpleModule.addDeserializer(NtsFundPool.class, new NtsFundPoolDeserializer());
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;

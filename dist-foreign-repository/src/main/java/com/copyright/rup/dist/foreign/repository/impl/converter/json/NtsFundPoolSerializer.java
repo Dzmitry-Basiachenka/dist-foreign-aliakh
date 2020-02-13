@@ -17,12 +17,12 @@ import java.io.IOException;
  *
  * @author Aliaksandr Liakh
  */
-public class FundPoolSerializer extends StdSerializer<NtsFundPool> {
+public class NtsFundPoolSerializer extends StdSerializer<NtsFundPool> {
 
     /**
      * Default constructor.
      */
-    FundPoolSerializer() {
+    NtsFundPoolSerializer() {
         super(NtsFundPool.class);
     }
 

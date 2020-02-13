@@ -22,7 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Verifies {@link FundPoolTypeHandler}.
+ * Verifies {@link NtsFundPoolTypeHandler}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -36,7 +36,7 @@ public class NtsFundPoolTypeHandlerTest {
     private static final int COLUMN_INDEX = 1;
     private static final int PARAMETER_INDEX = 1;
 
-    private final FundPoolTypeHandler typeHandler = new FundPoolTypeHandler();
+    private final NtsFundPoolTypeHandler typeHandler = new NtsFundPoolTypeHandler();
 
     @Test
     public void testSetNonNullParameterPreparedStatement() throws SQLException {

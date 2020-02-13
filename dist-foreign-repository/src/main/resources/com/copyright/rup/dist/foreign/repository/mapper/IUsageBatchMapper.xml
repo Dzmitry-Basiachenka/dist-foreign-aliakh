@@ -13,7 +13,7 @@
         <result property="paymentDate" column="payment_date"/>
         <result property="fiscalYear" column="fiscal_year"/>
         <result property="grossAmount" column="gross_amount"/>
-        <result property="ntsFundPool" column="fund_pool" typeHandler="FundPoolTypeHandler"/>
+        <result property="ntsFundPool" column="fund_pool" typeHandler="NtsFundPoolTypeHandler"/>
     </resultMap>
 
     <resultMap id="batchNameScenarioNamePairResultMap" type="BatchNameScenarioNamePair">
@@ -57,7 +57,7 @@
             #{paymentDate},
             #{fiscalYear},
             #{grossAmount},
-            #{ntsFundPool, typeHandler=FundPoolTypeHandler},
+            #{ntsFundPool, typeHandler=NtsFundPoolTypeHandler},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>

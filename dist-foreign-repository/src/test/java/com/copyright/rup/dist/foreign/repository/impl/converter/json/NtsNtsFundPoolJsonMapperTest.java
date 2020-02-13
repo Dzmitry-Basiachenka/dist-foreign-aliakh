@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
- * Verifies {@link FundPoolJsonMapper}.
+ * Verifies {@link NtsFundPoolJsonMapper}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -24,9 +24,9 @@ import java.math.BigDecimal;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFundPoolJsonMapperTest {
+public class NtsNtsFundPoolJsonMapperTest {
 
-    private final FundPoolJsonMapper jsonMapper = new FundPoolJsonMapper();
+    private final NtsFundPoolJsonMapper jsonMapper = new NtsFundPoolJsonMapper();
 
     @Test
     public void testDeserialize() throws IOException {
