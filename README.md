@@ -1,3 +1,44 @@
+9.1.0
+-
+* B-52334 FDA: Load AACL Fund Pool: add product_family column into df_fund_pool table and rename withdrawn_amount to total_amount
+* B-52334 FDA: Load AACL Fund Pool: create df_fund_pool_aacl, df_fund_pool_detail_aacl tables
+* B-52334 FDA: Load AACL Fund Pool: implement Upload button
+* B-52334 FDA: Load AACL Fund Pool: implement file upload dialog
+* B-52334 FDA: Load AACL Fund Pool: implement fund pool CSV file parsing
+* B-52334 FDA: Load AACL Fund Pool: implement fund pool name uniqueness validation
+* B-52334 FDA: Load AACL Fund Pool: implement fund pool service and repository
+* B-52334 FDA: Load AACL Fund Pool: make changes based on comments in CR-DIST-FOREIGN-145
+* B-52334 FDA: Load AACL Fund Pool: make changes based on comments in CR-DIST-FOREIGN-145
+* B-52334 FDA: Load AACL Fund Pool: make changes based on comments in CR-DIST-FOREIGN-145
+* B-52334 FDA: Load AACL Fund Pool: remove df_fund_pool_aacl table and use df_fund_pool table instead
+* B-54725 FDA: View/Delete AACL Fund Pool: fix AACL fund pool detail retrieving logic
+* B-54725 FDA: View/Delete AACL Fund Pool: implement View Fund Pool Details window, add total amount column to View Fund Pool window
+* B-54725 FDA: View/Delete AACL Fund Pool: implement View Fund Pool window
+* B-54725 FDA: View/Delete AACL Fund Pool: implement repository/service logic for deleting AACL fund pool
+* B-54725 FDA: View/Delete AACL Fund Pool: implement repository/service logic for reading AACL fund pool
+* B-54725 FDA: View/Delete AACL Fund Pool: make changes based on comments in CR-DIST-FOREIGN-145
+* B-54725 FDA: View/Delete AACL Fund Pool: remove missing setFundPoolId method usage
+* B-55624 FDA: Modify Usage Tab export for AACL: add button to export AACL usages to CSV file
+* B-55624 FDA: Modify Usage Tab export for AACL: implement controller logic related to export AACL usages to CSV file
+* B-55624 FDA: Modify Usage Tab export for AACL: implement repository logic
+* B-55624 FDA: Modify Usage Tab export for AACL: implement service logic related to export AACL usages to CSV file
+* B-55624: FDA: Modify Usage Tab export for AACL: make changes based on CR-DIST-FOREIGN-144
+* B-56093 Tech Debt: FDA: introduce separate FDA repository and mapper for FAS specific logic
+* B-56093 Tech Debt: FDA: introduce specific methods for NTS and FAS product families for sending scenarios to LM
+* B-56093 Tech Debt: FDA: move NTS and FAS specific services to corresponding packages
+* B-56093 Tech Debt: FDA: move NTS specific logic to separate service and repository on Usage level
+* B-56093 Tech Debt: FDA: move NTS specific logic to separate service and repository on Usage level
+* B-56093 Tech Debt: FDA: move NTS specific logic to separate service and repository on Usage level and fix issue related to check style
+* B-56093 Tech Debt: FDA: refresh context after each integration test class invocation
+* B-56093 Tech Debt: FDA: remove resolved TODO from IFundPoolRepository
+* B-56093 Tech Debt: FDA: rename NTS fund pool handler, serializer and deserializer
+* B-56093 Tech Debt: FDA: unify naming of methods in FundPoolService
+* B-56093 Tech Debt: FDA: update commonScripts version to 3.5.2
+* B-56093 Tech Debt: FDA: update commonScripts version to 3.5.3
+* B-56265 FDA: View & Delete AACL Batch: implement window to view and delete AACL batches
+* CDP-889 FDA: Undistributed Liabilities Reconciliation Report for FAS/FAS2: NTS RROs are displayed in the report
+* CDP-890 FDA: NTS classification: There are duplicates on classification window for 30k+ unique works
+
 8.1.23
 -
 * B-52329 FDA: Load classified AACL usages: add publication type to AaclClassifiedUsage toString() method
