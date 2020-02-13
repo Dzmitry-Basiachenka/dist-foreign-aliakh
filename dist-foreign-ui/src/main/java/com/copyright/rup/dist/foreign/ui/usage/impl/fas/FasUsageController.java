@@ -91,6 +91,12 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     }
 
     @Override
+    public void deleteUsageBatch(UsageBatch usageBatch) {
+        getUsageBatchService().deleteUsageBatch(usageBatch);
+        getUsageFilterController().getWidget().clearFilter();
+    }
+
+    @Override
     public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
         return getUsageService()
             .isValidFilteredUsageStatus(getUsageFilterController().getWidget().getAppliedFilter(), status);

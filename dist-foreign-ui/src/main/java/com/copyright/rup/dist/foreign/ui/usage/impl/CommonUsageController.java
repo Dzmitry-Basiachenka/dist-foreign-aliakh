@@ -107,12 +107,6 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     }
 
     @Override
-    public void deleteUsageBatch(UsageBatch usageBatch) {
-        usageBatchService.deleteUsageBatch(usageBatch);
-        getUsageFilterController().getWidget().clearFilter();
-    }
-
-    @Override
     public void onScenarioCreated(ScenarioCreateEvent event) {
         getWidget().fireWidgetEvent(event);
     }
