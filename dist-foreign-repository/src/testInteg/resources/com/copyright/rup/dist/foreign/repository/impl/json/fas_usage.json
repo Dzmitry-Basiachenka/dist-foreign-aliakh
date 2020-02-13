@@ -1,8 +1,8 @@
 [
   {
     "id": "463e2239-1a36-41cc-9a51-ee2a80eae0c1",
-    "batchId": "56282dbc-2468-48d4-b926-93d3458a656a",
-    "scenarioId": "b1f0b236-3ae9-4a60-9fab-61db84199d6f",
+    "batchId": "b5def044-259d-43fe-90d1-69a67e3abbd5",
+    "scenarioId": "f3bb9d31-e305-4979-8591-bfaa2f930c90",
     "wrWrkInst": 123456783,
     "workTitle": "Wissenschaft & Forschung Japan",
     "systemTitle": "Wissenschaft & Forschung Japan",
@@ -25,7 +25,7 @@
     "reportedValue": 11.25,
     "grossAmount": 54.4400000000,
     "rightsholder": {
-      "id": "05c4714b-291d-4e38-ba4a-35307434acfb",
+      "id": "1497a662-f9d5-4192-922a-4bcb466e46cf",
       "name": "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
       "accountNumber": 7000813806
     },

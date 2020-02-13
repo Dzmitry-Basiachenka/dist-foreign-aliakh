@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -43,7 +42,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.StringUtils;
-import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -118,35 +116,6 @@ public class UsageServiceTest {
         Whitebox.setInternalState(usageService, usageArchiveRepository);
         Whitebox.setInternalState(usageService, scenarioAuditService);
         Whitebox.setInternalState(usageService, rightsholderService);
-    }
-
-    @Test
-    public void testInsertUsages() {
-        mockStatic(RupContextUtils.class);
-        Capture<Usage> captureUsage1 = new Capture<>();
-        Capture<Usage> captureUsage2 = new Capture<>();
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setGrossAmount(new BigDecimal("12.00"));
-        usageBatch.setName("ABC");
-        Usage usage1 = new Usage();
-        usage1.setReportedValue(BigDecimal.TEN);
-        Usage usage2 = new Usage();
-        usage2.setReportedValue(BigDecimal.ONE);
-        List<Usage> usages = Arrays.asList(usage1, usage2);
-        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        usageRepository.insert(capture(captureUsage1));
-        expectLastCall().once();
-        usageAuditService.logAction(usage1.getId(), UsageActionTypeEnum.LOADED, "Uploaded in 'ABC' Batch");
-        expectLastCall().once();
-        usageRepository.insert(capture(captureUsage2));
-        expectLastCall().once();
-        usageAuditService.logAction(usage2.getId(), UsageActionTypeEnum.LOADED, "Uploaded in 'ABC' Batch");
-        expectLastCall().once();
-        replay(usageRepository, usageAuditService, RupContextUtils.class);
-        assertEquals(2, usageService.insertUsages(usageBatch, usages));
-        verifyUsage(captureUsage1.getValue(), new BigDecimal("10.9090909090"));
-        verifyUsage(captureUsage2.getValue(), new BigDecimal("1.0909090909"));
-        verify(usageRepository, usageAuditService, RupContextUtils.class);
     }
 
     @Test
@@ -650,13 +619,6 @@ public class UsageServiceTest {
     private void assertResult(List<?> result, int size) {
         assertNotNull(result);
         assertEquals(size, result.size());
-    }
-
-    private void verifyUsage(Usage usage, BigDecimal grossAmount) {
-        assertNotNull(usage);
-        assertEquals(grossAmount, usage.getGrossAmount());
-        assertEquals(USER_NAME, usage.getCreateUser());
-        assertEquals(USER_NAME, usage.getUpdateUser());
     }
 
     private Usage buildUsage(String usageId) {
