@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Implementation of {@link INtsUsageRepository}.
@@ -76,6 +77,20 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         params.put(STATUS_KEY, UsageStatusEnum.ARCHIVED);
         params.put("excludeClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
         return selectOne("INtsUsageMapper.findCountForBatch", params);
+    }
+
+    @Override
+    public int findUnclassifiedUsagesCountByWrWrkInsts(Set<Long> wrWrkInsts) {
+        AtomicInteger count = new AtomicInteger(0);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(STATUS_KEY, UsageStatusEnum.UNCLASSIFIED);
+        Iterables.partition(Objects.requireNonNull(wrWrkInsts), MAX_VARIABLES_COUNT)
+            .forEach(partition -> {
+                parameters.put("wrWrkInsts", partition);
+                count.addAndGet(
+                    selectOne("INtsUsageMapper.findUnclassifiedUsagesCountByWrWrkInsts", parameters));
+            });
+        return count.get();
     }
 
     @Override

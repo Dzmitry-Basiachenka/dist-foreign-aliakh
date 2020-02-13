@@ -1,25 +1,21 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.notNull;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
-import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mybatis.spring.SqlSessionTemplate;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -65,18 +61,6 @@ public class UsageRepositoryTest {
             .andReturn(0).times(2);
         replay(sqlSessionTemplate);
         usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.RH_NOT_FOUND, 1L);
-        verify(sqlSessionTemplate);
-    }
-
-    @Test
-    public void testFindCountByStatusAndWrWrkInsts() {
-        Set<Long> wrWrkInst = LongStream.range(1, 32002).boxed().collect(Collectors.toSet());
-        Capture<Map<String, Object>> paramsCapture = new Capture<>();
-        expect(sqlSessionTemplate.selectOne(eq("IUsageMapper.findCountByStatusAndWrWrkInsts"), capture(paramsCapture)))
-            .andReturn(0).times(2);
-        replay(sqlSessionTemplate);
-        usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED, wrWrkInst);
-        assertTrue(wrWrkInst.size() > ((List) paramsCapture.getValue().get("wrWrkInsts")).size());
         verify(sqlSessionTemplate);
     }
 }

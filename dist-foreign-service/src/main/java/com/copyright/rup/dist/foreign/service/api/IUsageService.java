@@ -337,14 +337,6 @@ public interface IUsageService {
     void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber);
 
     /**
-     * Gets count of unclassified usages to be updated based on set of Wr Wrk Insts.
-     *
-     * @param wrWrkInsts set of Wr Wrk Insts
-     * @return usages count
-     */
-    int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts);
-
-    /**
      * Gets map of Wr Wrk Insts to usage ids related to specified batch
      * and having {@link UsageStatusEnum#RH_NOT_FOUND} status.
      *

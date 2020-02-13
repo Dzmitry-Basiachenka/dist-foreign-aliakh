@@ -34,6 +34,14 @@ public interface INtsUsageService {
     int getUsagesCountForBatch(UsageBatch usageBatch);
 
     /**
+     * Gets count of unclassified usages to be updated based on set of Wr Wrk Insts.
+     *
+     * @param wrWrkInsts set of Wr Wrk Insts
+     * @return usages count
+     */
+    int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts);
+
+    /**
      * Updates under minimum usages grouped by Wr Wrk Inst in
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} status.
      * Sets product family and {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN} status.

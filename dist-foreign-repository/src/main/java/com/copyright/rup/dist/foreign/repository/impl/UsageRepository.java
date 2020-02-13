@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Implementation of Usage repository.
@@ -104,20 +103,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT)
             .forEach(partition -> result.addAll(selectList("IUsageMapper.findByIds", partition)));
         return result;
-    }
-
-    @Override
-    public int findCountByStatusAndWrWrkInsts(UsageStatusEnum status, Set<Long> wrWrkInsts) {
-        AtomicInteger count = new AtomicInteger(0);
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        Iterables.partition(Objects.requireNonNull(wrWrkInsts), MAX_VARIABLES_COUNT)
-            .forEach(
-                partition -> {
-                    parameters.put("wrWrkInsts", partition);
-                    count.addAndGet(selectOne("IUsageMapper.findCountByStatusAndWrWrkInsts", parameters));
-                });
-        return count.get();
     }
 
     @Override

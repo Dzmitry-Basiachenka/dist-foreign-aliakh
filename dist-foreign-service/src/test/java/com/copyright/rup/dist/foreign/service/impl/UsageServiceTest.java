@@ -634,16 +634,6 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetUnclassifiedUsagesCount() {
-        Set<Long> wrWrkInsts = Collections.singleton(987654321L);
-        expect(usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED, wrWrkInsts))
-            .andReturn(2).once();
-        replay(usageRepository);
-        usageService.getUnclassifiedUsagesCount(wrWrkInsts);
-        verify(usageRepository);
-    }
-
-    @Test
     public void testGetUsagesByIds() {
         List<String> usageIds = Collections.singletonList(USAGE_ID_1);
         List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));

@@ -7,7 +7,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.IWorkClassificationService;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.IWorkClassificationController;
 
@@ -41,7 +41,7 @@ public class WorkClassificationController implements IWorkClassificationControll
     @Autowired
     private IWorkClassificationService workClassificationService;
     @Autowired
-    private IUsageService usageService;
+    private INtsUsageService ntsUsageService;
     @Autowired
     private IReportService reportService;
     @Autowired
@@ -81,7 +81,7 @@ public class WorkClassificationController implements IWorkClassificationControll
 
     @Override
     public int getCountToUpdate(Set<WorkClassification> classifications) {
-        return usageService.getUnclassifiedUsagesCount(
+        return ntsUsageService.getUnclassifiedUsagesCount(
             classifications.stream().map(WorkClassification::getWrWrkInst).collect(Collectors.toSet()));
     }
 

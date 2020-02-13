@@ -502,11 +502,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts) {
-        return usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED, wrWrkInsts);
-    }
-
-    @Override
     public Map<Long, Set<String>> getWrWrkInstToUsageIdsForRightsAssignment(String batchName) {
         return usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus(batchName,
             UsageStatusEnum.RH_NOT_FOUND);

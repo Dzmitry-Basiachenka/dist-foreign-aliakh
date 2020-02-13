@@ -194,6 +194,15 @@ public class NtsUsageServiceTest {
     }
 
     @Test
+    public void testGetUnclassifiedUsagesCount() {
+        Set<Long> wrWrkInsts = Collections.singleton(987654321L);
+        expect(ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(wrWrkInsts)).andReturn(2).once();
+        replay(ntsUsageRepository);
+        ntsUsageService.getUnclassifiedUsagesCount(wrWrkInsts);
+        verify(ntsUsageRepository);
+    }
+
+    @Test
     public void testMoveToArchivedNts() {
         mockStatic(RupContextUtils.class);
         Scenario scenario = new Scenario();
