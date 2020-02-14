@@ -41,6 +41,12 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '1caa7fac-7287-4075-8e8e-492bdcfcba5a')
+            column(name: 'rh_account_number', value: '7000813807')
+            column(name: 'name', value: 'CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'ff8b9ac9-5fca-4d57-b74e-26da209c1040')
             column(name: 'rh_account_number', value: '2000017010')
             column(name: 'name', value: 'JAC, Japan Academic Association for Copyright Clearance, Inc.')
@@ -100,6 +106,40 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario name 2')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario 2')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: 'abe31cdc-adfb-41c5-9a46-4ca4966a41be')
+            column(name: 'name', value: 'Scenario name')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'description', value: 'The description of scenario')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '9a898ab5-30c9-4289-8e17-2c35dcb7f9e1')
+            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
+            column(name: 'df_scenario_uid', value: 'abe31cdc-adfb-41c5-9a46-4ca4966a41be')
+            column(name: 'wr_wrk_inst', value: '123456783')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'rh_account_number', value: '7000813807')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '2192-3559')
+            column(name: 'standard_number_type', value: 'STDID')
+            column(name: 'number_of_copies', value: '155')
+            column(name: 'gross_amount', value: '54.4400000000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '9a898ab5-30c9-4289-8e17-2c35dcb7f9e1')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2015')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '11.25')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

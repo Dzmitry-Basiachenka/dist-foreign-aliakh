@@ -15,7 +15,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,15 +31,6 @@ import java.util.Set;
  * @author Aliaksandr Radkevich
  */
 public interface IUsageService {
-
-    /**
-     * Inserts usages.
-     *
-     * @param usageBatch usage batch
-     * @param usages     list of {@link Usage}s
-     * @return count of inserted usages
-     */
-    int insertUsages(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
      * Deletes all {@link Usage}s associated with the given {@link UsageBatch}.

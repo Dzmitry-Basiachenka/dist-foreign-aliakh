@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.api.IFasUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioUsageFilterRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -76,6 +77,8 @@ public class ScenarioRepositoryIntegrationTest {
     private ScenarioRepository scenarioRepository;
     @Autowired
     private IUsageRepository usageRepository;
+    @Autowired
+    private IFasUsageRepository fasUsageRepository;
     @Autowired
     private IUsageBatchRepository batchRepository;
     @Autowired
@@ -235,7 +238,7 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(1, scenariosNames.size());
         Scenario scenario = buildScenario();
         scenarioRepository.insert(scenario);
-        usageRepository.insert(buildUsage());
+        fasUsageRepository.insert(buildUsage());
         scenariosNames = scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID);
         assertNotNull(scenariosNames);
         assertEquals(2, scenariosNames.size());
@@ -295,18 +298,18 @@ public class ScenarioRepositoryIntegrationTest {
     @Test
     public void testFindSourceRros() {
         scenarioRepository.insert(buildScenario());
-        usageRepository.insert(buildUsage());
+        fasUsageRepository.insert(buildUsage());
         UsageBatch batch = buildBatch();
         batchRepository.insert(batch);
         Usage usage = buildUsage();
         usage.setBatchId(batch.getId());
-        usageRepository.insert(usage);
+        fasUsageRepository.insert(usage);
         // inserting different batch with the same RRO to verify that it will be returned only once
         batch = buildBatch();
         batchRepository.insert(batch);
         usage = buildUsage();
         usage.setBatchId(batch.getId());
-        usageRepository.insert(usage);
+        fasUsageRepository.insert(usage);
         List<Rightsholder> sourceRros = scenarioRepository.findSourceRros(SCENARIO_ID);
         assertEquals(2, sourceRros.size());
         assertTrue(sourceRros.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toSet()).containsAll(
@@ -325,9 +328,9 @@ public class ScenarioRepositoryIntegrationTest {
         // build 2 usages with the same rh and payee
         Usage usage2 = buildUsage();
         Usage usage3 = buildUsage();
-        usageRepository.insert(usage1);
-        usageRepository.insert(usage2);
-        usageRepository.insert(usage3);
+        fasUsageRepository.insert(usage1);
+        fasUsageRepository.insert(usage2);
+        fasUsageRepository.insert(usage3);
         usageRepository.addToScenario(Lists.newArrayList(usage1, usage2, usage3));
         List<RightsholderPayeePair> result =
             scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(SCENARIO_ID, 2000017010L);
