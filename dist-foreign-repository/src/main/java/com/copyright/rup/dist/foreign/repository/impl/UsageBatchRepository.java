@@ -62,11 +62,11 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public List<UsageBatch> findUsageBatchesForPreServiceFeeFunds() {
+    public List<UsageBatch> findUsageBatchesForAdditionalFunds() {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("productFamilies", FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
         params.put("status", UsageStatusEnum.NTS_WITHDRAWN);
-        return selectList("IUsageBatchMapper.findUsageBatchesForPreServiceFeeFunds", params);
+        return selectList("IUsageBatchMapper.findUsageBatchesForAdditionalFunds", params);
     }
 
     @Override

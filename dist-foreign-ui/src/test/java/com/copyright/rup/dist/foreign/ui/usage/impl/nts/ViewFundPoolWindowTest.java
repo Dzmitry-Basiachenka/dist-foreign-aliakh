@@ -103,7 +103,7 @@ public class ViewFundPoolWindowTest {
         Whitebox.setInternalState(viewFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
-        expect(controller.getPreServiceFeeFundNamesByUsageBatchId(anyString()))
+        expect(controller.getAdditionalFundNamesByUsageBatchId(anyString()))
             .andReturn(Arrays.asList("Fund 1", "Fund 2")).once();
         Windows.showNotificationWindow("Fund pool cannot be deleted because it is associated with the following " +
             "additional funds:<ul><li>Fund 1</li><li>Fund 2</li></ul>");
@@ -121,7 +121,7 @@ public class ViewFundPoolWindowTest {
         Whitebox.setInternalState(viewFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
-        expect(controller.getPreServiceFeeFundNamesByUsageBatchId(USAGE_BATCH_ID))
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
@@ -142,7 +142,7 @@ public class ViewFundPoolWindowTest {
         Whitebox.setInternalState(viewFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
-        expect(controller.getPreServiceFeeFundNamesByUsageBatchId(USAGE_BATCH_ID))
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();

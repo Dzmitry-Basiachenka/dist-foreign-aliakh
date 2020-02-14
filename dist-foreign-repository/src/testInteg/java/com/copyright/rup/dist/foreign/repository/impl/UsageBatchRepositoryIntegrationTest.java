@@ -173,8 +173,8 @@ public class UsageBatchRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindUsageBatchesForPreServiceFeeFunds() {
-        List<UsageBatch> usageBatches = usageBatchRepository.findUsageBatchesForPreServiceFeeFunds();
+    public void testFindUsageBatchesForAdditionalFunds() {
+        List<UsageBatch> usageBatches = usageBatchRepository.findUsageBatchesForAdditionalFunds();
         assertEquals(1, usageBatches.size());
         assertEquals("66282dbc-2468-48d4-b926-93d3458a656b", usageBatches.get(0).getId());
     }

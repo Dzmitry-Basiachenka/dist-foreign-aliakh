@@ -9,7 +9,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
-import com.copyright.rup.dist.foreign.service.impl.csv.PreServiceFeeFundBatchesCsvReportHandler;
+import com.copyright.rup.dist.foreign.service.impl.csv.AdditionalFundBatchesCsvReportHandler;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.ibatis.executor.result.DefaultResultContext;
@@ -133,10 +133,10 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writePreServiceFeeFundBatchesCsvReport(List<UsageBatch> batches, BigDecimal totalGrossAmount,
-                                                       OutputStream outputStream) {
-        try (PreServiceFeeFundBatchesCsvReportHandler handler =
-                 new PreServiceFeeFundBatchesCsvReportHandler(outputStream)) {
+    public void writeAdditionalFundBatchesCsvReport(List<UsageBatch> batches, BigDecimal totalGrossAmount,
+                                                    OutputStream outputStream) {
+        try (AdditionalFundBatchesCsvReportHandler handler =
+                 new AdditionalFundBatchesCsvReportHandler(outputStream)) {
             batches.forEach(usageBatch -> handleUsageBatch(handler, usageBatch));
             UsageBatch usageBatch = new UsageBatch();
             usageBatch.setName("Total");
@@ -161,7 +161,7 @@ public class ReportService implements IReportService {
         }
     }
 
-    private void handleUsageBatch(PreServiceFeeFundBatchesCsvReportHandler handler, UsageBatch usageBatch) {
+    private void handleUsageBatch(AdditionalFundBatchesCsvReportHandler handler, UsageBatch usageBatch) {
         DefaultResultContext<UsageBatch> context = new DefaultResultContext<>();
         context.nextResultObject(usageBatch);
         handler.handleResult(context);

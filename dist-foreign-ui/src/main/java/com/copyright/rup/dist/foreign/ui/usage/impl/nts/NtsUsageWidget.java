@@ -65,7 +65,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         NtsUsageMediator mediator = new NtsUsageMediator();
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setAssignClassificationButton(assignClassificationButton);
-        mediator.setWithdrawnFundMenuBar(additionalFundsMenuBar);
+        mediator.setAdditionalFundsMenuBar(additionalFundsMenuBar);
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         return mediator;
     }
@@ -142,23 +142,23 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         MenuBar.MenuItem menuItem =
             additionalFundsMenuBar.addItem(ForeignUi.getMessage("menu.caption.additional_funds"), null, null);
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
-            item -> Windows.showModalWindow(initPreServiceFeeFundBatchesFilterWindow()));
+            item -> Windows.showModalWindow(initAdditionalFundBatchesFilterWindow()));
         menuItem.addItem(ForeignUi.getMessage("menu.item.delete"), null,
             item -> Windows.showModalWindow(new DeleteAdditionalFundsWindow(controller)));
         VaadinUtils.addComponentStyle(additionalFundsMenuBar, "additional-funds-menu-bar");
         VaadinUtils.addComponentStyle(additionalFundsMenuBar, "v-menubar-df");
     }
 
-    private Window initPreServiceFeeFundBatchesFilterWindow() {
-        PreServiceFeeFundBatchesFilterWidget widget = new PreServiceFeeFundBatchesFilterWidget(
-            () -> controller.getUsageBatchesForPreServiceFeeFunds());
-        PreServiceFeeFundBatchesFilterWindow window = new PreServiceFeeFundBatchesFilterWindow(widget);
+    private Window initAdditionalFundBatchesFilterWindow() {
+        AdditionalFundBatchesFilterWidget widget = new AdditionalFundBatchesFilterWidget(
+            () -> controller.getUsageBatchesForAdditionalFunds());
+        AdditionalFundBatchesFilterWindow window = new AdditionalFundBatchesFilterWindow(widget);
         window.updateSaveButtonClickListener(
             () -> {
                 List<UsageBatch> selectedUsageBatches = widget.getSelectedUsageBatches();
                 if (!selectedUsageBatches.isEmpty()) {
                     Windows.showModalWindow(
-                        new PreServiceFeeFundFilteredBatchesWindow(controller, selectedUsageBatches, window));
+                        new AdditionalFundFilteredBatchesWindow(controller, selectedUsageBatches, window));
                 } else {
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.usage.batches.empty"));
                 }

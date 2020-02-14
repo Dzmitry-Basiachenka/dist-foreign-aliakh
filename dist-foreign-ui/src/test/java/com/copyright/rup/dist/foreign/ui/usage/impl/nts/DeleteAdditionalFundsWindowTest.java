@@ -76,7 +76,7 @@ public class DeleteAdditionalFundsWindowTest {
         fundPool.setName("Test Fund");
         fundPool.setId(FUND_ID);
         controller = createMock(INtsUsageController.class);
-        expect(controller.getPreServiceSeeFunds()).andReturn(Collections.singletonList(fundPool)).once();
+        expect(controller.getAdditionalFunds()).andReturn(Collections.singletonList(fundPool)).once();
         replay(controller);
         deleteWindow = new DeleteAdditionalFundsWindow(controller);
         verify(controller);
@@ -113,7 +113,7 @@ public class DeleteAdditionalFundsWindowTest {
         Button deleteButton = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
         Collection<?> listeners = deleteButton.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
-        expect(controller.getScenarioNameAssociatedWithPreServiceFeeFund(FUND_ID)).andReturn(null).once();
+        expect(controller.getScenarioNameAssociatedWithAdditionalFund(FUND_ID)).andReturn(null).once();
         expect(
             Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'Test Fund'</b></i> additional fund?"),
                 capture(listenerCapture))).andReturn(confirmWindowCapture).once();
@@ -131,7 +131,7 @@ public class DeleteAdditionalFundsWindowTest {
         Button deleteButton = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
         Collection<?> listeners = deleteButton.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
-        expect(controller.getScenarioNameAssociatedWithPreServiceFeeFund(FUND_ID))
+        expect(controller.getScenarioNameAssociatedWithAdditionalFund(FUND_ID))
             .andReturn("FAS Distribution 2019").once();
         Windows.showNotificationWindow("Pre-Service Fee Fund cannot be deleted because it is associated with " +
             "the following scenario: FAS Distribution 2019");

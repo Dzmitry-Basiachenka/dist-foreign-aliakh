@@ -128,12 +128,12 @@ public interface ICommonUsageController extends IController<ICommonUsageWidget> 
     Scenario createScenario(String scenarioName, String description);
 
     /**
-     * Gets Pre-Service Fee Funds by usage batch id.
+     * Gets Additional Funds' names by usage batch id.
      *
      * @param batchId batch id
-     * @return list of found Pre-Service Funds names
+     * @return list of found Additional Funds' names
      */
-    List<String> getPreServiceFeeFundNamesByUsageBatchId(String batchId);
+    List<String> getAdditionalFundNamesByUsageBatchId(String batchId);
 
     /**
      * Handles {@link com.copyright.rup.dist.foreign.domain.Scenario} creation.

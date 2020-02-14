@@ -206,9 +206,9 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
     }
 
     private void deleteUsageBatch(UsageBatch usageBatch) {
-        List<String> preServiceFeeFundNames = controller.getPreServiceFeeFundNamesByUsageBatchId(usageBatch.getId());
-        if (CollectionUtils.isNotEmpty(preServiceFeeFundNames)) {
-            Windows.showNotificationWindow(buildNotificationMessage("additional funds", preServiceFeeFundNames));
+        List<String> additionalFundNames = controller.getAdditionalFundNamesByUsageBatchId(usageBatch.getId());
+        if (CollectionUtils.isNotEmpty(additionalFundNames)) {
+            Windows.showNotificationWindow(buildNotificationMessage("additional funds", additionalFundNames));
         } else {
             List<String> scenariosNames = controller.getScenariosNamesAssociatedWithUsageBatch(usageBatch.getId());
             if (CollectionUtils.isEmpty(scenariosNames)) {

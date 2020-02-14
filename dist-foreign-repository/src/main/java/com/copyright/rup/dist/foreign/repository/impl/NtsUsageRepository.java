@@ -132,12 +132,12 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
     }
 
     @Override
-    public void deleteFromPreServiceFeeFund(String fundPoolId, String updateUser) {
+    public void deleteFromAdditionalFund(String fundPoolId, String updateUser) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put("fundPoolId", Objects.requireNonNull(fundPoolId));
         params.put(STATUS_KEY, UsageStatusEnum.NTS_WITHDRAWN);
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
-        update("INtsUsageMapper.deleteFromPreServiceFeeFund", params);
+        update("INtsUsageMapper.deleteFromAdditionalFund", params);
     }
 
     @Override

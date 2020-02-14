@@ -19,7 +19,7 @@ class NtsUsageMediator implements IMediator {
 
     private Button addToScenarioButton;
     private Button assignClassificationButton;
-    private MenuBar withdrawnFundMenuBar;
+    private MenuBar additionalFundsMenuBar;
     private MenuBar.MenuItem loadFundPoolMenuItem;
 
     @Override
@@ -27,7 +27,7 @@ class NtsUsageMediator implements IMediator {
         loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
         assignClassificationButton.setVisible(ForeignSecurityUtils.hasAssignClassificationPermission());
-        withdrawnFundMenuBar.setVisible(ForeignSecurityUtils.hasCreateDeleteFundPermission());
+        additionalFundsMenuBar.setVisible(ForeignSecurityUtils.hasCreateDeleteFundPermission());
     }
 
     void setAddToScenarioButton(Button addToScenarioButton) {
@@ -38,8 +38,8 @@ class NtsUsageMediator implements IMediator {
         this.assignClassificationButton = assignClassificationButton;
     }
 
-    void setWithdrawnFundMenuBar(MenuBar withdrawnFundMenuBar) {
-        this.withdrawnFundMenuBar = withdrawnFundMenuBar;
+    void setAdditionalFundsMenuBar(MenuBar additionalFundsMenuBar) {
+        this.additionalFundsMenuBar = additionalFundsMenuBar;
     }
 
     void setLoadFundPoolMenuItem(MenuBar.MenuItem loadFundPoolMenuItem) {

@@ -221,7 +221,7 @@
         where u.df_scenario_uid = #{scenarioId}
     </update>
 
-    <update id="deleteFromPreServiceFeeFund" parameterType="map">
+    <update id="deleteFromAdditionalFund" parameterType="map">
         with ufas as (
             update
                 ${schema}.df_usage_fas

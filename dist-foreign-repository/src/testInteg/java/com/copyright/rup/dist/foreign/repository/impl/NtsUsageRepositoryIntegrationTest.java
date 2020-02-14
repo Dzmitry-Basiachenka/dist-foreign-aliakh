@@ -197,7 +197,7 @@ public class NtsUsageRepositoryIntegrationTest {
         Usage usage = usages.get(0);
         assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
         assertEquals(fundPoolId, usage.getFundPoolId());
-        ntsUsageRepository.deleteFromPreServiceFeeFund(fundPoolId, USER_NAME);
+        ntsUsageRepository.deleteFromAdditionalFund(fundPoolId, USER_NAME);
         usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_1)).get(0);
         assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
         assertNull(usage.getFundPoolId());
@@ -256,7 +256,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testAddWithdrawnUsagesToPreServiceFeeFund() {
+    public void testAddWithdrawnUsagesToAdditionalFund() {
         List<String> usageIds = Collections.singletonList("4dd8cdf8-ca10-422e-bdd5-3220105e6379");
         List<Usage> usages = usageRepository.findByIds(usageIds);
         assertEquals(1, usages.size());

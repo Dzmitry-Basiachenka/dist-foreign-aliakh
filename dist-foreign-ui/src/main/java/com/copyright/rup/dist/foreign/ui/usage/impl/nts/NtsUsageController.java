@@ -106,17 +106,17 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     }
 
     @Override
-    public void createPreServiceFeeFund(FundPool fundPool, Set<String> batchIds) {
+    public void createAdditionalFund(FundPool fundPool, Set<String> batchIds) {
         getFundPoolService().createNtsFundPool(fundPool, batchIds);
     }
 
     @Override
-    public boolean preServiceFeeFundExists(String name) {
+    public boolean additionalFundExists(String name) {
         return getFundPoolService().fundPoolExists(FdaConstants.NTS_PRODUCT_FAMILY, name);
     }
 
     @Override
-    public List<FundPool> getPreServiceSeeFunds() {
+    public List<FundPool> getAdditionalFunds() {
         return getFundPoolService().getFundPools(getSelectedProductFamily());
     }
 
@@ -126,17 +126,17 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     }
 
     @Override
-    public List<UsageBatch> getUsageBatchesForPreServiceFeeFunds() {
-        return getUsageBatchService().getUsageBatchesForPreServiceFeeFunds();
+    public List<UsageBatch> getUsageBatchesForAdditionalFunds() {
+        return getUsageBatchService().getUsageBatchesForAdditionalFunds();
     }
 
     @Override
-    public List<FundPool> getPreServiceFeeFundsNotAttachedToScenario() {
+    public List<FundPool> getAdditionalFundsNotAttachedToScenario() {
         return getFundPoolService().getNtsNotAttachedToScenario();
     }
 
     @Override
-    public void deletePreServiceFeeFund(FundPool fundPool) {
+    public void deleteAdditionalFund(FundPool fundPool) {
         getFundPoolService().deleteNtsFundPool(fundPool);
     }
 
@@ -161,10 +161,10 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     }
 
     @Override
-    public IStreamSource getPreServiceFeeFundBatchesStreamSource(List<UsageBatch> batches,
-                                                                 BigDecimal totalGrossAmount) {
+    public IStreamSource getAdditionalFundBatchesStreamSource(List<UsageBatch> batches,
+                                                              BigDecimal totalGrossAmount) {
         return streamSourceHandler.getCsvStreamSource(() -> "pre_service_fee_fund_batches_",
-            pos -> getReportService().writePreServiceFeeFundBatchesCsvReport(batches, totalGrossAmount, pos));
+            pos -> getReportService().writeAdditionalFundBatchesCsvReport(batches, totalGrossAmount, pos));
     }
 
     @Override
@@ -173,8 +173,8 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     }
 
     @Override
-    public String getScenarioNameAssociatedWithPreServiceFeeFund(String fundId) {
-        return getScenarioService().getScenarioNameByPreServiceFeeFundId(fundId);
+    public String getScenarioNameAssociatedWithAdditionalFund(String fundPoolId) {
+        return getScenarioService().getScenarioNameByAdditionalFundId(fundPoolId);
     }
 
     @Override

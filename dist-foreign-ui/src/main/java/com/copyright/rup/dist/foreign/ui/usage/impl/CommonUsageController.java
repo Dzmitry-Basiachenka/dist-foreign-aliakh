@@ -78,7 +78,7 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     }
 
     @Override
-    public List<String> getPreServiceFeeFundNamesByUsageBatchId(String batchId) {
+    public List<String> getAdditionalFundNamesByUsageBatchId(String batchId) {
         return fundPoolService.getNtsFundPoolNamesByUsageBatchId(batchId);
     }
 

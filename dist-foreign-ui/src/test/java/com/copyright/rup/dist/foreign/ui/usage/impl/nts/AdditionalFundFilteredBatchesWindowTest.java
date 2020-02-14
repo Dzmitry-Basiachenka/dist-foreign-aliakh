@@ -35,7 +35,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link PreServiceFeeFundFilteredBatchesWindow}.
+ * Verifies {@link AdditionalFundFilteredBatchesWindow}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Liakh
  */
-public class PreServiceFeeFundFilteredBatchesWindowTest {
+public class AdditionalFundFilteredBatchesWindowTest {
 
     private static final String USAGE_BATCH_ID = "2358deb3-caa3-4c4e-85cd-c353fcc8e6b9";
     private static final String USAGE_BATCH_NAME = "Copibec 25May18";
@@ -56,12 +56,12 @@ public class PreServiceFeeFundFilteredBatchesWindowTest {
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
-        expect(controller.getPreServiceFeeFundBatchesStreamSource(batches, USAGE_BATCH_GROSS_AMOUNT))
+        expect(controller.getAdditionalFundBatchesStreamSource(batches, USAGE_BATCH_GROSS_AMOUNT))
             .andReturn(streamSource).once();
         replay(controller, streamSource);
-        PreServiceFeeFundFilteredBatchesWindow
-            window = new PreServiceFeeFundFilteredBatchesWindow(controller, batches,
-            createMock(PreServiceFeeFundBatchesFilterWindow.class));
+        AdditionalFundFilteredBatchesWindow
+            window = new AdditionalFundFilteredBatchesWindow(controller, batches,
+            createMock(AdditionalFundBatchesFilterWindow.class));
         verify(controller, streamSource);
         assertEquals("Filtered batches", window.getCaption());
         verifySize(window, Unit.PIXELS, 700, Unit.PIXELS, 400);

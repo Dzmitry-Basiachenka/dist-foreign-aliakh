@@ -118,7 +118,7 @@ public class CommonUsageControllerTest {
         List<String> names = Arrays.asList("Test 1", "Test 2");
         expect(fundPoolService.getNtsFundPoolNamesByUsageBatchId(batchId)).andReturn(names).once();
         replay(fundPoolService);
-        assertEquals(names, controller.getPreServiceFeeFundNamesByUsageBatchId(batchId));
+        assertEquals(names, controller.getAdditionalFundNamesByUsageBatchId(batchId));
         verify(fundPoolService);
     }
 

@@ -5,7 +5,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import java.util.List;
 
 /**
- * Interface for widget to filter batches to create pre-service fee funds.
+ * Interface for widget to filter batches to create Additional Fund.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public interface IPreServiceFeeFundBatchesFilterWidget {
+public interface IAdditionalFundBatchesFilterWidget {
 
     /**
      * Get list of selected {@link UsageBatch}es.

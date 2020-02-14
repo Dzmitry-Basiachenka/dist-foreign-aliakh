@@ -245,19 +245,19 @@ public class NtsUsageControllerTest {
     }
 
     @Test
-    public void testGetScenarioNameAssociatedWithPreServiceFeeFund() {
-        expect(scenarioService.getScenarioNameByPreServiceFeeFundId(USAGE_BATCH_ID))
+    public void testGetScenarioNameAssociatedWithAdditionalFund() {
+        expect(scenarioService.getScenarioNameByAdditionalFundId(USAGE_BATCH_ID))
             .andReturn(SCENARIO_NAME).once();
         replay(scenarioService);
-        assertEquals(SCENARIO_NAME, controller.getScenarioNameAssociatedWithPreServiceFeeFund(USAGE_BATCH_ID));
+        assertEquals(SCENARIO_NAME, controller.getScenarioNameAssociatedWithAdditionalFund(USAGE_BATCH_ID));
         verify(scenarioService);
     }
 
     @Test
-    public void testGetUsageBatchesForPreServiceFeeFunds() {
-        expect(usageBatchService.getUsageBatchesForPreServiceFeeFunds()).andReturn(Collections.emptyList()).once();
+    public void testGetUsageBatchesForAdditionalFunds() {
+        expect(usageBatchService.getUsageBatchesForAdditionalFunds()).andReturn(Collections.emptyList()).once();
         replay(usageBatchService);
-        controller.getUsageBatchesForPreServiceFeeFunds();
+        controller.getUsageBatchesForAdditionalFunds();
         verify(usageBatchService);
     }
 
@@ -300,16 +300,16 @@ public class NtsUsageControllerTest {
         expect(controller.getSelectedProductFamily()).andReturn("NTS").once();
         expect(fundPoolService.getFundPools("NTS")).andReturn(additionalFunds).once();
         replay(productFamilyProvider, fundPoolService);
-        assertEquals(additionalFunds, controller.getPreServiceSeeFunds());
+        assertEquals(additionalFunds, controller.getAdditionalFunds());
         verify(productFamilyProvider, fundPoolService);
     }
 
     @Test
-    public void testGetPreServiceFeeFundsNotAttachedToScenario() {
+    public void testGetAdditionalFundsNotAttachedToScenario() {
         List<FundPool> additionalFunds = Collections.singletonList(new FundPool());
         expect(fundPoolService.getNtsNotAttachedToScenario()).andReturn(additionalFunds).once();
         replay(fundPoolService);
-        assertEquals(additionalFunds, controller.getPreServiceFeeFundsNotAttachedToScenario());
+        assertEquals(additionalFunds, controller.getAdditionalFundsNotAttachedToScenario());
         verify(fundPoolService);
     }
 
@@ -319,7 +319,7 @@ public class NtsUsageControllerTest {
         fundPoolService.deleteNtsFundPool(fund);
         expectLastCall().once();
         replay(fundPoolService);
-        controller.deletePreServiceFeeFund(fund);
+        controller.deleteAdditionalFund(fund);
         verify(fundPoolService);
     }
 
@@ -365,7 +365,7 @@ public class NtsUsageControllerTest {
     }
 
     @Test
-    public void testGetPreServiceFeeFundBatchesStreamSource() {
+    public void testGetAdditionalFundBatchesStreamSource() {
         mockStatic(OffsetDateTime.class);
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
@@ -376,11 +376,11 @@ public class NtsUsageControllerTest {
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
-        reportService.writePreServiceFeeFundBatchesCsvReport(
+        reportService.writeAdditionalFundBatchesCsvReport(
             Collections.singletonList(new UsageBatch()), BigDecimal.ONE, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, streamSourceHandler, reportService);
-        IStreamSource streamSource = controller.getPreServiceFeeFundBatchesStreamSource(
+        IStreamSource streamSource = controller.getAdditionalFundBatchesStreamSource(
             Collections.singletonList(new UsageBatch()), BigDecimal.ONE);
         assertEquals("pre_service_fee_fund_batches_01_02_2019_03_04.csv",
             streamSource.getSource().getKey().get());

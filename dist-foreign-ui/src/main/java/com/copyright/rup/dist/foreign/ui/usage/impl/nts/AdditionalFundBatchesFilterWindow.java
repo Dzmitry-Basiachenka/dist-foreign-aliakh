@@ -13,7 +13,7 @@ import com.vaadin.ui.Button.ClickListener;
 import java.util.List;
 
 /**
- * Window to filter batches to create pre-service fee funds.
+ * Window to filter batches to create Additional Fund.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -21,14 +21,14 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-class PreServiceFeeFundBatchesFilterWindow extends FilterWindow<UsageBatch> {
+class AdditionalFundBatchesFilterWindow extends FilterWindow<UsageBatch> {
 
     /**
      * Constructor.
      *
      * @param controller instance of {@link IFilterWindowController}
      */
-    PreServiceFeeFundBatchesFilterWindow(IFilterWindowController<UsageBatch> controller) {
+    AdditionalFundBatchesFilterWindow(IFilterWindowController<UsageBatch> controller) {
         super(ForeignUi.getMessage("window.batches_filter"), controller, "Continue", null,
             (ValueProvider<UsageBatch, List<String>>) batch -> Lists.newArrayList(batch.getName()));
         this.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));

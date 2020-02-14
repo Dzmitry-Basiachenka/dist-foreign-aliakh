@@ -30,7 +30,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 
 /**
- * Verifies {@link CreatePreServiceFeeFundWindow}.
+ * Verifies {@link CreateAdditionalFundWindow}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -38,19 +38,19 @@ import java.util.Collections;
  *
  * @author Aliaksandr Liakh
  */
-public class CreatePreServiceFeeFundWindowTest {
+public class CreateAdditionalFundWindowTest {
 
     private static final String FUND_POOL_NAME = "FundPoolName";
     private static final String FUND_POOL_NAME_INVALID = " FundPoolName ";
     private INtsUsageController usagesController;
-    private CreatePreServiceFeeFundWindow window;
+    private CreateAdditionalFundWindow window;
 
     @Test
     public void testConstructor() {
         usagesController = createMock(INtsUsageController.class);
-        window = new CreatePreServiceFeeFundWindow(usagesController,
-            Collections.emptySet(), BigDecimal.ONE, createMock(PreServiceFeeFundBatchesFilterWindow.class),
-            createMock(PreServiceFeeFundFilteredBatchesWindow.class));
+        window = new CreateAdditionalFundWindow(usagesController,
+            Collections.emptySet(), BigDecimal.ONE, createMock(AdditionalFundBatchesFilterWindow.class),
+            createMock(AdditionalFundFilteredBatchesWindow.class));
         assertEquals("Create NTS Pre-Service Fee Funds", window.getCaption());
         verifySize(window);
         VerticalLayout content = (VerticalLayout) window.getContent();
@@ -63,11 +63,11 @@ public class CreatePreServiceFeeFundWindowTest {
     }
 
     private void verifyPreServiceFeeFundNameField(Component component) {
-        expect(usagesController.preServiceFeeFundExists(FUND_POOL_NAME)).andReturn(false).anyTimes();
+        expect(usagesController.additionalFundExists(FUND_POOL_NAME)).andReturn(false).anyTimes();
         replay(usagesController);
-        window = new CreatePreServiceFeeFundWindow(usagesController,
-            Collections.emptySet(), BigDecimal.ONE, createMock(PreServiceFeeFundBatchesFilterWindow.class),
-            createMock(PreServiceFeeFundFilteredBatchesWindow.class));
+        window = new CreateAdditionalFundWindow(usagesController,
+            Collections.emptySet(), BigDecimal.ONE, createMock(AdditionalFundBatchesFilterWindow.class),
+            createMock(AdditionalFundFilteredBatchesWindow.class));
         assertNotNull(component);
         TextField fundNameField = (TextField) component;
         assertEquals("Fund Name", fundNameField.getCaption());

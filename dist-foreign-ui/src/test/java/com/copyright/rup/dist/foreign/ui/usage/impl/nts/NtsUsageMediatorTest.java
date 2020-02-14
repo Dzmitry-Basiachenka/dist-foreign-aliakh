@@ -34,7 +34,7 @@ public class NtsUsageMediatorTest {
 
     private Button addToScenarioButton;
     private Button assignClassificationButton;
-    private MenuBar withdrawnFundMenuBar;
+    private MenuBar additionalFundsMenuBar;
     private MenuBar fundPoolMenuBar;
     private MenuBar.MenuItem loadFundPoolMenuItem;
     private NtsUsageMediator mediator;
@@ -43,14 +43,14 @@ public class NtsUsageMediatorTest {
     public void setUp() {
         addToScenarioButton = new Button();
         assignClassificationButton = new Button();
-        withdrawnFundMenuBar = new MenuBar();
+        additionalFundsMenuBar = new MenuBar();
         fundPoolMenuBar = new MenuBar();
         loadFundPoolMenuItem = fundPoolMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
         mediator = new NtsUsageMediator();
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setAssignClassificationButton(assignClassificationButton);
-        mediator.setWithdrawnFundMenuBar(withdrawnFundMenuBar);
+        mediator.setAdditionalFundsMenuBar(additionalFundsMenuBar);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class NtsUsageMediatorTest {
         assertFalse(loadFundPoolMenuItem.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(assignClassificationButton.isVisible());
-        assertFalse(withdrawnFundMenuBar.isVisible());
+        assertFalse(additionalFundsMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -75,7 +75,7 @@ public class NtsUsageMediatorTest {
         assertFalse(loadFundPoolMenuItem.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(assignClassificationButton.isVisible());
-        assertFalse(withdrawnFundMenuBar.isVisible());
+        assertFalse(additionalFundsMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -88,7 +88,7 @@ public class NtsUsageMediatorTest {
         assertTrue(loadFundPoolMenuItem.isVisible());
         assertTrue(addToScenarioButton.isVisible());
         assertTrue(assignClassificationButton.isVisible());
-        assertTrue(withdrawnFundMenuBar.isVisible());
+        assertTrue(additionalFundsMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 

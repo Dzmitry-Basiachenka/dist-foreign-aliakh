@@ -26,7 +26,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 /**
- * Window to create Pre-Service fee fund.
+ * Window to create Additional Fund.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -34,13 +34,13 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-class CreatePreServiceFeeFundWindow extends Window {
+class CreateAdditionalFundWindow extends Window {
 
     private final INtsUsageController controller;
     private final Set<String> batchIds;
     private final BigDecimal amount;
-    private final PreServiceFeeFundBatchesFilterWindow batchesFilterWindow;
-    private final PreServiceFeeFundFilteredBatchesWindow filteredBatchesWindow;
+    private final AdditionalFundBatchesFilterWindow batchesFilterWindow;
+    private final AdditionalFundFilteredBatchesWindow filteredBatchesWindow;
     private final Binder<FundPool> binder = new Binder<>();
 
     private TextField fundNameField;
@@ -52,12 +52,12 @@ class CreatePreServiceFeeFundWindow extends Window {
      * @param controller            instance of {@link INtsUsageController}
      * @param batchIds              set of ids of usage batches
      * @param amount                gross amount
-     * @param batchesFilterWindow   instance of {@link PreServiceFeeFundBatchesFilterWindow}
-     * @param filteredBatchesWindow instance of {@link PreServiceFeeFundFilteredBatchesWindow}
+     * @param batchesFilterWindow   instance of {@link AdditionalFundBatchesFilterWindow}
+     * @param filteredBatchesWindow instance of {@link AdditionalFundFilteredBatchesWindow}
      */
-    CreatePreServiceFeeFundWindow(INtsUsageController controller, Set<String> batchIds, BigDecimal amount,
-                                  PreServiceFeeFundBatchesFilterWindow batchesFilterWindow,
-                                  PreServiceFeeFundFilteredBatchesWindow filteredBatchesWindow) {
+    CreateAdditionalFundWindow(INtsUsageController controller, Set<String> batchIds, BigDecimal amount,
+                               AdditionalFundBatchesFilterWindow batchesFilterWindow,
+                               AdditionalFundFilteredBatchesWindow filteredBatchesWindow) {
         this.controller = controller;
         this.batchIds = batchIds;
         this.amount = amount;
@@ -83,7 +83,7 @@ class CreatePreServiceFeeFundWindow extends Window {
         binder.forField(fundNameField)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !controller.preServiceFeeFundExists(StringUtils.trim(value)),
+            .withValidator(value -> !controller.additionalFundExists(StringUtils.trim(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Fund"))
             .bind(FundPool::getName, FundPool::setName);
         VaadinUtils.setMaxComponentsWidth(fundNameField);
@@ -123,7 +123,7 @@ class CreatePreServiceFeeFundWindow extends Window {
             fundPool.setName(StringUtils.trimToEmpty(fundNameField.getValue()));
             fundPool.setComment(StringUtils.trimToEmpty(commentsArea.getValue()));
             fundPool.setTotalAmount(amount);
-            controller.createPreServiceFeeFund(fundPool, batchIds);
+            controller.createAdditionalFund(fundPool, batchIds);
             closeAllWindows();
         } else {
             Windows.showValidationErrorWindow(Lists.newArrayList(fundNameField, commentsArea));

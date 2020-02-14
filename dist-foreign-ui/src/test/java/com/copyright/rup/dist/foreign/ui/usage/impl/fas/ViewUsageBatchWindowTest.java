@@ -103,7 +103,7 @@ public class ViewUsageBatchWindowTest {
         Whitebox.setInternalState(viewUsageBatchWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
-        expect(controller.getPreServiceFeeFundNamesByUsageBatchId(anyString()))
+        expect(controller.getAdditionalFundNamesByUsageBatchId(anyString()))
             .andReturn(Arrays.asList("Batch 1", "Batch 2")).once();
         Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
             "additional funds:<ul><li>Batch 1</li><li>Batch 2</li></ul>");
@@ -121,7 +121,7 @@ public class ViewUsageBatchWindowTest {
         Whitebox.setInternalState(viewUsageBatchWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
-        expect(controller.getPreServiceFeeFundNamesByUsageBatchId(USAGE_BATCH_ID))
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
@@ -142,7 +142,7 @@ public class ViewUsageBatchWindowTest {
         Whitebox.setInternalState(viewUsageBatchWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
-        expect(controller.getPreServiceFeeFundNamesByUsageBatchId(USAGE_BATCH_ID))
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
