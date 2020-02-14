@@ -6,7 +6,7 @@ import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import java.util.List;
 
 /**
- * Represents interface of repository for fund pools.
+ * Interface for {@link FundPool} repository .
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -17,14 +17,14 @@ import java.util.List;
 public interface IFundPoolRepository {
 
     /**
-     * Inserts Pre-Service fee fund.
+     * Inserts {@link FundPool}.
      *
      * @param fundPool instance of {@link FundPool}
      */
     void insert(FundPool fundPool);
 
     /**
-     * Finds Pre-Service fee fund by id.
+     * Finds {@link FundPool} by id.
      *
      * @param fundPoolId fund pool id
      * @return instance of {@link FundPool} or null if nothing found
@@ -32,7 +32,7 @@ public interface IFundPoolRepository {
     FundPool findById(String fundPoolId);
 
     /**
-     * Deletes Pre-Service fee fund by id.
+     * Deletes {@link FundPool} by id.
      *
      * @param fundId fund id
      * @return number of deleted records
@@ -55,10 +55,10 @@ public interface IFundPoolRepository {
     List<FundPool> findNtsNotAttachedToScenario();
 
     /**
-     * Find Pre-Service fee fund names associated with batch identifier.
+     * Find {@link FundPool}s' names associated with batch identifier.
      *
      * @param batchId batch identifier
-     * @return list of Pre-Service fee fund names
+     * @return list of {@link FundPool}s' names
      */
     List<String> findNamesByUsageBatchId(String batchId);
 

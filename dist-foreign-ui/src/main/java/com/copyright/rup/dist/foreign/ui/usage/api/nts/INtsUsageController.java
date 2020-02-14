@@ -31,27 +31,27 @@ public interface INtsUsageController extends ICommonUsageController {
     int loadNtsBatch(UsageBatch usageBatch);
 
     /**
-     * Creates Pre-Service Fee Fund.
+     * Creates Additional Fund.
      *
      * @param fundPool {@link FundPool} instance
      * @param batchIds set of batch ids
      */
-    void createPreServiceFeeFund(FundPool fundPool, Set<String> batchIds);
+    void createAdditionalFund(FundPool fundPool, Set<String> batchIds);
 
     /**
-     * Checks whether Pre-Service Fee Fund with provided name exists in databse.
+     * Checks whether Additional Fund with provided name exists.
      *
      * @param name fund pool name
-     * @return {@code true} - if Fund Pool exists, {@code false} - otherwise
+     * @return {@code true} - if Additional Fund exists, {@code false} - otherwise
      */
-    boolean preServiceFeeFundExists(String name);
+    boolean additionalFundExists(String name);
 
     /**
-     * Gets all {@link FundPool}s.
+     * Gets all Additional Funds.
      *
      * @return list of {@link FundPool}s
      */
-    List<FundPool> getPreServiceSeeFunds();
+    List<FundPool> getAdditionalFunds();
 
     /**
      * @return list of available markets.
@@ -59,25 +59,25 @@ public interface INtsUsageController extends ICommonUsageController {
     List<String> getMarkets();
 
     /**
-     * Gets list of {@link UsageBatch}es suitable for including in Pre-Service fee funds.
+     * Gets list of {@link UsageBatch}es suitable for including in Additional Funds.
      *
      * @return list of found {@link UsageBatch}es
      */
-    List<UsageBatch> getUsageBatchesForPreServiceFeeFunds();
+    List<UsageBatch> getUsageBatchesForAdditionalFunds();
 
     /**
-     * Gets {@link FundPool}s not attached to scenario.
+     * Gets Additional Funds not attached to scenario.
      *
      * @return list of {@link FundPool}s
      */
-    List<FundPool> getPreServiceFeeFundsNotAttachedToScenario();
+    List<FundPool> getAdditionalFundsNotAttachedToScenario();
 
     /**
-     * Deletes Pre-Service fee fund.
+     * Deletes Additional Fund.
      *
      * @param fundPool {@link FundPool} to delete
      */
-    void deletePreServiceFeeFund(FundPool fundPool);
+    void deleteAdditionalFund(FundPool fundPool);
 
     /**
      * Gets count of archived usages based on batch information.
@@ -93,12 +93,12 @@ public interface INtsUsageController extends ICommonUsageController {
     IWorkClassificationController getWorkClassificationController();
 
     /**
-     * Gets {@link Scenario} name associated with Pre-Service fee fund identifier.
+     * Gets {@link Scenario} name associated with Additional Fund.
      *
-     * @param fundId Pre-Service fee fund identifier
+     * @param fundPoolId fund pool id
      * @return {@link Scenario} name
      */
-    String getScenarioNameAssociatedWithPreServiceFeeFund(String fundId);
+    String getScenarioNameAssociatedWithAdditionalFund(String fundPoolId);
 
     /**
      * Gets map of STM and NON-STM classification to list of batch names
@@ -119,13 +119,13 @@ public interface INtsUsageController extends ICommonUsageController {
     List<String> getBatchNamesWithUnclassifiedWorks(Set<String> batchIds);
 
     /**
-     * Gets instance of {@link IStreamSource} for for pre-service fee fund filtered batches CSV report.
+     * Gets instance of {@link IStreamSource} for Additional Fund filtered batches CSV report.
      *
      * @param batches          list of batches
      * @param totalGrossAmount total gross amount
      * @return instance of {@link IStreamSource}
      */
-    IStreamSource getPreServiceFeeFundBatchesStreamSource(List<UsageBatch> batches, BigDecimal totalGrossAmount);
+    IStreamSource getAdditionalFundBatchesStreamSource(List<UsageBatch> batches, BigDecimal totalGrossAmount);
 
     /**
      * Gets names of processing batches (with usages in statuses besides ELIGIBLE, UNCLASSIFIED).

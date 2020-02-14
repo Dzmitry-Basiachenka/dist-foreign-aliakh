@@ -163,7 +163,7 @@ public class FundPoolServiceTest {
 
     @Test
     public void testDeleteNtsFundPool() {
-        ntsUsageService.deleteFromPreServiceFeeFund(FUND_POOL_ID);
+        ntsUsageService.deleteFromAdditionalFund(FUND_POOL_ID);
         expectLastCall().once();
         expect(fundPoolRepository.delete(FUND_POOL_ID)).andReturn(2).once();
         replay(fundPoolRepository, ntsUsageService);
@@ -228,12 +228,12 @@ public class FundPoolServiceTest {
     }
 
     private FundPool buildNtsFundPool() {
-        FundPool preServiceFeeFund = new FundPool();
-        preServiceFeeFund.setId(FUND_POOL_ID);
-        preServiceFeeFund.setProductFamily(NTS_PRODUCT_FAMILY);
-        preServiceFeeFund.setName(FUND_POOL_NAME);
-        preServiceFeeFund.setTotalAmount(BigDecimal.TEN);
-        return preServiceFeeFund;
+        FundPool additionalFund = new FundPool();
+        additionalFund.setId(FUND_POOL_ID);
+        additionalFund.setProductFamily(NTS_PRODUCT_FAMILY);
+        additionalFund.setName(FUND_POOL_NAME);
+        additionalFund.setTotalAmount(BigDecimal.TEN);
+        return additionalFund;
     }
 
     private FundPool buildAaclFundPool() {

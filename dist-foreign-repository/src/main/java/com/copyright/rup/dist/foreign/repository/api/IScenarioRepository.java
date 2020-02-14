@@ -70,10 +70,10 @@ public interface IScenarioRepository {
     /**
      * Finds {@link Scenario} name associated with {@link com.copyright.rup.dist.foreign.domain.FundPool}.
      *
-     * @param fundId fund pool identifier
+     * @param fundPoolId fund pool id
      * @return {@link Scenario} name
      */
-    String findNameByPreServiceFeeFundId(String fundId);
+    String findNameByAdditionalFundId(String fundPoolId);
 
     /**
      * Removes {@link Scenario} by given identifier.

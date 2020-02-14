@@ -122,11 +122,11 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testGetScenarioNameByPreServiceFeeFundId() {
-        String fundId = RupPersistUtils.generateUuid();
-        expect(scenarioRepository.findNameByPreServiceFeeFundId(fundId)).andReturn(SCENARIO_NAME).once();
+    public void testGetScenarioNameByAdditionalFundId() {
+        String fundPoolId = RupPersistUtils.generateUuid();
+        expect(scenarioRepository.findNameByAdditionalFundId(fundPoolId)).andReturn(SCENARIO_NAME).once();
         replay(scenarioRepository);
-        assertEquals(SCENARIO_NAME, scenarioService.getScenarioNameByPreServiceFeeFundId(fundId));
+        assertEquals(SCENARIO_NAME, scenarioService.getScenarioNameByAdditionalFundId(fundPoolId));
         verify(scenarioRepository);
     }
 

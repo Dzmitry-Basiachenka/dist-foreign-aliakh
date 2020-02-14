@@ -260,10 +260,10 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindNameByPreServiceFeeFundId() {
+    public void testFindNameByAdditionalFundId() {
         assertEquals("Sent to LM NTS scenario with audit",
-            scenarioRepository.findNameByPreServiceFeeFundId("815d6736-a34e-4fc8-96c3-662a114fa7f2"));
-        assertNull(scenarioRepository.findNameByPreServiceFeeFundId(RupPersistUtils.generateUuid()));
+            scenarioRepository.findNameByAdditionalFundId("815d6736-a34e-4fc8-96c3-662a114fa7f2"));
+        assertNull(scenarioRepository.findNameByAdditionalFundId(RupPersistUtils.generateUuid()));
     }
 
     @Test

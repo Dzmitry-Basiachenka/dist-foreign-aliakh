@@ -61,12 +61,12 @@ public interface INtsUsageService {
     void populatePayeeAndCalculateAmountsForScenarioUsages(Scenario scenario);
 
     /**
-     * Deletes usages from Pre-Service fee fund.
+     * Deletes usages from Additional Fund.
      * Reverts status of usages to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN}.
      *
      * @param fundPoolId fund pool id
      */
-    void deleteFromPreServiceFeeFund(String fundPoolId);
+    void deleteFromAdditionalFund(String fundPoolId);
 
     /**
      * Deletes usages with Wr Wrk Insts that were classified as BELLETRISTIC.

@@ -150,10 +150,10 @@ public class NtsUsageWidgetTest {
     @Test
     public void testSelectAdditionalFundsMenuItems() {
         mockStatic(Windows.class);
-        expect(controller.getPreServiceSeeFunds()).andReturn(Collections.emptyList()).once();
-        Windows.showModalWindow(anyObject(PreServiceFeeFundBatchesFilterWindow.class));
+        expect(controller.getAdditionalFunds()).andReturn(Collections.emptyList()).once();
+        Windows.showModalWindow(anyObject(AdditionalFundBatchesFilterWindow.class));
         expectLastCall().once();
-        expect(controller.getUsageBatchesForPreServiceFeeFunds()).andReturn(Collections.emptyList()).once();
+        expect(controller.getUsageBatchesForAdditionalFunds()).andReturn(Collections.emptyList()).once();
         Windows.showModalWindow(anyObject(DeleteAdditionalFundsWindow.class));
         expectLastCall().once();
         replay(controller, Windows.class);
@@ -186,7 +186,7 @@ public class NtsUsageWidgetTest {
             .andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", Collections.emptyList(), "NON-STM", Collections.emptyList())).once();
-        expect(controller.getPreServiceFeeFundsNotAttachedToScenario()).andReturn(Collections.emptyList()).once();
+        expect(controller.getAdditionalFundsNotAttachedToScenario()).andReturn(Collections.emptyList()).once();
         expect(controller.scenarioExists("NTS Distribution " + DATE)).andReturn(true).once();
         Windows.showModalWindow(anyObject(CreateNtsScenarioWindow.class));
         expectLastCall().once();
@@ -364,7 +364,7 @@ public class NtsUsageWidgetTest {
         expectLastCall().once();
         mediator.setAssignClassificationButton(anyObject(Button.class));
         expectLastCall().once();
-        mediator.setWithdrawnFundMenuBar(anyObject(MenuBar.class));
+        mediator.setAdditionalFundsMenuBar(anyObject(MenuBar.class));
         expectLastCall().once();
         mediator.setLoadFundPoolMenuItem(anyObject(MenuItem.class));
         expectLastCall().once();

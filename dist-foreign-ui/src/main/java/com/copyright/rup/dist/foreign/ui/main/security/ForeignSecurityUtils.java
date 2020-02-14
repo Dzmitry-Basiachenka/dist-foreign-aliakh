@@ -98,7 +98,7 @@ public final class ForeignSecurityUtils {
     }
 
     /**
-     * @return {@code true} if user has permission to create and delete Pre-Service fee funds.
+     * @return {@code true} if user has permission to create and delete Additional Funds.
      */
     public static boolean hasCreateDeleteFundPermission() {
         return SecurityUtils.hasPermission("FDA_CREATE_DELETE_FUND");

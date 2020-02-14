@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.ui.usage.api.nts.IPreServiceFeeFundBatchesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.nts.IAdditionalFundBatchesFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 
@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 /**
- * Widget to filter batches to create pre-service fee funds.
+ * Widget to filter batches to create Additional Fund.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -22,7 +22,7 @@ import java.util.function.Supplier;
  *
  * @author Aliaksandr Liakh
  */
-public class PreServiceFeeFundBatchesFilterWidget implements IPreServiceFeeFundBatchesFilterWidget,
+public class AdditionalFundBatchesFilterWidget implements IAdditionalFundBatchesFilterWidget,
     IFilterWindowController<UsageBatch>  {
 
     private final Supplier<List<UsageBatch>> supplier;
@@ -33,7 +33,7 @@ public class PreServiceFeeFundBatchesFilterWidget implements IPreServiceFeeFundB
      *
      * @param supplier supplier of {@link UsageBatch}'es
      */
-    PreServiceFeeFundBatchesFilterWidget(Supplier<List<UsageBatch>> supplier) {
+    AdditionalFundBatchesFilterWidget(Supplier<List<UsageBatch>> supplier) {
         this.supplier = supplier;
     }
 

@@ -85,13 +85,13 @@ public interface INtsUsageRepository {
     void deleteByScenarioId(String scenarioId);
 
     /**
-     * Deletes usages from Pre-Service fee fund.
+     * Deletes usages from NTS Fund Pool.
      * Updates usages status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN}.
      *
      * @param fundPoolId fund pool id
      * @param userName   user name
      */
-    void deleteFromPreServiceFeeFund(String fundPoolId, String userName);
+    void deleteFromAdditionalFund(String fundPoolId, String userName);
 
     /**
      * Deletes usages with Wr Wrk Insts that were classified as BELLETRISTIC.

@@ -144,10 +144,10 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void testGetUsageBatchesForPreServiceFeeFunds() {
-        expect(usageBatchRepository.findUsageBatchesForPreServiceFeeFunds()).andReturn(Collections.emptyList()).once();
+    public void testGetUsageBatchesForAdditionalFunds() {
+        expect(usageBatchRepository.findUsageBatchesForAdditionalFunds()).andReturn(Collections.emptyList()).once();
         replay(usageBatchRepository);
-        usageBatchService.getUsageBatchesForPreServiceFeeFunds();
+        usageBatchService.getUsageBatchesForAdditionalFunds();
         verify(usageBatchRepository);
     }
 

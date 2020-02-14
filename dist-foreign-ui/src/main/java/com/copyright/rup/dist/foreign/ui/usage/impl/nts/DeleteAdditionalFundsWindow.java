@@ -61,7 +61,7 @@ class DeleteAdditionalFundsWindow extends Window {
 
     private void initUsageBatchesGrid() {
         grid = new Grid<>();
-        grid.setItems(controller.getPreServiceSeeFunds());
+        grid.setItems(controller.getAdditionalFunds());
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
         grid.addColumn(FundPool::getName)
@@ -93,7 +93,7 @@ class DeleteAdditionalFundsWindow extends Window {
     }
 
     private void deleteFund(FundPool fundPool) {
-        String scenarioName = controller.getScenarioNameAssociatedWithPreServiceFeeFund(fundPool.getId());
+        String scenarioName = controller.getScenarioNameAssociatedWithAdditionalFund(fundPool.getId());
         if (Objects.nonNull(scenarioName)) {
             Windows.showNotificationWindow(
                 ForeignUi.getMessage("message.error.delete_action", "Pre-Service Fee Fund", "scenario",
@@ -106,8 +106,8 @@ class DeleteAdditionalFundsWindow extends Window {
     }
 
     private void performDelete(FundPool fundPool) {
-        controller.deletePreServiceFeeFund(fundPool);
-        grid.setItems(controller.getPreServiceSeeFunds());
+        controller.deleteAdditionalFund(fundPool);
+        grid.setItems(controller.getAdditionalFunds());
     }
 
     /**

@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Verifies {@link PreServiceFeeFundBatchesFilterWindow}.
+ * Verifies {@link AdditionalFundBatchesFilterWindow}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  *
  * @author Aliaksandr Liakh
  */
-public class PreServiceFeeFundBatchesFilterWindowTest {
+public class AdditionalFundBatchesFilterWindowTest {
 
     private static final String USAGE_BATCH_ID = "0358deb3-caa3-4c4e-85cd-c353fcc8e6b7";
     private static final String USAGE_BATCH_NAME = "Copibec 24May18";
@@ -49,8 +49,8 @@ public class PreServiceFeeFundBatchesFilterWindowTest {
         IFilterWindowController<UsageBatch> controller = createMock(IFilterWindowController.class);
         expect(controller.loadBeans()).andReturn(Collections.singletonList(buildUsageBatch())).once();
         replay(controller);
-        PreServiceFeeFundBatchesFilterWindow window =
-            new PreServiceFeeFundBatchesFilterWindow(controller);
+        AdditionalFundBatchesFilterWindow window =
+            new AdditionalFundBatchesFilterWindow(controller);
         assertEquals("Batches filter", window.getCaption());
         verifySize(window, Unit.PIXELS, 450, 400);
         assertEquals("batches-filter-window", window.getStyleName());
