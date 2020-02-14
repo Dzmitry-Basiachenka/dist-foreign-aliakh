@@ -49,7 +49,6 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -483,31 +482,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindForReconcile() {
-        List<Usage> usages = usageRepository.findForReconcile(SCENARIO_ID);
-        assertEquals(2, usages.size());
-        usages.forEach(usage -> {
-            assertEquals(243904752L, usage.getWrWrkInst(), 0);
-            assertEquals(1000002859L, usage.getRightsholder().getAccountNumber(), 0);
-            assertEquals("John Wiley & Sons - Books", usage.getRightsholder().getName());
-            assertEquals(WORK_TITLE, usage.getWorkTitle());
-            assertEquals(FAS_PRODUCT_FAMILY, usage.getProductFamily());
-            assertNotNull(usage.getGrossAmount());
-        });
-    }
-
-    @Test
-    public void testFindRightsholdersInformation() {
-        Map<Long, Usage> rhInfo = usageRepository.findRightsholdersInformation("ee8fc320-692c-4f7d-9981-54945e4ae127");
-        assertEquals(1, rhInfo.size());
-        Entry<Long, Usage> entry = rhInfo.entrySet().iterator().next();
-        assertEquals(1000002859L, entry.getKey(), 0);
-        assertEquals(1000002859L, entry.getValue().getPayee().getAccountNumber(), 0);
-        assertTrue(entry.getValue().isRhParticipating());
-        assertTrue(entry.getValue().isPayeeParticipating());
-    }
-
-    @Test
     public void testDeleteByScenarioId() {
         assertEquals(2, usageRepository.findByScenarioId(SCENARIO_ID).size());
         assertEquals(2, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_7, USAGE_ID_8));
@@ -522,84 +496,6 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(2, CollectionUtils.size(usages));
         assertEquals(Arrays.asList(USAGE_ID_1, USAGE_ID_2),
             usages.stream().map(Usage::getId).collect(Collectors.toList()));
-    }
-
-    @Test
-    public void testFindWithAmountsAndRightsholders() {
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
-                FAS_PRODUCT_FAMILY, UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
-    }
-
-    @Test
-    public void testVerifyFindWithAmountsAndRightsholders() {
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
-                FAS_PRODUCT_FAMILY, UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
-        List<Usage> usages = usageRepository.findWithAmountsAndRightsholders(usageFilter);
-        assertEquals(1, usages.size());
-        Usage usage = usages.get(0);
-        assertEquals(USAGE_ID_1, usage.getId());
-        assertEquals(new BigDecimal("35000.0000000000"), usage.getGrossAmount());
-        assertEquals(BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP), usage.getNetAmount());
-        assertEquals(new BigDecimal("2500.00"), usage.getReportedValue());
-        assertNull(usage.getServiceFee());
-        assertNotNull(usage.getCreateDate());
-        assertNotNull(usage.getUpdateDate());
-        assertEquals("SYSTEM", usage.getCreateUser());
-        assertEquals("SYSTEM", usage.getUpdateUser());
-        assertEquals(1, usage.getVersion());
-        assertNotNull(usage.getRightsholder());
-        assertEquals(1000009997L, usage.getRightsholder().getAccountNumber(), 0);
-        assertEquals("9905f006-a3e1-4061-b3d4-e7ece191103f", usage.getRightsholder().getId());
-        assertEquals("IEEE - Inst of Electrical and Electronics Engrs", usage.getRightsholder().getName());
-    }
-
-    @Test
-    public void testFindWithAmountsAndRightsholdersByUsageBatchFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
-            null, UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
-    }
-
-    @Test
-    public void testFindWithAmountsAndRightsholdersByRhAccountNumberFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(),
-            null, UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
-    }
-
-    @Test
-    public void testFindWithAmountsAndRightsholdersByProductFamiliesFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            FAS_PRODUCT_FAMILY, UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
-            USAGE_ID_3);
-    }
-
-    @Test
-    public void testFindWithAmountsAndRightsholdersByStatusFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            null, UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 4, USAGE_ID_1,
-            USAGE_ID_2, USAGE_ID_3, NTS_USAGE_ID);
-    }
-
-    @Test
-    public void testFindWithAmountsAndRightsholdersByPaymentDateFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            null, UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
-            USAGE_ID_3);
-    }
-
-    @Test
-    public void testFindWithAmountsAndRightsholdersByFiscalYearFilter() {
-        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            null, UsageStatusEnum.ELIGIBLE, null, FISCAL_YEAR);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
-            USAGE_ID_3);
     }
 
     @Test
@@ -1260,15 +1156,6 @@ public class UsageRepositoryIntegrationTest {
             .map(UsageDto::getId)
             .collect(Collectors.toList());
         assertEquals(Arrays.asList(expectedIds), actualIds);
-    }
-
-    private void verifyUsages(List<Usage> usages, int count, String... usageIds) {
-        assertNotNull(usages);
-        assertEquals(count, usages.size());
-        IntStream.range(0, count).forEach(i -> {
-            assertEquals(usageIds[i], usages.get(i).getId());
-            assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(i).getStatus());
-        });
     }
 
     private void assertFindForAuditSearch(String searchValue, String... usageIds) {

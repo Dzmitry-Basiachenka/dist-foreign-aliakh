@@ -1,38 +1,52 @@
 package com.copyright.rup.dist.foreign.service.impl.fas;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
+import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IFasUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import com.google.common.collect.Table;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Implementation of {@link IFasUsageService}.
@@ -48,6 +62,10 @@ public class FasUsageService implements IFasUsageService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
+    @Value("$RUP{dist.foreign.service_fee.cla_payee}")
+    private BigDecimal claPayeeServiceFee;
+    @Value("$RUP{dist.foreign.cla_account_number}")
+    private Long claAccountNumber;
     @Autowired
     private IFasUsageRepository fasUsageRepository;
     @Autowired
@@ -59,8 +77,12 @@ public class FasUsageService implements IFasUsageService {
     @Autowired
     private IChainExecutor<Usage> chainExecutor;
     @Autowired
+    private IPrmIntegrationService prmIntegrationService;
+    @Autowired
     @Qualifier("df.integration.piIntegrationCacheService")
     private IPiIntegrationService piIntegrationService;
+    @Autowired
+    private IRightsholderService rightsholderService;
 
     @Override
     public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -126,6 +148,93 @@ public class FasUsageService implements IFasUsageService {
         return usageIds;
     }
 
+    @Override
+    public List<Usage> getUsagesWithAmounts(UsageFilter filter) {
+        return fasUsageRepository.findWithAmountsAndRightsholders(filter);
+    }
+
+    @Override
+    public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
+        Set<String> rightsholdersIds =
+            usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet());
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        rightsholdersIds.addAll(getPayeeAndRhIds(rollUps));
+        Map<String, Table<String, String, Object>> preferencesMap =
+            prmIntegrationService.getPreferences(rightsholdersIds);
+        usages.forEach(usage -> {
+            usage.setPayee(PrmRollUpService.getPayee(rollUps, usage.getRightsholder(), usage.getProductFamily()));
+            addScenarioInfo(usage, scenario);
+            calculateAmounts(usage,
+                prmIntegrationService.isRightsholderParticipating(preferencesMap, usage.getRightsholder().getId(),
+                    usage.getProductFamily()));
+            fillPayeeParticipating(preferencesMap, usage);
+        });
+        usageRepository.addToScenario(usages);
+        rightsholderService.updateUsagesPayeesAsync(usages);
+    }
+
+    @Override
+    public void updateRhPayeeAmountsAndParticipating(List<Usage> usages) {
+        String userName = RupContextUtils.getUserName();
+        Map<String, Table<String, String, Object>> preferencesMap =
+            prmIntegrationService.getPreferences(usages.stream()
+                .flatMap(usage -> Stream.of(usage.getRightsholder().getId(), usage.getPayee().getId()))
+                .collect(Collectors.toSet()));
+        usages.forEach(usage -> {
+            calculateAmounts(usage,
+                prmIntegrationService.isRightsholderParticipating(preferencesMap, usage.getRightsholder().getId(),
+                    usage.getProductFamily()));
+            usage.setUpdateUser(userName);
+            fillPayeeParticipating(preferencesMap, usage);
+        });
+        usageRepository.update(usages);
+    }
+
+    @Override
+    public void recalculateUsagesForRefresh(UsageFilter filter, Scenario scenario) {
+        Map<Long, Usage> rhToUsageMap = getRightsholdersInformation(scenario.getId());
+        List<Usage> newUsages = fasUsageRepository.findWithAmountsAndRightsholders(filter);
+        Set<String> rightsholdersIds = newUsages.stream().map(usage -> usage.getRightsholder().getId())
+            .collect(Collectors.toSet());
+        rightsholdersIds.removeAll(
+            rhToUsageMap.values().stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        rightsholdersIds.addAll(getPayeeAndRhIds(rollUps));
+        Map<String, Table<String, String, Object>> preferencesMap =
+            prmIntegrationService.getPreferences(rightsholdersIds);
+        newUsages.forEach(usage -> {
+            final long rhAccountNumber = usage.getRightsholder().getAccountNumber();
+            Usage scenarioUsage = rhToUsageMap.get(rhAccountNumber);
+            Rightsholder payee = Objects.isNull(scenarioUsage)
+                ? PrmRollUpService.getPayee(rollUps, usage.getRightsholder(), usage.getProductFamily())
+                : scenarioUsage.getPayee();
+            usage.setPayee(payee);
+            addScenarioInfo(usage, scenario);
+            calculateAmounts(usage, Objects.isNull(scenarioUsage)
+                ? prmIntegrationService.isRightsholderParticipating(preferencesMap,
+                usage.getRightsholder().getId(), usage.getProductFamily())
+                : scenarioUsage.isRhParticipating());
+            fillPayeeParticipatingForRefresh(preferencesMap, usage, scenarioUsage);
+        });
+        usageRepository.addToScenario(newUsages);
+        rightsholderService.updateUsagesPayeesAsync(newUsages);
+    }
+
+    @Override
+    public List<Usage> getUsagesForReconcile(String scenarioId) {
+        return fasUsageRepository.findForReconcile(scenarioId);
+    }
+
+    @Override
+    public Map<Long, Usage> getRightsholdersInformation(String scenarioId) {
+        return fasUsageRepository.findRightsholdersInformation(scenarioId);
+    }
+
+    @Override
+    public Long getClaAccountNumber() {
+        return claAccountNumber;
+    }
+
     private void populateTitlesStandardNumberAndType(Collection<ResearchedUsage> researchedUsages) {
         researchedUsages.forEach(researchedUsage -> {
             Work work = piIntegrationService.findWorkByWrWrkInst(researchedUsage.getWrWrkInst());
@@ -133,5 +242,44 @@ public class FasUsageService implements IFasUsageService {
             researchedUsage.setStandardNumber(work.getMainIdno());
             researchedUsage.setSystemTitle(work.getMainTitle());
         });
+    }
+
+    private void fillPayeeParticipatingForRefresh(Map<String, Table<String, String, Object>> preferencesMap,
+                                                  Usage newUsage, Usage scenarioUsage) {
+        if (Objects.nonNull(scenarioUsage)) {
+            newUsage.setPayeeParticipating(scenarioUsage.isPayeeParticipating());
+        } else {
+            fillPayeeParticipating(preferencesMap, newUsage);
+        }
+    }
+
+    private Set<String> getPayeeAndRhIds(Map<String, Map<String, Rightsholder>> rollUps) {
+        return rollUps.values()
+            .stream()
+            .flatMap(map -> map.values().stream().map(Rightsholder::getId))
+            .collect(Collectors.toSet());
+    }
+
+    private void calculateAmounts(Usage usage, boolean rhParticipatingFlag) {
+        //usages that have CLA as Payee should get 10% service fee
+        CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
+            claAccountNumber.equals(usage.getPayee().getAccountNumber())
+                && FdaConstants.CLA_FAS_PRODUCT_FAMILY.equals(usage.getProductFamily())
+                ? claPayeeServiceFee
+                : prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
+    }
+
+    private void addScenarioInfo(Usage usage, Scenario scenario) {
+        usage.setScenarioId(scenario.getId());
+        usage.setStatus(UsageStatusEnum.LOCKED);
+        usage.setUpdateUser(scenario.getCreateUser());
+    }
+
+    private void fillPayeeParticipating(Map<String, Table<String, String, Object>> preferencesMap, Usage usage) {
+        boolean payeeParticipating = !usage.getRightsholder().getId().equals(usage.getPayee().getId())
+            ? prmIntegrationService.isRightsholderParticipating(preferencesMap, usage.getPayee().getId(),
+            usage.getProductFamily())
+            : usage.isRhParticipating();
+        usage.setPayeeParticipating(payeeParticipating);
     }
 }

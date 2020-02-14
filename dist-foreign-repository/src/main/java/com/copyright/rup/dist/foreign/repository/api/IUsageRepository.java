@@ -88,23 +88,6 @@ public interface IUsageRepository {
     List<Usage> findByIds(List<String> usageIds);
 
     /**
-     * Finds {@link Usage}s for reconcile based on scenario identifier.
-     *
-     * @param scenarioId scenario identifier
-     * @return the list of {@link Usage}
-     */
-    List<Usage> findForReconcile(String scenarioId);
-
-    /**
-     * Finds rightsholder information based on scenario identifier.
-     *
-     * @param scenarioId scenario id
-     * @return map where key is rightsholder account number, value is {@link Usage} with rightsholder, participating
-     * status and payee account number
-     */
-    Map<Long, Usage> findRightsholdersInformation(String scenarioId);
-
-    /**
      * Deletes all {@link Usage}s from the batch with given id.
      *
      * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
@@ -142,15 +125,6 @@ public interface IUsageRepository {
      * @param scenarioId scenario identifier
      */
     void deleteByScenarioId(String scenarioId);
-
-    /**
-     * Finds the {@link Usage}s only with information about gross amount, net amount, reported value and rightsholder
-     * based on {@link UsageFilter}.
-     *
-     * @param filter instance of {@link UsageFilter}
-     * @return the list of {@link Usage}s only with information about gross amount, net amount and reported value
-     */
-    List<Usage> findWithAmountsAndRightsholders(UsageFilter filter);
 
     /**
      * Finds rightsholders account numbers that are not presented in database based on {@link UsageFilter}.

@@ -2,12 +2,14 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IFasUsageRepository;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -20,14 +22,18 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
- * .
+ * Integration test for {@link FasUsageRepository}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -42,6 +48,15 @@ import java.util.stream.Collectors;
 @Transactional
 public class FasUsageRepositoryIntegrationTest {
 
+    private static final LocalDate PAYMENT_DATE = LocalDate.of(2018, 12, 11);
+    private static final String USAGE_BATCH_ID_1 = "7b8beb5d-1fc8-47bf-8e06-3ac85457ac5b";
+    private static final String SCENARIO_ID = "e726496d-aca1-46d8-b393-999827cc6dda";
+    private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
+    private static final String WORK_TITLE = "100 ROAD MOVIES";
+    private static final Integer FISCAL_YEAR = 2019;
+    private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
+    private static final String USAGE_ID_2 = "d77f2163-15ed-450f-896f-ecaa1ebce3b4";
+    private static final String USAGE_ID_3 = "c3df34f3-c6ed-4ed3-9cfd-586996e9d45f";
     private static final String USER_NAME = "user@copyright.com";
     private static final String STANDARD_NUMBER = "2192-3558";
     private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
@@ -115,6 +130,131 @@ public class FasUsageRepositoryIntegrationTest {
             UsageStatusEnum.WORK_FOUND);
     }
 
+    @Test
+    public void testFindForReconcile() {
+        List<Usage> usages = fasUsageRepository.findForReconcile(SCENARIO_ID);
+        assertEquals(2, usages.size());
+        usages.forEach(usage -> {
+            assertEquals(243904752L, usage.getWrWrkInst(), 0);
+            assertEquals(1000009523L, usage.getRightsholder().getAccountNumber(), 0);
+            assertEquals("John Wiley & Sons - Books", usage.getRightsholder().getName());
+            assertEquals(WORK_TITLE, usage.getWorkTitle());
+            assertNotNull(usage.getGrossAmount());
+        });
+    }
+
+    @Test
+    public void testFindRightsholdersInformation() {
+        Map<Long, Usage> rhInfo =
+            fasUsageRepository.findRightsholdersInformation(SCENARIO_ID);
+        assertEquals(1, rhInfo.size());
+        Entry<Long, Usage> entry = rhInfo.entrySet().iterator().next();
+        assertEquals(1000009523L, entry.getKey(), 0);
+        assertEquals(1000002859L, entry.getValue().getPayee().getAccountNumber(), 0);
+        assertTrue(entry.getValue().isRhParticipating());
+        assertTrue(entry.getValue().isPayeeParticipating());
+    }
+
+    @Test
+    public void testFindWithAmountsAndRightsholders() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
+                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
+    }
+
+    @Test
+    public void testVerifyFindWithAmountsAndRightsholders() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
+                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+        List<Usage> usages = fasUsageRepository.findWithAmountsAndRightsholders(usageFilter);
+        assertEquals(1, usages.size());
+        Usage usage = usages.get(0);
+        assertEquals(USAGE_ID_1, usage.getId());
+        assertEquals(new BigDecimal("35000.0000000000"), usage.getGrossAmount());
+        assertEquals(BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP), usage.getNetAmount());
+        assertEquals(new BigDecimal("2500.00"), usage.getReportedValue());
+        assertNull(usage.getServiceFee());
+        assertNotNull(usage.getCreateDate());
+        assertNotNull(usage.getUpdateDate());
+        assertEquals("SYSTEM", usage.getCreateUser());
+        assertEquals("SYSTEM", usage.getUpdateUser());
+        assertEquals(1, usage.getVersion());
+        assertNotNull(usage.getRightsholder());
+        assertEquals(1000009997L, usage.getRightsholder().getAccountNumber(), 0);
+        assertEquals("9905f006-a3e1-4061-b3d4-e7ece191103f", usage.getRightsholder().getId());
+        assertEquals("IEEE - Inst of Electrical and Electronics Engrs", usage.getRightsholder().getName());
+    }
+
+    @Test
+    public void testFindWithAmountsAndRightsholdersByUsageBatchFilter() {
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
+            UsageStatusEnum.ELIGIBLE, null, null);
+        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindWithAmountsAndRightsholdersByRhAccountNumberFilter() {
+        UsageFilter usageFilter = buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(),
+            UsageStatusEnum.ELIGIBLE, null, null);
+        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindWithAmountsAndRightsholdersByProductFamiliesFilter() {
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
+            UsageStatusEnum.ELIGIBLE, null, null);
+        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
+            USAGE_ID_3);
+    }
+
+    @Test
+    public void testFindWithAmountsAndRightsholdersByStatusFilter() {
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
+            UsageStatusEnum.ELIGIBLE, null, null);
+        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1,
+            USAGE_ID_2, USAGE_ID_3);
+    }
+
+    @Test
+    public void testFindWithAmountsAndRightsholdersByPaymentDateFilter() {
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
+            UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, null);
+        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
+            USAGE_ID_3);
+    }
+
+    @Test
+    public void testFindWithAmountsAndRightsholdersByFiscalYearFilter() {
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
+            UsageStatusEnum.ELIGIBLE, null, FISCAL_YEAR);
+        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
+            USAGE_ID_3);
+    }
+
+    private void verifyUsages(List<Usage> usages, int count, String... usageIds) {
+        assertNotNull(usages);
+        assertEquals(count, usages.size());
+        IntStream.range(0, count).forEach(i -> {
+            assertEquals(usageIds[i], usages.get(i).getId());
+            assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(i).getStatus());
+        });
+    }
+
+    private UsageFilter buildUsageFilter(Set<Long> accountNumbers, Set<String> usageBatchIds, UsageStatusEnum status,
+                                         LocalDate paymentDate, Integer fiscalYear) {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(status);
+        usageFilter.setRhAccountNumbers(accountNumbers);
+        usageFilter.setUsageStatus(status);
+        usageFilter.setUsageBatchesIds(usageBatchIds);
+        usageFilter.setPaymentDate(paymentDate);
+        usageFilter.setFiscalYear(fiscalYear);
+        usageFilter.setProductFamily("FAS");
+        return usageFilter;
+    }
+
     private ResearchedUsage buildResearchedUsage(String id, String title, Long wrWrkInst, String standardNumber,
                                                  String standardNumberType) {
         ResearchedUsage researchedUsage = new ResearchedUsage();
@@ -127,7 +267,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     private void verifyUsage(String usageId, String title, Long wrWrkInst, String standardNumber,
-                                String standardNumberType, UsageStatusEnum status) {
+                             String standardNumberType, UsageStatusEnum status) {
         List<Usage> usages = usageRepository.findByIds(Collections.singletonList(usageId));
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage = usages.get(0);

@@ -8,7 +8,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.PreServiceFeeFundBatchesCsvReportHandler;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -40,7 +40,7 @@ public class ReportService implements IReportService {
     @Autowired
     private IReportRepository reportRepository;
     @Autowired
-    private IUsageService usageService;
+    private IFasUsageService fasUsageService;
 
     @Value("$RUP{dist.foreign.rro.default_estimated_service_fee}")
     private BigDecimal defaultEstimatedServiceFee;
@@ -123,7 +123,7 @@ public class ReportService implements IReportService {
     public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
                                                OutputStream outputStream) {
         reportRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream,
-            usageService.getClaAccountNumber(), defaultEstimatedServiceFee);
+            fasUsageService.getClaAccountNumber(), defaultEstimatedServiceFee);
     }
 
     @Override

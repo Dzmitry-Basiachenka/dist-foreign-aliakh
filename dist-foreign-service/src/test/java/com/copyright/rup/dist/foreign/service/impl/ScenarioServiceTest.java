@@ -280,7 +280,7 @@ public class ScenarioServiceTest {
         usage.getRightsholder().setAccountNumber(2000017010L);
         List<Usage> usages = Collections.singletonList(usage);
         expect(usageService.getUsagesByScenarioId(SCENARIO_ID)).andReturn(usages).once();
-        usageService.updateRhPayeeAmountsAndParticipating(usages);
+        fasUsageService.updateRhPayeeAmountsAndParticipating(usages);
         expectLastCall().once();
         replayAll();
         scenarioService.updateRhPayeeParticipating(scenario);

@@ -15,7 +15,6 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
@@ -33,7 +32,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -43,9 +41,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import com.google.common.collect.Table;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -60,7 +56,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -102,7 +97,6 @@ public class UsageServiceTest {
     private IScenarioAuditService scenarioAuditService;
     private IRightsholderService rightsholderService;
     private UsageService usageService;
-    private IPrmIntegrationService prmIntegrationService;
 
     @Rule
     private final ExpectedException exception = ExpectedException.none();
@@ -115,18 +109,15 @@ public class UsageServiceTest {
         scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         usageRepository = createMock(IUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
-        prmIntegrationService = createMock(IPrmIntegrationService.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
         rightsholderService = createMock(IRightsholderService.class);
         usageService = new UsageService();
         Whitebox.setInternalState(usageService, usageRepository);
         Whitebox.setInternalState(usageService, usageAuditService);
-        Whitebox.setInternalState(usageService, prmIntegrationService);
         Whitebox.setInternalState(usageService, usageArchiveRepository);
         Whitebox.setInternalState(usageService, scenarioAuditService);
         Whitebox.setInternalState(usageService, rightsholderService);
-        Whitebox.setInternalState(usageService, "claAccountNumber", 2000017000L);
     }
 
     @Test
@@ -202,15 +193,6 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetUsagesForReconcile() {
-        List<Usage> usages = Collections.singletonList(new Usage());
-        expect(usageRepository.findForReconcile(scenario.getId())).andReturn(usages).once();
-        replay(usageRepository);
-        assertSame(usages, usageService.getUsagesForReconcile(scenario.getId()));
-        verify(usageRepository);
-    }
-
-    @Test
     public void testGetInvalidRightsholdersByFilter() {
         UsageFilter filter = new UsageFilter();
         List<Long> accountNumbers = Arrays.asList(1000000001L, 1000000002L);
@@ -218,46 +200,6 @@ public class UsageServiceTest {
         replay(usageRepository);
         assertSame(accountNumbers, usageService.getInvalidRightsholdersByFilter(filter));
         verify(usageRepository);
-    }
-
-    @Test
-    public void testGetUsagesWithAmounts() {
-        UsageFilter usageFilter = new UsageFilter();
-        Usage usage = buildUsage(USAGE_ID_1);
-        expect(usageRepository.findWithAmountsAndRightsholders(usageFilter))
-            .andReturn(Collections.singletonList(usage)).once();
-        replay(usageRepository);
-        assertTrue(CollectionUtils.isNotEmpty(usageService.getUsagesWithAmounts(usageFilter)));
-        verify(usageRepository);
-    }
-
-    @Test
-    public void testAddUsagesToScenario() {
-        Usage usage1 = buildUsage(USAGE_ID_1);
-        Usage usage2 = buildUsage(USAGE_ID_2);
-        List<Usage> usages = Arrays.asList(usage1, usage2);
-        Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
-        Rightsholder payee = buildRightsholder(PAYEE_ACCOUNT_NUMBER);
-        rollUps.put(RH_ID, ImmutableMap.of(FAS_PRODUCT_FAMILY, payee));
-        Map<String, Table<String, String, Object>> preferences = new HashMap<>();
-        expect(prmIntegrationService.getRollUps(Collections.singleton(RH_ID))).andReturn(rollUps).once();
-        expect(prmIntegrationService.getPreferences(Sets.newHashSet(payee.getId(), RH_ID)))
-            .andReturn(preferences).once();
-        usageRepository.addToScenario(usages);
-        expectLastCall().once();
-        expect(prmIntegrationService.isRightsholderParticipating(preferences, usage1.getRightsholder().getId(),
-            usage1.getProductFamily())).andReturn(true).once();
-        expect(prmIntegrationService.isRightsholderParticipating(preferences, usage2.getRightsholder().getId(),
-            usage2.getProductFamily())).andReturn(true).once();
-        expect(prmIntegrationService.isRightsholderParticipating(preferences, payee.getId(), FAS_PRODUCT_FAMILY))
-            .andReturn(true).times(2);
-        expect(prmIntegrationService.getRhParticipatingServiceFee(true))
-            .andReturn(new BigDecimal("0.16000")).times(2);
-        rightsholderService.updateUsagesPayeesAsync(Arrays.asList(usage1, usage2));
-        expectLastCall().once();
-        replay(usageRepository, prmIntegrationService, rightsholderService);
-        usageService.addUsagesToScenario(Arrays.asList(usage1, usage2), scenario);
-        verify(usageRepository, prmIntegrationService, rightsholderService);
     }
 
     @Test
@@ -376,27 +318,6 @@ public class UsageServiceTest {
         replay(usageRepository, usageAuditService, RupContextUtils.class);
         usageService.deleteFromScenario(scenario.getId(), 2000017011L, accountNumbers, "Action reason");
         verify(usageRepository, usageAuditService, RupContextUtils.class);
-    }
-
-    @Test
-    public void testRecalculateUsagesForRefresh() {
-        UsageFilter filter = new UsageFilter();
-        Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
-        Usage usage2 = buildUsageWithPayee(RupPersistUtils.generateUuid());
-        expect(usageRepository.findRightsholdersInformation(SCENARIO_ID))
-            .andReturn(ImmutableMap.of(usage2.getRightsholder().getAccountNumber(), usage2)).once();
-        expect(usageRepository.findWithAmountsAndRightsholders(filter)).andReturn(Collections.singletonList(usage1))
-            .once();
-        expect(prmIntegrationService.getRollUps(Collections.emptySet())).andReturn(Collections.emptyMap()).once();
-        expect(prmIntegrationService.getPreferences(Collections.emptySet())).andReturn(Collections.emptyMap()).once();
-        expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.32")).once();
-        usageRepository.addToScenario(Collections.singletonList(usage1));
-        expectLastCall().once();
-        rightsholderService.updateUsagesPayeesAsync(Collections.singletonList(usage1));
-        expectLastCall().once();
-        replay(usageRepository, prmIntegrationService, rightsholderService);
-        usageService.recalculateUsagesForRefresh(filter, scenario);
-        verify(usageRepository, prmIntegrationService, rightsholderService);
     }
 
     @Test
@@ -752,13 +673,6 @@ public class UsageServiceTest {
         return usage;
     }
 
-    private Usage buildUsageWithPayee(String usageId) {
-        Usage usage = buildUsage(usageId);
-        usage.getPayee().setId(RupPersistUtils.generateUuid());
-        usage.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
-        return usage;
-    }
-
     private PaidUsage buildPaidUsage(UsageStatusEnum status, boolean postDistributionFlag, Boolean splitParentFlag) {
         PaidUsage paidUsage = new PaidUsage();
         paidUsage.setId(USAGE_ID_1);
@@ -801,12 +715,5 @@ public class UsageServiceTest {
         paidUsage.setGrossAmount(usageFromLm.getGrossAmount());
         paidUsage.setServiceFeeAmount(usageFromLm.getServiceFeeAmount());
         return paidUsage;
-    }
-
-    private Rightsholder buildRightsholder(Long accountNUmber) {
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setId(RupPersistUtils.generateUuid());
-        rightsholder.setAccountNumber(accountNUmber);
-        return rightsholder;
     }
 }

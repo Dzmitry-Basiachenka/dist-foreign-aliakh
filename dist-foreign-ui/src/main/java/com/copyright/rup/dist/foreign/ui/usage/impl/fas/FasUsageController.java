@@ -104,7 +104,7 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
 
     @Override
     public Long getClaAccountNumber() {
-        return getUsageService().getClaAccountNumber();
+        return fasUsageService.getClaAccountNumber();
     }
 
     @Override

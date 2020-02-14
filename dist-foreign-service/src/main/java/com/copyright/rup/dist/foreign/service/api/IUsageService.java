@@ -64,15 +64,6 @@ public interface IUsageService {
     void deleteById(String usageId);
 
     /**
-     * Gets the {@link Usage}s based on {@link UsageFilter}.
-     *
-     * @param filter instance of {@link UsageFilter}
-     * @return the list of {@link Usage}s only with information about gross amount, net amount, reported value and
-     * rightsholder
-     */
-    List<Usage> getUsagesWithAmounts(UsageFilter filter);
-
-    /**
      * Gets rightsholders account numbers that are not presented in database based on {@link UsageFilter}.
      *
      * @param filter instance of {@link UsageFilter}
@@ -87,47 +78,6 @@ public interface IUsageService {
      * @return the list of {@link Usage}s
      */
     List<Usage> getUsagesByScenarioId(String scenarioId);
-
-    /**
-     * Gets the {@link Usage}s for reconcile based on {@link Scenario} identifier.
-     *
-     * @param scenarioId identifier of {@link Scenario}
-     * @return the list of {@link Usage}s
-     */
-    List<Usage> getUsagesForReconcile(String scenarioId);
-
-    /**
-     * Finds rightsholder information based on scenario identifier.
-     *
-     * @param scenarioId scenario id
-     * @return map where key is rightsholder account number, value is {@link Usage} with rightsholder, participating
-     * status and payee account number
-     */
-    Map<Long, Usage> getRightsholdersInformation(String scenarioId);
-
-    /**
-     * Gets the {@link Usage}s based on {@link UsageFilter}, recalculates amounts and add to scenario.
-     *
-     * @param filter   instance of {@link UsageFilter}
-     * @param scenario instance of {@link Scenario}
-     */
-    void recalculateUsagesForRefresh(UsageFilter filter, Scenario scenario);
-
-    /**
-     * Updates {@link Scenario} id, updated user name and status to 'LOCKED' for {@link Usage}s.
-     *
-     * @param usages   list of {@link Usage}s
-     * @param scenario {@link Scenario}
-     */
-    void addUsagesToScenario(List<Usage> usages, Scenario scenario);
-
-    /**
-     * Updates RH account number, payee account number, net amount, service fee amount and
-     * RH and Payee participating flags for {@link Usage}s.
-     *
-     * @param usages list of {@link Usage}s
-     */
-    void updateRhPayeeAmountsAndParticipating(List<Usage> usages);
 
     /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
@@ -238,11 +188,6 @@ public interface IUsageService {
      * @return list of {@link UsageDto}s
      */
     List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
-
-    /**
-     * @return CLA account number.
-     */
-    Long getClaAccountNumber();
 
     /**
      * Updates paid infromation for {@link PaidUsage}s

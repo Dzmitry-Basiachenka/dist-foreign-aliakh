@@ -4,7 +4,9 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IFasUsageRepository;
 
 import com.google.common.collect.Iterables;
@@ -80,5 +82,26 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
                 result.addAll(selectList("IFasUsageMapper.redesignateToNtsWithdrawnByPayees", parameters));
             });
         return result;
+    }
+
+    @Override
+    public List<Usage> findForReconcile(String scenarioId) {
+        return selectList("IFasUsageMapper.findForReconcile", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
+    public Map<Long, Usage> findRightsholdersInformation(String scenarioId) {
+        RightsholdersInfoResultHandler handler = new RightsholdersInfoResultHandler();
+        getTemplate().select("IFasUsageMapper.findRightsholdersInformation", Objects.requireNonNull(scenarioId),
+            handler);
+        return handler.getRhToUsageMap();
+    }
+
+    @Override
+    public List<Usage> findWithAmountsAndRightsholders(UsageFilter filter) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("filter", Objects.requireNonNull(filter));
+        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
+        return selectList("IFasUsageMapper.findWithAmountsAndRightsholders", parameters);
     }
 }

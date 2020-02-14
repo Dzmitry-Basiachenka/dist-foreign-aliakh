@@ -16,7 +16,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 
 import com.google.common.collect.Sets;
 
@@ -81,16 +81,16 @@ public class ReportServiceTest {
         LocalDate fromDate = LocalDate.now();
         LocalDate toDate = LocalDate.now();
         LocalDate paymentDateTo = LocalDate.now();
-        IUsageService usageService = createMock(IUsageService.class);
-        Whitebox.setInternalState(reportService, usageService);
-        expect(usageService.getClaAccountNumber()).andReturn(2000017000L).once();
+        IFasUsageService fasUsageService = createMock(IFasUsageService.class);
+        Whitebox.setInternalState(reportService, fasUsageService);
+        expect(fasUsageService.getClaAccountNumber()).andReturn(2000017000L).once();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         reportRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream, 2000017000L,
             DEFAULT_ESTIMATED_SERVICE_FEE);
         expectLastCall().once();
-        replay(reportRepository, usageService);
+        replay(reportRepository, fasUsageService);
         reportService.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);
-        verify(reportRepository, usageService);
+        verify(reportRepository, fasUsageService);
     }
 
     @Test
