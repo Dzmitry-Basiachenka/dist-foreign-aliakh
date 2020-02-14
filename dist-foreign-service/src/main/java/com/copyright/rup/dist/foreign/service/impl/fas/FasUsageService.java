@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
@@ -61,8 +60,6 @@ import java.util.stream.Stream;
 @Service
 public class FasUsageService implements IFasUsageService {
 
-    private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
-        "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Value("$RUP{dist.foreign.service_fee.cla_payee}")
@@ -86,38 +83,6 @@ public class FasUsageService implements IFasUsageService {
     private IPiIntegrationService piIntegrationService;
     @Autowired
     private IRightsholderService rightsholderService;
-
-    @Override
-    public int insertUsages(UsageBatch usageBatch, Collection<Usage> usages) {
-        String userName = RupContextUtils.getUserName();
-        int size = usages.size();
-        LOGGER.info("Insert usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
-            size, userName);
-        calculateUsagesGrossAmount(usageBatch, usages);
-        usages.forEach(usage -> {
-            usage.setBatchId(usageBatch.getId());
-            usage.setCreateUser(userName);
-            usage.setUpdateUser(userName);
-            fasUsageRepository.insert(usage);
-        });
-        // Adding data to audit table in separate loop increases performance up to 3 times
-        // while using batch with 200000 usages
-        String loadedReason = "Uploaded in '" + usageBatch.getName() + "' Batch";
-        String eligibleReason = "Usage was uploaded with Wr Wrk Inst and RH account number";
-        String workFoundReason = "Usage was uploaded with Wr Wrk Inst";
-        usages.forEach(usage -> {
-            usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason);
-            if (UsageStatusEnum.ELIGIBLE == usage.getStatus()) {
-                usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, eligibleReason);
-            }
-            if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
-                usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, workFoundReason);
-            }
-        });
-        LOGGER.info("Insert usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
-            size, userName);
-        return size;
-    }
 
     @Override
     public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -316,15 +281,5 @@ public class FasUsageService implements IFasUsageService {
             usage.getProductFamily())
             : usage.isRhParticipating();
         usage.setPayeeParticipating(payeeParticipating);
-    }
-
-    private void calculateUsagesGrossAmount(UsageBatch usageBatch, Collection<Usage> usages) {
-        BigDecimal fundPoolAmount = usageBatch.getGrossAmount();
-        BigDecimal totalAmount = usages.stream().map(Usage::getReportedValue).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal conversionRate = CalculationUtils.calculateConversionRate(fundPoolAmount, totalAmount);
-        usages.forEach(usage -> usage.setGrossAmount(
-            CalculationUtils.calculateUsdAmount(usage.getReportedValue(), conversionRate)));
-        LOGGER.info(CALCULATION_FINISHED_LOG_MESSAGE, usageBatch.getName(), usageBatch.getGrossAmount(), totalAmount,
-            conversionRate);
     }
 }

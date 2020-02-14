@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
-import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
@@ -73,8 +72,6 @@ public class UsageBatchService implements IUsageBatchService {
     @Autowired
     private INtsUsageService ntsUsageService;
     @Autowired
-    private IFasUsageService fasUsageService;
-    @Autowired
     private IAaclUsageService aaclUsageService;
     @Autowired
     private IRightsholderService rightsholderService;
@@ -127,7 +124,7 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatchRepository.insert(usageBatch);
         rightsholderService.updateRightsholder(usageBatch.getRro());
         populateTitlesStandardNumberAndType(usages);
-        int count = fasUsageService.insertUsages(usageBatch, usages);
+        int count = usageService.insertUsages(usageBatch, usages);
         Set<Long> accountNumbersToUpdate = usages.stream()
             .map(usage -> usage.getRightsholder().getAccountNumber())
             .filter(Objects::nonNull)

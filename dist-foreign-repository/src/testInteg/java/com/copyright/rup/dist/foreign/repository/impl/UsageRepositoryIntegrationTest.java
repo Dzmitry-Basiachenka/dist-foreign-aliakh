@@ -41,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -110,7 +111,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_15 = "0d85f51d-212b-4181-9972-3154cad74bd0";
     private static final String USAGE_ID_16 = "1cb766c6-7c49-489a-bd8f-9b8b052f5785";
     private static final String USAGE_ID_17 = "b53bb4f3-9eee-4732-8e3d-0c88722081d8";
-    private static final String USAGE_ID_18 = "9a898ab5-30c9-4289-8e17-2c35dcb7f9e1";
     private static final String USAGE_ID_20 = "dcc794ba-42aa-481d-937b-8f431929a611";
     private static final String USAGE_ID_21 = "47d48889-76b5-4957-aca0-2a7850a09f92";
     private static final String USAGE_ID_22 = "c5ea47b0-b269-4791-9aa7-76308fe835e6";
@@ -121,7 +121,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
-    private static final String SCENARIO_ID_2 = "abe31cdc-adfb-41c5-9a46-4ca4966a41be";
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
     private static final String PERCENT = "%";
@@ -139,6 +138,16 @@ public class UsageRepositoryIntegrationTest {
 
     @Autowired
     private UsageRepository usageRepository;
+
+    @Test
+    public void testInsert() throws IOException {
+        Usage expectedUsage = buildUsage();
+        expectedUsage.setNetAmount(expectedUsage.getNetAmount().setScale(10, RoundingMode.HALF_UP));
+        usageRepository.insert(expectedUsage);
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(expectedUsage.getId()));
+        assertEquals(1, CollectionUtils.size(usages));
+        verifyFasUsage(expectedUsage, usages.get(0));
+    }
 
     @Test
     public void testFindCountByFilter() {
@@ -245,14 +254,14 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindInvalidRightsholdersByFilter() {
+    public void testFindInvalidRightsholdersByFilter() throws IOException {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
                 null, UsageStatusEnum.ELIGIBLE, null, null);
         assertTrue(CollectionUtils.isEmpty(usageRepository.findInvalidRightsholdersByFilter(usageFilter)));
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_18));
-        usages.get(0).getRightsholder().setAccountNumber(1000000003L);
-        usageRepository.update(usages);
+        Usage usage = buildUsage();
+        usage.getRightsholder().setAccountNumber(1000000003L);
+        usageRepository.insert(usage);
         List<Long> accountNumbers = usageRepository.findInvalidRightsholdersByFilter(usageFilter);
         assertEquals(1, accountNumbers.size());
         assertEquals(1000000003L, accountNumbers.get(0), 0);
@@ -345,7 +354,8 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindCountByScenarioIdAndRhAccountNumberNullSearchValue() throws IOException {
         populateScenario();
-        Usage usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_18)).get(0);
+        Usage usage = buildUsage();
+        usageRepository.insert(usage);
         usageRepository.addToScenario(Collections.singletonList(usage));
         assertEquals(1, usageRepository.findCountByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null));
         assertEquals(3, usageRepository.findCountByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null));
@@ -538,19 +548,21 @@ public class UsageRepositoryIntegrationTest {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_8, USAGE_ID_7));
         assertEquals(2, CollectionUtils.size(usages));
         usages.forEach(usage -> assertEquals(SCENARIO_ID, usage.getScenarioId()));
-        Usage usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_18)).get(0);
+        Usage usage = buildUsage();
+        usageRepository.insert(usage);
         usageRepository.addToScenario(Collections.singletonList(usage));
         usageRepository.deleteFromScenario(Lists.newArrayList(USAGE_ID_8, USAGE_ID_7), USER_NAME);
         usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_8, USAGE_ID_7));
         assertEquals(2, CollectionUtils.size(usages));
         usages.forEach(usage1 -> verifyUsageExcludedFromScenario(usage1, FAS_PRODUCT_FAMILY, UsageStatusEnum.ELIGIBLE));
         usages = usageRepository.findByIds(Collections.singletonList(usage.getId()));
-        assertEquals(SCENARIO_ID_2, usages.get(0).getScenarioId());
+        assertEquals(SCENARIO_ID, usages.get(0).getScenarioId());
     }
 
     @Test
-    public void testFindByScenarioIdAndRhAccountNumbers() {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_18)).get(0);
+    public void testFindByScenarioIdAndRhAccountNumbers() throws IOException {
+        Usage usage = buildUsage();
+        usageRepository.insert(usage);
         usage.setScenarioId(SCENARIO_ID);
         usageRepository.addToScenario(Collections.singletonList(usage));
         List<String> usagesIds = usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(
@@ -643,12 +655,12 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamily(FAS_PRODUCT_FAMILY);
-        assertEquals(21, usageRepository.findCountForAudit(filter));
+        assertEquals(20, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages =
             usageRepository.findForAudit(filter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));
         verifyUsageDtos(usages, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21,
-            USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_11, USAGE_ID_2, USAGE_ID_18, USAGE_ID_5,
-            USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, POST_DISTRIBUTION_USAGE_ID, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20);
+            USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_11, USAGE_ID_2, USAGE_ID_5, USAGE_ID_8,
+            USAGE_ID_17, USAGE_ID_22, POST_DISTRIBUTION_USAGE_ID, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
@@ -1001,6 +1013,12 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageStatus(status);
         return usageFilter;
+    }
+
+    private Usage buildUsage() throws IOException {
+        List<Usage> usages = loadExpectedUsages("json/usage.json");
+        assertEquals(1, CollectionUtils.size(usages));
+        return usages.get(0);
     }
 
     private List<Usage> loadExpectedUsages(String fileName) throws IOException {
