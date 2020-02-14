@@ -20,13 +20,6 @@ import java.util.Set;
 public interface IFasUsageRepository {
 
     /**
-     * Inserts Usage into database.
-     *
-     * @param usage {@link Usage} instance
-     */
-    void insert(Usage usage);
-
-    /**
      * Updates researched usage details.
      *
      * @param researchedUsages list of {@link ResearchedUsage}s

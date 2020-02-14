@@ -42,11 +42,6 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
     private static final String PRODUCT_FAMILY_KEY = "productFamily";
 
     @Override
-    public void insert(Usage usage) {
-        insert("IFasUsageMapper.insert", Objects.requireNonNull(usage));
-    }
-
-    @Override
     public void updateResearchedUsages(List<ResearchedUsage> researchedUsages) {
         Objects.requireNonNull(researchedUsages);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);

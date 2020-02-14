@@ -6,17 +6,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IFasUsageRepository;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -27,9 +21,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -70,27 +62,10 @@ public class FasUsageRepositoryIntegrationTest {
     private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
     private static final BigDecimal DEFAULT_ZERO_AMOUNT = new BigDecimal("0.0000000000");
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
-    static {
-        OBJECT_MAPPER.registerModule(new JavaTimeModule());
-        OBJECT_MAPPER.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-    }
-
     @Autowired
     private UsageRepository usageRepository;
     @Autowired
     private IFasUsageRepository fasUsageRepository;
-
-    @Test
-    public void testInsert() throws IOException {
-        Usage expectedUsage = loadExpectedUsages().get(0);
-        expectedUsage.setNetAmount(expectedUsage.getNetAmount().setScale(10, RoundingMode.HALF_UP));
-        fasUsageRepository.insert(expectedUsage);
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(expectedUsage.getId()));
-        assertEquals(1, CollectionUtils.size(usages));
-        verifyFasUsage(expectedUsage, usages.get(0));
-    }
 
     @Test
     public void testDeleteFromScenarioByPayees() {
@@ -291,12 +266,6 @@ public class FasUsageRepositoryIntegrationTest {
         return researchedUsage;
     }
 
-    private List<Usage> loadExpectedUsages() throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), "json/fas_usage.json");
-        return OBJECT_MAPPER.readValue(content, new TypeReference<List<Usage>>() {
-        });
-    }
-
     private void verifyUsage(String usageId, String title, Long wrWrkInst, String standardNumber,
                              String standardNumberType, UsageStatusEnum status) {
         List<Usage> usages = usageRepository.findByIds(Collections.singletonList(usageId));
@@ -321,28 +290,5 @@ public class FasUsageRepositoryIntegrationTest {
         assertFalse(usage.isPayeeParticipating());
         assertEquals(USER_NAME, usage.getUpdateUser());
         assertEquals(productFamily, usage.getProductFamily());
-    }
-
-    private void verifyFasUsage(Usage expectedUsage, Usage actualUsage) {
-        assertEquals(expectedUsage.getId(), actualUsage.getId());
-        assertEquals(expectedUsage.getBatchId(), actualUsage.getBatchId());
-        assertEquals(expectedUsage.getScenarioId(), actualUsage.getScenarioId());
-        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
-        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
-        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
-        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
-        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
-        assertEquals(expectedUsage.getPublisher(), actualUsage.getPublisher());
-        assertEquals(expectedUsage.getMarket(), actualUsage.getMarket());
-        assertEquals(expectedUsage.getMarketPeriodTo(), actualUsage.getMarketPeriodTo());
-        assertEquals(expectedUsage.getMarketPeriodFrom(), actualUsage.getMarketPeriodFrom());
-        assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
-        assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
-        assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
-        assertEquals(expectedUsage.getRightsholder().getName(), actualUsage.getRightsholder().getName());
-        assertEquals(expectedUsage.getRightsholder().getId(), actualUsage.getRightsholder().getId());
-        assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
-            actualUsage.getRightsholder().getAccountNumber());
-        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
     }
 }

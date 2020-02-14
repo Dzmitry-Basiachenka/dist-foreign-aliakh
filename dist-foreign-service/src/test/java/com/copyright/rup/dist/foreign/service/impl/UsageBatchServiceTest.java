@@ -28,7 +28,6 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
-import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
@@ -78,7 +77,6 @@ public class UsageBatchServiceTest {
     private IUsageBatchRepository usageBatchRepository;
     private IUsageService usageService;
     private INtsUsageService ntsUsageService;
-    private IFasUsageService fasUsageService;
     private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
     private IChainExecutor<Usage> chainExecutor;
@@ -91,7 +89,6 @@ public class UsageBatchServiceTest {
         usageBatchRepository = createMock(IUsageBatchRepository.class);
         aaclUsageService = createMock(IAaclUsageService.class);
         usageService = createMock(IUsageService.class);
-        fasUsageService = createMock(IFasUsageService.class);
         ntsUsageService = createMock(INtsUsageService.class);
         rightsholderService = createMock(IRightsholderService.class);
         chainExecutor = createMock(IChainExecutor.class);
@@ -102,7 +99,6 @@ public class UsageBatchServiceTest {
         Whitebox.setInternalState(usageBatchService, usageBatchRepository);
         Whitebox.setInternalState(usageBatchService, aaclUsageService);
         Whitebox.setInternalState(usageBatchService, usageService);
-        Whitebox.setInternalState(usageBatchService, fasUsageService);
         Whitebox.setInternalState(usageBatchService, ntsUsageService);
         Whitebox.setInternalState(usageBatchService, rightsholderService);
         Whitebox.setInternalState(usageBatchService, chainExecutor);
@@ -191,7 +187,7 @@ public class UsageBatchServiceTest {
         expectLastCall().once();
         expect(piIntegrationService.findWorkByWrWrkInst(5498456456L)).andReturn(buildWork()).once();
         expect(piIntegrationService.findWorkByWrWrkInst(7974545646L)).andReturn(new Work()).once();
-        expect(fasUsageService.insertUsages(usageBatch, usages)).andReturn(3).once();
+        expect(usageService.insertUsages(usageBatch, usages)).andReturn(3).once();
         replayAll();
         assertEquals(3, usageBatchService.insertFasBatch(usageBatch, usages));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();

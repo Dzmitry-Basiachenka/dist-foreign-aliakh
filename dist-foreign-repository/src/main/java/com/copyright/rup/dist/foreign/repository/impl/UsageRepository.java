@@ -63,6 +63,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String BATCH_ID_KEY = "batchId";
 
     @Override
+    public void insert(Usage usage) {
+        insert("IUsageMapper.insert", Objects.requireNonNull(usage));
+    }
+
+    @Override
     public List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
