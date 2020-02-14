@@ -365,4 +365,14 @@
             and dlc.enrollment_profile ilike #{aaclUsage.enrollmentProfile}
             and dlc.discipline ilike #{aaclUsage.discipline}
     </update>
+
+    <delete id="deleteByBatchId" parameterType="string">
+        with usage as (
+            delete from ${schema}.df_usage
+            where df_usage_batch_uid = #{batchId}
+            returning df_usage_uid
+        )
+        delete from ${schema}.df_usage_aacl
+        where df_usage_aacl_uid in (select df_usage_uid from usage)
+    </delete>
 </mapper>

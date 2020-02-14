@@ -122,6 +122,13 @@ public interface IUsageBatchService {
     void deleteUsageBatch(UsageBatch usageBatch);
 
     /**
+     * Deletes given AACL {@link UsageBatch} and all it's usage details.
+     *
+     * @param usageBatch {@link UsageBatch}
+     */
+    void deleteAaclUsageBatch(UsageBatch usageBatch);
+
+    /**
      * Gets list of batch names containing usages with unclassified works.
      *
      * @param batchIds set of batch ids

@@ -195,6 +195,24 @@ public class AaclUsageServiceTest {
         verify(aaclUsageRepository, usageAuditService);
     }
 
+    @Test
+    public void testDeleteUsageBatchDetails() {
+        usageAuditService.deleteActionsByBatchId("0cfcf687-4005-4b4b-bbe1-612cc1a04f0c");
+        expectLastCall().once();
+        aaclUsageRepository.deleteByBatchId("0cfcf687-4005-4b4b-bbe1-612cc1a04f0c");
+        expectLastCall().once();
+        replay(aaclUsageRepository, usageAuditService);
+        aaclUsageService.deleteUsageBatchDetails(buildUsageBatch());
+        verify(aaclUsageRepository, usageAuditService);
+    }
+
+    private UsageBatch buildUsageBatch() {
+        UsageBatch batch = new UsageBatch();
+        batch.setId("0cfcf687-4005-4b4b-bbe1-612cc1a04f0c");
+        batch.setName("AACL Batch");
+        return batch;
+    }
+
     private AaclClassifiedUsage buildUsage() {
         AaclClassifiedUsage usage = new AaclClassifiedUsage();
         usage.setDetailId(USAGE_ID);
