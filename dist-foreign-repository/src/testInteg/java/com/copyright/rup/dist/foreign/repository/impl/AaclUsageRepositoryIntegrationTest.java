@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.ImmutableSet;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -181,6 +182,15 @@ public class AaclUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsagePeriod(2018);
         assertEquals(1, aaclUsageRepository.findCountByFilter(usageFilter));
+    }
+
+    @Test
+    public void testDeleteByBatchId() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageBatchesIds(ImmutableSet.of("940ca71c-fd90-4ffd-aa20-b293c0f49891"));
+        assertEquals(2, aaclUsageRepository.findCountByFilter(filter));
+        aaclUsageRepository.deleteByBatchId("940ca71c-fd90-4ffd-aa20-b293c0f49891");
+        assertEquals(0, aaclUsageRepository.findCountByFilter(filter));
     }
 
     @Test

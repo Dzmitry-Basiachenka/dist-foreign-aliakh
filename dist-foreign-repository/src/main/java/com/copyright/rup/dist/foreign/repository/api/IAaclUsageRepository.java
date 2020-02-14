@@ -101,4 +101,11 @@ public interface IAaclUsageRepository {
      * with status different from specified , {@code false} - otherwise
      */
     boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
+
+    /**
+     * Deletes all {@link Usage}s from the batch with given id.
+     *
+     * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
+     */
+    void deleteByBatchId(String batchId);
 }

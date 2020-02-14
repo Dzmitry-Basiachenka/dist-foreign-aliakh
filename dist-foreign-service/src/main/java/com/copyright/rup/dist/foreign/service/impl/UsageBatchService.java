@@ -217,6 +217,17 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
+    @Transactional
+    public void deleteAaclUsageBatch(UsageBatch usageBatch) {
+        String userName = RupContextUtils.getUserName();
+        String batchName = usageBatch.getName();
+        LOGGER.info("Delete AACL usage batch. Started. UsageBatchName={}, UserName={}", batchName, userName);
+        aaclUsageService.deleteUsageBatchDetails(usageBatch);
+        usageBatchRepository.deleteUsageBatch(usageBatch.getId());
+        LOGGER.info("Delete AACL usage batch. Finished. UsageBatchName={}, UserName={}", batchName, userName);
+    }
+
+    @Override
     public List<String> getBatchNamesWithUnclassifiedWorks(Set<String> batchIds) {
         return usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, null);
     }

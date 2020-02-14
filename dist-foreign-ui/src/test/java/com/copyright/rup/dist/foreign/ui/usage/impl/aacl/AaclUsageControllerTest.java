@@ -43,7 +43,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
 
 import com.vaadin.ui.HorizontalLayout;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -221,6 +220,20 @@ public class AaclUsageControllerTest {
         replay(fundPoolService);
         controller.deleteFundPool(fundPool);
         verify(fundPoolService);
+    }
+
+    @Test
+    public void testDeleteUsageBatch() {
+        usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
+        UsageBatch batch = new UsageBatch();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        filterWidgetMock.clearFilter();
+        expectLastCall().once();
+        usageBatchService.deleteAaclUsageBatch(batch);
+        expectLastCall().once();
+        replay(usageBatchService, filterController, filterWidgetMock);
+        controller.deleteUsageBatch(batch);
+        verify(usageBatchService, filterController, filterWidgetMock);
     }
 
     @Test

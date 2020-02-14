@@ -90,4 +90,12 @@ public interface IAaclUsageService {
      * {@code false} - otherwise
      */
     boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
+
+    /**
+     * Deletes all {@link Usage}s associated with the given AACL {@link UsageBatch}.
+     *
+     * @param usageBatch {@link UsageBatch} to delete usages from
+     */
+    void deleteUsageBatchDetails(UsageBatch usageBatch);
+
 }

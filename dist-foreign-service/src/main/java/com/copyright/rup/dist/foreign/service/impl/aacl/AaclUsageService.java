@@ -133,6 +133,13 @@ public class AaclUsageService implements IAaclUsageService {
         return aaclUsageRepository.isValidFilteredUsageStatus(filter, status);
     }
 
+    @Override
+    @Transactional
+    public void deleteUsageBatchDetails(UsageBatch usageBatch) {
+        usageAuditService.deleteActionsByBatchId(usageBatch.getId());
+        aaclUsageRepository.deleteByBatchId(usageBatch.getId());
+    }
+
     private boolean isUsageDisqualified(AaclClassifiedUsage usage) {
         return DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getDiscipline())
             || DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getEnrollmentProfile())

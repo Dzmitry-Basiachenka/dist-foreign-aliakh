@@ -26,6 +26,7 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
@@ -72,6 +73,7 @@ public class UsageBatchServiceTest {
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
 
+    private IAaclUsageService aaclUsageService;
     private IUsageBatchRepository usageBatchRepository;
     private IUsageService usageService;
     private INtsUsageService ntsUsageService;
@@ -85,6 +87,7 @@ public class UsageBatchServiceTest {
     @SuppressWarnings("unchecked")
     public void setUp() {
         usageBatchRepository = createMock(IUsageBatchRepository.class);
+        aaclUsageService = createMock(IAaclUsageService.class);
         usageService = createMock(IUsageService.class);
         ntsUsageService = createMock(INtsUsageService.class);
         rightsholderService = createMock(IRightsholderService.class);
@@ -94,6 +97,7 @@ public class UsageBatchServiceTest {
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, piIntegrationService);
         Whitebox.setInternalState(usageBatchService, usageBatchRepository);
+        Whitebox.setInternalState(usageBatchService, aaclUsageService);
         Whitebox.setInternalState(usageBatchService, usageService);
         Whitebox.setInternalState(usageBatchService, ntsUsageService);
         Whitebox.setInternalState(usageBatchService, rightsholderService);
@@ -230,6 +234,21 @@ public class UsageBatchServiceTest {
         expectLastCall().once();
         replay(usageService, usageBatchRepository, RupContextUtils.class);
         usageBatchService.deleteUsageBatch(usageBatch);
+        verify(usageService, usageBatchRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testDeleteAaclUsageBatch() {
+        mockStatic(RupContextUtils.class);
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId(RupPersistUtils.generateUuid());
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        aaclUsageService.deleteUsageBatchDetails(usageBatch);
+        expectLastCall().once();
+        usageBatchRepository.deleteUsageBatch(usageBatch.getId());
+        expectLastCall().once();
+        replay(usageService, usageBatchRepository, RupContextUtils.class);
+        usageBatchService.deleteAaclUsageBatch(usageBatch);
         verify(usageService, usageBatchRepository, RupContextUtils.class);
     }
 

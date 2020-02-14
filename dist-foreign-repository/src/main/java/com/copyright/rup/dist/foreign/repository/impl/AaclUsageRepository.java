@@ -112,4 +112,9 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         params.put(STATUS_KEY, Objects.requireNonNull(status));
         return selectOne("IAaclUsageMapper.isValidFilteredUsageStatus", params);
     }
+
+    @Override
+    public void deleteByBatchId(String batchId) {
+        delete("IAaclUsageMapper.deleteByBatchId", Objects.requireNonNull(batchId));
+    }
 }
