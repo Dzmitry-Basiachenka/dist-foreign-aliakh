@@ -148,10 +148,10 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void testGetUsageBatchesForAdditionalFunds() {
-        expect(usageBatchRepository.findUsageBatchesForAdditionalFunds()).andReturn(Collections.emptyList()).once();
+    public void testGetUsageBatchesForNtsFundPool() {
+        expect(usageBatchRepository.findUsageBatchesForNtsFundPool()).andReturn(Collections.emptyList()).once();
         replay(usageBatchRepository);
-        usageBatchService.getUsageBatchesForAdditionalFunds();
+        usageBatchService.getUsageBatchesForNtsFundPool();
         verify(usageBatchRepository);
     }
 

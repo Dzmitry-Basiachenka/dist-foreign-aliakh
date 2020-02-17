@@ -62,11 +62,11 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public List<UsageBatch> findUsageBatchesForAdditionalFunds() {
+    public List<UsageBatch> findUsageBatchesForNtsFundPool() {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("productFamilies", FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
         params.put("status", UsageStatusEnum.NTS_WITHDRAWN);
-        return selectList("IUsageBatchMapper.findUsageBatchesForAdditionalFunds", params);
+        return selectList("IUsageBatchMapper.findUsageBatchesForNtsFundPool", params);
     }
 
     @Override

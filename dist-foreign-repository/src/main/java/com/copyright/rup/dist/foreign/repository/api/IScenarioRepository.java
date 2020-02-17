@@ -68,12 +68,12 @@ public interface IScenarioRepository {
     List<String> findNamesByUsageBatchId(String usageBatchId);
 
     /**
-     * Finds {@link Scenario} name associated with {@link com.copyright.rup.dist.foreign.domain.FundPool}.
+     * Finds {@link Scenario} name associated with NTS {@link com.copyright.rup.dist.foreign.domain.FundPool}.
      *
      * @param fundPoolId fund pool id
      * @return {@link Scenario} name
      */
-    String findNameByAdditionalFundId(String fundPoolId);
+    String findNameByNtsFundPoolId(String fundPoolId);
 
     /**
      * Removes {@link Scenario} by given identifier.

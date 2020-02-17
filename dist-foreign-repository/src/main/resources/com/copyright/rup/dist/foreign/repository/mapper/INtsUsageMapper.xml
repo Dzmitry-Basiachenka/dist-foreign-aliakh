@@ -221,7 +221,7 @@
         where u.df_scenario_uid = #{scenarioId}
     </update>
 
-    <update id="deleteFromAdditionalFund" parameterType="map">
+    <update id="deleteFromNtsFundPool" parameterType="map">
         with ufas as (
             update
                 ${schema}.df_usage_fas
@@ -323,7 +323,7 @@
             and product_family = #{productFamily}
     </update>
 
-    <update id="addWithdrawnUsagesToFundPool" parameterType="map">
+    <update id="addWithdrawnUsagesToNtsFundPool" parameterType="map">
         with u as (
             update ${schema}.df_usage
             set

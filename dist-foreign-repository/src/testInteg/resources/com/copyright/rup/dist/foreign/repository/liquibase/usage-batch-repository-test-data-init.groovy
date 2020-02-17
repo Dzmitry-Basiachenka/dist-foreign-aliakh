@@ -172,7 +172,7 @@ databaseChangeLog {
             column(name: 'reported_value', value: '2500')
         }
 
-        //testFindUsageBatchesForAdditionalFunds
+        //testFindUsageBatchesForNtsFundPool
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '66282dbc-2468-48d4-b926-93d3458a656b')
             column(name: 'name', value: 'CADRA_12Dec17')

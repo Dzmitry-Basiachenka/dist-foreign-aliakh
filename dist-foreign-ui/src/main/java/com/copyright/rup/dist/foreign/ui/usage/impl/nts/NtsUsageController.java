@@ -127,7 +127,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public List<UsageBatch> getUsageBatchesForAdditionalFunds() {
-        return getUsageBatchService().getUsageBatchesForAdditionalFunds();
+        return getUsageBatchService().getUsageBatchesForNtsFundPool();
     }
 
     @Override
@@ -164,7 +164,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     public IStreamSource getAdditionalFundBatchesStreamSource(List<UsageBatch> batches,
                                                               BigDecimal totalGrossAmount) {
         return streamSourceHandler.getCsvStreamSource(() -> "pre_service_fee_fund_batches_",
-            pos -> getReportService().writeAdditionalFundBatchesCsvReport(batches, totalGrossAmount, pos));
+            pos -> getReportService().writeNtsWithdrawnBatchesCsvReport(batches, totalGrossAmount, pos));
     }
 
     @Override
@@ -174,7 +174,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public String getScenarioNameAssociatedWithAdditionalFund(String fundPoolId) {
-        return getScenarioService().getScenarioNameByAdditionalFundId(fundPoolId);
+        return getScenarioService().getScenarioNameByNtsFundPoolId(fundPoolId);
     }
 
     @Override

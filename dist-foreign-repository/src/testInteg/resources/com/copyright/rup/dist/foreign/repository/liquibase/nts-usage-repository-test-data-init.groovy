@@ -279,11 +279,11 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-03-29-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for testDeleteFromAdditionalFund')
+        comment('Inserting test data for testDeleteFromNtsFundPool')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '0f00e96b-eed7-4f26-8004-3370ec30da45')
-            column(name: 'name', value: 'FAS batch test delete additional fund')
+            column(name: 'name', value: 'FAS batch test delete NTS fund pool')
             column(name: 'rro_account_number', value: '1000000001')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2022-02-12')

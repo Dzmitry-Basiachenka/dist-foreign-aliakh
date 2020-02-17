@@ -86,7 +86,7 @@ public class SendScenarioToLmTest {
     @Test
     public void testSendToLmNts() throws IOException {
         assertTrue(CollectionUtils.isEmpty(findUsageDtos(NTS_SCENARIO_ID)));
-        assertAdditionalFundUsages(UsageStatusEnum.TO_BE_DISTRIBUTED);
+        assertNtsFundPoolUsages(UsageStatusEnum.TO_BE_DISTRIBUTED);
         Scenario scenario = new Scenario();
         scenario.setId(NTS_SCENARIO_ID);
         scenario.setProductFamily("NTS");
@@ -99,10 +99,10 @@ public class SendScenarioToLmTest {
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
         IntStream.range(0, usageDtos.size())
             .forEach(index -> assertUsageDto(expectedUsageDtos.get(index), usageDtos.get(index), false));
-        assertAdditionalFundUsages(UsageStatusEnum.ARCHIVED);
+        assertNtsFundPoolUsages(UsageStatusEnum.ARCHIVED);
     }
 
-    private void assertAdditionalFundUsages(UsageStatusEnum status) {
+    private void assertNtsFundPoolUsages(UsageStatusEnum status) {
         AuditFilter filter = new AuditFilter();
         filter.setBatchesIds(Collections.singleton("a3af8396-acf3-432b-9f23-7554e3d8f50d"));
         List<UsageDto> usages = usageService.getForAudit(filter, null, null);

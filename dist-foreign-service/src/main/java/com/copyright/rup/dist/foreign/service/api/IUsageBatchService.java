@@ -50,11 +50,11 @@ public interface IUsageBatchService {
     UsageBatch getUsageBatchById(String batchId);
 
     /**
-     * Finds list of {@link UsageBatch}es suitable for including in Additional Funds.
+     * Finds list of {@link UsageBatch}es suitable for including in NTS fund pool.
      *
      * @return list of found {@link UsageBatch}es
      */
-    List<UsageBatch> getUsageBatchesForAdditionalFunds();
+    List<UsageBatch> getUsageBatchesForNtsFundPool();
 
     /**
      * Checks whether Usage Batch with provided name exists in database or not.

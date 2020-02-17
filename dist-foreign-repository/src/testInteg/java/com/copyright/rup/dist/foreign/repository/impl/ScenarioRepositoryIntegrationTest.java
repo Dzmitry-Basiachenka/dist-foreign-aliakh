@@ -184,7 +184,7 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("900.00"), scenario.getReportedTotal());
         NtsFields ntsFields = scenario.getNtsFields();
         assertEquals("7141290b-7042-4cc6-975f-10546370adce", ntsFields.getPreServiceFeeFundId());
-        assertEquals("Pre-Service Fee Additional Fund 3", ntsFields.getPreServiceFeeFundName());
+        assertEquals("NTS Fund Pool 3", ntsFields.getPreServiceFeeFundName());
         assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
         assertEquals(new BigDecimal("100.00"), ntsFields.getPostServiceFeeAmount());
         assertEquals(new BigDecimal("50.00"), ntsFields.getPreServiceFeeAmount());
@@ -220,7 +220,7 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("900.00"), scenario.getReportedTotal());
         NtsFields ntsFields = scenario.getNtsFields();
         assertEquals("815d6736-a34e-4fc8-96c3-662a114fa7f2", ntsFields.getPreServiceFeeFundId());
-        assertEquals("Pre-Service Fee Additional Fund 4", ntsFields.getPreServiceFeeFundName());
+        assertEquals("NTS Fund Pool 4", ntsFields.getPreServiceFeeFundName());
         assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
         assertEquals(new BigDecimal("100.00"), ntsFields.getPostServiceFeeAmount());
         assertEquals(new BigDecimal("50.00"), ntsFields.getPreServiceFeeAmount());
@@ -263,10 +263,10 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindNameByAdditionalFundId() {
+    public void testFindNameByNtsFundPoolId() {
         assertEquals("Sent to LM NTS scenario with audit",
-            scenarioRepository.findNameByAdditionalFundId("815d6736-a34e-4fc8-96c3-662a114fa7f2"));
-        assertNull(scenarioRepository.findNameByAdditionalFundId(RupPersistUtils.generateUuid()));
+            scenarioRepository.findNameByNtsFundPoolId("815d6736-a34e-4fc8-96c3-662a114fa7f2"));
+        assertNull(scenarioRepository.findNameByNtsFundPoolId("59353faf-2e8f-4bf7-a160-4c6eb28e8177"));
     }
 
     @Test

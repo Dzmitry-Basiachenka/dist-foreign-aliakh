@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of {@link BaseCsvReportHandler} to write Additional Fund batches report.
+ * Implementation of {@link BaseCsvReportHandler} to write FAS batches with NTS withdrawn usages report.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public class AdditionalFundBatchesCsvReportHandler extends BaseCsvReportHandler<UsageBatch> {
+public class NtsWithdrawnBatchesCsvReportHandler extends BaseCsvReportHandler<UsageBatch> {
 
     private static final List<String> HEADERS = ImmutableList.of("Usage Batch Name", "Gross NTS Withdrawn Amount");
 
@@ -27,7 +27,7 @@ public class AdditionalFundBatchesCsvReportHandler extends BaseCsvReportHandler<
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    public AdditionalFundBatchesCsvReportHandler(OutputStream outputStream) {
+    public NtsWithdrawnBatchesCsvReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 

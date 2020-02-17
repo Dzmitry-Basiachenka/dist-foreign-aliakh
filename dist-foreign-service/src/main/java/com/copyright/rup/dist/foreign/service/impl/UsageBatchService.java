@@ -107,8 +107,8 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public List<UsageBatch> getUsageBatchesForAdditionalFunds() {
-        return usageBatchRepository.findUsageBatchesForAdditionalFunds();
+    public List<UsageBatch> getUsageBatchesForNtsFundPool() {
+        return usageBatchRepository.findUsageBatchesForNtsFundPool();
     }
 
     @Override

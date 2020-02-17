@@ -160,14 +160,14 @@ public class NtsUsageServiceTest {
     }
 
     @Test
-    public void testDeleteFromAdditionalFund() {
+    public void testDeleteFromNtsFundPool() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         String fundPoolId = "d40dc124-83dd-463b-9102-4ff383cc94b1";
-        ntsUsageRepository.deleteFromAdditionalFund(fundPoolId, USER_NAME);
+        ntsUsageRepository.deleteFromNtsFundPool(fundPoolId, USER_NAME);
         expectLastCall().once();
         replay(RupContextUtils.class, ntsUsageRepository);
-        ntsUsageService.deleteFromAdditionalFund(fundPoolId);
+        ntsUsageService.deleteFromNtsFundPool(fundPoolId);
         verify(RupContextUtils.class, ntsUsageRepository);
     }
 
@@ -223,13 +223,13 @@ public class NtsUsageServiceTest {
     }
 
     @Test
-    public void testAddWithdrawnUsagesToAdditionalFund() {
+    public void testAddWithdrawnUsagesToNtsFundPool() {
         String fundId = "e6042ad1-51e8-48d8-8b06-f8b2e684d993";
         Set<String> batchIds = Collections.singleton(BATCH_ID);
-        ntsUsageRepository.addWithdrawnUsagesToFundPool(fundId, batchIds, USER_NAME);
+        ntsUsageRepository.addWithdrawnUsagesToNtsFundPool(fundId, batchIds, USER_NAME);
         expectLastCall().once();
         replay(ntsUsageRepository);
-        ntsUsageRepository.addWithdrawnUsagesToFundPool(fundId, batchIds, USER_NAME);
+        ntsUsageRepository.addWithdrawnUsagesToNtsFundPool(fundId, batchIds, USER_NAME);
         verify(ntsUsageRepository);
     }
 
