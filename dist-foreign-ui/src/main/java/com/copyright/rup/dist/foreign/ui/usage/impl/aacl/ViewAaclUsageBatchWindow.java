@@ -114,7 +114,7 @@ public class ViewAaclUsageBatchWindow extends Window implements SearchWidget.ISe
         grid.addSelectionListener(
             event -> deleteButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
         addGridColumns();
-        VaadinUtils.addComponentStyle(grid, "view-usage-batch-grid");
+        VaadinUtils.addComponentStyle(grid, "view-batch-grid");
     }
 
     private void addGridColumns() {
