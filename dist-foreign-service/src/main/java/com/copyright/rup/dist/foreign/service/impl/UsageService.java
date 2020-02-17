@@ -20,7 +20,6 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
@@ -45,8 +44,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -71,8 +68,6 @@ import java.util.stream.Stream;
 @Service
 public class UsageService implements IUsageService {
 
-    private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
-        "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
     private static final String SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
         "ArchivedUsagesCount={}, NotReportedUsagesCount={}, ArchivedScenariosCount={}";
     private static final String SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
@@ -96,38 +91,6 @@ public class UsageService implements IUsageService {
     private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IRightsholderService rightsholderService;
-
-    @Override
-    public int insertUsages(UsageBatch usageBatch, Collection<Usage> usages) {
-        String userName = RupContextUtils.getUserName();
-        int size = usages.size();
-        LOGGER.info("Insert usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
-            size, userName);
-        calculateUsagesGrossAmount(usageBatch, usages);
-        usages.forEach(usage -> {
-            usage.setBatchId(usageBatch.getId());
-            usage.setCreateUser(userName);
-            usage.setUpdateUser(userName);
-            usageRepository.insert(usage);
-        });
-        // Adding data to audit table in separate loop increases performance up to 3 times
-        // while using batch with 200000 usages
-        String loadedReason = "Uploaded in '" + usageBatch.getName() + "' Batch";
-        String eligibleReason = "Usage was uploaded with Wr Wrk Inst and RH account number";
-        String workFoundReason = "Usage was uploaded with Wr Wrk Inst";
-        usages.forEach(usage -> {
-            usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason);
-            if (UsageStatusEnum.ELIGIBLE == usage.getStatus()) {
-                usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, eligibleReason);
-            }
-            if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
-                usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, workFoundReason);
-            }
-        });
-        LOGGER.info("Insert usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
-            size, userName);
-        return size;
-    }
 
     @Override
     @Transactional
@@ -482,16 +445,6 @@ public class UsageService implements IUsageService {
     private void updateReportedUsages(Set<String> usagesIds) {
         usageArchiveRepository.updateStatus(usagesIds, UsageStatusEnum.ARCHIVED);
         usageAuditService.logAction(usagesIds, UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM");
-    }
-
-    private void calculateUsagesGrossAmount(UsageBatch usageBatch, Collection<Usage> usages) {
-        BigDecimal fundPoolAmount = usageBatch.getGrossAmount();
-        BigDecimal totalAmount = usages.stream().map(Usage::getReportedValue).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal conversionRate = CalculationUtils.calculateConversionRate(fundPoolAmount, totalAmount);
-        usages.forEach(usage -> usage.setGrossAmount(
-            CalculationUtils.calculateUsdAmount(usage.getReportedValue(), conversionRate)));
-        LOGGER.info(CALCULATION_FINISHED_LOG_MESSAGE, usageBatch.getName(), usageBatch.getGrossAmount(), totalAmount,
-            conversionRate);
     }
 
     private String buildActionReason(Long oldAccountNumber, Long newAccountNumber, String actionReason) {

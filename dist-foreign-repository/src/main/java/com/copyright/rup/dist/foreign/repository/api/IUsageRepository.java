@@ -29,13 +29,6 @@ import java.util.Set;
 public interface IUsageRepository {
 
     /**
-     * Inserts Usage into database.
-     *
-     * @param usage {@link Usage} instance
-     */
-    void insert(Usage usage);
-
-    /**
      * Finds list of {@link UsageDto}s by usage filter.
      *
      * @param filter   instance of {@link UsageFilter}
