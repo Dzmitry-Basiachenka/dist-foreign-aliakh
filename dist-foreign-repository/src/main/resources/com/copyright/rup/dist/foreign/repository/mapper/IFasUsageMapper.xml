@@ -4,6 +4,58 @@
 
 <mapper namespace="IFasUsageMapper">
 
+    <insert id="insert" parameterType="Usage">
+        with u as (
+            insert into ${schema}.df_usage (
+                df_usage_uid,
+                <include refid="IUsageMapper.usageColumns"/>,
+                payee_account_number,
+                 <include refid="StoredEntityMapper.additionalColumns"/>
+            )
+            values (
+                #{id},
+                #{batchId},
+                #{scenarioId},
+                #{wrWrkInst},
+                #{workTitle},
+                #{systemTitle},
+                #{rightsholder.accountNumber},
+                #{status},
+                #{productFamily},
+                #{standardNumber},
+                #{standardNumberType},
+                #{numberOfCopies},
+                #{grossAmount},
+                #{comment},
+                #{payee.accountNumber},
+                <include refid="StoredEntityMapper.insert"/>
+            )
+        )
+        insert into ${schema}.df_usage_fas (
+            df_usage_fas_uid,
+            article,
+            publisher,
+            publication_date,
+            market,
+            market_period_from,
+            market_period_to,
+            author,
+            reported_value,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        )
+        select
+            #{id},
+            #{article},
+            #{publisher},
+            #{publicationDate},
+            #{market},
+            #{marketPeriodFrom},
+            #{marketPeriodTo},
+            #{author},
+            #{reportedValue},
+            <include refid="StoredEntityMapper.insert"/>
+    </insert>
+
     <update id="updateResearchedUsage" parameterType="map">
         update ${schema}.df_usage
         set
