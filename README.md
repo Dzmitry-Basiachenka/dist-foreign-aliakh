@@ -1,3 +1,12 @@
+9.1.1
+-
+* B-56093 Tech Debt: FDA: move FAS specific logic to separate service and repository on Usage level
+* B-56093 Tech Debt: FDA: move refresh and reconcile functionality to FAS specific classes
+* B-56093 Tech Debt: FDA: refactor classes/methods names to use AdditionalFund instead of PreServiceFeeFund
+* B-56265 FDA: View & Delete AACL Batch: Implement service and repository logic to remove AACL usage batch
+* Revert "B-56093 Tech Debt: FDA: move FAS specific logic to separate service and repository on Usage level"
+* Revert "Revert "B-56093 Tech Debt: FDA: move FAS specific logic to separate service and repository on Usage level""
+
 9.1.0
 -
 * B-52334 FDA: Load AACL Fund Pool: add product_family column into df_fund_pool table and rename withdrawn_amount to total_amount
