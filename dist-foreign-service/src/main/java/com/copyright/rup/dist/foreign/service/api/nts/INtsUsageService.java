@@ -61,12 +61,12 @@ public interface INtsUsageService {
     void populatePayeeAndCalculateAmountsForScenarioUsages(Scenario scenario);
 
     /**
-     * Deletes usages from Additional Fund.
+     * Deletes usages from NTS fund pool.
      * Reverts status of usages to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN}.
      *
      * @param fundPoolId fund pool id
      */
-    void deleteFromAdditionalFund(String fundPoolId);
+    void deleteFromNtsFundPool(String fundPoolId);
 
     /**
      * Deletes usages with Wr Wrk Insts that were classified as BELLETRISTIC.
@@ -106,5 +106,5 @@ public interface INtsUsageService {
      * @param batchIds   set of ids of usage batches
      * @param userName   user name
      */
-    void addWithdrawnUsagesToFundPool(String fundPoolId, Set<String> batchIds, String userName);
+    void addWithdrawnUsagesToNtsFundPool(String fundPoolId, Set<String> batchIds, String userName);
 }

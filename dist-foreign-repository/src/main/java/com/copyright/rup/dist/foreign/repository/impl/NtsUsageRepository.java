@@ -132,12 +132,12 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
     }
 
     @Override
-    public void deleteFromAdditionalFund(String fundPoolId, String updateUser) {
+    public void deleteFromNtsFundPool(String fundPoolId, String updateUser) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put("fundPoolId", Objects.requireNonNull(fundPoolId));
         params.put(STATUS_KEY, UsageStatusEnum.NTS_WITHDRAWN);
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
-        update("INtsUsageMapper.deleteFromAdditionalFund", params);
+        update("INtsUsageMapper.deleteFromNtsFundPool", params);
     }
 
     @Override
@@ -184,7 +184,7 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
     }
 
     @Override
-    public void addWithdrawnUsagesToFundPool(String fundPoolId, Set<String> batchIds, String userName) {
+    public void addWithdrawnUsagesToNtsFundPool(String fundPoolId, Set<String> batchIds, String userName) {
         checkArgument(StringUtils.isNotBlank(fundPoolId));
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
         params.put("fundPoolId", fundPoolId);
@@ -192,6 +192,6 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         params.put("statusToSet", UsageStatusEnum.TO_BE_DISTRIBUTED);
         params.put("batchIds", Objects.requireNonNull(batchIds));
         params.put("updateUser", Objects.requireNonNull(userName));
-        update("INtsUsageMapper.addWithdrawnUsagesToFundPool", params);
+        update("INtsUsageMapper.addWithdrawnUsagesToNtsFundPool", params);
     }
 }

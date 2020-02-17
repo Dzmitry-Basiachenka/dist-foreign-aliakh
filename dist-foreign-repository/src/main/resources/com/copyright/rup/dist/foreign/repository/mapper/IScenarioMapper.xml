@@ -240,7 +240,7 @@
         )
     </select>
 
-    <select id="findNameByAdditionalFundId" parameterType="string" resultType="string">
+    <select id="findNameByNtsFundPoolId" parameterType="string" resultType="string">
         select name
         from ${schema}.df_scenario
         where nts_fields->>'pre_service_fee_fund_uid' = #{fundPoolId}

@@ -61,12 +61,12 @@ public class FundPoolService implements IFundPoolService {
         fundPool.setCreateUser(userName);
         fundPool.setUpdateUser(userName);
         LOGGER.info(
-            "Insert Additional Fund. Started. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
+            "Insert NTS fund pool. Started. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
             fundPool.getName(), fundPool.getTotalAmount(), LogUtils.size(batchIds), userName);
         fundPoolRepository.insert(fundPool);
-        ntsUsageService.addWithdrawnUsagesToFundPool(fundPool.getId(), batchIds, userName);
+        ntsUsageService.addWithdrawnUsagesToNtsFundPool(fundPool.getId(), batchIds, userName);
         LOGGER.info(
-            "Insert Additional Fund. Finished. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
+            "Insert NTS fund pool. Finished. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
             fundPool.getName(), fundPool.getTotalAmount(), LogUtils.size(batchIds), userName);
     }
 
@@ -105,10 +105,10 @@ public class FundPoolService implements IFundPoolService {
     @Transactional
     public void deleteNtsFundPool(FundPool fundPool) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.info("Delete Additional Fund. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
-        ntsUsageService.deleteFromAdditionalFund(fundPool.getId());
+        LOGGER.info("Delete NTS fund pool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+        ntsUsageService.deleteFromNtsFundPool(fundPool.getId());
         fundPoolRepository.delete(fundPool.getId());
-        LOGGER.info("Delete Additional Fund. Finished. FundPoolName={}, UserName={}", fundPool.getName(),
+        LOGGER.info("Delete NTS fund pool. Finished. FundPoolName={}, UserName={}", fundPool.getName(),
             userName);
     }
 

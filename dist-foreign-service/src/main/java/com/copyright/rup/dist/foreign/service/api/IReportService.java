@@ -139,14 +139,14 @@ public interface IReportService {
     void writeSummaryMarkerCsvReport(List<UsageBatch> batches, OutputStream outputStream);
 
     /**
-     * Writes Additional Fund filtered batches into the output stream in CSV format.
+     * Writes FAS filtered batches with NTS withdrawn usages into the output stream in CSV format.
      *
      * @param batches          list of batches
      * @param totalGrossAmount total gross amount
      * @param outputStream     instance of {@link OutputStream}
      */
-    void writeAdditionalFundBatchesCsvReport(List<UsageBatch> batches, BigDecimal totalGrossAmount,
-                                             OutputStream outputStream);
+    void writeNtsWithdrawnBatchesCsvReport(List<UsageBatch> batches, BigDecimal totalGrossAmount,
+                                           OutputStream outputStream);
 
     /**
      * Writes Ownership Adjustment Report into a {@link OutputStream} in CSV format.

@@ -55,11 +55,11 @@ public interface IUsageBatchRepository {
     List<UsageBatch> findByProductFamily(String productFamily);
 
     /**
-     * Finds list of FAS/FAS2 {@link UsageBatch}es suitable for Additional Funds.
+     * Finds list of FAS/FAS2 {@link UsageBatch}es suitable for NTS Fund Pool.
      *
      * @return list of found {@link UsageBatch}es
      */
-    List<UsageBatch> findUsageBatchesForAdditionalFunds();
+    List<UsageBatch> findUsageBatchesForNtsFundPool();
 
     /**
      * Gets usage batches count with specified name.

@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2019-03-27-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: " +
+        comment("B-48760 FDA: Create NTS Fund Pool from NTS withdrawn details: " +
                 "Inserting test data for testFindById, testDelete, testFindAll")
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {

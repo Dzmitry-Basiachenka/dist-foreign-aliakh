@@ -100,7 +100,7 @@
             and ufas.df_fund_pool_uid is null
     </sql>
 
-    <select id="findUsageBatchesForAdditionalFunds" resultMap="usageBatchResultMap" parameterType="map">
+    <select id="findUsageBatchesForNtsFundPool" resultMap="usageBatchResultMap" parameterType="map">
         select
             ub.df_usage_batch_uid,
             ub.name,

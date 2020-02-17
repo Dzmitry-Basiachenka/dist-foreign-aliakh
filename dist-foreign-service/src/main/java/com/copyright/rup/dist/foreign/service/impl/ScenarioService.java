@@ -116,8 +116,8 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    public String getScenarioNameByAdditionalFundId(String fundPoolId) {
-        return scenarioRepository.findNameByAdditionalFundId(fundPoolId);
+    public String getScenarioNameByNtsFundPoolId(String fundPoolId) {
+        return scenarioRepository.findNameByNtsFundPoolId(fundPoolId);
     }
 
     @Override

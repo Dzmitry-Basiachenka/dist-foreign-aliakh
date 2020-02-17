@@ -96,7 +96,7 @@ public class FundPoolServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         fundPoolRepository.insert(fund);
         expectLastCall().once();
-        ntsUsageService.addWithdrawnUsagesToFundPool(fund.getId(), batchIds, USER_NAME);
+        ntsUsageService.addWithdrawnUsagesToNtsFundPool(fund.getId(), batchIds, USER_NAME);
         expectLastCall().once();
         replay(RupContextUtils.class, fundPoolRepository, ntsUsageService);
         fundPoolService.createNtsFundPool(fund, batchIds);
@@ -163,7 +163,7 @@ public class FundPoolServiceTest {
 
     @Test
     public void testDeleteNtsFundPool() {
-        ntsUsageService.deleteFromAdditionalFund(FUND_POOL_ID);
+        ntsUsageService.deleteFromNtsFundPool(FUND_POOL_ID);
         expectLastCall().once();
         expect(fundPoolRepository.delete(FUND_POOL_ID)).andReturn(2).once();
         replay(fundPoolRepository, ntsUsageService);
@@ -228,12 +228,12 @@ public class FundPoolServiceTest {
     }
 
     private FundPool buildNtsFundPool() {
-        FundPool additionalFund = new FundPool();
-        additionalFund.setId(FUND_POOL_ID);
-        additionalFund.setProductFamily(NTS_PRODUCT_FAMILY);
-        additionalFund.setName(FUND_POOL_NAME);
-        additionalFund.setTotalAmount(BigDecimal.TEN);
-        return additionalFund;
+        FundPool fundPool = new FundPool();
+        fundPool.setId(FUND_POOL_ID);
+        fundPool.setProductFamily(NTS_PRODUCT_FAMILY);
+        fundPool.setName(FUND_POOL_NAME);
+        fundPool.setTotalAmount(BigDecimal.TEN);
+        return fundPool;
     }
 
     private FundPool buildAaclFundPool() {

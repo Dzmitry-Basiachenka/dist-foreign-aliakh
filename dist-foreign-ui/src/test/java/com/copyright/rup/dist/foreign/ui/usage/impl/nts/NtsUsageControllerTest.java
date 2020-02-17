@@ -246,7 +246,7 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testGetScenarioNameAssociatedWithAdditionalFund() {
-        expect(scenarioService.getScenarioNameByAdditionalFundId(USAGE_BATCH_ID))
+        expect(scenarioService.getScenarioNameByNtsFundPoolId(USAGE_BATCH_ID))
             .andReturn(SCENARIO_NAME).once();
         replay(scenarioService);
         assertEquals(SCENARIO_NAME, controller.getScenarioNameAssociatedWithAdditionalFund(USAGE_BATCH_ID));
@@ -255,7 +255,7 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testGetUsageBatchesForAdditionalFunds() {
-        expect(usageBatchService.getUsageBatchesForAdditionalFunds()).andReturn(Collections.emptyList()).once();
+        expect(usageBatchService.getUsageBatchesForNtsFundPool()).andReturn(Collections.emptyList()).once();
         replay(usageBatchService);
         controller.getUsageBatchesForAdditionalFunds();
         verify(usageBatchService);
@@ -376,7 +376,7 @@ public class NtsUsageControllerTest {
         expect(OffsetDateTime.now()).andReturn(DATE).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
-        reportService.writeAdditionalFundBatchesCsvReport(
+        reportService.writeNtsWithdrawnBatchesCsvReport(
             Collections.singletonList(new UsageBatch()), BigDecimal.ONE, pos);
         expectLastCall().once();
         replay(OffsetDateTime.class, streamSourceHandler, reportService);

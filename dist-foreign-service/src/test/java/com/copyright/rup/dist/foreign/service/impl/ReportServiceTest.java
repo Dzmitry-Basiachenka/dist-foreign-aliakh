@@ -321,10 +321,10 @@ public class ReportServiceTest {
     }
 
     @Test
-    public void testWriteAdditionalFundBatchesCsvReport() throws IOException {
+    public void testWriteNtsWithdrawnBatchesCsvReport() throws IOException {
         PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream(pos);
-        new ReportService().writeAdditionalFundBatchesCsvReport(
+        new ReportService().writeNtsWithdrawnBatchesCsvReport(
             Collections.singletonList(buildUsageBatch()), USAGE_BATCH_GROSS_AMOUNT, pos);
         reportTestUtils.assertCsvReport("batches_nts_withdrawn.csv", pis);
     }

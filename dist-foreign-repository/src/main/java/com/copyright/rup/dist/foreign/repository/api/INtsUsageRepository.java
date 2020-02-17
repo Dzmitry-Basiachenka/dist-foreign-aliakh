@@ -91,7 +91,7 @@ public interface INtsUsageRepository {
      * @param fundPoolId fund pool id
      * @param userName   user name
      */
-    void deleteFromAdditionalFund(String fundPoolId, String userName);
+    void deleteFromNtsFundPool(String fundPoolId, String userName);
 
     /**
      * Deletes usages with Wr Wrk Insts that were classified as BELLETRISTIC.
@@ -131,11 +131,11 @@ public interface INtsUsageRepository {
 
     /**
      * Updates usages with status NTS_WITHDRAWN from given batches to status TO_BE_DISTRIBUTED
-     * and adds the usages to the fund pool.
+     * and adds the usages to the NTS fund pool.
      *
      * @param fundPoolId id of fund pool
      * @param batchIds   set of ids of usage batches
      * @param userName   user name
      */
-    void addWithdrawnUsagesToFundPool(String fundPoolId, Set<String> batchIds, String userName);
+    void addWithdrawnUsagesToNtsFundPool(String fundPoolId, Set<String> batchIds, String userName);
 }

@@ -207,7 +207,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: 'f2d19889-b6f6-4f8e-a89d-2ed757d6b883')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'name', value: 'Pre-Service Fee Additional Fund')
+            column(name: 'name', value: 'NTS fund pool')
             column(name: 'total_amount', value: '199.98')
         }
 
