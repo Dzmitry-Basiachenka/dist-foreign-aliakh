@@ -117,4 +117,72 @@ databaseChangeLog {
                     columnNames: 'name, product_family')
         }
     }
+
+    changeSet(id: '2020-02-17-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-56093 Tech Debt: FDA: modify data types of detail_licensee_class_id and aggregate_licensee_class_id columns")
+
+        dropForeignKeyConstraint(
+                baseTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_detail_licensee_class',
+                constraintName: 'fk_df_detail_licensee_class_2_df_aggregate_licensee_class')
+
+        dropForeignKeyConstraint(
+                baseTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_fund_pool_detail',
+                constraintName: 'fk_df_fund_pool_detail_2_df_aggregate_licensee_class')
+
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class', columnName: 'detail_licensee_class_id', newDataType: 'INTEGER')
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class', columnName: 'aggregate_licensee_class_id', newDataType: 'INTEGER')
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class', columnName: 'aggregate_licensee_class_id', newDataType: 'INTEGER')
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail', columnName: 'df_aggregate_licensee_class_id', newDataType: 'INTEGER')
+
+        addForeignKeyConstraint(constraintName: 'fk_df_detail_licensee_class_2_df_aggregate_licensee_class',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_detail_licensee_class',
+                baseColumnNames: 'aggregate_licensee_class_id',
+                referencedTableName: 'df_aggregate_licensee_class',
+                referencedColumnNames: 'aggregate_licensee_class_id')
+
+        addForeignKeyConstraint(constraintName: 'fk_df_fund_pool_detail_2_df_aggregate_licensee_class',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_fund_pool_detail',
+                baseColumnNames: 'df_aggregate_licensee_class_id',
+                referencedTableName: 'df_aggregate_licensee_class',
+                referencedColumnNames: 'aggregate_licensee_class_id')
+
+        rollback {
+            dropForeignKeyConstraint(
+                    baseTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_detail_licensee_class',
+                    constraintName: 'fk_df_detail_licensee_class_2_df_aggregate_licensee_class')
+
+            dropForeignKeyConstraint(
+                    baseTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_fund_pool_detail',
+                    constraintName: 'fk_df_fund_pool_detail_2_df_aggregate_licensee_class')
+
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class', columnName: 'aggregate_licensee_class_id', newDataType: 'NUMERIC(38)')
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class', columnName: 'detail_licensee_class_id', newDataType: 'NUMERIC(38)')
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class', columnName: 'aggregate_licensee_class_id', newDataType: 'NUMERIC(38)')
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail', columnName: 'df_aggregate_licensee_class_id', newDataType: 'NUMERIC(38)')
+
+            addForeignKeyConstraint(constraintName: 'fk_df_detail_licensee_class_2_df_aggregate_licensee_class',
+                    baseTableSchemaName: dbAppsSchema,
+                    referencedTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_detail_licensee_class',
+                    baseColumnNames: 'aggregate_licensee_class_id',
+                    referencedTableName: 'df_aggregate_licensee_class',
+                    referencedColumnNames: 'aggregate_licensee_class_id')
+
+            addForeignKeyConstraint(constraintName: 'fk_df_fund_pool_detail_2_df_aggregate_licensee_class',
+                    baseTableSchemaName: dbAppsSchema,
+                    referencedTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_fund_pool_detail',
+                    baseColumnNames: 'df_aggregate_licensee_class_id',
+                    referencedTableName: 'df_aggregate_licensee_class',
+                    referencedColumnNames: 'aggregate_licensee_class_id')
+        }
+    }
 }
