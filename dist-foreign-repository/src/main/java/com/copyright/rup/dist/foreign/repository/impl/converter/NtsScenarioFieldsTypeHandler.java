@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.foreign.domain.NtsFundPool;
-import com.copyright.rup.dist.foreign.repository.impl.converter.json.NtsFundPoolJsonMapper;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
+import com.copyright.rup.dist.foreign.repository.impl.converter.json.NtsScenarioFieldsJsonMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -18,20 +18,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Implementation of {@link BaseTypeHandler} for {@link NtsFundPool}.
+ * Implementation of {@link BaseTypeHandler} for {@link NtsFields}.
  * <p/>
- * Copyright (C) 2018 copyright.com
+ * Copyright (C) 2019 copyright.com
  * <p/>
- * Date: 12/03/2018
+ * Date: 04/17/2019
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFundPoolTypeHandler extends BaseTypeHandler<NtsFundPool> {
+public class NtsScenarioFieldsTypeHandler extends BaseTypeHandler<NtsFields> {
 
-    private static final NtsFundPoolJsonMapper JSON_MAPPER = new NtsFundPoolJsonMapper();
+    private static final NtsScenarioFieldsJsonMapper JSON_MAPPER = new NtsScenarioFieldsJsonMapper();
 
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, NtsFundPool parameter, JdbcType jdbcType)
+    public void setNonNullParameter(PreparedStatement ps, int i, NtsFields parameter, JdbcType jdbcType)
         throws SQLException {
         PGobject pgobject = new PGobject();
         pgobject.setValue(serialize(parameter));
@@ -40,50 +40,50 @@ public class NtsFundPoolTypeHandler extends BaseTypeHandler<NtsFundPool> {
     }
 
     @Override
-    public NtsFundPool getNullableResult(ResultSet rs, String columnName) throws SQLException {
+    public NtsFields getNullableResult(ResultSet rs, String columnName) throws SQLException {
         return deserialize(rs.getString(columnName));
     }
 
     @Override
-    public NtsFundPool getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+    public NtsFields getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
         return deserialize(rs.getString(columnIndex));
     }
 
     @Override
-    public NtsFundPool getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+    public NtsFields getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
         return deserialize(cs.getString(columnIndex));
     }
 
     /**
-     * Serializes an instance of {@link NtsFundPool} into a string JSON.
+     * Serializes an instance of {@link NtsFields} into a string JSON.
      * If the argument is {@code null}, the method returns {@code null}.
      *
-     * @param ntsFundPool the instance of {@link NtsFundPool}
+     * @param ntsFields the instance of {@link NtsFields}
      * @return the string JSON
      */
-    String serialize(NtsFundPool ntsFundPool) {
+    String serialize(NtsFields ntsFields) {
         try {
-            return JSON_MAPPER.serialize(ntsFundPool);
+            return JSON_MAPPER.serialize(ntsFields);
         } catch (JsonProcessingException e) {
-            throw new RupRuntimeException("Unable to serialize fund pool", e);
+            throw new RupRuntimeException("Unable to serialize NTS fields", e);
         }
     }
 
     /**
-     * Deserializes a string JSON into an instance of {@link NtsFundPool}.
+     * Deserializes a string JSON into an instance of {@link NtsFields}.
      * If the argument is {@code null}, the method returns {@code null}.
      *
      * @param json the string JSON
-     * @return the instance of {@link NtsFundPool}
+     * @return the instance of {@link NtsFields}
      */
-    NtsFundPool deserialize(String json) {
+    NtsFields deserialize(String json) {
         if (StringUtils.isEmpty(json)) {
             return null;
         }
         try {
             return JSON_MAPPER.deserialize(json);
         } catch (IOException e) {
-            throw new RupRuntimeException("Unable to deserialize fund pool", e);
+            throw new RupRuntimeException("Unable to deserialize NTS fields", e);
         }
     }
 }

@@ -164,7 +164,7 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
                 .findFirst()
                 .orElse(null);
             assertNotNull(insertedBatch);
-            assertEquals(usageBatch.getNtsFundPool(), insertedBatch.getNtsFundPool());
+            assertEquals(usageBatch.getNtsFields(), insertedBatch.getNtsFields());
             assertEquals(usageBatch.getFiscalYear(), insertedBatch.getFiscalYear());
             assertEquals(usageBatch.getGrossAmount(), insertedBatch.getGrossAmount());
             assertEquals(usageBatch.getPaymentDate(), insertedBatch.getPaymentDate());

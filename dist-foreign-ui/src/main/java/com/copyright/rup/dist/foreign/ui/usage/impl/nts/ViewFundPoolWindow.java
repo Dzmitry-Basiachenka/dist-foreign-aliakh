@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
-
 import com.copyright.rup.dist.foreign.ui.usage.impl.AbstractViewUsageBatchWindow;
 
 import com.vaadin.server.SerializableComparator;
@@ -66,21 +65,21 @@ class ViewFundPoolWindow extends AbstractViewUsageBatchWindow {
             .setRenderer(new LocalDateRenderer(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))
             .setWidth(100);
         addColumn(batch -> UsageBatchUtils.getFiscalYear(batch.getFiscalYear()), "table.column.fiscal_year", 90);
-        addAmountColumn(batch -> batch.getNtsFundPool().getStmAmount(), "table.column.stm_amount", 100,
-            (batch1, batch2) -> batch1.getNtsFundPool().getStmAmount()
-                .compareTo(batch2.getNtsFundPool().getStmAmount()));
-        addAmountColumn(batch -> batch.getNtsFundPool().getNonStmAmount(), "table.column.non_stm_amount", 115,
-            (batch1, batch2) -> batch1.getNtsFundPool().getNonStmAmount()
-                .compareTo(batch2.getNtsFundPool().getNonStmAmount()));
-        addAmountColumn(batch -> batch.getNtsFundPool().getStmMinimumAmount(), "table.column.stm_minimum_amount", 140,
-            (batch1, batch2) -> batch1.getNtsFundPool().getStmMinimumAmount()
-                .compareTo(batch2.getNtsFundPool().getStmMinimumAmount()));
-        addAmountColumn(batch -> batch.getNtsFundPool().getNonStmMinimumAmount(), "table.column.non_stm_minimum_amount",
-            160, (batch1, batch2) -> batch1.getNtsFundPool().getNonStmMinimumAmount()
-                .compareTo(batch2.getNtsFundPool().getNonStmMinimumAmount()));
-        addColumn(batch -> String.join(", ", batch.getNtsFundPool().getMarkets()), "table.column.markets", 140);
-        addColumn(batch -> batch.getNtsFundPool().getFundPoolPeriodFrom(), "table.column.market_period_from", 140);
-        addColumn(batch -> batch.getNtsFundPool().getFundPoolPeriodTo(), "table.column.market_period_to", 125);
+        addAmountColumn(batch -> batch.getNtsFields().getStmAmount(), "table.column.stm_amount", 100,
+            (batch1, batch2) -> batch1.getNtsFields().getStmAmount()
+                .compareTo(batch2.getNtsFields().getStmAmount()));
+        addAmountColumn(batch -> batch.getNtsFields().getNonStmAmount(), "table.column.non_stm_amount", 115,
+            (batch1, batch2) -> batch1.getNtsFields().getNonStmAmount()
+                .compareTo(batch2.getNtsFields().getNonStmAmount()));
+        addAmountColumn(batch -> batch.getNtsFields().getStmMinimumAmount(), "table.column.stm_minimum_amount", 140,
+            (batch1, batch2) -> batch1.getNtsFields().getStmMinimumAmount()
+                .compareTo(batch2.getNtsFields().getStmMinimumAmount()));
+        addAmountColumn(batch -> batch.getNtsFields().getNonStmMinimumAmount(), "table.column.non_stm_minimum_amount",
+            160, (batch1, batch2) -> batch1.getNtsFields().getNonStmMinimumAmount()
+                .compareTo(batch2.getNtsFields().getNonStmMinimumAmount()));
+        addColumn(batch -> String.join(", ", batch.getNtsFields().getMarkets()), "table.column.markets", 140);
+        addColumn(batch -> batch.getNtsFields().getFundPoolPeriodFrom(), "table.column.market_period_from", 140);
+        addColumn(batch -> batch.getNtsFields().getFundPoolPeriodTo(), "table.column.market_period_to", 125);
         addColumn(UsageBatch::getCreateUser, "table.column.create_user", 170,
             (batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()));
         grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))

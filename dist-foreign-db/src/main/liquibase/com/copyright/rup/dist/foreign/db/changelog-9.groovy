@@ -185,4 +185,22 @@ databaseChangeLog {
                     referencedColumnNames: 'aggregate_licensee_class_id')
         }
     }
+
+    changeSet(id: '2020-02-18-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-56093 Tech Debt: FDA: rename fund_pool column to nts_fields in df_usage_batch table")
+
+        renameColumn(schemaName: dbAppsSchema,
+                tableName: 'df_usage_batch',
+                oldColumnName: 'fund_pool',
+                newColumnName: 'nts_fields',
+                columnDataType: 'JSONB')
+
+        rollback {
+            renameColumn(schemaName: dbAppsSchema,
+                    tableName: 'df_usage_batch',
+                    oldColumnName: 'nts_fields',
+                    newColumnName: 'fund_pool',
+                    columnDataType: 'JSONB')
+        }
+    }
 }

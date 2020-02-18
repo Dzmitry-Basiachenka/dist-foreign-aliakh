@@ -8,9 +8,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.copyright.rup.dist.foreign.domain.NtsFundPool;
-
-import com.google.common.collect.ImmutableSet;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 
 import org.junit.Test;
 import org.postgresql.util.PGobject;
@@ -22,34 +20,34 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Verifies {@link NtsFundPoolTypeHandler}.
+ * Verifies {@link NtsScenarioFieldsTypeHandler}.
  * <p/>
- * Copyright (C) 2018 copyright.com
+ * Copyright (C) 2019 copyright.com
  * <p/>
- * Date: 12/03/2018
+ * Date: 04/17/2019
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFundPoolTypeHandlerTest {
+public class NtsScenarioFieldsTypeHandlerTest {
 
-    private static final String COLUMN_NAME = "fund_pool";
+    private static final String COLUMN_NAME = "nts_fields";
     private static final int COLUMN_INDEX = 1;
     private static final int PARAMETER_INDEX = 1;
 
-    private final NtsFundPoolTypeHandler typeHandler = new NtsFundPoolTypeHandler();
+    private final NtsScenarioFieldsTypeHandler typeHandler = new NtsScenarioFieldsTypeHandler();
 
     @Test
     public void testSetNonNullParameterPreparedStatement() throws SQLException {
         PreparedStatement ps = createMock(PreparedStatement.class);
         PGobject pgobject = new PGobject();
-        NtsFundPool ntsFundPool = buildFundPool();
-        String json = typeHandler.serialize(ntsFundPool);
+        NtsFields ntsFields = buildNtsFields();
+        String json = typeHandler.serialize(ntsFields);
         pgobject.setValue(json);
         pgobject.setType("jsonb");
         ps.setObject(PARAMETER_INDEX, pgobject);
         expectLastCall().once();
         replay(ps);
-        typeHandler.setNonNullParameter(ps, PARAMETER_INDEX, ntsFundPool, null);
+        typeHandler.setNonNullParameter(ps, PARAMETER_INDEX, ntsFields, null);
         verify(ps);
     }
 
@@ -72,13 +70,13 @@ public class NtsFundPoolTypeHandlerTest {
     public void testGetNullableResultColumnIndex() throws SQLException {
         ResultSet rs = createMock(ResultSet.class);
         try {
-            NtsFundPool ntsFundPool = buildFundPool();
-            String json = typeHandler.serialize(ntsFundPool);
+            NtsFields ntsFields = buildNtsFields();
+            String json = typeHandler.serialize(ntsFields);
             expect(rs.getString(COLUMN_INDEX)).andReturn(json).once();
             rs.close();
             expectLastCall().once();
             replay(rs);
-            assertEquals(ntsFundPool, typeHandler.getNullableResult(rs, COLUMN_INDEX));
+            assertEquals(ntsFields, typeHandler.getNullableResult(rs, COLUMN_INDEX));
         } finally {
             rs.close();
         }
@@ -88,23 +86,17 @@ public class NtsFundPoolTypeHandlerTest {
     @Test
     public void testGetNullableResultCallableStatement() throws SQLException {
         CallableStatement cs = createMock(CallableStatement.class);
-        NtsFundPool ntsFundPool = buildFundPool();
-        String json = typeHandler.serialize(ntsFundPool);
+        NtsFields ntsFields = buildNtsFields();
+        String json = typeHandler.serialize(ntsFields);
         expect(cs.getString(PARAMETER_INDEX)).andReturn(json).once();
         replay(cs);
-        assertEquals(ntsFundPool, typeHandler.getNullableResult(cs, COLUMN_INDEX));
+        assertEquals(ntsFields, typeHandler.getNullableResult(cs, COLUMN_INDEX));
         verify(cs);
     }
 
-    private NtsFundPool buildFundPool() {
-        NtsFundPool ntsFundPool = new NtsFundPool();
-        ntsFundPool.setFundPoolPeriodFrom(2017);
-        ntsFundPool.setFundPoolPeriodTo(2018);
-        ntsFundPool.setStmAmount(new BigDecimal(100));
-        ntsFundPool.setNonStmAmount(new BigDecimal(200));
-        ntsFundPool.setStmMinimumAmount(new BigDecimal(300));
-        ntsFundPool.setNonStmMinimumAmount(new BigDecimal(400));
-        ntsFundPool.setMarkets(ImmutableSet.of("Edu", "Gov"));
-        return ntsFundPool;
+    private NtsFields buildNtsFields() {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        return ntsFields;
     }
 }

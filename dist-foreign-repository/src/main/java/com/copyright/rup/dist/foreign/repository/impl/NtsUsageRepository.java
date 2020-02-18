@@ -5,8 +5,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 
@@ -49,7 +49,7 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
     @Override
     public List<String> insertUsages(UsageBatch usageBatch, String userName) {
         Objects.requireNonNull(usageBatch);
-        NtsFundPool ntsFundPool = Objects.requireNonNull(usageBatch.getNtsFundPool());
+        NtsFields ntsFundPool = Objects.requireNonNull(usageBatch.getNtsFields());
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(13);
         params.put("batchId", Objects.requireNonNull(usageBatch.getId()));
         params.put("marketPeriodFrom", Objects.requireNonNull(ntsFundPool.getFundPoolPeriodFrom()));

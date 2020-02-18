@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.NtsFundPool;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.google.common.collect.ImmutableSet;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
- * Verifies {@link NtsFundPoolJsonMapper}.
+ * Verifies {@link NtsBatchFieldsJsonMapper}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -24,14 +24,14 @@ import java.math.BigDecimal;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsNtsFundPoolJsonMapperTest {
+public class NtsBatchFieldsJsonMapperTest {
 
-    private final NtsFundPoolJsonMapper jsonMapper = new NtsFundPoolJsonMapper();
+    private final NtsBatchFieldsJsonMapper jsonMapper = new NtsBatchFieldsJsonMapper();
 
     @Test
     public void testDeserialize() throws IOException {
-        String json = TestUtils.fileToString(this.getClass(), "fund_pool.json");
-        NtsFundPool ntsFundPool = jsonMapper.deserialize(json);
+        String json = TestUtils.fileToString(this.getClass(), "nts_batch_fields.json");
+        NtsFields ntsFundPool = jsonMapper.deserialize(json);
         assertEquals(2017, ntsFundPool.getFundPoolPeriodFrom().intValue());
         assertEquals(2018, ntsFundPool.getFundPoolPeriodTo().intValue());
         assertEquals(new BigDecimal("100"), ntsFundPool.getStmAmount());
@@ -44,7 +44,7 @@ public class NtsNtsFundPoolJsonMapperTest {
 
     @Test
     public void testSerialize() throws IOException {
-        NtsFundPool ntsFundPool = new NtsFundPool();
+        NtsFields ntsFundPool = new NtsFields();
         ntsFundPool.setFundPoolPeriodFrom(2017);
         ntsFundPool.setFundPoolPeriodTo(2018);
         ntsFundPool.setStmAmount(new BigDecimal("100"));

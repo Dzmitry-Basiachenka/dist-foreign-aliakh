@@ -2,11 +2,11 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.ImmutableSet;
@@ -70,7 +70,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatch() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildNtsFundPool(BUS_MARKET, STM_AMOUNT, false)))
+            .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -85,7 +85,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchExcludingStmWithStmRh() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildNtsFundPool(DOC_DEL_MARKET, STM_AMOUNT, true)))
+            .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -98,7 +98,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchExcludingStmWithoutStmRh() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildNtsFundPool(DOC_DEL_MARKET, STM_AMOUNT, true)))
+            .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -113,7 +113,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchExcludingStmWithStmRhForAnotherProduct() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildNtsFundPool(DOC_DEL_MARKET, STM_AMOUNT, true)))
+            .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -128,7 +128,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchWithUnclassified() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildNtsFundPool("Gov", STM_AMOUNT, false)))
+            .withUsageBatch(buildUsageBatch(buildNtsFields("Gov", STM_AMOUNT, false)))
             .expectRmsRights("rights/rms_grants_576324545_request.json", "rights/rms_grants_576324545_response.json")
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -142,7 +142,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchWithIneligibleRh() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildNtsFundPool(BUS_MARKET, STM_AMOUNT, false)))
+            .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -155,7 +155,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchWithNonUsRhTaxCountry() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildNtsFundPool(BUS_MARKET, STM_AMOUNT, false)))
+            .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
             .expectOracleCall(1000023401L, "tax/rh_1000023401_tax_country_fr_response.json")
@@ -166,7 +166,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchWithRhNotFound() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildNtsFundPool("Univ", STM_AMOUNT, false)))
+            .withUsageBatch(buildUsageBatch(buildNtsFields("Univ", STM_AMOUNT, false)))
             .expectRmsRights("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json")
             .build()
             .run();
@@ -175,7 +175,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchWithUsageUnderMinimum() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildNtsFundPool("Lib", STM_AMOUNT, false)))
+            .withUsageBatch(buildUsageBatch(buildNtsFields("Lib", STM_AMOUNT, false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -190,8 +190,7 @@ public class CreateNtsBatchIntegrationTest {
     @Test
     public void testCreateNtsBatchZeroStmAmount() {
         testBuilder
-            .withUsageBatch(
-                buildUsageBatch(buildNtsFundPool("Edu", new BigDecimal("0.000"), false)))
+            .withUsageBatch(buildUsageBatch(buildNtsFields("Edu", new BigDecimal("0.000"), false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -203,14 +202,14 @@ public class CreateNtsBatchIntegrationTest {
             .run();
     }
 
-    private UsageBatch buildUsageBatch(NtsFundPool ntsFundPool) {
+    private UsageBatch buildUsageBatch(NtsFields ntsFields) {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName("Batch name");
         usageBatch.setFiscalYear(2017);
         usageBatch.setPaymentDate(DATE);
         usageBatch.setRro(buildRightsholder(2000017001L));
         usageBatch.setProductFamily("NTS");
-        usageBatch.setNtsFundPool(ntsFundPool);
+        usageBatch.setNtsFields(ntsFields);
         usageBatch.setGrossAmount(new BigDecimal("0.00"));
         return usageBatch;
     }
@@ -221,17 +220,17 @@ public class CreateNtsBatchIntegrationTest {
         return rightsholder;
     }
 
-    private NtsFundPool buildNtsFundPool(String market, BigDecimal stmAmount, boolean excludingStm) {
-        NtsFundPool ntsFundPool = new NtsFundPool();
-        ntsFundPool.setFundPoolPeriodFrom(2013);
-        ntsFundPool.setFundPoolPeriodTo(2016);
-        ntsFundPool.setStmAmount(stmAmount);
-        ntsFundPool.setNonStmAmount(new BigDecimal("400.44"));
-        ntsFundPool.setStmMinimumAmount(new BigDecimal("300.3"));
-        ntsFundPool.setNonStmMinimumAmount(new BigDecimal("200."));
-        ntsFundPool.setMarkets(ImmutableSet.of(market));
-        ntsFundPool.setExcludingStm(excludingStm);
-        return ntsFundPool;
+    private NtsFields buildNtsFields(String market, BigDecimal stmAmount, boolean excludingStm) {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setFundPoolPeriodFrom(2013);
+        ntsFields.setFundPoolPeriodTo(2016);
+        ntsFields.setStmAmount(stmAmount);
+        ntsFields.setNonStmAmount(new BigDecimal("400.44"));
+        ntsFields.setStmMinimumAmount(new BigDecimal("300.3"));
+        ntsFields.setNonStmMinimumAmount(new BigDecimal("200."));
+        ntsFields.setMarkets(ImmutableSet.of(market));
+        ntsFields.setExcludingStm(excludingStm);
+        return ntsFields;
     }
 
     private Usage buildUsage(String market, UsageStatusEnum status, Long wrWrkInst) {

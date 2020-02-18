@@ -2,12 +2,11 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.ImmutableSet;
@@ -66,7 +65,7 @@ public class NtsWorkflowIntegrationTest {
     @Test
     public void testNtsWorkflow() throws InterruptedException {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildNtsFundPool()))
+            .withUsageBatch(buildUsageBatch(buildNtsFields()))
             .expectRollups("prm/nts_rollups_response.json", RH_ID)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, "rights/rms_grants_658824345_response.json")
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
@@ -86,20 +85,20 @@ public class NtsWorkflowIntegrationTest {
     private Scenario buildScenario() {
         Scenario scenario = new Scenario();
         scenario.setStatus(ScenarioStatusEnum.ARCHIVED);
-        NtsFields ntsFields = new NtsFields();
+        Scenario.NtsFields ntsFields = new Scenario.NtsFields();
         scenario.setNtsFields(ntsFields);
         ntsFields.setRhMinimumAmount(new BigDecimal("300"));
         return scenario;
     }
 
-    private UsageBatch buildUsageBatch(NtsFundPool ntsFundPool) {
+    private UsageBatch buildUsageBatch(NtsFields ntsFields) {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName("Batch name");
         usageBatch.setFiscalYear(2017);
         usageBatch.setPaymentDate(DATE);
         usageBatch.setRro(buildRightsholder(2000017001L, "CFC, Centre Francais d'exploitation du droit de Copie"));
         usageBatch.setProductFamily("NTS");
-        usageBatch.setNtsFundPool(ntsFundPool);
+        usageBatch.setNtsFields(ntsFields);
         return usageBatch;
     }
 
@@ -110,16 +109,16 @@ public class NtsWorkflowIntegrationTest {
         return rightsholder;
     }
 
-    private NtsFundPool buildNtsFundPool() {
-        NtsFundPool ntsFundPool = new NtsFundPool();
-        ntsFundPool.setFundPoolPeriodFrom(2013);
-        ntsFundPool.setFundPoolPeriodTo(2016);
-        ntsFundPool.setStmAmount(STM_AMOUNT);
-        ntsFundPool.setNonStmAmount(new BigDecimal("400.44"));
-        ntsFundPool.setStmMinimumAmount(new BigDecimal("300.3"));
-        ntsFundPool.setNonStmMinimumAmount(new BigDecimal("200."));
-        ntsFundPool.setMarkets(ImmutableSet.of(BUS_MARKET));
-        return ntsFundPool;
+    private NtsFields buildNtsFields() {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setFundPoolPeriodFrom(2013);
+        ntsFields.setFundPoolPeriodTo(2016);
+        ntsFields.setStmAmount(STM_AMOUNT);
+        ntsFields.setNonStmAmount(new BigDecimal("400.44"));
+        ntsFields.setStmMinimumAmount(new BigDecimal("300.3"));
+        ntsFields.setNonStmMinimumAmount(new BigDecimal("200."));
+        ntsFields.setMarkets(ImmutableSet.of(BUS_MARKET));
+        return ntsFields;
     }
 
     private PaidUsage buildPaidUsage() {
