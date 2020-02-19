@@ -7,8 +7,8 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import com.google.common.collect.ImmutableSet;
@@ -94,7 +94,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
         assertEquals(GROSS_AMOUNT, usageBatch.getGrossAmount());
-        assertNull(usageBatch.getNtsFundPool());
+        assertNull(usageBatch.getNtsFields());
     }
 
     @Test
@@ -106,15 +106,15 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
-        NtsFundPool ntsFundPool = usageBatch.getNtsFundPool();
-        assertEquals(2017, ntsFundPool.getFundPoolPeriodFrom().intValue());
-        assertEquals(2018, ntsFundPool.getFundPoolPeriodTo().intValue());
-        assertEquals(new BigDecimal("100"), ntsFundPool.getStmAmount());
-        assertEquals(new BigDecimal("200."), ntsFundPool.getNonStmAmount());
-        assertEquals(new BigDecimal("300.3"), ntsFundPool.getStmMinimumAmount());
-        assertEquals(new BigDecimal("400.44"), ntsFundPool.getNonStmMinimumAmount());
-        assertEquals(ImmutableSet.of("Edu", "Gov"), ntsFundPool.getMarkets());
-        assertTrue(ntsFundPool.isExcludingStm());
+        NtsFields ntsFields = usageBatch.getNtsFields();
+        assertEquals(2017, ntsFields.getFundPoolPeriodFrom().intValue());
+        assertEquals(2018, ntsFields.getFundPoolPeriodTo().intValue());
+        assertEquals(new BigDecimal("100"), ntsFields.getStmAmount());
+        assertEquals(new BigDecimal("200."), ntsFields.getNonStmAmount());
+        assertEquals(new BigDecimal("300.3"), ntsFields.getStmMinimumAmount());
+        assertEquals(new BigDecimal("400.44"), ntsFields.getNonStmMinimumAmount());
+        assertEquals(ImmutableSet.of("Edu", "Gov"), ntsFields.getMarkets());
+        assertTrue(ntsFields.isExcludingStm());
     }
 
     @Test
@@ -151,15 +151,15 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(LocalDate.of(2019, 1, 11), usageBatch.getPaymentDate());
         assertEquals(2020, usageBatch.getFiscalYear().intValue());
-        NtsFundPool ntsFundPool = usageBatch.getNtsFundPool();
-        assertEquals(2013, ntsFundPool.getFundPoolPeriodFrom().intValue());
-        assertEquals(2017, ntsFundPool.getFundPoolPeriodTo().intValue());
-        assertEquals(new BigDecimal("100"), ntsFundPool.getStmAmount());
-        assertEquals(BigDecimal.ZERO, ntsFundPool.getNonStmAmount());
-        assertEquals(new BigDecimal("50"), ntsFundPool.getStmMinimumAmount());
-        assertEquals(new BigDecimal("7"), ntsFundPool.getNonStmMinimumAmount());
-        assertEquals(Collections.singleton("Univ"), ntsFundPool.getMarkets());
-        assertTrue(ntsFundPool.isExcludingStm());
+        NtsFields ntsFields = usageBatch.getNtsFields();
+        assertEquals(2013, ntsFields.getFundPoolPeriodFrom().intValue());
+        assertEquals(2017, ntsFields.getFundPoolPeriodTo().intValue());
+        assertEquals(new BigDecimal("100"), ntsFields.getStmAmount());
+        assertEquals(BigDecimal.ZERO, ntsFields.getNonStmAmount());
+        assertEquals(new BigDecimal("50"), ntsFields.getStmMinimumAmount());
+        assertEquals(new BigDecimal("7"), ntsFields.getNonStmMinimumAmount());
+        assertEquals(Collections.singleton("Univ"), ntsFields.getMarkets());
+        assertTrue(ntsFields.isExcludingStm());
     }
 
     @Test
@@ -271,20 +271,20 @@ public class UsageBatchRepositoryIntegrationTest {
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
         usageBatch.setRro(rightsholder);
         usageBatch.setPaymentDate(PAYMENT_DATE);
-        usageBatch.setNtsFundPool(buildFundPool());
+        usageBatch.setNtsFields(buildNtsFields());
         return usageBatch;
     }
 
-    private NtsFundPool buildFundPool() {
-        NtsFundPool ntsFundPool = new NtsFundPool();
-        ntsFundPool.setFundPoolPeriodFrom(2017);
-        ntsFundPool.setFundPoolPeriodTo(2018);
-        ntsFundPool.setStmAmount(new BigDecimal("100"));
-        ntsFundPool.setNonStmAmount(new BigDecimal("200."));
-        ntsFundPool.setStmMinimumAmount(new BigDecimal("300.3"));
-        ntsFundPool.setNonStmMinimumAmount(new BigDecimal("400.44"));
-        ntsFundPool.setMarkets(ImmutableSet.of("Edu", "Gov"));
-        ntsFundPool.setExcludingStm(true);
-        return ntsFundPool;
+    private NtsFields buildNtsFields() {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setFundPoolPeriodFrom(2017);
+        ntsFields.setFundPoolPeriodTo(2018);
+        ntsFields.setStmAmount(new BigDecimal("100"));
+        ntsFields.setNonStmAmount(new BigDecimal("200."));
+        ntsFields.setStmMinimumAmount(new BigDecimal("300.3"));
+        ntsFields.setNonStmMinimumAmount(new BigDecimal("400.44"));
+        ntsFields.setMarkets(ImmutableSet.of("Edu", "Gov"));
+        ntsFields.setExcludingStm(true);
+        return ntsFields;
     }
 }

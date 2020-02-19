@@ -268,7 +268,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-03-10')
             column(name: 'fiscal_year', value: '2019')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'fund_pool', value: '{"non_stm_minimum_amount":7,"stm_amount":700,"stm_minimum_amount":50,"non_stm_amount":5000,"fund_pool_period_from":2015,"markets":["Edu","Gov"],"fund_pool_period_to":2016}')
+            column(name: 'nts_fields', value: '{"non_stm_minimum_amount":7,"stm_amount":700,"stm_minimum_amount":50,"non_stm_amount":5000,"fund_pool_period_from":2015,"markets":["Edu","Gov"],"fund_pool_period_to":2016}')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
@@ -342,7 +342,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
 
@@ -453,7 +453,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 1000, "stm_minimum_amount": 50, ' +
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 1000, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
 
@@ -879,7 +879,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
 
@@ -966,7 +966,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-02-13')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 30, ' +
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 30, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
 
@@ -1089,7 +1089,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, "fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, "fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -1099,7 +1099,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
 

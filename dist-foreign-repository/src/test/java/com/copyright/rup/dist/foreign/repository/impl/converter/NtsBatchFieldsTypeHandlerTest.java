@@ -8,7 +8,9 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
+
+import com.google.common.collect.ImmutableSet;
 
 import org.junit.Test;
 import org.postgresql.util.PGobject;
@@ -20,21 +22,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Verifies {@link NtsFieldsTypeHandler}.
+ * Verifies {@link NtsBatchFieldsTypeHandler}.
  * <p/>
- * Copyright (C) 2019 copyright.com
+ * Copyright (C) 2018 copyright.com
  * <p/>
- * Date: 04/17/2019
+ * Date: 12/03/2018
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFieldsTypeHandlerTest {
+public class NtsBatchFieldsTypeHandlerTest {
 
     private static final String COLUMN_NAME = "nts_fields";
     private static final int COLUMN_INDEX = 1;
     private static final int PARAMETER_INDEX = 1;
 
-    private final NtsFieldsTypeHandler typeHandler = new NtsFieldsTypeHandler();
+    private final NtsBatchFieldsTypeHandler typeHandler = new NtsBatchFieldsTypeHandler();
 
     @Test
     public void testSetNonNullParameterPreparedStatement() throws SQLException {
@@ -96,7 +98,13 @@ public class NtsFieldsTypeHandlerTest {
 
     private NtsFields buildNtsFields() {
         NtsFields ntsFields = new NtsFields();
-        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        ntsFields.setFundPoolPeriodFrom(2017);
+        ntsFields.setFundPoolPeriodTo(2018);
+        ntsFields.setStmAmount(new BigDecimal(100));
+        ntsFields.setNonStmAmount(new BigDecimal(200));
+        ntsFields.setStmMinimumAmount(new BigDecimal(300));
+        ntsFields.setNonStmMinimumAmount(new BigDecimal(400));
+        ntsFields.setMarkets(ImmutableSet.of("Edu", "Gov"));
         return ntsFields;
     }
 }

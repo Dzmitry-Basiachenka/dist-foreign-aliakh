@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
-import com.copyright.rup.dist.foreign.repository.impl.converter.json.NtsFieldsJsonMapper;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
+import com.copyright.rup.dist.foreign.repository.impl.converter.json.NtsBatchFieldsJsonMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -20,15 +20,15 @@ import java.sql.SQLException;
 /**
  * Implementation of {@link BaseTypeHandler} for {@link NtsFields}.
  * <p/>
- * Copyright (C) 2019 copyright.com
+ * Copyright (C) 2018 copyright.com
  * <p/>
- * Date: 04/17/2019
+ * Date: 12/03/2018
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFieldsTypeHandler extends BaseTypeHandler<NtsFields> {
+public class NtsBatchFieldsTypeHandler extends BaseTypeHandler<NtsFields> {
 
-    private static final NtsFieldsJsonMapper JSON_MAPPER = new NtsFieldsJsonMapper();
+    private static final NtsBatchFieldsJsonMapper JSON_MAPPER = new NtsBatchFieldsJsonMapper();
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, NtsFields parameter, JdbcType jdbcType)
@@ -58,14 +58,14 @@ public class NtsFieldsTypeHandler extends BaseTypeHandler<NtsFields> {
      * Serializes an instance of {@link NtsFields} into a string JSON.
      * If the argument is {@code null}, the method returns {@code null}.
      *
-     * @param ntsFields the instance of {@link NtsFields}
+     * @param ntsFundPool the instance of {@link NtsFields}
      * @return the string JSON
      */
-    String serialize(NtsFields ntsFields) {
+    String serialize(NtsFields ntsFundPool) {
         try {
-            return JSON_MAPPER.serialize(ntsFields);
+            return JSON_MAPPER.serialize(ntsFundPool);
         } catch (JsonProcessingException e) {
-            throw new RupRuntimeException("Unable to serialize NTS fields", e);
+            throw new RupRuntimeException("Unable to serialize fund pool", e);
         }
     }
 
@@ -83,7 +83,7 @@ public class NtsFieldsTypeHandler extends BaseTypeHandler<NtsFields> {
         try {
             return JSON_MAPPER.deserialize(json);
         } catch (IOException e) {
-            throw new RupRuntimeException("Unable to deserialize NTS fields", e);
+            throw new RupRuntimeException("Unable to deserialize fund pool", e);
         }
     }
 }

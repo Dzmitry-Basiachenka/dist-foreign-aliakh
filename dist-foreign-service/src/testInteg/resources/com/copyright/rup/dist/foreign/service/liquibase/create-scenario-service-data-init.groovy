@@ -428,7 +428,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
-            column(name: 'fund_pool', value: '{"markets": ["Bus,Univ,Doc Del"], "stm_amount": 10, "non_stm_amount": 20, "stm_minimum_amount": 30, "non_stm_minimum_amount": 40, "fund_pool_period_to": 2017, "fund_pool_period_from": 2017}')
+            column(name: 'nts_fields', value: '{"markets": ["Bus,Univ,Doc Del"], "stm_amount": 10, "non_stm_amount": 20, "stm_minimum_amount": 30, "non_stm_minimum_amount": 40, "fund_pool_period_to": 2017, "fund_pool_period_from": 2017}')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

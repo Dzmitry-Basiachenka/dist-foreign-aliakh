@@ -11,10 +11,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
@@ -96,11 +95,11 @@ public class NtsUsageServiceTest {
     @Test
     public void testGetUsagesCountForBatch() {
         UsageBatch usageBatch = new UsageBatch();
-        NtsFundPool ntsFundPool = new NtsFundPool();
-        ntsFundPool.setFundPoolPeriodFrom(2019);
-        ntsFundPool.setFundPoolPeriodTo(2020);
-        ntsFundPool.setMarkets(Collections.singleton("Edu"));
-        usageBatch.setNtsFundPool(ntsFundPool);
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setFundPoolPeriodFrom(2019);
+        ntsFields.setFundPoolPeriodTo(2020);
+        ntsFields.setMarkets(Collections.singleton("Edu"));
+        usageBatch.setNtsFields(ntsFields);
         expect(ntsUsageRepository.findCountForBatch(2019, 2020, Collections.singleton("Edu")))
             .andReturn(1).once();
         replay(ntsUsageRepository);
@@ -121,7 +120,7 @@ public class NtsUsageServiceTest {
     public void testPopulatePayeeAndCalculateAmountsForScenarioUsages() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        NtsFields ntsFields = new NtsFields();
+        Scenario.NtsFields ntsFields = new Scenario.NtsFields();
         ntsFields.setPostServiceFeeAmount(new BigDecimal("100.500"));
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);

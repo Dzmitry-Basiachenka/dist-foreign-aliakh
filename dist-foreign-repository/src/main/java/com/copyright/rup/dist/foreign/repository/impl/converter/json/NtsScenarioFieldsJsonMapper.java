@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.io.IOException;
 
 /**
- * Mapper to/from JSON for {@link NtsFields}.
+ * Mapper to/from JSON for scenario {@link NtsFields}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -17,14 +17,14 @@ import java.io.IOException;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFieldsJsonMapper {
+public class NtsScenarioFieldsJsonMapper {
 
     private static final ObjectMapper OBJECT_MAPPER = buildObjectMapper();
 
     private static ObjectMapper buildObjectMapper() {
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(NtsFields.class, new NtsFieldsSerializer());
-        simpleModule.addDeserializer(NtsFields.class, new NtsFieldsDeserializer());
+        simpleModule.addSerializer(NtsFields.class, new NtsScenarioFieldsSerializer());
+        simpleModule.addDeserializer(NtsFields.class, new NtsScenarioFieldsDeserializer());
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;

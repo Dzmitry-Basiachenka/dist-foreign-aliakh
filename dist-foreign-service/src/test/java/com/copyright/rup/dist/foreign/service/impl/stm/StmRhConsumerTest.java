@@ -12,9 +12,9 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IStmRhService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
@@ -65,7 +65,7 @@ public class StmRhConsumerTest {
     public void testConsumeNotExcludingStm() {
         Usage usage = buildUsage(USAGE_ID_1);
         Capture<Predicate<Usage>> predicateCapture = new Capture<>();
-        expect(batchServiceMock.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFundPool(false))).once();
+        expect(batchServiceMock.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFields(false))).once();
         stmRhProcessorMock.executeNextProcessor(eq(usage), capture(predicateCapture));
         expectLastCall().once();
         replay(batchServiceMock, stmRhServiceMock, stmRhProcessorMock);
@@ -78,7 +78,7 @@ public class StmRhConsumerTest {
     public void testConsumeExcludingStmWithNonStmRh() {
         Usage usage = buildUsage(USAGE_ID_1);
         Capture<Predicate<Usage>> predicateCapture = new Capture<>();
-        expect(batchServiceMock.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFundPool(true))).once();
+        expect(batchServiceMock.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFields(true))).once();
         stmRhServiceMock.processStmRh(usage);
         expectLastCall().andDelegateTo(new MockStmRhService()).once();
         stmRhProcessorMock.executeNextProcessor(eq(usage), capture(predicateCapture));
@@ -93,7 +93,7 @@ public class StmRhConsumerTest {
     public void testConsumeExcludingStmWithStmRh() {
         Usage usage = buildUsage(USAGE_ID_2);
         Capture<Predicate<Usage>> predicateCapture = new Capture<>();
-        expect(batchServiceMock.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFundPool(true))).once();
+        expect(batchServiceMock.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFields(true))).once();
         stmRhServiceMock.processStmRh(usage);
         expectLastCall().andDelegateTo(new MockStmRhService()).once();
         stmRhProcessorMock.executeNextProcessor(eq(usage), capture(predicateCapture));
@@ -129,18 +129,18 @@ public class StmRhConsumerTest {
         return rightsholder;
     }
 
-    private UsageBatch buildUsageBatch(NtsFundPool ntsFundPool) {
+    private UsageBatch buildUsageBatch(NtsFields ntsFields) {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(BATCH_ID);
         usageBatch.setProductFamily(NTS_PRODUCT_FAMILY);
-        usageBatch.setNtsFundPool(ntsFundPool);
+        usageBatch.setNtsFields(ntsFields);
         return usageBatch;
     }
 
-    private NtsFundPool buildNtsFundPool(boolean excludingStm) {
-        NtsFundPool ntsFundPool = new NtsFundPool();
-        ntsFundPool.setExcludingStm(excludingStm);
-        return ntsFundPool;
+    private NtsFields buildNtsFields(boolean excludingStm) {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setExcludingStm(excludingStm);
+        return ntsFields;
     }
 
     private static class MockStmRhService implements IStmRhService {

@@ -1135,7 +1135,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 1000, "stm_minimum_amount": 50, ' +
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 1000, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
 

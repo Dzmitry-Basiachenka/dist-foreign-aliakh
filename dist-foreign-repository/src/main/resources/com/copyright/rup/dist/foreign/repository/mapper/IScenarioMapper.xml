@@ -14,7 +14,7 @@
         <result property="grossTotal" column="gross_total"/>
         <result property="reportedTotal" column="reported_total"/>
         <result property="description" column="description"/>
-        <result property="ntsFields" column="nts_fields" typeHandler="NtsFieldsTypeHandler"/>
+        <result property="ntsFields" column="nts_fields" typeHandler="NtsScenarioFieldsTypeHandler"/>
         <result property="ntsFields.preServiceFeeFundName" column="pre_service_fee_fund_name"/>
         <result property="ntsFields.preServiceFeeFundTotal" column="pre_service_fee_fund_total"/>
         <association property="auditItem" resultMap="IScenarioAuditMapper.scenarioAuditItemResultMap" columnPrefix="action_"/>
@@ -73,7 +73,7 @@
             #{name},
             #{status},
             #{description},
-            #{ntsFields, typeHandler=NtsFieldsTypeHandler},
+            #{ntsFields, typeHandler=NtsScenarioFieldsTypeHandler},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
@@ -96,7 +96,7 @@
                 #{scenario.name},
                 #{scenario.status},
                 #{scenario.description},
-                #{scenario.ntsFields, typeHandler=NtsFieldsTypeHandler},
+                #{scenario.ntsFields, typeHandler=NtsScenarioFieldsTypeHandler},
                 <include refid="StoredEntityMapper.insert"/>
             )
         ),
@@ -107,9 +107,9 @@
                 u.df_usage_batch_uid,
                 u.rh_account_number,
                 wc.classification,
-                ufas.reported_value * ((ub.fund_pool ->> 'fund_pool_period_to')::int - (ub.fund_pool ->> 'fund_pool_period_from')::int + 1) /
+                ufas.reported_value * ((ub.nts_fields ->> 'fund_pool_period_to')::int - (ub.nts_fields ->> 'fund_pool_period_from')::int + 1) /
                 (ufas.market_period_to - ufas.market_period_from + 1) as numerator_weight,
-                case when wc.classification = 'STM' then (ub.fund_pool ->> 'stm_amount')::numeric else (ub.fund_pool ->> 'non_stm_amount')::numeric end fund_pool_amount
+                case when wc.classification = 'STM' then (ub.nts_fields ->> 'stm_amount')::numeric else (ub.nts_fields ->> 'non_stm_amount')::numeric end fund_pool_amount
             from ${schema}.df_usage u
             join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
             join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import java.io.IOException;
 
 /**
- * Implementation of {@link StdDeserializer} for {@link NtsFields}.
+ * Implementation of {@link StdDeserializer} for scenario {@link NtsFields}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -18,14 +18,14 @@ import java.io.IOException;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFieldsDeserializer extends StdDeserializer<NtsFields> {
+public class NtsScenarioFieldsDeserializer extends StdDeserializer<NtsFields> {
 
     private static final String PRE_SERVICE_FEE_FUND_UID = "pre_service_fee_fund_uid";
 
     /**
      * Constructor.
      */
-    NtsFieldsDeserializer() {
+    NtsScenarioFieldsDeserializer() {
         super(NtsFields.class);
     }
 

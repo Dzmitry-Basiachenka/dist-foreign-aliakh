@@ -7,9 +7,9 @@ import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.domain.NtsFundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
@@ -74,9 +74,9 @@ public class NtsUsageService implements INtsUsageService {
 
     @Override
     public int getUsagesCountForBatch(UsageBatch usageBatch) {
-        NtsFundPool ntsFundPool = usageBatch.getNtsFundPool();
-        return ntsUsageRepository.findCountForBatch(ntsFundPool.getFundPoolPeriodFrom(),
-            ntsFundPool.getFundPoolPeriodTo(), ntsFundPool.getMarkets());
+        NtsFields ntsFields = usageBatch.getNtsFields();
+        return ntsUsageRepository.findCountForBatch(ntsFields.getFundPoolPeriodFrom(),
+            ntsFields.getFundPoolPeriodTo(), ntsFields.getMarkets());
     }
 
     @Override

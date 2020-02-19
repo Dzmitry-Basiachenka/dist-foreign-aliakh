@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
- * Verifies {@link NtsFieldsJsonMapper}.
+ * Verifies {@link NtsScenarioFieldsJsonMapper}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -22,13 +22,13 @@ import java.math.BigDecimal;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFieldsJsonMapperTest {
+public class NtsScenarioFieldsJsonMapperTest {
 
-    private final NtsFieldsJsonMapper jsonMapper = new NtsFieldsJsonMapper();
+    private final NtsScenarioFieldsJsonMapper jsonMapper = new NtsScenarioFieldsJsonMapper();
 
     @Test
     public void testDeserialize() throws IOException {
-        String json = TestUtils.fileToString(this.getClass(), "nts_fields.json");
+        String json = TestUtils.fileToString(this.getClass(), "nts_scenario_fields.json");
         NtsFields ntsFields = jsonMapper.deserialize(json);
         assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
         assertEquals(new BigDecimal("500.00"), ntsFields.getPreServiceFeeAmount());

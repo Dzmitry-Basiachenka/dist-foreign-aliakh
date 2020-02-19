@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 
 /**
- * Implementation of {@link StdSerializer} for {@link NtsFields}.
+ * Implementation of {@link StdSerializer} for scenario {@link NtsFields}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -17,12 +17,12 @@ import java.io.IOException;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFieldsSerializer extends StdSerializer<NtsFields> {
+public class NtsScenarioFieldsSerializer extends StdSerializer<NtsFields> {
 
     /**
      * Constructor.
      */
-    NtsFieldsSerializer() {
+    NtsScenarioFieldsSerializer() {
         super(NtsFields.class);
     }
 
