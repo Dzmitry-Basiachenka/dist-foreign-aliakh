@@ -75,7 +75,7 @@ public class FundPoolService implements IFundPoolService {
     public int createAaclFundPool(FundPool fundPool, List<FundPoolDetail> details) {
         String userName = RupContextUtils.getUserName();
         int count = details.size();
-        LOGGER.info("Insert AACL fund pool. Started. FundPoolName={}, UserName={}, UsagesCount={}",
+        LOGGER.info("Insert AACL fund pool. Started. FundPoolName={}, UserName={}, DetailsCount={}",
             fundPool.getName(), userName, count);
         fundPool.setId(RupPersistUtils.generateUuid());
         fundPool.setTotalAmount(details.stream()
@@ -91,7 +91,7 @@ public class FundPoolService implements IFundPoolService {
             detail.setUpdateUser(userName);
             fundPoolRepository.insertDetail(detail);
         });
-        LOGGER.info("Insert AACL fund pool. Finished. FundPoolName={}, UserName={}, UsagesCount={}",
+        LOGGER.info("Insert AACL fund pool. Finished. FundPoolName={}, UserName={}, DetailsCount={}",
             fundPool.getName(), userName, count);
         return count;
     }
