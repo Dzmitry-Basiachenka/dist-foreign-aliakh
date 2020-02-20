@@ -1,3 +1,14 @@
+9.1.2
+-
+* B-52334 FDA: Load AACL Fund Pool: fix log message
+* B-56093 Tech Debt: FDA: modify data types of detail_licensee_class_id and aggregate_licensee_class_id columns
+* B-56093 Tech Debt: FDA: refactor classes/methods to use NtsFundPool instead of AdditionalFunds, NtsUsageBatch instead of FundPool in services and repositories
+* B-56093 Tech Debt: FDA: remove enabled property from commonScripts
+* B-56093 Tech Debt: FDA: rename NtsFundPool class to NtsFields and move to UsageBatch, rename fund_pool columns in database to nts_fields
+* B-56093 Tech Debt: FDA: update postgres driver version to 42.2.9
+* B-56265 FDA: View & Delete AACL Batch: Align the grid id on View AACL Usage Batch window with the same grid for other product families
+* B-56265 FDA: View & Delete AACL Batch: Make changes based on comments in CR-DIST-FOREIGN-146
+
 9.1.1
 -
 * B-56093 Tech Debt: FDA: move FAS specific logic to separate service and repository on Usage level
