@@ -31,6 +31,15 @@ public class UsageBatch extends StoredEntity<String> {
     private Integer fiscalYear;
     private BigDecimal grossAmount;
     private NtsFields ntsFields;
+    private Integer numberOfBaselineYears;
+
+    public Integer getNumberOfBaselineYears() {
+        return numberOfBaselineYears;
+    }
+
+    public void setNumberOfBaselineYears(Integer numberOfBaselineYears) {
+        this.numberOfBaselineYears = numberOfBaselineYears;
+    }
 
     public String getName() {
         return name;
@@ -106,6 +115,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(this.fiscalYear, that.fiscalYear)
             .append(this.grossAmount, that.grossAmount)
             .append(this.ntsFields, that.ntsFields)
+            .append(this.numberOfBaselineYears, that.numberOfBaselineYears)
             .isEquals();
     }
 
@@ -120,6 +130,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(fiscalYear)
             .append(grossAmount)
             .append(ntsFields)
+            .append(numberOfBaselineYears)
             .toHashCode();
     }
 
@@ -134,6 +145,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append("fiscalYear", fiscalYear)
             .append("grossAmount", grossAmount)
             .append("ntsFields", ntsFields)
+            .append("numberOfBaselineYears", numberOfBaselineYears)
             .toString();
     }
 
