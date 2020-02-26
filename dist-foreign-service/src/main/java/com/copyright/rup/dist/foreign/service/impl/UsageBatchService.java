@@ -156,17 +156,17 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public int insertAaclBatch(UsageBatch usageBatch, Collection<Usage> usages) {
+    public Collection<Usage> insertAaclBatch(UsageBatch usageBatch, Collection<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
         LOGGER.info("Insert AACL batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
-        int count = aaclUsageService.insertUsages(usageBatch, usages);
+        aaclUsageService.insertUsages(usageBatch, usages);
         LOGGER.info("Insert AACL batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
-            usageBatch.getName(), userName, count);
-        return count;
+            usageBatch.getName(), userName, LogUtils.size(usages));
+        return usages;
     }
 
     @Override

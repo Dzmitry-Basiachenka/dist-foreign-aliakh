@@ -28,9 +28,8 @@ public interface IAaclUsageService {
      *
      * @param usageBatch usage batch
      * @param usages     list of {@link Usage}s
-     * @return count of inserted usages
      */
-    int insertUsages(UsageBatch usageBatch, Collection<Usage> usages);
+    void insertUsages(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
      * Updates classified AACL usages.

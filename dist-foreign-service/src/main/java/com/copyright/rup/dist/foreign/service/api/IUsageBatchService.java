@@ -110,9 +110,9 @@ public interface IUsageBatchService {
      *
      * @param usageBatch {@link UsageBatch} to insert
      * @param usages     list of {@link Usage}s
-     * @return count of inserted usages
+     * @return inserted usages
      */
-    int insertAaclBatch(UsageBatch usageBatch, Collection<Usage> usages);
+    Collection<Usage> insertAaclBatch(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
      * Deletes given {@link UsageBatch} and all it's usage details.

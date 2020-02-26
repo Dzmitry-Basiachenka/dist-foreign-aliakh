@@ -49,7 +49,7 @@ public class AaclUsageService implements IAaclUsageService {
     private IAaclUsageRepository aaclUsageRepository;
 
     @Override
-    public int insertUsages(UsageBatch usageBatch, Collection<Usage> usages) {
+    public void insertUsages(UsageBatch usageBatch, Collection<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
         LOGGER.info("Insert AACL usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
@@ -67,7 +67,6 @@ public class AaclUsageService implements IAaclUsageService {
         usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason));
         LOGGER.info("Insert AACL usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}",
             usageBatch.getName(), size, userName);
-        return size;
     }
 
     @Override
