@@ -299,4 +299,17 @@ databaseChangeLog {
             dropTable(tableName: 'df_usage_baseline_aacl', schemaName: dbAppsSchema)
         }
     }
+    
+    changeSet(id: '2020-02-26-02', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-52332 FDA: Add baseline usage details to usage batch: add baseline_years column into " +
+                "df_usage_batch table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'baseline_years', type: 'INTEGER', remarks: 'Number of Baseline Years')
+        }
+
+        rollback {
+            //automatic rollback
+        }
+    }
 }
