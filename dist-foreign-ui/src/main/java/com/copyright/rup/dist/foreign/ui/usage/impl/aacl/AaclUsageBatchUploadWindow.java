@@ -19,6 +19,7 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
 import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
+import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
@@ -56,6 +57,7 @@ public class AaclUsageBatchUploadWindow extends Window {
     private final Binder<String> uploadBinder = new Binder<>();
     private TextField periodEndDateField;
     private TextField usageBatchNameField;
+    private TextField numberOfBaselineYears;
     private UploadField uploadField;
 
     /**
@@ -83,9 +85,11 @@ public class AaclUsageBatchUploadWindow extends Window {
                 if (StringUtils.isNotEmpty(uploadField.getValue())) {
                     ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
                     if (processingResult.isSuccessful()) {
-                        int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get());
+                        int totalCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get());
+                        int uploadedCount = processingResult.get().size();
                         close();
-                        Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
+                        Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_aacl_batch_completed",
+                            uploadedCount, totalCount - uploadedCount));
                     } else {
                         Windows.showModalWindow(
                             new ErrorUploadWindow(
@@ -93,9 +97,11 @@ public class AaclUsageBatchUploadWindow extends Window {
                                 ForeignUi.getMessage("message.error.upload")));
                     }
                 } else {
-                    usagesController.loadUsageBatch(buildUsageBatch(), Collections.emptyList());
+                    int baselineUsagesCount =
+                        usagesController.loadUsageBatch(buildUsageBatch(), Collections.emptyList());
                     close();
-                    Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", 0));
+                    Windows.showNotificationWindow(
+                        ForeignUi.getMessage("message.upload_aacl_batch_completed", 0, baselineUsagesCount));
                 }
             } catch (ThresholdExceededException e) {
                 Windows.showModalWindow(
@@ -106,7 +112,8 @@ public class AaclUsageBatchUploadWindow extends Window {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             }
         } else {
-            Windows.showValidationErrorWindow(Arrays.asList(usageBatchNameField, uploadField, periodEndDateField));
+            Windows.showValidationErrorWindow(
+                Arrays.asList(usageBatchNameField, uploadField, periodEndDateField, numberOfBaselineYears));
         }
     }
 
@@ -122,7 +129,8 @@ public class AaclUsageBatchUploadWindow extends Window {
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
-        rootLayout.addComponents(initUsageBatchNameField(), initUploadField(), initPeriodEndDateField(), buttonsLayout);
+        rootLayout.addComponents(initUsageBatchNameField(), initUploadField(),
+            initPeriodEndDateAndNumberOfBaselineYearsField(), buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -166,7 +174,15 @@ public class AaclUsageBatchUploadWindow extends Window {
         return usageBatchNameField;
     }
 
-    private TextField initPeriodEndDateField() {
+    private HorizontalLayout initPeriodEndDateAndNumberOfBaselineYearsField() {
+        initPeriodEndDateField();
+        initNumberOfBaselineYearsFields();
+        HorizontalLayout horizontalLayout = new HorizontalLayout(periodEndDateField, numberOfBaselineYears);
+        horizontalLayout.setSizeFull();
+        return horizontalLayout;
+    }
+
+    private void initPeriodEndDateField() {
         periodEndDateField = new TextField(ForeignUi.getMessage("label.distribution_period"));
         periodEndDateField.setRequiredIndicatorVisible(true);
         binder.forField(periodEndDateField)
@@ -177,8 +193,20 @@ public class AaclUsageBatchUploadWindow extends Window {
             .withConverter(new LocalDateConverter())
             .bind(UsageBatch::getPaymentDate, UsageBatch::setPaymentDate);
         VaadinUtils.addComponentStyle(periodEndDateField, "distribution-period-field");
-        periodEndDateField.setWidth(50, Unit.PERCENTAGE);
-        return periodEndDateField;
+        periodEndDateField.setWidth(100, Unit.PERCENTAGE);
+    }
+
+    private void initNumberOfBaselineYearsFields() {
+        numberOfBaselineYears = new TextField(ForeignUi.getMessage("label.usage_number_of_baseline_years"));
+        numberOfBaselineYears.setRequiredIndicatorVisible(true);
+        binder.forField(numberOfBaselineYears)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)) || Integer.parseInt(
+                StringUtils.trim(value)) >= 0, "Field value should contain positive numeric values only")
+            .withConverter(new StringToIntegerConverter("Field value can not be converted"))
+            .bind(UsageBatch::getNumberOfBaselineYears, UsageBatch::setNumberOfBaselineYears);
+        VaadinUtils.addComponentStyle(numberOfBaselineYears, "number_of_baseline_usages");
+        numberOfBaselineYears.setWidth(100, Unit.PERCENTAGE);
     }
 
     private UsageBatch buildUsageBatch() {
@@ -186,6 +214,7 @@ public class AaclUsageBatchUploadWindow extends Window {
         usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
         usageBatch.setProductFamily(FdaConstants.AACL_PRODUCT_FAMILY);
         usageBatch.setPaymentDate(convertYearToDate(periodEndDateField.getValue()));
+        usageBatch.setNumberOfBaselineYears(Integer.parseInt(numberOfBaselineYears.getValue()));
         return usageBatch;
     }
 
