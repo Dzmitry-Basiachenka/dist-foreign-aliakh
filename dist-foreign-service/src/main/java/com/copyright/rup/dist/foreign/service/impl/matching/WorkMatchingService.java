@@ -123,6 +123,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             }
             usage.setSystemTitle(work.getMainTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
+            usage.setStandardNumber(work.getMainIdno());
             usage.setStandardNumberType(StringUtils.upperCase(work.getMainIdnoType()));
         }
         return work;

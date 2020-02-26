@@ -60,7 +60,7 @@ public class WorkMatchingServiceTest {
     public void testMatchByIdno() {
         Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
         expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, TITLE))
-            .andReturn(new Work(112930820L, TITLE, null, "valisbn10")).once();
+            .andReturn(new Work(112930820L, TITLE, STANDARD_NUMBER, "valisbn10")).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,

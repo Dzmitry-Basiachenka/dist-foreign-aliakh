@@ -38,12 +38,16 @@ public class PiIntegrationServiceTest {
     private static final String ANNUAIRE_TITLE = "Annuaire de la communication en Rhône-Alpes";
     private static final String OCULAR_TITLE = "Ocular Tissue Culture";
     private static final String FORBIDDEN_RIGHTS = "Forbidden rites";
+    private static final String VALISBN10 = "VALISBN10";
     private static final String VALISBN13 = "VALISBN13";
     private static final String IDNO_1 = "1140-9126";
     private static final String IDNO_2 = "978-0-271-01751-8";
     private static final String IDNO_3 = "978-0-08-027365-5";
     private static final String IDNO_4 = "10.1353/PGN.1999.0081";
     private static final String IDNO_5 = "978-0-271-01750-1";
+    private static final String SEARCH_HIT_1 = "pi_search_hit1.json";
+    private static final String SEARCH_HIT_2 = "pi_search_hit2.json";
+    private static final String SEARCH_HIT_3 = "pi_search_hit3.json";
 
     private PiIntegrationService piIntegrationService;
     private RupEsApi rupEsApi;
@@ -80,7 +84,7 @@ public class PiIntegrationServiceTest {
             searchHit6);
         assertEquals(new Work(123059057L, ANNUAIRE_TITLE, IDNO_1, "VALISSN"),
             piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
-        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, "VALISBN10"),
+        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10),
             piIntegrationService.findWorkByIdnoAndTitle("0-271-01750-3", null));
         assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS, IDNO_3, VALISBN13),
             piIntegrationService.findWorkByIdnoAndTitle(IDNO_3, null));
@@ -96,13 +100,59 @@ public class PiIntegrationServiceTest {
     }
 
     @Test
+    public void testFindWorkByIdnoWithSingleHostIndo() {
+        expect(searchResponse.getResults()).andReturn(searchResults).times(2);
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit1)).once();
+        expect(searchHit1.getFields()).andReturn(
+            ImmutableMap.of("hostIdno", Collections.singletonList(IDNO_2))).once();
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit2)).once();
+        expectSearchHitSource(searchHit2, SEARCH_HIT_2);
+        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(2);
+        replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2);
+        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10),
+            piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
+        verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2);
+    }
+
+    @Test
+    public void testFindWorkByIdnoWithSingleHostIndoMultipleResult() {
+        expect(searchResponse.getResults()).andReturn(searchResults).times(5);
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit1)).once();
+        expect(searchHit1.getFields()).andReturn(
+            ImmutableMap.of("hostIdno", Collections.singletonList(IDNO_2))).once();
+        expect(searchResults.getHits()).andReturn(Collections.emptyList()).times(3);
+        expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit2, searchHit3)).once();
+        expectSearchHitSource(searchHit2, SEARCH_HIT_2);
+        expectSearchHitSource(searchHit3, SEARCH_HIT_3);
+        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(5);
+        replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
+        Work expectedResult = new Work();
+        expectedResult.setMultipleMatches(true);
+        assertEquals(expectedResult, piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
+        verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
+    }
+
+    @Test
+    public void testFindWorkByIdnoWithMultipleHostIndos() {
+        expect(searchResponse.getResults()).andReturn(searchResults).once();
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit1)).once();
+        expect(searchHit1.getFields()).andReturn(ImmutableMap.of("hostIdno", Arrays.asList(IDNO_2, IDNO_3))).once();
+        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).once();
+        replay(rupEsApi, searchResponse, searchResults, searchHit1);
+        Work expectedResult = new Work();
+        expectedResult.setMultipleMatches(true);
+        assertEquals(expectedResult, piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
+        verify(rupEsApi, searchResponse, searchResults, searchHit1);
+    }
+
+    @Test
     public void testFindWorkByTitle() {
         expectGetSearchResponseByTitle();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
         assertEquals(new Work(123059057L, ANNUAIRE_TITLE, IDNO_1, "VALISSN"),
             piIntegrationService.findWorkByTitle(FORBIDDEN_RIGHTS));
-        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, "VALISBN10"),
+        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10),
             piIntegrationService.findWorkByTitle("Forbidden rites : a necromancer's manual of the fifteenth century"));
         assertEquals(new Work(), piIntegrationService.findWorkByTitle(
             "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century"));
@@ -122,7 +172,7 @@ public class PiIntegrationServiceTest {
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
         assertEquals(new Work(123059057L, ANNUAIRE_TITLE, IDNO_1, "VALISSN"),
             piIntegrationService.findWorkByWrWrkInst(123059057L));
-        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, "VALISBN10"),
+        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10),
             piIntegrationService.findWorkByWrWrkInst(123059058L));
         assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS, IDNO_3, VALISBN13),
             piIntegrationService.findWorkByWrWrkInst(156427025L));
@@ -143,9 +193,9 @@ public class PiIntegrationServiceTest {
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit2)).once();
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit3)).once();
         expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
-        expectSearchHitSource(searchHit1, "pi_search_hit1.json");
-        expectSearchHitSource(searchHit2, "pi_search_hit2.json");
-        expectSearchHitSource(searchHit3, "pi_search_hit3.json");
+        expectSearchHitSource(searchHit1, SEARCH_HIT_1);
+        expectSearchHitSource(searchHit2, SEARCH_HIT_2);
+        expectSearchHitSource(searchHit3, SEARCH_HIT_3);
     }
 
     private void expectGetSearchResponseByTitle() {
@@ -157,10 +207,10 @@ public class PiIntegrationServiceTest {
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit5)).once();
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit6)).once();
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(6);
-        expectSearchHitSource(searchHit1, "pi_search_hit1.json");
-        expectSearchHitSource(searchHit2, "pi_search_hit2.json");
-        expectSearchHitSource(searchHit5, "pi_search_hit5.json");
-        expectSearchHitSource(searchHit6, "pi_search_hit6.json");
+        expectSearchHitSourceWithEmptyFields(searchHit1, SEARCH_HIT_1);
+        expectSearchHitSourceWithEmptyFields(searchHit2, SEARCH_HIT_2);
+        expectSearchHitSourceWithEmptyFields(searchHit5, "pi_search_hit5.json");
+        expectSearchHitSourceWithEmptyFields(searchHit6, "pi_search_hit6.json");
     }
 
     private void expectGetSearchResponseByIdno() {
@@ -175,7 +225,7 @@ public class PiIntegrationServiceTest {
     private void expectGetResponseWithIssn() {
         expect(searchResponse.getResults()).andReturn(searchResults).once();
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit1)).once();
-        expectSearchHitSource(searchHit1, "pi_search_hit1.json");
+        expectSearchHitSourceWithEmptyFields(searchHit1, SEARCH_HIT_1);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).once();
     }
 
@@ -183,7 +233,7 @@ public class PiIntegrationServiceTest {
         expect(searchResponse.getResults()).andReturn(searchResults).times(2);
         expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit2)).once();
-        expectSearchHitSource(searchHit2, "pi_search_hit2.json");
+        expectSearchHitSourceWithEmptyFields(searchHit2, SEARCH_HIT_2);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(2);
     }
 
@@ -192,7 +242,7 @@ public class PiIntegrationServiceTest {
         expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
         expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit3)).once();
-        expectSearchHitSource(searchHit3, "pi_search_hit3.json");
+        expectSearchHitSourceWithEmptyFields(searchHit3, SEARCH_HIT_3);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(3);
     }
 
@@ -202,7 +252,7 @@ public class PiIntegrationServiceTest {
         expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
         expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit4)).once();
-        expectSearchHitSource(searchHit4, "pi_search_hit4.json");
+        expectSearchHitSourceWithEmptyFields(searchHit4, "pi_search_hit4.json");
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(4);
     }
 
@@ -224,6 +274,11 @@ public class PiIntegrationServiceTest {
         expect(searchResponse.getResults()).andReturn(searchResults).times(4);
         expect(searchResults.getHits()).andReturn(Collections.emptyList()).times(4);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(4);
+    }
+
+    private void expectSearchHitSourceWithEmptyFields(RupSearchHit searchHit, String sourceFileName) {
+        expect(searchHit.getFields()).andReturn(Collections.emptyMap()).once();
+        expectSearchHitSource(searchHit, sourceFileName);
     }
 
     private void expectSearchHitSource(RupSearchHit searchHit, String sourceFileName) {
