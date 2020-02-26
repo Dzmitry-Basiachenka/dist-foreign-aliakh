@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -27,6 +28,24 @@ public class AaclUsage {
     private String rightLimitation;
     private Integer numberOfPages;
     private LocalDate batchPeriodEndDate;
+    private boolean baselineFlag;
+    private BigDecimal publicationTypeWeight;
+
+    public BigDecimal getPublicationTypeWeight() {
+        return publicationTypeWeight;
+    }
+
+    public void setPublicationTypeWeight(BigDecimal publicationTypeWeight) {
+        this.publicationTypeWeight = publicationTypeWeight;
+    }
+
+    public boolean isBaselineFlag() {
+        return baselineFlag;
+    }
+
+    public void setBaselineFlag(boolean baselineFlag) {
+        this.baselineFlag = baselineFlag;
+    }
 
     public String getDetailLicenseeClassId() {
         return detailLicenseeClassId;
@@ -128,6 +147,8 @@ public class AaclUsage {
             .append(rightLimitation, that.rightLimitation)
             .append(numberOfPages, that.numberOfPages)
             .append(batchPeriodEndDate, that.batchPeriodEndDate)
+            .append(publicationTypeWeight, that.publicationTypeWeight)
+            .append(baselineFlag, that.baselineFlag)
             .isEquals();
     }
 
@@ -144,6 +165,8 @@ public class AaclUsage {
             .append(rightLimitation)
             .append(numberOfPages)
             .append(batchPeriodEndDate)
+            .append(publicationTypeWeight)
+            .append(baselineFlag)
             .toHashCode();
     }
 
@@ -160,6 +183,8 @@ public class AaclUsage {
             .append("rightLimitation", rightLimitation)
             .append("numberOfPages", numberOfPages)
             .append("batchPeriodEndDate", batchPeriodEndDate)
+            .append("publicationTypeWeight", publicationTypeWeight)
+            .append("baselineFlag", baselineFlag)
             .toString();
     }
 }
