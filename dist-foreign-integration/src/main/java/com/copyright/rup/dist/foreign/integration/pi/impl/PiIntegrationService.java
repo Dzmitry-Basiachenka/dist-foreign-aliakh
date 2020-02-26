@@ -44,7 +44,9 @@ import javax.annotation.PostConstruct;
 public class PiIntegrationService implements IPiIntegrationService {
 
     private static final int EXPECTED_SEARCH_HITS_COUNT = 1;
+    private static final int EXPECTED_HOST_INDOS_COUNT = 1;
     private static final String MAIN_TITLE = "mainTitle";
+    private static final String IDNO = "IDNO";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Value("$RUP{dist.foreign.pi.cluster}")
@@ -59,24 +61,12 @@ public class PiIntegrationService implements IPiIntegrationService {
 
     @Override
     public Work findWorkByWrWrkInst(Long wrWrkInst) {
-        return ObjectUtils.defaultIfNull(findWork("wrWrkInst", wrWrkInst), new Work());
+        return ObjectUtils.defaultIfNull(findByWrWrkInst(wrWrkInst), new Work());
     }
 
     @Override
     public Work findWorkByIdnoAndTitle(String idno, String title) {
-        Work result = findWork("issn", idno);
-        if (Objects.nonNull(result)) {
-            return result;
-        }
-        result = findWork("isbn10", idno);
-        if (Objects.nonNull(result)) {
-            return result;
-        }
-        result = findWork("isbn13", idno);
-        if (Objects.nonNull(result)) {
-            return result;
-        }
-        return matchByIdnoAndTitle(idno, title);
+        return findWorkByIdnoAndTitle(idno, title, false);
     }
 
     @Override
@@ -85,16 +75,7 @@ public class PiIntegrationService implements IPiIntegrationService {
         RupSearchResponse searchResponse = doSearch(MAIN_TITLE, title);
         List<RupSearchHit> searchHits = searchResponse.getResults().getHits();
         if (CollectionUtils.isNotEmpty(searchHits) && EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
-            try {
-                String source = searchHits.get(0).getSource();
-                result = mapper.readValue(source, Work.class);
-                LOGGER.trace("Search works. By MainTitle. Title={}, WrWrkInst={}, Hit={}", title, result.getWrWrkInst(),
-                    source);
-            } catch (IOException e) {
-                throw new RupRuntimeException(
-                    String.format("Search works. By MainTitle. Failed. Title=%s, Reason=Could not read response",
-                        title), e);
-            }
+            result = searchByHostIdnoIfExists(searchHits, MAIN_TITLE, title, false);
         } else if (CollectionUtils.isEmpty(searchHits)) {
             result.setMultipleMatches(false);
             LOGGER.debug("Search works. By MainTitle. Title={}, WWrWrkInst=Not Found, Hits=Empty", title);
@@ -138,12 +119,32 @@ public class PiIntegrationService implements IPiIntegrationService {
             : value);
     }
 
-    private Work matchByIdnoAndTitle(String idno, String title) {
+    private Work findWorkByIdnoAndTitle(String idno, String title, boolean isHostIdno) {
+        Work result = findWork("issn", idno, isHostIdno);
+        if (Objects.nonNull(result)) {
+            return result;
+        }
+        result = findWork("isbn10", idno, isHostIdno);
+        if (Objects.nonNull(result)) {
+            return result;
+        }
+        result = findWork("isbn13", idno, isHostIdno);
+        if (Objects.nonNull(result)) {
+            return result;
+        }
+        return matchByIdnoAndTitle(idno, title, isHostIdno);
+    }
+
+    private Work matchByIdnoAndTitle(String idno, String title, boolean isHostIdno) {
         List<RupSearchHit> searchHits = doSearch("idno", idno).getResults().getHits();
         Work result = new Work();
         if (CollectionUtils.isNotEmpty(searchHits)) {
             if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
-                return parseWorkFromSearchHit(searchHits, idno, "IDNO");
+                result = searchByHostIdnoIfExists(searchHits, idno, IDNO, isHostIdno);
+            } else if (isHostIdno) {
+                result.setMultipleMatches(true);
+                LOGGER.debug("Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst=MultiResults, Hits={}",
+                    idno, title, searchHits.stream().map(RupSearchHit::getSource).collect(Collectors.joining(";")));
             } else {
                 List<RupSearchHit> filteredByTitleHits = searchHits.stream().filter(searchHit -> {
                     List<Object> mainTitles = searchHit.getFields().get(MAIN_TITLE);
@@ -174,14 +175,41 @@ public class PiIntegrationService implements IPiIntegrationService {
         return result;
     }
 
-    private Work findWork(String parameter, Object value) {
+    private Work findWork(String parameter, Object value, boolean isHostIdno) {
+        Work result = null;
         List<RupSearchHit> searchHits = doSearch(parameter, value).getResults().getHits();
+        if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
+            result = searchByHostIdnoIfExists(searchHits, parameter, value, isHostIdno);
+        }
+        return result;
+    }
+
+    private Work searchByHostIdnoIfExists(List<RupSearchHit> searchHits, String parameter, Object value,
+                                          boolean isHostIdno) {
+        Work result = new Work();
+        if (isHostIdno) {
+            result = parseWorkFromSearchHit(searchHits, parameter, value);
+        } else {
+            List<Object> hostIdnos = searchHits.get(0).getFields().get("hostIdno");
+            if (Objects.isNull(hostIdnos)) {
+                result = parseWorkFromSearchHit(searchHits, parameter, value);
+            } else if (EXPECTED_HOST_INDOS_COUNT == hostIdnos.size()) {
+                result = findWorkByIdnoAndTitle(hostIdnos.get(0).toString(), null, true);
+            } else {
+                result.setMultipleMatches(true);
+            }
+        }
+        return result;
+    }
+
+    private Work findByWrWrkInst(Object value) {
+        List<RupSearchHit> searchHits = doSearch("wrWrkInst", value).getResults().getHits();
         return EXPECTED_SEARCH_HITS_COUNT == searchHits.size()
-            ? parseWorkFromSearchHit(searchHits, value, parameter)
+            ? parseWorkFromSearchHit(searchHits, "wrWrkInst", value)
             : null;
     }
 
-    private Work parseWorkFromSearchHit(List<RupSearchHit> searchHits, Object value, String parameter) {
+    private Work parseWorkFromSearchHit(List<RupSearchHit> searchHits, String parameter, Object value) {
         try {
             String source = searchHits.get(0).getSource();
             Work result = mapper.readValue(source, Work.class);
@@ -202,6 +230,7 @@ public class PiIntegrationService implements IPiIntegrationService {
         request.setTypes("work");
         request.setSearchType(RupSearchRequest.RupSearchType.DFS_QUERY_AND_FETCH);
         request.setFields(MAIN_TITLE);
+        request.setFields("hostIdno");
         request.setFetchSource(true);
         try {
             return getRupEsApi().search(request);
