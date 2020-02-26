@@ -203,4 +203,22 @@ databaseChangeLog {
                     columnDataType: 'JSONB')
         }
     }
+
+    changeSet(id: '2020-02-26-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-52332 FDA: Add baseline usage details to usage batch: add is_baseline_flag and " +
+                "publication_type_weight columns into df_usage_aacl table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'is_baseline_flag', type: 'BOOLEAN', defaultValue: 'false', remarks: 'Baseline Flag')
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'publication_type_weight', type: 'NUMERIC(10,2)', remarks: 'Publication Type Weight')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl', columnName: 'is_baseline_flag')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl', columnName: 'publication_type_weight')
+        }
+    }
 }
