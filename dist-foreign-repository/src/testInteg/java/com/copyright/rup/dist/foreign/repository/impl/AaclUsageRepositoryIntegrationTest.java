@@ -308,7 +308,9 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     private void verifytAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
-        assertEquals(expectedAaclUsage.getPublicationType(), actualAaclUsage.getPublicationType());
+        assertEquals(expectedAaclUsage.getPublicationType().getId(), actualAaclUsage.getPublicationType().getId());
+        assertEquals(expectedAaclUsage.getPublicationType().getName(), actualAaclUsage.getPublicationType().getName());
+        assertEquals(expectedAaclUsage.getPublicationTypeWeight(), actualAaclUsage.getPublicationTypeWeight());
         assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
         assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
         assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
@@ -318,6 +320,7 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedAaclUsage.getDiscipline(), actualAaclUsage.getDiscipline());
         assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
         assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
+        assertEquals(expectedAaclUsage.isBaselineFlag(), actualAaclUsage.isBaselineFlag());
     }
 
     private List<Usage> loadExpectedUsages(List<String> fileNames) {
@@ -328,7 +331,7 @@ public class AaclUsageRepositoryIntegrationTest {
                 usages.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<Usage>>() {
                 }));
             } catch (IOException e) {
-                fail();
+                throw new AssertionError(e);
             }
         });
         return usages;
@@ -358,7 +361,7 @@ public class AaclUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setProductFamily("AACL");
         return aaclUsageRepository.findDtosByFilter(usageFilter, null, null).stream()
-            .filter(usage -> StringUtils.isNotBlank(usage.getAaclUsage().getPublicationType())
+            .filter(usage -> StringUtils.isNotBlank(usage.getAaclUsage().getPublicationType().getName())
                 && StringUtils.isNotBlank(usage.getAaclUsage().getDetailLicenseeClassId()))
             .count();
     }

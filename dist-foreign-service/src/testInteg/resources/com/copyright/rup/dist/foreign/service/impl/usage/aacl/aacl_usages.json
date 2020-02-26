@@ -12,7 +12,8 @@
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
       "usageSource": "Feb 2019 TUR",
-      "numberOfPages": 14
+      "numberOfPages": 14,
+      "baselineFlag": false
     },
     "comment": "AACL usage Comment 1"
   },
@@ -29,7 +30,8 @@
     "aaclUsage": {
       "institution": "WESTERN MICHIGAN UNIVERSITY",
       "usageSource": "Aug 2018 TUR",
-      "numberOfPages": 12
+      "numberOfPages": 12,
+      "baselineFlag": false
     },
     "comment": "AACL usage Comment 2"
   },
@@ -46,7 +48,8 @@
     "aaclUsage": {
       "institution": "UNIV. OF MICHIGAN",
       "usageSource": "Aug 2019 TUR",
-      "numberOfPages": 7
+      "numberOfPages": 7,
+      "baselineFlag": false
     },
     "comment": "AACL usage Comment 3"
   },
@@ -63,7 +66,8 @@
     "aaclUsage": {
       "institution": "University of Chicago",
       "usageSource": "Feb 2018 TUR",
-      "numberOfPages": 17
+      "numberOfPages": 17,
+      "baselineFlag": false
     },
     "comment": "AACL usage Comment 4"
   }

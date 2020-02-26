@@ -12,7 +12,8 @@
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2019 TUR",
       "rightLimitation": "ALL",
-      "numberOfPages": 6
+      "numberOfPages": 6,
+      "baselineFlag": false
     },
     "rhName": "Delmar Learning, a division of Cengage Learning",
     "rhAccountNumber": 1000011450,

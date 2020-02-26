@@ -26,7 +26,8 @@
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
         <result property="aaclUsage.discipline" column="discipline"/>
         <result property="aaclUsage.enrollmentProfile" column="enrollment_profile"/>
-        <result property="aaclUsage.publicationType" column="name"/>
+        <result property="aaclUsage.publicationType.id" column="pub_type_id"/>
+        <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
         <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
         <result property="aaclUsage.publicationTypeWeight" column="publication_type_weight"/>
         <result property="aaclUsage.baselineFlag" column="is_baseline_flag"/>
@@ -53,7 +54,8 @@
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
         <result property="aaclUsage.discipline" column="discipline"/>
         <result property="aaclUsage.enrollmentProfile" column="enrollment_profile"/>
-        <result property="aaclUsage.publicationType" column="name"/>
+        <result property="aaclUsage.publicationType.id" column="pub_type_id"/>
+        <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
         <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
         <result property="aaclUsage.publicationTypeWeight" column="publication_type_weight"/>
         <result property="aaclUsage.baselineFlag" column="is_baseline_flag"/>
@@ -84,7 +86,8 @@
         uaacl.publication_type_weight,
         dlc.discipline,
         dlc.enrollment_profile,
-        pt.name,
+        pt.df_publication_type_uid pub_type_id,
+        pt.name pub_type_name,
         u.created_datetime,
         u.updated_datetime,
         u.created_by_user,
