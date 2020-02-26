@@ -1,3 +1,11 @@
+9.1.3
+-
+* B-52332 FDA: Add baseline usage details to usage batch: add baseline_years column into df_usage_batch
+* B-52332 FDA: Add baseline usage details to usage batch: add is_baseline_flag and publication_type_weight columns into df_usage_aacl
+* B-52332 FDA: Add baseline usage details to usage batch: create df_usage_baseline_aacl table
+* B-52332 FDA: Add baseline usage details to usage batch: make insertAaclBatch method return inserted usages
+* B-56530 FDA: Avoid matching to article or chapter level works: adjust service logic for PI integration in order to match works by hostIdno
+
 9.1.2
 -
 * B-52334 FDA: Load AACL Fund Pool: fix log message
