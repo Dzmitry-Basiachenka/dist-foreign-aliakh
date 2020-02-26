@@ -38,6 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -109,8 +110,8 @@ public class LoadAaclUsagesIntegrationTest {
         assertTrue(result.isSuccessful());
         List<Usage> usages = result.get();
         setPredefinedUsageIds(usages);
-        int usagesInsertedCount = usageBatchService.insertAaclBatch(batch, usages);
-        assertEquals(4, usagesInsertedCount);
+        Collection<Usage> insertedUsages = usageBatchService.insertAaclBatch(batch, usages);
+        assertEquals(4, insertedUsages.size());
         usageBatchService.sendForMatching(usages);
     }
 

@@ -33,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -145,8 +146,8 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
             setPredefinedUsageIds(usages);
-            int usagesInsertedCount = usageBatchService.insertAaclBatch(usageBatch, usages);
-            assertEquals(predefinedUsageIds.size(), usagesInsertedCount);
+            Collection<Usage> insertedUsages = usageBatchService.insertAaclBatch(usageBatch, usages);
+            assertEquals(predefinedUsageIds.size(), insertedUsages.size());
             usageBatchService.sendForMatching(usages);
         }
 

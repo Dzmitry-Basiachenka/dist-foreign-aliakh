@@ -85,7 +85,7 @@ public class AaclUsageServiceTest {
             "Uploaded in 'AACL product family' Batch");
         expectLastCall().once();
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
-        assertEquals(1, aaclUsageService.insertUsages(usageBatch, Collections.singleton(usage)));
+        aaclUsageService.insertUsages(usageBatch, Collections.singleton(usage));
         verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
     }
 
