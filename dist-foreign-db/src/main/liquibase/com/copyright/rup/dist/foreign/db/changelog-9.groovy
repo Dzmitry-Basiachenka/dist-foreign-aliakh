@@ -221,4 +221,82 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl', columnName: 'publication_type_weight')
         }
     }
+
+    changeSet(id: '2020-02-26-01', author: 'Stanislau Rudak <srudak@copyright.com>') {
+        comment("B-52332 FDA: Add baseline usage details to usage batch: create df_usage_baseline_aacl table")
+
+        createTable(tableName: 'df_usage_baseline_aacl', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing AACL baseline usages') {
+
+            column(name: 'df_usage_baseline_aacl_uid', type: 'VARCHAR(255)', remarks: 'The identifier of baseline usage')
+            column(name: 'wr_wrk_inst', type: 'NUMERIC(15,0)', remarks: 'Wr Wrk Inst') {
+                constraints(nullable: false)
+            }
+            column(name: 'usage_period', type: 'NUMERIC(6,0)', remarks: 'Usage period') {
+                constraints(nullable: false)
+            }
+            column(name: 'usage_source', type: 'VARCHAR(150)', remarks: 'Usage source') {
+                constraints(nullable: false)
+            }
+            column(name: 'number_of_copies', type: 'INTEGER', remarks: 'Number of copies') {
+                constraints(nullable: false)
+            }
+            column(name: 'number_of_pages', type: 'INTEGER', remarks: 'Number of pages') {
+                constraints(nullable: false)
+            }
+            column(name: 'detail_licensee_class_id', type: 'INTEGER', remarks: 'The identifier of Detail Licensee Class') {
+                constraints(nullable: false)
+            }
+            column(name: 'original_publication_type', type: 'VARCHAR(255)', remarks: 'Publication Type from ShareCalc')
+            column(name: 'publication_type_uid', type: 'VARCHAR(255)', remarks: 'The identifier of Publication Type') {
+                constraints(nullable: false)
+            }
+            column(name: 'publication_type_weight', type: 'NUMERIC(10,2)', remarks: 'Publication Type weight')
+            column(name: 'institution', type: 'VARCHAR(255)', remarks: 'Institution')
+            column(name: 'comment', type: 'VARCHAR(100)', remarks: 'Usage comment')
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl', tablespace: dbIndexTablespace,
+                columnNames: 'df_usage_baseline_aacl_uid', constraintName: 'pk_df_usage_baseline_aacl')
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_baseline_aacl_2_df_publication_type',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage_baseline_aacl',
+                baseColumnNames: 'publication_type_uid',
+                referencedTableName: 'df_publication_type',
+                referencedColumnNames: 'df_publication_type_uid')
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_baseline_aacl_2_df_detail_licensee_class',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage_baseline_aacl',
+                baseColumnNames: 'detail_licensee_class_id',
+                referencedTableName: 'df_detail_licensee_class',
+                referencedColumnNames: 'detail_licensee_class_id')
+
+        rollback {
+            dropTable(tableName: 'df_usage_baseline_aacl', schemaName: dbAppsSchema)
+        }
+    }
 }
