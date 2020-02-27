@@ -21,7 +21,7 @@ public class AaclUsage {
     private String detailLicenseeClassId;
     private String enrollmentProfile;
     private String discipline;
-    private String publicationType;
+    private PublicationType publicationType = new PublicationType();
     private String institution;
     private int usagePeriod;
     private String usageSource;
@@ -71,11 +71,11 @@ public class AaclUsage {
         this.discipline = discipline;
     }
 
-    public String getPublicationType() {
+    public PublicationType getPublicationType() {
         return publicationType;
     }
 
-    public void setPublicationType(String publicationType) {
+    public void setPublicationType(PublicationType publicationType) {
         this.publicationType = publicationType;
     }
 

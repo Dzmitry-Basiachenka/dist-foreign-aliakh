@@ -11,7 +11,8 @@
       "usagePeriod": 2018,
       "batchPeriodEndDate": "2018-06-30",
       "usageSource": "Feb 2018 TUR",
-      "numberOfPages": 341
+      "numberOfPages": 341,
+      "baselineFlag": false
     },
     "comment": "AACL NEW status"
   }

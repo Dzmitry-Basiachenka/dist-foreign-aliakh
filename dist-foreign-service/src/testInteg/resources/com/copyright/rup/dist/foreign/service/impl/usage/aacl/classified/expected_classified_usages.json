@@ -13,10 +13,14 @@
       "usageSource": "Aug 2018 TUR",
       "rightLimitation": "PRINT",
       "numberOfPages": 12,
-      "detailLicenseeClassId":"108",
-      "publicationType": "Book",
+      "detailLicenseeClassId": "108",
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book"
+      },
       "discipline": "Life Sciences",
-      "enrollmentProfile": "EXGP"
+      "enrollmentProfile": "EXGP",
+      "baselineFlag": false
     },
     "rightsholder": {
       "id": "77cfa2dd-efac-48a9-bd5b-98659ff2265a",
@@ -39,10 +43,14 @@
       "usageSource": "Aug 2018 TUR",
       "rightLimitation": "PRINT",
       "numberOfPages": 12,
-      "detailLicenseeClassId":"108",
-      "publicationType": "Book",
+      "detailLicenseeClassId": "108",
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book"
+      },
       "discipline": "Life Sciences",
-      "enrollmentProfile": "EXGP"
+      "enrollmentProfile": "EXGP",
+      "baselineFlag": false
     },
     "rightsholder": {
       "id": "77cfa2dd-efac-48a9-bd5b-98659ff2265a",
