@@ -85,11 +85,11 @@
         uaacl.right_limitation,
         uaacl.detail_licensee_class_id,
         uaacl.is_baseline_flag,
-        uaacl.publication_type_weight,
-        uaacl.original_publication_type,
         dlc.discipline,
         dlc.enrollment_profile,
         pt.df_publication_type_uid pub_type_id,
+        uaacl.original_publication_type,
+        uaacl.publication_type_weight,
         pt.name pub_type_name,
         u.created_datetime,
         u.updated_datetime,
@@ -268,6 +268,11 @@
             usage_source,
             number_of_pages,
             right_limitation,
+            detail_licensee_class_id,
+            original_publication_type,
+            publication_type_uid,
+            publication_type_weight,
+            is_baseline_flag,
             <include refid="StoredEntityMapper.additionalColumns"/>
         )
         values (
@@ -277,6 +282,11 @@
             #{aaclUsage.usageSource},
             #{aaclUsage.numberOfPages},
             #{aaclUsage.rightLimitation},
+            #{aaclUsage.detailLicenseeClassId},
+            #{aaclUsage.originalPublicationType},
+            #{aaclUsage.publicationType.id},
+            #{aaclUsage.publicationTypeWeight},
+            #{aaclUsage.baselineFlag},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>

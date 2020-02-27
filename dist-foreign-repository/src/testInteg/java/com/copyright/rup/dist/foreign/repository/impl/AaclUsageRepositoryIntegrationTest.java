@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
@@ -82,6 +83,19 @@ public class AaclUsageRepositoryIntegrationTest {
             loadExpectedUsages(Collections.singletonList("json/aacl/aacl_usage_5b41d618.json")).get(0);
         aaclUsageRepository.insert(expectedUsage);
         List<Usage> actualUsages = aaclUsageRepository.findByIds(Collections.singletonList(USAGE_ID_3));
+        assertEquals(1, actualUsages.size());
+        verifyUsage(expectedUsage, actualUsages.get(0));
+    }
+
+    @Test
+    public void testInsertBaselineUsage() {
+        Usage usageForInsert =
+            loadExpectedUsages(Collections.singletonList("json/aacl/aacl_usage_43eea683_for_insert.json")).get(0);
+        Usage expectedUsage =
+            loadExpectedUsages(Collections.singletonList("json/aacl/aacl_usage_43eea683.json")).get(0);
+        aaclUsageRepository.insert(usageForInsert);
+        List<Usage> actualUsages =
+            aaclUsageRepository.findByIds(Collections.singletonList("43eea683-ac57-4ff2-ac3a-65d38cd72220"));
         assertEquals(1, actualUsages.size());
         verifyUsage(expectedUsage, actualUsages.get(0));
     }
@@ -308,9 +322,9 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     private void verifytAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
+        assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
         assertEquals(expectedAaclUsage.getPublicationType().getId(), actualAaclUsage.getPublicationType().getId());
         assertEquals(expectedAaclUsage.getPublicationType().getName(), actualAaclUsage.getPublicationType().getName());
-        assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
         assertEquals(expectedAaclUsage.getPublicationTypeWeight(), actualAaclUsage.getPublicationTypeWeight());
         assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
         assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
@@ -363,7 +377,7 @@ public class AaclUsageRepositoryIntegrationTest {
         usageFilter.setProductFamily("AACL");
         return aaclUsageRepository.findDtosByFilter(usageFilter, null, null).stream()
             .filter(usage -> StringUtils.isNotBlank(usage.getAaclUsage().getPublicationType().getName())
-                && StringUtils.isNotBlank(usage.getAaclUsage().getDetailLicenseeClassId()))
+                && Objects.nonNull(usage.getAaclUsage().getDetailLicenseeClassId()))
             .count();
     }
 
