@@ -28,6 +28,7 @@
         <result property="aaclUsage.enrollmentProfile" column="enrollment_profile"/>
         <result property="aaclUsage.publicationType.id" column="pub_type_id"/>
         <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
+        <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>
         <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
         <result property="aaclUsage.publicationTypeWeight" column="publication_type_weight"/>
         <result property="aaclUsage.baselineFlag" column="is_baseline_flag"/>
@@ -56,6 +57,7 @@
         <result property="aaclUsage.enrollmentProfile" column="enrollment_profile"/>
         <result property="aaclUsage.publicationType.id" column="pub_type_id"/>
         <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
+        <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>
         <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
         <result property="aaclUsage.publicationTypeWeight" column="publication_type_weight"/>
         <result property="aaclUsage.baselineFlag" column="is_baseline_flag"/>
@@ -84,6 +86,7 @@
         uaacl.detail_licensee_class_id,
         uaacl.is_baseline_flag,
         uaacl.publication_type_weight,
+        uaacl.original_publication_type,
         dlc.discipline,
         dlc.enrollment_profile,
         pt.df_publication_type_uid pub_type_id,

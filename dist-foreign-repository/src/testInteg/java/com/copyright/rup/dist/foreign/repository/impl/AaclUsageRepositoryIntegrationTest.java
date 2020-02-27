@@ -310,6 +310,7 @@ public class AaclUsageRepositoryIntegrationTest {
     private void verifytAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
         assertEquals(expectedAaclUsage.getPublicationType().getId(), actualAaclUsage.getPublicationType().getId());
         assertEquals(expectedAaclUsage.getPublicationType().getName(), actualAaclUsage.getPublicationType().getName());
+        assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
         assertEquals(expectedAaclUsage.getPublicationTypeWeight(), actualAaclUsage.getPublicationTypeWeight());
         assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
         assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
