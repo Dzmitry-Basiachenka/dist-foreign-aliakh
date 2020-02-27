@@ -65,6 +65,7 @@ public class AaclUsageBatchUploadWindowTest {
     private static final String USAGE_BATCH_NAME = "BatchName";
     private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameField";
     private static final String PERIOD_END_DATE_FIELD = "periodEndDateField";
+    private static final String NUMBER_OF_BASELINE_YEARS = "numberOfBaselineYears";
 
     private AaclUsageBatchUploadWindow window;
     private IAaclUsageController usagesController;
@@ -99,6 +100,8 @@ public class AaclUsageBatchUploadWindowTest {
         ((TextField) Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD)).setValue(USAGE_BATCH_NAME);
         assertFalse(window.isValid());
         ((TextField) Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD)).setValue("2010");
+        assertFalse(window.isValid());
+        ((TextField) Whitebox.getInternalState(window, NUMBER_OF_BASELINE_YEARS)).setValue("2");
         assertTrue(window.isValid());
         verify(usagesController);
     }
@@ -118,6 +121,23 @@ public class AaclUsageBatchUploadWindowTest {
     }
 
     @Test
+    public void testNumberOfBaselineYearsValidation() {
+        replay(usagesController);
+        window = new AaclUsageBatchUploadWindow(usagesController);
+        Binder binder = Whitebox.getInternalState(window, "binder");
+        TextField numberOfBaselineYears = Whitebox.getInternalState(window, NUMBER_OF_BASELINE_YEARS);
+        validateField(numberOfBaselineYears, "", binder, "Field value should be specified", false);
+        validateField(numberOfBaselineYears, "two", binder, "Field value should contain positive numeric values only",
+            false);
+        validateField(numberOfBaselineYears, "-1", binder, "Field value should contain positive numeric values only",
+            false);
+        validateField(numberOfBaselineYears, " -2 ", binder, "Field value should contain positive numeric values only",
+            false);
+        validateField(numberOfBaselineYears, " 1 ", binder, null, true);
+        validateField(numberOfBaselineYears, "1", binder, null, true);
+    }
+
+    @Test
     public void testOnUploadClickedFileSpecified() {
         mockStatic(Windows.class);
         UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile", "getValue");
@@ -128,13 +148,16 @@ public class AaclUsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "uploadField", uploadField);
         Whitebox.setInternalState(window, USAGE_BATCH_NAME_FIELD, new TextField("Usage Batch Name", USAGE_BATCH_NAME));
         Whitebox.setInternalState(window, PERIOD_END_DATE_FIELD, new TextField("Period End Date", "2019"));
+        Whitebox.setInternalState(window, NUMBER_OF_BASELINE_YEARS, new TextField("Number of Baseline Years", "0"));
         expect(window.isValid()).andReturn(true).once();
         expect(uploadField.getValue()).andReturn("file.csv");
         expect(usagesController.getCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
-        expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get())).andReturn(1).once();
+        expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get())).andReturn(3)
+            .once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
-        Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
+        Windows.showNotificationWindow(
+            "Upload completed: 1 record(s) were uploaded, 2 record(s) were pulled from baseline");
         expectLastCall().once();
         replay(window, usagesController, Windows.class, processor, uploadField);
         window.onUploadClicked();
@@ -151,11 +174,14 @@ public class AaclUsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "uploadField", uploadField);
         Whitebox.setInternalState(window, USAGE_BATCH_NAME_FIELD, new TextField("Usage Batch Name", USAGE_BATCH_NAME));
         Whitebox.setInternalState(window, PERIOD_END_DATE_FIELD, new TextField("Period End Date", "2019"));
+        Whitebox.setInternalState(window, NUMBER_OF_BASELINE_YEARS, new TextField("Number of Baseline Years", "0"));
         expect(window.isValid()).andReturn(true).once();
         expect(uploadField.getValue()).andReturn(null);
         expect(usagesController.getCsvProcessor()).andReturn(processor).once();
-        expect(usagesController.loadUsageBatch(buildUsageBatch(), Collections.emptyList())).andReturn(0).once();
-        Windows.showNotificationWindow("Upload completed: 0 record(s) were stored successfully");
+        expect(usagesController.loadUsageBatch(buildUsageBatch(), Collections.emptyList())).andReturn(1)
+            .once();
+        Windows.showNotificationWindow(
+            "Upload completed: 0 record(s) were uploaded, 1 record(s) were pulled from baseline");
         expectLastCall().once();
         replay(window, usagesController, Windows.class, processor, uploadField);
         window.onUploadClicked();
@@ -168,7 +194,7 @@ public class AaclUsageBatchUploadWindowTest {
         assertEquals(4, verticalLayout.getComponentCount());
         verifyUsageBatchNameComponent(verticalLayout.getComponent(0));
         verifyUploadComponent(verticalLayout.getComponent(1));
-        verifyPeriodEndDate(verticalLayout.getComponent(2));
+        verifyPeriodEndDateAndBaselineYears(verticalLayout.getComponent(2));
         verifyButtonsLayout(verticalLayout.getComponent(3));
     }
 
@@ -183,6 +209,14 @@ public class AaclUsageBatchUploadWindowTest {
         assertTrue(component instanceof UploadField);
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
+    }
+
+    private void verifyPeriodEndDateAndBaselineYears(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertEquals(2, layout.getComponentCount());
+        verifyPeriodEndDate(layout.getComponent(0));
+        verifyNumberOfBaselineYears(layout.getComponent(1));
     }
 
     private void verifyButtonsLayout(Component component) {
@@ -200,7 +234,8 @@ public class AaclUsageBatchUploadWindowTest {
         Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
             Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD),
             Whitebox.getInternalState(window, "uploadField"),
-            Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD));
+            Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD),
+            Whitebox.getInternalState(window, NUMBER_OF_BASELINE_YEARS));
         Windows.showValidationErrorWindow(fields);
         expectLastCall().once();
         replay(Windows.class);
@@ -216,9 +251,15 @@ public class AaclUsageBatchUploadWindowTest {
     }
 
     private void verifyPeriodEndDate(Component component) {
-        TextField grossAmountField = verifyTextField(component, "Period End Date (YYYY)");
-        assertEquals(50, grossAmountField.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, grossAmountField.getWidthUnits());
+        TextField periodEndDateField = verifyTextField(component, "Period End Date (YYYY)");
+        assertEquals(100, periodEndDateField.getWidth(), 0);
+        assertEquals(Unit.PERCENTAGE, periodEndDateField.getWidthUnits());
+    }
+
+    private void verifyNumberOfBaselineYears(Component component) {
+        TextField baselineYearsField = verifyTextField(component, "Number of Baseline Years");
+        assertEquals(100, baselineYearsField.getWidth(), 0);
+        assertEquals(Unit.PERCENTAGE, baselineYearsField.getWidthUnits());
     }
 
     private void validateField(TextField field, String value, Binder binder, String message, boolean isValid) {
@@ -240,6 +281,7 @@ public class AaclUsageBatchUploadWindowTest {
         usageBatch.setName(USAGE_BATCH_NAME);
         usageBatch.setProductFamily("AACL");
         usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
+        usageBatch.setNumberOfBaselineYears(0);
         return usageBatch;
     }
 
