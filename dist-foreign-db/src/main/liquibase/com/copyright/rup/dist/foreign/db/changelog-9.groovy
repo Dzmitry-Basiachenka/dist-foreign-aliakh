@@ -312,4 +312,17 @@ databaseChangeLog {
             //automatic rollback
         }
     }
+
+    changeSet(id: '2020-02-27-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
+        comment("B-52332 FDA: Add baseline usage details to usage batch: add original_publication_type column " +
+                "to df_usage_aacl table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'original_publication_type', type: 'VARCHAR(255)', remarks: 'Publication Type from ShareCalc')
+        }
+
+        rollback {
+            //automatic rollback
+        }
+    }
 }

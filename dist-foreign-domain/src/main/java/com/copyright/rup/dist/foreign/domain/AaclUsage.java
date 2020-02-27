@@ -22,6 +22,7 @@ public class AaclUsage {
     private String enrollmentProfile;
     private String discipline;
     private PublicationType publicationType = new PublicationType();
+    private String originalPublicationType;
     private String institution;
     private int usagePeriod;
     private String usageSource;
@@ -77,6 +78,14 @@ public class AaclUsage {
 
     public void setPublicationType(PublicationType publicationType) {
         this.publicationType = publicationType;
+    }
+
+    public String getOriginalPublicationType() {
+        return originalPublicationType;
+    }
+
+    public void setOriginalPublicationType(String originalPublicationType) {
+        this.originalPublicationType = originalPublicationType;
     }
 
     public String getInstitution() {
@@ -141,6 +150,7 @@ public class AaclUsage {
             .append(enrollmentProfile, that.enrollmentProfile)
             .append(discipline, that.discipline)
             .append(publicationType, that.publicationType)
+            .append(originalPublicationType, that.originalPublicationType)
             .append(institution, that.institution)
             .append(usagePeriod, that.usagePeriod)
             .append(usageSource, that.usageSource)
@@ -159,6 +169,7 @@ public class AaclUsage {
             .append(enrollmentProfile)
             .append(discipline)
             .append(publicationType)
+            .append(originalPublicationType)
             .append(institution)
             .append(usagePeriod)
             .append(usageSource)
@@ -177,6 +188,7 @@ public class AaclUsage {
             .append("enrollmentProfile", enrollmentProfile)
             .append("discipline", discipline)
             .append("publicationType", publicationType)
+            .append("originalPublicationType", originalPublicationType)
             .append("institution", institution)
             .append("usagePeriod", usagePeriod)
             .append("usageSource", usageSource)
