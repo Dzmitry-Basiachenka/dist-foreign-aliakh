@@ -27,6 +27,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -136,9 +137,10 @@ public class ViewAaclUsageBatchWindowTest {
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Grid.Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Usage Batch Name", "Period End Date", "Create User", "Create Date"),
+        assertEquals(Arrays.asList("Usage Batch Name", "Period End Date", "Number of Baseline Years", "Create User",
+            "Create Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1.0, 170.0, 170.0, 170.0),
+        assertEquals(Arrays.asList(-1.0, 120.0, 180.0, 170.0, 170.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
     }
 
