@@ -18,7 +18,7 @@ import java.time.LocalDate;
  */
 public class AaclUsage {
 
-    private String detailLicenseeClassId;
+    private Integer detailLicenseeClassId;
     private String enrollmentProfile;
     private String discipline;
     private PublicationType publicationType = new PublicationType();
@@ -48,11 +48,11 @@ public class AaclUsage {
         this.baselineFlag = baselineFlag;
     }
 
-    public String getDetailLicenseeClassId() {
+    public Integer getDetailLicenseeClassId() {
         return detailLicenseeClassId;
     }
 
-    public void setDetailLicenseeClassId(String detailLicenseeClassId) {
+    public void setDetailLicenseeClassId(Integer detailLicenseeClassId) {
         this.detailLicenseeClassId = detailLicenseeClassId;
     }
 
