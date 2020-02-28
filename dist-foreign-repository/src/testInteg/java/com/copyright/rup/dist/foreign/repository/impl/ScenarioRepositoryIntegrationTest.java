@@ -299,13 +299,13 @@ public class ScenarioRepositoryIntegrationTest {
     public void testFindSourceRros() {
         scenarioRepository.insert(buildScenario());
         fasUsageRepository.insert(buildUsage());
-        UsageBatch batch = buildBatch();
+        UsageBatch batch = buildBatch("FAS batch 1");
         batchRepository.insert(batch);
         Usage usage = buildUsage();
         usage.setBatchId(batch.getId());
         fasUsageRepository.insert(usage);
         // inserting different batch with the same RRO to verify that it will be returned only once
-        batch = buildBatch();
+        batch = buildBatch("FAS batch 2");
         batchRepository.insert(batch);
         usage = buildUsage();
         usage.setBatchId(batch.getId());
@@ -394,14 +394,14 @@ public class ScenarioRepositoryIntegrationTest {
             .forEach(index -> verifyUsage(expected.get(index), actual.get(index)));
     }
 
-    private UsageBatch buildBatch() {
+    private UsageBatch buildBatch(String batchName) {
         UsageBatch batch = new UsageBatch();
         batch.setId(RupPersistUtils.generateUuid());
         batch.setProductFamily(FAS_PRODUCT_FAMILY);
         batch.setGrossAmount(new BigDecimal("100.00"));
         batch.setPaymentDate(LocalDate.of(2017, 1, 1));
         batch.setFiscalYear(2017);
-        batch.setName("Batch name");
+        batch.setName(batchName);
         Rightsholder rro = new Rightsholder();
         rro.setAccountNumber(2000017000L);
         batch.setRro(rro);

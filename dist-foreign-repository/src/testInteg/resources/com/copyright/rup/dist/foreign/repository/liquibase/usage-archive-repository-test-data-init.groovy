@@ -210,7 +210,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'b58a3ec8-4294-47ae-a12a-83cfe748909b')
-            column(name: 'name', value: 'Paid batch')
+            column(name: 'name', value: 'Paid batch 1')
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
@@ -291,7 +291,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'f132d857-d66a-4b9f-acdc-b1a64c8db718')
-            column(name: 'name', value: 'Paid batch')
+            column(name: 'name', value: 'Paid batch 2')
             column(name: 'rro_account_number', value: '7000813806')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')

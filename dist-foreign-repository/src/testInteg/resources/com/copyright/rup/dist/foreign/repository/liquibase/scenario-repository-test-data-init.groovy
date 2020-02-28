@@ -718,7 +718,7 @@ databaseChangeLog {
 
             insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
                 column(name: 'df_usage_batch_uid', value: 'f27ebc80-e74e-436d-ba6e-acf3d355b700')
-                column(name: 'name', value: 'Test NTS batch')
+                column(name: 'name', value: 'NTS batch 1')
                 column(name: 'rro_account_number', value: '2000017010')
                 column(name: 'payment_date', value: '2010-09-10')
                 column(name: 'product_family', value: 'NTS')
@@ -770,7 +770,7 @@ databaseChangeLog {
 
             insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
                 column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
-                column(name: 'name', value: 'NTS Batch')
+                column(name: 'name', value: 'NTS batch 2')
                 column(name: 'rro_account_number', value: '2000017001')
                 column(name: 'payment_date', value: '2019-01-11')
                 column(name: 'product_family', value: 'NTS')
@@ -912,7 +912,7 @@ databaseChangeLog {
             /* zero fund pool amounts */
             insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
                 column(name: 'df_usage_batch_uid', value: 'ac9bae73-9bd7-477c-bc95-e73daee455ee')
-                column(name: 'name', value: 'NTS Batch 3')
+                column(name: 'name', value: 'NTS batch 3')
                 column(name: 'rro_account_number', value: '2000017001')
                 column(name: 'payment_date', value: '2019-01-11')
                 column(name: 'product_family', value: 'NTS')
@@ -950,7 +950,7 @@ databaseChangeLog {
             /* payment date doesn't meet filter criteria */
             insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
                 column(name: 'df_usage_batch_uid', value: '5769e9fe-1b4b-4399-841c-73108893f7d2')
-                column(name: 'name', value: 'NTS Batch 2')
+                column(name: 'name', value: 'NTS batch 4')
                 column(name: 'rro_account_number', value: '2000017001')
                 column(name: 'payment_date', value: '2021-01-11')
                 column(name: 'product_family', value: 'NTS')
@@ -988,7 +988,7 @@ databaseChangeLog {
             /* fiscal year doesn't meet filter criteria */
             insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
                 column(name: 'df_usage_batch_uid', value: 'd8baa8e6-10fd-4c3c-8851-b1e6883e8cde')
-                column(name: 'name', value: 'NTS Batch 2')
+                column(name: 'name', value: 'NTS batch 5')
                 column(name: 'rro_account_number', value: '2000017001')
                 column(name: 'payment_date', value: '2019-01-11')
                 column(name: 'product_family', value: 'NTS')
@@ -1026,7 +1026,7 @@ databaseChangeLog {
             /* RRO doesn't meet filter criteria */
             insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
                 column(name: 'df_usage_batch_uid', value: 'f8f23728-75ac-4114-b910-2d7abc061217')
-                column(name: 'name', value: 'NTS Batch 2')
+                column(name: 'name', value: 'NTS batch 6')
                 column(name: 'rro_account_number', value: '2000017002')
                 column(name: 'payment_date', value: '2019-01-11')
                 column(name: 'product_family', value: 'NTS')
@@ -1080,7 +1080,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '680b2dca-9efa-4b4d-97ba-2fb5d18fd25b')
-            column(name: 'name', value: 'NTS Batch 1')
+            column(name: 'name', value: 'NTS batch 7')
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
@@ -1216,7 +1216,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '668495a3-44fd-4863-8fc1-9f96229bfe9d')
-            column(name: 'name', value: 'NTS Batch 2')
+            column(name: 'name', value: 'NTS batch 8')
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
