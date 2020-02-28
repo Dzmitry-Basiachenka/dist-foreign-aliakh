@@ -128,6 +128,7 @@ public class PiIntegrationServiceTest {
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
         Work expectedResult = new Work();
         expectedResult.setMultipleMatches(true);
+        expectedResult.setHostIdnoFlag(true);
         assertEquals(expectedResult, piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
     }
@@ -138,6 +139,7 @@ public class PiIntegrationServiceTest {
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit1)).once();
         expect(searchHit1.getFields()).andReturn(ImmutableMap.of("hostIdno", Arrays.asList(IDNO_2, IDNO_3))).once();
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).once();
+        expectSearchHitSource(searchHit1, SEARCH_HIT_1);
         replay(rupEsApi, searchResponse, searchResults, searchHit1);
         Work expectedResult = new Work();
         expectedResult.setMultipleMatches(true);
@@ -265,7 +267,7 @@ public class PiIntegrationServiceTest {
         expect(searchHit5.getFields()).andReturn(
             ImmutableMap.of("mainTitle", Collections.singletonList(FORBIDDEN_RIGHTS))).once();
         expect(searchHit6.getFields()).andReturn(
-            ImmutableMap.of("mainTitle", Collections.singletonList(OCULAR_TITLE))).once();
+            ImmutableMap.of("mainTitle", Collections.singletonList(OCULAR_TITLE))).times(2);
         expectSearchHitSource(searchHit6, "pi_search_hit6.json");
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(4);
     }

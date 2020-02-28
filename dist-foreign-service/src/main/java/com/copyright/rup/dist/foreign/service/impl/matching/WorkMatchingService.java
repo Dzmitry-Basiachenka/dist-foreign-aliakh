@@ -53,8 +53,9 @@ public class WorkMatchingService implements IWorkMatchingService {
         Work work = doMatchByIdno(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
             usageService.updateProcessedUsage(usage);
+            String searchParameter = work.isHostIdnoFlag() ? "host IDNO" : "standard number";
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
+                String.format("Wr Wrk Inst %s was found by %s %s", usage.getWrWrkInst(), searchParameter,
                     usage.getStandardNumber()));
         } else {
             updateUsagesStatusAndWriteAudit(usage, work, UsageGroupEnum.STANDARD_NUMBER,
@@ -69,8 +70,10 @@ public class WorkMatchingService implements IWorkMatchingService {
         Work work = doMatchByTitle(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
             usageService.updateProcessedUsage(usage);
+            String searchParameter = work.isHostIdnoFlag() ? "host IDNO" : "title";
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(), usage.getWorkTitle()));
+                String.format("Wr Wrk Inst %s was found by %s \"%s\"", usage.getWrWrkInst(), searchParameter,
+                    usage.getWorkTitle()));
         } else {
             updateUsagesStatusAndWriteAudit(usage, work, UsageGroupEnum.TITLE,
                 usageRepository.getTotalAmountByTitleAndBatchId(usage.getWorkTitle(), usage.getBatchId()));
