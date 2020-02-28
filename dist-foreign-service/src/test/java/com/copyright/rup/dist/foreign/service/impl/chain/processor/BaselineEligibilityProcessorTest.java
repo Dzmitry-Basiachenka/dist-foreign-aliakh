@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -19,45 +20,59 @@ import org.powermock.reflect.Whitebox;
 import java.util.Collections;
 
 /**
- * Verifies {@link EligibilityProcessor}.
+ * Verifies {@link BaselineEligibilityProcessor}.
  * <p>
- * Copyright (C) 2018 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 12/19/2018
+ * Date: 28/02/2020
  *
- * @author Uladzislau Shalamitski
+ * @author Anton Azarenka
  */
-public class EligibilityProcessorTest {
+public class BaselineEligibilityProcessorTest {
 
-    private EligibilityProcessor eligibilityProcessor;
+    private BaselineEligibilityProcessor baselineEligibilityProcessor;
     private IUsageRepository usageRepository;
     private IUsageAuditService usageAuditService;
 
     @Before
     public void setUp() {
-        eligibilityProcessor = new EligibilityProcessor();
+        baselineEligibilityProcessor = new BaselineEligibilityProcessor();
         usageRepository = createMock(IUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
-        Whitebox.setInternalState(eligibilityProcessor, usageRepository);
-        Whitebox.setInternalState(eligibilityProcessor, usageAuditService);
+        Whitebox.setInternalState(baselineEligibilityProcessor, usageRepository);
+        Whitebox.setInternalState(baselineEligibilityProcessor, usageAuditService);
     }
 
     @Test
-    public void testProcess() {
-        Usage usage = buildUsage();
+    public void testProcessBaselineUsage() {
+        Usage usage = buildUsage(true);
         usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);
         expectLastCall().once();
-        usageAuditService
-            .logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
+        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
         expectLastCall().once();
         replay(usageRepository, usageAuditService);
-        eligibilityProcessor.process(usage);
+        baselineEligibilityProcessor.process(usage);
         verify(usageRepository, usageAuditService);
     }
 
-    private Usage buildUsage() {
+    @Test
+    public void testProcessNotBaselineUsage() {
+        Usage usage = buildUsage(false);
+        replay(usageRepository, usageAuditService);
+        baselineEligibilityProcessor.process(usage);
+        verify(usageRepository, usageAuditService);
+    }
+
+    private Usage buildUsage(boolean flag) {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
+        usage.setAaclUsage(buildAaclUsage(flag));
         return usage;
+    }
+
+    private AaclUsage buildAaclUsage(boolean flag) {
+        AaclUsage aaclUsage = new AaclUsage();
+        aaclUsage.setBaselineFlag(flag);
+        return aaclUsage;
     }
 }

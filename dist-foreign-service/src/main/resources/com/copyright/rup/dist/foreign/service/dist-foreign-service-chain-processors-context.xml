@@ -59,6 +59,8 @@
     <bean id="df.service.ntsUnclassifiedStatusProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.UnclassifiedStatusProcessor" />
 
     <!-- AACL processors -->
+    <bean id="df.service.aaclBaselineEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.BaselineEligibilityProcessor"/>
+
     <bean id="df.service.aaclMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingProcessor">
         <property name="usageStatus" value="NEW"/>
         <property name="successProcessor" ref="df.service.aaclRightsProcessor"/>
@@ -66,6 +68,7 @@
 
     <bean id="df.service.aaclRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
         <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.aaclBaselineEligibilityProcessor"/>
         <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
     </bean>
 </beans>
