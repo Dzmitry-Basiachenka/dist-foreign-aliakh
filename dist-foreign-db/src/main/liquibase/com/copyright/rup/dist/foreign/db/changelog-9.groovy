@@ -325,4 +325,21 @@ databaseChangeLog {
             //automatic rollback
         }
     }
+
+    changeSet(id: '2020-02-27-01', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-57437 FDA: Tech Debt: make Usage Batch name unique across product family")
+
+        addUniqueConstraint(constraintName: 'uk_df_usage_batch_name_product_family',
+                schemaName: dbAppsSchema,
+                tablespace: dbDataTablespace,
+                tableName: 'df_usage_batch',
+                columnNames: 'name, product_family')
+        rollback {
+            dropUniqueConstraint(constraintName: 'uk_df_usage_batch_name_product_family',
+                    schemaName: dbAppsSchema,
+                    tablespace: dbDataTablespace,
+                    tableName: 'df_usage_batch',
+                    columnNames: 'name, product_family')
+        }
+    }
 }
