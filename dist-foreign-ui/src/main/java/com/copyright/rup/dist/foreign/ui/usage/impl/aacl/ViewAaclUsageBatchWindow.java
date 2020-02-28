@@ -18,6 +18,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.renderers.LocalDateRenderer;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -125,7 +126,12 @@ public class ViewAaclUsageBatchWindow extends Window implements SearchWidget.ISe
         grid.addColumn(UsageBatch::getPaymentDate)
             .setCaption(ForeignUi.getMessage("table.column.period_end_date"))
             .setRenderer(new LocalDateRenderer(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))
-            .setWidth(170);
+            .setWidth(120);
+        grid.addColumn(UsageBatch::getNumberOfBaselineYears)
+            .setCaption(ForeignUi.getMessage("table.column.number_of_baseline_years"))
+            .setComparator(
+                (batch1, batch2) -> batch1.getNumberOfBaselineYears().compareTo(batch2.getNumberOfBaselineYears()))
+            .setWidth(180);
         grid.addColumn(UsageBatch::getCreateUser)
             .setCaption(ForeignUi.getMessage("table.column.create_user"))
             .setComparator((batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()))
