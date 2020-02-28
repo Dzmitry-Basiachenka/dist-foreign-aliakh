@@ -21,6 +21,7 @@ public class Work {
     private String mainIdno;
     private String mainIdnoType;
     private boolean multipleMatches;
+    private boolean hostIdnoFlag;
 
     /**
      * Constructor.
@@ -83,6 +84,14 @@ public class Work {
         this.mainIdnoType = mainIdnoType;
     }
 
+    public boolean isHostIdnoFlag() {
+        return hostIdnoFlag;
+    }
+
+    public void setHostIdnoFlag(boolean hostIdnoFlag) {
+        this.hostIdnoFlag = hostIdnoFlag;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -98,6 +107,7 @@ public class Work {
             .append(this.mainIdno, that.mainIdno)
             .append(this.multipleMatches, that.multipleMatches)
             .append(this.mainIdnoType, that.mainIdnoType)
+            .append(this.hostIdnoFlag, that.hostIdnoFlag)
             .isEquals();
     }
 
@@ -109,6 +119,7 @@ public class Work {
             .append(mainIdno)
             .append(multipleMatches)
             .append(mainIdnoType)
+            .append(hostIdnoFlag)
             .toHashCode();
     }
 
@@ -120,6 +131,7 @@ public class Work {
             .append("mainIdno", mainIdno)
             .append("multipleMatches", multipleMatches)
             .append("mainIdnoType", mainIdnoType)
+            .append("hostIdnoFlag", hostIdnoFlag)
             .toString();
     }
 }

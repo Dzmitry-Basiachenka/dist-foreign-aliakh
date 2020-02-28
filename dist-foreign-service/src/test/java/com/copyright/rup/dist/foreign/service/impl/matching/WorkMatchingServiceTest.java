@@ -59,12 +59,13 @@ public class WorkMatchingServiceTest {
     @Test
     public void testMatchByIdno() {
         Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
-        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, TITLE))
-            .andReturn(new Work(112930820L, TITLE, STANDARD_NUMBER, "valisbn10")).once();
+        Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, "valisbn10");
+        work.setHostIdnoFlag(true);
+        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, TITLE)).andReturn(work).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-            "Wr Wrk Inst 112930820 was found by standard number 000043122-1");
+            "Wr Wrk Inst 112930820 was found by host IDNO 000043122-1");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService, usageService);
         workMatchingService.matchByIdno(usage);

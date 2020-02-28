@@ -46,6 +46,7 @@ public class PiIntegrationService implements IPiIntegrationService {
     private static final int EXPECTED_SEARCH_HITS_COUNT = 1;
     private static final int EXPECTED_HOST_INDOS_COUNT = 1;
     private static final String MAIN_TITLE = "mainTitle";
+    private static final String HOST_IDNO = "hostIdno";
     private static final String IDNO = "IDNO";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -138,6 +139,7 @@ public class PiIntegrationService implements IPiIntegrationService {
     private Work matchByIdnoAndTitle(String idno, String title, boolean isHostIdno) {
         List<RupSearchHit> searchHits = doSearch("idno", idno).getResults().getHits();
         Work result = new Work();
+        result.setHostIdnoFlag(isHostIdno);
         if (CollectionUtils.isNotEmpty(searchHits)) {
             if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
                 result = searchByHostIdnoIfExists(searchHits, idno, IDNO, isHostIdno);
@@ -152,16 +154,7 @@ public class PiIntegrationService implements IPiIntegrationService {
                         mainTitles.iterator().next().toString());
                 }).collect(Collectors.toList());
                 if (EXPECTED_SEARCH_HITS_COUNT == filteredByTitleHits.size()) {
-                    try {
-                        String source = filteredByTitleHits.get(0).getSource();
-                        result = mapper.readValue(source, Work.class);
-                        LOGGER.trace("Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst={}, Hit={}", idno,
-                            title, result.getWrWrkInst(), source);
-                    } catch (IOException e) {
-                        throw new RupRuntimeException(
-                            String.format("Search works. Failed. IDNO=%s, Title=%s, Reason=Could not read response",
-                                idno, title), e);
-                    }
+                    return searchByHostIdnoIfExists(filteredByTitleHits, IDNO, idno, false);
                 } else {
                     result.setMultipleMatches(true);
                     LOGGER.debug("Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst=MultiResults, Hits={}",
@@ -187,16 +180,19 @@ public class PiIntegrationService implements IPiIntegrationService {
     private Work searchByHostIdnoIfExists(List<RupSearchHit> searchHits, String parameter, Object value,
                                           boolean isHostIdno) {
         Work result = new Work();
+        result.setHostIdnoFlag(isHostIdno);
         if (isHostIdno) {
             result = parseWorkFromSearchHit(searchHits, parameter, value);
         } else {
-            List<Object> hostIdnos = searchHits.get(0).getFields().get("hostIdno");
+            List<Object> hostIdnos = searchHits.get(0).getFields().get(HOST_IDNO);
             if (Objects.isNull(hostIdnos)) {
                 result = parseWorkFromSearchHit(searchHits, parameter, value);
             } else if (EXPECTED_HOST_INDOS_COUNT == hostIdnos.size()) {
                 result = findWorkByIdnoAndTitle(hostIdnos.get(0).toString(), null, true);
             } else {
                 result.setMultipleMatches(true);
+                LOGGER.debug("Search works. By {}. ParameterValue={}, WrWrkInst=MultiResults, Hits={}", parameter,
+                    value, searchHits.stream().map(RupSearchHit::getSource).collect(Collectors.joining(";")));
             }
         }
         return result;
@@ -229,8 +225,7 @@ public class PiIntegrationService implements IPiIntegrationService {
         request.setQueryBuilder(builder);
         request.setTypes("work");
         request.setSearchType(RupSearchRequest.RupSearchType.DFS_QUERY_AND_FETCH);
-        request.setFields(MAIN_TITLE);
-        request.setFields("hostIdno");
+        request.setFields(MAIN_TITLE, HOST_IDNO);
         request.setFetchSource(true);
         try {
             return getRupEsApi().search(request);
