@@ -431,7 +431,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'c10a11c6-dae3-43d7-a632-c682542b1209')
-            column(name: 'name', value: 'Works without WrWrkInst test')
+            column(name: 'name', value: 'Works without WrWrkInst test 1')
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
@@ -488,7 +488,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
-            column(name: 'name', value: 'Works without WrWrkInst test')
+            column(name: 'name', value: 'Works without WrWrkInst test 2')
             column(name: 'rro_account_number', value: '2000017011')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
@@ -852,7 +852,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '8a901f85-0949-40b8-9176-378d1a61afb8')
-            column(name: 'name', value: 'Usage Batch')
+            column(name: 'name', value: 'FAS batch 1')
             column(name: 'rro_account_number', value: '2000017011')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
@@ -923,7 +923,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'ee575916-f6d0-4c3c-b589-32663e0f4793')
-            column(name: 'name', value: 'Usage Batch')
+            column(name: 'name', value: 'FAS batch 2')
             column(name: 'rro_account_number', value: '2000017011')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
@@ -1006,7 +1006,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'd368a40b-d3ab-45b1-80a3-07be2cd5224c')
-            column(name: 'name', value: 'Usage Batch')
+            column(name: 'name', value: 'FAS batch 3')
             column(name: 'rro_account_number', value: '2000017011')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
@@ -1358,7 +1358,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '26a66a43-2a5a-427a-b3af-0806ebfd7262')
-            column(name: 'name', value: 'FAS2 batch')
+            column(name: 'name', value: 'FAS2 batch 1')
             column(name: 'rro_account_number', value: '2000017000')
             column(name: 'payment_date', value: '2019-02-13')
             column(name: 'product_family', value: 'FAS2')
@@ -1463,7 +1463,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'b4652f21-a1bd-44c5-ab7d-23a287fd1756')
-            column(name: 'name', value: 'FAS2 batch')
+            column(name: 'name', value: 'FAS2 batch 2')
             column(name: 'rro_account_number', value: '2000017000')
             column(name: 'payment_date', value: '2019-02-13')
             column(name: 'product_family', value: 'FAS2')

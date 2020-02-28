@@ -62,7 +62,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '02a09322-5f0f-4cae-888c-73127050dc98')
-            column(name: 'name', value: 'Test Batch 2')
+            column(name: 'name', value: 'Test Batch 3')
             column(name: 'rro_account_number', value: '2000017001')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
@@ -5253,7 +5253,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'e17ebc80-e74e-436d-ba6e-acf3d355b7ff')
-            column(name: 'name', value: 'NTS fund pool')
+            column(name: 'name', value: 'NTS fund pool 1')
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
@@ -5402,7 +5402,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'f17ebc80-e74e-436d-ba6e-acf3d355b7ff')
-            column(name: 'name', value: 'NTS fund pool')
+            column(name: 'name', value: 'NTS fund pool 2')
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
@@ -5929,7 +5929,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '0c0a379a-461c-4e84-8062-326ece3c1f65')
-            column(name: 'name', value: 'Test Batch 2')
+            column(name: 'name', value: 'Test Batch 4')
             column(name: 'rro_account_number', value: '2000017001')
             column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2017-01-11')

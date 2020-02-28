@@ -12,7 +12,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '63e350c1-b211-485f-bc42-6ebee8acb22d')
-            column(name: 'name', value: 'Archived batch')
+            column(name: 'name', value: 'Archived batch 1')
             column(name: 'rro_account_number', value: '7000813806')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
@@ -337,7 +337,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'b614f8a0-9271-4cae-8a26-b39a83cb7c46')
-            column(name: 'name', value: 'NTS Batch')
+            column(name: 'name', value: 'NTS batch 1')
             column(name: 'rro_account_number', value: '1000000001')
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
@@ -549,7 +549,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'd685ddcb-c323-41ce-9c44-1dfdeaedcab7')
-            column(name: 'name', value: 'Archived batch')
+            column(name: 'name', value: 'Archived batch 2')
             column(name: 'rro_account_number', value: '7000813806')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
@@ -874,7 +874,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '2167779f-cbae-4b4b-adc6-fb95aeb3c58d')
-            column(name: 'name', value: 'NTS Batch')
+            column(name: 'name', value: 'NTS batch 2')
             column(name: 'rro_account_number', value: '1000000001')
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
