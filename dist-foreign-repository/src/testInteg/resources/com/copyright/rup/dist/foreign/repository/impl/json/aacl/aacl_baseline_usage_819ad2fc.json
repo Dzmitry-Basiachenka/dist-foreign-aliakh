@@ -1,0 +1,27 @@
+[
+  {
+    "batchId": "6e6f656a-e080-4426-b8ea-985b69f8814d",
+    "wrWrkInst": 123986581,
+    "status": "NEW",
+    "productFamily": "AACL",
+    "numberOfCopies": 30,
+    "aaclUsage": {
+      "institution": "BIOLA UNIVERSITY",
+      "usagePeriod": 2016,
+      "batchPeriodEndDate": "2019-06-30",
+      "usageSource": "Aug 2016 FR",
+      "numberOfPages": 35,
+      "detailLicenseeClassId": 143,
+      "discipline": "Engineering",
+      "enrollmentProfile": "EXGP",
+      "publicationType": {
+        "id": "46634907-882e-4f91-b1ad-f57db945aff7",
+        "name": "Consumer Magazine"
+      },
+      "originalPublicationType": "Scholarly Journal",
+      "publicationTypeWeight": 2.00,
+      "baselineFlag": true
+    },
+    "comment": "Baseline usage 3"
+  }
+]

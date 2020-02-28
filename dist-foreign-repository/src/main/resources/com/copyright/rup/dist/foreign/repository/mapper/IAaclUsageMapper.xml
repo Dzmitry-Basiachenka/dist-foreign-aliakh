@@ -87,10 +87,10 @@
         uaacl.is_baseline_flag,
         dlc.discipline,
         dlc.enrollment_profile,
-        pt.df_publication_type_uid pub_type_id,
         uaacl.original_publication_type,
-        uaacl.publication_type_weight,
+        pt.df_publication_type_uid pub_type_id,
         pt.name pub_type_name,
+        uaacl.publication_type_weight,
         u.created_datetime,
         u.updated_datetime,
         u.created_by_user,
@@ -230,6 +230,7 @@
         <include refid="IAaclUsageMapper.selectCountByFilterSql"/>
     </select>
 
+    <!--TODO {srudak} revert recent changes to this query-->
     <insert id="insert" parameterType="Usage">
         with u as (
             insert into ${schema}.df_usage (
@@ -291,6 +292,82 @@
         )
     </insert>
 
+    <select id="insertFromBaseline" parameterType="map" resultType="string">
+        with baseline_usages as (
+            select
+                uuid_generate_v4() df_usage_uid,
+                #{batchId} df_usage_batch_uid,
+                wr_wrk_inst,
+                'NEW' status_ind,
+                'AACL' product_family,
+                usage_period,
+                usage_source,
+                number_of_copies,
+                number_of_pages,
+                detail_licensee_class_id,
+                original_publication_type,
+                publication_type_uid,
+                publication_type_weight,
+                institution,
+                comment,
+                true is_baseline_flag
+            from ${schema}.df_usage_baseline_aacl
+            where usage_period in
+            <foreach collection="periods" item="period" open="(" separator="," close=")">
+                #{period}
+            </foreach>
+        ),
+        u as (
+            insert into ${schema}.df_usage (
+                df_usage_uid,
+                df_usage_batch_uid,
+                wr_wrk_inst,
+                status_ind,
+                product_family,
+                number_of_copies,
+                comment,
+                <include refid="StoredEntityMapper.additionalColumns"/>
+            )
+            select
+                df_usage_uid,
+                df_usage_batch_uid,
+                wr_wrk_inst,
+                status_ind,
+                product_family,
+                number_of_copies,
+                comment,
+                <include refid="StoredEntityMapper.insert"/>
+            from baseline_usages
+        )
+        insert into ${schema}.df_usage_aacl (
+            df_usage_aacl_uid,
+            institution,
+            usage_period,
+            usage_source,
+            number_of_pages,
+            detail_licensee_class_id,
+            original_publication_type,
+            publication_type_uid,
+            publication_type_weight,
+            is_baseline_flag,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        )
+        select
+            df_usage_uid,
+            institution,
+            usage_period,
+            usage_source,
+            number_of_pages,
+            detail_licensee_class_id,
+            original_publication_type,
+            publication_type_uid,
+            publication_type_weight,
+            is_baseline_flag,
+            <include refid="StoredEntityMapper.insert"/>
+        from baseline_usages
+        returning df_usage_aacl_uid
+    </select>
+
     <select id="updateProcessedUsage" parameterType="map" resultType="string">
         with u as (
             update ${schema}.df_usage_aacl
@@ -344,6 +421,14 @@
         <foreach collection="usageIds" item="usageId" open="(" separator="," close=")">
             #{usageId}
         </foreach>
+    </select>
+
+    <select id="findBaselinePeriods" parameterType="map" resultType="int">
+        select distinct usage_period
+        from ${schema}.df_usage_baseline_aacl
+        where <![CDATA[usage_period <= #{startPeriod}]]>
+        order by usage_period desc
+        limit #{numberOfPriorYears}
     </select>
 
     <select id="findUsagePeriods" resultType="int">

@@ -17,9 +17,11 @@ import com.google.common.collect.Maps;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAaclUsageRepository}.
@@ -46,6 +48,16 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     @Override
     public void insert(Usage usage) {
         insert("IAaclUsageMapper.insert", Objects.requireNonNull(usage));
+    }
+
+    @Override
+    public List<String> insertFromBaseline(Set<Integer> periods, String batchId, String userName) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put("periods", Objects.requireNonNull(periods));
+        parameters.put("batchId", Objects.requireNonNull(batchId));
+        parameters.put("createUser", Objects.requireNonNull(userName));
+        parameters.put(UPDATE_USER_KEY, userName);
+        return selectList("IAaclUsageMapper.insertFromBaseline", parameters);
     }
 
     @Override
@@ -98,6 +110,14 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     public int findCountByFilter(UsageFilter filter) {
         return selectOne("IAaclUsageMapper.findCountByFilter",
             ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
+    }
+
+    @Override
+    public Set<Integer> findBaselinePeriods(int startPeriod, int numberOfPriorYears) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("startPeriod", startPeriod);
+        parameters.put("numberOfPriorYears", numberOfPriorYears);
+        return new HashSet<>(selectList("IAaclUsageMapper.findBaselinePeriods", parameters));
     }
 
     @Override

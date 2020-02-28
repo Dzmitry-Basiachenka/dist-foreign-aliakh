@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for AACL usage repository.
@@ -27,6 +28,16 @@ public interface IAaclUsageRepository {
      * @param usage {@link Usage} instance
      */
     void insert(Usage usage);
+
+    /**
+     * Inserts AACL usage from baseline.
+     *
+     * @param periods  baseline usage periods
+     * @param batchId  AACL {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id to add created usages to
+     * @param userName name of user
+     * @return list of inserted {@link Usage} ids
+     */
+    List<String> insertFromBaseline(Set<Integer> periods, String batchId, String userName);
 
     /**
      * Updates classified fields for AACL usages in database.
@@ -50,6 +61,15 @@ public interface IAaclUsageRepository {
      * @return id of updated record, otherwise {@code null}
      */
     String updateProcessedUsage(Usage usage);
+
+    /**
+     * Finds baseline periods.
+     *
+     * @param startPeriod        period to start from
+     * @param numberOfPriorYears number of prior years
+     * @return set of baseline periods
+     */
+    Set<Integer> findBaselinePeriods(int startPeriod, int numberOfPriorYears);
 
     /**
      * Finds list of AACL {@link Usage}s by their ids.
