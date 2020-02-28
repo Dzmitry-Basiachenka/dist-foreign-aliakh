@@ -58,6 +58,7 @@ public class CommonUsageDeserializerTest {
         usage.setProductFamily("AACL");
         usage.setAaclUsage(new AaclUsage());
         usage.getAaclUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
+        usage.getAaclUsage().setBaselineFlag(true);
         usage.setRightsholder(buildRightsholder());
         return usage;
     }

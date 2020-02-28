@@ -282,7 +282,7 @@ public class NtsUsageControllerTest {
         List<String> ntsUsageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(usageBatchService.insertNtsBatch(usageBatch, USER_NAME)).andReturn(ntsUsageIds).once();
-        usageBatchService.getAndSendForGettingRights(ntsUsageIds, BATCH_NAME);
+        usageBatchService.sendNtsForGettingRights(ntsUsageIds, BATCH_NAME);
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();

@@ -31,6 +31,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -99,10 +100,10 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
-        Collection<Usage> insertedUsages = getUsageBatchService().insertAaclBatch(usageBatch, usages);
-        getUsageBatchService().sendForMatching(insertedUsages);
+        Collection<String> insertedUsageIds = getUsageBatchService().insertAaclBatch(usageBatch, usages);
+        getUsageBatchService().sendAaclForMatching(insertedUsageIds, usageBatch.getName());
         aaclUsageFilterController.getWidget().clearFilter();
-        return insertedUsages.size();
+        return insertedUsageIds.size();
     }
 
     @Override

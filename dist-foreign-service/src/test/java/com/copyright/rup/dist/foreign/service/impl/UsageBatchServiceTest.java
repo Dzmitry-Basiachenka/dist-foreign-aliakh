@@ -44,6 +44,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -227,6 +228,87 @@ public class UsageBatchServiceTest {
     }
 
     @Test
+    public void testInsertAaclBatch() {
+        mockStatic(RupContextUtils.class);
+        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(BATCH_NAME);
+        usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
+        usageBatch.setNumberOfBaselineYears(3);
+        Usage uploadedUsage = new Usage();
+        uploadedUsage.setId("8e12b833-af38-4d49-96d0-221d2665f0dc");
+        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        usageBatchRepository.insert(capture(captureUsageBatch));
+        expectLastCall().once();
+        aaclUsageService.insertUsages(usageBatch, uploadedUsages);
+        expectLastCall().once();
+        expect(aaclUsageService.insertUsagesFromBaseline(usageBatch))
+            .andReturn(Collections.singletonList("b3f2727e-b023-49f0-970a-94dd3537ec6e")).once();
+        replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
+        assertEquals(Arrays.asList("b3f2727e-b023-49f0-970a-94dd3537ec6e", "8e12b833-af38-4d49-96d0-221d2665f0dc"),
+            usageBatchService.insertAaclBatch(usageBatch, uploadedUsages));
+        UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
+        assertNotNull(insertedUsageBatch.getId());
+        assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
+        assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
+        verify(usageBatchRepository, aaclUsageService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testInsertAaclBatchWithZeroBaselineYears() {
+        mockStatic(RupContextUtils.class);
+        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(BATCH_NAME);
+        usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
+        usageBatch.setNumberOfBaselineYears(0);
+        Usage uploadedUsage = new Usage();
+        uploadedUsage.setId("086ce041-c11a-45af-8229-824ca897cc97");
+        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        usageBatchRepository.insert(capture(captureUsageBatch));
+        expectLastCall().once();
+        aaclUsageService.insertUsages(usageBatch, uploadedUsages);
+        expectLastCall().once();
+        replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
+        assertEquals(Collections.singletonList("086ce041-c11a-45af-8229-824ca897cc97"),
+            usageBatchService.insertAaclBatch(usageBatch, uploadedUsages));
+        UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
+        assertNotNull(insertedUsageBatch.getId());
+        assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
+        assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
+        verify(usageBatchRepository, aaclUsageService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testInsertAaclBatchWithNoBaselineUsagesInserted() {
+        mockStatic(RupContextUtils.class);
+        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(BATCH_NAME);
+        usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
+        usageBatch.setNumberOfBaselineYears(3);
+        Usage uploadedUsage = new Usage();
+        uploadedUsage.setId("abc1a3de-151b-465e-8b90-9fedd13d6e79");
+        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        usageBatchRepository.insert(capture(captureUsageBatch));
+        expectLastCall().once();
+        aaclUsageService.insertUsages(usageBatch, uploadedUsages);
+        expectLastCall().once();
+        expect(aaclUsageService.insertUsagesFromBaseline(usageBatch)).andReturn(Collections.emptyList()).once();
+        replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
+        assertEquals(Collections.singletonList("abc1a3de-151b-465e-8b90-9fedd13d6e79"),
+            usageBatchService.insertAaclBatch(usageBatch, uploadedUsages));
+        UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
+        assertNotNull(insertedUsageBatch.getId());
+        assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
+        assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
+        verify(usageBatchRepository, aaclUsageService, RupContextUtils.class);
+    }
+
+    @Test
     public void testDeleteUsageBatch() {
         mockStatic(RupContextUtils.class);
         UsageBatch usageBatch = new UsageBatch();
@@ -268,6 +350,28 @@ public class UsageBatchServiceTest {
     }
 
     @Test
+    public void testSendAaclForMatching() {
+        List<String> usageIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
+        Usage usage1 = new Usage();
+        usage1.setStatus(UsageStatusEnum.NEW);
+        Usage usage2 = new Usage();
+        usage2.setStatus(UsageStatusEnum.NEW);
+        List<Usage> usages = Arrays.asList(usage1, usage2);
+        expect(aaclUsageService.getUsagesByIds(usageIds)).andReturn(usages).once();
+        Capture<Runnable> captureRunnable = new Capture<>();
+        executorService.execute(capture(captureRunnable));
+        expectLastCall().once();
+        chainExecutor.execute(usages, ChainProcessorTypeEnum.MATCHING);
+        expectLastCall().once();
+        replay(chainExecutor, executorService, aaclUsageService);
+        usageBatchService.sendAaclForMatching(usageIds, BATCH_NAME);
+        assertNotNull(captureRunnable);
+        Runnable runnable = captureRunnable.getValue();
+        runnable.run();
+        verify(chainExecutor, executorService, aaclUsageService);
+    }
+
+    @Test
     public void testSendForGettingRights() {
         Capture<Runnable> captureRunnable = new Capture<>();
         executorService.execute(capture(captureRunnable));
@@ -279,7 +383,7 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void testGetAndSendForGettingRights() {
+    public void testSendNtsForGettingRights() {
         List<String> usageIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
         Usage usage1 = new Usage();
         usage1.setStatus(UsageStatusEnum.WORK_FOUND);
@@ -293,7 +397,7 @@ public class UsageBatchServiceTest {
         chainExecutor.execute(usages, ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
         replay(chainExecutor, executorService, usageService);
-        usageBatchService.getAndSendForGettingRights(usageIds, BATCH_NAME);
+        usageBatchService.sendNtsForGettingRights(usageIds, BATCH_NAME);
         assertNotNull(captureRunnable);
         Runnable runnable = captureRunnable.getValue();
         runnable.run();

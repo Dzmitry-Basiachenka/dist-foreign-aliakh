@@ -155,7 +155,7 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
 
         private void loadNtsBatch() {
             actualUsageIds = usageBatchService.insertNtsBatch(usageBatch, RupContextUtils.getUserName());
-            usageBatchService.getAndSendForGettingRights(actualUsageIds, usageBatch.getName());
+            usageBatchService.sendNtsForGettingRights(actualUsageIds, usageBatch.getName());
         }
 
         private void assertBatch() {

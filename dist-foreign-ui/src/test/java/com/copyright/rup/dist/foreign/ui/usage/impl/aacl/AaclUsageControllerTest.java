@@ -43,6 +43,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
 
 import com.vaadin.ui.HorizontalLayout;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -182,15 +183,18 @@ public class AaclUsageControllerTest {
     @Test
     public void testLoadUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName("AACL Batch");
         List<Usage> usages = Collections.singletonList(new Usage());
+        List<String> insertedUsageIds =
+            Arrays.asList("2ad91b97-5288-47f4-a454-ed3a4388993b", "7c8f870f-97e6-4f9e-a8f8-e4b088dad057");
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
-        expect(usageBatchService.insertAaclBatch(usageBatch, usages)).andReturn(usages).once();
-        usageBatchService.sendForMatching(usages);
+        expect(usageBatchService.insertAaclBatch(usageBatch, usages)).andReturn(insertedUsageIds).once();
+        usageBatchService.sendAaclForMatching(insertedUsageIds, "AACL Batch");
         expectLastCall().once();
         replay(usageBatchService, filterController, filterWidgetMock, researchService);
-        assertEquals(1, controller.loadUsageBatch(usageBatch, usages));
+        assertEquals(2, controller.loadUsageBatch(usageBatch, usages));
         verify(usageBatchService, filterController, filterWidgetMock, researchService);
     }
 

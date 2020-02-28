@@ -72,6 +72,14 @@ public interface IUsageBatchService {
     void sendForMatching(Collection<Usage> usages);
 
     /**
+     * Finds AACL usages by their ids and sends them on queue for PI matching process.
+     *
+     * @param usageIds  collection of {@link Usage} ids
+     * @param batchName batch name
+     */
+    void sendAaclForMatching(Collection<String> usageIds, String batchName);
+
+    /**
      * Sends list of usages on queue for getting Rights process.
      *
      * @param usages    collection of {@link Usage} to be sent
@@ -85,7 +93,7 @@ public interface IUsageBatchService {
      * @param usageIds  collection of {@link Usage} ids
      * @param batchName batch name
      */
-    void getAndSendForGettingRights(List<String> usageIds, String batchName);
+    void sendNtsForGettingRights(List<String> usageIds, String batchName);
 
     /**
      * Inserts usage batch, it's usages and RRO.
@@ -108,11 +116,11 @@ public interface IUsageBatchService {
     /**
      * Inserts AACL batch and its usages.
      *
-     * @param usageBatch {@link UsageBatch} to insert
-     * @param usages     list of {@link Usage}s
-     * @return inserted usages
+     * @param usageBatch     {@link UsageBatch} to insert
+     * @param uploadedUsages list of {@link Usage}s
+     * @return ids of inserted usages
      */
-    Collection<Usage> insertAaclBatch(UsageBatch usageBatch, Collection<Usage> usages);
+    Collection<String> insertAaclBatch(UsageBatch usageBatch, Collection<Usage> uploadedUsages);
 
     /**
      * Deletes given {@link UsageBatch} and all it's usage details.

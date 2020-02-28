@@ -27,6 +27,7 @@ import java.util.Arrays;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+// TODO {srudak} add case with baseline usages
 public class AaclWorkflowIntegrationTest {
 
     private static final String USAGE_ID_1 = "072b4414-74b2-46cc-a69e-4b7f8f7cce5e";
@@ -78,6 +79,7 @@ public class AaclWorkflowIntegrationTest {
         batch.setName("AACL test batch");
         batch.setProductFamily(AACL_PRODUCT_FAMILY);
         batch.setPaymentDate(PAYMENT_DATE);
+        batch.setNumberOfBaselineYears(0);
         return batch;
     }
 

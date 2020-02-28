@@ -32,12 +32,28 @@ public interface IAaclUsageService {
     void insertUsages(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
+     * Inserts AACL usages from baseline.
+     *
+     * @param usageBatch usage batch
+     * @return list of ids of inserted usages
+     */
+    List<String> insertUsagesFromBaseline(UsageBatch usageBatch);
+
+    /**
      * Updates classified AACL usages.
      *
      * @param usages list of {@link AaclClassifiedUsage}s
      * @return count of updated usages
      */
     int updateClassifiedUsages(Collection<AaclClassifiedUsage> usages);
+
+    /**
+     * Gets list of {@link Usage}s by specified {@link Usage} ids.
+     *
+     * @param usageIds list of {@link Usage} ids
+     * @return list of {@link Usage}s
+     */
+    List<Usage> getUsagesByIds(List<String> usageIds);
 
     /**
      * Gets list of AACL {@link UsageDto}s based on applied filter.
