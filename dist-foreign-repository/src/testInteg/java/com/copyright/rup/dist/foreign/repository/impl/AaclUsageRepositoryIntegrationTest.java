@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,8 +37,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -88,6 +92,7 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
+    // TODO {srudak} remove this test case and related files
     public void testInsertBaselineUsage() {
         Usage usageForInsert =
             loadExpectedUsages(Collections.singletonList("json/aacl/aacl_usage_43eea683_for_insert.json")).get(0);
@@ -98,6 +103,19 @@ public class AaclUsageRepositoryIntegrationTest {
             aaclUsageRepository.findByIds(Collections.singletonList("43eea683-ac57-4ff2-ac3a-65d38cd72220"));
         assertEquals(1, actualUsages.size());
         verifyUsage(expectedUsage, actualUsages.get(0));
+    }
+
+    @Test
+    public void testInsertFromBaseline() {
+        List<String> actualIds = aaclUsageRepository.insertFromBaseline(Sets.newHashSet(2019, 2018, 2016),
+            "6e6f656a-e080-4426-b8ea-985b69f8814d", USER_NAME);
+        assertEquals(3, actualIds.size());
+        List<Usage> actualUsages = aaclUsageRepository.findByIds(actualIds).stream()
+            .sorted(Comparator.comparing(usage -> usage.getAaclUsage().getUsagePeriod()))
+            .collect(Collectors.toList());
+        verifyUsages(
+            Arrays.asList("json/aacl/aacl_baseline_usage_819ad2fc.json", "json/aacl/aacl_baseline_usage_5bcb69c5.json",
+                "json/aacl/aacl_baseline_usage_0085ceb9.json"), actualUsages, this::verifyUsageIgnoringId);
     }
 
     @Test
@@ -114,7 +132,8 @@ public class AaclUsageRepositoryIntegrationTest {
         aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
         assertEquals(1, getNumberOfUsagesWithNotEmptyClassificationData());
         verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
-            aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")));
+            aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")),
+            this::verifyUsage);
     }
 
     @Test
@@ -162,7 +181,7 @@ public class AaclUsageRepositoryIntegrationTest {
     public void testFindByIds() {
         List<Usage> actualUsages = aaclUsageRepository.findByIds(Arrays.asList(USAGE_ID_1, USAGE_ID_2));
         verifyUsages(Arrays.asList("json/aacl/aacl_usage_0b5ac9fc.json", "json/aacl/aacl_usage_6c91f04e.json"),
-            actualUsages);
+            actualUsages, this::verifyUsage);
     }
 
     @Test
@@ -196,6 +215,28 @@ public class AaclUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsagePeriod(2018);
         assertEquals(1, aaclUsageRepository.findCountByFilter(usageFilter));
+    }
+
+    @Test
+    public void testFindBaselinePeriodsStartingFromPeriodWithoutUsages() {
+        assertEquals(Collections.singleton(2019), aaclUsageRepository.findBaselinePeriods(2020, 1));
+        assertEquals(Sets.newHashSet(2019, 2018, 2016), aaclUsageRepository.findBaselinePeriods(2020, 3));
+    }
+
+    @Test
+    public void testFindBaselinePeriodsStartingFromPeriodWithUsages() {
+        assertEquals(Collections.singleton(2019), aaclUsageRepository.findBaselinePeriods(2019, 1));
+        assertEquals(Sets.newHashSet(2019, 2018, 2016), aaclUsageRepository.findBaselinePeriods(2019, 3));
+    }
+
+    @Test
+    public void testFindBaselinePeriodsWithNumberOfYearsGreaterThanExist() {
+        assertEquals(Sets.newHashSet(2016, 2015), aaclUsageRepository.findBaselinePeriods(2016, 3));
+    }
+
+    @Test
+    public void testFindBaselinePeriodsWithNonExistentPeriod() {
+        assertEquals(Collections.emptySet(), aaclUsageRepository.findBaselinePeriods(2014, 2));
     }
 
     @Test
@@ -279,15 +320,20 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(2020, usagePeriods.get(2).longValue());
     }
 
-    private void verifyUsages(List<String> usageIds, List<Usage> actualUsages) {
-        List<Usage> expectedUsages = loadExpectedUsages(usageIds);
+    private void verifyUsages(List<String> expectedUsageJsonFiles, List<Usage> actualUsages,
+                              BiConsumer<Usage, Usage> verifier) {
+        List<Usage> expectedUsages = loadExpectedUsages(expectedUsageJsonFiles);
         assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
         IntStream.range(0, expectedUsages.size())
-            .forEach(index -> verifyUsage(expectedUsages.get(index), actualUsages.get(index)));
+            .forEach(index -> verifier.accept(expectedUsages.get(index), actualUsages.get(index)));
     }
 
     private void verifyUsage(Usage expectedUsage, Usage actualUsage) {
         assertEquals(expectedUsage.getId(), actualUsage.getId());
+        verifyUsageIgnoringId(expectedUsage, actualUsage);
+    }
+
+    private void verifyUsageIgnoringId(Usage expectedUsage, Usage actualUsage) {
         assertEquals(expectedUsage.getBatchId(), actualUsage.getBatchId());
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
         assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
@@ -301,8 +347,8 @@ public class AaclUsageRepositoryIntegrationTest {
         verifytAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
     }
 
-    private void verifyUsageDtos(List<String> usageIds, List<UsageDto> actualUsages) {
-        List<UsageDto> expectedUsages = loadExpectedUsageDtos(usageIds);
+    private void verifyUsageDtos(List<String> expectedUsageJsonFiles, List<UsageDto> actualUsages) {
+        List<UsageDto> expectedUsages = loadExpectedUsageDtos(expectedUsageJsonFiles);
         assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
         IntStream.range(0, expectedUsages.size())
             .forEach(index -> verifyUsageDto(expectedUsages.get(index), actualUsages.get(index)));
