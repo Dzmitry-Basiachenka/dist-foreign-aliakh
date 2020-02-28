@@ -70,10 +70,15 @@ public class WorkMatchingService implements IWorkMatchingService {
         Work work = doMatchByTitle(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
             usageService.updateProcessedUsage(usage);
-            String searchParameter = work.isHostIdnoFlag() ? "host IDNO" : "title";
-            auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                String.format("Wr Wrk Inst %s was found by %s \"%s\"", usage.getWrWrkInst(), searchParameter,
-                    usage.getWorkTitle()));
+            if (work.isHostIdnoFlag()) {
+                auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                    String.format("Wr Wrk Inst %s was found by host IDNO %s", usage.getWrWrkInst(),
+                        usage.getStandardNumber()));
+            } else {
+                auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                    String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
+                        usage.getWorkTitle()));
+            }
         } else {
             updateUsagesStatusAndWriteAudit(usage, work, UsageGroupEnum.TITLE,
                 usageRepository.getTotalAmountByTitleAndBatchId(usage.getWorkTitle(), usage.getBatchId()));
@@ -109,7 +114,7 @@ public class WorkMatchingService implements IWorkMatchingService {
         Work work = piIntegrationService.findWorkByTitle(usage.getWorkTitle());
         if (Objects.nonNull(work.getWrWrkInst())) {
             usage.setWrWrkInst(work.getWrWrkInst());
-            usage.setSystemTitle(usage.getWorkTitle());
+            usage.setSystemTitle(work.getMainTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
             usage.setStandardNumberType(StringUtils.upperCase(work.getMainIdnoType()));
             usage.setStandardNumber(work.getMainIdno());

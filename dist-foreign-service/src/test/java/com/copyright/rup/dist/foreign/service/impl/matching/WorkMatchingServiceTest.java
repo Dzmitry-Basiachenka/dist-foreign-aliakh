@@ -37,6 +37,7 @@ public class WorkMatchingServiceTest {
 
     private static final String STANDARD_NUMBER = "000043122-1";
     private static final String TITLE = "The theological roots of Pentecostalism";
+    private static final String VALISSN = "VALISSN";
     private IPiIntegrationService piIntegrationService;
     private WorkMatchingService workMatchingService;
     private IUsageRepository usageRepository;
@@ -58,6 +59,25 @@ public class WorkMatchingServiceTest {
 
     @Test
     public void testMatchByIdno() {
+        Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
+        Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, "valisbn10");
+        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, TITLE)).andReturn(work).once();
+        usageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 112930820 was found by standard number 000043122-1");
+        expectLastCall().once();
+        replay(piIntegrationService, usageRepository, auditService, usageService);
+        workMatchingService.matchByIdno(usage);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals("VALISBN10", usage.getStandardNumberType());
+        assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        verify(piIntegrationService, usageRepository, auditService, usageService);
+    }
+
+    @Test
+    public void testMatchStandardNumberByHostIdno() {
         Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
         Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, "valisbn10");
         work.setHostIdnoFlag(true);
@@ -102,7 +122,7 @@ public class WorkMatchingServiceTest {
     public void testMatchByTitle() {
         Usage usage = buildUsage(null, TITLE);
         expect(piIntegrationService.findWorkByTitle(TITLE))
-            .andReturn(new Work(112930820L, TITLE, STANDARD_NUMBER, "valissn")).once();
+            .andReturn(new Work(112930820L, TITLE, STANDARD_NUMBER, VALISSN)).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
@@ -112,8 +132,28 @@ public class WorkMatchingServiceTest {
         workMatchingService.matchByTitle(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
-        assertEquals("VALISSN", usage.getStandardNumberType());
+        assertEquals(VALISSN, usage.getStandardNumberType());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
+        verify(piIntegrationService, usageRepository, auditService);
+    }
+
+    @Test
+    public void testMatchTitleByHostIdno() {
+        Usage usage = buildUsage(null, TITLE);
+        Work work = new Work(112930820L, TITLE, "00485772", VALISSN);
+        work.setHostIdnoFlag(true);
+        expect(piIntegrationService.findWorkByTitle(TITLE)).andReturn(work).once();
+        usageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 112930820 was found by host IDNO 00485772");
+        expectLastCall().once();
+        replay(piIntegrationService, usageRepository, auditService);
+        workMatchingService.matchByTitle(usage);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        assertEquals(VALISSN, usage.getStandardNumberType());
+        assertEquals("00485772", usage.getStandardNumber());
         verify(piIntegrationService, usageRepository, auditService);
     }
 
@@ -121,7 +161,7 @@ public class WorkMatchingServiceTest {
     public void testMatchByWrWrkInst() {
         Usage usage = buildUsage(112930820L);
         expect(piIntegrationService.findWorkByWrWrkInst(112930820L))
-            .andReturn(new Work(112930820L, TITLE, STANDARD_NUMBER, "valissn")).once();
+            .andReturn(new Work(112930820L, TITLE, STANDARD_NUMBER, VALISSN)).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 112930820 was found in PI");
@@ -132,7 +172,7 @@ public class WorkMatchingServiceTest {
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         assertEquals(TITLE, usage.getSystemTitle());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
-        assertEquals("VALISSN", usage.getStandardNumberType());
+        assertEquals(VALISSN, usage.getStandardNumberType());
         verify(piIntegrationService, usageRepository, auditService);
     }
 
