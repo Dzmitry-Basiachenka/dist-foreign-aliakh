@@ -1,3 +1,12 @@
+9.1.4
+-
+* B-52332 FDA: Add baseline usage details to usage batch: add original_publication_type column to df_usage_aacl
+* B-52332 FDA: Add baseline usage details to usage batch: adjust AACL usage inserting so baseline usage fields are considered, change detailLicenseeClassId field type to Integer in AaclUsage
+* B-52332 FDA: Add baseline usage details to usage batch: use PublicationType entity instead of string value in AaclUsage
+* B-523332 FDA: Add baseline usage details to usage batch: add Number of Baseline Years columns to the view AACL batch modal window
+* B-523332 FDA: Add baseline usage details to usage batch: add Number of Baseline Years field into modal window and adjust completed message
+* B-56530 FDA: Avoid matching to article or chapter level works: adjust audit records for usages matched by host idnos
+
 9.1.3
 -
 * B-52332 FDA: Add baseline usage details to usage batch: add baseline_years column into df_usage_batch
