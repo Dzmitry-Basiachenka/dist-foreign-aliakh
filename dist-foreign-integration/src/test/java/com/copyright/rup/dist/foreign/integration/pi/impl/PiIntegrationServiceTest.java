@@ -109,8 +109,9 @@ public class PiIntegrationServiceTest {
         expectSearchHitSource(searchHit2, SEARCH_HIT_2);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(2);
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2);
-        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10),
-            piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
+        Work work = new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10);
+        work.setHostIdnoFlag(true);
+        assertEquals(work, piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2);
     }
 
@@ -128,7 +129,7 @@ public class PiIntegrationServiceTest {
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
         Work expectedResult = new Work();
         expectedResult.setMultipleMatches(true);
-        expectedResult.setHostIdnoFlag(true);
+        expectedResult.setHostIdnoFlag(false);
         assertEquals(expectedResult, piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
     }

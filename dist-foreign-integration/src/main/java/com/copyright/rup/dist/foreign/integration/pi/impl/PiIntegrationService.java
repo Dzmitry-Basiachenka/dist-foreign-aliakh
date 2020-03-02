@@ -139,7 +139,6 @@ public class PiIntegrationService implements IPiIntegrationService {
     private Work matchByIdnoAndTitle(String idno, String title, boolean isHostIdno) {
         List<RupSearchHit> searchHits = doSearch("idno", idno).getResults().getHits();
         Work result = new Work();
-        result.setHostIdnoFlag(isHostIdno);
         if (CollectionUtils.isNotEmpty(searchHits)) {
             if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
                 result = searchByHostIdnoIfExists(searchHits, idno, IDNO, isHostIdno);
@@ -180,13 +179,12 @@ public class PiIntegrationService implements IPiIntegrationService {
     private Work searchByHostIdnoIfExists(List<RupSearchHit> searchHits, String parameter, Object value,
                                           boolean isHostIdno) {
         Work result = new Work();
-        result.setHostIdnoFlag(isHostIdno);
         if (isHostIdno) {
-            result = parseWorkFromSearchHit(searchHits, parameter, value);
+            result = parseWorkFromSearchHit(searchHits, parameter, value, true);
         } else {
             List<Object> hostIdnos = searchHits.get(0).getFields().get(HOST_IDNO);
             if (Objects.isNull(hostIdnos)) {
-                result = parseWorkFromSearchHit(searchHits, parameter, value);
+                result = parseWorkFromSearchHit(searchHits, parameter, value, false);
             } else if (EXPECTED_HOST_INDOS_COUNT == hostIdnos.size()) {
                 result = findWorkByIdnoAndTitle(hostIdnos.get(0).toString(), null, true);
             } else {
@@ -201,14 +199,16 @@ public class PiIntegrationService implements IPiIntegrationService {
     private Work findByWrWrkInst(Object value) {
         List<RupSearchHit> searchHits = doSearch("wrWrkInst", value).getResults().getHits();
         return EXPECTED_SEARCH_HITS_COUNT == searchHits.size()
-            ? parseWorkFromSearchHit(searchHits, "wrWrkInst", value)
+            ? parseWorkFromSearchHit(searchHits, "wrWrkInst", value, false)
             : null;
     }
 
-    private Work parseWorkFromSearchHit(List<RupSearchHit> searchHits, String parameter, Object value) {
+    private Work parseWorkFromSearchHit(List<RupSearchHit> searchHits, String parameter, Object value,
+                                        boolean isHostIdno) {
         try {
             String source = searchHits.get(0).getSource();
             Work result = mapper.readValue(source, Work.class);
+            result.setHostIdnoFlag(isHostIdno);
             LOGGER.trace("Search works. By {}. ParameterValue={}, Hit={}", parameter, value, source);
             return result;
         } catch (IOException e) {
