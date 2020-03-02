@@ -1,3 +1,12 @@
+9.1.5
+-
+* B-52332 FDA: Add baseline usage details to usage batch: adjust chain processing to make RH_FOUND usages from baseline ELIGIBLE
+* B-52332 FDA: Add baseline usage details to usage batch: implement repository logic for pulling usages from baseline
+* B-52332 FDA: Add baseline usage details to usage batch: resolve issue related to parse number of baseline years value
+* B-57437 FDA: Tech Debt: make Usage Batch name unique across product family
+* B-57437 FDA: Tech Debt: make Usage Batch name unique across product family
+* CDP-892 FDA: PI Matching: System Title is not updated to actual one in case pi matching is performed by Title only and HostIdno was returned
+
 9.1.4
 -
 * B-52332 FDA: Add baseline usage details to usage batch: add original_publication_type column to df_usage_aacl
