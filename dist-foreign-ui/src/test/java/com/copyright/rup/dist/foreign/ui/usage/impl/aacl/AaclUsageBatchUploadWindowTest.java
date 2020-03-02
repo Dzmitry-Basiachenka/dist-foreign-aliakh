@@ -146,9 +146,9 @@ public class AaclUsageBatchUploadWindowTest {
         window = createPartialMock(AaclUsageBatchUploadWindow.class, "isValid");
         Whitebox.setInternalState(window, "usagesController", usagesController);
         Whitebox.setInternalState(window, "uploadField", uploadField);
-        Whitebox.setInternalState(window, USAGE_BATCH_NAME_FIELD, new TextField("Usage Batch Name", USAGE_BATCH_NAME));
+        Whitebox.setInternalState(window, USAGE_BATCH_NAME_FIELD, new TextField(" Usage Batch Name", USAGE_BATCH_NAME));
         Whitebox.setInternalState(window, PERIOD_END_DATE_FIELD, new TextField("Period End Date", "2019"));
-        Whitebox.setInternalState(window, NUMBER_OF_BASELINE_YEARS, new TextField("Number of Baseline Years", "0"));
+        Whitebox.setInternalState(window, NUMBER_OF_BASELINE_YEARS, new TextField("Number of Baseline Years", " 0 "));
         expect(window.isValid()).andReturn(true).once();
         expect(uploadField.getValue()).andReturn("file.csv");
         expect(usagesController.getCsvProcessor()).andReturn(processor).once();
