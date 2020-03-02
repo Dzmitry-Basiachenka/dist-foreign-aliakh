@@ -214,7 +214,7 @@ public class AaclUsageBatchUploadWindow extends Window {
         usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
         usageBatch.setProductFamily(FdaConstants.AACL_PRODUCT_FAMILY);
         usageBatch.setPaymentDate(convertYearToDate(periodEndDateField.getValue()));
-        usageBatch.setNumberOfBaselineYears(Integer.parseInt(numberOfBaselineYears.getValue()));
+        usageBatch.setNumberOfBaselineYears(Integer.parseInt(StringUtils.trim(numberOfBaselineYears.getValue())));
         return usageBatch;
     }
 
