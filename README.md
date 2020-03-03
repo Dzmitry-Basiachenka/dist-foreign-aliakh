@@ -1,3 +1,7 @@
+9.1.6
+-
+* B-52332 FDA: Add baseline usage details to usage batch: adjust AACL batch insertion logic to pull usages from baseline
+
 9.1.5
 -
 * B-52332 FDA: Add baseline usage details to usage batch: adjust chain processing to make RH_FOUND usages from baseline ELIGIBLE
