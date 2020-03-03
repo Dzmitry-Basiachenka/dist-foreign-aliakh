@@ -55,6 +55,8 @@
 
     <bean id="usageBatchService" class="com.copyright.rup.dist.foreign.service.impl.mock.UsageBatchServiceMock"/>
 
+    <bean id="aaclUsageService" class="com.copyright.rup.dist.foreign.service.impl.mock.AaclUsageServiceMock"/>
+
     <bean id="rightsholderRepository" class="com.copyright.rup.dist.foreign.repository.impl.RightsholderRepository"/>
 
     <bean id="rightsholderService" class="com.copyright.rup.dist.foreign.service.impl.mock.RightsholderServiceMock">
