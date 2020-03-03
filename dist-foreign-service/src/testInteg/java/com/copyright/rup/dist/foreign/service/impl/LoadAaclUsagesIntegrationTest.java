@@ -57,6 +57,7 @@ import java.util.stream.Collectors;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+// TODO {srudak} add case with baseline usages
 public class LoadAaclUsagesIntegrationTest {
 
     private static final String USAGE_ID_1 = "3e9566e6-5cb9-4013-88ef-d4f8b66bda5d";
@@ -110,9 +111,9 @@ public class LoadAaclUsagesIntegrationTest {
         assertTrue(result.isSuccessful());
         List<Usage> usages = result.get();
         setPredefinedUsageIds(usages);
-        Collection<Usage> insertedUsages = usageBatchService.insertAaclBatch(batch, usages);
-        assertEquals(4, insertedUsages.size());
-        usageBatchService.sendForMatching(usages);
+        Collection<String> insertedUsageIds = usageBatchService.insertAaclBatch(batch, usages);
+        assertEquals(4, insertedUsageIds.size());
+        usageBatchService.sendAaclForMatching(insertedUsageIds, batch.getName());
     }
 
     private UsageBatch buildUsageBatch() {
@@ -120,6 +121,7 @@ public class LoadAaclUsagesIntegrationTest {
         batch.setName("AACL test batch");
         batch.setProductFamily(AACL_PRODUCT_FAMILY);
         batch.setPaymentDate(PAYMENT_DATE);
+        batch.setNumberOfBaselineYears(0);
         return batch;
     }
 

@@ -63,6 +63,7 @@ public class CommonUsageDeserializer extends JsonDeserializer<Usage> {
             usage.setAaclUsage(new AaclUsage());
             usage.getAaclUsage()
                 .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get("batch_period_end_date")));
+            usage.getAaclUsage().setBaselineFlag(JsonUtils.getBooleanValue(jsonNode.get("baseline_flag")));
         }
         usage.setVersion(JsonUtils.getIntegerValue(jsonNode.get("record_version")));
         return usage;

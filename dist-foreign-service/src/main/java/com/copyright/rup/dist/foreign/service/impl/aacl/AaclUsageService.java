@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +43,10 @@ import java.util.stream.Collectors;
 @Service
 public class AaclUsageService implements IAaclUsageService {
 
+    private static final String INSERT_BASELINE_FINISHED_LOG_MESSAGE_FORMAT = "Insert AACL usages from baseline. " +
+        "Finished. UsageBatchName={}, Period={}, NumberOfYears={}, UsagesCount={}, UserName={}";
+    private static final String INSERT_BASELINE_SKIPPED_LOG_MESSAGE_FORMAT = "Insert AACL usages from baseline. " +
+        "Skipped. Reason=No usages to pull, UsageBatchName={}, Period={}, NumberOfYears={}, UserName={}";
     private static final String DISQUALIFIED_USAGE = "disqualified";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -70,6 +77,30 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    public List<String> insertUsagesFromBaseline(UsageBatch usageBatch) {
+        String userName = RupContextUtils.getUserName();
+        int period = usageBatch.getPaymentDate().getYear();
+        int numberOfYears = Objects.requireNonNull(usageBatch.getNumberOfBaselineYears());
+        LOGGER.info(
+            "Insert AACL usages from baseline. Started. UsageBatchName={}, Period={}, NumberOfYears={}, UserName={}",
+            usageBatch.getName(), period, numberOfYears, userName);
+        Set<Integer> baselinePeriods = aaclUsageRepository.findBaselinePeriods(period, numberOfYears);
+        List<String> usageIds;
+        if (CollectionUtils.isNotEmpty(baselinePeriods)) {
+            usageIds = aaclUsageRepository.insertFromBaseline(baselinePeriods, usageBatch.getId(), userName);
+            usageAuditService.logAction(new HashSet<>(usageIds), UsageActionTypeEnum.LOADED,
+                "Pulled from baseline for '" + usageBatch.getName() + "' Batch");
+            LOGGER.info(INSERT_BASELINE_FINISHED_LOG_MESSAGE_FORMAT,
+                usageBatch.getName(), period, numberOfYears, LogUtils.size(usageIds), userName);
+        } else {
+            usageIds = Collections.emptyList();
+            LOGGER.info(INSERT_BASELINE_SKIPPED_LOG_MESSAGE_FORMAT,
+                usageBatch.getName(), period, numberOfYears, userName);
+        }
+        return usageIds;
+    }
+
+    @Override
     @Transactional
     public int updateClassifiedUsages(Collection<AaclClassifiedUsage> usages) {
         String userName = RupContextUtils.getUserName();
@@ -91,6 +122,13 @@ public class AaclUsageService implements IAaclUsageService {
         LOGGER.info("Update Classified AACL usages. Finished. UsagesCount={}, UserName={}, DisqualifiedCount={}",
             updatedCount, userName, disqualifiedCount);
         return updatedCount;
+    }
+
+    @Override
+    public List<Usage> getUsagesByIds(List<String> usageIds) {
+        return CollectionUtils.isNotEmpty(usageIds)
+            ? aaclUsageRepository.findByIds(usageIds)
+            : Collections.emptyList();
     }
 
     @Override

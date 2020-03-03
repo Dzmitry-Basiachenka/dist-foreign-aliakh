@@ -12,5 +12,6 @@
   "status" : "WORK_FOUND",
   "product_family" : "AACL",
   "batch_period_end_date" : "06/30/2019",
+  "baseline_flag" : true,
   "record_version" : 1
 }

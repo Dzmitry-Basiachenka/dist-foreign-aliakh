@@ -94,7 +94,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     public int loadNtsBatch(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         List<String> ntsUsageIds = getUsageBatchService().insertNtsBatch(usageBatch, userName);
-        getUsageBatchService().getAndSendForGettingRights(ntsUsageIds, usageBatch.getName());
+        getUsageBatchService().sendNtsForGettingRights(ntsUsageIds, usageBatch.getName());
         getUsageFilterController().getWidget().clearFilter();
         return CollectionUtils.size(ntsUsageIds);
     }

@@ -38,6 +38,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AaclUsageService}.
@@ -53,7 +54,9 @@ import java.util.List;
 public class AaclUsageServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
+    private static final String BATCH_ID = "eef46972-c381-4cb6-ab0a-c3e537ba708a";
     private static final String USAGE_ID = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
+
     private final AaclUsageService aaclUsageService = new AaclUsageService();
     private IUsageAuditService usageAuditService;
     private IAaclUsageRepository aaclUsageRepository;
@@ -72,28 +75,52 @@ public class AaclUsageServiceTest {
     @Test
     public void testInsertUsages() {
         mockStatic(RupContextUtils.class);
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setName("AACL product family");
-        usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
         Usage usage = new Usage();
         usage.setProductFamily("AACL");
         usage.setAaclUsage(new AaclUsage());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         aaclUsageRepository.insert(usage);
         expectLastCall().once();
-        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED,
-            "Uploaded in 'AACL product family' Batch");
+        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, "Uploaded in 'AACL Batch' Batch");
         expectLastCall().once();
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
-        aaclUsageService.insertUsages(usageBatch, Collections.singleton(usage));
+        aaclUsageService.insertUsages(buildUsageBatch(), Collections.singleton(usage));
+        verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testInsertUsagesFromBaseline() {
+        mockStatic(RupContextUtils.class);
+        Set<Integer> baselinePeriods = Collections.singleton(2019);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(aaclUsageRepository.findBaselinePeriods(2019, 3))
+            .andReturn(baselinePeriods).once();
+        expect(aaclUsageRepository.insertFromBaseline(baselinePeriods, BATCH_ID, USER_NAME))
+            .andReturn(Collections.singletonList(USAGE_ID)).once();
+        usageAuditService.logAction(Collections.singleton(USAGE_ID), UsageActionTypeEnum.LOADED,
+            "Pulled from baseline for 'AACL Batch' Batch");
+        expectLastCall().once();
+        replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
+        assertEquals(Collections.singletonList(USAGE_ID), aaclUsageService.insertUsagesFromBaseline(buildUsageBatch()));
+        verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testInsertUsagesFromBaselineWithNoUsages() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(aaclUsageRepository.findBaselinePeriods(2019, 3))
+            .andReturn(Collections.emptySet()).once();
+        replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
+        assertEquals(Collections.emptyList(), aaclUsageService.insertUsagesFromBaseline(buildUsageBatch()));
         verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
     }
 
     @Test
     public void testUpdateClassifiedUsages() {
         mockStatic(RupContextUtils.class);
-        AaclClassifiedUsage usage1 = buildUsage();
-        AaclClassifiedUsage usage2 = buildUsage();
+        AaclClassifiedUsage usage1 = buildClassifiedUsage();
+        AaclClassifiedUsage usage2 = buildClassifiedUsage();
         usage2.setPublicationType("disqualified");
         usage2.setDetailId(USAGE_ID);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
@@ -153,6 +180,23 @@ public class AaclUsageServiceTest {
     }
 
     @Test
+    public void testGetUsagesByIds() {
+        List<String> usageIds = Collections.singletonList(USAGE_ID);
+        List<Usage> usages = Collections.singletonList(new Usage());
+        expect(aaclUsageRepository.findByIds(usageIds)).andReturn(usages).once();
+        replay(aaclUsageRepository);
+        assertEquals(usages, aaclUsageService.getUsagesByIds(usageIds));
+        verify(aaclUsageRepository);
+    }
+
+    @Test
+    public void testGetUsagesByIdsWithEmptyUsages() {
+        replay(aaclUsageRepository);
+        assertEquals(Collections.emptyList(), aaclUsageService.getUsagesByIds(Collections.emptyList()));
+        verify(aaclUsageRepository);
+    }
+
+    @Test
     public void testGetUsageDtos() {
         List<UsageDto> usagesWithBatch = Collections.singletonList(new UsageDto());
         Pageable pageable = new Pageable(0, 1);
@@ -197,9 +241,9 @@ public class AaclUsageServiceTest {
 
     @Test
     public void testDeleteUsageBatchDetails() {
-        usageAuditService.deleteActionsByBatchId("0cfcf687-4005-4b4b-bbe1-612cc1a04f0c");
+        usageAuditService.deleteActionsByBatchId(BATCH_ID);
         expectLastCall().once();
-        aaclUsageRepository.deleteByBatchId("0cfcf687-4005-4b4b-bbe1-612cc1a04f0c");
+        aaclUsageRepository.deleteByBatchId(BATCH_ID);
         expectLastCall().once();
         replay(aaclUsageRepository, usageAuditService);
         aaclUsageService.deleteUsageBatchDetails(buildUsageBatch());
@@ -208,12 +252,14 @@ public class AaclUsageServiceTest {
 
     private UsageBatch buildUsageBatch() {
         UsageBatch batch = new UsageBatch();
-        batch.setId("0cfcf687-4005-4b4b-bbe1-612cc1a04f0c");
+        batch.setId(BATCH_ID);
         batch.setName("AACL Batch");
+        batch.setPaymentDate(LocalDate.of(2019, 6, 30));
+        batch.setNumberOfBaselineYears(3);
         return batch;
     }
 
-    private AaclClassifiedUsage buildUsage() {
+    private AaclClassifiedUsage buildClassifiedUsage() {
         AaclClassifiedUsage usage = new AaclClassifiedUsage();
         usage.setDetailId(USAGE_ID);
         usage.setPublicationType("Book");

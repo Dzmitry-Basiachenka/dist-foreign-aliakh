@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -57,10 +58,8 @@ import javax.annotation.PreDestroy;
 @Service
 public class UsageBatchService implements IUsageBatchService {
 
-    private static final String GETTING_RIGHTS_STARTED_LOG = "Sending usages for getting rights. Started. " +
-        "UsageBatchName={}, UsagesCount={}, BatchSize={}";
-    private static final String GETTING_RIGHTS_FINISHED_LOG = "Sending usages for getting rights. Finished. " +
-        "UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}";
+    private static final String GETTING_RIGHTS_FINISHED_LOG =
+        "Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -156,17 +155,24 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public Collection<Usage> insertAaclBatch(UsageBatch usageBatch, Collection<Usage> usages) {
+    // TODO {srudak} refine Collection/Set/List usage
+    public Collection<String> insertAaclBatch(UsageBatch usageBatch, Collection<Usage> uploadedUsages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
         LOGGER.info("Insert AACL batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
-        aaclUsageService.insertUsages(usageBatch, usages);
-        LOGGER.info("Insert AACL batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
-            usageBatch.getName(), userName, LogUtils.size(usages));
-        return usages;
+        aaclUsageService.insertUsages(usageBatch, uploadedUsages);
+        List<String> baselineUsageIds = 0 < Objects.requireNonNull(usageBatch.getNumberOfBaselineYears())
+            ? aaclUsageService.insertUsagesFromBaseline(usageBatch)
+            : Collections.emptyList();
+        LOGGER.info("Insert AACL batch. Finished. UsageBatchName={}, UserName={}, UploadedCount={}, BaselineCount={}",
+            usageBatch.getName(), userName, LogUtils.size(uploadedUsages), LogUtils.size(baselineUsageIds));
+        List<String> uploadedUsageIds = uploadedUsages.stream()
+            .map(Usage::getId)
+            .collect(Collectors.toList());
+        return CollectionUtils.union(uploadedUsageIds, baselineUsageIds);
     }
 
     @Override
@@ -179,9 +185,24 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
+    public void sendAaclForMatching(Collection<String> usageIds, String batchName) {
+        AtomicInteger usageIdsCount = new AtomicInteger(0);
+        executorService.execute(() ->
+            Iterables.partition(usageIds, usagesBatchSize)
+                .forEach(partition -> {
+                    usageIdsCount.addAndGet(partition.size());
+                    LOGGER.info("Send usages for PI matching. Started. UsageBatchName={}, UsagesCount={}", batchName,
+                        usageIdsCount);
+                    chainExecutor.execute(aaclUsageService.getUsagesByIds(partition), ChainProcessorTypeEnum.MATCHING);
+                    LOGGER.info("Send usages for PI matching. Finished. UsageBatchName={}, UsagesCount={}", batchName,
+                        usageIdsCount);
+                }));
+    }
+
+    @Override
     public void sendForGettingRights(Collection<Usage> usages, String batchName) {
         executorService.execute(() -> {
-            LOGGER.info("Sending usages for getting rights. Started. UsageBatchName={}, UsagesCount={}", batchName,
+            LOGGER.info("Send usages for getting rights. Started. UsageBatchName={}, UsagesCount={}", batchName,
                 LogUtils.size(usages));
             List<Usage> workFoundUsages =
                 usages.stream()
@@ -193,19 +214,20 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public void getAndSendForGettingRights(List<String> usageIds, String batchName) {
+    public void sendNtsForGettingRights(List<String> usageIds, String batchName) {
         AtomicInteger usageIdsCount = new AtomicInteger(0);
         executorService.execute(() ->
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> {
                     usageIdsCount.addAndGet(partition.size());
-                    LOGGER.info(GETTING_RIGHTS_STARTED_LOG, batchName, usageIdsCount, usagesBatchSize);
+                    LOGGER.info("Send usages for getting rights. Started. UsageBatchName={}, UsagesCount={}",
+                        batchName, usageIdsCount);
                     List<Usage> workFoundUsages = usageService.getUsagesByIds(partition)
                         .stream()
                         .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                         .collect(Collectors.toList());
                     chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
-                    LOGGER.info(GETTING_RIGHTS_FINISHED_LOG, batchName, usageIdsCount, usagesBatchSize);
+                    LOGGER.info(GETTING_RIGHTS_FINISHED_LOG, batchName, usageIdsCount, LogUtils.size(workFoundUsages));
                 }));
     }
 
