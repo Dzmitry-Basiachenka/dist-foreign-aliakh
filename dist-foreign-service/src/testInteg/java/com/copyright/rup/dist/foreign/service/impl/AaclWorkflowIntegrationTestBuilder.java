@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -32,13 +33,13 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -53,11 +54,11 @@ import java.util.stream.Collectors;
 @Component
 public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
-    private final Map<String, List<UsageAuditItem>> expectedUsageIdToAuditMap = Maps.newHashMap();
+    private final Map<String, List<UsageAuditItem>> expectedUsageCommentToAuditMap = Maps.newHashMap();
     private final Map<String, String> expectedRmsRequestsToResponses = new LinkedHashMap<>();
-    private List<String> predefinedUsageIds;
     private Long expectedPrmAccountNumber;
     private String expectedPrmResponse;
+    private int expectedUploadedCount;
     private String usagesCsvFile;
     private String productFamily;
     private UsageBatch usageBatch;
@@ -72,9 +73,9 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private ServiceTestHelper testHelper;
 
-    AaclWorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
+    AaclWorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, int expectedCount) {
         this.usagesCsvFile = csvFile;
-        this.predefinedUsageIds = Arrays.asList(usageIds);
+        this.expectedUploadedCount = expectedCount;
         return this;
     }
 
@@ -93,8 +94,8 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    AaclWorkflowIntegrationTestBuilder expectUsageAudit(String usageId, List<UsageAuditItem> usageAudit) {
-        this.expectedUsageIdToAuditMap.put(usageId, usageAudit);
+    AaclWorkflowIntegrationTestBuilder expectUsageAudit(String usageComment, List<UsageAuditItem> usageAudit) {
+        this.expectedUsageCommentToAuditMap.put(usageComment, usageAudit);
         return this;
     }
 
@@ -110,7 +111,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     void reset() {
-        expectedUsageIdToAuditMap.clear();
+        expectedUsageCommentToAuditMap.clear();
         expectedRmsRequestsToResponses.clear();
     }
 
@@ -124,7 +125,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
      */
     public class Runner {
 
-        private List<UsageDto> actualUsages;
+        private Map<String, UsageDto> actualCommentsToUsages;
 
         public void run() throws IOException {
             testHelper.createRestServer();
@@ -134,9 +135,11 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             UsageFilter filter = new UsageFilter();
             filter.setProductFamily(productFamily);
             filter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
-            actualUsages = usageService.getUsageDtos(filter, null, null);
+            actualCommentsToUsages = usageService.getUsageDtos(filter, null, null).stream()
+                .collect(Collectors.toMap(UsageDto::getComment, usageDto -> usageDto));
             verifyUsages();
-            expectedUsageIdToAuditMap.forEach(testHelper::assertAudit);
+            expectedUsageCommentToAuditMap.forEach((comment, expectedAudit) ->
+                testHelper.assertAudit(actualCommentsToUsages.get(comment).getId(), expectedAudit));
             testHelper.verifyRestServer();
         }
 
@@ -145,16 +148,13 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
-            setPredefinedUsageIds(usages);
             Collection<String> insertedUsageIds = usageBatchService.insertAaclBatch(usageBatch, usages);
-            assertEquals(predefinedUsageIds.size(), insertedUsageIds.size());
-            usageBatchService.sendAaclForMatching(insertedUsageIds, usageBatch.getName());
-        }
-
-        // predefined usage ids are used, otherwise during every test run the usage ids will be random
-        private void setPredefinedUsageIds(List<Usage> usages) {
-            AtomicInteger usageId = new AtomicInteger(0);
-            usages.forEach(usage -> usage.setId(predefinedUsageIds.get(usageId.getAndIncrement())));
+            assertEquals(expectedUploadedCount, insertedUsageIds.size());
+            List<String> orderedIds = usageService.getUsagesByIds(new ArrayList<>(insertedUsageIds)).stream()
+                .sorted(Comparator.comparing(Usage::getComment))
+                .map(Usage::getId)
+                .collect(Collectors.toList());
+            usageBatchService.sendAaclForMatching(orderedIds, usageBatch.getName());
         }
 
         private ByteArrayOutputStream getCsvOutputStream() throws IOException {
@@ -166,11 +166,9 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void verifyUsages() throws IOException {
             List<UsageDto> expectedUsages = loadExpectedUsages(expectedUsagesJsonFile);
-            assertEquals(expectedUsages.size(), actualUsages.size());
-            Map<String, UsageDto> actualUsageIdsToUsages = actualUsages.stream()
-                .collect(Collectors.toMap(UsageDto::getId, usageDto -> usageDto));
+            assertEquals(expectedUsages.size(), actualCommentsToUsages.size());
             expectedUsages.forEach(
-                expectedUsage -> assertUsage(expectedUsage, actualUsageIdsToUsages.get(expectedUsage.getId())));
+                expectedUsage -> assertUsage(expectedUsage, actualCommentsToUsages.get(expectedUsage.getComment())));
         }
 
         private List<UsageDto> loadExpectedUsages(String fileName) throws IOException {
@@ -195,20 +193,26 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
             assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
             assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-            AaclUsage expectedAaclUsage = expectedUsage.getAaclUsage();
-            AaclUsage actualAaclUsage = actualUsage.getAaclUsage();
-            assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
+            assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
+        }
+
+        private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
             assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
             assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
             assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
             assertEquals(expectedAaclUsage.getUsagePeriod(), actualAaclUsage.getUsagePeriod());
-            assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
+            assertPublicationType(expectedAaclUsage.getPublicationType(), actualAaclUsage.getPublicationType());
             assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
-            assertEquals(expectedAaclUsage.getPublicationType().getId(), actualAaclUsage.getPublicationType().getId());
-            assertEquals(expectedAaclUsage.getPublicationType().getName(),
-                actualAaclUsage.getPublicationType().getName());
             assertEquals(expectedAaclUsage.getPublicationTypeWeight(), actualAaclUsage.getPublicationTypeWeight());
+            assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
+            assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
             assertEquals(expectedAaclUsage.isBaselineFlag(), actualAaclUsage.isBaselineFlag());
+        }
+
+        private void assertPublicationType(PublicationType expectedPublicationType,
+                                           PublicationType actualPublicationType) {
+            assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
+            assertEquals(expectedPublicationType.getName(), actualPublicationType.getName());
         }
     }
 }

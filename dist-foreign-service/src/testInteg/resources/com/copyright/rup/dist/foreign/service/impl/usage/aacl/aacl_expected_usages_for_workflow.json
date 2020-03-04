@@ -1,6 +1,105 @@
 [
   {
-    "id": "072b4414-74b2-46cc-a69e-4b7f8f7cce5e",
+    "batchName": "AACL test batch",
+    "paymentDate": "2019-06-30",
+    "wrWrkInst": 100009840,
+    "rhAccountNumber": "1000024950",
+    "systemTitle": "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )",
+    "standardNumber": "12345XX-79068",
+    "standardNumberType": "VALISSN",
+    "numberOfCopies": 10,
+    "grossAmount": 0.00,
+    "reportedValue": 0.00,
+    "netAmount": 0.00,
+    "serviceFeeAmount": 0.00,
+    "status": "ELIGIBLE",
+    "productFamily": "AACL",
+    "comment": "AACL baseline usage Comment 1",
+    "aaclUsage": {
+      "institution": "BIOLA UNIVERSITY",
+      "usagePeriod": 2018,
+      "usageSource": "Aug 2018 FR",
+      "batchPeriodEndDate": "2019-06-30",
+      "rightLimitation": "ALL",
+      "numberOfPages": 15,
+      "detailLicenseeClassId": 113,
+      "publicationType": {
+        "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
+        "name": "STMA Journal"
+      },
+      "originalPublicationType": "Textbook",
+      "publicationTypeWeight": 1.71,
+      "discipline": "Life Sciences",
+      "enrollmentProfile": "MU",
+      "baselineFlag": true
+    }
+  },
+  {
+    "batchName": "AACL test batch",
+    "paymentDate": "2019-06-30",
+    "wrWrkInst": 100010768,
+    "rhAccountNumber": "1000024950",
+    "systemTitle": "Reclaiming youth at risk : our hope for the future",
+    "standardNumber": "12345XX-123117",
+    "standardNumberType": "VALISSN",
+    "numberOfCopies": 20,
+    "grossAmount": 0.00,
+    "reportedValue": 0.00,
+    "netAmount": 0.00,
+    "serviceFeeAmount": 0.00,
+    "status": "ELIGIBLE",
+    "productFamily": "AACL",
+    "comment": "AACL baseline usage Comment 2",
+    "aaclUsage": {
+      "institution": "CORNELL UNIVERSITY",
+      "usagePeriod": 2018,
+      "usageSource": "Aug 2018 FR",
+      "batchPeriodEndDate": "2019-06-30",
+      "rightLimitation": "PRINT",
+      "numberOfPages": 25,
+      "detailLicenseeClassId": 195,
+      "publicationType": {
+        "id": "a3dff475-fc06-4d8c-b7cc-f093073ada6f",
+        "name": "News Source"
+      },
+      "originalPublicationType": "Book series",
+      "publicationTypeWeight": 4.29,
+      "discipline": "Medical & Health",
+      "enrollmentProfile": "HGP",
+      "baselineFlag": true
+    }
+  },
+  {
+    "batchName": "AACL test batch",
+    "paymentDate": "2019-06-30",
+    "wrWrkInst": 963852741,
+    "numberOfCopies": 40,
+    "grossAmount": 0.00,
+    "reportedValue": 0.00,
+    "netAmount": 0.00,
+    "serviceFeeAmount": 0.00,
+    "status": "WORK_NOT_FOUND",
+    "productFamily": "AACL",
+    "comment": "AACL baseline usage Comment 4",
+    "aaclUsage": {
+      "institution": "CORNELL UNIVERSITY",
+      "usagePeriod": 2016,
+      "usageSource": "Aug 2016 FR",
+      "batchPeriodEndDate": "2019-06-30",
+      "numberOfPages": 45,
+      "detailLicenseeClassId": 141,
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book"
+      },
+      "originalPublicationType": "Fiction or Poetry",
+      "publicationTypeWeight": 3.50,
+      "discipline": "Education",
+      "enrollmentProfile": "MU",
+      "baselineFlag": true
+    }
+  },
+  {
     "batchName": "AACL test batch",
     "paymentDate": "2019-06-30",
     "wrWrkInst": 100009840,
@@ -27,7 +126,6 @@
     }
   },
   {
-    "id": "5e4ea6e9-83f6-4712-b8ab-b5a5f0eb4a70",
     "batchName": "AACL test batch",
     "paymentDate": "2019-06-30",
     "wrWrkInst": 100010768,
@@ -54,7 +152,6 @@
     }
   },
   {
-    "id": "0e5d1005-df99-419f-96be-e3af89163879",
     "batchName": "AACL test batch",
     "paymentDate": "2019-06-30",
     "wrWrkInst": 963852741,
