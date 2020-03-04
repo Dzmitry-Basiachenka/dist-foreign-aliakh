@@ -72,7 +72,7 @@ public class ClassifiedUsageCsvProcessor extends DistCsvProcessor<AaclClassified
         DETAIL_LICENSEE_CLASS_ID("Detail Licensee Class ID"),
         ENROLLMENT_PROFILE("Enrollment Profile"),
         DISCIPLINE("Discipline"),
-        PUBLICATION_TYPE("Publication Type"),
+        PUBLICATION_TYPE("Pub Type"),
         INSTITUTION("Institution"),
         USAGE_PERIOD("Usage Period"),
         USAGE_SOURCE("Usage Source"),
