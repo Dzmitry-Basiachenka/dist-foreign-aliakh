@@ -272,7 +272,7 @@ public class AaclUsageWidgetTest {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
             "Period End Date", "RH Account #", "RH Name", "Wr Wrk Inst", "System Title", "Standard Number",
-            "Standard Number Type", "Detail Licensee Class ID", "Enrollment Profile", "Discipline", "Publication Type",
+            "Standard Number Type", "Detail Licensee Class ID", "Enrollment Profile", "Discipline", "Pub Type",
             "Institution", "Usage Period", "Usage Source", "Number of Copies", "Number of Pages", "Right Limitation",
             "Comment"), columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid);

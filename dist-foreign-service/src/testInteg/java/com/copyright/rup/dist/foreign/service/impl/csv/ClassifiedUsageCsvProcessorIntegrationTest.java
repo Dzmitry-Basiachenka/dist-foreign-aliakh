@@ -123,7 +123,7 @@ public class ClassifiedUsageCsvProcessorIntegrationTest {
                     "<li>Detail Licensee Class ID</li>" +
                     "<li>Enrollment Profile</li>" +
                     "<li>Discipline</li>" +
-                    "<li>Publication Type</li>" +
+                    "<li>Pub Type</li>" +
                     "<li>Institution</li>" +
                     "<li>Usage Period</li>" +
                     "<li>Usage Source</li>" +

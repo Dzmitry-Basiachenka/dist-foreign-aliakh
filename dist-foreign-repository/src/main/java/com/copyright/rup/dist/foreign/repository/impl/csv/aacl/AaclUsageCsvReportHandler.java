@@ -22,7 +22,7 @@ public class AaclUsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
     private static final List<String> HEADERS =
         Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name", "Period End Date",
             "RH Account #", "RH Name", "Wr Wrk Inst", "System Title", "Standard Number", "Standard Number Type",
-            "Detail Licensee Class ID", "Enrollment Profile", "Discipline", "Publication Type", "Institution",
+            "Detail Licensee Class ID", "Enrollment Profile", "Discipline", "Pub Type", "Institution",
             "Usage Period", "Usage Source", "Number of Copies", "Number of Pages", "Right Limitation", "Comment");
 
     /**
