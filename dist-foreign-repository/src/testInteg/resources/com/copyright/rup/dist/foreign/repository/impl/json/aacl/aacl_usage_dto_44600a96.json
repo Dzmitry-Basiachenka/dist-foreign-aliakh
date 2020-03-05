@@ -13,7 +13,7 @@
       "usageSource": "Feb 2019 TUR",
       "rightLimitation": "PRINT",
       "numberOfPages": 12,
-      "baselineFlag": false
+      "baseline": false
     },
     "rhName": "Georgia State University Business Press [C]",
     "rhAccountNumber": 1000000026,

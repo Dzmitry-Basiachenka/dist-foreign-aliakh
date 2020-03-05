@@ -56,7 +56,7 @@ public class CommonUsageSerializer extends StdSerializer<Usage> {
             writeNotNullField(jsonGenerator, "product_family", usage.getProductFamily());
             if (FdaConstants.AACL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
                 writeNotNullField(jsonGenerator, "batch_period_end_date", usage.getAaclUsage().getBatchPeriodEndDate());
-                jsonGenerator.writeBooleanField("baseline_flag", usage.getAaclUsage().isBaselineFlag());
+                jsonGenerator.writeBooleanField("baseline_flag", usage.getAaclUsage().isBaseline());
             }
             jsonGenerator.writeNumberField("record_version", usage.getVersion());
         }

@@ -381,7 +381,7 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedAaclUsage.getDiscipline(), actualAaclUsage.getDiscipline());
         assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
         assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
-        assertEquals(expectedAaclUsage.isBaselineFlag(), actualAaclUsage.isBaselineFlag());
+        assertEquals(expectedAaclUsage.isBaseline(), actualAaclUsage.isBaseline());
     }
 
     private List<Usage> loadExpectedUsages(List<String> fileNames) {

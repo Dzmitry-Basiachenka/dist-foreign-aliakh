@@ -20,7 +20,7 @@
       },
       "originalPublicationType": "Textbook",
       "publicationTypeWeight": 1.71,
-      "baselineFlag": true
+      "baseline": true
     },
     "comment": "Baseline usage 1"
   }
