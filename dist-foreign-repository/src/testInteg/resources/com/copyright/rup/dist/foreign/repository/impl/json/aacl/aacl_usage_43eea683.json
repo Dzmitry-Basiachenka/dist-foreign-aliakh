@@ -29,7 +29,7 @@
       },
       "originalPublicationType": "Textbook",
       "publicationTypeWeight": 2.51,
-      "baselineFlag": true
+      "baseline": true
     },
     "comment": "Baseline AACL usage"
   }

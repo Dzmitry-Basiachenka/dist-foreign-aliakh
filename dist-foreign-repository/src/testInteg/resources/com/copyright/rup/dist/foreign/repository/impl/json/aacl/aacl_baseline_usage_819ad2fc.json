@@ -20,7 +20,7 @@
       },
       "originalPublicationType": "Scholarly Journal",
       "publicationTypeWeight": 2.00,
-      "baselineFlag": true
+      "baseline": true
     },
     "comment": "Baseline usage 3"
   }

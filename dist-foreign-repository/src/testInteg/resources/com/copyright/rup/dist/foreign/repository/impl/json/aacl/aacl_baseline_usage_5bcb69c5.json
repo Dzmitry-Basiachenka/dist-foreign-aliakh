@@ -20,7 +20,7 @@
       },
       "originalPublicationType": "Book series",
       "publicationTypeWeight": 4.29,
-      "baselineFlag": true
+      "baseline": true
     },
     "comment": "Baseline usage 2"
   }

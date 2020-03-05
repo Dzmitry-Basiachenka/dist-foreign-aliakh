@@ -31,7 +31,7 @@
       "publicationTypeWeight": 1.71,
       "discipline": "Life Sciences",
       "enrollmentProfile": "MU",
-      "baselineFlag": true
+      "baseline": true
     }
   },
   {
@@ -66,7 +66,7 @@
       "publicationTypeWeight": 4.29,
       "discipline": "Medical & Health",
       "enrollmentProfile": "HGP",
-      "baselineFlag": true
+      "baseline": true
     }
   },
   {
@@ -96,7 +96,7 @@
       "publicationTypeWeight": 3.50,
       "discipline": "Education",
       "enrollmentProfile": "MU",
-      "baselineFlag": true
+      "baseline": true
     }
   },
   {
@@ -122,7 +122,7 @@
       "batchPeriodEndDate": "2019-06-30",
       "rightLimitation": "ALL",
       "numberOfPages": 14,
-      "baselineFlag": false
+      "baseline": false
     }
   },
   {
@@ -148,7 +148,7 @@
       "batchPeriodEndDate": "2019-06-30",
       "rightLimitation": "PRINT",
       "numberOfPages": 12,
-      "baselineFlag": false
+      "baseline": false
     }
   },
   {
@@ -169,7 +169,7 @@
       "usageSource": "Feb 2018 TUR",
       "batchPeriodEndDate": "2019-06-30",
       "numberOfPages": 17,
-      "baselineFlag": false
+      "baseline": false
     }
   }
 ]

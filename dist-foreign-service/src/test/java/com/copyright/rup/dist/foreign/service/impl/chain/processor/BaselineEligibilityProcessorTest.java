@@ -72,7 +72,7 @@ public class BaselineEligibilityProcessorTest {
 
     private AaclUsage buildAaclUsage(boolean flag) {
         AaclUsage aaclUsage = new AaclUsage();
-        aaclUsage.setBaselineFlag(flag);
+        aaclUsage.setBaseline(flag);
         return aaclUsage;
     }
 }

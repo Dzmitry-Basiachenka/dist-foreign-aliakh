@@ -37,7 +37,7 @@ public class BaselineEligibilityProcessor extends AbstractUsageChainProcessor {
     @Transactional
     @Profiled(tag = "BaselineEligibilityProcessor.process")
     public void process(Usage usage) {
-        if (usage.getAaclUsage().isBaselineFlag()) {
+        if (usage.getAaclUsage().isBaseline()) {
             LOGGER.trace("Usage Baseline Eligibility processor. Started. UsageId={}", usage.getId());
             usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);
             usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
