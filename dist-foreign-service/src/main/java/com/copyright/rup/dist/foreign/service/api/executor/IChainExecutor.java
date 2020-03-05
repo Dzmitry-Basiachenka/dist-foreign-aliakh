@@ -33,4 +33,11 @@ public interface IChainExecutor<T> {
      * @param type  processor in chain from which execution will be started
      */
     void execute(List<T> items, ChainProcessorTypeEnum type);
+
+    /**
+     * Executes the given command in a {@link ExecutorService}.
+     *
+     * @param command the runnable task
+     */
+    void execute(Runnable command);
 }

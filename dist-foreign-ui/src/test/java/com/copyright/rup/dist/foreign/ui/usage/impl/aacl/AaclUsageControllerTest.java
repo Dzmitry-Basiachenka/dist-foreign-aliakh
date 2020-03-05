@@ -191,7 +191,7 @@ public class AaclUsageControllerTest {
         filterWidgetMock.clearFilter();
         expectLastCall().once();
         expect(usageBatchService.insertAaclBatch(usageBatch, usages)).andReturn(insertedUsageIds).once();
-        usageBatchService.sendAaclForMatching(insertedUsageIds, "AACL Batch");
+        aaclUsageService.sendForMatching(insertedUsageIds, "AACL Batch");
         expectLastCall().once();
         replay(usageBatchService, filterController, filterWidgetMock, researchService);
         assertEquals(2, controller.loadUsageBatch(usageBatch, usages));

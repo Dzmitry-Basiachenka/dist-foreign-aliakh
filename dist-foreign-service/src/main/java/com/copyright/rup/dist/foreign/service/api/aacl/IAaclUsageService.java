@@ -112,4 +112,11 @@ public interface IAaclUsageService {
      */
     void deleteUsageBatchDetails(UsageBatch usageBatch);
 
+    /**
+     * Finds AACL usages by their ids and sends them on queue for PI matching process.
+     *
+     * @param usageIds  list of usages ids
+     * @param batchName batch name
+     */
+    void sendForMatching(List<String> usageIds, String batchName);
 }

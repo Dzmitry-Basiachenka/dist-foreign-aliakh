@@ -27,10 +27,8 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
-import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
-import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -50,7 +48,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
 
 /**
  * Verifies {@link UsageBatchService}.
@@ -82,8 +79,6 @@ public class UsageBatchServiceTest {
     private IFasUsageService fasUsageService;
     private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
-    private IChainExecutor<Usage> chainExecutor;
-    private ExecutorService executorService;
     private IPiIntegrationService piIntegrationService;
 
     @Before
@@ -95,8 +90,6 @@ public class UsageBatchServiceTest {
         fasUsageService = createMock(IFasUsageService.class);
         ntsUsageService = createMock(INtsUsageService.class);
         rightsholderService = createMock(IRightsholderService.class);
-        chainExecutor = createMock(IChainExecutor.class);
-        executorService = createMock(ExecutorService.class);
         piIntegrationService = createMock(IPiIntegrationService.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, piIntegrationService);
@@ -106,9 +99,6 @@ public class UsageBatchServiceTest {
         Whitebox.setInternalState(usageBatchService, fasUsageService);
         Whitebox.setInternalState(usageBatchService, ntsUsageService);
         Whitebox.setInternalState(usageBatchService, rightsholderService);
-        Whitebox.setInternalState(usageBatchService, chainExecutor);
-        Whitebox.setInternalState(usageBatchService, executorService);
-        Whitebox.setInternalState(usageBatchService, "usagesBatchSize", 100);
     }
 
     @Test
@@ -336,72 +326,6 @@ public class UsageBatchServiceTest {
         replay(usageService, usageBatchRepository, RupContextUtils.class);
         usageBatchService.deleteAaclUsageBatch(usageBatch);
         verify(usageService, usageBatchRepository, RupContextUtils.class);
-    }
-
-    @Test
-    public void testSendForMatching() {
-        Capture<Runnable> captureRunnable = new Capture<>();
-        executorService.execute(capture(captureRunnable));
-        expectLastCall().once();
-        replay(chainExecutor, executorService);
-        usageBatchService.sendForMatching(Arrays.asList(new Usage(), new Usage()));
-        assertNotNull(captureRunnable);
-        verify(chainExecutor, executorService);
-    }
-
-    @Test
-    public void testSendAaclForMatching() {
-        List<String> usageIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
-        Usage usage1 = new Usage();
-        usage1.setStatus(UsageStatusEnum.NEW);
-        Usage usage2 = new Usage();
-        usage2.setStatus(UsageStatusEnum.NEW);
-        List<Usage> usages = Arrays.asList(usage1, usage2);
-        expect(aaclUsageService.getUsagesByIds(usageIds)).andReturn(usages).once();
-        Capture<Runnable> captureRunnable = new Capture<>();
-        executorService.execute(capture(captureRunnable));
-        expectLastCall().once();
-        chainExecutor.execute(usages, ChainProcessorTypeEnum.MATCHING);
-        expectLastCall().once();
-        replay(chainExecutor, executorService, aaclUsageService);
-        usageBatchService.sendAaclForMatching(usageIds, BATCH_NAME);
-        assertNotNull(captureRunnable);
-        Runnable runnable = captureRunnable.getValue();
-        runnable.run();
-        verify(chainExecutor, executorService, aaclUsageService);
-    }
-
-    @Test
-    public void testSendForGettingRights() {
-        Capture<Runnable> captureRunnable = new Capture<>();
-        executorService.execute(capture(captureRunnable));
-        expectLastCall().once();
-        replay(chainExecutor, executorService);
-        usageBatchService.sendForGettingRights(Arrays.asList(new Usage(), new Usage()), BATCH_NAME);
-        assertNotNull(captureRunnable);
-        verify(chainExecutor, executorService);
-    }
-
-    @Test
-    public void testSendNtsForGettingRights() {
-        List<String> usageIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
-        Usage usage1 = new Usage();
-        usage1.setStatus(UsageStatusEnum.WORK_FOUND);
-        Usage usage2 = new Usage();
-        usage2.setStatus(UsageStatusEnum.WORK_FOUND);
-        List<Usage> usages = Arrays.asList(usage1, usage2);
-        expect(usageService.getUsagesByIds(usageIds)).andReturn(usages).once();
-        Capture<Runnable> captureRunnable = new Capture<>();
-        executorService.execute(capture(captureRunnable));
-        expectLastCall().once();
-        chainExecutor.execute(usages, ChainProcessorTypeEnum.RIGHTS);
-        expectLastCall().once();
-        replay(chainExecutor, executorService, usageService);
-        usageBatchService.sendNtsForGettingRights(usageIds, BATCH_NAME);
-        assertNotNull(captureRunnable);
-        Runnable runnable = captureRunnable.getValue();
-        runnable.run();
-        verify(chainExecutor, executorService, usageService);
     }
 
     @Test

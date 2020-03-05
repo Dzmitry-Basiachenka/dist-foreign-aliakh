@@ -33,6 +33,8 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -91,6 +93,8 @@ public class UsageService implements IUsageService {
     private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    private IChainExecutor<Usage> chainExecutor;
 
     @Override
     @Transactional
@@ -370,6 +374,30 @@ public class UsageService implements IUsageService {
     public Map<Long, Set<String>> getWrWrkInstToUsageIdsForRightsAssignment(String batchName) {
         return usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus(batchName,
             UsageStatusEnum.RH_NOT_FOUND);
+    }
+
+    @Override
+    public void sendForMatching(List<Usage> usages) {
+        chainExecutor.execute(() -> {
+            List<Usage> usagesInNewStatus =
+                usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
+            chainExecutor.execute(usagesInNewStatus, ChainProcessorTypeEnum.MATCHING);
+        });
+    }
+
+    @Override
+    public void sendForGettingRights(List<Usage> usages, String batchName) {
+        chainExecutor.execute(() -> {
+            LOGGER.info("Send usages for getting rights. Started. UsageBatchName={}, UsagesCount={}", batchName,
+                LogUtils.size(usages));
+            List<Usage> workFoundUsages =
+                usages.stream()
+                    .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
+                    .collect(Collectors.toList());
+            chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
+            LOGGER.info("Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, " +
+                "WorkFoundUsagesCount={}", batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));
+        });
     }
 
     private void populateAccountNumbers(List<PaidUsage> paidUsages) {

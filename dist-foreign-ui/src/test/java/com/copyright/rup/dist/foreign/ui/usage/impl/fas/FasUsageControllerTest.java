@@ -254,9 +254,9 @@ public class FasUsageControllerTest {
         filterWidgetMock.clearFilter();
         expectLastCall().once();
         expect(usageBatchService.insertFasBatch(usageBatch, usages)).andReturn(1).once();
-        usageBatchService.sendForMatching(usages);
+        usageService.sendForMatching(usages);
         expectLastCall().once();
-        usageBatchService.sendForGettingRights(usages, usageBatch.getName());
+        usageService.sendForGettingRights(usages, usageBatch.getName());
         expectLastCall().once();
         replay(usageBatchService, filterController, filterWidgetMock);
         assertEquals(1, controller.loadUsageBatch(usageBatch, usages));

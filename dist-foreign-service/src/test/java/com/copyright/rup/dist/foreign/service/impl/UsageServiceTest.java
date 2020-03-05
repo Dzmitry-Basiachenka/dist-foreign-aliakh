@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -36,12 +37,15 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.StringUtils;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -94,6 +98,7 @@ public class UsageServiceTest {
     private IUsageAuditService usageAuditService;
     private IScenarioAuditService scenarioAuditService;
     private IRightsholderService rightsholderService;
+    private IChainExecutor<Usage> chainExecutor;
     private UsageService usageService;
 
     @Rule
@@ -110,12 +115,14 @@ public class UsageServiceTest {
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
         rightsholderService = createMock(IRightsholderService.class);
+        chainExecutor = createMock(IChainExecutor.class);
         usageService = new UsageService();
         Whitebox.setInternalState(usageService, usageRepository);
         Whitebox.setInternalState(usageService, usageAuditService);
         Whitebox.setInternalState(usageService, usageArchiveRepository);
         Whitebox.setInternalState(usageService, scenarioAuditService);
         Whitebox.setInternalState(usageService, rightsholderService);
+        Whitebox.setInternalState(usageService, chainExecutor);
     }
 
     @Test
@@ -614,6 +621,46 @@ public class UsageServiceTest {
         replay(usageRepository);
         usageService.getWrWrkInstToUsageIdsForRightsAssignment("FAS Distribution 05/07/2018");
         verify(usageRepository);
+    }
+
+    @Test
+    public void testSendForMatching() {
+        Usage usage1 = new Usage();
+        usage1.setStatus(UsageStatusEnum.NEW);
+        Usage usage2 = new Usage();
+        usage2.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
+        Capture<Runnable> captureRunnable = new Capture<>();
+        chainExecutor.execute(capture(captureRunnable));
+        expectLastCall().once();
+        chainExecutor.execute(Arrays.asList(usage1), ChainProcessorTypeEnum.MATCHING);
+        expectLastCall().once();
+        replay(chainExecutor);
+        usageService.sendForMatching(Arrays.asList(usage1, usage2));
+        assertNotNull(captureRunnable);
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        runnable.run();
+        verify(chainExecutor);
+    }
+
+    @Test
+    public void testSendForGettingRights() {
+        Usage usage1 = new Usage();
+        usage1.setStatus(UsageStatusEnum.WORK_FOUND);
+        Usage usage2 = new Usage();
+        usage2.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
+        Capture<Runnable> captureRunnable = new Capture<>();
+        chainExecutor.execute(capture(captureRunnable));
+        expectLastCall().once();
+        chainExecutor.execute(Arrays.asList(usage1), ChainProcessorTypeEnum.RIGHTS);
+        expectLastCall().once();
+        replay(chainExecutor);
+        usageService.sendForGettingRights(Arrays.asList(usage1, usage2), "Batch name");
+        assertNotNull(captureRunnable);
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        runnable.run();
+        verify(chainExecutor);
     }
 
     private void assertResult(List<?> result, int size) {

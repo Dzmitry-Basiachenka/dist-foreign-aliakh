@@ -107,4 +107,12 @@ public interface INtsUsageService {
      * @param userName   user name
      */
     void addWithdrawnUsagesToNtsFundPool(String fundPoolId, Set<String> batchIds, String userName);
+
+    /**
+     * Finds NTS usages by their ids and sends them to queue for getting Rights process.
+     *
+     * @param usageIds  list of usages ids
+     * @param batchName batch name
+     */
+    void sendForGettingRights(List<String> usageIds, String batchName);
 }

@@ -15,11 +15,16 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
+
+import com.google.common.collect.Iterables;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -53,6 +59,10 @@ public class AaclUsageService implements IAaclUsageService {
     private IUsageAuditService usageAuditService;
     @Autowired
     private IAaclUsageRepository aaclUsageRepository;
+    @Autowired
+    private IChainExecutor<Usage> chainExecutor;
+    @Value("$RUP{dist.foreign.usages.batch_size}")
+    private int usagesBatchSize;
 
     @Override
     @Transactional
@@ -176,6 +186,21 @@ public class AaclUsageService implements IAaclUsageService {
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         usageAuditService.deleteActionsByBatchId(usageBatch.getId());
         aaclUsageRepository.deleteByBatchId(usageBatch.getId());
+    }
+
+    @Override
+    public void sendForMatching(List<String> usageIds, String batchName) {
+        AtomicInteger usageIdsCount = new AtomicInteger(0);
+        chainExecutor.execute(() ->
+            Iterables.partition(usageIds, usagesBatchSize)
+                .forEach(partition -> {
+                    usageIdsCount.addAndGet(partition.size());
+                    LOGGER.info("Send usages for PI matching. Started. UsageBatchName={}, UsagesCount={}", batchName,
+                        usageIdsCount);
+                    chainExecutor.execute(getUsagesByIds(partition), ChainProcessorTypeEnum.MATCHING);
+                    LOGGER.info("Send usages for PI matching. Finished. UsageBatchName={}, UsagesCount={}", batchName,
+                        usageIdsCount);
+                }));
     }
 
     private boolean isUsageDisqualified(AaclClassifiedUsage usage) {

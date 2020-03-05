@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.impl.NtsWorkflowIntegrationTestBuilder.Runner;
 
 import com.google.common.collect.ImmutableMap;
@@ -53,6 +54,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IUsageBatchService usageBatchService;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private INtsUsageService ntsUsageService;
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
@@ -210,7 +213,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void loadNtsBatch() {
             actualUsageIds = usageBatchService.insertNtsBatch(usageBatch, RupContextUtils.getUserName());
-            usageBatchService.sendNtsForGettingRights(actualUsageIds, usageBatch.getName());
+            ntsUsageService.sendForGettingRights(actualUsageIds, usageBatch.getName());
         }
 
         private void createScenario() {

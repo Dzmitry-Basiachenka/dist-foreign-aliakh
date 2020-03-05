@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.aacl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -10,6 +11,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -23,8 +25,11 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -58,8 +63,10 @@ public class AaclUsageServiceTest {
     private static final String USAGE_ID = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
 
     private final AaclUsageService aaclUsageService = new AaclUsageService();
+
     private IUsageAuditService usageAuditService;
     private IAaclUsageRepository aaclUsageRepository;
+    private IChainExecutor<Usage> chainExecutor;
 
     @Rule
     private final ExpectedException exception = ExpectedException.none();
@@ -68,8 +75,11 @@ public class AaclUsageServiceTest {
     public void setUp() {
         usageAuditService = createMock(IUsageAuditService.class);
         aaclUsageRepository = createMock(IAaclUsageRepository.class);
+        chainExecutor = createMock(IChainExecutor.class);
         Whitebox.setInternalState(aaclUsageService, usageAuditService);
         Whitebox.setInternalState(aaclUsageService, aaclUsageRepository);
+        Whitebox.setInternalState(aaclUsageService, chainExecutor);
+        Whitebox.setInternalState(aaclUsageService, "usagesBatchSize", 100);
     }
 
     @Test
@@ -248,6 +258,29 @@ public class AaclUsageServiceTest {
         replay(aaclUsageRepository, usageAuditService);
         aaclUsageService.deleteUsageBatchDetails(buildUsageBatch());
         verify(aaclUsageRepository, usageAuditService);
+    }
+
+    @Test
+    public void testSendForMatching() {
+        List<String> usageIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
+        Usage usage1 = new Usage();
+        usage1.setStatus(UsageStatusEnum.NEW);
+        Usage usage2 = new Usage();
+        usage2.setStatus(UsageStatusEnum.NEW);
+        List<Usage> usages = Arrays.asList(usage1, usage2);
+        expect(aaclUsageRepository.findByIds(usageIds)).andReturn(usages).once();
+        Capture<Runnable> captureRunnable = new Capture<>();
+        chainExecutor.execute(capture(captureRunnable));
+        expectLastCall().once();
+        chainExecutor.execute(usages, ChainProcessorTypeEnum.MATCHING);
+        expectLastCall().once();
+        replay(chainExecutor, aaclUsageRepository);
+        aaclUsageService.sendForMatching(usageIds, "Batch name");
+        assertNotNull(captureRunnable);
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        runnable.run();
+        verify(chainExecutor, aaclUsageRepository);
     }
 
     private UsageBatch buildUsageBatch() {

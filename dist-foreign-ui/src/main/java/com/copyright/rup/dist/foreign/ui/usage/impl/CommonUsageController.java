@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
@@ -47,8 +46,6 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     private IUsageBatchService usageBatchService;
     @Autowired
     private IUsageService usageService;
-    @Autowired
-    private INtsUsageService ntsUsageService;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
@@ -158,13 +155,6 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
      */
     protected IUsageService getUsageService() {
         return usageService;
-    }
-
-    /**
-     * @return {@link INtsUsageService} instance.
-     */
-    protected INtsUsageService getNtsUsageService() {
-        return ntsUsageService;
     }
 
     /**

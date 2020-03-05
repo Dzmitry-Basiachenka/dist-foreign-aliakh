@@ -110,7 +110,7 @@ public class LoadAaclUsagesIntegrationTest {
             .sorted(Comparator.comparing(Usage::getComment))
             .map(Usage::getId)
             .collect(Collectors.toList());
-        usageBatchService.sendAaclForMatching(orderedIds, batch.getName());
+        aaclUsageService.sendForMatching(orderedIds, batch.getName());
     }
 
     private UsageBatch buildUsageBatch() {

@@ -53,7 +53,7 @@
     <bean id="dist.common.integration.rest.prmRightsholderOrganizationAsyncService"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PrmRightsholderOrganizationServiceMock"/>
 
-    <bean id="usageBatchService" class="com.copyright.rup.dist.foreign.service.impl.mock.UsageBatchServiceMock"/>
+    <bean id="usageChainExecutor" class="com.copyright.rup.dist.foreign.service.impl.mock.UsageChainExecutorMock"/>
 
     <bean id="aaclUsageService" class="com.copyright.rup.dist.foreign.service.impl.mock.AaclUsageServiceMock"/>
 

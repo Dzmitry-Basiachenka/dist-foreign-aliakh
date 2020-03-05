@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 
@@ -66,6 +67,8 @@ public class LoadFasUsagesIntegrationTest {
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
+    private IUsageService usageService;
+    @Autowired
     private ServiceTestHelper testHelper;
 
     @Test
@@ -117,8 +120,8 @@ public class LoadFasUsagesIntegrationTest {
         setPredefinedUsageIds(usages);
         int usagesInsertedCount = usageBatchService.insertFasBatch(batch, usages);
         assertEquals(4, usagesInsertedCount);
-        usageBatchService.sendForMatching(usages);
-        usageBatchService.sendForGettingRights(usages, batch.getName());
+        usageService.sendForMatching(usages);
+        usageService.sendForGettingRights(usages, batch.getName());
     }
 
     private UsageBatch buildUsageBatch() {

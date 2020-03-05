@@ -83,8 +83,8 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     @Override
     public int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
         int result = getUsageBatchService().insertFasBatch(usageBatch, usages);
-        getUsageBatchService().sendForMatching(usages);
-        getUsageBatchService().sendForGettingRights(usages, usageBatch.getName());
+        getUsageService().sendForMatching(usages);
+        getUsageService().sendForGettingRights(usages, usageBatch.getName());
         getUsageFilterController().getWidget().clearFilter();
         return result;
     }
