@@ -30,7 +30,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -210,7 +209,7 @@ public abstract class CommonScenariosController extends CommonController<ICommon
         builder.append(String.format("<li><b><i>%s </i></b>(%s)</li>", ForeignUi.getMessage(criterionName), values));
     }
 
-    private Collection<String> generateRightsholderList(Map<Long, Rightsholder> rightsholderMap) {
+    private List<String> generateRightsholderList(Map<Long, Rightsholder> rightsholderMap) {
         return rightsholderMap.entrySet().stream().map(entry -> {
             String rightsholderRepresentation = String.valueOf(entry.getKey());
             Rightsholder rightsholder = entry.getValue();

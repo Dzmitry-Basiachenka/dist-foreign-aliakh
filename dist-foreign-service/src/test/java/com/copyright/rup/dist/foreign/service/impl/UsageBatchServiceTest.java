@@ -246,7 +246,7 @@ public class UsageBatchServiceTest {
         expect(aaclUsageService.insertUsagesFromBaseline(usageBatch))
             .andReturn(Collections.singletonList("b3f2727e-b023-49f0-970a-94dd3537ec6e")).once();
         replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
-        assertEquals(Arrays.asList("b3f2727e-b023-49f0-970a-94dd3537ec6e", "8e12b833-af38-4d49-96d0-221d2665f0dc"),
+        assertEquals(Arrays.asList("8e12b833-af38-4d49-96d0-221d2665f0dc", "b3f2727e-b023-49f0-970a-94dd3537ec6e"),
             usageBatchService.insertAaclBatch(usageBatch, uploadedUsages));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
         assertNotNull(insertedUsageBatch.getId());

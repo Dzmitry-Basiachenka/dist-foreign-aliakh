@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -56,7 +55,8 @@ public class AaclUsageService implements IAaclUsageService {
     private IAaclUsageRepository aaclUsageRepository;
 
     @Override
-    public void insertUsages(UsageBatch usageBatch, Collection<Usage> usages) {
+    @Transactional
+    public void insertUsages(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
         LOGGER.info("Insert AACL usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
@@ -77,6 +77,7 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    @Transactional
     public List<String> insertUsagesFromBaseline(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         int period = usageBatch.getPaymentDate().getYear();
@@ -102,7 +103,7 @@ public class AaclUsageService implements IAaclUsageService {
 
     @Override
     @Transactional
-    public int updateClassifiedUsages(Collection<AaclClassifiedUsage> usages) {
+    public int updateClassifiedUsages(List<AaclClassifiedUsage> usages) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Update Classified AACL usages. Started. UsagesCount={}, UserName={}", LogUtils.size(usages),
             userName);

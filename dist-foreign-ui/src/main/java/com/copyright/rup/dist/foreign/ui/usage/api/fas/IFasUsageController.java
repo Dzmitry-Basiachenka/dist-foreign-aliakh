@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProces
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -30,7 +29,7 @@ public interface IFasUsageController extends ICommonUsageController {
      * @param usages     list of {@link Usage}s
      * @return count of inserted usages
      */
-    int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
+    int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages);
 
     /**
      * @return CLA account number.

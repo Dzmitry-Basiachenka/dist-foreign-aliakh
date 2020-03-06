@@ -33,7 +33,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -82,7 +81,7 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     }
 
     @Override
-    public int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
+    public int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
         int result = getUsageBatchService().insertFasBatch(usageBatch, usages);
         getUsageBatchService().sendForMatching(usages);
         getUsageBatchService().sendForGettingRights(usages, usageBatch.getName());

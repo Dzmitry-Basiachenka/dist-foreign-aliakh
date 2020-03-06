@@ -92,20 +92,6 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    // TODO {srudak} remove this test case and related files
-    public void testInsertBaselineUsage() {
-        Usage usageForInsert =
-            loadExpectedUsages(Collections.singletonList("json/aacl/aacl_usage_43eea683_for_insert.json")).get(0);
-        Usage expectedUsage =
-            loadExpectedUsages(Collections.singletonList("json/aacl/aacl_usage_43eea683.json")).get(0);
-        aaclUsageRepository.insert(usageForInsert);
-        List<Usage> actualUsages =
-            aaclUsageRepository.findByIds(Collections.singletonList("43eea683-ac57-4ff2-ac3a-65d38cd72220"));
-        assertEquals(1, actualUsages.size());
-        verifyUsage(expectedUsage, actualUsages.get(0));
-    }
-
-    @Test
     public void testInsertFromBaseline() {
         List<String> actualIds = aaclUsageRepository.insertFromBaseline(Sets.newHashSet(2019, 2018, 2016),
             "6e6f656a-e080-4426-b8ea-985b69f8814d", USER_NAME);

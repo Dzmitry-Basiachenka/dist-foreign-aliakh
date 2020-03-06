@@ -84,7 +84,7 @@ public class AaclUsageServiceTest {
         usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, "Uploaded in 'AACL Batch' Batch");
         expectLastCall().once();
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
-        aaclUsageService.insertUsages(buildUsageBatch(), Collections.singleton(usage));
+        aaclUsageService.insertUsages(buildUsageBatch(), Collections.singletonList(usage));
         verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
     }
 

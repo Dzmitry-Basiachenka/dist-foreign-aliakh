@@ -269,11 +269,6 @@
             usage_source,
             number_of_pages,
             right_limitation,
-            detail_licensee_class_id,
-            original_publication_type,
-            publication_type_uid,
-            publication_type_weight,
-            is_baseline_flag,
             <include refid="StoredEntityMapper.additionalColumns"/>
         )
         values (
@@ -283,11 +278,6 @@
             #{aaclUsage.usageSource},
             #{aaclUsage.numberOfPages},
             #{aaclUsage.rightLimitation},
-            #{aaclUsage.detailLicenseeClassId},
-            #{aaclUsage.originalPublicationType},
-            #{aaclUsage.publicationType.id},
-            #{aaclUsage.publicationTypeWeight},
-            #{aaclUsage.baseline},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
@@ -428,7 +418,7 @@
         from ${schema}.df_usage_baseline_aacl
         where <![CDATA[usage_period <= #{startPeriod}]]>
         order by usage_period desc
-        limit #{numberOfPriorYears}
+        limit #{numberOfBaselineYears}
     </select>
 
     <select id="findUsagePeriods" resultType="int">

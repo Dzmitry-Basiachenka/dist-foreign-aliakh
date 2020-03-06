@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +31,7 @@ public interface IFasUsageService {
      * @param usages     list of {@link Usage}s
      * @return count of inserted usages
      */
-    int insertUsages(UsageBatch usageBatch, Collection<Usage> usages);
+    int insertUsages(UsageBatch usageBatch, List<Usage> usages);
 
     /**
      * Gets list of {@link UsageDto}s based on applied filter.

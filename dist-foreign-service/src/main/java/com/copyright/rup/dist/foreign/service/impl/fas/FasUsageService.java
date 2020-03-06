@@ -40,7 +40,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +87,7 @@ public class FasUsageService implements IFasUsageService {
     private IRightsholderService rightsholderService;
 
     @Override
-    public int insertUsages(UsageBatch usageBatch, Collection<Usage> usages) {
+    public int insertUsages(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
         LOGGER.info("Insert usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
@@ -270,7 +269,7 @@ public class FasUsageService implements IFasUsageService {
         return claAccountNumber;
     }
 
-    private void populateTitlesStandardNumberAndType(Collection<ResearchedUsage> researchedUsages) {
+    private void populateTitlesStandardNumberAndType(List<ResearchedUsage> researchedUsages) {
         researchedUsages.forEach(researchedUsage -> {
             Work work = piIntegrationService.findWorkByWrWrkInst(researchedUsage.getWrWrkInst());
             researchedUsage.setStandardNumberType(work.getMainIdnoType());
@@ -318,7 +317,7 @@ public class FasUsageService implements IFasUsageService {
         usage.setPayeeParticipating(payeeParticipating);
     }
 
-    private void calculateUsagesGrossAmount(UsageBatch usageBatch, Collection<Usage> usages) {
+    private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {
         BigDecimal fundPoolAmount = usageBatch.getGrossAmount();
         BigDecimal totalAmount = usages.stream().map(Usage::getReportedValue).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal conversionRate = CalculationUtils.calculateConversionRate(fundPoolAmount, totalAmount);

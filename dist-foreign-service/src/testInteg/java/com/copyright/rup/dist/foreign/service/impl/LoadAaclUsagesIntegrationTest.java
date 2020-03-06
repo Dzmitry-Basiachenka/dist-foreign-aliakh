@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -105,9 +104,9 @@ public class LoadAaclUsagesIntegrationTest {
         ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
         assertTrue(result.isSuccessful());
         List<Usage> usages = result.get();
-        Collection<String> insertedUsageIds = usageBatchService.insertAaclBatch(batch, usages);
+        List<String> insertedUsageIds = usageBatchService.insertAaclBatch(batch, usages);
         assertEquals(8, insertedUsageIds.size());
-        List<String> orderedIds = aaclUsageService.getUsagesByIds(new ArrayList<>(insertedUsageIds)).stream()
+        List<String> orderedIds = aaclUsageService.getUsagesByIds(insertedUsageIds).stream()
             .sorted(Comparator.comparing(Usage::getComment))
             .map(Usage::getId)
             .collect(Collectors.toList());

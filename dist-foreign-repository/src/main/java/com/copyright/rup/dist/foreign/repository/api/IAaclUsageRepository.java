@@ -65,11 +65,11 @@ public interface IAaclUsageRepository {
     /**
      * Finds baseline periods.
      *
-     * @param startPeriod        period to start from
-     * @param numberOfPriorYears number of prior years
+     * @param startPeriod           period to start from
+     * @param numberOfBaselineYears number of baseline years
      * @return set of baseline periods
      */
-    Set<Integer> findBaselinePeriods(int startPeriod, int numberOfPriorYears);
+    Set<Integer> findBaselinePeriods(int startPeriod, int numberOfBaselineYears);
 
     /**
      * Finds list of AACL {@link Usage}s by their ids.
