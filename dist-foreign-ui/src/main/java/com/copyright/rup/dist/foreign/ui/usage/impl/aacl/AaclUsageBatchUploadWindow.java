@@ -197,7 +197,7 @@ public class AaclUsageBatchUploadWindow extends Window {
     }
 
     private void initNumberOfBaselineYearsFields() {
-        numberOfBaselineYears = new TextField(ForeignUi.getMessage("label.usage_number_of_baseline_years"));
+        numberOfBaselineYears = new TextField(ForeignUi.getMessage("label.number_of_baseline_years"));
         numberOfBaselineYears.setRequiredIndicatorVisible(true);
         binder.forField(numberOfBaselineYears)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
@@ -205,7 +205,7 @@ public class AaclUsageBatchUploadWindow extends Window {
                 StringUtils.trim(value)) >= 0, "Field value should contain positive numeric values only")
             .withConverter(new StringToIntegerConverter("Field value can not be converted"))
             .bind(UsageBatch::getNumberOfBaselineYears, UsageBatch::setNumberOfBaselineYears);
-        VaadinUtils.addComponentStyle(numberOfBaselineYears, "number_of_baseline_usages");
+        VaadinUtils.addComponentStyle(numberOfBaselineYears, "number-of-baseline-years-field");
         numberOfBaselineYears.setWidth(100, Unit.PERCENTAGE);
     }
 

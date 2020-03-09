@@ -113,10 +113,10 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
-    public Set<Integer> findBaselinePeriods(int startPeriod, int numberOfPriorYears) {
+    public Set<Integer> findBaselinePeriods(int startPeriod, int numberOfBaselineYears) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("startPeriod", startPeriod);
-        parameters.put("numberOfPriorYears", numberOfPriorYears);
+        parameters.put("numberOfBaselineYears", numberOfBaselineYears);
         return new HashSet<>(selectList("IAaclUsageMapper.findBaselinePeriods", parameters));
     }
 

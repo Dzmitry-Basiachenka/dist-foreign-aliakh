@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -29,7 +28,7 @@ public interface IAaclUsageService {
      * @param usageBatch usage batch
      * @param usages     list of {@link Usage}s
      */
-    void insertUsages(UsageBatch usageBatch, Collection<Usage> usages);
+    void insertUsages(UsageBatch usageBatch, List<Usage> usages);
 
     /**
      * Inserts AACL usages from baseline.
@@ -45,7 +44,7 @@ public interface IAaclUsageService {
      * @param usages list of {@link AaclClassifiedUsage}s
      * @return count of updated usages
      */
-    int updateClassifiedUsages(Collection<AaclClassifiedUsage> usages);
+    int updateClassifiedUsages(List<AaclClassifiedUsage> usages);
 
     /**
      * Gets list of {@link Usage}s by specified {@link Usage} ids.

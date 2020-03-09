@@ -38,7 +38,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -99,8 +98,8 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
-    public int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
-        Collection<String> insertedUsageIds = getUsageBatchService().insertAaclBatch(usageBatch, usages);
+    public int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
+        List<String> insertedUsageIds = getUsageBatchService().insertAaclBatch(usageBatch, usages);
         getUsageBatchService().sendAaclForMatching(insertedUsageIds, usageBatch.getName());
         aaclUsageFilterController.getWidget().clearFilter();
         return insertedUsageIds.size();

@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -33,7 +32,7 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @param usages     list of {@link Usage}s
      * @return count of inserted usages
      */
-    int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
+    int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages);
 
     /**
      * @return list of existing {@link FundPool}s.

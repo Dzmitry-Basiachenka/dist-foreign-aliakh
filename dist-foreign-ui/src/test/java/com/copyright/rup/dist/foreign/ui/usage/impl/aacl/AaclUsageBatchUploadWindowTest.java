@@ -112,11 +112,11 @@ public class AaclUsageBatchUploadWindowTest {
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField periodEndDate = Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD);
-        validateField(periodEndDate, "null", binder, "Field value should be specified", false);
-        validateField(periodEndDate, "a", binder, "Field value should contain numeric values only", false);
-        validateField(periodEndDate, "1000", binder, "Field value should be in range from 1950 to 2099", false);
-        validateField(periodEndDate, "2100", binder, "Field value should be in range from 1950 to 2099", false);
-        validateField(periodEndDate, "2020", binder, null, true);
+        verifyField(periodEndDate, "null", binder, "Field value should be specified", false);
+        verifyField(periodEndDate, "a", binder, "Field value should contain numeric values only", false);
+        verifyField(periodEndDate, "1000", binder, "Field value should be in range from 1950 to 2099", false);
+        verifyField(periodEndDate, "2100", binder, "Field value should be in range from 1950 to 2099", false);
+        verifyField(periodEndDate, "2020", binder, null, true);
         verify(usagesController);
     }
 
@@ -126,15 +126,15 @@ public class AaclUsageBatchUploadWindowTest {
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField numberOfBaselineYears = Whitebox.getInternalState(window, NUMBER_OF_BASELINE_YEARS);
-        validateField(numberOfBaselineYears, "", binder, "Field value should be specified", false);
-        validateField(numberOfBaselineYears, "two", binder, "Field value should contain positive numeric values only",
+        verifyField(numberOfBaselineYears, "", binder, "Field value should be specified", false);
+        verifyField(numberOfBaselineYears, "two", binder, "Field value should contain positive numeric values only",
             false);
-        validateField(numberOfBaselineYears, "-1", binder, "Field value should contain positive numeric values only",
+        verifyField(numberOfBaselineYears, "-1", binder, "Field value should contain positive numeric values only",
             false);
-        validateField(numberOfBaselineYears, " -2 ", binder, "Field value should contain positive numeric values only",
+        verifyField(numberOfBaselineYears, " -2 ", binder, "Field value should contain positive numeric values only",
             false);
-        validateField(numberOfBaselineYears, " 1 ", binder, null, true);
-        validateField(numberOfBaselineYears, "1", binder, null, true);
+        verifyField(numberOfBaselineYears, " 1 ", binder, null, true);
+        verifyField(numberOfBaselineYears, "1", binder, null, true);
     }
 
     @Test
@@ -153,8 +153,8 @@ public class AaclUsageBatchUploadWindowTest {
         expect(uploadField.getValue()).andReturn("file.csv");
         expect(usagesController.getCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
-        expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get())).andReturn(3)
-            .once();
+        expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get()))
+            .andReturn(3).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
         Windows.showNotificationWindow(
             "Upload completed: 1 record(s) were uploaded, 2 record(s) were pulled from baseline");
@@ -178,8 +178,8 @@ public class AaclUsageBatchUploadWindowTest {
         expect(window.isValid()).andReturn(true).once();
         expect(uploadField.getValue()).andReturn(null);
         expect(usagesController.getCsvProcessor()).andReturn(processor).once();
-        expect(usagesController.loadUsageBatch(buildUsageBatch(), Collections.emptyList())).andReturn(1)
-            .once();
+        expect(usagesController.loadUsageBatch(buildUsageBatch(), Collections.emptyList()))
+            .andReturn(1).once();
         Windows.showNotificationWindow(
             "Upload completed: 0 record(s) were uploaded, 1 record(s) were pulled from baseline");
         expectLastCall().once();
@@ -262,7 +262,7 @@ public class AaclUsageBatchUploadWindowTest {
         assertEquals(Unit.PERCENTAGE, baselineYearsField.getWidthUnits());
     }
 
-    private void validateField(TextField field, String value, Binder binder, String message, boolean isValid) {
+    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
         field.setValue(value);
         List<ValidationResult> errors = binder.validate().getValidationErrors();
         List<String> errorMessages =

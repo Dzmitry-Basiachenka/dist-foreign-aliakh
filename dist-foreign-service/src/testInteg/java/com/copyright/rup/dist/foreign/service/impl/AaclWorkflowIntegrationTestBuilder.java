@@ -33,8 +33,6 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -148,9 +146,9 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
-            Collection<String> insertedUsageIds = usageBatchService.insertAaclBatch(usageBatch, usages);
+            List<String> insertedUsageIds = usageBatchService.insertAaclBatch(usageBatch, usages);
             assertEquals(expectedUploadedCount, insertedUsageIds.size());
-            List<String> orderedIds = usageService.getUsagesByIds(new ArrayList<>(insertedUsageIds)).stream()
+            List<String> orderedIds = usageService.getUsagesByIds(insertedUsageIds).stream()
                 .sorted(Comparator.comparing(Usage::getComment))
                 .map(Usage::getId)
                 .collect(Collectors.toList());

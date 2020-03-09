@@ -23,7 +23,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -117,7 +116,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public int insertFasBatch(UsageBatch usageBatch, Collection<Usage> usages) {
+    public int insertFasBatch(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
@@ -155,8 +154,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    // TODO {srudak} refine Collection/Set/List usage
-    public Collection<String> insertAaclBatch(UsageBatch usageBatch, Collection<Usage> uploadedUsages) {
+    public List<String> insertAaclBatch(UsageBatch usageBatch, List<Usage> uploadedUsages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
@@ -172,11 +170,11 @@ public class UsageBatchService implements IUsageBatchService {
         List<String> uploadedUsageIds = uploadedUsages.stream()
             .map(Usage::getId)
             .collect(Collectors.toList());
-        return CollectionUtils.union(uploadedUsageIds, baselineUsageIds);
+        return ListUtils.union(uploadedUsageIds, baselineUsageIds);
     }
 
     @Override
-    public void sendForMatching(Collection<Usage> usages) {
+    public void sendForMatching(List<Usage> usages) {
         executorService.execute(() -> {
             List<Usage> usagesInNewStatus =
                 usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
@@ -185,7 +183,7 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public void sendAaclForMatching(Collection<String> usageIds, String batchName) {
+    public void sendAaclForMatching(List<String> usageIds, String batchName) {
         AtomicInteger usageIdsCount = new AtomicInteger(0);
         executorService.execute(() ->
             Iterables.partition(usageIds, usagesBatchSize)
@@ -200,7 +198,7 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public void sendForGettingRights(Collection<Usage> usages, String batchName) {
+    public void sendForGettingRights(List<Usage> usages, String batchName) {
         executorService.execute(() -> {
             LOGGER.info("Send usages for getting rights. Started. UsageBatchName={}, UsagesCount={}", batchName,
                 LogUtils.size(usages));
@@ -310,7 +308,7 @@ public class UsageBatchService implements IUsageBatchService {
         executorService.shutdown();
     }
 
-    private void populateTitlesStandardNumberAndType(Collection<Usage> usages) {
+    private void populateTitlesStandardNumberAndType(List<Usage> usages) {
         usages.stream()
             .filter(usage -> Objects.nonNull(usage.getWrWrkInst()))
             .forEach(usage -> {

@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -67,30 +66,30 @@ public interface IUsageBatchService {
     /**
      * Sends list of usages on queue for PI matching process.
      *
-     * @param usages collection of {@link Usage} to be sent
+     * @param usages list of {@link Usage} to be sent
      */
-    void sendForMatching(Collection<Usage> usages);
+    void sendForMatching(List<Usage> usages);
 
     /**
      * Finds AACL usages by their ids and sends them on queue for PI matching process.
      *
-     * @param usageIds  collection of {@link Usage} ids
+     * @param usageIds  list of {@link Usage} ids
      * @param batchName batch name
      */
-    void sendAaclForMatching(Collection<String> usageIds, String batchName);
+    void sendAaclForMatching(List<String> usageIds, String batchName);
 
     /**
      * Sends list of usages on queue for getting Rights process.
      *
-     * @param usages    collection of {@link Usage} to be sent
+     * @param usages    list of {@link Usage} to be sent
      * @param batchName batch name
      */
-    void sendForGettingRights(Collection<Usage> usages, String batchName);
+    void sendForGettingRights(List<Usage> usages, String batchName);
 
     /**
      * Finds usages by their ids and sends them to queue for getting Rights process.
      *
-     * @param usageIds  collection of {@link Usage} ids
+     * @param usageIds  list of {@link Usage} ids
      * @param batchName batch name
      */
     void sendNtsForGettingRights(List<String> usageIds, String batchName);
@@ -102,7 +101,7 @@ public interface IUsageBatchService {
      * @param usages     list of {@link Usage}s
      * @return count of inserted usages
      */
-    int insertFasBatch(UsageBatch usageBatch, Collection<Usage> usages);
+    int insertFasBatch(UsageBatch usageBatch, List<Usage> usages);
 
     /**
      * Inserts NTS batch and assigns eligible for NTS usages to it based on fund pool information.
@@ -120,7 +119,7 @@ public interface IUsageBatchService {
      * @param uploadedUsages list of {@link Usage}s
      * @return ids of inserted usages
      */
-    Collection<String> insertAaclBatch(UsageBatch usageBatch, Collection<Usage> uploadedUsages);
+    List<String> insertAaclBatch(UsageBatch usageBatch, List<Usage> uploadedUsages);
 
     /**
      * Deletes given {@link UsageBatch} and all it's usage details.
