@@ -342,4 +342,49 @@ databaseChangeLog {
                     columnNames: 'name, product_family')
         }
     }
+
+    changeSet(id: '2020-03-11-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-56947 FDA: AACL view and edit scenario Pub Type Weights: delete Pub Type 'Other' and add Pub Type Weights")
+
+        delete(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            where "name = 'Other'"
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'weight', type: 'NUMERIC(10,2)', remarks: 'Publication Type Weight')
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'weight', value: '1.00')
+            where "name = 'Book'"
+        }
+        update(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'weight', value: '1.50')
+            where "name = 'Business or Trade Journal'"
+        }
+        update(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'weight', value: '1.00')
+            where "name = 'Consumer Magazine'"
+        }
+        update(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'weight', value: '4.00')
+            where "name = 'News Source'"
+        }
+        update(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'weight', value: '1.10')
+            where "name = 'STMA Journal'"
+        }
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_publication_type',
+                columnName: 'weight', columnDataType: 'NUMERIC(10,2)')
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_publication_type', columnName: 'weight')
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+                column(name: 'df_publication_type_uid', value: '357ea293-8f98-4160-820e-8369f6180654')
+                column(name: 'name', value: 'Other')
+            }
+        }
+    }
 }
