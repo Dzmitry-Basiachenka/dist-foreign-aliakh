@@ -8,6 +8,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents scenario.
@@ -29,6 +31,7 @@ public class Scenario extends StoredEntity<String> {
     private String description;
     private ScenarioStatusEnum status;
     private ScenarioAuditItem auditItem;
+    private AaclFields aaclFields;
     private NtsFields ntsFields;
 
     public String getName() {
@@ -103,6 +106,14 @@ public class Scenario extends StoredEntity<String> {
         this.auditItem = auditItem;
     }
 
+    public AaclFields getAaclFields() {
+        return aaclFields;
+    }
+
+    public void setAaclFields(AaclFields aaclFields) {
+        this.aaclFields = aaclFields;
+    }
+
     public NtsFields getNtsFields() {
         return ntsFields;
     }
@@ -131,6 +142,7 @@ public class Scenario extends StoredEntity<String> {
             .append(this.description, that.description)
             .append(this.status, that.status)
             .append(this.auditItem, that.auditItem)
+            .append(this.aaclFields, that.aaclFields)
             .append(this.ntsFields, that.ntsFields)
             .isEquals();
     }
@@ -148,6 +160,7 @@ public class Scenario extends StoredEntity<String> {
             .append(description)
             .append(status)
             .append(auditItem)
+            .append(aaclFields)
             .append(ntsFields)
             .toHashCode();
     }
@@ -165,8 +178,54 @@ public class Scenario extends StoredEntity<String> {
             .append("description", description)
             .append("status", status)
             .append("auditItem", auditItem)
+            .append("aaclFields", aaclFields)
             .append("ntsFields", ntsFields)
             .toString();
+    }
+
+    /**
+     * Represents fields specific for AACL scenario.
+     */
+    public static class AaclFields {
+
+        private List<PublicationType> publicationTypes = new ArrayList<>();
+        // TODO {aliakh} add Usage Age Weights, Licensee Classes mapping and other fields specific for AACL scenario
+
+        public List<PublicationType> getPublicationTypes() {
+            return publicationTypes;
+        }
+
+        public void setPublicationTypes(List<PublicationType> publicationTypes) {
+            this.publicationTypes = publicationTypes;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (null == obj || this.getClass() != obj.getClass()) {
+                return false;
+            }
+            AaclFields that = (AaclFields) obj;
+            return new EqualsBuilder()
+                .append(this.publicationTypes, that.publicationTypes)
+                .isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder()
+                .append(publicationTypes)
+                .toHashCode();
+        }
+
+        @Override
+        public String toString() {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("publicationTypes", publicationTypes)
+                .toString();
+        }
     }
 
     /**
