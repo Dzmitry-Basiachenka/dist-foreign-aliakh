@@ -230,7 +230,6 @@
         <include refid="IAaclUsageMapper.selectCountByFilterSql"/>
     </select>
 
-    <!--TODO {srudak} revert recent changes to this query-->
     <insert id="insert" parameterType="Usage">
         with u as (
             insert into ${schema}.df_usage (
