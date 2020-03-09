@@ -1,0 +1,46 @@
+package com.copyright.rup.dist.foreign.repository.impl.converter.json;
+
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+
+import java.io.IOException;
+import java.util.List;
+
+/**
+ * Implementation of {@link StdSerializer} for scenario {@link AaclFields}.
+ * <p/>
+ * Copyright (C) 2020 copyright.com
+ * <p/>
+ * Date: 03/11/2020
+ *
+ * @author Aliaksandr Liakh
+ */
+// TODO {aliakh} write Usage Age Weights, Licensee Classes mapping and other fields specific for AACL scenario
+public class AaclScenarioFieldsSerializer extends StdSerializer<AaclFields> {
+
+    /**
+     * Constructor.
+     */
+    AaclScenarioFieldsSerializer() {
+        super(AaclFields.class);
+    }
+
+    @Override
+    public void serialize(AaclFields aaclFields, JsonGenerator jg, SerializerProvider provider) throws IOException {
+        jg.writeStartObject();
+        jg.writeArrayFieldStart("publicationTypes");
+        List<PublicationType> publicationTypes = aaclFields.getPublicationTypes();
+        for (PublicationType publicationType: publicationTypes) {
+            jg.writeStartObject();
+            jg.writeStringField("name", publicationType.getName());
+            jg.writeNumberField("weight", publicationType.getWeight());
+            jg.writeEndObject();
+        }
+        jg.writeEndArray();
+        jg.writeEndObject();
+    }
+}

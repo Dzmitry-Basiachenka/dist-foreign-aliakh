@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
-import com.copyright.rup.dist.foreign.repository.impl.converter.json.NtsScenarioFieldsJsonMapper;
+import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
+import com.copyright.rup.dist.foreign.repository.impl.converter.json.AaclScenarioFieldsJsonMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -18,20 +18,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Implementation of {@link BaseTypeHandler} for {@link NtsFields}.
+ * Implementation of {@link BaseTypeHandler} for {@link AaclFields}.
  * <p/>
- * Copyright (C) 2019 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p/>
- * Date: 04/17/2019
+ * Date: 03/11/2020
  *
  * @author Aliaksandr Liakh
  */
-public class NtsScenarioFieldsTypeHandler extends BaseTypeHandler<NtsFields> {
+public class AaclScenarioFieldsTypeHandler extends BaseTypeHandler<AaclFields> {
 
-    private static final NtsScenarioFieldsJsonMapper JSON_MAPPER = new NtsScenarioFieldsJsonMapper();
+    private static final AaclScenarioFieldsJsonMapper JSON_MAPPER = new AaclScenarioFieldsJsonMapper();
 
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, NtsFields parameter, JdbcType jdbcType)
+    public void setNonNullParameter(PreparedStatement ps, int i, AaclFields parameter, JdbcType jdbcType)
         throws SQLException {
         PGobject pgobject = new PGobject();
         pgobject.setValue(serialize(parameter));
@@ -40,50 +40,50 @@ public class NtsScenarioFieldsTypeHandler extends BaseTypeHandler<NtsFields> {
     }
 
     @Override
-    public NtsFields getNullableResult(ResultSet rs, String columnName) throws SQLException {
+    public AaclFields getNullableResult(ResultSet rs, String columnName) throws SQLException {
         return deserialize(rs.getString(columnName));
     }
 
     @Override
-    public NtsFields getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+    public AaclFields getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
         return deserialize(rs.getString(columnIndex));
     }
 
     @Override
-    public NtsFields getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+    public AaclFields getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
         return deserialize(cs.getString(columnIndex));
     }
 
     /**
-     * Serializes an instance of {@link NtsFields} into a string JSON.
+     * Serializes an instance of {@link AaclFields} into a string JSON.
      * If the argument is {@code null}, the method returns {@code null}.
      *
-     * @param ntsFields the instance of {@link NtsFields}
+     * @param aaclFields the instance of {@link AaclFields}
      * @return the string JSON
      */
-    String serialize(NtsFields ntsFields) {
+    String serialize(AaclFields aaclFields) {
         try {
-            return JSON_MAPPER.serialize(ntsFields);
+            return JSON_MAPPER.serialize(aaclFields);
         } catch (JsonProcessingException e) {
-            throw new RupRuntimeException("Unable to serialize NTS scenario fields", e);
+            throw new RupRuntimeException("Unable to serialize AACL scenario fields", e);
         }
     }
 
     /**
-     * Deserializes a string JSON into an instance of {@link NtsFields}.
+     * Deserializes a string JSON into an instance of {@link AaclFields}.
      * If the argument is {@code null}, the method returns {@code null}.
      *
      * @param json the string JSON
-     * @return the instance of {@link NtsFields}
+     * @return the instance of {@link AaclFields}
      */
-    NtsFields deserialize(String json) {
+    AaclFields deserialize(String json) {
         if (StringUtils.isEmpty(json)) {
             return null;
         }
         try {
             return JSON_MAPPER.deserialize(json);
         } catch (IOException e) {
-            throw new RupRuntimeException("Unable to deserialize NTS scenario fields", e);
+            throw new RupRuntimeException("Unable to deserialize AACL scenario fields", e);
         }
     }
 }

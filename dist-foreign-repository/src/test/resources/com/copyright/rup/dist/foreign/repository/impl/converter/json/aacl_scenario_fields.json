@@ -1,0 +1,24 @@
+{
+  "publicationTypes": [
+    {
+      "name": "Book",
+      "weight": 1.00
+    },
+    {
+      "name": "Business or Trade Journal",
+      "weight": 1.50
+    },
+    {
+      "name": "Consumer Magazine",
+      "weight": 1.00
+    },
+    {
+      "name": "News Source",
+      "weight": 4.00
+    },
+    {
+      "name": "STMA Journal",
+      "weight": 1.10
+    }
+  ]
+}
