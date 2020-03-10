@@ -1,13 +1,13 @@
 package com.copyright.rup.dist.foreign.service.impl.mock;
 
-import com.copyright.rup.dist.foreign.service.impl.UsageBatchService;
+import com.copyright.rup.dist.foreign.service.impl.chain.executor.UsageChainExecutor;
 
 import org.apache.camel.util.concurrent.SynchronousExecutorService;
 
 import java.util.concurrent.ExecutorService;
 
 /**
- * Mock for {@link UsageBatchService} with synchronous executor service.
+ * Mock for {@link UsageChainExecutor} with synchronous executor service.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
  *
  * @author Aliaksandr Liakh
  */
-public class UsageBatchServiceMock extends UsageBatchService {
+public class UsageChainExecutorMock extends UsageChainExecutor {
 
     @Override
     protected ExecutorService getExecutorService() {

@@ -33,6 +33,7 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -67,7 +68,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
-    private IAaclUsageService usageService;
+    private IAaclUsageService aaclUsageService;
     @Autowired
     private ServiceTestHelper testHelper;
 
@@ -133,7 +134,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             UsageFilter filter = new UsageFilter();
             filter.setProductFamily(productFamily);
             filter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
-            actualCommentsToUsages = usageService.getUsageDtos(filter, null, null).stream()
+            actualCommentsToUsages = aaclUsageService.getUsageDtos(filter, null, null).stream()
                 .collect(Collectors.toMap(UsageDto::getComment, usageDto -> usageDto));
             verifyUsages();
             expectedUsageCommentToAuditMap.forEach((comment, expectedAudit) ->
@@ -148,11 +149,11 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             List<Usage> usages = result.get();
             List<String> insertedUsageIds = usageBatchService.insertAaclBatch(usageBatch, usages);
             assertEquals(expectedUploadedCount, insertedUsageIds.size());
-            List<String> orderedIds = usageService.getUsagesByIds(insertedUsageIds).stream()
+            List<String> orderedIds = aaclUsageService.getUsagesByIds(new ArrayList<>(insertedUsageIds)).stream()
                 .sorted(Comparator.comparing(Usage::getComment))
                 .map(Usage::getId)
                 .collect(Collectors.toList());
-            usageBatchService.sendAaclForMatching(orderedIds, usageBatch.getName());
+            aaclUsageService.sendForMatching(orderedIds, usageBatch.getName());
         }
 
         private ByteArrayOutputStream getCsvOutputStream() throws IOException {

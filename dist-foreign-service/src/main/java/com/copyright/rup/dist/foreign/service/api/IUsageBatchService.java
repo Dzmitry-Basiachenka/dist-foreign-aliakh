@@ -64,37 +64,6 @@ public interface IUsageBatchService {
     boolean usageBatchExists(String name);
 
     /**
-     * Sends list of usages on queue for PI matching process.
-     *
-     * @param usages list of {@link Usage} to be sent
-     */
-    void sendForMatching(List<Usage> usages);
-
-    /**
-     * Finds AACL usages by their ids and sends them on queue for PI matching process.
-     *
-     * @param usageIds  list of {@link Usage} ids
-     * @param batchName batch name
-     */
-    void sendAaclForMatching(List<String> usageIds, String batchName);
-
-    /**
-     * Sends list of usages on queue for getting Rights process.
-     *
-     * @param usages    list of {@link Usage} to be sent
-     * @param batchName batch name
-     */
-    void sendForGettingRights(List<Usage> usages, String batchName);
-
-    /**
-     * Finds usages by their ids and sends them to queue for getting Rights process.
-     *
-     * @param usageIds  list of {@link Usage} ids
-     * @param batchName batch name
-     */
-    void sendNtsForGettingRights(List<String> usageIds, String batchName);
-
-    /**
      * Inserts usage batch, it's usages and RRO.
      *
      * @param usageBatch {@link UsageBatch} instance

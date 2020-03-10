@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
@@ -55,6 +56,8 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     private IFasNtsUsageFilterController fasNtsUsageFilterController;
     @Autowired
     private IFasUsageService fasUsageService;
+    @Autowired
+    private INtsUsageService ntsUsageService;
 
     @Override
     public ICommonUsageFilterController getUsageFilterController() {
@@ -94,7 +97,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     public int loadNtsBatch(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         List<String> ntsUsageIds = getUsageBatchService().insertNtsBatch(usageBatch, userName);
-        getUsageBatchService().sendNtsForGettingRights(ntsUsageIds, usageBatch.getName());
+        ntsUsageService.sendForGettingRights(ntsUsageIds, usageBatch.getName());
         getUsageFilterController().getWidget().clearFilter();
         return CollectionUtils.size(ntsUsageIds);
     }
@@ -122,7 +125,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public List<String> getMarkets() {
-        return getNtsUsageService().getMarkets();
+        return ntsUsageService.getMarkets();
     }
 
     @Override
@@ -142,7 +145,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public int getUsagesCountForNtsBatch(UsageBatch usageBatch) {
-        return getNtsUsageService().getUsagesCountForBatch(usageBatch);
+        return ntsUsageService.getUsagesCountForBatch(usageBatch);
     }
 
     @Override

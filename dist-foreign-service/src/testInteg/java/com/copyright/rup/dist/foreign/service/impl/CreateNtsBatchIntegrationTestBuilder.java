@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.impl.CreateNtsBatchIntegrationTestBuilder.Runner;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -42,6 +43,8 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
     private IUsageAuditService usageAuditService;
     @Autowired
     private IUsageBatchService usageBatchService;
+    @Autowired
+    private INtsUsageService ntsUsageService;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -155,7 +158,7 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
 
         private void loadNtsBatch() {
             actualUsageIds = usageBatchService.insertNtsBatch(usageBatch, RupContextUtils.getUserName());
-            usageBatchService.sendNtsForGettingRights(actualUsageIds, usageBatch.getName());
+            ntsUsageService.sendForGettingRights(actualUsageIds, usageBatch.getName());
         }
 
         private void assertBatch() {

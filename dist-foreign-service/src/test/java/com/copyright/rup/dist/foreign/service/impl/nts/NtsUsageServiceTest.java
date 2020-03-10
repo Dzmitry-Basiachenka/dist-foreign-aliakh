@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.service.impl.nts;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -12,18 +14,24 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,6 +73,8 @@ public class NtsUsageServiceTest {
     private IPrmIntegrationService prmIntegrationService;
     private IUsageArchiveRepository usageArchiveRepository;
     private IUsageAuditService usageAuditService;
+    private IUsageService usageService;
+    private IChainExecutor<Usage> chainExecutor;
 
     @Before
     public void setUp() {
@@ -73,11 +83,16 @@ public class NtsUsageServiceTest {
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         usageAuditService = createMock(IUsageAuditService.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
+        usageService = createMock(IUsageService.class);
+        chainExecutor = createMock(IChainExecutor.class);
         Whitebox.setInternalState(ntsUsageService, ntsUsageRepository);
         Whitebox.setInternalState(ntsUsageService, rightsholderService);
         Whitebox.setInternalState(ntsUsageService, prmIntegrationService);
         Whitebox.setInternalState(ntsUsageService, usageArchiveRepository);
         Whitebox.setInternalState(ntsUsageService, usageAuditService);
+        Whitebox.setInternalState(ntsUsageService, usageService);
+        Whitebox.setInternalState(ntsUsageService, chainExecutor);
+        Whitebox.setInternalState(ntsUsageService, "usagesBatchSize", 100);
     }
 
     @Test
@@ -228,8 +243,30 @@ public class NtsUsageServiceTest {
         ntsUsageRepository.addWithdrawnUsagesToNtsFundPool(fundId, batchIds, USER_NAME);
         expectLastCall().once();
         replay(ntsUsageRepository);
-        ntsUsageRepository.addWithdrawnUsagesToNtsFundPool(fundId, batchIds, USER_NAME);
+        ntsUsageService.addWithdrawnUsagesToNtsFundPool(fundId, batchIds, USER_NAME);
         verify(ntsUsageRepository);
+    }
+
+    @Test
+    public void testSendForGettingRights() {
+        List<String> usageIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
+        Usage usage1 = new Usage();
+        usage1.setStatus(UsageStatusEnum.WORK_FOUND);
+        Usage usage2 = new Usage();
+        usage2.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
+        List<Usage> usages = Arrays.asList(usage1, usage2);
+        expect(usageService.getUsagesByIds(usageIds)).andReturn(usages).once();
+        Capture<Runnable> captureRunnable = new Capture<>();
+        chainExecutor.execute(capture(captureRunnable));
+        expectLastCall().once();
+        chainExecutor.execute(Arrays.asList(usage1), ChainProcessorTypeEnum.RIGHTS);
+        expectLastCall().once();
+        replay(chainExecutor, usageService);
+        ntsUsageService.sendForGettingRights(usageIds, "Batch name");
+        assertNotNull(captureRunnable);
+        Runnable runnable = captureRunnable.getValue();
+        runnable.run();
+        verify(chainExecutor, usageService);
     }
 
     private Rightsholder buildRightsholder(Long accountNUmber) {

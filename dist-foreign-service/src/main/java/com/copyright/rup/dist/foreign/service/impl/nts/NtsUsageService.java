@@ -8,16 +8,22 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Table;
 
 import org.slf4j.Logger;
@@ -31,6 +37,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -60,6 +67,12 @@ public class NtsUsageService implements INtsUsageService {
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    private IUsageService usageService;
+    @Autowired
+    private IChainExecutor<Usage> chainExecutor;
+    @Value("$RUP{dist.foreign.usages.batch_size}")
+    private int usagesBatchSize;
 
     @Override
     @Transactional
@@ -151,5 +164,24 @@ public class NtsUsageService implements INtsUsageService {
     @Override
     public void deleteFromScenario(String scenarioId) {
         ntsUsageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
+    }
+
+    @Override
+    public void sendForGettingRights(List<String> usageIds, String batchName) {
+        AtomicInteger usageIdsCount = new AtomicInteger(0);
+        chainExecutor.execute(() ->
+            Iterables.partition(usageIds, usagesBatchSize)
+                .forEach(partition -> {
+                    usageIdsCount.addAndGet(partition.size());
+                    LOGGER.info("Send usages for getting rights. Started. UsageBatchName={}, UsagesCount={}",
+                        batchName, usageIdsCount);
+                    List<Usage> workFoundUsages = usageService.getUsagesByIds(partition)
+                        .stream()
+                        .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
+                        .collect(Collectors.toList());
+                    chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
+                    LOGGER.info("Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, " +
+                        "WorkFoundUsagesCount={}", batchName, usageIdsCount, LogUtils.size(workFoundUsages));
+                }));
     }
 }

@@ -279,4 +279,19 @@ public interface IUsageService {
      * @return map where key - Wr Wrk Inst, value - set of usage ids related to Wr Wrk Inst
      */
     Map<Long, Set<String>> getWrWrkInstToUsageIdsForRightsAssignment(String batchName);
+
+    /**
+     * Sends list of usages on queue for PI matching process.
+     *
+     * @param usages list of {@link Usage} to be sent
+     */
+    void sendForMatching(List<Usage> usages);
+
+    /**
+     * Sends list of usages on queue for getting Rights process.
+     *
+     * @param usages    list of {@link Usage} to be sent
+     * @param batchName batch name
+     */
+    void sendForGettingRights(List<Usage> usages, String batchName);
 }

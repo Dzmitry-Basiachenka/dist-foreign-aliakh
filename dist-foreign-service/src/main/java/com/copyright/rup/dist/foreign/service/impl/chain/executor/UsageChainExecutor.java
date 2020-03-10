@@ -19,9 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 /**
  * Implementation of {@link IChainExecutor}.
@@ -44,6 +47,8 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
     @Autowired
     @Qualifier("df.service.aaclMatchingProcessor")
     private IChainProcessor<Usage> aaclProcessor;
+
+    private ExecutorService executorService;
 
     private Map<String, IChainProcessor<Usage>> productFamilyToProcessorMap;
 
@@ -80,6 +85,37 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
                     String.format("Product family %s is not supported", productFamily));
             }
         });
+    }
+
+    @Override
+    public void execute(Runnable command) {
+        executorService.execute(command);
+    }
+
+    /**
+     * Gets instance of {@link ExecutorService} with 2 threads.
+     * Used for sending usages to queues to process them.
+     *
+     * @return instance of {@link ExecutorService}
+     */
+    protected ExecutorService getExecutorService() {
+        return Executors.newCachedThreadPool();
+    }
+
+    /**
+     * Post construct method.
+     */
+    @PostConstruct
+    void postConstruct() {
+        executorService = getExecutorService();
+    }
+
+    /**
+     * Pre destroy method.
+     */
+    @PreDestroy
+    void preDestroy() {
+        executorService.shutdown();
     }
 
     private List<JobInfo> execute(String productFamily, IChainProcessor<Usage> processor, ChainProcessorTypeEnum type) {

@@ -7,7 +7,6 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
@@ -15,19 +14,15 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
-import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
-import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,13 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 /**
  * Implementation of {@link IUsageBatchService}.
@@ -57,8 +46,6 @@ import javax.annotation.PreDestroy;
 @Service
 public class UsageBatchService implements IUsageBatchService {
 
-    private static final String GETTING_RIGHTS_FINISHED_LOG =
-        "Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -76,13 +63,6 @@ public class UsageBatchService implements IUsageBatchService {
     private IAaclUsageService aaclUsageService;
     @Autowired
     private IRightsholderService rightsholderService;
-    @Autowired
-    private IChainExecutor<Usage> chainExecutor;
-
-    @Value("$RUP{dist.foreign.usages.batch_size}")
-    private int usagesBatchSize;
-
-    private ExecutorService executorService;
 
     @Override
     public List<Integer> getFiscalYears(String productFamily) {
@@ -174,62 +154,6 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public void sendForMatching(List<Usage> usages) {
-        executorService.execute(() -> {
-            List<Usage> usagesInNewStatus =
-                usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
-            chainExecutor.execute(usagesInNewStatus, ChainProcessorTypeEnum.MATCHING);
-        });
-    }
-
-    @Override
-    public void sendAaclForMatching(List<String> usageIds, String batchName) {
-        AtomicInteger usageIdsCount = new AtomicInteger(0);
-        executorService.execute(() ->
-            Iterables.partition(usageIds, usagesBatchSize)
-                .forEach(partition -> {
-                    usageIdsCount.addAndGet(partition.size());
-                    LOGGER.info("Send usages for PI matching. Started. UsageBatchName={}, UsagesCount={}", batchName,
-                        usageIdsCount);
-                    chainExecutor.execute(aaclUsageService.getUsagesByIds(partition), ChainProcessorTypeEnum.MATCHING);
-                    LOGGER.info("Send usages for PI matching. Finished. UsageBatchName={}, UsagesCount={}", batchName,
-                        usageIdsCount);
-                }));
-    }
-
-    @Override
-    public void sendForGettingRights(List<Usage> usages, String batchName) {
-        executorService.execute(() -> {
-            LOGGER.info("Send usages for getting rights. Started. UsageBatchName={}, UsagesCount={}", batchName,
-                LogUtils.size(usages));
-            List<Usage> workFoundUsages =
-                usages.stream()
-                    .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
-                    .collect(Collectors.toList());
-            chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
-            LOGGER.info(GETTING_RIGHTS_FINISHED_LOG, batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));
-        });
-    }
-
-    @Override
-    public void sendNtsForGettingRights(List<String> usageIds, String batchName) {
-        AtomicInteger usageIdsCount = new AtomicInteger(0);
-        executorService.execute(() ->
-            Iterables.partition(usageIds, usagesBatchSize)
-                .forEach(partition -> {
-                    usageIdsCount.addAndGet(partition.size());
-                    LOGGER.info("Send usages for getting rights. Started. UsageBatchName={}, UsagesCount={}",
-                        batchName, usageIdsCount);
-                    List<Usage> workFoundUsages = usageService.getUsagesByIds(partition)
-                        .stream()
-                        .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
-                        .collect(Collectors.toList());
-                    chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
-                    LOGGER.info(GETTING_RIGHTS_FINISHED_LOG, batchName, usageIdsCount, LogUtils.size(workFoundUsages));
-                }));
-    }
-
-    @Override
     @Transactional
     public void deleteUsageBatch(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
@@ -280,32 +204,6 @@ public class UsageBatchService implements IUsageBatchService {
     @Override
     public List<String> getBatchNamesAvailableForRightsAssignment() {
         return usageBatchRepository.findBatchNamesWithRhNotFoundUsages();
-    }
-
-    /**
-     * Gets instance of {@link ExecutorService} with 2 threads.
-     * Used for sending usages to queues to process them.
-     *
-     * @return instance of {@link ExecutorService}
-     */
-    protected ExecutorService getExecutorService() {
-        return Executors.newCachedThreadPool();
-    }
-
-    /**
-     * Post construct method.
-     */
-    @PostConstruct
-    void postConstruct() {
-        executorService = getExecutorService();
-    }
-
-    /**
-     * Pre destroy method.
-     */
-    @PreDestroy
-    void preDestroy() {
-        executorService.shutdown();
     }
 
     private void populateTitlesStandardNumberAndType(List<Usage> usages) {
