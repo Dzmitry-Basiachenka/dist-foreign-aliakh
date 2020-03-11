@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.math.BigDecimal;
+
 /**
  * Represents publication type for AACL product family.
  * <p>
@@ -18,7 +20,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class PublicationType extends StoredEntity<String> {
 
     private String name;
-    private String weight;
+    private BigDecimal weight;
 
     public String getName() {
         return name;
@@ -28,11 +30,11 @@ public class PublicationType extends StoredEntity<String> {
         this.name = name;
     }
 
-    public String getWeight() {
+    public BigDecimal getWeight() {
         return weight;
     }
 
-    public void setWeight(String weight) {
+    public void setWeight(BigDecimal weight) {
         this.weight = weight;
     }
 

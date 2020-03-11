@@ -46,6 +46,7 @@
         <typeAlias alias="WorkClassification" type="com.copyright.rup.dist.foreign.domain.WorkClassification"/>
         <typeAlias alias="FundPool" type="com.copyright.rup.dist.foreign.domain.FundPool"/>
         <typeAlias alias="FundPoolDetail" type="com.copyright.rup.dist.foreign.domain.FundPoolDetail"/>
+        <typeAlias alias="AaclScenarioFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.AaclScenarioFieldsTypeHandler"/>
         <typeAlias alias="NtsScenarioFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.NtsScenarioFieldsTypeHandler"/>
         <typeAlias alias="batchNameScenarioNamePair" type="com.copyright.rup.dist.foreign.repository.impl.BatchesNamesToScenariosNamesResultHandler$BatchNameScenarioNamePair"/>
         <typeAlias alias="WrWrkInstUsageIdPair" type="com.copyright.rup.dist.foreign.repository.impl.WrWrkInstToUsageIdResultHandler$WrWrkInstUsageIdPair"/>
@@ -58,6 +59,7 @@
         <typeHandler handler="org.apache.ibatis.type.LocalDateTypeHandler"/>
         <typeHandler handler="org.apache.ibatis.type.OffsetDateTimeTypeHandler"/>
         <typeHandler handler="NtsBatchFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.UsageBatch$NtsFields"/>
+        <typeHandler handler="AaclScenarioFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.Scenario$AaclFields"/>
         <typeHandler handler="NtsScenarioFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.Scenario$NtsFields"/>
     </typeHandlers>
 
