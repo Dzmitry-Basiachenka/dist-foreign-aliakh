@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -49,11 +48,14 @@ public class DomainVerifierTest {
             {UsageFilter.class},
             {AuditFilter.class},
             {UsageBatch.class},
+            {UsageBatch.NtsFields.class},
             {Usage.class},
             {AaclUsage.class},
             {UsageDto.class},
             {PaidUsage.class},
             {Scenario.class},
+            {Scenario.AaclFields.class},
+            {Scenario.NtsFields.class},
             {RightsholderTotalsHolder.class},
             {UsageAuditItem.class},
             {ScenarioAuditItem.class},
@@ -69,7 +71,6 @@ public class DomainVerifierTest {
             {Work.class},
             {WorkClassification.class},
             {FundPool.class},
-            {NtsFields.class},
             {ExcludePayeeFilter.class},
             {PayeeTotalHolder.class},
             {AaclClassifiedUsage.class},
