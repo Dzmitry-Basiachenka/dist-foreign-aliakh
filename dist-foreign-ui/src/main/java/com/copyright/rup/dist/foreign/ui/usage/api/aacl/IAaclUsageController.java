@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -123,4 +124,11 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return list of found {@link UsageAge}s
      */
     List<UsageAge> getUsageAges(UsageFilter filter);
+
+    /**
+     * Gets list of all {@link PublicationType}s.
+     *
+     * @return list of {@link PublicationType}.
+     */
+    List<PublicationType> getPublicationTypes();
 }

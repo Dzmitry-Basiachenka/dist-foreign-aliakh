@@ -1,10 +1,13 @@
 package com.copyright.rup.dist.foreign.service.impl.aacl;
 
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.repository.api.IPublicationTypeRepository;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Implements {@link IPublicationTypeService}.
@@ -24,5 +27,10 @@ public class PublicationTypeService implements IPublicationTypeService {
     @Override
     public boolean publicationTypeExist(String pubTypeName) {
         return pubTypeRepository.isPublicationTypeExist(pubTypeName);
+    }
+
+    @Override
+    public List<PublicationType> getPublicationTypes() {
+        return pubTypeRepository.findPublicationTypes();
     }
 }

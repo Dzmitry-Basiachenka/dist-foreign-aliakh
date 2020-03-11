@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+
+import java.util.List;
+
 /**
  * Interface for Publication type repository.
  * <p>
@@ -18,4 +22,11 @@ public interface IPublicationTypeRepository {
      * @return {@code true} if publication type name is present, {@code false} otherwise
      */
     boolean isPublicationTypeExist(String pubTypeName);
+
+    /**
+     * Finds list of all {@link PublicationType}s.
+     *
+     * @return list of {@link PublicationType}.
+     */
+    List<PublicationType> findPublicationTypes();
 }

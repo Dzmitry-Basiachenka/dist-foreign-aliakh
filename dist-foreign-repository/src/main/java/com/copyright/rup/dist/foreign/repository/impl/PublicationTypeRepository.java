@@ -1,9 +1,12 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.repository.api.IPublicationTypeRepository;
 
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Implementation of {@link IPublicationTypeRepository}.
@@ -20,5 +23,10 @@ public class PublicationTypeRepository extends BaseRepository implements IPublic
     @Override
     public boolean isPublicationTypeExist(String pubTypeName) {
         return selectOne("IPublicationTypeMapper.isPublicationTypeExist", escapeSqlLikePattern(pubTypeName));
+    }
+
+    @Override
+    public List<PublicationType> findPublicationTypes() {
+        return selectList("IPublicationTypeMapper.findPublicationTypes");
     }
 }
