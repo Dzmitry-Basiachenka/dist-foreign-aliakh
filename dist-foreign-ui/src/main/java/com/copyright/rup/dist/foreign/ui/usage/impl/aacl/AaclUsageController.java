@@ -11,9 +11,11 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
@@ -29,9 +31,9 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterControll
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
 import com.google.common.io.Files;
+
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -173,6 +175,11 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Override
     public int insertFundPool(FundPool fundPool, List<FundPoolDetail> details) {
         return fundPoolService.createAaclFundPool(fundPool, details);
+    }
+
+    @Override
+    public List<UsageAge> getUsageAges(UsageFilter filter) {
+        return aaclUsageService.getUsageAges(filter);
     }
 
     @Override

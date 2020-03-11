@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -87,6 +88,14 @@ public interface IAaclUsageService {
      * @return list of AACL usage periods
      */
     List<Integer> getUsagePeriods();
+
+    /**
+     * Gets list of {@link UsageAge}s by {@link UsageFilter}.
+     *
+     * @param filter {@link UsageFilter} instance
+     * @return list of found {@link UsageAge}s
+     */
+    List<UsageAge> getUsageAges(UsageFilter filter);
 
     /**
      * Deletes AACL {@link Usage} with given id.

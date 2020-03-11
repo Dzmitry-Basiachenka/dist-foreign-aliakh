@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -29,6 +30,7 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Rule;
@@ -39,6 +41,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -238,6 +241,24 @@ public class AaclUsageServiceTest {
     }
 
     @Test
+    public void testGetUsageAges() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageBatchesIds(Collections.singleton("8adb441e-a709-4f58-8dc0-9264bfac2e23"));
+        List<Integer> usagePeriods = Arrays.asList(2020, 2019, 2017, 2016, 2014, 2012);
+        expect(aaclUsageRepository.findUsagePeriodsByFilter(filter)).andReturn(usagePeriods).once();
+        replay(aaclUsageRepository);
+        List<UsageAge> usageAges = aaclUsageService.getUsageAges(filter);
+        assertEquals(6, CollectionUtils.size(usageAges));
+        assertEquals(buildUsageAge(2020, new BigDecimal("1.00")), usageAges.get(0));
+        assertEquals(buildUsageAge(2019, new BigDecimal("0.75")), usageAges.get(1));
+        assertEquals(buildUsageAge(2017, new BigDecimal("0.50")), usageAges.get(2));
+        assertEquals(buildUsageAge(2016, new BigDecimal("0.25")), usageAges.get(3));
+        assertEquals(buildUsageAge(2014, new BigDecimal("0.00")), usageAges.get(4));
+        assertEquals(buildUsageAge(2012, new BigDecimal("0.00")), usageAges.get(5));
+        verify(aaclUsageRepository);
+    }
+
+    @Test
     public void testDeleteById() {
         String usageId = "7adb441e-d709-4f58-8dc0-9264bfac2e19 ";
         usageAuditService.deleteActionsByUsageId(usageId);
@@ -301,5 +322,12 @@ public class AaclUsageServiceTest {
         usage.setWrWrkInst(122830308L);
         usage.setComment("Comment");
         return usage;
+    }
+
+    private UsageAge buildUsageAge(Integer period, BigDecimal weight) {
+        UsageAge usageAge = new UsageAge();
+        usageAge.setPeriod(period);
+        usageAge.setWeight(weight);
+        return usageAge;
     }
 }

@@ -6,7 +6,9 @@ import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
@@ -113,4 +115,12 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return count of inserted details
      */
     int insertFundPool(FundPool fundPool, List<FundPoolDetail> details);
+
+    /**
+     * Gets list of {@link UsageAge}s by {@link UsageFilter}.
+     *
+     * @param filter {@link UsageFilter} instance
+     * @return list of found {@link UsageAge}s
+     */
+    List<UsageAge> getUsageAges(UsageFilter filter);
 }

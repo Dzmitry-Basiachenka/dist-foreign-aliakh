@@ -126,6 +126,12 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
+    public List<Integer> findUsagePeriodsByFilter(UsageFilter filter) {
+        return selectList("IAaclUsageMapper.findUsagePeriodsByFilter",
+            ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
+    }
+
+    @Override
     public boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put(FILTER_KEY, Objects.requireNonNull(filter));

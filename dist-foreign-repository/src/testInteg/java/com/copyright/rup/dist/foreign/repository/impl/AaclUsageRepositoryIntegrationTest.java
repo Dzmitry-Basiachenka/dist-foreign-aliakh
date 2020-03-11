@@ -300,10 +300,23 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testFindUsagePeriods() {
         List<Integer> usagePeriods = aaclUsageRepository.findUsagePeriods();
+        assertEquals(4, usagePeriods.size());
+        assertEquals(2010, usagePeriods.get(0).intValue());
+        assertEquals(2018, usagePeriods.get(1).longValue());
+        assertEquals(2019, usagePeriods.get(2).longValue());
+        assertEquals(2020, usagePeriods.get(3).longValue());
+    }
+
+    @Test
+    public void testFindUsagePeriodsByFilter() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageBatchesIds(
+            Sets.newHashSet("31ac3937-157b-48c2-86b2-db28356fc868", "87279dd4-e100-4b72-a561-49e7effe8238"));
+        List<Integer> usagePeriods = aaclUsageRepository.findUsagePeriodsByFilter(filter);
         assertEquals(3, usagePeriods.size());
-        assertEquals(2018, usagePeriods.get(0).longValue());
-        assertEquals(2019, usagePeriods.get(1).longValue());
-        assertEquals(2020, usagePeriods.get(2).longValue());
+        assertEquals(2020, usagePeriods.get(0).intValue());
+        assertEquals(2019, usagePeriods.get(1).intValue());
+        assertEquals(2010, usagePeriods.get(2).intValue());
     }
 
     private void verifyUsages(List<String> expectedUsageJsonFiles, List<Usage> actualUsages,
