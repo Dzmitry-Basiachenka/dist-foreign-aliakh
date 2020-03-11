@@ -419,4 +419,16 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2020-03-11-02', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-56947 FDA: AACL view and edit scenario Pub Type Weights: add aacl_fields column to df_scenario table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'aacl_fields', type: 'JSONB', remarks: 'The fields of AACL scenarios')
+        }
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
