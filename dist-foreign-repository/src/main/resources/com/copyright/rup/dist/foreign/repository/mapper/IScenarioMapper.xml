@@ -14,6 +14,7 @@
         <result property="grossTotal" column="gross_total"/>
         <result property="reportedTotal" column="reported_total"/>
         <result property="description" column="description"/>
+        <result property="aaclFields" column="aacl_fields" typeHandler="AaclScenarioFieldsTypeHandler"/>
         <result property="ntsFields" column="nts_fields" typeHandler="NtsScenarioFieldsTypeHandler"/>
         <result property="ntsFields.preServiceFeeFundName" column="pre_service_fee_fund_name"/>
         <result property="ntsFields.preServiceFeeFundTotal" column="pre_service_fee_fund_total"/>
@@ -32,6 +33,7 @@
         name,
         status_ind,
         description,
+        aacl_fields,
         nts_fields,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
@@ -46,6 +48,7 @@
         coalesce(sum(u.service_fee_amount), 0) service_fee_total,
         coalesce(sum(u.net_amount), 0) net_total,
         s.description,
+        s.aacl_fields,
         s.nts_fields,
         fund.name pre_service_fee_fund_name,
         fund.total_amount pre_service_fee_fund_total,
@@ -73,6 +76,7 @@
             #{name},
             #{status},
             #{description},
+            #{aaclFields, typeHandler=AaclScenarioFieldsTypeHandler},
             #{ntsFields, typeHandler=NtsScenarioFieldsTypeHandler},
             <include refid="StoredEntityMapper.insert"/>
         )
@@ -96,6 +100,7 @@
                 #{scenario.name},
                 #{scenario.status},
                 #{scenario.description},
+                null,
                 #{scenario.ntsFields, typeHandler=NtsScenarioFieldsTypeHandler},
                 <include refid="StoredEntityMapper.insert"/>
             )
@@ -209,6 +214,7 @@
             s.name,
             s.status_ind,
             s.description,
+            s.aacl_fields,
             s.nts_fields,
             s.created_by_user,
             s.created_datetime,

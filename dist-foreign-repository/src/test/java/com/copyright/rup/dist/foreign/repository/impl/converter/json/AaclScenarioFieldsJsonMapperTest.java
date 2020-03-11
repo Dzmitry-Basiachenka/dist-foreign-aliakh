@@ -37,6 +37,7 @@ public class AaclScenarioFieldsJsonMapperTest {
         AaclFields aaclFields = jsonMapper.deserialize(json);
         List<PublicationType> pubTypes = aaclFields.getPublicationTypes();
         assertNotNull(pubTypes);
+        assertEquals(5, pubTypes.size());
         assertEquals(buildPublicationType("Book", ONE), pubTypes.get(0));
         assertEquals(buildPublicationType("Business or Trade Journal", "1.50"), pubTypes.get(1));
         assertEquals(buildPublicationType("Consumer Magazine", ONE), pubTypes.get(2));
