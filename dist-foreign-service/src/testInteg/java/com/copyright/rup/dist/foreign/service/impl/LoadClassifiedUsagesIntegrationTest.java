@@ -174,6 +174,6 @@ public class LoadClassifiedUsagesIntegrationTest {
         assertEquals(expectedAaclUsage.getDiscipline(), actualAaclUsage.getDiscipline());
         assertEquals(expectedAaclUsage.getEnrollmentProfile(), actualAaclUsage.getEnrollmentProfile());
         assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
-        assertEquals(expectedAaclUsage.isBaseline(), actualAaclUsage.isBaseline());
+        assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
     }
 }

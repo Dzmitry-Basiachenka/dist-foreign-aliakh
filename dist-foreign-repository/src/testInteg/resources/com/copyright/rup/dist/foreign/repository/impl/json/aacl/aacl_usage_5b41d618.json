@@ -19,8 +19,7 @@
       "institution": "University of Chicago",
       "usagePeriod": 2019,
       "usageSource": "Feb 2018 TUR",
-      "numberOfPages": 100,
-      "baseline": false
+      "numberOfPages": 100
     },
     "comment": "AACL usage"
   }

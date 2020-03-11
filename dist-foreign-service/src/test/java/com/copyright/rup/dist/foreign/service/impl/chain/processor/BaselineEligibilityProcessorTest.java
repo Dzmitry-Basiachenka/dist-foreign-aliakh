@@ -45,7 +45,7 @@ public class BaselineEligibilityProcessorTest {
 
     @Test
     public void testProcessBaselineUsage() {
-        Usage usage = buildUsage(true);
+        Usage usage = buildUsage("5a85d661-bf51-4361-9e69-32b1d560c7b2");
         usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);
         expectLastCall().once();
         usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
@@ -57,22 +57,22 @@ public class BaselineEligibilityProcessorTest {
 
     @Test
     public void testProcessNotBaselineUsage() {
-        Usage usage = buildUsage(false);
+        Usage usage = buildUsage(null);
         replay(usageRepository, usageAuditService);
         baselineEligibilityProcessor.process(usage);
         verify(usageRepository, usageAuditService);
     }
 
-    private Usage buildUsage(boolean flag) {
+    private Usage buildUsage(String baselineId) {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
-        usage.setAaclUsage(buildAaclUsage(flag));
+        usage.setAaclUsage(buildAaclUsage(baselineId));
         return usage;
     }
 
-    private AaclUsage buildAaclUsage(boolean flag) {
+    private AaclUsage buildAaclUsage(String baselineId) {
         AaclUsage aaclUsage = new AaclUsage();
-        aaclUsage.setBaseline(flag);
+        aaclUsage.setBaselineId(baselineId);
         return aaclUsage;
     }
 }

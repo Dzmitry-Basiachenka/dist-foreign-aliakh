@@ -20,7 +20,7 @@
       },
       "originalPublicationType": "Book series",
       "publicationTypeWeight": 4.29,
-      "baseline": true
+      "baselineId": "5bcb69c5-5758-4cd2-8ca0-c8d63d3a9d18"
     },
     "comment": "Baseline usage 2"
   }

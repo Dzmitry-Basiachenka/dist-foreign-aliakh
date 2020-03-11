@@ -29,7 +29,7 @@ public class AaclUsage {
     private String rightLimitation;
     private Integer numberOfPages;
     private LocalDate batchPeriodEndDate;
-    private boolean baseline;
+    private String baselineId;
     private BigDecimal publicationTypeWeight;
 
     public BigDecimal getPublicationTypeWeight() {
@@ -40,12 +40,12 @@ public class AaclUsage {
         this.publicationTypeWeight = publicationTypeWeight;
     }
 
-    public boolean isBaseline() {
-        return baseline;
+    public String getBaselineId() {
+        return baselineId;
     }
 
-    public void setBaseline(boolean baseline) {
-        this.baseline = baseline;
+    public void setBaselineId(String baselineId) {
+        this.baselineId = baselineId;
     }
 
     public Integer getDetailLicenseeClassId() {
@@ -158,7 +158,7 @@ public class AaclUsage {
             .append(numberOfPages, that.numberOfPages)
             .append(batchPeriodEndDate, that.batchPeriodEndDate)
             .append(publicationTypeWeight, that.publicationTypeWeight)
-            .append(baseline, that.baseline)
+            .append(baselineId, that.baselineId)
             .isEquals();
     }
 
@@ -177,7 +177,7 @@ public class AaclUsage {
             .append(numberOfPages)
             .append(batchPeriodEndDate)
             .append(publicationTypeWeight)
-            .append(baseline)
+            .append(baselineId)
             .toHashCode();
     }
 
@@ -196,7 +196,7 @@ public class AaclUsage {
             .append("numberOfPages", numberOfPages)
             .append("batchPeriodEndDate", batchPeriodEndDate)
             .append("publicationTypeWeight", publicationTypeWeight)
-            .append("baseline", baseline)
+            .append("baselineId", baselineId)
             .toString();
     }
 }
