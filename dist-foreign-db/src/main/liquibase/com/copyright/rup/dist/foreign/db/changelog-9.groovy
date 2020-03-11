@@ -387,4 +387,36 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2020-03-11-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-57613 FDA: Audit Tab modifications for AACL: remove is_baseline_flag column and " +
+                "add baseline_uid column")
+
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl', columnName: 'is_baseline_flag')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'baseline_uid', type: 'VARCHAR(255)', remarks: 'The Identifier of Baseline Usage')
+        }
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_aacl_2_df_usage_baseline_aacl',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage_aacl',
+                baseColumnNames: 'baseline_uid',
+                referencedTableName: 'df_usage_baseline_aacl',
+                referencedColumnNames: 'df_usage_baseline_aacl_uid')
+
+        rollback {
+            dropForeignKeyConstraint(
+                    baseTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_usage_aacl',
+                    constraintName: 'fk_df_usage_aacl_2_df_usage_baseline_aacl')
+
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl', columnName: 'baseline_uid')
+
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+                column(name: 'is_baseline_flag', type: 'BOOLEAN', remarks: 'The Identifier of Baseline Usage')
+            }
+        }
+    }
 }
