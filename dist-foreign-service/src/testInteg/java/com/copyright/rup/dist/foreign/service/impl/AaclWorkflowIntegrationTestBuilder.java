@@ -205,7 +205,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedAaclUsage.getPublicationTypeWeight(), actualAaclUsage.getPublicationTypeWeight());
             assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
             assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
-            assertEquals(expectedAaclUsage.isBaseline(), actualAaclUsage.isBaseline());
+            assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
         }
 
         private void assertPublicationType(PublicationType expectedPublicationType,

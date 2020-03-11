@@ -12,8 +12,7 @@
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Feb 2019 TUR",
       "rightLimitation": "PRINT",
-      "numberOfPages": 12,
-      "baseline": false
+      "numberOfPages": 12
     },
     "rightsholder": {
       "id": "05844db0-e0e4-4423-8966-7f1c6160f000",

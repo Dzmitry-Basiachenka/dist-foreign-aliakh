@@ -76,7 +76,7 @@ public class CommonUsageSerializerTest {
         usage.setProductFamily("AACL");
         usage.setAaclUsage(new AaclUsage());
         usage.getAaclUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
-        usage.getAaclUsage().setBaseline(true);
+        usage.getAaclUsage().setBaselineId("e98d77bf-af0a-4c40-a46a-f211607e239f");
         usage.setRightsholder(buildRightsholder());
         return usage;
     }

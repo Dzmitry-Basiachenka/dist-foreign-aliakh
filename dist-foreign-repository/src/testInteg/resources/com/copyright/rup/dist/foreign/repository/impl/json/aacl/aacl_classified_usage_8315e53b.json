@@ -19,8 +19,7 @@
         "name": "Book"
       },
       "discipline": "Life Sciences",
-      "enrollmentProfile": "EXGP",
-      "baseline": false
+      "enrollmentProfile": "EXGP"
     },
     "rightsholder": {
       "id": "77cfa2dd-efac-48a9-bd5b-98659ff2265a",

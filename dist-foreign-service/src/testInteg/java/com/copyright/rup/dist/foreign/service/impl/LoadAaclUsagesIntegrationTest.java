@@ -172,7 +172,7 @@ public class LoadAaclUsagesIntegrationTest {
         assertEquals(expectedAaclUsage.getPublicationTypeWeight(), actualAaclUsage.getPublicationTypeWeight());
         assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
         assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
-        assertEquals(expectedAaclUsage.isBaseline(), actualAaclUsage.isBaseline());
+        assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
     }
 
     private void assertPublicationType(PublicationType expectedPublicationType, PublicationType actualPublicationType) {

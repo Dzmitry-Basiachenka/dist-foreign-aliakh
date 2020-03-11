@@ -31,7 +31,7 @@
         <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>
         <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
         <result property="aaclUsage.publicationTypeWeight" column="publication_type_weight"/>
-        <result property="aaclUsage.baseline" column="is_baseline_flag"/>
+        <result property="aaclUsage.baselineId" column="baseline_uid"/>
     </resultMap>
 
     <resultMap id="aaclUsageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
@@ -60,7 +60,7 @@
         <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>
         <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
         <result property="aaclUsage.publicationTypeWeight" column="publication_type_weight"/>
-        <result property="aaclUsage.baseline" column="is_baseline_flag"/>
+        <result property="aaclUsage.baselineId" column="baseline_uid"/>
     </resultMap>
 
     <sql id="aaclUsageColumns">
@@ -84,7 +84,7 @@
         uaacl.number_of_pages,
         uaacl.right_limitation,
         uaacl.detail_licensee_class_id,
-        uaacl.is_baseline_flag,
+        uaacl.baseline_uid,
         dlc.discipline,
         dlc.enrollment_profile,
         uaacl.original_publication_type,
@@ -299,7 +299,7 @@
                 publication_type_weight,
                 institution,
                 comment,
-                true is_baseline_flag
+                df_usage_baseline_aacl_uid
             from ${schema}.df_usage_baseline_aacl
             where usage_period in
             <foreach collection="periods" item="period" open="(" separator="," close=")">
@@ -338,7 +338,7 @@
             original_publication_type,
             publication_type_uid,
             publication_type_weight,
-            is_baseline_flag,
+            baseline_uid,
             <include refid="StoredEntityMapper.additionalColumns"/>
         )
         select
@@ -351,7 +351,7 @@
             original_publication_type,
             publication_type_uid,
             publication_type_weight,
-            is_baseline_flag,
+            df_usage_baseline_aacl_uid,
             <include refid="StoredEntityMapper.insert"/>
         from baseline_usages
         returning df_usage_aacl_uid
