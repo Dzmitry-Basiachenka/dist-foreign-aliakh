@@ -7,7 +7,6 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.util.ReflectTools;
 
@@ -26,30 +25,33 @@ import java.util.function.Supplier;
  */
 public class AaclScenarioParameterWidget<T> extends HorizontalLayout {
 
-    private final Supplier<Window> windowSupplier;
+    private final Supplier<AaclCommonScenarioParameterWindow<T>> windowSupplier;
+    private final Supplier<T> defaultParametersSupplier;
+    private T appliedParameters;
     private Button button;
-    private IParametersSaveListener<T> saveListener;
 
     /**
      * Constructor.
      *
-     * @param caption           button caption
-     * @param windowInitializer supplier for window initialization
+     * @param caption                   button caption
+     * @param defaultParametersSupplier supplier for getting default parameter
+     * @param windowInitializer         supplier for window initialization
      */
-    public AaclScenarioParameterWidget(String caption, Supplier<Window> windowInitializer) {
+    public AaclScenarioParameterWidget(String caption, Supplier<T> defaultParametersSupplier,
+                                       Supplier<AaclCommonScenarioParameterWindow<T>> windowInitializer) {
         this.windowSupplier = windowInitializer;
+        this.defaultParametersSupplier = defaultParametersSupplier;
+        this.appliedParameters = defaultParametersSupplier.get();
         initButton(caption);
         addComponent(button);
         setExpandRatio(button, 1);
     }
 
     /**
-     * Adds parameter save listener.
-     *
-     * @param listener {@link IParametersSaveListener}
+     * @return applied parameters.
      */
-    public void addParameterSaveListener(IParametersSaveListener<T> listener) {
-        saveListener = listener;
+    public T getAppliedParameters() {
+        return appliedParameters;
     }
 
     private void initButton(String caption) {
@@ -57,9 +59,13 @@ public class AaclScenarioParameterWidget<T> extends HorizontalLayout {
         button.addStyleName(ValoTheme.BUTTON_LINK);
         VaadinUtils.setButtonsAutoDisabled(button);
         button.addClickListener(event -> {
-            Window filterWindow = windowSupplier.get();
-            Windows.showModalWindow(filterWindow);
-            filterWindow.addListener(ParametersSaveEvent.class, saveListener, IParametersSaveListener.SAVE_HANDLER);
+            AaclCommonScenarioParameterWindow<T> parameterWindow = windowSupplier.get();
+            parameterWindow.setDefaultParameters(defaultParametersSupplier.get());
+            parameterWindow.setAppliedParameters(appliedParameters);
+            Windows.showModalWindow(parameterWindow);
+            parameterWindow.addListener(ParametersSaveEvent.class,
+                (IParametersSaveListener<T>) saveEvent -> appliedParameters = saveEvent.getSavedParameters(),
+                IParametersSaveListener.SAVE_HANDLER);
         });
     }
 

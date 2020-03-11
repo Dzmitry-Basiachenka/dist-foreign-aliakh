@@ -27,6 +27,22 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
         this.name = name;
     }
 
+    /**
+     * Default constructor.
+     */
+    public AggregateLicenseeClass() {
+    }
+
+    /**
+     * Copy constructor.
+     *
+     * @param clone instance of {@link DetailLicenseeClass} to copy
+     */
+    public AggregateLicenseeClass(AggregateLicenseeClass clone) {
+        this.setId(clone.getId());
+        name = clone.getName();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

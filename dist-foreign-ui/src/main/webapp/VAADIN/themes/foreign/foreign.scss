@@ -302,4 +302,16 @@
         border: none !important;
         padding: 0px !important;
     }
+
+    .v-grid-aggregate-licensee-class-mapping-grid .v-grid-cell.combobox-column, .v-grid-aggregate-licensee-class-mapping-grid .v-filterselect {
+        padding: 0 0px !important;
+    }
+
+    .v-grid-aggregate-licensee-class-mapping-grid .v-grid-row .v-filterselect-input {
+        background-color: #FFFFFF;
+    }
+
+    .v-grid-aggregate-licensee-class-mapping-grid .v-grid-row-stripe .v-filterselect-input, .v-grid-aggregate-licensee-class-mapping-grid .v-grid-row-stripe .v-filterselect-button {
+        background-color: #E2EFFF;
+    }
 }
