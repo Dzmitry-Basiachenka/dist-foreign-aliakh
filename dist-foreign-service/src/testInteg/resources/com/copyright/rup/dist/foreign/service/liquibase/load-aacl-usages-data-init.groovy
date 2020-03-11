@@ -73,7 +73,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '45')
             column(name: 'detail_licensee_class_id', value: '164')
             column(name: 'original_publication_type', value: 'Database or Reference Book')
-            column(name: 'publication_type_uid', value: '357ea293-8f98-4160-820e-8369f6180654')
+            column(name: 'publication_type_uid', value: '68fd94c0-a8c0-4a59-bfe3-6674c4b12199')
             column(name: 'publication_type_weight', value: '1.47')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
             column(name: 'comment', value: 'AACL baseline usage that should not be pulled')
