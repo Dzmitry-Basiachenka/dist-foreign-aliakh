@@ -7,8 +7,10 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
@@ -38,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -69,9 +72,11 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String SCENARIO_ID_2 = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String SCENARIO_ID_3 = "2369313c-dd17-45ed-a6e9-9461b9232ffd";
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USER = "user@copyright.com";
+    private static final String ONE = "1.00";
 
     @Autowired
     private ScenarioRepository scenarioRepository;
@@ -358,6 +363,33 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    public void testInsertAaclScenario() {
+        Scenario scenario = buildScenario();
+        scenario.setProductFamily(AACL_PRODUCT_FAMILY);
+        AaclFields aaclFields = new AaclFields();
+        scenario.setAaclFields(aaclFields);
+        List<PublicationType> pubTypes = new ArrayList<>();
+        aaclFields.setPublicationTypes(pubTypes);
+        pubTypes.add(buildPublicationType("Book", ONE));
+        pubTypes.add(buildPublicationType("Business or Trade Journal", "1.50"));
+        pubTypes.add(buildPublicationType("Consumer Magazine", ONE));
+        pubTypes.add(buildPublicationType("News Source", "4.00"));
+        pubTypes.add(buildPublicationType("STMA Journal", "1.10"));
+        scenarioRepository.insert(scenario);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        usageFilter.setProductFamily(AACL_PRODUCT_FAMILY);
+        ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter(usageFilter);
+        scenarioUsageFilter.setId(RupPersistUtils.generateUuid());
+        scenarioUsageFilter.setScenarioId(scenario.getId());
+        filterRepository.insert(scenarioUsageFilter);
+        Scenario actualScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID);
+        AaclFields actualAaclFields = actualScenario.getAaclFields();
+        assertNotNull(actualAaclFields);
+        assertEquals(pubTypes, actualAaclFields.getPublicationTypes());
+    }
+
+    @Test
     public void testInsertNtsScenarioAndAddUsages() {
         Scenario scenario = buildScenario();
         NtsFields ntsFields = new NtsFields();
@@ -499,5 +531,12 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(expectedUsage.getId(), actualUsage.getId());
         assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
         assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+    }
+
+    private PublicationType buildPublicationType(String name, String weight) {
+        PublicationType pubType = new PublicationType();
+        pubType.setName(name);
+        pubType.setWeight(new BigDecimal(weight));
+        return pubType;
     }
 }
