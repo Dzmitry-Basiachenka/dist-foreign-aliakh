@@ -35,6 +35,8 @@ public class AaclScenarioFieldsJsonMapperTest {
     public void testDeserialize() throws IOException {
         String json = TestUtils.fileToString(this.getClass(), "aacl_scenario_fields.json");
         AaclFields aaclFields = jsonMapper.deserialize(json);
+        assertEquals(new BigDecimal("12.34"), aaclFields.getTitleCutoffAmount());
+        assertEquals("8ab155cb-c96d-4355-9f37-12d26ef4d765", aaclFields.getFundPoolId());
         List<PublicationType> pubTypes = aaclFields.getPublicationTypes();
         assertNotNull(pubTypes);
         assertEquals(5, pubTypes.size());
@@ -48,6 +50,8 @@ public class AaclScenarioFieldsJsonMapperTest {
     @Test
     public void testSerialize() throws IOException {
         AaclFields aaclFields = new AaclFields();
+        aaclFields.setTitleCutoffAmount(new BigDecimal("12.34"));
+        aaclFields.setFundPoolId("8ab155cb-c96d-4355-9f37-12d26ef4d765");
         List<PublicationType> pubTypes = aaclFields.getPublicationTypes();
         aaclFields.setPublicationTypes(pubTypes);
         pubTypes.add(buildPublicationType("Book", ONE));

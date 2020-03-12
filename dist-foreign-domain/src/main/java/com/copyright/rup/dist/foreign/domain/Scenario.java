@@ -188,8 +188,26 @@ public class Scenario extends StoredEntity<String> {
      */
     public static class AaclFields {
 
+        private BigDecimal titleCutoffAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+        private String fundPoolId;
         private List<PublicationType> publicationTypes = new ArrayList<>();
         // TODO {aliakh} add Usage Age Weights, Licensee Classes mapping and other fields specific for AACL scenario
+
+        public BigDecimal getTitleCutoffAmount() {
+            return titleCutoffAmount;
+        }
+
+        public void setTitleCutoffAmount(BigDecimal titleCutoffAmount) {
+            this.titleCutoffAmount = titleCutoffAmount;
+        }
+
+        public String getFundPoolId() {
+            return fundPoolId;
+        }
+
+        public void setFundPoolId(String fundPoolId) {
+            this.fundPoolId = fundPoolId;
+        }
 
         public List<PublicationType> getPublicationTypes() {
             return publicationTypes;
@@ -210,6 +228,8 @@ public class Scenario extends StoredEntity<String> {
             AaclFields that = (AaclFields) obj;
             return new EqualsBuilder()
                 .append(this.publicationTypes, that.publicationTypes)
+                .append(this.titleCutoffAmount, that.titleCutoffAmount)
+                .append(this.fundPoolId, that.fundPoolId)
                 .isEquals();
         }
 
@@ -217,6 +237,8 @@ public class Scenario extends StoredEntity<String> {
         public int hashCode() {
             return new HashCodeBuilder()
                 .append(publicationTypes)
+                .append(titleCutoffAmount)
+                .append(fundPoolId)
                 .toHashCode();
         }
 
@@ -224,6 +246,8 @@ public class Scenario extends StoredEntity<String> {
         public String toString() {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("publicationTypes", publicationTypes)
+                .append("titleCutoffAmount", titleCutoffAmount)
+                .append("fundPoolId", fundPoolId)
                 .toString();
         }
     }
