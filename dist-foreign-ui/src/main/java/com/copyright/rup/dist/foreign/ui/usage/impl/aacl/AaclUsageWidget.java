@@ -21,6 +21,10 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.List;
+
 /**
  * Usage widget for AACL product families.
  * <p>
@@ -38,6 +42,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button sendForClassificationButton;
     private Button loadClassifiedUsagesButton;
+    private Button addToScenarioButton;
     private Button exportButton;
     private final IAaclUsageController controller;
 
@@ -57,6 +62,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         mediator.setSendForClassificationButton(sendForClassificationButton);
         mediator.setLoadClassifiedUsagesButton(loadClassifiedUsagesButton);
+        mediator.setAddToScenarioButton(addToScenarioButton);
         return mediator;
     }
 
@@ -102,10 +108,11 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         initFundPoolMenuBar();
         initSendForClassificationButton();
         initLoadClassifiedUsagesButton();
+        initAddToScenarioButton();
         initExportButton();
-        VaadinUtils.setButtonsAutoDisabled(loadClassifiedUsagesButton);
+        VaadinUtils.setButtonsAutoDisabled(loadClassifiedUsagesButton, addToScenarioButton);
         HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, sendForClassificationButton,
-            loadClassifiedUsagesButton, exportButton);
+            loadClassifiedUsagesButton, addToScenarioButton, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -162,11 +169,41 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
             Windows.showModalWindow(new ClassifiedUsagesUploadWindow(controller)));
     }
 
+    private void initAddToScenarioButton() {
+        addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked());
+    }
+
     private void initExportButton() {
         exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
         fileDownloader.extend(exportButton);
+    }
+
+    private void onAddToScenarioClicked() {
+        String message = getScenarioValidationMessage();
+        if (null != message) {
+            Windows.showNotificationWindow(message);
+        }
+        // TODO {srudak} show CreateAaclScenarioWindow in the else statement
+    }
+
+    private String getScenarioValidationMessage() {
+        String message = null;
+        if (0 == controller.getBeansCount()) {
+            message = ForeignUi.getMessage("message.error.empty_usages");
+        } else if (!controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)) {
+            message = ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.ELIGIBLE,
+                "added to scenario");
+        } else {
+            List<Long> accountNumbers = controller.getInvalidRightsholders();
+            if (CollectionUtils.isNotEmpty(accountNumbers)) {
+                message = ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
+                    accountNumbers);
+            }
+        }
+        return message;
     }
 
     private static class SendForClassificationFileDownloader extends OnDemandFileDownloader {

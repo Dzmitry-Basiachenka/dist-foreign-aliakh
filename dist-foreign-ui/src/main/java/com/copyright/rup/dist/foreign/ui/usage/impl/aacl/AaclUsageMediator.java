@@ -22,6 +22,7 @@ class AaclUsageMediator implements IMediator {
     private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button sendForClassificationButton;
     private Button loadClassifiedUsagesButton;
+    private Button addToScenarioButton;
 
     @Override
     public void applyPermissions() {
@@ -29,6 +30,7 @@ class AaclUsageMediator implements IMediator {
         loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadAaclFundPoolPermission());
         sendForClassificationButton.setVisible(ForeignSecurityUtils.hasSendForClassificationPermission());
         loadClassifiedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadClassifiedUsagePermission());
+        addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
     }
 
     void setLoadUsageBatchMenuItem(MenuBar.MenuItem loadUsageBatchMenuItem) {
@@ -45,5 +47,9 @@ class AaclUsageMediator implements IMediator {
 
     void setLoadClassifiedUsagesButton(Button loadClassifiedUsagesButton) {
         this.loadClassifiedUsagesButton = loadClassifiedUsagesButton;
+    }
+
+    void setAddToScenarioButton(Button addToScenarioButton) {
+        this.addToScenarioButton = addToScenarioButton;
     }
 }

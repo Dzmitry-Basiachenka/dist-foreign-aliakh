@@ -70,6 +70,7 @@ import java.util.stream.IntStream;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({AaclUsageWidget.class, Windows.class, ForeignSecurityUtils.class, ViewAaclFundPoolWindow.class})
+// TODO {srudak} add test for 'Add To Scenario' button listener
 public class AaclUsageWidgetTest {
 
     private AaclUsageWidget usagesWidget;
@@ -140,6 +141,8 @@ public class AaclUsageWidgetTest {
         mediator.setSendForClassificationButton(anyObject(Button.class));
         expectLastCall().once();
         mediator.setLoadClassifiedUsagesButton(anyObject(Button.class));
+        expectLastCall().once();
+        mediator.setAddToScenarioButton(anyObject(Button.class));
         expectLastCall().once();
         replay(AaclUsageMediator.class, mediator, controller);
         assertNotNull(usagesWidget.initMediator());
@@ -232,14 +235,14 @@ public class AaclUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(5, layout.getComponentCount());
+        assertEquals(6, layout.getComponentCount());
         verifyUsageBatchMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load", "View"));
         verifyFundPoolMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
         Button sendForClassificationButton = (Button) layout.getComponent(2);
         assertEquals("Send for Classification", sendForClassificationButton.getCaption());
-        Button loadClassifiedUsagesButton = (Button) layout.getComponent(3);
-        assertEquals("Load Classified Details", loadClassifiedUsagesButton.getCaption());
-        assertEquals("Export", layout.getComponent(4).getCaption());
+        assertEquals("Load Classified Details", layout.getComponent(3).getCaption());
+        assertEquals("Add To Scenario", layout.getComponent(4).getCaption());
+        assertEquals("Export", layout.getComponent(5).getCaption());
     }
 
     private void verifyUsageBatchMenuBar(Component component, String menuBarName, List<String> menuItems) {

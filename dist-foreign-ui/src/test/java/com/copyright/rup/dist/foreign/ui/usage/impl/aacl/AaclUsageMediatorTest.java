@@ -39,6 +39,7 @@ public class AaclUsageMediatorTest {
     private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button sendForClassificationButton;
     private Button loadClassifiedUsagesButton;
+    private Button addToScenarioButton;
     private AaclUsageMediator mediator;
 
     @Before
@@ -49,11 +50,13 @@ public class AaclUsageMediatorTest {
         loadFundPoolMenuItem = fundPoolMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
         sendForClassificationButton = new Button();
         loadClassifiedUsagesButton = new Button();
+        addToScenarioButton = new Button();
         mediator = new AaclUsageMediator();
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         mediator.setSendForClassificationButton(sendForClassificationButton);
         mediator.setLoadClassifiedUsagesButton(loadClassifiedUsagesButton);
+        mediator.setAddToScenarioButton(addToScenarioButton);
     }
 
     @Test
@@ -67,6 +70,7 @@ public class AaclUsageMediatorTest {
         assertFalse(loadFundPoolMenuItem.isVisible());
         assertFalse(sendForClassificationButton.isVisible());
         assertFalse(loadClassifiedUsagesButton.isVisible());
+        assertFalse(addToScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -81,6 +85,7 @@ public class AaclUsageMediatorTest {
         assertFalse(loadFundPoolMenuItem.isVisible());
         assertFalse(sendForClassificationButton.isVisible());
         assertFalse(loadClassifiedUsagesButton.isVisible());
+        assertFalse(addToScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -92,9 +97,10 @@ public class AaclUsageMediatorTest {
         assertTrue(usageBatchMenuBar.isVisible());
         assertTrue(loadUsageBatchMenuItem.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
-        assertTrue(loadFundPoolMenuItem.isVisible());        
+        assertTrue(loadFundPoolMenuItem.isVisible());
         assertTrue(sendForClassificationButton.isVisible());
         assertTrue(loadClassifiedUsagesButton.isVisible());
+        assertTrue(addToScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
 
