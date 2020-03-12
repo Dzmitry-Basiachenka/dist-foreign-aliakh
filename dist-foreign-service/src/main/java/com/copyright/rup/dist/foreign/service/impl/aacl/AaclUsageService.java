@@ -8,6 +8,7 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -28,6 +29,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +39,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Implementation of {@link IAaclUsageService}.
@@ -48,6 +53,9 @@ import java.util.stream.Collectors;
 @Service
 public class AaclUsageService implements IAaclUsageService {
 
+    private static final List<BigDecimal> DEFAULT_USAGES_AGE_WEIGHTS =
+        Arrays.asList(new BigDecimal("1.00"), new BigDecimal("0.75"), new BigDecimal("0.50"), new BigDecimal("0.25"));
+    private static final BigDecimal USAGES_AGE_WEIGHT_ZERO = new BigDecimal("0.00");
     private static final String INSERT_BASELINE_FINISHED_LOG_MESSAGE_FORMAT = "Insert AACL usages from baseline. " +
         "Finished. UsageBatchName={}, Period={}, NumberOfYears={}, UsagesCount={}, UserName={}";
     private static final String INSERT_BASELINE_SKIPPED_LOG_MESSAGE_FORMAT = "Insert AACL usages from baseline. " +
@@ -170,6 +178,20 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    public List<UsageAge> getUsageAges(UsageFilter filter) {
+        List<Integer> periods = aaclUsageRepository.findUsagePeriodsByFilter(filter);
+        List<UsageAge> usageAges = new ArrayList<>();
+        IntStream.range(0, CollectionUtils.size(periods))
+            .forEach(index -> {
+                UsageAge usageAge = new UsageAge();
+                usageAge.setPeriod(periods.get(index));
+                usageAge.setWeight(getAgeWeight(index));
+                usageAges.add(usageAge);
+            });
+        return usageAges;
+    }
+
+    @Override
     @Transactional
     public void deleteById(String usageId) {
         usageAuditService.deleteActionsByUsageId(usageId);
@@ -207,5 +229,10 @@ public class AaclUsageService implements IAaclUsageService {
         return DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getDiscipline())
             || DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getEnrollmentProfile())
             || DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getPublicationType());
+    }
+
+    private BigDecimal getAgeWeight(int index) {
+        return DEFAULT_USAGES_AGE_WEIGHTS.size() > index
+            ? DEFAULT_USAGES_AGE_WEIGHTS.get(index) : USAGES_AGE_WEIGHT_ZERO;
     }
 }

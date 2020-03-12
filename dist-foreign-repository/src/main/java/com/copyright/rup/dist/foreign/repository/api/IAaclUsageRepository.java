@@ -113,6 +113,14 @@ public interface IAaclUsageRepository {
     List<Integer> findUsagePeriods();
 
     /**
+     * Finds list of AACL usage periods by {@link UsageFilter}.
+     *
+     * @param filter {@link UsageFilter} instance
+     * @return list of AACL usage periods found by {@link UsageFilter}
+     */
+    List<Integer> findUsagePeriodsByFilter(UsageFilter filter);
+
+    /**
      * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.
      *
      * @param filter {@link UsageFilter} instance

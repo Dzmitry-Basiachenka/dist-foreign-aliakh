@@ -426,6 +426,14 @@
         order by usage_period
     </select>
 
+    <select id="findUsagePeriodsByFilter" parameterType="UsageFilter" resultType="int">
+        select distinct ua.usage_period
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aacl ua on u.df_usage_uid = ua.df_usage_aacl_uid
+        <include refid="IAaclUsageMapper.aaclUsageFilter"/>
+        order by ua.usage_period desc
+    </select>
+
     <select id="isValidFilteredUsageStatus" parameterType="map" resultType="boolean">
         select not exists (
             select 1

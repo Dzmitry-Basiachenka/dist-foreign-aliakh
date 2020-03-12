@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -43,7 +44,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
 
 import com.vaadin.ui.HorizontalLayout;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -58,6 +58,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -338,5 +339,23 @@ public class AaclUsageControllerTest {
         replay(fundPoolService);
         assertEquals(1, controller.insertFundPool(fundPool, details));
         verify(fundPoolService);
+    }
+
+    @Test
+    public void testGetUsageAges() {
+        UsageFilter filter = new UsageFilter();
+        List<UsageAge> usageAges =
+            Arrays.asList(buildUsageAge(2020, new BigDecimal("1.00")), buildUsageAge(2018, new BigDecimal("0.75")));
+        expect(aaclUsageService.getUsageAges(filter)).andReturn(usageAges).once();
+        replay(aaclUsageService);
+        assertEquals(usageAges, controller.getUsageAges(filter));
+        verify(aaclUsageService);
+    }
+
+    private UsageAge buildUsageAge(Integer period, BigDecimal weight) {
+        UsageAge usageAge = new UsageAge();
+        usageAge.setPeriod(period);
+        usageAge.setWeight(weight);
+        return usageAge;
     }
 }
