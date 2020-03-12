@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AuditAaclCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.SendForClassificationCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.AuditFasCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasBatchSummaryReportHandler;
@@ -259,8 +260,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
         writeCsvReportByParts("IReportMapper.findUsagesCountForAudit", "IReportMapper.findAuditReportDtos",
-            parameters,
-            !Objects.requireNonNull(filter).isEmpty(),
+            parameters, !Objects.requireNonNull(filter).isEmpty(),
             () -> new AuditFasCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
@@ -269,9 +269,17 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
         writeCsvReportByParts("IReportMapper.findUsagesCountForAudit", "IReportMapper.findAuditReportDtos",
-            parameters,
-            !Objects.requireNonNull(filter).isEmpty(),
+            parameters, !Objects.requireNonNull(filter).isEmpty(),
             () -> new AuditNtsCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeAuditAaclCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
+        parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
+        writeCsvReportByParts("IReportMapper.findUsagesCountForAudit", "IReportMapper.findAuditAaclReportDtos",
+            parameters, !Objects.requireNonNull(filter).isEmpty(),
+            () -> new AuditAaclCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override

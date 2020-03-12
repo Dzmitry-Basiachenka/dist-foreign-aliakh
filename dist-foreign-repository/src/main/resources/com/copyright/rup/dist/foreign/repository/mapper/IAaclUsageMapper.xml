@@ -42,6 +42,16 @@
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="payeeAccountNumber" column="payee_account_number"/>
+        <result property="payeeName" column="payee_name"/>
+        <result property="checkNumber" column="check_number"/>
+        <result property="checkDate" column="check_date"/>
+        <result property="cccEventId" column="ccc_event_id"/>
+        <result property="distributionName" column="distribution_name"/>
+        <result property="distributionDate" column="distribution_date"/>
         <result property="systemTitle" column="system_title"/>
         <result property="standardNumber" column="standard_number"/>
         <result property="standardNumberType" column="standard_number_type"/>
@@ -96,6 +106,198 @@
         u.created_by_user,
         u.updated_by_user,
         u.record_version
+    </sql>
+
+    <sql id="selectForAuditSql">
+        <choose>
+            <when test="null != filter.cccEventId || null != filter.distributionName">
+                <include refid="IAaclUsageMapper.selectArchivedUsagesForAuditSql"/>
+            </when>
+            <otherwise>
+                select
+                    u.df_usage_uid,
+                    u.status_ind,
+                    u.product_family,
+                    u.df_usage_batch_uid,
+                    ub.name batch_name,
+                    u.rh_account_number,
+                    rh.name rh_name,
+                    u.payee_account_number,
+                    payee.name payee_name,
+                    wr_wrk_inst,
+                    system_title,
+                    standard_number,
+                    standard_number_type,
+                    u.gross_amount,
+                    u.net_amount,
+                    service_fee_amount,
+                    u.updated_datetime,
+                    s.name scenario_name,
+                    null check_number,
+                    null check_date,
+                    null ccc_event_id,
+                    null distribution_name,
+                    null distribution_date,
+                    null period_end_date,
+                    u.comment,
+                    uaacl.baseline_uid,
+                    uaacl.usage_period,
+                    uaacl.usage_source,
+                    uaacl.number_of_pages,
+                    uaacl.detail_licensee_class_id,
+                    dlc.discipline,
+                    dlc.enrollment_profile
+                from ${schema}.df_usage u
+                join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+                left join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+                left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
+                left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+                left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
+                left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+                <where>
+                    <include refid="IUsageMapper.commonAuditFilterWhereClause">
+                        <property name="detail_uid" value="u.df_usage_uid"/>
+                    </include>
+                </where>
+                union
+                <include refid="IAaclUsageMapper.selectArchivedUsagesForAuditSql"/>
+            </otherwise>
+        </choose>
+        order by
+        <choose>
+            <when test="null != sort">
+                <choose>
+                    <when test="sort.property == 'productFamily'">
+                        product_family
+                    </when>
+                    <when test="sort.property == 'detailId'">
+                        df_usage_uid
+                    </when>
+                    <when test="sort.property == 'status'">
+                        status_ind
+                    </when>
+                    <when test="sort.property == 'batchName'">
+                        batch_name
+                    </when>
+                    <when test="sort.property == 'paymentDate'">
+                        payment_date
+                    </when>
+                    <when test="sort.property == 'rhAccountNumber'">
+                        rh_account_number
+                    </when>
+                    <when test="sort.property == 'rhName'">
+                        rh_name
+                    </when>
+                    <when test="sort.property == 'payeeAccountNumber'">
+                        payee_account_number
+                    </when>
+                    <when test="sort.property == 'payeeName'">
+                        payee_name
+                    </when>
+                    <when test="sort.property == 'wrWrkInst'">
+                        wr_wrk_inst
+                    </when>
+                    <when test="sort.property == 'systemTitle'">
+                        system_title
+                    </when>
+                    <when test="sort.property == 'workTitle'">
+                        work_title
+                    </when>
+                    <when test="sort.property == 'standardNumber'">
+                        standard_number
+                    </when>
+                    <when test="sort.property == 'standardNumberType'">
+                        standard_number_type
+                    </when>
+                    <when test="sort.property == 'reportedValue'">
+                        reported_value
+                    </when>
+                    <when test="sort.property == 'grossAmount'">
+                        gross_amount
+                    </when>
+                    <when test="sort.property == 'batchGrossAmount'">
+                        batch_gross_amount
+                    </when>
+                    <when test="sort.property == 'serviceFee'">
+                        service_fee
+                    </when>
+                    <when test="sort.property == 'scenarioName'">
+                        scenario_name
+                    </when>
+                    <when test="sort.property == 'checkNumber'">
+                        check_number
+                    </when>
+                    <when test="sort.property == 'checkDate'">
+                        check_date
+                    </when>
+                    <when test="sort.property == 'cccEventId'">
+                        ccc_event_id
+                    </when>
+                    <when test="sort.property == 'distributionName'">
+                        distribution_name
+                    </when>
+                    <when test="sort.property == 'distributionDate'">
+                        distribution_date
+                    </when>
+                    <when test="sort.property == 'periodEndDate'">
+                        period_end_date
+                    </when>
+                    <when test="sort.property == 'comment'">
+                        comment
+                    </when>
+                </choose>
+                <include refid="IUsageMapper.direction"/>,
+                df_usage_uid
+            </when>
+            <otherwise>
+                df_usage_uid
+            </otherwise>
+        </choose>
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <sql id="selectArchivedUsagesForAuditSql">
+        select
+            df_usage_archive_uid df_usage_uid,
+            u.status_ind,
+            u.product_family,
+            u.df_usage_batch_uid,
+            ub.name batch_name,
+            u.rh_account_number,
+            rh.name rh_name,
+            u.payee_account_number,
+            payee.name payee_name,
+            wr_wrk_inst,
+            system_title,
+            standard_number,
+            standard_number_type,
+            u.gross_amount,
+            u.net_amount,
+            service_fee_amount,
+            u.updated_datetime,
+            s.name scenario_name,
+            u.check_number,
+            u.check_date,
+            u.ccc_event_id,
+            u.distribution_name,
+            u.distribution_date,
+            u.period_end_date,
+            u.comment,
+            uaacl.baseline_uid,
+            uaacl.usage_period,
+            uaacl.usage_source,
+            uaacl.number_of_pages,
+            uaacl.detail_licensee_class_id,
+            dlc.discipline,
+            dlc.enrollment_profile
+        from ${schema}.df_usage_archive u
+        left join ${schema}.df_usage_aacl uaacl on u.df_usage_archive_uid = uaacl.df_usage_aacl_uid
+        left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
+        left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
+        left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+        <include refid="IUsageMapper.archivedAuditFilterWhereClause"/>
     </sql>
 
     <sql id="aaclUsageFilter">
