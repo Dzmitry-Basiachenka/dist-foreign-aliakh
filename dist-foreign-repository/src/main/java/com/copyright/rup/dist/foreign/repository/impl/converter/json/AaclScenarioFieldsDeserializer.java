@@ -23,6 +23,8 @@ import java.util.List;
 // TODO {aliakh} read Usage Age Weights, Licensee Classes mapping and other fields specific for AACL scenario
 public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> {
 
+    private static final String TITLE_CUTOFF_AMOUNT = "title_cutoff_amount";
+    private static final String FUND_POOL_ID = "fund_pool_uid";
     private static final String PUBLICATION_TYPES = "publicationTypes";
     private static final String NAME = "name";
     private static final String WEIGHT = "weight";
@@ -37,26 +39,33 @@ public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> 
     @Override
     public AaclFields deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         AaclFields aaclFields = new AaclFields();
-        PublicationType pubType = new PublicationType();
         JsonToken currentToken;
         while (null != (currentToken = jp.nextValue())) {
-            if (JsonToken.START_ARRAY == currentToken
-                && PUBLICATION_TYPES.equals(jp.getCurrentName())) {
-                while (jp.nextToken() != JsonToken.END_ARRAY) {
-                    List<PublicationType> pubTypes = aaclFields.getPublicationTypes();
-                    if (JsonToken.START_OBJECT == jp.currentToken()) {
-                        pubType = new PublicationType();
-                        pubTypes.add(pubType);
-                    } else if (JsonToken.VALUE_STRING == jp.currentToken()
-                        && NAME.equals(jp.getCurrentName())) {
-                        pubType.setName(jp.getValueAsString());
-                    } else if (JsonToken.VALUE_NUMBER_FLOAT == jp.currentToken()
-                        && WEIGHT.equals(jp.getCurrentName())) {
-                        pubType.setWeight(jp.getDecimalValue());
-                    }
-                }
+            if ((JsonToken.VALUE_NUMBER_INT == currentToken || JsonToken.VALUE_NUMBER_FLOAT == currentToken)
+                && TITLE_CUTOFF_AMOUNT.equals(jp.getCurrentName())) {
+                aaclFields.setTitleCutoffAmount(jp.getDecimalValue());
+            } else if (JsonToken.VALUE_STRING == currentToken && FUND_POOL_ID.equals(jp.getCurrentName())) {
+                aaclFields.setFundPoolId(jp.getValueAsString());
+            } else if (JsonToken.START_ARRAY == currentToken && PUBLICATION_TYPES.equals(jp.getCurrentName())) {
+                readPubTypes(jp, aaclFields.getPublicationTypes());
             }
         }
         return aaclFields;
+    }
+
+    private void readPubTypes(JsonParser jp, List<PublicationType> pubTypes) throws IOException {
+        PublicationType pubType = new PublicationType();
+        while (jp.nextToken() != JsonToken.END_ARRAY) {
+            if (JsonToken.START_OBJECT == jp.currentToken()) {
+                pubType = new PublicationType();
+                pubTypes.add(pubType);
+            } else if (JsonToken.VALUE_STRING == jp.currentToken()
+                && NAME.equals(jp.getCurrentName())) {
+                pubType.setName(jp.getValueAsString());
+            } else if (JsonToken.VALUE_NUMBER_FLOAT == jp.currentToken()
+                && WEIGHT.equals(jp.getCurrentName())) {
+                pubType.setWeight(jp.getDecimalValue());
+            }
+        }
     }
 }
