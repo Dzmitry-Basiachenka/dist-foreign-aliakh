@@ -7,6 +7,7 @@
     <resultMap id="pubTypeMap" type="PubType" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_publication_type_uid"/>
         <result property="name" column="name"/>
+        <result property="weight" column="weight"/>
     </resultMap>
 
     <select id="isPublicationTypeExist" parameterType="string" resultType="boolean">
@@ -15,5 +16,14 @@
             from ${schema}.df_publication_type
             where name ilike #{pubTypeName}
         )
+    </select>
+
+    <select id="findPublicationTypes" resultMap="pubTypeMap">
+        select
+            df_publication_type_uid,
+            name,
+            weight
+        from ${schema}.df_publication_type
+        order by name
     </select>
 </mapper>

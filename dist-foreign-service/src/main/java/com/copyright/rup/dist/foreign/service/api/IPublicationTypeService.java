@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+
+import java.util.List;
+
 /**
  * Represents interface of service for publication type business logic.
  * <p>
@@ -18,4 +22,11 @@ public interface IPublicationTypeService {
      * @return {@code true} if publication type name is present, {@code false} otherwise
      */
     boolean publicationTypeExist(String pubTypeName);
+
+    /**
+     * Gets list of all {@link PublicationType}s.
+     *
+     * @return list of {@link PublicationType}.
+     */
+    List<PublicationType> getPublicationTypes();
 }

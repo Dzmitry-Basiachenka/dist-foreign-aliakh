@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -17,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
@@ -67,6 +69,8 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     private IAaclUsageService aaclUsageService;
     @Autowired
     private IFundPoolService fundPoolService;
+    @Autowired
+    private IPublicationTypeService publicationTypeService;
 
     @Override
     public ICommonUsageFilterController getUsageFilterController() {
@@ -175,6 +179,10 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Override
     public int insertFundPool(FundPool fundPool, List<FundPoolDetail> details) {
         return fundPoolService.createAaclFundPool(fundPool, details);
+    }
+
+    public List<PublicationType> getPublicationTypes() {
+        return publicationTypeService.getPublicationTypes();
     }
 
     @Override
