@@ -315,12 +315,11 @@
         background-color: #E2EFFF;
     }
 
-    .v-grid-aacl-usage-age-weight-grid .editable-field, .v-grid-aacl-usage-age-weight-grid .editable-field:focus {
+    .v-grid-aacl-usage-age-weight-grid .editable-field, .v-grid-aacl-usage-age-weight-grid .editable-field:focus, .v-grid-aacl-publication-type-weight-grid .editable-field, .v-grid-aacl-publication-type-weight-grid .editable-field:focus {
         border: #366daa 2px solid !important;
-
     }
 
-    .v-grid-aacl-usage-age-weight-grid .editable-cell {
+    .v-grid-aacl-usage-age-weight-grid .editable-cell, .v-grid-aacl-publication-type-weight-grid .editable-cell {
         border: #bfbfbf 1px solid !important;
     }
 }
