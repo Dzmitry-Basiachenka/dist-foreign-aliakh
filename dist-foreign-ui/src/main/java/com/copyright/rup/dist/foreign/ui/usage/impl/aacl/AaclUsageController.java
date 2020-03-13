@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
@@ -186,8 +185,8 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
-    public List<UsageAge> getUsageAges(UsageFilter filter) {
-        return aaclUsageService.getUsageAges(filter);
+    public List<UsageAge> getUsageAges() {
+        return aaclUsageService.getUsageAges(getUsageFilterController().getWidget().getAppliedFilter());
     }
 
     @Override

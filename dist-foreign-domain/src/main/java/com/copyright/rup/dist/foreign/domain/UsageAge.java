@@ -20,6 +20,22 @@ public class UsageAge {
     private Integer period;
     private BigDecimal weight;
 
+    /**
+     * Constructor.
+     */
+    public UsageAge() {
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param usageAge instance of {@link UsageAge}
+     */
+    public UsageAge(UsageAge usageAge) {
+        this.period = usageAge.getPeriod();
+        this.weight = usageAge.getWeight();
+    }
+
     public Integer getPeriod() {
         return period;
     }
