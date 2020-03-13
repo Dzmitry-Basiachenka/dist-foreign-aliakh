@@ -1,10 +1,10 @@
-package com.copyright.rup.dist.foreign.ui.audit.impl.fas;
+package com.copyright.rup.dist.foreign.ui.audit.impl.aacl;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.ui.audit.api.fas.IFasAuditController;
-import com.copyright.rup.dist.foreign.ui.audit.api.fas.IFasAuditWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.aacl.IAaclAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.api.aacl.IAaclAuditWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -12,30 +12,27 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * Implementation of {@link IFasAuditWidget}.
+ * Implementation of {@link IAaclAuditWidget}.
  * <p>
- * Copyright (C) 2019 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 12/17/2019
+ * Date: 03/12/2020
  *
- * @author Aliaksanr Liakh
+ * @author Anton Azarenka
  */
-public class FasAuditWidget extends CommonAuditWidget implements IFasAuditWidget {
+public class AaclAuditWidget extends CommonAuditWidget implements IAaclAuditWidget {
 
-    private final IFasAuditController controller;
+    private final IAaclAuditController controller;
 
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IFasAuditController}
+     * @param controller instance of {@link IAaclAuditController}
      */
-    FasAuditWidget(IFasAuditController controller) {
+    AaclAuditWidget(IAaclAuditController controller) {
         this.controller = controller;
     }
 
@@ -51,29 +48,24 @@ public class FasAuditWidget extends CommonAuditWidget implements IFasAuditWidget
             .setCaption(ForeignUi.getMessage("table.column.detail_id"))
             .setSortProperty("detailId")
             .setWidth(130);
+        addColumn(usage -> usage.getAaclUsage().getBaselineId(), "table.column.baseline_id", "baselineId", 125);
         addColumn(UsageDto::getStatus, "table.column.usage_status", "status", 115);
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", 125);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", 140);
-        addColumn(usage -> CommonDateUtils.format(usage.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.payment_date", "paymentDate", 115);
+        addColumn(usage -> CommonDateUtils.format(usage.getAaclUsage().getBatchPeriodEndDate(),
+            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            "table.column.period_end_date", "periodEndDate", 115);
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 115);
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", 300);
         addColumn(UsageDto::getPayeeAccountNumber, "table.column.payee_account_number", "payeeAccountNumber", 115);
         addColumn(UsageDto::getPayeeName, "table.column.payee_name", "payeeName", 300);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 110);
         addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", 300);
-        addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", 300);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
         addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", 155);
-        addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", 115);
         addAmountColumn(UsageDto::getGrossAmount, "table.column.amount_in_usd", "grossAmount", 100);
-        addAmountColumn(UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", 120);
-        addColumn(usage -> {
-            BigDecimal value = usage.getServiceFee();
-            return Objects.nonNull(value)
-                ? Objects.toString(value.multiply(new BigDecimal("100")).setScale(1, BigDecimal.ROUND_HALF_UP))
-                : StringUtils.EMPTY;
-        }, "table.column.service_fee", "serviceFee", 115);
+        addColumn(UsageDto::getServiceFeeAmount, "table.column.service_fee_amount", "serviceFee", 130);
+        addAmountColumn(UsageDto::getNetAmount, "table.column.net_amount", "netAmount", 120);
         addColumn(UsageDto::getScenarioName, "table.column.scenario_name", "scenarioName", 125);
         addColumn(UsageDto::getCheckNumber, "table.column.check_number", "checkNumber", 85);
         addColumn(usage -> CommonDateUtils.format(usage.getCheckDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
@@ -83,13 +75,22 @@ public class FasAuditWidget extends CommonAuditWidget implements IFasAuditWidget
         addColumn(usage ->
                 CommonDateUtils.format(usage.getDistributionDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.distribution_date", "distributionDate", 105);
-        addColumn(usage -> CommonDateUtils.format(usage.getPeriodEndDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.period_ending", "periodEndDate", 115);
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClassId(), "table.column.det_lc_id",
+            "detailLicenseeClassId", 140);
+        addColumn(usage -> usage.getAaclUsage().getEnrollmentProfile(), "table.column.det_lc_enrollment",
+            "enrollmentProfile", 140);
+        addColumn(usage -> usage.getAaclUsage().getDiscipline(), "table.column.det_lc_discipline", "discipline", 140);
+        addColumn(usage -> usage.getAaclUsage().getPublicationType().getName(), "table.column.publication_type",
+            "publicationType", 140);
+        addColumn(usage -> usage.getAaclUsage().getUsagePeriod(), "table.column.usage_period", "usagePeriod",
+            140);
+        addColumn(usage -> usage.getAaclUsage().getUsageSource(), "table.column.usage_source", "usageSource",
+            140);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", 200);
     }
 
     @Override
     public String initSearchMessage() {
-        return "prompt.audit_search";
+        return "prompt.audit_search_aacl";
     }
 }

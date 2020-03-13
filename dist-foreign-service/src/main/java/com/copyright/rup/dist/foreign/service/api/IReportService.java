@@ -33,6 +33,14 @@ public interface IReportService {
     void writeAuditFasCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
+     * Writes AACL usages found by {@link AuditFilter} into CSV output stream.
+     *
+     * @param filter            {@link AuditFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeAuditAaclCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
      * Writes NTS usages found by {@link AuditFilter} into CSV output stream.
      *
      * @param filter            {@link AuditFilter}
