@@ -143,8 +143,8 @@ public class AggregateLicenseeClassMappingWindowTest {
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail Licensee Class ID", "Enrollment Profile", "Discipline",
-            "Aggregate Licensee Class ID", "Aggregate Licensee Class Name"),
+        assertEquals(Arrays.asList("Detail Licensee Class ID", "Enrollment Profile", "Discipline", "Agg LC ID",
+            "Agg LC Enrollment"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         assertEquals(Arrays.asList(160.0, 140.0, 210.0, 190.0, -1.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));

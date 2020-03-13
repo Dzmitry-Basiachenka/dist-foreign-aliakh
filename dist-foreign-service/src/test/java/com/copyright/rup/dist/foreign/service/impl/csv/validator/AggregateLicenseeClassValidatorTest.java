@@ -68,7 +68,8 @@ public class AggregateLicenseeClassValidatorTest {
     private AggregateLicenseeClass buildAggregateLicenseeClass(Integer id) {
         AggregateLicenseeClass alc = new AggregateLicenseeClass();
         alc.setId(id);
-        alc.setName("EXGP - Life Sciences");
+        alc.setEnrollmentProfile("EXGP");
+        alc.setDiscipline("Life Sciences");
         return alc;
     }
 }

@@ -52,13 +52,13 @@ import java.util.stream.IntStream;
 public class FundPoolServiceTest {
 
     private static final AggregateLicenseeClass AGG_LICENSEE_CLASS_108 =
-        buildAggregateLicenseeClass(108, "EXGP - Life Sciences");
+        buildAggregateLicenseeClass(108, "EXGP", "Life Sciences");
     private static final AggregateLicenseeClass AGG_LICENSEE_CLASS_110 =
-        buildAggregateLicenseeClass(110, "EXU4 - Life Sciences");
+        buildAggregateLicenseeClass(110, "EXU4", " Life Sciences");
     private static final AggregateLicenseeClass AGG_LICENSEE_CLASS_111 =
-        buildAggregateLicenseeClass(111, "HGP - Life Sciences");
+        buildAggregateLicenseeClass(111, "HGP", "Life Sciences");
     private static final AggregateLicenseeClass AGG_LICENSEE_CLASS_113 =
-        buildAggregateLicenseeClass(113, "MU - Life Sciences");
+        buildAggregateLicenseeClass(113, "MU", "Life Sciences");
     private static final String FUND_POOL_ID = "ce468e8a-fdea-4d0c-a8f2-0e8c9f479bc3";
     private static final String BATCH_POOL_ID = "d3da0c18-e6af-4e7c-8b67-795f93e38e90";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
@@ -70,10 +70,12 @@ public class FundPoolServiceTest {
     private IFundPoolRepository fundPoolRepository;
     private ILicenseeClassService licenseeClassService;
 
-    private static AggregateLicenseeClass buildAggregateLicenseeClass(Integer id, String name) {
+    private static AggregateLicenseeClass buildAggregateLicenseeClass(Integer id, String enrollmentProfile,
+                                                                      String discipline) {
         AggregateLicenseeClass alc = new AggregateLicenseeClass();
         alc.setId(id);
-        alc.setName(name);
+        alc.setEnrollmentProfile(enrollmentProfile);
+        alc.setDiscipline(discipline);
         return alc;
     }
 
@@ -222,8 +224,11 @@ public class FundPoolServiceTest {
 
     private void verifyDetail(FundPoolDetail expected, FundPoolDetail actual) {
         assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getAggregateLicenseeClass().getId(), actual.getAggregateLicenseeClass().getId());
-        assertEquals(expected.getAggregateLicenseeClass().getName(), actual.getAggregateLicenseeClass().getName());
+        AggregateLicenseeClass expectedAggregate = expected.getAggregateLicenseeClass();
+        AggregateLicenseeClass actualAggregate = actual.getAggregateLicenseeClass();
+        assertEquals(expectedAggregate.getId(), actualAggregate.getId());
+        assertEquals(expectedAggregate.getEnrollmentProfile(), actualAggregate.getEnrollmentProfile());
+        assertEquals(expectedAggregate.getDiscipline(), actualAggregate.getDiscipline());
         assertEquals(expected.getGrossAmount(), actual.getGrossAmount());
     }
 

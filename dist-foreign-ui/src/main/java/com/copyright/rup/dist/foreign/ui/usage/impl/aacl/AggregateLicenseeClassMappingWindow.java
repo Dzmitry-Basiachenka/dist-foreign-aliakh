@@ -104,8 +104,8 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
             .setComparator((SerializableComparator<DetailLicenseeClass>) (detail1, detail2) ->
                 detail1.getAggregateLicenseeClass().getId().compareTo(detail2.getAggregateLicenseeClass().getId()))
             .setWidth(190);
-        grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getName())
-            .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_name"))
+        grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getEnrollmentProfile())
+            .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_enrollment"))
             .setExpandRatio(1);
         grid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(grid, "aggregate-licensee-class-mapping-grid");

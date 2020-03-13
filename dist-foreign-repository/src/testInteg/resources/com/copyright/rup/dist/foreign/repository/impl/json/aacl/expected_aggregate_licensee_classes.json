@@ -1,146 +1,182 @@
 [
   {
     "id": 108,
-    "name": "EXGP - Life Sciences"
+    "enrollmentProfile": "EXGP",
+    "discipline": "Life Sciences"
   },
   {
     "id": 110,
-    "name": "EXU4 - Life Sciences"
+    "enrollmentProfile": "EXU4",
+    "discipline": "Life Sciences"
   },
   {
     "id": 111,
-    "name": "HGP - Life Sciences"
+    "enrollmentProfile": "HGP",
+    "discipline": "Life Sciences"
   },
   {
     "id": 113,
-    "name": "MU - Life Sciences"
+    "enrollmentProfile": "MU",
+    "discipline": "Life Sciences"
   },
   {
     "id": 115,
-    "name": "EXGP - Business Management"
+    "enrollmentProfile": "EXGP",
+    "discipline": "Business Management"
   },
   {
     "id": 117,
-    "name": "EXU4 - Business Management"
+    "enrollmentProfile": "EXU4",
+    "discipline": "Business Management"
   },
   {
     "id": 118,
-    "name": "HGP - Business Management"
+    "enrollmentProfile": "HGP",
+    "discipline": "Business Management"
   },
   {
     "id": 120,
-    "name": "MU - Business Management"
+    "enrollmentProfile": "MU",
+    "discipline": "Business Management"
   },
   {
     "id": 136,
-    "name": "EXGP - Education"
+    "enrollmentProfile": "EXGP",
+    "discipline": "Education"
   },
   {
     "id": 138,
-    "name": "EXU4 - Education"
+    "enrollmentProfile": "EXU4",
+    "discipline": "Education"
   },
   {
     "id": 139,
-    "name": "HGP - Education"
+    "enrollmentProfile": "HGP",
+    "discipline": "Education"
   },
   {
     "id": 141,
-    "name": "MU - Education"
+    "enrollmentProfile": "MU",
+    "discipline": "Education"
   },
   {
     "id": 143,
-    "name": "EXGP - Engineering"
+    "enrollmentProfile": "EXGP",
+    "discipline": "Engineering"
   },
   {
     "id": 145,
-    "name": "EXU4 - Engineering"
+    "enrollmentProfile": "EXU4",
+    "discipline": "Engineering"
   },
   {
     "id": 146,
-    "name": "HGP - Engineering"
+    "enrollmentProfile": "HGP",
+    "discipline": "Engineering"
   },
   {
     "id": 148,
-    "name": "MU - Engineering"
+    "enrollmentProfile": "MU",
+    "discipline": "Engineering"
   },
   {
     "id": 164,
-    "name": "EXGP - Law & Legal Studies"
+    "enrollmentProfile": "EXGP",
+    "discipline": "Law & Legal Studies"
   },
   {
     "id": 166,
-    "name": "EXU4 - Law & Legal Studies"
+    "enrollmentProfile": "EXU4",
+    "discipline": "Law & Legal Studies"
   },
   {
     "id": 167,
-    "name": "HGP - Law & Legal Studies"
+    "enrollmentProfile": "HGP",
+    "discipline": "Law & Legal Studies"
   },
   {
     "id": 169,
-    "name": "MU - Law & Legal Studies"
+    "enrollmentProfile": "MU",
+    "discipline": "Law & Legal Studies"
   },
   {
     "id": 171,
-    "name": "EXGP - Arts & Humanities"
+    "enrollmentProfile": "EXGP",
+    "discipline": "Arts & Humanities"
   },
   {
     "id": 173,
-    "name": "EXU4 - Arts & Humanities"
+    "enrollmentProfile": "EXU4",
+    "discipline": "Arts & Humanities"
   },
   {
     "id": 174,
-    "name": "HGP - Arts & Humanities"
+    "enrollmentProfile": "HGP",
+    "discipline": "Arts & Humanities"
   },
   {
     "id": 176,
-    "name": "MU - Arts & Humanities"
+    "enrollmentProfile": "MU",
+    "discipline": "Arts & Humanities"
   },
   {
     "id": 192,
-    "name": "EXGP - Medical & Health"
+    "enrollmentProfile": "EXGP",
+    "discipline": "Medical & Health"
   },
   {
     "id": 194,
-    "name": "EXU4 - Medical & Health"
+    "enrollmentProfile": "EXU4",
+    "discipline": "Medical & Health"
   },
   {
     "id": 195,
-    "name": "HGP - Medical & Health"
+    "enrollmentProfile": "HGP",
+    "discipline": "Medical & Health"
   },
   {
     "id": 197,
-    "name": "MU - Medical & Health"
+    "enrollmentProfile": "MU",
+    "discipline": "Medical & Health"
   },
   {
     "id": 206,
-    "name": "EXGP - Physical Sciences & Mathematics"
+    "enrollmentProfile": "EXGP",
+    "discipline": "Physical Sciences & Mathematics"
   },
   {
     "id": 208,
-    "name": "EXU4 - Physical Sciences & Mathematics"
+    "enrollmentProfile": "EXU4",
+    "discipline": "Physical Sciences & Mathematics"
   },
   {
     "id": 209,
-    "name": "HGP - Physical Sciences & Mathematics"
+    "enrollmentProfile": "HGP",
+    "discipline": "Physical Sciences & Mathematics"
   },
   {
     "id": 211,
-    "name": "MU - Physical Sciences & Mathematics"
+    "enrollmentProfile": "MU",
+    "discipline": "Physical Sciences & Mathematics"
   },
   {
     "id": 227,
-    "name": "EXGP - Social & Behavioral Sciences"
+    "enrollmentProfile": "EXGP",
+    "discipline": "Social & Behavioral Sciences"
   },
   {
     "id": 229,
-    "name": "EXU4 - Social & Behavioral Sciences"
+    "enrollmentProfile": "EXU4",
+    "discipline": "Social & Behavioral Sciences"
   },
   {
     "id": 230,
-    "name": "HGP - Social & Behavioral Sciences"
+    "enrollmentProfile": "HGP",
+    "discipline": "Social & Behavioral Sciences"
   },
   {
     "id": 232,
-    "name": "MU - Social & Behavioral Sciences"
+    "enrollmentProfile": "MU",
+    "discipline": "Social & Behavioral Sciences"
   }
 ]

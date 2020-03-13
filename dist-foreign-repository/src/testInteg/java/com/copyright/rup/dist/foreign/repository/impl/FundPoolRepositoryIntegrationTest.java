@@ -200,7 +200,8 @@ public class FundPoolRepositoryIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper.readValue(content, new TypeReference<List<FundPoolDetail>>() {});
+        return mapper.readValue(content, new TypeReference<List<FundPoolDetail>>() {
+        });
     }
 
     private void assertFundPool(FundPool fundPool, String id, String productFamily, String name, BigDecimal amount,
@@ -215,8 +216,11 @@ public class FundPoolRepositoryIntegrationTest {
     private void assertFundPoolDetail(FundPoolDetail expected, FundPoolDetail actual) {
         assertEquals(expected.getId(), actual.getId());
         assertNotNull(actual.getAggregateLicenseeClass());
-        assertEquals(expected.getAggregateLicenseeClass().getId(), actual.getAggregateLicenseeClass().getId());
-        assertEquals(expected.getAggregateLicenseeClass().getName(), actual.getAggregateLicenseeClass().getName());
+        AggregateLicenseeClass expectedAggregate = expected.getAggregateLicenseeClass();
+        AggregateLicenseeClass actualAggregate = actual.getAggregateLicenseeClass();
+        assertEquals(expectedAggregate.getId(), actualAggregate.getId());
+        assertEquals(expectedAggregate.getEnrollmentProfile(), actualAggregate.getEnrollmentProfile());
+        assertEquals(expectedAggregate.getDiscipline(), actualAggregate.getDiscipline());
         assertEquals(expected.getGrossAmount(), actual.getGrossAmount());
     }
 }
