@@ -1,27 +1,24 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Window;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 
 /**
  * Verifies {@link AaclScenarioParameterWidget}.
@@ -37,38 +34,34 @@ import org.powermock.reflect.Whitebox;
 public class AaclScenarioParameterWidgetTest {
 
     private static final String CAPTION = "caption";
+    private static final String DEFAULT_VALUE = "default";
+    private AaclScenarioParameterWidget<String> widget;
+    private AaclCommonScenarioParameterWindowMock window;
 
-    @Test
-    public void testConstructor() {
-        AaclScenarioParameterWidget scenarioParameterWidget = new AaclScenarioParameterWidget(CAPTION, Window::new);
-        assertEquals(1, scenarioParameterWidget.getComponentCount());
-        verifyButton(scenarioParameterWidget.getComponent(0));
+    @Before
+    public void setUp() {
+        window = new AaclCommonScenarioParameterWindowMock();
+        widget = new AaclScenarioParameterWidget<>(CAPTION, () -> DEFAULT_VALUE, () -> window);
     }
 
     @Test
-    public void testAddParameterSaveListener() {
-        AaclScenarioParameterWidget<String> scenarioParameterWidget =
-            new AaclScenarioParameterWidget<>(CAPTION, Window::new);
-        IParametersSaveListener saveListener = createMock(IParametersSaveListener.class);
-        assertNotEquals(saveListener, Whitebox.getInternalState(scenarioParameterWidget, "saveListener"));
-        scenarioParameterWidget.addParameterSaveListener(saveListener);
-        assertEquals(saveListener, Whitebox.getInternalState(scenarioParameterWidget, "saveListener"));
+    public void testConstructor() {
+        assertEquals(1, widget.getComponentCount());
+        verifyButton(widget.getComponent(0));
+        assertEquals(DEFAULT_VALUE, widget.getAppliedParameters());
     }
 
     @Test
     public void testButtonClickListener() {
         mockStatic(Windows.class);
-        Window window = new Window();
-        IParametersSaveListener<String> listener = event -> { /*stub*/ };
-        AaclScenarioParameterWidget<String> scenarioParameterWidget =
-            new AaclScenarioParameterWidget<>(CAPTION, () -> window);
-        scenarioParameterWidget.addParameterSaveListener(listener);
-        Button button = (Button) scenarioParameterWidget.getComponent(0);
+        Button button = (Button) widget.getComponent(0);
         Windows.showModalWindow(window);
         expectLastCall().once();
         replay(Windows.class);
         button.click();
-        assertEquals(listener, window.getListeners(ParametersSaveEvent.class).iterator().next());
+        window.fireParametersSaveEvent(new ParametersSaveEvent<>(window, "applied"));
+        assertNotNull(window.getListeners(ParametersSaveEvent.class).iterator().next());
+        assertEquals("applied", widget.getAppliedParameters());
         verify(Windows.class);
     }
 
@@ -78,5 +71,20 @@ public class AaclScenarioParameterWidgetTest {
         assertEquals(CAPTION, button.getCaption());
         assertTrue(button.getStyleName().contains("link"));
         assertTrue(button.isDisableOnClick());
+    }
+
+    private static class AaclCommonScenarioParameterWindowMock extends AaclCommonScenarioParameterWindow<String> {
+        @Override
+        void setDefaultParameters(String params) {
+        }
+
+        @Override
+        void setAppliedParameters(String params) {
+        }
+
+        @Override
+        void fireParametersSaveEvent(ParametersSaveEvent parametersSaveEvent) {
+            fireEvent(parametersSaveEvent);
+        }
     }
 }

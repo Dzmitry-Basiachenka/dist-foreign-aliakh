@@ -75,6 +75,7 @@ public class DomainVerifierTest {
             {PayeeTotalHolder.class},
             {AaclClassifiedUsage.class},
             {PublicationType.class},
+            {DetailLicenseeClass.class},
             {AggregateLicenseeClass.class},
             {FundPoolDetail.class}
         };
