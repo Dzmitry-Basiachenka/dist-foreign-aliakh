@@ -337,6 +337,10 @@
         <include refid="IUsageMapper.selectForAuditSql"/>
     </select>
 
+    <select id="findAuditAaclReportDtos" resultMap="IAaclUsageMapper.aaclUsageDtoResultMap" parameterType="map">
+        <include refid="IAaclUsageMapper.selectForAuditSql"/>
+    </select>
+
     <select id="findWorkClassificationCountByBatchIds" resultType="int" parameterType="map">
         <include refid="IWorkClassificationMapper.findCountByBatchIdsSql"/>
     </select>

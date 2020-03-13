@@ -92,6 +92,15 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    public void testWriteAuditAaclCsvReport() throws Exception {
+        AuditFilter auditFilter = new AuditFilter();
+        auditFilter.setBatchesIds(Collections.singleton("29689635-c6ff-483c-972d-09eb2febb9e0"));
+        auditFilter.setProductFamily("AACL");
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditAaclCsvReport(auditFilter, outputStream),
+            "audit_usages_report_aacl.csv");
+    }
+
+    @Test
     public void testWriteAuditFasCsvReportForPostDistribution() throws Exception {
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setSearchValue("75693c90-d6f5-401a-8c26-134adc9745c5");
@@ -107,6 +116,11 @@ public class CsvReportsIntegrationTest {
     @Test
     public void testWriteAuditNtsCsvReportEmptyCsvReport() throws Exception {
         assertEmptyAuditNtsReport(new AuditFilter());
+    }
+
+    @Test
+    public void testWriteAuditAaclCsvReportEmptyCsvReport() throws Exception {
+        assertEmptyAuditAaclReport(new AuditFilter());
     }
 
     @Test
@@ -145,6 +159,25 @@ public class CsvReportsIntegrationTest {
         assertEmptyAuditNtsReport(filter);
         filter.setDistributionName(SEARCH_WITH_SQL_2);
         assertEmptyAuditNtsReport(filter);
+    }
+
+    @Test
+    public void testWriteAuditAaclCsvReportSearchBySqlLikePattern() throws Exception {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue(SEARCH_WITH_SQL_1);
+        assertEmptyAuditAaclReport(filter);
+        filter.setSearchValue(SEARCH_WITH_SQL_2);
+        assertEmptyAuditAaclReport(filter);
+        filter = new AuditFilter();
+        filter.setCccEventId(SEARCH_WITH_SQL_1);
+        assertEmptyAuditAaclReport(filter);
+        filter.setCccEventId(SEARCH_WITH_SQL_2);
+        assertEmptyAuditAaclReport(filter);
+        filter = new AuditFilter();
+        filter.setDistributionName(SEARCH_WITH_SQL_1);
+        assertEmptyAuditAaclReport(filter);
+        filter.setDistributionName(SEARCH_WITH_SQL_2);
+        assertEmptyAuditAaclReport(filter);
     }
 
     @Test
@@ -387,5 +420,10 @@ public class CsvReportsIntegrationTest {
     private void assertEmptyAuditNtsReport(AuditFilter filter) throws IOException {
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(filter, outputStream),
             "audit_usages_report_empty.csv");
+    }
+
+    private void assertEmptyAuditAaclReport(AuditFilter filter) throws IOException {
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditAaclCsvReport(filter, outputStream),
+            "audit_usages_report_aacl_empty.csv");
     }
 }

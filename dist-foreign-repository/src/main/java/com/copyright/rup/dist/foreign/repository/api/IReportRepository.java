@@ -195,6 +195,15 @@ public interface IReportRepository {
     void writeAuditNtsCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
 
     /**
+     * Finds AACL usages by given {@link AuditFilter} and writes them to the given {@link PipedOutputStream}.
+     *
+     * @param filter            filter
+     * @param pipedOutputStream stream
+     * @throws RupRuntimeException in case when IOException appears during writing report
+     */
+    void writeAuditAaclCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
+
+    /**
      * Writes {@link com.copyright.rup.dist.foreign.domain.WorkClassification}s by batches ids and search value.
      *
      * @param batchesIds        set of batches ids

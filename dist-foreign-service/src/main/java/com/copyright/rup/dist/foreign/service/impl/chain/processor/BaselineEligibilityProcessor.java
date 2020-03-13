@@ -37,7 +37,6 @@ public class BaselineEligibilityProcessor extends AbstractUsageChainProcessor {
     @Transactional
     @Profiled(tag = "BaselineEligibilityProcessor.process")
     public void process(Usage usage) {
-        //todo {aazarenka} recheck is it works
         if (null != usage.getAaclUsage().getBaselineId()) {
             LOGGER.trace("Usage Baseline Eligibility processor. Started. UsageId={}", usage.getId());
             usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);
