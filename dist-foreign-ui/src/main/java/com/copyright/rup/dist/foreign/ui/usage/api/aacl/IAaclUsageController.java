@@ -6,6 +6,8 @@ import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -130,4 +132,14 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return list of {@link PublicationType}.
      */
     List<PublicationType> getPublicationTypes();
+
+    /**
+     * Creates AACL {@link Scenario} by entered scenario name and description.
+     *
+     * @param scenarioName name of scenario
+     * @param aaclFields   AACL scenario specific fields
+     * @param description  description for creating scenario
+     * @return created scenario
+     */
+    Scenario createAaclScenario(String scenarioName, AaclFields aaclFields, String description);
 }

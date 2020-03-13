@@ -185,8 +185,9 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         String message = getScenarioValidationMessage();
         if (null != message) {
             Windows.showNotificationWindow(message);
+        } else {
+            showCreateScenarioWindow(new CreateAaclScenarioWindow(controller));
         }
-        // TODO {srudak} show CreateAaclScenarioWindow in the else statement
     }
 
     private String getScenarioValidationMessage() {
@@ -202,6 +203,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
                 message = ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
                     accountNumbers);
             }
+            // TODO {srudak} validate batches
         }
         return message;
     }

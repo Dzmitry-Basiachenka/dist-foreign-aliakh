@@ -11,6 +11,8 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -32,9 +34,9 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterControll
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
 import com.google.common.io.Files;
-
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -187,6 +189,12 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Override
     public List<UsageAge> getUsageAges() {
         return aaclUsageService.getUsageAges(getUsageFilterController().getWidget().getAppliedFilter());
+    }
+
+    @Override
+    public Scenario createAaclScenario(String scenarioName, AaclFields aaclFields, String description) {
+        // TODO {srudak} implement
+        return new Scenario();
     }
 
     @Override
