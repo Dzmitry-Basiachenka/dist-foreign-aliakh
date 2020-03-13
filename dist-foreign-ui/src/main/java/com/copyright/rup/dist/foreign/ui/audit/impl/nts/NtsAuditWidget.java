@@ -86,4 +86,9 @@ public class NtsAuditWidget extends CommonAuditWidget implements INtsAuditWidget
             "table.column.period_ending", "periodEndDate", 115);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", 200);
     }
+
+    @Override
+    public String initSearchMessage() {
+        return "prompt.audit_search";
+    }
 }

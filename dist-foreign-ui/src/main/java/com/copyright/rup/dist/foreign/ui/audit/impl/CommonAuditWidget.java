@@ -147,7 +147,7 @@ public abstract class CommonAuditWidget extends HorizontalSplitPanel implements 
         IAuditFilterWidget filterWidget = controller.getAuditFilterController().initWidget();
         filterWidget.addListener(FilterChangedEvent.class, controller, ICommonAuditController.ON_FILTER_CHANGED);
         searchWidget = new SearchWidget(this::refresh);
-        searchWidget.setPrompt(ForeignUi.getMessage("prompt.audit_search"));
+        searchWidget.setPrompt(ForeignUi.getMessage(initSearchMessage()));
         searchWidget.setWidth(75, Unit.PERCENTAGE);
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(new CsvStreamSource(controller).getSource());
