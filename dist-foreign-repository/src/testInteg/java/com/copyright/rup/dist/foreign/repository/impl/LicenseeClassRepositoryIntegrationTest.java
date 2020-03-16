@@ -6,12 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.repository.api.ILicenseeClassRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,19 +58,42 @@ public class LicenseeClassRepositoryIntegrationTest {
 
     @Test
     public void testFindAggregateLicenseeClasses() throws IOException {
-        List<AggregateLicenseeClass> expectedClasses = loadExpectedClasses("expected_aggregate_licensee_classes.json");
+        List<AggregateLicenseeClass> expectedClasses =
+            loadExpectedAggregateClasses("expected_aggregate_licensee_classes.json");
         List<AggregateLicenseeClass> actualClasses = licenseeClassRepository.findAggregateLicenseeClasses();
         assertEquals(expectedClasses.size(), actualClasses.size());
         IntStream.range(0, expectedClasses.size())
             .forEach(i -> verifyAggregateLicenseeClass(expectedClasses.get(i), actualClasses.get(i)));
     }
 
-    private List<AggregateLicenseeClass> loadExpectedClasses(String fileName) throws IOException {
+    @Test
+    public void testFindDetailLicenseeClasses() throws IOException {
+        List<DetailLicenseeClass> expectedDetailsMapping = loadExpectedClasses("expected_detail_licensee_classes.json");
+        List<DetailLicenseeClass> actualDetailsMapping = licenseeClassRepository.findDetailLicenseeClasses();
+        assertEquals(expectedDetailsMapping.size(), actualDetailsMapping.size());
+        IntStream.range(0, expectedDetailsMapping.size())
+            .forEach(i -> verifyLicenseeClass(expectedDetailsMapping.get(i), actualDetailsMapping.get(i)));
+    }
+
+    private List<AggregateLicenseeClass> loadExpectedAggregateClasses(String fileName) throws IOException {
         String content = TestUtils.fileToString(this.getClass(), "json/aacl/" + fileName);
         ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper.readValue(content, new TypeReference<List<AggregateLicenseeClass>>() {});
+        return mapper.readValue(content, new TypeReference<List<AggregateLicenseeClass>>() {
+        });
+    }
+
+    private List<DetailLicenseeClass> loadExpectedClasses(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), "json/aacl/" + fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(content, new TypeReference<List<DetailLicenseeClass>>() {
+        });
+    }
+
+    private void verifyLicenseeClass(DetailLicenseeClass expected, DetailLicenseeClass actual) {
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getDiscipline(), actual.getDiscipline());
+        assertEquals(expected.getEnrollmentProfile(), actual.getEnrollmentProfile());
+        verifyAggregateLicenseeClass(expected.getAggregateLicenseeClass(), actual.getAggregateLicenseeClass());
     }
 
     private void verifyAggregateLicenseeClass(AggregateLicenseeClass expected, AggregateLicenseeClass actual) {

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 
 import java.util.List;
 
@@ -28,4 +29,9 @@ public interface ILicenseeClassRepository {
      * @return list of existing {@link AggregateLicenseeClass}es.
      */
     List<AggregateLicenseeClass> findAggregateLicenseeClasses();
+
+    /**
+     * @return list of existing {@link DetailLicenseeClass}es.
+     */
+    List<DetailLicenseeClass> findDetailLicenseeClasses();
 }

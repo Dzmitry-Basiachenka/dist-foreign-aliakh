@@ -10,6 +10,7 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -65,6 +66,8 @@ public class CreateAaclScenarioWindowTest {
         expect(controller.getFundPools()).andReturn(Collections.singletonList(fundPool)).once();
         expect(controller.getUsageAges()).andReturn(Collections.singletonList(new UsageAge())).once();
         expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(new PublicationType())).once();
+        expect(controller.getDetailLicenseeClasses())
+            .andReturn(Collections.singletonList(new DetailLicenseeClass())).once();
     }
 
     @Test

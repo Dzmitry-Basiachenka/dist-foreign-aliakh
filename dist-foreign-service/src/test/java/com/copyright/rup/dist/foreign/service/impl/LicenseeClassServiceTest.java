@@ -5,8 +5,11 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.repository.api.ILicenseeClassRepository;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.impl.aacl.LicenseeClassService;
@@ -14,6 +17,9 @@ import com.copyright.rup.dist.foreign.service.impl.aacl.LicenseeClassService;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Validates {@link LicenseeClassService}.
@@ -37,6 +43,24 @@ public class LicenseeClassServiceTest {
         licenseeClassService = new LicenseeClassService();
         licenseeClassRepository = createMock(ILicenseeClassRepository.class);
         Whitebox.setInternalState(licenseeClassService, "licenseeClassRepository", licenseeClassRepository);
+    }
+
+    @Test
+    public void testGetAggregateLicenseeClasses() {
+        List<AggregateLicenseeClass> aggregateLicenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
+        expect(licenseeClassRepository.findAggregateLicenseeClasses()).andReturn(aggregateLicenseeClasses).once();
+        replay(licenseeClassRepository);
+        assertSame(aggregateLicenseeClasses, licenseeClassService.getAggregateLicenseeClasses());
+        verify(licenseeClassRepository);
+    }
+
+    @Test
+    public void testGetDetailLicenseeClasses() {
+        List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        expect(licenseeClassRepository.findDetailLicenseeClasses()).andReturn(detailLicenseeClasses).once();
+        replay(licenseeClassRepository);
+        assertSame(detailLicenseeClasses, licenseeClassService.getDetailLicenseeClasses());
+        verify(licenseeClassRepository);
     }
 
     @Test

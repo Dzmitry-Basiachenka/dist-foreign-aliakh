@@ -18,6 +18,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -143,6 +144,8 @@ public class AaclUsageWidgetTest {
         expect(controller.getFundPools()).andReturn(Collections.singletonList(new FundPool())).once();
         expect(controller.getUsageAges()).andReturn(Collections.singletonList(new UsageAge())).once();
         expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(new PublicationType())).once();
+        expect(controller.getDetailLicenseeClasses())
+            .andReturn(Collections.singletonList(new DetailLicenseeClass())).once();
         expect(controller.scenarioExists("AACL Distribution " + DATE)).andReturn(true).once();
         Windows.showModalWindow(anyObject(CreateAaclScenarioWindow.class));
         expectLastCall().once();

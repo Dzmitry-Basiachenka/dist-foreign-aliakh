@@ -20,6 +20,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
@@ -31,6 +32,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
@@ -103,6 +105,7 @@ public class AaclUsageControllerTest {
     private IStreamSourceHandler streamSourceHandler;
     private IReportService reportService;
     private IPublicationTypeService publicationTypeService;
+    private ILicenseeClassService licenseeClassService;
 
     @Before
     public void setUp() {
@@ -118,6 +121,7 @@ public class AaclUsageControllerTest {
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         reportService = createMock(IReportService.class);
         publicationTypeService = createMock(IPublicationTypeService.class);
+        licenseeClassService = createMock(ILicenseeClassService.class);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, researchService);
@@ -129,6 +133,7 @@ public class AaclUsageControllerTest {
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, publicationTypeService);
+        Whitebox.setInternalState(controller, licenseeClassService);
         usageFilter = new UsageFilter();
     }
 
@@ -377,6 +382,15 @@ public class AaclUsageControllerTest {
         replay(publicationTypeService);
         assertEquals(pubTypes, controller.getPublicationTypes());
         verify(publicationTypeService);
+    }
+
+    @Test
+    public void testGetDetailLicenseeClasses() {
+        List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        expect(licenseeClassService.getDetailLicenseeClasses()).andReturn(detailLicenseeClasses).once();
+        replay(licenseeClassService);
+        assertEquals(detailLicenseeClasses, controller.getDetailLicenseeClasses());
+        verify(licenseeClassService);
     }
 
     private UsageAge buildUsageAge(Integer period, BigDecimal weight) {

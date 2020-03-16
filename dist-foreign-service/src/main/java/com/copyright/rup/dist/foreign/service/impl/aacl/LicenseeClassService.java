@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.aacl;
 
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.repository.api.ILicenseeClassRepository;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 
@@ -32,5 +33,10 @@ public class LicenseeClassService implements ILicenseeClassService {
     @Override
     public List<AggregateLicenseeClass> getAggregateLicenseeClasses() {
         return licenseeClassRepository.findAggregateLicenseeClasses();
+    }
+
+    @Override
+    public List<DetailLicenseeClass> getDetailLicenseeClasses() {
+        return licenseeClassRepository.findDetailLicenseeClasses();
     }
 }
