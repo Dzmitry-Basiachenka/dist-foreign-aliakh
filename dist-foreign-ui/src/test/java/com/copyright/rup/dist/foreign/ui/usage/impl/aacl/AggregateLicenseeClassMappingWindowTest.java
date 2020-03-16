@@ -133,7 +133,7 @@ public class AggregateLicenseeClassMappingWindowTest {
     }
 
     private void verifySize(Component component) {
-        assertEquals(1000, component.getWidth(), 0);
+        assertEquals(950, component.getWidth(), 0);
         assertEquals(550, component.getHeight(), 0);
         assertEquals(Sizeable.Unit.PIXELS, component.getHeightUnits());
         assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
@@ -143,12 +143,12 @@ public class AggregateLicenseeClassMappingWindowTest {
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail Licensee Class ID", "Enrollment Profile", "Discipline", "Agg LC ID",
-            "Agg LC Enrollment"),
-            columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(160.0, 140.0, 210.0, 190.0, -1.0),
+        assertEquals(
+            Arrays.asList("Det LC ID", "Det LC Enrollment", "Det LC Discipline", "Agg LC ID", "Agg LC Enrollment",
+                "Agg LC Discipline"), columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
+        assertEquals(Arrays.asList(100.0, 140.0, 210.0, -1.0, 140.0, 210.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1, -1, -1, -1, 1),
+        assertEquals(Arrays.asList(-1, -1, -1, 1, -1, -1),
             columns.stream().map(Grid.Column::getExpandRatio).collect(Collectors.toList()));
         columns.forEach(column -> assertTrue(column.isSortable()));
         assertFalse(grid.getDataProvider().isInMemory());

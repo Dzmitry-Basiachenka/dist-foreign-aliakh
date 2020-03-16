@@ -38,7 +38,7 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
      * Constructor.
      */
     public AggregateLicenseeClassMappingWindow() {
-        setWidth(1000, Unit.PIXELS);
+        setWidth(950, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
         initGrid();
         HorizontalLayout buttonsLayout = initButtons();
@@ -90,23 +90,26 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
 
     private void addGridColumns() {
         grid.addColumn(DetailLicenseeClass::getId)
-            .setCaption(ForeignUi.getMessage("table.column.detail_licensee_class_id"))
-            .setWidth(160);
+            .setCaption(ForeignUi.getMessage("table.column.det_lc_id"))
+            .setWidth(100);
         grid.addColumn(DetailLicenseeClass::getEnrollmentProfile)
-            .setCaption(ForeignUi.getMessage("table.column.enrollment_profile"))
+            .setCaption(ForeignUi.getMessage("table.column.det_lc_enrollment"))
             .setWidth(140);
         grid.addColumn(DetailLicenseeClass::getDiscipline)
-            .setCaption(ForeignUi.getMessage("table.column.discipline"))
+            .setCaption(ForeignUi.getMessage("table.column.det_lc_discipline"))
             .setWidth(210);
         grid.addComponentColumn(this::buildComboBox)
             .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
             .setStyleGenerator(licensee -> "combobox-column")
             .setComparator((SerializableComparator<DetailLicenseeClass>) (detail1, detail2) ->
                 detail1.getAggregateLicenseeClass().getId().compareTo(detail2.getAggregateLicenseeClass().getId()))
-            .setWidth(190);
+            .setExpandRatio(1);
         grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getEnrollmentProfile())
             .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_enrollment"))
-            .setExpandRatio(1);
+            .setWidth(140);
+        grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getDiscipline())
+            .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_discipline"))
+            .setWidth(210);
         grid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(grid, "aggregate-licensee-class-mapping-grid");
     }
