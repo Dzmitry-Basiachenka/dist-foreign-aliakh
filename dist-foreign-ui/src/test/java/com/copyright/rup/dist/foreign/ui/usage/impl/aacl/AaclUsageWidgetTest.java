@@ -20,6 +20,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
@@ -140,6 +141,7 @@ public class AaclUsageWidgetTest {
         expect(controller.getProcessingBatchesNames(Collections.singleton("3a070817-03ae-4ebd-b25f-dd3168a7ffb0")))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getFundPools()).andReturn(Collections.singletonList(new FundPool())).once();
+        expect(controller.getUsageAges()).andReturn(Collections.singletonList(new UsageAge())).once();
         expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(new PublicationType())).once();
         expect(controller.scenarioExists("AACL Distribution " + DATE)).andReturn(true).once();
         Windows.showModalWindow(anyObject(CreateAaclScenarioWindow.class));

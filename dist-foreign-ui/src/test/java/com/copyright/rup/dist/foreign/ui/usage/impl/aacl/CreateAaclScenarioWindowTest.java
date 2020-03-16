@@ -12,6 +12,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 
 import com.vaadin.data.Binder;
@@ -62,6 +63,7 @@ public class CreateAaclScenarioWindowTest {
         fundPool.setName("Fund Pool 1");
         expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).anyTimes();
         expect(controller.getFundPools()).andReturn(Collections.singletonList(fundPool)).once();
+        expect(controller.getUsageAges()).andReturn(Collections.singletonList(new UsageAge())).once();
         expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(new PublicationType())).once();
     }
 
