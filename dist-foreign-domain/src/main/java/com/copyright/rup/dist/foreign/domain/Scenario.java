@@ -191,6 +191,7 @@ public class Scenario extends StoredEntity<String> {
         private BigDecimal titleCutoffAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
         private String fundPoolId;
         private List<PublicationType> publicationTypes = new ArrayList<>();
+        private List<UsageAge> usageAges = new ArrayList<>();
         // TODO {aliakh} add Usage Age Weights, Licensee Classes mapping and other fields specific for AACL scenario
 
         public BigDecimal getTitleCutoffAmount() {
@@ -217,6 +218,14 @@ public class Scenario extends StoredEntity<String> {
             this.publicationTypes = publicationTypes;
         }
 
+        public List<UsageAge> getUsageAges() {
+            return usageAges;
+        }
+
+        public void setUsageAges(List<UsageAge> usageAges) {
+            this.usageAges = usageAges;
+        }
+
         @Override
         public boolean equals(Object obj) {
             if (obj == this) {
@@ -228,6 +237,7 @@ public class Scenario extends StoredEntity<String> {
             AaclFields that = (AaclFields) obj;
             return new EqualsBuilder()
                 .append(this.publicationTypes, that.publicationTypes)
+                .append(this.usageAges, that.usageAges)
                 .append(this.titleCutoffAmount, that.titleCutoffAmount)
                 .append(this.fundPoolId, that.fundPoolId)
                 .isEquals();
@@ -237,6 +247,7 @@ public class Scenario extends StoredEntity<String> {
         public int hashCode() {
             return new HashCodeBuilder()
                 .append(publicationTypes)
+                .append(usageAges)
                 .append(titleCutoffAmount)
                 .append(fundPoolId)
                 .toHashCode();
@@ -246,6 +257,7 @@ public class Scenario extends StoredEntity<String> {
         public String toString() {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("publicationTypes", publicationTypes)
+                .append("usageAges", usageAges)
                 .append("titleCutoffAmount", titleCutoffAmount)
                 .append("fundPoolId", fundPoolId)
                 .toString();

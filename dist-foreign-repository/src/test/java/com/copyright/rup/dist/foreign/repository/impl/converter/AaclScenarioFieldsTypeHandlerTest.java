@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNull;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import org.junit.Test;
 import org.postgresql.util.PGobject;
 
@@ -20,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Verifies {@link AaclScenarioFieldsTypeHandler}.
@@ -104,6 +106,12 @@ public class AaclScenarioFieldsTypeHandlerTest {
         pubType.setWeight(new BigDecimal("1.00"));
         pubTypes.add(pubType);
         aaclFields.setPublicationTypes(pubTypes);
+        List<UsageAge> usageAges = new ArrayList<>();
+        UsageAge usageAge = new UsageAge();
+        usageAge.setPeriod(2020);
+        usageAge.setWeight(new BigDecimal("1.00"));
+        usageAges.add(usageAge);
+        aaclFields.setUsageAges(usageAges);
         return aaclFields;
     }
 }
