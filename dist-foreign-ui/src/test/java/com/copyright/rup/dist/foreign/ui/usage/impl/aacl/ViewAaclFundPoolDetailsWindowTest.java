@@ -85,9 +85,9 @@ public class ViewAaclFundPoolDetailsWindowTest {
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Aggregate Licensee Class ID", "Aggregate Licensee Class Name", "Gross Amount"),
+        assertEquals(Arrays.asList("Agg LC ID", "Agg LC Enrollment", "Agg LC Discipline", "Gross Amount"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(200.0, -1.0, 110.0),
+        assertEquals(Arrays.asList(100.0, 150.0, -1.0, 110.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
     }
 
@@ -102,15 +102,17 @@ public class ViewAaclFundPoolDetailsWindowTest {
     private FundPoolDetail buildFundPoolDetail() {
         FundPoolDetail detail = new FundPoolDetail();
         detail.setId(RupPersistUtils.generateUuid());
-        detail.setAggregateLicenseeClass(buildAggregateLicenseeClass(108, "EXGP - Life Sciences"));
+        detail.setAggregateLicenseeClass(buildAggregateLicenseeClass(108, "EXGP", "Life Sciences"));
         detail.setGrossAmount(BigDecimal.ONE);
         return detail;
     }
 
-    private AggregateLicenseeClass buildAggregateLicenseeClass(Integer id, String name) {
+    private AggregateLicenseeClass buildAggregateLicenseeClass(Integer id, String enrollmentProfile,
+                                                               String discipline) {
         AggregateLicenseeClass licenseeClass = new AggregateLicenseeClass();
         licenseeClass.setId(id);
-        licenseeClass.setName(name);
+        licenseeClass.setEnrollmentProfile(enrollmentProfile);
+        licenseeClass.setDiscipline(discipline);
         return licenseeClass;
     }
 }

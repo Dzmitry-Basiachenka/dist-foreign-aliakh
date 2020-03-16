@@ -17,15 +17,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class AggregateLicenseeClass extends StoredEntity<Integer> {
 
-    private String name;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    private String enrollmentProfile;
+    private String discipline;
 
     /**
      * Default constructor.
@@ -40,7 +33,24 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
      */
     public AggregateLicenseeClass(AggregateLicenseeClass clone) {
         this.setId(clone.getId());
-        name = clone.getName();
+        enrollmentProfile = clone.getEnrollmentProfile();
+        discipline = clone.getDiscipline();
+    }
+
+    public String getEnrollmentProfile() {
+        return enrollmentProfile;
+    }
+
+    public void setEnrollmentProfile(String enrollmentProfile) {
+        this.enrollmentProfile = enrollmentProfile;
+    }
+
+    public String getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(String discipline) {
+        this.discipline = discipline;
     }
 
     @Override
@@ -54,7 +64,8 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
         AggregateLicenseeClass that = (AggregateLicenseeClass) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
-            .append(name, that.name)
+            .append(enrollmentProfile, that.enrollmentProfile)
+            .append(discipline, that.discipline)
             .isEquals();
     }
 
@@ -62,7 +73,8 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
-            .append(name)
+            .append(enrollmentProfile)
+            .append(discipline)
             .toHashCode();
     }
 
@@ -70,7 +82,8 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
-            .append("name", name)
+            .append("enrollmentProfile", enrollmentProfile)
+            .append("discipline", discipline)
             .toString();
     }
 }

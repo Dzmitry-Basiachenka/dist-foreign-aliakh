@@ -66,13 +66,12 @@ public class ViewAaclFundPoolDetailsWindow extends Window {
         grid.setSizeFull();
         grid.addColumn(detail -> detail.getAggregateLicenseeClass().getId())
             .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
-            .setComparator((detail1, detail2) -> detail1.getAggregateLicenseeClass().getId()
-                .compareTo(detail2.getAggregateLicenseeClass().getId()))
-            .setWidth(200);
-        grid.addColumn(detail -> detail.getAggregateLicenseeClass().getName())
-            .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_name"))
-            .setComparator((detail1, detail2) -> detail1.getAggregateLicenseeClass().getName()
-                .compareTo(detail2.getAggregateLicenseeClass().getName()));
+            .setWidth(100);
+        grid.addColumn(detail -> detail.getAggregateLicenseeClass().getEnrollmentProfile())
+            .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_enrollment"))
+            .setWidth(150);
+        grid.addColumn(detail -> detail.getAggregateLicenseeClass().getDiscipline())
+            .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_discipline"));
         grid.addColumn(detail -> CurrencyUtils.format(detail.getGrossAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.gross_amount"))
             .setComparator((detail1, detail2) -> detail1.getGrossAmount().compareTo(detail2.getGrossAmount()))

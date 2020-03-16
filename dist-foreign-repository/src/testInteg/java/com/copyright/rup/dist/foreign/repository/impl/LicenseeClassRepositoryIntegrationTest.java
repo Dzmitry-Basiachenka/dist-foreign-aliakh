@@ -76,6 +76,7 @@ public class LicenseeClassRepositoryIntegrationTest {
 
     private void verifyAggregateLicenseeClass(AggregateLicenseeClass expected, AggregateLicenseeClass actual) {
         assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getEnrollmentProfile(), actual.getEnrollmentProfile());
+        assertEquals(expected.getDiscipline(), actual.getDiscipline());
     }
 }

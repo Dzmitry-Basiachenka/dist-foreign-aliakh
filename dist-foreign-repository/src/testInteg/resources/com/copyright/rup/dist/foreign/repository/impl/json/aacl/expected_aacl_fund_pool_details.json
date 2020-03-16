@@ -3,7 +3,8 @@
     "id": "44709581-fb7e-4d72-9427-dd5681f24fc5",
     "aggregateLicenseeClass": {
       "id": 108,
-      "name": "EXGP - Life Sciences"
+      "enrollmentProfile": "EXGP",
+      "discipline": "Life Sciences"
     },
     "grossAmount": 10.95
   },
@@ -11,7 +12,8 @@
     "id": "a6a2c928-297d-4584-9fb6-abf41c84e5e4",
     "aggregateLicenseeClass": {
       "id": 110,
-      "name": "EXU4 - Life Sciences"
+      "enrollmentProfile": "EXU4",
+      "discipline": "Life Sciences"
     },
     "grossAmount": 20.25
   }

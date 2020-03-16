@@ -6,7 +6,8 @@
 
     <resultMap id="aggregateLicenseeClassResultMap" type="AggregateLicenseeClass" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="aggregate_licensee_class_id" javaType="java.lang.Integer"/>
-        <result property="name" column="aggregate_licensee_class_name"/>
+        <result property="discipline" column="discipline"/>
+        <result property="enrollmentProfile" column="enrollment_profile"/>
     </resultMap>
 
     <select id="detailLicenseeClassExists" parameterType="string" resultType="boolean">
@@ -21,7 +22,8 @@
     <select id="findAggregateLicenseeClasses" resultMap="aggregateLicenseeClassResultMap">
         select
             aggregate_licensee_class_id,
-            aggregate_licensee_class_name,
+            discipline,
+            enrollment_profile,
             <include refid="StoredEntityMapper.additionalColumns"/>
         from ${schema}.df_aggregate_licensee_class
         order by aggregate_licensee_class_id
