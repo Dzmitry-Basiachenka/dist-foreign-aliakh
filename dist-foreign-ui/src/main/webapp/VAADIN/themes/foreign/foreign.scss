@@ -314,4 +314,13 @@
     .v-grid-aggregate-licensee-class-mapping-grid .v-grid-row-stripe .v-filterselect-input, .v-grid-aggregate-licensee-class-mapping-grid .v-grid-row-stripe .v-filterselect-button {
         background-color: #E2EFFF;
     }
+
+    .v-grid-aacl-usage-age-weight-grid .editable-field, .v-grid-aacl-usage-age-weight-grid .editable-field:focus {
+        border: #366daa 2px solid !important;
+
+    }
+
+    .v-grid-aacl-usage-age-weight-grid .editable-cell {
+        border: #bfbfbf 1px solid !important;
+    }
 }

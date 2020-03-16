@@ -348,15 +348,15 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetUsageAges() {
-        UsageFilter filter = new UsageFilter();
         List<UsageAge> usageAges =
             Arrays.asList(buildUsageAge(2020, new BigDecimal("1.00")), buildUsageAge(2018, new BigDecimal("0.75")));
-        expect(aaclUsageService.getUsageAges(filter)).andReturn(usageAges).once();
-        replay(aaclUsageService);
-        assertEquals(usageAges, controller.getUsageAges(filter));
-        verify(aaclUsageService);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(aaclUsageService.getUsageAges(usageFilter)).andReturn(usageAges).once();
+        replay(aaclUsageService, filterWidgetMock, filterController);
+        assertEquals(usageAges, controller.getUsageAges());
+        verify(aaclUsageService, filterWidgetMock, filterController);
     }
-
 
     @Test
     public void testGetPublicationTypes() {
