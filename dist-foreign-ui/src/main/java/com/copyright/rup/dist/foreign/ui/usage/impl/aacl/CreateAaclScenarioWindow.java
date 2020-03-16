@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -142,13 +141,13 @@ class CreateAaclScenarioWindow extends Window {
     private void initUsageAgeWeightsWidget() {
         usageAgeWeightWidget =
             new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.usage_age_weights"),
-                Collections::emptyList, AaclScenarioParameterWindowStub::new);
+                controller::getUsageAges, AaclUsageAgeWeightWindow::new);
     }
 
     private void initPubTypeWeightsWidget() {
         publicationTypeWeightWidget =
             new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.publication_type_weights"),
-                controller::getPublicationTypes, AaclScenarioParameterWindowStub::new);
+                controller::getPublicationTypes, PublicationTypeWeightsWindow::new);
     }
 
     private void initLicenseeClassesMappingWidget() {
@@ -188,25 +187,6 @@ class CreateAaclScenarioWindow extends Window {
         } else {
             Windows.showValidationErrorWindow(
                 Arrays.asList(scenarioNameField, titleCutoffAmountField, fundPoolComboBox, descriptionArea));
-        }
-    }
-
-    // TODO {srudak} remove when all windows are implemented
-    private static class AaclScenarioParameterWindowStub<T> extends AaclCommonScenarioParameterWindow<T> {
-
-        @Override
-        void setDefaultParameters(T params) {
-
-        }
-
-        @Override
-        void setAppliedParameters(T params) {
-
-        }
-
-        @Override
-        void fireParametersSaveEvent(ParametersSaveEvent<T> parametersSaveEvent) {
-
         }
     }
 }
