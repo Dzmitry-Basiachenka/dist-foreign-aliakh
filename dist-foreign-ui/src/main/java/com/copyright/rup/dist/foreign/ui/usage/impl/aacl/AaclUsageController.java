@@ -44,6 +44,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAaclUsageController}.
@@ -189,6 +190,11 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Override
     public List<UsageAge> getUsageAges() {
         return aaclUsageService.getUsageAges(getUsageFilterController().getWidget().getAppliedFilter());
+    }
+
+    @Override
+    public List<String> getProcessingBatchesNames(Set<String> batchesIds) {
+        return getUsageBatchService().getProcessingAaclBatchesNames(batchesIds);
     }
 
     @Override

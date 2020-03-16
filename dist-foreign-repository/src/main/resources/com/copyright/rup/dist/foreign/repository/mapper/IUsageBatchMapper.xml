@@ -199,7 +199,7 @@
             from ${schema}.df_usage u
                 where u.df_usage_batch_uid = ub.df_usage_batch_uid
                 and u.status_ind not in
-                <foreach collection="statuses" item="status" separator="," open="(" close=")">
+                <foreach collection="processedStatuses" item="status" separator="," open="(" close=")">
                     #{status}
                 </foreach>
         )

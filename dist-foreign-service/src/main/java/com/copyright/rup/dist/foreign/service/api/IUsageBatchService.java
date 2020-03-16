@@ -122,12 +122,20 @@ public interface IUsageBatchService {
     Map<String, List<String>> getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(Set<String> batchIds);
 
     /**
-     * Gets names of processing batches (with usages in statuses besides ELIGIBLE, UNCLASSIFIED).
+     * Gets names of processing NTS batches.
      *
      * @param batchesIds set of batches ids
      * @return list of batches names
      */
-    List<String> getProcessingBatchesNames(Set<String> batchesIds);
+    List<String> getProcessingNtsBatchesNames(Set<String> batchesIds);
+
+    /**
+     * Gets names of processing AACL batches.
+     *
+     * @param batchesIds set of batches ids
+     * @return list of batches names
+     */
+    List<String> getProcessingAaclBatchesNames(Set<String> batchesIds);
 
     /**
      * Gets map of batches names to scenario names associated with the given batches.

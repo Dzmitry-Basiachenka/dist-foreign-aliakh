@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcess
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for AACL usages controller.
@@ -132,6 +133,15 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return list of {@link PublicationType}.
      */
     List<PublicationType> getPublicationTypes();
+
+    /**
+     * Gets names of processing batches (with usages in statuses besides WORK_NOT_FOUND, RH_FOUND, WORK_RESEARCH,
+     * ELIGIBLE).
+     *
+     * @param batchesIds set of batches ids
+     * @return list of batches names
+     */
+    List<String> getProcessingBatchesNames(Set<String> batchesIds);
 
     /**
      * Creates AACL {@link Scenario} by entered scenario name and description.
