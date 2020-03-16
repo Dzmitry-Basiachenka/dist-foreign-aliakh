@@ -22,6 +22,22 @@ public class PublicationType extends StoredEntity<String> {
     private String name;
     private BigDecimal weight;
 
+    /**
+     * Constructor.
+     */
+    public PublicationType() {
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param pubType instance of {@link PublicationType}
+     */
+    public PublicationType(PublicationType pubType) {
+        this.name = pubType.getName();
+        this.weight = pubType.getWeight();
+    }
+
     public String getName() {
         return name;
     }
