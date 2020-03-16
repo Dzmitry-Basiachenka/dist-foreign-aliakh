@@ -15,7 +15,11 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
@@ -50,6 +54,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
@@ -72,6 +77,9 @@ import java.util.stream.IntStream;
 @PrepareForTest({AaclUsageWidget.class, Windows.class, ForeignSecurityUtils.class, ViewAaclFundPoolWindow.class})
 // TODO {srudak} add test for 'Add To Scenario' button listener
 public class AaclUsageWidgetTest {
+
+    private static final String DATE =
+        CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
 
     private AaclUsageWidget usagesWidget;
     private IAaclUsageController controller;
@@ -115,6 +123,32 @@ public class AaclUsageWidgetTest {
     @Test
     public void testGetController() {
         assertSame(controller, usagesWidget.getController());
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListener() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(4);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSelectedProductFamily()).andReturn("AACL").once();
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getFundPools()).andReturn(Collections.singletonList(new FundPool())).once();
+        expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(new PublicationType())).once();
+        expect(controller.scenarioExists("AACL Distribution " + DATE)).andReturn(true).once();
+        Windows.showModalWindow(anyObject(CreateAaclScenarioWindow.class));
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
     }
 
     @Test

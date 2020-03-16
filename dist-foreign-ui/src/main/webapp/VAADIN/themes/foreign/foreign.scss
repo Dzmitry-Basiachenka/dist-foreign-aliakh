@@ -323,4 +323,8 @@
     .v-grid-aacl-usage-age-weight-grid .editable-cell {
         border: #bfbfbf 1px solid !important;
     }
+
+    .v-filterselect-error[role="combobox"] {
+        border-radius: 3px 12px 12px 3px;
+    }
 }
