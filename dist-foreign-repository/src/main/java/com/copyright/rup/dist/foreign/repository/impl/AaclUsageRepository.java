@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -142,5 +143,14 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     @Override
     public void deleteByBatchId(String batchId) {
         delete("IAaclUsageMapper.deleteByBatchId", Objects.requireNonNull(batchId));
+    }
+
+    @Override
+    public void addToScenario(Scenario scenario, UsageFilter filter) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("scenarioId", Objects.requireNonNull(scenario.getId()));
+        params.put(FILTER_KEY, Objects.requireNonNull(filter));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(scenario.getUpdateUser()));
+        update("IAaclUsageMapper.addToScenario", params);
     }
 }

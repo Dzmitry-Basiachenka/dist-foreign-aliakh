@@ -7,6 +7,7 @@
     <resultMap id="aaclUsageResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_usage_uid"/>
         <result property="batchId" column="df_usage_batch_uid"/>
+        <result property="scenarioId" column="df_scenario_uid"/>
         <result property="status" column="status_ind"/>
         <result property="productFamily" column="product_family"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
@@ -76,6 +77,7 @@
     <sql id="aaclUsageColumns">
         u.df_usage_uid,
         u.df_usage_batch_uid,
+        u.df_scenario_uid,
         u.wr_wrk_inst,
         u.system_title,
         u.standard_number,
@@ -681,4 +683,17 @@
         delete from ${schema}.df_usage_aacl
         where df_usage_aacl_uid in (select df_usage_uid from usage_ids)
     </delete>
+
+    <update id="addToScenario" parameterType="map">
+        update ${schema}.df_usage u
+        set
+            df_scenario_uid = #{scenarioId},
+            status_ind = 'LOCKED',
+            updated_by_user = #{updateUser},
+            updated_datetime = now(),
+            record_version = u.record_version + 1
+        from ${schema}.df_usage_aacl uaacl
+        <include refid="IAaclUsageMapper.aaclUsageFilter"/>
+        and u.df_usage_uid = uaacl.df_usage_aacl_uid
+    </update>
 </mapper>
