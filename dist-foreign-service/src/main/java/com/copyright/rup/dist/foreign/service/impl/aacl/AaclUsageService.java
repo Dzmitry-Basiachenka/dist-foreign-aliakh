@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -234,5 +235,11 @@ public class AaclUsageService implements IAaclUsageService {
     private BigDecimal getAgeWeight(int index) {
         return DEFAULT_USAGES_AGE_WEIGHTS.size() > index
             ? DEFAULT_USAGES_AGE_WEIGHTS.get(index) : USAGES_AGE_WEIGHT_ZERO;
+    }
+
+    @Override
+    public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
+        //todo {aazarenka} implement after adjusting repository
+        return Collections.emptyList();
     }
 }

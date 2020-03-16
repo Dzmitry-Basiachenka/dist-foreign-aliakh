@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.audit.api.aacl;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditWidget;
 
 /**
- * Interface for Aacl audit widget.
+ * Interface for AACL audit widget.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>

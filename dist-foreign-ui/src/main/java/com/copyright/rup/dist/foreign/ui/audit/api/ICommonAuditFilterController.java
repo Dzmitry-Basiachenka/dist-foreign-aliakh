@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Aliaksanr Liakh
  */
-public interface IAuditFilterController extends IFilterController<IAuditFilterWidget> {
+public interface ICommonAuditFilterController extends IFilterController<ICommonAuditFilterWidget> {
 
     /**
      * @return list of {@link UsageBatch}es.

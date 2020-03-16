@@ -10,7 +10,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -57,12 +57,12 @@ import java.util.stream.Stream;
 @PrepareForTest(JavaScript.class)
 public class LazyRightsholderFilterWindowTest {
 
-    private IAuditFilterController controller;
+    private ICommonAuditFilterController controller;
     private LazyRightsholderFilterWindow filterWindow;
 
     @Before
     public void setUp() {
-        controller = createMock(IAuditFilterController.class);
+        controller = createMock(ICommonAuditFilterController.class);
         filterWindow = new LazyRightsholderFilterWindow("Caption", controller);
     }
 

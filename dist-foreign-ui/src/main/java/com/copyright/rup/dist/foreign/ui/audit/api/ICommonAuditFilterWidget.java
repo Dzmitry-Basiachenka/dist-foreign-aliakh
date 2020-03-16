@@ -12,10 +12,15 @@ import com.copyright.rup.vaadin.widget.api.IFilterWidget;
  *
  * @author Aliaksanr Liakh
  */
-public interface IAuditFilterWidget extends IFilterWidget<IAuditFilterController> {
+public interface ICommonAuditFilterWidget extends IFilterWidget<ICommonAuditFilterController> {
 
     /**
      * @return currently applied {@link AuditFilter}.
      */
     AuditFilter getAppliedFilter();
+
+    /**
+     * @return {@link AuditFilter}.
+     */
+    AuditFilter getFilter();
 }

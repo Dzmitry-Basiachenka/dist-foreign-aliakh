@@ -9,6 +9,9 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.audit.impl.aacl.AaclStatusFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.impl.fas.FasStatusFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.impl.nts.NtsStatusFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -26,7 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Verifies {@link StatusFilterWidget}.
+ * Verifies {@link CommonStatusFilterWidget}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -36,7 +39,7 @@ import java.util.Set;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Windows.class)
-public class StatusFilterWidgetTest {
+public class CommonStatusFilterWidgetTest {
 
     private static final String SELECTED_ITEMS_IDS = "selectedItemsIds";
 
@@ -52,36 +55,44 @@ public class StatusFilterWidgetTest {
             UsageStatusEnum.NTS_EXCLUDED, UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY,
             UsageStatusEnum.LOCKED, UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED);
 
-    private static final String FAS_PRODUCT_FAMILY = "FAS";
-    private static final String NTS_PRODUCT_FAMILY = "NTS";
+    private static final Set<UsageStatusEnum> AACL_STATUSES =
+        Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
+            UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.LOCKED,
+            UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED);
 
     @Test
     public void testLoadBeansFas() {
-        StatusFilterWidget widget = new StatusFilterWidget(FAS_PRODUCT_FAMILY);
+        CommonStatusFilterWidget widget = new FasStatusFilterWidget();
         assertEquals(FAS_FAS2_STATUSES, widget.loadBeans());
     }
 
     @Test
     public void testLoadBeansNts() {
-        StatusFilterWidget widget = new StatusFilterWidget(NTS_PRODUCT_FAMILY);
+        CommonStatusFilterWidget widget = new NtsStatusFilterWidget();
         assertEquals(NTS_STATUSES, widget.loadBeans());
     }
 
     @Test
+    public void testLoadBeansAacl() {
+        CommonStatusFilterWidget widget = new AaclStatusFilterWidget();
+        assertEquals(AACL_STATUSES, widget.loadBeans());
+    }
+
+    @Test
     public void testGetBeanClass() {
-        StatusFilterWidget widget = new StatusFilterWidget(FAS_PRODUCT_FAMILY);
+        CommonStatusFilterWidget widget = new FasStatusFilterWidget();
         assertEquals(UsageStatusEnum.class, widget.getBeanClass());
     }
 
     @Test
     public void testGetBeanItemCaption() {
-        StatusFilterWidget widget = new StatusFilterWidget(FAS_PRODUCT_FAMILY);
+        CommonStatusFilterWidget widget = new FasStatusFilterWidget();
         assertEquals("ELIGIBLE", widget.getBeanItemCaption(UsageStatusEnum.ELIGIBLE));
     }
 
     @Test
     public void testOnSave() {
-        StatusFilterWidget widget = new StatusFilterWidget(FAS_PRODUCT_FAMILY);
+        CommonStatusFilterWidget widget = new FasStatusFilterWidget();
         FilterSaveEvent event = createMock(FilterSaveEvent.class);
         Set<UsageStatusEnum> values = Sets.newHashSet(UsageStatusEnum.ELIGIBLE);
         expect(event.getSelectedItemsIds()).andReturn(values).once();
@@ -93,7 +104,7 @@ public class StatusFilterWidgetTest {
 
     @Test
     public void testShowFilterWindow() {
-        StatusFilterWidget widget = new StatusFilterWidget(FAS_PRODUCT_FAMILY);
+        CommonStatusFilterWidget widget = new FasStatusFilterWidget();
         mockStatic(Windows.class);
         FilterWindow filterWindow = createMock(FilterWindow.class);
         expect(Windows.showFilterWindow("Status filter", widget)).andReturn(filterWindow).once();
@@ -111,7 +122,7 @@ public class StatusFilterWidgetTest {
 
     @Test
     public void testReset() {
-        StatusFilterWidget widget = new StatusFilterWidget(FAS_PRODUCT_FAMILY);
+        CommonStatusFilterWidget widget = new FasStatusFilterWidget();
         Whitebox.setInternalState(widget, SELECTED_ITEMS_IDS, EnumSet.of(UsageStatusEnum.ELIGIBLE));
         widget.reset();
         assertEquals(new HashSet<>(), Whitebox.getInternalState(widget, SELECTED_ITEMS_IDS));

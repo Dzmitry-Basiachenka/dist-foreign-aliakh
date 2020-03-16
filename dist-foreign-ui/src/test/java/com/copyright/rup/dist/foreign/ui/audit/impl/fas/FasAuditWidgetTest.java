@@ -14,10 +14,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.fas.IFasAuditController;
-import com.copyright.rup.dist.foreign.ui.audit.impl.AuditFilterWidget;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Lists;
@@ -66,16 +65,16 @@ public class FasAuditWidgetTest {
 
     private FasAuditWidget widget;
     private IFasAuditController controller;
-    private IAuditFilterWidget filterWidget;
-    private IAuditFilterController filterController;
+    private ICommonAuditFilterWidget filterWidget;
+    private ICommonAuditFilterController filterController;
 
     @Before
     public void setUp() {
         controller = createMock(IFasAuditController.class);
         widget = new FasAuditWidget(controller);
         widget.setController(controller);
-        filterController = createMock(IAuditFilterController.class);
-        filterWidget = new AuditFilterWidget();
+        filterController = createMock(ICommonAuditFilterController.class);
+        filterWidget = new FasAuditFilterWidget();
         filterWidget.setController(filterController);
     }
 
@@ -86,7 +85,7 @@ public class FasAuditWidgetTest {
         assertTrue(widget.isLocked());
         assertEquals("audit-widget", widget.getStyleName());
         Component component = widget.getFirstComponent();
-        assertTrue(component instanceof IAuditFilterWidget);
+        assertTrue(component instanceof ICommonAuditFilterWidget);
         component = widget.getSecondComponent();
         assertTrue(component instanceof VerticalLayout);
         verifyGridLayout((VerticalLayout) component);

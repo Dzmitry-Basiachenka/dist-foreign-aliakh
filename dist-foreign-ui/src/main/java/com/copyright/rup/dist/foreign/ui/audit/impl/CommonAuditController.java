@@ -1,31 +1,20 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
-import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.common.repository.api.Sort.Direction;
-import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
-import com.vaadin.data.provider.QuerySortOrder;
-import com.vaadin.shared.data.sort.SortDirection;
-
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Common implementation for audit controllers.
@@ -44,8 +33,6 @@ public abstract class CommonAuditController extends CommonController<ICommonAudi
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
-    private IAuditFilterController auditFilterController;
-    @Autowired
     private IUsageService usageService;
     @Autowired
     private IReportService reportService;
@@ -53,9 +40,7 @@ public abstract class CommonAuditController extends CommonController<ICommonAudi
     private IStreamSourceHandler streamSourceHandler;
 
     @Override
-    public IAuditFilterController getAuditFilterController() {
-        return auditFilterController;
-    }
+    public abstract ICommonAuditFilterController getAuditFilterController();
 
     @Override
     public AuditFilter getFilter() {
@@ -73,19 +58,6 @@ public abstract class CommonAuditController extends CommonController<ICommonAudi
     public int getSize() {
         AuditFilter filter = getFilter();
         return !filter.isEmpty() ? usageService.getAuditItemsCount(filter) : 0;
-    }
-
-    @Override
-    public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
-        AuditFilter filter = getFilter();
-        Sort sort = null;
-        if (CollectionUtils.isNotEmpty(sortOrders)) {
-            QuerySortOrder sortOrder = sortOrders.get(0);
-            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
-        }
-        return !filter.isEmpty()
-            ? usageService.getForAudit(filter, new Pageable(startIndex, count), sort)
-            : Collections.emptyList();
     }
 
     @Override

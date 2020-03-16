@@ -1,0 +1,40 @@
+package com.copyright.rup.dist.foreign.ui.audit.impl.aacl;
+
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.aacl.IAaclAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterController;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+/**
+ * Implementation of {@link IAaclAuditFilterController}.
+ * <p>
+ * Copyright (C) 2020 copyright.com
+ * <p>
+ * Date: 03/16/2020
+ *
+ * @author Anton Azarenka
+ */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class AaclAuditFilterController extends CommonAuditFilterController implements IAaclAuditFilterController {
+
+    @Autowired
+    private IAaclUsageService aaclUsageService;
+
+    @Override
+    protected ICommonAuditFilterWidget instantiateWidget() {
+        return new AaclAuditFilterWidget(this);
+    }
+
+    @Override
+    public List<Integer> getUsagePeriods() {
+        return aaclUsageService.getUsagePeriods();
+    }
+}

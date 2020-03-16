@@ -25,8 +25,11 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.aacl.IAaclAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.aacl.IAaclAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.aacl.IAaclAuditWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -67,20 +70,22 @@ public class AaclAuditControllerTest {
 
     private AaclAuditController controller;
     private IUsageAuditService usageAuditService;
-    private IAuditFilterController auditFilterController;
+    private ICommonAuditFilterController auditFilterController;
     private IUsageService usageService;
+    private IAaclUsageService aaclUsageService;
     private IAaclAuditWidget auditWidget;
-    private IAuditFilterWidget filterWidget;
+    private ICommonAuditFilterWidget filterWidget;
     private IReportService reportService;
     private IStreamSourceHandler streamSourceHandler;
 
     @Before
     public void setUp() {
         usageAuditService = createMock(IUsageAuditService.class);
-        auditFilterController = createMock(IAuditFilterController.class);
+        auditFilterController = createMock(IAaclAuditFilterController.class);
         usageService = createMock(IUsageService.class);
+        aaclUsageService = createMock(IAaclUsageService.class);
         auditWidget = createMock(IAaclAuditWidget.class);
-        filterWidget = createMock(IAuditFilterWidget.class);
+        filterWidget = createMock(IAaclAuditFilterWidget.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         controller = new AaclAuditController();
@@ -88,6 +93,7 @@ public class AaclAuditControllerTest {
         Whitebox.setInternalState(controller, usageAuditService);
         Whitebox.setInternalState(controller, auditFilterController);
         Whitebox.setInternalState(controller, usageService);
+        Whitebox.setInternalState(controller, aaclUsageService);
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
     }
@@ -133,12 +139,12 @@ public class AaclAuditControllerTest {
         expect(auditFilterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(auditWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
-        expect(usageService.getForAudit(eq(filter), capture(pageableCapture), capture(sortCapture)))
+        expect(aaclUsageService.getForAudit(eq(filter), capture(pageableCapture), capture(sortCapture)))
             .andReturn(Collections.emptyList()).once();
-        replay(filterWidget, auditWidget, auditFilterController, usageService);
+        replay(filterWidget, auditWidget, auditFilterController, aaclUsageService);
         List<UsageDto> result = controller.loadBeans(0, 10, null);
         assertEquals(Collections.emptyList(), result);
-        verify(filterWidget, auditWidget, auditFilterController, usageService);
+        verify(filterWidget, auditWidget, auditFilterController, aaclUsageService);
     }
 
     @Test
