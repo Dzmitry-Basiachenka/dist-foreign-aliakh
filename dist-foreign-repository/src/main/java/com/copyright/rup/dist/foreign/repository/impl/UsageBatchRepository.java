@@ -14,7 +14,6 @@ import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,9 +31,6 @@ import java.util.Set;
  */
 @Repository
 public class UsageBatchRepository extends BaseRepository implements IUsageBatchRepository {
-
-    private static final EnumSet<UsageStatusEnum> PROCESSED_NTS_BATCH_USAGE_STATUSES = EnumSet.of(
-        UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.LOCKED, UsageStatusEnum.NTS_EXCLUDED);
 
     @Override
     public void insert(UsageBatch usageBatch) {
@@ -90,10 +86,10 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public List<String> findProcessingBatchesNames(Set<String> batchesIds) {
+    public List<String> findProcessingBatchesNames(Set<String> batchesIds, Set<UsageStatusEnum> processedStatuses) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("batchesIds", Objects.requireNonNull(batchesIds));
-        params.put("statuses", Objects.requireNonNull(PROCESSED_NTS_BATCH_USAGE_STATUSES));
+        params.put("processedStatuses", Objects.requireNonNull(processedStatuses));
         return selectList("IUsageBatchMapper.findProcessingBatchesNames", params);
     }
 

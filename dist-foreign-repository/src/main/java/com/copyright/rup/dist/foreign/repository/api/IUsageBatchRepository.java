@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import java.util.List;
 import java.util.Map;
@@ -89,12 +90,13 @@ public interface IUsageBatchRepository {
     List<String> findBatchNamesWithoutUsagesForClassification(Set<String> batchIds, String classification);
 
     /**
-     * Finds names of processing batches (with usages in statuses besides ELIGIBLE, UNCLASSIFIED).
+     * Finds names of processing batches.
      *
-     * @param batchesIds set of batches ids
+     * @param batchesIds        set of batches ids
+     * @param processedStatuses set of statuses that a processed usage might have
      * @return list of batches names
      */
-    List<String> findProcessingBatchesNames(Set<String> batchesIds);
+    List<String> findProcessingBatchesNames(Set<String> batchesIds, Set<UsageStatusEnum> processedStatuses);
 
     /**
      * Finds map of batches names to scenario names associated with the given batches.

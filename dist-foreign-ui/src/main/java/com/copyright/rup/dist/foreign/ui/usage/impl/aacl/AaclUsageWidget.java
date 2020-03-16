@@ -24,6 +24,7 @@ import com.vaadin.ui.MenuBar;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Usage widget for AACL product families.
@@ -191,7 +192,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
     }
 
     private String getScenarioValidationMessage() {
-        String message = null;
+        String message;
         if (0 == controller.getBeansCount()) {
             message = ForeignUi.getMessage("message.error.empty_usages");
         } else if (!controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)) {
@@ -202,8 +203,24 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
             if (CollectionUtils.isNotEmpty(accountNumbers)) {
                 message = ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
                     accountNumbers);
+            } else {
+                message = getAaclScenarioValidationMessage();
             }
-            // TODO {srudak} validate batches
+        }
+        return message;
+    }
+
+    private String getAaclScenarioValidationMessage() {
+        String message = null;
+        Set<String> batchesIds = getFilterWidget().getFilter().getUsageBatchesIds();
+        if (CollectionUtils.isEmpty(batchesIds)) {
+            message = ForeignUi.getMessage("message.error.empty_usage_batches");
+        } else {
+            List<String> batchesNames = controller.getProcessingBatchesNames(batchesIds);
+            if (CollectionUtils.isNotEmpty(batchesNames)) {
+                message = ForeignUi.getMessage("message.error.processing_batches_names",
+                    String.join("<br><li>", batchesNames));
+            }
         }
         return message;
     }

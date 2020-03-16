@@ -45,6 +45,7 @@ import org.powermock.reflect.Whitebox;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -351,12 +352,30 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void testGetProcessingBatchesNames() {
+    public void testGetProcessingNtsBatchesNames() {
         Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
         List<String> batchesNames = Collections.singletonList("test batch name");
-        expect(usageBatchRepository.findProcessingBatchesNames(batchesIds)).andReturn(batchesNames).once();
+        EnumSet<UsageStatusEnum> processingStatuses =
+            EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.LOCKED,
+                UsageStatusEnum.NTS_EXCLUDED);
+        expect(usageBatchRepository.findProcessingBatchesNames(batchesIds, processingStatuses))
+            .andReturn(batchesNames).once();
         replay(usageBatchRepository);
-        assertEquals(batchesNames, usageBatchService.getProcessingBatchesNames(batchesIds));
+        assertEquals(batchesNames, usageBatchService.getProcessingNtsBatchesNames(batchesIds));
+        verify(usageBatchRepository);
+    }
+
+    @Test
+    public void testGetProcessingAaclBatchesNames() {
+        Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
+        List<String> batchesNames = Collections.singletonList("test batch name");
+        EnumSet<UsageStatusEnum> processingStatuses =
+            EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND,
+                UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED);
+        expect(usageBatchRepository.findProcessingBatchesNames(batchesIds, processingStatuses))
+            .andReturn(batchesNames).once();
+        replay(usageBatchRepository);
+        assertEquals(batchesNames, usageBatchService.getProcessingAaclBatchesNames(batchesIds));
         verify(usageBatchRepository);
     }
 

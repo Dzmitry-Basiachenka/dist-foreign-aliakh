@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -45,6 +47,12 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UsageBatchService implements IUsageBatchService {
+
+    private static final EnumSet<UsageStatusEnum> PROCESSED_NTS_BATCH_USAGE_STATUSES = EnumSet.of(
+        UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.NTS_EXCLUDED, UsageStatusEnum.LOCKED);
+    private static final EnumSet<UsageStatusEnum> PROCESSED_AACL_BATCH_USAGE_STATUSES = EnumSet.of(
+        UsageStatusEnum.ELIGIBLE, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND,
+        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED);
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -192,8 +200,13 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public List<String> getProcessingBatchesNames(Set<String> batchesIds) {
-        return usageBatchRepository.findProcessingBatchesNames(batchesIds);
+    public List<String> getProcessingNtsBatchesNames(Set<String> batchesIds) {
+        return usageBatchRepository.findProcessingBatchesNames(batchesIds, PROCESSED_NTS_BATCH_USAGE_STATUSES);
+    }
+
+    @Override
+    public List<String> getProcessingAaclBatchesNames(Set<String> batchesIds) {
+        return usageBatchRepository.findProcessingBatchesNames(batchesIds, PROCESSED_AACL_BATCH_USAGE_STATUSES);
     }
 
     @Override

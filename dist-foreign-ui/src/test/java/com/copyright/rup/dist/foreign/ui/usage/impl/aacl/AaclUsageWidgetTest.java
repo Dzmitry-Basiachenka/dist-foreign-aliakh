@@ -133,15 +133,101 @@ public class AaclUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
-        assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSelectedProductFamily()).andReturn("AACL").once();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Collections.singleton("3a070817-03ae-4ebd-b25f-dd3168a7ffb0")))
+            .andReturn(Collections.emptyList()).once();
         expect(controller.getFundPools()).andReturn(Collections.singletonList(new FundPool())).once();
         expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(new PublicationType())).once();
         expect(controller.scenarioExists("AACL Distribution " + DATE)).andReturn(true).once();
         Windows.showModalWindow(anyObject(CreateAaclScenarioWindow.class));
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithEmptyUsages() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(4);
+        expect(controller.getBeansCount()).andReturn(0).once();
+        Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithInvalidStatus() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(4);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
+        Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithInvalidRightsholders() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(4);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(700000000L)).once();
+        Windows.showNotificationWindow(
+            "Scenario cannot be created. The following rightsholder(s) are absent in PRM: <i><b>[700000000]</b></i>");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithProcessingBatches() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(4);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Collections.singleton("3a070817-03ae-4ebd-b25f-dd3168a7ffb0")))
+            .andReturn(Collections.singletonList("Batch Name")).once();
+        Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
+            "<ul><li><i><b>Batch Name</b></i></ul>");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
@@ -255,7 +341,6 @@ public class AaclUsageWidgetTest {
         Button loadClassifiedUsagesButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
                 .getComponent(0)).getComponent(3);
-        assertTrue(loadClassifiedUsagesButton.isDisableOnClick());
         Windows.showModalWindow(anyObject(ClassifiedUsagesUploadWindow.class));
         expectLastCall().once();
         replay(clickEvent, Windows.class, controller);
@@ -274,8 +359,12 @@ public class AaclUsageWidgetTest {
         verifyFundPoolMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
         Button sendForClassificationButton = (Button) layout.getComponent(2);
         assertEquals("Send for Classification", sendForClassificationButton.getCaption());
-        assertEquals("Load Classified Details", layout.getComponent(3).getCaption());
-        assertEquals("Add To Scenario", layout.getComponent(4).getCaption());
+        Button loadClassifiedButton = (Button) layout.getComponent(3);
+        assertEquals("Load Classified Details", loadClassifiedButton.getCaption());
+        assertTrue(loadClassifiedButton.isDisableOnClick());
+        Button addToScenarioButton = (Button) layout.getComponent(4);
+        assertEquals("Add To Scenario", addToScenarioButton.getCaption());
+        assertTrue(addToScenarioButton.isDisableOnClick());
         assertEquals("Export", layout.getComponent(5).getCaption());
     }
 

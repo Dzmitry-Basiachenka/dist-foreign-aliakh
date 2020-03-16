@@ -9,6 +9,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import com.google.common.collect.ImmutableSet;
@@ -27,6 +28,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
@@ -221,9 +223,13 @@ public class UsageBatchRepositoryIntegrationTest {
 
     @Test
     public void testFindProcessingBatchesNames() {
-        List<String> batchesNames = usageBatchRepository.findProcessingBatchesNames(
-            ImmutableSet.of("7c028d85-58c3-45f8-be2d-33c16b0905b0", "334959d7-ad39-4624-a8fa-38c3e82be6eb",
-                "00aed73a-4243-440b-aa8a-445185580cb9", "13027b25-2269-3bec-48ea-5126431eedb0", NTS_USAGE_BATCH_ID_4));
+        ImmutableSet<String> batchIds =
+            ImmutableSet.of(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3,
+                "13027b25-2269-3bec-48ea-5126431eedb0", NTS_USAGE_BATCH_ID_4);
+        EnumSet<UsageStatusEnum> statuses =
+            EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.LOCKED,
+                UsageStatusEnum.NTS_EXCLUDED);
+        List<String> batchesNames = usageBatchRepository.findProcessingBatchesNames(batchIds, statuses);
         assertNotNull(batchesNames);
         assertEquals(3, batchesNames.size());
         assertEquals("NTS Batch with Belletristic usages", batchesNames.get(0));

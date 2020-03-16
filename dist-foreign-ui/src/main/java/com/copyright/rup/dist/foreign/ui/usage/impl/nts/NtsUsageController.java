@@ -172,7 +172,7 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public List<String> getProcessingBatchesNames(Set<String> batchesIds) {
-        return getUsageBatchService().getProcessingBatchesNames(batchesIds);
+        return getUsageBatchService().getProcessingNtsBatchesNames(batchesIds);
     }
 
     @Override

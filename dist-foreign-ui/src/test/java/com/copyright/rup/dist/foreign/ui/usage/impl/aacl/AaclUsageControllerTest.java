@@ -46,6 +46,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
 
 import com.vaadin.ui.HorizontalLayout;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -67,6 +68,7 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -356,6 +358,16 @@ public class AaclUsageControllerTest {
         replay(aaclUsageService, filterWidgetMock, filterController);
         assertEquals(usageAges, controller.getUsageAges());
         verify(aaclUsageService, filterWidgetMock, filterController);
+    }
+
+    @Test
+    public void testGetProcessingBatchesNames() {
+        Set<String> batchIds = Collections.singleton("5d4f7674-4f0a-404e-ad23-7096b667402b");
+        List<String> batchNames = Collections.singletonList("batch name");
+        expect(usageBatchService.getProcessingAaclBatchesNames(batchIds)).andReturn(batchNames).once();
+        replay(usageBatchService);
+        assertEquals(batchNames, controller.getProcessingBatchesNames(batchIds));
+        verify(usageBatchService);
     }
 
     @Test
