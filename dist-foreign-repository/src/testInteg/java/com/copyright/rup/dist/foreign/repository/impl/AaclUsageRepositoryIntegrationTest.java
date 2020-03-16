@@ -10,6 +10,7 @@ import static org.junit.Assert.fail;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -60,6 +61,7 @@ import java.util.stream.IntStream;
 @Transactional
 public class AaclUsageRepositoryIntegrationTest {
 
+    private static final String SCENARIO_ID = "09f85d7d-3a37-45b2-ab6e-7a341c3f115c";
     private static final String USAGE_ID_1 = "0b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_2 = "6c91f04e-60dc-49e0-9cdc-e782e0b923e2";
     private static final String USAGE_ID_3 = "5b41d618-0a2f-4736-bb75-29da627ad677";
@@ -114,9 +116,9 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
         assertNull(expectedUsage.getAaclUsage().getDiscipline());
         assertNull(expectedUsage.getAaclUsage().getEnrollmentProfile());
-        assertEquals(0, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(2, getNumberOfUsagesWithNotEmptyClassificationData());
         aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
-        assertEquals(1, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(3, getNumberOfUsagesWithNotEmptyClassificationData());
         verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
             aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")),
             this::verifyUsage);
@@ -183,8 +185,9 @@ public class AaclUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
         verifyUsageDtos(
-            Arrays.asList("json/aacl/aacl_usage_dto_44600a96.json", "json/aacl/aacl_usage_dto_67750f86.json",
-                "json/aacl/aacl_usage_dto_0b5ac9fc.json", "json/aacl/aacl_usage_dto_6c91f04e.json"),
+            Arrays.asList("json/aacl/aacl_usage_dto_e21bcd1f.json", "json/aacl/aacl_usage_dto_44600a96.json",
+                "json/aacl/aacl_usage_dto_67750f86.json", "json/aacl/aacl_usage_dto_0b5ac9fc.json",
+                "json/aacl/aacl_usage_dto_6c91f04e.json"),
             aaclUsageRepository.findDtosByFilter(usageFilter, null, null));
     }
 
@@ -300,11 +303,12 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testFindUsagePeriods() {
         List<Integer> usagePeriods = aaclUsageRepository.findUsagePeriods();
-        assertEquals(4, usagePeriods.size());
+        assertEquals(5, usagePeriods.size());
         assertEquals(2010, usagePeriods.get(0).intValue());
-        assertEquals(2018, usagePeriods.get(1).longValue());
-        assertEquals(2019, usagePeriods.get(2).longValue());
-        assertEquals(2020, usagePeriods.get(3).longValue());
+        assertEquals(2017, usagePeriods.get(1).intValue());
+        assertEquals(2018, usagePeriods.get(2).longValue());
+        assertEquals(2019, usagePeriods.get(3).longValue());
+        assertEquals(2020, usagePeriods.get(4).longValue());
     }
 
     @Test
@@ -317,6 +321,49 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(2020, usagePeriods.get(0).intValue());
         assertEquals(2019, usagePeriods.get(1).intValue());
         assertEquals(2010, usagePeriods.get(2).intValue());
+    }
+
+    @Test
+    public void testAddToScenarioByBatchAndStatusFilter() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setUpdateUser(USER_NAME);
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        aaclUsageRepository.addToScenario(scenario, usageFilter);
+        aaclUsageRepository.findByIds(
+            Arrays.asList("0cd30b3e-ae74-466a-a7b1-a2d891b2123e", "9342062f-568e-4c27-8f33-c010a2afe61e"))
+            .forEach(actualUsage -> {
+                assertEquals(SCENARIO_ID, actualUsage.getScenarioId());
+                assertEquals(UsageStatusEnum.LOCKED, actualUsage.getStatus());
+                assertEquals(USER_NAME, actualUsage.getUpdateUser());
+            });
+        aaclUsageRepository.findByIds(Collections.singletonList("e21bcd1f-8040-4b44-93c7-4af732ac1916"))
+            .forEach(actualUsage -> {
+                assertNull(actualUsage.getScenarioId());
+                assertEquals(UsageStatusEnum.RH_FOUND, actualUsage.getStatus());
+            });
+    }
+
+    @Test
+    public void testAddToScenarioByBatchAndStatusAndPeriodFilter() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setUpdateUser(USER_NAME);
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        usageFilter.setUsagePeriod(2019);
+        aaclUsageRepository.addToScenario(scenario, usageFilter);
+        aaclUsageRepository.findByIds(Collections.singletonList("0cd30b3e-ae74-466a-a7b1-a2d891b2123e"))
+            .forEach(actualUsage -> {
+                assertEquals(SCENARIO_ID, actualUsage.getScenarioId());
+                assertEquals(USER_NAME, actualUsage.getUpdateUser());
+            });
+        aaclUsageRepository.findByIds(
+            Arrays.asList("9342062f-568e-4c27-8f33-c010a2afe61e", "e21bcd1f-8040-4b44-93c7-4af732ac1916"))
+            .forEach(actualUsage -> assertNull(actualUsage.getScenarioId()));
     }
 
     private void verifyUsages(List<String> expectedUsageJsonFiles, List<Usage> actualUsages,
