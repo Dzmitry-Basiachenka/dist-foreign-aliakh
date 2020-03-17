@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.repository.api.ILicenseeClassRepository;
 
 import com.google.common.collect.Maps;
@@ -35,5 +36,10 @@ public class LicenseeClassRepository extends BaseRepository implements ILicensee
     @Override
     public List<AggregateLicenseeClass> findAggregateLicenseeClasses() {
         return selectList("ILicenseeClassMapper.findAggregateLicenseeClasses");
+    }
+
+    @Override
+    public List<DetailLicenseeClass> findDetailLicenseeClasses() {
+        return selectList("ILicenseeClassMapper.findDetailLicenseeClasses");
     }
 }

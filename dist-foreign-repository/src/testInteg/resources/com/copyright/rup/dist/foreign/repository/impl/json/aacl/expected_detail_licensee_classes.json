@@ -1,0 +1,362 @@
+[
+  {
+    "id": 108,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Life Sciences",
+    "aggregateLicenseeClass": {
+      "id": 108,
+      "enrollmentProfile": "EXGP",
+      "discipline": "Life Sciences"
+    }
+  },
+  {
+    "id": 110,
+    "enrollmentProfile": "EXU4",
+    "discipline": "Life Sciences",
+    "aggregateLicenseeClass": {
+      "id": 110,
+      "enrollmentProfile": "EXU4",
+      "discipline": "Life Sciences"
+    }
+  },
+  {
+    "id": 111,
+    "enrollmentProfile": "HGP",
+    "discipline": "Life Sciences",
+    "aggregateLicenseeClass": {
+      "id": 111,
+      "enrollmentProfile": "HGP",
+      "discipline": "Life Sciences"
+    }
+  },
+  {
+    "id": 113,
+    "enrollmentProfile": "MU",
+    "discipline": "Life Sciences",
+    "aggregateLicenseeClass": {
+      "id": 113,
+      "enrollmentProfile": "MU",
+      "discipline": "Life Sciences"
+    }
+  },
+  {
+    "id": 115,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Business Management",
+    "aggregateLicenseeClass": {
+      "id": 115,
+      "enrollmentProfile": "EXGP",
+      "discipline": "Business Management"
+    }
+  },
+  {
+    "id": 117,
+    "enrollmentProfile": "EXU4",
+    "discipline": "Business Management",
+    "aggregateLicenseeClass": {
+      "id": 117,
+      "enrollmentProfile": "EXU4",
+      "discipline": "Business Management"
+    }
+  },
+  {
+    "id": 118,
+    "enrollmentProfile": "HGP",
+    "discipline": "Business Management",
+    "aggregateLicenseeClass": {
+      "id": 118,
+      "enrollmentProfile": "HGP",
+      "discipline": "Business Management"
+    }
+  },
+  {
+    "id": 120,
+    "enrollmentProfile": "MU",
+    "discipline": "Business Management",
+    "aggregateLicenseeClass": {
+      "id": 120,
+      "enrollmentProfile": "MU",
+      "discipline": "Business Management"
+    }
+  },
+  {
+    "id": 136,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Education",
+    "aggregateLicenseeClass": {
+      "id": 136,
+      "enrollmentProfile": "EXGP",
+      "discipline": "Education"
+    }
+  },
+  {
+    "id": 138,
+    "enrollmentProfile": "EXU4",
+    "discipline": "Education",
+    "aggregateLicenseeClass": {
+      "id": 138,
+      "enrollmentProfile": "EXU4",
+      "discipline": "Education"
+    }
+  },
+  {
+    "id": 139,
+    "enrollmentProfile": "HGP",
+    "discipline": "Education",
+    "aggregateLicenseeClass": {
+      "id": 139,
+      "enrollmentProfile": "HGP",
+      "discipline": "Education"
+    }
+  },
+  {
+    "id": 141,
+    "enrollmentProfile": "MU",
+    "discipline": "Education",
+    "aggregateLicenseeClass": {
+      "id": 141,
+      "enrollmentProfile": "MU",
+      "discipline": "Education"
+    }
+  },
+  {
+    "id": 143,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Engineering",
+    "aggregateLicenseeClass": {
+      "id": 143,
+      "enrollmentProfile": "EXGP",
+      "discipline": "Engineering"
+    }
+  },
+  {
+    "id": 145,
+    "enrollmentProfile": "EXU4",
+    "discipline": "Engineering",
+    "aggregateLicenseeClass": {
+      "id": 145,
+      "enrollmentProfile": "EXU4",
+      "discipline": "Engineering"
+    }
+  },
+  {
+    "id": 146,
+    "enrollmentProfile": "HGP",
+    "discipline": "Engineering",
+    "aggregateLicenseeClass": {
+      "id": 146,
+      "enrollmentProfile": "HGP",
+      "discipline": "Engineering"
+    }
+  },
+  {
+    "id": 148,
+    "enrollmentProfile": "MU",
+    "discipline": "Engineering",
+    "aggregateLicenseeClass": {
+      "id": 148,
+      "enrollmentProfile": "MU",
+      "discipline": "Engineering"
+    }
+  },
+  {
+    "id": 164,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Law & Legal Studies",
+    "aggregateLicenseeClass": {
+      "id": 164,
+      "enrollmentProfile": "EXGP",
+      "discipline": "Law & Legal Studies"
+    }
+  },
+  {
+    "id": 166,
+    "enrollmentProfile": "EXU4",
+    "discipline": "Law & Legal Studies",
+    "aggregateLicenseeClass": {
+      "id": 166,
+      "enrollmentProfile": "EXU4",
+      "discipline": "Law & Legal Studies"
+    }
+  },
+  {
+    "id": 167,
+    "enrollmentProfile": "HGP",
+    "discipline": "Law & Legal Studies",
+    "aggregateLicenseeClass": {
+      "id": 167,
+      "enrollmentProfile": "HGP",
+      "discipline": "Law & Legal Studies"
+    }
+  },
+  {
+    "id": 169,
+    "enrollmentProfile": "MU",
+    "discipline": "Law & Legal Studies",
+    "aggregateLicenseeClass": {
+      "id": 169,
+      "enrollmentProfile": "MU",
+      "discipline": "Law & Legal Studies"
+    }
+  },
+  {
+    "id": 171,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Arts & Humanities",
+    "aggregateLicenseeClass": {
+      "id": 171,
+      "enrollmentProfile": "EXGP",
+      "discipline": "Arts & Humanities"
+    }
+  },
+  {
+    "id": 173,
+    "enrollmentProfile": "EXU4",
+    "discipline": "Arts & Humanities",
+    "aggregateLicenseeClass": {
+      "id": 173,
+      "enrollmentProfile": "EXU4",
+      "discipline": "Arts & Humanities"
+    }
+  },
+  {
+    "id": 174,
+    "enrollmentProfile": "HGP",
+    "discipline": "Arts & Humanities",
+    "aggregateLicenseeClass": {
+      "id": 174,
+      "enrollmentProfile": "HGP",
+      "discipline": "Arts & Humanities"
+    }
+  },
+  {
+    "id": 176,
+    "enrollmentProfile": "MU",
+    "discipline": "Arts & Humanities",
+    "aggregateLicenseeClass": {
+      "id": 176,
+      "enrollmentProfile": "MU",
+      "discipline": "Arts & Humanities"
+    }
+  },
+  {
+    "id": 192,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Medical & Health",
+    "aggregateLicenseeClass": {
+      "id": 192,
+      "enrollmentProfile": "EXGP",
+      "discipline": "Medical & Health"
+    }
+  },
+  {
+    "id": 194,
+    "enrollmentProfile": "EXU4",
+    "discipline": "Medical & Health",
+    "aggregateLicenseeClass": {
+      "id": 194,
+      "enrollmentProfile": "EXU4",
+      "discipline": "Medical & Health"
+    }
+  },
+  {
+    "id": 195,
+    "enrollmentProfile": "HGP",
+    "discipline": "Medical & Health",
+    "aggregateLicenseeClass": {
+      "id": 195,
+      "enrollmentProfile": "HGP",
+      "discipline": "Medical & Health"
+    }
+  },
+  {
+    "id": 197,
+    "enrollmentProfile": "MU",
+    "discipline": "Medical & Health",
+    "aggregateLicenseeClass": {
+      "id": 197,
+      "enrollmentProfile": "MU",
+      "discipline": "Medical & Health"
+    }
+  },
+  {
+    "id": 206,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Physical Sciences & Mathematics",
+    "aggregateLicenseeClass": {
+      "id": 206,
+      "enrollmentProfile": "EXGP",
+      "discipline": "Physical Sciences & Mathematics"
+    }
+  },
+  {
+    "id": 208,
+    "enrollmentProfile": "EXU4",
+    "discipline": "Physical Sciences & Mathematics",
+    "aggregateLicenseeClass": {
+      "id": 208,
+      "enrollmentProfile": "EXU4",
+      "discipline": "Physical Sciences & Mathematics"
+    }
+  },
+  {
+    "id": 209,
+    "enrollmentProfile": "HGP",
+    "discipline": "Physical Sciences & Mathematics",
+    "aggregateLicenseeClass": {
+      "id": 209,
+      "enrollmentProfile": "HGP",
+      "discipline": "Physical Sciences & Mathematics"
+    }
+  },
+  {
+    "id": 211,
+    "enrollmentProfile": "MU",
+    "discipline": "Physical Sciences & Mathematics",
+    "aggregateLicenseeClass": {
+      "id": 211,
+      "enrollmentProfile": "MU",
+      "discipline": "Physical Sciences & Mathematics"
+    }
+  },
+  {
+    "id": 227,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Social & Behavioral Sciences",
+    "aggregateLicenseeClass": {
+      "id": 227,
+      "enrollmentProfile": "EXGP",
+      "discipline": "Social & Behavioral Sciences"
+    }
+  },
+  {
+    "id": 229,
+    "enrollmentProfile": "EXU4",
+    "discipline": "Social & Behavioral Sciences",
+    "aggregateLicenseeClass": {
+      "id": 229,
+      "enrollmentProfile": "EXU4",
+      "discipline": "Social & Behavioral Sciences"
+    }
+  },
+  {
+    "id": 230,
+    "enrollmentProfile": "HGP",
+    "discipline": "Social & Behavioral Sciences",
+    "aggregateLicenseeClass": {
+      "id": 230,
+      "enrollmentProfile": "HGP",
+      "discipline": "Social & Behavioral Sciences"
+    }
+  },
+  {
+    "id": 232,
+    "enrollmentProfile": "MU",
+    "discipline": "Social & Behavioral Sciences",
+    "aggregateLicenseeClass": {
+      "id": 232,
+      "enrollmentProfile": "MU",
+      "discipline": "Social & Behavioral Sciences"
+    }
+  }
+]

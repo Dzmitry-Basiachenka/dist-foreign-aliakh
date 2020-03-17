@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.api.aacl;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -11,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
@@ -133,6 +133,13 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return list of {@link PublicationType}.
      */
     List<PublicationType> getPublicationTypes();
+
+    /**
+     * Gets list of all {@link DetailLicenseeClass}s.
+     *
+     * @return list of {@link DetailLicenseeClass}.
+     */
+    List<DetailLicenseeClass> getDetailLicenseeClasses();
 
     /**
      * Gets names of processing batches (with usages in statuses besides WORK_NOT_FOUND, RH_FOUND, WORK_RESEARCH,

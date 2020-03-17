@@ -52,6 +52,7 @@
         <typeAlias alias="WrWrkInstUsageIdPair" type="com.copyright.rup.dist.foreign.repository.impl.WrWrkInstToUsageIdResultHandler$WrWrkInstUsageIdPair"/>
         <typeAlias alias="PayeeTotalHolder" type="com.copyright.rup.dist.foreign.domain.PayeeTotalHolder"/>
         <typeAlias alias="PubType" type="com.copyright.rup.dist.foreign.domain.PublicationType"/>
+        <typeAlias alias="DetailLicenseeClass" type="com.copyright.rup.dist.foreign.domain.DetailLicenseeClass"/>
         <typeAlias alias="AggregateLicenseeClass" type="com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass"/>
     </typeAliases>
 

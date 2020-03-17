@@ -33,7 +33,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -153,8 +152,7 @@ class CreateAaclScenarioWindow extends Window {
     private void initLicenseeClassesMappingWidget() {
         licenseeClassMappingWidget =
             new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
-                // TODO {srudak} adjust when window and controller are implemented
-                Collections::emptyList, AggregateLicenseeClassMappingWindow::new);
+                controller::getDetailLicenseeClasses, AggregateLicenseeClassMappingWindow::new);
     }
 
     private void initDescriptionArea() {

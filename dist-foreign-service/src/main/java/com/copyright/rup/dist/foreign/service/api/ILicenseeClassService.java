@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 
 import java.util.List;
 
@@ -28,4 +29,9 @@ public interface ILicenseeClassService {
      * @return list of existing {@link AggregateLicenseeClass}es.
      */
     List<AggregateLicenseeClass> getAggregateLicenseeClasses();
+
+    /**
+     * @return list of existing {@link DetailLicenseeClass}es.
+     */
+    List<DetailLicenseeClass> getDetailLicenseeClasses();
 }
