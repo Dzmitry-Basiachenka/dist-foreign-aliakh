@@ -140,7 +140,7 @@ class CreateAaclScenarioWindow extends Window {
     private void initUsageAgeWeightsWidget() {
         usageAgeWeightWidget =
             new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.usage_age_weights"),
-                controller::getUsageAges, AaclUsageAgeWeightWindow::new);
+                controller::getUsageAges, () -> new AaclUsageAgeWeightWindow(true));
     }
 
     private void initPubTypeWeightsWidget() {
