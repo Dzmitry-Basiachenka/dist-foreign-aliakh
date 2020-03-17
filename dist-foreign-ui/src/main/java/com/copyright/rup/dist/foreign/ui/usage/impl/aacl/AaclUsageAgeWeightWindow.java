@@ -36,11 +36,15 @@ public class AaclUsageAgeWeightWindow extends AaclCommonScenarioParameterWindow<
     private List<UsageAge> defaultValues;
     private List<UsageAge> currentValues;
     private Grid<UsageAge> grid;
+    private final boolean isEditable;
 
     /**
      * Constructor.
+     *
+     * @param isEditable {@code true} if window should be in edit mode, otherwice {@code false}
      */
-    public AaclUsageAgeWeightWindow() {
+    public AaclUsageAgeWeightWindow(boolean isEditable) {
+        this.isEditable = isEditable;
         setWidth(525, Unit.PIXELS);
         setHeight(300, Unit.PIXELS);
         initGrid();
@@ -72,33 +76,42 @@ public class AaclUsageAgeWeightWindow extends AaclCommonScenarioParameterWindow<
 
     private void initGrid() {
         grid = new Grid<>();
-        TextField textField = new TextField();
-        textField.addStyleName("editable-field");
-        Binder<UsageAge> binder = grid.getEditor().getBinder();
-        Binder.Binding<UsageAge, BigDecimal> editorBinder = binder.forField(textField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
-            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero"))
-            .withConverter(new BigDecimalConverter())
-            .bind(UsageAge::getWeight, UsageAge::setWeight);
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addColumn(UsageAge::getPeriod)
             .setCaption(ForeignUi.getMessage("label.usage_period"))
             .setSortable(false);
-        grid.addColumn(item -> CurrencyUtils.format(item.getWeight(), null))
-            .setCaption(ForeignUi.getMessage("table.column.weight"))
-            .setStyleGenerator(item -> "editable-cell")
-            .setEditorBinding(editorBinder)
-            .setSortable(false);
-        grid.getEditor().setEnabled(true);
-        grid.getEditor().setSaveCaption(ForeignUi.getMessage("button.update"));
-        grid.getEditor().addSaveListener(event -> {
-            // Workaround for https://github.com/vaadin/framework/issues/9678
-            grid.setItems(currentValues);
-        });
-        grid.addItemClickListener(event -> grid.getEditor().editRow(event.getRowIndex()));
+        Grid.Column<UsageAge, String> weightColumn =
+            grid.addColumn(item -> CurrencyUtils.format(item.getWeight(), null))
+                .setCaption(ForeignUi.getMessage("table.column.weight"))
+                .setSortable(false);
+        if (isEditable) {
+            weightColumn
+                .setStyleGenerator(item -> "editable-cell")
+                .setEditorBinding(initEditorBinding());
+            grid.getEditor().setEnabled(true);
+            grid.getEditor().setSaveCaption(ForeignUi.getMessage("button.update"));
+            grid.getEditor().addSaveListener(event -> {
+                // Workaround for https://github.com/vaadin/framework/issues/9678
+                grid.setItems(currentValues);
+            });
+            grid.addItemClickListener(event -> grid.getEditor().editRow(event.getRowIndex()));
+        } else {
+            grid.getEditor().setEnabled(false);
+        }
         VaadinUtils.addComponentStyle(grid, "aacl-usage-age-weight-grid");
+    }
+
+    private Binder.Binding<UsageAge, BigDecimal> initEditorBinding() {
+        TextField textField = new TextField();
+        textField.addStyleName("editable-field");
+        Binder<UsageAge> binder = grid.getEditor().getBinder();
+        return binder.forField(textField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
+                ForeignUi.getMessage("field.error.positive_number_or_zero"))
+            .withConverter(new BigDecimalConverter())
+            .bind(UsageAge::getWeight, UsageAge::setWeight);
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -107,8 +120,10 @@ public class AaclUsageAgeWeightWindow extends AaclCommonScenarioParameterWindow<
             fireParametersSaveEvent(new AaclScenarioParameterWidget.ParametersSaveEvent<>(this, currentValues));
             close();
         });
+        saveButton.setVisible(isEditable);
         Button defaultButton = new Button(ForeignUi.getMessage("button.default"));
         defaultButton.addClickListener(event -> setAppliedParameters(defaultValues));
+        defaultButton.setVisible(isEditable);
         return new HorizontalLayout(saveButton, defaultButton, Buttons.createCloseButton(this));
     }
 
