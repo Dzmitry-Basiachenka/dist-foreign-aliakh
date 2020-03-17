@@ -33,13 +33,17 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
     private List<DetailLicenseeClass> defaultValues;
     private List<DetailLicenseeClass> currentValues;
     private Grid<DetailLicenseeClass> grid;
+    private final boolean isEditable;
 
     /**
      * Constructor.
+     *
+     * @param isEditable {@code true} if window should be in edit mode, otherwise {@code false}
      */
-    public AggregateLicenseeClassMappingWindow() {
+    public AggregateLicenseeClassMappingWindow(boolean isEditable) {
         setWidth(950, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
+        this.isEditable = isEditable;
         initGrid();
         HorizontalLayout buttonsLayout = initButtons();
         VerticalLayout layout = new VerticalLayout(grid, buttonsLayout);
@@ -67,15 +71,16 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
     }
 
     private HorizontalLayout initButtons() {
-        Button closeButton = Buttons.createCloseButton(this);
         Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
+        saveButton.setVisible(isEditable);
         Button defaultButton = Buttons.createButton(ForeignUi.getMessage("button.default"));
+        defaultButton.setVisible(isEditable);
         defaultButton.addClickListener(event -> setAppliedParameters(defaultValues));
         saveButton.addClickListener(event -> {
             fireParametersSaveEvent(new ParametersSaveEvent<>(this, currentValues));
             close();
         });
-        HorizontalLayout layout = new HorizontalLayout(saveButton, defaultButton, closeButton);
+        HorizontalLayout layout = new HorizontalLayout(saveButton, defaultButton, Buttons.createCloseButton(this));
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "view-aacl-fund-pool-buttons");
         return layout;
@@ -98,12 +103,7 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
         grid.addColumn(DetailLicenseeClass::getDiscipline)
             .setCaption(ForeignUi.getMessage("table.column.det_lc_discipline"))
             .setWidth(210);
-        grid.addComponentColumn(this::buildComboBox)
-            .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
-            .setStyleGenerator(licensee -> "combobox-column")
-            .setComparator((SerializableComparator<DetailLicenseeClass>) (detail1, detail2) ->
-                detail1.getAggregateLicenseeClass().getId().compareTo(detail2.getAggregateLicenseeClass().getId()))
-            .setExpandRatio(1);
+        addAggregateLicenseeClassIdColumn();
         grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getEnrollmentProfile())
             .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_enrollment"))
             .setWidth(140);
@@ -112,6 +112,21 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
             .setWidth(210);
         grid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(grid, "aggregate-licensee-class-mapping-grid");
+    }
+
+    private void addAggregateLicenseeClassIdColumn() {
+        if (isEditable) {
+            grid.addComponentColumn(this::buildComboBox)
+                .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
+                .setStyleGenerator(licensee -> "combobox-column")
+                .setComparator((SerializableComparator<DetailLicenseeClass>) (detail1, detail2) ->
+                    detail1.getAggregateLicenseeClass().getId().compareTo(detail2.getAggregateLicenseeClass().getId()))
+                .setExpandRatio(1);
+        } else {
+            grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getId())
+                .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
+                .setExpandRatio(1);
+        }
     }
 
     private ComboBox<AggregateLicenseeClass> buildComboBox(DetailLicenseeClass detailLicenseeClass) {

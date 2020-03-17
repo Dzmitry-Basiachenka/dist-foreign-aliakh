@@ -152,7 +152,7 @@ class CreateAaclScenarioWindow extends Window {
     private void initLicenseeClassesMappingWidget() {
         licenseeClassMappingWidget =
             new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
-                controller::getDetailLicenseeClasses, AggregateLicenseeClassMappingWindow::new);
+                controller::getDetailLicenseeClasses, () -> new AggregateLicenseeClassMappingWindow(true));
     }
 
     private void initDescriptionArea() {

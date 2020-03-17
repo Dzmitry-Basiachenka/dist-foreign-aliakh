@@ -41,7 +41,7 @@ public class AaclUsageAgeWeightWindow extends AaclCommonScenarioParameterWindow<
     /**
      * Constructor.
      *
-     * @param isEditable {@code true} if window should be in edit mode, otherwice {@code false}
+     * @param isEditable {@code true} if window should be in edit mode, otherwise {@code false}
      */
     public AaclUsageAgeWeightWindow(boolean isEditable) {
         this.isEditable = isEditable;

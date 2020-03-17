@@ -49,5 +49,6 @@
         from ${schema}.df_detail_licensee_class dlc
         join ${schema}.df_aggregate_licensee_class alc
         on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        order by dlc.detail_licensee_class_id
     </select>
 </mapper>
