@@ -44,5 +44,151 @@
       "period": 2014,
       "weight": 0.00
     }
+  ],
+  "detailLicenseeClasses": [
+    {
+      "detailLicenseeClassId": 108,
+      "aggregateLicenseeClassId": 110
+    },
+    {
+      "detailLicenseeClassId": 110,
+      "aggregateLicenseeClassId": 108
+    },
+    {
+      "detailLicenseeClassId": 111,
+      "aggregateLicenseeClassId": 111
+    },
+    {
+      "detailLicenseeClassId": 113,
+      "aggregateLicenseeClassId": 113
+    },
+    {
+      "detailLicenseeClassId": 115,
+      "aggregateLicenseeClassId": 115
+    },
+    {
+      "detailLicenseeClassId": 117,
+      "aggregateLicenseeClassId": 117
+    },
+    {
+      "detailLicenseeClassId": 118,
+      "aggregateLicenseeClassId": 118
+    },
+    {
+      "detailLicenseeClassId": 120,
+      "aggregateLicenseeClassId": 120
+    },
+    {
+      "detailLicenseeClassId": 136,
+      "aggregateLicenseeClassId": 136
+    },
+    {
+      "detailLicenseeClassId": 138,
+      "aggregateLicenseeClassId": 138
+    },
+    {
+      "detailLicenseeClassId": 139,
+      "aggregateLicenseeClassId": 139
+    },
+    {
+      "detailLicenseeClassId": 141,
+      "aggregateLicenseeClassId": 141
+    },
+    {
+      "detailLicenseeClassId": 143,
+      "aggregateLicenseeClassId": 143
+    },
+    {
+      "detailLicenseeClassId": 145,
+      "aggregateLicenseeClassId": 145
+    },
+    {
+      "detailLicenseeClassId": 146,
+      "aggregateLicenseeClassId": 146
+    },
+    {
+      "detailLicenseeClassId": 148,
+      "aggregateLicenseeClassId": 148
+    },
+    {
+      "detailLicenseeClassId": 164,
+      "aggregateLicenseeClassId": 164
+    },
+    {
+      "detailLicenseeClassId": 166,
+      "aggregateLicenseeClassId": 166
+    },
+    {
+      "detailLicenseeClassId": 167,
+      "aggregateLicenseeClassId": 167
+    },
+    {
+      "detailLicenseeClassId": 169,
+      "aggregateLicenseeClassId": 169
+    },
+    {
+      "detailLicenseeClassId": 171,
+      "aggregateLicenseeClassId": 171
+    },
+    {
+      "detailLicenseeClassId": 173,
+      "aggregateLicenseeClassId": 173
+    },
+    {
+      "detailLicenseeClassId": 174,
+      "aggregateLicenseeClassId": 174
+    },
+    {
+      "detailLicenseeClassId": 176,
+      "aggregateLicenseeClassId": 176
+    },
+    {
+      "detailLicenseeClassId": 192,
+      "aggregateLicenseeClassId": 192
+    },
+    {
+      "detailLicenseeClassId": 194,
+      "aggregateLicenseeClassId": 194
+    },
+    {
+      "detailLicenseeClassId": 195,
+      "aggregateLicenseeClassId": 195
+    },
+    {
+      "detailLicenseeClassId": 197,
+      "aggregateLicenseeClassId": 197
+    },
+    {
+      "detailLicenseeClassId": 206,
+      "aggregateLicenseeClassId": 206
+    },
+    {
+      "detailLicenseeClassId": 208,
+      "aggregateLicenseeClassId": 208
+    },
+    {
+      "detailLicenseeClassId": 209,
+      "aggregateLicenseeClassId": 209
+    },
+    {
+      "detailLicenseeClassId": 211,
+      "aggregateLicenseeClassId": 211
+    },
+    {
+      "detailLicenseeClassId": 227,
+      "aggregateLicenseeClassId": 227
+    },
+    {
+      "detailLicenseeClassId": 229,
+      "aggregateLicenseeClassId": 229
+    },
+    {
+      "detailLicenseeClassId": 230,
+      "aggregateLicenseeClassId": 230
+    },
+    {
+      "detailLicenseeClassId": 232,
+      "aggregateLicenseeClassId": 232
+    }
   ]
 }

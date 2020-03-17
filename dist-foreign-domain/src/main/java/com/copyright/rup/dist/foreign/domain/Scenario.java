@@ -192,7 +192,7 @@ public class Scenario extends StoredEntity<String> {
         private String fundPoolId;
         private List<PublicationType> publicationTypes = new ArrayList<>();
         private List<UsageAge> usageAges = new ArrayList<>();
-        // TODO {aliakh} add Usage Age Weights, Licensee Classes mapping and other fields specific for AACL scenario
+        private List<DetailLicenseeClass> detailLicenseeClasses = new ArrayList<>();
 
         public BigDecimal getTitleCutoffAmount() {
             return titleCutoffAmount;
@@ -226,6 +226,14 @@ public class Scenario extends StoredEntity<String> {
             this.usageAges = usageAges;
         }
 
+        public List<DetailLicenseeClass> getDetailLicenseeClasses() {
+            return detailLicenseeClasses;
+        }
+
+        public void setDetailLicenseeClasses(List<DetailLicenseeClass> detailLicenseeClasses) {
+            this.detailLicenseeClasses = detailLicenseeClasses;
+        }
+
         @Override
         public boolean equals(Object obj) {
             if (obj == this) {
@@ -238,6 +246,7 @@ public class Scenario extends StoredEntity<String> {
             return new EqualsBuilder()
                 .append(this.publicationTypes, that.publicationTypes)
                 .append(this.usageAges, that.usageAges)
+                .append(this.detailLicenseeClasses, that.detailLicenseeClasses)
                 .append(this.titleCutoffAmount, that.titleCutoffAmount)
                 .append(this.fundPoolId, that.fundPoolId)
                 .isEquals();
@@ -248,6 +257,7 @@ public class Scenario extends StoredEntity<String> {
             return new HashCodeBuilder()
                 .append(publicationTypes)
                 .append(usageAges)
+                .append(detailLicenseeClasses)
                 .append(titleCutoffAmount)
                 .append(fundPoolId)
                 .toHashCode();
@@ -258,6 +268,7 @@ public class Scenario extends StoredEntity<String> {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("publicationTypes", publicationTypes)
                 .append("usageAges", usageAges)
+                .append("detailLicenseeClasses", detailLicenseeClasses)
                 .append("titleCutoffAmount", titleCutoffAmount)
                 .append("fundPoolId", fundPoolId)
                 .toString();

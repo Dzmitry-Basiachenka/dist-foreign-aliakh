@@ -22,7 +22,7 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
 
     private String enrollmentProfile;
     private String discipline;
-    private AggregateLicenseeClass aggregateLicenseeClass;
+    private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
 
     /**
      * Default constructor.
