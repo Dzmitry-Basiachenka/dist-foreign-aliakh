@@ -53,28 +53,23 @@ public class AggregateLicenseeClassMappingWindowTest {
 
     @Before
     public void setUp() {
-        window = new AggregateLicenseeClassMappingWindow();
+        window = new AggregateLicenseeClassMappingWindow(true);
         window.setDefaultParameters(defaultParams);
     }
 
     @Test
-    public void testConstructor() {
-        assertEquals("Licensee Class Mapping", window.getCaption());
-        verifySize(window);
+    public void testConstructorInEditMode() {
         VerticalLayout content = (VerticalLayout) window.getContent();
-        assertEquals(2, content.getComponentCount());
-        Component component = content.getComponent(0);
-        assertEquals(Grid.class, component.getClass());
-        verifyGrid((Grid) component);
-        assertEquals(1, content.getExpandRatio(component), 0);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(3, buttonsLayout.getComponentCount());
-        Button saveButton = (Button) buttonsLayout.getComponent(0);
-        Button defaultButton = (Button) buttonsLayout.getComponent(1);
-        Button closeButton = (Button) buttonsLayout.getComponent(2);
-        assertEquals("Save", saveButton.getCaption());
-        assertEquals("Default", defaultButton.getCaption());
-        assertEquals("Close", closeButton.getCaption());
+        verifyCommonWindowComponents(content);
+        verifyEditableButtonsLayout(content);
+    }
+
+    @Test
+    public void testConstructorInReadOnlyMode() {
+        window = new AggregateLicenseeClassMappingWindow(false);
+        VerticalLayout content = (VerticalLayout) window.getContent();
+        verifyCommonWindowComponents(content);
+        verifyViewOnlyButtonsLayout(content);
     }
 
     @Test
@@ -130,6 +125,44 @@ public class AggregateLicenseeClassMappingWindowTest {
         replay(listener);
         window.fireParametersSaveEvent(event);
         verify(listener);
+    }
+
+    private void verifyCommonWindowComponents(VerticalLayout content) {
+        assertEquals("Licensee Class Mapping", window.getCaption());
+        verifySize(window);
+        assertEquals(2, content.getComponentCount());
+        Component component = content.getComponent(0);
+        assertEquals(Grid.class, component.getClass());
+        verifyGrid((Grid) component);
+        assertEquals(1, content.getExpandRatio(component), 0);
+    }
+
+    private void verifyEditableButtonsLayout(VerticalLayout content) {
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
+        assertEquals(3, buttonsLayout.getComponentCount());
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        assertEquals("Save", saveButton.getCaption());
+        assertTrue(saveButton.isVisible());
+        Button defaultButton = (Button) buttonsLayout.getComponent(1);
+        assertEquals("Default", defaultButton.getCaption());
+        assertTrue(defaultButton.isVisible());
+        Button closeButton = (Button) buttonsLayout.getComponent(2);
+        assertEquals("Close", closeButton.getCaption());
+        assertTrue(closeButton.isVisible());
+    }
+
+    private void verifyViewOnlyButtonsLayout(VerticalLayout content) {
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
+        assertEquals(3, buttonsLayout.getComponentCount());
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        assertEquals("Save", saveButton.getCaption());
+        assertFalse(saveButton.isVisible());
+        Button defaultButton = (Button) buttonsLayout.getComponent(1);
+        assertEquals("Default", defaultButton.getCaption());
+        assertFalse(defaultButton.isVisible());
+        Button closeButton = (Button) buttonsLayout.getComponent(2);
+        assertEquals("Close", closeButton.getCaption());
+        assertTrue(closeButton.isVisible());
     }
 
     private void verifySize(Component component) {
