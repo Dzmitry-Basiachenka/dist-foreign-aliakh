@@ -49,6 +49,7 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
         this.isEditable = isEditable;
         setWidth(525, Unit.PIXELS);
         setHeight(250, Unit.PIXELS);
+        setResizable(false);
         initGrid();
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout mainLayout = new VerticalLayout(grid, buttonsLayout);

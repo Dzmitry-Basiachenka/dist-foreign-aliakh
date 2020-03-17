@@ -47,6 +47,7 @@ public class AaclUsageAgeWeightWindow extends AaclCommonScenarioParameterWindow<
         this.isEditable = isEditable;
         setWidth(525, Unit.PIXELS);
         setHeight(300, Unit.PIXELS);
+        setResizable(false);
         initGrid();
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout mainLayout = new VerticalLayout(grid, buttonsLayout);
