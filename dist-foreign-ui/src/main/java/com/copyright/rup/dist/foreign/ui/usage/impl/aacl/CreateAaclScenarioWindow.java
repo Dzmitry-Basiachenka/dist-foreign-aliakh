@@ -146,7 +146,7 @@ class CreateAaclScenarioWindow extends Window {
     private void initPubTypeWeightsWidget() {
         publicationTypeWeightWidget =
             new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.publication_type_weights"),
-                controller::getPublicationTypes, PublicationTypeWeightsWindow::new);
+                controller::getPublicationTypes, () -> new PublicationTypeWeightsWindow(true));
     }
 
     private void initLicenseeClassesMappingWidget() {

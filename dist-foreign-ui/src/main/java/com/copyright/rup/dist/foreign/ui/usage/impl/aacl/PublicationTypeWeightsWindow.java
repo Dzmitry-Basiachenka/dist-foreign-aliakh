@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
 import com.vaadin.data.Result;
@@ -16,6 +17,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -36,12 +38,16 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
     private List<PublicationType> defaultValues;
     private List<PublicationType> currentValues;
     private Grid<PublicationType> grid;
+    private final boolean isEditable;
 
     /**
      * Constructor.
+     *
+     * @param isEditable {@code true} if window should be in edit mode, otherwise {@code false}
      */
-    public PublicationTypeWeightsWindow() {
-        setWidth(600, Unit.PIXELS);
+    public PublicationTypeWeightsWindow(boolean isEditable) {
+        this.isEditable = isEditable;
+        setWidth(525, Unit.PIXELS);
         setHeight(250, Unit.PIXELS);
         initGrid();
         HorizontalLayout buttonsLayout = initButtonsLayout();
@@ -72,33 +78,42 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
 
     private void initGrid() {
         grid = new Grid<>();
-        TextField textField = new TextField();
-        textField.addStyleName("editable-field");
-        Binder<PublicationType> binder = grid.getEditor().getBinder();
-        Binder.Binding<PublicationType, BigDecimal> editorBinder = binder.forField(textField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
-            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero"))
-            .withConverter(new BigDecimalConverter())
-            .bind(PublicationType::getWeight, PublicationType::setWeight);
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addColumn(PublicationType::getName)
             .setCaption(ForeignUi.getMessage("table.column.name"))
             .setSortable(false);
-        grid.addColumn(item -> CurrencyUtils.format(item.getWeight(), null))
-            .setCaption(ForeignUi.getMessage("table.column.weight"))
-            .setStyleGenerator(item -> "editable-cell")
-            .setEditorBinding(editorBinder)
-            .setSortable(false);
-        grid.getEditor().setEnabled(true);
-        grid.getEditor().setSaveCaption(ForeignUi.getMessage("button.update"));
-        grid.getEditor().addSaveListener(event -> {
-            // Workaround for https://github.com/vaadin/framework/issues/9678
-            grid.setItems(currentValues);
-        });
-        grid.addItemClickListener(event -> grid.getEditor().editRow(event.getRowIndex()));
+        Grid.Column<PublicationType, String> weightColumn =
+            grid.addColumn(item -> CurrencyUtils.format(item.getWeight(), null))
+                .setCaption(ForeignUi.getMessage("table.column.weight"))
+                .setSortable(false);
+        if (isEditable) {
+            weightColumn
+                .setStyleGenerator(item -> "editable-cell")
+                .setEditorBinding(initEditorBinding());
+            grid.getEditor().setEnabled(true);
+            grid.getEditor().setSaveCaption(ForeignUi.getMessage("button.update"));
+            grid.getEditor().addSaveListener(event -> {
+                // Workaround for https://github.com/vaadin/framework/issues/9678
+                grid.setItems(currentValues);
+            });
+            grid.addItemClickListener(event -> grid.getEditor().editRow(event.getRowIndex()));
+        } else {
+            grid.getEditor().setEnabled(false);
+        }
         VaadinUtils.addComponentStyle(grid, "aacl-publication-type-weight-grid");
+    }
+
+    private Binder.Binding<PublicationType, BigDecimal> initEditorBinding() {
+        TextField textField = new TextField();
+        textField.addStyleName("editable-field");
+        Binder<PublicationType> binder = grid.getEditor().getBinder();
+        return binder.forField(textField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
+                ForeignUi.getMessage("field.error.positive_number_or_zero"))
+            .withConverter(new BigDecimalConverter())
+            .bind(PublicationType::getWeight, PublicationType::setWeight);
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -107,8 +122,10 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
             fireParametersSaveEvent(new AaclScenarioParameterWidget.ParametersSaveEvent<>(this, currentValues));
             close();
         });
+        saveButton.setVisible(isEditable);
         Button defaultButton = new Button(ForeignUi.getMessage("button.default"));
         defaultButton.addClickListener(event -> setAppliedParameters(defaultValues));
+        defaultButton.setVisible(isEditable);
         return new HorizontalLayout(saveButton, defaultButton, Buttons.createCloseButton(this));
     }
 

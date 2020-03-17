@@ -21,7 +21,6 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-// TODO {aliakh} write Usage Age Weights, Licensee Classes mapping and other fields specific for AACL scenario
 public class AaclScenarioFieldsSerializer extends StdSerializer<AaclFields> {
 
     /**

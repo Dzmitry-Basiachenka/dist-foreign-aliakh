@@ -63,25 +63,55 @@ public class PublicationTypeWeightsWindowTest {
 
     @Before
     public void setUp() {
-        window = new PublicationTypeWeightsWindow();
+        window = new PublicationTypeWeightsWindow(true);
         window.setDefaultParameters(defaultParams);
     }
 
     @Test
-    public void testConstructor() {
+    public void testConstructorInEditMode() {
         assertEquals("Pub Type Weights", window.getCaption());
         verifySize(window);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
         assertEquals(Grid.class, component.getClass());
-        verifyGrid((Grid) component);
+        verifyGrid((Grid) component, true);
         assertEquals(1, content.getExpandRatio(component), 0);
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
         assertEquals(3, buttonsLayout.getComponentCount());
-        assertEquals("Save", buttonsLayout.getComponent(0).getCaption());
-        assertEquals("Default", buttonsLayout.getComponent(1).getCaption());
-        assertEquals("Close", buttonsLayout.getComponent(2).getCaption());
+        Component saveButton = buttonsLayout.getComponent(0);
+        Component defaultButton = buttonsLayout.getComponent(1);
+        Component closeButton = buttonsLayout.getComponent(2);
+        assertEquals("Save", saveButton.getCaption());
+        assertEquals("Default", defaultButton.getCaption());
+        assertEquals("Close", closeButton.getCaption());
+        assertTrue(saveButton.isVisible());
+        assertTrue(defaultButton.isVisible());
+        assertTrue(closeButton.isVisible());
+    }
+
+    @Test
+    public void testConstructorInViewMode() {
+        window = new PublicationTypeWeightsWindow(false);
+        assertEquals("Pub Type Weights", window.getCaption());
+        verifySize(window);
+        VerticalLayout content = (VerticalLayout) window.getContent();
+        assertEquals(2, content.getComponentCount());
+        Component component = content.getComponent(0);
+        assertEquals(Grid.class, component.getClass());
+        verifyGrid((Grid) component, false);
+        assertEquals(1, content.getExpandRatio(component), 0);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
+        assertEquals(3, buttonsLayout.getComponentCount());
+        Component saveButton = buttonsLayout.getComponent(0);
+        Component defaultButton = buttonsLayout.getComponent(1);
+        Component closeButton = buttonsLayout.getComponent(2);
+        assertEquals("Save", saveButton.getCaption());
+        assertEquals("Default", defaultButton.getCaption());
+        assertEquals("Close", closeButton.getCaption());
+        assertFalse(saveButton.isVisible());
+        assertFalse(defaultButton.isVisible());
+        assertTrue(closeButton.isVisible());
     }
 
     @Test
@@ -140,14 +170,14 @@ public class PublicationTypeWeightsWindowTest {
     }
 
     private void verifySize(Component component) {
-        assertEquals(600, component.getWidth(), 0);
+        assertEquals(525, component.getWidth(), 0);
         assertEquals(250, component.getHeight(), 0);
         assertEquals(Sizeable.Unit.PIXELS, component.getHeightUnits());
         assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
     }
 
     @SuppressWarnings("unchecked")
-    private void verifyGrid(Grid grid) {
+    private void verifyGrid(Grid grid, boolean isEditorEnabled) {
         assertNull(grid.getCaption());
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Name", "Weight"),
@@ -156,6 +186,7 @@ public class PublicationTypeWeightsWindowTest {
         assertEquals(Arrays.asList(-1, -1), columns.stream().map(Column::getExpandRatio).collect(Collectors.toList()));
         columns.forEach(column -> assertFalse(column.isSortable()));
         assertFalse(grid.getDataProvider().isInMemory());
+        assertEquals(isEditorEnabled, grid.getEditor().isEnabled());
     }
 
     @SuppressWarnings("unchecked")
