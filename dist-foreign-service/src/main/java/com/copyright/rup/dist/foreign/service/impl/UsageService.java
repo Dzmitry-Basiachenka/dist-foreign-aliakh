@@ -205,9 +205,9 @@ public class UsageService implements IUsageService {
     @Override
     public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         //TODO {aazarenka} remove this code after adjust query
-        return "AACL".equals(filter.getProductFamily())
+        return !"AACL".equals(filter.getProductFamily())
             ? usageRepository.findForAudit(filter, pageable, sort)
-            : Collections.EMPTY_LIST;
+            : Collections.emptyList();
     }
 
     @Override
