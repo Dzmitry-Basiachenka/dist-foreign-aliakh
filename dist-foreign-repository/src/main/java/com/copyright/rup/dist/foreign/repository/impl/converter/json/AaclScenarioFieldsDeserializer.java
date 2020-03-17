@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -22,7 +23,6 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-// TODO {aliakh} read Usage Age Weights, Licensee Classes mapping and other fields specific for AACL scenario
 public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> {
 
     private static final String TITLE_CUTOFF_AMOUNT = "title_cutoff_amount";
@@ -32,6 +32,9 @@ public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> 
     private static final String NAME = "name";
     private static final String PERIOD = "period";
     private static final String WEIGHT = "weight";
+    private static final String DETAIL_LICENSEE_CLASSES = "detailLicenseeClasses";
+    private static final String DETAIL_LICENSEE_CLASS_ID = "detailLicenseeClassId";
+    private static final String AGGREGATE_LICENSEE_CLASS_ID = "aggregateLicenseeClassId";
 
     /**
      * Constructor.
@@ -54,6 +57,8 @@ public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> 
                 aaclFields.setPublicationTypes(readPubTypes(jp));
             } else if (JsonToken.START_ARRAY == currentToken && USAGE_AGES.equals(jp.getCurrentName())) {
                 aaclFields.setUsageAges(readUsageAges(jp));
+            } else if (JsonToken.START_ARRAY == currentToken && DETAIL_LICENSEE_CLASSES.equals(jp.getCurrentName())) {
+                aaclFields.setDetailLicenseeClasses(readDetailLicenseeClasses(jp));
             }
         }
         return aaclFields;
@@ -90,5 +95,23 @@ public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> 
             }
         }
         return usageAges;
+    }
+
+    private List<DetailLicenseeClass> readDetailLicenseeClasses(JsonParser jp) throws IOException {
+        List<DetailLicenseeClass> detailLicenseeClasses = new ArrayList<>();
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        while (jp.nextToken() != JsonToken.END_ARRAY) {
+            if (JsonToken.START_OBJECT == jp.currentToken()) {
+                detailLicenseeClass = new DetailLicenseeClass();
+                detailLicenseeClasses.add(detailLicenseeClass);
+            } else if (JsonToken.VALUE_NUMBER_INT == jp.currentToken()
+                && DETAIL_LICENSEE_CLASS_ID.equals(jp.getCurrentName())) {
+                detailLicenseeClass.setId(jp.getValueAsInt());
+            } else if (JsonToken.VALUE_NUMBER_INT == jp.currentToken()
+                && AGGREGATE_LICENSEE_CLASS_ID.equals(jp.getCurrentName())) {
+                detailLicenseeClass.getAggregateLicenseeClass().setId(jp.getValueAsInt());
+            }
+        }
+        return detailLicenseeClasses;
     }
 }

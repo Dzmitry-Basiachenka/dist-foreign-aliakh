@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -50,6 +51,15 @@ public class AaclScenarioFieldsSerializer extends StdSerializer<AaclFields> {
             jg.writeStartObject();
             jg.writeNumberField("period", usageAge.getPeriod());
             jg.writeNumberField("weight", usageAge.getWeight());
+            jg.writeEndObject();
+        }
+        jg.writeEndArray();
+        jg.writeArrayFieldStart("detailLicenseeClasses");
+        List<DetailLicenseeClass> detailLicenseeClasses = aaclFields.getDetailLicenseeClasses();
+        for (DetailLicenseeClass detailLicenseeClass : detailLicenseeClasses) {
+            jg.writeStartObject();
+            jg.writeNumberField("detailLicenseeClassId", detailLicenseeClass.getId());
+            jg.writeNumberField("aggregateLicenseeClassId", detailLicenseeClass.getAggregateLicenseeClass().getId());
             jg.writeEndObject();
         }
         jg.writeEndArray();
