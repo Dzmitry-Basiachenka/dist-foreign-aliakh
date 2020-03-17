@@ -7,9 +7,10 @@ import static org.junit.Assert.assertNull;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 
 import com.fasterxml.jackson.core.JsonParseException;
-
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -45,6 +46,13 @@ public class AaclScenarioFieldsJsonMapperTest {
         assertEquals(buildPublicationType("Consumer Magazine", ONE), pubTypes.get(2));
         assertEquals(buildPublicationType("News Source", "4.00"), pubTypes.get(3));
         assertEquals(buildPublicationType("STMA Journal", "1.10"), pubTypes.get(4));
+        List<UsageAge> usageAges = aaclFields.getUsageAges();
+        assertEquals(5, CollectionUtils.size(usageAges));
+        assertEquals(buildUsageAge(2020, ONE), usageAges.get(0));
+        assertEquals(buildUsageAge(2019, "0.75"), usageAges.get(1));
+        assertEquals(buildUsageAge(2017, "0.50"), usageAges.get(2));
+        assertEquals(buildUsageAge(2015, "0.25"), usageAges.get(3));
+        assertEquals(buildUsageAge(2014, "0.00"), usageAges.get(4));
     }
 
     @Test
@@ -59,6 +67,12 @@ public class AaclScenarioFieldsJsonMapperTest {
         pubTypes.add(buildPublicationType("Consumer Magazine", ONE));
         pubTypes.add(buildPublicationType("News Source", "4.00"));
         pubTypes.add(buildPublicationType("STMA Journal", "1.10"));
+        List<UsageAge> usageAges = aaclFields.getUsageAges();
+        usageAges.add(buildUsageAge(2020, ONE));
+        usageAges.add(buildUsageAge(2019, "0.75"));
+        usageAges.add(buildUsageAge(2017, "0.50"));
+        usageAges.add(buildUsageAge(2015, "0.25"));
+        usageAges.add(buildUsageAge(2014, "0.00"));
         String actualJson = jsonMapper.serialize(aaclFields);
         assertEquals(aaclFields, jsonMapper.deserialize(actualJson));
     }
@@ -83,5 +97,12 @@ public class AaclScenarioFieldsJsonMapperTest {
         pubType.setName(name);
         pubType.setWeight(new BigDecimal(weight));
         return pubType;
+    }
+
+    private UsageAge buildUsageAge(int period, String weight) {
+        UsageAge usageAge = new UsageAge();
+        usageAge.setPeriod(period);
+        usageAge.setWeight(new BigDecimal(weight));
+        return usageAge;
     }
 }

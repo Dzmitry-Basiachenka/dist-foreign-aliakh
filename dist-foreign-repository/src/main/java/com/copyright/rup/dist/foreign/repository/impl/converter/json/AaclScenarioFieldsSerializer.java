@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -40,6 +41,15 @@ public class AaclScenarioFieldsSerializer extends StdSerializer<AaclFields> {
             jg.writeStartObject();
             jg.writeStringField("name", publicationType.getName());
             jg.writeNumberField("weight", publicationType.getWeight());
+            jg.writeEndObject();
+        }
+        jg.writeEndArray();
+        jg.writeArrayFieldStart("usageAges");
+        List<UsageAge> usageAges = aaclFields.getUsageAges();
+        for (UsageAge usageAge : usageAges) {
+            jg.writeStartObject();
+            jg.writeNumberField("period", usageAge.getPeriod());
+            jg.writeNumberField("weight", usageAge.getWeight());
             jg.writeEndObject();
         }
         jg.writeEndArray();

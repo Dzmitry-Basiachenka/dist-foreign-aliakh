@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +28,9 @@ public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> 
     private static final String TITLE_CUTOFF_AMOUNT = "title_cutoff_amount";
     private static final String FUND_POOL_ID = "fund_pool_uid";
     private static final String PUBLICATION_TYPES = "publicationTypes";
+    private static final String USAGE_AGES = "usageAges";
     private static final String NAME = "name";
+    private static final String PERIOD = "period";
     private static final String WEIGHT = "weight";
 
     /**
@@ -47,25 +51,44 @@ public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> 
             } else if (JsonToken.VALUE_STRING == currentToken && FUND_POOL_ID.equals(jp.getCurrentName())) {
                 aaclFields.setFundPoolId(jp.getValueAsString());
             } else if (JsonToken.START_ARRAY == currentToken && PUBLICATION_TYPES.equals(jp.getCurrentName())) {
-                readPubTypes(jp, aaclFields.getPublicationTypes());
+                aaclFields.setPublicationTypes(readPubTypes(jp));
+            } else if (JsonToken.START_ARRAY == currentToken && USAGE_AGES.equals(jp.getCurrentName())) {
+                aaclFields.setUsageAges(readUsageAges(jp));
             }
         }
         return aaclFields;
     }
 
-    private void readPubTypes(JsonParser jp, List<PublicationType> pubTypes) throws IOException {
+    private List<PublicationType> readPubTypes(JsonParser jp) throws IOException {
         PublicationType pubType = new PublicationType();
+        List<PublicationType> pubTypes = new ArrayList<>();
         while (jp.nextToken() != JsonToken.END_ARRAY) {
             if (JsonToken.START_OBJECT == jp.currentToken()) {
                 pubType = new PublicationType();
                 pubTypes.add(pubType);
-            } else if (JsonToken.VALUE_STRING == jp.currentToken()
-                && NAME.equals(jp.getCurrentName())) {
+            } else if (JsonToken.VALUE_STRING == jp.currentToken() && NAME.equals(jp.getCurrentName())) {
                 pubType.setName(jp.getValueAsString());
-            } else if (JsonToken.VALUE_NUMBER_FLOAT == jp.currentToken()
-                && WEIGHT.equals(jp.getCurrentName())) {
+            } else if (JsonToken.VALUE_NUMBER_FLOAT == jp.currentToken() && WEIGHT.equals(jp.getCurrentName())) {
                 pubType.setWeight(jp.getDecimalValue());
             }
         }
+        return pubTypes;
+    }
+
+    private List<UsageAge> readUsageAges(JsonParser jp) throws IOException {
+        // Workaround for https://sourceforge.net/p/findbugs/bugs/1373
+        UsageAge usageAge = null;
+        List<UsageAge> usageAges = new ArrayList<>();
+        while (jp.nextToken() != JsonToken.END_ARRAY) {
+            if (JsonToken.START_OBJECT == jp.currentToken()) {
+                usageAge = new UsageAge();
+                usageAges.add(usageAge);
+            } else if (JsonToken.VALUE_NUMBER_INT == jp.currentToken() && PERIOD.equals(jp.getCurrentName())) {
+                usageAge.setPeriod(jp.getValueAsInt());
+            } else if (JsonToken.VALUE_NUMBER_FLOAT == jp.currentToken() && WEIGHT.equals(jp.getCurrentName())) {
+                usageAge.setWeight(jp.getDecimalValue());
+            }
+        }
+        return usageAges;
     }
 }
