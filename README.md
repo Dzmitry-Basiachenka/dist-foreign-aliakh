@@ -1,5 +1,44 @@
 9.1.7
 -
+* B-52332 FDA: Add baseline usage details to usage batch: adjust integration tests
+* B-54437 Tech Debt: FDA: replace Publication Type column name to Pub Type on UI
+* B-52332 FDA: Add baseline usage details to usage batch: use product family specific getUsagesByIds service method
+* B-52332 FDA: Add baseline usage details to usage batch: rename baselineFlag field in AaclUsage entity to baseline
+* B-57437 Tech Debt: FDA: update Postgres driver version to 42.2.10
+* B-52332 FDA: Add baseline usage details to usage batch: make changes based on comments in CR-DIST-FOREIGN-149
+* B-52332 FDA: Add baseline usage details to usage batch: remove obsolete TODO comment
+* B-57437 Tech Debt: FDA: move usage-related methods from UsageBatchService to UsageService, AaclUsageService, NtsUsageService
+* B-56947 FDA: AACL view and edit scenario Pub Type Weights: delete Pub Type 'Other' and add Pub Type Weights
+* B-27613 FDA: Audit Tab modifications for AACL: remove is_baseline_flag column and add baseline_uid column
+* B-56947 FDA: AACL view and edit scenario Pub Type Weights: implement the domain object for Pub Types and the object specific to AACL scenario fields
+* B-56943 FDA: AACL map detailed licensee classes to aggregate licensee classes: implement AACL scenario parameter widget
+* B-27613 FDA: Audit Tab modifications for AACL: adjust insert basline usage query and fix issue related to rename is_baseline_flag to baselineId colunm
+* B-56947 FDA: AACL view and edit scenario Pub Type Weights: implement serializers/deserializers for AACl scenario objects
+* B-56947 FDA: AACL view and edit scenario Pub Type Weights: add aacl_fields column to df_scenario table
+* B-56947 FDA: AACL view and edit scenario Pub Type Weights: implement repository for AACl scenario objects
+* B-56949 FDA: Edit usage age weights for AACL while creating a scenario: implement service and repository logic to get default usage age weights
+* B-52335 FDA: Create AACL Scenario: add titleCutoffAmount and fundPoolId to AaclFields
+* B-56947 FDA: AACL view and edit scenario Pub Type Weights: implement backend for Pub Type Weights
+* B-56844 Tech Debt: FDA: upgrade rup-vaadin to 8.1.+
+* B-52335 FDA: Create AACL Scenario: add 'Add To Scenario' button to AACL usage tab
+* B-27613 FDA: Audit Tab modifications for AACL: implement repository logic related to audit export for AACL product family
+* B-56943 FDA: AACL map detailed licensee classes to aggregate licensee classes: implement aggregate licensee class mapping window
+* B-27613 FDA: Audit Tab modifications for AACL: implement controller layer and add audit widget
+* B-56949 FDA: Edit usage age weights for AACL while creating a scenario: implement Usage Age Weights window
+* B-57745 FDA: AACL Licensee Class Name changes: implement liquibase script to update aggregate licensee class table, apply new columns on UI
+* B-52335 FDA: Create AACL Scenario: implement Create AACL Scenario window
+* B-56947 FDA: AACL view and edit scenario Pub Type Weights: implement Pub Type Weights window
+* B-52335 FDA: Create AACL Scenario: require batch filter and batch processing completion for creating AACL scenario
+* B-56943 FDA: AACL map detailed licensee classes to aggregate licensee classes: adjust column names, replace aggregate name column on aggregate mapping window
+* B-52335 FDA: Create AACL Scenario: add Usage Age Weights and Publication Type Weights windows to the Create Scenario window
+* B-52335 FDA: Create AACL Scenario: Implement logic for adding usages to scenario by UsageFilter
+* B-56949 FDA: Edit usage age weights for AACL while creating a scenario: adjust AACL scenario serializer and deserializer to store and retrieve UsageAge objects
+* B-56943 FDA: AACL map detailed licensee classes to aggregate licensee: implement backend logic for retrieving default aggregate licensee mapping
+* B-56844 Tech Debt: FDA: Fix security vulnerability CVE-2020-8840 in jackson-databind
+* B-27613 FDA: Audit Tab modifications for AACL: temporary fix of audit tab issue for AACL product family
+* B-56943 FDA: AACL map detailed licensee classes to aggregate licensee: add detail licensee classes to AACL scenario fields and serialization
+* B-27613 FDA: Audit Tab modifications for AACL: fix build related to audit tab for aacl product family
+* B-27613 FDA: Audit Tab modifications for AACL: fix checkstyle issue
 
 9.1.6
 -
