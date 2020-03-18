@@ -32,6 +32,7 @@ public class AuditFilter {
     private String cccEventId;
     private String distributionName;
     private String searchValue;
+    private Integer usagePeriod;
 
     /**
      * Default constructor.
@@ -53,6 +54,15 @@ public class AuditFilter {
         setDistributionName(filter.getDistributionName());
         setSearchValue(filter.getSearchValue());
         setProductFamily(filter.getProductFamily());
+        setUsagePeriod(filter.getUsagePeriod());
+    }
+
+    public Integer getUsagePeriod() {
+        return usagePeriod;
+    }
+
+    public void setUsagePeriod(Integer usagePeriod) {
+        this.usagePeriod = usagePeriod;
     }
 
     public Set<Long> getRhAccountNumbers() {
@@ -117,7 +127,8 @@ public class AuditFilter {
             && CollectionUtils.isEmpty(statuses)
             && StringUtils.isBlank(cccEventId)
             && StringUtils.isBlank(distributionName)
-            && StringUtils.isBlank(searchValue);
+            && StringUtils.isBlank(searchValue)
+            && null == usagePeriod;
     }
 
     @Override
@@ -137,6 +148,7 @@ public class AuditFilter {
             .append(this.cccEventId, that.cccEventId)
             .append(this.distributionName, that.distributionName)
             .append(this.searchValue, that.searchValue)
+            .append(this.usagePeriod, that.usagePeriod)
             .isEquals();
     }
 
@@ -150,6 +162,7 @@ public class AuditFilter {
             .append(cccEventId)
             .append(distributionName)
             .append(searchValue)
+            .append(usagePeriod)
             .toHashCode();
     }
 
@@ -163,6 +176,7 @@ public class AuditFilter {
             .append("cccEventId", cccEventId)
             .append("distributionName", distributionName)
             .append("searchValue", searchValue)
+            .append("usagePeriod", usagePeriod)
             .toString();
     }
 }

@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.audit.impl;
+package com.copyright.rup.dist.foreign.ui.audit.impl.nts;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
@@ -9,13 +9,13 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 
 import org.easymock.Capture;
@@ -27,26 +27,26 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link AuditFilterController}.
+ * Verifies {@link NtsAuditFilterController}.
  * <p>
- * Copyright (C) 2018 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 1/22/18
+ * Date: 03/12/2020
  *
- * @author Aliaksandr Radkevich
+ * @author Anton Azarenka
  */
-public class AuditFilterControllerTest {
+public class NtsAuditFilterControllerTest {
 
-    private AuditFilterController controller;
+    private CommonAuditFilterController controller;
     private IUsageBatchService usageBatchService;
     private IRightsholderService rightsholderService;
     private IProductFamilyProvider productFamilyProvider;
 
-    private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
 
     @Before
     public void setUp() {
-        controller = new AuditFilterController();
+        controller = new NtsAuditFilterController();
         usageBatchService = createMock(IUsageBatchService.class);
         rightsholderService = createMock(IRightsholderService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
@@ -60,10 +60,10 @@ public class AuditFilterControllerTest {
         List<Rightsholder> rightsholders = Collections.emptyList();
         Capture<Pageable> pageableCapture = new Capture<>();
         expect(rightsholderService.getFromUsages(
-            eq(FAS_PRODUCT_FAMILY), eq("search"), capture(pageableCapture), isNull()))
+            eq(NTS_PRODUCT_FAMILY), eq("search"), capture(pageableCapture), isNull()))
             .andReturn(rightsholders).once();
         replay(rightsholderService);
-        assertSame(rightsholders, controller.loadBeans(FAS_PRODUCT_FAMILY, "search", 0, 10, null));
+        assertSame(rightsholders, controller.loadBeans(NTS_PRODUCT_FAMILY, "search", 0, 10, null));
         assertEquals(10, pageableCapture.getValue().getLimit());
         assertEquals(0, pageableCapture.getValue().getOffset());
         verify(rightsholderService);
@@ -71,32 +71,27 @@ public class AuditFilterControllerTest {
 
     @Test
     public void testGetBeansCount() {
-        expect(rightsholderService.getCountFromUsages(FAS_PRODUCT_FAMILY, "searchValue")).andReturn(10).once();
+        expect(rightsholderService.getCountFromUsages(NTS_PRODUCT_FAMILY, "searchValue")).andReturn(10).once();
         replay(rightsholderService);
-        assertEquals(10, controller.getBeansCount(FAS_PRODUCT_FAMILY, "searchValue"));
+        assertEquals(10, controller.getBeansCount(NTS_PRODUCT_FAMILY, "searchValue"));
         verify(rightsholderService);
     }
 
     @Test
     public void testGetUsageBatches() {
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
         List<UsageBatch> usageBatches = Collections.emptyList();
-        expect(usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(usageBatches).once();
+        expect(usageBatchService.getUsageBatches(NTS_PRODUCT_FAMILY)).andReturn(usageBatches).once();
         replay(usageBatchService, productFamilyProvider);
         assertSame(usageBatches, controller.getUsageBatches());
         verify(usageBatchService, productFamilyProvider);
     }
 
     @Test
-    public void testInstantiateWidget() {
-        assertTrue(controller.instantiateWidget() instanceof AuditFilterWidget);
-    }
-
-    @Test
     public void testGetProductFamily() {
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
         replay(productFamilyProvider);
-        assertEquals(FAS_PRODUCT_FAMILY, controller.getProductFamily());
+        assertEquals(NTS_PRODUCT_FAMILY, controller.getProductFamily());
         verify(productFamilyProvider);
     }
 }

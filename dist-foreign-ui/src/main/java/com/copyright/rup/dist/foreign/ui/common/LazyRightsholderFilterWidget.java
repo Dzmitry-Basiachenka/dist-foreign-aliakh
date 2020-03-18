@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.common;
 
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWindow.IRightsholderFilterSaveListener;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -30,7 +30,7 @@ import java.util.Set;
  */
 public class LazyRightsholderFilterWidget extends HorizontalLayout {
 
-    private final IAuditFilterController controller;
+    private final ICommonAuditFilterController controller;
     private Set<Rightsholder> selectedItems = new HashSet<>();
     private IRightsholderFilterSaveListener saveListener;
     private Label label;
@@ -40,9 +40,9 @@ public class LazyRightsholderFilterWidget extends HorizontalLayout {
      * Constructor.
      *
      * @param caption    for button
-     * @param controller instance of {@link IAuditFilterController}
+     * @param controller instance of {@link ICommonAuditFilterController}
      */
-    public LazyRightsholderFilterWidget(String caption, IAuditFilterController controller) {
+    public LazyRightsholderFilterWidget(String caption, ICommonAuditFilterController controller) {
         this.controller = controller;
         initButton(caption);
         initLabel();

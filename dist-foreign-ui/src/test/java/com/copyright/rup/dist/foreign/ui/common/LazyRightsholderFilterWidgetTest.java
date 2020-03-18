@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWindow.IRightsholderFilterSaveListener;
 
 import com.vaadin.ui.Button;
@@ -40,7 +40,7 @@ public class LazyRightsholderFilterWidgetTest {
 
     @Before
     public void setUp() {
-        itemsFilterWidget = new LazyRightsholderFilterWidget(CAPTION, createMock(IAuditFilterController.class));
+        itemsFilterWidget = new LazyRightsholderFilterWidget(CAPTION, createMock(ICommonAuditFilterController.class));
     }
 
     @Test

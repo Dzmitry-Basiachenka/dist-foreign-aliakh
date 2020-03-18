@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
@@ -128,4 +129,14 @@ public interface IAaclUsageService {
      * @param batchName batch name
      */
     void sendForMatching(List<String> usageIds, String batchName);
+
+    /**
+     * Gets list of {@link UsageDto}s by filter.
+     *
+     * @param filter   {@link AuditFilter}
+     * @param pageable {@link Pageable}
+     * @param sort     {@link Sort}
+     * @return list of {@link UsageDto}s
+     */
+    List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
 }

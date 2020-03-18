@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.common;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
@@ -40,7 +40,7 @@ import java.util.Set;
  */
 public class LazyRightsholderFilterWindow extends Window {
 
-    private final IAuditFilterController controller;
+    private final ICommonAuditFilterController controller;
     private final SearchWidget searchWidget;
     private Grid<Rightsholder> grid;
     private DataProvider<Rightsholder, Void> dataProvider;
@@ -49,9 +49,9 @@ public class LazyRightsholderFilterWindow extends Window {
      * Constructor.
      *
      * @param caption    window caption
-     * @param controller {@link IAuditFilterController} instance
+     * @param controller {@link ICommonAuditFilterController} instance
      */
-    public LazyRightsholderFilterWindow(String caption, IAuditFilterController controller) {
+    public LazyRightsholderFilterWindow(String caption, ICommonAuditFilterController controller) {
         super(caption);
         this.controller = Objects.requireNonNull(controller);
         setWidth(450, Unit.PIXELS);

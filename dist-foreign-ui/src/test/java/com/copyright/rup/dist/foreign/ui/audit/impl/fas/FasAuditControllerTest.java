@@ -25,8 +25,10 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.fas.IFasAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.fas.IFasAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.fas.IFasAuditWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -67,20 +69,20 @@ public class FasAuditControllerTest {
 
     private FasAuditController controller;
     private IUsageAuditService usageAuditService;
-    private IAuditFilterController auditFilterController;
+    private ICommonAuditFilterController auditFilterController;
     private IUsageService usageService;
     private IFasAuditWidget auditWidget;
-    private IAuditFilterWidget filterWidget;
+    private ICommonAuditFilterWidget filterWidget;
     private IReportService reportService;
     private IStreamSourceHandler streamSourceHandler;
 
     @Before
     public void setUp() {
         usageAuditService = createMock(IUsageAuditService.class);
-        auditFilterController = createMock(IAuditFilterController.class);
+        auditFilterController = createMock(IFasAuditFilterController.class);
         usageService = createMock(IUsageService.class);
         auditWidget = createMock(IFasAuditWidget.class);
-        filterWidget = createMock(IAuditFilterWidget.class);
+        filterWidget = createMock(IFasAuditFilterWidget.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         controller = new FasAuditController();

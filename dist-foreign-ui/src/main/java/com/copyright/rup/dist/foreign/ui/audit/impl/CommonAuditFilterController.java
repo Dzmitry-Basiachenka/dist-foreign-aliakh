@@ -7,13 +7,14 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -33,7 +34,8 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class AuditFilterController extends CommonController<IAuditFilterWidget> implements IAuditFilterController {
+public abstract class CommonAuditFilterController extends CommonController<ICommonAuditFilterWidget> implements
+    ICommonAuditFilterController {
 
     @Autowired
     private IUsageBatchService usageBatchService;
@@ -61,11 +63,6 @@ public class AuditFilterController extends CommonController<IAuditFilterWidget> 
     @Override
     public List<UsageBatch> getUsageBatches() {
         return usageBatchService.getUsageBatches(productFamilyProvider.getSelectedProductFamily());
-    }
-
-    @Override
-    protected IAuditFilterWidget instantiateWidget() {
-        return new AuditFilterWidget();
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.copyright.rup.dist.foreign.ui.audit.impl;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -144,7 +144,7 @@ public abstract class CommonAuditWidget extends HorizontalSplitPanel implements 
         auditGrid.setSizeFull();
         addColumns();
         auditGrid.getColumns().forEach(column -> column.setSortable(true));
-        IAuditFilterWidget filterWidget = controller.getAuditFilterController().initWidget();
+        ICommonAuditFilterWidget filterWidget = controller.getAuditFilterController().initWidget();
         filterWidget.addListener(FilterChangedEvent.class, controller, ICommonAuditController.ON_FILTER_CHANGED);
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage(initSearchMessage()));

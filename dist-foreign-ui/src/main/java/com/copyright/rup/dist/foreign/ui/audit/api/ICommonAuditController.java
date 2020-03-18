@@ -30,7 +30,7 @@ public interface ICommonAuditController extends IController<ICommonAuditWidget>,
     /**
      * @return audit filter controller.
      */
-    IAuditFilterController getAuditFilterController();
+    ICommonAuditFilterController getAuditFilterController();
 
     /**
      * @return audit filter.

@@ -25,8 +25,10 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
-import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.api.nts.INtsAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.nts.INtsAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.nts.INtsAuditWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -67,20 +69,20 @@ public class NtsAuditControllerTest {
 
     private NtsAuditController controller;
     private IUsageAuditService usageAuditService;
-    private IAuditFilterController auditFilterController;
+    private ICommonAuditFilterController auditFilterController;
     private IUsageService usageService;
     private INtsAuditWidget auditWidget;
-    private IAuditFilterWidget filterWidget;
+    private ICommonAuditFilterWidget filterWidget;
     private IReportService reportService;
     private IStreamSourceHandler streamSourceHandler;
 
     @Before
     public void setUp() {
         usageAuditService = createMock(IUsageAuditService.class);
-        auditFilterController = createMock(IAuditFilterController.class);
+        auditFilterController = createMock(INtsAuditFilterController.class);
         usageService = createMock(IUsageService.class);
         auditWidget = createMock(INtsAuditWidget.class);
-        filterWidget = createMock(IAuditFilterWidget.class);
+        filterWidget = createMock(INtsAuditFilterWidget.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         controller = new NtsAuditController();
@@ -108,8 +110,8 @@ public class NtsAuditControllerTest {
         expect(auditFilterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(auditWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
-        filter.setStatuses(EnumSet.of(UsageStatusEnum.ELIGIBLE));
         expect(usageService.getAuditItemsCount(filter)).andReturn(1).once();
+        filter.setStatuses(EnumSet.of(UsageStatusEnum.ELIGIBLE));
         replay(filterWidget, auditWidget, auditFilterController, usageService);
         assertEquals(1, controller.getSize());
         verify(filterWidget, auditWidget, auditFilterController, usageService);
