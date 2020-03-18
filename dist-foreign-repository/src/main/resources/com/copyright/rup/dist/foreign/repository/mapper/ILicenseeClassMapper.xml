@@ -5,7 +5,7 @@
 <mapper namespace="ILicenseeClassMapper">
 
     <resultMap id="aggregateLicenseeClassResultMap" type="AggregateLicenseeClass" extends="StoredEntityMapper.storedEntityResult">
-        <result property="id" column="aggregate_licensee_class_id" javaType="java.lang.Integer"/>
+        <result property="id" column="aggregate_licensee_class_id"/>
         <result property="discipline" column="discipline"/>
         <result property="enrollmentProfile" column="enrollment_profile"/>
     </resultMap>
@@ -14,7 +14,7 @@
         <result property="id" column="detail_licensee_class_id"/>
         <result property="discipline" column="discipline"/>
         <result property="enrollmentProfile" column="enrollment_profile"/>
-        <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id" javaType="java.lang.Integer"/>
+        <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id"/>
         <result property="aggregateLicenseeClass.discipline" column="agg_discipline"/>
         <result property="aggregateLicenseeClass.enrollmentProfile" column="agg_enrollment_profile"/>
     </resultMap>

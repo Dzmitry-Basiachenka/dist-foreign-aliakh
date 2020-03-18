@@ -53,7 +53,7 @@ public class AaclUsageAgeWeightWindowTest {
     @Before
     public void setUp() {
         window = new AaclUsageAgeWeightWindow(true);
-        window.setDefaultParameters(defaultParams);
+        window.setDefault(defaultParams);
     }
 
     @Test
@@ -132,7 +132,7 @@ public class AaclUsageAgeWeightWindowTest {
 
     @Test
     public void testSetDefaultParameters() {
-        window.setDefaultParameters(appliedParams);
+        window.setDefault(appliedParams);
         assertSame(appliedParams, Whitebox.getInternalState(window, "defaultValues"));
     }
 

@@ -75,7 +75,7 @@ public class AaclScenarioParameterWidgetTest {
 
     private static class AaclCommonScenarioParameterWindowMock extends AaclCommonScenarioParameterWindow<String> {
         @Override
-        void setDefaultParameters(String params) {
+        void setDefault(String params) {
         }
 
         @Override
