@@ -26,6 +26,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -130,6 +131,15 @@ public class AaclUsageServiceTest {
         replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
         assertEquals(Collections.emptyList(), aaclUsageService.insertUsagesFromBaseline(buildUsageBatch()));
         verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testCountForAudit() {
+        AuditFilter filter = new AuditFilter();
+        expect(aaclUsageRepository.findCountForAudit(filter)).andReturn(1).once();
+        replay(aaclUsageRepository);
+        assertEquals(1, aaclUsageService.getCountForAudit(filter));
+        verify(aaclUsageRepository);
     }
 
     @Test

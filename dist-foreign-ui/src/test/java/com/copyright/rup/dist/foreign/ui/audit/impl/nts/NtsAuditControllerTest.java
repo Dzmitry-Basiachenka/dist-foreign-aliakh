@@ -110,7 +110,7 @@ public class NtsAuditControllerTest {
         expect(auditFilterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(auditWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
-        expect(usageService.getAuditItemsCount(filter)).andReturn(1).once();
+        expect(usageService.getCountForAudit(filter)).andReturn(1).once();
         filter.setStatuses(EnumSet.of(UsageStatusEnum.ELIGIBLE));
         replay(filterWidget, auditWidget, auditFilterController, usageService);
         assertEquals(1, controller.getSize());

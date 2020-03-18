@@ -47,6 +47,12 @@ public class NtsAuditController extends CommonAuditController implements INtsAud
     }
 
     @Override
+    public int getSize() {
+        AuditFilter filter = getFilter();
+        return !filter.isEmpty() ? getUsageService().getCountForAudit(filter) : 0;
+    }
+
+    @Override
     public ICommonAuditFilterController getAuditFilterController() {
         return controller;
     }

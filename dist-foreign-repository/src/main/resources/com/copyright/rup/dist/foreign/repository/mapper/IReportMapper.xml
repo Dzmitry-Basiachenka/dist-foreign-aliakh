@@ -329,6 +329,10 @@
         <include refid="IAaclUsageMapper.selectDtosByFilterSql"/>
     </select>
 
+    <select id="findAaclUsagesCountForAudit" resultType="int" parameterType="map">
+        <include refid="IAaclUsageMapper.selectCountForAuditSql"/>
+    </select>
+
     <select id="findUsagesCountForAudit" resultType="int" parameterType="map">
         <include refid="IUsageMapper.selectCountForAuditSql"/>
     </select>

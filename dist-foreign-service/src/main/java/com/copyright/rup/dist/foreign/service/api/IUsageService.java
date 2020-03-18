@@ -167,7 +167,7 @@ public interface IUsageService {
      * @param filter {@link AuditFilter}
      * @return count of items by filter
      */
-    int getAuditItemsCount(AuditFilter filter);
+    int getCountForAudit(AuditFilter filter);
 
     /**
      * Gets list of {@link UsageDto}s by filter.

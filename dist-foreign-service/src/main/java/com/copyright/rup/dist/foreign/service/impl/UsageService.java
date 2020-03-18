@@ -195,19 +195,13 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public int getAuditItemsCount(AuditFilter filter) {
-        //TODO {aazarenka} remove this code after adjust query
-        return !"AACL".equals(filter.getProductFamily())
-            ? usageRepository.findCountForAudit(filter)
-            : 0;
+    public int getCountForAudit(AuditFilter filter) {
+        return usageRepository.findCountForAudit(filter);
     }
 
     @Override
     public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
-        //TODO {aazarenka} remove this code after adjust query
-        return !"AACL".equals(filter.getProductFamily())
-            ? usageRepository.findForAudit(filter, pageable, sort)
-            : Collections.emptyList();
+        return usageRepository.findForAudit(filter, pageable, sort);
     }
 
     @Override

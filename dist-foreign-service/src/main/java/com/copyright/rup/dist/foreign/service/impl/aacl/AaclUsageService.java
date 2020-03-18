@@ -247,7 +247,11 @@ public class AaclUsageService implements IAaclUsageService {
 
     @Override
     public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
-        //todo {aazarenka} implement after adjusting repository
-        return Collections.emptyList();
+        return aaclUsageRepository.findForAudit(filter, pageable, sort);
+    }
+
+    @Override
+    public int getCountForAudit(AuditFilter filter) {
+        return aaclUsageRepository.findCountForAudit(filter);
     }
 }

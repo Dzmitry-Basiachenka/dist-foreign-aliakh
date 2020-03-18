@@ -301,7 +301,7 @@ public class UsageServiceTest {
         AuditFilter filter = new AuditFilter();
         expect(usageRepository.findCountForAudit(filter)).andReturn(1).once();
         replay(usageRepository);
-        assertEquals(1, usageService.getAuditItemsCount(filter));
+        assertEquals(1, usageService.getCountForAudit(filter));
         verify(usageRepository);
     }
 

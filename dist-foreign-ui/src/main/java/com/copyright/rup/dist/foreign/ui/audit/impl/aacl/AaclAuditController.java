@@ -60,6 +60,12 @@ public class AaclAuditController extends CommonAuditController implements IAaclA
     }
 
     @Override
+    public int getSize() {
+        AuditFilter filter = getFilter();
+        return !filter.isEmpty() ? aaclUsageService.getCountForAudit(filter) : 0;
+    }
+
+    @Override
     public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
         AuditFilter filter = getFilter();
         Sort sort = null;

@@ -142,6 +142,14 @@ public interface IAaclUsageService {
     List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
 
     /**
+     * Gets count of items by filter.
+     *
+     * @param filter {@link AuditFilter}
+     * @return count of items by filter
+     */
+    int getCountForAudit(AuditFilter filter);
+
+    /**
      * Adds usages to the scenario.
      *
      * @param scenario {@link Scenario} to add usages to
