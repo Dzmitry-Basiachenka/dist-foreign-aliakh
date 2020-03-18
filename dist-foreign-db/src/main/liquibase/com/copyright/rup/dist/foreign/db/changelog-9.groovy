@@ -652,5 +652,17 @@ databaseChangeLog {
                 where "aggregate_licensee_class_id = '232'"
             }
         }
+
+        changeSet(id: '2020-03-18-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
+            comment("B-52335 FDA: Create AACL Scenario: Add usage_period column to df_scenario_usage_filter table")
+
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+                column(name: 'usage_period', type: 'NUMERIC(4)', remarks: 'The usage period')
+            }
+
+            rollback {
+                // automatic rollback
+            }
+        }
     }
 }

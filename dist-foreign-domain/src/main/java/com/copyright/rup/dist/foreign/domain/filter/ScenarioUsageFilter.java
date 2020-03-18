@@ -34,6 +34,7 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
     private UsageStatusEnum usageStatus;
     private LocalDate paymentDate;
     private Integer fiscalYear;
+    private Integer usagePeriod;
 
     /**
      * Default constructor.
@@ -55,6 +56,7 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
         this.usageStatus = usageFilter.getUsageStatus();
         this.paymentDate = usageFilter.getPaymentDate();
         this.fiscalYear = usageFilter.getFiscalYear();
+        this.usagePeriod = usageFilter.getUsagePeriod();
     }
 
     public String getScenarioId() {
@@ -125,6 +127,14 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
         this.fiscalYear = fiscalYear;
     }
 
+    public Integer getUsagePeriod() {
+        return usagePeriod;
+    }
+
+    public void setUsagePeriod(Integer usagePeriod) {
+        this.usagePeriod = usagePeriod;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -142,6 +152,7 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
             .append(this.usageStatus, that.usageStatus)
             .append(this.paymentDate, that.paymentDate)
             .append(this.fiscalYear, that.fiscalYear)
+            .append(this.usagePeriod, that.usagePeriod)
             .isEquals();
     }
 
@@ -155,6 +166,7 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
             .append(usageStatus)
             .append(paymentDate)
             .append(fiscalYear)
+            .append(usagePeriod)
             .toHashCode();
     }
 
@@ -168,6 +180,7 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
             .append("usageStatus", usageStatus)
             .append("paymentDate", paymentDate)
             .append("fiscalYear", fiscalYear)
+            .append("usagePeriod", usagePeriod)
             .toString();
     }
 }

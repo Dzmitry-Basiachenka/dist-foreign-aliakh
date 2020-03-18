@@ -43,6 +43,7 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
     private static final UsageStatusEnum USAGE_STATUS = UsageStatusEnum.ELIGIBLE;
     private static final LocalDate PAYMENT_DATE = LocalDate.now();
     private static final Integer FISCAL_YEAR = LocalDate.now().getYear();
+    private static final Integer USAGE_PERIOD = LocalDate.now().getYear();
     private static final Set<Long> RH_ACCOUNT_NUMBERS = Collections.singleton(2000017004L);
     private static final Set<String> USAGE_BATCHES_IDS = Collections.singleton("e1c64cac-3f2b-4105-8056-6660e1ec461a");
 
@@ -93,6 +94,7 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
         usageFilter.setUsageStatus(USAGE_STATUS);
         usageFilter.setPaymentDate(PAYMENT_DATE);
         usageFilter.setFiscalYear(FISCAL_YEAR);
+        usageFilter.setUsagePeriod(USAGE_PERIOD);
         usageFilter.setRhAccountNumbers(RH_ACCOUNT_NUMBERS);
         usageFilter.setUsageBatchesIds(USAGE_BATCHES_IDS);
         return usageFilter;
@@ -106,5 +108,6 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
         assertEquals(USAGE_STATUS, usageFilter.getUsageStatus());
         assertEquals(PAYMENT_DATE, usageFilter.getPaymentDate());
         assertEquals(FISCAL_YEAR, usageFilter.getFiscalYear());
+        assertEquals(USAGE_PERIOD, usageFilter.getUsagePeriod());
     }
 }
