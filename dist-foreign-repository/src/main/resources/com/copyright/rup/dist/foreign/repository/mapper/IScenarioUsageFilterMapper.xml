@@ -11,6 +11,7 @@
         <result property="usageStatus" column="status_ind"/>
         <result property="paymentDate" column="payment_date"/>
         <result property="fiscalYear" column="fiscal_year"/>
+        <result property="usagePeriod" column="usage_period"/>
         <collection property="rhAccountNumbers" javaType="java.util.Set" ofType="java.lang.Long">
             <result column="rh_account_number"/>
         </collection>
@@ -30,6 +31,7 @@
             status_ind,
             payment_date,
             fiscal_year,
+            usage_period,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             #{id},
@@ -38,6 +40,7 @@
             #{usageStatus},
             #{paymentDate},
             #{fiscalYear},
+            #{usagePeriod},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
@@ -74,6 +77,7 @@
             f.status_ind,
             f.payment_date,
             f.fiscal_year,
+            f.usage_period,
             f.created_datetime,
             f.updated_datetime,
             f.created_by_user,
