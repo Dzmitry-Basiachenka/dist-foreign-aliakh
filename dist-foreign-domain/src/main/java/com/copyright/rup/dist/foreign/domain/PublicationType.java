@@ -34,6 +34,7 @@ public class PublicationType extends StoredEntity<String> {
      * @param pubType instance of {@link PublicationType}
      */
     public PublicationType(PublicationType pubType) {
+        setId(pubType.getId());
         this.name = pubType.getName();
         this.weight = pubType.getWeight();
     }
