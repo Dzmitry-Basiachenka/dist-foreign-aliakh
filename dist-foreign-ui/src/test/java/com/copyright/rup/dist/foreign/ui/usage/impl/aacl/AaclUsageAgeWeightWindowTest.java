@@ -60,6 +60,7 @@ public class AaclUsageAgeWeightWindowTest {
     public void testConstructorInEditMode() {
         assertEquals("Usage Age Weights", window.getCaption());
         verifySize(window);
+        assertFalse(window.isResizable());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
