@@ -1,0 +1,93 @@
+[
+  {
+    "id": "4aa7d89f-9721-4ad3-a9ab-e267743a2851",
+    "batchId": "ea7b6e8d-8454-4052-b639-c0fdb0a3145c",
+    "wrWrkInst": 123456789,
+    "status": "LOCKED",
+    "productFamily": "AACL",
+    "numberOfCopies": 10,
+    "aaclUsage": {
+      "institution": "CORNELL UNIVERSITY",
+      "usagePeriod": 2019,
+      "batchPeriodEndDate": "2019-06-30",
+      "usageSource": "Feb 2019 TUR",
+      "rightLimitation": "PRINT",
+      "numberOfPages": 12,
+      "detailLicenseeClassId": 108,
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book"
+      },
+      "publicationTypeWeight": 4.37,
+      "discipline": "Life Sciences",
+      "enrollmentProfile": "EXGP"
+    },
+    "rightsholder": {
+      "id": "60080587-a225-439c-81af-f016cb33aeac",
+      "name": "101 Communications, Ltd.",
+      "accountNumber": 2000133267
+    },
+    "comment": "AACL comment 1"
+  },
+  {
+    "id": "d5331924-72e9-43e7-9a7b-446ac09cff53",
+    "batchId": "ea7b6e8d-8454-4052-b639-c0fdb0a3145c",
+    "wrWrkInst": 123456789,
+    "status": "LOCKED",
+    "productFamily": "AACL",
+    "numberOfCopies": 10,
+    "aaclUsage": {
+      "institution": "CORNELL UNIVERSITY",
+      "usagePeriod": 2017,
+      "batchPeriodEndDate": "2019-06-30",
+      "usageSource": "Feb 2017 TUR",
+      "rightLimitation": "ALL",
+      "numberOfPages": 12,
+      "detailLicenseeClassId": 110,
+      "publicationType": {
+        "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
+        "name": "STMA Journal"
+      },
+      "publicationTypeWeight": 1.24,
+      "discipline": "Life Sciences",
+      "enrollmentProfile": "EXGP"
+    },
+    "rightsholder": {
+      "id": "b0e6b1f6-89e9-4767-b143-db0f49f32769",
+      "name": "st Contact Publishing",
+      "accountNumber": 2000073957
+    },
+    "comment": "AACL comment 2"
+  },
+  {
+    "id": "2b969cb4-4257-4674-b329-f627d60f5c0d",
+    "batchId": "ea7b6e8d-8454-4052-b639-c0fdb0a3145c",
+    "wrWrkInst": 123456789,
+    "status": "LOCKED",
+    "productFamily": "AACL",
+    "numberOfCopies": 10,
+    "aaclUsage": {
+      "institution": "CORNELL UNIVERSITY",
+      "usagePeriod": 2017,
+      "batchPeriodEndDate": "2019-06-30",
+      "usageSource": "Feb 2017 TUR",
+      "rightLimitation": "ALL",
+      "numberOfPages": 12,
+      "detailLicenseeClassId": 108,
+      "publicationType": {
+        "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
+        "name": "STMA Journal"
+      },
+      "publicationTypeWeight": 2.71,
+      "discipline": "Life Sciences",
+      "enrollmentProfile": "EXGP",
+      "baselineId": "f517f5b9-5f34-41f6-8984-67eeadf65ad1"
+    },
+    "rightsholder": {
+      "id": "b0e6b1f6-89e9-4767-b143-db0f49f32769",
+      "name": "st Contact Publishing",
+      "accountNumber": 2000073957
+    },
+    "comment": "AACL baseline usage"
+  }
+]
