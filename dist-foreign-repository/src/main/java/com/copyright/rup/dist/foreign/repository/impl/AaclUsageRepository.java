@@ -17,6 +17,7 @@ import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -152,5 +153,15 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         params.put(FILTER_KEY, Objects.requireNonNull(filter));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(scenario.getUpdateUser()));
         update("IAaclUsageMapper.addToScenario", params);
+    }
+
+    @Override
+    public void updatePublicationTypeWeight(Scenario scenario, String publicationTypeId, BigDecimal weight) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put("scenarioId", Objects.requireNonNull(scenario.getId()));
+        params.put("publicationTypeId", Objects.requireNonNull(publicationTypeId));
+        params.put("weight", Objects.requireNonNull(weight));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(scenario.getUpdateUser()));
+        update("IAaclUsageMapper.updatePublicationTypeWeight", params);
     }
 }
