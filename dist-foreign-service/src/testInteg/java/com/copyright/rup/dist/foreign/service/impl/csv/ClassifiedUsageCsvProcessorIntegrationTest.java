@@ -120,9 +120,9 @@ public class ClassifiedUsageCsvProcessorIntegrationTest {
                     "<li>System Title</li>" +
                     "<li>Standard Number</li>" +
                     "<li>Standard Number Type</li>" +
-                    "<li>Detail Licensee Class ID</li>" +
-                    "<li>Enrollment Profile</li>" +
-                    "<li>Discipline</li>" +
+                    "<li>Det LC ID</li>" +
+                    "<li>Det LC Enrollment</li>" +
+                    "<li>Det LC Discipline</li>" +
                     "<li>Pub Type</li>" +
                     "<li>Institution</li>" +
                     "<li>Usage Period</li>" +
