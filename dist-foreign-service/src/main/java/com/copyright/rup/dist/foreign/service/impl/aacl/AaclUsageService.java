@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -224,6 +225,13 @@ public class AaclUsageService implements IAaclUsageService {
                     LOGGER.info("Send usages for PI matching. Finished. UsageBatchName={}, UsagesCount={}", batchName,
                         usageIdsCount);
                 }));
+    }
+
+    @Override
+    public void addUsagesToScenario(Scenario scenario, UsageFilter filter) {
+        aaclUsageRepository.addToScenario(scenario, filter);
+        scenario.getAaclFields().getPublicationTypes().forEach(pubType ->
+            aaclUsageRepository.updatePublicationTypeWeight(scenario, pubType.getId(), pubType.getWeight()));
     }
 
     private boolean isUsageDisqualified(AaclClassifiedUsage usage) {

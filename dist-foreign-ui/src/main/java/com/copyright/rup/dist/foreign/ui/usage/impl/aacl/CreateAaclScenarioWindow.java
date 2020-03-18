@@ -177,8 +177,11 @@ class CreateAaclScenarioWindow extends Window {
         if (scenarioBinder.isValid() && fundPoolBinder.isValid()) {
             AaclFields aaclFields = new AaclFields();
             fundPoolComboBox.getSelectedItem().ifPresent(fundPool -> aaclFields.setFundPoolId(fundPool.getId()));
+            aaclFields.setTitleCutoffAmount(new BigDecimal(StringUtils.trimToEmpty(titleCutoffAmountField.getValue())));
+            aaclFields.setUsageAges(usageAgeWeightWidget.getAppliedParameters());
             aaclFields.setPublicationTypes(publicationTypeWeightWidget.getAppliedParameters());
-            // TODO {srudak} create scenario and fire ScenarioCreatedEvent
+            aaclFields.setDetailLicenseeClasses(licenseeClassMappingWidget.getAppliedParameters());
+            // TODO {srudak} fire ScenarioCreatedEvent
             controller.createAaclScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()), aaclFields,
                 StringUtils.trimToEmpty(descriptionArea.getValue()));
             close();

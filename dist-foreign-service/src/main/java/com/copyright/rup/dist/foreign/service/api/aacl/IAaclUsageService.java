@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.api.aacl;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -139,4 +140,12 @@ public interface IAaclUsageService {
      * @return list of {@link UsageDto}s
      */
     List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * Adds usages to the scenario.
+     *
+     * @param scenario {@link Scenario} to add usages to
+     * @param filter   {@link UsageFilter} instance
+     */
+    void addUsagesToScenario(Scenario scenario, UsageFilter filter);
 }

@@ -209,8 +209,10 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public Scenario createAaclScenario(String scenarioName, AaclFields aaclFields, String description) {
-        // TODO {srudak} implement
-        return new Scenario();
+        Scenario scenario = getScenarioService().createAaclScenario(scenarioName, aaclFields, description,
+            getUsageFilterController().getWidget().getAppliedFilter());
+        getUsageFilterController().getWidget().clearFilter();
+        return scenario;
     }
 
     @Override

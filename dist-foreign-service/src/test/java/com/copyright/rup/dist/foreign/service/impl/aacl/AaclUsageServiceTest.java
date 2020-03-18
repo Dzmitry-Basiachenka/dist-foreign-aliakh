@@ -17,6 +17,9 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -304,6 +307,29 @@ public class AaclUsageServiceTest {
         verify(chainExecutor, aaclUsageRepository);
     }
 
+    @Test
+    public void testAddUsagesToScenario() {
+        Scenario scenario = new Scenario();
+        scenario.setId("3a95352b-c9f5-4b46-b793-d635f7765997");
+        AaclFields aaclFields = new AaclFields();
+        aaclFields.setPublicationTypes(Arrays.asList(
+            buildPubType("eb500edd-c882-43a4-8945-454958c8fd52", BigDecimal.ONE),
+            buildPubType("77707191-bdbd-4034-b37b-0968aedaa346", BigDecimal.TEN)));
+        scenario.setAaclFields(aaclFields);
+        UsageFilter usageFilter = new UsageFilter();
+        aaclUsageRepository.addToScenario(scenario, usageFilter);
+        expectLastCall().once();
+        aaclUsageRepository.updatePublicationTypeWeight(scenario,
+            "eb500edd-c882-43a4-8945-454958c8fd52", BigDecimal.ONE);
+        expectLastCall().once();
+        aaclUsageRepository.updatePublicationTypeWeight(scenario,
+            "77707191-bdbd-4034-b37b-0968aedaa346", BigDecimal.TEN);
+        expectLastCall().once();
+        replay(aaclUsageRepository);
+        aaclUsageService.addUsagesToScenario(scenario, usageFilter);
+        verify(aaclUsageRepository);
+    }
+
     private UsageBatch buildUsageBatch() {
         UsageBatch batch = new UsageBatch();
         batch.setId(BATCH_ID);
@@ -329,5 +355,12 @@ public class AaclUsageServiceTest {
         usageAge.setPeriod(period);
         usageAge.setWeight(weight);
         return usageAge;
+    }
+
+    private PublicationType buildPubType(String id, BigDecimal weight) {
+        PublicationType pubType = new PublicationType();
+        pubType.setId(id);
+        pubType.setWeight(weight);
+        return pubType;
     }
 }
