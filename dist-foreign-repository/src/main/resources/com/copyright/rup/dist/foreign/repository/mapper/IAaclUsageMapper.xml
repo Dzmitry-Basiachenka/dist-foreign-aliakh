@@ -696,4 +696,18 @@
         <include refid="IAaclUsageMapper.aaclUsageFilter"/>
         and u.df_usage_uid = uaacl.df_usage_aacl_uid
     </update>
+
+    <update id="updatePublicationTypeWeight" parameterType="map">
+        update ${schema}.df_usage_aacl uaacl
+        set
+            publication_type_weight = #{weight},
+            updated_by_user = #{updateUser},
+            updated_datetime = now(),
+            record_version = u.record_version + 1
+        from ${schema}.df_usage u
+        where uaacl.df_usage_aacl_uid = u.df_usage_uid
+            and u.df_scenario_uid = #{scenarioId}
+            and uaacl.publication_type_uid = #{publicationTypeId}
+            and uaacl.baseline_uid is null
+    </update>
 </mapper>

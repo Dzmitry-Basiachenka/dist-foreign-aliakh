@@ -35,6 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -61,7 +62,8 @@ import java.util.stream.IntStream;
 @Transactional
 public class AaclUsageRepositoryIntegrationTest {
 
-    private static final String SCENARIO_ID = "09f85d7d-3a37-45b2-ab6e-7a341c3f115c";
+    private static final String SCENARIO_ID_1 = "09f85d7d-3a37-45b2-ab6e-7a341c3f115c";
+    private static final String SCENARIO_ID_2 = "66d10c81-705e-4996-89f4-11e1635c4c31";
     private static final String USAGE_ID_1 = "0b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_2 = "6c91f04e-60dc-49e0-9cdc-e782e0b923e2";
     private static final String USAGE_ID_3 = "5b41d618-0a2f-4736-bb75-29da627ad677";
@@ -116,9 +118,9 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
         assertNull(expectedUsage.getAaclUsage().getDiscipline());
         assertNull(expectedUsage.getAaclUsage().getEnrollmentProfile());
-        assertEquals(2, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(5, getNumberOfUsagesWithNotEmptyClassificationData());
         aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
-        assertEquals(3, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(6, getNumberOfUsagesWithNotEmptyClassificationData());
         verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
             aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")),
             this::verifyUsage);
@@ -303,12 +305,13 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testFindUsagePeriods() {
         List<Integer> usagePeriods = aaclUsageRepository.findUsagePeriods();
-        assertEquals(5, usagePeriods.size());
+        assertEquals(6, usagePeriods.size());
         assertEquals(2010, usagePeriods.get(0).intValue());
-        assertEquals(2017, usagePeriods.get(1).intValue());
-        assertEquals(2018, usagePeriods.get(2).longValue());
-        assertEquals(2019, usagePeriods.get(3).longValue());
-        assertEquals(2020, usagePeriods.get(4).longValue());
+        assertEquals(2015, usagePeriods.get(1).intValue());
+        assertEquals(2017, usagePeriods.get(2).intValue());
+        assertEquals(2018, usagePeriods.get(3).longValue());
+        assertEquals(2019, usagePeriods.get(4).longValue());
+        assertEquals(2020, usagePeriods.get(5).longValue());
     }
 
     @Test
@@ -326,7 +329,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testAddToScenarioByBatchAndStatusFilter() {
         Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
+        scenario.setId(SCENARIO_ID_1);
         scenario.setUpdateUser(USER_NAME);
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
@@ -335,7 +338,7 @@ public class AaclUsageRepositoryIntegrationTest {
         aaclUsageRepository.findByIds(
             Arrays.asList("0cd30b3e-ae74-466a-a7b1-a2d891b2123e", "9342062f-568e-4c27-8f33-c010a2afe61e"))
             .forEach(actualUsage -> {
-                assertEquals(SCENARIO_ID, actualUsage.getScenarioId());
+                assertEquals(SCENARIO_ID_1, actualUsage.getScenarioId());
                 assertEquals(UsageStatusEnum.LOCKED, actualUsage.getStatus());
                 assertEquals(USER_NAME, actualUsage.getUpdateUser());
             });
@@ -349,7 +352,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testAddToScenarioByBatchAndStatusAndPeriodFilter() {
         Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
+        scenario.setId(SCENARIO_ID_1);
         scenario.setUpdateUser(USER_NAME);
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
@@ -358,12 +361,32 @@ public class AaclUsageRepositoryIntegrationTest {
         aaclUsageRepository.addToScenario(scenario, usageFilter);
         aaclUsageRepository.findByIds(Collections.singletonList("0cd30b3e-ae74-466a-a7b1-a2d891b2123e"))
             .forEach(actualUsage -> {
-                assertEquals(SCENARIO_ID, actualUsage.getScenarioId());
+                assertEquals(SCENARIO_ID_1, actualUsage.getScenarioId());
                 assertEquals(USER_NAME, actualUsage.getUpdateUser());
             });
         aaclUsageRepository.findByIds(
             Arrays.asList("9342062f-568e-4c27-8f33-c010a2afe61e", "e21bcd1f-8040-4b44-93c7-4af732ac1916"))
             .forEach(actualUsage -> assertNull(actualUsage.getScenarioId()));
+    }
+
+    @Test
+    public void testUpdatePublicationTypeWeight() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID_2);
+        scenario.setUpdateUser(USER_NAME);
+        aaclUsageRepository.updatePublicationTypeWeight(scenario, "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
+            new BigDecimal("10.12"));
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
+        Usage usage1 =
+            aaclUsageRepository.findByIds(Collections.singletonList("248add96-93d0-428d-9fe2-2e46c237a88b")).get(0);
+        Usage usage2 =
+            aaclUsageRepository.findByIds(Collections.singletonList("161652a5-d822-493b-8242-d35dc881646f")).get(0);
+        Usage usage3 =
+            aaclUsageRepository.findByIds(Collections.singletonList("61b7dc5a-aaec-482c-8c16-fe48a9464059")).get(0);
+        assertNull(usage1.getAaclUsage().getPublicationTypeWeight());
+        assertEquals(new BigDecimal("10.12"), usage2.getAaclUsage().getPublicationTypeWeight());
+        assertEquals(new BigDecimal("1.71"), usage3.getAaclUsage().getPublicationTypeWeight());
     }
 
     private void verifyUsages(List<String> expectedUsageJsonFiles, List<Usage> actualUsages,

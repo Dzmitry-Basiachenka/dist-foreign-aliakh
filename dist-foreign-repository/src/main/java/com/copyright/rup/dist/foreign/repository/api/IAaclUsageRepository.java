@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -145,4 +146,13 @@ public interface IAaclUsageRepository {
      * @param filter   {@link UsageFilter} instance
      */
     void addToScenario(Scenario scenario, UsageFilter filter);
+
+    /**
+     * Sets publication type weight for scenario usages with the given publication type.
+     *
+     * @param scenario          {@link Scenario}
+     * @param publicationTypeId publication type id
+     * @param weight            publication type weight
+     */
+    void updatePublicationTypeWeight(Scenario scenario, String publicationTypeId, BigDecimal weight);
 }
