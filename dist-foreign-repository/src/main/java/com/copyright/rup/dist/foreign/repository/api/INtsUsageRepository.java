@@ -102,7 +102,7 @@ public interface INtsUsageRepository {
 
     /**
      * Deletes usages from scenario. Updates usages associated with scenario in
-     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_EXCLUDED} and
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED} and
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#LOCKED} statuses.
      * Reverts status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE},
      * sets scenario id to {@code null}, sets gross amount to 0.

@@ -179,7 +179,7 @@
         update
             ${schema}.df_usage u
         set
-            status_ind = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then 'NTS_EXCLUDED' else 'LOCKED' end,
+            status_ind = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then 'SCENARIO_EXCLUDED' else 'LOCKED' end,
             df_scenario_uid = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then null else #{scenario.id} end,
             gross_amount = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then 0.00 else amounts.gross_amount * (select factor from gt_factor) end,
             <include refid="StoredEntityMapper.update"/>

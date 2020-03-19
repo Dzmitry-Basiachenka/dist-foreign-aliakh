@@ -181,11 +181,11 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testDeleteByScenarioIdNtsExcluded() {
-        assertEquals(2, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
+    public void testDeleteByScenarioIdScenarioExcluded() {
+        assertEquals(2, usageRepository.findByStatuses(UsageStatusEnum.SCENARIO_EXCLUDED).size());
         assertEquals(1, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_4));
         ntsUsageRepository.deleteByScenarioId("c4bc09c1-eb9b-41f3-ac93-9cd088dff408");
-        assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
+        assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.SCENARIO_EXCLUDED).size());
         assertEquals(0, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_4));
     }
 
@@ -218,7 +218,7 @@ public class NtsUsageRepositoryIntegrationTest {
     public void testDeleteFromNtsScenario() {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_2, USAGE_ID_3));
         assertEquals(2, usages.size());
-        verifyUsage(usages.get(0), UsageStatusEnum.NTS_EXCLUDED, null, StoredEntity.DEFAULT_USER, ZERO_AMOUNT,
+        verifyUsage(usages.get(0), UsageStatusEnum.SCENARIO_EXCLUDED, null, StoredEntity.DEFAULT_USER, ZERO_AMOUNT,
             HUNDRED_AMOUNT, null, ZERO_AMOUNT, ZERO_AMOUNT);
         verifyUsage(usages.get(1), UsageStatusEnum.LOCKED, SCENARIO_ID, StoredEntity.DEFAULT_USER,
             new BigDecimal("900.0000000000"), new BigDecimal("900.00"), new BigDecimal("0.32000"),

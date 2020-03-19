@@ -357,7 +357,7 @@ public class UsageBatchServiceTest {
         List<String> batchesNames = Collections.singletonList("test batch name");
         EnumSet<UsageStatusEnum> processingStatuses =
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.LOCKED,
-                UsageStatusEnum.NTS_EXCLUDED);
+                UsageStatusEnum.SCENARIO_EXCLUDED);
         expect(usageBatchRepository.findProcessingBatchesNames(batchesIds, processingStatuses))
             .andReturn(batchesNames).once();
         replay(usageBatchRepository);

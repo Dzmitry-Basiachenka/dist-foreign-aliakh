@@ -49,7 +49,8 @@ import java.util.stream.Collectors;
 public class UsageBatchService implements IUsageBatchService {
 
     private static final EnumSet<UsageStatusEnum> PROCESSED_NTS_BATCH_USAGE_STATUSES = EnumSet.of(
-        UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.NTS_EXCLUDED, UsageStatusEnum.LOCKED);
+        UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.SCENARIO_EXCLUDED,
+        UsageStatusEnum.LOCKED);
     private static final EnumSet<UsageStatusEnum> PROCESSED_AACL_BATCH_USAGE_STATUSES = EnumSet.of(
         UsageStatusEnum.ELIGIBLE, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND,
         UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED);

@@ -127,7 +127,7 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
     public void deleteByScenarioId(String scenarioId) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(STATUS_KEY, UsageStatusEnum.NTS_EXCLUDED);
+        parameters.put(STATUS_KEY, UsageStatusEnum.SCENARIO_EXCLUDED);
         delete("INtsUsageMapper.deleteByScenarioId", parameters);
     }
 
@@ -154,7 +154,7 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put("eligibleStatus", UsageStatusEnum.ELIGIBLE);
         params.put("unclassifiedStatus", UsageStatusEnum.UNCLASSIFIED);
-        params.put("statusesToUpdate", Sets.newHashSet(UsageStatusEnum.NTS_EXCLUDED, UsageStatusEnum.LOCKED));
+        params.put("statusesToUpdate", Sets.newHashSet(UsageStatusEnum.SCENARIO_EXCLUDED, UsageStatusEnum.LOCKED));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("INtsUsageMapper.deleteFromScenario", params);
     }

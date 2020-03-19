@@ -78,9 +78,9 @@ public enum UsageStatusEnum {
     TO_BE_DISTRIBUTED,
 
     /**
-     * Status for usages excluded from scenario by RH minimum amount.
+     * Status for usages excluded from scenario by minimum amount.
      */
-    NTS_EXCLUDED,
+    SCENARIO_EXCLUDED,
 
     /**
      * Status for usages which were added to scenario.

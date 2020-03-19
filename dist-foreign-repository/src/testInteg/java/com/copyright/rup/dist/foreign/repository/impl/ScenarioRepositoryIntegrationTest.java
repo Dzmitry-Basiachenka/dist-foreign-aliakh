@@ -418,9 +418,9 @@ public class ScenarioRepositoryIntegrationTest {
                 buildUsage("87666035-2bdf-49ef-8c80-1d1b281fdc34", "9877.2321428571")),
             usageRepository.findByScenarioId(SCENARIO_ID));
         assertUsages(
-            Arrays.asList(buildNtsExcludedUsage("0d200064-185a-4c48-bbc9-c67554e7db8e"),
-                buildNtsExcludedUsage("9bc172f4-edbb-4a62-9ffc-254336e7a56d")),
-            usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED));
+            Arrays.asList(buildScenarioExcludedUsage("0d200064-185a-4c48-bbc9-c67554e7db8e"),
+                buildScenarioExcludedUsage("9bc172f4-edbb-4a62-9ffc-254336e7a56d")),
+            usageRepository.findByStatuses(UsageStatusEnum.SCENARIO_EXCLUDED));
     }
 
     private void assertUsages(List<Usage> expected, List<Usage> actual) {
@@ -522,10 +522,10 @@ public class ScenarioRepositoryIntegrationTest {
         return usage;
     }
 
-    private Usage buildNtsExcludedUsage(String usageId) {
+    private Usage buildScenarioExcludedUsage(String usageId) {
         Usage usage = new Usage();
         usage.setId(usageId);
-        usage.setStatus(UsageStatusEnum.NTS_EXCLUDED);
+        usage.setStatus(UsageStatusEnum.SCENARIO_EXCLUDED);
         usage.setGrossAmount(new BigDecimal("0.0000000000"));
         return usage;
     }

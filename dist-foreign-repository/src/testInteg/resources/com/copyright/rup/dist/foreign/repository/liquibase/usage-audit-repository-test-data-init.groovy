@@ -1130,7 +1130,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'c905546a-6405-467d-a7ce-d4b19e5f7d5f')
-            column(name: 'name', value: 'NTS Batch with NTS_EXCLUDED usages')
+            column(name: 'name', value: 'NTS Batch with SCENARIO_EXCLUDED usages')
             column(name: 'rro_account_number', value: '1000000001')
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
@@ -1194,7 +1194,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '642267671')
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'system_title', value: 'Cell Biology')
-            column(name: 'status_ind', value: 'NTS_EXCLUDED')
+            column(name: 'status_ind', value: 'SCENARIO_EXCLUDED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'number_of_copies', value: '1')

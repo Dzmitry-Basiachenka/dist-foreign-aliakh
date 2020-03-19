@@ -228,7 +228,7 @@ public class UsageBatchRepositoryIntegrationTest {
                 "13027b25-2269-3bec-48ea-5126431eedb0", NTS_USAGE_BATCH_ID_4);
         EnumSet<UsageStatusEnum> statuses =
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.LOCKED,
-                UsageStatusEnum.NTS_EXCLUDED);
+                UsageStatusEnum.SCENARIO_EXCLUDED);
         List<String> batchesNames = usageBatchRepository.findProcessingBatchesNames(batchIds, statuses);
         assertNotNull(batchesNames);
         assertEquals(3, batchesNames.size());

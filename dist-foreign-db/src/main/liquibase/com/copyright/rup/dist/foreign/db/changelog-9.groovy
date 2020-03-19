@@ -664,5 +664,21 @@ databaseChangeLog {
                 // automatic rollback
             }
         }
+
+        changeSet(id: '2020-03-19-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+            comment("B-56844 Tech Debt: FDA: update NTS_EXCLUDED status to SCENARIO_EXCLUDED in df_usage table")
+
+            update(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'status_ind', value: 'SCENARIO_EXCLUDED')
+                where "status_ind = 'NTS_EXCLUDED'"
+            }
+
+            rollback {
+                update(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                    column(name: 'status_ind', value: 'NTS_EXCLUDED')
+                    where "status_ind = 'SCENARIO_EXCLUDED'"
+                }
+            }
+        }
     }
 }
