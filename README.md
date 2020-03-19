@@ -1,3 +1,23 @@
+9.1.8
+-
+* B-27613 FDA: Audit Tab modifications for AACL: adjust find for audit query in AACL usage mapper
+* B-52335 FDA: Create AACL Scenario: cover scenario creation with integration test
+* B-52335 FDA: Create AACL Scenario: implement logic for creating scenario
+* B-52335 FDA: Create AACL Scenario: implement logic for updating pub type weights
+* B-52335 FDA: Create AACL Scenario: store usage period in scenario filter
+* B-56844 Tech Debt: FDA: rename NTS_EXLCUDED status to SCENARIO_EXCLUDED
+* B-56943 FDA: AACL map detailed licensee classes to aggregate licensee: apply read only mode for aggregate licensee class window
+* B-56943 FDA: AACL map detailed licensee classes to aggregate licensee: make changes based on comments in CR-DIST-FOREIGN-151
+* B-56947 FDA: AACL view and edit scenario Pub Type Weights: make Usage Age Weights and Publication Weights non-resizable
+* B-56947 FDA: AACL view and edit scenario Pub Type Weights: make changes based on comments in CR-DIST-FOREIGN-150
+* B-56947 FDA: AACL view and edit scenario Pub Type Weights: make changes based on comments in CR-DIST-FOREIGN-150
+* B-56947 FDA: AACL view and edit scenario Pub Type Weights: make changes based on comments in CR-DIST-FOREIGN-150
+* B-56949 FDA: Edit usage age weights for AACL while creating a scenario: adjust Usage Age Weights window to use it in view and edit modes
+* B-57613 FDA: Audit Tab modifications for AACL: adjust logic related to  Audit filter for AACL product family
+* B-57746 FDA: AACL Usage tab updates for Licensee class: rename licensee class related columns on usage export and classification
+* CDP-894 FDA: Pub Type Weights, Usage Age Weights: Exception occurs in case leading or trailing spaces are entered when editing Weights
+* CDP-895 FDA: Create AACL Scenario: Exception occurs when the user tries to create scenario with 'Usage Period' filter applied
+
 9.1.7
 -
 * B-52332 FDA: Add baseline usage details to usage batch: adjust integration tests
