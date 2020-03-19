@@ -187,7 +187,10 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
         metadataPanel.setSizeFull();
         VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
         metadataLayout = initMetadataLayout();
-        metadataLayout.addComponent(initScenarioActionLayout());
+        //TODO: remove in scope of B-57242
+        if (Objects.nonNull(scenarioHistoryController)) {
+            metadataLayout.addComponent(initScenarioActionLayout());
+        }
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
     }

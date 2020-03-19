@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.main.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosController;
 
@@ -31,13 +32,16 @@ public class ScenariosControllerProvider extends CommonControllerProvider<ICommo
     private IFasScenariosController fasScenariosController;
     @Autowired
     private INtsScenariosController ntsScenariosController;
+    @Autowired
+    private IAaclScenariosController aaclScenariosController;
 
     @Override
     protected Map<String, ICommonScenariosController> getProductFamilyToControllerMap() {
         return ImmutableMap.of(
             FdaConstants.FAS_PRODUCT_FAMILY, fasScenariosController,
             FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasScenariosController,
-            FdaConstants.NTS_PRODUCT_FAMILY, ntsScenariosController
+            FdaConstants.NTS_PRODUCT_FAMILY, ntsScenariosController,
+            FdaConstants.AACL_PRODUCT_FAMILY, aaclScenariosController
         );
     }
 }
