@@ -126,9 +126,9 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
         assertNull(expectedUsage.getAaclUsage().getDiscipline());
         assertNull(expectedUsage.getAaclUsage().getEnrollmentProfile());
-        assertEquals(6, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(9, getNumberOfUsagesWithNotEmptyClassificationData());
         aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
-        assertEquals(7, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(10, getNumberOfUsagesWithNotEmptyClassificationData());
         verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
             aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")),
             this::verifyUsage);
@@ -478,6 +478,25 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(usage1.getAaclUsage().getPublicationTypeWeight());
         assertEquals(new BigDecimal("10.12"), usage2.getAaclUsage().getPublicationTypeWeight());
         assertEquals(new BigDecimal("1.71"), usage3.getAaclUsage().getPublicationTypeWeight());
+    }
+
+    @Test
+    public void testUsagesExistByDetailLicenseeClassAndFilterWithBatchAndStatusFilter() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("d1108958-44cc-4bb4-9bb5-66fcf5b42104"));
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        assertTrue(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 108));
+        assertFalse(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 110));
+    }
+
+    @Test
+    public void testUsagesExistByDetailLicenseeClassAndFilterWithBatchAndStatusAndPeriodFilter() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("d1108958-44cc-4bb4-9bb5-66fcf5b42104"));
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        usageFilter.setUsagePeriod(2015);
+        assertTrue(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 113));
+        assertFalse(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 110));
     }
 
     private void assertFindForAuditSearch(String searchValue, String... usageIds) {

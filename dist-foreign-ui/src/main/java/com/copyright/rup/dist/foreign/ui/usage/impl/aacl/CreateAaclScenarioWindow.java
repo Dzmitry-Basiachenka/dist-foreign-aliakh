@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -28,6 +29,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -35,6 +37,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * Window to create AACL scenario.
@@ -173,7 +176,6 @@ class CreateAaclScenarioWindow extends Window {
     }
 
     private void onConfirmButtonClicked() {
-        // TODO {srudak} validate licensee class mapping
         if (scenarioBinder.isValid() && fundPoolBinder.isValid()) {
             AaclFields aaclFields = new AaclFields();
             fundPoolComboBox.getSelectedItem().ifPresent(fundPool -> aaclFields.setFundPoolId(fundPool.getId()));
@@ -181,10 +183,23 @@ class CreateAaclScenarioWindow extends Window {
             aaclFields.setUsageAges(usageAgeWeightWidget.getAppliedParameters());
             aaclFields.setPublicationTypes(publicationTypeWeightWidget.getAppliedParameters());
             aaclFields.setDetailLicenseeClasses(licenseeClassMappingWidget.getAppliedParameters());
-            // TODO {srudak} fire ScenarioCreatedEvent
-            controller.createAaclScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()), aaclFields,
-                StringUtils.trimToEmpty(descriptionArea.getValue()));
-            close();
+            List<AggregateLicenseeClass> aggregateClassesWithoutUsages =
+                controller.getAggregateLicenseeClassesWithoutUsages(aaclFields.getFundPoolId(),
+                    aaclFields.getDetailLicenseeClasses());
+            if (CollectionUtils.isEmpty(aggregateClassesWithoutUsages)) {
+                // TODO {srudak} fire ScenarioCreatedEvent
+                controller.createAaclScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()), aaclFields,
+                    StringUtils.trimToEmpty(descriptionArea.getValue()));
+                close();
+            } else {
+                List<String> formattedAggregateClasses = aggregateClassesWithoutUsages.stream()
+                    .map(aggregateClass -> String.format("%s (%s - %s)", aggregateClass.getId(),
+                        aggregateClass.getEnrollmentProfile(), aggregateClass.getDiscipline()))
+                    .collect(Collectors.toList());
+                Windows.showNotificationWindow(
+                    ForeignUi.getMessage("message.error.aggregate_licensee_classes_without_usages",
+                        String.join("<br><li>", formattedAggregateClasses)));
+            }
         } else {
             Windows.showValidationErrorWindow(
                 Arrays.asList(scenarioNameField, titleCutoffAmountField, fundPoolComboBox, descriptionArea));

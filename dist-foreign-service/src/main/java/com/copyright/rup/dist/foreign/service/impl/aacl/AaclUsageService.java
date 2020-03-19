@@ -6,6 +6,9 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -16,6 +19,8 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
@@ -23,6 +28,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -35,8 +41,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -67,6 +76,10 @@ public class AaclUsageService implements IAaclUsageService {
 
     @Autowired
     private IUsageAuditService usageAuditService;
+    @Autowired
+    private IFundPoolService fundPoolService;
+    @Autowired
+    private ILicenseeClassService licenseeClassService;
     @Autowired
     private IAaclUsageRepository aaclUsageRepository;
     @Autowired
@@ -235,15 +248,24 @@ public class AaclUsageService implements IAaclUsageService {
             aaclUsageRepository.updatePublicationTypeWeight(scenario, pubType.getId(), pubType.getWeight()));
     }
 
-    private boolean isUsageDisqualified(AaclClassifiedUsage usage) {
-        return DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getDiscipline())
-            || DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getEnrollmentProfile())
-            || DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getPublicationType());
-    }
-
-    private BigDecimal getAgeWeight(int index) {
-        return DEFAULT_USAGES_AGE_WEIGHTS.size() > index
-            ? DEFAULT_USAGES_AGE_WEIGHTS.get(index) : USAGES_AGE_WEIGHT_ZERO;
+    @Override
+    public List<AggregateLicenseeClass> getAggregateLicenseeClassesWithoutUsages(String fundPoolId, UsageFilter filter,
+                                                                                 List<DetailLicenseeClass> mapping) {
+        Set<Integer> fundPoolAggregateClassIds = getAggregateClassIdsWithAmountsFromFundPool(fundPoolId);
+        Map<Integer, Set<Integer>> aggregateToDetailClassIds = mapping.stream()
+            .collect(Collectors.groupingBy(detailClass -> detailClass.getAggregateLicenseeClass().getId(),
+                Collectors.mapping(DetailLicenseeClass::getId, Collectors.toSet())));
+        Set<Integer> unmappedAggregateClassIds =
+            Sets.difference(fundPoolAggregateClassIds, aggregateToDetailClassIds.keySet());
+        Set<Integer> aggregateClassIdsWithNoUsages = aggregateToDetailClassIds.entrySet().stream()
+            .filter(entry -> fundPoolAggregateClassIds.contains(entry.getKey()))
+            .filter(entry -> entry.getValue()
+                .stream()
+                .noneMatch(detailClassId ->
+                    aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(filter, detailClassId)))
+            .map(Entry::getKey)
+            .collect(Collectors.toSet());
+        return getAggregateClassesByIds(Sets.union(unmappedAggregateClassIds, aggregateClassIdsWithNoUsages));
     }
 
     @Override
@@ -254,5 +276,34 @@ public class AaclUsageService implements IAaclUsageService {
     @Override
     public int getCountForAudit(AuditFilter filter) {
         return aaclUsageRepository.findCountForAudit(filter);
+    }
+
+    private Set<Integer> getAggregateClassIdsWithAmountsFromFundPool(String fundPoolId) {
+        return fundPoolService.getDetailsByFundPoolId(fundPoolId).stream()
+            .filter(detail -> 0 > BigDecimal.ZERO.compareTo(detail.getGrossAmount()))
+            .map(FundPoolDetail::getAggregateLicenseeClass)
+            .map(AggregateLicenseeClass::getId)
+            .collect(Collectors.toSet());
+    }
+
+    private List<AggregateLicenseeClass> getAggregateClassesByIds(Set<Integer> aggregateClassIds) {
+        Map<Integer, AggregateLicenseeClass> aggregateClassIdToClass =
+            licenseeClassService.getAggregateLicenseeClasses().stream()
+                .collect(Collectors.toMap(AggregateLicenseeClass::getId, aggregateClass -> aggregateClass));
+        return aggregateClassIds.stream()
+            .map(aggregateClassIdToClass::get)
+            .sorted(Comparator.comparing(AggregateLicenseeClass::getId))
+            .collect(Collectors.toList());
+    }
+
+    private boolean isUsageDisqualified(AaclClassifiedUsage usage) {
+        return DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getDiscipline())
+            || DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getEnrollmentProfile())
+            || DISQUALIFIED_USAGE.equalsIgnoreCase(usage.getPublicationType());
+    }
+
+    private BigDecimal getAgeWeight(int index) {
+        return DEFAULT_USAGES_AGE_WEIGHTS.size() > index
+            ? DEFAULT_USAGES_AGE_WEIGHTS.get(index) : USAGES_AGE_WEIGHT_ZERO;
     }
 }

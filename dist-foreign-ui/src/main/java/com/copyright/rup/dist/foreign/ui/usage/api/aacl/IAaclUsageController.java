@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.api.aacl;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
@@ -149,6 +150,16 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return list of batches names
      */
     List<String> getProcessingBatchesNames(Set<String> batchesIds);
+
+    /**
+     * Gets aggregate licensee classes that have money that can't be distributed.
+     *
+     * @param fundPoolId fund pool id
+     * @param mapping    {@link DetailLicenseeClass} to {@link AggregateLicenseeClass} mapping
+     * @return list of {@link AggregateLicenseeClass}es
+     */
+    List<AggregateLicenseeClass> getAggregateLicenseeClassesWithoutUsages(String fundPoolId,
+                                                                          List<DetailLicenseeClass> mapping);
 
     /**
      * Creates AACL {@link Scenario} by entered scenario name and description.
