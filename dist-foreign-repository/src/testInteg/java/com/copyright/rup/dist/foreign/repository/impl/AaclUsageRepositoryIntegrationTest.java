@@ -324,7 +324,7 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindUsagePeriodsByFilter() {
+    public void testFindUsagePeriodsByFilterWithBatchFilter() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(
             Sets.newHashSet("31ac3937-157b-48c2-86b2-db28356fc868", "87279dd4-e100-4b72-a561-49e7effe8238"));
@@ -333,6 +333,17 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(2020, usagePeriods.get(0).intValue());
         assertEquals(2019, usagePeriods.get(1).intValue());
         assertEquals(2010, usagePeriods.get(2).intValue());
+    }
+
+    @Test
+    public void testFindUsagePeriodsByFilterWithBatchAndPeriodFilter() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageBatchesIds(
+            Sets.newHashSet("31ac3937-157b-48c2-86b2-db28356fc868", "87279dd4-e100-4b72-a561-49e7effe8238"));
+        filter.setUsagePeriod(2020);
+        List<Integer> usagePeriods = aaclUsageRepository.findUsagePeriodsByFilter(filter);
+        assertEquals(1, usagePeriods.size());
+        assertEquals(2020, usagePeriods.get(0).intValue());
     }
 
     @Test

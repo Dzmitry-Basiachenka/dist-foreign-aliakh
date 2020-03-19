@@ -736,11 +736,11 @@
     </select>
 
     <select id="findUsagePeriodsByFilter" parameterType="UsageFilter" resultType="int">
-        select distinct ua.usage_period
+        select distinct uaacl.usage_period
         from ${schema}.df_usage u
-        join ${schema}.df_usage_aacl ua on u.df_usage_uid = ua.df_usage_aacl_uid
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
         <include refid="IAaclUsageMapper.aaclUsageFilter"/>
-        order by ua.usage_period desc
+        order by uaacl.usage_period desc
     </select>
 
     <select id="isValidFilteredUsageStatus" parameterType="map" resultType="boolean">
