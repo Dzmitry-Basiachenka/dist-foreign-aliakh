@@ -77,8 +77,8 @@ public class CreateAaclScenarioIntegrationTest {
             buildUsageAge(2019, new BigDecimal("1.00")),
             buildUsageAge(2017, new BigDecimal("0.75"))));
         aaclFields.setPublicationTypes(Arrays.asList(
-            buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "STMA Journal", new BigDecimal("1.24")),
-            buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", new BigDecimal("4.37"))));
+            buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", new BigDecimal("1.24")),
+            buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", new BigDecimal("4.37"))));
         aaclFields.setDetailLicenseeClasses(Arrays.asList(
             buildDetailClass(108, 141),
             buildDetailClass(113, 141),
@@ -101,10 +101,9 @@ public class CreateAaclScenarioIntegrationTest {
         return usageAge;
     }
 
-    private PublicationType buildPublicationType(String id, String name, BigDecimal weight) {
+    private PublicationType buildPublicationType(String id, BigDecimal weight) {
         PublicationType pubType = new PublicationType();
         pubType.setId(id);
-        pubType.setName(name);
         pubType.setWeight(weight);
         return pubType;
     }
