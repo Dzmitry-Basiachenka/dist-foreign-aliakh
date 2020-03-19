@@ -228,6 +228,7 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    @Transactional
     public void addUsagesToScenario(Scenario scenario, UsageFilter filter) {
         aaclUsageRepository.addToScenario(scenario, filter);
         scenario.getAaclFields().getPublicationTypes().forEach(pubType ->
