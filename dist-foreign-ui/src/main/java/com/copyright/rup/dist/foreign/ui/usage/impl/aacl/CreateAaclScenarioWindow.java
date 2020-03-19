@@ -115,9 +115,9 @@ class CreateAaclScenarioWindow extends Window {
         titleCutoffAmountField.setRequiredIndicatorVisible(true);
         scenarioBinder.forField(titleCutoffAmountField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
-            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
-            .withValidator(value -> new AmountValidator(true).isValid(value.toString()),
+            .withValidator(value -> new AmountValidator(true).isValid(value),
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
+            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .bind(scenario -> scenario.getAaclFields().getTitleCutoffAmount(),
                 (Setter<Scenario, BigDecimal>) (scenario, cutoffAmount) ->
                     scenario.getAaclFields().setTitleCutoffAmount(cutoffAmount));

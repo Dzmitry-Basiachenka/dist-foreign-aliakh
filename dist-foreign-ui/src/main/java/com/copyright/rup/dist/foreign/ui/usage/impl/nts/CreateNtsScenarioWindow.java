@@ -107,9 +107,9 @@ class CreateNtsScenarioWindow extends Window {
         rhMinimumAmountField.setRequiredIndicatorVisible(true);
         scenarioBinder.forField(rhMinimumAmountField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
-            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
-            .withValidator(value -> new AmountValidator(true).isValid(value.toString()),
+            .withValidator(value -> new AmountValidator(true).isValid(value),
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
+            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .bind(scenario -> scenario.getNtsFields().getRhMinimumAmount(),
                 (Setter<Scenario, BigDecimal>) (scenario, rhMinimumAmount) ->
                     scenario.getNtsFields().setRhMinimumAmount(rhMinimumAmount));
@@ -138,9 +138,9 @@ class CreateNtsScenarioWindow extends Window {
         amountField.setValue("0");
         fundBinder.forField(amountField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
-            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
-            .withValidator(value -> new AmountValidator(true).isValid(value.toString()),
+            .withValidator(value -> new AmountValidator(true).isValid(value),
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
+            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .bind(getter, setter);
         VaadinUtils.setMaxComponentsWidth(amountField);
         VaadinUtils.addComponentStyle(amountField, fieldId);
