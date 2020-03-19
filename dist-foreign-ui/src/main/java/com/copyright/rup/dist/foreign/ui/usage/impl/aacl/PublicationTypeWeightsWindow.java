@@ -8,16 +8,12 @@ import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.Converter;
-import com.vaadin.data.Result;
-import com.vaadin.data.ValueContext;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -128,18 +124,5 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
         defaultButton.addClickListener(event -> setAppliedParameters(defaultValues));
         defaultButton.setVisible(isEditable);
         return new HorizontalLayout(saveButton, defaultButton, Buttons.createCloseButton(this));
-    }
-
-    private static class BigDecimalConverter implements Converter<String, BigDecimal> {
-
-        @Override
-        public Result<BigDecimal> convertToModel(String value, ValueContext context) {
-            return Result.ok(new BigDecimal(value).setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        @Override
-        public String convertToPresentation(BigDecimal value, ValueContext context) {
-            return String.valueOf(value);
-        }
     }
 }
