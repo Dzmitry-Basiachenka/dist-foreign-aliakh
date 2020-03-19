@@ -17,7 +17,6 @@ import java.util.Objects;
  *
  * @author Ihar Suvorau
  */
-//TODO {isuvorau} apply in AaclUsage
 public class DetailLicenseeClass extends StoredEntity<Integer> {
 
     private String enrollmentProfile;
@@ -31,16 +30,16 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
     }
 
     /**
-     * Copy constructor.
+     * Constructor.
      *
-     * @param clone instance of {@link DetailLicenseeClass} to copy
+     * @param detailLicenseeClass instance of {@link DetailLicenseeClass} to copy
      */
-    public DetailLicenseeClass(DetailLicenseeClass clone) {
-        setId(clone.getId());
-        enrollmentProfile = clone.getEnrollmentProfile();
-        discipline = clone.getDiscipline();
-        AggregateLicenseeClass aggregateLicenseeClassClone = clone.getAggregateLicenseeClass();
-        aggregateLicenseeClass = Objects.nonNull(aggregateLicenseeClassClone)
+    public DetailLicenseeClass(DetailLicenseeClass detailLicenseeClass) {
+        this.setId(detailLicenseeClass.getId());
+        this.enrollmentProfile = detailLicenseeClass.getEnrollmentProfile();
+        this.discipline = detailLicenseeClass.getDiscipline();
+        AggregateLicenseeClass aggregateLicenseeClassClone = detailLicenseeClass.getAggregateLicenseeClass();
+        this.aggregateLicenseeClass = Objects.nonNull(aggregateLicenseeClassClone)
             ? new AggregateLicenseeClass(aggregateLicenseeClassClone)
             : null;
     }

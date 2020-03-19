@@ -14,7 +14,7 @@
 
     <resultMap id="aaclFundPoolDetailResultMap" type="FundPoolDetail" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_fund_pool_detail_uid"/>
-        <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id" javaType="java.lang.Integer"/>
+        <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id"/>
         <result property="aggregateLicenseeClass.discipline" column="discipline"/>
         <result property="aggregateLicenseeClass.enrollmentProfile" column="enrollment_profile"/>
         <result property="grossAmount" column="gross_amount"/>

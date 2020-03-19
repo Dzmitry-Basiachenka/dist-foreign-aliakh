@@ -200,8 +200,7 @@ public class FundPoolRepositoryIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper.readValue(content, new TypeReference<List<FundPoolDetail>>() {
-        });
+        return mapper.readValue(content, new TypeReference<List<FundPoolDetail>>() {});
     }
 
     private void assertFundPool(FundPool fundPool, String id, String productFamily, String name, BigDecimal amount,

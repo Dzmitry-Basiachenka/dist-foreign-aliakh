@@ -60,7 +60,7 @@ public class AaclUsageAgeWeightWindow extends AaclCommonScenarioParameterWindow<
     }
 
     @Override
-    void setDefaultParameters(List<UsageAge> params) {
+    void setDefault(List<UsageAge> params) {
         defaultValues = params;
     }
 

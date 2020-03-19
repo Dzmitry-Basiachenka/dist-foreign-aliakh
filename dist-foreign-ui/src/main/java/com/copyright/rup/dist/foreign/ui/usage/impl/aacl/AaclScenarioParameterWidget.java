@@ -60,7 +60,7 @@ public class AaclScenarioParameterWidget<T> extends HorizontalLayout {
         VaadinUtils.setButtonsAutoDisabled(button);
         button.addClickListener(event -> {
             AaclCommonScenarioParameterWindow<T> parameterWindow = windowSupplier.get();
-            parameterWindow.setDefaultParameters(defaultParametersSupplier.get());
+            parameterWindow.setDefault(defaultParametersSupplier.get());
             parameterWindow.setAppliedParameters(appliedParameters);
             Windows.showModalWindow(parameterWindow);
             parameterWindow.addListener(ParametersSaveEvent.class,

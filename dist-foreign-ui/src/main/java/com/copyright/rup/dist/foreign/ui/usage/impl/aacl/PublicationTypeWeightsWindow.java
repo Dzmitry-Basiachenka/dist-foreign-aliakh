@@ -62,7 +62,7 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
     }
 
     @Override
-    void setDefaultParameters(List<PublicationType> params) {
+    void setDefault(List<PublicationType> params) {
         defaultValues = params;
     }
 

@@ -27,14 +27,14 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
     }
 
     /**
-     * Copy constructor.
+     * Constructor.
      *
-     * @param clone instance of {@link DetailLicenseeClass} to copy
+     * @param aggregateLicenseeClass instance of {@link AggregateLicenseeClass} to copy
      */
-    public AggregateLicenseeClass(AggregateLicenseeClass clone) {
-        this.setId(clone.getId());
-        enrollmentProfile = clone.getEnrollmentProfile();
-        discipline = clone.getDiscipline();
+    public AggregateLicenseeClass(AggregateLicenseeClass aggregateLicenseeClass) {
+        this.setId(aggregateLicenseeClass.getId());
+        enrollmentProfile = aggregateLicenseeClass.getEnrollmentProfile();
+        discipline = aggregateLicenseeClass.getDiscipline();
     }
 
     public String getEnrollmentProfile() {

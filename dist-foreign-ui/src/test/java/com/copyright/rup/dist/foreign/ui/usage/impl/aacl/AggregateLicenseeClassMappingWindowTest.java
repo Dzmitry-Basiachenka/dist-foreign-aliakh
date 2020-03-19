@@ -54,7 +54,7 @@ public class AggregateLicenseeClassMappingWindowTest {
     @Before
     public void setUp() {
         window = new AggregateLicenseeClassMappingWindow(true);
-        window.setDefaultParameters(defaultParams);
+        window.setDefault(defaultParams);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class AggregateLicenseeClassMappingWindowTest {
 
     @Test
     public void testSetDefaultParameters() {
-        window.setDefaultParameters(appliedParams);
+        window.setDefault(appliedParams);
         assertSame(appliedParams, Whitebox.getInternalState(window, "defaultValues"));
     }
 

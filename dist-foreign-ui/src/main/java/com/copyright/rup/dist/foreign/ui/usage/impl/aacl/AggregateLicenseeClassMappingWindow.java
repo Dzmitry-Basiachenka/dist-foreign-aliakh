@@ -55,7 +55,7 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
     }
 
     @Override
-    void setDefaultParameters(List<DetailLicenseeClass> params) {
+    void setDefault(List<DetailLicenseeClass> params) {
         defaultValues = params;
     }
 

@@ -21,7 +21,7 @@ public abstract class AaclCommonScenarioParameterWindow<T> extends Window {
      *
      * @param params to set
      */
-    abstract void setDefaultParameters(T params);
+    abstract void setDefault(T params);
 
     /**
      * Sets applied parameters for the window.

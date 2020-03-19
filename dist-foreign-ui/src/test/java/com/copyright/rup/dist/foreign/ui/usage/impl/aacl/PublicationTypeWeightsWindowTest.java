@@ -64,7 +64,7 @@ public class PublicationTypeWeightsWindowTest {
     @Before
     public void setUp() {
         window = new PublicationTypeWeightsWindow(true);
-        window.setDefaultParameters(defaultParams);
+        window.setDefault(defaultParams);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class PublicationTypeWeightsWindowTest {
 
     @Test
     public void testSetDefaultParameters() {
-        window.setDefaultParameters(appliedParams);
+        window.setDefault(appliedParams);
         assertSame(appliedParams, Whitebox.getInternalState(window, "defaultValues"));
     }
 
