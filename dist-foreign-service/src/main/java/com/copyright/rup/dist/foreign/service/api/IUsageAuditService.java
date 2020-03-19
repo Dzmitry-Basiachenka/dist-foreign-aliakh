@@ -61,7 +61,7 @@ public interface IUsageAuditService {
 
     /**
      * Deletes usage actions by scenario id.
-     * Audit records for {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_EXCLUDED} usages
+     * Audit records for {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED} usages
      * that were excluded from specified scenario also will be deleted.
      *
      * @param scenarioId scenario id

@@ -1607,7 +1607,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-06-13-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for testDeleteByScenarioIdNtsExcluded')
+        comment('Inserting test data for testDeleteByScenarioIdScenarioExcluded')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'fd09c318-75e8-4f4d-b384-8c83e8033e25')

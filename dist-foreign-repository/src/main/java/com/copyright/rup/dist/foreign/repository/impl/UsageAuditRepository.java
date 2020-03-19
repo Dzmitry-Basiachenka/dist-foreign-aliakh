@@ -55,7 +55,7 @@ public class UsageAuditRepository extends BaseRepository implements IUsageAuditR
     public void deleteByScenarioId(String scenarioId) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("scenarioId", Objects.requireNonNull(scenarioId));
-        params.put("status", UsageStatusEnum.NTS_EXCLUDED);
+        params.put("status", UsageStatusEnum.SCENARIO_EXCLUDED);
         delete("IUsageAuditMapper.deleteByScenarioId", params);
     }
 

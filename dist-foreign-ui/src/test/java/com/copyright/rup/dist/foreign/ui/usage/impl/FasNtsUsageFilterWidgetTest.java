@@ -71,7 +71,7 @@ public class FasNtsUsageFilterWidgetTest {
         UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE);
     private static final Set<UsageStatusEnum> NTS_STATUSES = Sets.newHashSet(UsageStatusEnum.NTS_WITHDRAWN,
         UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE,
-        UsageStatusEnum.TO_BE_DISTRIBUTED, UsageStatusEnum.NTS_EXCLUDED);
+        UsageStatusEnum.TO_BE_DISTRIBUTED, UsageStatusEnum.SCENARIO_EXCLUDED);
 
     private IFasNtsUsageFilterController usagesFilterController;
     private FasNtsUsageFilterWidget widget;

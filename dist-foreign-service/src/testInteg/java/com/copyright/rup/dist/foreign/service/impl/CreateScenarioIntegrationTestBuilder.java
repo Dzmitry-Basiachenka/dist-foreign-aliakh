@@ -63,7 +63,7 @@ class CreateScenarioIntegrationTestBuilder {
     private List<String> expectedPreferencesRightholderIds;
     private UsageFilter usageFilter;
     private List<Usage> expectedUsages;
-    private List<Usage> expectedNtsExcludedUsages;
+    private List<Usage> expectedScenarioExcludedUsages;
     private List<Usage> expectedAlreadyInScenarioUsages;
     private Scenario expectedScenario;
 
@@ -94,8 +94,8 @@ class CreateScenarioIntegrationTestBuilder {
         return this;
     }
 
-    CreateScenarioIntegrationTestBuilder expectNtsExcludedUsages(List<Usage> ntsExcludedUsages) {
-        this.expectedNtsExcludedUsages = ntsExcludedUsages;
+    CreateScenarioIntegrationTestBuilder expectScenarioExcludedUsages(List<Usage> scenarioExcludedUsages) {
+        this.expectedScenarioExcludedUsages = scenarioExcludedUsages;
         return this;
     }
 
@@ -116,7 +116,7 @@ class CreateScenarioIntegrationTestBuilder {
         usageFilter = null;
         expectedUsages = null;
         expectedAlreadyInScenarioUsages = null;
-        expectedNtsExcludedUsages = null;
+        expectedScenarioExcludedUsages = null;
         expectedScenario = null;
     }
 
@@ -199,8 +199,8 @@ class CreateScenarioIntegrationTestBuilder {
 
         private void assertUsages() {
             testHelper.assertUsages(expectedUsages);
-            if (Objects.nonNull(expectedNtsExcludedUsages)) {
-                assertNtsExcludedUsages();
+            if (Objects.nonNull(expectedScenarioExcludedUsages)) {
+                assertScenarioExcludedUsages();
             }
             if (Objects.nonNull(expectedAlreadyInScenarioUsages)) {
                 assertAlreadyInScenarioUsages();
@@ -216,13 +216,13 @@ class CreateScenarioIntegrationTestBuilder {
                 });
         }
 
-        private void assertNtsExcludedUsages() {
-            List<Usage> actualNtsExcludedUsages =
-                usageRepository.findByIds(expectedNtsExcludedUsages.stream().map(Usage::getId).collect(
+        private void assertScenarioExcludedUsages() {
+            List<Usage> actualScenarioExcludedUsages =
+                usageRepository.findByIds(expectedScenarioExcludedUsages.stream().map(Usage::getId).collect(
                     Collectors.toList()));
-            assertEquals(expectedNtsExcludedUsages.size(), actualNtsExcludedUsages.size());
-            actualNtsExcludedUsages.forEach(actualUsage -> {
-                assertEquals(UsageStatusEnum.NTS_EXCLUDED, actualUsage.getStatus());
+            assertEquals(expectedScenarioExcludedUsages.size(), actualScenarioExcludedUsages.size());
+            actualScenarioExcludedUsages.forEach(actualUsage -> {
+                assertEquals(UsageStatusEnum.SCENARIO_EXCLUDED, actualUsage.getStatus());
                 assertEquals(0, actualUsage.getServiceFeeAmount().compareTo(BigDecimal.ZERO));
                 assertEquals(0, actualUsage.getNetAmount().compareTo(BigDecimal.ZERO));
                 assertEquals(0, actualUsage.getGrossAmount().compareTo(BigDecimal.ZERO));

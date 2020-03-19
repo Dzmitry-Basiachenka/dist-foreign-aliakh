@@ -186,10 +186,10 @@ public class CreateScenarioIntegrationTest {
                 buildUsage(USAGE_ID_7, 1000024497L, 1000024497L, SERVICE_FEE_32,
                     "68.6421794744", "145.8646313831", "214.5068108575", 145632563L, NTS_PRODUCT_FAMILY,
                     new BigDecimal(REPORTED_VALUE_2), false, false)))
-            .expectNtsExcludedUsages(Arrays.asList(
-                buildNtsExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),
-                buildNtsExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
-                buildNtsExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
+            .expectScenarioExcludedUsages(Arrays.asList(
+                buildScenarioExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),
+                buildScenarioExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
+                buildScenarioExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
             .expectScenario(buildScenario("323.00", "475.00", "152.00", "956.02",
                 buildNtsFields(new BigDecimal("100.00"), new BigDecimal("255.00"), BigDecimal.ZERO,
                     "c7ca1ca1-7cd8-49cc-aaeb-ac53fe62d903")))
@@ -217,10 +217,10 @@ public class CreateScenarioIntegrationTest {
                 buildUsage(USAGE_ID_7, 1000024497L, 1000024497L, SERVICE_FEE_32, "4.3352955458",
                     "461.0315856924", "465.3668812382", 145632563L, NTS_PRODUCT_FAMILY,
                     new BigDecimal(REPORTED_VALUE_2), false, false)))
-            .expectNtsExcludedUsages(Arrays.asList(
-                buildNtsExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),
-                buildNtsExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
-                buildNtsExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
+            .expectScenarioExcludedUsages(Arrays.asList(
+                buildScenarioExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),
+                buildScenarioExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
+                buildScenarioExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
             .expectScenario(buildScenario("1020.9000000000", "1030.5000000000", "9.6000000000", "956.02",
                 buildNtsFields(new BigDecimal("5.00"), BigDecimal.ZERO, new BigDecimal("1000.5"), null)))
             .build()
@@ -250,11 +250,11 @@ public class CreateScenarioIntegrationTest {
         return ntsFields;
     }
 
-    private Usage buildNtsExcludedUsage(String id, Long rhAccountNumber) {
+    private Usage buildScenarioExcludedUsage(String id, Long rhAccountNumber) {
         Usage usage =
             buildUsage(id, rhAccountNumber, null, SERVICE_FEE_32, AMOUNT_ZERO, AMOUNT_ZERO, AMOUNT_ZERO,
                 null, NTS_PRODUCT_FAMILY, null, false, false);
-        usage.setStatus(UsageStatusEnum.NTS_EXCLUDED);
+        usage.setStatus(UsageStatusEnum.SCENARIO_EXCLUDED);
         return usage;
     }
 
