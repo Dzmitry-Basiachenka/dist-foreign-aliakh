@@ -111,7 +111,7 @@ public class FasAuditControllerTest {
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(auditWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
         filter.setStatuses(EnumSet.of(UsageStatusEnum.ELIGIBLE));
-        expect(usageService.getAuditItemsCount(filter)).andReturn(1).once();
+        expect(usageService.getCountForAudit(filter)).andReturn(1).once();
         replay(filterWidget, auditWidget, auditFilterController, usageService);
         assertEquals(1, controller.getSize());
         verify(filterWidget, auditWidget, auditFilterController, usageService);

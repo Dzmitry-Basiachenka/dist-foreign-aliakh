@@ -1,0 +1,32 @@
+[
+  {
+    "id": "49680a3e-2986-44f5-943c-3701d80f2d3d",
+    "batchName": "AACL batch 1 for Audit",
+    "wrWrkInst": 122830309,
+    "systemTitle": "100 ROAD MOVIES",
+    "standardNumber": "1008902112317555XX",
+    "standardNumberType": "STDID",
+    "status": "ELIGIBLE",
+    "productFamily": "AACL",
+    "numberOfCopies": 100,
+    "payeeAccountNumber": 1000011450,
+    "rhAccountNumber": 1000011450,
+    "rhName": "Delmar Learning, a division of Cengage Learning",
+    "payeeName": "Delmar Learning, a division of Cengage Learning",
+    "grossAmount": 500.0000000000,
+    "serviceFeeAmount": 420.0000000000,
+    "netAmount": 80.0000000000,
+    "aaclUsage": {
+      "detailLicenseeClassId": "143",
+      "enrollmentProfile": "EXGP",
+      "discipline": "Engineering",
+      "usagePeriod": 2020,
+      "usageSource": "Aug 2020 TUR",
+      "numberOfPages": 6,
+      "publicationType": {
+        "name": "Consumer Magazine"
+      }
+    },
+    "comment": "AACL usage"
+  }
+]

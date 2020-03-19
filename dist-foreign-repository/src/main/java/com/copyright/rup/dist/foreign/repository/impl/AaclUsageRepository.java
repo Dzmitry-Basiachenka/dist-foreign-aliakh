@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 
@@ -156,6 +157,22 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
+    public List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
+        params.put("pageable", pageable);
+        params.put("sort", sort);
+        return selectList("IAaclUsageMapper.findForAudit", params);
+    }
+
+    @Override
+    public int findCountForAudit(AuditFilter filter) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(1);
+        params.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
+        return selectOne("IAaclUsageMapper.findCountForAudit", params);
+    }
+
+    @Override
     public void updatePublicationTypeWeight(Scenario scenario, String publicationTypeId, BigDecimal weight) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put("scenarioId", Objects.requireNonNull(scenario.getId()));
@@ -163,5 +180,13 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         params.put("weight", Objects.requireNonNull(weight));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(scenario.getUpdateUser()));
         update("IAaclUsageMapper.updatePublicationTypeWeight", params);
+    }
+
+    private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
+        AuditFilter filterCopy = new AuditFilter(auditFilter);
+        filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
+        filterCopy.setDistributionName(escapeSqlLikePattern(filterCopy.getDistributionName()));
+        filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
+        return filterCopy;
     }
 }

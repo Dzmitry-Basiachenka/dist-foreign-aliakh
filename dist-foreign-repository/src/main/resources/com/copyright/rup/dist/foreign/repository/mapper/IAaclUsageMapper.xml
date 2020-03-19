@@ -48,6 +48,8 @@
         <result property="netAmount" column="net_amount"/>
         <result property="payeeAccountNumber" column="payee_account_number"/>
         <result property="payeeName" column="payee_name"/>
+        <result property="periodEndDate" column="period_end_date"/>
+        <result property="scenarioName" column="scenario_name"/>
         <result property="checkNumber" column="check_number"/>
         <result property="checkDate" column="check_date"/>
         <result property="cccEventId" column="ccc_event_id"/>
@@ -110,6 +112,38 @@
         u.record_version
     </sql>
 
+
+    <sql id="selectCountForAuditSql">
+        select
+        <choose>
+            <when test="null != filter.cccEventId || null != filter.distributionName">
+                <include refid="IAaclUsageMapper.selectArchivedCountForAuditSql"/>
+            </when>
+            <otherwise>
+                (select count(1) usage_count
+                from ${schema}.df_usage u
+                join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+                join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+                left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+                <where>
+                    <include refid="IAaclUsageMapper.aaclAuditFilterWhereClause">
+                        <property name="detail_uid" value="u.df_usage_uid"/>
+                    </include>
+                </where>) +
+                <include refid="IAaclUsageMapper.selectArchivedCountForAuditSql"/>
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="selectArchivedCountForAuditSql">
+        (select count(1) usage_count
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_archive_uid = uaacl.df_usage_aacl_uid
+        left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+        <include refid="IAaclUsageMapper.archivedAaclAuditFilterWhereClause"/>)
+    </sql>
+
     <sql id="selectForAuditSql">
         <choose>
             <when test="null != filter.cccEventId || null != filter.distributionName">
@@ -147,17 +181,19 @@
                     uaacl.usage_source,
                     uaacl.number_of_pages,
                     uaacl.detail_licensee_class_id,
+                    pt.name pub_type_name,
                     dlc.discipline,
                     dlc.enrollment_profile
                 from ${schema}.df_usage u
                 join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
                 left join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+                left join ${schema}.df_publication_type pt on uaacl.publication_type_uid = pt.df_publication_type_uid
                 left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
                 left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
                 left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
                 left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
                 <where>
-                    <include refid="IUsageMapper.commonAuditFilterWhereClause">
+                    <include refid="IAaclUsageMapper.aaclAuditFilterWhereClause">
                         <property name="detail_uid" value="u.df_usage_uid"/>
                     </include>
                 </where>
@@ -169,20 +205,23 @@
         <choose>
             <when test="null != sort">
                 <choose>
-                    <when test="sort.property == 'productFamily'">
-                        product_family
-                    </when>
                     <when test="sort.property == 'detailId'">
                         df_usage_uid
+                    </when>
+                    <when test="sort.property == 'baselineId'">
+                        baseline_uid
                     </when>
                     <when test="sort.property == 'status'">
                         status_ind
                     </when>
+                    <when test="sort.property == 'productFamily'">
+                        product_family
+                    </when>
                     <when test="sort.property == 'batchName'">
                         batch_name
                     </when>
-                    <when test="sort.property == 'paymentDate'">
-                        payment_date
+                    <when test="sort.property == 'periodEndDate'">
+                        period_end_date
                     </when>
                     <when test="sort.property == 'rhAccountNumber'">
                         rh_account_number
@@ -202,26 +241,20 @@
                     <when test="sort.property == 'systemTitle'">
                         system_title
                     </when>
-                    <when test="sort.property == 'workTitle'">
-                        work_title
-                    </when>
                     <when test="sort.property == 'standardNumber'">
                         standard_number
                     </when>
                     <when test="sort.property == 'standardNumberType'">
                         standard_number_type
                     </when>
-                    <when test="sort.property == 'reportedValue'">
-                        reported_value
-                    </when>
                     <when test="sort.property == 'grossAmount'">
                         gross_amount
                     </when>
-                    <when test="sort.property == 'batchGrossAmount'">
-                        batch_gross_amount
+                    <when test="sort.property == 'serviceFeeAmount'">
+                        service_fee_amount
                     </when>
-                    <when test="sort.property == 'serviceFee'">
-                        service_fee
+                    <when test="sort.property == 'netAmount'">
+                        net_amount
                     </when>
                     <when test="sort.property == 'scenarioName'">
                         scenario_name
@@ -241,8 +274,23 @@
                     <when test="sort.property == 'distributionDate'">
                         distribution_date
                     </when>
-                    <when test="sort.property == 'periodEndDate'">
-                        period_end_date
+                    <when test="sort.property == 'detailLicenseeClassId'">
+                        detail_licensee_class_id
+                    </when>
+                    <when test="sort.property == 'enrollmentProfile'">
+                        enrollment_profile
+                    </when>
+                    <when test="sort.property == 'discipline'">
+                        discipline
+                    </when>
+                    <when test="sort.property == 'publicationType'">
+                        name
+                    </when>
+                    <when test="sort.property == 'usagePeriod'">
+                        usage_period
+                    </when>
+                    <when test="sort.property == 'usageSource'">
+                        usage_source
                     </when>
                     <when test="sort.property == 'comment'">
                         comment
@@ -290,16 +338,65 @@
             uaacl.usage_source,
             uaacl.number_of_pages,
             uaacl.detail_licensee_class_id,
+            pt.name pub_type_name,
             dlc.discipline,
             dlc.enrollment_profile
         from ${schema}.df_usage_archive u
-        left join ${schema}.df_usage_aacl uaacl on u.df_usage_archive_uid = uaacl.df_usage_aacl_uid
+        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_archive_uid = uaacl.df_usage_aacl_uid
+        left join ${schema}.df_publication_type pt on uaacl.publication_type_uid = pt.df_publication_type_uid
         left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
-        left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
         left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
-        <include refid="IUsageMapper.archivedAuditFilterWhereClause"/>
+        <include refid="IAaclUsageMapper.archivedAaclAuditFilterWhereClause"/>
+    </sql>
+
+    <sql id="archivedAaclAuditFilterWhereClause">
+        <where>
+            <include refid="IAaclUsageMapper.aaclAuditFilterWhereClause">
+                <property name="detail_uid" value="u.df_usage_archive_uid"/>
+            </include>
+            <if test="null != filter.cccEventId">
+                and ccc_event_id ilike '%' || #{filter.cccEventId} || '%'
+            </if>
+            <if test="null != filter.distributionName">
+                and distribution_name ilike '%' || #{filter.distributionName} || '%'
+            </if>
+        </where>
+    </sql>
+
+    <sql id="aaclAuditFilterWhereClause">
+        <if test="!filter.rhAccountNumbers.isEmpty()">
+            u.rh_account_number in
+            <foreach collection="filter.rhAccountNumbers" item="accountNumber" separator="," open="(" close=")">
+                #{accountNumber}
+            </foreach>
+        </if>
+        <if test="!filter.batchesIds.isEmpty()">
+            and ub.df_usage_batch_uid in
+            <foreach collection="filter.batchesIds" item="batchId" separator="," open="(" close=")">
+                #{batchId}
+            </foreach>
+        </if>
+        <if test="!filter.statuses.isEmpty()">
+            and u.status_ind in
+            <foreach collection="filter.statuses" item="status" separator="," open="(" close=")">
+                #{status}
+            </foreach>
+        </if>
+        <if test="null != filter.productFamily">
+            and u.product_family = #{filter.productFamily}
+        </if>
+        <if test="null != filter.usagePeriod">
+            and uaacl.usage_period = #{filter.usagePeriod}
+        </if>
+        <if test="null != filter.searchValue">
+            and (
+            ${detail_uid} like '%' || #{filter.searchValue} || '%' or
+            cast(wr_wrk_inst as text) like '%' || #{filter.searchValue} || '%' or
+            system_title ilike '%' || #{filter.searchValue} || '%')
+        </if>
     </sql>
 
     <sql id="aaclUsageFilter">
@@ -429,6 +526,14 @@
         join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
         <include refid="IAaclUsageMapper.aaclUsageFilter"/>
     </sql>
+
+    <select id="findForAudit" resultMap="aaclUsageDtoResultMap" parameterType="map">
+        <include refid="IAaclUsageMapper.selectForAuditSql"/>
+    </select>
+
+    <select id="findCountForAudit" resultType="int" parameterType="map">
+        <include refid="IAaclUsageMapper.selectCountForAuditSql"/>
+    </select>
 
     <select id="findCountByFilter" parameterType="map" resultType="int">
         <include refid="IAaclUsageMapper.selectCountByFilterSql"/>

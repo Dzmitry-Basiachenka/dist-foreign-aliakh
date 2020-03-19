@@ -115,10 +115,10 @@ public class AaclAuditControllerTest {
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(auditWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
         filter.setStatuses(EnumSet.of(UsageStatusEnum.ELIGIBLE));
-        expect(usageService.getAuditItemsCount(filter)).andReturn(1).once();
-        replay(filterWidget, auditWidget, auditFilterController, usageService);
+        expect(aaclUsageService.getCountForAudit(filter)).andReturn(1).once();
+        replay(filterWidget, auditWidget, auditFilterController, aaclUsageService);
         assertEquals(1, controller.getSize());
-        verify(filterWidget, auditWidget, auditFilterController, usageService);
+        verify(filterWidget, auditWidget, auditFilterController, aaclUsageService);
     }
 
     @Test

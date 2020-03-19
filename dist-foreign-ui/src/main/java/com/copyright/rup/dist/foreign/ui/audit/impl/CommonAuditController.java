@@ -55,12 +55,6 @@ public abstract class CommonAuditController extends CommonController<ICommonAudi
     }
 
     @Override
-    public int getSize() {
-        AuditFilter filter = getFilter();
-        return !filter.isEmpty() ? usageService.getAuditItemsCount(filter) : 0;
-    }
-
-    @Override
     public void showUsageHistory(String usageId, String detailId) {
         Windows.showModalWindow(new UsageHistoryWindow(detailId, usageAuditService.getUsageAudit(usageId)));
     }

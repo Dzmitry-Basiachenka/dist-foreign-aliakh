@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
@@ -14,6 +15,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 
@@ -40,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -67,12 +70,17 @@ public class AaclUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_1 = "0b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_2 = "6c91f04e-60dc-49e0-9cdc-e782e0b923e2";
     private static final String USAGE_ID_3 = "5b41d618-0a2f-4736-bb75-29da627ad677";
+    private static final String USAGE_ID_4 = "f89f016d-0cc7-46b6-9f3f-63d2439458d5";
+    private static final String USAGE_ID_5 = "49680a3e-2986-44f5-943c-3701d80f2d3d";
+    private static final String USAGE_ID_6 = "870ee1dc-8596-409f-8ffe-717d17a33c9e";
     private static final String BATCH_ID_3 = "adcc460c-c4ae-4750-99e8-b9fe91787ce1";
     private static final String SYSTEM_TITLE = "Wissenschaft & Forschung Japan";
     private static final String USER_NAME = "user@mail.com";
     private static final String STANDARD_NUMBER = "2192-3558";
     private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
     private static final String RIGHT_LIMITATION = "ALL";
+    private static final String PERCENT = "%";
+    private static final String UNDERSCORE = "_";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -118,9 +126,9 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
         assertNull(expectedUsage.getAaclUsage().getDiscipline());
         assertNull(expectedUsage.getAaclUsage().getEnrollmentProfile());
-        assertEquals(5, getNumberOfUsagesWithNotEmptyClassificationData());
-        aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
         assertEquals(6, getNumberOfUsagesWithNotEmptyClassificationData());
+        aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
+        assertEquals(7, getNumberOfUsagesWithNotEmptyClassificationData());
         verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
             aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")),
             this::verifyUsage);
@@ -305,13 +313,14 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testFindUsagePeriods() {
         List<Integer> usagePeriods = aaclUsageRepository.findUsagePeriods();
-        assertEquals(6, usagePeriods.size());
+        assertEquals(7, usagePeriods.size());
         assertEquals(2010, usagePeriods.get(0).intValue());
         assertEquals(2015, usagePeriods.get(1).intValue());
         assertEquals(2017, usagePeriods.get(2).intValue());
         assertEquals(2018, usagePeriods.get(3).longValue());
         assertEquals(2019, usagePeriods.get(4).longValue());
         assertEquals(2020, usagePeriods.get(5).longValue());
+        assertEquals(2040, usagePeriods.get(6).longValue());
     }
 
     @Test
@@ -370,6 +379,77 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindForAudit() {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue(USAGE_ID_5);
+        verifyUsageDtosForAudit(loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_audit_usage_dto.json")),
+            aaclUsageRepository.findForAudit(filter, null, null));
+    }
+
+    @Test
+    public void testFindForAuditArchived() {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue(USAGE_ID_6);
+        verifyUsageDtosForAudit(
+            loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_archived_audit_usage_dto.json")),
+            aaclUsageRepository.findForAudit(filter, null, null));
+    }
+
+    @Test
+    public void findAuditByRightsholder() {
+        AuditFilter filter = new AuditFilter();
+        filter.setRhAccountNumbers(Sets.newHashSet(1000000027L));
+        assertEquals(1, aaclUsageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = aaclUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, "f89f016d-0cc7-46b6-9f3f-63d2439458d5");
+    }
+
+    @Test
+    public void testFindForAuditByBatch() {
+        AuditFilter filter = new AuditFilter();
+        filter.setBatchesIds(Collections.singleton("9e0f99e4-1e95-488d-a0c5-ff1353c84e39"));
+        assertEquals(3, aaclUsageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = aaclUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, USAGE_ID_5, USAGE_ID_4, USAGE_ID_6);
+    }
+
+    @Test
+    public void testFindForAuditByStatus() {
+        AuditFilter filter = new AuditFilter();
+        filter.setStatuses(EnumSet.of(UsageStatusEnum.PAID));
+        assertEquals(1, aaclUsageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = aaclUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, USAGE_ID_6);
+    }
+
+    @Test
+    public void testFindForAuditByPeriodDate() {
+        assertFindForAuditSearchByPeriodDate(2020, USAGE_ID_4, USAGE_ID_5);
+    }
+
+    @Test
+    public void testFindForAuditSearchByCccEventId() {
+        assertFindForAuditSearchByCccEventId("53257", USAGE_ID_6);
+        assertFindForAuditSearchByCccEventId(PERCENT);
+        assertFindForAuditSearchByCccEventId(UNDERSCORE);
+    }
+
+    @Test
+    public void testFindForAuditSearchByDistributionName() {
+        assertFindForAuditSearchByDistributionName("AACL_March_40", USAGE_ID_6);
+        assertFindForAuditSearchByDistributionName(PERCENT);
+        assertFindForAuditSearchByDistributionName(UNDERSCORE, USAGE_ID_6);
+    }
+
+    @Test
+    public void testFindForAuditWithSearch() {
+        assertFindForAuditSearch(USAGE_ID_4, USAGE_ID_4);
+        assertFindForAuditSearch("122830309", USAGE_ID_5);
+        assertFindForAuditSearch(PERCENT);
+        assertFindForAuditSearch(UNDERSCORE);
+    }
+
+    @Test
     public void testUpdatePublicationTypeWeight() {
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID_2);
@@ -387,6 +467,51 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(usage1.getAaclUsage().getPublicationTypeWeight());
         assertEquals(new BigDecimal("10.12"), usage2.getAaclUsage().getPublicationTypeWeight());
         assertEquals(new BigDecimal("1.71"), usage3.getAaclUsage().getPublicationTypeWeight());
+    }
+
+    private void assertFindForAuditSearch(String searchValue, String... usageIds) {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue(searchValue);
+        assertEquals(usageIds.length, aaclUsageRepository.findCountForAudit(filter));
+        verifyUsageDtos(aaclUsageRepository.findForAudit(filter, null, null), usageIds);
+    }
+
+    private void assertFindForAuditSearchByPeriodDate(int periodDate, String... usageIds) {
+        AuditFilter filter = new AuditFilter();
+        filter.setProductFamily("AACL");
+        filter.setBatchesIds(Collections.singleton("9e0f99e4-1e95-488d-a0c5-ff1353c84e39"));
+        filter.setUsagePeriod(periodDate);
+        assertEquals(usageIds.length, aaclUsageRepository.findCountForAudit(filter));
+        verifyUsageDtos(aaclUsageRepository.findForAudit(filter, null, null), usageIds);
+    }
+
+    private void assertFindForAuditSearchByCccEventId(String cccEventId, String... usageIds) {
+        AuditFilter filter = new AuditFilter();
+        filter.setCccEventId(cccEventId);
+        assertEquals(usageIds.length, aaclUsageRepository.findCountForAudit(filter));
+        verifyUsageDtos(aaclUsageRepository.findForAudit(filter, null, null), usageIds);
+    }
+
+    private void assertFindForAuditSearchByDistributionName(String distributionName, String... usageIds) {
+        AuditFilter filter = new AuditFilter();
+        filter.setDistributionName(distributionName);
+        assertEquals(usageIds.length, aaclUsageRepository.findCountForAudit(filter));
+        verifyUsageDtos(aaclUsageRepository.findForAudit(filter, null, null), usageIds);
+    }
+
+    private void verifyUsageDtos(List<UsageDto> usageDtos, String... usageIds) {
+        assertNotNull(usageDtos);
+        usageDtos.sort(Comparator.comparing(UsageDto::getId));
+        Arrays.sort(usageIds);
+        verifyUsageDtosInExactOrder(usageDtos, usageIds);
+    }
+
+    private void verifyUsageDtosInExactOrder(List<UsageDto> usageDtos, String... expectedIds) {
+        assertNotNull(usageDtos);
+        List<String> actualIds = usageDtos.stream()
+            .map(UsageDto::getId)
+            .collect(Collectors.toList());
+        assertEquals(Arrays.asList(expectedIds), actualIds);
     }
 
     private void verifyUsages(List<String> expectedUsageJsonFiles, List<Usage> actualUsages,
@@ -413,7 +538,7 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
             actualUsage.getRightsholder().getAccountNumber());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-        verifytAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
+        verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
     }
 
     private void verifyUsageDtos(List<String> expectedUsageJsonFiles, List<UsageDto> actualUsages) {
@@ -433,10 +558,10 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
         assertEquals(expectedUsage.getRhName(), actualUsage.getRhName());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-        verifytAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
+        verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
     }
 
-    private void verifytAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
+    private void verifyAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
         assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
         assertEquals(expectedAaclUsage.getPublicationType().getId(), actualAaclUsage.getPublicationType().getId());
         assertEquals(expectedAaclUsage.getPublicationType().getName(), actualAaclUsage.getPublicationType().getName());
@@ -505,5 +630,42 @@ public class AaclUsageRepositoryIntegrationTest {
         usage.setWrWrkInst(123456789L);
         usage.setComment("updated comment for AACL classified usage 1");
         return usage;
+    }
+
+    private void verifyUsageDtosForAudit(List<UsageDto> expectedUsages, List<UsageDto> actualUsages) {
+        assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
+        IntStream.range(0, expectedUsages.size())
+            .forEach(index -> verifyUsageDtoForAudit(expectedUsages.get(index), actualUsages.get(index)));
+    }
+
+    private void verifyUsageDtoForAudit(UsageDto expectedUsage, UsageDto actualUsage) {
+        assertEquals(expectedUsage.getId(), actualUsage.getId());
+        assertEquals(expectedUsage.getBatchName(), actualUsage.getBatchName());
+        assertEquals(expectedUsage.getPaymentDate(), actualUsage.getPaymentDate());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+        assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
+        assertEquals(expectedUsage.getRhName(), actualUsage.getRhName());
+        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
+        assertEquals(expectedUsage.getPayeeAccountNumber(), actualUsage.getPayeeAccountNumber());
+        assertEquals(expectedUsage.getPayeeName(), actualUsage.getPayeeName());
+        assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+        assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
+        assertEquals(expectedUsage.getBatchGrossAmount(), actualUsage.getBatchGrossAmount());
+        assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+        assertEquals(expectedUsage.getScenarioName(), actualUsage.getScenarioName());
+        assertEquals(expectedUsage.getCheckNumber(), actualUsage.getCheckNumber());
+        assertEquals(expectedUsage.getCheckDate(), actualUsage.getCheckDate());
+        assertEquals(expectedUsage.getCccEventId(), actualUsage.getCccEventId());
+        assertEquals(expectedUsage.getDistributionName(), actualUsage.getDistributionName());
+        assertEquals(expectedUsage.getDistributionDate(), actualUsage.getDistributionDate());
+        assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        assertNotNull(expectedUsage.getUpdateDate());
+        verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
     }
 }

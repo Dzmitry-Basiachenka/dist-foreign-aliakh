@@ -277,7 +277,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     public void writeAuditAaclCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
         parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
-        writeCsvReportByParts("IReportMapper.findUsagesCountForAudit", "IReportMapper.findAuditAaclReportDtos",
+        writeCsvReportByParts("IReportMapper.findAaclUsagesCountForAudit", "IReportMapper.findAuditAaclReportDtos",
             parameters, !Objects.requireNonNull(filter).isEmpty(),
             () -> new AuditAaclCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
