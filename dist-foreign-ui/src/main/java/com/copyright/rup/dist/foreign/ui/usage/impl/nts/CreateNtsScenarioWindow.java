@@ -88,8 +88,9 @@ class CreateNtsScenarioWindow extends Window {
 
     private void initScenarioNameField() {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
+        scenarioNameField.setRequiredIndicatorVisible(true);
         scenarioBinder.forField(scenarioNameField)
-            .asRequired(ForeignUi.getMessage("field.error.empty"))
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.scenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Scenario"))
