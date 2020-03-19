@@ -80,8 +80,9 @@ class CreateAdditionalFundWindow extends Window {
 
     private void initPreServiceFeeFundNameField() {
         fundNameField = new TextField(ForeignUi.getMessage("field.fund_name"));
+        fundNameField.setRequiredIndicatorVisible(true);
         binder.forField(fundNameField)
-            .asRequired(ForeignUi.getMessage("field.error.empty"))
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.additionalFundExists(StringUtils.trim(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Fund"))
