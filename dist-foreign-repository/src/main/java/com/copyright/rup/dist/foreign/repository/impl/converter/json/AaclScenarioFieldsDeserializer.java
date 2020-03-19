@@ -29,7 +29,7 @@ public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> 
     private static final String FUND_POOL_ID = "fund_pool_uid";
     private static final String PUBLICATION_TYPES = "publicationTypes";
     private static final String USAGE_AGES = "usageAges";
-    private static final String NAME = "name";
+    private static final String ID = "id";
     private static final String PERIOD = "period";
     private static final String WEIGHT = "weight";
     private static final String DETAIL_LICENSEE_CLASSES = "detailLicenseeClasses";
@@ -71,8 +71,8 @@ public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> 
             if (JsonToken.START_OBJECT == jp.currentToken()) {
                 pubType = new PublicationType();
                 pubTypes.add(pubType);
-            } else if (JsonToken.VALUE_STRING == jp.currentToken() && NAME.equals(jp.getCurrentName())) {
-                pubType.setName(jp.getValueAsString());
+            } else if (JsonToken.VALUE_STRING == jp.currentToken() && ID.equals(jp.getCurrentName())) {
+                pubType.setId(jp.getValueAsString());
             } else if (JsonToken.VALUE_NUMBER_FLOAT == jp.currentToken() && WEIGHT.equals(jp.getCurrentName())) {
                 pubType.setWeight(jp.getDecimalValue());
             }

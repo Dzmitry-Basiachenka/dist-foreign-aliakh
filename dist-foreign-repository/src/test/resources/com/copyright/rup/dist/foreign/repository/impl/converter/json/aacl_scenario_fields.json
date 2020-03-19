@@ -3,23 +3,23 @@
   "fund_pool_uid": "8ab155cb-c96d-4355-9f37-12d26ef4d765",
   "publicationTypes": [
     {
-      "name": "Book",
+      "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
       "weight": 1.00
     },
     {
-      "name": "Business or Trade Journal",
+      "id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199",
       "weight": 1.50
     },
     {
-      "name": "Consumer Magazine",
+      "id": "46634907-882e-4f91-b1ad-f57db945aff7",
       "weight": 1.00
     },
     {
-      "name": "News Source",
+      "id": "a3dff475-fc06-4d8c-b7cc-f093073ada6f",
       "weight": 4.00
     },
     {
-      "name": "STMA Journal",
+      "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
       "weight": 1.10
     }
   ],

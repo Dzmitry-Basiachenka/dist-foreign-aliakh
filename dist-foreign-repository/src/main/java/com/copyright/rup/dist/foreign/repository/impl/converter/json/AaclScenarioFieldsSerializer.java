@@ -39,7 +39,7 @@ public class AaclScenarioFieldsSerializer extends StdSerializer<AaclFields> {
         List<PublicationType> publicationTypes = aaclFields.getPublicationTypes();
         for (PublicationType publicationType : publicationTypes) {
             jg.writeStartObject();
-            jg.writeStringField("name", publicationType.getName());
+            jg.writeStringField("id", publicationType.getId());
             jg.writeNumberField("weight", publicationType.getWeight());
             jg.writeEndObject();
         }
