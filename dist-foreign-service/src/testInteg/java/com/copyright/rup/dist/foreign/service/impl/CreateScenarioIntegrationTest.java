@@ -37,7 +37,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=create-scenario-service-data-init.groovy"})
+@TestPropertySource(properties = {"test.liquibase.changelog=create-scenario-data-init.groovy"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Transactional
 public class CreateScenarioIntegrationTest {
