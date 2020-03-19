@@ -102,7 +102,7 @@ public class AaclScenarioFieldsTypeHandlerTest {
         AaclFields aaclFields = new AaclFields();
         ArrayList<PublicationType> pubTypes = new ArrayList<>();
         PublicationType pubType = new PublicationType();
-        pubType.setName("Book");
+        pubType.setId("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e");
         pubType.setWeight(new BigDecimal("1.00"));
         pubTypes.add(pubType);
         aaclFields.setPublicationTypes(pubTypes);

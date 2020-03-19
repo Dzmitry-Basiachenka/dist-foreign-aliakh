@@ -86,6 +86,7 @@ public class PublicationType extends StoredEntity<String> {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+            .appendSuper(super.toString())
             .append("name", name)
             .append("weight", weight)
             .toString();

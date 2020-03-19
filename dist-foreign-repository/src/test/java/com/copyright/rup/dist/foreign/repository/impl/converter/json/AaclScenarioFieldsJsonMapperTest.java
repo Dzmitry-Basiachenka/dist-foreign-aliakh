@@ -43,11 +43,11 @@ public class AaclScenarioFieldsJsonMapperTest {
         List<PublicationType> pubTypes = aaclFields.getPublicationTypes();
         assertNotNull(pubTypes);
         assertEquals(5, pubTypes.size());
-        assertEquals(buildPublicationType("Book", ONE), pubTypes.get(0));
-        assertEquals(buildPublicationType("Business or Trade Journal", "1.50"), pubTypes.get(1));
-        assertEquals(buildPublicationType("Consumer Magazine", ONE), pubTypes.get(2));
-        assertEquals(buildPublicationType("News Source", "4.00"), pubTypes.get(3));
-        assertEquals(buildPublicationType("STMA Journal", "1.10"), pubTypes.get(4));
+        assertEquals(buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", ONE), pubTypes.get(0));
+        assertEquals(buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "1.50"), pubTypes.get(1));
+        assertEquals(buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", ONE), pubTypes.get(2));
+        assertEquals(buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "4.00"), pubTypes.get(3));
+        assertEquals(buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "1.10"), pubTypes.get(4));
         List<UsageAge> usageAges = aaclFields.getUsageAges();
         assertEquals(5, CollectionUtils.size(usageAges));
         assertEquals(buildUsageAge(2020, ONE), usageAges.get(0));
@@ -65,11 +65,11 @@ public class AaclScenarioFieldsJsonMapperTest {
         aaclFields.setFundPoolId("8ab155cb-c96d-4355-9f37-12d26ef4d765");
         List<PublicationType> pubTypes = aaclFields.getPublicationTypes();
         aaclFields.setPublicationTypes(pubTypes);
-        pubTypes.add(buildPublicationType("Book", ONE));
-        pubTypes.add(buildPublicationType("Business or Trade Journal", "1.50"));
-        pubTypes.add(buildPublicationType("Consumer Magazine", ONE));
-        pubTypes.add(buildPublicationType("News Source", "4.00"));
-        pubTypes.add(buildPublicationType("STMA Journal", "1.10"));
+        pubTypes.add(buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", ONE));
+        pubTypes.add(buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "1.50"));
+        pubTypes.add(buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", ONE));
+        pubTypes.add(buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "4.00"));
+        pubTypes.add(buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "1.10"));
         List<UsageAge> usageAges = aaclFields.getUsageAges();
         usageAges.add(buildUsageAge(2020, ONE));
         usageAges.add(buildUsageAge(2019, "0.75"));
@@ -141,9 +141,9 @@ public class AaclScenarioFieldsJsonMapperTest {
         assertEquals(buildDetailLicenseeClass(232, 232), detailLicenseeClasses.get(35));
     }
 
-    private PublicationType buildPublicationType(String name, String weight) {
+    private PublicationType buildPublicationType(String id, String weight) {
         PublicationType pubType = new PublicationType();
-        pubType.setName(name);
+        pubType.setId(id);
         pubType.setWeight(new BigDecimal(weight));
         return pubType;
     }

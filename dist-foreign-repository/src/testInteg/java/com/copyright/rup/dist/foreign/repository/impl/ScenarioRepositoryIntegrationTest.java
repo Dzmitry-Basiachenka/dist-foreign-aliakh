@@ -372,11 +372,11 @@ public class ScenarioRepositoryIntegrationTest {
         aaclFields.setFundPoolId("95faddb9-27b6-422e-9de8-01f3aaa9c64d");
         List<PublicationType> pubTypes = new ArrayList<>();
         aaclFields.setPublicationTypes(pubTypes);
-        pubTypes.add(buildPublicationType("Book", ONE));
-        pubTypes.add(buildPublicationType("Business or Trade Journal", "1.50"));
-        pubTypes.add(buildPublicationType("Consumer Magazine", ONE));
-        pubTypes.add(buildPublicationType("News Source", "4.00"));
-        pubTypes.add(buildPublicationType("STMA Journal", "1.10"));
+        pubTypes.add(buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", ONE));
+        pubTypes.add(buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "1.50"));
+        pubTypes.add(buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", ONE));
+        pubTypes.add(buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "4.00"));
+        pubTypes.add(buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "1.10"));
         scenarioRepository.insert(scenario);
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
@@ -537,9 +537,9 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
     }
 
-    private PublicationType buildPublicationType(String name, String weight) {
+    private PublicationType buildPublicationType(String id, String weight) {
         PublicationType pubType = new PublicationType();
-        pubType.setName(name);
+        pubType.setId(id);
         pubType.setWeight(new BigDecimal(weight));
         return pubType;
     }
