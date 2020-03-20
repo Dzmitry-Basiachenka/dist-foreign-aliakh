@@ -141,6 +141,15 @@ public interface IAaclUsageRepository {
     void deleteByBatchId(String batchId);
 
     /**
+     * Finds whether there are usages that match {@link UsageFilter} and have the given Detail Licensee Class.
+     *
+     * @param filter                {@link UsageFilter} instance
+     * @param detailLicenseeClassId Detail Licensee Class id
+     * @return {@code true} if such usages exist, {@code false} otherwise
+     */
+    boolean usagesExistByDetailLicenseeClassAndFilter(UsageFilter filter, Integer detailLicenseeClassId);
+
+    /**
      * Attaches usages to scenario.
      *
      * @param scenario {@link Scenario} to add usages to

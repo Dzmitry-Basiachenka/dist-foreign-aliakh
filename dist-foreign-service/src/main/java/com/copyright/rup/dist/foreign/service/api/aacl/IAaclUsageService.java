@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.service.api.aacl;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -156,4 +158,15 @@ public interface IAaclUsageService {
      * @param filter   {@link UsageFilter} instance
      */
     void addUsagesToScenario(Scenario scenario, UsageFilter filter);
+
+    /**
+     * Gets aggregate licensee classes that have money that can't be distributed.
+     *
+     * @param fundPoolId fund pool id
+     * @param filter     {@link UsageFilter} instance
+     * @param mapping    {@link DetailLicenseeClass} to {@link AggregateLicenseeClass} mapping
+     * @return list of {@link AggregateLicenseeClass}es
+     */
+    List<AggregateLicenseeClass> getAggregateLicenseeClassesWithoutUsages(String fundPoolId, UsageFilter filter,
+                                                                          List<DetailLicenseeClass> mapping);
 }

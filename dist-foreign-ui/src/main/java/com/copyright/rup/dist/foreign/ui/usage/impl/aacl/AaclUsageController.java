@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
@@ -205,6 +206,13 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Override
     public List<String> getProcessingBatchesNames(Set<String> batchesIds) {
         return getUsageBatchService().getProcessingAaclBatchesNames(batchesIds);
+    }
+
+    @Override
+    public List<AggregateLicenseeClass> getAggregateLicenseeClassesWithoutUsages(String fundPoolId,
+                                                                                 List<DetailLicenseeClass> mapping) {
+        return aaclUsageService.getAggregateLicenseeClassesWithoutUsages(fundPoolId,
+            getUsageFilterController().getWidget().getAppliedFilter(), mapping);
     }
 
     @Override

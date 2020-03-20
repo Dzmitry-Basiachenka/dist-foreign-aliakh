@@ -20,6 +20,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
@@ -391,6 +392,22 @@ public class AaclUsageControllerTest {
         replay(licenseeClassService);
         assertEquals(detailLicenseeClasses, controller.getDetailLicenseeClasses());
         verify(licenseeClassService);
+    }
+
+    @Test
+    public void testGetAggregateLicenseeClassesWithoutUsages() {
+        List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        List<AggregateLicenseeClass> aggregateLicenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(
+            aaclUsageService.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, usageFilter, detailLicenseeClasses))
+            .andReturn(aggregateLicenseeClasses)
+            .once();
+        replay(aaclUsageService, filterWidgetMock, filterController);
+        assertEquals(aggregateLicenseeClasses,
+            controller.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, detailLicenseeClasses));
+        verify(aaclUsageService, filterWidgetMock, filterController);
     }
 
     private UsageAge buildUsageAge(Integer period, BigDecimal weight) {

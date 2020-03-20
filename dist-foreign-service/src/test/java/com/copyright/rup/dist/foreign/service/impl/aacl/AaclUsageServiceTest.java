@@ -17,6 +17,9 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
@@ -29,6 +32,8 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
@@ -68,22 +73,51 @@ public class AaclUsageServiceTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "eef46972-c381-4cb6-ab0a-c3e537ba708a";
     private static final String USAGE_ID = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
+    private static final String FUND_POOL_ID = "9a71a608-d6a5-4783-b6a2-9665d6ba7d45";
+    private static final AggregateLicenseeClass ALC_1 = buildAggregateLicenseeClass(108);
+    private static final AggregateLicenseeClass ALC_2 = buildAggregateLicenseeClass(110);
+    private static final AggregateLicenseeClass ALC_3 = buildAggregateLicenseeClass(113);
+    private static final AggregateLicenseeClass ALC_4 = buildAggregateLicenseeClass(115);
+    private static final DetailLicenseeClass DLC_1 = buildDetailLicenseeClass(141, ALC_1);
+    private static final DetailLicenseeClass DLC_2 = buildDetailLicenseeClass(143, ALC_1);
+    private static final DetailLicenseeClass DLC_3 = buildDetailLicenseeClass(145, ALC_2);
+    private static final DetailLicenseeClass DLC_4 = buildDetailLicenseeClass(146, ALC_3);
+
 
     private final AaclUsageService aaclUsageService = new AaclUsageService();
 
     private IUsageAuditService usageAuditService;
+    private IFundPoolService fundPoolService;
+    private ILicenseeClassService licenseeClassService;
     private IAaclUsageRepository aaclUsageRepository;
     private IChainExecutor<Usage> chainExecutor;
 
     @Rule
     private final ExpectedException exception = ExpectedException.none();
 
+    private static AggregateLicenseeClass buildAggregateLicenseeClass(Integer id) {
+        AggregateLicenseeClass alc = new AggregateLicenseeClass();
+        alc.setId(id);
+        return alc;
+    }
+
+    private static DetailLicenseeClass buildDetailLicenseeClass(Integer id, AggregateLicenseeClass alc) {
+        DetailLicenseeClass dlc = new DetailLicenseeClass();
+        dlc.setId(id);
+        dlc.setAggregateLicenseeClass(alc);
+        return dlc;
+    }
+
     @Before
     public void setUp() {
         usageAuditService = createMock(IUsageAuditService.class);
+        fundPoolService = createMock(IFundPoolService.class);
+        licenseeClassService = createMock(ILicenseeClassService.class);
         aaclUsageRepository = createMock(IAaclUsageRepository.class);
         chainExecutor = createMock(IChainExecutor.class);
         Whitebox.setInternalState(aaclUsageService, usageAuditService);
+        Whitebox.setInternalState(aaclUsageService, fundPoolService);
+        Whitebox.setInternalState(aaclUsageService, licenseeClassService);
         Whitebox.setInternalState(aaclUsageService, aaclUsageRepository);
         Whitebox.setInternalState(aaclUsageService, chainExecutor);
         Whitebox.setInternalState(aaclUsageService, "usagesBatchSize", 100);
@@ -340,6 +374,94 @@ public class AaclUsageServiceTest {
         verify(aaclUsageRepository);
     }
 
+    @Test
+    public void testGetAggregateLicenseeClassesWithoutUsagesWithAllValid() {
+        List<DetailLicenseeClass> classes = Arrays.asList(DLC_1, DLC_2, DLC_3, DLC_4);
+        List<FundPoolDetail> fundPoolDetails = Arrays.asList(
+            buildFundPoolDetail(ALC_1, BigDecimal.TEN),
+            buildFundPoolDetail(ALC_2, BigDecimal.TEN),
+            buildFundPoolDetail(ALC_3, BigDecimal.ZERO),
+            buildFundPoolDetail(ALC_4, BigDecimal.ZERO));
+        UsageFilter usageFilter = new UsageFilter();
+        expect(licenseeClassService.getAggregateLicenseeClasses())
+            .andReturn(Arrays.asList(ALC_1, ALC_2, ALC_3, ALC_4)).once();
+        expect(fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 141)).andReturn(false).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 143)).andReturn(true).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 145)).andReturn(true).once();
+        replay(licenseeClassService, fundPoolService, aaclUsageRepository);
+        List<AggregateLicenseeClass> result =
+            aaclUsageService.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, usageFilter, classes);
+        verify(licenseeClassService, fundPoolService, aaclUsageRepository);
+        assertEquals(Collections.emptyList(), result);
+    }
+
+    @Test
+    public void testGetAggregateLicenseeClassesWithoutUsagesWithUnmapped() {
+        List<DetailLicenseeClass> classes = Arrays.asList(DLC_1, DLC_2, DLC_3, DLC_4);
+        List<FundPoolDetail> fundPoolDetails = Arrays.asList(
+            buildFundPoolDetail(ALC_1, BigDecimal.TEN),
+            buildFundPoolDetail(ALC_2, BigDecimal.TEN),
+            buildFundPoolDetail(ALC_3, BigDecimal.ZERO),
+            buildFundPoolDetail(ALC_4, BigDecimal.TEN));
+        UsageFilter usageFilter = new UsageFilter();
+        expect(licenseeClassService.getAggregateLicenseeClasses())
+            .andReturn(Arrays.asList(ALC_1, ALC_2, ALC_3, ALC_4)).once();
+        expect(fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 141)).andReturn(false).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 143)).andReturn(true).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 145)).andReturn(true).once();
+        replay(licenseeClassService, fundPoolService, aaclUsageRepository);
+        List<AggregateLicenseeClass> result =
+            aaclUsageService.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, usageFilter, classes);
+        verify(licenseeClassService, fundPoolService, aaclUsageRepository);
+        assertEquals(Collections.singletonList(ALC_4), result);
+    }
+
+    @Test
+    public void testGetAggregateLicenseeClassesWithoutUsagesWithNoUsages() {
+        List<DetailLicenseeClass> classes = Arrays.asList(DLC_1, DLC_2, DLC_3, DLC_4);
+        List<FundPoolDetail> fundPoolDetails = Arrays.asList(
+            buildFundPoolDetail(ALC_1, BigDecimal.TEN),
+            buildFundPoolDetail(ALC_2, BigDecimal.TEN),
+            buildFundPoolDetail(ALC_3, BigDecimal.ZERO),
+            buildFundPoolDetail(ALC_4, BigDecimal.ZERO));
+        UsageFilter usageFilter = new UsageFilter();
+        expect(licenseeClassService.getAggregateLicenseeClasses())
+            .andReturn(Arrays.asList(ALC_1, ALC_2, ALC_3, ALC_4)).once();
+        expect(fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 141)).andReturn(false).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 143)).andReturn(true).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 145)).andReturn(false).once();
+        replay(licenseeClassService, fundPoolService, aaclUsageRepository);
+        List<AggregateLicenseeClass> result =
+            aaclUsageService.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, usageFilter, classes);
+        verify(licenseeClassService, fundPoolService, aaclUsageRepository);
+        assertEquals(Collections.singletonList(ALC_2), result);
+    }
+
+    @Test
+    public void testGetAggregateLicenseeClassesWithoutUsagesWithUnmappedAndNoUsages() {
+        List<DetailLicenseeClass> classes = Arrays.asList(DLC_1, DLC_2, DLC_3, DLC_4);
+        List<FundPoolDetail> fundPoolDetails = Arrays.asList(
+            buildFundPoolDetail(ALC_1, BigDecimal.TEN),
+            buildFundPoolDetail(ALC_2, BigDecimal.TEN),
+            buildFundPoolDetail(ALC_3, BigDecimal.ZERO),
+            buildFundPoolDetail(ALC_4, BigDecimal.TEN));
+        UsageFilter usageFilter = new UsageFilter();
+        expect(licenseeClassService.getAggregateLicenseeClasses())
+            .andReturn(Arrays.asList(ALC_1, ALC_2, ALC_3, ALC_4)).once();
+        expect(fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 141)).andReturn(false).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 143)).andReturn(true).once();
+        expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 145)).andReturn(false).once();
+        replay(licenseeClassService, fundPoolService, aaclUsageRepository);
+        List<AggregateLicenseeClass> result =
+            aaclUsageService.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, usageFilter, classes);
+        verify(licenseeClassService, fundPoolService, aaclUsageRepository);
+        assertEquals(Arrays.asList(ALC_2, ALC_4), result);
+    }
+
     private UsageBatch buildUsageBatch() {
         UsageBatch batch = new UsageBatch();
         batch.setId(BATCH_ID);
@@ -372,5 +494,12 @@ public class AaclUsageServiceTest {
         pubType.setId(id);
         pubType.setWeight(weight);
         return pubType;
+    }
+
+    private FundPoolDetail buildFundPoolDetail(AggregateLicenseeClass alc, BigDecimal amount) {
+        FundPoolDetail detail = new FundPoolDetail();
+        detail.setAggregateLicenseeClass(alc);
+        detail.setGrossAmount(amount);
+        return detail;
     }
 }

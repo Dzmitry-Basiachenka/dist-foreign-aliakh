@@ -148,6 +148,14 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
+    public boolean usagesExistByDetailLicenseeClassAndFilter(UsageFilter filter, Integer detailLicenseeClassId) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(FILTER_KEY, Objects.requireNonNull(filter));
+        params.put("detailLicenseeClassId", Objects.requireNonNull(detailLicenseeClassId));
+        return selectOne("IAaclUsageMapper.usagesExistByDetailLicenseeClassAndFilter", params);
+    }
+
+    @Override
     public void addToScenario(Scenario scenario, UsageFilter filter) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("scenarioId", Objects.requireNonNull(scenario.getId()));

@@ -815,4 +815,15 @@
             and uaacl.publication_type_uid = #{publicationTypeId}
             and uaacl.baseline_uid is null
     </update>
+
+    <select id="usagesExistByDetailLicenseeClassAndFilter" parameterType="map" resultType="boolean">
+        select exists (
+            select 1
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+            <include refid="IAaclUsageMapper.aaclUsageFilter"/>
+                and uaacl.detail_licensee_class_id = #{detailLicenseeClassId}
+                and u.df_scenario_uid is null
+        )
+    </select>
 </mapper>
