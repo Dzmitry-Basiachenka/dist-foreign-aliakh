@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -187,9 +188,9 @@ class CreateAaclScenarioWindow extends Window {
                 controller.getAggregateLicenseeClassesWithoutUsages(aaclFields.getFundPoolId(),
                     aaclFields.getDetailLicenseeClasses());
             if (CollectionUtils.isEmpty(aggregateClassesWithoutUsages)) {
-                // TODO {srudak} fire ScenarioCreatedEvent
-                controller.createAaclScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()), aaclFields,
-                    StringUtils.trimToEmpty(descriptionArea.getValue()));
+                fireEvent(new ScenarioCreateEvent(this,
+                    controller.createAaclScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()), aaclFields,
+                        StringUtils.trimToEmpty(descriptionArea.getValue()))));
                 close();
             } else {
                 List<String> formattedAggregateClasses = aggregateClassesWithoutUsages.stream()

@@ -1,25 +1,35 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -29,11 +39,16 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,13 +61,20 @@ import java.util.stream.Collectors;
  *
  * @author Stanislau Rudak
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Windows.class})
 public class CreateAaclScenarioWindowTest {
 
     private static final String DATE =
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String SCENARIO_NAME = "AACL Distribution " + DATE;
     private static final String AACL_PRODUCT_FAMILY = "AACL";
+    private static final String FUND_POOL_ID = "eb9ce57e-af7e-4f57-b7cb-66db7e24b553";
     private FundPool fundPool;
+    private UsageAge usageAge;
+    private PublicationType publicationType;
+    private DetailLicenseeClass detailLicenseeClass;
+    private AggregateLicenseeClass aggregateLicenseeClass;
 
     private IAaclUsageController controller;
     private CreateAaclScenarioWindow window;
@@ -61,13 +83,28 @@ public class CreateAaclScenarioWindowTest {
     public void setUp() {
         controller = createMock(IAaclUsageController.class);
         fundPool = new FundPool();
+        fundPool.setId(FUND_POOL_ID);
         fundPool.setName("Fund Pool 1");
+        usageAge = new UsageAge();
+        usageAge.setPeriod(2019);
+        usageAge.setWeight(BigDecimal.ONE);
+        publicationType = new PublicationType();
+        publicationType.setId("a6694d41-e2d5-4f4d-8dd5-3a0581d1d73e");
+        publicationType.setWeight(BigDecimal.ONE);
+        detailLicenseeClass = new DetailLicenseeClass();
+        aggregateLicenseeClass = new AggregateLicenseeClass();
+        aggregateLicenseeClass.setId(143);
+        aggregateLicenseeClass.setEnrollmentProfile("EXGP");
+        aggregateLicenseeClass.setDiscipline("Life Sciences");
+        detailLicenseeClass.setId(108);
+        aggregateLicenseeClass.setEnrollmentProfile("EXGP");
+        aggregateLicenseeClass.setDiscipline("Life Sciences");
+        detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
         expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).anyTimes();
         expect(controller.getFundPools()).andReturn(Collections.singletonList(fundPool)).once();
-        expect(controller.getUsageAges()).andReturn(Collections.singletonList(new UsageAge())).once();
-        expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(new PublicationType())).once();
-        expect(controller.getDetailLicenseeClasses())
-            .andReturn(Collections.singletonList(new DetailLicenseeClass())).once();
+        expect(controller.getUsageAges()).andReturn(Collections.singletonList(usageAge)).once();
+        expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(publicationType)).once();
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(detailLicenseeClass)).once();
     }
 
     @Test
@@ -94,8 +131,78 @@ public class CreateAaclScenarioWindowTest {
     }
 
     @Test
+    public void testConfirmButtonClickListener() {
+        List<UsageAge> usageAges = Collections.singletonList(usageAge);
+        List<PublicationType> publicationTypes = Collections.singletonList(publicationType);
+        List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(detailLicenseeClass);
+        AaclFields expectedAaclFields = new AaclFields();
+        expectedAaclFields.setTitleCutoffAmount(new BigDecimal("50"));
+        expectedAaclFields.setFundPoolId(FUND_POOL_ID);
+        expectedAaclFields.setUsageAges(usageAges);
+        expectedAaclFields.setPublicationTypes(publicationTypes);
+        expectedAaclFields.setDetailLicenseeClasses(detailLicenseeClasses);
+        Scenario scenario = new Scenario();
+        expect(controller.createAaclScenario(SCENARIO_NAME, expectedAaclFields, "")).andReturn(scenario).once();
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
+        expect(controller.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, detailLicenseeClasses))
+            .andReturn(Collections.emptyList()).once();
+        replay(controller);
+        TestCreateAaclScenarioWindow createScenarioWindow = new TestCreateAaclScenarioWindow(controller);
+        VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();
+        ComboBox<FundPool> fundPoolComboBox = (ComboBox<FundPool>) content.getComponent(2);
+        fundPoolComboBox.setSelectedItem(fundPool);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(7);
+        Button confirmButton = (Button) buttonsLayout.getComponent(0);
+        ClickListener listener = (ClickListener) confirmButton.getListeners(ClickEvent.class).iterator().next();
+        listener.buttonClick(new ClickEvent(createScenarioWindow));
+        EventObject event = createScenarioWindow.getEventObject();
+        assertNotNull(event);
+        assertTrue(event instanceof ScenarioCreateEvent);
+        ScenarioCreateEvent scenarioCreateEvent = (ScenarioCreateEvent) event;
+        assertEquals(scenario, scenarioCreateEvent.getScenarioId());
+        assertEquals(createScenarioWindow, scenarioCreateEvent.getSource());
+        assertTrue(createScenarioWindow.isClosed());
+        verify(controller);
+    }
+
+    @Test
+    public void testConfirmButtonClickListenerWithInvalidMapping() {
+        mockStatic(Windows.class);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
+        expect(controller.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID,
+            Collections.singletonList(detailLicenseeClass)))
+            .andReturn(Collections.singletonList(aggregateLicenseeClass)).once();
+        Windows.showNotificationWindow(
+            "Scenario cannot be created. There are no usages for the following Aggregate Licensee Class(es):" +
+                "<ul><li><i><b>143 (EXGP - Life Sciences)</b></i></ul>");
+        expectLastCall().once();
+        replay(controller, Windows.class);
+        TestCreateAaclScenarioWindow createScenarioWindow = new TestCreateAaclScenarioWindow(controller);
+        VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();
+        ComboBox<FundPool> fundPoolComboBox = (ComboBox<FundPool>) content.getComponent(2);
+        fundPoolComboBox.setSelectedItem(fundPool);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(7);
+        Button confirmButton = (Button) buttonsLayout.getComponent(0);
+        ClickListener listener = (ClickListener) confirmButton.getListeners(ClickEvent.class).iterator().next();
+        listener.buttonClick(new ClickEvent(createScenarioWindow));
+        assertFalse(createScenarioWindow.isClosed());
+        verify(controller, Windows.class);
+    }
+
+    @Test
     public void testButtonCloseClick() {
-        // TODO {srudak} implement
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        replay(controller);
+        TestCreateAaclScenarioWindow createScenarioWindow = new TestCreateAaclScenarioWindow(controller);
+        assertFalse(createScenarioWindow.isClosed());
+        VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();
+        Component component = content.getComponent(7);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) component;
+        Button cancelButton = (Button) buttonsLayout.getComponent(1);
+        ClickListener listener = (ClickListener) cancelButton.getListeners(ClickEvent.class).iterator().next();
+        listener.buttonClick(new ClickEvent(createScenarioWindow));
+        assertTrue(createScenarioWindow.isClosed());
+        verify(controller);
     }
 
     @Test
@@ -170,5 +277,33 @@ public class CreateAaclScenarioWindowTest {
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         return button;
+    }
+
+    private static class TestCreateAaclScenarioWindow extends CreateAaclScenarioWindow {
+
+        private EventObject eventObject;
+        private boolean closed;
+
+        TestCreateAaclScenarioWindow(IAaclUsageController controller) {
+            super(controller);
+        }
+
+        EventObject getEventObject() {
+            return eventObject;
+        }
+
+        boolean isClosed() {
+            return closed;
+        }
+
+        @Override
+        protected void fireEvent(EventObject event) {
+            this.eventObject = event;
+        }
+
+        @Override
+        public void close() {
+            this.closed = true;
+        }
     }
 }
