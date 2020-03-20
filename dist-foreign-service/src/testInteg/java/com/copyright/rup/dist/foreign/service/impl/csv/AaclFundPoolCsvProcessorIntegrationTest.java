@@ -88,7 +88,7 @@ public class AaclFundPoolCsvProcessorIntegrationTest {
             assertEquals(
                 "Columns headers are incorrect. Expected columns headers are:\n" +
                     "<ul>" +
-                    "<li>Aggregate Licensee Class ID</li>" +
+                    "<li>Agg LC ID</li>" +
                     "<li>Gross Amount</li>" +
                     "</ul>",
                 e.getHtmlMessage());
