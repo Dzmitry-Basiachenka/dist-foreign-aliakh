@@ -680,5 +680,36 @@ databaseChangeLog {
                 }
             }
         }
+
+        changeSet(id: '2020-03-20-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+            comment("B-56844 Tech Debt: FDA: rename publication_type_uid columns to df_publication_type_uid " +
+                    "in df_usage_aacl, df_usage_baseline_aacl tables")
+
+            renameColumn(schemaName: dbAppsSchema,
+                    tableName: 'df_usage_aacl',
+                    oldColumnName: 'publication_type_uid',
+                    newColumnName: 'df_publication_type_uid',
+                    columnDataType: 'VARCHAR(255)')
+
+            renameColumn(schemaName: dbAppsSchema,
+                    tableName: 'df_usage_baseline_aacl',
+                    oldColumnName: 'publication_type_uid',
+                    newColumnName: 'df_publication_type_uid',
+                    columnDataType: 'VARCHAR(255)')
+
+            rollback {
+                renameColumn(schemaName: dbAppsSchema,
+                        tableName: 'df_usage_aacl',
+                        oldColumnName: 'df_publication_type_uid',
+                        newColumnName: 'publication_type_uid',
+                        columnDataType: 'VARCHAR(255)')
+
+                renameColumn(schemaName: dbAppsSchema,
+                        tableName: 'df_usage_baseline_aacl',
+                        oldColumnName: 'df_publication_type_uid',
+                        newColumnName: 'publication_type_uid',
+                        columnDataType: 'VARCHAR(255)')
+            }
+        }
     }
 }
