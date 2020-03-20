@@ -187,7 +187,7 @@
                 from ${schema}.df_usage u
                 join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
                 left join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
-                left join ${schema}.df_publication_type pt on uaacl.publication_type_uid = pt.df_publication_type_uid
+                left join ${schema}.df_publication_type pt on uaacl.df_publication_type_uid = pt.df_publication_type_uid
                 left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
                 left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
                 left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
@@ -344,7 +344,7 @@
         from ${schema}.df_usage_archive u
         join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         join ${schema}.df_usage_aacl uaacl on u.df_usage_archive_uid = uaacl.df_usage_aacl_uid
-        left join ${schema}.df_publication_type pt on uaacl.publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_publication_type pt on uaacl.df_publication_type_uid = pt.df_publication_type_uid
         left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
@@ -497,7 +497,7 @@
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
-        left join ${schema}.df_publication_type pt on uaacl.publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_publication_type pt on uaacl.df_publication_type_uid = pt.df_publication_type_uid
         left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         <include refid="IAaclUsageMapper.aaclUsageFilter"/>
@@ -604,7 +604,7 @@
                 number_of_pages,
                 detail_licensee_class_id,
                 original_publication_type,
-                publication_type_uid,
+                df_publication_type_uid,
                 publication_type_weight,
                 institution,
                 comment,
@@ -645,7 +645,7 @@
             number_of_pages,
             detail_licensee_class_id,
             original_publication_type,
-            publication_type_uid,
+            df_publication_type_uid,
             publication_type_weight,
             baseline_uid,
             <include refid="StoredEntityMapper.additionalColumns"/>
@@ -658,7 +658,7 @@
             number_of_pages,
             detail_licensee_class_id,
             original_publication_type,
-            publication_type_uid,
+            df_publication_type_uid,
             publication_type_weight,
             df_usage_baseline_aacl_uid,
             <include refid="StoredEntityMapper.insert"/>
@@ -702,7 +702,7 @@
         from ${schema}.df_usage u
         join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_publication_type pt on uaacl.publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_publication_type pt on uaacl.df_publication_type_uid = pt.df_publication_type_uid
         left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         where u.df_usage_uid in
@@ -768,7 +768,7 @@
         update ${schema}.df_usage_aacl uaacl
         set
             detail_licensee_class_id = dlc.detail_licensee_class_id,
-            publication_type_uid = pt.df_publication_type_uid,
+            df_publication_type_uid = pt.df_publication_type_uid,
             updated_by_user = #{updateUser},
             updated_datetime = now(),
             record_version = uaacl.record_version + 1
@@ -812,7 +812,7 @@
         from ${schema}.df_usage u
         where uaacl.df_usage_aacl_uid = u.df_usage_uid
             and u.df_scenario_uid = #{scenarioId}
-            and uaacl.publication_type_uid = #{publicationTypeId}
+            and uaacl.df_publication_type_uid = #{publicationTypeId}
             and uaacl.baseline_uid is null
     </update>
 </mapper>

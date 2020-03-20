@@ -261,7 +261,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '15')
             column(name: 'detail_licensee_class_id', value: '113')
             column(name: 'original_publication_type', value: 'Textbook')
-            column(name: 'publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
             column(name: 'publication_type_weight', value: '1.71')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'Baseline usage 1')
@@ -276,7 +276,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '25')
             column(name: 'detail_licensee_class_id', value: '195')
             column(name: 'original_publication_type', value: 'Book series')
-            column(name: 'publication_type_uid', value: 'a3dff475-fc06-4d8c-b7cc-f093073ada6f')
+            column(name: 'df_publication_type_uid', value: 'a3dff475-fc06-4d8c-b7cc-f093073ada6f')
             column(name: 'publication_type_weight', value: '4.29')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
             column(name: 'comment', value: 'Baseline usage 2')
@@ -291,7 +291,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '35')
             column(name: 'detail_licensee_class_id', value: '143')
             column(name: 'original_publication_type', value: 'Scholarly Journal')
-            column(name: 'publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
+            column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
             column(name: 'publication_type_weight', value: '2')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'Baseline usage 3')
@@ -306,7 +306,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '45')
             column(name: 'detail_licensee_class_id', value: '141')
             column(name: 'original_publication_type', value: 'Fiction or Poetry')
-            column(name: 'publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: '3.5')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
             column(name: 'comment', value: 'Baseline usage 4')
@@ -441,7 +441,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -463,7 +463,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -514,7 +514,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'original_publication_type', value: 'Textbook')
-            column(name: 'publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
             column(name: 'publication_type_weight', value: '1.71')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'AACL baseline usage')
@@ -555,7 +555,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -578,7 +578,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -601,7 +601,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
             column(name: 'publication_type_weight', value: '1.71')
             column(name: 'baseline_uid', value: 'b012c81c-2370-458e-a6cb-349b66d08e6e')
         }
@@ -682,7 +682,7 @@ databaseChangeLog {
             column(name: 'usage_period', value: '2020')
             column(name: 'usage_source', value: 'Aug 2020 TUR')
             column(name: 'detail_licensee_class_id', value: '143')
-            column(name: 'publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
+            column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
             column(name: 'number_of_pages', value: '6')
             column(name: 'right_limitation', value: 'ALL')
         }
@@ -696,7 +696,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '6')
             column(name: 'detail_licensee_class_id', value: '143')
             column(name: 'original_publication_type', value: 'Scholarly Journal')
-            column(name: 'publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
+            column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
             column(name: 'publication_type_weight', value: '2')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'Baseline usage')
@@ -734,7 +734,7 @@ databaseChangeLog {
             column(name: 'usage_period', value: '2040')
             column(name: 'usage_source', value: 'Feb 2040 TUR')
             column(name: 'detail_licensee_class_id', value: '143')
-            column(name: 'publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
+            column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
             column(name: 'number_of_pages', value: '341')
             column(name: 'right_limitation', value: 'ALL')
             column(name: 'baseline_uid', value: 'a4b26f19-674e-4874-865d-62be5962658e')

@@ -25,7 +25,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'original_publication_type', value: 'Textbook')
-            column(name: 'publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
             column(name: 'publication_type_weight', value: '1.71')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
             column(name: 'comment', value: 'AACL baseline usage')
@@ -81,7 +81,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -103,7 +103,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'ALL')
             column(name: 'detail_licensee_class_id', value: '110')
-            column(name: 'publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -125,7 +125,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'ALL')
             column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
             column(name: 'publication_type_weight', value: '2.71')
             column(name: 'baseline_uid', value: 'f517f5b9-5f34-41f6-8984-67eeadf65ad1')
         }

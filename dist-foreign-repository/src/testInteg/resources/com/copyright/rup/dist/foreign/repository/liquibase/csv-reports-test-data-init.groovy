@@ -6306,7 +6306,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '8315e53b-0a7e-452a-a62c-17fe959f3f84')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
-            column(name: 'publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'usage_period', value: '2019')
             column(name: 'usage_source', value: 'Aug 2019 TUR')
@@ -6331,7 +6331,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '64194cf9-177f-4220-9eb5-01040324b8b2')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
-            column(name: 'publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'detail_licensee_class_id', value: '120')
             column(name: 'usage_period', value: '2019')
             column(name: 'usage_source', value: 'Aug 2019 TUR')
@@ -6375,7 +6375,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '6')
             column(name: 'detail_licensee_class_id', value: '143')
             column(name: 'original_publication_type', value: 'Scholarly Journal')
-            column(name: 'publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
+            column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
             column(name: 'publication_type_weight', value: '2')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'Baseline usage')
@@ -6409,7 +6409,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: 'c794662f-a5d6-4b86-8955-582723631656')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
-            column(name: 'publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'usage_period', value: '2019')
             column(name: 'usage_source', value: 'Aug 2019 TUR')
@@ -6438,7 +6438,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '3c96f468-abaa-4db7-9004-4012d8ba8e0d')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
-            column(name: 'publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
+            column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
             column(name: 'detail_licensee_class_id', value: '143')
             column(name: 'usage_period', value: '2016')
             column(name: 'usage_source', value: 'Aug 201 FR')
