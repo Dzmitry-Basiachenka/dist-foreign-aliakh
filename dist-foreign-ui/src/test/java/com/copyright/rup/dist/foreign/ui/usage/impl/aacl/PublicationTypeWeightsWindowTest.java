@@ -181,7 +181,7 @@ public class PublicationTypeWeightsWindowTest {
     private void verifyGrid(Grid grid, boolean isEditorEnabled) {
         assertNull(grid.getCaption());
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Name", "Weight"),
+        assertEquals(Arrays.asList("Pub Type", "Weight"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertEquals(Arrays.asList(-1.0, -1.0), columns.stream().map(Column::getWidth).collect(Collectors.toList()));
         assertEquals(Arrays.asList(-1, -1), columns.stream().map(Column::getExpandRatio).collect(Collectors.toList()));

@@ -78,7 +78,7 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addColumn(PublicationType::getName)
-            .setCaption(ForeignUi.getMessage("table.column.name"))
+            .setCaption(ForeignUi.getMessage("table.column.publication_type"))
             .setSortable(false);
         Grid.Column<PublicationType, String> weightColumn =
             grid.addColumn(item -> CurrencyUtils.format(item.getWeight(), null))
