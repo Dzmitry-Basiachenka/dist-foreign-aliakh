@@ -49,7 +49,7 @@ public class AaclFundPoolCsvProcessor extends DistCsvProcessor<FundPoolDetail> {
      */
     private enum Header implements ICsvColumn {
 
-        AGGREGATE_LICENSEE_CLASS_ID("Aggregate Licensee Class ID"),
+        AGGREGATE_LICENSEE_CLASS_ID("Agg LC ID"),
         GROSS_AMOUNT("Gross Amount");
 
         private final String columnName;

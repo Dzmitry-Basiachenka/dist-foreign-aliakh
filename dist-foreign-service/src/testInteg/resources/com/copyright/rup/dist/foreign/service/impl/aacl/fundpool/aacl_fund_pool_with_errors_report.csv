@@ -1,12 +1,12 @@
-Aggregate Licensee Class ID,Gross Amount,Line,Error Reason
-,,5,Aggregate Licensee Class ID: Field is required and cannot be null or empty; Gross Amount: Field is required and cannot be null or empty
-a,z,6,Aggregate Licensee Class ID: Field value should be positive number; Gross Amount: Field value should be greater than 0 after rounding
--1,,7,Aggregate Licensee Class ID: Field value should be positive number; Gross Amount: Field is required and cannot be null or empty
+Agg LC ID,Gross Amount,Line,Error Reason
+,,5,Agg LC ID: Field is required and cannot be null or empty; Gross Amount: Field is required and cannot be null or empty
+a,z,6,Agg LC ID: Field value should be positive number; Gross Amount: Field value should be greater than 0 after rounding
+-1,,7,Agg LC ID: Field value should be positive number; Gross Amount: Field is required and cannot be null or empty
 999,1,8,Aggregate Licensee Class with such ID doesn't exist in the system
-1234567890,,9,Aggregate Licensee Class ID: Field value should not exceed 9 characters; Gross Amount: Field is required and cannot be null or empty
+1234567890,,9,Agg LC ID: Field value should not exceed 9 characters; Gross Amount: Field is required and cannot be null or empty
 113,0,10,Gross Amount: Field value should be greater than 0 after rounding
 115,-1,11,Gross Amount: Field value should be greater than 0 after rounding
 117,-1.0,12,Gross Amount: Field value should be greater than 0 after rounding
 118,-0.1,13,Gross Amount: Field value should be greater than 0 after rounding
-120,1,15,Aggregate Licensee Class ID: Duplicate with Line 14
-120,1,16,"Aggregate Licensee Class ID: Duplicate with Line 14, 15"
+120,1,15,Agg LC ID: Duplicate with Line 14
+120,1,16,"Agg LC ID: Duplicate with Line 14, 15"
