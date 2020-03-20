@@ -825,7 +825,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -847,7 +847,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -869,7 +869,7 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '12')
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: '113')
-            column(name: 'publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
         }
     }
 }
