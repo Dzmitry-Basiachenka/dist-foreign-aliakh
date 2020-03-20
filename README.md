@@ -1,3 +1,16 @@
+9.1.9
+-
+*  B-52335 FDA: Create AACL Scenario: implement logic for validating licensee classes mapping
+* B-52335 FDA: Create AACL Scenario: fire ScenarioCreateEvent when scenario is created
+* B-56844 Tech Debt: FDA: adjust validation rules for amounts fields on scenario creation windows
+* B-56844 Tech Debt: FDA: adjust validation rules for empty entered values
+* B-56844 Tech Debt: FDA: remove ProductFamilyFilterWidget class
+* B-56844 Tech Debt: FDA: rename publication_type_uid columns to df_publication_type_uid in df_usage_aacl, df_usage_baseline_aacl tables
+* B-56844 Tech Debt: FDA: rename publication_type_uid columns to df_publication_type_uid in df_usage_aacl, df_usage_baseline_aacl tables
+* B-56844 Tech Debt: FDA: rename table column from Name to Pub Type in Pub Type Weights window
+* B-57241 FDA: Scenario Tab modifications for AACL Main View: implement Scenarios tab
+* B-57745 FDA: AACL Licensee Class Name changes: adjust Agg LC ID column name for uploading AACL fund pool
+
 9.1.8
 -
 * B-27613 FDA: Audit Tab modifications for AACL: adjust find for audit query in AACL usage mapper
