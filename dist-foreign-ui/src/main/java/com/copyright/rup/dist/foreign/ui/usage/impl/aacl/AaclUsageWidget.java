@@ -83,7 +83,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", true,
             155);
         addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClassId(), "table.column.det_lc_id",
-            "detailLicenseeClassId", true, 140);
+            "detailLicenseeClassId", true, 80);
         addColumn(usage -> usage.getAaclUsage().getEnrollmentProfile(), "table.column.det_lc_enrollment",
             "enrollmentProfile", true, 140);
         addColumn(usage -> usage.getAaclUsage().getDiscipline(), "table.column.det_lc_discipline", "discipline", true,
@@ -93,14 +93,14 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         addColumn(usage -> usage.getAaclUsage().getInstitution(), "table.column.institution", "institution",
             true, 140);
         addColumn(usage -> usage.getAaclUsage().getUsagePeriod(), "table.column.usage_period", "usagePeriod",
-            true, 140);
+            true, 100);
         addColumn(usage -> usage.getAaclUsage().getUsageSource(), "table.column.usage_source", "usageSource",
             true, 140);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
         addColumn(usage -> usage.getAaclUsage().getNumberOfPages(), "table.column.number_of_pages",
             "numberOfPages", true, 140);
         addColumn(usage -> usage.getAaclUsage().getRightLimitation(), "table.column.right_limitation",
-            "rightLimitation", true, 200);
+            "rightLimitation", true, 120);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", true, 200);
     }
 
