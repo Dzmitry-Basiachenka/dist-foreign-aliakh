@@ -47,6 +47,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     private static final String SORT_KEY = "sort";
     private static final String UPDATE_USER_KEY = "updateUser";
     private static final String STATUS_KEY = "status";
+    private static final String SCENARIO_ID_KEY = "scenarioId";
 
     @Override
     public void insert(Usage usage) {
@@ -124,6 +125,17 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
+    public void updatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, Long payeeAccountNumber,
+                                           String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("rhAccountNumber", Objects.requireNonNull(rhAccountNumber));
+        params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        update("IAaclUsageMapper.updatePayeeByAccountNumber", params);
+    }
+
+    @Override
     public List<Integer> findUsagePeriods() {
         return selectList("IAaclUsageMapper.findUsagePeriods");
     }
@@ -158,7 +170,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     @Override
     public void addToScenario(Scenario scenario, UsageFilter filter) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
-        params.put("scenarioId", Objects.requireNonNull(scenario.getId()));
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenario.getId()));
         params.put(FILTER_KEY, Objects.requireNonNull(filter));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(scenario.getUpdateUser()));
         update("IAaclUsageMapper.addToScenario", params);
@@ -183,7 +195,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     @Override
     public void updatePublicationTypeWeight(Scenario scenario, String publicationTypeId, BigDecimal weight) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
-        params.put("scenarioId", Objects.requireNonNull(scenario.getId()));
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenario.getId()));
         params.put("publicationTypeId", Objects.requireNonNull(publicationTypeId));
         params.put("weight", Objects.requireNonNull(weight));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(scenario.getUpdateUser()));

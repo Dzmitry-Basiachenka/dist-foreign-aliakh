@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -58,9 +59,13 @@ public class CreateAaclScenarioIntegrationTestBuilder {
     private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IScenarioUsageFilterService scenarioUsageFilterService;
+    @Autowired
+    private ServiceTestHelper testHelper;
 
     private String scenarioName;
     private String scenarioDescription;
+    private String expectedRollupsJson;
+    private List<String> expectedRollupsRightholderIds;
     private AaclFields scenarioAaclFields;
     private UsageFilter scenarioUsageFilter;
     private Scenario expectedScenario;
@@ -69,6 +74,12 @@ public class CreateAaclScenarioIntegrationTestBuilder {
 
     CreateAaclScenarioIntegrationTestBuilder withFilter(UsageFilter usageFilter) {
         scenarioUsageFilter = usageFilter;
+        return this;
+    }
+
+    CreateAaclScenarioIntegrationTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
+        this.expectedRollupsJson = rollupsJson;
+        this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
         return this;
     }
 
@@ -99,6 +110,8 @@ public class CreateAaclScenarioIntegrationTestBuilder {
     }
 
     void reset() {
+        expectedRollupsJson = null;
+        expectedRollupsRightholderIds = null;
         scenarioName = null;
         scenarioDescription = null;
         scenarioAaclFields = null;
@@ -117,8 +130,13 @@ public class CreateAaclScenarioIntegrationTestBuilder {
         private String scenarioId;
 
         void run() throws IOException {
+            testHelper.createRestServer();
+            if (Objects.nonNull(expectedRollupsRightholderIds)) {
+                testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
+            }
             scenarioId = scenarioService
                 .createAaclScenario(scenarioName, scenarioAaclFields, scenarioDescription, scenarioUsageFilter).getId();
+            testHelper.verifyRestServer();
             assertScenario();
             assertUsages();
             assertScenarioActions();

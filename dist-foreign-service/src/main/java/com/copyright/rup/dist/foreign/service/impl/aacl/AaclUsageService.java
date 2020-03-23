@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.service.impl.aacl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -8,6 +11,7 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -18,9 +22,11 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
@@ -82,6 +88,10 @@ public class AaclUsageService implements IAaclUsageService {
     private ILicenseeClassService licenseeClassService;
     @Autowired
     private IAaclUsageRepository aaclUsageRepository;
+    @Autowired
+    private IPrmIntegrationService prmIntegrationService;
+    @Autowired
+    private IRightsholderService rightsholderService;
     @Autowired
     private IChainExecutor<Usage> chainExecutor;
     @Value("$RUP{dist.foreign.usages.batch_size}")
@@ -246,6 +256,19 @@ public class AaclUsageService implements IAaclUsageService {
         aaclUsageRepository.addToScenario(scenario, filter);
         scenario.getAaclFields().getPublicationTypes().forEach(pubType ->
             aaclUsageRepository.updatePublicationTypeWeight(scenario, pubType.getId(), pubType.getWeight()));
+        String userName = RupContextUtils.getUserName();
+        Set<Long> payeeAccountNumbers = new HashSet<>();
+        List<Rightsholder> rightsholders = rightsholderService.getByScenarioId(scenario.getId());
+        Set<String> rightsholdersIds = rightsholders.stream().map(BaseEntity::getId).collect(Collectors.toSet());
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        rightsholders.forEach(rightsholder -> {
+            Long payeeAccountNumber = PrmRollUpService.getPayee(rollUps, rightsholder, FdaConstants.AACL_PRODUCT_FAMILY)
+                .getAccountNumber();
+            payeeAccountNumbers.add(payeeAccountNumber);
+            aaclUsageRepository.updatePayeeByAccountNumber(rightsholder.getAccountNumber(),
+                scenario.getId(), payeeAccountNumber, userName);
+        });
+        rightsholderService.updateRighstholdersAsync(payeeAccountNumbers);
     }
 
     @Override
