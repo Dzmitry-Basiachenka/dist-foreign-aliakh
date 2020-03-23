@@ -23,6 +23,7 @@
     "aaclUsage": {
       "detailLicenseeClassId": "143",
       "enrollmentProfile": "EXGP",
+      "batchPeriodEndDate": "2019-06-30",
       "discipline": "Engineering",
       "usagePeriod": 2040,
       "usageSource": "Feb 2040 TUR",

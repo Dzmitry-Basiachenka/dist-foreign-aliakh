@@ -21,6 +21,7 @@
       "enrollmentProfile": "EXGP",
       "discipline": "Engineering",
       "usagePeriod": 2020,
+      "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2020 TUR",
       "numberOfPages": 6,
       "publicationType": {

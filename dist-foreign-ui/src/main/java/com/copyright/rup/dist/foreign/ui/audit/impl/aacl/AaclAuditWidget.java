@@ -53,8 +53,7 @@ public class AaclAuditWidget extends CommonAuditWidget implements IAaclAuditWidg
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", 125);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", 140);
         addColumn(usage -> CommonDateUtils.format(usage.getAaclUsage().getBatchPeriodEndDate(),
-            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
-            "table.column.period_end_date", "periodEndDate", 115);
+            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.period_end_date", "batchPeriodEndDate", 115);
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 115);
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", 300);
         addColumn(UsageDto::getPayeeAccountNumber, "table.column.payee_account_number", "payeeAccountNumber", 115);

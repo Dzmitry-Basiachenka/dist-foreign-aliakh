@@ -156,6 +156,7 @@
                     u.product_family,
                     u.df_usage_batch_uid,
                     ub.name batch_name,
+                    ub.payment_date batch_period_end_date,
                     u.rh_account_number,
                     rh.name rh_name,
                     u.payee_account_number,
@@ -220,8 +221,8 @@
                     <when test="sort.property == 'batchName'">
                         batch_name
                     </when>
-                    <when test="sort.property == 'periodEndDate'">
-                        period_end_date
+                    <when test="sort.property == 'batchPeriodEndDate'">
+                        batch_period_end_date
                     </when>
                     <when test="sort.property == 'rhAccountNumber'">
                         rh_account_number
@@ -284,7 +285,7 @@
                         discipline
                     </when>
                     <when test="sort.property == 'publicationType'">
-                        name
+                        pub_type_name
                     </when>
                     <when test="sort.property == 'usagePeriod'">
                         usage_period
@@ -313,6 +314,7 @@
             u.product_family,
             u.df_usage_batch_uid,
             ub.name batch_name,
+            ub.payment_date batch_period_end_date,
             u.rh_account_number,
             rh.name rh_name,
             u.payee_account_number,
