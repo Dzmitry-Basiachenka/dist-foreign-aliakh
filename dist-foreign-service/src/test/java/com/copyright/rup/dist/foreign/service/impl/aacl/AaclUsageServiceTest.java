@@ -12,6 +12,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -31,9 +32,11 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
@@ -90,6 +93,8 @@ public class AaclUsageServiceTest {
     private IFundPoolService fundPoolService;
     private ILicenseeClassService licenseeClassService;
     private IAaclUsageRepository aaclUsageRepository;
+    private IRightsholderService rightsholderService;
+    private IPrmIntegrationService prmIntegrationService;
     private IChainExecutor<Usage> chainExecutor;
 
     @Rule
@@ -114,11 +119,15 @@ public class AaclUsageServiceTest {
         fundPoolService = createMock(IFundPoolService.class);
         licenseeClassService = createMock(ILicenseeClassService.class);
         aaclUsageRepository = createMock(IAaclUsageRepository.class);
+        rightsholderService = createMock(IRightsholderService.class);
+        prmIntegrationService = createMock(IPrmIntegrationService.class);
         chainExecutor = createMock(IChainExecutor.class);
         Whitebox.setInternalState(aaclUsageService, usageAuditService);
         Whitebox.setInternalState(aaclUsageService, fundPoolService);
         Whitebox.setInternalState(aaclUsageService, licenseeClassService);
         Whitebox.setInternalState(aaclUsageService, aaclUsageRepository);
+        Whitebox.setInternalState(aaclUsageService, rightsholderService);
+        Whitebox.setInternalState(aaclUsageService, prmIntegrationService);
         Whitebox.setInternalState(aaclUsageService, chainExecutor);
         Whitebox.setInternalState(aaclUsageService, "usagesBatchSize", 100);
     }
@@ -360,6 +369,15 @@ public class AaclUsageServiceTest {
             buildPubType("eb500edd-c882-43a4-8945-454958c8fd52", BigDecimal.ONE),
             buildPubType("77707191-bdbd-4034-b37b-0968aedaa346", BigDecimal.TEN)));
         scenario.setAaclFields(aaclFields);
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId("378cafcf-cf21-4036-b223-5bd48b09c41f");
+        rightsholder.setAccountNumber(2000073957L);
+        expect(rightsholderService.getByScenarioId(scenario.getId()))
+            .andReturn(Collections.singletonList(rightsholder)).once();
+        expect(prmIntegrationService.getRollUps(Collections.singleton("378cafcf-cf21-4036-b223-5bd48b09c41f")))
+            .andReturn(Collections.emptyMap()).once();
+        aaclUsageRepository.updatePayeeByAccountNumber(2000073957L, scenario.getId(), 2000073957L, "SYSTEM");
+        expectLastCall().once();
         UsageFilter usageFilter = new UsageFilter();
         aaclUsageRepository.addToScenario(scenario, usageFilter);
         expectLastCall().once();
@@ -369,9 +387,11 @@ public class AaclUsageServiceTest {
         aaclUsageRepository.updatePublicationTypeWeight(scenario,
             "77707191-bdbd-4034-b37b-0968aedaa346", BigDecimal.TEN);
         expectLastCall().once();
-        replay(aaclUsageRepository);
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(2000073957L));
+        expectLastCall().once();
+        replay(aaclUsageRepository, rightsholderService, prmIntegrationService);
         aaclUsageService.addUsagesToScenario(scenario, usageFilter);
-        verify(aaclUsageRepository);
+        verify(aaclUsageRepository, rightsholderService, prmIntegrationService);
     }
 
     @Test

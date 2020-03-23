@@ -513,6 +513,17 @@ public class AaclUsageRepositoryIntegrationTest {
         assertFalse(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 110));
     }
 
+    @Test
+    public void testUpdatePayeeByAccountNumber() {
+        AuditFilter auditFilter = new AuditFilter();
+        auditFilter.setBatchesIds(Collections.singleton("a87b82ca-cfca-463d-96e9-fa856618c389"));
+        aaclUsageRepository.findForAudit(auditFilter, null, null)
+            .forEach(usage -> assertNull(usage.getPayeeAccountNumber()));
+        aaclUsageRepository.updatePayeeByAccountNumber(1000000026L, SCENARIO_ID_2, RH_ACCOUNT_NUMBER, USER_NAME);
+        aaclUsageRepository.findForAudit(auditFilter, null, null)
+            .forEach(usage -> assertEquals(RH_ACCOUNT_NUMBER, usage.getPayeeAccountNumber()));
+    }
+
     private void assertFindForAuditSearch(String searchValue, String... usageIds) {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(searchValue);

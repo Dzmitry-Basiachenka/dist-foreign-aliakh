@@ -781,6 +781,15 @@
             and dlc.discipline ilike #{aaclUsage.discipline}
     </update>
 
+    <update id="updatePayeeByAccountNumber" parameterType="map">
+        update ${schema}.df_usage
+        set
+            payee_account_number = #{payeeAccountNumber},
+            <include refid="StoredEntityMapper.update"/>
+        where rh_account_number = #{rhAccountNumber}
+        and df_scenario_uid = #{scenarioId}
+    </update>
+
     <delete id="deleteByBatchId" parameterType="string">
         with usage_ids as (
             delete from ${schema}.df_usage

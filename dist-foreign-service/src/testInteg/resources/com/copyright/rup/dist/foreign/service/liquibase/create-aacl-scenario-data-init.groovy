@@ -16,6 +16,12 @@ databaseChangeLog {
             column(name: 'name', value: '1st Contact Publishing')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '9905f006-a3e1-4061-b3d4-e7ece191103f')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'name', value: 'IEEE - Inst of Electrical and Electronics Engrs')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: 'f517f5b9-5f34-41f6-8984-67eeadf65ad1')
             column(name: 'wr_wrk_inst', value: '123456789')

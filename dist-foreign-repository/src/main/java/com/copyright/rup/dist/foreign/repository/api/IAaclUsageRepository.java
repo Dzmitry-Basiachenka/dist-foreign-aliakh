@@ -75,6 +75,16 @@ public interface IAaclUsageRepository {
     Set<Integer> findBaselinePeriods(int startPeriod, int numberOfBaselineYears);
 
     /**
+     * Sets payee account number for usages with given RH account number and scenario id.
+     *
+     * @param rhAccountNumber    RH account number
+     * @param scenarioId         scenario id
+     * @param payeeAccountNumber payee account number
+     * @param userName           user name
+     */
+    void updatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, Long payeeAccountNumber, String userName);
+
+    /**
      * Finds list of AACL {@link Usage}s by their ids.
      *
      * @param usageIds list of {@link Usage}s identifiers

@@ -52,6 +52,8 @@ public class CreateAaclScenarioIntegrationTest {
     public void testCreateAaclScenario() throws IOException {
         builder
             .withFilter(buildUsageFilter())
+            .expectRollups("prm/aacl_rollups_response.json", "b0e6b1f6-89e9-4767-b143-db0f49f32769",
+                "60080587-a225-439c-81af-f016cb33aeac")
             .withScenario(SCENARIO_NAME, SCENARIO_DESCRIPTION, buildAaclFields())
             .expectScenario(buildExpectedScenario())
             .expectScenarioFilter(new ScenarioUsageFilter(buildUsageFilter()))
