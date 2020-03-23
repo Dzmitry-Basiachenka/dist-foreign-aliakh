@@ -66,7 +66,7 @@ public class NtsAuditWidget extends CommonAuditWidget implements INtsAuditWidget
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
         addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", 155);
         addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", 115);
-        addAmountColumn(UsageDto::getGrossAmount, "table.column.amount_in_usd", "grossAmount", 100);
+        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", 130);
         addColumn(usage -> {
             BigDecimal value = usage.getServiceFee();
             return Objects.nonNull(value)

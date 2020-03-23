@@ -97,7 +97,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
             "table.column.publication_date", "publicationDate", true, 90);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
         addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", 130);
-        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", 110);
+        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", 130);
         addColumn(UsageDto::getMarket, "table.column.market", "market", true, 115);
         addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", true, 150);
         addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", true, 145);
