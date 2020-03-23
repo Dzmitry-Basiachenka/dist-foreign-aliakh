@@ -1,6 +1,23 @@
+9.1.10
+-
+* Revving up build version
+* Update release notes for version 9.1.9
+* B-56844 Tech Debt: FDA: adjust widths of headers in AACL usages table
+* B-57613 FDA: Audit Tab modifications for AACL: fix issue related to sort by service fee amount
+* CDP-897 FDA: Create AACL Scenario: User is able to delete batches and fund pools that have already been added to a Scenario
+* CDP-896 FDA: Create AACL Scenario: AACL usages attached to a created scenario can be displayed on ‘Usages’ tab in LOCKED status
+* B-56527 FDA:  Add "Gross" to "Amt in USD" for all product families: refactor usages table and export usages CSV report
+* B-56527 FDA: Add "Gross" to "Amt in USD" for all product families: refactor FAS/FAS2 “Send for Research” and “Load Researched Details” functionalities
+* B-57816 FDA: Get Payee for AACL scenario: implement logic to get and populate payee for AACL usages
+* B-57613 FDA: Audit Tab modifications for AACL: fix issue related to Period And Date and Pub Type columns
+* B-56527 FDA: Add "Gross" to "Amt in USD" for all product families: refactor FAS/FAS2 Usage Batch upload
+* B-57849 FDA: Add service fee amount to metadata panel all product families: add service fee amount label to metadata panel
+* B-56527 FDA: Add "Gross" to "Amt in USD" for all product families: refactor usages audit table and export usages CSV report
+* B-52335 FDA: Create AACL Scenario: include usage period filter when checking for invalid rightsholders
+
 9.1.9
 -
-*  B-52335 FDA: Create AACL Scenario: implement logic for validating licensee classes mapping
+* B-52335 FDA: Create AACL Scenario: implement logic for validating licensee classes mapping
 * B-52335 FDA: Create AACL Scenario: fire ScenarioCreateEvent when scenario is created
 * B-56844 Tech Debt: FDA: adjust validation rules for amounts fields on scenario creation windows
 * B-56844 Tech Debt: FDA: adjust validation rules for empty entered values
