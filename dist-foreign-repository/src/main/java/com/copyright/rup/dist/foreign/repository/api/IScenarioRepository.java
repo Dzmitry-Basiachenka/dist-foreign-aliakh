@@ -76,6 +76,14 @@ public interface IScenarioRepository {
     String findNameByNtsFundPoolId(String fundPoolId);
 
     /**
+     * Finds {@link Scenario} names associated with AACL {@link com.copyright.rup.dist.foreign.domain.FundPool}.
+     *
+     * @param fundPoolId fund pool id
+     * @return list of {@link Scenario} names
+     */
+    List<String> findNamesByAaclFundPoolId(String fundPoolId);
+
+    /**
      * Removes {@link Scenario} by given identifier.
      *
      * @param scenarioId {@link Scenario} identifier

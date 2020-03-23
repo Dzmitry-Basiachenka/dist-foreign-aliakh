@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -89,13 +90,20 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
         Button closeButton = Buttons.createCloseButton(this);
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
         deleteButton.addClickListener(event -> {
-            FundPool selectedFundPool = grid.getSelectedItems().stream().findFirst().orElse(null);
-            Windows.showConfirmDialog(
-                ForeignUi.getMessage("message.confirm.delete_action", selectedFundPool.getName(), "fund pool"),
-                () -> {
-                    controller.deleteFundPool(selectedFundPool);
-                    grid.setItems(controller.getFundPools());
-                });
+            grid.getSelectedItems().stream().findFirst().ifPresent(selectedFundPool -> {
+                List<String> scenarioNames =
+                    controller.getScenarioNamesAssociatedWithFundPool(selectedFundPool.getId());
+                if (CollectionUtils.isEmpty(scenarioNames)) {
+                    Windows.showConfirmDialog(
+                        ForeignUi.getMessage("message.confirm.delete_action", selectedFundPool.getName(), "fund pool"),
+                        () -> {
+                            controller.deleteFundPool(selectedFundPool);
+                            grid.setItems(controller.getFundPools());
+                        });
+                } else {
+                    Windows.showNotificationWindow(buildDeleteErrorMessage(scenarioNames));
+                }
+            });
         });
         deleteButton.setEnabled(false);
         viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
@@ -148,5 +156,14 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
         return Objects.nonNull(date)
             ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
             : StringUtils.EMPTY;
+    }
+
+    private String buildDeleteErrorMessage(List<String> scenarioNames) {
+        StringBuilder htmlNamesList = new StringBuilder("<ul>");
+        for (String name : scenarioNames) {
+            htmlNamesList.append("<li>").append(name).append("</li>");
+        }
+        htmlNamesList.append("</ul>");
+        return ForeignUi.getMessage("message.error.delete_action", "Fund pool", "scenarios", htmlNamesList);
     }
 }

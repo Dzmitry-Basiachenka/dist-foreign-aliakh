@@ -1351,4 +1351,132 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2020-03-20-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
+        comment('Inserting test data for testFindNamesByAaclFundPoolId')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '39548ee4-7929-477e-b9d2-bcb1e76f8037')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'name', value: 'AACL Fund Pool 2')
+            column(name: 'total_amount', value: '10.95')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
+            column(name: 'df_fund_pool_detail_uid', value: '7dc93e89-d1f4-4721-81be-fd32606e4a66')
+            column(name: 'df_fund_pool_uid', value: '39548ee4-7929-477e-b9d2-bcb1e76f8037')
+            column(name: 'df_aggregate_licensee_class_id', value: '108')
+            column(name: 'gross_amount', value: '10.95')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '859c35e5-abda-407f-92df-02f3a51f24cf')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'name', value: 'AACL Fund Pool 3')
+            column(name: 'total_amount', value: '27.25')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
+            column(name: 'df_fund_pool_detail_uid', value: '131e8e91-7f04-4f24-81de-7636719e7e5b')
+            column(name: 'df_fund_pool_uid', value: '859c35e5-abda-407f-92df-02f3a51f24cf')
+            column(name: 'df_aggregate_licensee_class_id', value: '113')
+            column(name: 'gross_amount', value: '27.25')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '91f3c9ba-1b61-4dcc-b087-f88f89d22c35')
+            column(name: 'name', value: 'AACL batch 7')
+            column(name: 'payment_date', value: '2019-06-30')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'fiscal_year', value: '2019')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '66d10c81-705e-4996-89f4-11e1635c4c31')
+            column(name: 'name', value: 'AACL Scenario 1')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'aacl_fields', value: '{"fund_pool_uid": "39548ee4-7929-477e-b9d2-bcb1e76f8037"}')
+            column(name: 'description', value: 'AACL Scenario')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: 'fa9ff28f-6d88-4f05-9874-ddbd378a2043')
+            column(name: 'name', value: 'AACL Scenario 2')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'aacl_fields', value: '{"fund_pool_uid": "39548ee4-7929-477e-b9d2-bcb1e76f8037"}')
+            column(name: 'description', value: 'AACL Scenario')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '2f3988e1-7cca-42b2-bdf8-a8850dbf315b')
+            column(name: 'df_usage_batch_uid', value: '91f3c9ba-1b61-4dcc-b087-f88f89d22c35')
+            column(name: 'df_scenario_uid', value: '66d10c81-705e-4996-89f4-11e1635c4c31')
+            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'rh_account_number', value: '1000000026')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: '10')
+            column(name: 'comment', value: 'AACL comment')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: '2f3988e1-7cca-42b2-bdf8-a8850dbf315b')
+            column(name: 'institution', value: 'CORNELL UNIVERSITY')
+            column(name: 'usage_period', value: '2019')
+            column(name: 'usage_source', value: 'Feb 2019 TUR')
+            column(name: 'number_of_pages', value: '12')
+            column(name: 'right_limitation', value: 'PRINT')
+            column(name: 'detail_licensee_class_id', value: '108')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'f309962c-31f8-4a31-9fad-750d43a80021')
+            column(name: 'df_usage_batch_uid', value: '91f3c9ba-1b61-4dcc-b087-f88f89d22c35')
+            column(name: 'df_scenario_uid', value: 'fa9ff28f-6d88-4f05-9874-ddbd378a2043')
+            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'rh_account_number', value: '1000000026')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: '10')
+            column(name: 'comment', value: 'AACL comment')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: 'f309962c-31f8-4a31-9fad-750d43a80021')
+            column(name: 'institution', value: 'CORNELL UNIVERSITY')
+            column(name: 'usage_period', value: '2019')
+            column(name: 'usage_source', value: 'Feb 2019 TUR')
+            column(name: 'number_of_pages', value: '12')
+            column(name: 'right_limitation', value: 'PRINT')
+            column(name: 'detail_licensee_class_id', value: '108')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: 'ceef1548-700e-48a2-a732-f9d183b3d2e3')
+            column(name: 'df_scenario_uid', value: '66d10c81-705e-4996-89f4-11e1635c4c31')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: 'ceef1548-700e-48a2-a732-f9d183b3d2e3')
+            column(name: 'df_usage_batch_uid', value: '91f3c9ba-1b61-4dcc-b087-f88f89d22c35')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '5ca01807-eb22-4661-b17b-29e6af6f16cd')
+            column(name: 'df_scenario_uid', value: 'fa9ff28f-6d88-4f05-9874-ddbd378a2043')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: '5ca01807-eb22-4661-b17b-29e6af6f16cd')
+            column(name: 'df_usage_batch_uid', value: '91f3c9ba-1b61-4dcc-b087-f88f89d22c35')
+        }
+
+        rollback ""
+    }
 }

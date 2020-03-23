@@ -56,6 +56,14 @@ public interface IScenarioService {
     String getScenarioNameByNtsFundPoolId(String fundPoolId);
 
     /**
+     * Gets {@link Scenario} names based on AACL fund pool id.
+     *
+     * @param fundPoolId fund pool id
+     * @return list of {@link Scenario} names
+     */
+    List<String> getScenarioNamesByAaclFundPoolId(String fundPoolId);
+
+    /**
      * Creates {@link Scenario}. Also calculates gross total and reported total for {@link Scenario}.
      *
      * @param scenarioName name of scenario
