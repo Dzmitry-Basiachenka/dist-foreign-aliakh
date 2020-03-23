@@ -187,7 +187,7 @@ public class UsageCsvProcessorIntegrationTest {
                     "<li>Pub Date</li>" +
                     "<li>Number of Copies</li>" +
                     "<li>Reported Value</li>" +
-                    "<li>Amt in USD</li>" +
+                    "<li>Gross Amt in USD</li>" +
                     "<li>Batch Amt in USD</li>" +
                     "<li>Market</li>" +
                     "<li>Market Period From</li>" +
