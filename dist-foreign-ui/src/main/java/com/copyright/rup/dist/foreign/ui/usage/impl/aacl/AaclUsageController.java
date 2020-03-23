@@ -151,6 +151,12 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
+    public List<Long> getInvalidRightsholders() {
+        return aaclUsageService
+            .getInvalidRightsholdersByFilter(getUsageFilterController().getWidget().getAppliedFilter());
+    }
+
+    @Override
     public IStreamSource getSendForClassificationUsagesStreamSource() {
         return new ByteArrayStreamSource("send_for_classification_",
             pipedStream -> researchService.sendForClassification(

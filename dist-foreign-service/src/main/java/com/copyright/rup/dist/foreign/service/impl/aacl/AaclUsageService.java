@@ -229,6 +229,11 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    public List<Long> getInvalidRightsholdersByFilter(UsageFilter filter) {
+        return aaclUsageRepository.findInvalidRightsholdersByFilter(filter);
+    }
+
+    @Override
     @Transactional
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         usageAuditService.deleteActionsByBatchId(usageBatch.getId());

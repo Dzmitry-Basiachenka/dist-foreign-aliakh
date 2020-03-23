@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -152,6 +153,12 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         params.put(FILTER_KEY, Objects.requireNonNull(filter));
         params.put(STATUS_KEY, Objects.requireNonNull(status));
         return selectOne("IAaclUsageMapper.isValidFilteredUsageStatus", params);
+    }
+
+    @Override
+    public List<Long> findInvalidRightsholdersByFilter(UsageFilter filter) {
+        return selectList("IAaclUsageMapper.findInvalidRightsholdersByFilter",
+            Collections.singletonMap(FILTER_KEY, Objects.requireNonNull(filter)));
     }
 
     @Override

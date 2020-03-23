@@ -802,6 +802,16 @@
         where df_usage_aacl_uid in (select df_usage_uid from usage_ids)
     </delete>
 
+    <select id="findInvalidRightsholdersByFilter" parameterType="map" resultType="long">
+        select distinct
+            u.rh_account_number
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        <include refid="IAaclUsageMapper.aaclUsageFilter"/>
+            and r.df_rightsholder_uid is null
+    </select>
+
     <update id="addToScenario" parameterType="map">
         update ${schema}.df_usage u
         set

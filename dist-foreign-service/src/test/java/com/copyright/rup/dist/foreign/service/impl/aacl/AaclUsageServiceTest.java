@@ -327,6 +327,16 @@ public class AaclUsageServiceTest {
     }
 
     @Test
+    public void testGetInvalidRightsholdersByFilter() {
+        UsageFilter filter = new UsageFilter();
+        expect(aaclUsageRepository.findInvalidRightsholdersByFilter(filter))
+            .andReturn(Collections.singletonList(7000000001L)).once();
+        replay(aaclUsageRepository);
+        assertEquals(Collections.singletonList(7000000001L), aaclUsageService.getInvalidRightsholdersByFilter(filter));
+        verify(aaclUsageRepository);
+    }
+
+    @Test
     public void testDeleteUsageBatchDetails() {
         usageAuditService.deleteActionsByBatchId(BATCH_ID);
         expectLastCall().once();
