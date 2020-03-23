@@ -167,7 +167,7 @@ public class FasAuditWidgetTest {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name", "Payment Date",
             "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title", "Title",
-            "Standard Number", "Standard Number Type", "Reported Value", "Amt in USD", "Batch Amt in USD",
+            "Standard Number", "Standard Number Type", "Reported Value", "Gross Amt in USD", "Batch Amt in USD",
             "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date",
             "Period Ending", "Comment"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));

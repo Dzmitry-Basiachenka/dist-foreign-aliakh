@@ -22,7 +22,7 @@ public class AuditNtsCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Detail Status", "Product Family",
         "Usage Batch Name", "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name",
         "Wr Wrk Inst", "System Title", "Title", "Standard Number", "Standard Number Type", "Reported Value",
-        "Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID",
+        "Gross Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID",
         "Dist. Name", "Dist. Date", "Period Ending", "Comment");
 
     /**
