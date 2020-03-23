@@ -501,6 +501,7 @@
         left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         <include refid="IAaclUsageMapper.aaclUsageFilter"/>
+            and u.df_scenario_uid is null
         order by
         <choose>
             <when test="null != sort">
@@ -525,6 +526,7 @@
         from ${schema}.df_usage u
         join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
         <include refid="IAaclUsageMapper.aaclUsageFilter"/>
+            and u.df_scenario_uid is null
     </sql>
 
     <select id="findForAudit" resultMap="aaclUsageDtoResultMap" parameterType="map">

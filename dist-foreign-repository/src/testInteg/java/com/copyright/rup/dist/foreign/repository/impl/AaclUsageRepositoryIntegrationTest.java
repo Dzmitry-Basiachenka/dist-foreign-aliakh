@@ -126,9 +126,9 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
         assertNull(expectedUsage.getAaclUsage().getDiscipline());
         assertNull(expectedUsage.getAaclUsage().getEnrollmentProfile());
-        assertEquals(9, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(6, getNumberOfUsagesWithNotEmptyClassificationData());
         aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
-        assertEquals(10, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(7, getNumberOfUsagesWithNotEmptyClassificationData());
         verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
             aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")),
             this::verifyUsage);
@@ -210,10 +210,24 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindDtosByBatchFilterWithScenarioUsages() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("a87b82ca-cfca-463d-96e9-fa856618c389"));
+        assertEquals(Collections.emptyList(), aaclUsageRepository.findDtosByFilter(usageFilter, null, null));
+    }
+
+    @Test
     public void testFindCountByFilter() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsagePeriod(2018);
         assertEquals(1, aaclUsageRepository.findCountByFilter(usageFilter));
+    }
+
+    @Test
+    public void testFindCountByFilterWithScenarioUsages() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("a87b82ca-cfca-463d-96e9-fa856618c389"));
+        assertEquals(0, aaclUsageRepository.findCountByFilter(usageFilter));
     }
 
     @Test
