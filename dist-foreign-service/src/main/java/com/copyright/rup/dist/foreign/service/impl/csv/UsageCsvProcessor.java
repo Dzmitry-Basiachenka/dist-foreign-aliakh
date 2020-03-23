@@ -137,7 +137,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         PUBLICATION_DATE("Pub Date"),
         NUMBER_OF_COPIES("Number of Copies"),
         REPORTED_VALUE("Reported Value"),
-        GROSS_AMOUNT("Amt in USD"),
+        GROSS_AMOUNT("Gross Amt in USD"),
         BATCH_GROSS_AMOUNT("Batch Amt in USD"),
         MARKET("Market"),
         MARKET_PERIOD_FROM("Market Period From"),
