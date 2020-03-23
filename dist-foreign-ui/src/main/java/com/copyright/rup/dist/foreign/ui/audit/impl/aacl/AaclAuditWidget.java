@@ -64,7 +64,7 @@ public class AaclAuditWidget extends CommonAuditWidget implements IAaclAuditWidg
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
         addColumn(UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", 155);
         addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", 130);
-        addAmountColumn(UsageDto::getServiceFeeAmount, "table.column.service_fee_amount", "serviceFee", 150);
+        addAmountColumn(UsageDto::getServiceFeeAmount, "table.column.service_fee_amount", "serviceFeeAmount", 150);
         addAmountColumn(UsageDto::getNetAmount, "table.column.net_amount", "netAmount", 120);
         addColumn(UsageDto::getScenarioName, "table.column.scenario_name", "scenarioName", 125);
         addColumn(UsageDto::getCheckNumber, "table.column.check_number", "checkNumber", 85);
