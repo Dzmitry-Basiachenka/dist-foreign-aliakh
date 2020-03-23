@@ -252,6 +252,12 @@
         where nts_fields->>'pre_service_fee_fund_uid' = #{fundPoolId}
     </select>
 
+    <select id="findNamesByAaclFundPoolId" parameterType="string" resultType="string">
+        select name
+        from ${schema}.df_scenario
+        where aacl_fields->>'fund_pool_uid' = #{fundPoolId}
+    </select>
+
     <delete id="remove" parameterType="string">
         delete from ${schema}.df_scenario
         where df_scenario_uid = #{scenarioId}

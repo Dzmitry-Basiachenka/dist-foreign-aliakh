@@ -80,6 +80,12 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
+    public List<String> findNamesByAaclFundPoolId(String fundPoolId) {
+        checkArgument(StringUtils.isNotBlank(fundPoolId));
+        return selectList("IScenarioMapper.findNamesByAaclFundPoolId", fundPoolId);
+    }
+
+    @Override
     public void remove(String scenarioId) {
         checkArgument(StringUtils.isNotBlank(scenarioId));
         delete("IScenarioMapper.remove", scenarioId);

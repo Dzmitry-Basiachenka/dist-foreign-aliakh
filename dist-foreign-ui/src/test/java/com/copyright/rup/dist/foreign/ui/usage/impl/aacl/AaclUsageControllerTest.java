@@ -37,6 +37,7 @@ import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
@@ -101,6 +102,7 @@ public class AaclUsageControllerTest {
     private IResearchService researchService;
     private IAaclUsageService aaclUsageService;
     private IFundPoolService fundPoolService;
+    private IScenarioService scenarioService;
     private CsvProcessorFactory csvProcessorFactory;
     private UsageFilter usageFilter;
     private IStreamSourceHandler streamSourceHandler;
@@ -118,6 +120,7 @@ public class AaclUsageControllerTest {
         researchService = createMock(IResearchService.class);
         aaclUsageService = createMock(IAaclUsageService.class);
         fundPoolService = createMock(IFundPoolService.class);
+        scenarioService = createMock(IScenarioService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         reportService = createMock(IReportService.class);
@@ -130,6 +133,7 @@ public class AaclUsageControllerTest {
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, aaclUsageService);
         Whitebox.setInternalState(controller, fundPoolService);
+        Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, reportService);
@@ -228,6 +232,16 @@ public class AaclUsageControllerTest {
         replay(fundPoolService);
         assertEquals(details, controller.getFundPoolDetails(FUND_POOL_ID));
         verify(fundPoolService);
+    }
+
+    @Test
+    public void testGetScenarioNamesAssociatedWithFundPool() {
+        expect(scenarioService.getScenarioNamesByAaclFundPoolId(FUND_POOL_ID))
+            .andReturn(Collections.singletonList("Scenario 1")).once();
+        replay(scenarioService);
+        assertEquals(Collections.singletonList("Scenario 1"),
+            controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID));
+        verify(scenarioService);
     }
 
     @Test

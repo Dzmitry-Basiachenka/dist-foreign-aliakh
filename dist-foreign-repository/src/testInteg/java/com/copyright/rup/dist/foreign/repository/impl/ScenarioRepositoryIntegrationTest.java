@@ -275,6 +275,14 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindNamesByAaclFundPoolId() {
+        assertEquals(Arrays.asList("AACL Scenario 1", "AACL Scenario 2"),
+            scenarioRepository.findNamesByAaclFundPoolId("39548ee4-7929-477e-b9d2-bcb1e76f8037"));
+        assertEquals(Collections.emptyList(),
+            scenarioRepository.findNamesByAaclFundPoolId("859c35e5-abda-407f-92df-02f3a51f24cf"));
+    }
+
+    @Test
     public void testRemove() {
         scenarioRepository.insert(buildScenario());
         assertEquals(1, scenarioRepository.findCountByName(SCENARIO_NAME));

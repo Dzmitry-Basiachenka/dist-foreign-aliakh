@@ -55,6 +55,14 @@ public interface IAaclUsageController extends ICommonUsageController {
     List<FundPoolDetail> getFundPoolDetails(String fundPoolId);
 
     /**
+     * Gets {@link Scenario} names associated with fund pool.
+     *
+     * @param fundPoolId fund pool id
+     * @return list of {@link Scenario} names
+     */
+    List<String> getScenarioNamesAssociatedWithFundPool(String fundPoolId);
+
+    /**
      * Deletes {@link FundPool}.
      *
      * @param fundPool a {@link FundPool} to delete

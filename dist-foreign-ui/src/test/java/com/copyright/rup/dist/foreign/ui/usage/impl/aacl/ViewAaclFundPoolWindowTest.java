@@ -127,6 +127,8 @@ public class ViewAaclFundPoolWindowTest {
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getButtonClickListener(1);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
+        expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
+            .andReturn(Collections.emptyList()).once();
         expect(
             Windows.showConfirmDialog(
                 eq("Are you sure you want to delete <i><b>'AACL Fund Pool'</b></i> fund pool?"), anyObject()))
@@ -134,6 +136,25 @@ public class ViewAaclFundPoolWindowTest {
         replay(controller, confirmWindowMock, grid, Windows.class);
         listener.buttonClick(createMock(ClickEvent.class));
         verify(controller, confirmWindowMock, grid, Windows.class);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testDeleteClickListenerWithAssociatedScenarios() {
+        mockStatic(Windows.class);
+        Grid<FundPool> grid = createMock(Grid.class);
+        Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
+        Button.ClickListener listener = getButtonClickListener(1);
+        expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
+        expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
+            .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
+        Windows.showNotificationWindow(
+            eq("Fund pool cannot be deleted because it is associated with the following scenarios:" +
+                "<ul><li>Scenario 1</li><li>Scenario 2</li></ul>"));
+        expectLastCall().once();
+        replay(controller, grid, Windows.class);
+        listener.buttonClick(createMock(ClickEvent.class));
+        verify(controller, grid, Windows.class);
     }
 
     @Test

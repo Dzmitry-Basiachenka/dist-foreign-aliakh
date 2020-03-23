@@ -103,11 +103,35 @@ public class ViewAaclUsageBatchWindowTest {
         Whitebox.setInternalState(viewaAaclUsageBatchWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
+            .andReturn(Collections.emptyList()).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'AACL batch'</b></i> usage batch?"),
             anyObject())).andReturn(confirmWindowCapture).once();
         replay(controller, confirmWindowCapture, grid, Windows.class);
         listener.buttonClick(null);
         verify(controller, confirmWindowCapture, grid, Windows.class);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testDeleteClickListenerWithAssociatedScenarios() {
+        mockStatic(Windows.class);
+        Grid<UsageBatch> grid = createMock(Grid.class);
+        Whitebox.setInternalState(viewaAaclUsageBatchWindow, "grid", grid);
+        Button.ClickListener listener = getDeleteButtonClickListener();
+        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
+            .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
+        Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
+            "scenarios:<ul><li>Scenario 1</li><li>Scenario 2</li></ul>");
+        expectLastCall().once();
+        replay(controller, grid, Windows.class);
+        listener.buttonClick(null);
+        verify(controller, grid, Windows.class);
     }
 
     @Test
