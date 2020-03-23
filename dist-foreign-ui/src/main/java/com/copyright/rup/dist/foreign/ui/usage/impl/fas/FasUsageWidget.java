@@ -90,7 +90,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
             "table.column.publication_date", "publicationDate", true, 90);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
         addAmountColumn(UsageDto::getReportedValue, "table.column.reported_value", "reportedValue", 130);
-        addAmountColumn(UsageDto::getGrossAmount, "table.column.amount_in_usd", "grossAmount", 110);
+        addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", 110);
         addAmountColumn(UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", 135);
         addColumn(UsageDto::getMarket, "table.column.market", "market", true, 115);
         addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", true, 150);
