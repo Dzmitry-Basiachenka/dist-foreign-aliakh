@@ -144,6 +144,14 @@ public interface IAaclUsageRepository {
     boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
 
     /**
+     * Finds rightsholders account numbers that are not presented in database based on {@link UsageFilter}.
+     *
+     * @param filter instance of {@link UsageFilter}
+     * @return list of rightsholders account numbers
+     */
+    List<Long> findInvalidRightsholdersByFilter(UsageFilter filter);
+
+    /**
      * Deletes all {@link Usage}s from the batch with given id.
      *
      * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id

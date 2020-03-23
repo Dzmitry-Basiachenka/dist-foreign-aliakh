@@ -126,9 +126,9 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
         assertNull(expectedUsage.getAaclUsage().getDiscipline());
         assertNull(expectedUsage.getAaclUsage().getEnrollmentProfile());
-        assertEquals(6, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(9, getNumberOfUsagesWithNotEmptyClassificationData());
         aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
-        assertEquals(7, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(10, getNumberOfUsagesWithNotEmptyClassificationData());
         verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
             aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")),
             this::verifyUsage);
@@ -322,6 +322,28 @@ public class AaclUsageRepositoryIntegrationTest {
         usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
+    }
+
+    @Test
+    public void testFindInvalidRightsholdersByFilterWithBatchFilter() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("70a96dc1-b0a8-433f-a7f4-c5d94ee75a9e"));
+        assertEquals(Arrays.asList(7000000001L, 7000000002L),
+            aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
+    }
+
+    @Test
+    public void testFindInvalidRightsholdersByFilterWithBatchAndPeriodFilter() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("70a96dc1-b0a8-433f-a7f4-c5d94ee75a9e"));
+        usageFilter.setUsagePeriod(2019);
+        assertEquals(Collections.emptyList(), aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
+        usageFilter.setUsagePeriod(2017);
+        assertEquals(Collections.singletonList(7000000001L),
+            aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
+        usageFilter.setUsagePeriod(2015);
+        assertEquals(Collections.singletonList(7000000002L),
+            aaclUsageRepository.findInvalidRightsholdersByFilter(usageFilter));
     }
 
     @Test

@@ -184,6 +184,18 @@ public class AaclUsageControllerTest {
     }
 
     @Test
+    public void testGetInvalidRightsholders() {
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(aaclUsageService.getInvalidRightsholdersByFilter(usageFilter))
+            .andReturn(Collections.singletonList(7000000001L)).once();
+        replay(filterController, filterWidgetMock, aaclUsageService);
+        assertEquals(Collections.singletonList(7000000001L), controller.getInvalidRightsholders());
+        verify(filterController, filterWidgetMock, aaclUsageService);
+    }
+
+    @Test
     public void testInstantiateWidget() {
         assertNotNull(controller.instantiateWidget());
     }

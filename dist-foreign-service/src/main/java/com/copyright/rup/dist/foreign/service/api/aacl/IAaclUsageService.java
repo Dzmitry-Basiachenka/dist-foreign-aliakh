@@ -119,6 +119,14 @@ public interface IAaclUsageService {
     boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
 
     /**
+     * Gets rightsholders account numbers that are not presented in database based on {@link UsageFilter}.
+     *
+     * @param filter instance of {@link UsageFilter}
+     * @return list of rightsholders account numbers
+     */
+    List<Long> getInvalidRightsholdersByFilter(UsageFilter filter);
+
+    /**
      * Deletes all {@link Usage}s associated with the given AACL {@link UsageBatch}.
      *
      * @param usageBatch {@link UsageBatch} to delete usages from
