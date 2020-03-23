@@ -414,8 +414,8 @@ public class NtsUsageWidgetTest {
         assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
             "RRO Account #", "RRO Name", "RH Account #", "RH Name", "Wr Wrk Inst", "System Title", "Standard Number",
             "Standard Number Type", "Fiscal Year", "Payment Date", "Title", "Article", "Publisher", "Pub Date",
-            "Number of Copies", "Reported Value", "Amt in USD", "Market", "Market Period From", "Market Period To",
-            "Author", "Comment"),
+            "Number of Copies", "Reported Value", "Gross Amt in USD", "Market", "Market Period From",
+            "Market Period To", "Author", "Comment"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid);
     }
