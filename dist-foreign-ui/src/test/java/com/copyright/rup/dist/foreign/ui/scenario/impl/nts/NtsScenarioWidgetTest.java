@@ -126,7 +126,7 @@ public class NtsScenarioWidgetTest {
         assertTrue(component instanceof Grid);
         Grid grid = (Grid) component;
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("RH Account #", "RH Name", "Payee Account #", "Payee Name", "Amt in USD",
+        assertEquals(Arrays.asList("RH Account #", "RH Name", "Payee Account #", "Payee Name", "Gross Amt in USD",
             "Service Fee Amount", "Net Amt in USD", "Service Fee %"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertTrue(grid.isFooterVisible());

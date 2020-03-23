@@ -1,3 +1,3 @@
-RH Account #,RH Name,Payee Account #,Payee Name,Amt in USD,Service Fee Amount,Net Amt in USD,Service Fee %
+RH Account #,RH Name,Payee Account #,Payee Name,Gross Amt in USD,Service Fee Amount,Net Amt in USD,Service Fee %
 1000002859,John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,67874.80,21720.00,46154.80,32.0
 1000005413,Kluwer Academic Publishers - Dordrecht,1000005413,Kluwer Academic Publishers - Dordrecht,2125.24,680.08,1445.16,32.0

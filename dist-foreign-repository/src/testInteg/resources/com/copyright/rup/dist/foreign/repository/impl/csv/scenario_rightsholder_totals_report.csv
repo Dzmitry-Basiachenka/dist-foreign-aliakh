@@ -1,4 +1,4 @@
-RH Account #,RH Name,Payee Account #,Payee Name,Amt in USD,Service Fee Amount,Net Amt in USD,Service Fee %
+RH Account #,RH Name,Payee Account #,Payee Name,Gross Amt in USD,Service Fee Amount,Net Amt in USD,Service Fee %
 1000000003,South African Institute of Mining and Metallurgy,1000000003,South African Institute of Mining and Metallurgy,6509.31,2082.98,4426.33,32.0
 1000000004,Computers for Design and Construction,1000000004,Computers for Design and Construction,1301.86,416.60,885.26,32.0
 1000000006,Januz Marketing Communications,1000000006,Januz Marketing Communications,2438.82,780.42,1658.40,32.0
