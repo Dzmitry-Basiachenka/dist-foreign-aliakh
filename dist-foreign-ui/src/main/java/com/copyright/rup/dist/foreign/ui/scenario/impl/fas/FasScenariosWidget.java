@@ -48,6 +48,7 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
     private final Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label reportedTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label serviceFeeTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label selectionCriteriaLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final IFasScenariosController controller;
@@ -107,9 +108,8 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
     protected VerticalLayout initMetadataLayout() {
         descriptionLabel.setStyleName("v-label-white-space-normal");
         selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
-        VerticalLayout metadataLayout =
-            new VerticalLayout(ownerLabel, netTotalLabel, grossTotalLabel, reportedTotalLabel,
-                descriptionLabel, selectionCriteriaLabel);
+        VerticalLayout metadataLayout = new VerticalLayout(ownerLabel, netTotalLabel, grossTotalLabel,
+            serviceFeeTotalLabel, reportedTotalLabel, descriptionLabel, selectionCriteriaLabel);
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
         return metadataLayout;
@@ -122,6 +122,8 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
             formatAmount(scenarioWithAmounts.getNetTotal())));
         grossTotalLabel.setValue(ForeignUi.getMessage("label.gross_amount_in_usd",
             formatAmount(scenarioWithAmounts.getGrossTotal())));
+        serviceFeeTotalLabel.setValue(ForeignUi.getMessage("label.service_fee_amount_in_usd",
+            formatAmount(scenarioWithAmounts.getServiceFeeTotal())));
         reportedTotalLabel.setValue(ForeignUi.getMessage("label.reported_total",
             formatAmount(scenarioWithAmounts.getReportedTotal())));
         descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenarioWithAmounts.getDescription()));

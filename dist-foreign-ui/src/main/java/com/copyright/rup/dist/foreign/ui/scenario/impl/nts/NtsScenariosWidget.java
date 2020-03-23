@@ -46,6 +46,7 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
     private final Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label reportedTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label serviceFeeTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label rhMinimumAmountLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label preServiceFeeAmountLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label postServiceFeeAmountLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -92,10 +93,9 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
     protected VerticalLayout initMetadataLayout() {
         descriptionLabel.setStyleName("v-label-white-space-normal");
         selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
-        VerticalLayout metadataLayout =
-            new VerticalLayout(ownerLabel, netTotalLabel, grossTotalLabel, reportedTotalLabel,
-                rhMinimumAmountLabel, preServiceFeeAmountLabel, postServiceFeeAmountLabel, preServiceFeeFundLabel,
-                descriptionLabel, selectionCriteriaLabel);
+        VerticalLayout metadataLayout = new VerticalLayout(ownerLabel, netTotalLabel, grossTotalLabel,
+            serviceFeeTotalLabel, reportedTotalLabel, rhMinimumAmountLabel, preServiceFeeAmountLabel,
+            postServiceFeeAmountLabel, preServiceFeeFundLabel, descriptionLabel, selectionCriteriaLabel);
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
         return metadataLayout;
@@ -108,6 +108,8 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
             formatAmount(scenarioWithAmounts.getNetTotal())));
         grossTotalLabel.setValue(ForeignUi.getMessage("label.gross_amount_in_usd",
             formatAmount(scenarioWithAmounts.getGrossTotal())));
+        serviceFeeTotalLabel.setValue(ForeignUi.getMessage("label.service_fee_amount_in_usd",
+            formatAmount(scenarioWithAmounts.getServiceFeeTotal())));
         reportedTotalLabel.setValue(ForeignUi.getMessage("label.reported_total",
             formatAmount(scenarioWithAmounts.getReportedTotal())));
         NtsFields ntsFields = scenarioWithAmounts.getNtsFields();
