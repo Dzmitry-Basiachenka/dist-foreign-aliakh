@@ -1,3 +1,13 @@
+9.1.11
+-
+* B-52335 FDA: Create AACL Scenario: Adjust scenario logging
+* B-52335 FDA: Create AACL Scenario: remove unused parameter from logger
+* B-56527 FDA: Add "Gross" to "Amt in USD" for all product families: refactor Exclude Details By Payee table
+* B-56527 FDA: Add "Gross" to "Amt in USD" for all product families: refactor Refresh Scenario table
+* B-56527 FDA: Add "Gross" to "Amt in USD" for all product families: refactor scenario by RH drilldown tables
+* B-56527 FDA: Add "Gross" to "Amt in USD" for all product families: refactor scenario table, export scenario and export scenario details CSV reports
+* B-56943 FDA: AACL map detailed licensee classes to aggregate licensee classes: avoid inserting invalid values in aggregate class id dropdown
+
 9.1.10
 -
 * Revving up build version
