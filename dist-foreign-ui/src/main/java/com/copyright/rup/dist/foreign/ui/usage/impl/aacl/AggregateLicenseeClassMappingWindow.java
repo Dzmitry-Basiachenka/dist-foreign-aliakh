@@ -17,6 +17,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -137,7 +138,11 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
         comboBox.setSelectedItem(detailLicenseeClass.getAggregateLicenseeClass());
         comboBox.setWidth("40");
         comboBox.addValueChangeListener(listener -> {
-            detailLicenseeClass.setAggregateLicenseeClass(listener.getValue());
+            if (Objects.nonNull(listener.getValue())) {
+                detailLicenseeClass.setAggregateLicenseeClass(listener.getValue());
+            } else {
+                detailLicenseeClass.setAggregateLicenseeClass(listener.getOldValue());
+            }
             grid.getDataProvider().refreshAll();
         });
         return comboBox;
