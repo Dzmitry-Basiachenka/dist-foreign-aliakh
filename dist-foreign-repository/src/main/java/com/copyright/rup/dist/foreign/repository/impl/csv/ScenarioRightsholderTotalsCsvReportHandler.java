@@ -21,7 +21,7 @@ import java.util.List;
 public class ScenarioRightsholderTotalsCsvReportHandler extends BaseCsvReportHandler<RightsholderTotalsHolder> {
 
     private static final List<String> HEADERS = Arrays.asList("RH Account #", "RH Name", "Payee Account #",
-        "Payee Name", "Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %");
+        "Payee Name", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %");
 
     /**
      * Constructor.

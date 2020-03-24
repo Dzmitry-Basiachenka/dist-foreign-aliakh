@@ -187,7 +187,7 @@ public abstract class CommonScenarioWidget extends Window implements ICommonScen
             .setHidable(true)
             .setExpandRatio(2);
         rightsholdersGrid.addColumn(holder -> CurrencyUtils.format(holder.getGrossTotal(), null))
-            .setCaption(ForeignUi.getMessage("table.column.amount_in_usd"))
+            .setCaption(ForeignUi.getMessage("table.column.gross_amount_in_usd"))
             .setId(PROPERTY_GROSS_TOTAL)
             .setSortProperty(PROPERTY_GROSS_TOTAL)
             .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)

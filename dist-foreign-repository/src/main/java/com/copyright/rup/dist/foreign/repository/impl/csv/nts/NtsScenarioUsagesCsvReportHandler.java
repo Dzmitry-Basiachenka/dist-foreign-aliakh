@@ -24,8 +24,8 @@ public class NtsScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<Usag
         Arrays.asList("Detail ID", "Product Family", "Usage Batch Name", "RRO Account #", "RRO Name", "RH Account #",
             "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title", "Standard Number",
             "Standard Number Type", "Fiscal Year", "Payment Date", "Title", "Article", "Publisher", "Pub Date",
-            "Number of Copies", "Reported Value", "Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %",
-            "Market", "Market Period From", "Market Period To", "Author", "Comment");
+            "Number of Copies", "Reported Value", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD",
+            "Service Fee %", "Market", "Market Period From", "Market Period To", "Author", "Comment");
 
     /**
      * Constructor.
