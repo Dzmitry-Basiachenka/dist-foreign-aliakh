@@ -122,7 +122,7 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
         addColumn(holder -> holder.getPayee().getName(), "table.column.payee_name", "payee.name")
             .setComparator((SerializableComparator<PayeeTotalHolder>) (holder1, holder2) ->
                 holder1.getPayee().getName().compareToIgnoreCase(holder2.getPayee().getName()));
-        addAmountColumn(PayeeTotalHolder::getGrossTotal, "table.column.amount_in_usd", "grossTotal");
+        addAmountColumn(PayeeTotalHolder::getGrossTotal, "table.column.gross_amount_in_usd", "grossTotal");
         addAmountColumn(PayeeTotalHolder::getServiceFeeTotal, "table.column.service_fee_amount",
             "serviceFeeTotal");
         addAmountColumn(PayeeTotalHolder::getNetTotal, "table.column.net_amount", "netTotal");
