@@ -89,7 +89,7 @@ public class NtsDrillDownByRightsholderWidgetTest {
         });
         assertArrayEquals(new String[]{"Detail ID", "Product Family", "Usage Batch Name", "RRO Account #", "RRO Name",
                 "Wr Wrk Inst", "System Title", "Standard Number", "Standard Number Type", "Fiscal Year", "Payment Date",
-                "Title", "Article", "Publisher", "Pub Date", "Number of Copies", "Reported Value", "Amt in USD",
+                "Title", "Article", "Publisher", "Pub Date", "Number of Copies", "Reported Value", "Gross Amt in USD",
                 "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market", "Market Period From",
                 "Market Period To", "Author", "Comment"},
             grid.getColumns().stream().map(Column::getCaption).toArray());
