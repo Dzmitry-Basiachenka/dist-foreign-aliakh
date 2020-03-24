@@ -131,13 +131,13 @@ public class RefreshScenarioWindow extends Window {
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies");
         addAmountColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
             "reportedValue", 113);
-        addAmountColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.amount_in_usd",
-            "grossAmount", 120);
+        addAmountColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount_in_usd",
+            "grossAmount", 130);
         addAmountColumn(usage -> CurrencyUtils.format(usage.getBatchGrossAmount(), null),
-            "table.column.batch_gross_amount", "batchGrossAmount", 120);
+            "table.column.batch_gross_amount", "batchGrossAmount", 130);
         addColumn(UsageDto::getMarket, "table.column.market", "market", true, 135);
-        addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom");
-        addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo");
+        addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", true, 150);
+        addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", true, 145);
         addColumn(UsageDto::getAuthor, "table.column.author", "author", true, 300);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", true, 200);
     }
