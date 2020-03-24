@@ -166,13 +166,13 @@ public class ScenarioService implements IScenarioService {
     public Scenario createAaclScenario(String scenarioName, AaclFields aaclFields, String description,
                                        UsageFilter usageFilter) {
         LOGGER.info("Insert AACL scenario. Started. Name={}, AaclFields={}, Description={}, UsageFilter={}",
-            scenarioName, aaclFields, description, usageFilter);
+            scenarioName, ForeignLogUtils.scenarioAaclFields(aaclFields), description, usageFilter);
         Scenario scenario = buildAaclScenario(scenarioName, aaclFields, description, usageFilter);
         scenarioRepository.insert(scenario);
         aaclUsageService.addUsagesToScenario(scenario, usageFilter);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
-        LOGGER.info("Insert AACL scenario. Finished. Name={}, AaclFields={}, Description={}, UsageFilter={}",
+        LOGGER.info("Insert AACL scenario. Finished. Name={}, Description={}, UsageFilter={}",
             scenarioName, aaclFields, description, usageFilter);
         return scenario;
     }
