@@ -189,8 +189,8 @@ public class ExcludePayeeWidgetTest {
         assertTrue(component instanceof Grid);
         Grid grid = (Grid) component;
         List<Grid.Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList(
-            "Payee Account #", "Payee Name", "Amt in USD", "Service Fee Amount", "Net Amt in USD", "Participating"),
+        assertEquals(Arrays.asList("Payee Account #", "Payee Name", "Gross Amt in USD", "Service Fee Amount",
+            "Net Amt in USD", "Participating"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
     }
 
