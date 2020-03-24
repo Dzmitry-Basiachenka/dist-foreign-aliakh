@@ -173,7 +173,7 @@ public class ScenarioService implements IScenarioService {
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         LOGGER.info("Insert AACL scenario. Finished. Name={}, Description={}, UsageFilter={}",
-            scenarioName, aaclFields, description, usageFilter);
+            scenarioName, description, usageFilter);
         return scenario;
     }
 
