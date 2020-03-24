@@ -1,7 +1,14 @@
 package com.copyright.rup.dist.foreign.domain.common.util;
 
 import com.copyright.rup.dist.common.util.LogUtils.ILogWrapper;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Provides methods to log information for FDA related objects.
@@ -13,6 +20,9 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
  * @author Ihar Suvorau
  */
 public final class ForeignLogUtils {
+
+    private static final String NULL_STRING = "NULL";
+    private static final String LIST_DELIMITER = ", ";
 
     private ForeignLogUtils() {
         throw new AssertionError("Constructor shouldn't be called directly");
@@ -33,5 +43,84 @@ public final class ForeignLogUtils {
                     : String.format("ScenarioName='%s', Status='%s'", scenario.getName(), scenario.getStatus());
             }
         };
+    }
+
+    /**
+     * Wraps the {@link AaclFields} object and provides information for log message.
+     *
+     * @param aaclFields instance of {@link AaclFields}
+     * @return instance of {@link ILogWrapper}
+     */
+    public static ILogWrapper scenarioAaclFields(AaclFields aaclFields) {
+        return new ILogWrapper() {
+            @Override
+            public String toString() {
+                String result;
+                if (null == aaclFields) {
+                    result = "AaclFields={NULL}";
+                } else {
+                    result = String.format("AaclFields[TitleCutoffAmount=%s, FundPoolId=%s, UsageAges=%s, " +
+                            "PublicationTypes=%s, DetailLicenseeClasses=%s]",
+                        aaclFields.getTitleCutoffAmount(), aaclFields.getFundPoolId(),
+                        formatUsageAges(aaclFields.getUsageAges()),
+                        formatPublicationTypes(aaclFields.getPublicationTypes()),
+                        formatDetailLicenseeClasses(aaclFields.getDetailLicenseeClasses()));
+                }
+                return result;
+            }
+        };
+    }
+
+    private static String formatUsageAges(List<UsageAge> usageAges) {
+        String result;
+        if (null == usageAges) {
+            result = NULL_STRING;
+        } else {
+            result = usageAges.stream()
+                .map(usageAge -> null == usageAge
+                    ? NULL_STRING :
+                    String.format("[Period=%s, Weight=%s]", usageAge.getPeriod(), usageAge.getWeight()))
+                .collect(Collectors.joining(LIST_DELIMITER));
+        }
+        return result;
+    }
+
+    private static String formatPublicationTypes(List<PublicationType> publicationTypes) {
+        String result;
+        if (null == publicationTypes) {
+            result = NULL_STRING;
+        } else {
+            result = publicationTypes.stream()
+                .map(publicationType -> null == publicationType
+                    ? NULL_STRING :
+                    String.format("[Name=%s, Weight=%s]", publicationType.getName(), publicationType.getWeight()))
+                .collect(Collectors.joining(LIST_DELIMITER));
+        }
+        return result;
+    }
+
+    private static String formatDetailLicenseeClasses(List<DetailLicenseeClass> detailLicenseeClasses) {
+        String result;
+        if (null == detailLicenseeClasses) {
+            result = NULL_STRING;
+        } else {
+            result = detailLicenseeClasses.stream()
+                .map(ForeignLogUtils::formatDetailLicenseeClass)
+                .collect(Collectors.joining(LIST_DELIMITER));
+        }
+        return result;
+    }
+
+    private static String formatDetailLicenseeClass(DetailLicenseeClass detailLicenseeClass) {
+        String result;
+        if (null == detailLicenseeClass) {
+            result = NULL_STRING;
+        } else {
+            result = String.format("[DLC=%s, ALC=%s]", detailLicenseeClass.getId(),
+                null == detailLicenseeClass.getAggregateLicenseeClass()
+                    ? NULL_STRING
+                    : detailLicenseeClass.getAggregateLicenseeClass().getId());
+        }
+        return result;
     }
 }
