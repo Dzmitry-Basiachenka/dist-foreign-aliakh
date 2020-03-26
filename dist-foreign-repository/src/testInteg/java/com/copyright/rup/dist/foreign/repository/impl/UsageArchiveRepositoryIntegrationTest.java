@@ -106,7 +106,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isEmpty(
             usageArchiveRepository.findByIdAndStatus(Collections.singletonList(ARCHIVED_USAGE_ID),
                 UsageStatusEnum.ARCHIVED)));
-        assertEquals(0, usageRepository.findReferencedFasUsagesCountByIds(ARCHIVED_USAGE_ID));
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(ARCHIVED_USAGE_ID));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         usageArchiveRepository.deleteByIds(usageIds);
         assertTrue(
             CollectionUtils.isEmpty(usageArchiveRepository.findByIdAndStatus(usageIds, UsageStatusEnum.ARCHIVED)));
-        assertEquals(0, usageRepository.findReferencedFasUsagesCountByIds(ARCHIVED_USAGE_ID,
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(ARCHIVED_USAGE_ID,
             "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1"));
     }
 

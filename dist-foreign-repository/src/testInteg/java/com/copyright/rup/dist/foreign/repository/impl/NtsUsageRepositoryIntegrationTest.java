@@ -183,10 +183,10 @@ public class NtsUsageRepositoryIntegrationTest {
     @Test
     public void testDeleteByScenarioIdScenarioExcluded() {
         assertEquals(2, usageRepository.findByStatuses(UsageStatusEnum.SCENARIO_EXCLUDED).size());
-        assertEquals(1, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_4));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_4));
         ntsUsageRepository.deleteByScenarioId("c4bc09c1-eb9b-41f3-ac93-9cd088dff408");
         assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.SCENARIO_EXCLUDED).size());
-        assertEquals(0, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_4));
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_4));
     }
 
     @Test
@@ -211,7 +211,7 @@ public class NtsUsageRepositoryIntegrationTest {
         ntsUsageRepository.deleteBelletristicByScenarioId(scenarioId);
         verifyUsageIdsInScenario(Arrays.asList(USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
         assertEquals(0, usageRepository.findByIds(Collections.singletonList(USAGE_ID_BELLETRISTIC)).size());
-        assertEquals(0, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_BELLETRISTIC));
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_BELLETRISTIC));
     }
 
     @Test
