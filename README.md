@@ -1,3 +1,9 @@
+9.1.12
+-
+* B-56844 Tech Debt: FDA: Fix security vulnerabilities CVE-2020-9546, CVE-2020-9547, CVE-2020-9548 in jackson-databind
+* B-56844 Tech Debt: FDA: Fix security vulnerability CVE-2020-1938 in tomcat-embed-core
+* CDP-898 FDA: Upload AACL Usage Batch: RH_NOT_FOUND usages are removed from ‘df_usage’ table and are not removed from ‘df_usage_aacl’ table
+
 9.1.11
 -
 * B-52335 FDA: Create AACL Scenario: Adjust scenario logging
