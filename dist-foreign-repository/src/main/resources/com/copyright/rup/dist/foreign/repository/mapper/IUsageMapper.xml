@@ -612,9 +612,13 @@
         with u as (
             delete from ${schema}.df_usage
             where df_usage_uid = #{usageId}
+        ),
+        fas as (
+            delete from ${schema}.df_usage_fas
+            where df_usage_fas_uid = #{usageId}
         )
-        delete from ${schema}.df_usage_fas
-        where df_usage_fas_uid = #{usageId}
+        delete from ${schema}.df_usage_aacl
+        where df_usage_aacl_uid = #{usageId}
     </delete>
 
     <delete id="deleteByScenarioId" parameterType="string">
@@ -1229,12 +1233,19 @@
             and u.wr_wrk_inst is not null
     </select>
 
-    <select id="findReferencedFasUsagesCountByIds" resultType="int" parameterType="list">
-        select count(1)
+    <select id="findReferencedUsagesCountByIds" resultType="int" parameterType="list">
+        select
+            (select count(1)
             from ${schema}.df_usage_fas
-        where df_usage_fas_uid in
-        <foreach collection="usageIds" item="usageId" open="(" separator="," close=")">
-            #{usageId}
-        </foreach>
+            where df_usage_fas_uid in
+            <foreach collection="usageIds" item="usageId" open="(" separator="," close=")">
+                #{usageId}
+            </foreach>) +
+            (select count(1)
+            from ${schema}.df_usage_aacl
+            where df_usage_aacl_uid in
+            <foreach collection="usageIds" item="usageId" open="(" separator="," close=")">
+                #{usageId}
+            </foreach>)
     </select>
 </mapper>

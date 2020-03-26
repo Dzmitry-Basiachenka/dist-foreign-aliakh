@@ -118,6 +118,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
     private static final String USAGE_ID_31 = "3cf274c5-8eac-4d4a-96be-5921ae026840";
     private static final String USAGE_ID_32 = "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15";
+    private static final String USAGE_ID_33 = "ff853c23-9525-441a-8e78-be2d17201025";
     private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
@@ -428,10 +429,10 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindReferencedFasUsagesCountByIds() {
-        assertEquals(2, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_31, USAGE_ID_2));
-        assertEquals(1, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_32));
-        assertEquals(1, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_31, "invalidId"));
+    public void testFindReferencedUsagesCountByIds() {
+        assertEquals(2, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_31, USAGE_ID_2));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_32));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_31, "invalidId"));
     }
 
     @Test
@@ -442,24 +443,38 @@ public class UsageRepositoryIntegrationTest {
         List<UsageDto> usages = usageRepository.findDtosByFilter(filter, null, sort);
         assertEquals(1, usages.size());
         assertEquals(USAGE_ID_1, usages.get(0).getId());
-        assertEquals(1, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_1));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_1));
         usageRepository.deleteByBatchId(USAGE_BATCH_ID_1);
         assertEquals(0, usageRepository.findDtosByFilter(filter, null, sort).size());
-        assertEquals(0, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_1));
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_1));
     }
 
     @Test
-    public void testDeleteById() {
+    public void testDeleteByIdFas() {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_31, USAGE_ID_32));
         assertEquals(2, CollectionUtils.size(usages));
-        assertEquals(1, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_31));
-        assertEquals(1, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_32));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_31));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_32));
         usageRepository.deleteById(USAGE_ID_31);
         usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_31, USAGE_ID_32));
         assertEquals(1, CollectionUtils.size(usages));
         assertEquals(USAGE_ID_32, usages.get(0).getId());
-        assertEquals(0, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_31));
-        assertEquals(1, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_32));
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_31));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_32));
+    }
+
+    @Test
+    public void testDeleteByIdAacl() {
+        List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_32, USAGE_ID_33));
+        assertEquals(2, CollectionUtils.size(usages));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_32));
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_33));
+        usageRepository.deleteById(USAGE_ID_33);
+        usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_32, USAGE_ID_33));
+        assertEquals(1, CollectionUtils.size(usages));
+        assertEquals(USAGE_ID_32, usages.get(0).getId());
+        assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_32));
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_33));
     }
 
     @Test
@@ -474,10 +489,10 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testDeleteByScenarioId() {
         assertEquals(2, usageRepository.findByScenarioId(SCENARIO_ID).size());
-        assertEquals(2, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_7, USAGE_ID_8));
+        assertEquals(2, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_7, USAGE_ID_8));
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         assertTrue(usageRepository.findByScenarioId(SCENARIO_ID).isEmpty());
-        assertEquals(2, usageRepository.findReferencedFasUsagesCountByIds(USAGE_ID_7, USAGE_ID_8));
+        assertEquals(2, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_7, USAGE_ID_8));
     }
 
     @Test

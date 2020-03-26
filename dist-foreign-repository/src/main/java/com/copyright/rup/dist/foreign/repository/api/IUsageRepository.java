@@ -319,10 +319,10 @@ public interface IUsageRepository {
     Map<Long, Set<String>> findWrWrkInstToUsageIdsByBatchNameAndUsageStatus(String batchName, UsageStatusEnum status);
 
     /**
-     * Finds count of referenced usages in the df_usage_fas table by ids.
+     * Finds count of referenced usages in the df_usage_fas and df_usage_aacl tables by ids.
      *
      * @param usageIds set of usage ids
      * @return the count of usages
      */
-    int findReferencedFasUsagesCountByIds(String... usageIds);
+    int findReferencedUsagesCountByIds(String... usageIds);
 }

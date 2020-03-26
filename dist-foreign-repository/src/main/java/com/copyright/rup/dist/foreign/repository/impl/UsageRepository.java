@@ -331,8 +331,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public int findReferencedFasUsagesCountByIds(String... usageIds) {
-        return selectOne("IUsageMapper.findReferencedFasUsagesCountByIds",
+    public int findReferencedUsagesCountByIds(String... usageIds) {
+        return selectOne("IUsageMapper.findReferencedUsagesCountByIds",
             ImmutableMap.of("usageIds", Objects.requireNonNull(usageIds)));
     }
 
