@@ -18,6 +18,14 @@ import java.util.Set;
 public interface IFundPoolService {
 
     /**
+     * Gets {@link FundPool} by id.
+     *
+     * @param fundPoolId {@link FundPool} id
+     * @return found {@link FundPool} or {@code null} if none found
+     */
+    FundPool getFundPoolById(String fundPoolId);
+
+    /**
      * Gets all {@link FundPool}s related to selected product family.
      *
      * @param productFamily product family

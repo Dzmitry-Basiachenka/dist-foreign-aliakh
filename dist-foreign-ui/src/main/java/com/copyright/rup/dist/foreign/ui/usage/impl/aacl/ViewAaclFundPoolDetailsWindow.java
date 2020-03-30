@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -16,6 +15,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -35,19 +35,19 @@ public class ViewAaclFundPoolDetailsWindow extends Window {
      * Constructor.
      *
      * @param fundPool   an {@link FundPool} to view
-     * @param controller an {@link IAaclUsageController} instance
+     * @param fundPoolDetails list of {@link FundPoolDetail}s
      */
-    public ViewAaclFundPoolDetailsWindow(FundPool fundPool, IAaclUsageController controller) {
+    public ViewAaclFundPoolDetailsWindow(FundPool fundPool, List<FundPoolDetail> fundPoolDetails) {
         setWidth(600, Unit.PIXELS);
         setHeight(600, Unit.PIXELS);
-        initGrid(Objects.requireNonNull(fundPool), Objects.requireNonNull(controller));
+        initGrid(Objects.requireNonNull(fundPoolDetails));
         HorizontalLayout buttonsLayout = initButtons();
         VerticalLayout layout = new VerticalLayout(grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         setContent(layout);
-        setCaption(fundPool.getName());
+        setCaption(Objects.requireNonNull(fundPool).getName());
         VaadinUtils.addComponentStyle(this, "view-aacl-fund-pool-details-window");
     }
 
@@ -59,10 +59,10 @@ public class ViewAaclFundPoolDetailsWindow extends Window {
         return layout;
     }
 
-    private void initGrid(FundPool fundPool, IAaclUsageController controller) {
+    private void initGrid(List<FundPoolDetail> fundPoolDetails) {
         grid = new Grid<>();
         grid.setSelectionMode(SelectionMode.NONE);
-        grid.setItems(controller.getFundPoolDetails(fundPool.getId()));
+        grid.setItems(fundPoolDetails);
         grid.setSizeFull();
         grid.addColumn(detail -> detail.getAggregateLicenseeClass().getId())
             .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))

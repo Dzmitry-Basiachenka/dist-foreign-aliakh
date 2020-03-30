@@ -17,7 +17,9 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -42,6 +44,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -105,12 +108,15 @@ public class ViewAaclFundPoolWindowTest {
     @Test
     public void testViewClickListener() throws Exception {
         mockStatic(Windows.class);
+        List<FundPoolDetail> fundPoolDetails = buildFundPoolDetail();
+        expect(controller.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
         ViewAaclFundPoolDetailsWindow viewDetailsWindowMock = createMock(ViewAaclFundPoolDetailsWindow.class);
         Grid<FundPool> grid = createMock(Grid.class);
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getButtonClickListener(0);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
-        expectNew(ViewAaclFundPoolDetailsWindow.class, fundPool, controller).andReturn(viewDetailsWindowMock).once();
+        expectNew(ViewAaclFundPoolDetailsWindow.class, fundPool, fundPoolDetails).andReturn(viewDetailsWindowMock)
+            .once();
         Windows.showModalWindow(viewDetailsWindowMock);
         expectLastCall().once();
         replay(controller, grid, Windows.class, ViewAaclFundPoolDetailsWindow.class);
@@ -227,5 +233,20 @@ public class ViewAaclFundPoolWindowTest {
         aaclFundPool.setId(FUND_POOL_ID);
         aaclFundPool.setName("AACL Fund Pool");
         return aaclFundPool;
+    }
+    private List<FundPoolDetail> buildFundPoolDetail() {
+        FundPoolDetail fundPoolDetail = new FundPoolDetail();
+        fundPoolDetail.setAggregateLicenseeClass(buildAggregateLicenseeClass(108, "EXGP", "Life Sciences"));
+        fundPoolDetail.setGrossAmount(BigDecimal.ONE);
+        return Collections.singletonList(fundPoolDetail);
+    }
+
+    private AggregateLicenseeClass buildAggregateLicenseeClass(Integer id, String enrollmentProfile,
+                                                               String discipline) {
+        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+        aggregateLicenseeClass.setId(id);
+        aggregateLicenseeClass.setEnrollmentProfile(enrollmentProfile);
+        aggregateLicenseeClass.setDiscipline(discipline);
+        return aggregateLicenseeClass;
     }
 }

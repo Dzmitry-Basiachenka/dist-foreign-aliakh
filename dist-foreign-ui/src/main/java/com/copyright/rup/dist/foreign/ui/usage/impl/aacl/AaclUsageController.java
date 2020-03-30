@@ -119,6 +119,11 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
+    public FundPool getFundPoolById(String fundPoolId) {
+        return fundPoolService.getFundPoolById(fundPoolId);
+    }
+
+    @Override
     public List<FundPool> getFundPools() {
         return fundPoolService.getFundPools(FdaConstants.AACL_PRODUCT_FAMILY);
     }

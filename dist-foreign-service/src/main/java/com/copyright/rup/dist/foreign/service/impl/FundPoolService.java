@@ -45,6 +45,11 @@ public class FundPoolService implements IFundPoolService {
     private ILicenseeClassService licenseeClassService;
 
     @Override
+    public FundPool getFundPoolById(String fundPoolId) {
+        return fundPoolRepository.findById(fundPoolId);
+    }
+
+    @Override
     public List<FundPool> getFundPools(String productFamily) {
         return fundPoolRepository.findByProductFamily(productFamily);
     }
