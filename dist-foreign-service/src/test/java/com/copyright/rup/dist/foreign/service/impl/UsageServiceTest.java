@@ -308,7 +308,6 @@ public class UsageServiceTest {
     @Test
     public void testGetForAudit() {
         AuditFilter filter = new AuditFilter();
-        filter.setProductFamily("FAS");//TODO {aazarenka} remove this code after adjust query
         Pageable pageable = new Pageable(0, 10);
         Sort sort = new Sort("detailId", Direction.DESC);
         expect(usageRepository.findForAudit(filter, pageable, sort)).andReturn(Collections.emptyList()).once();
