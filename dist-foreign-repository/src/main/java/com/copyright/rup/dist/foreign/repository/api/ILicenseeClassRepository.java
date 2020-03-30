@@ -34,4 +34,12 @@ public interface ILicenseeClassRepository {
      * @return list of existing {@link DetailLicenseeClass}es.
      */
     List<DetailLicenseeClass> findDetailLicenseeClasses();
+
+    /**
+     * Finds list of {@link DetailLicenseeClass}es by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return list of {@link DetailLicenseeClass}es
+     */
+    List<DetailLicenseeClass> findDetailLicenseeClassesByScenarioId(String scenarioId);
 }

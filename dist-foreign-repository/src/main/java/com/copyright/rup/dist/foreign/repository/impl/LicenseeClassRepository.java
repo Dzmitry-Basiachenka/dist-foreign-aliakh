@@ -42,4 +42,10 @@ public class LicenseeClassRepository extends BaseRepository implements ILicensee
     public List<DetailLicenseeClass> findDetailLicenseeClasses() {
         return selectList("ILicenseeClassMapper.findDetailLicenseeClasses");
     }
+
+    @Override
+    public List<DetailLicenseeClass> findDetailLicenseeClassesByScenarioId(String scenarioId) {
+        return selectList("ILicenseeClassMapper.findDetailLicenseeClassesByScenarioId",
+            Objects.requireNonNull(scenarioId));
+    }
 }

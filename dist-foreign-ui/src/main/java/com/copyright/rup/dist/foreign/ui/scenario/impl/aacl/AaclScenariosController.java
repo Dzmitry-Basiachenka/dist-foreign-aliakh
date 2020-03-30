@@ -1,14 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Implementation of {@link IAaclScenariosController}.
@@ -22,6 +27,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AaclScenariosController extends CommonScenariosController implements IAaclScenariosController {
+
+    @Autowired
+    private ILicenseeClassService licenseeClassService;
 
     @Override
     public void sendToLm() {
@@ -43,5 +51,10 @@ public class AaclScenariosController extends CommonScenariosController implement
     protected ICommonScenarioWidget initScenarioWidget() {
         //TODO init scenario widget in scope of B-55091 story
         return null;
+    }
+
+    @Override
+    public List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId) {
+        return licenseeClassService.getDetailLicenseeClassesByScenarioId(scenarioId);
     }
 }

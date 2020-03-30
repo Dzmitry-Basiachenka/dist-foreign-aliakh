@@ -64,6 +64,17 @@ public class LicenseeClassServiceTest {
     }
 
     @Test
+    public void testGetDetailLicenseeClassesByScenarioId() {
+        String scenarioId = "43e6b6e8-4c80-40ba-9836-7b27b2bbca5f";
+        List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        expect(licenseeClassRepository.findDetailLicenseeClassesByScenarioId(scenarioId))
+            .andReturn(detailLicenseeClasses).once();
+        replay(licenseeClassRepository);
+        assertSame(detailLicenseeClasses, licenseeClassService.getDetailLicenseeClassesByScenarioId(scenarioId));
+        verify(licenseeClassRepository);
+    }
+
+    @Test
     public void testIsDetailLicenceClassExist() {
         expect(licenseeClassRepository.detailLicenseeClassExists(ENROLLMENT_PROFILE, DISCIPLINE))
             .andReturn(true).once();
