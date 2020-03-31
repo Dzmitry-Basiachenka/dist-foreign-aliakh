@@ -1,3 +1,8 @@
+9.1.13
+-
+* B-56844 Tech Debt: FDA: make ProductFamilyProvider serializable to avoid warnings in logs
+* B-56844 Tech Debt: FDA: remove temporary source code
+
 9.1.12
 -
 * B-56844 Tech Debt: FDA: Fix security vulnerabilities CVE-2020-9546, CVE-2020-9547, CVE-2020-9548 in jackson-databind
