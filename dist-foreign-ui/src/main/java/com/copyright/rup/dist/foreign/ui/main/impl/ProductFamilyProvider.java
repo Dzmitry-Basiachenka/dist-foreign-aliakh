@@ -7,6 +7,7 @@ import com.vaadin.spring.annotation.UIScope;
 
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -21,7 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Component
 @UIScope
-public class ProductFamilyProvider implements IProductFamilyProvider {
+public class ProductFamilyProvider implements IProductFamilyProvider, Serializable {
 
     private final AtomicReference<String> selectedProductFamilyHolder =
         new AtomicReference<>(FdaConstants.FAS_PRODUCT_FAMILY);
