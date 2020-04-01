@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosController;
@@ -47,6 +48,9 @@ public class AaclScenariosController extends CommonScenariosController implement
     @Autowired
     private IAaclUsageController aaclUsageController;
 
+    @Autowired
+    private IAaclScenarioController scenarioController;
+
     @Override
     public void sendToLm() {
         //TODO: implement logic for sending to LM in scope of corresponding story
@@ -59,14 +63,12 @@ public class AaclScenariosController extends CommonScenariosController implement
 
     @Override
     protected ICommonScenarioController getScenarioController() {
-        //TODO init scenario controller in scope of B-55091 story
-        return null;
+        return scenarioController;
     }
 
     @Override
     protected ICommonScenarioWidget initScenarioWidget() {
-        //TODO init scenario widget in scope of B-55091 story
-        return null;
+        return scenarioController.initWidget();
     }
 
     @Override
