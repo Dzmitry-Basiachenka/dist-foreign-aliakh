@@ -39,4 +39,9 @@ public class LicenseeClassService implements ILicenseeClassService {
     public List<DetailLicenseeClass> getDetailLicenseeClasses() {
         return licenseeClassRepository.findDetailLicenseeClasses();
     }
+
+    @Override
+    public List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId) {
+        return licenseeClassRepository.findDetailLicenseeClassesByScenarioId(scenarioId);
+    }
 }

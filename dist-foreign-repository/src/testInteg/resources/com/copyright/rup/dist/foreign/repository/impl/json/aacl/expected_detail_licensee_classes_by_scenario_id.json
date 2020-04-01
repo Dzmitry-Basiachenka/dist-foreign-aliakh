@@ -1,0 +1,32 @@
+[
+  {
+    "id": 108,
+    "enrollmentProfile": "EXGP",
+    "discipline": "Life Sciences",
+    "aggregateLicenseeClass": {
+      "id": 141,
+      "enrollmentProfile": "MU",
+      "discipline": "Education"
+    }
+  },
+  {
+    "id": 110,
+    "enrollmentProfile": "EXU4",
+    "discipline": "Life Sciences",
+    "aggregateLicenseeClass": {
+      "id": 143,
+      "enrollmentProfile": "EXGP",
+      "discipline": "Engineering"
+    }
+  },
+  {
+    "id": 113,
+    "enrollmentProfile": "MU",
+    "discipline": "Life Sciences",
+    "aggregateLicenseeClass": {
+      "id": 141,
+      "enrollmentProfile": "MU",
+      "discipline": "Education"
+    }
+  }
+]

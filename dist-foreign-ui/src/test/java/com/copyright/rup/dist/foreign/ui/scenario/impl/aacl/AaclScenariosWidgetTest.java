@@ -10,10 +10,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.data.sort.SortDirection;
@@ -50,6 +53,7 @@ import java.util.stream.Collectors;
 public class AaclScenariosWidgetTest {
 
     private static final String GRID_ID = "scenarioGrid";
+    private static final String SCENARIO_ID = "505aeb54-cd42-4f3c-84d9-36e60f5f7023";
 
     private AaclScenariosWidget scenariosWidget;
     private IAaclScenariosController controller;
@@ -61,7 +65,7 @@ public class AaclScenariosWidgetTest {
         scenariosWidget = new AaclScenariosWidget(controller, null);
         scenariosWidget.setController(controller);
         scenario = new Scenario();
-        scenario.setId("505aeb54-cd42-4f3c-84d9-36e60f5f7023");
+        scenario.setId(SCENARIO_ID);
         scenario.setDescription("Description");
         scenario.setCreateUser("User@copyright.com");
         scenario.setAuditItem(buildScenarioAuditItem());
@@ -100,6 +104,8 @@ public class AaclScenariosWidgetTest {
     public void testRefresh() {
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).times(2);
+        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_ID)).andReturn(buildDetailLicenseeClasses())
+            .times(2);
         replay(controller);
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
@@ -111,6 +117,8 @@ public class AaclScenariosWidgetTest {
         Grid grid = Whitebox.getInternalState(scenariosWidget, GRID_ID);
         assertTrue(CollectionUtils.isEmpty(grid.getSelectedItems()));
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_ID)).andReturn(buildDetailLicenseeClasses())
+            .once();
         replay(controller);
         scenariosWidget.selectScenario(scenario);
         assertEquals(scenario, grid.getSelectedItems().iterator().next());
@@ -123,6 +131,8 @@ public class AaclScenariosWidgetTest {
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_ID)).andReturn(buildDetailLicenseeClasses())
+            .once();
         replay(controller, grid);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();
@@ -185,7 +195,11 @@ public class AaclScenariosWidgetTest {
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
-        assertEquals(0, layout.getComponentCount());
+        assertEquals(1, layout.getComponentCount());
+        Component licenseeClassMapping = layout.getComponent(0);
+        assertTrue(licenseeClassMapping instanceof AaclScenarioParameterWidget);
+        AaclScenarioParameterWidget widget = (AaclScenarioParameterWidget) licenseeClassMapping;
+        assertEquals("Licensee Class Mapping", widget.getComponent(0).getCaption());
     }
 
     private ScenarioAuditItem buildScenarioAuditItem() {
@@ -196,5 +210,18 @@ public class AaclScenariosWidgetTest {
         scenarioAuditItem.setCreateDate(
             Date.from(LocalDate.of(2016, 12, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         return scenarioAuditItem;
+    }
+
+    private List<DetailLicenseeClass> buildDetailLicenseeClasses() {
+        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+        aggregateLicenseeClass.setId(108);
+        aggregateLicenseeClass.setEnrollmentProfile("EXGP");
+        aggregateLicenseeClass.setDiscipline("Life Sciences");
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        detailLicenseeClass.setId(108);
+        detailLicenseeClass.setEnrollmentProfile("EXGP");
+        detailLicenseeClass.setDiscipline("Life Sciences");
+        detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
+        return Collections.singletonList(detailLicenseeClass);
     }
 }

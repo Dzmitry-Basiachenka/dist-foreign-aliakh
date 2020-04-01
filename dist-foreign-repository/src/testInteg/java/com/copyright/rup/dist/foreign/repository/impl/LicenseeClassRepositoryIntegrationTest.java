@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
+@TestPropertySource(properties = {"test.liquibase.changelog=licensee-class-repository-test-data-init.groovy"})
 @Transactional
 public class LicenseeClassRepositoryIntegrationTest {
 
@@ -70,6 +72,17 @@ public class LicenseeClassRepositoryIntegrationTest {
     public void testFindDetailLicenseeClasses() throws IOException {
         List<DetailLicenseeClass> expectedDetailsMapping = loadExpectedClasses("expected_detail_licensee_classes.json");
         List<DetailLicenseeClass> actualDetailsMapping = licenseeClassRepository.findDetailLicenseeClasses();
+        assertEquals(expectedDetailsMapping.size(), actualDetailsMapping.size());
+        IntStream.range(0, expectedDetailsMapping.size())
+            .forEach(i -> verifyLicenseeClass(expectedDetailsMapping.get(i), actualDetailsMapping.get(i)));
+    }
+
+    @Test
+    public void testFindDetailLicenseeClassesByScenarioId() throws IOException {
+        List<DetailLicenseeClass> expectedDetailsMapping =
+            loadExpectedClasses("expected_detail_licensee_classes_by_scenario_id.json");
+        List<DetailLicenseeClass> actualDetailsMapping =
+            licenseeClassRepository.findDetailLicenseeClassesByScenarioId("66d10c81-705e-4996-89f4-11e1635c4c31");
         assertEquals(expectedDetailsMapping.size(), actualDetailsMapping.size());
         IntStream.range(0, expectedDetailsMapping.size())
             .forEach(i -> verifyLicenseeClass(expectedDetailsMapping.get(i), actualDetailsMapping.get(i)));

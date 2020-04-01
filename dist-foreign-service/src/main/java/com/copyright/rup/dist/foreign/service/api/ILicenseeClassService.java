@@ -34,4 +34,12 @@ public interface ILicenseeClassService {
      * @return list of existing {@link DetailLicenseeClass}es.
      */
     List<DetailLicenseeClass> getDetailLicenseeClasses();
+
+    /**
+     * Gets list of {@link DetailLicenseeClass}es by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return list of {@link DetailLicenseeClass}es
+     */
+    List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId);
 }

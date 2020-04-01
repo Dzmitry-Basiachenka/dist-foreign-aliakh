@@ -54,6 +54,15 @@ public class AaclScenarioParameterWidget<T> extends HorizontalLayout {
         return appliedParameters;
     }
 
+    /**
+     * Sets applied parameters.
+     *
+     * @param appliedParameters applied parameters
+     */
+    public void setAppliedParameters(T appliedParameters) {
+        this.appliedParameters = appliedParameters;
+    }
+
     private void initButton(String caption) {
         button = Buttons.createButton(caption);
         button.addStyleName(ValoTheme.BUTTON_LINK);
