@@ -16,11 +16,9 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
-import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosWidget;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioWidget;
@@ -32,7 +30,6 @@ import com.vaadin.ui.Window;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -141,13 +138,13 @@ public class AaclScenariosControllerTest {
         usageBatch.setName("BatchName");
         scenarioUsageFilter.setUsageBatches(Collections.singleton(usageBatch));
         expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(scenarioUsageFilter).once();
-        PowerMock.replay(scenariosWidget, scenarioUsageFilterService);
+        replay(scenariosWidget, scenarioUsageFilterService);
         String result = scenariosController.getCriteriaHtmlRepresentation();
         assertTrue(result.contains("<b>Selection Criteria:</b>"));
         assertTrue(result.contains("<li><b><i>Product Family </i></b>(AACL)</li>"));
         assertTrue(result.contains("<li><b><i>Batch in </i></b>(BatchName)</li>"));
         assertTrue(result.contains("<li><b><i>Status </i></b>(ELIGIBLE)</li>"));
-        PowerMock.verify(scenariosWidget, scenarioUsageFilterService);
+        verify(scenariosWidget, scenarioUsageFilterService);
     }
 
     private void buildScenario() {
