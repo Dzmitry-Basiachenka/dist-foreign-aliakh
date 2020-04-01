@@ -19,11 +19,15 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +45,13 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
 
     private final IAaclScenariosController controller;
     private final IAaclUsageController usageController;
+    private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label cutoffAmt = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label serviceFeeTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label selectionCriteriaLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private AaclScenariosMediator mediator;
     private FundPool fundPool;
     private List<FundPoolDetail> fundPoolDetails;
@@ -84,7 +95,6 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
 
     @Override
     protected VerticalLayout initMetadataLayout() {
-        //TODO: add components to scenario metadata in scope of B-57242 story
         Button fundPoolButton = Buttons.createButton(ForeignUi.getMessage("label.fund_pool"));
         fundPoolButton.addStyleName(ValoTheme.BUTTON_LINK);
         VaadinUtils.setButtonsAutoDisabled(fundPoolButton);
@@ -94,7 +104,10 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
         licenseeClassMappingWidget = new AaclScenarioParameterWidget<>(
             ForeignUi.getMessage("button.licensee_class_mapping"),
             Collections::emptyList, () -> new AggregateLicenseeClassMappingWindow(false));
-        VerticalLayout metadataLayout = new VerticalLayout(fundPoolButton, licenseeClassMappingWidget);
+        descriptionLabel.setStyleName("v-label-white-space-normal");
+        VerticalLayout metadataLayout =
+            new VerticalLayout(ownerLabel, grossTotalLabel, serviceFeeTotalLabel, netTotalLabel,
+                cutoffAmt, descriptionLabel, selectionCriteriaLabel, fundPoolButton, licenseeClassMappingWidget);
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
         return metadataLayout;
@@ -102,10 +115,20 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
 
     @Override
     protected void updateScenarioMetadata(Scenario scenarioWithAmounts) {
-        //TODO: implement logic to update scenario metadata in scope of B-57242 story
         String fundPoolId = scenarioWithAmounts.getAaclFields().getFundPoolId();
         fundPool = usageController.getFundPoolById(fundPoolId);
         fundPoolDetails = usageController.getFundPoolDetails(fundPoolId);
+        ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenarioWithAmounts.getCreateUser()));
+        grossTotalLabel.setValue(ForeignUi.getMessage("label.gross_amount_in_usd",
+            formatAmount(scenarioWithAmounts.getGrossTotal())));
+        serviceFeeTotalLabel.setValue(ForeignUi.getMessage("label.service_fee_amount_in_usd",
+            formatAmount(scenarioWithAmounts.getServiceFeeTotal())));
+        netTotalLabel.setValue(ForeignUi.getMessage("label.net_amount_in_usd",
+            formatAmount(scenarioWithAmounts.getNetTotal())));
+        cutoffAmt.setValue(ForeignUi.getMessage("label.cutoff_amt_in_usd",
+            formatAmount(scenarioWithAmounts.getAaclFields().getTitleCutoffAmount())));
+        descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenarioWithAmounts.getDescription()));
+        selectionCriteriaLabel.setValue(getController().getCriteriaHtmlRepresentation());
         licenseeClassMappingWidget.setAppliedParameters(
             controller.getDetailLicenseeClassesByScenarioId(scenarioWithAmounts.getId()));
     }

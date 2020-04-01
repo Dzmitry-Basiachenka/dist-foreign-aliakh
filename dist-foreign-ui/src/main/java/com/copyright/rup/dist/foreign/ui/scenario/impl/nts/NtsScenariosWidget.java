@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
@@ -22,7 +21,6 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -141,9 +139,5 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
         rejectButton.addClickListener(event -> getController().handleAction(ScenarioActionTypeEnum.REJECTED));
         approveButton.addClickListener(event -> getController().handleAction(ScenarioActionTypeEnum.APPROVED));
         sendToLmButton.addClickListener(event -> getController().sendToLm());
-    }
-
-    private String formatAmount(BigDecimal amount) {
-        return CurrencyUtils.formatAsHtml(amount.setScale(2, BigDecimal.ROUND_HALF_UP));
     }
 }
