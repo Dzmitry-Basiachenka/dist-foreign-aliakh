@@ -426,6 +426,27 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testUpdateAaclUsagesUnderMinimum() {
+        Scenario scenario = new Scenario();
+        scenario.setId("8b01939c-abda-4090-86d1-6231fc20f679");
+        aaclUsageRepository.updateAaclUsagesUnderMinimum(scenario.getId(), new BigDecimal("150.00"), USER_NAME);
+        List<Usage> excludedUsages = aaclUsageRepository.findByIds(
+            Arrays.asList("9ccf8b43-4ad5-4199-8c7f-c5884f27e44f", "ccb115c7-3444-4dbb-9540-7541961febdf"));
+        assertEquals(2, excludedUsages.size());
+        excludedUsages.forEach(usage -> {
+            assertEquals(UsageStatusEnum.SCENARIO_EXCLUDED, usage.getStatus());
+            assertNull(usage.getScenarioId());
+        });
+        List<Usage> lockedUsages = aaclUsageRepository.findByIds(
+            Arrays.asList("83be7d3e-b4c0-4512-b4d4-230f6392ef5e", "b28df2d4-359a-4165-8936-fc0c0bdf4ba9"));
+        assertEquals(2, lockedUsages.size());
+        lockedUsages.forEach(usage -> {
+            assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
+            assertEquals("8b01939c-abda-4090-86d1-6231fc20f679", usage.getScenarioId());
+        });
+    }
+
+    @Test
     public void testFindForAudit() {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(USAGE_ID_5);

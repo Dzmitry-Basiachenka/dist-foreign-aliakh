@@ -234,6 +234,11 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    public void updateAaclUsagesUnderMinimum(String scenarioId, BigDecimal cutoffAmount, String userName) {
+        aaclUsageRepository.updateAaclUsagesUnderMinimum(scenarioId, cutoffAmount, userName);
+    }
+
+    @Override
     @Transactional
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         usageAuditService.deleteActionsByBatchId(usageBatch.getId());
