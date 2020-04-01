@@ -12,15 +12,20 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosController;
+import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -33,6 +38,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -54,21 +60,25 @@ public class AaclScenariosWidgetTest {
 
     private static final String GRID_ID = "scenarioGrid";
     private static final String SCENARIO_ID = "505aeb54-cd42-4f3c-84d9-36e60f5f7023";
+    private static final String FUND_POOL_ID = "e0d3b5c5-2a63-473a-9d37-1233cfaad346";
 
     private AaclScenariosWidget scenariosWidget;
     private IAaclScenariosController controller;
+    private IAaclUsageController usageController;
     private Scenario scenario;
 
     @Before
     public void setUp() {
         controller = createMock(IAaclScenariosController.class);
-        scenariosWidget = new AaclScenariosWidget(controller, null);
+        usageController = createMock(IAaclUsageController.class);
+        scenariosWidget = new AaclScenariosWidget(controller, null, usageController);
         scenariosWidget.setController(controller);
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setDescription("Description");
         scenario.setCreateUser("User@copyright.com");
         scenario.setAuditItem(buildScenarioAuditItem());
+        scenario.setAaclFields(buildAaclFields());
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         replay(controller);
         scenariosWidget.init();
@@ -102,41 +112,53 @@ public class AaclScenariosWidgetTest {
 
     @Test
     public void testRefresh() {
+        FundPool fundPool = buildFundPool();
+        List<FundPoolDetail> fundPoolDetails = buildFundPoolDetail();
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).times(2);
         expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_ID)).andReturn(buildDetailLicenseeClasses())
             .times(2);
-        replay(controller);
+        expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).times(2);
+        expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).times(2);
+        replay(controller, usageController);
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
-        verify(controller);
+        verify(controller, usageController);
     }
 
     @Test
     public void testSelectScenario() {
+        FundPool fundPool = buildFundPool();
+        List<FundPoolDetail> fundPoolDetails = buildFundPoolDetail();
         Grid grid = Whitebox.getInternalState(scenariosWidget, GRID_ID);
         assertTrue(CollectionUtils.isEmpty(grid.getSelectedItems()));
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_ID)).andReturn(buildDetailLicenseeClasses())
             .once();
-        replay(controller);
+        expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).once();
+        expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
+        replay(controller, usageController);
         scenariosWidget.selectScenario(scenario);
         assertEquals(scenario, grid.getSelectedItems().iterator().next());
-        verify(controller);
+        verify(controller, usageController);
     }
 
     @Test
     public void testRefreshSelectedScenario() {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
+        FundPool fundPool = buildFundPool();
+        List<FundPoolDetail> fundPoolDetails = buildFundPoolDetail();
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_ID)).andReturn(buildDetailLicenseeClasses())
             .once();
-        replay(controller, grid);
+        expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).once();
+        expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
+        replay(controller, usageController, grid);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();
-        verify(controller, grid);
+        verify(controller, usageController, grid);
     }
 
     @Test
@@ -195,8 +217,11 @@ public class AaclScenariosWidgetTest {
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
-        assertEquals(1, layout.getComponentCount());
-        Component licenseeClassMapping = layout.getComponent(0);
+        assertEquals(2, layout.getComponentCount());
+        Component fundPool = layout.getComponent(0);
+        assertTrue(fundPool instanceof Button);
+        assertEquals("Fund Pool", fundPool.getCaption());
+        Component licenseeClassMapping = layout.getComponent(1);
         assertTrue(licenseeClassMapping instanceof AaclScenarioParameterWidget);
         AaclScenarioParameterWidget widget = (AaclScenarioParameterWidget) licenseeClassMapping;
         assertEquals("Licensee Class Mapping", widget.getComponent(0).getCaption());
@@ -212,16 +237,41 @@ public class AaclScenariosWidgetTest {
         return scenarioAuditItem;
     }
 
-    private List<DetailLicenseeClass> buildDetailLicenseeClasses() {
+    private FundPool buildFundPool() {
+        FundPool fundPool = new FundPool();
+        fundPool.setId(FUND_POOL_ID);
+        return fundPool;
+    }
+
+    private List<FundPoolDetail> buildFundPoolDetail() {
+        FundPoolDetail fundPoolDetail = new FundPoolDetail();
+        fundPoolDetail.setAggregateLicenseeClass(buildAggregateLicenseeClass(108, "EXGP", "Life Sciences"));
+        fundPoolDetail.setGrossAmount(BigDecimal.ONE);
+        return Collections.singletonList(fundPoolDetail);
+    }
+
+    private AggregateLicenseeClass buildAggregateLicenseeClass(Integer id, String enrollmentProfile,
+                                                               String discipline) {
         AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
-        aggregateLicenseeClass.setId(108);
-        aggregateLicenseeClass.setEnrollmentProfile("EXGP");
-        aggregateLicenseeClass.setDiscipline("Life Sciences");
+        aggregateLicenseeClass.setId(id);
+        aggregateLicenseeClass.setEnrollmentProfile(enrollmentProfile);
+        aggregateLicenseeClass.setDiscipline(discipline);
+        return aggregateLicenseeClass;
+    }
+
+    private List<DetailLicenseeClass> buildDetailLicenseeClasses() {
+        AggregateLicenseeClass aggregateLicenseeClass = buildAggregateLicenseeClass(108, "EXGP", "Life Sciences");
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
         detailLicenseeClass.setId(108);
         detailLicenseeClass.setEnrollmentProfile("EXGP");
         detailLicenseeClass.setDiscipline("Life Sciences");
         detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
         return Collections.singletonList(detailLicenseeClass);
+    }
+
+    private AaclFields buildAaclFields() {
+        AaclFields aaclFields = new AaclFields();
+        aaclFields.setFundPoolId(FUND_POOL_ID);
+        return aaclFields;
     }
 }

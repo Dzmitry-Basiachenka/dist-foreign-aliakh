@@ -1,10 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -12,7 +7,6 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
-import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
@@ -48,12 +42,7 @@ public class ViewAaclFundPoolDetailsWindowTest {
 
     @Before
     public void setUp() {
-        IAaclUsageController controllerMock = createMock(IAaclUsageController.class);
-        expect(controllerMock.getFundPoolDetails(eq(FUND_POOL_ID)))
-            .andReturn(Collections.singletonList(buildFundPoolDetail())).once();
-        replay(controllerMock);
-        window = new ViewAaclFundPoolDetailsWindow(buildFundPool(), controllerMock);
-        verify(controllerMock);
+        window = new ViewAaclFundPoolDetailsWindow(buildFundPool(), Collections.singletonList(buildFundPoolDetail()));
     }
 
     @Test

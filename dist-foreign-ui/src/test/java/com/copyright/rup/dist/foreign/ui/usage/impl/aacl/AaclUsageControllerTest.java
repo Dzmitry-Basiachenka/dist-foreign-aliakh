@@ -89,7 +89,6 @@ import java.util.function.Supplier;
 @PrepareForTest({ByteArrayStreamSource.class, OffsetDateTime.class, StreamSource.class})
 public class AaclUsageControllerTest {
 
-
     private static final String FUND_POOL_ID = "76b16c8d-0bea-4135-9611-6c52e53bfbea";
     private static final String FUND_POOL_NAME = "fund pool name";
     private static final OffsetDateTime DATE = OffsetDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
@@ -226,6 +225,15 @@ public class AaclUsageControllerTest {
         replay(usageBatchService, filterController, filterWidgetMock, researchService);
         assertEquals(2, controller.loadUsageBatch(usageBatch, usages));
         verify(usageBatchService, filterController, filterWidgetMock, researchService);
+    }
+
+    @Test
+    public void testGetFundPoolById() {
+        FundPool fundPool = new FundPool();
+        expect(fundPoolService.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).once();
+        replay(fundPoolService);
+        assertSame(fundPool, controller.getFundPoolById(FUND_POOL_ID));
+        verify(fundPoolService);
     }
 
     @Test

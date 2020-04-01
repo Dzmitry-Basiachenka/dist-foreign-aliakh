@@ -109,7 +109,8 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
         viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
         viewButton.addClickListener(event -> {
             FundPool selectedFundPool = grid.getSelectedItems().stream().findFirst().orElse(null);
-            Windows.showModalWindow(new ViewAaclFundPoolDetailsWindow(selectedFundPool, controller));
+            Windows.showModalWindow(new ViewAaclFundPoolDetailsWindow(selectedFundPool,
+                controller.getFundPoolDetails(selectedFundPool.getId())));
         });
         viewButton.setEnabled(false);
         HorizontalLayout layout = new HorizontalLayout(viewButton, deleteButton, closeButton);

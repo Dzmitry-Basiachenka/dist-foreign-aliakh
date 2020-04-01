@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -88,6 +89,15 @@ public class FundPoolServiceTest {
         Whitebox.setInternalState(fundPoolService, ntsUsageService);
         Whitebox.setInternalState(fundPoolService, fundPoolRepository);
         Whitebox.setInternalState(fundPoolService, licenseeClassService);
+    }
+
+    @Test
+    public void testGetFundPoolById() {
+        FundPool fundPool = new FundPool();
+        expect(fundPoolRepository.findById(FUND_POOL_ID)).andReturn(fundPool).once();
+        replay(fundPoolRepository);
+        assertSame(fundPool, fundPoolService.getFundPoolById(FUND_POOL_ID));
+        verify(fundPoolRepository);
     }
 
     @Test

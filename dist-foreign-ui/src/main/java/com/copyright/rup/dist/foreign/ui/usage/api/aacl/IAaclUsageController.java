@@ -42,6 +42,14 @@ public interface IAaclUsageController extends ICommonUsageController {
     int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages);
 
     /**
+     * Gets {@link FundPool} by id.
+     *
+     * @param fundPoolId {@link FundPool} id
+     * @return found {@link FundPool} or {@code null} if none found
+     */
+    FundPool getFundPoolById(String fundPoolId);
+
+    /**
      * @return list of existing {@link FundPool}s.
      */
     List<FundPool> getFundPools();

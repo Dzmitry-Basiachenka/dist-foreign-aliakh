@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosController;
+import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -31,6 +32,9 @@ public class AaclScenariosController extends CommonScenariosController implement
     @Autowired
     private ILicenseeClassService licenseeClassService;
 
+    @Autowired
+    private IAaclUsageController aaclUsageController;
+
     @Override
     public void sendToLm() {
         //TODO: implement logic for sending to LM in scope of corresponding story
@@ -38,7 +42,7 @@ public class AaclScenariosController extends CommonScenariosController implement
 
     @Override
     protected IAaclScenariosWidget instantiateWidget() {
-        return new AaclScenariosWidget(this, null);
+        return new AaclScenariosWidget(this, null, aaclUsageController);
     }
 
     @Override
