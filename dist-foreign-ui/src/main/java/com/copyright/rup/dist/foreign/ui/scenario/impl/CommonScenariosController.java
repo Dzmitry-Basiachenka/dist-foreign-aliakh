@@ -1,12 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
@@ -26,7 +22,6 @@ import com.google.common.collect.Maps;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Window;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -49,7 +44,6 @@ import javax.annotation.PostConstruct;
 public abstract class CommonScenariosController extends CommonController<ICommonScenariosWidget>
     implements ICommonScenariosController {
 
-    private static final String LIST_SEPARATOR = ", ";
     private Map<ScenarioActionTypeEnum, IActionHandler> actionHandlers;
 
     @Autowired
@@ -114,40 +108,6 @@ public abstract class CommonScenariosController extends CommonController<ICommon
         getWidget().refreshSelectedScenario();
     }
 
-    @Override
-    public String getCriteriaHtmlRepresentation() {
-        ScenarioUsageFilter filter =
-            scenarioUsageFilterService.getByScenarioId(getWidget().getSelectedScenario().getId());
-        StringBuilder sb = new StringBuilder(ForeignUi.getMessage("label.criteria"));
-        if (Objects.nonNull(filter)) {
-            sb.append("<ul>");
-            if (Objects.nonNull(filter.getProductFamily())) {
-                appendCriterionMessage(sb, "label.product_family", filter.getProductFamily());
-            }
-            if (CollectionUtils.isNotEmpty(filter.getUsageBatches())) {
-                appendCriterionMessage(sb, "label.batch_in", StringUtils.join(
-                    filter.getUsageBatches().stream().map(UsageBatch::getName).collect(Collectors.toList()),
-                    LIST_SEPARATOR));
-            }
-            if (CollectionUtils.isNotEmpty(filter.getRhAccountNumbers())) {
-                appendCriterionMessage(sb, "label.rro_in", StringUtils.join(generateRightsholderList(
-                    rightsholderService.updateAndGetRightsholders(filter.getRhAccountNumbers())), LIST_SEPARATOR));
-            }
-            if (Objects.nonNull(filter.getPaymentDate())) {
-                appendCriterionMessage(sb, "label.payment_date_to",
-                    CommonDateUtils.format(filter.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
-            }
-            if (Objects.nonNull(filter.getUsageStatus())) {
-                appendCriterionMessage(sb, "label.status", filter.getUsageStatus());
-            }
-            if (Objects.nonNull(filter.getFiscalYear())) {
-                appendCriterionMessage(sb, "label.fiscal_year_to", filter.getFiscalYear());
-            }
-            sb.append("</ul>");
-        }
-        return sb.toString();
-    }
-
     /**
      * Initializes handlers for actions.
      */
@@ -160,6 +120,13 @@ public abstract class CommonScenariosController extends CommonController<ICommon
             (scenario, reason) -> scenarioService.approve(scenario, reason));
         actionHandlers.put(ScenarioActionTypeEnum.REJECTED,
             (scenario, reason) -> scenarioService.reject(scenario, reason));
+    }
+
+    /**
+     * @return rightsholder service
+     */
+    protected IRightsholderService getRightsholderService() {
+        return rightsholderService;
     }
 
     /**
@@ -200,16 +167,24 @@ public abstract class CommonScenariosController extends CommonController<ICommon
      */
     protected abstract ICommonScenarioWidget initScenarioWidget();
 
-    private void deleteScenario(Scenario scenario) {
-        scenarioService.deleteScenario(scenario);
-        getWidget().refresh();
-    }
-
-    private void appendCriterionMessage(StringBuilder builder, String criterionName, Object values) {
+    /**
+     * Appends creation message.
+     *
+     * @param builder       string builder
+     * @param criterionName name of creation
+     * @param values        values
+     */
+    protected void appendCriterionMessage(StringBuilder builder, String criterionName, Object values) {
         builder.append(String.format("<li><b><i>%s </i></b>(%s)</li>", ForeignUi.getMessage(criterionName), values));
     }
 
-    private List<String> generateRightsholderList(Map<Long, Rightsholder> rightsholderMap) {
+    /**
+     * Generates rightsholders.
+     *
+     * @param rightsholderMap map of rightsholders
+     * @return list of rightsholders
+     */
+    protected List<String> generateRightsholderList(Map<Long, Rightsholder> rightsholderMap) {
         return rightsholderMap.entrySet().stream().map(entry -> {
             String rightsholderRepresentation = String.valueOf(entry.getKey());
             Rightsholder rightsholder = entry.getValue();
@@ -218,5 +193,10 @@ public abstract class CommonScenariosController extends CommonController<ICommon
             }
             return rightsholderRepresentation;
         }).collect(Collectors.toList());
+    }
+
+    private void deleteScenario(Scenario scenario) {
+        scenarioService.deleteScenario(scenario);
+        getWidget().refresh();
     }
 }

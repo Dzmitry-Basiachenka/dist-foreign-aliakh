@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.provider.DataProvider;
@@ -32,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -126,6 +128,16 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
         return ForeignUi.getMessage("label.format.label_with_caption", caption, value);
     }
 
+    /**
+     * Formats amount to string with round.
+     *
+     * @param amount amount
+     * @return format amount
+     */
+    protected String formatAmount(BigDecimal amount) {
+        return CurrencyUtils.formatAsHtml(amount.setScale(2, BigDecimal.ROUND_HALF_UP));
+    }
+
     protected ICommonScenariosController getController() {
         return controller;
     }
@@ -187,10 +199,7 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
         metadataPanel.setSizeFull();
         VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
         metadataLayout = initMetadataLayout();
-        //TODO: remove in scope of B-57242
-        if (Objects.nonNull(scenarioHistoryController)) {
-            metadataLayout.addComponent(initScenarioActionLayout());
-        }
+        metadataLayout.addComponent(initScenarioActionLayout());
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
     }
