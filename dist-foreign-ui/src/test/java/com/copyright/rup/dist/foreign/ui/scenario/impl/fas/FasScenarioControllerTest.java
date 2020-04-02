@@ -92,7 +92,6 @@ public class FasScenarioControllerTest {
         scenario.setDescription("Description");
         scenario.setNetTotal(new BigDecimal("10000.00"));
         scenario.setGrossTotal(new BigDecimal("20000.00"));
-        scenario.setReportedTotal(new BigDecimal("30000.00"));
         scenario.setCreateUser("User@copyright.com");
         controller = new FasScenarioController();
         controller.setScenario(buildScenario());
