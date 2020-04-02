@@ -203,16 +203,19 @@ public class FasScenariosMediatorTest {
 
     private void mockViewOnlyPermissions() {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
+        expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
     }
 
     private void mockManagerPermissions() {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
+        expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_REJECT_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_APPROVE_SCENARIO")).andReturn(true).once();
     }
 
     private void mockSpecialistPermissions() {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
+        expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_RECONCILE_RIGHTSHOLDERS")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_SUBMIT_SCENARIO")).andReturn(true).once();

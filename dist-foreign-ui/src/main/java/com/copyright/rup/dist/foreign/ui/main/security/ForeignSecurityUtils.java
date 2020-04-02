@@ -77,6 +77,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to view scenarios.
+     */
+    public static boolean hasViewScenarioPermission() {
+        return SecurityUtils.hasPermission("FDA_VIEW_SCENARIO");
+    }
+
+    /**
      * @return {@code true} if user has permission to send usages for work research.
      */
     public static boolean hasSendForWorkResearchPermission() {

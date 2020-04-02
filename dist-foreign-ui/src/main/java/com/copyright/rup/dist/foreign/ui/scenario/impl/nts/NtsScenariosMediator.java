@@ -32,7 +32,7 @@ class NtsScenariosMediator implements IScenariosMediator {
         rejectButton.setVisible(ForeignSecurityUtils.hasRejectScenarioPermission());
         approveButton.setVisible(ForeignSecurityUtils.hasApproveScenarioPermission());
         sendToLmButton.setVisible(ForeignSecurityUtils.hasSendScenarioToLmPermission());
-        viewButton.setVisible(true);
+        viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
     }
 
     @Override

@@ -36,7 +36,7 @@ class FasScenariosMediator implements IScenariosMediator {
         sendToLmButton.setVisible(ForeignSecurityUtils.hasSendScenarioToLmPermission());
         reconcileRightsholdersButton.setVisible(ForeignSecurityUtils.hasReconcileRightsholdersPermission());
         refreshScenarioButton.setVisible(ForeignSecurityUtils.hasRefreshScenarioPermission());
-        viewButton.setVisible(true);
+        viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
     }
 
     @Override

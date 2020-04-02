@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
 
 import com.vaadin.ui.Button;
@@ -20,8 +21,7 @@ class AaclScenariosMediator implements IScenariosMediator {
 
     @Override
     public void applyPermissions() {
-        // TODO {srudak} add permissions for viewing
-        viewButton.setVisible(true);
+        viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
     }
 
     @Override
