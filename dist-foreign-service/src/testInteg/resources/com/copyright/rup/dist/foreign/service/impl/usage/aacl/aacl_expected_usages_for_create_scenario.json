@@ -6,6 +6,10 @@
     "status": "LOCKED",
     "productFamily": "AACL",
     "numberOfCopies": 10,
+    "grossAmount": 30.9366510346,
+    "netAmount": 23.2024882760,
+    "serviceFeeAmount": 7.7341627587,
+    "serviceFee": 0.25000,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
       "usagePeriod": 2019,
@@ -41,6 +45,10 @@
     "status": "LOCKED",
     "productFamily": "AACL",
     "numberOfCopies": 10,
+    "grossAmount": 20.0000000000,
+    "netAmount": 15.0000000000,
+    "serviceFeeAmount": 5.0000000000,
+    "serviceFee": 0.25000,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
       "usagePeriod": 2017,
@@ -76,6 +84,10 @@
     "status": "LOCKED",
     "productFamily": "AACL",
     "numberOfCopies": 10,
+    "grossAmount": 49.0633489654,
+    "netAmount": 36.7975117240,
+    "serviceFeeAmount": 12.2658372413,
+    "serviceFee": 0.25000,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
       "usagePeriod": 2017,

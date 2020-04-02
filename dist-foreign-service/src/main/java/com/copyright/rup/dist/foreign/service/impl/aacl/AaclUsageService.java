@@ -239,6 +239,11 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    public void calculateAmounts(String scenarioId, String userName) {
+        aaclUsageRepository.calculateAmounts(scenarioId, userName);
+    }
+
+    @Override
     @Transactional
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         usageAuditService.deleteActionsByBatchId(usageBatch.getId());

@@ -126,6 +126,11 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
+    public List<Usage> findByScenarioId(String scenarioId) {
+        return selectList("IAaclUsageMapper.findByScenarioId", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
     public void updatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, Long payeeAccountNumber,
                                            String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
@@ -190,6 +195,14 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         params.put("cutoffAmount", cutoffAmount);
         params.put(UPDATE_USER_KEY, userName);
         insert("IAaclUsageMapper.updateAaclUsagesUnderMinimum", params);
+    }
+
+    @Override
+    public void calculateAmounts(String scenarioId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(UPDATE_USER_KEY, userName);
+        insert("IAaclUsageMapper.calculateAmounts", params);
     }
 
     @Override

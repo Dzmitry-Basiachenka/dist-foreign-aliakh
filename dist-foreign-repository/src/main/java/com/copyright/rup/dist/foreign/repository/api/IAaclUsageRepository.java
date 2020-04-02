@@ -75,6 +75,14 @@ public interface IAaclUsageRepository {
     Set<Integer> findBaselinePeriods(int startPeriod, int numberOfBaselineYears);
 
     /**
+     * Finds usages based on scenario identifier.
+     *
+     * @param scenarioId scenario id
+     * @return the list of {@link Usage}
+     */
+    List<Usage> findByScenarioId(String scenarioId);
+
+    /**
      * Sets payee account number for usages with given RH account number and scenario id.
      *
      * @param rhAccountNumber    RH account number
@@ -184,6 +192,14 @@ public interface IAaclUsageRepository {
      * @param userName     user name
      */
     void updateAaclUsagesUnderMinimum(String scenarioId, BigDecimal cutoffAmount, String userName);
+
+    /**
+     * Calculates gross_amount, service_fee, service_fee_amount and net_amount for all scenario usages.
+     *
+     * @param scenarioId scenario identifier
+     * @param userName   user name
+     */
+    void calculateAmounts(String scenarioId, String userName);
 
     /**
      * Finds list of {@link UsageDto}s matching specified filter.
