@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -125,6 +126,16 @@ public interface IAaclUsageService {
      * @return list of rightsholders account numbers
      */
     List<Long> getInvalidRightsholdersByFilter(UsageFilter filter);
+
+    /**
+     * Calculates usages amounts and marks usages that under cutoff minimum amount as
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED}.
+     *
+     * @param scenarioId   scenario identifier
+     * @param cutoffAmount minimum amount to exclude from scenario
+     * @param userName     user name
+     */
+    void updateAaclUsagesUnderMinimum(String scenarioId, BigDecimal cutoffAmount, String userName);
 
     /**
      * Deletes all {@link Usage}s associated with the given AACL {@link UsageBatch}.

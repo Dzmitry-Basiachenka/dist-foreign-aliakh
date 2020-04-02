@@ -825,6 +825,62 @@
         and u.df_usage_uid = uaacl.df_usage_aacl_uid
     </update>
 
+    <update id="updateAaclUsagesUnderMinimum">
+        with usage_weights as (
+            select
+                (usage_weight ->> 'period')::int as period,
+                (usage_weight ->> 'weight')::decimal as weight
+            from ${schema}.df_scenario sc, jsonb_array_elements(sc.aacl_fields -> 'usageAges') as usage_weight
+            where df_scenario_uid = #{scenarioId}
+        ),
+        aggregate_mapping as (
+            select
+                (detailLicenseeClass ->> 'detailLicenseeClassId')::int as detailId,
+                (detailLicenseeClass ->> 'aggregateLicenseeClassId')::int as aggregateId
+            from ${schema}.df_scenario sc, jsonb_array_elements(sc.aacl_fields -> 'detailLicenseeClasses') as detailLicenseeClass
+            where df_scenario_uid = #{scenarioId}
+        ),
+        weights as (
+            select
+                df_usage_uid,
+                wr_wrk_inst,
+                u.number_of_copies * (select weight from usage_weights where usage_period = period) * case when right_limitation != 'ALL' then 0.37 else 1 end volume_weight,
+                u.number_of_copies * ua.number_of_pages * publication_type_weight * (select weight from usage_weights where usage_period = period) * case when right_limitation != 'ALL' then 0.37 else 1 end value_weight,
+                (select aggregateId from aggregate_mapping where detailId = ua.detail_licensee_class_id) aggregateId,
+                u.df_scenario_uid
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_aacl ua on u.df_usage_uid = ua.df_usage_aacl_uid
+            join ${schema}.df_scenario sc on u.df_scenario_uid = sc.df_scenario_uid
+            where u.df_scenario_uid = #{scenarioId}
+        ),
+        denominators as (
+            select
+                case when sum(volume_weight) != 0  then sum(volume_weight) else 1 end volume_denominator,
+                case when sum(value_weight) != 0  then sum(value_weight) else 1 end value_denominator,
+                aggregateId
+            from weights
+            group by aggregateId
+        )
+        update ${schema}.df_usage
+        set
+            status_ind = 'SCENARIO_EXCLUDED',
+            df_scenario_uid = null,
+            payee_account_number = null,
+            <include refid="StoredEntityMapper.update"/>
+        where df_scenario_uid = #{scenarioId}
+            and wr_wrk_inst in (
+                select
+                    wr_wrk_inst
+                    from weights
+                join denominators on denominators.aggregateId = weights.aggregateId
+                join ${schema}.df_scenario sc on weights.df_scenario_uid = sc.df_scenario_uid
+                left join ${schema}.df_fund_pool_detail fpd on fpd.df_aggregate_licensee_class_id = weights.aggregateId
+                    and fpd.df_fund_pool_uid = sc.aacl_fields ->> 'fund_pool_uid'
+                group by wr_wrk_inst
+                having coalesce (sum((volume_weight / volume_denominator + value_weight / value_denominator) / 2 * fpd.gross_amount), 0) &lt; #{cutoffAmount}
+            )
+    </update>
+
     <update id="updatePublicationTypeWeight" parameterType="map">
         update ${schema}.df_usage_aacl uaacl
         set

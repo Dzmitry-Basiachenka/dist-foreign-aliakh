@@ -176,6 +176,16 @@ public interface IAaclUsageRepository {
     void addToScenario(Scenario scenario, UsageFilter filter);
 
     /**
+     * Calculates usages amounts and marks usages that under cutoff minimum amount as
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED}.
+     *
+     * @param scenarioId   scenario identifier
+     * @param cutoffAmount minimum amount to exclude from scenario
+     * @param userName     user name
+     */
+    void updateAaclUsagesUnderMinimum(String scenarioId, BigDecimal cutoffAmount, String userName);
+
+    /**
      * Finds list of {@link UsageDto}s matching specified filter.
      *
      * @param filter   {@link AuditFilter}

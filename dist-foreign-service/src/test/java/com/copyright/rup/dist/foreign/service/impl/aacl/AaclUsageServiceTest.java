@@ -337,6 +337,16 @@ public class AaclUsageServiceTest {
     }
 
     @Test
+    public void testUpdateAaclUsagesUnderMinimum() {
+        String scenarioId = "617ece75-b7e9-4889-a128-1423216c0ddc";
+        aaclUsageRepository.updateAaclUsagesUnderMinimum(scenarioId, BigDecimal.TEN, USER_NAME);
+        expectLastCall().once();
+        replay(aaclUsageRepository);
+        aaclUsageService.updateAaclUsagesUnderMinimum(scenarioId, BigDecimal.TEN, USER_NAME);
+        verify(aaclUsageRepository);
+    }
+
+    @Test
     public void testDeleteUsageBatchDetails() {
         usageAuditService.deleteActionsByBatchId(BATCH_ID);
         expectLastCall().once();

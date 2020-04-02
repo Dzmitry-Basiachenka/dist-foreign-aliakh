@@ -184,6 +184,15 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
+    public void updateAaclUsagesUnderMinimum(String scenarioId, BigDecimal cutoffAmount, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("cutoffAmount", cutoffAmount);
+        params.put(UPDATE_USER_KEY, userName);
+        insert("IAaclUsageMapper.updateAaclUsagesUnderMinimum", params);
+    }
+
+    @Override
     public List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
