@@ -1,13 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
@@ -24,6 +27,7 @@ import com.vaadin.ui.VerticalLayout;
 public class AaclScenarioWidget extends CommonScenarioWidget implements IAaclScenarioWidget {
 
     private final IAaclScenarioController scenarioController;
+    private Button exportButton;
 
     /**
      * Constructor.
@@ -46,7 +50,11 @@ public class AaclScenarioWidget extends CommonScenarioWidget implements IAaclSce
 
     @Override
     protected HorizontalLayout initButtons() {
-        HorizontalLayout buttons = new HorizontalLayout(Buttons.createCloseButton(this));
+        exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader exportScenarioFileDownloader = new OnDemandFileDownloader(
+            scenarioController.getExportScenarioRightsholderTotalsStreamSource().getSource());
+        exportScenarioFileDownloader.extend(exportButton);
+        HorizontalLayout buttons = new HorizontalLayout(exportButton, Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");
         buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;
@@ -54,6 +62,7 @@ public class AaclScenarioWidget extends CommonScenarioWidget implements IAaclSce
 
     private void updateLayouts() {
         boolean scenarioEmpty = scenarioController.isScenarioEmpty();
+        exportButton.setEnabled(!scenarioEmpty);
         getRightsholdersGrid().setVisible(!scenarioEmpty);
         getSearchWidget().setVisible(!scenarioEmpty);
         getEmptyUsagesLayout().setVisible(scenarioEmpty);

@@ -11,6 +11,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioController;
@@ -36,8 +37,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -68,12 +71,16 @@ public class AaclScenarioWidgetTest {
         scenario.setGrossTotal(new BigDecimal("20000.00"));
         scenario.setServiceFeeTotal(new BigDecimal("6400.00"));
         scenario.setNetTotal(new BigDecimal("13600.00"));
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource())
+            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
+        expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
         expect(controller.isScenarioEmpty()).andReturn(false).once();
-        replay(controller, ForeignSecurityUtils.class);
+        replay(controller, streamSource, ForeignSecurityUtils.class);
         scenarioWidget.init();
-        verify(controller, ForeignSecurityUtils.class);
+        verify(controller, streamSource, ForeignSecurityUtils.class);
         reset(controller);
     }
 
@@ -136,8 +143,11 @@ public class AaclScenarioWidgetTest {
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(1, horizontalLayout.getComponentCount());
-        Button closeButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals(2, horizontalLayout.getComponentCount());
+        Button exportButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals("Export", exportButton.getCaption());
+        assertEquals("Export", exportButton.getId());
+        Button closeButton = (Button) horizontalLayout.getComponent(1);
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());
