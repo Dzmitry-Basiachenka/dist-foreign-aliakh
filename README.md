@@ -1,5 +1,14 @@
 9.1.14
 -
+* B-57245 FDA: Scenario Tab modifications for AACL Licensee Class Mapping View: implement link from scenario metadata panel to Licensee Class Mapping View window
+* B-57244 FDA: Scenario Tab modifications for AACL Fund Pool View: implement link from scenario metadata panel to Fund Pool View window
+* B-57242 FDA: Scenario Tab modifications for AACL Metadata Panel: display scenario specific information and implement logic to display scenario-specific details  on metadata panel
+* B-55091 FDA: Modify the scenario popup view for AACL: implement View Scenario window
+* B-55091 FDA: Modify the scenario popup view for AACL: adjust imports in AaclScenariosControllerTest
+* B-56913 FDA: Modify the scenario drill-down view for AACL: Implement Drill Down By Rightsholder window
+* B-55090 FDA: AACL Calculate Scenario: implement first round of calculation to find usages under minimum
+* B-55008 FDA: AACL Exports Scenario Results by RH Account: add 'Export' button
+* B-57242 FDA: Scenario Tab modifications for AACL Metadata Panel: adjust ordering of amounts and remove Reported Total Amount on scenario metadata panel for FAS/FAS2/NTS product families
 
 9.1.13
 -
