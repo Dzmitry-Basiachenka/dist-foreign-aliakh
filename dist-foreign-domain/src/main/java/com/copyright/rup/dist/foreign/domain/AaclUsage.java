@@ -19,12 +19,16 @@ import java.time.LocalDate;
 public class AaclUsage {
 
     private Integer detailLicenseeClassId;
-    private String enrollmentProfile;
-    private String discipline;
+    private String detailLicenseeEnrollment;
+    private String detailLicenseeDiscipline;
+    private Integer aggregateLicenseeClassId;
+    private String aggregateLicenseeEnrollment;
+    private String aggregateLicenseeDiscipline;
     private PublicationType publicationType = new PublicationType();
     private String originalPublicationType;
     private String institution;
     private int usagePeriod;
+    private BigDecimal usageAgeWeight;
     private String usageSource;
     private String rightLimitation;
     private Integer numberOfPages;
@@ -56,20 +60,44 @@ public class AaclUsage {
         this.detailLicenseeClassId = detailLicenseeClassId;
     }
 
-    public String getEnrollmentProfile() {
-        return enrollmentProfile;
+    public String getDetailLicenseeEnrollment() {
+        return detailLicenseeEnrollment;
     }
 
-    public void setEnrollmentProfile(String enrollmentProfile) {
-        this.enrollmentProfile = enrollmentProfile;
+    public void setDetailLicenseeEnrollment(String detailLicenseeEnrollment) {
+        this.detailLicenseeEnrollment = detailLicenseeEnrollment;
     }
 
-    public String getDiscipline() {
-        return discipline;
+    public String getDetailLicenseeDiscipline() {
+        return detailLicenseeDiscipline;
     }
 
-    public void setDiscipline(String discipline) {
-        this.discipline = discipline;
+    public void setDetailLicenseeDiscipline(String detailLicenseeDiscipline) {
+        this.detailLicenseeDiscipline = detailLicenseeDiscipline;
+    }
+
+    public Integer getAggregateLicenseeClassId() {
+        return aggregateLicenseeClassId;
+    }
+
+    public void setAggregateLicenseeClassId(Integer aggregateLicenseeClassId) {
+        this.aggregateLicenseeClassId = aggregateLicenseeClassId;
+    }
+
+    public String getAggregateLicenseeEnrollment() {
+        return aggregateLicenseeEnrollment;
+    }
+
+    public void setAggregateLicenseeEnrollment(String aggregateLicenseeEnrollment) {
+        this.aggregateLicenseeEnrollment = aggregateLicenseeEnrollment;
+    }
+
+    public String getAggregateLicenseeDiscipline() {
+        return aggregateLicenseeDiscipline;
+    }
+
+    public void setAggregateLicenseeDiscipline(String aggregateLicenseeDiscipline) {
+        this.aggregateLicenseeDiscipline = aggregateLicenseeDiscipline;
     }
 
     public PublicationType getPublicationType() {
@@ -102,6 +130,14 @@ public class AaclUsage {
 
     public void setUsagePeriod(int usagePeriod) {
         this.usagePeriod = usagePeriod;
+    }
+
+    public BigDecimal getUsageAgeWeight() {
+        return usageAgeWeight;
+    }
+
+    public void setUsageAgeWeight(BigDecimal usageAgeWeight) {
+        this.usageAgeWeight = usageAgeWeight;
     }
 
     public String getUsageSource() {
@@ -147,12 +183,16 @@ public class AaclUsage {
         AaclUsage that = (AaclUsage) obj;
         return new EqualsBuilder()
             .append(detailLicenseeClassId, that.detailLicenseeClassId)
-            .append(enrollmentProfile, that.enrollmentProfile)
-            .append(discipline, that.discipline)
+            .append(detailLicenseeEnrollment, that.detailLicenseeEnrollment)
+            .append(detailLicenseeDiscipline, that.detailLicenseeDiscipline)
+            .append(aggregateLicenseeClassId, that.aggregateLicenseeClassId)
+            .append(aggregateLicenseeEnrollment, that.aggregateLicenseeEnrollment)
+            .append(aggregateLicenseeDiscipline, that.aggregateLicenseeDiscipline)
             .append(publicationType, that.publicationType)
             .append(originalPublicationType, that.originalPublicationType)
             .append(institution, that.institution)
             .append(usagePeriod, that.usagePeriod)
+            .append(usageAgeWeight, that.usageAgeWeight)
             .append(usageSource, that.usageSource)
             .append(rightLimitation, that.rightLimitation)
             .append(numberOfPages, that.numberOfPages)
@@ -166,12 +206,16 @@ public class AaclUsage {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(detailLicenseeClassId)
-            .append(enrollmentProfile)
-            .append(discipline)
+            .append(detailLicenseeEnrollment)
+            .append(detailLicenseeDiscipline)
+            .append(aggregateLicenseeClassId)
+            .append(aggregateLicenseeEnrollment)
+            .append(aggregateLicenseeDiscipline)
             .append(publicationType)
             .append(originalPublicationType)
             .append(institution)
             .append(usagePeriod)
+            .append(usageAgeWeight)
             .append(usageSource)
             .append(rightLimitation)
             .append(numberOfPages)
@@ -185,12 +229,16 @@ public class AaclUsage {
     public String toString() {
         return new ToStringBuilder(this)
             .append("detailLicenseeClassId", detailLicenseeClassId)
-            .append("enrollmentProfile", enrollmentProfile)
-            .append("discipline", discipline)
+            .append("detailLicenseeEnrollment", detailLicenseeEnrollment)
+            .append("detailLicenseeDiscipline", detailLicenseeDiscipline)
+            .append("aggregateLicenseeClassId", aggregateLicenseeClassId)
+            .append("aggregateLicenseeEnrollment", aggregateLicenseeEnrollment)
+            .append("aggregateLicenseeDiscipline", aggregateLicenseeDiscipline)
             .append("publicationType", publicationType)
             .append("originalPublicationType", originalPublicationType)
             .append("institution", institution)
             .append("usagePeriod", usagePeriod)
+            .append("usageAgeWeight", usageAgeWeight)
             .append("usageSource", usageSource)
             .append("rightLimitation", rightLimitation)
             .append("numberOfPages", numberOfPages)

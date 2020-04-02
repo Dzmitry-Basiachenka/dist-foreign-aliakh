@@ -18,8 +18,8 @@
     "netAmount": 80.0000000000,
     "aaclUsage": {
       "detailLicenseeClassId": "143",
-      "enrollmentProfile": "EXGP",
-      "discipline": "Engineering",
+      "detailLicenseeEnrollment": "EXGP",
+      "detailLicenseeDiscipline": "Engineering",
       "usagePeriod": 2020,
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2020 TUR",

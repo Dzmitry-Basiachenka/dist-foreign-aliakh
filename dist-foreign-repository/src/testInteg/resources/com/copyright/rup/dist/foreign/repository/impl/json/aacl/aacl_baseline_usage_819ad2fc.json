@@ -12,8 +12,8 @@
       "usageSource": "Aug 2016 FR",
       "numberOfPages": 35,
       "detailLicenseeClassId": 143,
-      "discipline": "Engineering",
-      "enrollmentProfile": "EXGP",
+      "detailLicenseeDiscipline": "Engineering",
+      "detailLicenseeEnrollment": "EXGP",
       "publicationType": {
         "id": "46634907-882e-4f91-b1ad-f57db945aff7",
         "name": "Consumer Magazine"

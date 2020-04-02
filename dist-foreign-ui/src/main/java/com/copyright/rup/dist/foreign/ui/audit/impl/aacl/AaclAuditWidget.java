@@ -76,9 +76,10 @@ public class AaclAuditWidget extends CommonAuditWidget implements IAaclAuditWidg
             "table.column.distribution_date", "distributionDate", 105);
         addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClassId(), "table.column.det_lc_id",
             "detailLicenseeClassId", 80);
-        addColumn(usage -> usage.getAaclUsage().getEnrollmentProfile(), "table.column.det_lc_enrollment",
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeEnrollment(), "table.column.det_lc_enrollment",
             "enrollmentProfile", 140);
-        addColumn(usage -> usage.getAaclUsage().getDiscipline(), "table.column.det_lc_discipline", "discipline", 140);
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeDiscipline(), "table.column.det_lc_discipline",
+            "discipline", 140);
         addColumn(usage -> usage.getAaclUsage().getPublicationType().getName(), "table.column.publication_type",
             "publicationType", 140);
         addColumn(usage -> usage.getAaclUsage().getUsagePeriod(), "table.column.usage_period", "usagePeriod",

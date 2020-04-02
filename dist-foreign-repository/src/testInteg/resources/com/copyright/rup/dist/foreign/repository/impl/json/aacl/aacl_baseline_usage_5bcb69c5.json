@@ -12,8 +12,8 @@
       "usageSource": "Aug 2018 FR",
       "numberOfPages": 25,
       "detailLicenseeClassId": 195,
-      "discipline": "Medical & Health",
-      "enrollmentProfile": "HGP",
+      "detailLicenseeDiscipline": "Medical & Health",
+      "detailLicenseeEnrollment": "HGP",
       "publicationType": {
         "id": "a3dff475-fc06-4d8c-b7cc-f093073ada6f",
         "name": "News Source"

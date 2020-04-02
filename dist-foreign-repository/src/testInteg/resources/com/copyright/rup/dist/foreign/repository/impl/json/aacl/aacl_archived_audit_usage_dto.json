@@ -22,9 +22,9 @@
     "rhAccountNumber": 1000002859,
     "aaclUsage": {
       "detailLicenseeClassId": "143",
-      "enrollmentProfile": "EXGP",
+      "detailLicenseeEnrollment": "EXGP",
+      "detailLicenseeDiscipline": "Engineering",
       "batchPeriodEndDate": "2019-06-30",
-      "discipline": "Engineering",
       "usagePeriod": 2040,
       "usageSource": "Feb 2040 TUR",
       "numberOfPages": 341,

@@ -25,8 +25,8 @@
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
-        <result property="aaclUsage.discipline" column="discipline"/>
-        <result property="aaclUsage.enrollmentProfile" column="enrollment_profile"/>
+        <result property="aaclUsage.detailLicenseeDiscipline" column="discipline"/>
+        <result property="aaclUsage.detailLicenseeEnrollment" column="enrollment_profile"/>
         <result property="aaclUsage.publicationType.id" column="pub_type_id"/>
         <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
         <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>
@@ -66,8 +66,8 @@
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
-        <result property="aaclUsage.discipline" column="discipline"/>
-        <result property="aaclUsage.enrollmentProfile" column="enrollment_profile"/>
+        <result property="aaclUsage.detailLicenseeDiscipline" column="discipline"/>
+        <result property="aaclUsage.detailLicenseeEnrollment" column="enrollment_profile"/>
         <result property="aaclUsage.publicationType.id" column="pub_type_id"/>
         <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
         <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>

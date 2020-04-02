@@ -18,8 +18,8 @@
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
         "name": "Book"
       },
-      "discipline": "Life Sciences",
-      "enrollmentProfile": "EXGP"
+      "detailLicenseeDiscipline": "Life Sciences",
+      "detailLicenseeEnrollment": "EXGP"
     },
     "rightsholder": {
       "id": "77cfa2dd-efac-48a9-bd5b-98659ff2265a",
@@ -47,8 +47,8 @@
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
         "name": "Book"
       },
-      "discipline": "Life Sciences",
-      "enrollmentProfile": "EXGP"
+      "detailLicenseeDiscipline": "Life Sciences",
+      "detailLicenseeEnrollment": "EXGP"
     },
     "rightsholder": {
       "id": "77cfa2dd-efac-48a9-bd5b-98659ff2265a",
