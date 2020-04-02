@@ -124,8 +124,8 @@ public class AaclUsageRepositoryIntegrationTest {
         Usage expectedUsage = usages.get(0);
         assertEquals(UsageStatusEnum.WORK_RESEARCH, expectedUsage.getStatus());
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
-        assertNull(expectedUsage.getAaclUsage().getDiscipline());
-        assertNull(expectedUsage.getAaclUsage().getEnrollmentProfile());
+        assertNull(expectedUsage.getAaclUsage().getDetailLicenseeDiscipline());
+        assertNull(expectedUsage.getAaclUsage().getDetailLicenseeEnrollment());
         assertEquals(9, getNumberOfUsagesWithNotEmptyClassificationData());
         aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
         assertEquals(10, getNumberOfUsagesWithNotEmptyClassificationData());
@@ -646,10 +646,10 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
         assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
         assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-        assertEquals(expectedAaclUsage.getEnrollmentProfile(), actualAaclUsage.getEnrollmentProfile());
+        assertEquals(expectedAaclUsage.getDetailLicenseeEnrollment(), actualAaclUsage.getDetailLicenseeEnrollment());
         assertEquals(expectedAaclUsage.getUsagePeriod(), actualAaclUsage.getUsagePeriod());
         assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
-        assertEquals(expectedAaclUsage.getDiscipline(), actualAaclUsage.getDiscipline());
+        assertEquals(expectedAaclUsage.getDetailLicenseeDiscipline(), actualAaclUsage.getDetailLicenseeDiscipline());
         assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
         assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
         assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());

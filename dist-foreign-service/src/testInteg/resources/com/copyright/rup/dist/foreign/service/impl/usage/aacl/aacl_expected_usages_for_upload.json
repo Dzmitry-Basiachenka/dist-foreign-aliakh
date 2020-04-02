@@ -30,8 +30,8 @@
       },
       "originalPublicationType": "Textbook",
       "publicationTypeWeight": 1.71,
-      "discipline": "Life Sciences",
-      "enrollmentProfile": "MU",
+      "detailLicenseeDiscipline": "Life Sciences",
+      "detailLicenseeEnrollment": "MU",
       "baselineId": "3b483859-f398-48cd-b3a2-76e1f7b8412d"
     }
   },
@@ -66,8 +66,8 @@
       },
       "originalPublicationType": "Book series",
       "publicationTypeWeight": 4.29,
-      "discipline": "Medical & Health",
-      "enrollmentProfile": "HGP",
+      "detailLicenseeDiscipline": "Medical & Health",
+      "detailLicenseeEnrollment": "HGP",
       "baselineId": "81ee3d75-dd1b-4181-8d4c-f962ab6aa9e5"
     }
   },
@@ -96,8 +96,8 @@
       },
       "originalPublicationType": "Fiction or Poetry",
       "publicationTypeWeight": 3.50,
-      "discipline": "Education",
-      "enrollmentProfile": "MU",
+      "detailLicenseeDiscipline": "Education",
+      "detailLicenseeEnrollment": "MU",
       "baselineId": "0dab496e-e126-4607-bafe-adf205d6ec54"
     }
   },

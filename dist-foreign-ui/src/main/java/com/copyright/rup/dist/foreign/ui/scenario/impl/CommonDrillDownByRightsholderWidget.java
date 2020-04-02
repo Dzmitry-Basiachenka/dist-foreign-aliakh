@@ -68,6 +68,11 @@ public abstract class CommonDrillDownByRightsholderWidget extends Window
     }
 
     /**
+     * @return the search prompt.
+     */
+    protected abstract String getSearchPrompt();
+
+    /**
      * Adds columns to the grid.
      *
      * @see #addColumn(ValueProvider, String, String)
@@ -174,7 +179,7 @@ public abstract class CommonDrillDownByRightsholderWidget extends Window
 
     private HorizontalLayout initSearchWidget() {
         searchWidget = new SearchWidget(() -> dataProvider.refreshAll());
-        searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.usage.search_widget"));
+        searchWidget.setPrompt(getSearchPrompt());
         searchWidget.setWidth(60, Unit.PERCENTAGE);
         HorizontalLayout layout = new HorizontalLayout(searchWidget);
         layout.setWidth(100, Unit.PERCENTAGE);

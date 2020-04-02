@@ -2,11 +2,13 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioController;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,9 @@ import java.io.PipedOutputStream;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AaclScenarioController extends CommonScenarioController implements IAaclScenarioController {
 
+    @Autowired
+    private IAaclDrillDownByRightsholderController drillDownByRightsholderController;
+
     @Override
     protected IAaclScenarioWidget instantiateWidget() {
         return new AaclScenarioWidget(this);
@@ -33,7 +38,7 @@ public class AaclScenarioController extends CommonScenarioController implements 
 
     @Override
     protected ICommonDrillDownByRightsholderController getDrillDownByRightsholderController() {
-        throw new NotImplementedException("Drill down-down by RH is not yet implemented");
+        return drillDownByRightsholderController;
     }
 
     @Override

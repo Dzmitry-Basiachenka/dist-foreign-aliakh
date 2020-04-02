@@ -19,8 +19,8 @@
         "name": "Book"
       },
       "publicationTypeWeight": 4.37,
-      "discipline": "Life Sciences",
-      "enrollmentProfile": "EXGP"
+      "detailLicenseeDiscipline": "Life Sciences",
+      "detailLicenseeEnrollment": "EXGP"
     },
     "rightsholder": {
       "id": "60080587-a225-439c-81af-f016cb33aeac",
@@ -54,8 +54,8 @@
         "name": "STMA Journal"
       },
       "publicationTypeWeight": 1.24,
-      "discipline": "Life Sciences",
-      "enrollmentProfile": "EXGP"
+      "detailLicenseeDiscipline": "Life Sciences",
+      "detailLicenseeEnrollment": "EXGP"
     },
     "rightsholder": {
       "id": "b0e6b1f6-89e9-4767-b143-db0f49f32769",
@@ -89,8 +89,8 @@
         "name": "STMA Journal"
       },
       "publicationTypeWeight": 2.71,
-      "discipline": "Life Sciences",
-      "enrollmentProfile": "EXGP",
+      "detailLicenseeDiscipline": "Life Sciences",
+      "detailLicenseeEnrollment": "EXGP",
       "baselineId": "f517f5b9-5f34-41f6-8984-67eeadf65ad1"
     },
     "rightsholder": {

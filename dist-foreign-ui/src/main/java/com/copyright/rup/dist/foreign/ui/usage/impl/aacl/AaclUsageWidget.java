@@ -84,10 +84,10 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
             155);
         addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClassId(), "table.column.det_lc_id",
             "detailLicenseeClassId", true, 80);
-        addColumn(usage -> usage.getAaclUsage().getEnrollmentProfile(), "table.column.det_lc_enrollment",
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeEnrollment(), "table.column.det_lc_enrollment",
             "enrollmentProfile", true, 140);
-        addColumn(usage -> usage.getAaclUsage().getDiscipline(), "table.column.det_lc_discipline", "discipline", true,
-            140);
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeDiscipline(), "table.column.det_lc_discipline",
+            "discipline", true, 140);
         addColumn(usage -> usage.getAaclUsage().getPublicationType().getName(), "table.column.publication_type",
             "publicationType", true, 140);
         addColumn(usage -> usage.getAaclUsage().getInstitution(), "table.column.institution", "institution",

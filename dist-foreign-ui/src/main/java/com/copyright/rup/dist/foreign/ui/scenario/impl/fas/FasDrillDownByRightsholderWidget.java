@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasDrillDownByRightsholderWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonDrillDownByRightsholderWidget;
 
@@ -53,5 +54,10 @@ public class FasDrillDownByRightsholderWidget extends CommonDrillDownByRightshol
         addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", true, 145);
         addColumn(UsageDto::getAuthor, "table.column.author", "author", true, 90);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", true, 200);
+    }
+
+    @Override
+    protected String getSearchPrompt() {
+        return ForeignUi.getMessage("field.prompt.drill_down_by_rightsholder.search_widget");
     }
 }

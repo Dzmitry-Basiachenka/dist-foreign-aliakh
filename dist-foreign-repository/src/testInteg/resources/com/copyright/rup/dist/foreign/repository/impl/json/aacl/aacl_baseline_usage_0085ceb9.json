@@ -12,8 +12,8 @@
       "usageSource": "Aug 2019 FR",
       "numberOfPages": 15,
       "detailLicenseeClassId": 113,
-      "discipline": "Life Sciences",
-      "enrollmentProfile": "MU",
+      "detailLicenseeDiscipline": "Life Sciences",
+      "detailLicenseeEnrollment": "MU",
       "publicationType": {
         "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
         "name": "STMA Journal"
