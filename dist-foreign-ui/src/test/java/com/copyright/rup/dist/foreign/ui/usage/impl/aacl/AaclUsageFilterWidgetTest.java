@@ -65,7 +65,7 @@ public class AaclUsageFilterWidgetTest {
 
     private static final Set<UsageStatusEnum> AACL_STATUSES = ImmutableSet.of(UsageStatusEnum.NEW,
         UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
-        UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.ELIGIBLE);
+        UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED);
 
     private IAaclUsageFilterController usagesFilterController;
     private AaclUsageFilterWidget widget;
@@ -232,7 +232,7 @@ public class AaclUsageFilterWidgetTest {
         ListDataProvider<UsageStatusEnum> listDataProvider =
             (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
         Collection<?> actualStatuses = listDataProvider.getItems();
-        assertEquals(6, actualStatuses.size());
+        assertEquals(7, actualStatuses.size());
         assertEquals(AACL_STATUSES, actualStatuses);
     }
 
