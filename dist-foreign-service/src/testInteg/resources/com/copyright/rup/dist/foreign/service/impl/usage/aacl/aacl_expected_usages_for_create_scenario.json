@@ -24,7 +24,9 @@
       },
       "publicationTypeWeight": 4.37,
       "detailLicenseeDiscipline": "Life Sciences",
-      "detailLicenseeEnrollment": "EXGP"
+      "detailLicenseeEnrollment": "EXGP",
+      "volumeWeight": 3.7000000000,
+      "valueWeight": 194.0280000000
     },
     "rightsholder": {
       "id": "60080587-a225-439c-81af-f016cb33aeac",
@@ -63,7 +65,9 @@
       },
       "publicationTypeWeight": 1.24,
       "detailLicenseeDiscipline": "Life Sciences",
-      "detailLicenseeEnrollment": "EXGP"
+      "detailLicenseeEnrollment": "EXGP",
+      "volumeWeight": 7.5000000000,
+      "valueWeight": 111.6000000000
     },
     "rightsholder": {
       "id": "b0e6b1f6-89e9-4767-b143-db0f49f32769",
@@ -103,7 +107,9 @@
       "publicationTypeWeight": 2.71,
       "detailLicenseeDiscipline": "Life Sciences",
       "detailLicenseeEnrollment": "EXGP",
-      "baselineId": "f517f5b9-5f34-41f6-8984-67eeadf65ad1"
+      "baselineId": "f517f5b9-5f34-41f6-8984-67eeadf65ad1",
+      "volumeWeight": 7.5000000000,
+      "valueWeight": 243.9000000000
     },
     "rightsholder": {
       "id": "b0e6b1f6-89e9-4767-b143-db0f49f32769",

@@ -35,6 +35,8 @@ public class AaclUsage {
     private LocalDate batchPeriodEndDate;
     private String baselineId;
     private BigDecimal publicationTypeWeight;
+    private BigDecimal volumeWeight;
+    private BigDecimal valueWeight;
 
     public BigDecimal getPublicationTypeWeight() {
         return publicationTypeWeight;
@@ -172,6 +174,22 @@ public class AaclUsage {
         this.batchPeriodEndDate = batchPeriodEndDate;
     }
 
+    public BigDecimal getVolumeWeight() {
+        return volumeWeight;
+    }
+
+    public void setVolumeWeight(BigDecimal volumeWeight) {
+        this.volumeWeight = volumeWeight;
+    }
+
+    public BigDecimal getValueWeight() {
+        return valueWeight;
+    }
+
+    public void setValueWeight(BigDecimal valueWeight) {
+        this.valueWeight = valueWeight;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -199,6 +217,8 @@ public class AaclUsage {
             .append(batchPeriodEndDate, that.batchPeriodEndDate)
             .append(publicationTypeWeight, that.publicationTypeWeight)
             .append(baselineId, that.baselineId)
+            .append(volumeWeight, that.volumeWeight)
+            .append(valueWeight, that.valueWeight)
             .isEquals();
     }
 
@@ -222,6 +242,8 @@ public class AaclUsage {
             .append(batchPeriodEndDate)
             .append(publicationTypeWeight)
             .append(baselineId)
+            .append(volumeWeight)
+            .append(valueWeight)
             .toHashCode();
     }
 
@@ -245,6 +267,8 @@ public class AaclUsage {
             .append("batchPeriodEndDate", batchPeriodEndDate)
             .append("publicationTypeWeight", publicationTypeWeight)
             .append("baselineId", baselineId)
+            .append("volumeWeight", volumeWeight)
+            .append("valueWeight", valueWeight)
             .toString();
     }
 }

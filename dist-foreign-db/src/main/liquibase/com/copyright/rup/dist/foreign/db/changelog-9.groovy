@@ -652,64 +652,80 @@ databaseChangeLog {
                 where "aggregate_licensee_class_id = '232'"
             }
         }
+    }
 
-        changeSet(id: '2020-03-18-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-            comment("B-52335 FDA: Create AACL Scenario: Add usage_period column to df_scenario_usage_filter table")
+    changeSet(id: '2020-03-18-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
+        comment("B-52335 FDA: Create AACL Scenario: Add usage_period column to df_scenario_usage_filter table")
 
-            addColumn(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
-                column(name: 'usage_period', type: 'NUMERIC(4)', remarks: 'The usage period')
-            }
-
-            rollback {
-                // automatic rollback
-            }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'usage_period', type: 'NUMERIC(4)', remarks: 'The usage period')
         }
 
-        changeSet(id: '2020-03-19-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-            comment("B-56844 Tech Debt: FDA: update NTS_EXCLUDED status to SCENARIO_EXCLUDED in df_usage table")
+        rollback {
+            // automatic rollback
+        }
+    }
 
+    changeSet(id: '2020-03-19-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-56844 Tech Debt: FDA: update NTS_EXCLUDED status to SCENARIO_EXCLUDED in df_usage table")
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'status_ind', value: 'SCENARIO_EXCLUDED')
+            where "status_ind = 'NTS_EXCLUDED'"
+        }
+
+        rollback {
             update(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'status_ind', value: 'SCENARIO_EXCLUDED')
-                where "status_ind = 'NTS_EXCLUDED'"
-            }
-
-            rollback {
-                update(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                    column(name: 'status_ind', value: 'NTS_EXCLUDED')
-                    where "status_ind = 'SCENARIO_EXCLUDED'"
-                }
+                column(name: 'status_ind', value: 'NTS_EXCLUDED')
+                where "status_ind = 'SCENARIO_EXCLUDED'"
             }
         }
+    }
 
-        changeSet(id: '2020-03-20-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-            comment("B-56844 Tech Debt: FDA: rename publication_type_uid columns to df_publication_type_uid " +
-                    "in df_usage_aacl, df_usage_baseline_aacl tables")
+    changeSet(id: '2020-03-20-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-56844 Tech Debt: FDA: rename publication_type_uid columns to df_publication_type_uid " +
+                "in df_usage_aacl, df_usage_baseline_aacl tables")
 
+        renameColumn(schemaName: dbAppsSchema,
+                tableName: 'df_usage_aacl',
+                oldColumnName: 'publication_type_uid',
+                newColumnName: 'df_publication_type_uid',
+                columnDataType: 'VARCHAR(255)')
+
+        renameColumn(schemaName: dbAppsSchema,
+                tableName: 'df_usage_baseline_aacl',
+                oldColumnName: 'publication_type_uid',
+                newColumnName: 'df_publication_type_uid',
+                columnDataType: 'VARCHAR(255)')
+
+        rollback {
             renameColumn(schemaName: dbAppsSchema,
                     tableName: 'df_usage_aacl',
-                    oldColumnName: 'publication_type_uid',
-                    newColumnName: 'df_publication_type_uid',
+                    oldColumnName: 'df_publication_type_uid',
+                    newColumnName: 'publication_type_uid',
                     columnDataType: 'VARCHAR(255)')
 
             renameColumn(schemaName: dbAppsSchema,
                     tableName: 'df_usage_baseline_aacl',
-                    oldColumnName: 'publication_type_uid',
-                    newColumnName: 'df_publication_type_uid',
+                    oldColumnName: 'df_publication_type_uid',
+                    newColumnName: 'publication_type_uid',
                     columnDataType: 'VARCHAR(255)')
+        }
+    }
 
-            rollback {
-                renameColumn(schemaName: dbAppsSchema,
-                        tableName: 'df_usage_aacl',
-                        oldColumnName: 'df_publication_type_uid',
-                        newColumnName: 'publication_type_uid',
-                        columnDataType: 'VARCHAR(255)')
+    changeSet(id: '2020-04-03-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-55090 FDA: AACL Calculate Scenario: add volume_weight and value_weight columns to df_usage_aacl table")
 
-                renameColumn(schemaName: dbAppsSchema,
-                        tableName: 'df_usage_baseline_aacl',
-                        oldColumnName: 'df_publication_type_uid',
-                        newColumnName: 'publication_type_uid',
-                        columnDataType: 'VARCHAR(255)')
-            }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'volume_weight', type: 'NUMERIC(38,10)', remarks: 'The volume weight')
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'value_weight', type: 'NUMERIC(38,10)', remarks: 'The value weight')
+        }
+
+        rollback {
+            // automatic rollback
         }
     }
 }
