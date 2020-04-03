@@ -1,3 +1,9 @@
+9.1.15
+-
+* B-55090 FDA: AACL Calculate Scenario: add scenario_excluded status to Usages and Audit tabs
+* B-55090 FDA: AACL Calculate Scenario: implement second round of calculation to calculate gross, net and service fee amount
+* B-55091 FDA: Modify the scenario popup view for AACL: add permission for viewing scenario
+
 9.1.14
 -
 * B-57245 FDA: Scenario Tab modifications for AACL Licensee Class Mapping View: implement link from scenario metadata panel to Licensee Class Mapping View window
