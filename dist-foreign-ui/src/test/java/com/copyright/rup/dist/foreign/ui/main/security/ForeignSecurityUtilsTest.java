@@ -34,6 +34,7 @@ import java.util.Set;
 public final class ForeignSecurityUtilsTest {
 
     private static final String FDA_ACCESS_APPLICATION = "FDA_ACCESS_APPLICATION";
+    private static final String FDA_VIEW_SCENARIO = "FDA_VIEW_SCENARIO";
     private final Set<String> permissions;
 
     /**
@@ -47,11 +48,11 @@ public final class ForeignSecurityUtilsTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> setUpUserPermissions() {
-        Object[] viewOnlyRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION)};
-        Object[] distributionManagerRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION)};
+        Object[] viewOnlyRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION, FDA_VIEW_SCENARIO)};
+        Object[] distributionManagerRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION, FDA_VIEW_SCENARIO)};
         Object[] distributionSpecialistRole = {Sets.newHashSet(
             FDA_ACCESS_APPLICATION, "FDA_DELETE_USAGE", "FDA_LOAD_USAGE", "FDA_LOAD_FUND_POOL",
-            "FDA_LOAD_AACL_FUND_POOL", "FDA_DELETE_AACL_FUND_POOL", "FDA_LOAD_RESEARCHED_USAGE",
+            "FDA_LOAD_AACL_FUND_POOL", "FDA_VIEW_SCENARIO", "FDA_DELETE_AACL_FUND_POOL", "FDA_LOAD_RESEARCHED_USAGE",
             "FDA_CREATE_DELETE_FUND", "FDA_ASSIGN_CLASSIFICATION", "FDA_DELETE_SCENARIO", "FDA_EXCLUDE_FROM_SCENARIO",
             "FDA_SEND_FOR_WORK_RESEARCH", "FDA_SEND_FOR_CLASSIFICATION", "FDA_LOAD_CLASSIFIED_USAGE")};
         Object[] roleWithoutPermissions = {Collections.emptySet()};
@@ -96,6 +97,8 @@ public final class ForeignSecurityUtilsTest {
             ForeignSecurityUtils.hasLoadResearchedUsagePermission());
         assertEquals(permissions.contains("FDA_CREATE_EDIT_SCENARIO"),
             ForeignSecurityUtils.hasCreateEditScenarioPermission());
+        assertEquals(permissions.contains("FDA_VIEW_SCENARIO"),
+            ForeignSecurityUtils.hasViewScenarioPermission());
         assertEquals(permissions.contains("FDA_DELETE_SCENARIO"),
             ForeignSecurityUtils.hasDeleteScenarioPermission());
         assertEquals(permissions.contains("FDA_EXCLUDE_FROM_SCENARIO"),
