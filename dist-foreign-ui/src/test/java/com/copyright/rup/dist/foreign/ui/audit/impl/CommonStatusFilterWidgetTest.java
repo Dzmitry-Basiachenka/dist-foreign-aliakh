@@ -57,8 +57,9 @@ public class CommonStatusFilterWidgetTest {
 
     private static final Set<UsageStatusEnum> AACL_STATUSES =
         Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
-            UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.LOCKED,
-            UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED);
+            UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND, UsageStatusEnum.ELIGIBLE,
+            UsageStatusEnum.SCENARIO_EXCLUDED, UsageStatusEnum.LOCKED, UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID,
+            UsageStatusEnum.ARCHIVED);
 
     @Test
     public void testLoadBeansFas() {
