@@ -175,6 +175,7 @@ public class ScenarioService implements IScenarioService {
         //TODO refine logic for getting payees only for LOCKED details
         aaclUsageService.updateAaclUsagesUnderMinimum(scenario.getId(), aaclFields.getTitleCutoffAmount(),
             scenario.getCreateUser());
+        aaclUsageService.calculateAmounts(scenario.getId(), scenario.getCreateUser());
         LOGGER.info("Insert AACL scenario. Finished. Name={}, Description={}, UsageFilter={}",
             scenarioName, description, usageFilter);
         return scenario;

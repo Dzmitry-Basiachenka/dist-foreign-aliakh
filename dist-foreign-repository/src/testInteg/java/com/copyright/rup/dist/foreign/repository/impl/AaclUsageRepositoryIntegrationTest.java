@@ -67,6 +67,7 @@ public class AaclUsageRepositoryIntegrationTest {
 
     private static final String SCENARIO_ID_1 = "09f85d7d-3a37-45b2-ab6e-7a341c3f115c";
     private static final String SCENARIO_ID_2 = "66d10c81-705e-4996-89f4-11e1635c4c31";
+    private static final String SCENARIO_ID_3 = "8b01939c-abda-4090-86d1-6231fc20f679";
     private static final String USAGE_ID_1 = "0b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_2 = "6c91f04e-60dc-49e0-9cdc-e782e0b923e2";
     private static final String USAGE_ID_3 = "5b41d618-0a2f-4736-bb75-29da627ad677";
@@ -427,9 +428,8 @@ public class AaclUsageRepositoryIntegrationTest {
 
     @Test
     public void testUpdateAaclUsagesUnderMinimum() {
-        Scenario scenario = new Scenario();
-        scenario.setId("8b01939c-abda-4090-86d1-6231fc20f679");
-        aaclUsageRepository.updateAaclUsagesUnderMinimum(scenario.getId(), new BigDecimal("150.00"), USER_NAME);
+        assertEquals(4, aaclUsageRepository.findByScenarioId(SCENARIO_ID_3).size());
+        aaclUsageRepository.updateAaclUsagesUnderMinimum(SCENARIO_ID_3, new BigDecimal("150.00"), USER_NAME);
         List<Usage> excludedUsages = aaclUsageRepository.findByIds(
             Arrays.asList("9ccf8b43-4ad5-4199-8c7f-c5884f27e44f", "ccb115c7-3444-4dbb-9540-7541961febdf"));
         assertEquals(2, excludedUsages.size());
@@ -437,13 +437,18 @@ public class AaclUsageRepositoryIntegrationTest {
             assertEquals(UsageStatusEnum.SCENARIO_EXCLUDED, usage.getStatus());
             assertNull(usage.getScenarioId());
         });
-        List<Usage> lockedUsages = aaclUsageRepository.findByIds(
-            Arrays.asList("83be7d3e-b4c0-4512-b4d4-230f6392ef5e", "b28df2d4-359a-4165-8936-fc0c0bdf4ba9"));
-        assertEquals(2, lockedUsages.size());
-        lockedUsages.forEach(usage -> {
-            assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
-            assertEquals("8b01939c-abda-4090-86d1-6231fc20f679", usage.getScenarioId());
-        });
+        assertEquals(2, aaclUsageRepository.findByScenarioId(SCENARIO_ID_3).size());
+    }
+
+    @Test
+    public void testCalculateAmounts() {
+        aaclUsageRepository.calculateAmounts(SCENARIO_ID_3, USER_NAME);
+        List<Usage> usages = aaclUsageRepository.findByScenarioId(SCENARIO_ID_3);
+        usages.sort(Comparator.comparing(Usage::getId));
+        assertAmounts(usages.get(0), "474.2846861858", "355.7135146393", "118.5711715464");
+        assertAmounts(usages.get(1), "8.6947406155", "6.5210554616", "2.1736851539");
+        assertAmounts(usages.get(2), "500.0000000000", "375.0000000000", "125.0000000000");
+        assertAmounts(usages.get(3), "17.0205731987", "12.7654298991", "4.2551432997");
     }
 
     @Test
@@ -765,5 +770,12 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
         assertNotNull(expectedUsage.getUpdateDate());
         verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
+    }
+
+    private void assertAmounts(Usage usage, String grossAmount, String netAmount, String serviceFeeAmount) {
+        assertEquals(new BigDecimal(grossAmount), usage.getGrossAmount());
+        assertEquals(new BigDecimal(netAmount), usage.getNetAmount());
+        assertEquals(new BigDecimal(serviceFeeAmount), usage.getServiceFeeAmount());
+        assertEquals(new BigDecimal("0.25000"), usage.getServiceFee());
     }
 }

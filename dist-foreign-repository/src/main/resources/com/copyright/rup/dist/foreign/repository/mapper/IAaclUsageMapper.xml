@@ -18,6 +18,10 @@
         <result property="standardNumber" column="standard_number"/>
         <result property="standardNumberType" column="standard_number_type"/>
         <result property="numberOfCopies" column="number_of_copies"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="serviceFee" column="service_fee"/>
         <result property="comment" column="comment"/>
         <result property="aaclUsage.institution" column="institution"/>
         <result property="aaclUsage.usagePeriod" column="usage_period"/>
@@ -90,6 +94,10 @@
         u.status_ind,
         u.product_family,
         u.number_of_copies,
+        u.gross_amount,
+        u.service_fee_amount,
+        u.net_amount,
+        u.service_fee,
         u.comment,
         ub.payment_date batch_period_end_date,
         uaacl.institution,
@@ -747,6 +755,18 @@
         order by uaacl.usage_period desc
     </select>
 
+    <select id="findByScenarioId" parameterType="string" resultMap="aaclUsageResultMap">
+        select
+            <include refid="IAaclUsageMapper.aaclUsageColumns"/>
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_publication_type pt on uaacl.df_publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where u.df_scenario_uid = #{scenarioId}
+    </select>
+
     <select id="isValidFilteredUsageStatus" parameterType="map" resultType="boolean">
         select not exists (
             select 1
@@ -825,7 +845,7 @@
         and u.df_usage_uid = uaacl.df_usage_aacl_uid
     </update>
 
-    <update id="updateAaclUsagesUnderMinimum">
+    <sql id="prepareCalculationSteps">
         with usage_weights as (
             select
                 (usage_weight ->> 'period')::int as period,
@@ -855,12 +875,16 @@
         ),
         denominators as (
             select
-                case when sum(volume_weight) != 0  then sum(volume_weight) else 1 end volume_denominator,
-                case when sum(value_weight) != 0  then sum(value_weight) else 1 end value_denominator,
+                case when sum(volume_weight) != 0 then sum(volume_weight) else 1 end volume_denominator,
+                case when sum(value_weight) != 0 then sum(value_weight) else 1 end value_denominator,
                 aggregateId
             from weights
             group by aggregateId
         )
+    </sql>
+
+    <update id="updateAaclUsagesUnderMinimum">
+        <include refid="prepareCalculationSteps"/>
         update ${schema}.df_usage
         set
             status_ind = 'SCENARIO_EXCLUDED',
@@ -871,7 +895,7 @@
             and wr_wrk_inst in (
                 select
                     wr_wrk_inst
-                    from weights
+                from weights
                 join denominators on denominators.aggregateId = weights.aggregateId
                 join ${schema}.df_scenario sc on weights.df_scenario_uid = sc.df_scenario_uid
                 left join ${schema}.df_fund_pool_detail fpd on fpd.df_aggregate_licensee_class_id = weights.aggregateId
@@ -879,6 +903,30 @@
                 group by wr_wrk_inst
                 having coalesce (sum((volume_weight / volume_denominator + value_weight / value_denominator) / 2 * fpd.gross_amount), 0) &lt; #{cutoffAmount}
             )
+    </update>
+
+    <update id="calculateAmounts">
+        <include refid="prepareCalculationSteps"/>,
+        gross_amounts as (
+            select
+                df_usage_uid,
+                (volume_weight / volume_denominator + value_weight / value_denominator) / 2 * fpd.gross_amount as gross_amount
+            from weights
+            join denominators on denominators.aggregateId = weights.aggregateId
+            join ${schema}.df_scenario sc on weights.df_scenario_uid = sc.df_scenario_uid
+            left join ${schema}.df_fund_pool_detail fpd on fpd.df_aggregate_licensee_class_id = weights.aggregateId
+                and fpd.df_fund_pool_uid = sc.aacl_fields ->> 'fund_pool_uid'
+            where sc.df_scenario_uid = #{scenarioId}
+        )
+        update ${schema}.df_usage u
+        set
+            gross_amount = ga.gross_amount,
+            net_amount = ga.gross_amount * 0.75,
+            service_fee_amount = ga.gross_amount * 0.25,
+            service_fee = 0.25,
+            <include refid="StoredEntityMapper.update"/>
+        from gross_amounts ga
+        where u.df_usage_uid = ga.df_usage_uid
     </update>
 
     <update id="updatePublicationTypeWeight" parameterType="map">

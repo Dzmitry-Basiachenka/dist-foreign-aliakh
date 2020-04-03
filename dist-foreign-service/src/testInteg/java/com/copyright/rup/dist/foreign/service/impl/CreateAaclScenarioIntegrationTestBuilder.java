@@ -249,6 +249,10 @@ public class CreateAaclScenarioIntegrationTestBuilder {
             assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
             assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
             assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
+            assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+            assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+            assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
+            assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
             assertEquals(expectedUsage.getComment(), actualUsage.getComment());
             assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
         }

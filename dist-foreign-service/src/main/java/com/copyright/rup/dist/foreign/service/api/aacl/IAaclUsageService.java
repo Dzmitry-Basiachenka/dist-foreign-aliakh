@@ -138,6 +138,14 @@ public interface IAaclUsageService {
     void updateAaclUsagesUnderMinimum(String scenarioId, BigDecimal cutoffAmount, String userName);
 
     /**
+     * Calculates gross_amount, service_fee, service_fee_amount and net_amount for all scenario usages.
+     *
+     * @param scenarioId scenario identifier
+     * @param userName   user name
+     */
+    void calculateAmounts(String scenarioId, String userName);
+
+    /**
      * Deletes all {@link Usage}s associated with the given AACL {@link UsageBatch}.
      *
      * @param usageBatch {@link UsageBatch} to delete usages from
