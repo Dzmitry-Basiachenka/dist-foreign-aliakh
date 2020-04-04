@@ -172,10 +172,10 @@ public class ScenarioService implements IScenarioService {
         aaclUsageService.addUsagesToScenario(scenario, usageFilter);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
-        //TODO refine logic for getting payees only for LOCKED details
         aaclUsageService.updateAaclUsagesUnderMinimum(scenario.getId(), aaclFields.getTitleCutoffAmount(),
             scenario.getCreateUser());
         aaclUsageService.calculateAmounts(scenario.getId(), scenario.getCreateUser());
+        aaclUsageService.populatePayees(scenario.getId());
         LOGGER.info("Insert AACL scenario. Finished. Name={}, Description={}, UsageFilter={}",
             scenarioName, description, usageFilter);
         return scenario;
