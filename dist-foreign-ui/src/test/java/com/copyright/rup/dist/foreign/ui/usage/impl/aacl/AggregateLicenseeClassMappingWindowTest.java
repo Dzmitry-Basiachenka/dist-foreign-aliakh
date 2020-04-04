@@ -179,9 +179,9 @@ public class AggregateLicenseeClassMappingWindowTest {
         assertEquals(
             Arrays.asList("Det LC ID", "Det LC Enrollment", "Det LC Discipline", "Agg LC ID", "Agg LC Enrollment",
                 "Agg LC Discipline"), columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(100.0, 140.0, 210.0, -1.0, 140.0, 210.0),
+        assertEquals(Arrays.asList(-1.0, -1.0, -1.0, -1.0, -1.0, -1.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1, -1, -1, 1, -1, -1),
+        assertEquals(Arrays.asList(1, 2, 3, 1, 2, 3),
             columns.stream().map(Grid.Column::getExpandRatio).collect(Collectors.toList()));
         columns.forEach(column -> assertTrue(column.isSortable()));
         assertFalse(grid.getDataProvider().isInMemory());
