@@ -951,7 +951,7 @@
         gross_amounts as (
             select
                 df_usage_uid,
-                (volume_weight / volume_denominator + value_weight / value_denominator) / 2 * fpd.gross_amount as gross_amount
+                coalesce ((volume_weight / volume_denominator + value_weight / value_denominator) / 2 * fpd.gross_amount, 0) as gross_amount
             from weights
             join denominators on denominators.aggregateId = weights.aggregateId
             join ${schema}.df_scenario sc on weights.df_scenario_uid = sc.df_scenario_uid
