@@ -187,6 +187,13 @@ public interface IAaclUsageService {
     void addUsagesToScenario(Scenario scenario, UsageFilter filter);
 
     /**
+     * Gets rollups from PRM service and populates for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void populatePayees(String scenarioId);
+
+    /**
      * Gets aggregate licensee classes that have money that can't be distributed.
      *
      * @param fundPoolId fund pool id

@@ -391,15 +391,6 @@ public class AaclUsageServiceTest {
             buildPubType("eb500edd-c882-43a4-8945-454958c8fd52", BigDecimal.ONE),
             buildPubType("77707191-bdbd-4034-b37b-0968aedaa346", BigDecimal.TEN)));
         scenario.setAaclFields(aaclFields);
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setId("378cafcf-cf21-4036-b223-5bd48b09c41f");
-        rightsholder.setAccountNumber(2000073957L);
-        expect(rightsholderService.getByScenarioId(scenario.getId()))
-            .andReturn(Collections.singletonList(rightsholder)).once();
-        expect(prmIntegrationService.getRollUps(Collections.singleton("378cafcf-cf21-4036-b223-5bd48b09c41f")))
-            .andReturn(Collections.emptyMap()).once();
-        aaclUsageRepository.updatePayeeByAccountNumber(2000073957L, scenario.getId(), 2000073957L, "SYSTEM");
-        expectLastCall().once();
         UsageFilter usageFilter = new UsageFilter();
         aaclUsageRepository.addToScenario(scenario, usageFilter);
         expectLastCall().once();
@@ -409,10 +400,27 @@ public class AaclUsageServiceTest {
         aaclUsageRepository.updatePublicationTypeWeight(scenario,
             "77707191-bdbd-4034-b37b-0968aedaa346", BigDecimal.TEN);
         expectLastCall().once();
+        replay(aaclUsageRepository);
+        aaclUsageService.addUsagesToScenario(scenario, usageFilter);
+        verify(aaclUsageRepository);
+    }
+
+    @Test
+    public void testPopulatePayees() {
+        String scenarioId = "fe08f50c-bea8-4856-8787-3e3e9e46669c";
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId("378cafcf-cf21-4036-b223-5bd48b09c41f");
+        rightsholder.setAccountNumber(2000073957L);
+        expect(rightsholderService.getByScenarioId(scenarioId))
+            .andReturn(Collections.singletonList(rightsholder)).once();
+        expect(prmIntegrationService.getRollUps(Collections.singleton("378cafcf-cf21-4036-b223-5bd48b09c41f")))
+            .andReturn(Collections.emptyMap()).once();
+        aaclUsageRepository.updatePayeeByAccountNumber(2000073957L, scenarioId, 2000073957L, "SYSTEM");
+        expectLastCall().once();
         rightsholderService.updateRighstholdersAsync(Collections.singleton(2000073957L));
         expectLastCall().once();
         replay(aaclUsageRepository, rightsholderService, prmIntegrationService);
-        aaclUsageService.addUsagesToScenario(scenario, usageFilter);
+        aaclUsageService.populatePayees(scenarioId);
         verify(aaclUsageRepository, rightsholderService, prmIntegrationService);
     }
 

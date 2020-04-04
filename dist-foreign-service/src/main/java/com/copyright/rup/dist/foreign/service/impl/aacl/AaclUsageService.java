@@ -270,17 +270,22 @@ public class AaclUsageService implements IAaclUsageService {
         aaclUsageRepository.addToScenario(scenario, filter);
         scenario.getAaclFields().getPublicationTypes().forEach(pubType ->
             aaclUsageRepository.updatePublicationTypeWeight(scenario, pubType.getId(), pubType.getWeight()));
+    }
+
+    @Override
+    @Transactional
+    public void populatePayees(String scenarioId) {
         String userName = RupContextUtils.getUserName();
         Set<Long> payeeAccountNumbers = new HashSet<>();
-        List<Rightsholder> rightsholders = rightsholderService.getByScenarioId(scenario.getId());
+        List<Rightsholder> rightsholders = rightsholderService.getByScenarioId(scenarioId);
         Set<String> rightsholdersIds = rightsholders.stream().map(BaseEntity::getId).collect(Collectors.toSet());
         Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
         rightsholders.forEach(rightsholder -> {
             Long payeeAccountNumber = PrmRollUpService.getPayee(rollUps, rightsholder, FdaConstants.AACL_PRODUCT_FAMILY)
                 .getAccountNumber();
             payeeAccountNumbers.add(payeeAccountNumber);
-            aaclUsageRepository.updatePayeeByAccountNumber(rightsholder.getAccountNumber(),
-                scenario.getId(), payeeAccountNumber, userName);
+            aaclUsageRepository.updatePayeeByAccountNumber(rightsholder.getAccountNumber(), scenarioId,
+                payeeAccountNumber, userName);
         });
         rightsholderService.updateRighstholdersAsync(payeeAccountNumbers);
     }
