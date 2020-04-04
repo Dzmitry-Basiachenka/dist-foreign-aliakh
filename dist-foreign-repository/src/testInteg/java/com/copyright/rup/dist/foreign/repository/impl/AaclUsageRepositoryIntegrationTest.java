@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
@@ -25,7 +26,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -74,6 +74,8 @@ public class AaclUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_4 = "f89f016d-0cc7-46b6-9f3f-63d2439458d5";
     private static final String USAGE_ID_5 = "49680a3e-2986-44f5-943c-3701d80f2d3d";
     private static final String USAGE_ID_6 = "870ee1dc-8596-409f-8ffe-717d17a33c9e";
+    private static final String USAGE_ID_7 = "10bd15c1-b907-457e-94c0-9d6bb66e706f";
+    private static final String USAGE_ID_8 = "2f3988e1-7cca-42b2-bdf8-a8850dbf315b";
     private static final String BATCH_ID_3 = "adcc460c-c4ae-4750-99e8-b9fe91787ce1";
     private static final String SYSTEM_TITLE = "Wissenschaft & Forschung Japan";
     private static final String USER_NAME = "user@mail.com";
@@ -574,6 +576,79 @@ public class AaclUsageRepositoryIntegrationTest {
             .forEach(usage -> assertEquals(RH_ACCOUNT_NUMBER, usage.getPayeeAccountNumber()));
     }
 
+    @Test
+    public void testFindCountByScenarioIdAndRhAccountNumber() {
+        assertEquals(2, aaclUsageRepository
+            .findCountByScenarioIdAndRhAccountNumber(1000011450L, "20bed3d9-8da3-470f-95d7-d839a41488d4", null));
+    }
+
+    @Test
+    public void testFindByScenarioIdAndRhAccountNumber() {
+        List<UsageDto> expectedUsageDtos =
+            loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_usage_dtos.json"));
+        List<UsageDto> actualUsageDtos = aaclUsageRepository
+            .findByScenarioIdAndRhAccountNumber(1000011450L, "20bed3d9-8da3-470f-95d7-d839a41488d4", null, null, null);
+        assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
+        IntStream.range(0, expectedUsageDtos.size())
+            .forEach(index -> verifyUsageDto(expectedUsageDtos.get(0), actualUsageDtos.get(0)));
+    }
+
+    @Test
+    public void testSortingFindByScenarioIdAndRhAccountNumber() {
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailId", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "detailId", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "batchName", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "batchName", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "periodEndDate", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "periodEndDate", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "wrWrkInst", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "wrWrkInst", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "systemTitle", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "systemTitle", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "standardNumber", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "standardNumber", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "standardNumberType", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "standardNumberType", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "detailLicenseeClassId", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailLicenseeClassId", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "detailLicenseeEnrollment", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailLicenseeEnrollment", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailLicenseeDiscipline", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailLicenseeDiscipline", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "aggregateLicenseeClassId", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "aggregateLicenseeClassId", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "aggregateLicenseeEnrollment", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "aggregateLicenseeEnrollment", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "aggregateLicenseeDiscipline", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "aggregateLicenseeDiscipline", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "publicationType", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "publicationType", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "publicationTypeWeight", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "publicationTypeWeight", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "institution", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "institution", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "usagePeriod", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "usagePeriod", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "usageAgeWeight", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "usageAgeWeight", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "usageSource", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "usageSource", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "numberOfPages", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "numberOfPages", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "rightLimitation", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "rightLimitation", Sort.Direction.DESC);
+    }
+
+    private void assertSortingFindByScenarioIdAndRhAccountNumber(String detailId, String sortProperty,
+                                                                 Sort.Direction sortDirection) {
+        String scenarioId = "20bed3d9-8da3-470f-95d7-d839a41488d4";
+        List<UsageDto> usageDtos = aaclUsageRepository
+            .findByScenarioIdAndRhAccountNumber(1000011450L, scenarioId, null, null,
+                new Sort(sortProperty, sortDirection));
+        assertEquals(2, CollectionUtils.size(usageDtos));
+        assertEquals(detailId, usageDtos.get(0).getId());
+    }
+
     private void assertFindForAuditSearch(String searchValue, String... usageIds) {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(searchValue);
@@ -674,13 +749,19 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
         assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
         assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-        assertEquals(expectedAaclUsage.getDetailLicenseeEnrollment(), actualAaclUsage.getDetailLicenseeEnrollment());
         assertEquals(expectedAaclUsage.getUsagePeriod(), actualAaclUsage.getUsagePeriod());
         assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
-        assertEquals(expectedAaclUsage.getDetailLicenseeDiscipline(), actualAaclUsage.getDetailLicenseeDiscipline());
         assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
-        assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
         assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
+        assertEquals(expectedAaclUsage.getUsageAgeWeight(), actualAaclUsage.getUsageAgeWeight());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
+        assertEquals(expectedAaclUsage.getDetailLicenseeDiscipline(), actualAaclUsage.getDetailLicenseeDiscipline());
+        assertEquals(expectedAaclUsage.getDetailLicenseeEnrollment(), actualAaclUsage.getDetailLicenseeEnrollment());
+        assertEquals(expectedAaclUsage.getAggregateLicenseeClassId(), actualAaclUsage.getAggregateLicenseeClassId());
+        assertEquals(expectedAaclUsage.getAggregateLicenseeDiscipline(),
+            actualAaclUsage.getAggregateLicenseeDiscipline());
+        assertEquals(expectedAaclUsage.getAggregateLicenseeEnrollment(),
+            actualAaclUsage.getAggregateLicenseeEnrollment());
     }
 
     private List<Usage> loadExpectedUsages(List<String> fileNames) {

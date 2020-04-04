@@ -24,7 +24,7 @@ public class AaclDrillDownByRightsholderWidget extends CommonDrillDownByRightsho
         addColumn(UsageDto::getId, "table.column.detail_id", "detailId", false, 130);
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", true, 125);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", true, 145);
-        addColumn(usageDto -> CommonDateUtils.format(usageDto.getPeriodEndDate(),
+        addColumn(usageDto -> CommonDateUtils.format(usageDto.getAaclUsage().getBatchPeriodEndDate(),
             RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.period_end_date", "periodEndDate", true, 120);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);
         addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
@@ -50,8 +50,8 @@ public class AaclDrillDownByRightsholderWidget extends CommonDrillDownByRightsho
             "table.column.aggregate_lc_discipline", "aggregateLicenseeDiscipline", true, 140);
         addColumn(usageDto -> usageDto.getAaclUsage().getPublicationType().getName(), "table.column.publication_type",
             "publicationType", true, 140);
-        addColumn(usageDto -> usageDto.getAaclUsage().getPublicationType().getWeight(),
-            "table.column.publication_type_weight", "publicationTypeWeights", true, 120);
+        addColumn(usageDto -> usageDto.getAaclUsage().getPublicationTypeWeight(),
+            "table.column.publication_type_weight", "publicationTypeWeight", true, 120);
         addColumn(usageDto -> usageDto.getAaclUsage().getOriginalPublicationType(),
             "table.column.historical_publication_type", "historicalPublicationType", true, 140);
         addColumn(usageDto -> usageDto.getAaclUsage().getInstitution(), "table.column.institution", "institution",
@@ -66,7 +66,7 @@ public class AaclDrillDownByRightsholderWidget extends CommonDrillDownByRightsho
         addColumn(usageDto -> usageDto.getAaclUsage().getNumberOfPages(), "table.column.number_of_pages",
             "numberOfPages", true, 140);
         addColumn(usageDto -> usageDto.getAaclUsage().getRightLimitation(), "table.column.right_limitation",
-            "right_limitation", true, 140);
+            "rightLimitation", true, 140);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", true, 200);
     }
 

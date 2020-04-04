@@ -1,16 +1,22 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclDrillDownByRightsholderWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonDrillDownByRightsholderController;
 
 import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.shared.data.sort.SortDirection;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,16 +33,24 @@ import java.util.List;
 public class AaclDrillDownByRightsholderController extends CommonDrillDownByRightsholderController
     implements IAaclDrillDownByRightsholderController {
 
+    @Autowired
+    private IAaclUsageService usageService;
+
     @Override
     public int getSize() {
-        //TODO use service logic here
-        return 0;
+        return usageService.getCountByScenarioAndRhAccountNumber(getSelectedRightsholderAccountNumber(),
+            getSelectedScenario().getId(), getWidget().getSearchValue());
     }
 
     @Override
     public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
-        //TODO use service logic here
-        return new ArrayList<>();
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.get(0);
+            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
+        return usageService.getByScenarioAndRhAccountNumber(getSelectedRightsholderAccountNumber(),
+            getSelectedScenario().getId(), getWidget().getSearchValue(), new Pageable(startIndex, count), sort);
     }
 
     @Override

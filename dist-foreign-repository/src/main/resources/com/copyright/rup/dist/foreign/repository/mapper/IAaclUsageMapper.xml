@@ -29,12 +29,12 @@
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
-        <result property="aaclUsage.detailLicenseeDiscipline" column="discipline"/>
-        <result property="aaclUsage.detailLicenseeEnrollment" column="enrollment_profile"/>
+        <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
+        <result property="aaclUsage.detailLicenseeDiscipline" column="detail_licensee_discipline"/>
+        <result property="aaclUsage.detailLicenseeEnrollment" column="detail_licensee_enrollment"/>
         <result property="aaclUsage.publicationType.id" column="pub_type_id"/>
         <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
         <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>
-        <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
         <result property="aaclUsage.publicationTypeWeight" column="publication_type_weight"/>
         <result property="aaclUsage.baselineId" column="baseline_uid"/>
         <result property="aaclUsage.volumeWeight" column="volume_weight"/>
@@ -68,16 +68,20 @@
         <result property="comment" column="comment"/>
         <result property="aaclUsage.institution" column="institution"/>
         <result property="aaclUsage.usagePeriod" column="usage_period"/>
+        <result property="aaclUsage.usageAgeWeight" column="usage_age_weight"/>
         <result property="aaclUsage.usageSource" column="usage_source"/>
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
-        <result property="aaclUsage.detailLicenseeDiscipline" column="discipline"/>
-        <result property="aaclUsage.detailLicenseeEnrollment" column="enrollment_profile"/>
+        <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
+        <result property="aaclUsage.detailLicenseeDiscipline" column="detail_licensee_discipline"/>
+        <result property="aaclUsage.detailLicenseeEnrollment" column="detail_licensee_enrollment"/>
+        <result property="aaclUsage.aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
+        <result property="aaclUsage.aggregateLicenseeDiscipline" column="aggregate_licensee_discipline"/>
+        <result property="aaclUsage.aggregateLicenseeEnrollment" column="aggregate_licensee_enrollment"/>
         <result property="aaclUsage.publicationType.id" column="pub_type_id"/>
         <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
         <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>
-        <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
         <result property="aaclUsage.publicationTypeWeight" column="publication_type_weight"/>
         <result property="aaclUsage.baselineId" column="baseline_uid"/>
     </resultMap>
@@ -111,8 +115,8 @@
         uaacl.baseline_uid,
         uaacl.volume_weight,
         uaacl.value_weight,
-        dlc.discipline,
-        dlc.enrollment_profile,
+        dlc.discipline detail_licensee_discipline,
+        dlc.enrollment_profile detail_licensee_enrollment,
         uaacl.original_publication_type,
         pt.df_publication_type_uid pub_type_id,
         pt.name pub_type_name,
@@ -195,8 +199,8 @@
                     uaacl.number_of_pages,
                     uaacl.detail_licensee_class_id,
                     pt.name pub_type_name,
-                    dlc.discipline,
-                    dlc.enrollment_profile
+                    dlc.discipline detail_licensee_discipline,
+                    dlc.enrollment_profile detail_licensee_enrollment
                 from ${schema}.df_usage u
                 join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
                 left join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
@@ -291,10 +295,10 @@
                         detail_licensee_class_id
                     </when>
                     <when test="sort.property == 'enrollmentProfile'">
-                        enrollment_profile
+                        detail_licensee_enrollment
                     </when>
                     <when test="sort.property == 'discipline'">
-                        discipline
+                        detail_licensee_discipline
                     </when>
                     <when test="sort.property == 'publicationType'">
                         pub_type_name
@@ -353,8 +357,8 @@
             uaacl.number_of_pages,
             uaacl.detail_licensee_class_id,
             pt.name pub_type_name,
-            dlc.discipline,
-            dlc.enrollment_profile
+            dlc.discipline detail_licensee_discipline,
+            dlc.enrollment_profile detail_licensee_enrollment
         from ${schema}.df_usage_archive u
         join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         join ${schema}.df_usage_aacl uaacl on u.df_usage_archive_uid = uaacl.df_usage_aacl_uid
@@ -489,17 +493,50 @@
             <when test="sort.property == 'comment'">
                 u.comment <include refid="IUsageMapper.direction"/>
             </when>
-            <when test="sort.property == 'discipline'">
-                dlc.discipline <include refid="IUsageMapper.direction"/>
-            </when>
-            <when test="sort.property == 'enrollmentProfile'">
-                dlc.enrollment_profile <include refid="IUsageMapper.direction"/>
-            </when>
             <when test="sort.property == 'publicationType'">
                 pt.name <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'publicationTypeWeight'">
+                uaacl.publication_type_weight <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'historicalPublicationType'">
+                uaacl.original_publication_type <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'usagePeriod'">
+                uaacl.usage_period <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'usageAgeWeight'">
+                usage_age_weight <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'detailLicenseeClassId'">
                 uaacl.detail_licensee_class_id <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'detailLicenseeDiscipline'">
+                detail_licensee_discipline <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'detailLicenseeEnrollment'">
+                detail_licensee_enrollment <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'aggregateLicenseeClassId'">
+                aggregate_licensee_class_id <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'aggregateLicenseeDiscipline'">
+                aggregate_licensee_discipline <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'aggregateLicenseeEnrollment'">
+                aggregate_licensee_enrollment <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'grossAmount'">
+                u.gross_amount
+            </when>
+            <when test="sort.property == 'serviceFeeAmount'">
+                u.service_fee_amount
+            </when>
+            <when test="sort.property == 'serviceFee'">
+                u.service_fee
+            </when>
+            <when test="sort.property == 'netAmount'">
+                u.net_amount
             </when>
         </choose>
     </sql>
@@ -914,7 +951,7 @@
         gross_amounts as (
             select
                 df_usage_uid,
-                coalesce ((volume_weight / volume_denominator + value_weight / value_denominator) / 2 * fpd.gross_amount, 0) as gross_amount
+                (volume_weight / volume_denominator + value_weight / value_denominator) / 2 * fpd.gross_amount as gross_amount
             from weights
             join denominators on denominators.aggregateId = weights.aggregateId
             join ${schema}.df_scenario sc on weights.df_scenario_uid = sc.df_scenario_uid
@@ -966,4 +1003,84 @@
                 and u.df_scenario_uid is null
         )
     </select>
+
+    <select id="findCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
+        select count(1)
+        <include refid="drillDownFromWhereClauses"/>
+    </select>
+
+    <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="aaclUsageDtoResultMap">
+        select
+            u.df_usage_uid,
+            u.product_family,
+            u.wr_wrk_inst,
+            u.system_title,
+            u.standard_number,
+            u.standard_number_type,
+            u.gross_amount,
+            u.service_fee_amount,
+            u.net_amount,
+            u.service_fee,
+            ub.name batch_name,
+            ub.payment_date batch_period_end_date,
+            dlc.detail_licensee_class_id,
+            dlc.discipline detail_licensee_discipline,
+            dlc.enrollment_profile detail_licensee_enrollment,
+            alc.aggregate_licensee_class_id,
+            alc.discipline aggregate_licensee_discipline,
+            alc.enrollment_profile aggregate_licensee_enrollment,
+            pt.name pub_type_name,
+            uaacl.publication_type_weight,
+            uaacl.original_publication_type,
+            uaacl.institution,
+            uaacl.usage_period,
+            uaacl.usage_source,
+            uaacl.number_of_pages,
+            uaacl.right_limitation,
+            (usageAges ->> 'weight')::text usage_age_weight,
+            u.number_of_copies,
+            u.comment
+        <include refid="drillDownFromWhereClauses"/>
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="IAaclUsageMapper.aaclChooseSortProperty">
+                    <property name="detail_uid" value="u.df_usage_uid"/>
+                </include>
+            </when>
+            <otherwise>
+                u.df_usage_uid
+            </otherwise>
+        </choose>
+        <include refid="IUsageMapper.ifPageable"/>
+    </select>
+
+    <sql id="drillDownFromWhereClauses">
+        from ${schema}.df_scenario s
+        join ${schema}.df_usage u
+            on s.df_scenario_uid = u.df_scenario_uid
+        join ${schema}.df_usage_aacl uaacl
+            on u.df_usage_uid = uaacl.df_usage_aacl_uid
+        join ${schema}.df_usage_batch ub
+            on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_publication_type pt
+            on uaacl.df_publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_detail_licensee_class dlc
+            on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
+        left join jsonb_array_elements(s.aacl_fields -> 'usageAges') usageAges
+            on (usageAges ->> 'period')::int = uaacl.usage_period
+        left join jsonb_array_elements(s.aacl_fields -> 'detailLicenseeClasses') detailLicenseeClasses
+            on (detailLicenseeClasses ->> 'detailLicenseeClassId')::int = dlc.detail_licensee_class_id
+        left join ${schema}.df_aggregate_licensee_class alc
+            on (detailLicenseeClasses ->> 'aggregateLicenseeClassId')::int = alc.aggregate_licensee_class_id
+        where u.df_scenario_uid = #{scenarioId}
+            and u.rh_account_number = #{accountNumber}
+            <if test="null != searchValue">
+                and (
+                    u.df_usage_uid like '%' || #{searchValue} || '%' or
+                    u.standard_number ilike '%' || #{searchValue} || '%' or
+                    cast(u.wr_wrk_inst as text) like '%' || #{searchValue} || '%'
+                )
+            </if>
+    </sql>
 </mapper>

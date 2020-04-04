@@ -73,7 +73,9 @@ import java.util.Set;
 @PrepareForTest({RupContextUtils.class})
 public class AaclUsageServiceTest {
 
+    private static final String SEARCH = "search";
     private static final String USER_NAME = "user@copyright.com";
+    private static final String SCENARIO_ID = "10bd15c1-b907-457e-94c0-9d6bb66e706f";
     private static final String BATCH_ID = "eef46972-c381-4cb6-ab0a-c3e537ba708a";
     private static final String USAGE_ID = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
     private static final String FUND_POOL_ID = "9a71a608-d6a5-4783-b6a2-9665d6ba7d45";
@@ -500,6 +502,26 @@ public class AaclUsageServiceTest {
             aaclUsageService.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, usageFilter, classes);
         verify(licenseeClassService, fundPoolService, aaclUsageRepository);
         assertEquals(Arrays.asList(ALC_2, ALC_4), result);
+    }
+
+    @Test
+    public void testGetCountByScenarioAndRhAccountNumber() {
+        expect(aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(1000009422L, SCENARIO_ID, SEARCH))
+            .andReturn(10).once();
+        replay(aaclUsageRepository);
+        assertEquals(10, aaclUsageService.getCountByScenarioAndRhAccountNumber(1000009422L, SCENARIO_ID, SEARCH));
+        verify(aaclUsageRepository);
+    }
+
+    @Test
+    public void testGetByScenarioAndRhAccountNumber() {
+        List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
+        expect(aaclUsageRepository.findByScenarioIdAndRhAccountNumber(1000009422L, SCENARIO_ID, SEARCH, null, null))
+            .andReturn(usageDtos).once();
+        replay(aaclUsageRepository);
+        assertEquals(usageDtos,
+            aaclUsageService.getByScenarioAndRhAccountNumber(1000009422L, SCENARIO_ID, SEARCH, null, null));
+        verify(aaclUsageRepository);
     }
 
     private UsageBatch buildUsageBatch() {
