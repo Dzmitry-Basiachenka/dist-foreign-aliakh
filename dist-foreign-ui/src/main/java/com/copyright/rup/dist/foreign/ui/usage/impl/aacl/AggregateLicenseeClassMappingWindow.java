@@ -97,20 +97,20 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
     private void addGridColumns() {
         grid.addColumn(DetailLicenseeClass::getId)
             .setCaption(ForeignUi.getMessage("table.column.det_lc_id"))
-            .setWidth(100);
+            .setExpandRatio(1);
         grid.addColumn(DetailLicenseeClass::getEnrollmentProfile)
             .setCaption(ForeignUi.getMessage("table.column.det_lc_enrollment"))
-            .setWidth(140);
+            .setExpandRatio(2);
         grid.addColumn(DetailLicenseeClass::getDiscipline)
             .setCaption(ForeignUi.getMessage("table.column.det_lc_discipline"))
-            .setWidth(210);
+            .setExpandRatio(3);
         addAggregateLicenseeClassIdColumn();
         grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getEnrollmentProfile())
             .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_enrollment"))
-            .setWidth(140);
+            .setExpandRatio(2);
         grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getDiscipline())
             .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_discipline"))
-            .setWidth(210);
+            .setExpandRatio(3);
         grid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(grid, "aggregate-licensee-class-mapping-grid");
     }

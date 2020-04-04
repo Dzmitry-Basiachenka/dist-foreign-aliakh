@@ -66,17 +66,18 @@ public class ViewAaclFundPoolDetailsWindow extends Window {
         grid.setSizeFull();
         grid.addColumn(detail -> detail.getAggregateLicenseeClass().getId())
             .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
-            .setWidth(100);
+            .setExpandRatio(1);
         grid.addColumn(detail -> detail.getAggregateLicenseeClass().getEnrollmentProfile())
             .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_enrollment"))
-            .setWidth(150);
+            .setExpandRatio(2);
         grid.addColumn(detail -> detail.getAggregateLicenseeClass().getDiscipline())
-            .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_discipline"));
+            .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_discipline"))
+            .setExpandRatio(3);
         grid.addColumn(detail -> CurrencyUtils.format(detail.getGrossAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.gross_amount"))
             .setComparator((detail1, detail2) -> detail1.getGrossAmount().compareTo(detail2.getGrossAmount()))
             .setStyleGenerator(item -> "v-align-right")
-            .setWidth(110);
+            .setExpandRatio(2);
         VaadinUtils.addComponentStyle(grid, "view-aacl-fund-pool-details-grid");
     }
 }

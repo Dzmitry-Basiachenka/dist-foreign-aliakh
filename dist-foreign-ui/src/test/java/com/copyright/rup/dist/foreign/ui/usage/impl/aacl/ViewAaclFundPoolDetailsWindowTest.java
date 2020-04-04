@@ -76,8 +76,10 @@ public class ViewAaclFundPoolDetailsWindowTest {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Agg LC ID", "Agg LC Enrollment", "Agg LC Discipline", "Gross Amount"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(100.0, 150.0, -1.0, 110.0),
+        assertEquals(Arrays.asList(-1.0, -1.0, -1.0, -1.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
+        assertEquals(Arrays.asList(1, 2, 3, 2),
+            columns.stream().map(Grid.Column::getExpandRatio).collect(Collectors.toList()));
     }
 
     private FundPool buildFundPool() {
