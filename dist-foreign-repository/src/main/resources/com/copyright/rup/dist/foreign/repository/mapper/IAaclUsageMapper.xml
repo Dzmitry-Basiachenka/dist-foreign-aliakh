@@ -37,6 +37,8 @@
         <result property="aaclUsage.detailLicenseeClassId" column="detail_licensee_class_id"/>
         <result property="aaclUsage.publicationTypeWeight" column="publication_type_weight"/>
         <result property="aaclUsage.baselineId" column="baseline_uid"/>
+        <result property="aaclUsage.volumeWeight" column="volume_weight"/>
+        <result property="aaclUsage.valueWeight" column="value_weight"/>
     </resultMap>
 
     <resultMap id="aaclUsageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
@@ -107,6 +109,8 @@
         uaacl.right_limitation,
         uaacl.detail_licensee_class_id,
         uaacl.baseline_uid,
+        uaacl.volume_weight,
+        uaacl.value_weight,
         dlc.discipline,
         dlc.enrollment_profile,
         uaacl.original_publication_type,
@@ -910,13 +914,22 @@
         gross_amounts as (
             select
                 df_usage_uid,
-                (volume_weight / volume_denominator + value_weight / value_denominator) / 2 * fpd.gross_amount as gross_amount
+                coalesce ((volume_weight / volume_denominator + value_weight / value_denominator) / 2 * fpd.gross_amount, 0) as gross_amount
             from weights
             join denominators on denominators.aggregateId = weights.aggregateId
             join ${schema}.df_scenario sc on weights.df_scenario_uid = sc.df_scenario_uid
             left join ${schema}.df_fund_pool_detail fpd on fpd.df_aggregate_licensee_class_id = weights.aggregateId
                 and fpd.df_fund_pool_uid = sc.aacl_fields ->> 'fund_pool_uid'
             where sc.df_scenario_uid = #{scenarioId}
+        ),
+        weights_update as (
+            update ${schema}.df_usage_aacl ua
+            set
+                volume_weight = weights.volume_weight,
+                value_weight = weights.value_weight,
+                <include refid="StoredEntityMapper.update"/>
+            from weights
+            where ua.df_usage_aacl_uid = weights.df_usage_uid
         )
         update ${schema}.df_usage u
         set
