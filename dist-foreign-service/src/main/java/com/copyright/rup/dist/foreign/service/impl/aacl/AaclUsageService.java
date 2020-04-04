@@ -35,7 +35,6 @@ import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateExcepti
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -314,6 +313,19 @@ public class AaclUsageService implements IAaclUsageService {
     @Override
     public int getCountForAudit(AuditFilter filter) {
         return aaclUsageRepository.findCountForAudit(filter);
+    }
+
+
+    @Override
+    public int getCountByScenarioAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
+        return aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue);
+    }
+
+    @Override
+    public List<UsageDto> getByScenarioAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
+                                                          Pageable pageable, Sort sort) {
+        return aaclUsageRepository.findByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue,
+            pageable, sort);
     }
 
     private Set<Integer> getAggregateClassIdsWithAmountsFromFundPool(String fundPoolId) {

@@ -15,7 +15,6 @@ import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -49,6 +48,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     private static final String UPDATE_USER_KEY = "updateUser";
     private static final String STATUS_KEY = "status";
     private static final String SCENARIO_ID_KEY = "scenarioId";
+    private static final String SEARCH_VALUE_KEY = "searchValue";
 
     @Override
     public void insert(Usage usage) {
@@ -229,6 +229,27 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         params.put("weight", Objects.requireNonNull(weight));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(scenario.getUpdateUser()));
         update("IAaclUsageMapper.updatePublicationTypeWeight", params);
+    }
+
+    @Override
+    public int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        return selectOne("IAaclUsageMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
+    }
+
+    @Override
+    public List<UsageDto> findByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
+                                                             Pageable pageable, Sort sort) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
+        parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        parameters.put(PAGEABLE_KEY, pageable);
+        parameters.put(SORT_KEY, sort);
+        return selectList("IAaclUsageMapper.findByScenarioIdAndRhAccountNumber", parameters);
     }
 
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {

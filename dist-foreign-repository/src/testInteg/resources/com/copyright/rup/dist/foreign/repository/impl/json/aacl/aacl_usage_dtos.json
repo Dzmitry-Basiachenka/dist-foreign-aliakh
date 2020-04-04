@@ -1,0 +1,64 @@
+[
+  {
+    "id": "10bd15c1-b907-457e-94c0-9d6bb66e706f",
+    "batchName": "AACL Usage Batch 1",
+    "wrWrkInst": 109040891,
+    "systemTitle": "Biological Journal",
+    "standardNumber": "4680262122277",
+    "standardNumberType": "VALISBN10",
+    "status": "LOCKED",
+    "productFamily": "AACL",
+    "numberOfCopies": 300,
+    "aaclUsage": {
+      "batchPeriodEndDate": "2019-06-30",
+      "institution": "University of Michigan",
+      "usageSource": "Feb 2019 TUR",
+      "rightLimitation": "DIGITAL",
+      "detailLicenseeClassId": "110",
+      "detailLicenseeEnrollment": "EXU4",
+      "detailLicenseeDiscipline": "Life Sciences",
+      "aggregateLicenseeClassId": "143",
+      "aggregateLicenseeEnrollment": "EXGP",
+      "aggregateLicenseeDiscipline": "Engineering",
+      "publicationTypeWeight": 1.50,
+      "usagePeriod": 2019,
+      "usageAgeWeight": 0.75,
+      "numberOfPages": 200,
+      "publicationType": {
+        "name": "Business or Trade Journal"
+      }
+    },
+    "comment": "AACL Scenario Comment"
+  },
+  {
+    "id": "2f3988e1-7cca-42b2-bdf8-a8850dbf315b",
+    "batchName": "AACL Usage Batch 2",
+    "wrWrkInst": 269040891,
+    "systemTitle": "Snap to grid",
+    "standardNumber": "9780262122269",
+    "standardNumberType": "VALISBN13",
+    "status": "LOCKED",
+    "productFamily": "AACL",
+    "numberOfCopies": 155,
+    "aaclUsage": {
+      "batchPeriodEndDate": "2019-06-30",
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2019 TUR",
+      "rightLimitation": "PRINT",
+      "detailLicenseeClassId": "108",
+      "detailLicenseeEnrollment": "EXGP",
+      "detailLicenseeDiscipline": "Life Sciences",
+      "aggregateLicenseeClassId": "141",
+      "aggregateLicenseeEnrollment": "MU",
+      "aggregateLicenseeDiscipline": "Education",
+      "publicationTypeWeight": 1.00,
+      "usagePeriod": 2020,
+      "usageAgeWeight": 1.00,
+      "numberOfPages": 100,
+      "publicationType": {
+        "name": "Book"
+      }
+    },
+    "comment": "AACL Scenario Comment"
+  }
+]

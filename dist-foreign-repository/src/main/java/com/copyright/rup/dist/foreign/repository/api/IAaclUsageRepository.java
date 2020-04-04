@@ -227,4 +227,29 @@ public interface IAaclUsageRepository {
      * @param weight            publication type weight
      */
     void updatePublicationTypeWeight(Scenario scenario, String publicationTypeId, BigDecimal weight);
+
+    /**
+     * Gets count of usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
+     * rightsholder account number.
+     *
+     * @param accountNumber selected rightsholder account number
+     * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param searchValue   search value
+     * @return count of usage details
+     */
+    int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
+
+    /**
+     * Gets list of {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
+     * rightsholder account number.
+     *
+     * @param accountNumber selected rightsholder account number
+     * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param searchValue   search value
+     * @param pageable      instance of {@link Pageable}
+     * @param sort          instance of {@link Sort}
+     * @return list of {@link UsageDto}s
+     */
+    List<UsageDto> findByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
+                                                      Pageable pageable, Sort sort);
 }
