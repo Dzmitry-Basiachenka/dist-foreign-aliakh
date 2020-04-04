@@ -1,3 +1,10 @@
+9.1.16
+-
+* B-55090 FDA: AACL Calculate Scenario: add volume_weight and value_weight columns to df_usage_aacl table and populate them during scenario creation
+* B-56847 Tech Debt: FDA: implement proportional columns resizing for tables in Licensee Class Mapping, Fund Pool windows for AACL scenarios
+* B-56913 FDA: Modify the scenario drill-down view for AACL: Implement service and repository logic
+* B-56913 FDA: Modify the scenario drill-down view for AACL: fix changed gross amount calculation
+
 9.1.15
 -
 * B-55090 FDA: AACL Calculate Scenario: add scenario_excluded status to Usages and Audit tabs
