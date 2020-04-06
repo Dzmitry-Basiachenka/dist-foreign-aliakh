@@ -52,6 +52,7 @@
         <result property="grossAmount" column="gross_amount"/>
         <result property="serviceFeeAmount" column="service_fee_amount"/>
         <result property="netAmount" column="net_amount"/>
+        <result property="serviceFee" column="service_fee"/>
         <result property="payeeAccountNumber" column="payee_account_number"/>
         <result property="payeeName" column="payee_name"/>
         <result property="periodEndDate" column="period_end_date"/>

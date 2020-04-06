@@ -738,6 +738,10 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
         assertEquals(expectedUsage.getRhName(), actualUsage.getRhName());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+        assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+        assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
+        assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
         verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
     }
 
