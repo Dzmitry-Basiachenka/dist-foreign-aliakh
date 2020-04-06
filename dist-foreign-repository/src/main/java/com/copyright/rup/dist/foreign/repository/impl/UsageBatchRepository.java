@@ -86,11 +86,12 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public List<String> findProcessingBatchesNames(Set<String> batchesIds, Set<UsageStatusEnum> processedStatuses) {
+    public List<String> findIneligibleForScenarioBatchNames(Set<String> batchesIds,
+                                                            Set<UsageStatusEnum> eligibleStatuses) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("batchesIds", Objects.requireNonNull(batchesIds));
-        params.put("processedStatuses", Objects.requireNonNull(processedStatuses));
-        return selectList("IUsageBatchMapper.findProcessingBatchesNames", params);
+        params.put("eligibleStatuses", Objects.requireNonNull(eligibleStatuses));
+        return selectList("IUsageBatchMapper.findIneligibleForScenarioBatchNames", params);
     }
 
     @Override

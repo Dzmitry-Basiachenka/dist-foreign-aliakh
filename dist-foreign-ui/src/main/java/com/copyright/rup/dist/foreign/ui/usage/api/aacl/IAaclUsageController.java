@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcess
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -166,6 +167,22 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return list of batches names
      */
     List<String> getProcessingBatchesNames(Set<String> batchesIds);
+
+    /**
+     * Gets names of batches with usages in status, different from ELIGIBLE.
+     *
+     * @param batchesIds set of batches ids
+     * @return list of batches names
+     */
+    List<String> getIneligibleBatchesNames(Set<String> batchesIds);
+
+    /**
+     * Gets map of batches names to scenario names associated with the given batches.
+     *
+     * @param batchesIds set of batches ids
+     * @return map of batches names to scenario names
+     */
+    Map<String, String> getBatchesNamesToScenariosNames(Set<String> batchesIds);
 
     /**
      * Gets aggregate licensee classes that have money that can't be distributed.

@@ -72,6 +72,7 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -407,6 +408,26 @@ public class AaclUsageControllerTest {
         expect(usageBatchService.getProcessingAaclBatchesNames(batchIds)).andReturn(batchNames).once();
         replay(usageBatchService);
         assertEquals(batchNames, controller.getProcessingBatchesNames(batchIds));
+        verify(usageBatchService);
+    }
+
+    @Test
+    public void testGetIneligibleBatchesNames() {
+        Set<String> batchIds = Collections.singleton("5d4f7674-4f0a-404e-ad23-7096b667402b");
+        List<String> batchNames = Collections.singletonList("batch name");
+        expect(usageBatchService.getIneligibleBatchesNames(batchIds)).andReturn(batchNames).once();
+        replay(usageBatchService);
+        assertEquals(batchNames, controller.getIneligibleBatchesNames(batchIds));
+        verify(usageBatchService);
+    }
+
+    @Test
+    public void testGetBatchesNamesToScenariosNames() {
+        Set<String> batchIds = Collections.singleton("5d4f7674-4f0a-404e-ad23-7096b667402b");
+        Map<String, String> batchToScenarioNames = Collections.singletonMap("batch name", "scenario name");
+        expect(usageBatchService.getBatchesNamesToScenariosNames(batchIds)).andReturn(batchToScenarioNames).once();
+        replay(usageBatchService);
+        assertEquals(batchToScenarioNames, controller.getBatchesNamesToScenariosNames(batchIds));
         verify(usageBatchService);
     }
 

@@ -185,7 +185,7 @@
         </if>
     </select>
 
-    <select id="findProcessingBatchesNames" parameterType="map" resultType="string">
+    <select id="findIneligibleForScenarioBatchNames" parameterType="map" resultType="string">
         select
             name
         from ${schema}.df_usage_batch ub
@@ -199,7 +199,7 @@
             from ${schema}.df_usage u
                 where u.df_usage_batch_uid = ub.df_usage_batch_uid
                 and u.status_ind not in
-                <foreach collection="processedStatuses" item="status" separator="," open="(" close=")">
+                <foreach collection="eligibleStatuses" item="status" separator="," open="(" close=")">
                     #{status}
                 </foreach>
         )
