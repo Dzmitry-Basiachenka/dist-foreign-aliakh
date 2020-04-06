@@ -90,13 +90,13 @@ public interface IUsageBatchRepository {
     List<String> findBatchNamesWithoutUsagesForClassification(Set<String> batchIds, String classification);
 
     /**
-     * Finds names of processing batches.
+     * Finds names of batches, that have usages in statuses, different from the given.
      *
-     * @param batchesIds        set of batches ids
-     * @param processedStatuses set of statuses that a processed usage might have
+     * @param batchesIds       set of batches ids
+     * @param eligibleStatuses set of statuses, usages in which are considered eligible
      * @return list of batches names
      */
-    List<String> findProcessingBatchesNames(Set<String> batchesIds, Set<UsageStatusEnum> processedStatuses);
+    List<String> findIneligibleForScenarioBatchNames(Set<String> batchesIds, Set<UsageStatusEnum> eligibleStatuses);
 
     /**
      * Finds map of batches names to scenario names associated with the given batches.

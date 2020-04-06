@@ -354,11 +354,11 @@ public class UsageBatchServiceTest {
     @Test
     public void testGetProcessingNtsBatchesNames() {
         Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
-        List<String> batchesNames = Collections.singletonList("test batch name");
+        List<String> batchesNames = Collections.singletonList(BATCH_NAME);
         EnumSet<UsageStatusEnum> processingStatuses =
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.LOCKED,
                 UsageStatusEnum.SCENARIO_EXCLUDED);
-        expect(usageBatchRepository.findProcessingBatchesNames(batchesIds, processingStatuses))
+        expect(usageBatchRepository.findIneligibleForScenarioBatchNames(batchesIds, processingStatuses))
             .andReturn(batchesNames).once();
         replay(usageBatchRepository);
         assertEquals(batchesNames, usageBatchService.getProcessingNtsBatchesNames(batchesIds));
@@ -368,11 +368,11 @@ public class UsageBatchServiceTest {
     @Test
     public void testGetProcessingAaclBatchesNames() {
         Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
-        List<String> batchesNames = Collections.singletonList("test batch name");
+        List<String> batchesNames = Collections.singletonList(BATCH_NAME);
         EnumSet<UsageStatusEnum> processingStatuses =
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND,
-                UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED);
-        expect(usageBatchRepository.findProcessingBatchesNames(batchesIds, processingStatuses))
+                UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED, UsageStatusEnum.SCENARIO_EXCLUDED);
+        expect(usageBatchRepository.findIneligibleForScenarioBatchNames(batchesIds, processingStatuses))
             .andReturn(batchesNames).once();
         replay(usageBatchRepository);
         assertEquals(batchesNames, usageBatchService.getProcessingAaclBatchesNames(batchesIds));
@@ -380,10 +380,22 @@ public class UsageBatchServiceTest {
     }
 
     @Test
+    public void testGetIneligibleBatchesNames() {
+        Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
+        List<String> batchesNames = Collections.singletonList(BATCH_NAME);
+        expect(
+            usageBatchRepository.findIneligibleForScenarioBatchNames(batchesIds, EnumSet.of(UsageStatusEnum.ELIGIBLE)))
+            .andReturn(batchesNames).once();
+        replay(usageBatchRepository);
+        assertEquals(batchesNames, usageBatchService.getIneligibleBatchesNames(batchesIds));
+        verify(usageBatchRepository);
+    }
+
+    @Test
     public void testGetBatchesNamesToScenariosNames() {
         String batchId = RupPersistUtils.generateUuid();
         Set<String> batchesIds = Collections.singleton(batchId);
-        Map<String, String> batchesNamesToScenariosNames = ImmutableMap.of("test batch name", "test scenario name");
+        Map<String, String> batchesNamesToScenariosNames = ImmutableMap.of(BATCH_NAME, "test scenario name");
         expect(usageBatchRepository.findBatchesNamesToScenariosNames(batchesIds))
             .andReturn(batchesNamesToScenariosNames).once();
         replay(usageBatchRepository);

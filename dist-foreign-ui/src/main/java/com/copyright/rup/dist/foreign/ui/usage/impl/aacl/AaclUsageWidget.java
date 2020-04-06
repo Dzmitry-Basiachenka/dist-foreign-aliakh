@@ -24,7 +24,9 @@ import com.vaadin.ui.MenuBar;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Usage widget for AACL product families.
@@ -36,6 +38,8 @@ import java.util.Set;
  * @author Aliaksandr Liakh
  */
 public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidget {
+
+    private static final String BATCH_NAMES_LIST_SEPARATOR = "<br><li>";
 
     private MenuBar usageBatchMenuBar;
     private MenuBar.MenuItem loadUsageBatchMenuItem;
@@ -217,10 +221,28 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         if (CollectionUtils.isEmpty(batchesIds)) {
             message = ForeignUi.getMessage("message.error.empty_usage_batches");
         } else {
-            List<String> batchesNames = controller.getProcessingBatchesNames(batchesIds);
-            if (CollectionUtils.isNotEmpty(batchesNames)) {
+            List<String> processingBatchesNames = controller.getProcessingBatchesNames(batchesIds);
+            if (CollectionUtils.isNotEmpty(processingBatchesNames)) {
                 message = ForeignUi.getMessage("message.error.processing_batches_names",
-                    String.join("<br><li>", batchesNames));
+                    String.join(BATCH_NAMES_LIST_SEPARATOR, processingBatchesNames));
+            } else {
+                Map<String, String> batchesNamesToScenarioNames =
+                    controller.getBatchesNamesToScenariosNames(batchesIds);
+                if (batchesNamesToScenarioNames.isEmpty()) {
+                    List<String> ineligibleBatchNames = controller.getIneligibleBatchesNames(batchesIds);
+                    if (CollectionUtils.isNotEmpty(ineligibleBatchNames)) {
+                        message = ForeignUi.getMessage("message.error.batches_with_non_eligible_usages",
+                            String.join(BATCH_NAMES_LIST_SEPARATOR, ineligibleBatchNames));
+                    }
+                } else {
+                    message = ForeignUi.getMessage("message.error.batches_already_associated_with_scenarios",
+                        String.join(BATCH_NAMES_LIST_SEPARATOR,
+                            batchesNamesToScenarioNames
+                                .entrySet()
+                                .stream()
+                                .map(entry -> entry.getKey() + " : " + entry.getValue())
+                                .collect(Collectors.toList())));
+                }
             }
         }
         return message;

@@ -222,14 +222,14 @@ public class UsageBatchRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindProcessingBatchesNames() {
+    public void testFindIneligibleForScenarioBatchNames() {
         ImmutableSet<String> batchIds =
             ImmutableSet.of(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3,
                 "13027b25-2269-3bec-48ea-5126431eedb0", NTS_USAGE_BATCH_ID_4);
         EnumSet<UsageStatusEnum> statuses =
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.LOCKED,
                 UsageStatusEnum.SCENARIO_EXCLUDED);
-        List<String> batchesNames = usageBatchRepository.findProcessingBatchesNames(batchIds, statuses);
+        List<String> batchesNames = usageBatchRepository.findIneligibleForScenarioBatchNames(batchIds, statuses);
         assertNotNull(batchesNames);
         assertEquals(3, batchesNames.size());
         assertEquals("NTS Batch with Belletristic usages", batchesNames.get(0));

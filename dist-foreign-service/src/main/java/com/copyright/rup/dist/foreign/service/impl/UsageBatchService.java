@@ -53,7 +53,7 @@ public class UsageBatchService implements IUsageBatchService {
         UsageStatusEnum.LOCKED);
     private static final EnumSet<UsageStatusEnum> PROCESSED_AACL_BATCH_USAGE_STATUSES = EnumSet.of(
         UsageStatusEnum.ELIGIBLE, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND,
-        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED);
+        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED, UsageStatusEnum.SCENARIO_EXCLUDED);
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -202,12 +202,19 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     public List<String> getProcessingNtsBatchesNames(Set<String> batchesIds) {
-        return usageBatchRepository.findProcessingBatchesNames(batchesIds, PROCESSED_NTS_BATCH_USAGE_STATUSES);
+        return usageBatchRepository.findIneligibleForScenarioBatchNames(batchesIds, PROCESSED_NTS_BATCH_USAGE_STATUSES);
     }
 
     @Override
     public List<String> getProcessingAaclBatchesNames(Set<String> batchesIds) {
-        return usageBatchRepository.findProcessingBatchesNames(batchesIds, PROCESSED_AACL_BATCH_USAGE_STATUSES);
+        return usageBatchRepository
+            .findIneligibleForScenarioBatchNames(batchesIds, PROCESSED_AACL_BATCH_USAGE_STATUSES);
+    }
+
+    @Override
+    public List<String> getIneligibleBatchesNames(Set<String> batchesIds) {
+        return usageBatchRepository
+            .findIneligibleForScenarioBatchNames(batchesIds, Collections.singleton(UsageStatusEnum.ELIGIBLE));
     }
 
     @Override
