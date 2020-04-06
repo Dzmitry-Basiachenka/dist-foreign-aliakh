@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -15,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
@@ -238,8 +240,12 @@ public class CreateAaclScenarioIntegrationTestBuilder {
         private void assertUsage(Usage expectedUsage, Usage actualUsage) {
             assertNotNull(actualUsage);
             assertEquals(expectedUsage.getBatchId(), actualUsage.getBatchId());
-            assertEquals(scenarioId, actualUsage.getScenarioId());
             assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+            if (UsageStatusEnum.LOCKED == expectedUsage.getStatus()) {
+                assertEquals(scenarioId, actualUsage.getScenarioId());
+            } else {
+                assertNull(actualUsage.getScenarioId());
+            }
             assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
             assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
                 actualUsage.getRightsholder().getAccountNumber());

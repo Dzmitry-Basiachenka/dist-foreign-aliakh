@@ -82,6 +82,39 @@
     "comment": "AACL comment 2"
   },
   {
+    "id": "a96d23a9-a8e7-48e2-9f0e-c0a1ce3a0eab",
+    "batchId": "ea7b6e8d-8454-4052-b639-c0fdb0a3145c",
+    "wrWrkInst": 100010768,
+    "status": "SCENARIO_EXCLUDED",
+    "productFamily": "AACL",
+    "numberOfCopies": 1,
+    "grossAmount": 0.0000000000,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "aaclUsage": {
+      "institution": "CORNELL UNIVERSITY",
+      "usagePeriod": 2017,
+      "batchPeriodEndDate": "2019-06-30",
+      "usageSource": "Feb 2017 TUR",
+      "rightLimitation": "PRINT",
+      "numberOfPages": 1,
+      "detailLicenseeClassId": 110,
+      "publicationType": {
+        "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
+        "name": "STMA Journal"
+      },
+      "publicationTypeWeight": 1.24,
+      "detailLicenseeDiscipline": "Life Sciences",
+      "detailLicenseeEnrollment": "EXGP"
+    },
+    "rightsholder": {
+      "id": "019acfde-91be-43aa-8871-6305642bcb2c",
+      "name": "White Horse Press",
+      "accountNumber": 1000024497
+    },
+    "comment": "AACL comment 3"
+  },
+  {
     "id": "2b969cb4-4257-4674-b329-f627d60f5c0d",
     "batchId": "ea7b6e8d-8454-4052-b639-c0fdb0a3145c",
     "wrWrkInst": 123456789,
@@ -116,6 +149,45 @@
       "name": "st Contact Publishing",
       "accountNumber": 2000073957
     },
+    "payee": {
+      "id": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+      "name": "IEEE - Inst of Electrical and Electronics Engrs",
+      "accountNumber": 1000009997
+    },
     "comment": "AACL baseline usage"
+  },
+  {
+    "id": "c71c0c80-57c0-43d1-9c40-432c7cd112c6",
+    "batchId": "ea7b6e8d-8454-4052-b639-c0fdb0a3145c",
+    "wrWrkInst": 100010768,
+    "status": "SCENARIO_EXCLUDED",
+    "productFamily": "AACL",
+    "numberOfCopies": 1,
+    "grossAmount": 0.0000000000,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "aaclUsage": {
+      "institution": "CORNELL UNIVERSITY",
+      "usagePeriod": 2017,
+      "batchPeriodEndDate": "2019-06-30",
+      "usageSource": "Feb 2017 TUR",
+      "rightLimitation": "PRINT",
+      "numberOfPages": 1,
+      "detailLicenseeClassId": 108,
+      "publicationType": {
+        "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
+        "name": "STMA Journal"
+      },
+      "publicationTypeWeight": 1.71,
+      "detailLicenseeDiscipline": "Life Sciences",
+      "detailLicenseeEnrollment": "EXGP",
+      "baselineId": "9aeb87ed-5000-4bee-abcb-e3dfc4f84235"
+    },
+    "rightsholder": {
+      "id": "b0e6b1f6-89e9-4767-b143-db0f49f32769",
+      "name": "st Contact Publishing",
+      "accountNumber": 2000073957
+    },
+    "comment": "AACL baseline usage 2"
   }
 ]
