@@ -9,6 +9,10 @@
     "status": "LOCKED",
     "productFamily": "AACL",
     "numberOfCopies": 300,
+    "grossAmount": 100.0000000000,
+    "netAmount": 75.0000000000,
+    "serviceFeeAmount": 25.0000000000,
+    "serviceFee": 0.25000,
     "aaclUsage": {
       "batchPeriodEndDate": "2019-06-30",
       "institution": "University of Michigan",
@@ -40,6 +44,10 @@
     "status": "LOCKED",
     "productFamily": "AACL",
     "numberOfCopies": 155,
+    "grossAmount": 200.0000000000,
+    "netAmount": 150.0000000000,
+    "serviceFeeAmount": 50.0000000000,
+    "serviceFee": 0.25000,
     "aaclUsage": {
       "batchPeriodEndDate": "2019-06-30",
       "institution": "University of Chicago",

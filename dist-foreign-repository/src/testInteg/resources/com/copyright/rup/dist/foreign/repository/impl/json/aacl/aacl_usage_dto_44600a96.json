@@ -6,6 +6,10 @@
     "status": "RH_FOUND",
     "productFamily": "AACL",
     "numberOfCopies": 10,
+    "grossAmount": 0.0000000000,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "serviceFee": null,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
       "usagePeriod": 2020,
