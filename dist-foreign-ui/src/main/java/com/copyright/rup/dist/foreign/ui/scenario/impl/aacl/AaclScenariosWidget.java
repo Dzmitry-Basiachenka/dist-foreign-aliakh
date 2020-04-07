@@ -3,7 +3,9 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
@@ -13,6 +15,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AggregateLicenseeClassMappingWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.PublicationTypeWeightsWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.ViewAaclFundPoolDetailsWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -31,6 +34,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IAaclScenariosWidget}.
@@ -57,6 +62,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     private FundPool fundPool;
     private List<FundPoolDetail> fundPoolDetails;
     private AaclScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
+    private AaclScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget;
 
     /**
      * Controller.
@@ -102,16 +108,19 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
         Button fundPoolButton = Buttons.createButton(ForeignUi.getMessage("label.fund_pool"));
         fundPoolButton.addStyleName(ValoTheme.BUTTON_LINK);
         VaadinUtils.setButtonsAutoDisabled(fundPoolButton);
-        fundPoolButton.addClickListener(event -> {
-            Windows.showModalWindow(new ViewAaclFundPoolDetailsWindow(fundPool, fundPoolDetails));
-        });
+        fundPoolButton.addClickListener(event ->
+            Windows.showModalWindow(new ViewAaclFundPoolDetailsWindow(fundPool, fundPoolDetails)));
         licenseeClassMappingWidget = new AaclScenarioParameterWidget<>(
             ForeignUi.getMessage("button.licensee_class_mapping"),
             Collections::emptyList, () -> new AggregateLicenseeClassMappingWindow(false));
+        publicationTypeWeightWidget = new AaclScenarioParameterWidget<>(
+            ForeignUi.getMessage("button.publication_type_weights"),
+            usageController::getPublicationTypes, () -> new PublicationTypeWeightsWindow(false));
         descriptionLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout metadataLayout =
             new VerticalLayout(ownerLabel, grossTotalLabel, serviceFeeTotalLabel, netTotalLabel,
-                cutoffAmt, descriptionLabel, selectionCriteriaLabel, fundPoolButton, licenseeClassMappingWidget);
+                cutoffAmt, descriptionLabel, selectionCriteriaLabel, fundPoolButton, licenseeClassMappingWidget,
+                publicationTypeWeightWidget);
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
         return metadataLayout;
@@ -135,6 +144,17 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
         selectionCriteriaLabel.setValue(getController().getCriteriaHtmlRepresentation());
         licenseeClassMappingWidget.setAppliedParameters(
             controller.getDetailLicenseeClassesByScenarioId(scenarioWithAmounts.getId()));
+        updatePublicationTypeWeightWidget(scenarioWithAmounts.getAaclFields());
+    }
+
+    private void updatePublicationTypeWeightWidget(AaclFields aaclFields) {
+        Map<String, String> idsToPublicationTypeNames = usageController.getPublicationTypes()
+            .stream()
+            .collect(Collectors.toMap(PublicationType::getId, PublicationType::getName));
+        publicationTypeWeightWidget.setAppliedParameters(aaclFields.getPublicationTypes()
+            .stream()
+            .peek(pubType -> pubType.setName(idsToPublicationTypeNames.get(pubType.getId())))
+            .collect(Collectors.toList()));
     }
 
     private void addButtonsListeners() {

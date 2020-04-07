@@ -129,9 +129,11 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
             close();
         });
         saveButton.setVisible(isEditable);
+        Label placeholderLabel = new Label();
+        placeholderLabel.setVisible(isEditable);
         Button defaultButton = new Button(ForeignUi.getMessage("button.default"));
         defaultButton.addClickListener(event -> setAppliedParameters(defaultValues));
         defaultButton.setVisible(isEditable);
-        return new HorizontalLayout(saveButton, Buttons.createCloseButton(this), new Label(), defaultButton);
+        return new HorizontalLayout(saveButton, Buttons.createCloseButton(this), placeholderLabel, defaultButton);
     }
 }

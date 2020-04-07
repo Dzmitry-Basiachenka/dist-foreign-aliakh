@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -24,6 +25,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.impl.ScenarioHistoryController
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget;
 
+import com.google.common.collect.ImmutableList;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.shared.ui.MarginInfo;
@@ -89,11 +91,12 @@ public class AaclScenariosWidgetTest {
         scenario.setAuditItem(buildScenarioAuditItem());
         scenario.setAaclFields(buildAaclFields());
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
-        replay(controller);
+        expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
+        replay(controller, usageController);
         scenariosWidget.init();
         scenariosWidget.initMediator();
-        verify(controller);
-        reset(controller);
+        verify(controller, usageController);
+        reset(controller, usageController);
     }
 
     @Test
@@ -130,6 +133,7 @@ public class AaclScenariosWidgetTest {
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).times(2);
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).times(2);
+        expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).times(2);
         replay(controller, usageController);
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
@@ -148,6 +152,7 @@ public class AaclScenariosWidgetTest {
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).once();
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).once();
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
+        expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
         replay(controller, usageController);
         scenariosWidget.selectScenario(scenario);
         assertEquals(scenario, grid.getSelectedItems().iterator().next());
@@ -167,6 +172,7 @@ public class AaclScenariosWidgetTest {
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).once();
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
+        expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
         replay(controller, usageController, grid);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();
@@ -240,7 +246,7 @@ public class AaclScenariosWidgetTest {
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
-        assertEquals(10, layout.getComponentCount());
+        assertEquals(11, layout.getComponentCount());
         verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
         verifyMetadataLabel(layout.getComponent(1),
             "<b>Gross Amt in USD: </b><span class='label-amount'>10,000.00</span>");
@@ -256,10 +262,12 @@ public class AaclScenariosWidgetTest {
         assertTrue(fundPool instanceof Button);
         assertEquals("Fund Pool", fundPool.getCaption());
         assertTrue(layout.getComponent(8) instanceof AaclScenarioParameterWidget);
-        AaclScenarioParameterWidget widget = (AaclScenarioParameterWidget) layout.getComponent(8);
-        assertEquals("Licensee Class Mapping", widget.getComponent(0).getCaption());
-        assertTrue(layout.getComponent(9) instanceof VerticalLayout);
-        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(9);
+        AaclScenarioParameterWidget licenseeClassMappingWidget = (AaclScenarioParameterWidget) layout.getComponent(8);
+        assertEquals("Licensee Class Mapping", licenseeClassMappingWidget.getComponent(0).getCaption());
+        AaclScenarioParameterWidget pubTypeWeightsWidget = (AaclScenarioParameterWidget) layout.getComponent(9);
+        assertEquals("Pub Type Weights", pubTypeWeightsWidget.getComponent(0).getCaption());
+        assertTrue(layout.getComponent(10) instanceof VerticalLayout);
+        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(10);
         assertEquals(5, lastActionLayout.getComponentCount());
         verifyMetadataLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
         verifyMetadataLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
@@ -321,5 +329,22 @@ public class AaclScenariosWidgetTest {
     private void verifyMetadataLabel(Component component, String expectedValue) {
         assertTrue(component instanceof Label);
         assertEquals(expectedValue, ((Label) component).getValue());
+    }
+
+    private List<PublicationType> buildPublicationTypes() {
+        return ImmutableList.of(
+            buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "1.00"),
+            buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "Business or Trade Journal", "1.50"),
+            buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine", "1.00"),
+            buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "News Source", "4.00"),
+            buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "STMA Journal", "1.10"));
+    }
+
+    private PublicationType buildPublicationType(String id, String name, String weight) {
+        PublicationType pubType = new PublicationType();
+        pubType.setId(id);
+        pubType.setName(name);
+        pubType.setWeight(new BigDecimal(weight));
+        return pubType;
     }
 }
