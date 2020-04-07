@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
 
+import com.google.common.collect.ImmutableList;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
@@ -23,6 +24,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.easymock.Capture;
@@ -46,18 +48,18 @@ import java.util.stream.Collectors;
  */
 public class PublicationTypeWeightsWindowTest {
 
-    private final List<PublicationType> defaultParams = Arrays.asList(
-        buildPublicationType("Book", "1.00"),
-        buildPublicationType("Business or Trade Journal", "1.50"),
-        buildPublicationType("Consumer Magazine", "1.00"),
-        buildPublicationType("News Source", "4.00"),
-        buildPublicationType("STMA Journal", "1.10"));
-    private final List<PublicationType> appliedParams = Arrays.asList(
-        buildPublicationType("Book", "1.00"),
-        buildPublicationType("Business or Trade Journal", "2.00"),
-        buildPublicationType("Consumer Magazine", "3.00"),
-        buildPublicationType("News Source", "4.00"),
-        buildPublicationType("STMA Journal", "5.00"));
+    private final List<PublicationType> defaultParams = ImmutableList.of(
+        buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "1.00"),
+        buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "Business or Trade Journal", "1.50"),
+        buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine", "1.00"),
+        buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "News Source", "4.00"),
+        buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "STMA Journal", "1.10"));
+    private final List<PublicationType> appliedParams = ImmutableList.of(
+        buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "1.00"),
+        buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "Business or Trade Journal", "2.00"),
+        buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine", "3.00"),
+        buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "News Source", "4.00"),
+        buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "STMA Journal", "5.00"));
 
     private PublicationTypeWeightsWindow window;
 
@@ -79,13 +81,16 @@ public class PublicationTypeWeightsWindowTest {
         verifyGrid((Grid) component, true);
         assertEquals(1, content.getExpandRatio(component), 0);
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(3, buttonsLayout.getComponentCount());
+        assertEquals(4, buttonsLayout.getComponentCount());
         Component saveButton = buttonsLayout.getComponent(0);
-        Component defaultButton = buttonsLayout.getComponent(1);
-        Component closeButton = buttonsLayout.getComponent(2);
+        Component closeButton = buttonsLayout.getComponent(1);
+        Component placeholderLabel = buttonsLayout.getComponent(2);
+        Component defaultButton = buttonsLayout.getComponent(3);
         assertEquals("Save", saveButton.getCaption());
-        assertEquals("Default", defaultButton.getCaption());
         assertEquals("Close", closeButton.getCaption());
+        assertTrue(placeholderLabel instanceof Label);
+        assertNull(placeholderLabel.getCaption());
+        assertEquals("Default", defaultButton.getCaption());
         assertTrue(saveButton.isVisible());
         assertTrue(defaultButton.isVisible());
         assertTrue(closeButton.isVisible());
@@ -103,13 +108,16 @@ public class PublicationTypeWeightsWindowTest {
         verifyGrid((Grid) component, false);
         assertEquals(1, content.getExpandRatio(component), 0);
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(3, buttonsLayout.getComponentCount());
+        assertEquals(4, buttonsLayout.getComponentCount());
         Component saveButton = buttonsLayout.getComponent(0);
-        Component defaultButton = buttonsLayout.getComponent(1);
-        Component closeButton = buttonsLayout.getComponent(2);
+        Component closeButton = buttonsLayout.getComponent(1);
+        Component placeholderLabel = buttonsLayout.getComponent(2);
+        Component defaultButton = buttonsLayout.getComponent(3);
         assertEquals("Save", saveButton.getCaption());
-        assertEquals("Default", defaultButton.getCaption());
         assertEquals("Close", closeButton.getCaption());
+        assertTrue(placeholderLabel instanceof Label);
+        assertNull(placeholderLabel.getCaption());
+        assertEquals("Default", defaultButton.getCaption());
         assertFalse(saveButton.isVisible());
         assertFalse(defaultButton.isVisible());
         assertTrue(closeButton.isVisible());
@@ -136,7 +144,7 @@ public class PublicationTypeWeightsWindowTest {
     public void testDefaultButtonClickListener() {
         VerticalLayout content = (VerticalLayout) window.getContent();
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        Button defaultButton = (Button) buttonsLayout.getComponent(1);
+        Button defaultButton = (Button) buttonsLayout.getComponent(3);
         defaultButton.click();
         assertGridItems(defaultParams);
     }
@@ -181,10 +189,12 @@ public class PublicationTypeWeightsWindowTest {
     private void verifyGrid(Grid grid, boolean isEditorEnabled) {
         assertNull(grid.getCaption());
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Pub Type", "Weight"),
+        assertEquals(Arrays.asList("Pub Type", "Default Weight", "Scenario Weight"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1.0, -1.0), columns.stream().map(Column::getWidth).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1, -1), columns.stream().map(Column::getExpandRatio).collect(Collectors.toList()));
+        assertEquals(Arrays.asList(-1.0, -1.0, -1.0),
+            columns.stream().map(Column::getWidth).collect(Collectors.toList()));
+        assertEquals(Arrays.asList(-1, -1, -1),
+            columns.stream().map(Column::getExpandRatio).collect(Collectors.toList()));
         columns.forEach(column -> assertFalse(column.isSortable()));
         assertFalse(grid.getDataProvider().isInMemory());
         assertEquals(isEditorEnabled, grid.getEditor().isEnabled());
@@ -194,12 +204,13 @@ public class PublicationTypeWeightsWindowTest {
     private void assertGridItems(List<PublicationType> params) {
         VerticalLayout content = (VerticalLayout) window.getContent();
         Grid<PublicationType> grid = (Grid<PublicationType>) content.getComponent(0);
-        assertTrue(grid.getDataProvider().isInMemory());
+        assertTrue(grid.getDataProvider() instanceof ListDataProvider);
         assertEquals(params, ((ListDataProvider<PublicationType>) grid.getDataProvider()).getItems());
     }
 
-    private PublicationType buildPublicationType(String name, String weight) {
+    private PublicationType buildPublicationType(String id, String name, String weight) {
         PublicationType pubType = new PublicationType();
+        pubType.setId(id);
         pubType.setName(name);
         pubType.setWeight(new BigDecimal(weight));
         return pubType;

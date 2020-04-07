@@ -12,12 +12,14 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWindow<List<PublicationType>> {
 
     private List<PublicationType> defaultValues;
+    private Map<String, BigDecimal> idsToDefaultWeights;
     private List<PublicationType> currentValues;
     private Grid<PublicationType> grid;
     private final boolean isEditable;
@@ -60,6 +63,9 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
     @Override
     void setDefault(List<PublicationType> params) {
         defaultValues = params;
+        idsToDefaultWeights = defaultValues
+            .stream()
+            .collect(Collectors.toMap(PublicationType::getId, PublicationType::getWeight));
     }
 
     @Override
@@ -80,9 +86,12 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
         grid.addColumn(PublicationType::getName)
             .setCaption(ForeignUi.getMessage("table.column.publication_type"))
             .setSortable(false);
+        grid.addColumn(item -> CurrencyUtils.format(idsToDefaultWeights.get(item.getId()), null))
+            .setCaption(ForeignUi.getMessage("table.column.default_weight"))
+            .setSortable(false);
         Grid.Column<PublicationType, String> weightColumn =
             grid.addColumn(item -> CurrencyUtils.format(item.getWeight(), null))
-                .setCaption(ForeignUi.getMessage("table.column.weight"))
+                .setCaption(ForeignUi.getMessage("table.column.scenario_weight"))
                 .setSortable(false);
         if (isEditable) {
             weightColumn
@@ -123,6 +132,6 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
         Button defaultButton = new Button(ForeignUi.getMessage("button.default"));
         defaultButton.addClickListener(event -> setAppliedParameters(defaultValues));
         defaultButton.setVisible(isEditable);
-        return new HorizontalLayout(saveButton, defaultButton, Buttons.createCloseButton(this));
+        return new HorizontalLayout(saveButton, Buttons.createCloseButton(this), new Label(), defaultButton);
     }
 }
