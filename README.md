@@ -1,3 +1,10 @@
+9.1.17
+-
+* B-55090 FDA: AACL Calculate Scenario: adjust logic for getting payees only for calculated usages
+* B-55090 FDA: AACL Calculate Scenario: extend test data for AACL scenario integration test to cover SCENARIO_EXCLUDED usages
+* B-58160 FDA: Create AACL Scenario: LOCKED usages are fixed to a Scenario until Scenario is deleted: add checks for batches
+* CDP-901 FDA: Scenario drill-down view for AACL Product Family: Service fee % is displayed as 0.0
+
 9.1.16
 -
 * B-55090 FDA: AACL Calculate Scenario: add volume_weight and value_weight columns to df_usage_aacl table and populate them during scenario creation
