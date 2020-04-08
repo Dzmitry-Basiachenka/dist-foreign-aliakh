@@ -1,3 +1,10 @@
+9.1.18
+-
+* B-54999 FDA: View scenario-specific usage age weights for AACL: implement default weights column for Usage Age Weights View window
+* B-55721 FDA: Scenario Tab metadata panel AACL Pub Type Weights View: implement default weights column for Pub Type Weights View window
+* B-55721 FDA: Scenario Tab metadata panel AACL Pub Type Weights View: implement link from scenario metadata panel to Pub Type Weights View window
+* B-56267 FDA: Delete AACL Scenario: implement delete button on scenario tab
+
 9.1.17
 -
 * B-55090 FDA: AACL Calculate Scenario: adjust logic for getting payees only for calculated usages
