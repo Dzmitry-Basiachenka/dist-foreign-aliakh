@@ -12,12 +12,14 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 public class AaclUsageAgeWeightWindow extends AaclCommonScenarioParameterWindow<List<UsageAge>> {
 
     private List<UsageAge> defaultValues;
+    private Map<Integer, BigDecimal> periodsToDefaultWeights;
     private List<UsageAge> currentValues;
     private Grid<UsageAge> grid;
     private final boolean isEditable;
@@ -60,6 +63,9 @@ public class AaclUsageAgeWeightWindow extends AaclCommonScenarioParameterWindow<
     @Override
     void setDefault(List<UsageAge> params) {
         defaultValues = params;
+        periodsToDefaultWeights = defaultValues
+            .stream()
+            .collect(Collectors.toMap(UsageAge::getPeriod, UsageAge::getWeight));
     }
 
     @Override
@@ -80,9 +86,12 @@ public class AaclUsageAgeWeightWindow extends AaclCommonScenarioParameterWindow<
         grid.addColumn(UsageAge::getPeriod)
             .setCaption(ForeignUi.getMessage("label.usage_period"))
             .setSortable(false);
+        grid.addColumn(item -> CurrencyUtils.format(periodsToDefaultWeights.get(item.getPeriod()), null))
+            .setCaption(ForeignUi.getMessage("table.column.default_weight"))
+            .setSortable(false);
         Grid.Column<UsageAge, String> weightColumn =
             grid.addColumn(item -> CurrencyUtils.format(item.getWeight(), null))
-                .setCaption(ForeignUi.getMessage("table.column.weight"))
+                .setCaption(ForeignUi.getMessage("table.column.scenario_weight"))
                 .setSortable(false);
         if (isEditable) {
             weightColumn
@@ -120,9 +129,11 @@ public class AaclUsageAgeWeightWindow extends AaclCommonScenarioParameterWindow<
             close();
         });
         saveButton.setVisible(isEditable);
+        Label placeholderLabel = new Label();
+        placeholderLabel.setVisible(isEditable);
         Button defaultButton = new Button(ForeignUi.getMessage("button.default"));
         defaultButton.addClickListener(event -> setAppliedParameters(defaultValues));
         defaultButton.setVisible(isEditable);
-        return new HorizontalLayout(saveButton, defaultButton, Buttons.createCloseButton(this));
+        return new HorizontalLayout(saveButton, Buttons.createCloseButton(this), placeholderLabel, defaultButton);
     }
 }

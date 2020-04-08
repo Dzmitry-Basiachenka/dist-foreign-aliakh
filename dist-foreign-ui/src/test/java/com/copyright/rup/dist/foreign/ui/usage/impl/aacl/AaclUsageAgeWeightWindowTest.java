@@ -22,6 +22,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -68,15 +69,19 @@ public class AaclUsageAgeWeightWindowTest {
         verifyGrid((Grid) component, true);
         assertEquals(1, content.getExpandRatio(component), 0);
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(3, buttonsLayout.getComponentCount());
+        assertEquals(4, buttonsLayout.getComponentCount());
         Component saveButton = buttonsLayout.getComponent(0);
-        Component defaultButton = buttonsLayout.getComponent(1);
-        Component closeButton = buttonsLayout.getComponent(2);
+        Component closeButton = buttonsLayout.getComponent(1);
+        Component placeholderLabel = buttonsLayout.getComponent(2);
+        Component defaultButton = buttonsLayout.getComponent(3);
         assertEquals("Save", saveButton.getCaption());
-        assertEquals("Default", defaultButton.getCaption());
         assertEquals("Close", closeButton.getCaption());
+        assertTrue(placeholderLabel instanceof Label);
+        assertNull(placeholderLabel.getCaption());
+        assertEquals("Default", defaultButton.getCaption());
         assertTrue(saveButton.isVisible());
         assertTrue(defaultButton.isVisible());
+        assertTrue(placeholderLabel.isVisible());
         assertTrue(closeButton.isVisible());
     }
 
@@ -92,15 +97,19 @@ public class AaclUsageAgeWeightWindowTest {
         verifyGrid((Grid) component, false);
         assertEquals(1, content.getExpandRatio(component), 0);
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(3, buttonsLayout.getComponentCount());
+        assertEquals(4, buttonsLayout.getComponentCount());
         Component saveButton = buttonsLayout.getComponent(0);
-        Component defaultButton = buttonsLayout.getComponent(1);
-        Component closeButton = buttonsLayout.getComponent(2);
+        Component closeButton = buttonsLayout.getComponent(1);
+        Component placeholderLabel = buttonsLayout.getComponent(2);
+        Component defaultButton = buttonsLayout.getComponent(3);
         assertEquals("Save", saveButton.getCaption());
-        assertEquals("Default", defaultButton.getCaption());
         assertEquals("Close", closeButton.getCaption());
+        assertTrue(placeholderLabel instanceof Label);
+        assertNull(placeholderLabel.getCaption());
+        assertEquals("Default", defaultButton.getCaption());
         assertFalse(saveButton.isVisible());
         assertFalse(defaultButton.isVisible());
+        assertFalse(placeholderLabel.isVisible());
         assertTrue(closeButton.isVisible());
     }
 
@@ -125,7 +134,7 @@ public class AaclUsageAgeWeightWindowTest {
     public void testDefaultButtonClickListener() {
         VerticalLayout content = (VerticalLayout) window.getContent();
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        Button defaultButton = (Button) buttonsLayout.getComponent(1);
+        Button defaultButton = (Button) buttonsLayout.getComponent(3);
         defaultButton.click();
         assertGridItems(defaultParams);
     }
@@ -170,10 +179,12 @@ public class AaclUsageAgeWeightWindowTest {
     private void verifyGrid(Grid grid, boolean isEditorEnabled) {
         assertNull(grid.getCaption());
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Usage Period", "Weight"),
+        assertEquals(Arrays.asList("Usage Period", "Default Weight", "Scenario Weight"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1.0, -1.0), columns.stream().map(Column::getWidth).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1, -1), columns.stream().map(Column::getExpandRatio).collect(Collectors.toList()));
+        assertEquals(Arrays.asList(-1.0, -1.0, -1.0),
+            columns.stream().map(Column::getWidth).collect(Collectors.toList()));
+        assertEquals(Arrays.asList(-1, -1, -1),
+            columns.stream().map(Column::getExpandRatio).collect(Collectors.toList()));
         columns.forEach(column -> assertFalse(column.isSortable()));
         assertFalse(grid.getDataProvider().isInMemory());
         assertEquals(isEditorEnabled, grid.getEditor().isEnabled());
