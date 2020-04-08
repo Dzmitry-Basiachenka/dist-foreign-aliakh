@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
@@ -83,18 +82,6 @@ public interface IScenarioService {
      * @return {@link Scenario}
      */
     Scenario createNtsScenario(String scenarioName, NtsFields ntsFields, String description, UsageFilter usageFilter);
-
-    /**
-     * Creates AACL scenario and adds usages to it.
-     *
-     * @param scenarioName name of scenario
-     * @param aaclFields   instance of {@link AaclFields}
-     * @param description  description
-     * @param usageFilter  instance of {@link UsageFilter} for usages to be added
-     * @return {@link Scenario}
-     */
-    Scenario createAaclScenario(String scenarioName, AaclFields aaclFields, String description,
-                                UsageFilter usageFilter);
 
     /**
      * Deletes {@link Scenario} by given identifier.

@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -66,13 +65,6 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     @Override
     public Scenario getScenarioWithAmountsAndLastAction(Scenario scenario) {
         return scenarioService.getScenarioWithAmountsAndLastAction(scenario);
-    }
-
-    @Override
-    public void onDeleteButtonClicked() {
-        Scenario scenario = getWidget().getSelectedScenario();
-        Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario"),
-            () -> deleteScenario(scenario));
     }
 
     @Override
@@ -194,13 +186,5 @@ public abstract class CommonScenariosController extends CommonController<ICommon
             }
             return rightsholderRepresentation;
         }).collect(Collectors.toList());
-    }
-
-    private void deleteScenario(Scenario scenario) {
-        //TODO{aazarenka} will be separate by product family
-        if (!FdaConstants.AACL_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
-            scenarioService.deleteScenario(scenario);
-            getWidget().refresh();
-        }
     }
 }

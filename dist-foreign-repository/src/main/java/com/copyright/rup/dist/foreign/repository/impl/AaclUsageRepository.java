@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -250,6 +251,11 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IAaclUsageMapper.findByScenarioIdAndRhAccountNumber", parameters);
+    }
+
+    @Override
+    public void deleteFromScenario(String scenarioId, String userName) {
+        //TODO{aazarenka} will be implemented in task related to repository layer
     }
 
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {

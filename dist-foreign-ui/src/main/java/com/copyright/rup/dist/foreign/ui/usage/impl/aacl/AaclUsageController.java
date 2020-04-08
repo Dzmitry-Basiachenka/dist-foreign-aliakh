@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
@@ -79,6 +80,8 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     private IPublicationTypeService publicationTypeService;
     @Autowired
     private ILicenseeClassService licenseeClassService;
+    @Autowired
+    private IAaclScenarioService aaclScenarioService;
 
     @Override
     public ICommonUsageFilterController getUsageFilterController() {
@@ -244,7 +247,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public Scenario createAaclScenario(String scenarioName, AaclFields aaclFields, String description) {
-        Scenario scenario = getScenarioService().createAaclScenario(scenarioName, aaclFields, description,
+        Scenario scenario = aaclScenarioService.createScenario(scenarioName, aaclFields, description,
             getUsageFilterController().getWidget().getAppliedFilter());
         getUsageFilterController().getWidget().clearFilter();
         return scenario;

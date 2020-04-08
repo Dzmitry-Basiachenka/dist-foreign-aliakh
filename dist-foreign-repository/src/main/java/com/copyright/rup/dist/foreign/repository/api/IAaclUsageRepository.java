@@ -252,4 +252,16 @@ public interface IAaclUsageRepository {
      */
     List<UsageDto> findByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
                                                       Pageable pageable, Sort sort);
+
+    /**
+     * Deletes usages from scenario. Updates usages status from
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED} and
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#LOCKED} to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}.
+     * Sets scenario id to {@code null}, sets gross amount to 0.
+     *
+     * @param scenarioId scenario id
+     * @param userName   user name
+     */
+    void deleteFromScenario(String scenarioId, String userName);
 }

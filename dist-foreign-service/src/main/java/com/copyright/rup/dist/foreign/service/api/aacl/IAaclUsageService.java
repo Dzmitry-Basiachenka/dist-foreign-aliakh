@@ -226,4 +226,13 @@ public interface IAaclUsageService {
      */
     List<UsageDto> getByScenarioAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
                                                    Pageable pageable, Sort sort);
+
+    /**
+     * Deletes usages from AACL scenario. Reverts status of usages to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, sets scenario id to {@code null},
+     * sets gross amount to 0.
+     *
+     * @param scenarioId scenario id
+     */
+    void deleteFromScenario(String scenarioId);
 }

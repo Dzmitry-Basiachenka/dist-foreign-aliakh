@@ -184,6 +184,16 @@ public class FasScenariosController extends CommonScenariosController implements
         return scenarioWidget;
     }
 
+    @Override
+    public void onDeleteButtonClicked() {
+        Scenario scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario"),
+            () -> {
+                getScenarioService().deleteScenario(scenario);
+                getWidget().refresh();
+            });
+    }
+
     private List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders,
                                      UsageFilter usageFilter) {
         Sort sort = null;
