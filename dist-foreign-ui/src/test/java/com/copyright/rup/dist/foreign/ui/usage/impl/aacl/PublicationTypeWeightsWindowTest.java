@@ -93,6 +93,7 @@ public class PublicationTypeWeightsWindowTest {
         assertEquals("Default", defaultButton.getCaption());
         assertTrue(saveButton.isVisible());
         assertTrue(defaultButton.isVisible());
+        assertTrue(placeholderLabel.isVisible());
         assertTrue(closeButton.isVisible());
     }
 
@@ -120,6 +121,7 @@ public class PublicationTypeWeightsWindowTest {
         assertEquals("Default", defaultButton.getCaption());
         assertFalse(saveButton.isVisible());
         assertFalse(defaultButton.isVisible());
+        assertFalse(placeholderLabel.isVisible());
         assertTrue(closeButton.isVisible());
     }
 
