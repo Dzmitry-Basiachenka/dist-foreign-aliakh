@@ -14,6 +14,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import java.util.List;
@@ -74,6 +75,8 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
     private HorizontalLayout initButtons() {
         Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
         saveButton.setVisible(isEditable);
+        Label placeholderLabel = new Label();
+        placeholderLabel.setVisible(isEditable);
         Button defaultButton = Buttons.createButton(ForeignUi.getMessage("button.default"));
         defaultButton.setVisible(isEditable);
         defaultButton.addClickListener(event -> setAppliedParameters(defaultValues));
@@ -81,7 +84,8 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
             fireParametersSaveEvent(new ParametersSaveEvent<>(this, currentValues));
             close();
         });
-        HorizontalLayout layout = new HorizontalLayout(saveButton, defaultButton, Buttons.createCloseButton(this));
+        HorizontalLayout layout = new HorizontalLayout(saveButton, Buttons.createCloseButton(this), placeholderLabel,
+            defaultButton);
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "view-aacl-fund-pool-buttons");
         return layout;
