@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
@@ -92,6 +93,7 @@ public class AaclScenariosWidgetTest {
         scenario.setAaclFields(buildAaclFields());
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
+        expect(usageController.getUsageAges()).andReturn(buildUsageAges()).once();
         replay(controller, usageController);
         scenariosWidget.init();
         scenariosWidget.initMediator();
@@ -247,7 +249,7 @@ public class AaclScenariosWidgetTest {
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
-        assertEquals(11, layout.getComponentCount());
+        assertEquals(12, layout.getComponentCount());
         verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
         verifyMetadataLabel(layout.getComponent(1),
             "<b>Gross Amt in USD: </b><span class='label-amount'>10,000.00</span>");
@@ -265,10 +267,14 @@ public class AaclScenariosWidgetTest {
         assertTrue(layout.getComponent(8) instanceof AaclScenarioParameterWidget);
         AaclScenarioParameterWidget licenseeClassMappingWidget = (AaclScenarioParameterWidget) layout.getComponent(8);
         assertEquals("Licensee Class Mapping", licenseeClassMappingWidget.getComponent(0).getCaption());
+        assertTrue(layout.getComponent(9) instanceof AaclScenarioParameterWidget);
         AaclScenarioParameterWidget pubTypeWeightsWidget = (AaclScenarioParameterWidget) layout.getComponent(9);
         assertEquals("Pub Type Weights", pubTypeWeightsWidget.getComponent(0).getCaption());
-        assertTrue(layout.getComponent(10) instanceof VerticalLayout);
-        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(10);
+        assertTrue(layout.getComponent(10) instanceof AaclScenarioParameterWidget);
+        AaclScenarioParameterWidget usageAgeWeightsWidget = (AaclScenarioParameterWidget) layout.getComponent(10);
+        assertEquals("Usage Age Weights", usageAgeWeightsWidget.getComponent(0).getCaption());
+        assertTrue(layout.getComponent(11) instanceof VerticalLayout);
+        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(11);
         assertEquals(5, lastActionLayout.getComponentCount());
         verifyMetadataLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
         verifyMetadataLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
@@ -347,5 +353,18 @@ public class AaclScenariosWidgetTest {
         pubType.setName(name);
         pubType.setWeight(new BigDecimal(weight));
         return pubType;
+    }
+
+    private List<UsageAge> buildUsageAges() {
+        return ImmutableList.of(
+            buildUsageAge(2019, new BigDecimal("1.00")),
+            buildUsageAge(2018, new BigDecimal("0.75")));
+    }
+
+    private UsageAge buildUsageAge(Integer period, BigDecimal weight) {
+        UsageAge usageAge = new UsageAge();
+        usageAge.setPeriod(period);
+        usageAge.setWeight(weight);
+        return usageAge;
     }
 }
