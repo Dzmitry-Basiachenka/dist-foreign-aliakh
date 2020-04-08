@@ -34,13 +34,16 @@ public class AaclScenariosMediatorTest {
 
     private AaclScenariosMediator mediator;
     private Button viewButton;
+    private Button deleteButton;
 
     @Before
     public void setUp() {
         mockStatic(SecurityUtils.class);
         mediator = new AaclScenariosMediator();
         viewButton = new Button("View");
+        deleteButton = new Button("Delete");
         mediator.setViewButton(viewButton);
+        mediator.setDeleteButton(deleteButton);
     }
 
     @Test
@@ -49,6 +52,7 @@ public class AaclScenariosMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(viewButton.isVisible());
+        assertFalse(deleteButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -58,6 +62,7 @@ public class AaclScenariosMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(viewButton.isVisible());
+        assertFalse(deleteButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -74,12 +79,14 @@ public class AaclScenariosMediatorTest {
     public void testSelectedScenarioChanged() {
         mediator.selectedScenarioChanged(new Scenario());
         assertTrue(viewButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
     }
 
     @Test
     public void testSelectedScenarioChangedNullScenario() {
         mediator.selectedScenarioChanged(null);
         assertFalse(viewButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
     }
 
     private void mockViewOnlyPermissions() {
@@ -95,5 +102,6 @@ public class AaclScenariosMediatorTest {
     private void mockSpecialistPermissions() {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
     }
 }

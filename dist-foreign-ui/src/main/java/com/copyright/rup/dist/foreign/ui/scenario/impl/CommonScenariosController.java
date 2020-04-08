@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -196,7 +197,10 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     }
 
     private void deleteScenario(Scenario scenario) {
-        scenarioService.deleteScenario(scenario);
-        getWidget().refresh();
+        //TODO{aazarenka} will be separate by product family
+        if (!FdaConstants.AACL_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
+            scenarioService.deleteScenario(scenario);
+            getWidget().refresh();
+        }
     }
 }
