@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
@@ -14,6 +15,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclUsageAgeWeightWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AggregateLicenseeClassMappingWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.PublicationTypeWeightsWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.ViewAaclFundPoolDetailsWindow;
@@ -64,6 +66,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     private List<FundPoolDetail> fundPoolDetails;
     private AaclScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
     private AaclScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget;
+    private AaclScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
 
     /**
      * Controller.
@@ -118,11 +121,14 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
         publicationTypeWeightWidget = new AaclScenarioParameterWidget<>(
             ForeignUi.getMessage("button.publication_type_weights"),
             usageController::getPublicationTypes, () -> new PublicationTypeWeightsWindow(false));
+        usageAgeWeightWidget = new AaclScenarioParameterWidget<>(
+            ForeignUi.getMessage("button.usage_age_weights"),
+            usageController::getUsageAges, () -> new AaclUsageAgeWeightWindow(false));
         descriptionLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout metadataLayout =
             new VerticalLayout(ownerLabel, grossTotalLabel, serviceFeeTotalLabel, netTotalLabel,
                 cutoffAmt, descriptionLabel, selectionCriteriaLabel, fundPoolButton, licenseeClassMappingWidget,
-                publicationTypeWeightWidget);
+                publicationTypeWeightWidget, usageAgeWeightWidget);
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
         return metadataLayout;
@@ -147,6 +153,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
         licenseeClassMappingWidget.setAppliedParameters(
             controller.getDetailLicenseeClassesByScenarioId(scenarioWithAmounts.getId()));
         updatePublicationTypeWeightWidget(scenarioWithAmounts.getAaclFields());
+        usageAgeWeightWidget.setAppliedParameters(scenarioWithAmounts.getAaclFields().getUsageAges());
     }
 
     private void updatePublicationTypeWeightWidget(AaclFields aaclFields) {
