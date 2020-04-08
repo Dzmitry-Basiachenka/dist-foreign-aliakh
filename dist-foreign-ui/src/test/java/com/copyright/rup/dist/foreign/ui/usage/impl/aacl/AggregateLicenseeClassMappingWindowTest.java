@@ -23,6 +23,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.easymock.Capture;
@@ -93,7 +94,7 @@ public class AggregateLicenseeClassMappingWindowTest {
     public void testDefaultButtonClickListener() {
         VerticalLayout content = (VerticalLayout) window.getContent();
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        Button defaultButton = (Button) buttonsLayout.getComponent(1);
+        Button defaultButton = (Button) buttonsLayout.getComponent(3);
         defaultButton.click();
         assertGridItems(defaultParams);
     }
@@ -139,30 +140,36 @@ public class AggregateLicenseeClassMappingWindowTest {
 
     private void verifyEditableButtonsLayout(VerticalLayout content) {
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(3, buttonsLayout.getComponentCount());
+        assertEquals(4, buttonsLayout.getComponentCount());
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         assertEquals("Save", saveButton.getCaption());
         assertTrue(saveButton.isVisible());
-        Button defaultButton = (Button) buttonsLayout.getComponent(1);
-        assertEquals("Default", defaultButton.getCaption());
-        assertTrue(defaultButton.isVisible());
-        Button closeButton = (Button) buttonsLayout.getComponent(2);
+        Button closeButton = (Button) buttonsLayout.getComponent(1);
         assertEquals("Close", closeButton.getCaption());
         assertTrue(closeButton.isVisible());
+        Label placeholderLabel = (Label) buttonsLayout.getComponent(2);
+        assertNull(placeholderLabel.getCaption());
+        assertTrue(placeholderLabel.isVisible());
+        Button defaultButton = (Button) buttonsLayout.getComponent(3);
+        assertEquals("Default", defaultButton.getCaption());
+        assertTrue(defaultButton.isVisible());
     }
 
     private void verifyViewOnlyButtonsLayout(VerticalLayout content) {
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(3, buttonsLayout.getComponentCount());
+        assertEquals(4, buttonsLayout.getComponentCount());
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         assertEquals("Save", saveButton.getCaption());
         assertFalse(saveButton.isVisible());
-        Button defaultButton = (Button) buttonsLayout.getComponent(1);
-        assertEquals("Default", defaultButton.getCaption());
-        assertFalse(defaultButton.isVisible());
-        Button closeButton = (Button) buttonsLayout.getComponent(2);
+        Button closeButton = (Button) buttonsLayout.getComponent(1);
         assertEquals("Close", closeButton.getCaption());
         assertTrue(closeButton.isVisible());
+        Label placeholderLabel = (Label) buttonsLayout.getComponent(2);
+        assertNull(placeholderLabel.getCaption());
+        assertFalse(placeholderLabel.isVisible());
+        Button defaultButton = (Button) buttonsLayout.getComponent(3);
+        assertEquals("Default", defaultButton.getCaption());
+        assertFalse(defaultButton.isVisible());
     }
 
     private void verifySize(Component component) {
