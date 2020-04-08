@@ -210,8 +210,9 @@ public class AaclScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        assertEquals(1, layout.getComponentCount());
+        assertEquals(2, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "View");
+        verifyButton(layout.getComponent(1), "Delete");
     }
 
     private void verifyButton(Component component, String caption) {

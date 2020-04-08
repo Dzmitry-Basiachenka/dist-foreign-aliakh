@@ -46,6 +46,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     private final IAaclScenariosController controller;
     private final IAaclUsageController usageController;
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
+    private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label cutoffAmt = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -77,6 +78,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     public IMediator initMediator() {
         mediator = new AaclScenariosMediator();
         mediator.setViewButton(viewButton);
+        mediator.setDeleteButton(deleteButton);
         mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
     }
@@ -90,8 +92,8 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     protected HorizontalLayout initButtonsLayout() {
         HorizontalLayout layout = new HorizontalLayout();
         addButtonsListeners();
-        VaadinUtils.setButtonsAutoDisabled(viewButton);
-        layout.addComponents(viewButton);
+        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton);
+        layout.addComponents(viewButton, deleteButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
@@ -139,5 +141,6 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
 
     private void addButtonsListeners() {
         viewButton.addClickListener(event -> getController().onViewButtonClicked());
+        deleteButton.addClickListener(event -> getController().onDeleteButtonClicked());
     }
 }
