@@ -447,12 +447,12 @@ public class AaclUsageRepositoryIntegrationTest {
         aaclUsageRepository.calculateAmounts(SCENARIO_ID_3, USER_NAME);
         List<Usage> usages = aaclUsageRepository.findByScenarioId(SCENARIO_ID_3);
         usages.sort(Comparator.comparing(Usage::getId));
-        assertAmounts(usages.get(0), "474.2846861858", "355.7135146393", "118.5711715464", "10.0000000000",
+        verifyAmounts(usages.get(0), "474.2846861858", "355.7135146393", "118.5711715464", "10.0000000000",
             "500.0000000000");
-        assertAmounts(usages.get(1), "8.6947406155", "6.5210554616", "2.1736851539", "0.3700000000", "0.7400000000");
-        assertAmounts(usages.get(2), "500.0000000000", "375.0000000000", "125.0000000000", "5.0000000000",
+        verifyAmounts(usages.get(1), "8.6947406155", "6.5210554616", "2.1736851539", "0.3700000000", "0.7400000000");
+        verifyAmounts(usages.get(2), "500.0000000000", "375.0000000000", "125.0000000000", "5.0000000000",
             "50.0000000000");
-        assertAmounts(usages.get(3), "17.0205731987", "12.7654298991", "4.2551432997", "0.7400000000", "0.7400000000");
+        verifyAmounts(usages.get(3), "17.0205731987", "12.7654298991", "4.2551432997", "0.7400000000", "0.7400000000");
     }
 
     @Test
@@ -859,7 +859,7 @@ public class AaclUsageRepositoryIntegrationTest {
         verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
     }
 
-    private void assertAmounts(Usage usage, String grossAmount, String netAmount, String serviceFeeAmount,
+    private void verifyAmounts(Usage usage, String grossAmount, String netAmount, String serviceFeeAmount,
                                String volumeWeight, String valueWeight) {
         assertEquals(new BigDecimal(grossAmount), usage.getGrossAmount());
         assertEquals(new BigDecimal(netAmount), usage.getNetAmount());

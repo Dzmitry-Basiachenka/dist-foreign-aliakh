@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -192,8 +193,8 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     public void updateAaclUsagesUnderMinimum(String scenarioId, BigDecimal cutoffAmount, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        params.put("cutoffAmount", cutoffAmount);
-        params.put(UPDATE_USER_KEY, userName);
+        params.put("cutoffAmount", Objects.requireNonNull(cutoffAmount));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         insert("IAaclUsageMapper.updateAaclUsagesUnderMinimum", params);
     }
 
@@ -201,7 +202,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     public void calculateAmounts(String scenarioId, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        params.put(UPDATE_USER_KEY, userName);
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         insert("IAaclUsageMapper.calculateAmounts", params);
     }
 
