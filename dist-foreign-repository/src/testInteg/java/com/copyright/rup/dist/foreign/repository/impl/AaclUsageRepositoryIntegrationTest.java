@@ -609,6 +609,12 @@ public class AaclUsageRepositoryIntegrationTest {
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "standardNumber", Sort.Direction.DESC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "standardNumberType", Sort.Direction.ASC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "standardNumberType", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "grossAmount", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "grossAmount", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "netAmount", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "netAmount", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "serviceFeeAmount", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "serviceFeeAmount", Sort.Direction.DESC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "detailLicenseeClassId", Sort.Direction.ASC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailLicenseeClassId", Sort.Direction.DESC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "detailLicenseeEnrollment", Sort.Direction.ASC);

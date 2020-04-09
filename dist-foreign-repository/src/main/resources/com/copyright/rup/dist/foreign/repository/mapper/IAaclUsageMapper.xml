@@ -528,16 +528,16 @@
                 aggregate_licensee_enrollment <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'grossAmount'">
-                u.gross_amount
+                u.gross_amount <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'serviceFeeAmount'">
-                u.service_fee_amount
+                u.service_fee_amount <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'serviceFee'">
-                u.service_fee
+                u.service_fee <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'netAmount'">
-                u.net_amount
+                u.net_amount <include refid="IUsageMapper.direction"/>
             </when>
         </choose>
     </sql>
