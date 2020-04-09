@@ -144,7 +144,7 @@ public class CreateAaclScenarioWindowTest {
         Scenario scenario = new Scenario();
         expect(controller.createAaclScenario(SCENARIO_NAME, expectedAaclFields, "")).andReturn(scenario).once();
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
-        expect(controller.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, detailLicenseeClasses))
+        expect(controller.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, detailLicenseeClasses))
             .andReturn(Collections.emptyList()).once();
         replay(controller);
         TestCreateAaclScenarioWindow createScenarioWindow = new TestCreateAaclScenarioWindow(controller);
@@ -169,7 +169,7 @@ public class CreateAaclScenarioWindowTest {
     public void testConfirmButtonClickListenerWithInvalidMapping() {
         mockStatic(Windows.class);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
-        expect(controller.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID,
+        expect(controller.getAggregateClassesNotToBeDistributed(FUND_POOL_ID,
             Collections.singletonList(detailLicenseeClass)))
             .andReturn(Collections.singletonList(aggregateLicenseeClass)).once();
         Windows.showNotificationWindow(

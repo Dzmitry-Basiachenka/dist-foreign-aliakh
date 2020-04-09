@@ -239,9 +239,9 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
-    public List<AggregateLicenseeClass> getAggregateLicenseeClassesWithoutUsages(String fundPoolId,
-                                                                                 List<DetailLicenseeClass> mapping) {
-        return aaclUsageService.getAggregateLicenseeClassesWithoutUsages(fundPoolId,
+    public List<AggregateLicenseeClass> getAggregateClassesNotToBeDistributed(String fundPoolId,
+                                                                              List<DetailLicenseeClass> mapping) {
+        return aaclUsageService.getAggregateClassesNotToBeDistributed(fundPoolId,
             getUsageFilterController().getWidget().getAppliedFilter(), mapping);
     }
 

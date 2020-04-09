@@ -54,7 +54,6 @@ public class UsageBatchService implements IUsageBatchService {
     private static final EnumSet<UsageStatusEnum> PROCESSED_AACL_BATCH_USAGE_STATUSES = EnumSet.of(
         UsageStatusEnum.ELIGIBLE, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND,
         UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED, UsageStatusEnum.SCENARIO_EXCLUDED);
-
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired

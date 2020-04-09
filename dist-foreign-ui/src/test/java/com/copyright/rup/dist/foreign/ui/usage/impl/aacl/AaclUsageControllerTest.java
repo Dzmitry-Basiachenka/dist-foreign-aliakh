@@ -450,18 +450,18 @@ public class AaclUsageControllerTest {
     }
 
     @Test
-    public void testGetAggregateLicenseeClassesWithoutUsages() {
+    public void testGetAggregateClassesNotToBeDistributed() {
         List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
         List<AggregateLicenseeClass> aggregateLicenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         expect(
-            aaclUsageService.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, usageFilter, detailLicenseeClasses))
+            aaclUsageService.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, usageFilter, detailLicenseeClasses))
             .andReturn(aggregateLicenseeClasses)
             .once();
         replay(aaclUsageService, filterWidgetMock, filterController);
         assertEquals(aggregateLicenseeClasses,
-            controller.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, detailLicenseeClasses));
+            controller.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, detailLicenseeClasses));
         verify(aaclUsageService, filterWidgetMock, filterController);
     }
 

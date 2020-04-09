@@ -268,9 +268,12 @@ public class AaclUsageService implements IAaclUsageService {
     @Override
     @Transactional
     public void addUsagesToScenario(Scenario scenario, UsageFilter filter) {
-        aaclUsageRepository.addToScenario(scenario, filter);
+        String scenarioId = scenario.getId();
+        String updateUser = scenario.getUpdateUser();
+        aaclUsageRepository.addToScenario(scenarioId, filter, updateUser);
         scenario.getAaclFields().getPublicationTypes().forEach(pubType ->
-            aaclUsageRepository.updatePublicationTypeWeight(scenario, pubType.getId(), pubType.getWeight()));
+            aaclUsageRepository.updatePublicationTypeWeight(scenarioId, pubType.getId(),
+                pubType.getWeight(), updateUser));
     }
 
     @Override
@@ -292,15 +295,15 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
-    public List<AggregateLicenseeClass> getAggregateLicenseeClassesWithoutUsages(String fundPoolId, UsageFilter filter,
-                                                                                 List<DetailLicenseeClass> mapping) {
+    public List<AggregateLicenseeClass> getAggregateClassesNotToBeDistributed(String fundPoolId, UsageFilter filter,
+                                                                              List<DetailLicenseeClass> mapping) {
         Set<Integer> fundPoolAggregateClassIds = getAggregateClassIdsWithAmountsFromFundPool(fundPoolId);
         Map<Integer, Set<Integer>> aggregateToDetailClassIds = mapping.stream()
             .collect(Collectors.groupingBy(detailClass -> detailClass.getAggregateLicenseeClass().getId(),
                 Collectors.mapping(DetailLicenseeClass::getId, Collectors.toSet())));
         Set<Integer> unmappedAggregateClassIds =
             Sets.difference(fundPoolAggregateClassIds, aggregateToDetailClassIds.keySet());
-        Set<Integer> aggregateClassIdsWithNoUsages = aggregateToDetailClassIds.entrySet().stream()
+        Set<Integer> aggregateClassIdsWithNoUsagesFor = aggregateToDetailClassIds.entrySet().stream()
             .filter(entry -> fundPoolAggregateClassIds.contains(entry.getKey()))
             .filter(entry -> entry.getValue()
                 .stream()
@@ -308,7 +311,7 @@ public class AaclUsageService implements IAaclUsageService {
                     aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(filter, detailClassId)))
             .map(Entry::getKey)
             .collect(Collectors.toSet());
-        return getAggregateClassesByIds(Sets.union(unmappedAggregateClassIds, aggregateClassIdsWithNoUsages));
+        return getAggregateClassesByIds(Sets.union(unmappedAggregateClassIds, aggregateClassIdsWithNoUsagesFor));
     }
 
     @Override

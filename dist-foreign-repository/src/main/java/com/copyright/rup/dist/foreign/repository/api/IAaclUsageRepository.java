@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -178,10 +177,11 @@ public interface IAaclUsageRepository {
     /**
      * Attaches usages to scenario.
      *
-     * @param scenario {@link Scenario} to add usages to
-     * @param filter   {@link UsageFilter} instance
+     * @param scenarioId id of scenario to add usages to
+     * @param filter     {@link UsageFilter} instance
+     * @param userName   user name
      */
-    void addToScenario(Scenario scenario, UsageFilter filter);
+    void addToScenario(String scenarioId, UsageFilter filter, String userName);
 
     /**
      * Calculates usages amounts and marks usages that under cutoff minimum amount as
@@ -222,11 +222,12 @@ public interface IAaclUsageRepository {
     /**
      * Sets publication type weight for scenario usages with the given publication type.
      *
-     * @param scenario          {@link Scenario}
+     * @param scenarioId        scenario id
      * @param publicationTypeId publication type id
      * @param weight            publication type weight
+     * @param userName          update user name
      */
-    void updatePublicationTypeWeight(Scenario scenario, String publicationTypeId, BigDecimal weight);
+    void updatePublicationTypeWeight(String scenarioId, String publicationTypeId, BigDecimal weight, String userName);
 
     /**
      * Gets count of usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and

@@ -4,7 +4,6 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -181,11 +180,11 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
-    public void addToScenario(Scenario scenario, UsageFilter filter) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
-        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenario.getId()));
+    public void addToScenario(String scenarioId, UsageFilter filter, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put(FILTER_KEY, Objects.requireNonNull(filter));
-        params.put(UPDATE_USER_KEY, Objects.requireNonNull(scenario.getUpdateUser()));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("IAaclUsageMapper.addToScenario", params);
     }
 
@@ -223,12 +222,13 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
-    public void updatePublicationTypeWeight(Scenario scenario, String publicationTypeId, BigDecimal weight) {
+    public void updatePublicationTypeWeight(String scenarioId, String publicationTypeId,
+                                            BigDecimal weight, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
-        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenario.getId()));
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put("publicationTypeId", Objects.requireNonNull(publicationTypeId));
         params.put("weight", Objects.requireNonNull(weight));
-        params.put(UPDATE_USER_KEY, Objects.requireNonNull(scenario.getUpdateUser()));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("IAaclUsageMapper.updatePublicationTypeWeight", params);
     }
 

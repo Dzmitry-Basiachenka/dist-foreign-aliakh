@@ -191,8 +191,8 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @param mapping    {@link DetailLicenseeClass} to {@link AggregateLicenseeClass} mapping
      * @return list of {@link AggregateLicenseeClass}es
      */
-    List<AggregateLicenseeClass> getAggregateLicenseeClassesWithoutUsages(String fundPoolId,
-                                                                          List<DetailLicenseeClass> mapping);
+    List<AggregateLicenseeClass> getAggregateClassesNotToBeDistributed(String fundPoolId,
+                                                                       List<DetailLicenseeClass> mapping);
 
     /**
      * Creates AACL {@link Scenario} by entered scenario name and description.
