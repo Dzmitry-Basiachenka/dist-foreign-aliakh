@@ -1,3 +1,10 @@
+9.1.19
+-
+* B-54999 FDA: View scenario-specific usage age weights for AACL: implement link from scenario metadata panel to Usage Age Weights View window
+* B-56267 FDA: Delete AACL Scenario: implement service logic to delete AACL scenario
+* B-56847 Tech Debt: FDA: change buttons order, add placeholder between buttons in Licensee Class Mapping window
+* CDP-903 FDA: Scenario drill-down view for AACL Product Family: Sorting by 'GROSS AMT IN USD', 'SERVICE FEE AMOUNT', 'NET AMT IN USD' columns doesn't work
+
 9.1.18
 -
 * B-54999 FDA: View scenario-specific usage age weights for AACL: implement default weights column for Usage Age Weights View window
