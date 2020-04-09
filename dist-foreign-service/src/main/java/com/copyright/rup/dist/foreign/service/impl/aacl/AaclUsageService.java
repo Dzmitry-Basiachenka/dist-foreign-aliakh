@@ -35,6 +35,7 @@ import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateExcepti
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -331,6 +332,11 @@ public class AaclUsageService implements IAaclUsageService {
                                                           Pageable pageable, Sort sort) {
         return aaclUsageRepository.findByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue,
             pageable, sort);
+    }
+
+    @Override
+    public void deleteFromScenario(String scenarioId) {
+        aaclUsageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
     }
 
     private Set<Integer> getAggregateClassIdsWithAmountsFromFundPool(String fundPoolId) {

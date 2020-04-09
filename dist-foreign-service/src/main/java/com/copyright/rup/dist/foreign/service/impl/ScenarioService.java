@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -33,7 +32,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
@@ -85,8 +83,6 @@ public class ScenarioService implements IScenarioService {
     private INtsUsageService ntsUsageService;
     @Autowired
     private IFasUsageService fasUsageService;
-    @Autowired
-    private IAaclUsageService aaclUsageService;
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
@@ -158,26 +154,6 @@ public class ScenarioService implements IScenarioService {
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         LOGGER.info("Insert NTS scenario. Finished. Name={}, NtsFields={}, Description={}, UsageFilter={}",
             scenarioName, ntsFields, description, usageFilter);
-        return scenario;
-    }
-
-    @Override
-    @Transactional
-    public Scenario createAaclScenario(String scenarioName, AaclFields aaclFields, String description,
-                                       UsageFilter usageFilter) {
-        LOGGER.info("Insert AACL scenario. Started. Name={}, AaclFields={}, Description={}, UsageFilter={}",
-            scenarioName, ForeignLogUtils.scenarioAaclFields(aaclFields), description, usageFilter);
-        Scenario scenario = buildAaclScenario(scenarioName, aaclFields, description, usageFilter);
-        scenarioRepository.insert(scenario);
-        aaclUsageService.addUsagesToScenario(scenario, usageFilter);
-        scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
-        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
-        aaclUsageService.updateAaclUsagesUnderMinimum(scenario.getId(), aaclFields.getTitleCutoffAmount(),
-            scenario.getCreateUser());
-        aaclUsageService.calculateAmounts(scenario.getId(), scenario.getCreateUser());
-        aaclUsageService.populatePayees(scenario.getId());
-        LOGGER.info("Insert AACL scenario. Finished. Name={}, Description={}, UsageFilter={}",
-            scenarioName, description, usageFilter);
         return scenario;
     }
 
@@ -385,20 +361,6 @@ public class ScenarioService implements IScenarioService {
         return archivedCount;
     }
 
-    private Scenario buildNtsScenario(String scenarioName, NtsFields ntsFields, String description,
-                                      UsageFilter usageFilter) {
-        Scenario scenario = buildScenario(scenarioName, description, usageFilter);
-        scenario.setNtsFields(ntsFields);
-        return scenario;
-    }
-
-    private Scenario buildAaclScenario(String scenarioName, AaclFields aaclFields, String description,
-                                       UsageFilter usageFilter) {
-        Scenario scenario = buildScenario(scenarioName, description, usageFilter);
-        scenario.setAaclFields(aaclFields);
-        return scenario;
-    }
-
     private Scenario buildScenario(String scenarioName, String description, UsageFilter usageFilter) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
@@ -409,6 +371,13 @@ public class ScenarioService implements IScenarioService {
         String userName = RupContextUtils.getUserName();
         scenario.setCreateUser(userName);
         scenario.setUpdateUser(userName);
+        return scenario;
+    }
+
+    private Scenario buildNtsScenario(String scenarioName, NtsFields ntsFields, String description,
+                                      UsageFilter usageFilter) {
+        Scenario scenario = buildScenario(scenarioName, description, usageFilter);
+        scenario.setNtsFields(ntsFields);
         return scenario;
     }
 

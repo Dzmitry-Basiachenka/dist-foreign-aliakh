@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -55,6 +56,8 @@ public class CreateAaclScenarioIntegrationTestBuilder {
 
     @Autowired
     private IScenarioService scenarioService;
+    @Autowired
+    private IAaclScenarioService aaclScenarioService;
     @Autowired
     private IAaclUsageService aaclUsageService;
     @Autowired
@@ -136,8 +139,8 @@ public class CreateAaclScenarioIntegrationTestBuilder {
             if (Objects.nonNull(expectedRollupsRightholderIds)) {
                 testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
             }
-            scenarioId = scenarioService
-                .createAaclScenario(scenarioName, scenarioAaclFields, scenarioDescription, scenarioUsageFilter).getId();
+            scenarioId = aaclScenarioService
+                .createScenario(scenarioName, scenarioAaclFields, scenarioDescription, scenarioUsageFilter).getId();
             testHelper.verifyRestServer();
             assertScenario();
             assertUsages();

@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosWidget;
@@ -83,6 +84,7 @@ public class AaclScenariosControllerTest {
         Whitebox.setInternalState(scenariosController, "usageService", createMock(IUsageService.class));
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
+        Whitebox.setInternalState(scenariosController, "aaclScenarioService", createMock(IAaclScenarioService.class));
         verify(SecurityUtils.class);
     }
 

@@ -116,4 +116,14 @@ public class NtsScenariosController extends CommonScenariosController implements
         }
         return sb.toString();
     }
+
+    @Override
+    public void onDeleteButtonClicked() {
+        Scenario scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario"),
+            () -> {
+                getScenarioService().deleteScenario(scenario);
+                getWidget().refresh();
+            });
+    }
 }
