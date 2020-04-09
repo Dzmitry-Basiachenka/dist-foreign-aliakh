@@ -185,7 +185,7 @@ class CreateAaclScenarioWindow extends Window {
             aaclFields.setPublicationTypes(publicationTypeWeightWidget.getAppliedParameters());
             aaclFields.setDetailLicenseeClasses(licenseeClassMappingWidget.getAppliedParameters());
             List<AggregateLicenseeClass> aggregateClassesWithoutUsages =
-                controller.getAggregateLicenseeClassesWithoutUsages(aaclFields.getFundPoolId(),
+                controller.getAggregateClassesNotToBeDistributed(aaclFields.getFundPoolId(),
                     aaclFields.getDetailLicenseeClasses());
             if (CollectionUtils.isEmpty(aggregateClassesWithoutUsages)) {
                 fireEvent(new ScenarioCreateEvent(this,

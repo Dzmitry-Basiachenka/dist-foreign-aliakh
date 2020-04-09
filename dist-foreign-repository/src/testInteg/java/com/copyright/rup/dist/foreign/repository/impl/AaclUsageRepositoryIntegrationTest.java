@@ -12,7 +12,6 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -26,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -387,13 +387,10 @@ public class AaclUsageRepositoryIntegrationTest {
 
     @Test
     public void testAddToScenarioByBatchAndStatusFilter() {
-        Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_ID_1);
-        scenario.setUpdateUser(USER_NAME);
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        aaclUsageRepository.addToScenario(scenario, usageFilter);
+        aaclUsageRepository.addToScenario(SCENARIO_ID_1, usageFilter, USER_NAME);
         aaclUsageRepository.findByIds(
             Arrays.asList("0cd30b3e-ae74-466a-a7b1-a2d891b2123e", "9342062f-568e-4c27-8f33-c010a2afe61e"))
             .forEach(actualUsage -> {
@@ -410,14 +407,11 @@ public class AaclUsageRepositoryIntegrationTest {
 
     @Test
     public void testAddToScenarioByBatchAndStatusAndPeriodFilter() {
-        Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_ID_1);
-        scenario.setUpdateUser(USER_NAME);
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         usageFilter.setUsagePeriod(2019);
-        aaclUsageRepository.addToScenario(scenario, usageFilter);
+        aaclUsageRepository.addToScenario(SCENARIO_ID_1, usageFilter, USER_NAME);
         aaclUsageRepository.findByIds(Collections.singletonList("0cd30b3e-ae74-466a-a7b1-a2d891b2123e"))
             .forEach(actualUsage -> {
                 assertEquals(SCENARIO_ID_1, actualUsage.getScenarioId());
@@ -528,11 +522,8 @@ public class AaclUsageRepositoryIntegrationTest {
 
     @Test
     public void testUpdatePublicationTypeWeight() {
-        Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_ID_2);
-        scenario.setUpdateUser(USER_NAME);
-        aaclUsageRepository.updatePublicationTypeWeight(scenario, "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
-            new BigDecimal("10.12"));
+        aaclUsageRepository.updatePublicationTypeWeight(SCENARIO_ID_2, "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
+            new BigDecimal("10.12"), USER_NAME);
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("5ceb887e-502e-463a-ae94-f925feff35d8"));
         Usage usage1 =

@@ -385,20 +385,21 @@ public class AaclUsageServiceTest {
     @Test
     public void testAddUsagesToScenario() {
         Scenario scenario = new Scenario();
-        scenario.setId("3a95352b-c9f5-4b46-b793-d635f7765997");
+        scenario.setId(SCENARIO_ID);
         AaclFields aaclFields = new AaclFields();
         aaclFields.setPublicationTypes(Arrays.asList(
             buildPubType("eb500edd-c882-43a4-8945-454958c8fd52", BigDecimal.ONE),
             buildPubType("77707191-bdbd-4034-b37b-0968aedaa346", BigDecimal.TEN)));
         scenario.setAaclFields(aaclFields);
+        scenario.setUpdateUser(USER_NAME);
         UsageFilter usageFilter = new UsageFilter();
-        aaclUsageRepository.addToScenario(scenario, usageFilter);
+        aaclUsageRepository.addToScenario(SCENARIO_ID, usageFilter, USER_NAME);
         expectLastCall().once();
-        aaclUsageRepository.updatePublicationTypeWeight(scenario,
-            "eb500edd-c882-43a4-8945-454958c8fd52", BigDecimal.ONE);
+        aaclUsageRepository.updatePublicationTypeWeight(SCENARIO_ID, "eb500edd-c882-43a4-8945-454958c8fd52",
+            BigDecimal.ONE, USER_NAME);
         expectLastCall().once();
-        aaclUsageRepository.updatePublicationTypeWeight(scenario,
-            "77707191-bdbd-4034-b37b-0968aedaa346", BigDecimal.TEN);
+        aaclUsageRepository.updatePublicationTypeWeight(SCENARIO_ID, "77707191-bdbd-4034-b37b-0968aedaa346",
+            BigDecimal.TEN, USER_NAME);
         expectLastCall().once();
         replay(aaclUsageRepository);
         aaclUsageService.addUsagesToScenario(scenario, usageFilter);
@@ -425,7 +426,7 @@ public class AaclUsageServiceTest {
     }
 
     @Test
-    public void testGetAggregateLicenseeClassesWithoutUsagesWithAllValid() {
+    public void testGetAggregateClassesNotToBeDistributedWithAllValid() {
         List<DetailLicenseeClass> classes = Arrays.asList(DLC_1, DLC_2, DLC_3, DLC_4);
         List<FundPoolDetail> fundPoolDetails = Arrays.asList(
             buildFundPoolDetail(ALC_1, BigDecimal.TEN),
@@ -441,13 +442,13 @@ public class AaclUsageServiceTest {
         expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 145)).andReturn(true).once();
         replay(licenseeClassService, fundPoolService, aaclUsageRepository);
         List<AggregateLicenseeClass> result =
-            aaclUsageService.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, usageFilter, classes);
+            aaclUsageService.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, usageFilter, classes);
         verify(licenseeClassService, fundPoolService, aaclUsageRepository);
         assertEquals(Collections.emptyList(), result);
     }
 
     @Test
-    public void testGetAggregateLicenseeClassesWithoutUsagesWithUnmapped() {
+    public void testGetAggregateClassesNotToBeDistributedWithUnmapped() {
         List<DetailLicenseeClass> classes = Arrays.asList(DLC_1, DLC_2, DLC_3, DLC_4);
         List<FundPoolDetail> fundPoolDetails = Arrays.asList(
             buildFundPoolDetail(ALC_1, BigDecimal.TEN),
@@ -463,13 +464,13 @@ public class AaclUsageServiceTest {
         expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 145)).andReturn(true).once();
         replay(licenseeClassService, fundPoolService, aaclUsageRepository);
         List<AggregateLicenseeClass> result =
-            aaclUsageService.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, usageFilter, classes);
+            aaclUsageService.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, usageFilter, classes);
         verify(licenseeClassService, fundPoolService, aaclUsageRepository);
         assertEquals(Collections.singletonList(ALC_4), result);
     }
 
     @Test
-    public void testGetAggregateLicenseeClassesWithoutUsagesWithNoUsages() {
+    public void testGetAggregateClassesNotToBeDistributedWithNoUsages() {
         List<DetailLicenseeClass> classes = Arrays.asList(DLC_1, DLC_2, DLC_3, DLC_4);
         List<FundPoolDetail> fundPoolDetails = Arrays.asList(
             buildFundPoolDetail(ALC_1, BigDecimal.TEN),
@@ -485,13 +486,13 @@ public class AaclUsageServiceTest {
         expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 145)).andReturn(false).once();
         replay(licenseeClassService, fundPoolService, aaclUsageRepository);
         List<AggregateLicenseeClass> result =
-            aaclUsageService.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, usageFilter, classes);
+            aaclUsageService.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, usageFilter, classes);
         verify(licenseeClassService, fundPoolService, aaclUsageRepository);
         assertEquals(Collections.singletonList(ALC_2), result);
     }
 
     @Test
-    public void testGetAggregateLicenseeClassesWithoutUsagesWithUnmappedAndNoUsages() {
+    public void testGetAggregateClassesNotToBeDistributedWithUnmappedAndNoUsages() {
         List<DetailLicenseeClass> classes = Arrays.asList(DLC_1, DLC_2, DLC_3, DLC_4);
         List<FundPoolDetail> fundPoolDetails = Arrays.asList(
             buildFundPoolDetail(ALC_1, BigDecimal.TEN),
@@ -507,7 +508,7 @@ public class AaclUsageServiceTest {
         expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 145)).andReturn(false).once();
         replay(licenseeClassService, fundPoolService, aaclUsageRepository);
         List<AggregateLicenseeClass> result =
-            aaclUsageService.getAggregateLicenseeClassesWithoutUsages(FUND_POOL_ID, usageFilter, classes);
+            aaclUsageService.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, usageFilter, classes);
         verify(licenseeClassService, fundPoolService, aaclUsageRepository);
         assertEquals(Arrays.asList(ALC_2, ALC_4), result);
     }

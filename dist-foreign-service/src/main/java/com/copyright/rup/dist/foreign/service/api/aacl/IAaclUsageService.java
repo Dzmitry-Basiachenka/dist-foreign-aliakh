@@ -201,8 +201,8 @@ public interface IAaclUsageService {
      * @param mapping    {@link DetailLicenseeClass} to {@link AggregateLicenseeClass} mapping
      * @return list of {@link AggregateLicenseeClass}es
      */
-    List<AggregateLicenseeClass> getAggregateLicenseeClassesWithoutUsages(String fundPoolId, UsageFilter filter,
-                                                                          List<DetailLicenseeClass> mapping);
+    List<AggregateLicenseeClass> getAggregateClassesNotToBeDistributed(String fundPoolId, UsageFilter filter,
+                                                                       List<DetailLicenseeClass> mapping);
 
     /**
      * Gets count of usage details based on {@link Scenario} and rightsholder account number.
