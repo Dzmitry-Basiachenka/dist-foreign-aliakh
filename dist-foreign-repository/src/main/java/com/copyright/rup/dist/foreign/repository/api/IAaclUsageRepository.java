@@ -78,7 +78,7 @@ public interface IAaclUsageRepository {
      * Finds usages based on scenario identifier.
      *
      * @param scenarioId scenario id
-     * @return the list of {@link Usage}
+     * @return the list of {@link Usage}s
      */
     List<Usage> findByScenarioId(String scenarioId);
 
@@ -184,7 +184,7 @@ public interface IAaclUsageRepository {
     void addToScenario(Scenario scenario, UsageFilter filter);
 
     /**
-     * Calculates usages amounts and marks usages that under cutoff minimum amount as
+     * Calculates usages amounts and marks usages that are under cutoff minimum amount as
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED}.
      *
      * @param scenarioId   scenario identifier

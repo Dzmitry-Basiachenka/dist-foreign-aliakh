@@ -907,7 +907,7 @@
                 df_usage_uid,
                 wr_wrk_inst,
                 u.number_of_copies * (select weight from usage_weights where usage_period = period) * case when right_limitation != 'ALL' then 0.37 else 1 end volume_weight,
-                u.number_of_copies * ua.number_of_pages * publication_type_weight * (select weight from usage_weights where usage_period = period) * case when right_limitation != 'ALL' then 0.37 else 1 end value_weight,
+                u.number_of_copies * (select weight from usage_weights where usage_period = period) * ua.number_of_pages * publication_type_weight *  case when right_limitation != 'ALL' then 0.37 else 1 end value_weight,
                 (select aggregateId from aggregate_mapping where detailId = ua.detail_licensee_class_id) aggregateId,
                 u.df_scenario_uid
             from ${schema}.df_usage u

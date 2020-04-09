@@ -128,7 +128,7 @@ public interface IAaclUsageService {
     List<Long> getInvalidRightsholdersByFilter(UsageFilter filter);
 
     /**
-     * Calculates usages amounts and marks usages that under cutoff minimum amount as
+     * Calculates usages amounts and marks usages that are under cutoff minimum amount as
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED}.
      *
      * @param scenarioId   scenario identifier
