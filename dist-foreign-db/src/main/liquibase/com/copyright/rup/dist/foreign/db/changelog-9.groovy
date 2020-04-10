@@ -728,4 +728,24 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2020-04-10-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-55090 FDA: AACL Calculate Scenario: add volume_share, value_share and total_share columns to df_usage_aacl table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'volume_share', type: 'NUMERIC(38,10)', remarks: 'The volume share')
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'value_share', type: 'NUMERIC(38,10)', remarks: 'The value share')
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'total_share', type: 'NUMERIC(38,10)', remarks: 'The total share')
+        }
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
