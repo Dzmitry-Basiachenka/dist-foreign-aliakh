@@ -1,3 +1,11 @@
+9.1.20
+-
+* B-52335 FDA: Create AACL Scenario: make changes based on comments in CR-DIST-FOREIGN-157
+* B-55090 FDA: AACL Calculate Scenario: add volume, value and total shares columns in database and populate them during scenario calculation
+* B-55090 FDA: AACL Calculate Scenario: make changes based on comments in CR-DIST-FOREIGN-156
+* B-56267 FDA: Delete AACL Scenario: implement repository logic to delete usages from scenario
+* B-58160 FDA: Create AACL Scenario: LOCKED usages are fixed to a Scenario until Scenario is deleted: make changes based on comment in CR-DIST-FOREIGN-164
+
 9.1.19
 -
 * B-54999 FDA: View scenario-specific usage age weights for AACL: implement link from scenario metadata panel to Usage Age Weights View window
