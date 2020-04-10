@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.springframework.stereotype.Repository;
 
@@ -255,7 +256,12 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
 
     @Override
     public void deleteFromScenario(String scenarioId, String userName) {
-        //TODO{aazarenka} will be implemented in task related to repository layer
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("updateStatusTo", UsageStatusEnum.ELIGIBLE);
+        params.put("updateStatusesFrom", Sets.newHashSet(UsageStatusEnum.SCENARIO_EXCLUDED, UsageStatusEnum.LOCKED));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        update("IAaclUsageMapper.deleteFromScenario", params);
     }
 
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {

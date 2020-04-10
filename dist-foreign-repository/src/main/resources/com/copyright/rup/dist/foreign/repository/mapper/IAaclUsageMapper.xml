@@ -1094,4 +1094,38 @@
                 )
             </if>
     </sql>
+
+    <update id="deleteFromScenario" parameterType="map">
+        with usage_ids as (
+            update
+                ${schema}.df_usage u
+            set
+                status_ind = #{updateStatusTo},
+                df_scenario_uid = null,
+                payee_account_number = null,
+                service_fee = null,
+                service_fee_amount = 0,
+                net_amount = 0,
+                gross_amount = 0,
+                <include refid="StoredEntityMapper.update"/>
+            where <include refid="IUsageMapper.scenarioBatchesFilter"/>
+                    and u.status_ind in
+                        <foreach collection="updateStatusesFrom" item="updateStatusFrom" separator="," open="(" close=")">
+                            #{updateStatusFrom}
+                        </foreach>
+            returning u.df_usage_uid
+        )
+        update ${schema}.df_usage_aacl
+        set
+            volume_weight = null,
+            value_weight = null,
+            volume_share = null,
+            value_share = null,
+            total_share = null,
+            publication_type_weight = case when baseline_uid is null then null else publication_type_weight end,
+            <include refid="StoredEntityMapper.update"/>
+        from usage_ids
+        where df_usage_aacl_uid = usage_ids.df_usage_uid
+    </update>
+
 </mapper>

@@ -1,0 +1,60 @@
+[
+  {
+    "id": "8eb9dbbc-3535-42cc-8094-2d90849952e2",
+    "batchId": "0c2447c6-29fb-4c8c-a421-514d40547e49",
+    "scenarioId": "aedbd4ba-8b9f-41dc-94d6-bf651009c180",
+    "wrWrkInst": 269040891,
+    "workTitle": "Snap to grid",
+    "status": "ELIGIBLE",
+    "productFamily": "AACL",
+    "numberOfCopies": 20,
+    "grossAmount": 0.0000000000,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "aaclUsage": {
+      "institution": "University of Chicago",
+      "usagePeriod": 2020,
+      "batchPeriodEndDate": "2019-06-30",
+      "usageSource": "Feb 2020 TUR",
+      "rightLimitation": "PRINT",
+      "numberOfPages": 100,
+      "detailLicenseeClassId": 171,
+      "detailLicenseeEnrollment": "EXGP",
+      "detailLicenseeDiscipline": "Arts & Humanities",
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book"
+      }
+    },
+    "comment": "AACL Scenario Comment"
+  },
+  {
+    "id": "0b5ac9fc-63e2-4162-8d63-953b7023293c",
+    "batchId": "6e6f656a-e080-4426-b8ea-985b69f8814d",
+    "wrWrkInst": 122830308,
+    "status": "ELIGIBLE",
+    "productFamily": "AACL",
+    "numberOfCopies": 20,
+    "grossAmount": 0.0000000000,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "aaclUsage": {
+      "institution": "University of Michigan",
+      "usagePeriod": 2019,
+      "batchPeriodEndDate": "2019-06-30",
+      "usageSource": "Feb 2019 TUR",
+      "rightLimitation": "DIGITAL",
+      "numberOfPages": 200,
+      "publicationTypeWeight": 1.00,
+      "baselineId": "b012c81c-2370-458e-a6cb-349b66d08e6e",
+      "detailLicenseeClassId": 171,
+      "detailLicenseeEnrollment": "EXGP",
+      "detailLicenseeDiscipline": "Arts & Humanities",
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book"
+      }
+    },
+    "comment": "AACL comment 2"
+  }
+]
