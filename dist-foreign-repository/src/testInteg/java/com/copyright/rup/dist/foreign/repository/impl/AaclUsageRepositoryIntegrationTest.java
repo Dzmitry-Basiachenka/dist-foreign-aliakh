@@ -68,6 +68,7 @@ public class AaclUsageRepositoryIntegrationTest {
     private static final String SCENARIO_ID_1 = "09f85d7d-3a37-45b2-ab6e-7a341c3f115c";
     private static final String SCENARIO_ID_2 = "66d10c81-705e-4996-89f4-11e1635c4c31";
     private static final String SCENARIO_ID_3 = "8b01939c-abda-4090-86d1-6231fc20f679";
+    private static final String SCENARIO_ID_4 = "aedbd4ba-8b9f-41dc-94d6-bf651009c180";
     private static final String USAGE_ID_1 = "0b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_2 = "6c91f04e-60dc-49e0-9cdc-e782e0b923e2";
     private static final String USAGE_ID_3 = "5b41d618-0a2f-4736-bb75-29da627ad677";
@@ -638,6 +639,35 @@ public class AaclUsageRepositoryIntegrationTest {
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "rightLimitation", Sort.Direction.DESC);
     }
 
+    @Test
+    public void testDeleteFromScenario() {
+        List<Usage> usages = aaclUsageRepository.findByScenarioId(SCENARIO_ID_4);
+        assertEquals(2, usages.size());
+        usages.forEach(this::verifyUsagesBeforeDeleteScenario);
+        aaclUsageRepository.deleteFromScenario(SCENARIO_ID_4, "SYSTEM");
+        List<Usage> usageList = aaclUsageRepository.findByIds(
+            Arrays.asList("9c8ae08e-60a9-4819-b445-eb2bbc50635d", "8eb9dbbc-3535-42cc-8094-2d90849952e2"));
+        assertEquals(2, usageList.size());
+        verifyUsages(Collections.singletonList("json/aacl/aacl_usage_delete_scenario.json"), usageList,
+            this::verifyUsageForDeleteScenario);
+    }
+
+    private void verifyUsagesBeforeDeleteScenario(Usage usage) {
+        assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
+        assertEquals(new BigDecimal("24.0000000000"), usage.getAaclUsage().getValueWeight());
+        assertEquals(new BigDecimal("5.0000000000"), usage.getAaclUsage().getVolumeWeight());
+        assertEquals(new BigDecimal("1.00"), usage.getAaclUsage().getPublicationTypeWeight());
+        assertEquals(new BigDecimal("60.0000000000"), usage.getAaclUsage().getValueShare());
+        assertEquals(new BigDecimal("50.0000000000"), usage.getAaclUsage().getVolumeShare());
+        assertEquals(new BigDecimal("2.0000000000"), usage.getAaclUsage().getTotalShare());
+        assertNotNull(usage.getGrossAmount());
+        assertNotNull(usage.getNetAmount());
+        assertNotNull(usage.getServiceFeeAmount());
+        assertNotNull(usage.getServiceFee());
+        assertNotNull(usage.getGrossAmount());
+        assertNotNull(usage.getPayee());
+    }
+
     private void assertSortingFindByScenarioIdAndRhAccountNumber(String detailId, String sortProperty,
                                                                  Sort.Direction sortDirection) {
         String scenarioId = "20bed3d9-8da3-470f-95d7-d839a41488d4";
@@ -727,6 +757,16 @@ public class AaclUsageRepositoryIntegrationTest {
             .forEach(index -> verifyUsageDto(expectedUsages.get(index), actualUsages.get(index)));
     }
 
+    private void verifyUsageForDeleteScenario(Usage expectedUsage, Usage actualUsage) {
+        assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+        assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
+        assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
+        assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber());
+        verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
+    }
+
     private void verifyUsageDto(UsageDto expectedUsage, UsageDto actualUsage) {
         assertEquals(expectedUsage.getId(), actualUsage.getId());
         assertEquals(expectedUsage.getBatchName(), actualUsage.getBatchName());
@@ -757,6 +797,11 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
         assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
         assertEquals(expectedAaclUsage.getUsageAgeWeight(), actualAaclUsage.getUsageAgeWeight());
+        assertEquals(expectedAaclUsage.getValueWeight(), actualAaclUsage.getValueWeight());
+        assertEquals(expectedAaclUsage.getVolumeWeight(), actualAaclUsage.getVolumeWeight());
+        assertEquals(expectedAaclUsage.getVolumeShare(), actualAaclUsage.getVolumeShare());
+        assertEquals(expectedAaclUsage.getValueShare(), actualAaclUsage.getValueShare());
+        assertEquals(expectedAaclUsage.getTotalShare(), actualAaclUsage.getTotalShare());
         assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
         assertEquals(expectedAaclUsage.getDetailLicenseeDiscipline(), actualAaclUsage.getDetailLicenseeDiscipline());
         assertEquals(expectedAaclUsage.getDetailLicenseeEnrollment(), actualAaclUsage.getDetailLicenseeEnrollment());
