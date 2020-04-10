@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -448,11 +449,13 @@ public class AaclUsageRepositoryIntegrationTest {
         List<Usage> usages = aaclUsageRepository.findByScenarioId(SCENARIO_ID_3);
         usages.sort(Comparator.comparing(Usage::getId));
         verifyAmounts(usages.get(0), "474.2846861858", "355.7135146393", "118.5711715464", "10.0000000000",
-            "500.0000000000");
-        verifyAmounts(usages.get(1), "8.6947406155", "6.5210554616", "2.1736851539", "0.3700000000", "0.7400000000");
+            "500.0000000000", "0.9000900090", "0.9970487357", "0.9485693724");
+        verifyAmounts(usages.get(1), "8.6947406155", "6.5210554616", "2.1736851539", "0.3700000000", "0.7400000000",
+            "0.0333033303", "0.0014756321", "0.0173894812");
         verifyAmounts(usages.get(2), "500.0000000000", "375.0000000000", "125.0000000000", "5.0000000000",
-            "50.0000000000");
-        verifyAmounts(usages.get(3), "17.0205731987", "12.7654298991", "4.2551432997", "0.7400000000", "0.7400000000");
+            "50.0000000000", "1.0000000000", "1.0000000000", "1.0000000000");
+        verifyAmounts(usages.get(3), "17.0205731987", "12.7654298991", "4.2551432997", "0.7400000000", "0.7400000000",
+            "0.0666066607", "0.0014756321", "0.0340411464");
     }
 
     @Test
@@ -860,12 +863,16 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     private void verifyAmounts(Usage usage, String grossAmount, String netAmount, String serviceFeeAmount,
-                               String volumeWeight, String valueWeight) {
+                               String volumeWeight, String valueWeight, String volumeShare, String valueShare,
+                               String totalShare) {
         assertEquals(new BigDecimal(grossAmount), usage.getGrossAmount());
         assertEquals(new BigDecimal(netAmount), usage.getNetAmount());
         assertEquals(new BigDecimal(serviceFeeAmount), usage.getServiceFeeAmount());
         assertEquals(new BigDecimal("0.25000"), usage.getServiceFee());
         assertEquals(new BigDecimal(volumeWeight), usage.getAaclUsage().getVolumeWeight());
         assertEquals(new BigDecimal(valueWeight), usage.getAaclUsage().getValueWeight());
+        assertEquals(new BigDecimal(volumeShare), usage.getAaclUsage().getVolumeShare());
+        assertEquals(new BigDecimal(valueShare), usage.getAaclUsage().getValueShare());
+        assertEquals(new BigDecimal(totalShare), usage.getAaclUsage().getTotalShare());
     }
 }

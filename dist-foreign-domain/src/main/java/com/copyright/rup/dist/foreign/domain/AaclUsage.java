@@ -37,6 +37,9 @@ public class AaclUsage {
     private BigDecimal publicationTypeWeight;
     private BigDecimal volumeWeight;
     private BigDecimal valueWeight;
+    private BigDecimal valueShare;
+    private BigDecimal volumeShare;
+    private BigDecimal totalShare;
 
     public BigDecimal getPublicationTypeWeight() {
         return publicationTypeWeight;
@@ -190,6 +193,30 @@ public class AaclUsage {
         this.valueWeight = valueWeight;
     }
 
+    public BigDecimal getValueShare() {
+        return valueShare;
+    }
+
+    public void setValueShare(BigDecimal valueShare) {
+        this.valueShare = valueShare;
+    }
+
+    public BigDecimal getVolumeShare() {
+        return volumeShare;
+    }
+
+    public void setVolumeShare(BigDecimal volumeShare) {
+        this.volumeShare = volumeShare;
+    }
+
+    public BigDecimal getTotalShare() {
+        return totalShare;
+    }
+
+    public void setTotalShare(BigDecimal totalShare) {
+        this.totalShare = totalShare;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -219,6 +246,9 @@ public class AaclUsage {
             .append(baselineId, that.baselineId)
             .append(volumeWeight, that.volumeWeight)
             .append(valueWeight, that.valueWeight)
+            .append(volumeShare, that.volumeShare)
+            .append(valueShare, that.valueShare)
+            .append(totalShare, that.totalShare)
             .isEquals();
     }
 
@@ -244,6 +274,9 @@ public class AaclUsage {
             .append(baselineId)
             .append(volumeWeight)
             .append(valueWeight)
+            .append(volumeShare)
+            .append(valueShare)
+            .append(totalShare)
             .toHashCode();
     }
 
@@ -269,6 +302,9 @@ public class AaclUsage {
             .append("baselineId", baselineId)
             .append("volumeWeight", volumeWeight)
             .append("valueWeight", valueWeight)
+            .append("volumeShare", volumeShare)
+            .append("valueShare", valueShare)
+            .append("totalShare", totalShare)
             .toString();
     }
 }

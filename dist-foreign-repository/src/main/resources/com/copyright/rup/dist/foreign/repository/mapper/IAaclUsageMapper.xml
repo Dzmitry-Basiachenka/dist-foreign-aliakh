@@ -39,6 +39,9 @@
         <result property="aaclUsage.baselineId" column="baseline_uid"/>
         <result property="aaclUsage.volumeWeight" column="volume_weight"/>
         <result property="aaclUsage.valueWeight" column="value_weight"/>
+        <result property="aaclUsage.volumeShare" column="volume_share"/>
+        <result property="aaclUsage.valueShare" column="value_share"/>
+        <result property="aaclUsage.totalShare" column="total_share"/>
     </resultMap>
 
     <resultMap id="aaclUsageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
@@ -116,6 +119,9 @@
         uaacl.baseline_uid,
         uaacl.volume_weight,
         uaacl.value_weight,
+        uaacl.volume_share,
+        uaacl.value_share,
+        uaacl.total_share,
         dlc.discipline detail_licensee_discipline,
         dlc.enrollment_profile detail_licensee_enrollment,
         uaacl.original_publication_type,
@@ -965,8 +971,12 @@
             set
                 volume_weight = weights.volume_weight,
                 value_weight = weights.value_weight,
+                volume_share = weights.volume_weight / volume_denominator,
+                value_share = weights.value_weight / value_denominator,
+                total_share = (weights.volume_weight / volume_denominator + weights.value_weight / value_denominator) / 2,
                 <include refid="StoredEntityMapper.update"/>
             from weights
+            join denominators on denominators.aggregateId = weights.aggregateId
             where ua.df_usage_aacl_uid = weights.df_usage_uid
         )
         update ${schema}.df_usage u

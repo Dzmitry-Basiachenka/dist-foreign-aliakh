@@ -276,6 +276,9 @@ public class CreateAaclScenarioIntegrationTestBuilder {
             assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
             assertEquals(expectedAaclUsage.getVolumeWeight(), actualAaclUsage.getVolumeWeight());
             assertEquals(expectedAaclUsage.getValueWeight(), actualAaclUsage.getValueWeight());
+            assertEquals(expectedAaclUsage.getVolumeShare(), actualAaclUsage.getVolumeShare());
+            assertEquals(expectedAaclUsage.getValueShare(), actualAaclUsage.getValueShare());
+            assertEquals(expectedAaclUsage.getTotalShare(), actualAaclUsage.getTotalShare());
         }
 
         private void assertPublicationType(PublicationType expectedPublicationType,
