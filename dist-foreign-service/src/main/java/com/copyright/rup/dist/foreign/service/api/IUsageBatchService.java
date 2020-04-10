@@ -138,7 +138,7 @@ public interface IUsageBatchService {
     List<String> getProcessingAaclBatchesNames(Set<String> batchesIds);
 
     /**
-     * Gets names of batches that have usages in status, different from .
+     * Gets names of batches that have usages in status, different from ELIGIBLE.
      *
      * @param batchesIds set of batches ids
      * @return list of batches names
