@@ -146,7 +146,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
             formatAmount(scenarioWithAmounts.getServiceFeeTotal())));
         netTotalLabel.setValue(ForeignUi.getMessage("label.net_amount_in_usd",
             formatAmount(scenarioWithAmounts.getNetTotal())));
-        cutoffAmt.setValue(ForeignUi.getMessage("label.cutoff_amt_in_usd",
+        cutoffAmt.setValue(ForeignUi.getMessage("label.title_cutoff_amount",
             formatAmount(scenarioWithAmounts.getAaclFields().getTitleCutoffAmount())));
         descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenarioWithAmounts.getDescription()));
         selectionCriteriaLabel.setValue(getController().getCriteriaHtmlRepresentation());
