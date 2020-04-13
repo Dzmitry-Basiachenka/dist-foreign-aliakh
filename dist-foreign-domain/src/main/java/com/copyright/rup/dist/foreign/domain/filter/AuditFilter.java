@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -128,7 +129,7 @@ public class AuditFilter {
             && StringUtils.isBlank(cccEventId)
             && StringUtils.isBlank(distributionName)
             && StringUtils.isBlank(searchValue)
-            && null == usagePeriod;
+            && Objects.isNull(usagePeriod);
     }
 
     @Override
