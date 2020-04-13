@@ -41,7 +41,7 @@ public class AaclScenarioParameterWidgetTest {
     @Before
     public void setUp() {
         window = new AaclCommonScenarioParameterWindowMock();
-        widget = new AaclScenarioParameterWidget<>(CAPTION, () -> DEFAULT_VALUE, () -> window);
+        widget = new AaclScenarioParameterWidget<>(CAPTION, DEFAULT_VALUE, () -> window);
     }
 
     @Test

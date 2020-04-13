@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.shared.ui.MarginInfo;
@@ -93,7 +94,6 @@ public class AaclScenariosWidgetTest {
         scenario.setAaclFields(buildAaclFields());
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
-        expect(usageController.getUsageAges()).andReturn(buildUsageAges()).once();
         replay(controller, usageController);
         scenariosWidget.init();
         scenariosWidget.initMediator();
@@ -136,6 +136,8 @@ public class AaclScenariosWidgetTest {
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).times(2);
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).times(2);
         expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).times(2);
+        expect(usageController.getDefaultUsageAges(Lists.newArrayList(2019, 2018)))
+            .andReturn(buildUsageAges()).times(2);
         replay(controller, usageController);
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
@@ -155,6 +157,8 @@ public class AaclScenariosWidgetTest {
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).once();
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
         expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
+        expect(usageController.getDefaultUsageAges(Lists.newArrayList(2019, 2018)))
+            .andReturn(buildUsageAges()).once();
         replay(controller, usageController);
         scenariosWidget.selectScenario(scenario);
         assertEquals(scenario, grid.getSelectedItems().iterator().next());
@@ -175,6 +179,8 @@ public class AaclScenariosWidgetTest {
         expect(usageController.getFundPoolById(FUND_POOL_ID)).andReturn(fundPool).once();
         expect(usageController.getFundPoolDetails(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
         expect(usageController.getPublicationTypes()).andReturn(buildPublicationTypes()).once();
+        expect(usageController.getDefaultUsageAges(Lists.newArrayList(2019, 2018)))
+            .andReturn(buildUsageAges()).once();
         replay(controller, usageController, grid);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();
@@ -330,6 +336,7 @@ public class AaclScenariosWidgetTest {
         AaclFields aaclFields = new AaclFields();
         aaclFields.setFundPoolId(FUND_POOL_ID);
         aaclFields.setTitleCutoffAmount(new BigDecimal("1.35"));
+        aaclFields.setUsageAges(buildUsageAges());
         return aaclFields;
     }
 
