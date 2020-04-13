@@ -23,9 +23,4 @@ public interface ICommonAuditWidget extends IWidget<ICommonAuditController>, IRe
      * @return search value string.
      */
     String getSearchValue();
-
-    /**
-     * @return message for search field
-     */
-    String initSearchMessage();
 }

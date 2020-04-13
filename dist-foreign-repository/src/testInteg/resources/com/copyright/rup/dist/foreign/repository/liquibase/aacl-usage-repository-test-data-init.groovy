@@ -620,7 +620,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-03-17-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for Audit")
+        comment("Insert test data for testFindForAudit")
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'c480ba67-82f3-4aad-a966-4586da4898e6')
@@ -767,7 +767,6 @@ databaseChangeLog {
             column(name: 'action_reason', value: 'Uploaded in \'AACL batch 1\' Batch')
             column(name: 'created_by_user', value: 'SYSTEM')
             column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2012-03-15 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -775,7 +774,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'f89f016d-0cc7-46b6-9f3f-63d2439458d5')
             column(name: 'action_type_ind', value: 'WORK_FOUND')
             column(name: 'action_reason', value: 'Wr Wrk Inst 269040892 was found by standard number 1008902112377654XX')
-            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -783,7 +781,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '49680a3e-2986-44f5-943c-3701d80f2d3d')
             column(name: 'action_type_ind', value: 'WORK_FOUND')
             column(name: 'action_reason', value: 'Wr Wrk Inst 122830309 was found by standard number 1008902112377654XX')
-            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -791,7 +788,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '870ee1dc-8596-409f-8ffe-717d17a33c9e')
             column(name: 'action_type_ind', value: 'WORK_FOUND')
             column(name: 'action_reason', value: 'Wr Wrk Inst 269040892 was found by standard number 1008902112377654XX')
-            column(name: 'created_datetime', value: '2019-04-01')
         }
     }
 
