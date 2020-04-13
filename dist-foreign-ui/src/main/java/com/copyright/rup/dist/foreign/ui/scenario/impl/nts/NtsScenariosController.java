@@ -69,21 +69,6 @@ public class NtsScenariosController extends CommonScenariosController implements
     }
 
     @Override
-    protected INtsScenariosWidget instantiateWidget() {
-        return new NtsScenariosWidget(scenarioHistoryController);
-    }
-
-    @Override
-    protected INtsScenarioController getScenarioController() {
-        return scenarioController;
-    }
-
-    @Override
-    protected ICommonScenarioWidget initScenarioWidget() {
-        return scenarioController.initWidget();
-    }
-
-    @Override
     public String getCriteriaHtmlRepresentation() {
         ScenarioUsageFilter filter =
             getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId());
@@ -125,5 +110,20 @@ public class NtsScenariosController extends CommonScenariosController implements
                 getScenarioService().deleteScenario(scenario);
                 getWidget().refresh();
             });
+    }
+
+    @Override
+    protected INtsScenariosWidget instantiateWidget() {
+        return new NtsScenariosWidget(scenarioHistoryController);
+    }
+
+    @Override
+    protected INtsScenarioController getScenarioController() {
+        return scenarioController;
+    }
+
+    @Override
+    protected ICommonScenarioWidget initScenarioWidget() {
+        return scenarioController.initWidget();
     }
 }
