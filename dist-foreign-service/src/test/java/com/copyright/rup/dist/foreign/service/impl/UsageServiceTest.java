@@ -297,7 +297,7 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetAuditItemsCount() {
+    public void testGetCountForAudit() {
         AuditFilter filter = new AuditFilter();
         expect(usageRepository.findCountForAudit(filter)).andReturn(1).once();
         replay(usageRepository);

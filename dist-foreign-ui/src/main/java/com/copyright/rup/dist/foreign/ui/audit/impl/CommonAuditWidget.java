@@ -88,6 +88,11 @@ public abstract class CommonAuditWidget extends HorizontalSplitPanel implements 
     }
 
     /**
+     * @return message for search field
+     */
+    protected abstract String initSearchMessage();
+
+    /**
      * Adds a column to the audit grid.
      *
      * @param provider        the column value provider
