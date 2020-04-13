@@ -62,26 +62,6 @@ public class AaclScenariosController extends CommonScenariosController implement
     }
 
     @Override
-    protected IAaclScenariosWidget instantiateWidget() {
-        return new AaclScenariosWidget(this, scenarioHistoryController, aaclUsageController);
-    }
-
-    @Override
-    protected ICommonScenarioController getScenarioController() {
-        return scenarioController;
-    }
-
-    @Override
-    protected ICommonScenarioWidget initScenarioWidget() {
-        return scenarioController.initWidget();
-    }
-
-    @Override
-    public List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId) {
-        return licenseeClassService.getDetailLicenseeClassesByScenarioId(scenarioId);
-    }
-
-    @Override
     public String getCriteriaHtmlRepresentation() {
         ScenarioUsageFilter filter =
             getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId());
@@ -112,5 +92,25 @@ public class AaclScenariosController extends CommonScenariosController implement
                 aaclScenarioService.deleteScenario(scenario);
                 getWidget().refresh();
             });
+    }
+
+    @Override
+    public List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId) {
+        return licenseeClassService.getDetailLicenseeClassesByScenarioId(scenarioId);
+    }
+
+    @Override
+    protected IAaclScenariosWidget instantiateWidget() {
+        return new AaclScenariosWidget(this, scenarioHistoryController, aaclUsageController);
+    }
+
+    @Override
+    protected ICommonScenarioController getScenarioController() {
+        return scenarioController;
+    }
+
+    @Override
+    protected ICommonScenarioWidget initScenarioWidget() {
+        return scenarioController.initWidget();
     }
 }
