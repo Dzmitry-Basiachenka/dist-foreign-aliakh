@@ -7,9 +7,15 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 
 import com.copyright.rup.dist.foreign.ui.usage.impl.AbstractViewUsageBatchWindow;
+
 import com.vaadin.server.SerializableComparator;
+import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.renderers.LocalDateRenderer;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.time.format.DateTimeFormatter;
 
 /**
  * Modal window that provides functionality for viewing and deleting {@link UsageBatch}es.
@@ -49,6 +55,15 @@ class ViewUsageBatchWindow extends AbstractViewUsageBatchWindow {
     @Override
     protected String getDeleteErrorMessage(String fieldName, String namesList) {
         return ForeignUi.getMessage("message.error.delete_action", "Usage batch", fieldName, namesList);
+    }
+
+    @Override
+    protected SerializablePredicate<UsageBatch> getSearchFilter(String searchValue) {
+        return batch -> StringUtils.containsIgnoreCase(batch.getName(), searchValue)
+            || StringUtils.containsIgnoreCase(batch.getRro().getName(), searchValue)
+            || StringUtils.containsIgnoreCase(batch.getRro().getAccountNumber().toString(), searchValue)
+            || StringUtils.containsIgnoreCase(batch.getPaymentDate()
+            .format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)), searchValue);
     }
 
     @Override

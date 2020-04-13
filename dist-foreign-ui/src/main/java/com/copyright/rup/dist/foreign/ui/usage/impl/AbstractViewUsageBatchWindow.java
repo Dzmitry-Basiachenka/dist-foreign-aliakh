@@ -12,17 +12,18 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.SerializableComparator;
+import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -72,13 +73,9 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
     public void performSearch() {
         ListDataProvider<UsageBatch> dataProvider = (ListDataProvider<UsageBatch>) grid.getDataProvider();
         dataProvider.clearFilters();
-        String search = searchWidget.getSearchValue();
-        if (StringUtils.isNotBlank(search)) {
-            dataProvider.setFilter(batch -> StringUtils.containsIgnoreCase(batch.getName(), search)
-                || StringUtils.containsIgnoreCase(batch.getRro().getName(), search)
-                || StringUtils.containsIgnoreCase(batch.getRro().getAccountNumber().toString(), search)
-                || StringUtils.containsIgnoreCase(batch.getPaymentDate()
-                .format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)), search));
+        String searchValue = searchWidget.getSearchValue();
+        if (StringUtils.isNotBlank(searchValue)) {
+            dataProvider.setFilter(getSearchFilter(searchValue));
         }
         // Gets round an issue when Vaadin do not recalculates columns widths once vertical scroll is disappeared
         grid.recalculateColumnWidths();
@@ -175,6 +172,14 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
      * @param dataGrid instance of {@link Grid}
      */
     protected abstract void addGridColumns(Grid<UsageBatch> dataGrid);
+
+    /**
+     * Gets {@link SerializablePredicate} to filter batches based on search value.
+     *
+     * @param searchValue search value
+     * @return instance of  {@link SerializablePredicate}
+     */
+    protected abstract SerializablePredicate<UsageBatch> getSearchFilter(String searchValue);
 
     private void initMediator() {
         ViewUsageBatchMediator mediator = new ViewUsageBatchMediator();
