@@ -139,6 +139,14 @@ public interface IAaclUsageController extends ICommonUsageController {
     int insertFundPool(FundPool fundPool, List<FundPoolDetail> details);
 
     /**
+     * Gets list of default {@link UsageAge}s by list of periods.
+     *
+     * @param periods list of periods
+     * @return list of default {@link UsageAge}s
+     */
+    List<UsageAge> getDefaultUsageAges(List<Integer> periods);
+
+    /**
      * Gets list of {@link UsageAge}s by filter.
      *
      * @return list of found {@link UsageAge}s

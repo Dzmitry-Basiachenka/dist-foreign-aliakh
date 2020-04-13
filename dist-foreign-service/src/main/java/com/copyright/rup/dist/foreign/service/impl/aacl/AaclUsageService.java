@@ -203,8 +203,7 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
-    public List<UsageAge> getUsageAges(UsageFilter filter) {
-        List<Integer> periods = aaclUsageRepository.findUsagePeriodsByFilter(filter);
+    public List<UsageAge> getDefaultUsageAges(List<Integer> periods) {
         List<UsageAge> usageAges = new ArrayList<>();
         IntStream.range(0, CollectionUtils.size(periods))
             .forEach(index -> {
@@ -214,6 +213,11 @@ public class AaclUsageService implements IAaclUsageService {
                 usageAges.add(usageAge);
             });
         return usageAges;
+    }
+
+    @Override
+    public List<UsageAge> getUsageAges(UsageFilter filter) {
+        return getDefaultUsageAges(aaclUsageRepository.findUsagePeriodsByFilter(filter));
     }
 
     @Override

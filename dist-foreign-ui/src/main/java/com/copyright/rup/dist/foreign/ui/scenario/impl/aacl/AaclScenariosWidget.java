@@ -117,13 +117,13 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
             Windows.showModalWindow(new ViewAaclFundPoolDetailsWindow(fundPool, fundPoolDetails)));
         licenseeClassMappingWidget = new AaclScenarioParameterWidget<>(
             ForeignUi.getMessage("button.licensee_class_mapping"),
-            Collections::emptyList, () -> new AggregateLicenseeClassMappingWindow(false));
+            Collections.emptyList(), () -> new AggregateLicenseeClassMappingWindow(false));
         publicationTypeWeightWidget = new AaclScenarioParameterWidget<>(
             ForeignUi.getMessage("button.publication_type_weights"),
-            usageController::getPublicationTypes, () -> new PublicationTypeWeightsWindow(false));
+            usageController.getPublicationTypes(), () -> new PublicationTypeWeightsWindow(false));
         usageAgeWeightWidget = new AaclScenarioParameterWidget<>(
             ForeignUi.getMessage("button.usage_age_weights"),
-            usageController::getUsageAges, () -> new AaclUsageAgeWeightWindow(false));
+            Collections.emptyList(), () -> new AaclUsageAgeWeightWindow(false));
         descriptionLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout metadataLayout =
             new VerticalLayout(ownerLabel, grossTotalLabel, serviceFeeTotalLabel, netTotalLabel,
@@ -153,7 +153,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
         licenseeClassMappingWidget.setAppliedParameters(
             controller.getDetailLicenseeClassesByScenarioId(scenarioWithAmounts.getId()));
         updatePublicationTypeWeightWidget(scenarioWithAmounts.getAaclFields());
-        usageAgeWeightWidget.setAppliedParameters(scenarioWithAmounts.getAaclFields().getUsageAges());
+        updateUsageAgeWeightWidget(scenarioWithAmounts);
     }
 
     private void updatePublicationTypeWeightWidget(AaclFields aaclFields) {
@@ -164,6 +164,13 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
             .stream()
             .peek(pubType -> pubType.setName(idsToPublicationTypeNames.get(pubType.getId())))
             .collect(Collectors.toList()));
+    }
+
+    private void updateUsageAgeWeightWidget(Scenario scenarioWithAmounts) {
+        List<UsageAge> usageAges = scenarioWithAmounts.getAaclFields().getUsageAges();
+        usageAgeWeightWidget.setDefaultParameters(usageController.getDefaultUsageAges(
+            usageAges.stream().map(UsageAge::getPeriod).collect(Collectors.toList())));
+        usageAgeWeightWidget.setAppliedParameters(usageAges);
     }
 
     private void addButtonsListeners() {

@@ -95,6 +95,14 @@ public interface IAaclUsageService {
     List<Integer> getUsagePeriods();
 
     /**
+     * Gets list of default {@link UsageAge}s by list of periods.
+     *
+     * @param periods list of periods
+     * @return list of default {@link UsageAge}s
+     */
+    List<UsageAge> getDefaultUsageAges(List<Integer> periods);
+
+    /**
      * Gets list of {@link UsageAge}s by {@link UsageFilter}.
      *
      * @param filter {@link UsageFilter} instance

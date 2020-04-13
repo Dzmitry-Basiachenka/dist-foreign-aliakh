@@ -42,7 +42,7 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
-import org.apache.commons.collections4.CollectionUtils;
+import com.google.common.collect.Lists;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Rule;
@@ -299,20 +299,17 @@ public class AaclUsageServiceTest {
     }
 
     @Test
+    public void testGetDefaultUsageAges() {
+        verifyUsageAges(aaclUsageService.getDefaultUsageAges(buildUsagePeriods()));
+    }
+
+    @Test
     public void testGetUsageAges() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Collections.singleton("8adb441e-a709-4f58-8dc0-9264bfac2e23"));
-        List<Integer> usagePeriods = Arrays.asList(2020, 2019, 2017, 2016, 2014, 2012);
-        expect(aaclUsageRepository.findUsagePeriodsByFilter(filter)).andReturn(usagePeriods).once();
+        expect(aaclUsageRepository.findUsagePeriodsByFilter(filter)).andReturn(buildUsagePeriods()).once();
         replay(aaclUsageRepository);
-        List<UsageAge> usageAges = aaclUsageService.getUsageAges(filter);
-        assertEquals(6, CollectionUtils.size(usageAges));
-        assertEquals(buildUsageAge(2020, new BigDecimal("1.00")), usageAges.get(0));
-        assertEquals(buildUsageAge(2019, new BigDecimal("0.75")), usageAges.get(1));
-        assertEquals(buildUsageAge(2017, new BigDecimal("0.50")), usageAges.get(2));
-        assertEquals(buildUsageAge(2016, new BigDecimal("0.25")), usageAges.get(3));
-        assertEquals(buildUsageAge(2014, new BigDecimal("0.00")), usageAges.get(4));
-        assertEquals(buildUsageAge(2012, new BigDecimal("0.00")), usageAges.get(5));
+        verifyUsageAges(aaclUsageService.getUsageAges(filter));
         verify(aaclUsageRepository);
     }
 
@@ -572,5 +569,19 @@ public class AaclUsageServiceTest {
         detail.setAggregateLicenseeClass(alc);
         detail.setGrossAmount(amount);
         return detail;
+    }
+
+    private List<Integer> buildUsagePeriods() {
+        return Lists.newArrayList(2020, 2019, 2017, 2016, 2014, 2012);
+    }
+
+    private void verifyUsageAges(List<UsageAge> usageAges) {
+        assertEquals(6, usageAges.size());
+        assertEquals(buildUsageAge(2020, new BigDecimal("1.00")), usageAges.get(0));
+        assertEquals(buildUsageAge(2019, new BigDecimal("0.75")), usageAges.get(1));
+        assertEquals(buildUsageAge(2017, new BigDecimal("0.50")), usageAges.get(2));
+        assertEquals(buildUsageAge(2016, new BigDecimal("0.25")), usageAges.get(3));
+        assertEquals(buildUsageAge(2014, new BigDecimal("0.00")), usageAges.get(4));
+        assertEquals(buildUsageAge(2012, new BigDecimal("0.00")), usageAges.get(5));
     }
 }

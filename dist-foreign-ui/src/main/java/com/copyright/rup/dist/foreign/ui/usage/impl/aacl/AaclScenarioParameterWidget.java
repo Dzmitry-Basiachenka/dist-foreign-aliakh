@@ -26,39 +26,39 @@ import java.util.function.Supplier;
 public class AaclScenarioParameterWidget<T> extends HorizontalLayout {
 
     private final Supplier<AaclCommonScenarioParameterWindow<T>> windowSupplier;
-    private final Supplier<T> defaultParametersSupplier;
+    private T defaultParameters;
     private T appliedParameters;
     private Button button;
 
     /**
      * Constructor.
      *
-     * @param caption                   button caption
-     * @param defaultParametersSupplier supplier for getting default parameter
-     * @param windowInitializer         supplier for window initialization
+     * @param caption           button caption
+     * @param defaultParameters default parameters
+     * @param windowInitializer supplier for window initialization
      */
-    public AaclScenarioParameterWidget(String caption, Supplier<T> defaultParametersSupplier,
+    public AaclScenarioParameterWidget(String caption, T defaultParameters,
                                        Supplier<AaclCommonScenarioParameterWindow<T>> windowInitializer) {
         this.windowSupplier = windowInitializer;
-        this.defaultParametersSupplier = defaultParametersSupplier;
-        this.appliedParameters = defaultParametersSupplier.get();
+        this.defaultParameters = defaultParameters;
+        this.appliedParameters = defaultParameters;
         initButton(caption);
         addComponent(button);
         setExpandRatio(button, 1);
     }
 
-    /**
-     * @return applied parameters.
-     */
+    public T getDefaultParameters() {
+        return defaultParameters;
+    }
+
+    public void setDefaultParameters(T defaultParameters) {
+        this.defaultParameters = defaultParameters;
+    }
+
     public T getAppliedParameters() {
         return appliedParameters;
     }
 
-    /**
-     * Sets applied parameters.
-     *
-     * @param appliedParameters applied parameters
-     */
     public void setAppliedParameters(T appliedParameters) {
         this.appliedParameters = appliedParameters;
     }
@@ -69,7 +69,7 @@ public class AaclScenarioParameterWidget<T> extends HorizontalLayout {
         VaadinUtils.setButtonsAutoDisabled(button);
         button.addClickListener(event -> {
             AaclCommonScenarioParameterWindow<T> parameterWindow = windowSupplier.get();
-            parameterWindow.setDefault(defaultParametersSupplier.get());
+            parameterWindow.setDefault(defaultParameters);
             parameterWindow.setAppliedParameters(appliedParameters);
             Windows.showModalWindow(parameterWindow);
             parameterWindow.addListener(ParametersSaveEvent.class,

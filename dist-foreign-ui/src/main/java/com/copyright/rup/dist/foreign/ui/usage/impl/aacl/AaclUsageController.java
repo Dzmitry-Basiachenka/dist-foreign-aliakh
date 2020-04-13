@@ -214,6 +214,11 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
+    public List<UsageAge> getDefaultUsageAges(List<Integer> periods) {
+        return aaclUsageService.getDefaultUsageAges(periods);
+    }
+
+    @Override
     public List<UsageAge> getUsageAges() {
         return aaclUsageService.getUsageAges(getUsageFilterController().getWidget().getAppliedFilter());
     }

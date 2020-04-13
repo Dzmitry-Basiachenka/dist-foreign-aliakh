@@ -144,19 +144,19 @@ class CreateAaclScenarioWindow extends Window {
     private void initUsageAgeWeightsWidget() {
         usageAgeWeightWidget =
             new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.usage_age_weights"),
-                controller::getUsageAges, () -> new AaclUsageAgeWeightWindow(true));
+                controller.getUsageAges(), () -> new AaclUsageAgeWeightWindow(true));
     }
 
     private void initPubTypeWeightsWidget() {
         publicationTypeWeightWidget =
             new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.publication_type_weights"),
-                controller::getPublicationTypes, () -> new PublicationTypeWeightsWindow(true));
+                controller.getPublicationTypes(), () -> new PublicationTypeWeightsWindow(true));
     }
 
     private void initLicenseeClassesMappingWidget() {
         licenseeClassMappingWidget =
             new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
-                controller::getDetailLicenseeClasses, () -> new AggregateLicenseeClassMappingWindow(true));
+                controller.getDetailLicenseeClasses(), () -> new AggregateLicenseeClassMappingWindow(true));
     }
 
     private void initDescriptionArea() {

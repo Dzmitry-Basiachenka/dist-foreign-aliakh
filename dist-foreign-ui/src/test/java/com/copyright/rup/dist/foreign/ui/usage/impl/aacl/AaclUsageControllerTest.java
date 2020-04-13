@@ -49,6 +49,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterControll
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
 
+import com.google.common.collect.Lists;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.io.IOUtils;
@@ -390,9 +391,17 @@ public class AaclUsageControllerTest {
     }
 
     @Test
+    public void testGetDefaultUsageAges() {
+        List<UsageAge> usageAges = buildUsageAges();
+        expect(aaclUsageService.getDefaultUsageAges(Lists.newArrayList(2020, 2018))).andReturn(usageAges).once();
+        replay(aaclUsageService, filterWidgetMock, filterController);
+        assertEquals(usageAges, controller.getDefaultUsageAges(Lists.newArrayList(2020, 2018)));
+        verify(aaclUsageService, filterWidgetMock, filterController);
+    }
+
+    @Test
     public void testGetUsageAges() {
-        List<UsageAge> usageAges =
-            Arrays.asList(buildUsageAge(2020, new BigDecimal("1.00")), buildUsageAge(2018, new BigDecimal("0.75")));
+        List<UsageAge> usageAges = buildUsageAges();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         expect(aaclUsageService.getUsageAges(usageFilter)).andReturn(usageAges).once();
@@ -463,6 +472,12 @@ public class AaclUsageControllerTest {
         assertEquals(aggregateLicenseeClasses,
             controller.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, detailLicenseeClasses));
         verify(aaclUsageService, filterWidgetMock, filterController);
+    }
+
+    private List<UsageAge> buildUsageAges() {
+        return Lists.newArrayList(
+            buildUsageAge(2020, new BigDecimal("1.00")),
+            buildUsageAge(2018, new BigDecimal("0.75")));
     }
 
     private UsageAge buildUsageAge(Integer period, BigDecimal weight) {
