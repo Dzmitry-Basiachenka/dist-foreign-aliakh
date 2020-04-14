@@ -259,7 +259,7 @@ public interface IAaclUsageRepository {
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED} and
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#LOCKED} to
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}.
-     * Sets scenario id to {@code null}, sets gross amount to 0.
+     * Sets scenario id to {@code null}, sets amounts values to 0, sets shares and weights values to {@code null}.
      *
      * @param scenarioId scenario id
      * @param userName   user name

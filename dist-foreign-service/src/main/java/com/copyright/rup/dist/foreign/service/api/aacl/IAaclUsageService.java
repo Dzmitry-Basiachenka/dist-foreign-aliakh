@@ -238,7 +238,7 @@ public interface IAaclUsageService {
     /**
      * Deletes usages from AACL scenario. Reverts status of usages to
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, sets scenario id to {@code null},
-     * sets gross amount to 0.
+     * sets amounts values to 0, sets shares and weights values to {@code null}.
      *
      * @param scenarioId scenario id
      */
