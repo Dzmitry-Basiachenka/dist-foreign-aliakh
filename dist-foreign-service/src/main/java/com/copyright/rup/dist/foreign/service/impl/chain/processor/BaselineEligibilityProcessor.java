@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Objects;
 
 /**
  * Implementation of {@link AbstractUsageChainProcessor} to make {@link Usage} eligible.
@@ -37,7 +38,7 @@ public class BaselineEligibilityProcessor extends AbstractUsageChainProcessor {
     @Transactional
     @Profiled(tag = "BaselineEligibilityProcessor.process")
     public void process(Usage usage) {
-        if (null != usage.getAaclUsage().getBaselineId()) {
+        if (Objects.nonNull(usage.getAaclUsage().getBaselineId())) {
             LOGGER.trace("Usage Baseline Eligibility processor. Started. UsageId={}", usage.getId());
             usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);
             usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
