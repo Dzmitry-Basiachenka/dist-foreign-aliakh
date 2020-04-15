@@ -10,9 +10,11 @@
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2016 FR",
       "numberOfPages": 35,
-      "detailLicenseeClassId": 143,
-      "detailLicenseeDiscipline": "Engineering",
-      "detailLicenseeEnrollment": "EXGP",
+      "detailLicenseeClass": {
+        "id": 143,
+        "discipline": "Engineering",
+        "enrollmentProfile": "EXGP"
+      },
       "usageAge": {
         "period": 2016
       },

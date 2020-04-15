@@ -22,7 +22,11 @@
       "batchPeriodEndDate": "2019-06-30",
       "rightLimitation": "ALL",
       "numberOfPages": 15,
-      "detailLicenseeClassId": 113,
+      "detailLicenseeClass": {
+        "id": 113,
+        "discipline": "Life Sciences",
+        "enrollmentProfile": "MU"
+      },
       "usageAge": {
         "period": 2018
       },
@@ -32,8 +36,6 @@
         "weight": 1.71
       },
       "originalPublicationType": "Textbook",
-      "detailLicenseeDiscipline": "Life Sciences",
-      "detailLicenseeEnrollment": "MU",
       "baselineId": "3b483859-f398-48cd-b3a2-76e1f7b8412d"
     }
   },
@@ -60,7 +62,11 @@
       "batchPeriodEndDate": "2019-06-30",
       "rightLimitation": "PRINT",
       "numberOfPages": 25,
-      "detailLicenseeClassId": 195,
+      "detailLicenseeClass": {
+        "id": 195,
+        "discipline": "Medical & Health",
+        "enrollmentProfile": "HGP"
+      },
       "usageAge": {
         "period": 2018
       },
@@ -70,8 +76,6 @@
         "weight": 4.29
       },
       "originalPublicationType": "Book series",
-      "detailLicenseeDiscipline": "Medical & Health",
-      "detailLicenseeEnrollment": "HGP",
       "baselineId": "81ee3d75-dd1b-4181-8d4c-f962ab6aa9e5"
     }
   },
@@ -92,18 +96,20 @@
       "usageSource": "Aug 2016 FR",
       "batchPeriodEndDate": "2019-06-30",
       "numberOfPages": 45,
+      "detailLicenseeClass": {
+        "id": 141,
+        "discipline": "Education",
+        "enrollmentProfile": "MU"
+      },
       "usageAge": {
         "period": 2016
       },
-      "detailLicenseeClassId": 141,
       "publicationType": {
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
         "name": "Book",
         "weight": 3.50
       },
       "originalPublicationType": "Fiction or Poetry",
-      "detailLicenseeDiscipline": "Education",
-      "detailLicenseeEnrollment": "MU",
       "baselineId": "0dab496e-e126-4607-bafe-adf205d6ec54"
     }
   },

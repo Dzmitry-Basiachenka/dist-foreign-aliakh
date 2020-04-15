@@ -17,12 +17,14 @@
     "serviceFeeAmount": 420.0000000000,
     "netAmount": 80.0000000000,
     "aaclUsage": {
-      "detailLicenseeClassId": "143",
-      "detailLicenseeEnrollment": "EXGP",
-      "detailLicenseeDiscipline": "Engineering",
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2020 TUR",
       "numberOfPages": 6,
+      "detailLicenseeClass": {
+        "id": 143,
+        "discipline": "Engineering",
+        "enrollmentProfile": "EXGP"
+      },
       "publicationType": {
         "name": "Consumer Magazine"
       },

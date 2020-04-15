@@ -48,9 +48,9 @@ public class AaclUsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getSystemTitle());
         beanProperties.add(formatStringStartedWithZero(bean.getStandardNumber()));
         beanProperties.add(bean.getStandardNumberType());
-        beanProperties.add(getBeanPropertyAsString(bean.getAaclUsage().getDetailLicenseeClassId()));
-        beanProperties.add(bean.getAaclUsage().getDetailLicenseeEnrollment());
-        beanProperties.add(bean.getAaclUsage().getDetailLicenseeDiscipline());
+        beanProperties.add(getBeanPropertyAsString(bean.getAaclUsage().getDetailLicenseeClass().getId()));
+        beanProperties.add(bean.getAaclUsage().getDetailLicenseeClass().getEnrollmentProfile());
+        beanProperties.add(bean.getAaclUsage().getDetailLicenseeClass().getDiscipline());
         beanProperties.add(bean.getAaclUsage().getPublicationType().getName());
         beanProperties.add(bean.getAaclUsage().getInstitution());
         beanProperties.add(getBeanPropertyAsString(bean.getAaclUsage().getUsageAge().getPeriod()));

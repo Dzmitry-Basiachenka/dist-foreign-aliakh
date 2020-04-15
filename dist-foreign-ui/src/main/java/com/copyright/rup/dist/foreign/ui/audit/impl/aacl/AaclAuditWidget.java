@@ -74,12 +74,12 @@ public class AaclAuditWidget extends CommonAuditWidget implements IAaclAuditWidg
         addColumn(usage ->
                 CommonDateUtils.format(usage.getDistributionDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.distribution_date", "distributionDate", 105);
-        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClassId(), "table.column.det_lc_id",
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass().getId(), "table.column.det_lc_id",
             "detailLicenseeClassId", 80);
-        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeEnrollment(), "table.column.det_lc_enrollment",
-            "enrollmentProfile", 140);
-        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeDiscipline(), "table.column.det_lc_discipline",
-            "discipline", 140);
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass().getEnrollmentProfile(),
+            "table.column.det_lc_enrollment", "enrollmentProfile", 140);
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass().getDiscipline(),
+            "table.column.det_lc_discipline", "discipline", 140);
         addColumn(usage -> usage.getAaclUsage().getPublicationType().getName(), "table.column.publication_type",
             "publicationType", 140);
         addColumn(usage -> usage.getAaclUsage().getUsageAge().getPeriod(), "table.column.usage_period", "usagePeriod",

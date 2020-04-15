@@ -10,9 +10,11 @@
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2019 FR",
       "numberOfPages": 15,
-      "detailLicenseeClassId": 113,
-      "detailLicenseeDiscipline": "Life Sciences",
-      "detailLicenseeEnrollment": "MU",
+      "detailLicenseeClass": {
+        "id": 113,
+        "discipline": "Life Sciences",
+        "enrollmentProfile": "MU"
+      },
       "usageAge": {
         "period": 2019
       },

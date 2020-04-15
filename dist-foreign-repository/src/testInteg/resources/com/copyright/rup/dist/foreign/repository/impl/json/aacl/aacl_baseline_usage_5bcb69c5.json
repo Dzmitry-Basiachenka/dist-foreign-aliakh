@@ -10,9 +10,11 @@
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2018 FR",
       "numberOfPages": 25,
-      "detailLicenseeClassId": 195,
-      "detailLicenseeDiscipline": "Medical & Health",
-      "detailLicenseeEnrollment": "HGP",
+      "detailLicenseeClass": {
+        "id": 195,
+        "discipline": "Medical & Health",
+        "enrollmentProfile": "HGP"
+      },
       "publicationType": {
         "id": "a3dff475-fc06-4d8c-b7cc-f093073ada6f",
         "name": "News Source",

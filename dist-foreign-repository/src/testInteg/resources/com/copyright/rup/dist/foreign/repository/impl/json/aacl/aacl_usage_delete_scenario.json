@@ -17,9 +17,11 @@
       "usageSource": "Feb 2020 TUR",
       "rightLimitation": "PRINT",
       "numberOfPages": 100,
-      "detailLicenseeClassId": 171,
-      "detailLicenseeEnrollment": "EXGP",
-      "detailLicenseeDiscipline": "Arts & Humanities",
+      "detailLicenseeClass": {
+        "id": 171,
+        "discipline": "Arts & Humanities",
+        "enrollmentProfile": "EXGP"
+      },
       "usageAge": {
         "period": 2020
       },
@@ -47,9 +49,11 @@
       "rightLimitation": "DIGITAL",
       "numberOfPages": 200,
       "baselineId": "b012c81c-2370-458e-a6cb-349b66d08e6e",
-      "detailLicenseeClassId": 171,
-      "detailLicenseeEnrollment": "EXGP",
-      "detailLicenseeDiscipline": "Arts & Humanities",
+      "detailLicenseeClass": {
+        "id": 171,
+        "discipline": "Arts & Humanities",
+        "enrollmentProfile": "EXGP"
+      },
       "usageAge": {
         "period": 2019
       },

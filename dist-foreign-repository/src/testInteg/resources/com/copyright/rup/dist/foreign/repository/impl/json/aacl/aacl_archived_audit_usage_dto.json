@@ -21,13 +21,15 @@
     "netAmount": 80.0000000000,
     "rhAccountNumber": 1000002859,
     "aaclUsage": {
-      "detailLicenseeClassId": "143",
-      "detailLicenseeEnrollment": "EXGP",
-      "detailLicenseeDiscipline": "Engineering",
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Feb 2040 TUR",
       "numberOfPages": 341,
       "baselineId": "a4b26f19-674e-4874-865d-62be5962658e",
+      "detailLicenseeClass": {
+        "id": 143,
+        "discipline": "Engineering",
+        "enrollmentProfile": "EXGP"
+      },
       "publicationType": {
         "name": "Consumer Magazine"
       },

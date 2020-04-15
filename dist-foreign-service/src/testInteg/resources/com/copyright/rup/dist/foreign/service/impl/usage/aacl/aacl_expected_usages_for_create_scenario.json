@@ -16,7 +16,11 @@
       "usageSource": "Feb 2019 TUR",
       "rightLimitation": "PRINT",
       "numberOfPages": 12,
-      "detailLicenseeClassId": 108,
+      "detailLicenseeClass": {
+        "id": 108,
+        "discipline": "Life Sciences",
+        "enrollmentProfile": "EXGP"
+      },
       "publicationType": {
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
         "name": "Book",
@@ -25,8 +29,6 @@
       "usageAge": {
         "period": 2019
       },
-      "detailLicenseeDiscipline": "Life Sciences",
-      "detailLicenseeEnrollment": "EXGP",
       "volumeWeight": 3.7000000000,
       "valueWeight": 194.0280000000,
       "volumeShare": 0.3303571429,
@@ -62,7 +64,11 @@
       "usageSource": "Feb 2017 TUR",
       "rightLimitation": "ALL",
       "numberOfPages": 12,
-      "detailLicenseeClassId": 110,
+      "detailLicenseeClass": {
+        "id": 110,
+        "discipline": "Life Sciences",
+        "enrollmentProfile": "EXGP"
+      },
       "publicationType": {
         "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
         "name": "STMA Journal",
@@ -71,8 +77,6 @@
       "usageAge": {
         "period": 2017
       },
-      "detailLicenseeDiscipline": "Life Sciences",
-      "detailLicenseeEnrollment": "EXGP",
       "volumeWeight": 7.5000000000,
       "valueWeight": 111.6000000000,
       "volumeShare": 1.0000000000,
@@ -107,7 +111,11 @@
       "usageSource": "Feb 2017 TUR",
       "rightLimitation": "PRINT",
       "numberOfPages": 1,
-      "detailLicenseeClassId": 110,
+      "detailLicenseeClass": {
+        "id": 110,
+        "discipline": "Life Sciences",
+        "enrollmentProfile": "EXGP"
+      },
       "publicationType": {
         "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
         "name": "STMA Journal",
@@ -115,9 +123,7 @@
       },
       "usageAge": {
         "period": 2017
-      },
-      "detailLicenseeDiscipline": "Life Sciences",
-      "detailLicenseeEnrollment": "EXGP"
+      }
     },
     "rightsholder": {
       "id": "019acfde-91be-43aa-8871-6305642bcb2c",
@@ -143,7 +149,11 @@
       "usageSource": "Feb 2017 TUR",
       "rightLimitation": "ALL",
       "numberOfPages": 12,
-      "detailLicenseeClassId": 108,
+      "detailLicenseeClass": {
+        "id": 108,
+        "discipline": "Life Sciences",
+        "enrollmentProfile": "EXGP"
+      },
       "publicationType": {
         "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
         "name": "STMA Journal",
@@ -152,8 +162,6 @@
       "usageAge": {
         "period": 2017
       },
-      "detailLicenseeDiscipline": "Life Sciences",
-      "detailLicenseeEnrollment": "EXGP",
       "baselineId": "f517f5b9-5f34-41f6-8984-67eeadf65ad1",
       "volumeWeight": 7.5000000000,
       "valueWeight": 243.9000000000,
@@ -189,7 +197,11 @@
       "usageSource": "Feb 2017 TUR",
       "rightLimitation": "PRINT",
       "numberOfPages": 1,
-      "detailLicenseeClassId": 108,
+      "detailLicenseeClass": {
+        "id": 108,
+        "discipline": "Life Sciences",
+        "enrollmentProfile": "EXGP"
+      },
       "publicationType": {
         "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
         "name": "STMA Journal",
@@ -198,8 +210,6 @@
       "usageAge": {
         "period": 2017
       },
-      "detailLicenseeDiscipline": "Life Sciences",
-      "detailLicenseeEnrollment": "EXGP",
       "baselineId": "9aeb87ed-5000-4bee-abcb-e3dfc4f84235"
     },
     "rightsholder": {

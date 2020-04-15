@@ -127,9 +127,9 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(1, usages.size());
         Usage expectedUsage = usages.get(0);
         assertEquals(UsageStatusEnum.WORK_RESEARCH, expectedUsage.getStatus());
-        assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClassId());
-        assertNull(expectedUsage.getAaclUsage().getDetailLicenseeDiscipline());
-        assertNull(expectedUsage.getAaclUsage().getDetailLicenseeEnrollment());
+        assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClass().getId());
+        assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClass().getDiscipline());
+        assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClass().getEnrollmentProfile());
         assertEquals(9, getNumberOfUsagesWithNotEmptyClassificationData());
         aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
         assertEquals(10, getNumberOfUsagesWithNotEmptyClassificationData());
@@ -803,14 +803,18 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedAaclUsage.getVolumeShare(), actualAaclUsage.getVolumeShare());
         assertEquals(expectedAaclUsage.getValueShare(), actualAaclUsage.getValueShare());
         assertEquals(expectedAaclUsage.getTotalShare(), actualAaclUsage.getTotalShare());
-        assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
-        assertEquals(expectedAaclUsage.getDetailLicenseeDiscipline(), actualAaclUsage.getDetailLicenseeDiscipline());
-        assertEquals(expectedAaclUsage.getDetailLicenseeEnrollment(), actualAaclUsage.getDetailLicenseeEnrollment());
-        assertEquals(expectedAaclUsage.getAggregateLicenseeClassId(), actualAaclUsage.getAggregateLicenseeClassId());
-        assertEquals(expectedAaclUsage.getAggregateLicenseeDiscipline(),
-            actualAaclUsage.getAggregateLicenseeDiscipline());
-        assertEquals(expectedAaclUsage.getAggregateLicenseeEnrollment(),
-            actualAaclUsage.getAggregateLicenseeEnrollment());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
+            actualAaclUsage.getDetailLicenseeClass().getId());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getDiscipline(),
+            actualAaclUsage.getDetailLicenseeClass().getDiscipline());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getEnrollmentProfile(),
+            actualAaclUsage.getDetailLicenseeClass().getEnrollmentProfile());
+        assertEquals(expectedAaclUsage.getAggregateLicenseeClass().getId(),
+            actualAaclUsage.getAggregateLicenseeClass().getId());
+        assertEquals(expectedAaclUsage.getAggregateLicenseeClass().getDiscipline(),
+            actualAaclUsage.getAggregateLicenseeClass().getDiscipline());
+        assertEquals(expectedAaclUsage.getAggregateLicenseeClass().getEnrollmentProfile(),
+            actualAaclUsage.getAggregateLicenseeClass().getEnrollmentProfile());
     }
 
     private List<Usage> loadExpectedUsages(List<String> fileNames) {
@@ -852,7 +856,7 @@ public class AaclUsageRepositoryIntegrationTest {
         usageFilter.setProductFamily("AACL");
         return aaclUsageRepository.findDtosByFilter(usageFilter, null, null).stream()
             .filter(usage -> StringUtils.isNotBlank(usage.getAaclUsage().getPublicationType().getName())
-                && Objects.nonNull(usage.getAaclUsage().getDetailLicenseeClassId()))
+                && Objects.nonNull(usage.getAaclUsage().getDetailLicenseeClass().getId()))
             .count();
     }
 
