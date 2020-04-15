@@ -12,9 +12,11 @@
     "serviceFee": null,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
-      "usagePeriod": 2018,
       "batchPeriodEndDate": "2018-06-30",
       "usageSource": "Feb 2018 TUR",
+      "usageAge": {
+        "period": 2018
+      },
       "numberOfPages": 341
     },
     "comment": "AACL NEW status"

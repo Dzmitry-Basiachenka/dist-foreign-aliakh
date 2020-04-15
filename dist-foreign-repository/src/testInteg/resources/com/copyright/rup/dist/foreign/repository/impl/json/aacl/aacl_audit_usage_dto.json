@@ -20,12 +20,14 @@
       "detailLicenseeClassId": "143",
       "detailLicenseeEnrollment": "EXGP",
       "detailLicenseeDiscipline": "Engineering",
-      "usagePeriod": 2020,
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2020 TUR",
       "numberOfPages": 6,
       "publicationType": {
         "name": "Consumer Magazine"
+      },
+      "usageAge": {
+        "period": 2020
       }
     },
     "comment": "AACL usage"

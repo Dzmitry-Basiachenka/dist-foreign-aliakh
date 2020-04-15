@@ -12,10 +12,12 @@
     "serviceFee": null,
     "aaclUsage": {
       "institution": "BIOLA UNIVERSITY",
-      "usagePeriod": 2020,
       "batchPeriodEndDate": "2020-06-30",
       "usageSource": "Aug 2019 TUR",
       "rightLimitation": "ALL",
+      "usageAge": {
+        "period": 2020
+      },
       "numberOfPages": 6
     },
     "rhName": "Delmar Learning, a division of Cengage Learning",

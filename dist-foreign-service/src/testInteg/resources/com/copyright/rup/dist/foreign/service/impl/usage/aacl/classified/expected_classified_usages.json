@@ -8,7 +8,6 @@
     "numberOfCopies": 20,
     "aaclUsage": {
       "institution": "BIOLA UNIVERSITY",
-      "usagePeriod": 2019,
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2018 TUR",
       "rightLimitation": "PRINT",
@@ -17,6 +16,9 @@
       "publicationType": {
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
         "name": "Book"
+      },
+      "usageAge": {
+        "period": 2019
       },
       "detailLicenseeDiscipline": "Life Sciences",
       "detailLicenseeEnrollment": "EXGP"
@@ -37,7 +39,6 @@
     "numberOfCopies": 20,
     "aaclUsage": {
       "institution": "BIOLA UNIVERSITY",
-      "usagePeriod": 2019,
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2018 TUR",
       "rightLimitation": "PRINT",
@@ -46,6 +47,9 @@
       "publicationType": {
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
         "name": "Book"
+      },
+      "usageAge": {
+        "period": 2019
       },
       "detailLicenseeDiscipline": "Life Sciences",
       "detailLicenseeEnrollment": "EXGP"

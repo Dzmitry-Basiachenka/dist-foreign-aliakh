@@ -165,12 +165,13 @@ public class LoadClassifiedUsagesIntegrationTest {
         assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
         assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
         assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-        assertEquals(expectedAaclUsage.getUsagePeriod(), actualAaclUsage.getUsagePeriod());
+        assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
         assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
         assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
         assertEquals(expectedAaclUsage.getPublicationType().getId(), actualAaclUsage.getPublicationType().getId());
         assertEquals(expectedAaclUsage.getPublicationType().getName(), actualAaclUsage.getPublicationType().getName());
-        assertEquals(expectedAaclUsage.getPublicationTypeWeight(), actualAaclUsage.getPublicationTypeWeight());
+        assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
+            actualAaclUsage.getPublicationType().getWeight());
         assertEquals(expectedAaclUsage.getDetailLicenseeDiscipline(), actualAaclUsage.getDetailLicenseeDiscipline());
         assertEquals(expectedAaclUsage.getDetailLicenseeEnrollment(), actualAaclUsage.getDetailLicenseeEnrollment());
         assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());

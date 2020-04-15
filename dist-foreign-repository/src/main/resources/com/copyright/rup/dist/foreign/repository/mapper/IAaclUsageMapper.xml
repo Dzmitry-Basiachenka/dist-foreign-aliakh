@@ -24,7 +24,7 @@
         <result property="serviceFee" column="service_fee"/>
         <result property="comment" column="comment"/>
         <result property="aaclUsage.institution" column="institution"/>
-        <result property="aaclUsage.usagePeriod" column="usage_period"/>
+        <result property="aaclUsage.usageAge.period" column="usage_period"/>
         <result property="aaclUsage.usageSource" column="usage_source"/>
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>
@@ -34,8 +34,8 @@
         <result property="aaclUsage.detailLicenseeEnrollment" column="detail_licensee_enrollment"/>
         <result property="aaclUsage.publicationType.id" column="pub_type_id"/>
         <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
+        <result property="aaclUsage.publicationType.weight" column="publication_type_weight"/>
         <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>
-        <result property="aaclUsage.publicationTypeWeight" column="publication_type_weight"/>
         <result property="aaclUsage.baselineId" column="baseline_uid"/>
         <result property="aaclUsage.volumeWeight" column="volume_weight"/>
         <result property="aaclUsage.valueWeight" column="value_weight"/>
@@ -71,8 +71,8 @@
         <result property="numberOfCopies" column="number_of_copies"/>
         <result property="comment" column="comment"/>
         <result property="aaclUsage.institution" column="institution"/>
-        <result property="aaclUsage.usagePeriod" column="usage_period"/>
-        <result property="aaclUsage.usageAgeWeight" column="usage_age_weight"/>
+        <result property="aaclUsage.usageAge.period" column="usage_period"/>
+        <result property="aaclUsage.usageAge.weight" column="usage_age_weight"/>
         <result property="aaclUsage.usageSource" column="usage_source"/>
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>
@@ -85,8 +85,8 @@
         <result property="aaclUsage.aggregateLicenseeEnrollment" column="aggregate_licensee_enrollment"/>
         <result property="aaclUsage.publicationType.id" column="pub_type_id"/>
         <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
+        <result property="aaclUsage.publicationType.weight" column="publication_type_weight"/>
         <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>
-        <result property="aaclUsage.publicationTypeWeight" column="publication_type_weight"/>
         <result property="aaclUsage.baselineId" column="baseline_uid"/>
     </resultMap>
 
@@ -642,7 +642,7 @@
         values (
             #{id},
             #{aaclUsage.institution},
-            #{aaclUsage.usagePeriod},
+            #{aaclUsage.usageAge.period},
             #{aaclUsage.usageSource},
             #{aaclUsage.numberOfPages},
             #{aaclUsage.rightLimitation},
