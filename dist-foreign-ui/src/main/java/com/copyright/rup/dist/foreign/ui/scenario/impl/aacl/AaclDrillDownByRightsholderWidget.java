@@ -50,15 +50,15 @@ public class AaclDrillDownByRightsholderWidget extends CommonDrillDownByRightsho
             "table.column.aggregate_lc_discipline", "aggregateLicenseeDiscipline", true, 140);
         addColumn(usageDto -> usageDto.getAaclUsage().getPublicationType().getName(), "table.column.publication_type",
             "publicationType", true, 140);
-        addColumn(usageDto -> usageDto.getAaclUsage().getPublicationTypeWeight(),
+        addColumn(usageDto -> usageDto.getAaclUsage().getPublicationType().getWeight(),
             "table.column.publication_type_weight", "publicationTypeWeight", true, 120);
         addColumn(usageDto -> usageDto.getAaclUsage().getOriginalPublicationType(),
             "table.column.historical_publication_type", "historicalPublicationType", true, 140);
         addColumn(usageDto -> usageDto.getAaclUsage().getInstitution(), "table.column.institution", "institution",
             true, 115);
-        addColumn(usageDto -> usageDto.getAaclUsage().getUsagePeriod(), "table.column.usage_period",
+        addColumn(usageDto -> usageDto.getAaclUsage().getUsageAge().getPeriod(), "table.column.usage_period",
             "usagePeriod", true, 100);
-        addAmountColumn(usageDto -> usageDto.getAaclUsage().getUsageAgeWeight(), "table.column.usage_age_weight",
+        addAmountColumn(usageDto -> usageDto.getAaclUsage().getUsageAge().getWeight(), "table.column.usage_age_weight",
             "usageAgeWeight", 130);
         addColumn(usageDto -> usageDto.getAaclUsage().getUsageSource(), "table.column.usage_source", "usageSource",
             true, 140);

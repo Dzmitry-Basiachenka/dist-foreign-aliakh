@@ -17,9 +17,11 @@
     "aaclUsage": {
       "batchPeriodEndDate": "2019-06-30",
       "institution": "University of Chicago",
-      "usagePeriod": 2019,
       "usageSource": "Feb 2018 TUR",
-      "numberOfPages": 100
+      "numberOfPages": 100,
+      "usageAge": {
+        "period": 2019
+      }
     },
     "comment": "AACL usage"
   }

@@ -7,7 +7,6 @@
     "numberOfCopies": 20,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
-      "usagePeriod": 2018,
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2018 FR",
       "numberOfPages": 25,
@@ -16,10 +15,13 @@
       "detailLicenseeEnrollment": "HGP",
       "publicationType": {
         "id": "a3dff475-fc06-4d8c-b7cc-f093073ada6f",
-        "name": "News Source"
+        "name": "News Source",
+        "weight": 4.29
+      },
+      "usageAge": {
+        "period": 2018
       },
       "originalPublicationType": "Book series",
-      "publicationTypeWeight": 4.29,
       "baselineId": "5bcb69c5-5758-4cd2-8ca0-c8d63d3a9d18"
     },
     "comment": "Baseline usage 2"

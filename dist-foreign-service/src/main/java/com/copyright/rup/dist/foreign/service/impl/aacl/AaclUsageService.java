@@ -107,7 +107,7 @@ public class AaclUsageService implements IAaclUsageService {
         int period = usageBatch.getPaymentDate().getYear();
         usages.forEach(usage -> {
             usage.setBatchId(usageBatch.getId());
-            usage.getAaclUsage().setUsagePeriod(period);
+            usage.getAaclUsage().getUsageAge().setPeriod(period);
             usage.getAaclUsage().setBatchPeriodEndDate(usageBatch.getPaymentDate());
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);

@@ -25,12 +25,14 @@
       "detailLicenseeEnrollment": "EXGP",
       "detailLicenseeDiscipline": "Engineering",
       "batchPeriodEndDate": "2019-06-30",
-      "usagePeriod": 2040,
       "usageSource": "Feb 2040 TUR",
       "numberOfPages": 341,
       "baselineId": "a4b26f19-674e-4874-865d-62be5962658e",
       "publicationType": {
         "name": "Consumer Magazine"
+      },
+      "usageAge": {
+        "period": 2040
       }
     },
     "comment": "AACL archived usage"

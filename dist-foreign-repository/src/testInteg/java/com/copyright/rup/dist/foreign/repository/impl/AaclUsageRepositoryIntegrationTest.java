@@ -113,7 +113,7 @@ public class AaclUsageRepositoryIntegrationTest {
             "6e6f656a-e080-4426-b8ea-985b69f8814d", USER_NAME);
         assertEquals(3, actualIds.size());
         List<Usage> actualUsages = aaclUsageRepository.findByIds(actualIds).stream()
-            .sorted(Comparator.comparing(usage -> usage.getAaclUsage().getUsagePeriod()))
+            .sorted(Comparator.comparing(usage -> usage.getAaclUsage().getUsageAge().getPeriod()))
             .collect(Collectors.toList());
         verifyUsages(
             Arrays.asList("json/aacl/aacl_baseline_usage_819ad2fc.json", "json/aacl/aacl_baseline_usage_5bcb69c5.json",
@@ -535,9 +535,9 @@ public class AaclUsageRepositoryIntegrationTest {
             aaclUsageRepository.findByIds(Collections.singletonList("161652a5-d822-493b-8242-d35dc881646f")).get(0);
         Usage usage3 =
             aaclUsageRepository.findByIds(Collections.singletonList("61b7dc5a-aaec-482c-8c16-fe48a9464059")).get(0);
-        assertNull(usage1.getAaclUsage().getPublicationTypeWeight());
-        assertEquals(new BigDecimal("10.12"), usage2.getAaclUsage().getPublicationTypeWeight());
-        assertEquals(new BigDecimal("1.71"), usage3.getAaclUsage().getPublicationTypeWeight());
+        assertNull(usage1.getAaclUsage().getPublicationType().getWeight());
+        assertEquals(new BigDecimal("10.12"), usage2.getAaclUsage().getPublicationType().getWeight());
+        assertEquals(new BigDecimal("1.71"), usage3.getAaclUsage().getPublicationType().getWeight());
     }
 
     @Test
@@ -656,7 +656,7 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
         assertEquals(new BigDecimal("24.0000000000"), usage.getAaclUsage().getValueWeight());
         assertEquals(new BigDecimal("5.0000000000"), usage.getAaclUsage().getVolumeWeight());
-        assertEquals(new BigDecimal("1.00"), usage.getAaclUsage().getPublicationTypeWeight());
+        assertEquals(new BigDecimal("1.00"), usage.getAaclUsage().getPublicationType().getWeight());
         assertEquals(new BigDecimal("60.0000000000"), usage.getAaclUsage().getValueShare());
         assertEquals(new BigDecimal("50.0000000000"), usage.getAaclUsage().getVolumeShare());
         assertEquals(new BigDecimal("2.0000000000"), usage.getAaclUsage().getTotalShare());
@@ -788,15 +788,16 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
         assertEquals(expectedAaclUsage.getPublicationType().getId(), actualAaclUsage.getPublicationType().getId());
         assertEquals(expectedAaclUsage.getPublicationType().getName(), actualAaclUsage.getPublicationType().getName());
-        assertEquals(expectedAaclUsage.getPublicationTypeWeight(), actualAaclUsage.getPublicationTypeWeight());
+        assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
+            actualAaclUsage.getPublicationType().getWeight());
         assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
         assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
         assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-        assertEquals(expectedAaclUsage.getUsagePeriod(), actualAaclUsage.getUsagePeriod());
+        assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
         assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
         assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
         assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
-        assertEquals(expectedAaclUsage.getUsageAgeWeight(), actualAaclUsage.getUsageAgeWeight());
+        assertEquals(expectedAaclUsage.getUsageAge().getWeight(), actualAaclUsage.getUsageAge().getWeight());
         assertEquals(expectedAaclUsage.getValueWeight(), actualAaclUsage.getValueWeight());
         assertEquals(expectedAaclUsage.getVolumeWeight(), actualAaclUsage.getVolumeWeight());
         assertEquals(expectedAaclUsage.getVolumeShare(), actualAaclUsage.getVolumeShare());

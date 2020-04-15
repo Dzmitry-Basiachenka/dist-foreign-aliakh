@@ -166,10 +166,11 @@ public class LoadAaclUsagesIntegrationTest {
         assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
         assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
         assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-        assertEquals(expectedAaclUsage.getUsagePeriod(), actualAaclUsage.getUsagePeriod());
+        assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
         assertPublicationType(expectedAaclUsage.getPublicationType(), actualAaclUsage.getPublicationType());
         assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
-        assertEquals(expectedAaclUsage.getPublicationTypeWeight(), actualAaclUsage.getPublicationTypeWeight());
+        assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
+            actualAaclUsage.getPublicationType().getWeight());
         assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
         assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
         assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());

@@ -102,7 +102,7 @@
         <result property="payeeParticipating" column="is_payee_participating_flag"/>
         <result property="comment" column="comment"/>
         <result property="aaclUsage.institution" column="institution"/>
-        <result property="aaclUsage.usagePeriod" column="usage_period"/>
+        <result property="aaclUsage.usageAge.period" column="usage_period"/>
         <result property="aaclUsage.usageSource" column="usage_source"/>
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>

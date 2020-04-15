@@ -25,29 +25,19 @@ public class AaclUsage {
     private String aggregateLicenseeEnrollment;
     private String aggregateLicenseeDiscipline;
     private PublicationType publicationType = new PublicationType();
+    private UsageAge usageAge = new UsageAge();
     private String originalPublicationType;
     private String institution;
-    private int usagePeriod;
-    private BigDecimal usageAgeWeight;
     private String usageSource;
     private String rightLimitation;
     private Integer numberOfPages;
     private LocalDate batchPeriodEndDate;
     private String baselineId;
-    private BigDecimal publicationTypeWeight;
     private BigDecimal volumeWeight;
     private BigDecimal valueWeight;
     private BigDecimal valueShare;
     private BigDecimal volumeShare;
     private BigDecimal totalShare;
-
-    public BigDecimal getPublicationTypeWeight() {
-        return publicationTypeWeight;
-    }
-
-    public void setPublicationTypeWeight(BigDecimal publicationTypeWeight) {
-        this.publicationTypeWeight = publicationTypeWeight;
-    }
 
     public String getBaselineId() {
         return baselineId;
@@ -129,20 +119,12 @@ public class AaclUsage {
         this.institution = institution;
     }
 
-    public int getUsagePeriod() {
-        return usagePeriod;
+    public UsageAge getUsageAge() {
+        return usageAge;
     }
 
-    public void setUsagePeriod(int usagePeriod) {
-        this.usagePeriod = usagePeriod;
-    }
-
-    public BigDecimal getUsageAgeWeight() {
-        return usageAgeWeight;
-    }
-
-    public void setUsageAgeWeight(BigDecimal usageAgeWeight) {
-        this.usageAgeWeight = usageAgeWeight;
+    public void setUsageAge(UsageAge usageAge) {
+        this.usageAge = usageAge;
     }
 
     public String getUsageSource() {
@@ -236,13 +218,11 @@ public class AaclUsage {
             .append(publicationType, that.publicationType)
             .append(originalPublicationType, that.originalPublicationType)
             .append(institution, that.institution)
-            .append(usagePeriod, that.usagePeriod)
-            .append(usageAgeWeight, that.usageAgeWeight)
+            .append(usageAge, that.usageAge)
             .append(usageSource, that.usageSource)
             .append(rightLimitation, that.rightLimitation)
             .append(numberOfPages, that.numberOfPages)
             .append(batchPeriodEndDate, that.batchPeriodEndDate)
-            .append(publicationTypeWeight, that.publicationTypeWeight)
             .append(baselineId, that.baselineId)
             .append(volumeWeight, that.volumeWeight)
             .append(valueWeight, that.valueWeight)
@@ -264,13 +244,11 @@ public class AaclUsage {
             .append(publicationType)
             .append(originalPublicationType)
             .append(institution)
-            .append(usagePeriod)
-            .append(usageAgeWeight)
+            .append(usageAge)
             .append(usageSource)
             .append(rightLimitation)
             .append(numberOfPages)
             .append(batchPeriodEndDate)
-            .append(publicationTypeWeight)
             .append(baselineId)
             .append(volumeWeight)
             .append(valueWeight)
@@ -292,13 +270,11 @@ public class AaclUsage {
             .append("publicationType", publicationType)
             .append("originalPublicationType", originalPublicationType)
             .append("institution", institution)
-            .append("usagePeriod", usagePeriod)
-            .append("usageAgeWeight", usageAgeWeight)
+            .append("usageAge", usageAge)
             .append("usageSource", usageSource)
             .append("rightLimitation", rightLimitation)
             .append("numberOfPages", numberOfPages)
             .append("batchPeriodEndDate", batchPeriodEndDate)
-            .append("publicationTypeWeight", publicationTypeWeight)
             .append("baselineId", baselineId)
             .append("volumeWeight", volumeWeight)
             .append("valueWeight", valueWeight)

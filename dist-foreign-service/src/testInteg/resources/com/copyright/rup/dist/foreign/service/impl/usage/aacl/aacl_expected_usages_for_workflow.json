@@ -17,7 +17,6 @@
     "comment": "AACL baseline usage Comment 1",
     "aaclUsage": {
       "institution": "BIOLA UNIVERSITY",
-      "usagePeriod": 2018,
       "usageSource": "Aug 2018 FR",
       "batchPeriodEndDate": "2019-06-30",
       "rightLimitation": "ALL",
@@ -25,10 +24,13 @@
       "detailLicenseeClassId": 113,
       "publicationType": {
         "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
-        "name": "STMA Journal"
+        "name": "STMA Journal",
+        "weight": 1.71
+      },
+      "usageAge": {
+        "period": 2018
       },
       "originalPublicationType": "Textbook",
-      "publicationTypeWeight": 1.71,
       "detailLicenseeDiscipline": "Life Sciences",
       "detailLicenseeEnrollment": "MU",
       "baselineId": "4f466373-e8de-4b7d-8137-faba84ccafc2"
@@ -52,7 +54,6 @@
     "comment": "AACL baseline usage Comment 2",
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
-      "usagePeriod": 2018,
       "usageSource": "Aug 2018 FR",
       "batchPeriodEndDate": "2019-06-30",
       "rightLimitation": "PRINT",
@@ -60,10 +61,13 @@
       "detailLicenseeClassId": 195,
       "publicationType": {
         "id": "a3dff475-fc06-4d8c-b7cc-f093073ada6f",
-        "name": "News Source"
+        "name": "News Source",
+        "weight": 4.29
+      },
+      "usageAge": {
+        "period": 2018
       },
       "originalPublicationType": "Book series",
-      "publicationTypeWeight": 4.29,
       "detailLicenseeDiscipline": "Medical & Health",
       "detailLicenseeEnrollment": "HGP",
       "baselineId": "d20e6f4b-bcb5-46f2-a247-165a8909e726"
@@ -83,17 +87,19 @@
     "comment": "AACL baseline usage Comment 4",
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
-      "usagePeriod": 2016,
       "usageSource": "Aug 2016 FR",
       "batchPeriodEndDate": "2019-06-30",
       "numberOfPages": 45,
       "detailLicenseeClassId": 141,
       "publicationType": {
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
-        "name": "Book"
+        "name": "Book",
+        "weight": 3.50
+      },
+      "usageAge": {
+        "period": 2016
       },
       "originalPublicationType": "Fiction or Poetry",
-      "publicationTypeWeight": 3.50,
       "detailLicenseeDiscipline": "Education",
       "detailLicenseeEnrollment": "MU",
       "baselineId": "623d033b-98bb-4705-a2a0-a05f4cf8450b"
@@ -117,11 +123,13 @@
     "comment": "AACL usage Comment 1",
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
-      "usagePeriod": 2019,
       "usageSource": "Feb 2019 TUR",
       "batchPeriodEndDate": "2019-06-30",
       "rightLimitation": "ALL",
-      "numberOfPages": 14
+      "numberOfPages": 14,
+      "usageAge": {
+        "period": 2019
+      }
     }
   },
   {
@@ -142,11 +150,13 @@
     "comment": "AACL usage Comment 2",
     "aaclUsage": {
       "institution": "WESTERN MICHIGAN UNIVERSITY",
-      "usagePeriod": 2019,
       "usageSource": "Aug 2018 TUR",
       "batchPeriodEndDate": "2019-06-30",
       "rightLimitation": "PRINT",
-      "numberOfPages": 12
+      "numberOfPages": 12,
+      "usageAge": {
+        "period": 2019
+      }
     }
   },
   {
@@ -163,10 +173,12 @@
     "comment": "AACL usage Comment 4",
     "aaclUsage": {
       "institution": "University of Chicago",
-      "usagePeriod": 2019,
       "usageSource": "Feb 2018 TUR",
       "batchPeriodEndDate": "2019-06-30",
-      "numberOfPages": 17
+      "numberOfPages": 17,
+      "usageAge": {
+        "period": 2019
+      }
     }
   }
 ]

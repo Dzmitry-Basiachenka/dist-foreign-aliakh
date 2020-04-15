@@ -8,9 +8,11 @@
     "numberOfCopies": 155,
     "aaclUsage": {
       "institution": "University of Chicago",
-      "usagePeriod": 2019,
       "usageSource": "Feb 2018 TUR",
-      "numberOfPages": 1
+      "numberOfPages": 1,
+      "usageAge": {
+        "period": 2019
+      }
     },
     "comment": "AACL usage"
   }

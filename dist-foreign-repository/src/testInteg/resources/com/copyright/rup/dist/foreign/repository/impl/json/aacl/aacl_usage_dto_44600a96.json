@@ -12,10 +12,12 @@
     "serviceFee": null,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
-      "usagePeriod": 2020,
       "batchPeriodEndDate": "2020-06-30",
       "usageSource": "Feb 2019 TUR",
       "rightLimitation": "PRINT",
+      "usageAge": {
+        "period": 2020
+      },
       "numberOfPages": 12
     },
     "rhName": "Georgia State University Business Press [C]",

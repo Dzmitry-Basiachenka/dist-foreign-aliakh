@@ -7,19 +7,21 @@
     "numberOfCopies": 30,
     "aaclUsage": {
       "institution": "BIOLA UNIVERSITY",
-      "usagePeriod": 2016,
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2016 FR",
       "numberOfPages": 35,
       "detailLicenseeClassId": 143,
       "detailLicenseeDiscipline": "Engineering",
       "detailLicenseeEnrollment": "EXGP",
+      "usageAge": {
+        "period": 2016
+      },
       "publicationType": {
         "id": "46634907-882e-4f91-b1ad-f57db945aff7",
-        "name": "Consumer Magazine"
+        "name": "Consumer Magazine",
+        "weight": 2.00
       },
       "originalPublicationType": "Scholarly Journal",
-      "publicationTypeWeight": 2.00,
       "baselineId": "819ad2fc-24fe-45b6-965f-5df633a57dba"
     },
     "comment": "Baseline usage 3"

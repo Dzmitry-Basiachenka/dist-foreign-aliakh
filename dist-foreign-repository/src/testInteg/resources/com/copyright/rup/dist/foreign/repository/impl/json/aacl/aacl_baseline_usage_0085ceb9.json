@@ -7,19 +7,21 @@
     "numberOfCopies": 10,
     "aaclUsage": {
       "institution": "BIOLA UNIVERSITY",
-      "usagePeriod": 2019,
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Aug 2019 FR",
       "numberOfPages": 15,
       "detailLicenseeClassId": 113,
       "detailLicenseeDiscipline": "Life Sciences",
       "detailLicenseeEnrollment": "MU",
+      "usageAge": {
+        "period": 2019
+      },
       "publicationType": {
         "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
-        "name": "STMA Journal"
+        "name": "STMA Journal",
+        "weight": 1.71
       },
       "originalPublicationType": "Textbook",
-      "publicationTypeWeight": 1.71,
       "baselineId": "0085ceb9-6d2a-4a03-87a5-84e369dec6e1"
     },
     "comment": "Baseline usage 1"

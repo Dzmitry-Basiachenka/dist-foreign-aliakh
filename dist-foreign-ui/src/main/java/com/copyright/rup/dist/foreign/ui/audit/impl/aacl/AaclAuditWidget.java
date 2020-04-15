@@ -82,7 +82,7 @@ public class AaclAuditWidget extends CommonAuditWidget implements IAaclAuditWidg
             "discipline", 140);
         addColumn(usage -> usage.getAaclUsage().getPublicationType().getName(), "table.column.publication_type",
             "publicationType", 140);
-        addColumn(usage -> usage.getAaclUsage().getUsagePeriod(), "table.column.usage_period", "usagePeriod",
+        addColumn(usage -> usage.getAaclUsage().getUsageAge().getPeriod(), "table.column.usage_period", "usagePeriod",
             100);
         addColumn(usage -> usage.getAaclUsage().getUsageSource(), "table.column.usage_source", "usageSource",
             140);

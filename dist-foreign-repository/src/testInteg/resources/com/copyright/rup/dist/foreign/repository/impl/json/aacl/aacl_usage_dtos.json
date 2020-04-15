@@ -24,12 +24,14 @@
       "aggregateLicenseeClassId": "143",
       "aggregateLicenseeEnrollment": "EXGP",
       "aggregateLicenseeDiscipline": "Engineering",
-      "publicationTypeWeight": 1.50,
-      "usagePeriod": 2019,
-      "usageAgeWeight": 0.75,
       "numberOfPages": 200,
+      "usageAge": {
+        "period": 2019,
+        "weight": 0.75
+      },
       "publicationType": {
-        "name": "Business or Trade Journal"
+        "name": "Business or Trade Journal",
+        "weight": 1.50
       }
     },
     "comment": "AACL Scenario Comment"
@@ -59,12 +61,14 @@
       "aggregateLicenseeClassId": "141",
       "aggregateLicenseeEnrollment": "MU",
       "aggregateLicenseeDiscipline": "Education",
-      "publicationTypeWeight": 1.00,
-      "usagePeriod": 2020,
-      "usageAgeWeight": 1.00,
       "numberOfPages": 100,
       "publicationType": {
-        "name": "Book"
+        "name": "Book",
+        "weight": 1.00
+      },
+      "usageAge": {
+        "period": 2020,
+        "weight": 1.00
       }
     },
     "comment": "AACL Scenario Comment"

@@ -13,7 +13,6 @@
     "serviceFeeAmount": 0.0000000000,
     "aaclUsage": {
       "institution": "University of Chicago",
-      "usagePeriod": 2020,
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Feb 2020 TUR",
       "rightLimitation": "PRINT",
@@ -21,6 +20,9 @@
       "detailLicenseeClassId": 171,
       "detailLicenseeEnrollment": "EXGP",
       "detailLicenseeDiscipline": "Arts & Humanities",
+      "usageAge": {
+        "period": 2020
+      },
       "publicationType": {
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
         "name": "Book"
@@ -40,19 +42,21 @@
     "serviceFeeAmount": 0.0000000000,
     "aaclUsage": {
       "institution": "University of Michigan",
-      "usagePeriod": 2019,
       "batchPeriodEndDate": "2019-06-30",
       "usageSource": "Feb 2019 TUR",
       "rightLimitation": "DIGITAL",
       "numberOfPages": 200,
-      "publicationTypeWeight": 1.00,
       "baselineId": "b012c81c-2370-458e-a6cb-349b66d08e6e",
       "detailLicenseeClassId": 171,
       "detailLicenseeEnrollment": "EXGP",
       "detailLicenseeDiscipline": "Arts & Humanities",
+      "usageAge": {
+        "period": 2019
+      },
       "publicationType": {
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
-        "name": "Book"
+        "name": "Book",
+        "weight": 1.00
       }
     },
     "comment": "AACL comment 2"
