@@ -18,13 +18,17 @@
       "institution": "University of Michigan",
       "usageSource": "Feb 2019 TUR",
       "rightLimitation": "DIGITAL",
-      "detailLicenseeClassId": "110",
-      "detailLicenseeEnrollment": "EXU4",
-      "detailLicenseeDiscipline": "Life Sciences",
-      "aggregateLicenseeClassId": "143",
-      "aggregateLicenseeEnrollment": "EXGP",
-      "aggregateLicenseeDiscipline": "Engineering",
       "numberOfPages": 200,
+      "aggregateLicenseeClass": {
+        "id": 143,
+        "discipline": "Engineering",
+        "enrollmentProfile": "EXGP"
+      },
+      "detailLicenseeClass": {
+        "id": 110,
+        "discipline": "Life Sciences",
+        "enrollmentProfile": "EXU4"
+      },
       "usageAge": {
         "period": 2019,
         "weight": 0.75
@@ -55,13 +59,17 @@
       "institution": "University of Chicago",
       "usageSource": "Feb 2019 TUR",
       "rightLimitation": "PRINT",
-      "detailLicenseeClassId": "108",
-      "detailLicenseeEnrollment": "EXGP",
-      "detailLicenseeDiscipline": "Life Sciences",
-      "aggregateLicenseeClassId": "141",
-      "aggregateLicenseeEnrollment": "MU",
-      "aggregateLicenseeDiscipline": "Education",
       "numberOfPages": 100,
+      "aggregateLicenseeClass": {
+        "id": 141,
+        "discipline": "Education",
+        "enrollmentProfile": "MU"
+      },
+      "detailLicenseeClass": {
+        "id": 108,
+        "discipline": "Life Sciences",
+        "enrollmentProfile": "EXGP"
+      },
       "publicationType": {
         "name": "Book",
         "weight": 1.00

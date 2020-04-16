@@ -18,12 +18,8 @@ import java.time.LocalDate;
  */
 public class AaclUsage {
 
-    private Integer detailLicenseeClassId;
-    private String detailLicenseeEnrollment;
-    private String detailLicenseeDiscipline;
-    private Integer aggregateLicenseeClassId;
-    private String aggregateLicenseeEnrollment;
-    private String aggregateLicenseeDiscipline;
+    private DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+    private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
     private PublicationType publicationType = new PublicationType();
     private UsageAge usageAge = new UsageAge();
     private String originalPublicationType;
@@ -47,52 +43,20 @@ public class AaclUsage {
         this.baselineId = baselineId;
     }
 
-    public Integer getDetailLicenseeClassId() {
-        return detailLicenseeClassId;
+    public DetailLicenseeClass getDetailLicenseeClass() {
+        return detailLicenseeClass;
     }
 
-    public void setDetailLicenseeClassId(Integer detailLicenseeClassId) {
-        this.detailLicenseeClassId = detailLicenseeClassId;
+    public void setDetailLicenseeClass(DetailLicenseeClass detailLicenseeClass) {
+        this.detailLicenseeClass = detailLicenseeClass;
     }
 
-    public String getDetailLicenseeEnrollment() {
-        return detailLicenseeEnrollment;
+    public AggregateLicenseeClass getAggregateLicenseeClass() {
+        return aggregateLicenseeClass;
     }
 
-    public void setDetailLicenseeEnrollment(String detailLicenseeEnrollment) {
-        this.detailLicenseeEnrollment = detailLicenseeEnrollment;
-    }
-
-    public String getDetailLicenseeDiscipline() {
-        return detailLicenseeDiscipline;
-    }
-
-    public void setDetailLicenseeDiscipline(String detailLicenseeDiscipline) {
-        this.detailLicenseeDiscipline = detailLicenseeDiscipline;
-    }
-
-    public Integer getAggregateLicenseeClassId() {
-        return aggregateLicenseeClassId;
-    }
-
-    public void setAggregateLicenseeClassId(Integer aggregateLicenseeClassId) {
-        this.aggregateLicenseeClassId = aggregateLicenseeClassId;
-    }
-
-    public String getAggregateLicenseeEnrollment() {
-        return aggregateLicenseeEnrollment;
-    }
-
-    public void setAggregateLicenseeEnrollment(String aggregateLicenseeEnrollment) {
-        this.aggregateLicenseeEnrollment = aggregateLicenseeEnrollment;
-    }
-
-    public String getAggregateLicenseeDiscipline() {
-        return aggregateLicenseeDiscipline;
-    }
-
-    public void setAggregateLicenseeDiscipline(String aggregateLicenseeDiscipline) {
-        this.aggregateLicenseeDiscipline = aggregateLicenseeDiscipline;
+    public void setAggregateLicenseeClass(AggregateLicenseeClass aggregateLicenseeClass) {
+        this.aggregateLicenseeClass = aggregateLicenseeClass;
     }
 
     public PublicationType getPublicationType() {
@@ -209,12 +173,8 @@ public class AaclUsage {
         }
         AaclUsage that = (AaclUsage) obj;
         return new EqualsBuilder()
-            .append(detailLicenseeClassId, that.detailLicenseeClassId)
-            .append(detailLicenseeEnrollment, that.detailLicenseeEnrollment)
-            .append(detailLicenseeDiscipline, that.detailLicenseeDiscipline)
-            .append(aggregateLicenseeClassId, that.aggregateLicenseeClassId)
-            .append(aggregateLicenseeEnrollment, that.aggregateLicenseeEnrollment)
-            .append(aggregateLicenseeDiscipline, that.aggregateLicenseeDiscipline)
+            .append(detailLicenseeClass, that.detailLicenseeClass)
+            .append(aggregateLicenseeClass, that.aggregateLicenseeClass)
             .append(publicationType, that.publicationType)
             .append(originalPublicationType, that.originalPublicationType)
             .append(institution, that.institution)
@@ -235,12 +195,8 @@ public class AaclUsage {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(detailLicenseeClassId)
-            .append(detailLicenseeEnrollment)
-            .append(detailLicenseeDiscipline)
-            .append(aggregateLicenseeClassId)
-            .append(aggregateLicenseeEnrollment)
-            .append(aggregateLicenseeDiscipline)
+            .append(detailLicenseeClass)
+            .append(aggregateLicenseeClass)
             .append(publicationType)
             .append(originalPublicationType)
             .append(institution)
@@ -261,12 +217,8 @@ public class AaclUsage {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-            .append("detailLicenseeClassId", detailLicenseeClassId)
-            .append("detailLicenseeEnrollment", detailLicenseeEnrollment)
-            .append("detailLicenseeDiscipline", detailLicenseeDiscipline)
-            .append("aggregateLicenseeClassId", aggregateLicenseeClassId)
-            .append("aggregateLicenseeEnrollment", aggregateLicenseeEnrollment)
-            .append("aggregateLicenseeDiscipline", aggregateLicenseeDiscipline)
+            .append("detailLicenseeClass", detailLicenseeClass)
+            .append("aggregateLicenseeClass", aggregateLicenseeClass)
             .append("publicationType", publicationType)
             .append("originalPublicationType", originalPublicationType)
             .append("institution", institution)

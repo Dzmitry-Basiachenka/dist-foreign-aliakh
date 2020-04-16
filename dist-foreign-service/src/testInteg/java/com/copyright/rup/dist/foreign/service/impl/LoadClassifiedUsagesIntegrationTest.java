@@ -172,9 +172,12 @@ public class LoadClassifiedUsagesIntegrationTest {
         assertEquals(expectedAaclUsage.getPublicationType().getName(), actualAaclUsage.getPublicationType().getName());
         assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
             actualAaclUsage.getPublicationType().getWeight());
-        assertEquals(expectedAaclUsage.getDetailLicenseeDiscipline(), actualAaclUsage.getDetailLicenseeDiscipline());
-        assertEquals(expectedAaclUsage.getDetailLicenseeEnrollment(), actualAaclUsage.getDetailLicenseeEnrollment());
-        assertEquals(expectedAaclUsage.getDetailLicenseeClassId(), actualAaclUsage.getDetailLicenseeClassId());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getDiscipline(),
+            actualAaclUsage.getDetailLicenseeClass().getDiscipline());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getEnrollmentProfile(),
+            actualAaclUsage.getDetailLicenseeClass().getEnrollmentProfile());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
+            actualAaclUsage.getDetailLicenseeClass().getId());
         assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
     }
 }

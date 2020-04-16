@@ -36,17 +36,17 @@ public class AaclDrillDownByRightsholderWidget extends CommonDrillDownByRightsho
         addAmountColumn(UsageDto::getNetAmount, "table.column.net_amount", "netAmount", 120);
         addColumn(usageDto -> formatServiceFee(usageDto.getServiceFee()), "table.column.service_fee", "serviceFee",
             true, 115);
-        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClassId(), "table.column.det_lc_id",
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass().getId(), "table.column.det_lc_id",
             "detailLicenseeClassId", true, 80);
-        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeEnrollment(), "table.column.det_lc_enrollment",
-            "detailLicenseeEnrollment", true, 140);
-        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeDiscipline(), "table.column.det_lc_discipline",
-            "detailLicenseeDiscipline", true, 140);
-        addColumn(usage -> usage.getAaclUsage().getAggregateLicenseeClassId(),
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass().getEnrollmentProfile(),
+            "table.column.det_lc_enrollment", "detailLicenseeEnrollment", true, 140);
+        addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass().getDiscipline(),
+            "table.column.det_lc_discipline", "detailLicenseeDiscipline", true, 140);
+        addColumn(usage -> usage.getAaclUsage().getAggregateLicenseeClass().getId(),
             "table.column.aggregate_licensee_class_id", "aggregateLicenseeClassId", true, 80);
-        addColumn(usage -> usage.getAaclUsage().getAggregateLicenseeEnrollment(),
+        addColumn(usage -> usage.getAaclUsage().getAggregateLicenseeClass().getEnrollmentProfile(),
             "table.column.aggregate_lc_enrollment", "aggregateLicenseeEnrollment", true, 140);
-        addColumn(usage -> usage.getAaclUsage().getAggregateLicenseeDiscipline(),
+        addColumn(usage -> usage.getAaclUsage().getAggregateLicenseeClass().getDiscipline(),
             "table.column.aggregate_lc_discipline", "aggregateLicenseeDiscipline", true, 140);
         addColumn(usageDto -> usageDto.getAaclUsage().getPublicationType().getName(), "table.column.publication_type",
             "publicationType", true, 140);

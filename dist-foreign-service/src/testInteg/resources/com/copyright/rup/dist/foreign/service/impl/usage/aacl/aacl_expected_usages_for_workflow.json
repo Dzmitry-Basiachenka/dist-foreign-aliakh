@@ -21,7 +21,11 @@
       "batchPeriodEndDate": "2019-06-30",
       "rightLimitation": "ALL",
       "numberOfPages": 15,
-      "detailLicenseeClassId": 113,
+      "detailLicenseeClass": {
+        "id": 113,
+        "discipline": "Life Sciences",
+        "enrollmentProfile": "MU"
+      },
       "publicationType": {
         "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
         "name": "STMA Journal",
@@ -31,8 +35,6 @@
         "period": 2018
       },
       "originalPublicationType": "Textbook",
-      "detailLicenseeDiscipline": "Life Sciences",
-      "detailLicenseeEnrollment": "MU",
       "baselineId": "4f466373-e8de-4b7d-8137-faba84ccafc2"
     }
   },
@@ -58,7 +60,11 @@
       "batchPeriodEndDate": "2019-06-30",
       "rightLimitation": "PRINT",
       "numberOfPages": 25,
-      "detailLicenseeClassId": 195,
+      "detailLicenseeClass": {
+        "id": 195,
+        "discipline": "Medical & Health",
+        "enrollmentProfile": "HGP"
+      },
       "publicationType": {
         "id": "a3dff475-fc06-4d8c-b7cc-f093073ada6f",
         "name": "News Source",
@@ -68,8 +74,6 @@
         "period": 2018
       },
       "originalPublicationType": "Book series",
-      "detailLicenseeDiscipline": "Medical & Health",
-      "detailLicenseeEnrollment": "HGP",
       "baselineId": "d20e6f4b-bcb5-46f2-a247-165a8909e726"
     }
   },
@@ -90,7 +94,11 @@
       "usageSource": "Aug 2016 FR",
       "batchPeriodEndDate": "2019-06-30",
       "numberOfPages": 45,
-      "detailLicenseeClassId": 141,
+      "detailLicenseeClass": {
+        "id": 141,
+        "discipline": "Education",
+        "enrollmentProfile": "MU"
+      },
       "publicationType": {
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
         "name": "Book",
@@ -100,8 +108,6 @@
         "period": 2016
       },
       "originalPublicationType": "Fiction or Poetry",
-      "detailLicenseeDiscipline": "Education",
-      "detailLicenseeEnrollment": "MU",
       "baselineId": "623d033b-98bb-4705-a2a0-a05f4cf8450b"
     }
   },
