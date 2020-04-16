@@ -19,7 +19,6 @@ import java.time.LocalDate;
 public class AaclUsage {
 
     private DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
-    private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
     private PublicationType publicationType = new PublicationType();
     private UsageAge usageAge = new UsageAge();
     private String originalPublicationType;
@@ -52,11 +51,7 @@ public class AaclUsage {
     }
 
     public AggregateLicenseeClass getAggregateLicenseeClass() {
-        return aggregateLicenseeClass;
-    }
-
-    public void setAggregateLicenseeClass(AggregateLicenseeClass aggregateLicenseeClass) {
-        this.aggregateLicenseeClass = aggregateLicenseeClass;
+        return detailLicenseeClass.getAggregateLicenseeClass();
     }
 
     public PublicationType getPublicationType() {
@@ -174,7 +169,6 @@ public class AaclUsage {
         AaclUsage that = (AaclUsage) obj;
         return new EqualsBuilder()
             .append(detailLicenseeClass, that.detailLicenseeClass)
-            .append(aggregateLicenseeClass, that.aggregateLicenseeClass)
             .append(publicationType, that.publicationType)
             .append(originalPublicationType, that.originalPublicationType)
             .append(institution, that.institution)
@@ -196,7 +190,6 @@ public class AaclUsage {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(detailLicenseeClass)
-            .append(aggregateLicenseeClass)
             .append(publicationType)
             .append(originalPublicationType)
             .append(institution)
@@ -218,7 +211,6 @@ public class AaclUsage {
     public String toString() {
         return new ToStringBuilder(this)
             .append("detailLicenseeClass", detailLicenseeClass)
-            .append("aggregateLicenseeClass", aggregateLicenseeClass)
             .append("publicationType", publicationType)
             .append("originalPublicationType", originalPublicationType)
             .append("institution", institution)

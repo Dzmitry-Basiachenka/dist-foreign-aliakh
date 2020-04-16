@@ -19,15 +19,15 @@
       "usageSource": "Feb 2019 TUR",
       "rightLimitation": "DIGITAL",
       "numberOfPages": 200,
-      "aggregateLicenseeClass": {
-        "id": 143,
-        "discipline": "Engineering",
-        "enrollmentProfile": "EXGP"
-      },
       "detailLicenseeClass": {
         "id": 110,
         "discipline": "Life Sciences",
-        "enrollmentProfile": "EXU4"
+        "enrollmentProfile": "EXU4",
+        "aggregateLicenseeClass": {
+          "id": 143,
+          "discipline": "Engineering",
+          "enrollmentProfile": "EXGP"
+        }
       },
       "usageAge": {
         "period": 2019,
@@ -60,15 +60,15 @@
       "usageSource": "Feb 2019 TUR",
       "rightLimitation": "PRINT",
       "numberOfPages": 100,
-      "aggregateLicenseeClass": {
-        "id": 141,
-        "discipline": "Education",
-        "enrollmentProfile": "MU"
-      },
       "detailLicenseeClass": {
         "id": 108,
         "discipline": "Life Sciences",
-        "enrollmentProfile": "EXGP"
+        "enrollmentProfile": "EXGP",
+        "aggregateLicenseeClass": {
+          "id": 141,
+          "discipline": "Education",
+          "enrollmentProfile": "MU"
+        }
       },
       "publicationType": {
         "name": "Book",
