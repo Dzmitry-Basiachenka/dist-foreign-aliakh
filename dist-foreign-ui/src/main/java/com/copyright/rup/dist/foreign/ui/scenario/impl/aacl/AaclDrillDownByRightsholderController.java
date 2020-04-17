@@ -38,8 +38,8 @@ public class AaclDrillDownByRightsholderController extends CommonDrillDownByRigh
 
     @Override
     public int getSize() {
-        return usageService.getCountByScenarioAndRhAccountNumber(getSelectedRightsholderAccountNumber(),
-            getSelectedScenario().getId(), getWidget().getSearchValue());
+        return usageService.getCountByScenarioAndRhAccountNumber(getSelectedScenario().getId(),
+            getSelectedRightsholderAccountNumber(), getWidget().getSearchValue());
     }
 
     @Override
@@ -49,8 +49,9 @@ public class AaclDrillDownByRightsholderController extends CommonDrillDownByRigh
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return usageService.getByScenarioAndRhAccountNumber(getSelectedRightsholderAccountNumber(),
-            getSelectedScenario().getId(), getWidget().getSearchValue(), new Pageable(startIndex, count), sort);
+        return usageService.getByScenarioAndRhAccountNumber(getSelectedScenario().getId(),
+            getSelectedRightsholderAccountNumber(), getWidget().getSearchValue(), new Pageable(startIndex, count),
+            sort);
     }
 
     @Override

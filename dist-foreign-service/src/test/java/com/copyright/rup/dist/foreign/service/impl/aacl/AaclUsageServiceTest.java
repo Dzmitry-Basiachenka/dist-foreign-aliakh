@@ -512,21 +512,21 @@ public class AaclUsageServiceTest {
 
     @Test
     public void testGetCountByScenarioAndRhAccountNumber() {
-        expect(aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(1000009422L, SCENARIO_ID, SEARCH))
+        expect(aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH))
             .andReturn(10).once();
         replay(aaclUsageRepository);
-        assertEquals(10, aaclUsageService.getCountByScenarioAndRhAccountNumber(1000009422L, SCENARIO_ID, SEARCH));
+        assertEquals(10, aaclUsageService.getCountByScenarioAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH));
         verify(aaclUsageRepository);
     }
 
     @Test
     public void testGetByScenarioAndRhAccountNumber() {
         List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
-        expect(aaclUsageRepository.findByScenarioIdAndRhAccountNumber(1000009422L, SCENARIO_ID, SEARCH, null, null))
+        expect(aaclUsageRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null, null))
             .andReturn(usageDtos).once();
         replay(aaclUsageRepository);
         assertEquals(usageDtos,
-            aaclUsageService.getByScenarioAndRhAccountNumber(1000009422L, SCENARIO_ID, SEARCH, null, null));
+            aaclUsageService.getByScenarioAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null, null));
         verify(aaclUsageRepository);
     }
 

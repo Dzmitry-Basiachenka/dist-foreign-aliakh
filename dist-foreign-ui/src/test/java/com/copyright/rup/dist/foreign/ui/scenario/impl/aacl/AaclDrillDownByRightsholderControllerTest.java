@@ -76,7 +76,7 @@ public class AaclDrillDownByRightsholderControllerTest {
         Capture<Pageable> pageableCapture = new Capture<>();
         Capture<Sort> sortCapture = new Capture<>();
         expect(controller.getWidget()).andReturn(new AaclDrillDownByRightsholderControllerTest.WidgetMock()).once();
-        expect(usageService.getByScenarioAndRhAccountNumber(eq(RH_ACCOUNT_NUMBER), eq(SCENARIO_UID), eq(SEARCH),
+        expect(usageService.getByScenarioAndRhAccountNumber(eq(SCENARIO_UID), eq(RH_ACCOUNT_NUMBER), eq(SEARCH),
             capture(pageableCapture), capture(sortCapture)))
             .andReturn(usageDtos).once();
         replay(usageService, controller);
@@ -93,7 +93,7 @@ public class AaclDrillDownByRightsholderControllerTest {
     @Test
     public void testGetSize() {
         expect(controller.getWidget()).andReturn(new AaclDrillDownByRightsholderControllerTest.WidgetMock()).once();
-        expect(usageService.getCountByScenarioAndRhAccountNumber(eq(RH_ACCOUNT_NUMBER), eq(SCENARIO_UID), eq(SEARCH)))
+        expect(usageService.getCountByScenarioAndRhAccountNumber(eq(SCENARIO_UID), eq(RH_ACCOUNT_NUMBER), eq(SEARCH)))
             .andReturn(42).once();
         replay(usageService, controller);
         assertEquals(42, controller.getSize());

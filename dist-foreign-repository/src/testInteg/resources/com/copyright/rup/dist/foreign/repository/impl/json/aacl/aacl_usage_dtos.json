@@ -36,7 +36,8 @@
       "publicationType": {
         "name": "Business or Trade Journal",
         "weight": 1.50
-      }
+      },
+      "originalPublicationType": "Consumer Magazine"
     },
     "comment": "AACL Scenario Comment"
   },
@@ -77,7 +78,8 @@
       "usageAge": {
         "period": 2020,
         "weight": 1.00
-      }
+      },
+      "originalPublicationType": "NATL-INTL Newspaper"
     },
     "comment": "AACL Scenario Comment"
   }

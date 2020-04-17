@@ -215,24 +215,24 @@ public interface IAaclUsageService {
     /**
      * Gets count of usage details based on {@link Scenario} and rightsholder account number.
      *
-     * @param accountNumber selected rightsholder account number
      * @param scenarioId    scenario identifier
+     * @param accountNumber selected rightsholder account number
      * @param searchValue   search value
      * @return count of usage details
      */
-    int getCountByScenarioAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
+    int getCountByScenarioAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue);
 
     /**
      * Gets list of {@link UsageDto}s based on {@link Scenario} and rightsholder account number.
      *
-     * @param accountNumber selected rightsholder account number
      * @param scenarioId    scenario identifier
+     * @param accountNumber selected rightsholder account number
      * @param searchValue   search value
      * @param pageable      instance of {@link Pageable}
      * @param sort          instance of {@link Sort}
      * @return list of {@link UsageDto}s
      */
-    List<UsageDto> getByScenarioAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
+    List<UsageDto> getByScenarioAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue,
                                                    Pageable pageable, Sort sort);
 
     /**
