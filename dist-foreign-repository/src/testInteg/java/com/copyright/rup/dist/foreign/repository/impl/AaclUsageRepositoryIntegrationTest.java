@@ -573,7 +573,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testFindCountByScenarioIdAndRhAccountNumber() {
         assertEquals(2, aaclUsageRepository
-            .findCountByScenarioIdAndRhAccountNumber(1000011450L, "20bed3d9-8da3-470f-95d7-d839a41488d4", null));
+            .findCountByScenarioIdAndRhAccountNumber("20bed3d9-8da3-470f-95d7-d839a41488d4", 1000011450L, null));
     }
 
     @Test
@@ -581,7 +581,7 @@ public class AaclUsageRepositoryIntegrationTest {
         List<UsageDto> expectedUsageDtos =
             loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_usage_dtos.json"));
         List<UsageDto> actualUsageDtos = aaclUsageRepository
-            .findByScenarioIdAndRhAccountNumber(1000011450L, "20bed3d9-8da3-470f-95d7-d839a41488d4", null, null, null);
+            .findByScenarioIdAndRhAccountNumber("20bed3d9-8da3-470f-95d7-d839a41488d4", 1000011450L, null, null, null);
         assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
         IntStream.range(0, expectedUsageDtos.size())
             .forEach(index -> verifyUsageDto(expectedUsageDtos.get(0), actualUsageDtos.get(0)));
@@ -625,6 +625,8 @@ public class AaclUsageRepositoryIntegrationTest {
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "publicationType", Sort.Direction.DESC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "publicationTypeWeight", Sort.Direction.ASC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "publicationTypeWeight", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "originalPublicationType", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "originalPublicationType", Sort.Direction.DESC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "institution", Sort.Direction.ASC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "institution", Sort.Direction.DESC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "usagePeriod", Sort.Direction.ASC);
@@ -672,7 +674,7 @@ public class AaclUsageRepositoryIntegrationTest {
                                                                  Sort.Direction sortDirection) {
         String scenarioId = "20bed3d9-8da3-470f-95d7-d839a41488d4";
         List<UsageDto> usageDtos = aaclUsageRepository
-            .findByScenarioIdAndRhAccountNumber(1000011450L, scenarioId, null, null,
+            .findByScenarioIdAndRhAccountNumber(scenarioId, 1000011450L, null, null,
                 new Sort(sortProperty, sortDirection));
         assertEquals(2, CollectionUtils.size(usageDtos));
         assertEquals(detailId, usageDtos.get(0).getId());

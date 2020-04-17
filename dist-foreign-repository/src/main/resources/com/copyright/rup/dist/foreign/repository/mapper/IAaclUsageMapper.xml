@@ -506,7 +506,7 @@
             <when test="sort.property == 'publicationTypeWeight'">
                 uaacl.publication_type_weight <include refid="IUsageMapper.direction"/>
             </when>
-            <when test="sort.property == 'historicalPublicationType'">
+            <when test="sort.property == 'originalPublicationType'">
                 uaacl.original_publication_type <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'usagePeriod'">

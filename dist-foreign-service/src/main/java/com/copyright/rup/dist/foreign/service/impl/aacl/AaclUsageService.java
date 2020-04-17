@@ -330,14 +330,14 @@ public class AaclUsageService implements IAaclUsageService {
 
 
     @Override
-    public int getCountByScenarioAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
-        return aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue);
+    public int getCountByScenarioAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue) {
+        return aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(scenarioId, accountNumber, searchValue);
     }
 
     @Override
-    public List<UsageDto> getByScenarioAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
+    public List<UsageDto> getByScenarioAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue,
                                                           Pageable pageable, Sort sort) {
-        return aaclUsageRepository.findByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue,
+        return aaclUsageRepository.findByScenarioIdAndRhAccountNumber(scenarioId, accountNumber, searchValue,
             pageable, sort);
     }
 

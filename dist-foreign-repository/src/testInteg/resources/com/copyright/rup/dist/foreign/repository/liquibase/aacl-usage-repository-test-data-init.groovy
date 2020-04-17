@@ -1179,6 +1179,7 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
+            column(name: 'original_publication_type', value: "NATL-INTL Newspaper")
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1211,6 +1212,7 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: '110')
             column(name: 'df_publication_type_uid', value: '68fd94c0-a8c0-4a59-bfe3-6674c4b12199')
             column(name: 'publication_type_weight', value: 1.50)
+            column(name: 'original_publication_type', value: "Consumer Magazine")
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
