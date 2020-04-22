@@ -46,6 +46,11 @@ public interface IReportController extends IController<IReportWidget> {
     IOwnershipAdjustmentReportController getOwnershipAdjustmentReportController();
 
     /**
+     * @return work shares by aggregate class report controller
+     */
+    ICommonScenarioReportController getWorkSharesByAggLcClassReportController();
+
+    /**
      * @return instance of {@link IStreamSource} for FAS/FAS2 Batch Summary Report.
      */
     IStreamSource getFasBatchSummaryReportStreamSource();
