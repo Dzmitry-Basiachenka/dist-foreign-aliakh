@@ -73,7 +73,8 @@ public class AaclScenarioWidgetTest {
         scenario.setNetTotal(new BigDecimal("13600.00"));
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource())
-            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
+            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).times(2);
+        expect(controller.getExportScenarioUsagesStreamSource()).andReturn(streamSource).once();
         expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
@@ -143,11 +144,14 @@ public class AaclScenarioWidgetTest {
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(2, horizontalLayout.getComponentCount());
-        Button exportButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals(3, horizontalLayout.getComponentCount());
+        Button exportDetailsButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals("Export Details", exportDetailsButton.getCaption());
+        assertEquals("Export_Details", exportDetailsButton.getId());
+        Button exportButton = (Button) horizontalLayout.getComponent(1);
         assertEquals("Export", exportButton.getCaption());
         assertEquals("Export", exportButton.getId());
-        Button closeButton = (Button) horizontalLayout.getComponent(1);
+        Button closeButton = (Button) horizontalLayout.getComponent(2);
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());

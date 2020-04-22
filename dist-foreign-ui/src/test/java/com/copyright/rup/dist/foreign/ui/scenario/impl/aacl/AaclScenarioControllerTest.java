@@ -106,9 +106,9 @@ public class AaclScenarioControllerTest {
         expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
         expect(streamSource.getSource())
-            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
+            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(streamSource).once();
+            .andReturn(streamSource).times(2);
         replay(usageService, scenarioService, streamSourceHandler, streamSource);
         controller.initWidget();
         List<RightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
@@ -129,9 +129,9 @@ public class AaclScenarioControllerTest {
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
         expect(streamSource.getSource())
-            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
+            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
-            .andReturn(streamSource).once();
+            .andReturn(streamSource).times(2);
         expect(usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY)).andReturn(1)
             .once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();

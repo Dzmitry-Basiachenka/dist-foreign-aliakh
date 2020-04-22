@@ -27,6 +27,7 @@ import com.vaadin.ui.VerticalLayout;
 public class AaclScenarioWidget extends CommonScenarioWidget implements IAaclScenarioWidget {
 
     private final IAaclScenarioController scenarioController;
+    private Button exportDetailsButton;
     private Button exportButton;
 
     /**
@@ -50,11 +51,16 @@ public class AaclScenarioWidget extends CommonScenarioWidget implements IAaclSce
 
     @Override
     protected HorizontalLayout initButtons() {
+        exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
+        OnDemandFileDownloader exportDetailsFileDownloader =
+            new OnDemandFileDownloader(scenarioController.getExportScenarioUsagesStreamSource().getSource());
+        exportDetailsFileDownloader.extend(exportDetailsButton);
         exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader exportScenarioFileDownloader = new OnDemandFileDownloader(
             scenarioController.getExportScenarioRightsholderTotalsStreamSource().getSource());
         exportScenarioFileDownloader.extend(exportButton);
-        HorizontalLayout buttons = new HorizontalLayout(exportButton, Buttons.createCloseButton(this));
+        HorizontalLayout buttons =
+            new HorizontalLayout(exportDetailsButton, exportButton, Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");
         buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;
@@ -62,6 +68,7 @@ public class AaclScenarioWidget extends CommonScenarioWidget implements IAaclSce
 
     private void updateLayouts() {
         boolean scenarioEmpty = scenarioController.isScenarioEmpty();
+        exportDetailsButton.setEnabled(!scenarioEmpty);
         exportButton.setEnabled(!scenarioEmpty);
         getRightsholdersGrid().setVisible(!scenarioEmpty);
         getSearchWidget().setVisible(!scenarioEmpty);
