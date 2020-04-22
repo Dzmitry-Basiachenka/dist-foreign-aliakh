@@ -9,10 +9,13 @@ import static org.easymock.EasyMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.nts.IWorkClassificationService;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.impl.chain.executor.IPerformanceLogger;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 /**
  * Verifies {@link ClassificationProcessor}.
@@ -41,6 +44,8 @@ public class ClassificationProcessorTest {
         classificationProcessor.setWorkClassificationService(workClassificationServiceMock);
         classificationProcessor.setSuccessProcessor(nonBelletristicProcessorMock);
         classificationProcessor.setFailureProcessor(unclassifiedStatusProcessorMock);
+        Whitebox.setInternalState(classificationProcessor.getSuccessProcessor(), createMock(IPerformanceLogger.class));
+        Whitebox.setInternalState(classificationProcessor.getFailureProcessor(), createMock(IPerformanceLogger.class));
     }
 
     @Test
@@ -49,6 +54,8 @@ public class ClassificationProcessorTest {
         expect(workClassificationServiceMock.getClassification(WR_WRK_INST)).andReturn("STM").once();
         nonBelletristicProcessorMock.process(usage);
         expectLastCall().once();
+        expect(nonBelletristicProcessorMock.getChainProcessorType()).andReturn(ChainProcessorTypeEnum.CLASSIFICATION)
+            .once();
         replay(workClassificationServiceMock, nonBelletristicProcessorMock);
         classificationProcessor.process(usage);
         verify(workClassificationServiceMock, nonBelletristicProcessorMock);
@@ -60,6 +67,8 @@ public class ClassificationProcessorTest {
         expect(workClassificationServiceMock.getClassification(WR_WRK_INST)).andReturn(null).once();
         unclassifiedStatusProcessorMock.process(usage);
         expectLastCall().once();
+        expect(unclassifiedStatusProcessorMock.getChainProcessorType()).andReturn(ChainProcessorTypeEnum.DELETE)
+            .once();
         replay(workClassificationServiceMock, unclassifiedStatusProcessorMock);
         classificationProcessor.process(usage);
         verify(workClassificationServiceMock, unclassifiedStatusProcessorMock);
