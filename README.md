@@ -1,3 +1,18 @@
+9.1.22
+-
+*  B-56847 Tech Debt: FDA: adjust AaclUsage domain object to remove redundant fields for Agg and LC class detail
+* B-54909 FDA: AACL Reports: Work Shares by Aggregate Licensee Class: implement common widget and controller for scenario specific reports
+* B-55007 FDA: AACL Exports: Scenario-specific usage details: implement Export Details  button to scenario  window
+* B-56278 FDA: Submit and Approve an AACL scenario: Add buttons
+* B-56847 Tech Debt: FDA: adjust AaclUsage domain object to avoid redundant initialization
+* B-56847 Tech Debt: FDA: adjust AaclUsage domain object to remove redundant fields for usage and publication type weights
+* B-56847 Tech Debt: FDA: adjust sort properties on Usages tab for AACL product family
+* B-56847 Tech Debt: FDA: handle exception during canceling of CSV reports generation
+* B-56847 Tech Debt: FDA: update dist-common version to 49.5.+
+* B-56848 Tech Debt: FDA: change dist-common version to 49.4.+
+* B-56913 FDA: Modify the scenario drill-down view for AACL: Make changes based on comments in CR-DIST-FOREIGN-163
+* B-58288 FDA: Batch processing performance enhancements: implement performance logger for chain execuror
+
 9.1.21
 -
 * B-56267 FDA: Delete AACL Scenario: make changes based on CR-DIST-FOREIGN-166
