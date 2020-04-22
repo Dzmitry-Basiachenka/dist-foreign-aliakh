@@ -227,4 +227,20 @@ public interface IReportRepository {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeNtsWithdrawnBatchSummaryCsvReport(OutputStream outputStream);
+
+    /**
+     * Finds archived usages by AACL scenario id and writes them into the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeArchivedAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds usages by AACl scenario id and writes them into the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 }

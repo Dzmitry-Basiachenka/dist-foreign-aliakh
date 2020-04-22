@@ -89,6 +89,14 @@ public interface IReportService {
     void writeNtsScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
 
     /**
+     * Writes AACL scenario usages into csv output stream.
+     *
+     * @param scenario          {@link Scenario}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeAaclScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
+
+    /**
      * Writes scenario rightsholders into csv output stream.
      *
      * @param scenario          {@link Scenario}

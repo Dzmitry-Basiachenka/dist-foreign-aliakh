@@ -310,6 +310,16 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         }
     }
 
+    @Override
+    public void writeArchivedAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        //TODO {aazarenka} will be implemented in task related implement repository logic
+    }
+
+    @Override
+    public void writeAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        //TODO {aazarenka} will be implemented in task related implement repository logic
+    }
+
     private void writeCsvReportByParts(String countMethodName, String selectMethodName, Map<String, Object> parameters,
                                        Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
         writeCsvReportByParts(countMethodName, selectMethodName, parameters, true, handlerSupplier);

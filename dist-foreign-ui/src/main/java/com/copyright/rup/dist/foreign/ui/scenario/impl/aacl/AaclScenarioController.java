@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioControll
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioController;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -43,6 +42,6 @@ public class AaclScenarioController extends CommonScenarioController implements 
 
     @Override
     protected void writeScenarioUsagesCsvReport(Scenario scenarioForReport, PipedOutputStream pos) {
-        throw new NotImplementedException("Export of scenario usages is not yet implemented");
+        getReportService().writeAaclScenarioUsagesCsvReport(scenarioForReport, pos);
     }
 }
