@@ -26,7 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -116,6 +118,17 @@ public class FundPoolRepositoryIntegrationTest {
         List<FundPool> fundPools = fundPoolRepository.findNtsNotAttachedToScenario();
         assertEquals(1, fundPools.size());
         assertEquals(fundPools.get(0).getId(), "49060c9b-9cc2-4b93-b701-fffc82eb28b0");
+    }
+
+    @Test
+    public void testFindAaclNotAttachedToScenario() {
+        List<String> actualIds = fundPoolRepository.findAaclNotAttachedToScenario().stream()
+            .map(FundPool::getId)
+            .collect(Collectors.toList());
+        List<String> expectedIds =
+            Arrays.asList("6d38454b-ce71-4b0e-8ecf-436d23dc6c3e", "ce9c1258-6d29-4224-a4e6-6f03b6aeef53",
+                "100ce91c-49c1-4197-9f7a-23a8210d5706");
+        assertEquals(expectedIds, actualIds);
     }
 
     @Test

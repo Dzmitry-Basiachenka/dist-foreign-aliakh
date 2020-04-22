@@ -107,6 +107,11 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    public List<FundPool> getAaclNotAttachedToScenario() {
+        return fundPoolRepository.findAaclNotAttachedToScenario();
+    }
+
+    @Override
     @Transactional
     public void deleteNtsFundPool(FundPool fundPool) {
         String userName = RupContextUtils.getUserName();

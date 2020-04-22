@@ -145,7 +145,8 @@ public class AaclUsageWidgetTest {
             .andReturn(Collections.emptyMap()).once();
         expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
-        expect(controller.getFundPools()).andReturn(Collections.singletonList(new FundPool())).once();
+        expect(controller.getFundPoolsNotAttachedToScenario())
+            .andReturn(Collections.singletonList(new FundPool())).once();
         expect(controller.getUsageAges()).andReturn(Collections.singletonList(new UsageAge())).once();
         expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(new PublicationType())).once();
         expect(controller.getDetailLicenseeClasses())

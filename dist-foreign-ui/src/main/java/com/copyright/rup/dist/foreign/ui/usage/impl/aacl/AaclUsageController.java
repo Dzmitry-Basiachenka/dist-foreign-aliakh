@@ -133,6 +133,11 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
+    public List<FundPool> getFundPoolsNotAttachedToScenario() {
+        return fundPoolService.getAaclNotAttachedToScenario();
+    }
+
+    @Override
     public List<FundPoolDetail> getFundPoolDetails(String fundPoolId) {
         return fundPoolService.getDetailsByFundPoolId(fundPoolId);
     }

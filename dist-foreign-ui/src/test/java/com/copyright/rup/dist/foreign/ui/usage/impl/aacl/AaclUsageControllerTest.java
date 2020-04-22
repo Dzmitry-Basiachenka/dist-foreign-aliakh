@@ -248,6 +248,15 @@ public class AaclUsageControllerTest {
     }
 
     @Test
+    public void testGetFundPoolsNotAttachedToScenario() {
+        List<FundPool> fundPools = Collections.singletonList(new FundPool());
+        expect(fundPoolService.getAaclNotAttachedToScenario()).andReturn(fundPools).once();
+        replay(fundPoolService);
+        assertEquals(fundPools, controller.getFundPoolsNotAttachedToScenario());
+        verify(fundPoolService);
+    }
+
+    @Test
     public void testGetFundPoolDetails() {
         List<FundPoolDetail> details = Collections.singletonList(new FundPoolDetail());
         expect(fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(details).once();

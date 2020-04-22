@@ -63,6 +63,11 @@ public class FundPoolRepository extends BaseRepository implements IFundPoolRepos
     }
 
     @Override
+    public List<FundPool> findAaclNotAttachedToScenario() {
+        return selectList("IFundPoolMapper.findAaclNotAttachedToScenario", FdaConstants.AACL_PRODUCT_FAMILY);
+    }
+
+    @Override
     public boolean fundPoolExists(String productFamily, String name) {
         checkArgument(StringUtils.isNotBlank(name));
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);

@@ -174,6 +174,15 @@ public class FundPoolServiceTest {
     }
 
     @Test
+    public void testGetAaclNotAttachedToScenario() {
+        List<FundPool> funds = Collections.singletonList(buildAaclFundPool());
+        expect(fundPoolRepository.findAaclNotAttachedToScenario()).andReturn(funds).once();
+        replay(fundPoolRepository);
+        assertEquals(funds, fundPoolService.getAaclNotAttachedToScenario());
+        verify(fundPoolRepository);
+    }
+
+    @Test
     public void testDeleteNtsFundPool() {
         ntsUsageService.deleteFromNtsFundPool(FUND_POOL_ID);
         expectLastCall().once();

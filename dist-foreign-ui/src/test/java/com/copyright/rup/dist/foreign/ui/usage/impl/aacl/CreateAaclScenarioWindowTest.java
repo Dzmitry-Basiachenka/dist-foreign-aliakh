@@ -101,7 +101,7 @@ public class CreateAaclScenarioWindowTest {
         aggregateLicenseeClass.setDiscipline("Life Sciences");
         detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
         expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).anyTimes();
-        expect(controller.getFundPools()).andReturn(Collections.singletonList(fundPool)).once();
+        expect(controller.getFundPoolsNotAttachedToScenario()).andReturn(Collections.singletonList(fundPool)).once();
         expect(controller.getUsageAges()).andReturn(Collections.singletonList(usageAge)).once();
         expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(publicationType)).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(detailLicenseeClass)).once();
