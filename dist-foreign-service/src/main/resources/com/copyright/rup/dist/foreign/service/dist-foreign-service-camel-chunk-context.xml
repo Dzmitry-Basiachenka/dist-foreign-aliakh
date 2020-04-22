@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+    <bean id="df.service.usageChunkMarshaller"
+          class="com.copyright.rup.dist.foreign.service.impl.common.chunk.CommonUsageChunkMarshaller"/>
+
+    <bean id="df.service.usageChunkUnmarshaller"
+          class="com.copyright.rup.dist.foreign.service.impl.common.chunk.CommonUsageChunkUnmarshaller"/>
+
+    <bean id="df.service.matchingChunkMarshaller" parent="df.service.usageChunkMarshaller">
+        <property name="serializer" ref="df.service.commonUsageSerializer"/>
+    </bean>
+
+    <bean id="df.service.matchingChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUsageDeserializer"/>
+    </bean>
+
+    <bean id="df.service.rightsChunkMarshaller" parent="df.service.usageChunkMarshaller">
+        <property name="serializer" ref="df.service.commonUsageSerializer"/>
+    </bean>
+
+    <bean id="df.service.rightsChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUsageDeserializer"/>
+    </bean>
+
+    <bean id="df.service.rhTaxChunkMarshaller" parent="df.service.usageChunkMarshaller">
+        <property name="serializer" ref="df.service.commonUsageSerializer"/>
+    </bean>
+
+    <bean id="df.service.rhTaxChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUsageDeserializer"/>
+    </bean>
+
+    <bean id="df.service.stmRhChunkMarshaller" parent="df.service.usageChunkMarshaller">
+        <property name="serializer" ref="df.service.commonUsageSerializer"/>
+    </bean>
+
+    <bean id="df.service.stmRhChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUsageDeserializer"/>
+    </bean>
+
+    <bean id="df.service.rhEligibilityChunkMarshaller" parent="df.service.usageChunkMarshaller">
+        <property name="serializer" ref="df.service.commonUsageSerializer"/>
+    </bean>
+
+    <bean id="df.service.rhEligibilityChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUsageDeserializer"/>
+    </bean>
+
+    <bean id="df.service.usageChunkProducer"
+          class="com.copyright.rup.dist.foreign.service.impl.common.chunk.CommonUsageChunkProducer"/>
+
+    <bean id="df.service.rightsChunkProducer" parent="df.service.usageChunkProducer">
+        <property name="endPoint" value="direct:df.service.chunk.rights"/>
+    </bean>
+
+    <bean id="df.service.rhTaxChunkProducer" parent="df.service.usageChunkProducer">
+        <property name="endPoint" value="direct:df.service.chunk.tax"/>
+    </bean>
+
+    <bean id="df.service.stmRhChunkProducer" parent="df.service.usageChunkProducer">
+        <property name="endPoint" value="direct:df.service.chunk.stm.rh"/>
+    </bean>
+
+    <bean id="df.service.rhEligibilityChunkProducer" parent="df.service.usageChunkProducer">
+        <property name="endPoint" value="direct:df.service.chunk.eligibility"/>
+    </bean>
+
+    <bean id="df.service.matchingChunkProducer" parent="df.service.usageChunkProducer">
+        <property name="endPoint" value="direct:df.service.chunk.matching"/>
+    </bean>
+</beans>
