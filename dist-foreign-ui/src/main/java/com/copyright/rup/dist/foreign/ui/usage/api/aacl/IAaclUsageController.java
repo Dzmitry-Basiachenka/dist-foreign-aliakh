@@ -56,6 +56,11 @@ public interface IAaclUsageController extends ICommonUsageController {
     List<FundPool> getFundPools();
 
     /**
+     * @return list of {@link FundPool}s that are not attached to a scenario.
+     */
+    List<FundPool> getFundPoolsNotAttachedToScenario();
+
+    /**
      * Gets {@link FundPoolDetail}s by {@link FundPool} id.
      *
      * @param fundPoolId {@link FundPool} id
