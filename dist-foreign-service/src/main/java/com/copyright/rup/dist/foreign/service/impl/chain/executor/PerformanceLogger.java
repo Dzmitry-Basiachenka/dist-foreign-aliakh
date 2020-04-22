@@ -36,13 +36,13 @@ public class PerformanceLogger implements IPerformanceLogger {
     private LocalDateTime lastlogDateTime;
 
     @Override
-    public void log(ChainProcessorTypeEnum chainProcessorTypeEnum) {
+    public void log(ChainProcessorTypeEnum chainProcessorTypeEnum, int increment) {
         synchronized (this) {
             if (lastlogDateTime == null
                 || Duration.between(lastlogDateTime, LocalDateTime.now()).toMinutes() > PERIOD_OF_INACTIVITY_MINUTES) {
                 reset();
             } else {
-                count(chainProcessorTypeEnum);
+                count(chainProcessorTypeEnum, increment);
                 log();
             }
         }
@@ -67,13 +67,14 @@ public class PerformanceLogger implements IPerformanceLogger {
      * Counts an event.
      *
      * @param chainProcessorTypeEnum instance of {@link ChainProcessorTypeEnum}
+     * @param increment              value to increment performance counter
      */
-    void count(ChainProcessorTypeEnum chainProcessorTypeEnum) {
+    void count(ChainProcessorTypeEnum chainProcessorTypeEnum, int increment) {
         Integer size = currentTypeToUsagesCount.get(chainProcessorTypeEnum);
         if (size == null) {
             size = 0;
         }
-        currentTypeToUsagesCount.put(chainProcessorTypeEnum, size + 1);
+        currentTypeToUsagesCount.put(chainProcessorTypeEnum, size + increment);
     }
 
     /**

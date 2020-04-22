@@ -17,6 +17,7 @@ public interface IPerformanceLogger {
      * Logs execution of {@link com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor}.
      *
      * @param chainProcessorTypeEnum instance of of {@link ChainProcessorTypeEnum}
+     * @param increment              value to increment performance counter
      */
-    void log(ChainProcessorTypeEnum chainProcessorTypeEnum);
+    void log(ChainProcessorTypeEnum chainProcessorTypeEnum, int increment);
 }
