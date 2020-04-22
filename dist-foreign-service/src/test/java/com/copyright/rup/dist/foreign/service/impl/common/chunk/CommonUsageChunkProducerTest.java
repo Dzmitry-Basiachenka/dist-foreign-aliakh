@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.common;
+package com.copyright.rup.dist.foreign.service.impl.common.chunk;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
@@ -12,37 +12,41 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
- * Verifies {@link CommonUsageProducer}.
+ * Verifies {@link CommonUsageChunkProducer}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
  * Date: 01/11/18
  *
  * @author Uladzislau Shalamitski
+ * @author Aliaksandr Liakh
  */
-public class CommonUsageProducerTest {
+public class CommonUsageChunkProducerTest {
 
     private static final String END_POINT = "test";
 
     private ProducerTemplate template;
-    private CommonUsageProducer producer;
+    private CommonUsageChunkProducer producer;
 
     @Before
     public void setUp() {
         template = createMock(ProducerTemplate.class);
-        producer = new CommonUsageProducer();
+        producer = new CommonUsageChunkProducer();
         producer.setEndPoint(END_POINT);
         Whitebox.setInternalState(producer, template);
     }
 
     @Test
     public void testSendMessage() {
-        Usage usage = new Usage();
-        template.sendBody(END_POINT, usage);
+        List<Usage> usages = Collections.singletonList(new Usage());
+        template.sendBody(END_POINT, usages);
         expectLastCall().once();
         replay(template);
-        producer.send(usage);
+        producer.send(usages);
         verify(template);
     }
 }
