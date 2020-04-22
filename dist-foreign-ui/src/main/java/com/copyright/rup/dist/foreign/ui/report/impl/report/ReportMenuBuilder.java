@@ -50,10 +50,10 @@ public enum ReportMenuBuilder implements IReportMenuBuilder {
     /**
      * Report builder for AACL product family
      */
-    AACL(false) {
+    AACL(true) {
         @Override
         public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
-            // no reports for AACL product family so far
+            new AaclReportMenuBuilder().addItems(controller, widget, rootItem);
         }
     };
 
