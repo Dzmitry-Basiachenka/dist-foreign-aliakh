@@ -9,6 +9,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 
 import com.vaadin.ui.Button;
@@ -35,6 +36,9 @@ public class AaclScenariosMediatorTest {
     private AaclScenariosMediator mediator;
     private Button viewButton;
     private Button deleteButton;
+    private Button submitButton;
+    private Button rejectButton;
+    private Button approveButton;
 
     @Before
     public void setUp() {
@@ -42,8 +46,14 @@ public class AaclScenariosMediatorTest {
         mediator = new AaclScenariosMediator();
         viewButton = new Button("View");
         deleteButton = new Button("Delete");
+        submitButton = new Button("Submit for Approval");
+        rejectButton = new Button("Reject");
+        approveButton = new Button("Approve");
         mediator.setViewButton(viewButton);
         mediator.setDeleteButton(deleteButton);
+        mediator.setSubmitButton(submitButton);
+        mediator.setRejectButton(rejectButton);
+        mediator.setApproveButton(approveButton);
     }
 
     @Test
@@ -89,6 +99,42 @@ public class AaclScenariosMediatorTest {
         assertFalse(deleteButton.isEnabled());
     }
 
+    @Test
+    public void testSelectedScenarioChangedInProgress() {
+        Scenario scenario = new Scenario();
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        mediator.selectedScenarioChanged(scenario);
+        assertTrue(deleteButton.isEnabled());
+        assertTrue(viewButton.isEnabled());
+        assertTrue(submitButton.isEnabled());
+        assertFalse(rejectButton.isEnabled());
+        assertFalse(approveButton.isEnabled());
+    }
+
+    @Test
+    public void testSelectedScenarioChangedSubmitted() {
+        Scenario scenario = new Scenario();
+        scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
+        mediator.selectedScenarioChanged(scenario);
+        assertFalse(deleteButton.isEnabled());
+        assertTrue(viewButton.isEnabled());
+        assertFalse(submitButton.isEnabled());
+        assertTrue(rejectButton.isEnabled());
+        assertTrue(approveButton.isEnabled());
+    }
+
+    @Test
+    public void testSelectedScenarioChangedApproved() {
+        Scenario scenario = new Scenario();
+        scenario.setStatus(ScenarioStatusEnum.APPROVED);
+        mediator.selectedScenarioChanged(scenario);
+        assertFalse(deleteButton.isEnabled());
+        assertTrue(viewButton.isEnabled());
+        assertFalse(submitButton.isEnabled());
+        assertFalse(rejectButton.isEnabled());
+        assertFalse(approveButton.isEnabled());
+    }
+
     private void mockViewOnlyPermissions() {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
@@ -97,11 +143,14 @@ public class AaclScenariosMediatorTest {
     private void mockManagerPermissions() {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_APPROVE_SCENARIO")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_REJECT_SCENARIO")).andReturn(true).once();
     }
 
     private void mockSpecialistPermissions() {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_SUBMIT_SCENARIO")).andReturn(true).once();
     }
 }

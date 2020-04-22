@@ -20,11 +20,17 @@ class AaclScenariosMediator implements IScenariosMediator {
 
     private Button viewButton;
     private Button deleteButton;
+    private Button submitButton;
+    private Button rejectButton;
+    private Button approveButton;
 
     @Override
     public void applyPermissions() {
         deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
         viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
+        submitButton.setVisible(ForeignSecurityUtils.hasSubmitScenarioPermission());
+        rejectButton.setVisible(ForeignSecurityUtils.hasRejectScenarioPermission());
+        approveButton.setVisible(ForeignSecurityUtils.hasApproveScenarioPermission());
     }
 
     @Override
@@ -34,9 +40,16 @@ class AaclScenariosMediator implements IScenariosMediator {
             ScenarioStatusEnum status = scenario.getStatus();
             boolean isInProgressState = ScenarioStatusEnum.IN_PROGRESS == status;
             deleteButton.setEnabled(isInProgressState);
+            submitButton.setEnabled(isInProgressState);
+            boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
+            rejectButton.setEnabled(isSubmittedState);
+            approveButton.setEnabled(isSubmittedState);
         } else {
             viewButton.setEnabled(false);
             deleteButton.setEnabled(false);
+            submitButton.setEnabled(false);
+            rejectButton.setEnabled(false);
+            approveButton.setEnabled(false);
         }
     }
 
@@ -46,5 +59,17 @@ class AaclScenariosMediator implements IScenariosMediator {
 
     void setDeleteButton(Button deleteButton) {
         this.deleteButton = deleteButton;
+    }
+
+    void setSubmitButton(Button submitButton) {
+        this.submitButton = submitButton;
+    }
+
+    void setRejectButton(Button rejectButton) {
+        this.rejectButton = rejectButton;
+    }
+
+    void setApproveButton(Button approveButton) {
+        this.approveButton = approveButton;
     }
 }
