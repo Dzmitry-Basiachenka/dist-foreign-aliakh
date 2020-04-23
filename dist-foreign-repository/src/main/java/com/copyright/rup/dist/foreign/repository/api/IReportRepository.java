@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
@@ -175,6 +176,16 @@ public interface IReportRepository {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeArchivedScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes Work Shares by Aggregate Licensee Class Summary Report into the output stream in csv format.
+     *
+     * @param scenarioId   scenario id
+     * @param status       scenario status
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeWorkSharesByAggLcClassSummaryCsvReport(String scenarioId, ScenarioStatusEnum status,
+                                                     OutputStream outputStream);
 
     /**
      * Finds FAS and FAS2 usages by given {@link AuditFilter} and writes them to the given {@link PipedOutputStream}.

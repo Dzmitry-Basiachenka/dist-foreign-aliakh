@@ -54,6 +54,7 @@
         <typeAlias alias="PubType" type="com.copyright.rup.dist.foreign.domain.PublicationType"/>
         <typeAlias alias="DetailLicenseeClass" type="com.copyright.rup.dist.foreign.domain.DetailLicenseeClass"/>
         <typeAlias alias="AggregateLicenseeClass" type="com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass"/>
+        <typeAlias alias="WorkSharesByAggLcClassReportDto" type="com.copyright.rup.dist.foreign.domain.report.WorkSharesByAggLcClassReportDto"/>
     </typeAliases>
 
     <typeHandlers>

@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -265,6 +266,27 @@ public class CsvReportsIntegrationTest {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeArchivedScenarioRightsholderTotalsCsvReport("ff47dee9-327a-4ff6-b170-d89f5190ccd8",
                 outputStream), "archive_scenario_rightsholder_totals_report_fas.csv");
+    }
+
+    @Test
+    public void testWriteWorkSharesByAggLcClassSummaryCsvReport() throws IOException {
+        assertFiles(outputStream -> reportRepository.writeWorkSharesByAggLcClassSummaryCsvReport(
+            "42ad575b-5d0d-4d82-b1c5-d0982f6f6f1b", ScenarioStatusEnum.IN_PROGRESS, outputStream),
+            "shares_by_agg_lc_class_summary_report.csv");
+    }
+
+    @Test
+    public void testWriteArchivedWorkSharesByAggLcClassSummaryCsvEmptyReport() throws IOException {
+        assertFiles(outputStream -> reportRepository.writeWorkSharesByAggLcClassSummaryCsvReport(
+            "42ad575b-5d0d-4d82-b1c5-d0982f6f6f1b", ScenarioStatusEnum.SENT_TO_LM, outputStream),
+            "shares_by_agg_lc_class_summary_empty_report.csv");
+    }
+
+    @Test
+    public void testWriteArchivedWorkSharesByAggLcClassSummaryCsvReport() throws IOException {
+        assertFiles(outputStream -> reportRepository.writeWorkSharesByAggLcClassSummaryCsvReport(
+            "3704ecc3-927b-4b30-a860-6c58e7654c5e", ScenarioStatusEnum.SENT_TO_LM, outputStream),
+            "shares_by_agg_lc_class_summary_report.csv");
     }
 
     @Test
