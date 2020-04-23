@@ -252,7 +252,7 @@
         where nts_fields->>'pre_service_fee_fund_uid' = #{fundPoolId}
     </select>
 
-    <select id="findNamesByAaclFundPoolId" parameterType="string" resultType="string">
+    <select id="findNameByAaclFundPoolId" parameterType="string" resultType="string">
         select name
         from ${schema}.df_scenario
         where aacl_fields->>'fund_pool_uid' = #{fundPoolId}

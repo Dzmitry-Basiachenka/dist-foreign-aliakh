@@ -133,8 +133,7 @@ public class ViewAaclFundPoolWindowTest {
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getButtonClickListener(1);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
-        expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
-            .andReturn(Collections.emptyList()).once();
+        expect(controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID)).andReturn(null).once();
         expect(
             Windows.showConfirmDialog(
                 eq("Are you sure you want to delete <i><b>'AACL Fund Pool'</b></i> fund pool?"), anyObject()))
@@ -152,11 +151,9 @@ public class ViewAaclFundPoolWindowTest {
         Whitebox.setInternalState(viewAaclFundPoolWindow, "grid", grid);
         Button.ClickListener listener = getButtonClickListener(1);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(fundPool)).once();
-        expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
-            .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
+        expect(controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID)).andReturn("Scenario 1").once();
         Windows.showNotificationWindow(
-            eq("Fund pool cannot be deleted because it is associated with the following scenarios:" +
-                "<ul><li>Scenario 1</li><li>Scenario 2</li></ul>"));
+            eq("Fund pool cannot be deleted because it is associated with the following scenario: Scenario 1"));
         expectLastCall().once();
         replay(controller, grid, Windows.class);
         listener.buttonClick(createMock(ClickEvent.class));
@@ -234,6 +231,7 @@ public class ViewAaclFundPoolWindowTest {
         aaclFundPool.setName("AACL Fund Pool");
         return aaclFundPool;
     }
+
     private List<FundPoolDetail> buildFundPoolDetail() {
         FundPoolDetail fundPoolDetail = new FundPoolDetail();
         fundPoolDetail.setAggregateLicenseeClass(buildAggregateLicenseeClass(108, "EXGP", "Life Sciences"));

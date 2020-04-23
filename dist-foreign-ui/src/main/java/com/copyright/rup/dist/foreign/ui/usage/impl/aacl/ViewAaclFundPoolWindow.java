@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -91,9 +90,8 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
         deleteButton.addClickListener(event -> {
             grid.getSelectedItems().stream().findFirst().ifPresent(selectedFundPool -> {
-                List<String> scenarioNames =
-                    controller.getScenarioNamesAssociatedWithFundPool(selectedFundPool.getId());
-                if (CollectionUtils.isEmpty(scenarioNames)) {
+                String scenarioName = controller.getScenarioNameAssociatedWithFundPool(selectedFundPool.getId());
+                if (Objects.isNull(scenarioName)) {
                     Windows.showConfirmDialog(
                         ForeignUi.getMessage("message.confirm.delete_action", selectedFundPool.getName(), "fund pool"),
                         () -> {
@@ -101,7 +99,9 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
                             grid.setItems(controller.getFundPools());
                         });
                 } else {
-                    Windows.showNotificationWindow(buildDeleteErrorMessage(scenarioNames));
+                    Windows.showNotificationWindow(
+                        ForeignUi.getMessage("message.error.delete_action", "Fund pool", "scenario",
+                            ' ' + scenarioName));
                 }
             });
         });
@@ -157,14 +157,5 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
         return Objects.nonNull(date)
             ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
             : StringUtils.EMPTY;
-    }
-
-    private String buildDeleteErrorMessage(List<String> scenarioNames) {
-        StringBuilder htmlNamesList = new StringBuilder("<ul>");
-        for (String name : scenarioNames) {
-            htmlNamesList.append("<li>").append(name).append("</li>");
-        }
-        htmlNamesList.append("</ul>");
-        return ForeignUi.getMessage("message.error.delete_action", "Fund pool", "scenarios", htmlNamesList);
     }
 }
