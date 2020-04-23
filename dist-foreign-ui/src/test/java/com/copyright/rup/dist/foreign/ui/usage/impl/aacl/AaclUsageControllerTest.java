@@ -266,12 +266,10 @@ public class AaclUsageControllerTest {
     }
 
     @Test
-    public void testGetScenarioNamesAssociatedWithFundPool() {
-        expect(scenarioService.getScenarioNamesByAaclFundPoolId(FUND_POOL_ID))
-            .andReturn(Collections.singletonList("Scenario 1")).once();
+    public void testGetScenarioNameAssociatedWithFundPool() {
+        expect(scenarioService.getScenarioNameByAaclFundPoolId(FUND_POOL_ID)).andReturn("Scenario 1").once();
         replay(scenarioService);
-        assertEquals(Collections.singletonList("Scenario 1"),
-            controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID));
+        assertEquals("Scenario 1", controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID));
         verify(scenarioService);
     }
 

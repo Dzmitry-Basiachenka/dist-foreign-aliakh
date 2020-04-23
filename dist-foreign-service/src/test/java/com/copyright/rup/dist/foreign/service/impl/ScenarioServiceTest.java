@@ -131,13 +131,11 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testGetScenarioNamesByAaclFundPoolId() {
+    public void testGetScenarioNameByAaclFundPoolId() {
         String fundPoolId = RupPersistUtils.generateUuid();
-        expect(scenarioRepository.findNamesByAaclFundPoolId(fundPoolId))
-            .andReturn(Collections.singletonList(SCENARIO_NAME)).once();
+        expect(scenarioRepository.findNameByAaclFundPoolId(fundPoolId)).andReturn(SCENARIO_NAME).once();
         replay(scenarioRepository);
-        assertEquals(Collections.singletonList(SCENARIO_NAME),
-            scenarioService.getScenarioNamesByAaclFundPoolId(fundPoolId));
+        assertEquals(SCENARIO_NAME, scenarioService.getScenarioNameByAaclFundPoolId(fundPoolId));
         verify(scenarioRepository);
     }
 

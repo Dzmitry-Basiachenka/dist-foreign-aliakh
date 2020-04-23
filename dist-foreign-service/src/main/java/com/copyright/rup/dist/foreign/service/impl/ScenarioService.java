@@ -121,8 +121,8 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    public List<String> getScenarioNamesByAaclFundPoolId(String fundPoolId) {
-        return scenarioRepository.findNamesByAaclFundPoolId(fundPoolId);
+    public String getScenarioNameByAaclFundPoolId(String fundPoolId) {
+        return scenarioRepository.findNameByAaclFundPoolId(fundPoolId);
     }
 
     @Override
