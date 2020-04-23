@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  */
 public class PerformanceLoggerChainProcessorWrapperTest {
 
-    private PerformanceLoggerChainProcessorWrapper processorWrapper;
+    private PerformanceLoggerChainProcessorWrapper<Usage> processorWrapper;
     private IChainProcessor<Usage> processor;
     private IPerformanceLogger logger;
 
@@ -36,7 +36,7 @@ public class PerformanceLoggerChainProcessorWrapperTest {
     public void setUp() {
         processor = createMock(IChainProcessor.class);
         logger = createMock(IPerformanceLogger.class);
-        processorWrapper = new PerformanceLoggerChainProcessorWrapper(processor, logger);
+        processorWrapper = new PerformanceLoggerChainProcessorWrapper<>(processor, logger, u -> 1);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class PerformanceLoggerChainProcessorWrapperTest {
         processor.process(usage);
         expectLastCall().once();
         expect(processor.getChainProcessorType()).andReturn(chainProcessorTypeEnum).once();
-        logger.log(chainProcessorTypeEnum);
+        logger.log(chainProcessorTypeEnum, 1);
         expectLastCall().once();
         replay(processor, logger);
         processorWrapper.process(usage);

@@ -30,7 +30,8 @@ public abstract class AbstractUsageChainProcessor implements IChainProcessor<Usa
 
     @Override
     public void setSuccessProcessor(IChainProcessor<Usage> successProcessor) {
-        this.successProcessor = new PerformanceLoggerChainProcessorWrapper(successProcessor, performanceLogger);
+        this.successProcessor = new PerformanceLoggerChainProcessorWrapper<>(successProcessor, performanceLogger,
+            usage -> 1);
     }
 
     @Override
@@ -40,6 +41,7 @@ public abstract class AbstractUsageChainProcessor implements IChainProcessor<Usa
 
     @Override
     public void setFailureProcessor(IChainProcessor<Usage> failureProcessor) {
-        this.failureProcessor = new PerformanceLoggerChainProcessorWrapper(failureProcessor, performanceLogger);
+        this.failureProcessor = new PerformanceLoggerChainProcessorWrapper<>(failureProcessor, performanceLogger,
+            usage -> 1);
     }
 }

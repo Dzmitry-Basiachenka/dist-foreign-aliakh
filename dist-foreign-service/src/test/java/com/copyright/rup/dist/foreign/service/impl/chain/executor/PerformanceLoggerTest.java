@@ -28,7 +28,7 @@ public class PerformanceLoggerTest {
     public void testClean() {
         PerformanceLogger logger = new PerformanceLogger();
         ChainProcessorTypeEnum chainProcessorTypeEnum = ChainProcessorTypeEnum.MATCHING;
-        logger.count(chainProcessorTypeEnum);
+        logger.count(chainProcessorTypeEnum, 1);
         assertEquals(1, logger.getCurrentTypeToUsagesCount().get(chainProcessorTypeEnum).intValue());
         logger.reset();
         assertNull(logger.getCurrentTypeToUsagesCount().get(chainProcessorTypeEnum));
@@ -39,18 +39,18 @@ public class PerformanceLoggerTest {
         PerformanceLogger logger = new PerformanceLogger();
         ChainProcessorTypeEnum chainProcessorTypeEnum = ChainProcessorTypeEnum.MATCHING;
         assertNull(logger.getCurrentTypeToUsagesCount().get(chainProcessorTypeEnum));
-        logger.count(chainProcessorTypeEnum);
+        logger.count(chainProcessorTypeEnum, 1);
         assertEquals(1, logger.getCurrentTypeToUsagesCount().get(chainProcessorTypeEnum).intValue());
-        logger.count(chainProcessorTypeEnum);
+        logger.count(chainProcessorTypeEnum, 1);
         assertEquals(2, logger.getCurrentTypeToUsagesCount().get(chainProcessorTypeEnum).intValue());
     }
 
     @Test
     public void testGetMetrics() {
         PerformanceLogger logger = new PerformanceLogger();
-        logger.count(ChainProcessorTypeEnum.MATCHING);
-        logger.count(ChainProcessorTypeEnum.RIGHTS);
-        logger.count(ChainProcessorTypeEnum.RIGHTS);
+        logger.count(ChainProcessorTypeEnum.MATCHING, 1);
+        logger.count(ChainProcessorTypeEnum.RIGHTS, 1);
+        logger.count(ChainProcessorTypeEnum.RIGHTS, 1);
         Map<ChainProcessorTypeEnum, Map<String, String>> metrics = logger.getMetrics(60);
         Map<String, String> metric1 = metrics.get(ChainProcessorTypeEnum.MATCHING);
         assertEquals("1(+1)", metric1.get(USAGES));

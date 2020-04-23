@@ -138,7 +138,7 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
             if (type == processor.getChainProcessorType()) {
                 usages.forEach(usage -> {
                     processor.process(usage);
-                    logger.log(type);
+                    logger.log(type, 1);
                 });
             } else {
                 execute(usages, processor.getSuccessProcessor(), type);
