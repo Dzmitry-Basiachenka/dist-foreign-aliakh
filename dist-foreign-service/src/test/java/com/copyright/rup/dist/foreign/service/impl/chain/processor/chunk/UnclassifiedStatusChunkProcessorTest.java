@@ -4,11 +4,13 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -48,6 +50,11 @@ public class UnclassifiedStatusChunkProcessorTest {
         replay(usageRepository);
         unclassifiedStatusProcessor.process(Lists.newArrayList(usage1, usage2));
         verify(usageRepository);
+    }
+
+    @Test
+    public void testGetChainProcessorType() {
+        assertEquals(ChainProcessorTypeEnum.CLASSIFICATION, unclassifiedStatusProcessor.getChainProcessorType());
     }
 
     private Usage buildUsage() {
