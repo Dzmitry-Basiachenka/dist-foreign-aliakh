@@ -14,6 +14,7 @@
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-camel-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-camel-chunk-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-chain-processors-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-chain-chunk-processors-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-performance-aspect-context.xml"/>
 
     <bean id="df.service.rmsCacheService" class="com.copyright.rup.dist.foreign.integration.rms.impl.RmsRightsCacheService">

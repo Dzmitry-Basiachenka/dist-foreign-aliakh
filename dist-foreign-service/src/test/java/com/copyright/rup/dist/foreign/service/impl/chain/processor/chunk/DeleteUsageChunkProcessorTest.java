@@ -4,13 +4,16 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Lists;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
@@ -26,11 +29,18 @@ import org.powermock.reflect.Whitebox;
  */
 public class DeleteUsageChunkProcessorTest {
 
+    private DeleteUsageChunkProcessor deleteUsageProcessor;
+    private IUsageService usageService;
+
+    @Before
+    public void setUp() {
+        deleteUsageProcessor = new DeleteUsageChunkProcessor();
+        usageService = createMock(IUsageService.class);
+        Whitebox.setInternalState(deleteUsageProcessor, usageService);
+    }
+
     @Test
     public void testProcess() {
-        DeleteUsageChunkProcessor deleteUsageProcessor = new DeleteUsageChunkProcessor();
-        IUsageService usageService = createMock(IUsageService.class);
-        Whitebox.setInternalState(deleteUsageProcessor, usageService);
         Usage usage1 = buildUsage();
         Usage usage2 = buildUsage();
         usageService.deleteById(usage1.getId());
@@ -40,6 +50,11 @@ public class DeleteUsageChunkProcessorTest {
         replay(usageService);
         deleteUsageProcessor.process(Lists.newArrayList(usage1, usage2));
         verify(usageService);
+    }
+
+    @Test
+    public void testGetChainProcessorType() {
+        assertEquals(ChainProcessorTypeEnum.DELETE, deleteUsageProcessor.getChainProcessorType());
     }
 
     private Usage buildUsage() {

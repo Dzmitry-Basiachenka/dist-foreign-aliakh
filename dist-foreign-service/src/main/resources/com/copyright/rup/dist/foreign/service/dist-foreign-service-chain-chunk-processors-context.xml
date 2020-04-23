@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+    <!-- Common processors -->
+
+    <bean id="df.service.commonEligibilityChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.EligibilityChunkProcessor"/>
+    <bean id="df.service.deleteUsageChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.DeleteUsageChunkProcessor"/>
+
+    <!-- FAS/FAS2 processors -->
+
+    <bean id="df.service.fasRightsChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.RightsChunkProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.commonEligibilityChunkProcessor"/>
+    </bean>
+
+    <bean id="df.service.fasMatchingChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.MatchingChunkProcessor">
+        <property name="usageStatus" value="NEW"/>
+        <property name="successProcessor" ref="df.service.fasRightsChunkProcessor"/>
+    </bean>
+
+    <!-- NTS processors -->
+
+    <bean id="df.service.ntsRightsChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.RightsChunkProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.ntsRhTaxChunkProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageChunkProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsRhTaxChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.RhTaxChunkProcessor">
+        <property name="usageStatus" value="RH_FOUND"/>
+        <property name="successProcessor" ref="df.service.ntsStmRhChunkProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageChunkProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsStmRhChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.StmRhChunkProcessor">
+        <property name="usageStatus" value="US_TAX_COUNTRY"/>
+        <property name="successProcessor" ref="df.service.ntsRhEligibilityChunkProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageChunkProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsRhEligibilityChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.RhEligibilityChunkProcessor">
+        <property name="usageStatus" value="NON_STM_RH"/>
+        <property name="successProcessor" ref="df.service.ntsClassificationChunkProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageChunkProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsClassificationChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.ClassificationChunkProcessor">
+        <property name="successProcessor" ref="df.service.ntsNonBelletristicChunkProcessor"/>
+        <property name="failureProcessor" ref="df.service.ntsUnclassifiedStatusChunkProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsNonBelletristicChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.NonBelletristicChunkProcessor">
+        <property name="successProcessor" ref="df.service.commonEligibilityChunkProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageChunkProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsUnclassifiedStatusChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.UnclassifiedStatusChunkProcessor" />
+
+    <!-- AACL processors -->
+
+    <bean id="df.service.aaclBaselineEligibilityChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.BaselineEligibilityChunkProcessor"/>
+
+    <bean id="df.service.aaclMatchingChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.MatchingChunkProcessor">
+        <property name="usageStatus" value="NEW"/>
+        <property name="successProcessor" ref="df.service.aaclRightsChunkProcessor"/>
+    </bean>
+
+    <bean id="df.service.aaclRightsChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.RightsChunkProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.aaclBaselineEligibilityChunkProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageChunkProcessor"/>
+    </bean>
+</beans>

@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -70,6 +71,11 @@ public class NonBelletristicChunkProcessorTest {
         replay(workClassificationService, eligibilityProcessor, deleteProcessor);
         nonBelletristicProcessor.process(Lists.newArrayList(usage1, usage2));
         verify(workClassificationService, eligibilityProcessor, deleteProcessor);
+    }
+
+    @Test
+    public void testGetChainProcessorType() {
+        assertEquals(ChainProcessorTypeEnum.CLASSIFICATION, nonBelletristicProcessor.getChainProcessorType());
     }
 
     private Usage buildUsage(Long wrWrkInst) {
