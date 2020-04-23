@@ -1,3 +1,13 @@
+9.1.23
+-
+* B-54910 FDA: AACL Reports - Summary of Work Shares by Aggregate Licensee Class: Implement service and repository logic
+* B-55007 FDA: AACL Exports: Scenario-specific usage details: implement handler to export details of scenario
+* B-55007 FDA: AACL Exports: Scenario-specific usage details: implement service logic related to export details scenario
+* B-56278 FDA: Submit and Approve an AACL scenario: Adjust logic to retrieve fund pools for scenario creation
+* B-56278 FDA: Submit and Approve an AACL scenario: adjust 'Fund pool cannot be deleted' message on View AACL fund pool window
+* B-58288 FDA: Batch processing performance enhancements: implement AWS SQS producers
+* B-58288 FDA: Batch processing performance enhancements: implement AWS SQS serializer/deserializer, marshaller/unmarshaller
+
 9.1.22
 -
 *  B-56847 Tech Debt: FDA: adjust AaclUsage domain object to remove redundant fields for Agg and LC class detail
