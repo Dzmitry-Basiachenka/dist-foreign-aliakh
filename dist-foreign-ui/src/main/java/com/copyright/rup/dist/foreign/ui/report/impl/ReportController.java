@@ -44,6 +44,9 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Qualifier("df.workSharesByAggLcClassReportController")
     private ICommonScenarioReportController workSharesByAggLcClassReportController;
     @Autowired
+    @Qualifier("df.workSharesByAggLcClassSummaryReportController")
+    private ICommonScenarioReportController workSharesByAggLcClassSummaryReportController;
+    @Autowired
     private IReportService reportService;
     @Autowired
     private IProductFamilyProvider productFamilyProvider;
@@ -81,6 +84,11 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Override
     public ICommonScenarioReportController getWorkSharesByAggLcClassReportController() {
         return workSharesByAggLcClassReportController;
+    }
+
+    @Override
+    public ICommonScenarioReportController getWorkSharesByAggLcClassSummaryReportController() {
+        return workSharesByAggLcClassSummaryReportController;
     }
 
     @Override
