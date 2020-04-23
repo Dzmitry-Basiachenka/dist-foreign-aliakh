@@ -43,7 +43,7 @@ public class BaselineEligibilityChunkProcessor extends AbstractUsageChainChunkPr
     @Transactional
     @Profiled(tag = "BaselineEligibilityChunkProcessor.process")
     public void process(List<Usage> usages) {
-        LOGGER.trace("Usage Baseline Eligibility processor. Started. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Baseline Eligibility processor. Started. UsageIds={}", LogUtils.ids(usages));
         Set<String> usageIds = usages
             .stream()
             .filter(usage -> Objects.nonNull(usage.getAaclUsage().getBaselineId()))
@@ -51,7 +51,7 @@ public class BaselineEligibilityChunkProcessor extends AbstractUsageChainChunkPr
             .collect(Collectors.toSet());
         usageRepository.updateStatus(usageIds, UsageStatusEnum.ELIGIBLE);
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
-        LOGGER.trace("Usage Baseline Eligibility processor. Finished. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Baseline Eligibility processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 
     @Override

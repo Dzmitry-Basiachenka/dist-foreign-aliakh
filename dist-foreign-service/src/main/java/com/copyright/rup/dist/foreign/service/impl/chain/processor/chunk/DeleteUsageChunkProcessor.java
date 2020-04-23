@@ -32,12 +32,12 @@ public class DeleteUsageChunkProcessor extends AbstractUsageChainChunkProcessor 
     @Override
     @Profiled(tag = "DeleteUsageChunkProcessor.process")
     public void process(List<Usage> usages) {
-        LOGGER.trace("Usage Delete processor. Started. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Delete processor. Started. UsageIds={}", LogUtils.ids(usages));
         usages.forEach(usage -> {
             usageService.deleteById(usage.getId());
-            LOGGER.trace("Usage Delete processor. Deleted. UsageId={}", usage.getId());
+            LOGGER.trace("Usages Delete processor. Deleted. UsageId={}", usage.getId());
         });
-        LOGGER.trace("Usage Delete processor. Finished. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Delete processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 
     @Override

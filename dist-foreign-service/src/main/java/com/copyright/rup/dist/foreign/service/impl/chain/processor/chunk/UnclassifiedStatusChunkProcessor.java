@@ -35,13 +35,13 @@ public class UnclassifiedStatusChunkProcessor extends AbstractUsageChainChunkPro
     @Override
     @Profiled(tag = "UnclassifiedStatusChunkProcessor.process")
     public void process(List<Usage> usages) {
-        LOGGER.trace("Usage UnclassifiedStatus processor. Started. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages UnclassifiedStatus processor. Started. UsageIds={}", LogUtils.ids(usages));
         Set<String> usageIds = usages
             .stream()
             .map(Usage::getId)
             .collect(Collectors.toSet());
         usageRepository.updateStatus(usageIds, UsageStatusEnum.UNCLASSIFIED);
-        LOGGER.trace("Usage UnclassifiedStatus processor. Finished. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages UnclassifiedStatus processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 
     @Override

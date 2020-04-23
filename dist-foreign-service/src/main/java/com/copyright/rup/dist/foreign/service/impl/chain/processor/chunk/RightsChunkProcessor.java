@@ -34,9 +34,9 @@ public class RightsChunkProcessor extends AbstractUsageJobChunkProcessor {
     @Override
     @Profiled(tag = "RightsChunkProcessor.process")
     public void process(List<Usage> usages) {
-        LOGGER.trace("Usage Rights processor. Started. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Rights processor. Started. UsageIds={}", LogUtils.ids(usages));
         producer.send(usages);
-        LOGGER.trace("Usage Rights processor. Finished. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Rights processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 
     @Override
