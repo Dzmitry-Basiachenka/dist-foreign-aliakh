@@ -188,6 +188,15 @@ public interface IReportRepository {
                                                      OutputStream outputStream);
 
     /**
+     * Writes Work Shares by Aggregate Licensee Class Report into the output stream in csv format.
+     *
+     * @param scenarioId   scenario id
+     * @param status       scenario status
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeWorkSharesByAggLcClassCsvReport(String scenarioId, ScenarioStatusEnum status, OutputStream outputStream);
+
+    /**
      * Finds FAS and FAS2 usages by given {@link AuditFilter} and writes them to the given {@link PipedOutputStream}.
      *
      * @param filter            filter

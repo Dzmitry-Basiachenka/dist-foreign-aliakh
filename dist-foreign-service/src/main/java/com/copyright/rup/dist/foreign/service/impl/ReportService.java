@@ -103,6 +103,11 @@ public class ReportService implements IReportService {
     }
 
     @Override
+    public void writeWorkSharesByAggLcClassCsvReport(Scenario scenario, OutputStream outputStream) {
+        reportRepository.writeWorkSharesByAggLcClassCsvReport(scenario.getId(), scenario.getStatus(), outputStream);
+    }
+
+    @Override
     public void writeAuditFasCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         reportRepository.writeAuditFasCsvReport(filter, pipedOutputStream);
     }

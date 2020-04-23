@@ -49,6 +49,7 @@ public class CsvReportsIntegrationTest {
 
     private static final String SEARCH_WITH_SQL_1 = "%";
     private static final String SEARCH_WITH_SQL_2 = "_";
+    private static final String AACL_SCENARIO_ID = "42ad575b-5d0d-4d82-b1c5-d0982f6f6f1b";
     private static final BigDecimal DEFAULT_ESTIMATED_SERVICE_FEE = new BigDecimal("0.18500");
 
     @Autowired
@@ -270,16 +271,14 @@ public class CsvReportsIntegrationTest {
 
     @Test
     public void testWriteWorkSharesByAggLcClassSummaryCsvReport() throws IOException {
-        assertFiles(outputStream -> reportRepository.writeWorkSharesByAggLcClassSummaryCsvReport(
-            "42ad575b-5d0d-4d82-b1c5-d0982f6f6f1b", ScenarioStatusEnum.IN_PROGRESS, outputStream),
-            "shares_by_agg_lc_class_summary_report.csv");
+        assertFiles(outputStream -> reportRepository.writeWorkSharesByAggLcClassSummaryCsvReport(AACL_SCENARIO_ID,
+            ScenarioStatusEnum.IN_PROGRESS, outputStream), "shares_by_agg_lc_class_summary_report.csv");
     }
 
     @Test
     public void testWriteArchivedWorkSharesByAggLcClassSummaryCsvEmptyReport() throws IOException {
-        assertFiles(outputStream -> reportRepository.writeWorkSharesByAggLcClassSummaryCsvReport(
-            "42ad575b-5d0d-4d82-b1c5-d0982f6f6f1b", ScenarioStatusEnum.SENT_TO_LM, outputStream),
-            "shares_by_agg_lc_class_summary_empty_report.csv");
+        assertFiles(outputStream -> reportRepository.writeWorkSharesByAggLcClassSummaryCsvReport(AACL_SCENARIO_ID,
+            ScenarioStatusEnum.SENT_TO_LM, outputStream), "shares_by_agg_lc_class_summary_empty_report.csv");
     }
 
     @Test
@@ -287,6 +286,25 @@ public class CsvReportsIntegrationTest {
         assertFiles(outputStream -> reportRepository.writeWorkSharesByAggLcClassSummaryCsvReport(
             "3704ecc3-927b-4b30-a860-6c58e7654c5e", ScenarioStatusEnum.SENT_TO_LM, outputStream),
             "shares_by_agg_lc_class_summary_report.csv");
+    }
+
+    @Test
+    public void testWriteWorkSharesByAggLcClassCsvReport() throws IOException {
+        assertFiles(outputStream -> reportRepository.writeWorkSharesByAggLcClassCsvReport(AACL_SCENARIO_ID,
+            ScenarioStatusEnum.IN_PROGRESS, outputStream), "shares_by_agg_lc_class_report.csv");
+    }
+
+    @Test
+    public void testWriteArchivedWorkSharesByAggLcClassCsvEmptyReport() throws IOException {
+        assertFiles(outputStream -> reportRepository.writeWorkSharesByAggLcClassCsvReport(AACL_SCENARIO_ID,
+            ScenarioStatusEnum.SENT_TO_LM, outputStream), "shares_by_agg_lc_class_empty_report.csv");
+    }
+
+    @Test
+    public void testWriteArchivedWorkSharesByAggLcClassCsvReport() throws IOException {
+        assertFiles(outputStream -> reportRepository.writeWorkSharesByAggLcClassCsvReport(
+            "3704ecc3-927b-4b30-a860-6c58e7654c5e", ScenarioStatusEnum.SENT_TO_LM, outputStream),
+            "shares_by_agg_lc_class_report.csv");
     }
 
     @Test

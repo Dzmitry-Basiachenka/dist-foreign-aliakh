@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
@@ -36,6 +37,8 @@ public class WorkSharesByAggLcClassReportController extends CommonController<ISc
     private IProductFamilyProvider productFamilyProvider;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
+    @Autowired
+    private IReportService reportService;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -46,8 +49,7 @@ public class WorkSharesByAggLcClassReportController extends CommonController<ISc
     public IStreamSource getCsvStreamSource() {
         return streamSourceHandler.getCsvStreamSource(
             () -> String.format("work_shares_by_agg_lc_class_report_%s_", getWidget().getScenario().getName()),
-            //TODO {isuvorau} apply report generation
-            pos -> {});
+            pos -> reportService.writeWorkSharesByAggLcClassCsvReport(getWidget().getScenario(), pos));
     }
 
     @Override

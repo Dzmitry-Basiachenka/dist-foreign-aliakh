@@ -87,11 +87,18 @@
         <result property="ntsDetailsGrossAmount" column="nts_details_gross_amount"/>
     </resultMap>
 
-    <resultMap id="workSharesByAggLcClassSummaryReportDtoResultMap" type="WorkSharesByAggLcClassReportDto">
+    <resultMap id="workSharesByAggLcClassReportDtoResultMap" type="WorkSharesByAggLcClassReportDto">
         <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id"/>
         <result property="aggregateLicenseeClass.discipline" column="aggregate_licensee_discipline"/>
         <result property="aggregateLicenseeClass.enrollmentProfile" column="aggregate_licensee_enrollment"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="workTitle" column="title"/>
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="rightsholder.name" column="rh_name"/>
+        <result property="volumeShare" column="volume_share"/>
+        <result property="valueShare" column="value_share"/>
         <result property="totalShare" column="total_share"/>
+        <result property="netAmount" column="net_amount"/>
     </resultMap>
 
     <select id="findUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="undistributedLiabilitiesReportDtoResultMap">
@@ -305,7 +312,7 @@
     </select>
 
     <select id="findWorkSharesByAggLcClassSummaryReportDtos" parameterType="map"
-            resultMap="workSharesByAggLcClassSummaryReportDtoResultMap">
+            resultMap="workSharesByAggLcClassReportDtoResultMap">
         select
             alc.aggregate_licensee_class_id,
             alc.discipline aggregate_licensee_discipline,
@@ -329,16 +336,59 @@
 
     <sql id="workSharesByAggLcClassSummaryFromWhereClauses">
         from ${schema}.df_scenario s
-        join ${schema}.${usage_table} u
-            on s.df_scenario_uid = u.df_scenario_uid
-        join ${schema}.df_usage_aacl uaacl
-            on u.${usage_uid_column} = uaacl.df_usage_aacl_uid
+        join ${schema}.${usage_table} u on s.df_scenario_uid = u.df_scenario_uid
+        join ${schema}.df_usage_aacl uaacl on u.${usage_uid_column} = uaacl.df_usage_aacl_uid
         join jsonb_array_elements(s.aacl_fields -> 'detailLicenseeClasses') detailLicenseeClasses
             on (detailLicenseeClasses ->> 'detailLicenseeClassId')::int = uaacl.detail_licensee_class_id
         join ${schema}.df_aggregate_licensee_class alc
             on (detailLicenseeClasses ->> 'aggregateLicenseeClassId')::int = alc.aggregate_licensee_class_id
         where u.df_scenario_uid = #{scenarioId}
         group by alc.aggregate_licensee_class_id, aggregate_licensee_discipline, aggregate_licensee_enrollment
+        order by alc.aggregate_licensee_class_id
+    </sql>
+
+    <select id="findWorkSharesByAggLcClassReportDtos" parameterType="map"
+            resultMap="workSharesByAggLcClassReportDtoResultMap">
+        select
+            alc.aggregate_licensee_class_id,
+            alc.discipline aggregate_licensee_discipline,
+            alc.enrollment_profile aggregate_licensee_enrollment,
+            wr_wrk_inst,
+            system_title title,
+            rh.rh_account_number,
+            rh.name rh_name,
+            sum(uaacl.total_share) total_share,
+            sum(uaacl.volume_share) volume_share,
+            sum(uaacl.value_share) value_share,
+            sum(u.net_amount) net_amount
+        <choose>
+            <when test="status in archivedStatuses">
+                <include refid="workSharesByAggLcClassFromWhereClauses">
+                    <property name="usage_table" value="df_usage_archive"/>
+                    <property name="usage_uid_column" value="df_usage_archive_uid"/>
+                </include>
+            </when>
+            <otherwise>
+                <include refid="workSharesByAggLcClassFromWhereClauses">
+                    <property name="usage_table" value="df_usage"/>
+                    <property name="usage_uid_column" value="df_usage_uid"/>
+                </include>
+            </otherwise>
+        </choose>
+    </select>
+
+    <sql id="workSharesByAggLcClassFromWhereClauses">
+        from ${schema}.df_scenario s
+        join ${schema}.${usage_table} u on s.df_scenario_uid = u.df_scenario_uid
+        join ${schema}.df_usage_aacl uaacl on u.${usage_uid_column} = uaacl.df_usage_aacl_uid
+        join jsonb_array_elements(s.aacl_fields -> 'detailLicenseeClasses') detailLicenseeClasses
+            on (detailLicenseeClasses ->> 'detailLicenseeClassId')::int = uaacl.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc
+            on (detailLicenseeClasses ->> 'aggregateLicenseeClassId')::int = alc.aggregate_licensee_class_id
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where u.df_scenario_uid = #{scenarioId}
+        group by alc.aggregate_licensee_class_id, aggregate_licensee_discipline, aggregate_licensee_enrollment,
+            wr_wrk_inst, system_title, rh.rh_account_number, rh.name
         order by alc.aggregate_licensee_class_id
     </sql>
 

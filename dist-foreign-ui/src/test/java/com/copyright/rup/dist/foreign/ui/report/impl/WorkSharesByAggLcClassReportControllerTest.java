@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -14,6 +15,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.IScenarioReportWidget;
@@ -72,7 +74,9 @@ public class WorkSharesByAggLcClassReportControllerTest {
         WorkSharesByAggLcClassReportController controller = new WorkSharesByAggLcClassReportController();
         IScenarioReportWidget widget = createMock(IScenarioReportWidget.class);
         IStreamSourceHandler streamSourceHandler = createMock(IStreamSourceHandler.class);
+        IReportService reportService = createMock(IReportService.class);
         Whitebox.setInternalState(controller, widget);
+        Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
@@ -84,9 +88,11 @@ public class WorkSharesByAggLcClassReportControllerTest {
         Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
         PipedOutputStream pos = new PipedOutputStream();
         expect(OffsetDateTime.now()).andReturn(now).once();
-        expect(widget.getScenario()).andReturn(scenario).once();
+        expect(widget.getScenario()).andReturn(scenario).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        reportService.writeWorkSharesByAggLcClassCsvReport(scenario, pos);
+        expectLastCall().once();
         replay(OffsetDateTime.class, widget, streamSourceHandler);
         IStreamSource streamSource = controller.getCsvStreamSource();
         assertEquals("work_shares_by_agg_lc_class_report_Scenario_name_01_02_2019_03_04.csv",
