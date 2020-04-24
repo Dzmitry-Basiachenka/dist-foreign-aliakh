@@ -74,7 +74,7 @@ public class ScenarioReportWidgetTest {
     }
 
     private void verifySize(ScenarioReportWidget widget) {
-        assertEquals(350, widget.getWidth(), 0);
+        assertEquals(425, widget.getWidth(), 0);
         assertEquals(-1.0, widget.getHeight(), 0);
         assertEquals(Sizeable.Unit.PIXELS, widget.getWidthUnits());
         assertEquals(Sizeable.Unit.PIXELS, widget.getHeightUnits());

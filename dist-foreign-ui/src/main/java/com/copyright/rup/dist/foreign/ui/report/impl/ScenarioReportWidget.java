@@ -40,7 +40,7 @@ public class ScenarioReportWidget extends Window implements IScenarioReportWidge
         content.setSpacing(false);
         VaadinUtils.setMaxComponentsWidth(content);
         setContent(content);
-        setWidth(350, Unit.PIXELS);
+        setWidth(425, Unit.PIXELS);
         setResizable(false);
         return this;
     }
@@ -62,6 +62,7 @@ public class ScenarioReportWidget extends Window implements IScenarioReportWidge
         scenarioComboBox.addValueChangeListener(event -> exportButton.setEnabled(true));
         scenarioComboBox.setItems(controller.getScenarios());
         scenarioComboBox.setItemCaptionGenerator(Scenario::getName);
+        scenarioComboBox.setWidth(75, Unit.PERCENTAGE);
         return scenarioComboBox;
     }
 
