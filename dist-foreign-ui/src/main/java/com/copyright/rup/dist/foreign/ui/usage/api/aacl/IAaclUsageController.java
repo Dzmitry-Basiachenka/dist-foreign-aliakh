@@ -72,7 +72,7 @@ public interface IAaclUsageController extends ICommonUsageController {
      * Gets {@link Scenario} name associated with fund pool.
      *
      * @param fundPoolId fund pool id
-     * @return {@link Scenario} name
+     * @return {@link Scenario} name or {@code null} if none found
      */
     String getScenarioNameAssociatedWithFundPool(String fundPoolId);
 

@@ -50,7 +50,7 @@ public interface IScenarioService {
      * Gets {@link Scenario} name based on NTS fund pool id.
      *
      * @param fundPoolId fund pool id
-     * @return {@link Scenario} name
+     * @return {@link Scenario} name or {@code null} if none found
      */
     String getScenarioNameByNtsFundPoolId(String fundPoolId);
 
@@ -58,7 +58,7 @@ public interface IScenarioService {
      * Gets {@link Scenario} name based on AACL fund pool id.
      *
      * @param fundPoolId fund pool id
-     * @return {@link Scenario} name
+     * @return {@link Scenario} name or {@code null} if none found
      */
     String getScenarioNameByAaclFundPoolId(String fundPoolId);
 
