@@ -96,7 +96,7 @@ public interface INtsUsageController extends ICommonUsageController {
      * Gets {@link Scenario} name associated with Additional Fund.
      *
      * @param fundPoolId fund pool id
-     * @return {@link Scenario} name
+     * @return {@link Scenario} name or {@code null} if none found
      */
     String getScenarioNameAssociatedWithAdditionalFund(String fundPoolId);
 

@@ -71,7 +71,7 @@ public interface IScenarioRepository {
      * Finds {@link Scenario} name associated with NTS {@link com.copyright.rup.dist.foreign.domain.FundPool}.
      *
      * @param fundPoolId fund pool id
-     * @return {@link Scenario} name
+     * @return {@link Scenario} name or {@code null} if none found
      */
     String findNameByNtsFundPoolId(String fundPoolId);
 
@@ -79,7 +79,7 @@ public interface IScenarioRepository {
      * Finds {@link Scenario} name associated with AACL {@link com.copyright.rup.dist.foreign.domain.FundPool}.
      *
      * @param fundPoolId fund pool id
-     * @return {@link Scenario} name
+     * @return {@link Scenario} name or {@code null} if none found
      */
     String findNameByAaclFundPoolId(String fundPoolId);
 
