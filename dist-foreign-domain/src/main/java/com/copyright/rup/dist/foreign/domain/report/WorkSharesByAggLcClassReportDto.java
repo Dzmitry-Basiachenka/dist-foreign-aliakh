@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.domain.report;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 
@@ -21,7 +22,13 @@ import java.math.BigDecimal;
 public class WorkSharesByAggLcClassReportDto extends StoredEntity<String> {
 
     private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+    private Long wrWrkInst;
+    private String workTitle;
+    private Rightsholder rightsholder;
+    private BigDecimal volumeShare;
+    private BigDecimal valueShare;
     private BigDecimal totalShare;
+    private BigDecimal netAmount;
 
     public AggregateLicenseeClass getAggregateLicenseeClass() {
         return aggregateLicenseeClass;
@@ -31,12 +38,60 @@ public class WorkSharesByAggLcClassReportDto extends StoredEntity<String> {
         this.aggregateLicenseeClass = aggregateLicenseeClass;
     }
 
+    public Long getWrWrkInst() {
+        return wrWrkInst;
+    }
+
+    public void setWrWrkInst(Long wrWrkInst) {
+        this.wrWrkInst = wrWrkInst;
+    }
+
+    public String getWorkTitle() {
+        return workTitle;
+    }
+
+    public void setWorkTitle(String workTitle) {
+        this.workTitle = workTitle;
+    }
+
+    public Rightsholder getRightsholder() {
+        return rightsholder;
+    }
+
+    public void setRightsholder(Rightsholder rightsholder) {
+        this.rightsholder = rightsholder;
+    }
+
+    public BigDecimal getVolumeShare() {
+        return volumeShare;
+    }
+
+    public void setVolumeShare(BigDecimal volumeShare) {
+        this.volumeShare = volumeShare;
+    }
+
+    public BigDecimal getValueShare() {
+        return valueShare;
+    }
+
+    public void setValueShare(BigDecimal valueShare) {
+        this.valueShare = valueShare;
+    }
+
     public BigDecimal getTotalShare() {
         return totalShare;
     }
 
     public void setTotalShare(BigDecimal totalShare) {
         this.totalShare = totalShare;
+    }
+
+    public BigDecimal getNetAmount() {
+        return netAmount;
+    }
+
+    public void setNetAmount(BigDecimal netAmount) {
+        this.netAmount = netAmount;
     }
 
     @Override
@@ -52,7 +107,13 @@ public class WorkSharesByAggLcClassReportDto extends StoredEntity<String> {
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(aggregateLicenseeClass, that.aggregateLicenseeClass)
+            .append(wrWrkInst, that.wrWrkInst)
+            .append(workTitle, that.workTitle)
+            .append(rightsholder, that.rightsholder)
+            .append(volumeShare, that.volumeShare)
+            .append(valueShare, that.valueShare)
             .append(totalShare, that.totalShare)
+            .append(netAmount, that.netAmount)
             .isEquals();
     }
 
@@ -62,6 +123,13 @@ public class WorkSharesByAggLcClassReportDto extends StoredEntity<String> {
             .appendSuper(super.hashCode())
             .append(aggregateLicenseeClass)
             .append(totalShare)
+            .append(wrWrkInst)
+            .append(workTitle)
+            .append(rightsholder)
+            .append(volumeShare)
+            .append(valueShare)
+            .append(totalShare)
+            .append(netAmount)
             .toHashCode();
     }
 
@@ -69,7 +137,13 @@ public class WorkSharesByAggLcClassReportDto extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this)
             .append("aggregateLicenseeClass", aggregateLicenseeClass)
+            .append("wrWrkInst", wrWrkInst)
+            .append("workTitle", workTitle)
+            .append("rightsholder", rightsholder)
+            .append("volumeShare", volumeShare)
+            .append("valueShare", valueShare)
             .append("totalShare", totalShare)
+            .append("netAmount", netAmount)
             .toString();
     }
 }

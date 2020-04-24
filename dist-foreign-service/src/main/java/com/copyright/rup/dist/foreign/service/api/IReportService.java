@@ -113,6 +113,14 @@ public interface IReportService {
     void writeWorkSharesByAggLcClassSummaryCsvReport(Scenario scenario, OutputStream outputStream);
 
     /**
+     * Writes Work Shares by Aggregate Licensee Class Report into csv output stream.
+     *
+     * @param scenario     {@link Scenario}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeWorkSharesByAggLcClassCsvReport(Scenario scenario, OutputStream outputStream);
+
+    /**
      * Writes Undistributed Liabilities Reconciliation Report into the output stream in csv format.
      *
      * @param paymentDate     payment date

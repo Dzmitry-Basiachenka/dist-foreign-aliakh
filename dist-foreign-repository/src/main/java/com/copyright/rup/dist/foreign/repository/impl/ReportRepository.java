@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTo
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AuditAaclCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.SendForClassificationCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.WorkSharesByAggLcClassReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.WorkSharesByAggLcClassSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.AuditFasCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasBatchSummaryReportHandler;
@@ -37,6 +38,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchS
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
 
 import com.google.common.collect.Maps;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
@@ -216,10 +218,22 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("status", Objects.requireNonNull(status));
         parameters.put("archivedStatuses", Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
-        try (WorkSharesByAggLcClassSummaryReportHandler handler
-                 = new WorkSharesByAggLcClassSummaryReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IReportMapper.findWorkSharesByAggLcClassSummaryReportDtos",
-                parameters, handler);
+        try (WorkSharesByAggLcClassSummaryReportHandler handler =
+                 new WorkSharesByAggLcClassSummaryReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IReportMapper.findWorkSharesByAggLcClassSummaryReportDtos", parameters, handler);
+        }
+    }
+
+    @Override
+    public void writeWorkSharesByAggLcClassCsvReport(String scenarioId, ScenarioStatusEnum status,
+                                                     OutputStream outputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put("status", Objects.requireNonNull(status));
+        parameters.put("archivedStatuses", Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
+        try (WorkSharesByAggLcClassReportHandler handler =
+                 new WorkSharesByAggLcClassReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IReportMapper.findWorkSharesByAggLcClassReportDtos", parameters, handler);
         }
     }
 

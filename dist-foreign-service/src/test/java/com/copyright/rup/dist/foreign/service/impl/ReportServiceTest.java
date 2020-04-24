@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 
 import com.google.common.collect.Sets;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -123,6 +124,17 @@ public class ReportServiceTest {
         expectLastCall().once();
         replay(reportRepository);
         reportService.writeWorkSharesByAggLcClassSummaryCsvReport(scenario, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testWriteWorkSharesByAggLcClassCsvReport() {
+        Scenario scenario = buildScenario(ScenarioStatusEnum.IN_PROGRESS);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeWorkSharesByAggLcClassCsvReport(scenario.getId(), scenario.getStatus(), outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeWorkSharesByAggLcClassCsvReport(scenario, outputStream);
         verify(reportRepository);
     }
 
