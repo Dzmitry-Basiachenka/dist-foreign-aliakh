@@ -121,6 +121,25 @@
         <endpoint id="df.service.internal.eligibility.endpoint" uri="direct:df.service.eligibility"/>
         <endpoint id="df.service.rh.eligibility.endpoint" uri="$RUP{dist.foreign.endpoint.rh_eligibility}"/>
 
+        <!--chunk-based endpoints started -->
+
+        <endpoint id="df.service.internal.matching.chunk.endpoint" uri="direct:df.service.chunk.matching"/>
+        <endpoint id="df.service.matching.chunk.endpoint" uri="#{chunkUriFormatter.format('$RUP{dist.foreign.endpoint.matching}')}"/>
+
+        <endpoint id="df.service.internal.rights.chunk.endpoint" uri="direct:df.service.chunk.rights"/>
+        <endpoint id="df.service.rights.chunk.endpoint" uri="#{chunkUriFormatter.format('$RUP{dist.foreign.endpoint.rights}')}"/>
+
+        <endpoint id="df.service.internal.stm.rh.chunk.endpoint" uri="direct:df.service.chunk.stm.rh"/>
+        <endpoint id="df.service.stm.rh.chunk.endpoint" uri="#{chunkUriFormatter.format('$RUP{dist.foreign.endpoint.stm_rh}')}"/>
+
+        <endpoint id="df.service.internal.tax.chunk.endpoint" uri="direct:df.service.chunk.tax"/>
+        <endpoint id="df.service.rh.tax.chunk.endpoint" uri="#{chunkUriFormatter.format('$RUP{dist.foreign.endpoint.rh_tax}')}"/>
+
+        <endpoint id="df.service.internal.eligibility.chunk.endpoint" uri="direct:df.service.chunk.eligibility"/>
+        <endpoint id="df.service.rh.eligibility.chunk.endpoint" uri="#{chunkUriFormatter.format('$RUP{dist.foreign.endpoint.rh_eligibility}')}"/>
+
+        <!--chunk-based endpoints finished -->
+
         <endpoint id="df.producer.job.status.internal" uri="direct:df.feeder.job.status"/>
         <endpoint id="df.producer.job.status.sns" uri="$RUP{dist.foreign.endpoint.job.status.topic}"/>
 
@@ -317,5 +336,165 @@
                      loggingLevel="WARN" logName="com.copyright.rup.dist"/>
             </onException>
         </route>
+
+        <!--chunk-based routes started -->
+
+        <route id="df.service.matchingInternalChunkRoute">
+            <from ref="df.service.internal.matching.chunk.endpoint"/>
+            <marshal>
+                <custom ref="df.service.matchingChunkMarshaller"/>
+            </marshal>
+            <to ref="df.service.matching.chunk.endpoint"/>
+        </route>
+
+        <route id="df.service.matchingChunkRoute">
+            <from ref="df.service.matching.chunk.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.matchingChunkUnmarshaller"/>
+            </unmarshal>
+
+            <choice>
+                <when>
+                    <simple>
+                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.FAS_PRODUCT_FAMILY} ||
+                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.CLA_FAS_PRODUCT_FAMILY}
+                    </simple>
+                    <bean ref="df.service.fasMatchingChunkConsumer"/>
+                </when>
+                <when>
+                    <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.AACL_PRODUCT_FAMILY}</simple>
+                    <bean ref="df.service.aaclMatchingChunkConsumer"/>
+                </when>
+            </choice>
+
+            <onException useOriginalMessage="true">
+                <exception>java.lang.Exception</exception>
+                <handled>
+                    <constant>false</constant>
+                </handled>
+                <log message="Exception during matching processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
+                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
+            </onException>
+        </route>
+
+        <route id="df.service.rightsInternalChunkRoute">
+            <from ref="df.service.internal.rights.chunk.endpoint"/>
+            <marshal>
+                <custom ref="df.service.rightsChunkMarshaller"/>
+            </marshal>
+            <to ref="df.service.rights.chunk.endpoint"/>
+        </route>
+
+        <route id="df.service.rightsChunkRoute">
+            <from ref="df.service.rights.chunk.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.rightsChunkUnmarshaller"/>
+            </unmarshal>
+
+            <choice>
+                <when>
+                    <simple>
+                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.FAS_PRODUCT_FAMILY} ||
+                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.CLA_FAS_PRODUCT_FAMILY}
+                    </simple>
+                    <bean ref="df.service.fasRightsChunkConsumer"/>
+                </when>
+                <when>
+                    <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.NTS_PRODUCT_FAMILY}</simple>
+                    <bean ref="df.service.ntsRightsChunkConsumer"/>
+                </when>
+                <when>
+                    <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.AACL_PRODUCT_FAMILY}</simple>
+                    <bean ref="df.service.aaclRightsChunkConsumer"/>
+                </when>
+            </choice>
+
+            <onException useOriginalMessage="true">
+                <exception>java.lang.Exception</exception>
+                <handled>
+                    <constant>false</constant>
+                </handled>
+                <log message="Exception during rights processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
+                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
+            </onException>
+        </route>
+
+        <route id="df.service.taxInternalChunkRoute">
+            <from ref="df.service.internal.tax.chunk.endpoint"/>
+            <marshal>
+                <custom ref="df.service.rhTaxChunkMarshaller"/>
+            </marshal>
+            <to ref="df.service.rh.tax.chunk.endpoint"/>
+        </route>
+
+        <route id="df.service.taxChunkRoute">
+            <from ref="df.service.rh.tax.chunk.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.rhTaxChunkUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.rhTaxChunkConsumer"/>
+
+            <onException useOriginalMessage="true">
+                <exception>java.lang.Exception</exception>
+                <handled>
+                    <constant>false</constant>
+                </handled>
+                <log message="Exception during RH tax processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
+                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
+            </onException>
+        </route>
+
+        <route id="df.service.stmRhInternalChunkRoute">
+            <from ref="df.service.internal.stm.rh.chunk.endpoint"/>
+            <marshal>
+                <custom ref="df.service.stmRhChunkMarshaller"/>
+            </marshal>
+            <to ref="df.service.stm.rh.chunk.endpoint"/>
+        </route>
+
+        <route id="df.service.stmRhChunkRoute">
+            <from ref="df.service.stm.rh.chunk.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.stmRhChunkUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.stmRhChunkConsumer"/>
+
+            <onException useOriginalMessage="true">
+                <exception>java.lang.Exception</exception>
+                <handled>
+                    <constant>false</constant>
+                </handled>
+                <log message="Exception during processing STM RH usages. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
+                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
+            </onException>
+        </route>
+
+        <route id="df.service.eligibilityInternalChunkRoute">
+            <from ref="df.service.internal.eligibility.chunk.endpoint"/>
+            <marshal>
+                <custom ref="df.service.rhEligibilityChunkMarshaller"/>
+            </marshal>
+            <to ref="df.service.rh.eligibility.chunk.endpoint"/>
+        </route>
+
+        <route id="df.service.eligibilityChunkRoute">
+            <from ref="df.service.rh.eligibility.chunk.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.rhEligibilityChunkUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.rhEligibilityChunkConsumer"/>
+
+            <onException useOriginalMessage="true">
+                <exception>java.lang.Exception</exception>
+                <handled>
+                    <constant>false</constant>
+                </handled>
+                <log message="Exception during RH eligibility processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
+                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
+            </onException>
+        </route>
+
+        <!--chunk-based routes finished -->
+
     </camelContext>
 </beans>
