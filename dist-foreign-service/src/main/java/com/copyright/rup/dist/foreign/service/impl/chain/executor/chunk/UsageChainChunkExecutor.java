@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.chain.executor;
+package com.copyright.rup.dist.foreign.service.impl.chain.executor.chunk;
 
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
@@ -8,11 +8,14 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
+import com.copyright.rup.dist.foreign.service.impl.chain.executor.IPerformanceLogger;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -31,28 +34,31 @@ import javax.annotation.PreDestroy;
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
- * Date: 12/06/18
+ * Date: 12/06/2018
  *
  * @author Uladzislau Shalamitski
+ * @author Aliaksandr Liakh
  */
-@Component("usageChainExecutor")
-public class UsageChainExecutor implements IChainExecutor<Usage> {
+@Component("usageChainChunkExecutor")
+public class UsageChainChunkExecutor implements IChainExecutor<Usage> {
 
     @Autowired
-    @Qualifier("df.service.fasMatchingProcessor")
-    private IChainProcessor<Usage> fasProcessor;
+    @Qualifier("df.service.fasMatchingChunkProcessor")
+    private IChainProcessor<List<Usage>> fasProcessor;
     @Autowired
-    @Qualifier("df.service.ntsRightsProcessor")
-    private IChainProcessor<Usage> ntsProcessor;
+    @Qualifier("df.service.ntsRightsChunkProcessor")
+    private IChainProcessor<List<Usage>> ntsProcessor;
     @Autowired
-    @Qualifier("df.service.aaclMatchingProcessor")
-    private IChainProcessor<Usage> aaclProcessor;
+    @Qualifier("df.service.aaclMatchingChunkProcessor")
+    private IChainProcessor<List<Usage>> aaclProcessor;
+    @Value("$RUP{dist.foreign.usages.chunk_size}")
+    private Integer chunkSize;
     @Autowired
     private IPerformanceLogger logger;
 
     private ExecutorService executorService;
 
-    private Map<String, IChainProcessor<Usage>> productFamilyToProcessorMap;
+    private Map<String, IChainProcessor<List<Usage>>> productFamilyToProcessorMap;
 
     /**
      * Initialization.
@@ -79,7 +85,7 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
         Map<String, List<Usage>> productFamilyToUsagesMap = usages.stream()
             .collect(Collectors.groupingBy(Usage::getProductFamily));
         productFamilyToUsagesMap.forEach((productFamily, usagesList) -> {
-            IChainProcessor<Usage> processor = productFamilyToProcessorMap.get(productFamily);
+            IChainProcessor<List<Usage>> processor = productFamilyToProcessorMap.get(productFamily);
             if (Objects.nonNull(processor)) {
                 execute(usages, processor, type);
             } else {
@@ -120,7 +126,8 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
         executorService.shutdown();
     }
 
-    private List<JobInfo> execute(String productFamily, IChainProcessor<Usage> processor, ChainProcessorTypeEnum type) {
+    private List<JobInfo> execute(String productFamily, IChainProcessor<List<Usage>> processor,
+                                  ChainProcessorTypeEnum type) {
         List<JobInfo> jobInfos = new ArrayList<>();
         if (Objects.nonNull(processor)) {
             if (processor instanceof IUsageJobProcessor && type == processor.getChainProcessorType()) {
@@ -133,12 +140,12 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
         return jobInfos;
     }
 
-    private void execute(List<Usage> usages, IChainProcessor<Usage> processor, ChainProcessorTypeEnum type) {
+    private void execute(List<Usage> usages, IChainProcessor<List<Usage>> processor, ChainProcessorTypeEnum type) {
         if (Objects.nonNull(processor)) {
             if (type == processor.getChainProcessorType()) {
-                usages.forEach(usage -> {
-                    processor.process(usage);
-                    logger.log(type, 1);
+                Iterables.partition(usages, chunkSize).forEach(partition -> {
+                    processor.process(partition);
+                    logger.log(type, partition.size());
                 });
             } else {
                 execute(usages, processor.getSuccessProcessor(), type);

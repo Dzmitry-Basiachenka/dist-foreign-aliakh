@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @author Uladzislau Shalamitski
  * @author Aliaksandr Liakh
  */
-abstract class AbstractUsageChainChunkProcessor implements IChainChunkProcessor<List<Usage>, Usage> {
+public abstract class AbstractUsageChainChunkProcessor implements IChainChunkProcessor<List<Usage>, Usage> {
 
     private IChainProcessor<List<Usage>> successProcessor;
     private IChainProcessor<List<Usage>> failureProcessor;

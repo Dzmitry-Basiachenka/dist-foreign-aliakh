@@ -29,26 +29,27 @@ import org.quartz.JobExecutionContext;
 public class GetRightsJobTest {
 
     private GetRightsJob getRightsJob;
-    private IChainExecutor<Usage> executor;
+    private IChainExecutor<Usage> chainExecutor;
     private JobExecutionContext jobExecutionContext;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
-        executor = createMock(IChainExecutor.class);
+        chainExecutor = createMock(IChainExecutor.class);
         jobExecutionContext = createMock(JobExecutionContext.class);
         getRightsJob = new GetRightsJob();
-        Whitebox.setInternalState(getRightsJob, executor);
+        Whitebox.setInternalState(getRightsJob, "chainExecutor", chainExecutor);
+        Whitebox.setInternalState(getRightsJob, "useChunks", false);
     }
 
     @Test
     public void testExecuteInternal() {
         JobInfo jobInfo = new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=FAS, Reason=There are no usages");
-        expect(executor.execute(ChainProcessorTypeEnum.RIGHTS)).andReturn(jobInfo).once();
+        expect(chainExecutor.execute(ChainProcessorTypeEnum.RIGHTS)).andReturn(jobInfo).once();
         jobExecutionContext.setResult(jobInfo);
         expectLastCall().once();
-        replay(executor, jobExecutionContext);
+        replay(chainExecutor, jobExecutionContext);
         getRightsJob.executeInternal(jobExecutionContext);
-        verify(executor, jobExecutionContext);
+        verify(chainExecutor, jobExecutionContext);
     }
 }
