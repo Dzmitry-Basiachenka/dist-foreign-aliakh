@@ -46,6 +46,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -90,7 +91,7 @@ public class NtsUsageWidgetTest {
         controller = createMock(INtsUsageController.class);
         filterWidget = new FasNtsUsageFilterWidget(createMock(IFasNtsUsageFilterController.class));
         batchId = RupPersistUtils.generateUuid();
-        filterWidget.getFilter().setUsageBatchesIds(Collections.singleton(batchId));
+        filterWidget.getAppliedFilter().setUsageBatchesIds(Collections.singleton(batchId));
         usagesWidget = new NtsUsageWidget(controller);
         usagesWidget.setController(controller);
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
@@ -182,9 +183,10 @@ public class NtsUsageWidgetTest {
             .andReturn(Collections.emptyList()).once();
         expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(batchId)))
             .andReturn(Collections.emptyMap()).once();
-        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter().getUsageBatchesIds()))
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
+            filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", Collections.emptyList(), "NON-STM", Collections.emptyList())).once();
         expect(controller.getAdditionalFundsNotAttachedToScenario()).andReturn(Collections.emptyList()).once();
         expect(controller.scenarioExists("NTS Distribution " + DATE)).andReturn(true).once();
@@ -262,7 +264,7 @@ public class NtsUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
             .andReturn(Collections.emptyList()).once();
@@ -291,13 +293,14 @@ public class NtsUsageWidgetTest {
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(batchId)))
             .andReturn(Collections.emptyMap()).once();
-        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter().getUsageBatchesIds()))
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
+            filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", Collections.singletonList("Batch without STM RHs"))).once();
         Windows.showNotificationWindow("There are no STM rightsholders in the following batches: " +
             "<ul><li><i><b>Batch without STM RHs</b></i></ul>");
@@ -326,9 +329,10 @@ public class NtsUsageWidgetTest {
             .andReturn(Collections.emptyList()).once();
         expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(batchId)))
             .andReturn(Collections.emptyMap()).once();
-        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter().getUsageBatchesIds()))
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
+            filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", Collections.singletonList("Batch without STM RHs"),
                 "NON-STM", Collections.singletonList("Batch without NON-STM RHs"))).once();
         Windows.showNotificationWindow("There are no STM rightsholders in the following batches: " +

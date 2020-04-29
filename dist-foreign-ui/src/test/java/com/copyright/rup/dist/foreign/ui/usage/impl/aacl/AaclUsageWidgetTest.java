@@ -91,7 +91,7 @@ public class AaclUsageWidgetTest {
         controller = createMock(IAaclUsageController.class);
         AaclUsageFilterWidget filterWidget =
             new AaclUsageFilterWidget(createMock(IAaclUsageFilterController.class));
-        filterWidget.getFilter().setUsageBatchesIds(Collections.singleton(BATCH_ID));
+        filterWidget.getAppliedFilter().setUsageBatchesIds(Collections.singleton(BATCH_ID));
         usagesWidget = new AaclUsageWidget(controller);
         usagesWidget.setController(controller);
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();

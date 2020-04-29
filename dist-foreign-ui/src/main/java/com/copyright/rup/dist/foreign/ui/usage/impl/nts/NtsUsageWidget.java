@@ -151,7 +151,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
 
     private Window initAdditionalFundBatchesFilterWindow() {
         AdditionalFundBatchesFilterWidget widget = new AdditionalFundBatchesFilterWidget(
-            () -> controller.getUsageBatchesForAdditionalFunds());
+            controller::getUsageBatchesForAdditionalFunds);
         AdditionalFundBatchesFilterWindow window = new AdditionalFundBatchesFilterWindow(widget);
         window.updateSaveButtonClickListener(
             () -> {
@@ -197,7 +197,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
 
     private String getNtsScenarioValidationMessage() {
         String message;
-        Set<String> batchesIds = getFilterWidget().getFilter().getUsageBatchesIds();
+        Set<String> batchesIds = getFilterWidget().getAppliedFilter().getUsageBatchesIds();
         if (CollectionUtils.isEmpty(batchesIds)) {
             message = ForeignUi.getMessage("message.error.empty_usage_batches");
         } else {
@@ -212,12 +212,9 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
                     message = getClassificationValidationMessage(batchesIds);
                 } else {
                     message = ForeignUi.getMessage("message.error.batches_already_associated_with_scenarios",
-                        String.join(BATCH_NAMES_LIST_SEPARATOR,
-                            batchesNamesToScenarioNames
-                                .entrySet()
-                                .stream()
-                                .map(entry -> entry.getKey() + " : " + entry.getValue())
-                                .collect(Collectors.toList())));
+                        batchesNamesToScenarioNames.entrySet().stream()
+                            .map(entry -> entry.getKey() + " : " + entry.getValue())
+                            .collect(Collectors.joining(BATCH_NAMES_LIST_SEPARATOR)));
                 }
             }
         }
@@ -233,7 +230,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         } else {
             Map<String, List<String>> batchesWithoutRhsForStmOrNonStm =
                 controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
-                    getFilterWidget().getFilter().getUsageBatchesIds());
+                    getFilterWidget().getAppliedFilter().getUsageBatchesIds());
             List<String> batchesWithoutRhsForStm =
                 batchesWithoutRhsForStmOrNonStm.get(FdaConstants.STM_CLASSIFICATION);
             List<String> batchesWithoutRhsForNonStm =
