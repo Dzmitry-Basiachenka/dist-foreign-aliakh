@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AuditAaclCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.SendForClassificationCsvReportHandler;
@@ -341,12 +342,20 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
 
     @Override
     public void writeArchivedAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
-        //TODO {aazarenka} will be implemented in task related implement repository logic
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        writeCsvReportByParts("IReportMapper.findArchivedScenarioUsageDtosCount",
+            "IReportMapper.findAaclArchivedScenarioUsageReportDtos", parameters,
+            () -> new AaclScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
     public void writeAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
-        //TODO {aazarenka} will be implemented in task related implement repository logic
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        writeCsvReportByParts("IReportMapper.findScenarioUsageDtosCount",
+            "IReportMapper.findAaclScenarioUsageReportDtos",
+            parameters, () -> new AaclScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     private void writeCsvReportByParts(String countMethodName, String selectMethodName, Map<String, Object> parameters,

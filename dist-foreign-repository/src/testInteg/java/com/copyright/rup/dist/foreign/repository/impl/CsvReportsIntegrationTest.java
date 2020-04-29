@@ -256,6 +256,20 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    public void testWriteAaclScenarioUsagesCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeAaclScenarioUsagesCsvReport("153b80ba-85e6-48ee-b5c3-c81664827e8a",
+                outputStream), "scenario_usages_report_aacl.csv");
+    }
+
+    @Test
+    public void testWriteArchivedAaclScenarioUsagesCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeArchivedAaclScenarioUsagesCsvReport("5429c31b-ffd1-4a7f-9b24-8c7809417fce",
+                outputStream), "archive_scenario_usages_report_aacl.csv");
+    }
+
+    @Test
     public void testExportScenarioRightsholderTotalsCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeScenarioRightsholderTotalsCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",

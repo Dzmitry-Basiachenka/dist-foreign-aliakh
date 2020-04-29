@@ -91,7 +91,6 @@
     </resultMap>
 
     <sql id="aaclUsageColumns">
-        u.df_usage_uid,
         u.df_usage_batch_uid,
         u.df_scenario_uid,
         u.wr_wrk_inst,
@@ -134,7 +133,6 @@
         u.updated_by_user,
         u.record_version
     </sql>
-
 
     <sql id="selectCountForAuditSql">
         select
@@ -550,6 +548,7 @@
 
     <sql id="selectDtosByFilterSql">
         select
+            u.df_usage_uid,
             <include refid="IAaclUsageMapper.aaclUsageColumns"/>,
             ub.name batch_name
         from ${schema}.df_usage u
@@ -585,6 +584,55 @@
         join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
         <include refid="IAaclUsageMapper.aaclUsageFilter"/>
             and u.df_scenario_uid is null
+    </sql>
+
+    <sql id="selectUsageDtos">
+        select
+            u.df_usage_uid,
+            <include refid="IAaclUsageMapper.aaclUsageColumns"/>,
+            u.payee_account_number,
+            p.name payee_name,
+            ub.name batch_name,
+            alc.aggregate_licensee_class_id ,
+            alc.discipline aggregate_licensee_discipline,
+            alc.enrollment_profile aggregate_licensee_enrollment,
+            (usageAges ->> 'weight')::text usage_age_weight
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_publication_type pt on uaacl.df_publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
+        left join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        left join ${schema}.df_scenario s on u.df_scenario_uid = s.df_scenario_uid
+        left join jsonb_array_elements(s.aacl_fields -> 'usageAges') usageAges on (usageAges ->> 'period')::int = uaacl.usage_period
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+    </sql>
+
+    <sql id="selectArchivedDtoByScenarioIdSql">
+        select
+            u.df_usage_archive_uid df_usage_uid,
+            <include refid="IAaclUsageMapper.aaclUsageColumns"/>,
+            u.payee_account_number,
+            p.name payee_name,
+            ub.name batch_name,
+            alc.aggregate_licensee_class_id ,
+            alc.discipline aggregate_licensee_discipline,
+            alc.enrollment_profile aggregate_licensee_enrollment,
+            (usageAges ->> 'weight')::text usage_age_weight
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_archive_uid = uaacl.df_usage_aacl_uid
+        left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_publication_type pt on uaacl.df_publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
+        left join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        left join ${schema}.df_scenario s on u.df_scenario_uid = s.df_scenario_uid
+        left join jsonb_array_elements(s.aacl_fields -> 'usageAges') usageAges on (usageAges ->> 'period')::int = uaacl.usage_period
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        where s.df_scenario_uid = #{scenarioId}
+        order by u.rh_account_number, u.df_usage_archive_uid
+            <include refid="IUsageMapper.ifPageable"/>
     </sql>
 
     <select id="findForAudit" resultMap="aaclUsageDtoResultMap" parameterType="map">
@@ -758,6 +806,7 @@
 
     <select id="findByIds" resultMap="aaclUsageResultMap">
         select
+            u.df_usage_uid,
             <include refid="IAaclUsageMapper.aaclUsageColumns"/>
         from ${schema}.df_usage u
         join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
@@ -805,6 +854,7 @@
 
     <select id="findByScenarioId" parameterType="string" resultMap="aaclUsageResultMap">
         select
+            u.df_usage_uid,
             <include refid="IAaclUsageMapper.aaclUsageColumns"/>
         from ${schema}.df_usage u
         join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
@@ -879,6 +929,13 @@
         <include refid="IAaclUsageMapper.aaclUsageFilter"/>
             and r.df_rightsholder_uid is null
     </select>
+
+    <sql id="selectDtoByScenarioIdSql">
+        <include refid="IAaclUsageMapper.selectUsageDtos"/>
+        where s.df_scenario_uid = #{scenarioId}
+        order by u.rh_account_number, u.df_usage_uid
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
 
     <update id="addToScenario" parameterType="map">
         update ${schema}.df_usage u
