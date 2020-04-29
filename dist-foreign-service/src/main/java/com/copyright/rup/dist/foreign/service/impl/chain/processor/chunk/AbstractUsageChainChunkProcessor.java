@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.chunk.IChainChunkProcessor;
 import com.copyright.rup.dist.foreign.service.impl.chain.executor.IPerformanceLogger;
 import com.copyright.rup.dist.foreign.service.impl.chain.processor.PerformanceLoggerChainProcessorWrapper;
 
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
  * @author Uladzislau Shalamitski
  * @author Aliaksandr Liakh
  */
-abstract class AbstractUsageChainChunkProcessor implements IChainProcessor<List<Usage>> {
+abstract class AbstractUsageChainChunkProcessor implements IChainChunkProcessor<List<Usage>, Usage> {
 
     private IChainProcessor<List<Usage>> successProcessor;
     private IChainProcessor<List<Usage>> failureProcessor;
@@ -53,13 +54,8 @@ abstract class AbstractUsageChainChunkProcessor implements IChainProcessor<List<
             List::size);
     }
 
-    /**
-     * Passes processed {@link Usage} to the next processor.
-     *
-     * @param usages           {@link Usage}s to pass to the next processor
-     * @param successPredicate predicate to decide whether {@link Usage} was processed successfully or not
-     */
-    void executeNextChainProcessor(List<Usage> usages, Predicate<Usage> successPredicate) {
+    @Override
+    public void executeNextChainProcessor(List<Usage> usages, Predicate<Usage> successPredicate) {
         Map<Boolean, List<Usage>> partitionedUsages = usages
             .stream()
             .collect(Collectors.partitioningBy(successPredicate));

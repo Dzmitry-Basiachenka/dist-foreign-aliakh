@@ -41,14 +41,14 @@ public class EligibilityChunkProcessor extends AbstractUsageChainChunkProcessor 
     @Transactional
     @Profiled(tag = "EligibilityChunkProcessor.process")
     public void process(List<Usage> usages) {
-        LOGGER.trace("Usage Eligibility processor. Started. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Eligibility processor. Started. UsageIds={}", LogUtils.ids(usages));
         Set<String> usageIds = usages
             .stream()
             .map(Usage::getId)
             .collect(Collectors.toSet());
         usageRepository.updateStatus(usageIds, UsageStatusEnum.ELIGIBLE);
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
-        LOGGER.trace("Usage Eligibility processor. Finished. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Eligibility processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 
     @Override

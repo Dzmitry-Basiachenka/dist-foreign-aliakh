@@ -34,9 +34,9 @@ public class MatchingChunkProcessor extends AbstractUsageJobChunkProcessor {
     @Override
     @Profiled(tag = "MatchingChunkProcessor.process")
     public void process(List<Usage> usages) {
-        LOGGER.trace("Usage Matching processor. Started. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Matching processor. Started. UsageIds={}", LogUtils.ids(usages));
         matchingProducer.send(usages);
-        LOGGER.trace("Usage Matching processor. Finished. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Matching processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 
     @Override

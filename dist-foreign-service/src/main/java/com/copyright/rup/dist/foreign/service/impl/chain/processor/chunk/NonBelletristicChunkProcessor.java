@@ -34,14 +34,14 @@ public class NonBelletristicChunkProcessor extends AbstractUsageChainChunkProces
     @Override
     @Profiled(tag = "NonBelletristicChunkProcessor.process")
     public void process(List<Usage> usages) {
-        LOGGER.trace("Usage NonBelletristic processor. Started. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages NonBelletristic processor. Started. UsageIds={}", LogUtils.ids(usages));
         executeNextChainProcessor(usages, usage -> {
             String classification = workClassificationService.getClassification(usage.getWrWrkInst());
-            LOGGER.trace("Usage NonBelletristic processor. Classified. UsageId={}, Classification={}",
+            LOGGER.trace("Usages NonBelletristic processor. Classified. UsageId={}, Classification={}",
                 usage.getId(), classification);
             return !FdaConstants.BELLETRISTIC_CLASSIFICATION.equals(classification);
         });
-        LOGGER.trace("Usage NonBelletristic processor. Finished. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages NonBelletristic processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 
     @Override

@@ -57,7 +57,7 @@ public class RightsProcessorChunkTest {
 
     @Test
     public void testProcessUsage() {
-        List<Usage> usages = buildUsage(UsageStatusEnum.NEW);
+        List<Usage> usages = buildUsages(UsageStatusEnum.NEW);
         rightsProducer.send(usages);
         expectLastCall().once();
         replay(rightsProducer);
@@ -67,7 +67,7 @@ public class RightsProcessorChunkTest {
 
     @Test
     public void testProcessResultSuccess() {
-        List<Usage> usages = buildUsage(UsageStatusEnum.WORK_FOUND);
+        List<Usage> usages = buildUsages(UsageStatusEnum.WORK_FOUND);
         successProcessor.process(usages);
         expectLastCall().once();
         expect(successProcessor.getChainProcessorType()).andReturn(ChainProcessorTypeEnum.RH_TAX).once();
@@ -78,7 +78,7 @@ public class RightsProcessorChunkTest {
 
     @Test
     public void testProcessResultFailure() {
-        List<Usage> usages = buildUsage(UsageStatusEnum.WORK_NOT_FOUND);
+        List<Usage> usages = buildUsages(UsageStatusEnum.WORK_NOT_FOUND);
         failureProcessor.process(usages);
         expectLastCall().once();
         expect(failureProcessor.getChainProcessorType()).andReturn(ChainProcessorTypeEnum.DELETE).once();
@@ -92,7 +92,7 @@ public class RightsProcessorChunkTest {
         assertEquals(ChainProcessorTypeEnum.RIGHTS, processor.getChainProcessorType());
     }
 
-    private List<Usage> buildUsage(UsageStatusEnum status) {
+    private List<Usage> buildUsages(UsageStatusEnum status) {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
         usage.setProductFamily("NTS");

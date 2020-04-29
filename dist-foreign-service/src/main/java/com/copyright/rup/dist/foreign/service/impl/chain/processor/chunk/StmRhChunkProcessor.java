@@ -34,9 +34,9 @@ public class StmRhChunkProcessor extends AbstractUsageJobChunkProcessor {
     @Override
     @Profiled(tag = "StmRhChunkProcessor.process")
     public void process(List<Usage> usages) {
-        LOGGER.trace("Usage STM RH processor. Started. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages STM RH processor. Started. UsageIds={}", LogUtils.ids(usages));
         producer.send(usages);
-        LOGGER.trace("Usage STM RH processor. Finished. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages STM RH processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 
     @Override

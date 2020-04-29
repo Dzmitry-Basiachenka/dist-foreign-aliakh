@@ -34,9 +34,9 @@ public class RhTaxChunkProcessor extends AbstractUsageJobChunkProcessor {
     @Override
     @Profiled(tag = "RhTaxChunkProcessor.process")
     public void process(List<Usage> usages) {
-        LOGGER.trace("Usage RhTax processor. Started. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages RhTax processor. Started. UsageIds={}", LogUtils.ids(usages));
         rhTaxProducer.send(usages);
-        LOGGER.trace("Usage RhTax processor. Finished. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages RhTax processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 
     @Override

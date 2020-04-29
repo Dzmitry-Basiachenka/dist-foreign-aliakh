@@ -34,9 +34,9 @@ public class RhEligibilityChunkProcessor extends AbstractUsageJobChunkProcessor 
     @Override
     @Profiled(tag = "RhEligibilityChunkProcessor.process")
     public void process(List<Usage> usages) {
-        LOGGER.trace("Usage RhEligibility processor. Started. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages RhEligibility processor. Started. UsageIds={}", LogUtils.ids(usages));
         rhEligibilityProducer.send(usages);
-        LOGGER.trace("Usage RhEligibility processor. Finished. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages RhEligibility processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 
     @Override

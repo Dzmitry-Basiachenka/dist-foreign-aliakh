@@ -34,14 +34,14 @@ public class ClassificationChunkProcessor extends AbstractUsageChainChunkProcess
     @Override
     @Profiled(tag = "ClassificationChunkProcessor.process")
     public void process(List<Usage> usages) {
-        LOGGER.trace("Usage Classification processor. Started. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Classification processor. Started. UsageIds={}", LogUtils.ids(usages));
         executeNextChainProcessor(usages, usage -> {
             String classification = workClassificationService.getClassification(usage.getWrWrkInst());
-            LOGGER.trace("Usage Classification processor. Classified. UsageId={}, Classification={}",
+            LOGGER.trace("Usages Classification processor. Classified. UsageId={}, Classification={}",
                 usage.getId(), classification);
             return Objects.nonNull(classification);
         });
-        LOGGER.trace("Usage Classification processor. Finished. UsageIds={}", LogUtils.ids(usages));
+        LOGGER.trace("Usages Classification processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 
     @Override
