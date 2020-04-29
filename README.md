@@ -1,3 +1,13 @@
+9.1.24
+-
+* B-54909 FDA: AACL Reports: Work Shares by Aggregate Licensee Class: implement repository logic for report generation
+* B-54910 FDA: AACL Reports - Summary of Work Shares by Aggregate Licensee Class: Implement report widget and controller
+* B-54910 FDA: AACL Reports - Summary of Work Shares by Aggregate Licensee Class: fix report name and adjust window size
+* B-55007 FDA: AACL Exports: Scenario-specific usage details: adjust repository logic to export detais scenario
+* B-56278 FDA: Submit and Approve an AACL scenario: make changes based on comments in CR-DIST-FOREIGN-167
+* B-58288 FDA: Batch processing performance enhancements: implement chain processors
+* B-58288 FDA: Batch processing performance enhancements: implement job processors
+
 9.1.23
 -
 * B-54910 FDA: AACL Reports - Summary of Work Shares by Aggregate Licensee Class: Implement service and repository logic
