@@ -43,7 +43,7 @@ public interface IReportController extends IController<IReportWidget> {
     /**
      * @return ownership adjustment report controller.
      */
-    IOwnershipAdjustmentReportController getOwnershipAdjustmentReportController();
+    ICommonScenarioReportController getOwnershipAdjustmentReportController();
 
     /**
      * @return work shares by aggregate class report controller.

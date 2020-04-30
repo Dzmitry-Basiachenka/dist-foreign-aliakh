@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportController;
@@ -39,7 +38,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Autowired
     private ISummaryMarketReportController summaryMarketReportController;
     @Autowired
-    private IOwnershipAdjustmentReportController ownershipAdjustmentReportController;
+    @Qualifier("df.ownershipAdjustmentReportController")
+    private ICommonScenarioReportController ownershipAdjustmentReportController;
     @Autowired
     @Qualifier("df.workSharesByAggLcClassReportController")
     private ICommonScenarioReportController workSharesByAggLcClassReportController;
@@ -77,7 +77,7 @@ public class ReportController extends CommonController<IReportWidget> implements
     }
 
     @Override
-    public IOwnershipAdjustmentReportController getOwnershipAdjustmentReportController() {
+    public ICommonScenarioReportController getOwnershipAdjustmentReportController() {
         return ownershipAdjustmentReportController;
     }
 
