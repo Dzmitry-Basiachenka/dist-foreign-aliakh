@@ -356,13 +356,13 @@
             <choice>
                 <when>
                     <simple>
-                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.FAS_PRODUCT_FAMILY} ||
-                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.CLA_FAS_PRODUCT_FAMILY}
+                        ${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.FAS_PRODUCT_FAMILY} ||
+                        ${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.CLA_FAS_PRODUCT_FAMILY}
                     </simple>
                     <bean ref="df.service.fasMatchingChunkConsumer"/>
                 </when>
                 <when>
-                    <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.AACL_PRODUCT_FAMILY}</simple>
+                    <simple>${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.AACL_PRODUCT_FAMILY}</simple>
                     <bean ref="df.service.aaclMatchingChunkConsumer"/>
                 </when>
             </choice>
@@ -394,17 +394,17 @@
             <choice>
                 <when>
                     <simple>
-                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.FAS_PRODUCT_FAMILY} ||
-                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.CLA_FAS_PRODUCT_FAMILY}
+                        ${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.FAS_PRODUCT_FAMILY} ||
+                        ${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.CLA_FAS_PRODUCT_FAMILY}
                     </simple>
                     <bean ref="df.service.fasRightsChunkConsumer"/>
                 </when>
                 <when>
-                    <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.NTS_PRODUCT_FAMILY}</simple>
+                    <simple>${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.NTS_PRODUCT_FAMILY}</simple>
                     <bean ref="df.service.ntsRightsChunkConsumer"/>
                 </when>
                 <when>
-                    <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.AACL_PRODUCT_FAMILY}</simple>
+                    <simple>${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.AACL_PRODUCT_FAMILY}</simple>
                     <bean ref="df.service.aaclRightsChunkConsumer"/>
                 </when>
             </choice>
