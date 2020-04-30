@@ -6905,7 +6905,7 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '153b80ba-85e6-48ee-b5c3-c81664827e8a')
             column(name: 'name', value: 'AACL Scenario For Delete Scenario Test')
             column(name: 'status_ind', value: 'IN_PROGRESS')
-            column(name: 'aacl_fields', value: '{"usageAges": [{"period": 2020, "weight": 1.00}, {"period": 2019, "weight": 0.75}], "publicationTypes": [{"name": "Book", "weight": 1.00},{"name": "Business or Trade Journal", "weight": 1.50},{"name": "Consumer Magazine", "weight": 1.00},{"name": "News Source", "weight": 4.00},{"name": "STMA Journal", "weight": 1.10}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 113, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 110, "aggregateLicenseeClassId": 143}]}')
+            column(name: 'aacl_fields', value: '{"usageAges": [{"period": 2020, "weight": 1.00}, {"period": 2019, "weight": 0.75}], "publicationTypes": [{"name": "Book", "weight": 1.00},{"name": "Business or Trade Journal", "weight": 1.50},{"name": "Consumer Magazine", "weight": 1.00},{"name": "News Source", "weight": 4.00},{"name": "STMA Journal", "weight": 1.10}],"detailLicenseeClasses": [{"detailLicenseeClassId": 171, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 113, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 110, "aggregateLicenseeClassId": 143}]}')
             column(name: 'description', value: 'AACL Scenario Description 2')
         }
 
@@ -6990,7 +6990,7 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Feb 2019 TUR')
             column(name: 'number_of_pages', value: '200')
             column(name: 'right_limitation', value: 'DIGITAL')
-            column(name: 'detail_licensee_class_id', value: '171')
+            column(name: 'detail_licensee_class_id', value: '113')
             column(name: 'value_weight', value: '0.6000000')
             column(name: 'volume_weight', value: '0.7000000')
             column(name: 'volume_share', value: '0.8000000')
@@ -7098,7 +7098,7 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Feb 2019 TUR')
             column(name: 'number_of_pages', value: '200')
             column(name: 'right_limitation', value: 'DIGITAL')
-            column(name: 'detail_licensee_class_id', value: '171')
+            column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'value_weight', value: '0.7900000')
             column(name: 'volume_weight', value: '0.5900000')
             column(name: 'volume_share', value: '0.4500000')

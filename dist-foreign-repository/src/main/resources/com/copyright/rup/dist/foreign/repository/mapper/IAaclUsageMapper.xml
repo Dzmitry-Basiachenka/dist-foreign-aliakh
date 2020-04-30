@@ -593,7 +593,7 @@
             u.payee_account_number,
             p.name payee_name,
             ub.name batch_name,
-            alc.aggregate_licensee_class_id ,
+            alc.aggregate_licensee_class_id,
             alc.discipline aggregate_licensee_discipline,
             alc.enrollment_profile aggregate_licensee_enrollment,
             (usageAges ->> 'weight')::text usage_age_weight
@@ -602,9 +602,12 @@
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_publication_type pt on uaacl.df_publication_type_uid = pt.df_publication_type_uid
         left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
-        left join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
         left join ${schema}.df_scenario s on u.df_scenario_uid = s.df_scenario_uid
         left join jsonb_array_elements(s.aacl_fields -> 'usageAges') usageAges on (usageAges ->> 'period')::int = uaacl.usage_period
+        left join jsonb_array_elements(s.aacl_fields -> 'detailLicenseeClasses') detailLicenseeClasses
+            on (detailLicenseeClasses ->> 'detailLicenseeClassId')::int = dlc.detail_licensee_class_id
+        left join ${schema}.df_aggregate_licensee_class alc
+            on (detailLicenseeClasses ->> 'aggregateLicenseeClassId')::int = alc.aggregate_licensee_class_id
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
     </sql>
@@ -616,7 +619,7 @@
             u.payee_account_number,
             p.name payee_name,
             ub.name batch_name,
-            alc.aggregate_licensee_class_id ,
+            alc.aggregate_licensee_class_id,
             alc.discipline aggregate_licensee_discipline,
             alc.enrollment_profile aggregate_licensee_enrollment,
             (usageAges ->> 'weight')::text usage_age_weight
@@ -625,9 +628,12 @@
         left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_publication_type pt on uaacl.df_publication_type_uid = pt.df_publication_type_uid
         left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
-        left join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
         left join ${schema}.df_scenario s on u.df_scenario_uid = s.df_scenario_uid
         left join jsonb_array_elements(s.aacl_fields -> 'usageAges') usageAges on (usageAges ->> 'period')::int = uaacl.usage_period
+        left join jsonb_array_elements(s.aacl_fields -> 'detailLicenseeClasses') detailLicenseeClasses
+            on (detailLicenseeClasses ->> 'detailLicenseeClassId')::int = dlc.detail_licensee_class_id
+        left join ${schema}.df_aggregate_licensee_class alc
+            on (detailLicenseeClasses ->> 'aggregateLicenseeClassId')::int = alc.aggregate_licensee_class_id
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where s.df_scenario_uid = #{scenarioId}
