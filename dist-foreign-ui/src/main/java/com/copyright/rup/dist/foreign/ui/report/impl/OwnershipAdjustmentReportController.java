@@ -7,12 +7,11 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
-import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IScenarioReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.collect.ImmutableSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -22,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Implementation of {@link IOwnershipAdjustmentReportController}.
+ * Implementation of {@link ICommonScenarioReportController}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -30,10 +29,10 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-@Component
+@Component("df.ownershipAdjustmentReportController")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class OwnershipAdjustmentReportController extends CommonController<IOwnershipAdjustmentReportWidget>
-    implements IOwnershipAdjustmentReportController {
+public class OwnershipAdjustmentReportController extends CommonController<IScenarioReportWidget>
+    implements ICommonScenarioReportController {
 
     private static final Set<RightsholderDiscrepancyStatusEnum> REPORT_STATUSES =
         ImmutableSet.of(RightsholderDiscrepancyStatusEnum.DRAFT, RightsholderDiscrepancyStatusEnum.APPROVED);
@@ -61,7 +60,7 @@ public class OwnershipAdjustmentReportController extends CommonController<IOwner
     }
 
     @Override
-    protected IOwnershipAdjustmentReportWidget instantiateWidget() {
-        return new OwnershipAdjustmentReportWidget();
+    protected IScenarioReportWidget instantiateWidget() {
+        return new ScenarioReportWidget();
     }
 }

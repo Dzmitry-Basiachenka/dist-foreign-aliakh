@@ -19,10 +19,9 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
-import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.IScenarioReportWidget;
 
 import com.google.common.collect.ImmutableSet;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -75,7 +74,7 @@ public class OwnershipAdjustmentReportControllerTest {
         OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
         OwnershipAdjustmentReportController controller = new OwnershipAdjustmentReportController();
-        IOwnershipAdjustmentReportWidget widget = createMock(IOwnershipAdjustmentReportWidget.class);
+        IScenarioReportWidget widget = createMock(IScenarioReportWidget.class);
         IReportService reportService = createMock(IReportService.class);
         IStreamSourceHandler streamSourceHandler = createMock(IStreamSourceHandler.class);
         Whitebox.setInternalState(controller, widget);
@@ -110,8 +109,8 @@ public class OwnershipAdjustmentReportControllerTest {
     @Test
     public void testInstantiateWidget() {
         OwnershipAdjustmentReportController controller = new OwnershipAdjustmentReportController();
-        IOwnershipAdjustmentReportWidget widget = controller.instantiateWidget();
+        IScenarioReportWidget widget = controller.instantiateWidget();
         assertNotNull(controller.instantiateWidget());
-        assertEquals(OwnershipAdjustmentReportWidget.class, widget.getClass());
+        assertEquals(ScenarioReportWidget.class, widget.getClass());
     }
 }
