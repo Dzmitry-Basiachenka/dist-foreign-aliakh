@@ -748,4 +748,15 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2020-04-30-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-56848 Tech Debt: FDA: update updated_datetime for usages migrated from SC")
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'updated_datetime', value: '2018-06-30')
+            where "rh_account_number is null"
+        }
+
+        rollback ""
+    }
 }

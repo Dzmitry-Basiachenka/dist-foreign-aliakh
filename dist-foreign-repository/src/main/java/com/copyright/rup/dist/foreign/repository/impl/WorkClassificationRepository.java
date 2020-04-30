@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.repository.api.IWorkClassificationRepository;
 
@@ -65,8 +66,9 @@ public class WorkClassificationRepository extends BaseRepository implements IWor
 
     @Override
     public List<WorkClassification> findBySearch(String searchValue, Pageable pageable, Sort sort) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put("productFamilies", FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
         parameters.put("pageable", pageable);
         parameters.put("sort", sort);
         return selectList("IWorkClassificationMapper.findBySearch", parameters);
@@ -74,8 +76,9 @@ public class WorkClassificationRepository extends BaseRepository implements IWor
 
     @Override
     public int findCountBySearch(String searchValue) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put("productFamilies", FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
         return selectOne("IWorkClassificationMapper.findCountBySearch", parameters);
     }
 }
