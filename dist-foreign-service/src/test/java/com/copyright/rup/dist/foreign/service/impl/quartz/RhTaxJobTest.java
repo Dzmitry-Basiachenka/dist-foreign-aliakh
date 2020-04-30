@@ -29,26 +29,27 @@ import org.quartz.JobExecutionContext;
 public class RhTaxJobTest {
 
     private RhTaxJob rhTaxJob;
-    private IChainExecutor<Usage> executor;
+    private IChainExecutor<Usage> chainExecutor;
     private JobExecutionContext jobExecutionContext;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
-        executor = createMock(IChainExecutor.class);
+        chainExecutor = createMock(IChainExecutor.class);
         jobExecutionContext = createMock(JobExecutionContext.class);
         rhTaxJob = new RhTaxJob();
-        Whitebox.setInternalState(rhTaxJob, executor);
+        Whitebox.setInternalState(rhTaxJob, "chainExecutor", chainExecutor);
+        Whitebox.setInternalState(rhTaxJob, "useChunks", false);
     }
 
     @Test
     public void testExecuteInternal() {
         JobInfo jobInfo = new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=FAS, Reason=There are no usages");
-        expect(executor.execute(ChainProcessorTypeEnum.RH_TAX)).andReturn(jobInfo).once();
+        expect(chainExecutor.execute(ChainProcessorTypeEnum.RH_TAX)).andReturn(jobInfo).once();
         jobExecutionContext.setResult(jobInfo);
         expectLastCall().once();
-        replay(executor, jobExecutionContext);
+        replay(chainExecutor, jobExecutionContext);
         rhTaxJob.executeInternal(jobExecutionContext);
-        verify(executor, jobExecutionContext);
+        verify(chainExecutor, jobExecutionContext);
     }
 }

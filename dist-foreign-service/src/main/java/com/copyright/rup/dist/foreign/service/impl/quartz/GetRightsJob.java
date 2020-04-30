@@ -7,6 +7,8 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -24,10 +26,17 @@ import org.springframework.stereotype.Component;
 public class GetRightsJob extends QuartzJobBean {
 
     @Autowired
-    private IChainExecutor<Usage> executor;
+    @Qualifier("usageChainExecutor")
+    private IChainExecutor<Usage> chainExecutor;
+    @Autowired
+    @Qualifier("usageChainChunkExecutor")
+    private IChainExecutor<Usage> chainChunkExecutor;
+    @Value("$RUP{dist.foreign.usages.chunks}")
+    private boolean useChunks;
 
     @Override
     public void executeInternal(JobExecutionContext context) {
-        context.setResult(executor.execute(ChainProcessorTypeEnum.RIGHTS));
+        context.setResult((useChunks ? chainChunkExecutor : chainExecutor)
+            .execute(ChainProcessorTypeEnum.RIGHTS));
     }
 }

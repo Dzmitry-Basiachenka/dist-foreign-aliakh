@@ -122,7 +122,8 @@ public class UsageServiceTest {
         Whitebox.setInternalState(usageService, usageArchiveRepository);
         Whitebox.setInternalState(usageService, scenarioAuditService);
         Whitebox.setInternalState(usageService, rightsholderService);
-        Whitebox.setInternalState(usageService, chainExecutor);
+        Whitebox.setInternalState(usageService, "chainExecutor", chainExecutor);
+        Whitebox.setInternalState(usageService, "useChunks", false);
     }
 
     @Test

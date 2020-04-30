@@ -39,6 +39,7 @@ import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,7 +94,13 @@ public class AaclUsageService implements IAaclUsageService {
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
+    @Qualifier("usageChainExecutor")
     private IChainExecutor<Usage> chainExecutor;
+    @Autowired
+    @Qualifier("usageChainChunkExecutor")
+    private IChainExecutor<Usage> chainChunkExecutor;
+    @Value("$RUP{dist.foreign.usages.chunks}")
+    private boolean useChunks;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private int usagesBatchSize;
 
@@ -257,13 +264,14 @@ public class AaclUsageService implements IAaclUsageService {
     @Override
     public void sendForMatching(List<String> usageIds, String batchName) {
         AtomicInteger usageIdsCount = new AtomicInteger(0);
-        chainExecutor.execute(() ->
+        IChainExecutor<Usage> currentChainExecutor = useChunks ? chainChunkExecutor : chainExecutor;
+        currentChainExecutor.execute(() ->
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> {
                     usageIdsCount.addAndGet(partition.size());
                     LOGGER.info("Send usages for PI matching. Started. UsageBatchName={}, UsagesCount={}", batchName,
                         usageIdsCount);
-                    chainExecutor.execute(getUsagesByIds(partition), ChainProcessorTypeEnum.MATCHING);
+                    currentChainExecutor.execute(getUsagesByIds(partition), ChainProcessorTypeEnum.MATCHING);
                     LOGGER.info("Send usages for PI matching. Finished. UsageBatchName={}, UsagesCount={}", batchName,
                         usageIdsCount);
                 }));

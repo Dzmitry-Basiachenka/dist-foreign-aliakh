@@ -130,7 +130,8 @@ public class AaclUsageServiceTest {
         Whitebox.setInternalState(aaclUsageService, aaclUsageRepository);
         Whitebox.setInternalState(aaclUsageService, rightsholderService);
         Whitebox.setInternalState(aaclUsageService, prmIntegrationService);
-        Whitebox.setInternalState(aaclUsageService, chainExecutor);
+        Whitebox.setInternalState(aaclUsageService, "chainExecutor", chainExecutor);
+        Whitebox.setInternalState(aaclUsageService, "useChunks", false);
         Whitebox.setInternalState(aaclUsageService, "usagesBatchSize", 100);
     }
 

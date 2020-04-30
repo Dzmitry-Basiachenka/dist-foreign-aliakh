@@ -28,6 +28,7 @@ import com.google.common.collect.Table;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +71,13 @@ public class NtsUsageService implements INtsUsageService {
     @Autowired
     private IUsageService usageService;
     @Autowired
+    @Qualifier("usageChainExecutor")
     private IChainExecutor<Usage> chainExecutor;
+    @Autowired
+    @Qualifier("usageChainChunkExecutor")
+    private IChainExecutor<Usage> chainChunkExecutor;
+    @Value("$RUP{dist.foreign.usages.chunks}")
+    private boolean useChunks;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private int usagesBatchSize;
 
@@ -169,7 +176,8 @@ public class NtsUsageService implements INtsUsageService {
     @Override
     public void sendForGettingRights(List<String> usageIds, String batchName) {
         AtomicInteger usageIdsCount = new AtomicInteger(0);
-        chainExecutor.execute(() ->
+        IChainExecutor<Usage> currentChainExecutor = useChunks ? chainChunkExecutor : chainExecutor;
+        currentChainExecutor.execute(() ->
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> {
                     usageIdsCount.addAndGet(partition.size());
@@ -179,7 +187,7 @@ public class NtsUsageService implements INtsUsageService {
                         .stream()
                         .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                         .collect(Collectors.toList());
-                    chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
+                    currentChainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
                     LOGGER.info("Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, " +
                         "WorkFoundUsagesCount={}", batchName, usageIdsCount, LogUtils.size(workFoundUsages));
                 }));

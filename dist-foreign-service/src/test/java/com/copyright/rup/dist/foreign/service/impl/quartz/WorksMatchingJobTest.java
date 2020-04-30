@@ -28,27 +28,28 @@ import org.quartz.JobExecutionContext;
  */
 public class WorksMatchingJobTest {
 
-    private WorksMatchingJob job;
-    private IChainExecutor<Usage> executor;
+    private WorksMatchingJob worksMatchingJob;
+    private IChainExecutor<Usage> chainExecutor;
     private JobExecutionContext jobExecutionContext;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
-        executor = createMock(IChainExecutor.class);
+        chainExecutor = createMock(IChainExecutor.class);
         jobExecutionContext = createMock(JobExecutionContext.class);
-        job = new WorksMatchingJob();
-        Whitebox.setInternalState(job, executor);
+        worksMatchingJob = new WorksMatchingJob();
+        Whitebox.setInternalState(worksMatchingJob, "chainExecutor", chainExecutor);
+        Whitebox.setInternalState(worksMatchingJob, "useChunks", false);
     }
 
     @Test
     public void testExecuteInternal() {
         JobInfo jobInfo = new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=FAS, Reason=There are no usages");
-        expect(executor.execute(ChainProcessorTypeEnum.MATCHING)).andReturn(jobInfo).once();
+        expect(chainExecutor.execute(ChainProcessorTypeEnum.MATCHING)).andReturn(jobInfo).once();
         jobExecutionContext.setResult(jobInfo);
         expectLastCall().once();
-        replay(executor, jobExecutionContext);
-        job.executeInternal(jobExecutionContext);
-        verify(executor, jobExecutionContext);
+        replay(chainExecutor, jobExecutionContext);
+        worksMatchingJob.executeInternal(jobExecutionContext);
+        verify(chainExecutor, jobExecutionContext);
     }
 }

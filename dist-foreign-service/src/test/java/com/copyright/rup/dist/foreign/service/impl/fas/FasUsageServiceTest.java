@@ -108,7 +108,8 @@ public class FasUsageServiceTest {
         Whitebox.setInternalState(usageService, piIntegrationService);
         Whitebox.setInternalState(usageService, prmIntegrationService);
         Whitebox.setInternalState(usageService, rightsholderService);
-        Whitebox.setInternalState(usageService, chainExecutor);
+        Whitebox.setInternalState(usageService, "chainExecutor", chainExecutor);
+        Whitebox.setInternalState(usageService, "useChunks", false);
         Whitebox.setInternalState(usageService, "claAccountNumber", 2000017000L);
     }
 
