@@ -257,7 +257,7 @@ public interface IReportRepository {
     void writeArchivedAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
-     * Finds usages by AACl scenario id and writes them into the output stream in CSV format.
+     * Finds usages by AACL scenario id and writes them into the output stream in CSV format.
      *
      * @param scenarioId        scenario id
      * @param pipedOutputStream instance of {@link PipedOutputStream}
