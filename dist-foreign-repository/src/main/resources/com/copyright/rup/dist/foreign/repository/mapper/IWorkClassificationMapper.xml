@@ -139,10 +139,10 @@
     </sql>
 
     <select id="findByBatchIds" resultMap="workClassificationResultMap" parameterType="map">
-        <include refid="findByBatchIdsSql" />
+        <include refid="findByBatchIdsSql"/>
     </select>
 
-    <sql id="findBySearchSql" >
+    <sql id="findBySearchSql">
         select
             wc.df_work_classification_uid,
             wc.classification,
@@ -164,6 +164,11 @@
                 u.rh_account_number
             from ${schema}.df_usage_archive u
             where u.wr_wrk_inst = wc.wr_wrk_inst
+                and product_family in
+                <foreach collection="productFamilies" item="productFamily" open="(" separator="," close=")">
+                    #{productFamily}
+                </foreach>
+            order by u.updated_datetime desc
             limit 1
         ) u on true
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
@@ -178,7 +183,7 @@
     </sql>
 
     <select id="findBySearch" resultMap="workClassificationResultMap">
-        <include refid="findBySearchSql" />
+        <include refid="findBySearchSql"/>
     </select>
 
     <sql id="findCountByBatchIdsSql">
@@ -200,10 +205,10 @@
     </sql>
 
     <select id="findCountByBatchIds" parameterType="map" resultType="int">
-        <include refid="findCountByBatchIdsSql" />
+        <include refid="findCountByBatchIdsSql"/>
     </select>
 
-    <sql id="findCountBySearchSql" >
+    <sql id="findCountBySearchSql">
         select count(1)
         from ${schema}.df_work_classification wc
         left join lateral (
@@ -214,6 +219,11 @@
                 u.rh_account_number
             from ${schema}.df_usage_archive u
             where u.wr_wrk_inst = wc.wr_wrk_inst
+                and product_family in
+                <foreach collection="productFamilies" item="productFamily" open="(" separator="," close=")">
+                    #{productFamily}
+                </foreach>
+            order by u.updated_datetime desc
             limit 1
         ) u on true
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
@@ -226,6 +236,6 @@
     </sql>
 
     <select id="findCountBySearch" parameterType="map" resultType="int">
-        <include refid="findCountBySearchSql" />
+        <include refid="findCountBySearchSql"/>
     </select>
 </mapper>

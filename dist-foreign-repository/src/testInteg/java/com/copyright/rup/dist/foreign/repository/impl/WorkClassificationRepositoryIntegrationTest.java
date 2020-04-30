@@ -129,7 +129,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     public void testFindCountBySearch() {
         assertEquals(5, workClassificationRepository.findCountBySearch(StringUtils.EMPTY));
         assertEquals(1, workClassificationRepository.findCountBySearch("243904752"));
-        assertEquals(3, workClassificationRepository.findCountBySearch("John Wiley & Sons - Books"));
+        assertEquals(2, workClassificationRepository.findCountBySearch("John Wiley & Sons - Books"));
     }
 
     private List<WorkClassification> loadExpectedClassifications(String fileName)

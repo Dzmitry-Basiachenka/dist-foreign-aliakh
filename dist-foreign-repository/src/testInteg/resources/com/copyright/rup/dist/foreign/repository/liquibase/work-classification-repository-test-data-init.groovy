@@ -25,6 +25,12 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '074c0f1f-2457-49a9-ad72-2a85d07ce90e')
+            column(name: 'rh_account_number', value: '1000000002')
+            column(name: 'name', value: 'Royal Society of Victoria')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '14edbc9b-1473-4fc9-95f6-07b3ef45e851')
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'name', value: 'John Wiley & Sons - Books')
@@ -269,6 +275,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '23800.00')
             column(name: 'service_fee_amount', value: '11200.00')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'updated_datetime', value: '2019-06-30 10:00:00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -304,6 +311,80 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: '403b378d-7678-4f1d-95cd-bff21b3a9998')
+            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants')
+            column(name: 'publisher', value: 'John Wiley & Sons')
+            column(name: 'publication_date', value: '2011-05-10')
+            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ')
+            column(name: 'market_period_from', value: '2015')
+            column(name: 'market_period_to', value: '2019')
+            column(name: 'author', value: 'Nanette M. Schwann')
+            column(name: 'reported_value', value: '1560')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'c2065264-b8b2-44d0-ad69-3536794ff857')
+            column(name: 'name', value: 'FAS2 batch')
+            column(name: 'rro_account_number', value: '2000017000')
+            column(name: 'payment_date', value: '2015-09-10')
+            column(name: 'fiscal_year', value: '2016')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'gross_amount', value: '35000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: 'ae01ac7d-12f9-458b-b675-a3ed04aa4198')
+            column(name: 'df_usage_batch_uid', value: 'c2065264-b8b2-44d0-ad69-3536794ff857')
+            column(name: 'df_scenario_uid', value: 'ac5f668f-bc75-4a89-a8d4-39a89e6a973a')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: 'Corporate identity manuals')
+            column(name: 'system_title', value: 'Corporate identity manuals')
+            column(name: 'rh_account_number', value: '1000000002')
+            column(name: 'payee_account_number', value: '1000000002')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'standard_number', value: '1008902002377655XX')
+            column(name: 'number_of_copies', value: '1600')
+            column(name: 'gross_amount', value: '35000.00')
+            column(name: 'net_amount', value: '23800.00')
+            column(name: 'service_fee_amount', value: '11200.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'updated_datetime', value: '2019-07-30 10:00:00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'ae01ac7d-12f9-458b-b675-a3ed04aa4198')
+            column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants')
+            column(name: 'publisher', value: 'John Wiley & Sons')
+            column(name: 'publication_date', value: '2011-05-10')
+            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ')
+            column(name: 'market_period_from', value: '2015')
+            column(name: 'market_period_to', value: '2019')
+            column(name: 'author', value: 'Nanette M. Schwann')
+            column(name: 'reported_value', value: '1560')
+        }
+
+        // NTS product should not be used in classification
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: 'f29b0a2a-3e6e-4244-9637-64f716964498')
+            column(name: 'df_scenario_uid', value: 'ac5f668f-bc75-4a89-a8d4-39a89e6a973a')
+            column(name: 'wr_wrk_inst', value: '122410079')
+            column(name: 'work_title', value: 'Corporate identity manuals')
+            column(name: 'system_title', value: 'Corporate identity manuals')
+            column(name: 'rh_account_number', value: '1000000002')
+            column(name: 'payee_account_number', value: '1000000002')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1008902002377655XX')
+            column(name: 'number_of_copies', value: '1600')
+            column(name: 'gross_amount', value: '35000.00')
+            column(name: 'net_amount', value: '23800.00')
+            column(name: 'service_fee_amount', value: '11200.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'updated_datetime', value: '2019-07-30 10:00:00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'f29b0a2a-3e6e-4244-9637-64f716964498')
             column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants')
             column(name: 'publisher', value: 'John Wiley & Sons')
             column(name: 'publication_date', value: '2011-05-10')
