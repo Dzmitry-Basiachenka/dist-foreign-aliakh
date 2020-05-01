@@ -1,3 +1,14 @@
+9.1.25
+-
+* B-56848 Tech Debt: FDA: Replace OwnershipAdjustmentReportWidget with ScenarioReportWidget
+* B-56848 Tech Debt: FDA: adjust work classification report
+* B-56848 Tech Debt: FDA: apply updated_date ordering for classification, add filtering by FAS/FAS2 product families and update updatate_datetime column for SC migrated usages
+* B-56848 Tech Debt: FDA: system disallows user to create scenario without applied batch filter
+* B-58288 FDA: Batch processing performance enhancements: implement AWS SQS consumers
+* B-58288 FDA: Batch processing performance enhancements: implement Camel configuration
+* B-58288 FDA: Batch processing performance enhancements: refactor service methods to switch between main and alternative chain executors
+* CDP-908: Default values of Agg LC ID, Agg LC Enrollment, Agg LC Discipline are exported in spite of the fact that Licensee Class Mapping was adjusted while the scenario creation
+
 9.1.24
 -
 * B-54909 FDA: AACL Reports: Work Shares by Aggregate Licensee Class: implement repository logic for report generation
