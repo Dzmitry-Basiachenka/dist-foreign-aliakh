@@ -327,6 +327,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     public void writeWorkClassificationCsvReport(String searchValue, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put("productFamilies", FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
         writeCsvReportByParts("IReportMapper.findWorkClassificationCountBySearch",
             "IReportMapper.findWorkClassificationBySearch", parameters,
             () -> new WorkClassificationCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
