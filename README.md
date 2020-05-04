@@ -1,3 +1,7 @@
+9.1.26
+-
+* B-58288 FDA: Batch processing performance enhancements: use chunk-based serializers/deserializers and use header-based routing in Camel configuration
+
 9.1.25
 -
 * B-56848 Tech Debt: FDA: Replace OwnershipAdjustmentReportWidget with ScenarioReportWidget
