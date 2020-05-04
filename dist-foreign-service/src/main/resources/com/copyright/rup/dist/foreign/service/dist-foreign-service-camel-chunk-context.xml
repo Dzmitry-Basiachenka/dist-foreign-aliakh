@@ -12,43 +12,43 @@
           class="com.copyright.rup.dist.foreign.service.impl.common.chunk.CommonUsageChunkUnmarshaller"/>
 
     <bean id="df.service.matchingChunkMarshaller" parent="df.service.usageChunkMarshaller">
-        <property name="serializer" ref="df.service.commonUsageSerializer"/>
+        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
     </bean>
 
     <bean id="df.service.matchingChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageDeserializer"/>
+        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
     </bean>
 
     <bean id="df.service.rightsChunkMarshaller" parent="df.service.usageChunkMarshaller">
-        <property name="serializer" ref="df.service.commonUsageSerializer"/>
+        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
     </bean>
 
     <bean id="df.service.rightsChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageDeserializer"/>
+        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
     </bean>
 
     <bean id="df.service.rhTaxChunkMarshaller" parent="df.service.usageChunkMarshaller">
-        <property name="serializer" ref="df.service.commonUsageSerializer"/>
+        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
     </bean>
 
     <bean id="df.service.rhTaxChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageDeserializer"/>
+        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
     </bean>
 
     <bean id="df.service.stmRhChunkMarshaller" parent="df.service.usageChunkMarshaller">
-        <property name="serializer" ref="df.service.commonUsageSerializer"/>
+        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
     </bean>
 
     <bean id="df.service.stmRhChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageDeserializer"/>
+        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
     </bean>
 
     <bean id="df.service.rhEligibilityChunkMarshaller" parent="df.service.usageChunkMarshaller">
-        <property name="serializer" ref="df.service.commonUsageSerializer"/>
+        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
     </bean>
 
     <bean id="df.service.rhEligibilityChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageDeserializer"/>
+        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
     </bean>
 
     <bean id="df.service.usageChunkProducer"

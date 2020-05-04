@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,10 @@ public class BaselineEligibilityChunkProcessor extends AbstractUsageChainChunkPr
             .filter(usage -> Objects.nonNull(usage.getAaclUsage().getBaselineId()))
             .map(Usage::getId)
             .collect(Collectors.toSet());
-        usageRepository.updateStatus(usageIds, UsageStatusEnum.ELIGIBLE);
-        usageAuditService.logAction(usageIds, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
+        if (CollectionUtils.isNotEmpty(usageIds)) {
+            usageRepository.updateStatus(usageIds, UsageStatusEnum.ELIGIBLE);
+            usageAuditService.logAction(usageIds, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
+        }
         LOGGER.trace("Usages Baseline Eligibility processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 

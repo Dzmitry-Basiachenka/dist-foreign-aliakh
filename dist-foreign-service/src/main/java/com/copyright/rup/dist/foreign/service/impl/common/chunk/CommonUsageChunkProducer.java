@@ -3,16 +3,21 @@ package com.copyright.rup.dist.foreign.service.impl.common.chunk;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
+import com.google.common.collect.Maps;
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.ProducerTemplate;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Common implementation of {@link IProducer} to send usages to queue.
@@ -25,6 +30,8 @@ import java.util.List;
  * @author Aliaksandr Liakh
  */
 public class CommonUsageChunkProducer implements IProducer<List<Usage>> {
+
+    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     @Qualifier("df.service.producerTemplate")
@@ -45,7 +52,13 @@ public class CommonUsageChunkProducer implements IProducer<List<Usage>> {
     @Override
     public void send(List<Usage> usages) throws RupRuntimeException {
         try {
-            producerTemplate.sendBody(endPoint, usages);
+            Map<String, Object> headers = Maps.newHashMapWithExpectedSize(1);
+            if (CollectionUtils.isNotEmpty(usages)) {
+                headers.put("productFamily", usages.get(0).getProductFamily());
+            } else {
+                LOGGER.warn("Usages producer. Usages are empty");
+            }
+            producerTemplate.sendBodyAndHeaders(endPoint, usages, headers);
         } catch (CamelExecutionException e) {
             throw new RupRuntimeException(
                 String.format("Exception appeared while sending usages to queue. Endpoint=%s. Usages=%s", endPoint,

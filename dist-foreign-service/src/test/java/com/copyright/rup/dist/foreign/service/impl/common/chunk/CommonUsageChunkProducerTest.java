@@ -13,7 +13,9 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Verifies {@link CommonUsageChunkProducer}.
@@ -28,6 +30,7 @@ import java.util.List;
 public class CommonUsageChunkProducerTest {
 
     private static final String END_POINT = "test";
+    private static final String PRODUCT_FAMILY = "FAS";
 
     private ProducerTemplate template;
     private CommonUsageChunkProducer producer;
@@ -42,8 +45,12 @@ public class CommonUsageChunkProducerTest {
 
     @Test
     public void testSendMessage() {
-        List<Usage> usages = Collections.singletonList(new Usage());
-        template.sendBody(END_POINT, usages);
+        Usage usage = new Usage();
+        usage.setProductFamily(PRODUCT_FAMILY);
+        List<Usage> usages = Collections.singletonList(usage);
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("productFamily", PRODUCT_FAMILY);
+        template.sendBodyAndHeaders(END_POINT, usages, headers);
         expectLastCall().once();
         replay(template);
         producer.send(usages);
