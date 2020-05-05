@@ -51,8 +51,8 @@
         (cast(${wr_wrk_inst} as text) ilike '%' || #{searchValue} || '%' or
         standard_number ilike '%' || #{searchValue} || '%' or
         system_title ilike '%' || #{searchValue} || '%' or
-        cast(rh.rh_account_number as text) like '%' || #{searchValue} || '%' or
-        rh.name ilike '%' || #{searchValue} || '%')
+        cast(u.rh_account_number as text) like '%' || #{searchValue} || '%' or
+        ${rh_name} ilike '%' || #{searchValue} || '%')
     </sql>
 
     <sql id="classificationOrderByClause">
@@ -129,6 +129,7 @@
                     and
                         <include refid="IWorkClassificationMapper.searchClause">
                             <property name="wr_wrk_inst" value="u.wr_wrk_inst"/>
+                            <property name="rh_name" value="rh.name"/>
                         </include>
                 </if>
             order by u.wr_wrk_inst, u.updated_datetime desc
@@ -152,8 +153,8 @@
             u.standard_number_type,
             wc.updated_by_user,
             wc.updated_datetime,
-            rh.rh_account_number,
-            rh.name rh_name
+            u.rh_account_number,
+            u.rh_name
         from ${schema}.df_work_classification wc
         left join lateral (
             select
@@ -161,8 +162,10 @@
                 u.system_title,
                 u.standard_number,
                 u.standard_number_type,
-                u.rh_account_number
+                u.rh_account_number,
+                rh.name rh_name
             from ${schema}.df_usage_archive u
+            left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
             where u.wr_wrk_inst = wc.wr_wrk_inst
                 and product_family in
                 <foreach collection="productFamilies" item="productFamily" open="(" separator="," close=")">
@@ -171,11 +174,11 @@
             order by u.updated_datetime desc
             limit 1
         ) u on true
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         <if test="null != searchValue">
             where
                 <include refid="IWorkClassificationMapper.searchClause">
                     <property name="wr_wrk_inst" value="wc.wr_wrk_inst"/>
+                    <property name="rh_name" value="u.rh_name"/>
                 </include>
         </if>
         <include refid="IWorkClassificationMapper.classificationOrderByClause"/>
@@ -200,6 +203,7 @@
             and
                 <include refid="IWorkClassificationMapper.searchClause">
                     <property name="wr_wrk_inst" value="u.wr_wrk_inst"/>
+                    <property name="rh_name" value="rh.name"/>
                 </include>
         </if>
     </sql>
@@ -216,8 +220,10 @@
                 u.wr_wrk_inst,
                 u.system_title,
                 u.standard_number,
-                u.rh_account_number
+                u.rh_account_number,
+                rh.name rh_name
             from ${schema}.df_usage_archive u
+            left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
             where u.wr_wrk_inst = wc.wr_wrk_inst
                 and product_family in
                 <foreach collection="productFamilies" item="productFamily" open="(" separator="," close=")">
@@ -226,11 +232,11 @@
             order by u.updated_datetime desc
             limit 1
         ) u on true
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         <if test="null != searchValue">
             where
                 <include refid="IWorkClassificationMapper.searchClause">
                     <property name="wr_wrk_inst" value="wc.wr_wrk_inst"/>
+                    <property name="rh_name" value="u.rh_name"/>
                 </include>
         </if>
     </sql>
