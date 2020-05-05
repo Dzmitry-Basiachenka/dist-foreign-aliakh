@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.service.impl.tax.chunk;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
-
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
@@ -15,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.chunk.IChainChunkProcessor;
 import com.copyright.rup.dist.foreign.service.impl.tax.RhTaxService;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -86,6 +86,7 @@ public class RhTaxChunkConsumerTest {
 
     private Usage buildUsage(String id) {
         Usage usage = new Usage();
+        usage.getRightsholder().setAccountNumber(100009522L);
         usage.setId(id);
         return usage;
     }
@@ -93,9 +94,9 @@ public class RhTaxChunkConsumerTest {
     private static class MockRhTaxService extends RhTaxService {
 
         @Override
-        public void processTaxCountryCode(Usage usage) {
-            if (USAGE_ID_1.equals(usage.getId())) {
-                usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
+        public void processTaxCountryCode(List<Usage> usages) {
+            if (1 == CollectionUtils.size(usages) && USAGE_ID_1.equals(usages.get(0).getId())) {
+                usages.get(0).setStatus(UsageStatusEnum.US_TAX_COUNTRY);
             }
         }
     }

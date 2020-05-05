@@ -1,22 +1,30 @@
 package com.copyright.rup.dist.foreign.service.impl.tax;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNull;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxChunkService;
 import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link RhTaxService}.
@@ -29,22 +37,27 @@ import org.powermock.reflect.Whitebox;
  */
 public class RhTaxServiceTest {
 
+    private static final Set<Long> ACCOUNT_NUMBERS = Sets.newHashSet(7001413934L, 1000009522L);
+
     private RhTaxService rhTaxService;
     private IUsageService usageService;
     private IOracleRhTaxService oracleRhTaxService;
+    private IOracleRhTaxChunkService oracleRhTaxChunkService;
 
     @Before
     public void setUp() {
         rhTaxService = new RhTaxService();
         usageService = createMock(IUsageService.class);
         oracleRhTaxService = createMock(IOracleRhTaxService.class);
+        oracleRhTaxChunkService = createMock(IOracleRhTaxChunkService.class);
         Whitebox.setInternalState(rhTaxService, "usageService", usageService);
         Whitebox.setInternalState(rhTaxService, "oracleRhTaxService", oracleRhTaxService);
+        Whitebox.setInternalState(rhTaxService, "oracleRhTaxChunkService", oracleRhTaxChunkService);
     }
 
     @Test
     public void testProcessTaxCountryCode() {
-        Usage usage = buildUsage();
+        Usage usage = buildUsage(1000001534L);
         expect(oracleRhTaxService.isUsTaxCountry(1000001534L)).andReturn(true).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
@@ -56,7 +69,7 @@ public class RhTaxServiceTest {
 
     @Test
     public void testProcessTaxCountryCodeNonUs() {
-        Usage usage = buildUsage();
+        Usage usage = buildUsage(1000001534L);
         expect(oracleRhTaxService.isUsTaxCountry(1000001534L)).andReturn(false).once();
         replay(oracleRhTaxService, usageService);
         rhTaxService.processTaxCountryCode(usage);
@@ -70,10 +83,27 @@ public class RhTaxServiceTest {
         rhTaxService.processTaxCountryCode(usage);
     }
 
-    private Usage buildUsage() {
+    @Test
+    public void testProcessTaxCountryCodeByChunks() {
+        Usage usTaxUsage = buildUsage(7001413934L);
+        Usage notUsTaxUsage = buildUsage(1000009522L);
+        List<Usage> usages = Arrays.asList(usTaxUsage, notUsTaxUsage);
+        expect(oracleRhTaxChunkService.isUsTaxCountry(ACCOUNT_NUMBERS))
+            .andReturn(ImmutableMap.of(7001413934L, Boolean.TRUE, 1000009522L, Boolean.FALSE))
+            .once();
+        usageService.updateProcessedUsage(usTaxUsage);
+        expectLastCall().once();
+        replay(oracleRhTaxChunkService, usageService);
+        rhTaxService.processTaxCountryCode(usages);
+        assertEquals(UsageStatusEnum.US_TAX_COUNTRY, usTaxUsage.getStatus());
+        assertNotEquals(UsageStatusEnum.US_TAX_COUNTRY, notUsTaxUsage.getStatus());
+        verify(oracleRhTaxChunkService, usageService);
+    }
+
+    private Usage buildUsage(Long accountNumber) {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
-        usage.getRightsholder().setAccountNumber(1000001534L);
+        usage.getRightsholder().setAccountNumber(accountNumber);
         return usage;
     }
 }

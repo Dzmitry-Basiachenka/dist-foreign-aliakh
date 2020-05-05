@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 
+import java.util.List;
+
 /**
  * Service to process RH taxes.
  * <p>
@@ -20,4 +22,12 @@ public interface IRhTaxService {
      * @param usage NTS {@link Usage} to check RH tax country
      */
     void processTaxCountryCode(Usage usage);
+
+    /**
+     * Verifies whether RH tax country for NTS {@link Usage}s is US or not. For US usages updates status of to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#US_TAX_COUNTRY} and adds log message.
+     *
+     * @param usages list of NTS {@link Usage}s to check RH tax country
+     */
+    void processTaxCountryCode(List<Usage> usages);
 }
