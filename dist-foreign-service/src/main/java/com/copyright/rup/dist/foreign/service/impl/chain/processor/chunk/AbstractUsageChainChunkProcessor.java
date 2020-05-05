@@ -2,9 +2,11 @@ package com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
 import com.copyright.rup.dist.foreign.service.api.processor.chunk.IChainChunkProcessor;
 import com.copyright.rup.dist.foreign.service.impl.chain.executor.IPerformanceLogger;
 import com.copyright.rup.dist.foreign.service.impl.chain.processor.PerformanceLoggerChainProcessorWrapper;
+import com.copyright.rup.dist.foreign.service.impl.chain.processor.PerformanceLoggerJobChainProcessorWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,8 +41,9 @@ public abstract class AbstractUsageChainChunkProcessor implements IChainChunkPro
 
     @Override
     public void setSuccessProcessor(IChainProcessor<List<Usage>> successProcessor) {
-        this.successProcessor = new PerformanceLoggerChainProcessorWrapper<>(successProcessor, performanceLogger,
-            List::size);
+        this.successProcessor = successProcessor instanceof IUsageJobProcessor
+            ? new PerformanceLoggerJobChainProcessorWrapper<>(successProcessor, performanceLogger, List::size)
+            : new PerformanceLoggerChainProcessorWrapper<>(successProcessor, performanceLogger, List::size);
     }
 
     @Override
@@ -50,8 +53,9 @@ public abstract class AbstractUsageChainChunkProcessor implements IChainChunkPro
 
     @Override
     public void setFailureProcessor(IChainProcessor<List<Usage>> failureProcessor) {
-        this.failureProcessor = new PerformanceLoggerChainProcessorWrapper<>(failureProcessor, performanceLogger,
-            List::size);
+        this.failureProcessor = failureProcessor instanceof IUsageJobProcessor
+            ? new PerformanceLoggerJobChainProcessorWrapper<>(failureProcessor, performanceLogger, List::size)
+            : new PerformanceLoggerChainProcessorWrapper<>(failureProcessor, performanceLogger, List::size);
     }
 
     @Override

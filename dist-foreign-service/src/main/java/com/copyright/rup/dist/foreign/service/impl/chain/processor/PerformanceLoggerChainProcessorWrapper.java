@@ -72,5 +72,9 @@ public class PerformanceLoggerChainProcessorWrapper<T> implements IChainProcesso
     public void executeNextProcessor(T item, Predicate<T> successPredicate) {
         processor.executeNextProcessor(item, successPredicate);
     }
+
+    protected IChainProcessor<T> getDelegate() {
+        return processor;
+    }
 }
 
