@@ -43,11 +43,7 @@ public class RhTaxChunkConsumer implements IConsumer<List<Usage>> {
     public void consume(List<Usage> usages) {
         if (Objects.nonNull(usages)) {
             LOGGER.trace("Consume usages for RH tax processing. Started. UsageIds={}", LogUtils.ids(usages));
-            usages.forEach(usage -> {
-                rhTaxService.processTaxCountryCode(usage);
-                LOGGER.trace("Consume usages for RH tax processing. Processed. UsageId={}, UsageStatus={}",
-                    usage.getId(), usage.getStatus());
-            });
+            rhTaxService.processTaxCountryCode(usages);
             rhTaxProcessor.executeNextChainProcessor(usages,
                 usage -> UsageStatusEnum.US_TAX_COUNTRY == usage.getStatus());
             LOGGER.trace("Consume usages for RH tax processing. Finished. UsageIds={}", LogUtils.ids(usages));
