@@ -759,4 +759,17 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2020-05-05-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-56848 Tech Debt: FDA: classification updates: add index by rh_account_number in df_rightsholder table")
+
+        createIndex(indexName: 'ix_df_rightsholder_rh_account_number', schemaName: dbAppsSchema, tableName: 'df_rightsholder',
+                tablespace: dbIndexTablespace) {
+            column(name: 'rh_account_number')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_rightsholder_rh_account_number")
+        }
+    }
 }
