@@ -239,6 +239,7 @@
             nts_details_gross_amount,
             created_datetime
         from ${schema}.v_nts_withdrawn_batch_summary_report
+        order by batch_name
     </select>
 
     <select id="findServiceFeeTrueUpReportDtos" resultMap="serviceFeeTrueUpReportDtoResultMap">
