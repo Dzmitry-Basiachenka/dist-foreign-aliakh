@@ -1,3 +1,10 @@
+9.1.27
+-
+* B-56848 Tech Debt: FDA: add index to rh_account_number column in df_rightsholder table to speed up classification process
+* B-56848 Tech Debt: FDA: add sorting by batch_name to withdrawn batch_summary_report
+* B-58288 FDA: Batch processing performance enhancements: Refactor RH Tax logic to process usages by chunks
+* CDP-909: FDA: df.service.getRightsQuartzJob: Job updates usages for NTS only, ignoring other product families
+
 9.1.26
 -
 * B-58288 FDA: Batch processing performance enhancements: use chunk-based serializers/deserializers and use header-based routing in Camel configuration
