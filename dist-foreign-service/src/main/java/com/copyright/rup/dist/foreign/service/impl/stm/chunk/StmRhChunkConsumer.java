@@ -5,9 +5,9 @@ import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IStmRhService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.processor.chunk.IChainChunkProcessor;
+import com.copyright.rup.dist.foreign.service.api.stm.chunk.IStmRhChunkService;
 
 import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public class StmRhChunkConsumer implements IConsumer<List<Usage>> {
     @Autowired
     private IUsageBatchService batchService;
     @Autowired
-    private IStmRhService stmRhService;
+    private IStmRhChunkService stmRhService;
     @Autowired
     @Qualifier("df.service.ntsStmRhChunkProcessor")
     private IChainChunkProcessor<List<Usage>, Usage> stmRhProcessor;
@@ -62,11 +62,8 @@ public class StmRhChunkConsumer implements IConsumer<List<Usage>> {
                 .collect(Collectors.partitioningBy(successPredicate));
             List<Usage> usagesExcludingStm = usagesByExcludingStm.get(true);
             if (!usagesExcludingStm.isEmpty()) {
-                usagesExcludingStm.forEach(usage -> {
-                    stmRhService.processStmRh(usage);
-                    LOGGER.trace("Consume usages for processing STM RH. Finished. UsageId={}, UsageStatus={}",
-                        usage.getId(), usage.getStatus());
-                });
+                String productFamily = usagesExcludingStm.get(0).getProductFamily();
+                stmRhService.processStmRhs(usagesExcludingStm, productFamily);
                 stmRhProcessor.executeNextChainProcessor(usagesExcludingStm,
                     usage -> UsageStatusEnum.NON_STM_RH == usage.getStatus());
             }

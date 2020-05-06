@@ -16,10 +16,11 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IStmRhService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.processor.chunk.IChainChunkProcessor;
+import com.copyright.rup.dist.foreign.service.api.stm.chunk.IStmRhChunkService;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,14 +49,14 @@ public class StmRhChunkConsumerTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
 
     private IUsageBatchService batchService;
-    private IStmRhService stmRhService;
+    private IStmRhChunkService stmRhService;
     private IChainChunkProcessor<List<Usage>, Usage> stmRhProcessor;
     private StmRhChunkConsumer consumer;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
-        stmRhService = createMock(IStmRhService.class);
+        stmRhService = createMock(IStmRhChunkService.class);
         batchService = createMock(IUsageBatchService.class);
         stmRhProcessor = createMock(IChainChunkProcessor.class);
         consumer = new StmRhChunkConsumer();
@@ -84,7 +85,7 @@ public class StmRhChunkConsumerTest {
         List<Usage> usages = Collections.singletonList(usage);
         Capture<Predicate<Usage>> predicateCapture = new Capture<>();
         expect(batchService.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFields(true))).once();
-        stmRhService.processStmRh(usage);
+        stmRhService.processStmRhs(usages, NTS_PRODUCT_FAMILY);
         expectLastCall().andDelegateTo(new MockStmRhService()).once();
         stmRhProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
         expectLastCall().once();
@@ -100,7 +101,7 @@ public class StmRhChunkConsumerTest {
         List<Usage> usages = Collections.singletonList(usage);
         Capture<Predicate<Usage>> predicateCapture = new Capture<>();
         expect(batchService.getUsageBatchById(BATCH_ID)).andReturn(buildUsageBatch(buildNtsFields(true))).once();
-        stmRhService.processStmRh(usage);
+        stmRhService.processStmRhs(usages, NTS_PRODUCT_FAMILY);
         expectLastCall().andDelegateTo(new MockStmRhService()).once();
         stmRhProcessor.executeNextChainProcessor(eq(usages), capture(predicateCapture));
         expectLastCall().once();
@@ -149,12 +150,12 @@ public class StmRhChunkConsumerTest {
         return ntsFields;
     }
 
-    private static class MockStmRhService implements IStmRhService {
+    private static class MockStmRhService implements IStmRhChunkService {
 
         @Override
-        public void processStmRh(Usage usage) {
-            if (USAGE_ID_1.equals(usage.getId())) {
-                usage.setStatus(UsageStatusEnum.NON_STM_RH);
+        public void processStmRhs(List<Usage> usages, String productFamily) {
+            if (1 == CollectionUtils.size(usages) && USAGE_ID_1.equals(usages.get(0).getId())) {
+                usages.get(0).setStatus(UsageStatusEnum.NON_STM_RH);
             }
         }
     }
