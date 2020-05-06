@@ -21,6 +21,7 @@ import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
@@ -74,7 +75,7 @@ public class ScenarioReportWidgetTest {
     }
 
     private void verifySize(ScenarioReportWidget widget) {
-        assertEquals(425, widget.getWidth(), 0);
+        assertEquals(450, widget.getWidth(), 0);
         assertEquals(-1.0, widget.getHeight(), 0);
         assertEquals(Sizeable.Unit.PIXELS, widget.getWidthUnits());
         assertEquals(Sizeable.Unit.PIXELS, widget.getHeightUnits());
@@ -92,6 +93,8 @@ public class ScenarioReportWidgetTest {
         assertEquals(ComboBox.class, component.getClass());
         ComboBox<Scenario> scenarioComboBox = (ComboBox<Scenario>) component;
         assertEquals("Scenario name", scenarioComboBox.getCaption());
+        assertEquals(100, scenarioComboBox.getWidth(), 0);
+        assertEquals(Unit.PERCENTAGE, scenarioComboBox.getWidthUnits());
         assertFalse(scenarioComboBox.isEmptySelectionAllowed());
         assertFalse(scenarioComboBox.isTextInputAllowed());
         ListDataProvider<Scenario> listDataProvider = (ListDataProvider<Scenario>) scenarioComboBox.getDataProvider();
