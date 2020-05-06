@@ -1,0 +1,29 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList ",
+      [
+        {
+          "@class": "com.copyright.rup.adapters.oracle.ap.domain.RightsholderDataInfo",
+          "rightsholderAccountNumber": "1000023401",
+          "rightsholderName": "101 Communications, Ltd.",
+          "withholdingIndicator": "U",
+          "domesticInternationalIndicator": "D",
+          "taxCountry": "US"
+        },
+        {
+          "@class": "com.copyright.rup.adapters.oracle.ap.domain.RightsholderDataInfo",
+          "rightsholderAccountNumber": "1000023995",
+          "rightsholderName": "XXX",
+          "withholdingIndicator": "U",
+          "domesticInternationalIndicator": "D",
+          "taxCountry": "US"
+        }
+      ]
+    ]
+  }
+}

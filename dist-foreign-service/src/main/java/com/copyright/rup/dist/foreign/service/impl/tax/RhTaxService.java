@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -62,7 +63,7 @@ public class RhTaxService implements IRhTaxService {
         LogUtils.ILogWrapper usageIdsWrapper = LogUtils.ids(usages);
         Set<Long> accountNumbers = usages.stream()
             .map(usage -> Objects.requireNonNull(usage.getRightsholder().getAccountNumber()))
-            .collect(Collectors.toSet());
+            .collect(Collectors.toCollection(TreeSet::new));
         LOGGER.debug("Processing RH tax country. Started. UsageIds={}, RhAccountNumbers={}", usageIdsWrapper,
             accountNumbers);
         Map<Long, Boolean> accountNumberToUsTaxCountryMap = oracleRhTaxChunkService.isUsTaxCountry(accountNumbers);

@@ -158,6 +158,7 @@ public class CreateNtsBatchIntegrationTest {
             .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
+            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectOracleCall(1000023401L, "tax/rh_1000023401_tax_country_fr_response.json")
             .build()
             .run();
@@ -167,6 +168,7 @@ public class CreateNtsBatchIntegrationTest {
     public void testCreateNtsBatchWithRhNotFound() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Univ", STM_AMOUNT, false)))
+            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectRmsRights("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json")
             .build()
             .run();

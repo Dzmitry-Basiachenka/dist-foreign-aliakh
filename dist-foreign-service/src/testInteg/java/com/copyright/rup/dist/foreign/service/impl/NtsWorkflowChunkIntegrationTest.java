@@ -71,7 +71,7 @@ public class NtsWorkflowChunkIntegrationTest {
                 1000023401L, "prm/rightsholder_1000023401_response.json"))
             .expectPrmCallForUpdateRro(2000017001L, "prm/rightsholder_2000017001_response.json")
             .expectOracleCall(ImmutableMap.of(
-                Arrays.asList(1000023401L, 1000009522L), "tax/rh_tax_country_us_response_1.json"))
+                Arrays.asList(1000009522L, 1000023401L), "tax/rh_tax_country_us_response_1.json"))
             .expectPreferences(ImmutableMap.of(
                 Arrays.asList(RH_ID_2, RH_ID_1), "preferences/rh_preferences_response_1.json"))
             .expectUsage(buildPaidUsage())
