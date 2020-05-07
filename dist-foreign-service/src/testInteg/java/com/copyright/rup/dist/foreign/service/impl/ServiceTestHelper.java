@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -113,6 +114,16 @@ public class ServiceTestHelper {
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                 expectedPrmResponse), MediaType.APPLICATION_JSON));
+    }
+
+    public void expectOracleCall(String expectedOracleResponse, List<Long> expectedOracleAccountNumbers) {
+        mockServer.expect(MockRestRequestMatchers
+            .requestTo(
+                "http://localhost:8080/oracle-ap-rest/getRightsholderDataInfo?rightsholderAccountNumbers=" +
+                    Joiner.on(",").join(expectedOracleAccountNumbers)))
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+            .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
+                expectedOracleResponse), MediaType.APPLICATION_JSON));
     }
 
     public void expectOracleCall(String expectedOracleResponse, Long expectedOracleAccountNumber) {
