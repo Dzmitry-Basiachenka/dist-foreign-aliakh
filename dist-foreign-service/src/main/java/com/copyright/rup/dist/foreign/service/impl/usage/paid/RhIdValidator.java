@@ -2,9 +2,10 @@ package com.copyright.rup.dist.foreign.service.impl.usage.paid;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.camel.IValidator;
+import com.copyright.rup.dist.common.integration.camel.ValidationException;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
-import com.copyright.rup.dist.foreign.service.api.IValidator;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Sets;
