@@ -179,7 +179,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             });
         }
 
-        // TODO {srudak} try to use ServiceTestHelper here
         private void assertUsage(UsageDto expectedUsage, UsageDto actualUsage) {
             assertNotNull(actualUsage);
             assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
