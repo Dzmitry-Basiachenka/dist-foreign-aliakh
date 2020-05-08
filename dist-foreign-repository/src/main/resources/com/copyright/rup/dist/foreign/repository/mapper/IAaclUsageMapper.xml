@@ -574,10 +574,6 @@
         <include refid="IUsageMapper.ifPageable"/>
     </sql>
 
-    <select id="findDtosByFilter" resultMap="aaclUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
-        <include refid="IAaclUsageMapper.selectDtosByFilterSql"/>
-    </select>
-
     <sql id="selectCountByFilterSql">
         select count(1)
         from ${schema}.df_usage u
@@ -640,6 +636,10 @@
         order by u.rh_account_number, u.df_usage_archive_uid
             <include refid="IUsageMapper.ifPageable"/>
     </sql>
+
+    <select id="findDtosByFilter" resultMap="aaclUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IAaclUsageMapper.selectDtosByFilterSql"/>
+    </select>
 
     <select id="findForAudit" resultMap="aaclUsageDtoResultMap" parameterType="map">
         <include refid="IAaclUsageMapper.selectForAuditSql"/>
