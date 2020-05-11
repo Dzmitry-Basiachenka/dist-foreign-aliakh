@@ -110,8 +110,8 @@ public class NtsWorkflowChunkIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    NtsWorkflowChunkIntegrationTestBuilder expectPrmCall(Map<Long, String> accountToPrmResponseResponseMap) {
-        this.expectedAccountToPrmResponseMap = accountToPrmResponseResponseMap;
+    NtsWorkflowChunkIntegrationTestBuilder expectPrmCall(Map<Long, String> accountToPrmResponseMap) {
+        this.expectedAccountToPrmResponseMap = accountToPrmResponseMap;
         return this;
     }
 

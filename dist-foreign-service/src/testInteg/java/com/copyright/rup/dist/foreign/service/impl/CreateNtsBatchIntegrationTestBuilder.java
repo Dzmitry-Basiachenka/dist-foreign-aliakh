@@ -126,6 +126,8 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
         expectedOracleResponse = null;
         expectedPreferencesResponse = null;
         expectedPreferencesRightsholderId = null;
+        expectedRroAccountNumber = null;
+        expectedPrmResponseForUpdateRro = null;
         testHelper.reset();
     }
 
