@@ -30,7 +30,6 @@ import java.util.stream.Stream;
  * @author Uladzislau Shalamitski
  */
 @Component("df.service.usageRhIdValidator")
-// TODO move to dist-common
 class RhIdValidator implements IValidator<List<PaidUsage>> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
