@@ -35,7 +35,7 @@ public class PrmIntegrationChunkService implements IPrmIntegrationChunkService {
     private IPrmPreferenceService prmPreferenceService;
 
     @Override
-    public Map<String, Boolean> areStmRightsholders(Set<String> rightsholdersIds, String productFamily) {
+    public Map<String, Boolean> getStmRightsholderPreferenceMap(Set<String> rightsholdersIds, String productFamily) {
         return getBooleanPreferencesMap(
             prmPreferenceService.getPreferencesMap(rightsholdersIds), rightsholdersIds,
             productFamily, FdaConstants.IS_RH_STM_IPRO_CODE);

@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
-import com.copyright.rup.dist.foreign.service.impl.chain.executor.IPerformanceLogger;
 import com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk.AbstractUsageChainChunkProcessor;
 
 import org.junit.Before;
@@ -53,7 +52,6 @@ public class UsageChainChunkExecutorTest {
         Whitebox.setInternalState(executor, "ntsProcessor", ntsProcessor);
         Whitebox.setInternalState(executor, "aaclProcessor", aaclProcessor);
         Whitebox.setInternalState(executor, "chunkSize", 1);
-        Whitebox.setInternalState(executor, createMock(IPerformanceLogger.class));
         executor.init();
     }
 

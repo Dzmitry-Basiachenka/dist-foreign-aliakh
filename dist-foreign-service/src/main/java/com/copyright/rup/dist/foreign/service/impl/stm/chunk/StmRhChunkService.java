@@ -44,7 +44,8 @@ public class StmRhChunkService implements IStmRhChunkService {
             .stream()
             .map(usage -> usage.getRightsholder().getId())
             .collect(Collectors.toSet());
-        Map<String, Boolean> rhIdsToIsStmRhs = prmIntegrationService.areStmRightsholders(rhIds, productFamily);
+        Map<String, Boolean> rhIdsToIsStmRhs =
+            prmIntegrationService.getStmRightsholderPreferenceMap(rhIds, productFamily);
         usages.forEach(usage -> {
             boolean isStmRh = rhIdsToIsStmRhs.get(usage.getRightsholder().getId());
             LOGGER.debug("Processing STM RHs. Processed. UsageId={}, RhId={}, IsStmRh={}", usage.getId(),

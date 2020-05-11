@@ -2,10 +2,6 @@ package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
-import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
-import com.copyright.rup.dist.foreign.service.impl.chain.executor.IPerformanceLogger;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Abstract implementation of {@link IChainProcessor}.
@@ -21,9 +17,6 @@ public abstract class AbstractUsageChainProcessor implements IChainProcessor<Usa
     private IChainProcessor<Usage> successProcessor;
     private IChainProcessor<Usage> failureProcessor;
 
-    @Autowired
-    private IPerformanceLogger performanceLogger;
-
     @Override
     public IChainProcessor<Usage> getSuccessProcessor() {
         return successProcessor;
@@ -31,9 +24,7 @@ public abstract class AbstractUsageChainProcessor implements IChainProcessor<Usa
 
     @Override
     public void setSuccessProcessor(IChainProcessor<Usage> successProcessor) {
-        this.successProcessor = successProcessor instanceof IUsageJobProcessor
-            ? new PerformanceLoggerJobChainProcessorWrapper<>(successProcessor, performanceLogger, usage -> 1)
-            : new PerformanceLoggerChainProcessorWrapper<>(successProcessor, performanceLogger, usage -> 1);
+        this.successProcessor = successProcessor;
     }
 
     @Override
@@ -43,8 +34,6 @@ public abstract class AbstractUsageChainProcessor implements IChainProcessor<Usa
 
     @Override
     public void setFailureProcessor(IChainProcessor<Usage> failureProcessor) {
-        this.failureProcessor = successProcessor instanceof IUsageJobProcessor
-            ? new PerformanceLoggerJobChainProcessorWrapper<>(failureProcessor, performanceLogger, usage -> 1)
-            : new PerformanceLoggerChainProcessorWrapper<>(failureProcessor, performanceLogger, usage -> 1);
+        this.failureProcessor = failureProcessor;
     }
 }

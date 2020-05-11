@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.nts.IWorkClassificationService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
-import com.copyright.rup.dist.foreign.service.impl.chain.executor.IPerformanceLogger;
 
 import com.google.common.collect.Lists;
 
@@ -52,8 +51,6 @@ public class ClassificationChunkProcessorTest {
         Whitebox.setInternalState(classificationProcessor, workClassificationService);
         classificationProcessor.setSuccessProcessor(nonBelletristicProcessor);
         classificationProcessor.setFailureProcessor(unclassifiedStatusProcessor);
-        Whitebox.setInternalState(classificationProcessor.getSuccessProcessor(), createMock(IPerformanceLogger.class));
-        Whitebox.setInternalState(classificationProcessor.getFailureProcessor(), createMock(IPerformanceLogger.class));
     }
 
     @Test
@@ -64,11 +61,8 @@ public class ClassificationChunkProcessorTest {
         expect(workClassificationService.getClassification(WR_WRK_INST_2)).andReturn(null).once();
         nonBelletristicProcessor.process(Collections.singletonList(usage1));
         expectLastCall().once();
-        expect(nonBelletristicProcessor.getChainProcessorType()).andReturn(ChainProcessorTypeEnum.CLASSIFICATION)
-            .once();
         unclassifiedStatusProcessor.process(Collections.singletonList(usage2));
         expectLastCall().once();
-        expect(unclassifiedStatusProcessor.getChainProcessorType()).andReturn(ChainProcessorTypeEnum.DELETE).once();
         replay(workClassificationService, nonBelletristicProcessor, unclassifiedStatusProcessor);
         classificationProcessor.process(Lists.newArrayList(usage1, usage2));
         verify(workClassificationService, nonBelletristicProcessor, unclassifiedStatusProcessor);

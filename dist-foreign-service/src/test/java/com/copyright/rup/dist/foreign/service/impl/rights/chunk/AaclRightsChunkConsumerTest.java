@@ -58,6 +58,13 @@ public class AaclRightsChunkConsumerTest {
         testConsume(null, false);
     }
 
+    @Test
+    public void testConsumeNull() {
+        replay(aaclRightsProcessor);
+        aaclRightsConsumer.consume(null);
+        verify(aaclRightsProcessor);
+    }
+
     private void testConsume(Long foundRhAccountNumber, boolean expectedPredicateResult) {
         Whitebox.setInternalState(aaclRightsConsumer, new RightsServiceMock(foundRhAccountNumber));
         Usage usage = buildUsage();
@@ -70,13 +77,6 @@ public class AaclRightsChunkConsumerTest {
         verify(aaclRightsProcessor);
         reset(aaclRightsProcessor);
         assertEquals(expectedPredicateResult, predicateCapture.getValue().test(usage));
-    }
-
-    @Test
-    public void testConsumeNull() {
-        replay(aaclRightsProcessor);
-        aaclRightsConsumer.consume(null);
-        verify(aaclRightsProcessor);
     }
 
     private Usage buildUsage() {

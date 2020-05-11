@@ -49,7 +49,6 @@ public class UsageChainExecutorTest {
         Whitebox.setInternalState(executor, "fasProcessor", fasProcessor);
         Whitebox.setInternalState(executor, "ntsProcessor", ntsProcessor);
         Whitebox.setInternalState(executor, "aaclProcessor", aaclProcessor);
-        Whitebox.setInternalState(executor, createMock(IPerformanceLogger.class));
         executor.init();
     }
 

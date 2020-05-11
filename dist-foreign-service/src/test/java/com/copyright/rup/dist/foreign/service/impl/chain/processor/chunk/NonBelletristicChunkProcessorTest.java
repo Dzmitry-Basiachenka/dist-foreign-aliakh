@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.nts.IWorkClassificationService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
-import com.copyright.rup.dist.foreign.service.impl.chain.executor.IPerformanceLogger;
 
 import com.google.common.collect.Lists;
 
@@ -52,8 +51,6 @@ public class NonBelletristicChunkProcessorTest {
         Whitebox.setInternalState(nonBelletristicProcessor, workClassificationService);
         nonBelletristicProcessor.setSuccessProcessor(eligibilityProcessor);
         nonBelletristicProcessor.setFailureProcessor(deleteProcessor);
-        Whitebox.setInternalState(nonBelletristicProcessor.getSuccessProcessor(), createMock(IPerformanceLogger.class));
-        Whitebox.setInternalState(nonBelletristicProcessor.getFailureProcessor(), createMock(IPerformanceLogger.class));
     }
 
     @Test
@@ -64,10 +61,8 @@ public class NonBelletristicChunkProcessorTest {
         expect(workClassificationService.getClassification(WR_WRK_INST_2)).andReturn("BELLETRISTIC").once();
         eligibilityProcessor.process(Collections.singletonList(usage1));
         expectLastCall().once();
-        expect(eligibilityProcessor.getChainProcessorType()).andReturn(ChainProcessorTypeEnum.ELIGIBILITY).once();
         deleteProcessor.process(Collections.singletonList(usage2));
         expectLastCall().once();
-        expect(deleteProcessor.getChainProcessorType()).andReturn(ChainProcessorTypeEnum.DELETE).once();
         replay(workClassificationService, eligibilityProcessor, deleteProcessor);
         nonBelletristicProcessor.process(Lists.newArrayList(usage1, usage2));
         verify(workClassificationService, eligibilityProcessor, deleteProcessor);

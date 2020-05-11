@@ -22,5 +22,5 @@ public interface IPrmIntegrationChunkService {
      * @param productFamily    product family
      * @return map from rightsholder ids to STM rightsholders flag
      */
-    Map<String, Boolean> areStmRightsholders(Set<String> rightsholdersIds, String productFamily);
+    Map<String, Boolean> getStmRightsholderPreferenceMap(Set<String> rightsholdersIds, String productFamily);
 }
