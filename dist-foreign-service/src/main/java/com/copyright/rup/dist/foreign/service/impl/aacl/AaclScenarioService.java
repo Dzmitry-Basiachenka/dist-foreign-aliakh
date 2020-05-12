@@ -78,6 +78,11 @@ public class AaclScenarioService implements IAaclScenarioService {
         LOGGER.info("Delete scenario. Finished. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
     }
 
+    @Override
+    public String getScenarioNameByFundPoolId(String fundPoolId) {
+        return scenarioRepository.findNameByAaclFundPoolId(fundPoolId);
+    }
+
     private Scenario buildAaclScenario(String scenarioName, AaclFields aaclFields, String description,
                                        UsageFilter usageFilter) {
         Scenario scenario = new Scenario();

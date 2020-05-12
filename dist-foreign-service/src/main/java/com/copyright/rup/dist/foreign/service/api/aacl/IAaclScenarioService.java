@@ -33,4 +33,12 @@ public interface IAaclScenarioService {
      */
     Scenario createScenario(String scenarioName, AaclFields aaclFields, String description,
                             UsageFilter usageFilter);
+
+    /**
+     * Gets {@link Scenario} name based on AACL fund pool id.
+     *
+     * @param fundPoolId fund pool id
+     * @return {@link Scenario} name or {@code null} if none found
+     */
+    String getScenarioNameByFundPoolId(String fundPoolId);
 }
