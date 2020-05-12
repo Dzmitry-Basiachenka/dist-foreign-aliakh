@@ -27,7 +27,6 @@ public class Scenario extends StoredEntity<String> {
     private BigDecimal netTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private BigDecimal serviceFeeTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private BigDecimal grossTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal reportedTotal = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
     private String description;
     private ScenarioStatusEnum status;
     private ScenarioAuditItem auditItem;
@@ -72,14 +71,6 @@ public class Scenario extends StoredEntity<String> {
 
     public void setGrossTotal(BigDecimal grossTotal) {
         this.grossTotal = grossTotal;
-    }
-
-    public BigDecimal getReportedTotal() {
-        return reportedTotal;
-    }
-
-    public void setReportedTotal(BigDecimal reportedTotal) {
-        this.reportedTotal = reportedTotal;
     }
 
     public String getDescription() {
@@ -138,7 +129,6 @@ public class Scenario extends StoredEntity<String> {
             .append(this.netTotal, that.netTotal)
             .append(this.serviceFeeTotal, that.serviceFeeTotal)
             .append(this.grossTotal, that.grossTotal)
-            .append(this.reportedTotal, that.reportedTotal)
             .append(this.description, that.description)
             .append(this.status, that.status)
             .append(this.auditItem, that.auditItem)
@@ -156,7 +146,6 @@ public class Scenario extends StoredEntity<String> {
             .append(netTotal)
             .append(serviceFeeTotal)
             .append(grossTotal)
-            .append(reportedTotal)
             .append(description)
             .append(status)
             .append(auditItem)
@@ -174,7 +163,6 @@ public class Scenario extends StoredEntity<String> {
             .append("netTotal", netTotal)
             .append("serviceFeeTotal", serviceFeeTotal)
             .append("grossTotal", grossTotal)
-            .append("reportedTotal", reportedTotal)
             .append("description", description)
             .append("status", status)
             .append("auditItem", auditItem)

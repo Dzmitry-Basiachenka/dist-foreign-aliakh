@@ -114,7 +114,6 @@ class RefreshScenarioTestBuilder {
             assertEquals(expectedScenario.getNetTotal(), scenario.getNetTotal());
             assertEquals(expectedScenario.getGrossTotal(), scenario.getGrossTotal());
             assertEquals(expectedScenario.getServiceFeeTotal(), scenario.getServiceFeeTotal());
-            assertEquals(expectedScenario.getReportedTotal(), scenario.getReportedTotal());
             assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
             assertEquals(expectedScenario.getDescription(), scenario.getDescription());
             assertEquals("SYSTEM", scenario.getCreateUser());
