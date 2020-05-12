@@ -1,3 +1,18 @@
+9.1.28
+-
+* B-54909 FDA: Work Shares by Aggregate Licensee Class: make changes based on comments in CR-DIST-FOREIGN-168
+* B-55007 FDA: AACL Exports: Scenario-specific usage details: make changes based on CR-DIST-FOREIGN-169
+* B-56848 Tech Debt: FDA: adjust Ownership Adjustment Report window width
+* B-56848 Tech Debt: FDA: fix unit tests for Ownership Adjustment Report window
+* B-56848 Tech Debt: FDA: remove obsolete TODO comment
+* B-56848 Tech Debt: FDA: remove redundant TODO
+* B-56848 Tech Debt: FDA: remove reported value from Scenario domain
+* B-56848 Tech Debt: FDA: update dist-common version to 49.6.+
+* B-58288 FDA: Batch processing performance enhancements: Refactor NtsWorkflowChunkIntegrationTest
+* B-58288 FDA: Batch processing performance enhancements: make changes based on comments in CR-DIST-FOREIGN-170
+* B-58288 FDA: Batch processing performance enhancements: refactor CreateNtsBatchChunkIntegrationTest to verify STM RH consumer to use REST calls with list arguments
+* B-58288 FDA: Batch processing performance enhancements: refactor STM RH consumer to use REST calls with list arguments
+
 9.1.27
 -
 * B-56848 Tech Debt: FDA: add index to rh_account_number column in df_rightsholder table to speed up classification process
