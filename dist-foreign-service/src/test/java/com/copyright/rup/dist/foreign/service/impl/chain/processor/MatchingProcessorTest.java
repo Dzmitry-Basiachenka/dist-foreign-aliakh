@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -10,13 +9,10 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
-import com.copyright.rup.dist.foreign.service.impl.chain.executor.IPerformanceLogger;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
 
 /**
  * Verifies {@link MatchingProcessor}.
@@ -46,8 +42,6 @@ public class MatchingProcessorTest {
         processor.setSuccessProcessor(successProcessor);
         processor.setFailureProcessor(failureProcessor);
         processor.setUsageStatus(UsageStatusEnum.NEW);
-        Whitebox.setInternalState(processor.getSuccessProcessor(), createMock(IPerformanceLogger.class));
-        Whitebox.setInternalState(processor.getFailureProcessor(), createMock(IPerformanceLogger.class));
     }
 
     @Test
@@ -65,7 +59,6 @@ public class MatchingProcessorTest {
         Usage usage = buildUsage(UsageStatusEnum.WORK_FOUND);
         successProcessor.process(usage);
         expectLastCall().once();
-        expect(successProcessor.getChainProcessorType()).andReturn(ChainProcessorTypeEnum.RIGHTS).once();
         replay(successProcessor, failureProcessor);
         processor.executeNextProcessor(usage, usage1 -> UsageStatusEnum.WORK_FOUND == usage1.getStatus());
         verify(successProcessor, failureProcessor);
@@ -76,7 +69,6 @@ public class MatchingProcessorTest {
         Usage usage = buildUsage(UsageStatusEnum.WORK_NOT_FOUND);
         failureProcessor.process(usage);
         expectLastCall().once();
-        expect(failureProcessor.getChainProcessorType()).andReturn(ChainProcessorTypeEnum.DELETE).once();
         replay(successProcessor, failureProcessor);
         processor.executeNextProcessor(usage, usage1 -> UsageStatusEnum.WORK_FOUND == usage1.getStatus());
         verify(successProcessor, failureProcessor);

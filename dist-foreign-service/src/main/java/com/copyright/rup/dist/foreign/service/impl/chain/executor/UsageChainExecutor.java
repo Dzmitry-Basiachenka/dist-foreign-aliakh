@@ -47,8 +47,6 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
     @Autowired
     @Qualifier("df.service.aaclMatchingProcessor")
     private IChainProcessor<Usage> aaclProcessor;
-    @Autowired
-    private IPerformanceLogger logger;
 
     private ExecutorService executorService;
 
@@ -136,10 +134,7 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
     private void execute(List<Usage> usages, IChainProcessor<Usage> processor, ChainProcessorTypeEnum type) {
         if (Objects.nonNull(processor)) {
             if (type == processor.getChainProcessorType()) {
-                usages.forEach(usage -> {
-                    processor.process(usage);
-                    logger.log(type, 1);
-                });
+                usages.forEach(processor::process);
             } else {
                 execute(usages, processor.getSuccessProcessor(), type);
                 execute(usages, processor.getFailureProcessor(), type);

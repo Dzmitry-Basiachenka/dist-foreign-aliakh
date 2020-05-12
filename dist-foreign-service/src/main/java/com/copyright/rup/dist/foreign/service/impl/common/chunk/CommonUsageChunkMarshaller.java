@@ -35,17 +35,17 @@ public class CommonUsageChunkMarshaller extends CommonMarshaller {
     }
 
     @Override
+    public Object unmarshal(Exchange exchange, InputStream stream) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     protected ObjectMapper getObjectMapper() {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(serializer);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;
-    }
-
-    @Override
-    public Object unmarshal(Exchange exchange, InputStream stream) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
     }
 
     @Override

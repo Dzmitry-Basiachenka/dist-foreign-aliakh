@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
-import com.copyright.rup.dist.foreign.service.impl.chain.executor.IPerformanceLogger;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
@@ -53,8 +52,6 @@ public class UsageChainChunkExecutor implements IChainExecutor<Usage> {
     private IChainProcessor<List<Usage>> aaclProcessor;
     @Value("$RUP{dist.foreign.usages.chunk_size}")
     private Integer chunkSize;
-    @Autowired
-    private IPerformanceLogger logger;
 
     private ExecutorService executorService;
 
@@ -143,10 +140,7 @@ public class UsageChainChunkExecutor implements IChainExecutor<Usage> {
     private void execute(List<Usage> usages, IChainProcessor<List<Usage>> processor, ChainProcessorTypeEnum type) {
         if (Objects.nonNull(processor)) {
             if (type == processor.getChainProcessorType()) {
-                Iterables.partition(usages, chunkSize).forEach(partition -> {
-                    processor.process(partition);
-                    logger.log(type, partition.size());
-                });
+                Iterables.partition(usages, chunkSize).forEach(processor::process);
             } else {
                 execute(usages, processor.getSuccessProcessor(), type);
                 execute(usages, processor.getFailureProcessor(), type);

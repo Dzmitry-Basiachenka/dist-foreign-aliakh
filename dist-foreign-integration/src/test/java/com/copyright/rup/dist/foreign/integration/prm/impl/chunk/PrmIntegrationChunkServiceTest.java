@@ -48,66 +48,71 @@ public class PrmIntegrationChunkServiceTest {
     }
 
     @Test
-    public void testAreStmRightsholdersTrue() {
+    public void testGetStmRightsholderPreferenceMapTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_STM_IPRO_CODE, true);
         expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         Map<String, Boolean> rhIdsToIsStmRhs =
-            prmIntegrationService.areStmRightsholders(Collections.singleton(RIGHTSHOLDER_ID), NTS_PRODUCT_FAMILY);
+            prmIntegrationService.getStmRightsholderPreferenceMap(Collections.singleton(RIGHTSHOLDER_ID),
+                NTS_PRODUCT_FAMILY);
         assertTrue(rhIdsToIsStmRhs.get(RIGHTSHOLDER_ID));
         verify(prmPreferenceService);
     }
 
     @Test
-    public void testAreStmRightsholdersFalse() {
+    public void testGetStmRightsholderPreferenceMapFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_STM_IPRO_CODE, false);
         expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         Map<String, Boolean> rhIdsToIsStmRhs =
-            prmIntegrationService.areStmRightsholders(Collections.singleton(RIGHTSHOLDER_ID), NTS_PRODUCT_FAMILY);
+            prmIntegrationService.getStmRightsholderPreferenceMap(Collections.singleton(RIGHTSHOLDER_ID),
+                NTS_PRODUCT_FAMILY);
         assertFalse(rhIdsToIsStmRhs.get(RIGHTSHOLDER_ID));
         verify(prmPreferenceService);
     }
 
     @Test
-    public void testAreStmRightsholdersAllProductsTrue() {
+    public void testGetStmRightsholderPreferenceMapAllProductsTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(ALL_PRODUCTS, FdaConstants.IS_RH_STM_IPRO_CODE, true);
         expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         Map<String, Boolean> rhIdsToIsStmRhs =
-            prmIntegrationService.areStmRightsholders(Collections.singleton(RIGHTSHOLDER_ID), NTS_PRODUCT_FAMILY);
+            prmIntegrationService.getStmRightsholderPreferenceMap(Collections.singleton(RIGHTSHOLDER_ID),
+                NTS_PRODUCT_FAMILY);
         assertTrue(rhIdsToIsStmRhs.get(RIGHTSHOLDER_ID));
         verify(prmPreferenceService);
     }
 
     @Test
-    public void testAreStmRightsholdersAllProductsFalse() {
+    public void testGetStmRightsholderPreferenceMapAllProductsFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(ALL_PRODUCTS, FdaConstants.IS_RH_STM_IPRO_CODE, false);
         expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         Map<String, Boolean> rhIdsToIsStmRhs =
-            prmIntegrationService.areStmRightsholders(Collections.singleton(RIGHTSHOLDER_ID), NTS_PRODUCT_FAMILY);
+            prmIntegrationService.getStmRightsholderPreferenceMap(Collections.singleton(RIGHTSHOLDER_ID),
+                NTS_PRODUCT_FAMILY);
         assertFalse(rhIdsToIsStmRhs.get(RIGHTSHOLDER_ID));
         verify(prmPreferenceService);
     }
 
     @Test
-    public void testAreStmRightsholdersDefaultFalse() {
+    public void testGetStmRightsholderPreferenceMapDefaultFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put(FAS_PRODUCT_FAMILY, FdaConstants.IS_RH_STM_IPRO_CODE, true);
         expect(prmPreferenceService.getPreferencesMap(Collections.singleton(RIGHTSHOLDER_ID)))
             .andReturn(ImmutableMap.of(RIGHTSHOLDER_ID, preferencesTable)).once();
         replay(prmPreferenceService);
         Map<String, Boolean> rhIdsToIsStmRhs =
-            prmIntegrationService.areStmRightsholders(Collections.singleton(RIGHTSHOLDER_ID), NTS_PRODUCT_FAMILY);
+            prmIntegrationService.getStmRightsholderPreferenceMap(Collections.singleton(RIGHTSHOLDER_ID),
+                NTS_PRODUCT_FAMILY);
         assertFalse(rhIdsToIsStmRhs.get(RIGHTSHOLDER_ID));
         verify(prmPreferenceService);
     }

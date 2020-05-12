@@ -55,7 +55,7 @@ public class StmRhChunkServiceTest {
     public void testProcessStmRhsWithNonStmRh() {
         Usage usage = buildUsage();
         List<Usage> usages = Collections.singletonList(usage);
-        expect(prmIntegrationService.areStmRightsholders(Collections.singleton(RH_ID), NTS_PRODUCT_FAMILY))
+        expect(prmIntegrationService.getStmRightsholderPreferenceMap(Collections.singleton(RH_ID), NTS_PRODUCT_FAMILY))
             .andReturn(ImmutableMap.of(RH_ID, false)).once();
         usageServiceMock.updateProcessedUsage(usage);
         expectLastCall().once();
@@ -69,7 +69,7 @@ public class StmRhChunkServiceTest {
     public void testProcessStmRhsWithStmRh() {
         Usage usage = buildUsage();
         List<Usage> usages = Collections.singletonList(usage);
-        expect(prmIntegrationService.areStmRightsholders(Collections.singleton(RH_ID), NTS_PRODUCT_FAMILY))
+        expect(prmIntegrationService.getStmRightsholderPreferenceMap(Collections.singleton(RH_ID), NTS_PRODUCT_FAMILY))
             .andReturn(ImmutableMap.of(RH_ID, true)).once();
         replay(prmIntegrationService, usageServiceMock);
         stmRhService.processStmRhs(usages, NTS_PRODUCT_FAMILY);
