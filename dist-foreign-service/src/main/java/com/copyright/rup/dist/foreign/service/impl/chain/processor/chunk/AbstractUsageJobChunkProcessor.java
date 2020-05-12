@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -45,8 +46,6 @@ abstract class AbstractUsageJobChunkProcessor extends AbstractUsageChainChunkPro
     private IAaclUsageService aaclUsageService;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private Integer usagesBatchSize;
-    @Value("$RUP{dist.foreign.usages.chunk_size}")
-    private Integer chunkSize;
 
     private UsageStatusEnum usageStatus;
     private Map<String, Function<List<String>, List<Usage>>> productFamilyToUsageLoaderMap;
@@ -62,9 +61,8 @@ abstract class AbstractUsageJobChunkProcessor extends AbstractUsageChainChunkPro
                 productFamily, usagesCount);
             Function<List<String>, List<Usage>> usageLoader = productFamilyToUsageLoaderMap.get(productFamily);
             Iterables.partition(usageIds, usagesBatchSize)
-                .forEach(partition ->
-                    Iterables.partition(usageLoader.apply(partition), chunkSize)
-                        .forEach(this::process));
+                .forEach(partition -> usageLoader.apply(partition)
+                    .forEach(usage -> process(Collections.singletonList(usage))));
             String message = "ProductFamily=" + productFamily + ", UsagesCount=" + usagesCount;
             LOGGER.info("Send {} usages for processing. Finished. {}", usageStatus, message);
             jobInfo = new JobInfo(JobStatusEnum.FINISHED, message);

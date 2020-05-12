@@ -58,7 +58,6 @@ public class AbstractUsageJobChunkProcessorTest {
         aaclUsageService = createMock(IAaclUsageService.class);
         successProcessor = createMock(IChainProcessor.class);
         failureProcessor = createMock(IChainProcessor.class);
-        Whitebox.setInternalState(processor, "chunkSize", 1);
         processor.setUsagesBatchSize(1000);
         Whitebox.setInternalState(processor, usageService);
         Whitebox.setInternalState(processor, aaclUsageService);
