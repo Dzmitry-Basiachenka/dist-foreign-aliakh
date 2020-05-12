@@ -144,7 +144,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public String getScenarioNameAssociatedWithFundPool(String fundPoolId) {
-        return getScenarioService().getScenarioNameByAaclFundPoolId(fundPoolId);
+        return aaclScenarioService.getScenarioNameByFundPoolId(fundPoolId);
     }
 
     @Override

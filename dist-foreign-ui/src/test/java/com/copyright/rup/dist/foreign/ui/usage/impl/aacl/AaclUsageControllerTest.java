@@ -39,6 +39,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
@@ -103,7 +104,7 @@ public class AaclUsageControllerTest {
     private IResearchService researchService;
     private IAaclUsageService aaclUsageService;
     private IFundPoolService fundPoolService;
-    private IScenarioService scenarioService;
+    private IAaclScenarioService aaclScenarioService;
     private CsvProcessorFactory csvProcessorFactory;
     private UsageFilter usageFilter;
     private IStreamSourceHandler streamSourceHandler;
@@ -121,7 +122,7 @@ public class AaclUsageControllerTest {
         researchService = createMock(IResearchService.class);
         aaclUsageService = createMock(IAaclUsageService.class);
         fundPoolService = createMock(IFundPoolService.class);
-        scenarioService = createMock(IScenarioService.class);
+        aaclScenarioService = createMock(IAaclScenarioService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         reportService = createMock(IReportService.class);
@@ -134,7 +135,8 @@ public class AaclUsageControllerTest {
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, aaclUsageService);
         Whitebox.setInternalState(controller, fundPoolService);
-        Whitebox.setInternalState(controller, scenarioService);
+        Whitebox.setInternalState(controller, createMock(IScenarioService.class));
+        Whitebox.setInternalState(controller, aaclScenarioService);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, reportService);
@@ -267,10 +269,10 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testGetScenarioNameAssociatedWithFundPool() {
-        expect(scenarioService.getScenarioNameByAaclFundPoolId(FUND_POOL_ID)).andReturn("Scenario 1").once();
-        replay(scenarioService);
+        expect(aaclScenarioService.getScenarioNameByFundPoolId(FUND_POOL_ID)).andReturn("Scenario 1").once();
+        replay(aaclScenarioService);
         assertEquals("Scenario 1", controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID));
-        verify(scenarioService);
+        verify(aaclScenarioService);
     }
 
     @Test

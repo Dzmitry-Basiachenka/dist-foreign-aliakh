@@ -121,11 +121,6 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    public String getScenarioNameByAaclFundPoolId(String fundPoolId) {
-        return scenarioRepository.findNameByAaclFundPoolId(fundPoolId);
-    }
-
-    @Override
     @Transactional
     public Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter) {
         LOGGER.info("Insert scenario. Started. Name={}, Description={}, UsageFilter={}",

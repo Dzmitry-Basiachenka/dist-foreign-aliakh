@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl.aacl;
 
+import static org.easymock.EasyMock.expect;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
@@ -13,6 +15,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +37,7 @@ import org.powermock.reflect.Whitebox;
 public class AaclScenarioServiceTest {
 
     private static final String SCENARIO_ID = "958f07f0-a8a8-4dc5-8c24-fe4e484fd054";
+    private static final String SCENARIO_NAME = "Scenario name";
     private final Scenario scenario = new Scenario();
 
     private IScenarioUsageFilterService scenarioUsageFilterService;
@@ -70,5 +74,14 @@ public class AaclScenarioServiceTest {
         replay(aaclUsageService, scenarioAuditService, scenarioUsageFilterService, scenarioRepository);
         aaclScenarioService.deleteScenario(scenario);
         verify(aaclUsageService, scenarioAuditService, scenarioUsageFilterService, scenarioRepository);
+    }
+
+    @Test
+    public void testGetScenarioNameByFundPoolId() {
+        String fundPoolId = RupPersistUtils.generateUuid();
+        expect(scenarioRepository.findNameByAaclFundPoolId(fundPoolId)).andReturn(SCENARIO_NAME).once();
+        replay(scenarioRepository);
+        Assert.assertEquals(SCENARIO_NAME, aaclScenarioService.getScenarioNameByFundPoolId(fundPoolId));
+        verify(scenarioRepository);
     }
 }
