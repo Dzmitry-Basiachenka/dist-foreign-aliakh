@@ -154,7 +154,6 @@ public class CreateAaclScenarioIntegrationTestBuilder {
             assertEquals(expectedScenario.getNetTotal(), actualScenario.getNetTotal());
             assertEquals(expectedScenario.getGrossTotal(), actualScenario.getGrossTotal());
             assertEquals(expectedScenario.getServiceFeeTotal(), actualScenario.getServiceFeeTotal());
-            assertEquals(expectedScenario.getReportedTotal(), actualScenario.getReportedTotal());
             assertEquals(expectedScenario.getStatus(), actualScenario.getStatus());
             assertEquals(expectedScenario.getDescription(), actualScenario.getDescription());
             assertAaclFields(expectedScenario.getAaclFields(), actualScenario.getAaclFields());
