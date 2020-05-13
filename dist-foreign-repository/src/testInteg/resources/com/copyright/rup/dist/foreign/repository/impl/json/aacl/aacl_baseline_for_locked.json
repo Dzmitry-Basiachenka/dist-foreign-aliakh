@@ -1,0 +1,25 @@
+[
+  {
+    "wrWrkInst": 269040891,
+    "numberOfCopies": 155,
+    "aaclUsage": {
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2021 TUR",
+      "numberOfPages": 100,
+      "detailLicenseeClass": {
+        "id": 108,
+        "enrollmentProfile": "EXGP",
+        "discipline": "Life Sciences"
+      },
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book",
+        "weight": 3.00
+      },
+      "usageAge": {
+        "period": 2021
+      }
+    },
+    "comment": "Newly uploaded LOCKED usage"
+  }
+]

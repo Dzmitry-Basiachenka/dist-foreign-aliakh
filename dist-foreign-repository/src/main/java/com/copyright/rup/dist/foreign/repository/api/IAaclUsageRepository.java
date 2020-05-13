@@ -265,4 +265,19 @@ public interface IAaclUsageRepository {
      * @param userName   user name
      */
     void deleteFromScenario(String scenarioId, String userName);
+
+    /**
+     * Add newly uploaded scenario usages to baseline.
+     *
+     * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} id
+     * @param userName   user name
+     */
+    void addToBaselineByScenarioId(String scenarioId, String userName);
+
+    /**
+     * Finds all baseline usages.
+     *
+     * @return list of baseline {@link Usage}s
+     */
+    List<Usage> findBaselineUsages();
 }

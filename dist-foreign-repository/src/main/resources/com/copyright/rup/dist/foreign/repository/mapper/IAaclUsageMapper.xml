@@ -1172,10 +1172,10 @@
                 gross_amount = 0,
                 <include refid="StoredEntityMapper.update"/>
             where <include refid="IUsageMapper.scenarioBatchesFilter"/>
-                    and u.status_ind in
-                        <foreach collection="updateStatusesFrom" item="updateStatusFrom" separator="," open="(" close=")">
-                            #{updateStatusFrom}
-                        </foreach>
+                and u.status_ind in
+                    <foreach collection="updateStatusesFrom" item="updateStatusFrom" separator="," open="(" close=")">
+                        #{updateStatusFrom}
+                    </foreach>
             returning u.df_usage_uid
         )
         update ${schema}.df_usage_aacl
@@ -1191,4 +1191,63 @@
         where df_usage_aacl_uid = usage_ids.df_usage_uid
     </update>
 
+    <update id="addToBaselineByScenarioId" parameterType="map">
+        insert into ${schema}.df_usage_baseline_aacl (
+            df_usage_baseline_aacl_uid,
+            wr_wrk_inst,
+            number_of_copies,
+            comment,
+            usage_period,
+            usage_source,
+            number_of_pages,
+            detail_licensee_class_id,
+            df_publication_type_uid,
+            publication_type_weight,
+            institution,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        )
+        select
+            uuid_generate_v4() df_usage_baseline_aacl_uid,
+            u.wr_wrk_inst,
+            u.number_of_copies,
+            u.comment,
+            uaacl.usage_period,
+            uaacl.usage_source,
+            uaacl.number_of_pages,
+            uaacl.detail_licensee_class_id,
+            uaacl.df_publication_type_uid,
+            (pubTypes ->> 'weight')::numeric publication_type_weight,
+            uaacl.institution,
+            <include refid="StoredEntityMapper.insert"/>
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+        join ${schema}.df_scenario s on s.df_scenario_uid = #{scenarioId}
+        join jsonb_array_elements(s.aacl_fields -> 'publicationTypes') pubTypes on (pubTypes ->> 'id') = uaacl.df_publication_type_uid
+        where <include refid="IUsageMapper.scenarioBatchesFilter"/>
+            and uaacl.baseline_uid is null
+    </update>
+
+    <select id="findBaselineUsages" parameterType="map" resultMap="aaclUsageResultMap">
+        select
+            uba.df_usage_baseline_aacl_uid df_usage_uid,
+            uba.wr_wrk_inst,
+            uba.number_of_copies,
+            uba.comment,
+            uba.usage_period,
+            uba.usage_source,
+            uba.number_of_pages,
+            uba.detail_licensee_class_id,
+            dlc.discipline detail_licensee_discipline,
+            dlc.enrollment_profile detail_licensee_enrollment,
+            uba.df_publication_type_uid pub_type_id,
+            pt.name pub_type_name,
+            uba.publication_type_weight,
+            uba.original_publication_type,
+            uba.institution
+        from ${schema}.df_usage_baseline_aacl uba
+        left join ${schema}.df_publication_type pt
+            on uba.df_publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_detail_licensee_class dlc
+            on uba.detail_licensee_class_id = dlc.detail_licensee_class_id
+    </select>
 </mapper>

@@ -264,6 +264,20 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         update("IAaclUsageMapper.deleteFromScenario", params);
     }
 
+    @Override
+    public void addToBaselineByScenarioId(String scenarioId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("createUser", Objects.requireNonNull(userName));
+        params.put(UPDATE_USER_KEY, userName);
+        update("IAaclUsageMapper.addToBaselineByScenarioId", params);
+    }
+
+    @Override
+    public List<Usage> findBaselineUsages() {
+        return selectList("IAaclUsageMapper.findBaselineUsages");
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
