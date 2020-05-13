@@ -277,7 +277,7 @@
             u.updated_by_user,
             u.record_version
         from ${schema}.df_usage_archive u
-        join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
+        left join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         where u.status_ind = #{status}
             and u.df_usage_archive_uid in
