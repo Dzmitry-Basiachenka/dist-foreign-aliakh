@@ -1,0 +1,44 @@
+{
+  "list": {
+    "rightsDistribution": [
+      {
+        "cccEventId": "53256",
+        "product": "AACL",
+        "rorAccountNumber": "1000002859",
+        "payeeAccountNumber": "1000002859",
+        "royaltyAmount": 420.0000000000,
+        "currency": "USD",
+        "licenseCreateDate": "03-11-2016T12:00:00 AM",
+        "serviceFeeAmount": 80.0000000000,
+        "wrWrkInst": "243904752",
+        "publicationName": "100 ROAD MOVIES",
+        "omOrderDetailNumber": "e5ae9237-05a0-4c82-b607-0f91f19b2f24",
+        "totalAmount": 500.0000000000,
+        "periodEndDate": "03/11/2016",
+        "adjustmentFlag": false,
+        "passThroughFlag": true,
+        "createUser": "FDA Distribution",
+        "status": "D - Distributed"
+      },
+      {
+        "cccEventId": "53257",
+        "product": "AACL",
+        "rorAccountNumber": "1000002859",
+        "payeeAccountNumber": "1000002859",
+        "royaltyAmount": 420.0000000000,
+        "currency": "USD",
+        "licenseCreateDate": "03-11-2016T12:00:00 AM",
+        "serviceFeeAmount": 80.0000000000,
+        "wrWrkInst": "243904752",
+        "publicationName": "100 ROAD MOVIES",
+        "omOrderDetailNumber": "8ab89fcc-abf9-432e-b653-e84f2605697f",
+        "totalAmount": 500.0000000000,
+        "periodEndDate": "03/11/2016",
+        "adjustmentFlag": false,
+        "passThroughFlag": true,
+        "createUser": "FDA Distribution",
+        "status": "D - Distributed"
+      }
+    ]
+  }
+}
