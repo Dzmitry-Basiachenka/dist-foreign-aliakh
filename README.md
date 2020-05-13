@@ -1,3 +1,8 @@
+9.1.29
+- 
+* B-58288 FDA: Batch processing performance enhancements: make changes based on comments in CR-DIST-FOREIGN-170
+* B-56848 Tech Debt: FDA: move getScenarioNameByFundPoolId method to AaclScenarioService
+
 9.1.28
 -
 * B-54909 FDA: Work Shares by Aggregate Licensee Class: make changes based on comments in CR-DIST-FOREIGN-168
