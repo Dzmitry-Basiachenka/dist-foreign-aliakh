@@ -130,9 +130,9 @@ public class AaclUsageRepositoryIntegrationTest {
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClass().getId());
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClass().getDiscipline());
         assertNull(expectedUsage.getAaclUsage().getDetailLicenseeClass().getEnrollmentProfile());
-        assertEquals(9, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(11, getNumberOfUsagesWithNotEmptyClassificationData());
         aaclUsageRepository.updateClassifiedUsages(Collections.singletonList(buildAaclClassifiedUsage()), USER_NAME);
-        assertEquals(10, getNumberOfUsagesWithNotEmptyClassificationData());
+        assertEquals(12, getNumberOfUsagesWithNotEmptyClassificationData());
         verifyUsages(Collections.singletonList("json/aacl/aacl_classified_usage_8315e53b.json"),
             aaclUsageRepository.findByIds(Collections.singletonList("8315e53b-0a7e-452a-a62c-17fe959f3f84")),
             this::verifyUsage);
@@ -353,14 +353,15 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testFindUsagePeriods() {
         List<Integer> usagePeriods = aaclUsageRepository.findUsagePeriods();
-        assertEquals(7, usagePeriods.size());
+        assertEquals(8, usagePeriods.size());
         assertEquals(2010, usagePeriods.get(0).intValue());
         assertEquals(2015, usagePeriods.get(1).intValue());
         assertEquals(2017, usagePeriods.get(2).intValue());
         assertEquals(2018, usagePeriods.get(3).longValue());
         assertEquals(2019, usagePeriods.get(4).longValue());
         assertEquals(2020, usagePeriods.get(5).longValue());
-        assertEquals(2040, usagePeriods.get(6).longValue());
+        assertEquals(2021, usagePeriods.get(6).longValue());
+        assertEquals(2040, usagePeriods.get(7).longValue());
     }
 
     @Test
@@ -652,6 +653,22 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(2, usageList.size());
         verifyUsages(Collections.singletonList("json/aacl/aacl_usage_delete_scenario.json"), usageList,
             this::verifyUsageForDeleteScenario);
+    }
+
+    @Test
+    public void testAddToBaselineByScenarioId() {
+        assertEquals(8, aaclUsageRepository.findBaselineUsages().size());
+        aaclUsageRepository.addToBaselineByScenarioId("45f17838-b5cb-47e2-a57a-8d128fa07edf", USER_NAME);
+        List<Usage> actualBaselineUsages = aaclUsageRepository.findBaselineUsages();
+        assertEquals(10, actualBaselineUsages.size());
+        List<Usage> newBaselineUsages = aaclUsageRepository.findBaselineUsages().stream()
+            .filter(usage -> Arrays.asList("Newly uploaded LOCKED usage", "Newly uploaded SCENARIO_EXCLUDED usage")
+                .contains(usage.getComment()))
+            .sorted(Comparator.comparing(Usage::getComment))
+            .collect(Collectors.toList());
+        assertEquals(2, newBaselineUsages.size());
+        verifyUsages(Arrays.asList("json/aacl/aacl_baseline_for_locked.json",
+            "json/aacl/aacl_baseline_for_scenario_excluded.json"), newBaselineUsages, this::verifyUsageIgnoringId);
     }
 
     private void verifyUsagesBeforeDeleteScenario(Usage usage) {

@@ -1,0 +1,25 @@
+[
+  {
+    "wrWrkInst": 123456789,
+    "numberOfCopies": 155,
+    "aaclUsage": {
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2021 TUR",
+      "numberOfPages": 100,
+      "detailLicenseeClass": {
+        "id": 108,
+        "enrollmentProfile": "EXGP",
+        "discipline": "Life Sciences"
+      },
+      "publicationType": {
+        "id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199",
+        "name": "Business or Trade Journal",
+        "weight": 2.00
+      },
+      "usageAge": {
+        "period": 2021
+      }
+    },
+    "comment": "Newly uploaded SCENARIO_EXCLUDED usage"
+  }
+]
