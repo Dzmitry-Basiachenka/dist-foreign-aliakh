@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -34,6 +35,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -43,6 +45,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
 import com.google.common.collect.Lists;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Rule;
@@ -95,6 +98,7 @@ public class AaclUsageServiceTest {
     private IFundPoolService fundPoolService;
     private ILicenseeClassService licenseeClassService;
     private IAaclUsageRepository aaclUsageRepository;
+    private IUsageArchiveRepository usageArchiveRepository;
     private IRightsholderService rightsholderService;
     private IPrmIntegrationService prmIntegrationService;
     private IChainExecutor<Usage> chainExecutor;
@@ -121,6 +125,7 @@ public class AaclUsageServiceTest {
         fundPoolService = createMock(IFundPoolService.class);
         licenseeClassService = createMock(ILicenseeClassService.class);
         aaclUsageRepository = createMock(IAaclUsageRepository.class);
+        usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         rightsholderService = createMock(IRightsholderService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         chainExecutor = createMock(IChainExecutor.class);
@@ -128,6 +133,7 @@ public class AaclUsageServiceTest {
         Whitebox.setInternalState(aaclUsageService, fundPoolService);
         Whitebox.setInternalState(aaclUsageService, licenseeClassService);
         Whitebox.setInternalState(aaclUsageService, aaclUsageRepository);
+        Whitebox.setInternalState(aaclUsageService, usageArchiveRepository);
         Whitebox.setInternalState(aaclUsageService, rightsholderService);
         Whitebox.setInternalState(aaclUsageService, prmIntegrationService);
         Whitebox.setInternalState(aaclUsageService, "chainExecutor", chainExecutor);
@@ -529,6 +535,30 @@ public class AaclUsageServiceTest {
         assertEquals(usageDtos,
             aaclUsageService.getByScenarioAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null, null));
         verify(aaclUsageRepository);
+    }
+
+    @Test
+    public void testMoveToArchive() {
+        mockStatic(RupContextUtils.class);
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setName("Scenario name");
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        List<String> usageIds = Collections.singletonList(USAGE_ID);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        aaclUsageRepository.addToBaselineByScenarioId(SCENARIO_ID, USER_NAME);
+        expectLastCall().once();
+        expect(usageArchiveRepository.copyToArchiveByScenarioId(SCENARIO_ID, USER_NAME))
+            .andReturn(usageIds).once();
+        usageAuditService.deleteActionsByScenarioId(SCENARIO_ID);
+        expectLastCall().once();
+        aaclUsageRepository.deleteLockedByScenarioId(SCENARIO_ID);
+        expectLastCall().once();
+        aaclUsageRepository.deleteExcludedByScenarioId(SCENARIO_ID);
+        expectLastCall().once();
+        replay(aaclUsageRepository, usageArchiveRepository, usageAuditService, RupContextUtils.class);
+        assertEquals(usageIds, aaclUsageService.moveToArchive(scenario));
+        verify(aaclUsageRepository, usageArchiveRepository, usageAuditService, RupContextUtils.class);
     }
 
     private UsageBatch buildUsageBatch() {

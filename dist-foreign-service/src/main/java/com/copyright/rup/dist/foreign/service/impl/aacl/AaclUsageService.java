@@ -20,10 +20,12 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -89,6 +91,8 @@ public class AaclUsageService implements IAaclUsageService {
     private ILicenseeClassService licenseeClassService;
     @Autowired
     private IAaclUsageRepository aaclUsageRepository;
+    @Autowired
+    private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
@@ -352,6 +356,22 @@ public class AaclUsageService implements IAaclUsageService {
     @Override
     public void deleteFromScenario(String scenarioId) {
         aaclUsageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
+    }
+
+    @Override
+    @Transactional
+    public List<String> moveToArchive(Scenario scenario) {
+        LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
+        String scenarioId = scenario.getId();
+        String userName = RupContextUtils.getUserName();
+        aaclUsageRepository.addToBaselineByScenarioId(scenarioId, userName);
+        List<String> usageIds = usageArchiveRepository.copyToArchiveByScenarioId(scenarioId, userName);
+        usageAuditService.deleteActionsByScenarioId(scenarioId);
+        aaclUsageRepository.deleteLockedByScenarioId(scenarioId);
+        aaclUsageRepository.deleteExcludedByScenarioId(scenarioId);
+        LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
+            LogUtils.size(usageIds));
+        return usageIds;
     }
 
     private Set<Integer> getAggregateClassIdsWithAmountsFromFundPool(String fundPoolId) {
