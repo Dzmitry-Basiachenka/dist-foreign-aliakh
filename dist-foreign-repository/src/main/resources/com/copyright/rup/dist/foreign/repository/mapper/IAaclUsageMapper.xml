@@ -1251,11 +1251,15 @@
             on uba.detail_licensee_class_id = dlc.detail_licensee_class_id
     </select>
 
-    <delete id="deleteByScenarioId" parameterType="map">
+    <delete id="deleteLockedByScenarioId" parameterType="map">
+        delete from ${schema}.df_usage
+        where df_scenario_uid = #{scenarioId}
+    </delete>
+
+    <delete id="deleteExcludedByScenarioId" parameterType="map">
         with u as (
             delete from ${schema}.df_usage
-            where df_scenario_uid = #{scenarioId}
-                or (<include refid="IUsageMapper.scenarioBatchesFilter"/> and status_ind = #{status})
+            where <include refid="IUsageMapper.scenarioBatchesFilter"/> and status_ind = #{status}
             returning df_usage_uid
         )
         delete from ${schema}.df_usage_aacl
