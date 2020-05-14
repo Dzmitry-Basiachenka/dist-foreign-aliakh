@@ -155,6 +155,13 @@ public interface IScenarioService {
     void sendNtsToLm(Scenario scenario);
 
     /**
+     * Sends given AACL {@link Scenario} to LM.
+     *
+     * @param scenario {@link Scenario} instance
+     */
+    void sendAaclToLm(Scenario scenario);
+
+    /**
      * Gets ownership changes for specified {@link Scenario} using RMS service and saves in database.
      *
      * @param scenario {@link Scenario} instance

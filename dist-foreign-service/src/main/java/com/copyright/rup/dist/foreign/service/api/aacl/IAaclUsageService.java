@@ -243,4 +243,12 @@ public interface IAaclUsageService {
      * @param scenarioId scenario id
      */
     void deleteFromScenario(String scenarioId);
+
+    /**
+     * Moves AACL {@link com.copyright.rup.dist.foreign.domain.Usage}s to the archive for given {@link Scenario}.
+     *
+     * @param scenario {@link Scenario}
+     * @return list of moved to archive {@link com.copyright.rup.dist.foreign.domain.Usage}s ids
+     */
+    List<String> moveToArchive(Scenario scenario);
 }

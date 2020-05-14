@@ -26,6 +26,7 @@ import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
@@ -67,6 +68,7 @@ public class ScenarioServiceTest {
     private IUsageService usageService;
     private IFasUsageService fasUsageService;
     private INtsUsageService ntsUsageService;
+    private IAaclUsageService aaclUsageService;
     private IScenarioAuditService scenarioAuditService;
     private ILmIntegrationService lmIntegrationService;
     private IScenarioUsageFilterService scenarioUsageFilterService;
@@ -80,6 +82,7 @@ public class ScenarioServiceTest {
         usageService = createMock(IUsageService.class);
         ntsUsageService = createMock(INtsUsageService.class);
         fasUsageService = createMock(IFasUsageService.class);
+        aaclUsageService = createMock(IAaclUsageService.class);
         lmIntegrationService = createMock(ILmIntegrationService.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
         scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
@@ -89,6 +92,7 @@ public class ScenarioServiceTest {
         Whitebox.setInternalState(scenarioService, usageService);
         Whitebox.setInternalState(scenarioService, ntsUsageService);
         Whitebox.setInternalState(scenarioService, fasUsageService);
+        Whitebox.setInternalState(scenarioService, aaclUsageService);
         Whitebox.setInternalState(scenarioService, scenarioAuditService);
         Whitebox.setInternalState(scenarioService, lmIntegrationService);
         Whitebox.setInternalState(scenarioService, scenarioUsageFilterService);
@@ -261,6 +265,24 @@ public class ScenarioServiceTest {
         scenarioService.sendNtsToLm(scenario);
         assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
         verify(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, ntsUsageService);
+    }
+
+    @Test
+    public void testSendAaclToLm() {
+        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
+        Usage usage = new Usage();
+        expect(aaclUsageService.moveToArchive(scenario)).andReturn(usageIds).once();
+        expect(usageService.getArchivedUsagesByIds(usageIds)).andReturn(Collections.singletonList(usage));
+        lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(usage)));
+        expectLastCall().once();
+        scenarioRepository.updateStatus(scenario);
+        expectLastCall().once();
+        scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
+        expectLastCall().once();
+        replay(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, aaclUsageService);
+        scenarioService.sendAaclToLm(scenario);
+        assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
+        verify(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, aaclUsageService);
     }
 
     @Test
