@@ -3,6 +3,9 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
+import java.time.LocalDate;
+import java.util.List;
+
 /**
  * Interface represents API for working with RA functionality.
  * <p>
@@ -37,6 +40,20 @@ public interface IRightsService {
     void updateRight(Usage usage, boolean logAction);
 
     /**
+     * Sends Wr Wrk Insts to RMS to get Grants and updates usages status and usage RH based on response.
+     * Sets usages status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_FOUND} if RH was found
+     * in RMS, and {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} otherwise.
+     * In case of logAction parameter is {@code true} it writes
+     * {@link com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum#RH_FOUND} audit if RH was found in RMS,
+     * and {@link com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum#RH_NOT_FOUND} audit if RH wasn't found.
+     *
+     * @param usages        list of {@link Usage}s to update
+     * @param productFamily usages product family
+     * @param logAction     defines whether usage audit should be added or not
+     */
+    void updateRights(List<Usage> usages, String productFamily, boolean logAction);
+
+    /**
      * Sends Wr Wrk Inst to RMS to get Grants and updates usage status and usage RH based on response. Sets usage status
      * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_FOUND} and update if RH was found in RMS, and
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} otherwise.
@@ -44,6 +61,16 @@ public interface IRightsService {
      * @param usage {@link Usage} to update
      */
     void updateAaclRight(Usage usage);
+
+    /**
+     * Sends Wr Wrk Insts to RMS to get Grants and updates usages status and usages RH based on response.
+     * Sets usage status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_FOUND} if RH was found
+     * in RMS, and {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} otherwise.
+     *
+     * @param usages        list of {@link Usage}s to update
+     * @param periodEndDate batch period end date
+     */
+    void updateAaclRights(List<Usage> usages, LocalDate periodEndDate);
 
     /**
      * Finds list of {@link com.copyright.rup.dist.foreign.domain.Usage}s with

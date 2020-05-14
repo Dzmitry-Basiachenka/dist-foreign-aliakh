@@ -10,6 +10,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.chunk.IChainChunkProcessor;
@@ -20,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -84,6 +86,9 @@ public class AaclRightsChunkConsumerTest {
         usage.setId(RupPersistUtils.generateUuid());
         usage.setProductFamily("AACL");
         usage.setStatus(UsageStatusEnum.WORK_FOUND);
+        AaclUsage aaclUsage = new AaclUsage();
+        aaclUsage.setBatchPeriodEndDate(LocalDate.of(2020, 6, 30));
+        usage.setAaclUsage(aaclUsage);
         return usage;
     }
 
@@ -96,13 +101,15 @@ public class AaclRightsChunkConsumerTest {
         }
 
         @Override
-        public void updateAaclRight(Usage usage) {
-            if (Objects.nonNull(rhAccountNumber)) {
-                usage.getRightsholder().setAccountNumber(rhAccountNumber);
-                usage.setStatus(UsageStatusEnum.RH_FOUND);
-            } else {
-                usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
-            }
+        public void updateAaclRights(List<Usage> usages, LocalDate periodEndDate) {
+            usages.forEach(usage -> {
+                if (Objects.nonNull(rhAccountNumber)) {
+                    usage.getRightsholder().setAccountNumber(rhAccountNumber);
+                    usage.setStatus(UsageStatusEnum.RH_FOUND);
+                } else {
+                    usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                }
+            });
         }
     }
 }

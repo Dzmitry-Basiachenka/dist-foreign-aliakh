@@ -96,13 +96,15 @@ public class NtsRightsChunkConsumerTest {
         }
 
         @Override
-        public void updateRight(Usage usage, boolean logAction) {
-            if (Objects.nonNull(rhAccountNumber)) {
-                usage.getRightsholder().setAccountNumber(rhAccountNumber);
-                usage.setStatus(UsageStatusEnum.RH_FOUND);
-            } else {
-                usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
-            }
+        public void updateRights(List<Usage> usages, String productFamily, boolean logAction) {
+            usages.forEach(usage -> {
+                if (Objects.nonNull(rhAccountNumber)) {
+                    usage.getRightsholder().setAccountNumber(rhAccountNumber);
+                    usage.setStatus(UsageStatusEnum.RH_FOUND);
+                } else {
+                    usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                }
+            });
         }
     }
 }
