@@ -671,6 +671,17 @@ public class AaclUsageRepositoryIntegrationTest {
             "json/aacl/aacl_baseline_for_scenario_excluded.json"), newBaselineUsages, this::verifyUsageIgnoringId);
     }
 
+    @Test
+    public void testDeleteByScenarioId() {
+        List<String> usageIds =
+            Arrays.asList("f92c8af2-dea6-4243-ac58-01055932187e", "45ad755f-5b8f-4f38-b362-d37de4b520eb",
+                "a46b6313-11de-4d6e-a51e-b50dd8239ec7", "bb87e43f-b755-467f-abdd-30ac0500aeff");
+        assertEquals(4, aaclUsageRepository.findByIds(usageIds).size());
+        aaclUsageRepository.deleteByScenarioId("45f17838-b5cb-47e2-a57a-8d128fa07edf");
+        assertEquals(Collections.emptyList(), aaclUsageRepository.findByIds(usageIds));
+        assertEquals(0, aaclUsageRepository.findReferencedAaclUsagesCountByIds(usageIds.toArray(new String[]{})));
+    }
+
     private void verifyUsagesBeforeDeleteScenario(Usage usage) {
         assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
         assertEquals(new BigDecimal("24.0000000000"), usage.getAaclUsage().getValueWeight());

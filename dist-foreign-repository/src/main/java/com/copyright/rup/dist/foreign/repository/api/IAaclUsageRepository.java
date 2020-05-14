@@ -280,4 +280,11 @@ public interface IAaclUsageRepository {
      * @return list of baseline {@link Usage}s
      */
     List<Usage> findBaselineUsages();
+
+    /**
+     * Deletes all AACL {@link Usage}s for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteByScenarioId(String scenarioId);
 }
