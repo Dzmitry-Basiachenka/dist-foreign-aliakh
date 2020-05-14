@@ -27,6 +27,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -672,14 +673,33 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testDeleteByScenarioId() {
-        List<String> usageIds =
-            Arrays.asList("f92c8af2-dea6-4243-ac58-01055932187e", "45ad755f-5b8f-4f38-b362-d37de4b520eb",
-                "a46b6313-11de-4d6e-a51e-b50dd8239ec7", "bb87e43f-b755-467f-abdd-30ac0500aeff");
-        assertEquals(4, aaclUsageRepository.findByIds(usageIds).size());
-        aaclUsageRepository.deleteByScenarioId("45f17838-b5cb-47e2-a57a-8d128fa07edf");
-        assertEquals(Collections.emptyList(), aaclUsageRepository.findByIds(usageIds));
-        assertEquals(0, aaclUsageRepository.findReferencedAaclUsagesCountByIds(usageIds.toArray(new String[]{})));
+    public void testDeleteLockedByScenarioId() {
+        List<String> lockedUsageIds =
+            Arrays.asList("f92c8af2-dea6-4243-ac58-01055932187e", "a46b6313-11de-4d6e-a51e-b50dd8239ec7");
+        List<String> excludedUsageIds =
+            Arrays.asList("45ad755f-5b8f-4f38-b362-d37de4b520eb", "bb87e43f-b755-467f-abdd-30ac0500aeff");
+        assertEquals(4, aaclUsageRepository.findByIds(ListUtils.union(lockedUsageIds, excludedUsageIds)).size());
+        aaclUsageRepository.deleteLockedByScenarioId("45f17838-b5cb-47e2-a57a-8d128fa07edf");
+        assertEquals(0, aaclUsageRepository.findByIds(lockedUsageIds).size());
+        assertEquals(2, aaclUsageRepository.findByIds(excludedUsageIds).size());
+        assertEquals(2, aaclUsageRepository.findReferencedAaclUsagesCountByIds(lockedUsageIds.toArray(new String[]{})));
+        assertEquals(2,
+            aaclUsageRepository.findReferencedAaclUsagesCountByIds(excludedUsageIds.toArray(new String[]{})));
+    }
+
+    @Test
+    public void testDeleteExcludedByScenarioId() {
+        List<String> lockedUsageIds =
+            Arrays.asList("f92c8af2-dea6-4243-ac58-01055932187e", "a46b6313-11de-4d6e-a51e-b50dd8239ec7");
+        List<String> excludedUsageIds =
+            Arrays.asList("45ad755f-5b8f-4f38-b362-d37de4b520eb", "bb87e43f-b755-467f-abdd-30ac0500aeff");
+        assertEquals(4, aaclUsageRepository.findByIds(ListUtils.union(lockedUsageIds, excludedUsageIds)).size());
+        aaclUsageRepository.deleteExcludedByScenarioId("45f17838-b5cb-47e2-a57a-8d128fa07edf");
+        assertEquals(2, aaclUsageRepository.findByIds(lockedUsageIds).size());
+        assertEquals(0, aaclUsageRepository.findByIds(excludedUsageIds).size());
+        assertEquals(2, aaclUsageRepository.findReferencedAaclUsagesCountByIds(lockedUsageIds.toArray(new String[]{})));
+        assertEquals(0,
+            aaclUsageRepository.findReferencedAaclUsagesCountByIds(excludedUsageIds.toArray(new String[]{})));
     }
 
     private void verifyUsagesBeforeDeleteScenario(Usage usage) {

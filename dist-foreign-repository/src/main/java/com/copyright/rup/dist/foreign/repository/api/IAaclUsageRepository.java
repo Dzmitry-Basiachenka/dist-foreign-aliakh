@@ -282,9 +282,18 @@ public interface IAaclUsageRepository {
     List<Usage> findBaselineUsages();
 
     /**
-     * Deletes all AACL {@link Usage}s for specified scenario.
+     * Deletes all {@link UsageStatusEnum#LOCKED} AACL {@link Usage}s for specified scenario, retaining references in
+     * df_usage_aacl table.
      *
      * @param scenarioId scenario identifier
      */
-    void deleteByScenarioId(String scenarioId);
+    void deleteLockedByScenarioId(String scenarioId);
+
+    /**
+     * Deletes all {@link UsageStatusEnum#SCENARIO_EXCLUDED} AACL {@link Usage}s with references in df_usage_aacl for
+     * specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteExcludedByScenarioId(String scenarioId);
 }

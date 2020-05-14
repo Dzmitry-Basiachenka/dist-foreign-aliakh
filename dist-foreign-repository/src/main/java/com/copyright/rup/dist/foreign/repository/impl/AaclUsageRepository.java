@@ -279,11 +279,17 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
-    public void deleteByScenarioId(String scenarioId) {
+    public void deleteLockedByScenarioId(String scenarioId) {
+        delete("IAaclUsageMapper.deleteLockedByScenarioId",
+            Collections.singletonMap(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId)));
+    }
+
+    @Override
+    public void deleteExcludedByScenarioId(String scenarioId) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(STATUS_KEY, UsageStatusEnum.SCENARIO_EXCLUDED);
-        delete("IAaclUsageMapper.deleteByScenarioId", parameters);
+        delete("IAaclUsageMapper.deleteExcludedByScenarioId", parameters);
     }
 
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
