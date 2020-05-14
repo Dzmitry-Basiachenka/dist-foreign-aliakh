@@ -278,6 +278,14 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         return selectList("IAaclUsageMapper.findBaselineUsages");
     }
 
+    @Override
+    public void deleteByScenarioId(String scenarioId) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(STATUS_KEY, UsageStatusEnum.SCENARIO_EXCLUDED);
+        delete("IAaclUsageMapper.deleteByScenarioId", parameters);
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
