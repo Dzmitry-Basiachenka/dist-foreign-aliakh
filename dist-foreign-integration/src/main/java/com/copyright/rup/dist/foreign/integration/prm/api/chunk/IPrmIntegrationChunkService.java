@@ -16,7 +16,12 @@ import java.util.Set;
 public interface IPrmIntegrationChunkService {
 
     /**
-     * Checks whether rightsholders are STM rightsholders.
+     * Gets map from rightsholder ids to STM rightsholder flag.
+     * Gets STM flag {@link com.copyright.rup.dist.foreign.domain.FdaConstants#IS_RH_STM_IPRO_CODE} by specified
+     * rightsholder id and product family.
+     * </br>
+     * If preferences for NTS product family were not found System finds preferences for the same rightsholder id
+     * and <b>{@code '*'}</b> ('*' is passed as a product family).
      *
      * @param rightsholdersIds list of rightsholder ids
      * @param productFamily    product family
