@@ -1,3 +1,8 @@
+9.1.30
+-
+* CDP-910 FDA: AACL P-PRE usage details are classified but show status of WORK_RESEARCH
+* B-56849 Tech Debt: FDA: get RMS grants by batches for chunk usage processors
+
 9.1.29
 - 
 * B-58288 FDA: Batch processing performance enhancements: make changes based on comments in CR-DIST-FOREIGN-170
