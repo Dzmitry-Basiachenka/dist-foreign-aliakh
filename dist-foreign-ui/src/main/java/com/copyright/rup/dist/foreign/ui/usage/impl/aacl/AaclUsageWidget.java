@@ -156,10 +156,8 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         // Click listener and second isValidFilteredUsageStatus() call were added due to problem with
         // modal window appearance in chrome browser
         sendForClassificationButton.addClickListener(event -> {
-            if (!controller.isValidFilteredUsageStatus(UsageStatusEnum.RH_FOUND)) {
-                Windows.showNotificationWindow(
-                    ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.RH_FOUND,
-                        "sent for classification"));
+            if (!controller.isValidForClassification()) {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.invalid_usages_for_classification"));
             } else {
                 NotificationWindow window =
                     new NotificationWindow(ForeignUi.getMessage("message.download_in_progress"));
@@ -261,8 +259,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
 
         @Override
         public boolean handleConnectorRequest(VaadinRequest request, VaadinResponse response, String path) {
-            return controller.isValidFilteredUsageStatus(UsageStatusEnum.RH_FOUND)
-                && super.handleConnectorRequest(request, response, path);
+            return controller.isValidForClassification() && super.handleConnectorRequest(request, response, path);
         }
     }
 }

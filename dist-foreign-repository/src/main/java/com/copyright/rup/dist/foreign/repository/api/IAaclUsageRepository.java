@@ -151,6 +151,14 @@ public interface IAaclUsageRepository {
     boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
 
     /**
+     * Verifies whether all filtered {@link Usage}s are eligible for sending for classification.
+     *
+     * @param filter {@link UsageFilter} instance
+     * @return {@code true} if all filtered usages aren't baseline and have RH_FOUND status, {@code false} - otherwise
+     */
+    boolean isValidForClassification(UsageFilter filter);
+
+    /**
      * Finds rightsholders account numbers that are not presented in database based on {@link UsageFilter}.
      *
      * @param filter instance of {@link UsageFilter}

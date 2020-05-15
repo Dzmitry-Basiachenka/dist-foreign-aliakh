@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -52,7 +53,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
 
 import com.google.common.collect.Lists;
 import com.vaadin.ui.HorizontalLayout;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -447,6 +447,26 @@ public class AaclUsageControllerTest {
         replay(usageBatchService);
         assertEquals(batchToScenarioNames, controller.getBatchesNamesToScenariosNames(batchIds));
         verify(usageBatchService);
+    }
+
+    @Test
+    public void testIsValidForClassification() {
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(aaclUsageService.isValidForClassification(usageFilter)).andReturn(true).once();
+        replay(aaclUsageService, filterWidgetMock, filterController);
+        assertTrue(controller.isValidForClassification());
+        verify(aaclUsageService, filterWidgetMock, filterController);
+    }
+
+    @Test
+    public void testIsValidForClassificationNegativeResult() {
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(aaclUsageService.isValidForClassification(usageFilter)).andReturn(false).once();
+        replay(aaclUsageService, filterWidgetMock, filterController);
+        assertFalse(controller.isValidForClassification());
+        verify(aaclUsageService, filterWidgetMock, filterController);
     }
 
     @Test

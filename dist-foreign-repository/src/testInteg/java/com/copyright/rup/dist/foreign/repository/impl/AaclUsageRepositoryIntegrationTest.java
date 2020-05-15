@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -196,12 +195,12 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindDtosByStatusFilter() {
+    public void testFindDtosByStatusAndPeriodFilters() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
+        usageFilter.setUsagePeriod(2019);
         verifyUsageDtos(
-            Arrays.asList("json/aacl/aacl_usage_dto_e21bcd1f.json", "json/aacl/aacl_usage_dto_44600a96.json",
-                "json/aacl/aacl_usage_dto_67750f86.json", "json/aacl/aacl_usage_dto_0b5ac9fc.json",
+            Arrays.asList("json/aacl/aacl_usage_dto_e21bcd1f.json", "json/aacl/aacl_usage_dto_0b5ac9fc.json",
                 "json/aacl/aacl_usage_dto_6c91f04e.json"),
             aaclUsageRepository.findDtosByFilter(usageFilter, null, null));
     }
@@ -327,6 +326,36 @@ public class AaclUsageRepositoryIntegrationTest {
         usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
+    }
+
+    @Test
+    public void testIsValidForClassification() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("38718bfe-08bd-4af7-8481-0fe16dcf2750"));
+        assertTrue(aaclUsageRepository.isValidForClassification(usageFilter));
+    }
+
+    @Test
+    public void testIsValidForClassificationWithEligibleStatus() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("38718bfe-08bd-4af7-8481-0fe16dcf2750"));
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        assertFalse(aaclUsageRepository.isValidForClassification(usageFilter));
+    }
+
+    @Test
+    public void testIsValidForClassificationWithUsagesFromBaseline() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("52d9c8b9-0de9-4578-915a-60ec01243fc4"));
+        assertFalse(aaclUsageRepository.isValidForClassification(usageFilter));
+    }
+
+    @Test
+    public void testIsValidForClassificationWithEligibleStatusAndUsagesFromBaseline() {
+        UsageFilter usageFilter = buildUsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("52d9c8b9-0de9-4578-915a-60ec01243fc4"));
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        assertFalse(aaclUsageRepository.isValidForClassification(usageFilter));
     }
 
     @Test
