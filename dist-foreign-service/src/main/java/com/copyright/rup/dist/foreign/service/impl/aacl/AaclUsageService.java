@@ -244,6 +244,11 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    public boolean isValidForClassification(UsageFilter filter) {
+        return aaclUsageRepository.isValidForClassification(filter);
+    }
+
+    @Override
     public List<Long> getInvalidRightsholdersByFilter(UsageFilter filter) {
         return aaclUsageRepository.findInvalidRightsholdersByFilter(filter);
     }

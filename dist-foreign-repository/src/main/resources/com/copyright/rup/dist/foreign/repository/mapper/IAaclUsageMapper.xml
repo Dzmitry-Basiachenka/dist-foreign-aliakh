@@ -883,6 +883,27 @@
         )
     </select>
 
+    <select id="isValidForClassification" parameterType="map" resultType="boolean">
+        with usages_by_filter as (
+            select
+                uaacl.baseline_uid,
+                u.status_ind
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+            join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+            <include refid="IAaclUsageMapper.aaclUsageFilter"/>
+        )
+        select exists (
+            select 1
+            from usages_by_filter
+        ) and not exists (
+            select 1
+            from usages_by_filter ubf
+            where ubf.status_ind != #{status}
+                or (ubf.status_ind = #{status} and ubf.baseline_uid is not null)
+        )
+    </select>
+
     <update id="updateClassifiedUsage" parameterType="map">
         with u as (
             update ${schema}.df_usage

@@ -216,4 +216,11 @@ public interface IAaclUsageController extends ICommonUsageController {
      * @return created scenario
      */
     Scenario createAaclScenario(String scenarioName, AaclFields aaclFields, String description);
+
+    /**
+     * Verifies whether all filtered {@link Usage}s are eligible for sending for classification.
+     *
+     * @return {@code true} if all filtered usages aren't baseline and have RH_FOUND status, {@code false} - otherwise
+     */
+    boolean isValidForClassification();
 }

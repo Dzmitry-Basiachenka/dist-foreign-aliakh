@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -349,6 +350,24 @@ public class AaclUsageServiceTest {
         expectLastCall().once();
         replay(aaclUsageRepository);
         aaclUsageService.updateAaclUsagesUnderMinimum(scenarioId, BigDecimal.TEN, USER_NAME);
+        verify(aaclUsageRepository);
+    }
+
+    @Test
+    public void testIsValidForClassification() {
+        UsageFilter filter = new UsageFilter();
+        expect(aaclUsageRepository.isValidForClassification(filter)).andReturn(true).once();
+        replay(aaclUsageRepository);
+        assertTrue(aaclUsageService.isValidForClassification(filter));
+        verify(aaclUsageRepository);
+    }
+
+    @Test
+    public void testIsValidForClassificationNegativeResult() {
+        UsageFilter filter = new UsageFilter();
+        expect(aaclUsageRepository.isValidForClassification(filter)).andReturn(false).once();
+        replay(aaclUsageRepository);
+        assertFalse(aaclUsageService.isValidForClassification(filter));
         verify(aaclUsageRepository);
     }
 

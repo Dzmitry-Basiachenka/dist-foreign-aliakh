@@ -162,6 +162,14 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
+    public boolean isValidForClassification(UsageFilter filter) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(FILTER_KEY, Objects.requireNonNull(filter));
+        params.put(STATUS_KEY, UsageStatusEnum.RH_FOUND);
+        return selectOne("IAaclUsageMapper.isValidForClassification", params);
+    }
+
+    @Override
     public List<Long> findInvalidRightsholdersByFilter(UsageFilter filter) {
         return selectList("IAaclUsageMapper.findInvalidRightsholdersByFilter",
             Collections.singletonMap(FILTER_KEY, Objects.requireNonNull(filter)));
