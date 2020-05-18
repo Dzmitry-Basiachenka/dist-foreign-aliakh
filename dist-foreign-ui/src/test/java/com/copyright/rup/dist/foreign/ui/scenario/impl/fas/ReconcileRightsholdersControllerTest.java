@@ -21,7 +21,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IReconcileRightsholdersController;
 
@@ -60,7 +60,7 @@ import java.util.function.Supplier;
 public class ReconcileRightsholdersControllerTest {
 
     private IReconcileRightsholdersController controller;
-    private IScenarioService scenarioService;
+    private IFasScenarioService fasScenarioService;
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
     private IReportService reportService;
     private IStreamSourceHandler streamSourceHandler;
@@ -73,11 +73,11 @@ public class ReconcileRightsholdersControllerTest {
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName("Scenario name");
         controller.setScenario(scenario);
-        scenarioService = createMock(IScenarioService.class);
+        fasScenarioService = createMock(IFasScenarioService.class);
         rightsholderDiscrepancyService = createMock(IRightsholderDiscrepancyService.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
-        Whitebox.setInternalState(controller, scenarioService);
+        Whitebox.setInternalState(controller, fasScenarioService);
         Whitebox.setInternalState(controller, rightsholderDiscrepancyService);
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
@@ -86,11 +86,11 @@ public class ReconcileRightsholdersControllerTest {
     @Test
     public void testApproveReconciliation() {
         controller.setScenario(scenario);
-        scenarioService.approveOwnershipChanges(scenario);
+        fasScenarioService.approveOwnershipChanges(scenario);
         expectLastCall().once();
-        replay(scenarioService);
+        replay(fasScenarioService);
         controller.approveReconciliation();
-        verify(scenarioService);
+        verify(fasScenarioService);
     }
 
     @Test

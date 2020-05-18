@@ -8,9 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.replayAll;
 import static org.powermock.api.easymock.PowerMock.verify;
-import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
@@ -27,7 +25,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
-import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 
 import com.google.common.collect.Lists;
@@ -58,14 +55,13 @@ import java.util.List;
 public class ScenarioServiceTest {
 
     private static final String SCENARIO_NAME = "Scenario Name";
-    private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
-    private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
+    private static final String USAGE_BATCH_ID = "a46937ad-6e23-423d-8a65-b97c40904b95";
+    private static final String SCENARIO_ID = "3d9dc27c-a3dd-4a15-85fe-9230f7dec5e2";
     private static final String REASON = "reason";
     private final Scenario scenario = new Scenario();
     private ScenarioService scenarioService;
     private IScenarioRepository scenarioRepository;
     private IUsageService usageService;
-    private IFasUsageService fasUsageService;
     private IAaclUsageService aaclUsageService;
     private IScenarioAuditService scenarioAuditService;
     private ILmIntegrationService lmIntegrationService;
@@ -78,7 +74,6 @@ public class ScenarioServiceTest {
         scenario.setProductFamily("FAS");
         scenarioRepository = createMock(IScenarioRepository.class);
         usageService = createMock(IUsageService.class);
-        fasUsageService = createMock(IFasUsageService.class);
         aaclUsageService = createMock(IAaclUsageService.class);
         lmIntegrationService = createMock(ILmIntegrationService.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
@@ -87,7 +82,6 @@ public class ScenarioServiceTest {
         scenarioService = new ScenarioService();
         Whitebox.setInternalState(scenarioService, scenarioRepository);
         Whitebox.setInternalState(scenarioService, usageService);
-        Whitebox.setInternalState(scenarioService, fasUsageService);
         Whitebox.setInternalState(scenarioService, aaclUsageService);
         Whitebox.setInternalState(scenarioService, scenarioAuditService);
         Whitebox.setInternalState(scenarioService, lmIntegrationService);
@@ -154,14 +148,6 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testGetSourceRros() {
-        expect(scenarioRepository.findSourceRros(SCENARIO_ID)).andReturn(Collections.emptyList()).once();
-        replay(scenarioRepository);
-        assertEquals(Collections.emptyList(), scenarioService.getSourceRros(SCENARIO_ID));
-        verify(scenarioRepository);
-    }
-
-    @Test
     public void testSubmit() {
         scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
@@ -201,24 +187,6 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testSendFasToLm() {
-        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
-        Usage usage = new Usage();
-        expect(fasUsageService.moveToArchive(scenario)).andReturn(usageIds).once();
-        expect(usageService.getArchivedUsagesByIds(usageIds)).andReturn(Collections.singletonList(usage));
-        lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(usage)));
-        expectLastCall().once();
-        scenarioRepository.updateStatus(scenario);
-        expectLastCall().once();
-        scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
-        expectLastCall().once();
-        replay(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, fasUsageService);
-        scenarioService.sendFasToLm(scenario);
-        assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
-        verify(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, fasUsageService);
-    }
-
-    @Test
     public void testSendAaclToLm() {
         List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
         Usage usage = new Usage();
@@ -234,29 +202,5 @@ public class ScenarioServiceTest {
         scenarioService.sendAaclToLm(scenario);
         assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
         verify(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, aaclUsageService);
-    }
-
-    @Test
-    public void testGetRightsholdersByScenarioAndSourceRro() {
-        expect(scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(SCENARIO_ID, 2000017010L))
-            .andReturn(Collections.emptyList()).once();
-        replay(scenarioRepository);
-        assertEquals(Collections.emptyList(),
-            scenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 2000017010L));
-        verify(scenarioRepository);
-    }
-
-    @Test
-    public void testUpdateRhPayeeParticipating() {
-        Usage usage = new Usage();
-        usage.setWrWrkInst(1L);
-        usage.getRightsholder().setAccountNumber(2000017010L);
-        List<Usage> usages = Collections.singletonList(usage);
-        expect(usageService.getUsagesByScenarioId(SCENARIO_ID)).andReturn(usages).once();
-        fasUsageService.updateRhPayeeAmountsAndParticipating(usages);
-        expectLastCall().once();
-        replayAll();
-        scenarioService.updateRhPayeeParticipating(scenario);
-        verifyAll();
     }
 }

@@ -405,8 +405,9 @@ public class UsageService implements IUsageService {
                     .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                     .collect(Collectors.toList());
             currentChainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
-            LOGGER.info("Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, " +
-                "WorkFoundUsagesCount={}", batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));
+            LOGGER.info(
+                "Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}",
+                batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));
         });
     }
 

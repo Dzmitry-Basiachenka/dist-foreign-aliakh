@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -64,13 +65,15 @@ public class FasScenariosController extends CommonScenariosController implements
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
     @Autowired
     private IFasUsageService fasUsageService;
+    @Autowired
+    private IFasScenarioService fasScenarioService;
 
     @Override
     public void onReconcileRightsholdersButtonClicked() {
         Scenario scenario = getWidget().getSelectedScenario();
         scenarioController.setScenario(scenario);
         if (!scenarioController.isScenarioEmpty()) {
-            getScenarioService().reconcileRightsholders(scenario);
+            fasScenarioService.reconcileRightsholders(scenario);
             if (0 < rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
                 RightsholderDiscrepancyStatusEnum.DRAFT)) {
                 reconcileRightsholdersController.setScenario(scenario);
@@ -78,7 +81,7 @@ public class FasScenariosController extends CommonScenariosController implements
             } else {
                 Windows.showConfirmDialog(ForeignUi.getMessage("window.reconcile_rightsholders", scenario.getName()),
                     () -> {
-                        getScenarioService().updateRhPayeeParticipating(scenario);
+                        fasScenarioService.updateRhPayeeParticipating(scenario);
                         getWidget().refreshSelectedScenario();
                     });
             }
@@ -147,7 +150,7 @@ public class FasScenariosController extends CommonScenariosController implements
         Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenario", scenario.getName()),
             () -> {
                 try {
-                    getScenarioService().sendFasToLm(scenario);
+                    fasScenarioService.sendToLm(scenario);
                 } catch (RuntimeException e) {
                     Windows.showNotificationWindow(e.getMessage());
                 }

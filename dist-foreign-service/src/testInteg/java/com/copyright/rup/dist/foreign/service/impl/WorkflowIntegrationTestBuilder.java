@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.WorkflowIntegrationTestBuilder.Runner;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
@@ -73,6 +74,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IUsageBatchService usageBatchService;
     @Autowired
     private IScenarioService scenarioService;
+    @Autowired
+    private IFasScenarioService fasScenarioService;
     @Autowired
     private IUsageService usageService;
     @Autowired
@@ -252,7 +255,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         void sendScenarioToLm() {
-            scenarioService.sendFasToLm(scenario);
+            fasScenarioService.sendToLm(scenario);
             List<String> lmUsageMessages = Lists.newArrayListWithExpectedSize(expecteLmDetailsMessagesCount);
             expectedLmDetailsJsonFiles.forEach(lmDetailsFile ->
                 lmUsageMessages.add(TestUtils.fileToString(this.getClass(), lmDetailsFile)));

@@ -9,7 +9,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IReconcileRightsholdersController;
 
@@ -41,7 +41,7 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     private Scenario scenario;
 
     @Autowired
-    private IScenarioService scenarioService;
+    private IFasScenarioService fasScenarioService;
     @Autowired
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
     @Autowired
@@ -51,7 +51,7 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
 
     @Override
     public void approveReconciliation() {
-        scenarioService.approveOwnershipChanges(scenario);
+        fasScenarioService.approveOwnershipChanges(scenario);
     }
 
     @Override
