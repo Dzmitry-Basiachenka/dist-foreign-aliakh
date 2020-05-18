@@ -166,8 +166,9 @@ public class ScenarioService implements IScenarioService {
         List<String> usageIds = aaclUsageService.moveToArchive(scenario);
         if (CollectionUtils.isNotEmpty(usageIds)) {
             Iterables.partition(usageIds, batchSize)
-                .forEach(partition -> lmIntegrationService.sendToLm(usageService.getArchivedUsagesByIds(partition)
-                    .stream().map(ExternalUsage::new).collect(Collectors.toList())));
+                .forEach(partition ->
+                    lmIntegrationService.sendToLm(usageService.getArchivedUsagesForSendToLmByIds(partition)
+                        .stream().map(ExternalUsage::new).collect(Collectors.toList())));
             changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
                 StringUtils.EMPTY);
             LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),

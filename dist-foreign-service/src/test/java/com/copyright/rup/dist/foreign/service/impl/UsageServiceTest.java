@@ -549,6 +549,23 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testGetArchivedUsagesForSendToLmByIds() {
+        List<String> usageIds = Collections.singletonList(USAGE_ID_1);
+        List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
+        expect(usageArchiveRepository.findForSendToLmByIds(eq(usageIds))).andReturn(usages).once();
+        replay(usageArchiveRepository);
+        assertEquals(usages, usageService.getArchivedUsagesForSendToLmByIds(usageIds));
+        verify(usageArchiveRepository);
+    }
+
+    @Test
+    public void testGetArchivedUsagesForSendToLmByIdsEmptyIds() {
+        replay(usageArchiveRepository);
+        assertEquals(Collections.emptyList(), usageService.getArchivedUsagesForSendToLmByIds(Collections.emptyList()));
+        verify(usageArchiveRepository);
+    }
+
+    @Test
     public void testGetUsageIdsByStatusAndProductFamily() {
         List<String> usageIds = Collections.singletonList(USAGE_ID_1);
         expect(usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY))

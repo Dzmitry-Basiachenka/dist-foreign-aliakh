@@ -226,6 +226,14 @@ public interface IUsageService {
     List<Usage> getArchivedUsagesByIds(List<String> usageIds);
 
     /**
+     * Gets list of archived {@link Usage}s for sending to LM by specified {@link Usage} ids.
+     *
+     * @param usageIds list of {@link Usage} ids
+     * @return list of {@link Usage}s
+     */
+    List<Usage> getArchivedUsagesForSendToLmByIds(List<String> usageIds);
+
+    /**
      * Gets list of {@link Usage} ids by specified {@link UsageStatusEnum} and product family.
      *
      * @param status        {@link UsageStatusEnum} instance

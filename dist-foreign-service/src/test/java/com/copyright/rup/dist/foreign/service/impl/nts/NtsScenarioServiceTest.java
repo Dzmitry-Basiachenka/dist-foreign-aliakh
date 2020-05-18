@@ -101,7 +101,8 @@ public class NtsScenarioServiceTest {
         List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
         Usage usage = new Usage();
         expect(ntsUsageService.moveToArchive(scenario)).andReturn(usageIds).once();
-        expect(usageService.getArchivedUsagesByIds(usageIds)).andReturn(Collections.singletonList(usage)).once();
+        expect(usageService.getArchivedUsagesForSendToLmByIds(usageIds))
+            .andReturn(Collections.singletonList(usage)).once();
         lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(usage)));
         expectLastCall().once();
         scenarioRepository.updateStatus(scenario);

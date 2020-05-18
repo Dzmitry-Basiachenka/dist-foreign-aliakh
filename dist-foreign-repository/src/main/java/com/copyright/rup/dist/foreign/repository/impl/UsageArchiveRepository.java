@@ -163,4 +163,12 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
             .forEach(partition -> result.addAll(selectList("IUsageArchiveMapper.findByIds", partition)));
         return result;
     }
+
+    @Override
+    public List<Usage> findForSendToLmByIds(List<String> usageIds) {
+        List<Usage> result = new ArrayList<>();
+        Iterables.partition(Objects.requireNonNull(usageIds), BATCH_SIZE)
+            .forEach(partition -> result.addAll(selectList("IUsageArchiveMapper.findForSendToLmByIds", partition)));
+        return result;
+    }
 }

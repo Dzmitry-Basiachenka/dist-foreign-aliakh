@@ -338,6 +338,24 @@
             </foreach>
     </select>
 
+    <select id="findForSendToLmByIds" resultMap="archivedUsageResultMap">
+        select
+            u.df_usage_archive_uid,
+            u.wr_wrk_inst,
+            u.system_title,
+            rh.df_rightsholder_uid rh_id,
+            u.product_family,
+            u.gross_amount,
+            u.service_fee_amount,
+            u.net_amount
+        from ${schema}.df_usage_archive u
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where u.df_usage_archive_uid in
+        <foreach collection="list" item="usageId" open="(" separator="," close=")">
+            #{usageId}
+        </foreach>
+    </select>
+
     <insert id="insertPaid" parameterType="PaidUsage">
         with result as (
             insert into ${schema}.df_usage_archive (

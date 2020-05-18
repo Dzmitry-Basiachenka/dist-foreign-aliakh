@@ -108,7 +108,7 @@ public class NtsScenarioService implements INtsScenarioService {
         if (CollectionUtils.isNotEmpty(usageIds)) {
             Iterables.partition(usageIds, batchSize)
                 .forEach(partition -> {
-                    List<Usage> usages = usageService.getArchivedUsagesByIds(partition);
+                    List<Usage> usages = usageService.getArchivedUsagesForSendToLmByIds(partition);
                     usages.forEach(usage -> {
                         //for NTS usages System should not send work information to LM
                         usage.setWrWrkInst(null);
