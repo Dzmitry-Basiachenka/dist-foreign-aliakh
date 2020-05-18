@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
@@ -47,14 +46,6 @@ public interface IScenarioService {
     List<String> getScenariosNamesByUsageBatchId(String usageBatchId);
 
     /**
-     * Gets {@link Scenario} name based on NTS fund pool id.
-     *
-     * @param fundPoolId fund pool id
-     * @return {@link Scenario} name or {@code null} if none found
-     */
-    String getScenarioNameByNtsFundPoolId(String fundPoolId);
-
-    /**
      * Creates {@link Scenario}. Also calculates gross total and reported total for {@link Scenario}.
      *
      * @param scenarioName name of scenario
@@ -63,17 +54,6 @@ public interface IScenarioService {
      * @return {@link Scenario}
      */
     Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter);
-
-    /**
-     * Creates NTS scenario and adds usages to it.
-     *
-     * @param scenarioName name of scenario
-     * @param ntsFields    instance of {@link NtsFields}
-     * @param description  description
-     * @param usageFilter  instance of {@link UsageFilter} for usages to be added
-     * @return {@link Scenario}
-     */
-    Scenario createNtsScenario(String scenarioName, NtsFields ntsFields, String description, UsageFilter usageFilter);
 
     /**
      * Deletes {@link Scenario} by given identifier.
@@ -146,13 +126,6 @@ public interface IScenarioService {
      * @param scenario {@link Scenario} instance
      */
     void sendFasToLm(Scenario scenario);
-
-    /**
-     * Sends given NTS {@link Scenario} to LM.
-     *
-     * @param scenario {@link Scenario} instance
-     */
-    void sendNtsToLm(Scenario scenario);
 
     /**
      * Sends given AACL {@link Scenario} to LM.

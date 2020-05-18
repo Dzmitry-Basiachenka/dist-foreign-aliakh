@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
@@ -45,6 +46,8 @@ public class NtsScenariosController extends CommonScenariosController implements
     private IScenarioHistoryController scenarioHistoryController;
     @Autowired
     private INtsScenarioController scenarioController;
+    @Autowired
+    private INtsScenarioService ntsScenarioService;
 
     @Override
     public void onViewButtonClicked() {
@@ -60,7 +63,7 @@ public class NtsScenariosController extends CommonScenariosController implements
         Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenario", scenario.getName()),
             () -> {
                 try {
-                    getScenarioService().sendNtsToLm(scenario);
+                    ntsScenarioService.sendToLm(scenario);
                 } catch (RuntimeException e) {
                     Windows.showNotificationWindow(e.getMessage());
                 }
@@ -107,7 +110,7 @@ public class NtsScenariosController extends CommonScenariosController implements
         Scenario scenario = getWidget().getSelectedScenario();
         Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario"),
             () -> {
-                getScenarioService().deleteScenario(scenario);
+                ntsScenarioService.deleteScenario(scenario);
                 getWidget().refresh();
             });
     }

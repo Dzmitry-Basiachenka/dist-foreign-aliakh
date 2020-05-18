@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ class CreateScenarioIntegrationTestBuilder {
     private static final String SCENARIO_NAME = "Test Scenario";
     private static final String DESCRIPTION = "Scenario Description";
 
+    @Autowired
+    private INtsScenarioService ntsScenarioService;
     @Autowired
     private IScenarioService scenarioService;
     @Autowired
@@ -154,7 +157,7 @@ class CreateScenarioIntegrationTestBuilder {
         private void createScenario() {
             Scenario scenario;
             if ("NTS".equals(usageFilter.getProductFamily())) {
-                scenario = scenarioService.createNtsScenario(SCENARIO_NAME, expectedScenario.getNtsFields(),
+                scenario = ntsScenarioService.createScenario(SCENARIO_NAME, expectedScenario.getNtsFields(),
                     DESCRIPTION, usageFilter);
             } else {
                 scenario = scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter);

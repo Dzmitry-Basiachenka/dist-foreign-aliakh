@@ -30,10 +30,10 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
@@ -99,7 +99,7 @@ public class NtsUsageControllerTest {
     private INtsUsageWidget usagesWidget;
     private IUsageBatchService usageBatchService;
     private IPrmIntegrationService prmIntegrationService;
-    private IScenarioService scenarioService;
+    private INtsScenarioService ntsScenarioService;
     private IFundPoolService fundPoolService;
     private IReportService reportService;
     private IStreamSourceHandler streamSourceHandler;
@@ -114,7 +114,7 @@ public class NtsUsageControllerTest {
         usageBatchService = createMock(IUsageBatchService.class);
         filterController = createMock(IFasNtsUsageFilterController.class);
         usagesWidget = createMock(INtsUsageWidget.class);
-        scenarioService = createMock(IScenarioService.class);
+        ntsScenarioService = createMock(INtsScenarioService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         filterWidgetMock = createMock(IFasNtsUsageFilterWidget.class);
         fundPoolService = createMock(IFundPoolService.class);
@@ -127,7 +127,7 @@ public class NtsUsageControllerTest {
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, prmIntegrationService);
-        Whitebox.setInternalState(controller, scenarioService);
+        Whitebox.setInternalState(controller, ntsScenarioService);
         Whitebox.setInternalState(controller, fundPoolService);
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
@@ -192,15 +192,15 @@ public class NtsUsageControllerTest {
         NtsFields ntsFields = new NtsFields();
         ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
         Scenario scenario = new Scenario();
-        expect(scenarioService.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION, usageFilter))
+        expect(ntsScenarioService.createScenario(SCENARIO_NAME, ntsFields, DESCRIPTION, usageFilter))
             .andReturn(scenario).once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).times(2);
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
-        replay(filterController, filterWidgetMock, scenarioService);
+        replay(filterController, filterWidgetMock, ntsScenarioService);
         assertEquals(scenario, controller.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION));
-        verify(filterController, filterWidgetMock, scenarioService);
+        verify(filterController, filterWidgetMock, ntsScenarioService);
     }
 
     @Test
@@ -246,11 +246,10 @@ public class NtsUsageControllerTest {
 
     @Test
     public void testGetScenarioNameAssociatedWithAdditionalFund() {
-        expect(scenarioService.getScenarioNameByNtsFundPoolId(USAGE_BATCH_ID))
-            .andReturn(SCENARIO_NAME).once();
-        replay(scenarioService);
+        expect(ntsScenarioService.getScenarioNameByFundPoolId(USAGE_BATCH_ID)).andReturn(SCENARIO_NAME).once();
+        replay(ntsScenarioService);
         assertEquals(SCENARIO_NAME, controller.getScenarioNameAssociatedWithAdditionalFund(USAGE_BATCH_ID));
-        verify(scenarioService);
+        verify(ntsScenarioService);
     }
 
     @Test

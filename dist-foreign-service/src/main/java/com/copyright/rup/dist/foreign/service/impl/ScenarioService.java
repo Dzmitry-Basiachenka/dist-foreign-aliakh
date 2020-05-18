@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -35,7 +34,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
-import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
@@ -81,8 +79,6 @@ public class ScenarioService implements IScenarioService {
     @Autowired
     private IUsageService usageService;
     @Autowired
-    private INtsUsageService ntsUsageService;
-    @Autowired
     private IFasUsageService fasUsageService;
     @Autowired
     private IAaclUsageService aaclUsageService;
@@ -119,11 +115,6 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    public String getScenarioNameByNtsFundPoolId(String fundPoolId) {
-        return scenarioRepository.findNameByNtsFundPoolId(fundPoolId);
-    }
-
-    @Override
     @Transactional
     public Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter) {
         LOGGER.info("Insert scenario. Started. Name={}, Description={}, UsageFilter={}",
@@ -141,33 +132,12 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
-    public Scenario createNtsScenario(String scenarioName, NtsFields ntsFields, String description,
-                                      UsageFilter usageFilter) {
-        LOGGER.info("Insert NTS scenario. Started. Name={}, NtsFields={}, Description={}, UsageFilter={}",
-            scenarioName, ntsFields, description, usageFilter);
-        Scenario scenario = buildNtsScenario(scenarioName, ntsFields, description, usageFilter);
-        scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
-        ntsUsageService.populatePayeeAndCalculateAmountsForScenarioUsages(scenario);
-        scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
-        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
-        LOGGER.info("Insert NTS scenario. Finished. Name={}, NtsFields={}, Description={}, UsageFilter={}",
-            scenarioName, ntsFields, description, usageFilter);
-        return scenario;
-    }
-
-    @Override
-    @Transactional
     public void deleteScenario(Scenario scenario) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete scenario. Started. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
         String scenarioId = scenario.getId();
-        if (FdaConstants.NTS_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
-            ntsUsageService.deleteBelletristicByScenarioId(scenarioId);
-            ntsUsageService.deleteFromScenario(scenarioId);
-        } else {
-            usageService.deleteFromScenario(scenarioId);
-            rightsholderDiscrepancyService.deleteByScenarioId(scenarioId);
-        }
+        usageService.deleteFromScenario(scenarioId);
+        rightsholderDiscrepancyService.deleteByScenarioId(scenarioId);
         scenarioAuditService.deleteActions(scenarioId);
         scenarioUsageFilterService.removeByScenarioId(scenarioId);
         scenarioRepository.remove(scenarioId);
@@ -233,33 +203,6 @@ public class ScenarioService implements IScenarioService {
             Iterables.partition(usageIds, batchSize)
                 .forEach(partition -> lmIntegrationService.sendToLm(usageService.getArchivedUsagesByIds(partition)
                     .stream().map(ExternalUsage::new).collect(Collectors.toList())));
-            changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
-                StringUtils.EMPTY);
-            LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
-                RupContextUtils.getUserName());
-        } else {
-            throw new RupRuntimeException(String.format("Send scenario to LM. Failed. %s. Reason=Scenario is empty",
-                ForeignLogUtils.scenario(scenario)));
-        }
-    }
-
-    @Override
-    @Transactional
-    public void sendNtsToLm(Scenario scenario) {
-        LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
-            RupContextUtils.getUserName());
-        List<String> usageIds = ntsUsageService.moveToArchive(scenario);
-        if (CollectionUtils.isNotEmpty(usageIds)) {
-            Iterables.partition(usageIds, batchSize)
-                .forEach(partition -> {
-                    List<Usage> usages = usageService.getArchivedUsagesByIds(partition);
-                    usages.forEach(usage -> {
-                        //for NTS usages System should not send work information to LM
-                        usage.setWrWrkInst(null);
-                        usage.setSystemTitle(null);
-                    });
-                    lmIntegrationService.sendToLm(usages.stream().map(ExternalUsage::new).collect(Collectors.toList()));
-                });
             changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
                 StringUtils.EMPTY);
             LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
@@ -389,13 +332,6 @@ public class ScenarioService implements IScenarioService {
         String userName = RupContextUtils.getUserName();
         scenario.setCreateUser(userName);
         scenario.setUpdateUser(userName);
-        return scenario;
-    }
-
-    private Scenario buildNtsScenario(String scenarioName, NtsFields ntsFields, String description,
-                                      UsageFilter usageFilter) {
-        Scenario scenario = buildScenario(scenarioName, description, usageFilter);
-        scenario.setNtsFields(ntsFields);
         return scenario;
     }
 

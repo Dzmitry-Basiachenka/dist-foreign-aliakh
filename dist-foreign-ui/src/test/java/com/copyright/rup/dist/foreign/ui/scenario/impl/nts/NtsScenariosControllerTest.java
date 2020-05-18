@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioWidget;
@@ -68,6 +69,7 @@ public class NtsScenariosControllerTest {
     private NtsScenariosController scenariosController;
     private IUsageService usageService;
     private IScenarioService scenarioService;
+    private INtsScenarioService ntsScenarioService;
     private NtsScenarioController scenarioController;
     private Scenario scenario;
     private INtsScenariosWidget scenariosWidget;
@@ -78,6 +80,7 @@ public class NtsScenariosControllerTest {
     public void setUp() {
         usageService = createMock(IUsageService.class);
         scenarioService = createMock(IScenarioService.class);
+        ntsScenarioService = createMock(INtsScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         scenariosController = new NtsScenariosController();
         buildScenario();
@@ -92,6 +95,7 @@ public class NtsScenariosControllerTest {
         scenariosController.initActionHandlers();
         Whitebox.setInternalState(scenariosController, "usageService", usageService);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
+        Whitebox.setInternalState(scenariosController, "ntsScenarioService", ntsScenarioService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
         verify(SecurityUtils.class);
     }
@@ -118,14 +122,14 @@ public class NtsScenariosControllerTest {
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'" + SCENARIO_NAME + "'</b></i> scenario?"),
             capture(listenerCapture))).andReturn(null).once();
-        scenarioService.deleteScenario(scenario);
+        ntsScenarioService.deleteScenario(scenario);
         expectLastCall().once();
         scenariosWidget.refresh();
         expectLastCall().once();
-        replay(scenariosWidget, scenarioService, Windows.class);
+        replay(scenariosWidget, ntsScenarioService, Windows.class);
         scenariosController.onDeleteButtonClicked();
         listenerCapture.getValue().onActionConfirmed();
-        verify(scenariosWidget, scenarioService, Windows.class);
+        verify(scenariosWidget, ntsScenarioService, Windows.class);
     }
 
     @Test
@@ -269,14 +273,14 @@ public class NtsScenariosControllerTest {
         expect(Windows.showConfirmDialog(
             eq("Are you sure that you want to send scenario <i><b>" + SCENARIO_NAME + "</b></i> to Liability Manager?"),
             capture(listenerCapture))).andReturn(null).once();
-        scenarioService.sendNtsToLm(scenario);
+        ntsScenarioService.sendToLm(scenario);
         expectLastCall().once();
         scenariosWidget.refresh();
         expectLastCall().once();
-        replay(scenariosWidget, scenarioService, Windows.class);
+        replay(scenariosWidget, ntsScenarioService, Windows.class);
         scenariosController.sendToLm();
         listenerCapture.getValue().onActionConfirmed();
-        verify(scenariosWidget, scenarioService, Windows.class);
+        verify(scenariosWidget, ntsScenarioService, Windows.class);
     }
 
     private void buildScenario() {
