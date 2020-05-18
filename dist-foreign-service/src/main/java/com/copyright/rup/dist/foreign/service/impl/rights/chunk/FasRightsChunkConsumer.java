@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Consumer to handle FAS/FAS2 usages for getting Rights.
@@ -30,10 +32,6 @@ import java.util.Objects;
 @Component("df.service.fasRightsChunkConsumer")
 public class FasRightsChunkConsumer implements IConsumer<List<Usage>> {
 
-    private static final String RIGHTS_PROCESSING_STARTED_LOG = "Consume FAS usages for rights processing. " +
-        "Started. UsageId={}, ProductFamily={}, WrWrkInst={}";
-    private static final String RIGHTS_PROCESSING_FINISHED_LOG = "Consume FAS usages for rights processing. " +
-        "Finished. UsageId={}, ProductFamily={}, WrWrkInst={}, UsageStatus={}, RhAcc#={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -47,13 +45,10 @@ public class FasRightsChunkConsumer implements IConsumer<List<Usage>> {
     public void consume(List<Usage> usages) {
         if (Objects.nonNull(usages)) {
             LOGGER.trace("Consume FAS usages for rights processing. Started. UsageIds={}", LogUtils.ids(usages));
-            usages.forEach(usage -> {
-                LOGGER.trace(RIGHTS_PROCESSING_STARTED_LOG, usage.getId(), usage.getProductFamily(),
-                    usage.getWrWrkInst());
-                rightsService.updateRight(usage, true);
-                LOGGER.trace(RIGHTS_PROCESSING_FINISHED_LOG, usage.getId(), usage.getProductFamily(),
-                    usage.getWrWrkInst(), usage.getStatus(), usage.getRightsholder().getAccountNumber());
-            });
+            Map<String, List<Usage>> groupedByProductFamilyUsages =
+                usages.stream().collect(Collectors.groupingBy(Usage::getProductFamily));
+            groupedByProductFamilyUsages.forEach(
+                (productFamily, groupedUsages) -> rightsService.updateRights(groupedUsages, productFamily, true));
             fasRightsProcessor.executeNextChainProcessor(usages,
                 usage -> UsageStatusEnum.RH_FOUND == usage.getStatus());
             LOGGER.trace("Consume FAS usages for rights processing. Finished. UsageIds={}", LogUtils.ids(usages));

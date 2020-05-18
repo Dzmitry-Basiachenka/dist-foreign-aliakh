@@ -43,6 +43,17 @@
         <property name="createCommonTablesOnStartup" value="false"/>
     </bean>
 
+    <!--> Temp solution to override 'dist.foreign.usages.chunks' property. <-->
+    <bean id="systemProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" value="#{@systemProperties}"/>
+        <property name="targetMethod" value="putAll"/>
+        <property name="arguments">
+            <util:properties>
+                <prop key="dist.foreign.usages.chunks">false</prop>
+            </util:properties>
+        </property>
+    </bean>
+
     <!-- Mocks -->
     <bean id="df.service.paidUsageConsumer"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock"/>

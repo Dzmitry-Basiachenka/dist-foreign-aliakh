@@ -8,14 +8,17 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.processor.chunk.IChainChunkProcessor;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Consumer to handle AACL usages for getting Rights.
@@ -30,10 +33,6 @@ import java.util.Objects;
 @Component("df.service.aaclRightsChunkConsumer")
 public class AaclRightsChunkConsumer implements IConsumer<List<Usage>> {
 
-    private static final String RIGHTS_PROCESSING_STARTED_LOG = "Consume AACL usages for rights processing. " +
-        "Started. UsageId={}, ProductFamily={}, WrWrkInst={}";
-    private static final String RIGHTS_PROCESSING_FINISHED_LOG = "Consume AACL usages for rights processing. " +
-        "Finished. UsageId={}, ProductFamily={}, WrWrkInst={}, UsageStatus={}, RhAcc#={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -45,15 +44,12 @@ public class AaclRightsChunkConsumer implements IConsumer<List<Usage>> {
     @Override
     @Profiled(tag = "AaclRightsChunkConsumer.consume")
     public void consume(List<Usage> usages) {
-        if (Objects.nonNull(usages)) {
+        if (CollectionUtils.isNotEmpty(usages)) {
             LOGGER.trace("Consume AACL usages for rights processing. Started. UsageIds={}", LogUtils.ids(usages));
-            usages.forEach(usage -> {
-                LOGGER.trace(RIGHTS_PROCESSING_STARTED_LOG, usage.getId(), usage.getProductFamily(),
-                    usage.getWrWrkInst());
-                rightsService.updateAaclRight(usage);
-                LOGGER.trace(RIGHTS_PROCESSING_FINISHED_LOG, usage.getId(), usage.getProductFamily(),
-                    usage.getWrWrkInst(), usage.getStatus(), usage.getRightsholder().getAccountNumber());
-            });
+            Map<LocalDate, List<Usage>> groupedByPeriodEndDateUsages =
+                usages.stream().collect(Collectors.groupingBy(usage -> usage.getAaclUsage().getBatchPeriodEndDate()));
+            groupedByPeriodEndDateUsages.forEach(
+                (periodEndDate, groupedUsages) -> rightsService.updateAaclRights(groupedUsages, periodEndDate));
             aaclRightsProcessor.executeNextChainProcessor(usages,
                 usage -> UsageStatusEnum.RH_FOUND == usage.getStatus());
             LOGGER.trace("Consume AACL usages for rights processing. Finished. UsageIds={}", LogUtils.ids(usages));

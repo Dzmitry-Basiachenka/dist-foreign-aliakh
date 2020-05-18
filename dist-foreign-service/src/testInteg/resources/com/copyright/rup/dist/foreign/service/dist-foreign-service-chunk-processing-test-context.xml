@@ -7,15 +7,17 @@
            http://www.springframework.org/schema/util
            http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
+    <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"/>
+
+    <!--> Temp solution to override 'dist.foreign.usages.chunks' property.
+    Bean should go after the import to override bean with the same definition from imported context. <-->
     <bean id="systemProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetObject" value="#{@systemProperties}" />
-        <property name="targetMethod" value="putAll" />
+        <property name="targetObject" value="#{@systemProperties}"/>
+        <property name="targetMethod" value="putAll"/>
         <property name="arguments">
             <util:properties>
                 <prop key="dist.foreign.usages.chunks">true</prop>
             </util:properties>
         </property>
     </bean>
-
-    <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"/>
 </beans>

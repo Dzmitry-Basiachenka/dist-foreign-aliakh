@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.rights.chunk;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
@@ -30,10 +31,6 @@ import java.util.Objects;
 @Component("df.service.ntsRightsChunkConsumer")
 public class NtsRightsChunkConsumer implements IConsumer<List<Usage>> {
 
-    private static final String RIGHTS_PROCESSING_STARTED_LOG = "Consume NTS usages for rights processing. " +
-        "Started. UsageId={}, ProductFamily={}, WrWrkInst={}";
-    private static final String RIGHTS_PROCESSING_FINISHED_LOG = "Consume NTS usages for rights processing. " +
-        "Finished. UsageId={}, ProductFamily={}, WrWrkInst={}, UsageStatus={}, RhAcc#={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -47,13 +44,7 @@ public class NtsRightsChunkConsumer implements IConsumer<List<Usage>> {
     public void consume(List<Usage> usages) {
         if (Objects.nonNull(usages)) {
             LOGGER.trace("Consume NTS usages for rights processing. Started. UsageIds={}", LogUtils.ids(usages));
-            usages.forEach(usage -> {
-                LOGGER.trace(RIGHTS_PROCESSING_STARTED_LOG, usage.getId(), usage.getProductFamily(),
-                    usage.getWrWrkInst());
-                rightsService.updateRight(usage, false);
-                LOGGER.trace(RIGHTS_PROCESSING_FINISHED_LOG, usage.getId(), usage.getProductFamily(),
-                    usage.getWrWrkInst(), usage.getStatus(), usage.getRightsholder().getAccountNumber());
-            });
+            rightsService.updateRights(usages, FdaConstants.NTS_PRODUCT_FAMILY, false);
             ntsRightsProcessor.executeNextChainProcessor(usages,
                 usage -> UsageStatusEnum.RH_FOUND == usage.getStatus());
             LOGGER.trace("Consume NTS usages for rights processing. Finished. UsageIds={}", LogUtils.ids(usages));

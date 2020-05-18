@@ -55,7 +55,7 @@ import java.util.stream.IntStream;
 @TestPropertySource(properties = {"test.liquibase.changelog=update-rights-data-init.groovy"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Transactional
-public class UpdateRightsTest {
+public class UpdateRightsIntegrationTest {
 
     private static final String FAS = "FAS";
     private static final String AACL = "AACL";
