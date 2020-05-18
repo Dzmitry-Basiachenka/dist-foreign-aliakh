@@ -28,7 +28,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.ScenarioService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
@@ -80,6 +80,7 @@ public class FasScenarioControllerTest {
     private FasScenarioController controller;
     private IUsageService usageService;
     private IScenarioService scenarioService;
+    private IFasScenarioService fasScenarioService;
     private IReportService reportService;
     private IStreamSourceHandler streamSourceHandler;
     private IExcludePayeeController excludePayeesController;
@@ -96,13 +97,15 @@ public class FasScenarioControllerTest {
         controller = new FasScenarioController();
         controller.setScenario(buildScenario());
         usageService = createMock(UsageService.class);
-        scenarioService = createMock(ScenarioService.class);
+        scenarioService = createMock(IScenarioService.class);
+        fasScenarioService = createMock(IFasScenarioService.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         excludePayeesController = createMock(IExcludePayeeController.class);
         mockStatic(ForeignSecurityUtils.class);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, scenarioService);
+        Whitebox.setInternalState(controller, fasScenarioService);
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, excludePayeesController);
@@ -243,12 +246,12 @@ public class FasScenarioControllerTest {
         mockStatic(Windows.class);
         Windows.showModalWindow(anyObject(ExcludeSourceRroWindow.class));
         expectLastCall().once();
-        expect(scenarioService.getSourceRros(SCENARIO_ID)).andReturn(
+        expect(fasScenarioService.getSourceRros(SCENARIO_ID)).andReturn(
             Collections.singletonList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
             .once();
-        replay(scenarioService, Windows.class);
+        replay(fasScenarioService, Windows.class);
         controller.onExcludeByRroClicked();
-        verify(scenarioService, Windows.class);
+        verify(fasScenarioService, Windows.class);
     }
 
     @Test
@@ -268,15 +271,15 @@ public class FasScenarioControllerTest {
     @Test
     public void testGetSourceRros() {
         Whitebox.setInternalState(controller, "scenarioService", scenarioService);
-        expect(scenarioService.getSourceRros(SCENARIO_ID)).andReturn(
+        expect(fasScenarioService.getSourceRros(SCENARIO_ID)).andReturn(
             Collections.singletonList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
             .once();
-        replay(scenarioService);
+        replay(fasScenarioService);
         List<Rightsholder> rros = controller.getSourceRros();
         assertEquals(1, CollectionUtils.size(rros));
         assertEquals(Long.valueOf(1000009522L), rros.get(0).getAccountNumber());
         assertEquals("Societa Italiana Autori ed Editori (SIAE)", rros.get(0).getName());
-        verify(scenarioService);
+        verify(fasScenarioService);
     }
 
     @Test
@@ -292,9 +295,9 @@ public class FasScenarioControllerTest {
     @Test
     public void testGetRightsholdersPayeePairs() {
         Whitebox.setInternalState(controller, "scenarioService", scenarioService);
-        expect(scenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 1000009522L))
+        expect(fasScenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 1000009522L))
             .andReturn(Collections.singletonList(buildRightsholderPayeePair())).once();
-        replay(scenarioService);
+        replay(fasScenarioService);
         List<RightsholderPayeePair> pairs = controller.getRightsholdersPayeePairs(1000009522L);
         assertEquals(1, CollectionUtils.size(pairs));
         RightsholderPayeePair pair = pairs.get(0);
@@ -302,7 +305,7 @@ public class FasScenarioControllerTest {
         assertEquals("ICLA, Irish Copyright Licensing Agency", pair.getPayee().getName());
         assertEquals(Long.valueOf(2000017006L), pair.getRightsholder().getAccountNumber());
         assertEquals("CAL, Copyright Agency Limited", pair.getRightsholder().getName());
-        verify(scenarioService);
+        verify(fasScenarioService);
     }
 
     private Scenario buildScenario() {

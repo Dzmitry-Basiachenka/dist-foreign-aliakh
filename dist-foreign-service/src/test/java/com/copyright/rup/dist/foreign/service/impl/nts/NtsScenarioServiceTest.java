@@ -42,7 +42,7 @@ public class NtsScenarioServiceTest {
     private static final String SCENARIO_NAME = "Scenario Name";
     private static final String SCENARIO_ID = "f9c61268-36df-418a-af14-bddd49014ef8";
     private final Scenario scenario = new Scenario();
-    private NtsScenarioService scenarioService;
+    private NtsScenarioService ntsScenarioService;
     private IScenarioRepository scenarioRepository;
     private IUsageService usageService;
     private INtsUsageService ntsUsageService;
@@ -60,14 +60,14 @@ public class NtsScenarioServiceTest {
         lmIntegrationService = createMock(ILmIntegrationService.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
         scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
-        scenarioService = new NtsScenarioService();
-        Whitebox.setInternalState(scenarioService, scenarioRepository);
-        Whitebox.setInternalState(scenarioService, usageService);
-        Whitebox.setInternalState(scenarioService, ntsUsageService);
-        Whitebox.setInternalState(scenarioService, scenarioAuditService);
-        Whitebox.setInternalState(scenarioService, lmIntegrationService);
-        Whitebox.setInternalState(scenarioService, scenarioUsageFilterService);
-        Whitebox.setInternalState(scenarioService, "batchSize", 1);
+        ntsScenarioService = new NtsScenarioService();
+        Whitebox.setInternalState(ntsScenarioService, scenarioRepository);
+        Whitebox.setInternalState(ntsScenarioService, usageService);
+        Whitebox.setInternalState(ntsScenarioService, ntsUsageService);
+        Whitebox.setInternalState(ntsScenarioService, scenarioAuditService);
+        Whitebox.setInternalState(ntsScenarioService, lmIntegrationService);
+        Whitebox.setInternalState(ntsScenarioService, scenarioUsageFilterService);
+        Whitebox.setInternalState(ntsScenarioService, "batchSize", 1);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class NtsScenarioServiceTest {
         String fundPoolId = RupPersistUtils.generateUuid();
         expect(scenarioRepository.findNameByNtsFundPoolId(fundPoolId)).andReturn(SCENARIO_NAME).once();
         replay(scenarioRepository);
-        assertEquals(SCENARIO_NAME, scenarioService.getScenarioNameByFundPoolId(fundPoolId));
+        assertEquals(SCENARIO_NAME, ntsScenarioService.getScenarioNameByFundPoolId(fundPoolId));
         verify(scenarioRepository);
     }
 
@@ -92,7 +92,7 @@ public class NtsScenarioServiceTest {
         scenarioAuditService.deleteActions(SCENARIO_ID);
         expectLastCall().once();
         replay(ntsUsageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
-        scenarioService.deleteScenario(scenario);
+        ntsScenarioService.deleteScenario(scenario);
         verify(ntsUsageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
     }
 
@@ -109,7 +109,7 @@ public class NtsScenarioServiceTest {
         scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
         expectLastCall().once();
         replay(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, ntsUsageService);
-        scenarioService.sendToLm(scenario);
+        ntsScenarioService.sendToLm(scenario);
         assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
         verify(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, ntsUsageService);
     }

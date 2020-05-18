@@ -1,7 +1,5 @@
 package com.copyright.rup.dist.foreign.service.api;
 
-import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
@@ -79,24 +77,6 @@ public interface IScenarioService {
     Scenario getScenarioWithAmountsAndLastAction(Scenario scenario);
 
     /**
-     * Gets all source RROs belonging to the {@link Scenario} with given id.
-     *
-     * @param scenarioId {@link Scenario} id
-     * @return list of source RROs for given scenario
-     */
-    List<Rightsholder> getSourceRros(String scenarioId);
-
-    /**
-     * Finds all {@link RightsholderPayeePair}s belonging to the source RRO with given account number within the
-     * {@link Scenario} with given id.
-     *
-     * @param scenarioId       {@link Scenario} id
-     * @param rroAccountNumber RRO account number
-     * @return list of {@link RightsholderPayeePair}s
-     */
-    List<RightsholderPayeePair> getRightsholdersByScenarioAndSourceRro(String scenarioId, Long rroAccountNumber);
-
-    /**
      * Submits given {@link Scenario} for approval with provided reason if any.
      *
      * @param scenario {@link Scenario} instance
@@ -121,39 +101,11 @@ public interface IScenarioService {
     void approve(Scenario scenario, String reason);
 
     /**
-     * Sends given FAS {@link Scenario} to LM.
-     *
-     * @param scenario {@link Scenario} instance
-     */
-    void sendFasToLm(Scenario scenario);
-
-    /**
      * Sends given AACL {@link Scenario} to LM.
      *
      * @param scenario {@link Scenario} instance
      */
     void sendAaclToLm(Scenario scenario);
-
-    /**
-     * Gets ownership changes for specified {@link Scenario} using RMS service and saves in database.
-     *
-     * @param scenario {@link Scenario} instance
-     */
-    void reconcileRightsholders(Scenario scenario);
-
-    /**
-     * Updates usages RH and Payee participating flags and amounts for specified {@link Scenario} using PRM service.
-     *
-     * @param scenario {@link Scenario} instance
-     */
-    void updateRhPayeeParticipating(Scenario scenario);
-
-    /**
-     * Approves ownership changes for {@link Scenario}.
-     *
-     * @param scenario instance of {@link Scenario}
-     */
-    void approveOwnershipChanges(Scenario scenario);
 
     /**
      * Updates scenario status to {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#ARCHIVED} if

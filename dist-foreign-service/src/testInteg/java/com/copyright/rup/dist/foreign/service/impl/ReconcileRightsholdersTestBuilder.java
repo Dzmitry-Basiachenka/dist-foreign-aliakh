@@ -7,7 +7,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ class ReconcileRightsholdersTestBuilder {
     private Map<String, List<UsageAuditItem>> usageIdToAuditItemsMap;
 
     @Autowired
-    private IScenarioService scenarioService;
+    private IFasScenarioService fasScenarioService;
     @Autowired
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
     @Autowired
@@ -123,9 +123,9 @@ class ReconcileRightsholdersTestBuilder {
                 testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
             }
             testHelper.expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
-            scenarioService.reconcileRightsholders(expectedScenario);
+            fasScenarioService.reconcileRightsholders(expectedScenario);
             assertDiscrepancies();
-            scenarioService.approveOwnershipChanges(expectedScenario);
+            fasScenarioService.approveOwnershipChanges(expectedScenario);
             testHelper.assertUsages(expectedUsages);
             assertAudit();
             testHelper.verifyRestServer();

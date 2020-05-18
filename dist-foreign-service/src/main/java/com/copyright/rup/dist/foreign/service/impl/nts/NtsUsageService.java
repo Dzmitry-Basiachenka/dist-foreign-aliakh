@@ -53,6 +53,8 @@ import java.util.stream.Collectors;
 @Service
 public class NtsUsageService implements INtsUsageService {
 
+    private static final String GET_RIGHTS_FINISHED_LOG_MESSAGE =
+        "Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Value("$RUP{dist.foreign.markets}")
@@ -188,8 +190,8 @@ public class NtsUsageService implements INtsUsageService {
                         .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                         .collect(Collectors.toList());
                     currentChainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
-                    LOGGER.info("Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, " +
-                        "WorkFoundUsagesCount={}", batchName, usageIdsCount, LogUtils.size(workFoundUsages));
+                    LOGGER.info(GET_RIGHTS_FINISHED_LOG_MESSAGE, batchName, usageIdsCount,
+                        LogUtils.size(workFoundUsages));
                 }));
     }
 }

@@ -28,6 +28,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
@@ -79,6 +80,7 @@ public class FasScenariosControllerTest {
     private IUsageService usageService;
     private IFasUsageService fasUsageService;
     private IScenarioService scenarioService;
+    private IFasScenarioService fasScenarioService;
     private FasScenarioController scenarioController;
     private Scenario scenario;
     private IFasScenariosWidget scenariosWidget;
@@ -90,6 +92,7 @@ public class FasScenariosControllerTest {
         usageService = createMock(IUsageService.class);
         fasUsageService = createMock(IFasUsageService.class);
         scenarioService = createMock(IScenarioService.class);
+        fasScenarioService = createMock(IFasScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         scenariosController = new FasScenariosController();
         buildScenario();
@@ -105,6 +108,7 @@ public class FasScenariosControllerTest {
         Whitebox.setInternalState(scenariosController, "usageService", usageService);
         Whitebox.setInternalState(scenariosController, "fasUsageService", fasUsageService);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
+        Whitebox.setInternalState(scenariosController, "fasScenarioService", fasScenarioService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
         verify(SecurityUtils.class);
     }
@@ -162,16 +166,16 @@ public class FasScenariosControllerTest {
             createMock(IRightsholderDiscrepancyService.class);
         Whitebox.setInternalState(scenariosController, rightsholderDiscrepancyService);
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        scenarioService.reconcileRightsholders(scenario);
+        fasScenarioService.reconcileRightsholders(scenario);
         expectLastCall().once();
         expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.DRAFT)).andReturn(0).once();
         expect(Windows.showConfirmDialog(eq("There are no rightsholders updates for scenario " +
                 "<i><b>Scenario name</b></i>. Do you want to update service fee?"),
             anyObject(ConfirmDialogWindow.IListener.class))).andReturn(null).once();
-        replay(scenariosWidget, scenarioService, rightsholderDiscrepancyService, Windows.class);
+        replay(scenariosWidget, fasScenarioService, rightsholderDiscrepancyService, Windows.class);
         scenariosController.onReconcileRightsholdersButtonClicked();
-        verify(scenariosWidget, scenarioService, rightsholderDiscrepancyService, Windows.class);
+        verify(scenariosWidget, fasScenarioService, rightsholderDiscrepancyService, Windows.class);
     }
 
     @Test
@@ -189,7 +193,7 @@ public class FasScenariosControllerTest {
             new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         expect(reconcileRightsholdersController.getCsvStreamSource()).andReturn(streamSource).once();
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        scenarioService.reconcileRightsholders(scenario);
+        fasScenarioService.reconcileRightsholders(scenario);
         expectLastCall().once();
         expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.DRAFT)).andReturn(5).once();
@@ -197,10 +201,10 @@ public class FasScenariosControllerTest {
         expectLastCall().once();
         reconcileRightsholdersController.setScenario(scenario);
         expectLastCall().once();
-        replay(scenariosWidget, scenarioService, reconcileRightsholdersController, rightsholderDiscrepancyService,
+        replay(scenariosWidget, fasScenarioService, reconcileRightsholdersController, rightsholderDiscrepancyService,
             Windows.class, streamSource);
         scenariosController.onReconcileRightsholdersButtonClicked();
-        verify(scenariosWidget, scenarioService, reconcileRightsholdersController, rightsholderDiscrepancyService,
+        verify(scenariosWidget, fasScenarioService, reconcileRightsholdersController, rightsholderDiscrepancyService,
             Windows.class, streamSource);
     }
 
@@ -362,14 +366,14 @@ public class FasScenariosControllerTest {
         expect(Windows.showConfirmDialog(
             eq("Are you sure that you want to send scenario <i><b>" + SCENARIO_NAME + "</b></i> to Liability Manager?"),
             capture(listenerCapture))).andReturn(new Window());
-        scenarioService.sendFasToLm(scenario);
+        fasScenarioService.sendToLm(scenario);
         expectLastCall().once();
         scenariosWidget.refresh();
         expectLastCall().once();
-        replay(scenariosWidget, scenarioService, Windows.class);
+        replay(scenariosWidget, fasScenarioService, Windows.class);
         scenariosController.sendToLm();
         listenerCapture.getValue().onActionConfirmed();
-        verify(scenariosWidget, scenarioService, Windows.class);
+        verify(scenariosWidget, fasScenarioService, Windows.class);
     }
 
     private void buildScenario() {

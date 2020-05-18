@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
@@ -40,6 +41,8 @@ public class FasScenarioController extends CommonScenarioController implements I
     private IFasDrillDownByRightsholderController drillDownByRightsholderController;
     @Autowired
     private IExcludePayeeController excludePayeesController;
+    @Autowired
+    private IFasScenarioService fasScenarioService;
 
     @Override
     public void onExcludeByRroClicked() {
@@ -56,7 +59,7 @@ public class FasScenarioController extends CommonScenarioController implements I
 
     @Override
     public List<Rightsholder> getSourceRros() {
-        return getScenarioService().getSourceRros(getScenario().getId());
+        return fasScenarioService.getSourceRros(getScenario().getId());
     }
 
     @Override
@@ -66,7 +69,7 @@ public class FasScenarioController extends CommonScenarioController implements I
 
     @Override
     public List<RightsholderPayeePair> getRightsholdersPayeePairs(Long rroAccountNumber) {
-        return getScenarioService().getRightsholdersByScenarioAndSourceRro(getScenario().getId(), rroAccountNumber);
+        return fasScenarioService.getRightsholdersByScenarioAndSourceRro(getScenario().getId(), rroAccountNumber);
     }
 
     @Override
