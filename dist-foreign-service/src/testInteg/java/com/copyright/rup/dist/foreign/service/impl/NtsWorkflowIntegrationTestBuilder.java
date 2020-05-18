@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.impl.NtsWorkflowIntegrationTestBuilder.Runner;
 
@@ -46,6 +47,8 @@ import java.util.Objects;
 @Component
 public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
+    @Autowired
+    private INtsScenarioService ntsScenarioService;
     @Autowired
     private IScenarioService scenarioService;
     @Autowired
@@ -222,11 +225,11 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             usageFilter.setProductFamily("NTS");
             NtsFields ntsFields = new NtsFields();
             ntsFields.setRhMinimumAmount(new BigDecimal("300"));
-            actualScenario = scenarioService.createNtsScenario("Test Scenario", ntsFields, null, usageFilter);
+            actualScenario = ntsScenarioService.createScenario("Test Scenario", ntsFields, null, usageFilter);
         }
 
         private void sendScenarioToLm() {
-            scenarioService.sendNtsToLm(actualScenario);
+            ntsScenarioService.sendToLm(actualScenario);
             sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
                 Collections.singletonList(TestUtils.fileToString(this.getClass(), expectedLmDetailsJsonFile)),
                 Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
@@ -240,7 +243,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void assertScenario() {
             actualScenario = scenarioService.getScenarios("NTS").stream()
                 .filter(scenario -> actualScenario.getId().equals(scenario.getId()))
-                .findAny().get();
+                .findAny()
+                .orElse(null);
             assertNotNull(actualScenario);
             assertEquals(expectedScenario.getNtsFields().getRhMinimumAmount(),
                 actualScenario.getNtsFields().getRhMinimumAmount());

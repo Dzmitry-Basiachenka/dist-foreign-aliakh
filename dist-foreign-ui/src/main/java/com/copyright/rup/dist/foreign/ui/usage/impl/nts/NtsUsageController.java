@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
@@ -58,6 +59,8 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     private IFasUsageService fasUsageService;
     @Autowired
     private INtsUsageService ntsUsageService;
+    @Autowired
+    private INtsScenarioService ntsScenarioService;
 
     @Override
     public ICommonUsageFilterController getUsageFilterController() {
@@ -177,12 +180,12 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
 
     @Override
     public String getScenarioNameAssociatedWithAdditionalFund(String fundPoolId) {
-        return getScenarioService().getScenarioNameByNtsFundPoolId(fundPoolId);
+        return ntsScenarioService.getScenarioNameByFundPoolId(fundPoolId);
     }
 
     @Override
     public Scenario createNtsScenario(String scenarioName, Scenario.NtsFields ntsFields, String description) {
-        Scenario scenario = getScenarioService().createNtsScenario(scenarioName, ntsFields, description,
+        Scenario scenario = ntsScenarioService.createScenario(scenarioName, ntsFields, description,
             getUsageFilterController().getWidget().getAppliedFilter());
         getUsageFilterController().getWidget().clearFilter();
         return scenario;

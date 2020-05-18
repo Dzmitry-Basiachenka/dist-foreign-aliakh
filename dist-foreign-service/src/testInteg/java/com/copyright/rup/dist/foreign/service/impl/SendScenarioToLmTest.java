@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,6 +53,8 @@ public class SendScenarioToLmTest {
     @Autowired
     private IScenarioService scenarioService;
     @Autowired
+    private INtsScenarioService ntsScenarioService;
+    @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
     @Autowired
     private SqsClientMock sqsClientMock;
@@ -90,7 +93,7 @@ public class SendScenarioToLmTest {
         Scenario scenario = new Scenario();
         scenario.setId(NTS_SCENARIO_ID);
         scenario.setProductFamily("NTS");
-        scenarioService.sendNtsToLm(scenario);
+        ntsScenarioService.sendToLm(scenario);
         sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_nts.json")),
             Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
