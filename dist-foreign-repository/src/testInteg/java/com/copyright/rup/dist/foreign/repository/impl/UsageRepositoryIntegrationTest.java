@@ -47,6 +47,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -125,6 +126,10 @@ public class UsageRepositoryIntegrationTest {
     private static final String SCENARIO_ID_2 = "abe31cdc-adfb-41c5-9a46-4ca4966a41be";
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
+    private static final String CCC_EVENT_ID_1 = "53256";
+    private static final String CCC_EVENT_ID_2 = "53257";
+    private static final String DISTRIBUTION_NAME_1 = "FDA July 17";
+    private static final String DISTRIBUTION_NAME_2 = "FDA_March_17";
     private static final String PERCENT = "%";
     private static final String UNDERSCORE = "_";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
@@ -679,18 +684,26 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testFindForAuditSearchByCccEventId() {
-        assertFindForAuditSearchByCccEventId("53256", USAGE_ID_15, POST_DISTRIBUTION_USAGE_ID);
-        assertFindForAuditSearchByCccEventId("53257", USAGE_ID_16);
+        assertFindForAuditSearchByCccEventId(CCC_EVENT_ID_1, USAGE_ID_15, POST_DISTRIBUTION_USAGE_ID);
+        assertFindForAuditSearchByCccEventId(CCC_EVENT_ID_2, USAGE_ID_16);
         assertFindForAuditSearchByCccEventId(PERCENT);
         assertFindForAuditSearchByCccEventId(UNDERSCORE);
+        assertFindForAuditSearchByCccEventId(CCC_EVENT_ID_2.toUpperCase(Locale.US), USAGE_ID_16);
+        assertFindForAuditSearchByCccEventId(CCC_EVENT_ID_2.toLowerCase(Locale.US), USAGE_ID_16);
+        assertFindForAuditSearchByCccEventId(CCC_EVENT_ID_2.substring(1));
+        assertFindForAuditSearchByCccEventId(CCC_EVENT_ID_2.substring(0, CCC_EVENT_ID_2.length() - 1));
     }
 
     @Test
     public void testFindForAuditSearchByDistributionName() {
-        assertFindForAuditSearchByDistributionName("FDA July 17", USAGE_ID_16);
-        assertFindForAuditSearchByDistributionName("FDA_March_17", USAGE_ID_15, POST_DISTRIBUTION_USAGE_ID);
+        assertFindForAuditSearchByDistributionName(DISTRIBUTION_NAME_1, USAGE_ID_16);
+        assertFindForAuditSearchByDistributionName(DISTRIBUTION_NAME_2, USAGE_ID_15, POST_DISTRIBUTION_USAGE_ID);
         assertFindForAuditSearchByDistributionName(PERCENT);
-        assertFindForAuditSearchByDistributionName(UNDERSCORE, USAGE_ID_15, POST_DISTRIBUTION_USAGE_ID);
+        assertFindForAuditSearchByDistributionName(UNDERSCORE);
+        assertFindForAuditSearchByDistributionName(DISTRIBUTION_NAME_1.toUpperCase(Locale.US), USAGE_ID_16);
+        assertFindForAuditSearchByDistributionName(DISTRIBUTION_NAME_1.toLowerCase(Locale.US), USAGE_ID_16);
+        assertFindForAuditSearchByDistributionName(DISTRIBUTION_NAME_1.substring(1));
+        assertFindForAuditSearchByDistributionName(DISTRIBUTION_NAME_1.substring(0, DISTRIBUTION_NAME_1.length() - 1));
     }
 
     @Test
