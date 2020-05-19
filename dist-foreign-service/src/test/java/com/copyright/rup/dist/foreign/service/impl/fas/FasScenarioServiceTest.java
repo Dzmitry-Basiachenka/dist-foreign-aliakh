@@ -77,7 +77,8 @@ public class FasScenarioServiceTest {
         List<String> usageIds = Collections.singletonList("3d81a2d6-c4b4-48d1-b59c-41e67b3719ac");
         Usage usage = new Usage();
         expect(fasUsageService.moveToArchive(scenario)).andReturn(usageIds).once();
-        expect(usageService.getArchivedUsagesByIds(usageIds)).andReturn(Collections.singletonList(usage)).once();
+        expect(usageService.getArchivedUsagesForSendToLmByIds(usageIds))
+            .andReturn(Collections.singletonList(usage)).once();
         lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(usage)));
         expectLastCall().once();
         scenarioRepository.updateStatus(scenario);

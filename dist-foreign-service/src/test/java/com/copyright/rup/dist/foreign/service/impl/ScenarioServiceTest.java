@@ -191,7 +191,7 @@ public class ScenarioServiceTest {
         List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
         Usage usage = new Usage();
         expect(aaclUsageService.moveToArchive(scenario)).andReturn(usageIds).once();
-        expect(usageService.getArchivedUsagesByIds(usageIds)).andReturn(Collections.singletonList(usage));
+        expect(usageService.getArchivedUsagesForSendToLmByIds(usageIds)).andReturn(Collections.singletonList(usage));
         lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(usage)));
         expectLastCall().once();
         scenarioRepository.updateStatus(scenario);

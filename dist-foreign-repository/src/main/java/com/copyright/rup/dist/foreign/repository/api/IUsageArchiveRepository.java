@@ -157,4 +157,12 @@ public interface IUsageArchiveRepository {
      * @return list of found {@link Usage}s
      */
     List<Usage> findByIds(List<String> usageIds);
+
+    /**
+     * Finds {@link Usage} info for sending to LM.
+     *
+     * @param usageIds list of usage ids
+     * @return list of found {@link Usage}s
+     */
+    List<Usage> findForSendToLmByIds(List<String> usageIds);
 }

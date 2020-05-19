@@ -349,6 +349,13 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public List<Usage> getArchivedUsagesForSendToLmByIds(List<String> usageIds) {
+        return CollectionUtils.isNotEmpty(usageIds)
+            ? usageArchiveRepository.findForSendToLmByIds(usageIds)
+            : Collections.emptyList();
+    }
+
+    @Override
     public List<String> getUsageIdsByStatusAndProductFamily(UsageStatusEnum status, String productFamily) {
         return usageRepository.findIdsByStatusAndProductFamily(status, productFamily);
     }

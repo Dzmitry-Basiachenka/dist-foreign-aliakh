@@ -1,0 +1,14 @@
+[
+  {
+    "id": "37ea653f-c748-4cb9-b4a3-7b11d434244a",
+    "wrWrkInst": 151811999,
+    "systemTitle": "NON-TITLE NTS",
+    "productFamily": "NTS",
+    "grossAmount": 6000.0000000000,
+    "netAmount": 4080.0000000000,
+    "serviceFeeAmount": 1920.0000000000,
+    "rightsholder": {
+      "id": "5bcf2c37-2f32-48e9-90fe-c9d75298eeed"
+    }
+  }
+]

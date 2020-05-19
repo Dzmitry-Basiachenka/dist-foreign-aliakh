@@ -11,6 +11,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -20,6 +21,10 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableList;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -38,6 +43,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -86,6 +92,13 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final String PAID_USAGE_ID = "3f8ce825-6514-4307-a118-3ec89187bef3";
     private static final String ARCHIVED_USAGE_ID = "5f90f7d7-566f-402a-975b-d54466862704";
     private static final String LM_DETAIL_ID = "5963a9c2-b639-468c-a4c1-02101a4597c6";
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    static {
+        OBJECT_MAPPER.registerModule(new JavaTimeModule());
+        OBJECT_MAPPER.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+    }
 
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
@@ -395,6 +408,15 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertUsage(paidUsage, usages.get(0));
     }
 
+    @Test
+    public void testFindForSendToLmByIds() {
+        List<Usage> expectedUsages = loadExpectedUsages(Collections.singletonList("json/usage_for_send_to_lm.json"));
+        List<Usage> actualUsages =
+            usageArchiveRepository.findForSendToLmByIds(
+                Collections.singletonList("37ea653f-c748-4cb9-b4a3-7b11d434244a"));
+        assertEquals(expectedUsages, actualUsages);
+    }
+
     private void assertUsagePaidInformation(PaidUsage expectedPaidUsage) {
         List<Usage> usages = usageArchiveRepository.findByIds(ImmutableList.of(expectedPaidUsage.getId()));
         assertTrue(CollectionUtils.isNotEmpty(usages));
@@ -592,5 +614,19 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertNull(usage.getMarketPeriodFrom());
         assertNull(usage.getMarketPeriodTo());
         assertNull(usage.getComment());
+    }
+
+    private List<Usage> loadExpectedUsages(List<String> fileNames) {
+        List<Usage> usages = new ArrayList<>();
+        fileNames.forEach(fileName -> {
+            try {
+                String content = TestUtils.fileToString(this.getClass(), fileName);
+                usages.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<Usage>>() {
+                }));
+            } catch (IOException e) {
+                throw new AssertionError(e);
+            }
+        });
+        return usages;
     }
 }
