@@ -381,10 +381,10 @@
                 <property name="detail_uid" value="u.df_usage_archive_uid"/>
             </include>
             <if test="null != filter.cccEventId">
-                and ccc_event_id ilike '%' || #{filter.cccEventId} || '%'
+                and ccc_event_id ilike #{filter.cccEventId}
             </if>
             <if test="null != filter.distributionName">
-                and distribution_name ilike '%' || #{filter.distributionName} || '%'
+                and distribution_name ilike #{filter.distributionName}
             </if>
         </where>
     </sql>
