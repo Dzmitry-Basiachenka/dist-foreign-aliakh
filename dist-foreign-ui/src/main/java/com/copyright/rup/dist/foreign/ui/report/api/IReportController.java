@@ -56,6 +56,11 @@ public interface IReportController extends IController<IReportWidget> {
     ICommonScenarioReportController getWorkSharesByAggLcClassSummaryReportController();
 
     /**
+     * @return baseline usages report controller.
+     */
+    IBaselineUsagesReportController getBaselineUsagesReportController();
+
+    /**
      * @return instance of {@link IStreamSource} for FAS/FAS2 Batch Summary Report.
      */
     IStreamSource getFasBatchSummaryReportStreamSource();
