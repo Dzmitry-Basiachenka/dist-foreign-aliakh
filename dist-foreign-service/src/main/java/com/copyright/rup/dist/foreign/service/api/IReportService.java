@@ -131,6 +131,14 @@ public interface IReportService {
                                                 Set<String> productFamilies);
 
     /**
+     * Writes AACL Baseline usages Report into the output stream in csv format.
+     *
+     * @param numberOfYears number of years to export
+     * @param outputStream  instance of {@link OutputStream}
+     */
+    void writeAaclBaselineUsagesCsvReport(int numberOfYears, OutputStream outputStream);
+
+    /**
      * Writes FAS/FAS2 Batch Summary Report into the output stream in csv format.
      *
      * @param outputStream instance of {@link OutputStream}

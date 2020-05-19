@@ -101,6 +101,23 @@
         <result property="netAmount" column="net_amount"/>
     </resultMap>
 
+    <resultMap id="baselineUsageDtoMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="aaclUsage.baselineId" column="baseline_uid"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="aaclUsage.usageAge.period" column="usage_period"/>
+        <result property="aaclUsage.usageSource" column="usage_source"/>
+        <result property="numberOfCopies" column="number_of_copies"/>
+        <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
+        <result property="aaclUsage.detailLicenseeClass.id" column="detail_licensee_class_id"/>
+        <result property="aaclUsage.detailLicenseeClass.enrollmentProfile" column="detail_licensee_enrollment"/>
+        <result property="aaclUsage.detailLicenseeClass.discipline" column="detail_licensee_discipline"/>
+        <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
+        <result property="aaclUsage.publicationType.weight" column="publication_type_weight"/>
+        <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>
+        <result property="aaclUsage.institution" column="institution"/>
+        <result property="comment" column="comment"/>
+    </resultMap>
+
     <sql id="workSharesByAggLcClassSummaryFromWhereClauses">
         from ${schema}.df_scenario s
         join ${schema}.${usage_table} u on s.df_scenario_uid = u.df_scenario_uid
@@ -391,6 +408,35 @@
                 </include>
             </otherwise>
         </choose>
+    </select>
+
+    <select id="findAaclBaselineUsages" parameterType="int" resultMap="baselineUsageDtoMap">
+        select
+            df_usage_baseline_aacl_uid baseline_uid,
+            wr_wrk_inst,
+            usage_period,
+            usage_source,
+            number_of_copies,
+            number_of_pages,
+            dlc.detail_licensee_class_id,
+            dlc.enrollment_profile detail_licensee_enrollment,
+            discipline detail_licensee_discipline,
+            pt.name pub_type_name,
+            publication_type_weight,
+            original_publication_type,
+            institution,
+            comment,
+            u.updated_by_user,
+            u.updated_datetime
+        from ${schema}.df_usage_baseline_aacl u
+        join ${schema}.df_publication_type pt on pt.df_publication_type_uid = u.df_publication_type_uid
+        join ${schema}.df_detail_licensee_class dlc on dlc.detail_licensee_class_id = u.detail_licensee_class_id
+        where usage_period in (
+            select distinct usage_period
+            from ${schema}.df_usage_baseline_aacl
+            order by usage_period desc
+            limit #{numberOfYears}
+        )
     </select>
 
     <select id="findScenarioUsageReportDtos" resultMap="IUsageMapper.usageDtoResultMap">

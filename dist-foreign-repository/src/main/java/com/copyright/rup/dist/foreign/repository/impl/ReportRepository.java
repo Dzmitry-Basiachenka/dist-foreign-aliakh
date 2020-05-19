@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTo
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AuditAaclCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.BaselineUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.SendForClassificationCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.WorkSharesByAggLcClassReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.WorkSharesByAggLcClassSummaryReportHandler;
@@ -357,6 +358,14 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         writeCsvReportByParts("IReportMapper.findScenarioUsageDtosCount",
             "IReportMapper.findAaclScenarioUsageReportDtos",
             parameters, () -> new AaclScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeAaclBaselineUsagesCsvReport(int numberOfYears, OutputStream outputStream) {
+        try (BaselineUsagesCsvReportHandler handler =
+                 new BaselineUsagesCsvReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IReportMapper.findAaclBaselineUsages", numberOfYears, handler);
+        }
     }
 
     private void writeCsvReportByParts(String countMethodName, String selectMethodName, Map<String, Object> parameters,

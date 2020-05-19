@@ -452,6 +452,18 @@ public class CsvReportsIntegrationTest {
             "work_classification_report_empty.csv");
     }
 
+    @Test
+    public void testWriteAaclBaselineUsagesCsvEmptyReport() throws Exception {
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAaclBaselineUsagesCsvReport(0, outputStream),
+            "baseline_usages_report_empty.csv");
+    }
+
+    @Test
+    public void testWriteAaclBaselineUsagesCsvReport() throws Exception {
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAaclBaselineUsagesCsvReport(2, outputStream),
+            "baseline_usages_report.csv");
+    }
+
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         reportWriter.accept(outputStream);

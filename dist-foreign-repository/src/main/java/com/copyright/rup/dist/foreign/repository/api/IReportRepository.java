@@ -263,4 +263,12 @@ public interface IReportRepository {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds AACL baseline usages and writes them into the output stream in CSV format.
+     *
+     * @param numberOfYears number of baseline years
+     * @param outputStream  instance of {@link OutputStream}
+     */
+    void writeAaclBaselineUsagesCsvReport(int numberOfYears, OutputStream outputStream);
 }
