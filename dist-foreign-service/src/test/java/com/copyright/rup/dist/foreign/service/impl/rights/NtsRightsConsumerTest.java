@@ -13,10 +13,12 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -82,13 +84,15 @@ public class NtsRightsConsumerTest {
         }
 
         @Override
-        public void updateRight(Usage usage, boolean logAction) {
-            if (Objects.nonNull(rhAccountNumber)) {
-                usage.getRightsholder().setAccountNumber(rhAccountNumber);
-                usage.setStatus(UsageStatusEnum.RH_FOUND);
-            } else {
-                usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
-            }
+        public void updateRights(List<Usage> usages, boolean logAction) {
+            usages.forEach(usage -> {
+                if (Objects.nonNull(rhAccountNumber)) {
+                    usage.getRightsholder().setAccountNumber(rhAccountNumber);
+                    usage.setStatus(UsageStatusEnum.RH_FOUND);
+                } else {
+                    usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                }
+            });
         }
     }
 }

@@ -106,7 +106,7 @@ public class FasRightsChunkConsumerTest {
         }
 
         @Override
-        public void updateRights(List<Usage> usages, String productFamily, boolean logAction) {
+        public void updateRights(List<Usage> usages, boolean logAction) {
             usages.forEach(usage -> {
                 if (Objects.nonNull(rhAccountNumber)) {
                     usage.getRightsholder().setAccountNumber(rhAccountNumber);

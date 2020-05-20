@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -43,7 +44,7 @@ public class AaclRightsConsumer implements IConsumer<Usage> {
         if (Objects.nonNull(usage)) {
             LOGGER.trace("Consume usage for rights processing. Started. UsageId={}, ProductFamily={}, WrWrkInst={}",
                 usage.getId(), usage.getProductFamily(), usage.getWrWrkInst());
-            rightsService.updateAaclRight(usage);
+            rightsService.updateAaclRights(Collections.singletonList(usage));
             aaclRightsProcessor.executeNextProcessor(usage, item -> UsageStatusEnum.RH_FOUND == item.getStatus());
             LOGGER.trace(RIGHTS_PROCESSING_FINISHED_LOG, usage.getId(), usage.getProductFamily(), usage.getWrWrkInst(),
                 usage.getStatus(), usage.getRightsholder().getAccountNumber());

@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.processor.chunk.IChainChunkProcessor;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Consumer to handle FAS/FAS2 usages for getting Rights.
@@ -43,12 +41,9 @@ public class FasRightsChunkConsumer implements IConsumer<List<Usage>> {
     @Override
     @Profiled(tag = "FasRightsChunkConsumer.consume")
     public void consume(List<Usage> usages) {
-        if (Objects.nonNull(usages)) {
+        if (CollectionUtils.isNotEmpty(usages)) {
             LOGGER.trace("Consume FAS usages for rights processing. Started. UsageIds={}", LogUtils.ids(usages));
-            Map<String, List<Usage>> groupedByProductFamilyUsages =
-                usages.stream().collect(Collectors.groupingBy(Usage::getProductFamily));
-            groupedByProductFamilyUsages.forEach(
-                (productFamily, groupedUsages) -> rightsService.updateRights(groupedUsages, productFamily, true));
+            rightsService.updateRights(usages, true);
             fasRightsProcessor.executeNextChainProcessor(usages,
                 usage -> UsageStatusEnum.RH_FOUND == usage.getStatus());
             LOGGER.trace("Consume FAS usages for rights processing. Finished. UsageIds={}", LogUtils.ids(usages));
