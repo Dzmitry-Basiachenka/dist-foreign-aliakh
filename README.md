@@ -1,3 +1,23 @@
+10.1.0
+-
+* B-56234 FDA: AACL export of baseline data: add baseline usages report to AACL report tab
+* B-56234 FDA: AACL export of baseline data: implement repository logic for report generation
+* B-56282 FDA: Send AACL scenario to LM: Add a specific method for getting usages for sending to LM
+* B-56282 FDA: Send AACL scenario to LM: Adjust repository logic for deleting scenario usages
+* B-56282 FDA: Send AACL scenario to LM: Enable view scenario functionality for scenario with archived usages
+* B-56282 FDA: Send AACL scenario to LM: Implement logic for copying scenario usages to baseline
+* B-56282 FDA: Send AACL scenario to LM: Implement logic for deleting scenario usages
+* B-56282 FDA: Send AACL scenario to LM: Implement service logic for sending AACL scenario to LM
+* B-56615 FDA: Reporting AACL to RC: adjust integration test to send report to crm
+* B-56849 Tech Debt: FDA: get RMS grants by batches for chunk usage processors
+* B-56849 Tech Debt: FDA: move FAS scenario specific logic to separate service
+* B-56849 Tech Debt: FDA: move NTS scenario specific logic to separate service
+* B-58238 FDA: Filter criteria modifications for searching: adjust filters on Audit tab to search by exact match
+* B-58238 FDA: Filter criteria modifications for searching: make changes based on comments in CR-DIST-FOREIGN-171
+* B-58238 FDA: Filter criteria modifications for searching: make changes based on comments in CR-DIST-FOREIGN-171
+* B-58288 FDA: Batch processing performance enhancements: make changes based on comments in CR-DIST-FOREIGN-170
+* CDP-910 FDA: AACL P-PRE usage details are classified but show status of WORK_RESEARCH
+
 9.1.30
 -
 * CDP-910 FDA: AACL P-PRE usage details are classified but show status of WORK_RESEARCH
