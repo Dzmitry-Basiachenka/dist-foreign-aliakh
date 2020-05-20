@@ -547,7 +547,7 @@ public class AaclUsageRepositoryIntegrationTest {
         assertFindForAuditSearchByDistributionName(PERCENT);
         assertFindForAuditSearchByDistributionName(UNDERSCORE);
         assertFindForAuditSearchByDistributionName("AACL March 20", USAGE_ID_6);
-        assertFindForAuditSearchByDistributionName("AACL March 20", USAGE_ID_6);
+        assertFindForAuditSearchByDistributionName("aacl march 20", USAGE_ID_6);
         assertFindForAuditSearchByDistributionName("ACL March 20");
         assertFindForAuditSearchByDistributionName("AACL March 2");
     }
