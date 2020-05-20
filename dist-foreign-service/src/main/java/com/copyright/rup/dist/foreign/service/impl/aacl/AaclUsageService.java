@@ -347,14 +347,20 @@ public class AaclUsageService implements IAaclUsageService {
 
 
     @Override
-    public int getCountByScenarioAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue) {
-        return aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(scenarioId, accountNumber, searchValue);
+    public int getCountByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue) {
+        return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
+            ? aaclUsageRepository.findArchivedCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
+                searchValue)
+            : aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue);
     }
 
     @Override
-    public List<UsageDto> getByScenarioAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue,
+    public List<UsageDto> getByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue,
                                                           Pageable pageable, Sort sort) {
-        return aaclUsageRepository.findByScenarioIdAndRhAccountNumber(scenarioId, accountNumber, searchValue,
+        return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
+            ? aaclUsageRepository.findArchivedByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
+            searchValue, pageable, sort)
+            : aaclUsageRepository.findByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue,
             pageable, sort);
     }
 
