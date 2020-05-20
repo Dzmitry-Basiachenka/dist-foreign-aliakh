@@ -58,7 +58,16 @@ public class AaclScenariosController extends CommonScenariosController implement
 
     @Override
     public void sendToLm() {
-        //TODO: implement logic for sending to LM in scope of corresponding story
+        Scenario scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenario", scenario.getName()),
+            () -> {
+                try {
+                    getScenarioService().sendAaclToLm(scenario);
+                } catch (RuntimeException e) {
+                    Windows.showNotificationWindow(e.getMessage());
+                }
+                getWidget().refresh();
+            });
     }
 
     @Override

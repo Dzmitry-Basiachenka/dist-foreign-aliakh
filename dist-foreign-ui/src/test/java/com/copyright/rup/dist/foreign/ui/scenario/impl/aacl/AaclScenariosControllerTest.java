@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -30,11 +31,13 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Validator;
 import com.vaadin.ui.Window;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -215,6 +218,24 @@ public class AaclScenariosControllerTest {
         assertTrue(result.contains("<li><b><i>Batch in </i></b>(BatchName)</li>"));
         assertTrue(result.contains("<li><b><i>Status </i></b>(ELIGIBLE)</li>"));
         verify(scenariosWidget, scenarioUsageFilterService);
+    }
+
+    @Test
+    public void testSendScenarioToLm() {
+        mockStatic(Windows.class);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        Capture<IListener> listenerCapture = new Capture<>();
+        expect(Windows.showConfirmDialog(
+            eq("Are you sure that you want to send scenario <i><b>" + SCENARIO_NAME + "</b></i> to Liability Manager?"),
+            capture(listenerCapture))).andReturn(new Window());
+        scenarioService.sendAaclToLm(scenario);
+        expectLastCall().once();
+        scenariosWidget.refresh();
+        expectLastCall().once();
+        replay(scenariosWidget, scenarioService, Windows.class);
+        scenariosController.sendToLm();
+        listenerCapture.getValue().onActionConfirmed();
+        verify(scenariosWidget, scenarioService, Windows.class);
     }
 
     private void buildScenario() {

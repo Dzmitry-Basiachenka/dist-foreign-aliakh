@@ -23,6 +23,7 @@ class AaclScenariosMediator implements IScenariosMediator {
     private Button submitButton;
     private Button rejectButton;
     private Button approveButton;
+    private Button sendToLmButton;
 
     @Override
     public void applyPermissions() {
@@ -31,6 +32,7 @@ class AaclScenariosMediator implements IScenariosMediator {
         submitButton.setVisible(ForeignSecurityUtils.hasSubmitScenarioPermission());
         rejectButton.setVisible(ForeignSecurityUtils.hasRejectScenarioPermission());
         approveButton.setVisible(ForeignSecurityUtils.hasApproveScenarioPermission());
+        sendToLmButton.setVisible(ForeignSecurityUtils.hasSendScenarioToLmPermission());
     }
 
     @Override
@@ -44,12 +46,14 @@ class AaclScenariosMediator implements IScenariosMediator {
             boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
             rejectButton.setEnabled(isSubmittedState);
             approveButton.setEnabled(isSubmittedState);
+            sendToLmButton.setEnabled(ScenarioStatusEnum.APPROVED == status);
         } else {
             viewButton.setEnabled(false);
             deleteButton.setEnabled(false);
             submitButton.setEnabled(false);
             rejectButton.setEnabled(false);
             approveButton.setEnabled(false);
+            sendToLmButton.setEnabled(false);
         }
     }
 
@@ -71,5 +75,9 @@ class AaclScenariosMediator implements IScenariosMediator {
 
     void setApproveButton(Button approveButton) {
         this.approveButton = approveButton;
+    }
+
+    void setSendToLmButton(Button sendToLmButton) {
+        this.sendToLmButton = sendToLmButton;
     }
 }
