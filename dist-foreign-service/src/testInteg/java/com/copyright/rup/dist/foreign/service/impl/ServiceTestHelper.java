@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
@@ -42,6 +41,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -63,8 +63,6 @@ public class ServiceTestHelper {
     private IUsageAuditService usageAuditService;
     @Autowired
     private IUsageRepository usageRepository;
-    @Autowired
-    private IUsageService usageService;
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
@@ -217,9 +215,9 @@ public class ServiceTestHelper {
         });
     }
 
-    public void assertPaidUsages(List<PaidUsage> expectedUsages) {
+    public void assertPaidUsages(List<PaidUsage> expectedUsages, Function<AuditFilter, List<UsageDto>> function) {
         expectedUsages.forEach(expectedUsage -> {
-            PaidUsage actualUsage = getPaidUsageByLmDetailId(expectedUsage.getLmDetailId());
+            PaidUsage actualUsage = getPaidUsageByLmDetailId(expectedUsage.getLmDetailId(), function);
             assertUsage(expectedUsage, actualUsage);
             assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
             assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
@@ -261,19 +259,20 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber());
         assertEquals(expectedUsage.isRhParticipating(), actualUsage.isRhParticipating());
         assertEquals(expectedUsage.isPayeeParticipating(), actualUsage.isPayeeParticipating());
-        assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
+        if (Objects.nonNull(actualUsage.getReportedValue())) {
+            assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
+        }
         assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
         assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
         assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
         assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
     }
 
-    private PaidUsage getPaidUsageByLmDetailId(String lmDetailId) {
+    private PaidUsage getPaidUsageByLmDetailId(String lmDetailId, Function<AuditFilter, List<UsageDto>> function) {
         assertNotNull(lmDetailId);
-        Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus =
-            usageService.getForAudit(new AuditFilter(), null, null).stream()
-                .collect(Collectors.groupingBy(UsageDto::getStatus,
-                    Collectors.mapping(UsageDto::getId, Collectors.toList())));
+        Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus = function.apply(new AuditFilter()).stream()
+            .collect(Collectors.groupingBy(UsageDto::getStatus,
+                Collectors.mapping(UsageDto::getId, Collectors.toList())));
         List<PaidUsage> usages = usageIdsGroupedByStatus.entrySet().stream()
             .flatMap(entry -> usageArchiveRepository.findByIdAndStatus(entry.getValue(), entry.getKey()).stream())
             .filter(paidUsage -> Objects.equals(lmDetailId, paidUsage.getLmDetailId()))

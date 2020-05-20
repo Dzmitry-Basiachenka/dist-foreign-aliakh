@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -30,6 +31,7 @@ import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
@@ -58,6 +60,8 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -97,6 +101,8 @@ public class AaclUsageService implements IAaclUsageService {
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    private IUsageService usageService;
     @Autowired
     @Qualifier("usageChainExecutor")
     private IChainExecutor<Usage> chainExecutor;
@@ -350,7 +356,7 @@ public class AaclUsageService implements IAaclUsageService {
     public int getCountByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue) {
         return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? aaclUsageRepository.findArchivedCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
-                searchValue)
+            searchValue)
             : aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue);
     }
 
@@ -383,6 +389,17 @@ public class AaclUsageService implements IAaclUsageService {
         LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
             LogUtils.size(usageIds));
         return usageIds;
+    }
+
+    @Override
+    @Transactional
+    public void updatePaidInfo(List<PaidUsage> paidUsages) {
+        Function<List<PaidUsage>, List<Usage>> function =
+            paidUsage -> usageArchiveRepository.findAaclByIds(paidUsage.stream()
+                .map(PaidUsage::getId)
+                .collect(Collectors.toList()));
+        Consumer<PaidUsage> consumer = usage -> usageArchiveRepository.insertAaclPaid(usage);
+        usageService.updatePaidUsages(paidUsages, function, consumer);
     }
 
     private Set<Integer> getAggregateClassIdsWithAmountsFromFundPool(String fundPoolId) {

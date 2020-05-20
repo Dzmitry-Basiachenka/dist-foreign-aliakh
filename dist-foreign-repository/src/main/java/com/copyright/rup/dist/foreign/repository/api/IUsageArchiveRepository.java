@@ -123,6 +123,13 @@ public interface IUsageArchiveRepository {
     void insertPaid(PaidUsage paidUsage);
 
     /**
+     * Insert AACL usage with paid information.
+     *
+     * @param paidUsage {@link PaidUsage} instance
+     */
+    void insertAaclPaid(PaidUsage paidUsage);
+
+    /**
      * Moves usages from {@link com.copyright.rup.dist.foreign.domain.FundPool} related to selected
      * {@link com.copyright.rup.dist.foreign.domain.Scenario} to archive table.
      *
@@ -157,6 +164,14 @@ public interface IUsageArchiveRepository {
      * @return list of found {@link Usage}s
      */
     List<Usage> findByIds(List<String> usageIds);
+
+    /**
+     * Finds AACL {@link Usage}s with populated RH uid information by specified ids.
+     *
+     * @param usageIds list of usage ids
+     * @return list of found {@link Usage}s
+     */
+    List<Usage> findAaclByIds(List<String> usageIds);
 
     /**
      * Finds {@link Usage} info for sending to LM.

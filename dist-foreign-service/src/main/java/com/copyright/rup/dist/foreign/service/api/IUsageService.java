@@ -18,6 +18,8 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Represents interface of service for usage business logic.
@@ -302,4 +304,15 @@ public interface IUsageService {
      * @param batchName batch name
      */
     void sendForGettingRights(List<Usage> usages, String batchName);
+
+    /**
+     * Updates paid infromation for {@link PaidUsage}s
+     * and status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#PAID}.
+     *
+     * @param paidUsages list of {@link PaidUsage}s to update
+     * @param function   function convert paid usages to map with usage id and original usages
+     * @param consumer   consume information for update
+     */
+    void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<PaidUsage>, List<Usage>> function,
+                          Consumer<PaidUsage> consumer);
 }

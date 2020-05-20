@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
@@ -196,7 +197,8 @@ public class NtsWorkflowChunkIntegrationTestBuilder implements Builder<Runner> {
             receivePaidUsagesFromLm();
             usageService.sendToCrm();
             assertScenario();
-            testHelper.assertPaidUsages(expectedUsages);
+            testHelper.assertPaidUsages(expectedUsages, usageDtos ->
+                usageService.getForAudit(new AuditFilter(), null, null));
             assertAudit();
             testHelper.verifyRestServer();
         }

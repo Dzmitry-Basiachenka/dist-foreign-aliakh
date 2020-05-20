@@ -63,6 +63,7 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
         usage.setNetAmount(JsonUtils.getBigDecimalValue(jsonNode.get("royalty_amount")));
         usage.setServiceFeeAmount(JsonUtils.getBigDecimalValue(jsonNode.get("service_fee_amount")));
         usage.setGrossAmount(JsonUtils.getBigDecimalValue(jsonNode.get("collected_amount")));
+        usage.setProductFamily(JsonUtils.getStringValue(jsonNode.get("product_family")));
         JsonNode splitParentFlag = jsonNode.get("split_parent_flag");
         usage.setSplitParentFlag(null != splitParentFlag ? JsonUtils.getBooleanValue(splitParentFlag) : null);
         usage.setPostDistributionFlag(JsonUtils.getBooleanValue(jsonNode.get("post_distribution_flag")));

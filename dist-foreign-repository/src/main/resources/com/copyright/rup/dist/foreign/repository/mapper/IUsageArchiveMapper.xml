@@ -356,6 +356,23 @@
         </foreach>
     </select>
 
+    <select id="findAaclByIds" resultMap="IAaclUsageMapper.aaclUsageResultMap">
+        select
+            u.df_usage_archive_uid df_usage_uid,
+            pt.weight publication_type_weight,
+            <include refid="IAaclUsageMapper.aaclUsageColumns"/>
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        join ${schema}.df_usage_aacl uaacl on u.df_usage_archive_uid = uaacl.df_usage_aacl_uid
+        left join ${schema}.df_publication_type pt on uaacl.df_publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where u.df_usage_archive_uid in
+            <foreach collection="list" item="usageId" open="(" separator="," close=")">
+                #{usageId}
+            </foreach>
+    </select>
+
     <insert id="insertPaid" parameterType="PaidUsage">
         with result as (
             insert into ${schema}.df_usage_archive (
@@ -422,6 +439,86 @@
             #{reportedValue},
             #{rhParticipating},
             <include refid="StoredEntityMapper.insert"/>)
+    </insert>
+
+    <insert id="insertAaclPaid" parameterType="PaidUsage">
+        with result as (
+            insert into ${schema}.df_usage_archive (
+                df_usage_archive_uid,
+                <include refid="IUsageMapper.usageColumns"/>,
+                <include refid="payeeColumns"/>,
+                check_number,
+                check_date,
+                ccc_event_id,
+                distribution_name,
+                distribution_date,
+                period_end_date,
+                lm_detail_id,
+                <include refid="StoredEntityMapper.additionalColumns"/>)
+            values (
+                #{id},
+                #{batchId},
+                #{scenarioId},
+                #{wrWrkInst},
+                #{workTitle},
+                #{systemTitle},
+                #{rightsholder.accountNumber},
+                #{status},
+                #{productFamily},
+                #{standardNumber},
+                #{standardNumberType},
+                #{numberOfCopies},
+                #{grossAmount},
+                #{comment},
+                #{serviceFee},
+                #{serviceFeeAmount},
+                #{netAmount},
+                #{payee.accountNumber},
+                #{checkNumber},
+                #{checkDate},
+                #{cccEventId},
+                #{distributionName},
+                #{distributionDate},
+                #{periodEndDate},
+                #{lmDetailId},
+                <include refid="StoredEntityMapper.insert"/>)
+        )
+        insert into ${schema}.df_usage_aacl (
+            df_usage_aacl_uid,
+            institution,
+            usage_period,
+            usage_source,
+            number_of_pages,
+            right_limitation,
+            df_publication_type_uid,
+            detail_licensee_class_id,
+            original_publication_type,
+            publication_type_weight,
+            baseline_uid,
+            volume_weight,
+            value_weight,
+            value_share,
+            volume_share,
+            total_share,
+            <include refid="StoredEntityMapper.additionalColumns"/>)
+        values (
+            #{id},
+            #{aaclUsage.institution},
+            #{aaclUsage.usageAge.period},
+            #{aaclUsage.usageSource},
+            #{aaclUsage.numberOfPages},
+            #{aaclUsage.rightLimitation},
+            #{aaclUsage.publicationType.id},
+            #{aaclUsage.detailLicenseeClass.id},
+            #{aaclUsage.originalPublicationType},
+            #{aaclUsage.publicationType.weight},
+            #{aaclUsage.baselineId},
+            #{aaclUsage.volumeWeight},
+            #{aaclUsage.valueWeight},
+            #{aaclUsage.valueShare},
+            #{aaclUsage.volumeShare},
+            #{aaclUsage.totalShare},
+        <include refid="StoredEntityMapper.insert"/>)
     </insert>
 
     <select id="copyToArchiveByScenarioId" parameterType="map" resultType="string">
