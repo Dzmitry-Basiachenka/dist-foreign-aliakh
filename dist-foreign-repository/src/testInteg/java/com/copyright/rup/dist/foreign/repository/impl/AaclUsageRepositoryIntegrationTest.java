@@ -45,7 +45,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -85,8 +84,6 @@ public class AaclUsageRepositoryIntegrationTest {
     private static final String STANDARD_NUMBER = "2192-3558";
     private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
     private static final String RIGHT_LIMITATION = "ALL";
-    private static final String DISTRIBUTION_NAME = "AACL_March_40";
-    private static final String CCC_EVENT_ID = "53257";
     private static final String PERCENT = "%";
     private static final String UNDERSCORE = "_";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
@@ -538,24 +535,22 @@ public class AaclUsageRepositoryIntegrationTest {
 
     @Test
     public void testFindForAuditSearchByCccEventId() {
-        assertFindForAuditSearchByCccEventId(CCC_EVENT_ID, USAGE_ID_6);
+        assertFindForAuditSearchByCccEventId("53257", USAGE_ID_6);
         assertFindForAuditSearchByCccEventId(PERCENT);
         assertFindForAuditSearchByCccEventId(UNDERSCORE);
-        assertFindForAuditSearchByCccEventId(CCC_EVENT_ID.toUpperCase(Locale.US), USAGE_ID_6);
-        assertFindForAuditSearchByCccEventId(CCC_EVENT_ID.toLowerCase(Locale.US), USAGE_ID_6);
-        assertFindForAuditSearchByCccEventId(CCC_EVENT_ID.substring(1));
-        assertFindForAuditSearchByCccEventId(CCC_EVENT_ID.substring(0, CCC_EVENT_ID.length() - 1));
+        assertFindForAuditSearchByCccEventId("3257");
+        assertFindForAuditSearchByCccEventId("5325");
     }
 
     @Test
     public void testFindForAuditSearchByDistributionName() {
-        assertFindForAuditSearchByDistributionName(DISTRIBUTION_NAME, USAGE_ID_6);
+        assertFindForAuditSearchByDistributionName("AACL March 20", USAGE_ID_6);
         assertFindForAuditSearchByDistributionName(PERCENT);
         assertFindForAuditSearchByDistributionName(UNDERSCORE);
-        assertFindForAuditSearchByDistributionName(DISTRIBUTION_NAME.toUpperCase(Locale.US), USAGE_ID_6);
-        assertFindForAuditSearchByDistributionName(DISTRIBUTION_NAME.toLowerCase(Locale.US), USAGE_ID_6);
-        assertFindForAuditSearchByDistributionName(DISTRIBUTION_NAME.substring(1));
-        assertFindForAuditSearchByDistributionName(DISTRIBUTION_NAME.substring(0, DISTRIBUTION_NAME.length() - 1));
+        assertFindForAuditSearchByDistributionName("AACL March 20", USAGE_ID_6);
+        assertFindForAuditSearchByDistributionName("AACL March 20", USAGE_ID_6);
+        assertFindForAuditSearchByDistributionName("ACL March 20");
+        assertFindForAuditSearchByDistributionName("AACL March 2");
     }
 
     @Test

@@ -721,7 +721,7 @@ databaseChangeLog {
             column(name: 'check_number', value: '578945')
             column(name: 'check_date', value: '2016-11-03')
             column(name: 'ccc_event_id', value: '53257')
-            column(name: 'distribution_name', value: 'AACL_March_40')
+            column(name: 'distribution_name', value: 'AACL March 20')
             column(name: 'distribution_date', value: '2016-11-03')
             column(name: 'lm_detail_id', value: 'ced40f77-704a-4b77-ae46-2698ef408df4')
             column(name: 'comment', value: 'AACL archived usage')
