@@ -1,0 +1,22 @@
+{
+  "details": [
+    {
+      "product_family": "AACL",
+      "detail_id": "297d5aea-24f8-4b26-be22-2441bda526dd",
+      "royalty_amount": 375.00,
+      "service_fee_amount": 125.00,
+      "collected_amount": 500.00,
+      "wr_wrk_inst": "471137967",
+      "work_title": "Cell Biology"
+    },
+    {
+      "product_family": "AACL",
+      "detail_id": "190fee30-4de4-4cac-afce-432503e42485",
+      "royalty_amount": 375.00,
+      "service_fee_amount": 125.00,
+      "collected_amount": 500.00,
+      "wr_wrk_inst": "471137967",
+      "work_title": "Cell Biology"
+    }
+  ]
+}

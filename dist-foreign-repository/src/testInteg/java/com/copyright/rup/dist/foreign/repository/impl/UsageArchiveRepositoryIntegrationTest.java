@@ -13,7 +13,9 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -47,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.IntStream;
 
 /**
  * Integration test for {@link UsageArchiveRepository}.
@@ -417,6 +421,18 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedUsages, actualUsages);
     }
 
+    @Test
+    public void testFindAaclDtosByScenarioId() {
+        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos(
+            Arrays.asList("json/aacl/aacl_archived_usage_dto_927ea8a1.json",
+                "json/aacl/aacl_archived_usage_dto_cfd3e488.json"));
+        List<UsageDto> actualUsageDtos =
+            usageArchiveRepository.findAaclDtosByScenarioId("4f1714a1-5e23-4e46-aeb1-b44fbeea17e6");
+        assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
+        IntStream.range(0, expectedUsageDtos.size())
+            .forEach(i -> assertUsageDto(expectedUsageDtos.get(i), actualUsageDtos.get(i)));
+    }
+
     private void assertUsagePaidInformation(PaidUsage expectedPaidUsage) {
         List<Usage> usages = usageArchiveRepository.findByIds(ImmutableList.of(expectedPaidUsage.getId()));
         assertTrue(CollectionUtils.isNotEmpty(usages));
@@ -527,6 +543,66 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
         assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        if (Objects.nonNull(expectedUsage.getAaclUsage())) {
+            assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
+        } else {
+            assertNull(actualUsage.getAaclUsage());
+        }
+    }
+
+    private void assertUsageDto(UsageDto expectedUsageDto, UsageDto actualUsageDto) {
+        assertEquals(expectedUsageDto.getBatchName(), actualUsageDto.getBatchName());
+        assertEquals(expectedUsageDto.getFiscalYear(), actualUsageDto.getFiscalYear());
+        assertEquals(expectedUsageDto.getRroAccountNumber(), actualUsageDto.getRroAccountNumber());
+        assertEquals(expectedUsageDto.getRroName(), actualUsageDto.getRroName());
+        assertEquals(expectedUsageDto.getWrWrkInst(), actualUsageDto.getWrWrkInst());
+        assertEquals(expectedUsageDto.getSystemTitle(), actualUsageDto.getSystemTitle());
+        assertEquals(expectedUsageDto.getWorkTitle(), actualUsageDto.getWorkTitle());
+        assertEquals(expectedUsageDto.getArticle(), actualUsageDto.getArticle());
+        assertEquals(expectedUsageDto.getRhAccountNumber(), actualUsageDto.getRhAccountNumber());
+        assertEquals(expectedUsageDto.getRhName(), actualUsageDto.getRhName());
+        assertEquals(expectedUsageDto.getStandardNumber(), actualUsageDto.getStandardNumber());
+        assertEquals(expectedUsageDto.getStandardNumberType(), actualUsageDto.getStandardNumberType());
+        assertEquals(expectedUsageDto.getPublisher(), actualUsageDto.getPublisher());
+        assertEquals(expectedUsageDto.getNumberOfCopies(), actualUsageDto.getNumberOfCopies());
+        assertEquals(expectedUsageDto.getMarket(), actualUsageDto.getMarket());
+        assertEquals(expectedUsageDto.getArticle(), actualUsageDto.getArticle());
+        assertEquals(expectedUsageDto.getPayeeAccountNumber(), actualUsageDto.getPayeeAccountNumber());
+        assertEquals(expectedUsageDto.getPayeeName(), actualUsageDto.getPayeeName());
+        assertEquals(expectedUsageDto.getGrossAmount(), actualUsageDto.getGrossAmount());
+        assertEquals(expectedUsageDto.getReportedValue(), actualUsageDto.getReportedValue());
+        assertEquals(expectedUsageDto.getNetAmount(), actualUsageDto.getNetAmount());
+        assertEquals(expectedUsageDto.getStatus(), actualUsageDto.getStatus());
+        assertEquals(expectedUsageDto.getServiceFee(), actualUsageDto.getServiceFee());
+        assertEquals(expectedUsageDto.getComment(), actualUsageDto.getComment());
+        if (Objects.nonNull(expectedUsageDto.getAaclUsage())) {
+            assertAaclUsage(expectedUsageDto.getAaclUsage(), actualUsageDto.getAaclUsage());
+        } else {
+            assertNull(actualUsageDto.getAaclUsage());
+        }
+    }
+
+    private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
+        assertNotNull(actualAaclUsage);
+        assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
+        assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
+        assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
+        assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
+        assertPublicationType(expectedAaclUsage.getPublicationType(), actualAaclUsage.getPublicationType());
+        assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
+        assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
+            actualAaclUsage.getPublicationType().getWeight());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
+            actualAaclUsage.getDetailLicenseeClass().getId());
+        assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
+        assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
+    }
+
+    private void assertPublicationType(PublicationType expectedPublicationType,
+                                       PublicationType actualPublicationType) {
+        assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
+        assertEquals(expectedPublicationType.getName(), actualPublicationType.getName());
+        assertEquals(expectedPublicationType.getWeight(), actualPublicationType.getWeight());
     }
 
     private void setUsageFields(Usage usage, String usageId, String usageBatchId) {
@@ -622,6 +698,20 @@ public class UsageArchiveRepositoryIntegrationTest {
             try {
                 String content = TestUtils.fileToString(this.getClass(), fileName);
                 usages.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<Usage>>() {
+                }));
+            } catch (IOException e) {
+                throw new AssertionError(e);
+            }
+        });
+        return usages;
+    }
+
+    private List<UsageDto> loadExpectedUsageDtos(List<String> fileNames) {
+        List<UsageDto> usages = new ArrayList<>();
+        fileNames.forEach(fileName -> {
+            try {
+                String content = TestUtils.fileToString(this.getClass(), fileName);
+                usages.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<UsageDto>>() {
                 }));
             } catch (IOException e) {
                 throw new AssertionError(e);
