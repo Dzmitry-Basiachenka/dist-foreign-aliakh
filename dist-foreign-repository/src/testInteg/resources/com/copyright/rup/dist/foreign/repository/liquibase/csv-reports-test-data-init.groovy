@@ -6379,6 +6379,7 @@ databaseChangeLog {
             column(name: 'publication_type_weight', value: '2')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'Baseline usage')
+            column(name: 'updated_datetime', value: '2020-02-14 11:45:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -6922,6 +6923,7 @@ databaseChangeLog {
             column(name: 'publication_type_weight', value: '1.71')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'AACL baseline usage')
+            column(name: 'updated_datetime', value: '2020-02-14 11:45:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -7063,6 +7065,7 @@ databaseChangeLog {
             column(name: 'publication_type_weight', value: '1.71')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'AACL baseline usage')
+            column(name: 'updated_datetime', value: '2020-02-14 11:45:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {

@@ -66,13 +66,22 @@ public class ReportServiceTest {
     public void testWriteUndistributedLiabilitiesCsvReport() {
         LocalDate paymentDate = LocalDate.now();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        reportRepository
-            .writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, DEFAULT_ESTIMATED_SERVICE_FEE,
-                Sets.newHashSet("FAS", "FAS2"));
+        reportRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream,
+            DEFAULT_ESTIMATED_SERVICE_FEE, Sets.newHashSet("FAS", "FAS2"));
         expectLastCall().once();
         replay(reportRepository);
         reportService.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream,
             Sets.newHashSet("FAS", "FAS2"));
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testWriteAaclBaselineUsagesCsvReport() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        reportRepository.writeAaclBaselineUsagesCsvReport(2, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeAaclBaselineUsagesCsvReport(2, outputStream);
         verify(reportRepository);
     }
 

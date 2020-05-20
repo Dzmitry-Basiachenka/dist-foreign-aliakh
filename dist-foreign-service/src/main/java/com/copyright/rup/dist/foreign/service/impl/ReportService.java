@@ -130,6 +130,11 @@ public class ReportService implements IReportService {
     }
 
     @Override
+    public void writeAaclBaselineUsagesCsvReport(int numberOfYears, OutputStream outputStream) {
+        reportRepository.writeAaclBaselineUsagesCsvReport(numberOfYears, outputStream);
+    }
+
+    @Override
     public void writeFasBatchSummaryCsvReport(OutputStream outputStream) {
         reportRepository.writeFasBatchSummaryCsvReport(outputStream);
     }
