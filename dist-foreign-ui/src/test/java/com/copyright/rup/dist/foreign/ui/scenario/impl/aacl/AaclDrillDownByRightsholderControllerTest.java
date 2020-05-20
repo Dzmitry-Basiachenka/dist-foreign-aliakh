@@ -25,6 +25,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Window;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +50,6 @@ import java.util.List;
 @PrepareForTest({AaclDrillDownByRightsholderController.class, Windows.class})
 public class AaclDrillDownByRightsholderControllerTest {
 
-    private static final String SCENARIO_UID = "10bd15c1-b907-457e-94c0-9d6bb66e706f";
     private static final Long RH_ACCOUNT_NUMBER = 100000001L;
     private static final String SORT_PROPERTY = "detailId";
     private static final String SEARCH = "search";
@@ -58,13 +58,13 @@ public class AaclDrillDownByRightsholderControllerTest {
 
     private AaclDrillDownByRightsholderController controller;
     private IAaclUsageService usageService;
+    private Scenario scenario;
 
     @Before
     public void setUp() {
         controller = createPartialMock(AaclDrillDownByRightsholderController.class, "initWidget", "getWidget");
         usageService = createMock(IAaclUsageService.class);
-        Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_UID);
+        scenario = new Scenario();
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, scenario);
         Whitebox.setInternalState(controller, RH_ACCOUNT_NUMBER);
@@ -76,7 +76,7 @@ public class AaclDrillDownByRightsholderControllerTest {
         Capture<Pageable> pageableCapture = new Capture<>();
         Capture<Sort> sortCapture = new Capture<>();
         expect(controller.getWidget()).andReturn(new AaclDrillDownByRightsholderControllerTest.WidgetMock()).once();
-        expect(usageService.getByScenarioAndRhAccountNumber(eq(SCENARIO_UID), eq(RH_ACCOUNT_NUMBER), eq(SEARCH),
+        expect(usageService.getByScenarioAndRhAccountNumber(eq(scenario), eq(RH_ACCOUNT_NUMBER), eq(SEARCH),
             capture(pageableCapture), capture(sortCapture)))
             .andReturn(usageDtos).once();
         replay(usageService, controller);
@@ -93,7 +93,7 @@ public class AaclDrillDownByRightsholderControllerTest {
     @Test
     public void testGetSize() {
         expect(controller.getWidget()).andReturn(new AaclDrillDownByRightsholderControllerTest.WidgetMock()).once();
-        expect(usageService.getCountByScenarioAndRhAccountNumber(eq(SCENARIO_UID), eq(RH_ACCOUNT_NUMBER), eq(SEARCH)))
+        expect(usageService.getCountByScenarioAndRhAccountNumber(eq(scenario), eq(RH_ACCOUNT_NUMBER), eq(SEARCH)))
             .andReturn(42).once();
         replay(usageService, controller);
         assertEquals(42, controller.getSize());

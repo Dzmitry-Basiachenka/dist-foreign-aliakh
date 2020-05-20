@@ -1,0 +1,43 @@
+[
+  {
+    "id": "165e057b-d8d6-485d-872c-b3dddfa7ae86",
+    "batchName": "AACL Usage Batch 5",
+    "wrWrkInst": 269040891,
+    "systemTitle": "Snap to grid",
+    "standardNumber": "9780262122269",
+    "standardNumberType": "VALISBN13",
+    "numberOfCopies": 155,
+    "grossAmount": 500.0000000000,
+    "reportedValue": 0.00,
+    "netAmount": 375.0000000000,
+    "serviceFee": 0.25000,
+    "serviceFeeAmount": 125.0000000000,
+    "productFamily": "AACL",
+    "comment": "Newly uploaded LOCKED usage",
+    "aaclUsage": {
+      "detailLicenseeClass": {
+        "id": 108,
+        "enrollmentProfile": "EXGP",
+        "discipline": "Life Sciences",
+        "aggregateLicenseeClass": {
+          "id": 141,
+          "enrollmentProfile": "MU",
+          "discipline": "Education"
+        }
+      },
+      "publicationType": {
+        "name": "Book",
+        "weight": 3.00
+      },
+      "usageAge": {
+        "period": 2021,
+        "weight": 1.00
+      },
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2021 TUR",
+      "rightLimitation": "PRINT",
+      "numberOfPages": 100,
+      "batchPeriodEndDate": "2021-06-30"
+    }
+  }
+]

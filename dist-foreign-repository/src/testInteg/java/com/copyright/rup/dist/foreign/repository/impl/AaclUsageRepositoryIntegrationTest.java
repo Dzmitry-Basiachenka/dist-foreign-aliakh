@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -624,6 +625,25 @@ public class AaclUsageRepositoryIntegrationTest {
             loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_usage_dtos.json"));
         List<UsageDto> actualUsageDtos = aaclUsageRepository
             .findByScenarioIdAndRhAccountNumber("20bed3d9-8da3-470f-95d7-d839a41488d4", 1000011450L, null, null, null);
+        assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
+        IntStream.range(0, expectedUsageDtos.size())
+            .forEach(index -> verifyUsageDto(expectedUsageDtos.get(0), actualUsageDtos.get(0)));
+    }
+
+    @Test
+    public void testFindArchivedCountByScenarioIdAndRhAccountNumber() {
+        assertEquals(1,
+            aaclUsageRepository.findArchivedCountByScenarioIdAndRhAccountNumber("26366b7d-52d3-4e18-bb9b-ebbfa958c0a7",
+                2580011451L, null));
+    }
+
+    @Test
+    public void testFindArchivedByScenarioIdAndRhAccountNumber() {
+        List<UsageDto> expectedUsageDtos =
+            loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_archived_usage_dtos.json"));
+        List<UsageDto> actualUsageDtos =
+            aaclUsageRepository.findArchivedByScenarioIdAndRhAccountNumber("26366b7d-52d3-4e18-bb9b-ebbfa958c0a7",
+                2580011451L, null, null, null);
         assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
         IntStream.range(0, expectedUsageDtos.size())
             .forEach(index -> verifyUsageDto(expectedUsageDtos.get(0), actualUsageDtos.get(0)));

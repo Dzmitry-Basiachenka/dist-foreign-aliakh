@@ -538,21 +538,54 @@ public class AaclUsageServiceTest {
 
     @Test
     public void testGetCountByScenarioAndRhAccountNumber() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         expect(aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH))
             .andReturn(10).once();
         replay(aaclUsageRepository);
-        assertEquals(10, aaclUsageService.getCountByScenarioAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH));
+        assertEquals(10, aaclUsageService.getCountByScenarioAndRhAccountNumber(scenario, 1000009422L, SEARCH));
+        verify(aaclUsageRepository);
+    }
+
+    @Test
+    public void testGetCountByScenarioAndRhAccountNumberForArchived() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        expect(aaclUsageRepository.findArchivedCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH))
+            .andReturn(10).once();
+        replay(aaclUsageRepository);
+        assertEquals(10, aaclUsageService.getCountByScenarioAndRhAccountNumber(scenario, 1000009422L, SEARCH));
         verify(aaclUsageRepository);
     }
 
     @Test
     public void testGetByScenarioAndRhAccountNumber() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
         expect(aaclUsageRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null, null))
             .andReturn(usageDtos).once();
         replay(aaclUsageRepository);
         assertEquals(usageDtos,
-            aaclUsageService.getByScenarioAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null, null));
+            aaclUsageService.getByScenarioAndRhAccountNumber(scenario, 1000009422L, SEARCH, null, null));
+        verify(aaclUsageRepository);
+    }
+
+    @Test
+    public void testGetByScenarioAndRhAccountNumberForArchived() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
+        expect(aaclUsageRepository.findArchivedByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null,
+            null))
+            .andReturn(usageDtos).once();
+        replay(aaclUsageRepository);
+        assertEquals(usageDtos,
+            aaclUsageService.getByScenarioAndRhAccountNumber(scenario, 1000009422L, SEARCH, null, null));
         verify(aaclUsageRepository);
     }
 

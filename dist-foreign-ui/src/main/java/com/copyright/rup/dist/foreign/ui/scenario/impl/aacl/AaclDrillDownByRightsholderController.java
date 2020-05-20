@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonDrillDownByRightsho
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -38,7 +39,7 @@ public class AaclDrillDownByRightsholderController extends CommonDrillDownByRigh
 
     @Override
     public int getSize() {
-        return usageService.getCountByScenarioAndRhAccountNumber(getSelectedScenario().getId(),
+        return usageService.getCountByScenarioAndRhAccountNumber(getSelectedScenario(),
             getSelectedRightsholderAccountNumber(), getWidget().getSearchValue());
     }
 
@@ -49,7 +50,7 @@ public class AaclDrillDownByRightsholderController extends CommonDrillDownByRigh
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return usageService.getByScenarioAndRhAccountNumber(getSelectedScenario().getId(),
+        return usageService.getByScenarioAndRhAccountNumber(getSelectedScenario(),
             getSelectedRightsholderAccountNumber(), getWidget().getSearchValue(), new Pageable(startIndex, count),
             sort);
     }

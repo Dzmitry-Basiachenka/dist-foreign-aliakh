@@ -50,6 +50,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     private static final String STATUS_KEY = "status";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String SEARCH_VALUE_KEY = "searchValue";
+    private static final String ACCOUNT_NUMBER_KEY = "accountNumber";
 
     @Override
     public void insert(Usage usage) {
@@ -244,7 +245,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     @Override
     public int findCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
+        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         return selectOne("IAaclUsageMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
@@ -254,12 +255,34 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     public List<UsageDto> findByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue,
                                                              Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-        parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
+        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IAaclUsageMapper.findByScenarioIdAndRhAccountNumber", parameters);
+    }
+
+    @Override
+    public int findArchivedCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber,
+                                                               String searchValue) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        return selectOne("IAaclUsageMapper.findArchivedCountByScenarioIdAndRhAccountNumber", parameters);
+    }
+
+    @Override
+    public List<UsageDto> findArchivedByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber,
+                                                                     String searchValue, Pageable pageable, Sort sort) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
+        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        parameters.put(PAGEABLE_KEY, pageable);
+        parameters.put(SORT_KEY, sort);
+        return selectList("IAaclUsageMapper.findArchivedByScenarioIdAndRhAccountNumber", parameters);
     }
 
     @Override
