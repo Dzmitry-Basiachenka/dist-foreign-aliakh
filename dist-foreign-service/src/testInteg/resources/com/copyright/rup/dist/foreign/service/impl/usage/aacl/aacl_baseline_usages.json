@@ -1,0 +1,96 @@
+[
+  {
+    "wrWrkInst": 471137967,
+    "numberOfCopies": 155,
+    "aaclUsage": {
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2021 TUR",
+      "numberOfPages": 100,
+      "detailLicenseeClass": {
+        "id": 108,
+        "enrollmentProfile": "EXGP",
+        "discipline": "Life Sciences"
+      },
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book",
+        "weight": 1.50
+      },
+      "originalPublicationType": "Textbook",
+      "usageAge": {
+        "period": 2021
+      }
+    },
+    "comment": "LOCKED usage from baseline"
+  },
+  {
+    "wrWrkInst": 471137967,
+    "numberOfCopies": 155,
+    "aaclUsage": {
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2021 TUR",
+      "numberOfPages": 100,
+      "detailLicenseeClass": {
+        "id": 108,
+        "enrollmentProfile": "EXGP",
+        "discipline": "Life Sciences"
+      },
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book",
+        "weight": 3.00
+      },
+      "usageAge": {
+        "period": 2021
+      }
+    },
+    "comment": "Newly uploaded LOCKED usage"
+  },
+  {
+    "wrWrkInst": 122235134,
+    "numberOfCopies": 155,
+    "aaclUsage": {
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2021 TUR",
+      "numberOfPages": 100,
+      "detailLicenseeClass": {
+        "id": 108,
+        "enrollmentProfile": "EXGP",
+        "discipline": "Life Sciences"
+      },
+      "publicationType": {
+        "id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199",
+        "name": "Business or Trade Journal",
+        "weight": 2.00
+      },
+      "usageAge": {
+        "period": 2021
+      }
+    },
+    "comment": "Newly uploaded SCENARIO_EXCLUDED usage"
+  },
+  {
+    "wrWrkInst": 122235134,
+    "numberOfCopies": 155,
+    "aaclUsage": {
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2021 TUR",
+      "numberOfPages": 100,
+      "detailLicenseeClass": {
+        "id": 108,
+        "enrollmentProfile": "EXGP",
+        "discipline": "Life Sciences"
+      },
+      "publicationType": {
+        "id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199",
+        "name": "Business or Trade Journal",
+        "weight": 2.50
+      },
+      "originalPublicationType": "Textbook",
+      "usageAge": {
+        "period": 2021
+      }
+    },
+    "comment": "SCENARIO_EXCLUDED usage from baseline"
+  }
+]

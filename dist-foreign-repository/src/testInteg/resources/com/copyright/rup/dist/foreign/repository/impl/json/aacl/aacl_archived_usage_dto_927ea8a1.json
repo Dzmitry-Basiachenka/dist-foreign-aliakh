@@ -1,0 +1,49 @@
+[
+  {
+    "id": "927ea8a1-08d1-4301-8c8b-b465c5c179ee",
+    "batchName": "AACL Usage Batch 1",
+    "wrWrkInst": 269040891,
+    "systemTitle": "Snap to grid",
+    "rhAccountNumber": 1000002859,
+    "payeeAccountNumber": 1000002859,
+    "rhName": "John Wiley & Sons - Books",
+    "standardNumber": "9780262122269",
+    "standardNumberType": "VALISBN13",
+    "numberOfCopies": 155,
+    "payeeName": "John Wiley & Sons - Books",
+    "grossAmount": 500.0000000000,
+    "reportedValue": 0.00,
+    "netAmount": 375.0000000000,
+    "serviceFee": 0.25000,
+    "serviceFeeAmount": 125.0000000000,
+    "status": "LOCKED",
+    "productFamily": "AACL",
+    "comment": "Newly uploaded LOCKED usage",
+    "aaclUsage": {
+      "detailLicenseeClass": {
+        "id": 108,
+        "enrollmentProfile": "EXGP",
+        "discipline": "Life Sciences",
+        "aggregateLicenseeClass": {
+          "id": 141,
+          "enrollmentProfile": "MU",
+          "discipline": "Education"
+        }
+      },
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book",
+        "weight": 3.00
+      },
+      "usageAge": {
+        "period": 2021,
+        "weight": 1.00
+      },
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2021 TUR",
+      "rightLimitation": "PRINT",
+      "numberOfPages": 100,
+      "batchPeriodEndDate": "2021-06-30"
+    }
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "190fee30-4de4-4cac-afce-432503e42485",
+    "batchName": "AACL Usage Batch",
+    "wrWrkInst": 471137967,
+    "systemTitle": "Cell Biology",
+    "standardNumber": "9780262122269",
+    "standardNumberType": "VALISBN13",
+    "status": "SENT_TO_LM",
+    "productFamily": "AACL",
+    "numberOfCopies": 155,
+    "rhAccountNumber": "2580011451",
+    "payeeAccountNumber": "2580011451",
+    "periodEndDate": "2021-06-30",
+    "grossAmount": 500.0000000000,
+    "netAmount": 375.0000000000,
+    "serviceFeeAmount": 125.0000000000,
+    "serviceFee": 0.25000,
+    "aaclUsage": {
+      "batchPeriodEndDate": "2021-06-30",
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2021 TUR",
+      "numberOfPages": 100,
+      "rightLimitation": "PRINT",
+      "detailLicenseeClass": {
+        "id": 108,
+        "enrollmentProfile": "EXGP",
+        "discipline": "Life Sciences"
+      },
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book",
+        "weight": 3.00
+      },
+      "usageAge": {
+        "period": 2021
+      },
+      "valueShare": 60.0000000,
+      "valueWeight": 24.0000000,
+      "volumeShare": 50.0000000,
+      "volumeWeight": 5.0000000,
+      "totalShare": 2.0000000
+    },
+    "comment": "Newly uploaded LOCKED usage"
+  },
+  {
+    "id": "297d5aea-24f8-4b26-be22-2441bda526dd",
+    "batchName": "AACL Usage Batch",
+    "wrWrkInst": 471137967,
+    "systemTitle": "Cell Biology",
+    "standardNumber": "9780262122269",
+    "standardNumberType": "VALISBN13",
+    "status": "SENT_TO_LM",
+    "productFamily": "AACL",
+    "numberOfCopies": 155,
+    "rhAccountNumber": "2580011451",
+    "payeeAccountNumber": "2580011451",
+    "periodEndDate": "2021-06-30",
+    "grossAmount": 500.0000000000,
+    "netAmount": 375.0000000000,
+    "serviceFeeAmount": 125.0000000000,
+    "serviceFee": 0.25000,
+    "aaclUsage": {
+      "batchPeriodEndDate": "2021-06-30",
+      "institution": "University of Chicago",
+      "usageSource": "Feb 2021 TUR",
+      "numberOfPages": 100,
+      "rightLimitation": "PRINT",
+      "baselineId": "98b4a093-b48c-4a41-828b-30cb54ebd387",
+      "detailLicenseeClass": {
+        "id": 108,
+        "enrollmentProfile": "EXGP",
+        "discipline": "Life Sciences"
+      },
+      "publicationType": {
+        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
+        "name": "Book",
+        "weight": 1.50
+      },
+      "originalPublicationType": "Textbook",
+      "usageAge": {
+        "period": 2021
+      },
+      "valueShare": 60.0000000,
+      "valueWeight": 24.0000000,
+      "volumeShare": 50.0000000,
+      "volumeWeight": 5.0000000,
+      "totalShare": 2.0000000
+    },
+    "comment": "LOCKED usage from baseline"
+  }
+]

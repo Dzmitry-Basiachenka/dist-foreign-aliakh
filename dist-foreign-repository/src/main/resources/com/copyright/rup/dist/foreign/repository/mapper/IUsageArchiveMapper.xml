@@ -511,4 +511,8 @@
         join participation_flags p on r.rh_account_number = p.rh_account_number
         returning df_usage_fas_uid
     </select>
+
+    <select id="findAaclDtosByScenarioId" resultMap="IAaclUsageMapper.aaclUsageDtoResultMap">
+        <include refid="IAaclUsageMapper.selectArchivedDtoByScenarioIdSql"/>
+    </select>
 </mapper>

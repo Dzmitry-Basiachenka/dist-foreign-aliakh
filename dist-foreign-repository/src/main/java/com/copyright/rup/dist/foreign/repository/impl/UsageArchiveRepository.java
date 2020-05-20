@@ -139,7 +139,7 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     @Override
     public List<String> copyToArchiveByScenarioId(String scenarioId, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
-        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
         params.put("createUser", Objects.requireNonNull(userName));
         params.put("updateUser", userName);
@@ -149,7 +149,7 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     @Override
     public List<String> copyNtsToArchiveByScenarioId(String scenarioId, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
-        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
         params.put("createUser", Objects.requireNonNull(userName));
         params.put("updateUser", userName);
@@ -170,5 +170,13 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         Iterables.partition(Objects.requireNonNull(usageIds), BATCH_SIZE)
             .forEach(partition -> result.addAll(selectList("IUsageArchiveMapper.findForSendToLmByIds", partition)));
         return result;
+    }
+
+    @Override
+    public List<UsageDto> findAaclDtosByScenarioId(String scenarioId) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put("pageable", null);
+        return selectList("IUsageArchiveMapper.findAaclDtosByScenarioId", parameters);
     }
 }

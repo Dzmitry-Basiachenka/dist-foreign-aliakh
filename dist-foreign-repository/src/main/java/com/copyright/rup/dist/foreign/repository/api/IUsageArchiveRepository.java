@@ -165,4 +165,12 @@ public interface IUsageArchiveRepository {
      * @return list of found {@link Usage}s
      */
     List<Usage> findForSendToLmByIds(List<String> usageIds);
+
+    /**
+     * Finds {@link UsageDto}s by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return list of {@link UsageDto}s
+     */
+    List<UsageDto> findAaclDtosByScenarioId(String scenarioId);
 }
