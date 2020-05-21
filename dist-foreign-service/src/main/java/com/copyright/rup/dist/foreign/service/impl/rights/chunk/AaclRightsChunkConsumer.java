@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Consumer to handle AACL usages for getting Rights.
@@ -46,10 +43,7 @@ public class AaclRightsChunkConsumer implements IConsumer<List<Usage>> {
     public void consume(List<Usage> usages) {
         if (CollectionUtils.isNotEmpty(usages)) {
             LOGGER.trace("Consume AACL usages for rights processing. Started. UsageIds={}", LogUtils.ids(usages));
-            Map<LocalDate, List<Usage>> groupedByPeriodEndDateUsages =
-                usages.stream().collect(Collectors.groupingBy(usage -> usage.getAaclUsage().getBatchPeriodEndDate()));
-            groupedByPeriodEndDateUsages.forEach(
-                (periodEndDate, groupedUsages) -> rightsService.updateAaclRights(groupedUsages, periodEndDate));
+            rightsService.updateAaclRights(usages);
             aaclRightsProcessor.executeNextChainProcessor(usages,
                 usage -> UsageStatusEnum.RH_FOUND == usage.getStatus());
             LOGGER.trace("Consume AACL usages for rights processing. Finished. UsageIds={}", LogUtils.ids(usages));

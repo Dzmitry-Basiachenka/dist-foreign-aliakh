@@ -4,11 +4,6 @@
       "status": ["GRANT", "DENY"],
       "wr_wrk_inst": 448824345,
       "period_end_date": "02/01/2018"
-    },
-    {
-      "status": ["GRANT", "DENY"],
-      "wr_wrk_inst": 658824345,
-      "period_end_date": "02/01/2018"
     }
   ]
 }

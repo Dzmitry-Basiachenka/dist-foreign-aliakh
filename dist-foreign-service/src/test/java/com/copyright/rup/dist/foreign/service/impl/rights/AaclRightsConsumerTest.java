@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -84,13 +85,15 @@ public class AaclRightsConsumerTest {
         }
 
         @Override
-        public void updateAaclRight(Usage usage) {
-            if (Objects.nonNull(rhAccountNumber)) {
-                usage.getRightsholder().setAccountNumber(rhAccountNumber);
-                usage.setStatus(UsageStatusEnum.RH_FOUND);
-            } else {
-                usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
-            }
+        public void updateAaclRights(List<Usage> usages) {
+            usages.forEach(usage -> {
+                if (Objects.nonNull(rhAccountNumber)) {
+                    usage.getRightsholder().setAccountNumber(rhAccountNumber);
+                    usage.setStatus(UsageStatusEnum.RH_FOUND);
+                } else {
+                    usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                }
+            });
         }
     }
 }

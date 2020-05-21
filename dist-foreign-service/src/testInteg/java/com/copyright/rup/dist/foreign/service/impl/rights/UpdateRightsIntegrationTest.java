@@ -100,18 +100,20 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
-    public void testUpdateRight() {
+    public void testUpdateRights() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
         expectRmsCallIgnoreDate("rms_grants_254030731_request.json", "rms_grants_254030731_response.json");
         expectRmsCallIgnoreDate("rms_grants_658824345_request.json", "rms_grants_658824345_response.json");
         expectRmsCallIgnoreDate("rms_grants_488824345_request.json", "rms_grants_empty_response.json");
         expectRmsCallIgnoreDate("rms_grants_786768461_request.json", "rms_grants_786768461_response.json");
-        rightsService.updateRight(buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", FAS, 254030731L), true);
-        rightsService.updateRight(buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", FAS, 254030731L), true);
-        rightsService.updateRight(buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", FAS, 658824345L), true);
-        rightsService.updateRight(buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", FAS, 488824345L), true);
-        rightsService.updateRight(buildUsage("ede81bc0-a756-43a2-b236-05a0184384f4", "NTS", 786768461L), false);
+        rightsService.updateRights(Arrays.asList(
+            buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", FAS, 254030731L),
+            buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", FAS, 254030731L),
+            buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", FAS, 658824345L),
+            buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", FAS, 488824345L)), true);
+        rightsService.updateRights(
+            Collections.singletonList(buildUsage("ede81bc0-a756-43a2-b236-05a0184384f4", "NTS", 786768461L)), false);
         assertUsage("ede81bc0-a756-43a2-b236-05a0184384f4", UsageStatusEnum.RH_FOUND, 1000010088L);
         assertUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", UsageStatusEnum.RH_FOUND, 1000010077L);
         assertUsage("8aded52d-9507-4883-ab4c-fd2e029298af", UsageStatusEnum.RH_FOUND, 1000010077L);
@@ -127,16 +129,17 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
-    public void testUpdateAaclRight() {
+    public void testUpdateAaclRights() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
         expectRmsCall("rms_grants_122803735_request.json", "rms_grants_122803735_response.json");
         expectRmsCall("rms_grants_130297955_request.json", "rms_grants_130297955_response.json");
         expectRmsCall("rms_grants_200208329_request.json", "rms_grants_empty_response.json");
         expectPrmCall();
-        rightsService.updateAaclRight(buildAaclUsage("b23cb103-9242-4d58-a65d-2634b3e5a8cf", 122803735));
-        rightsService.updateAaclRight(buildAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", 130297955));
-        rightsService.updateAaclRight(buildAaclUsage("10c9a60f-28b6-466c-975c-3ea930089a9e", 200208329));
+        rightsService.updateAaclRights(Arrays.asList(
+            buildAaclUsage("b23cb103-9242-4d58-a65d-2634b3e5a8cf", 122803735),
+            buildAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", 130297955),
+            buildAaclUsage("10c9a60f-28b6-466c-975c-3ea930089a9e", 200208329)));
         assertAaclUsage("b23cb103-9242-4d58-a65d-2634b3e5a8cf", UsageStatusEnum.RH_FOUND, 1000000322L, "ALL");
         assertAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", UsageStatusEnum.RH_FOUND, 1000023401L, "PRINT");
         assertAaclUsage("10c9a60f-28b6-466c-975c-3ea930089a9e", UsageStatusEnum.NEW, null, null);
