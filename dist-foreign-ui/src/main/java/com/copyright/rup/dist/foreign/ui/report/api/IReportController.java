@@ -58,7 +58,7 @@ public interface IReportController extends IController<IReportWidget> {
     /**
      * @return baseline usages report controller.
      */
-    IBaselineUsagesReportController getBaselineUsagesReportController();
+    IAaclBaselineUsagesReportController getAaclBaselineUsagesReportController();
 
     /**
      * @return instance of {@link IStreamSource} for FAS/FAS2 Batch Summary Report.

@@ -101,7 +101,7 @@
         <result property="netAmount" column="net_amount"/>
     </resultMap>
 
-    <resultMap id="baselineUsageDtoMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
+    <resultMap id="aaclBaselineUsageDtoMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
         <result property="aaclUsage.baselineId" column="baseline_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="aaclUsage.usageAge.period" column="usage_period"/>
@@ -410,7 +410,7 @@
         </choose>
     </select>
 
-    <select id="findAaclBaselineUsages" parameterType="int" resultMap="baselineUsageDtoMap">
+    <select id="findAaclBaselineUsages" parameterType="int" resultMap="aaclBaselineUsageDtoMap">
         select
             df_usage_baseline_aacl_uid baseline_uid,
             wr_wrk_inst,

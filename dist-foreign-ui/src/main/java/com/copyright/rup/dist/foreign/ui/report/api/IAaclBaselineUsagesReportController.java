@@ -4,7 +4,7 @@ import com.copyright.rup.dist.common.reporting.api.ICsvReportProvider;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 /**
- * Interface for baseline usages report controller.
+ * Interface for AACL baseline usages report controller.
  * <p/>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -12,6 +12,6 @@ import com.copyright.rup.vaadin.widget.api.IController;
  *
  * @author Ihar Suvorau
  */
-public interface IBaselineUsagesReportController extends IController<IBaselineUsagesReportWidget>,
+public interface IAaclBaselineUsagesReportController extends IController<IAaclBaselineUsagesReportWidget>,
     ICsvReportProvider {
 }

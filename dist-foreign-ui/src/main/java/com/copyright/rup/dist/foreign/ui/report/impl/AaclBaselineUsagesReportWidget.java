@@ -2,8 +2,8 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.report.api.IBaselineUsagesReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IBaselineUsagesReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.IAaclBaselineUsagesReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IAaclBaselineUsagesReportWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -21,7 +21,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Widget for exporting baseline usages.
+ * Widget for exporting AACL baseline usages.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -29,16 +29,16 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Ihar Suvorau
  */
-public class BaselineUsagesReportWidget extends Window implements IBaselineUsagesReportWidget {
+public class AaclBaselineUsagesReportWidget extends Window implements IAaclBaselineUsagesReportWidget {
 
-    private IBaselineUsagesReportController controller;
+    private IAaclBaselineUsagesReportController controller;
     private TextField numberOfBaselineYearsField;
     private final Binder<Integer> binder = new Binder<>();
     private Button exportButton;
 
     @Override
     @SuppressWarnings("unchecked")
-    public IBaselineUsagesReportWidget init() {
+    public IAaclBaselineUsagesReportWidget init() {
         initNumberOfBaselineYearsField();
         VerticalLayout content = new VerticalLayout(numberOfBaselineYearsField, getButtonsLayout());
         content.setSpacing(false);
@@ -51,7 +51,7 @@ public class BaselineUsagesReportWidget extends Window implements IBaselineUsage
     }
 
     @Override
-    public void setController(IBaselineUsagesReportController controller) {
+    public void setController(IAaclBaselineUsagesReportController controller) {
         this.controller = controller;
     }
 

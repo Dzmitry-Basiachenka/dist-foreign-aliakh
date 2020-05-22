@@ -4,7 +4,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
-import com.copyright.rup.dist.foreign.ui.report.api.IBaselineUsagesReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IAaclBaselineUsagesReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
@@ -48,7 +48,7 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Qualifier("df.workSharesByAggLcClassSummaryReportController")
     private ICommonScenarioReportController workSharesByAggLcClassSummaryReportController;
     @Autowired
-    private IBaselineUsagesReportController baselineUsagesReportController;
+    private IAaclBaselineUsagesReportController aaclBaselineUsagesReportController;
     @Autowired
     private IReportService reportService;
     @Autowired
@@ -95,8 +95,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     }
 
     @Override
-    public IBaselineUsagesReportController getBaselineUsagesReportController() {
-        return baselineUsagesReportController;
+    public IAaclBaselineUsagesReportController getAaclBaselineUsagesReportController() {
+        return aaclBaselineUsagesReportController;
     }
 
     @Override

@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.ui.report.api.IBaselineUsagesReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IBaselineUsagesReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.IAaclBaselineUsagesReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IAaclBaselineUsagesReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Implementation of controller for {@link IBaselineUsagesReportWidget}.
+ * Implementation of controller for {@link IAaclBaselineUsagesReportWidget}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -23,8 +23,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class BaselineUsagesReportController extends CommonController<IBaselineUsagesReportWidget>
-    implements IBaselineUsagesReportController {
+public class AaclBaselineUsagesReportController extends CommonController<IAaclBaselineUsagesReportWidget>
+    implements IAaclBaselineUsagesReportController {
 
     @Autowired
     private IReportService reportService;
@@ -36,7 +36,7 @@ public class BaselineUsagesReportController extends CommonController<IBaselineUs
     }
 
     @Override
-    protected IBaselineUsagesReportWidget instantiateWidget() {
-        return new BaselineUsagesReportWidget();
+    protected IAaclBaselineUsagesReportWidget instantiateWidget() {
+        return new AaclBaselineUsagesReportWidget();
     }
 }

@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Ihar Suvorau
  */
-public class BaselineUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
+public class AaclBaselineUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     private static final List<String> HEADERS =
         Arrays.asList("Detail ID", "Wr Wrk Inst", "Usage Period", "Usage Source", "Number of Copies", "Number of Pages",
@@ -32,7 +32,7 @@ public class BaselineUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDt
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    public BaselineUsagesCsvReportHandler(OutputStream outputStream) {
+    public AaclBaselineUsagesCsvReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 
