@@ -132,6 +132,11 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     }
 
     @Override
+    public void insertAaclPaid(PaidUsage paidUsage) {
+        insert("IUsageArchiveMapper.insertAaclPaid", Objects.requireNonNull(paidUsage));
+    }
+
+    @Override
     public void moveFundUsagesToArchive(String scenarioId) {
         insert("IUsageArchiveMapper.moveFundUsagesToArchive", Objects.requireNonNull(scenarioId));
     }
@@ -178,5 +183,13 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("pageable", null);
         return selectList("IUsageArchiveMapper.findAaclDtosByScenarioId", parameters);
+    }
+
+    @Override
+    public List<Usage> findAaclByIds(List<String> usageIds) {
+        List<Usage> result = new ArrayList<>();
+        Iterables.partition(Objects.requireNonNull(usageIds), BATCH_SIZE)
+            .forEach(partition -> result.addAll(selectList("IUsageArchiveMapper.findAaclByIds", partition)));
+        return result;
     }
 }

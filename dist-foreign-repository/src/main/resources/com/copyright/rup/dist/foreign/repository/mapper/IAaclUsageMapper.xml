@@ -369,8 +369,8 @@
             dlc.discipline detail_licensee_discipline,
             dlc.enrollment_profile detail_licensee_enrollment
         from ${schema}.df_usage_archive u
-        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         join ${schema}.df_usage_aacl uaacl on u.df_usage_archive_uid = uaacl.df_usage_aacl_uid
+        left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_publication_type pt on uaacl.df_publication_type_uid = pt.df_publication_type_uid
         left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number

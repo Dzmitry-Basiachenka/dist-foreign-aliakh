@@ -14,6 +14,7 @@
       "royalty_amount": 840.00,
       "service_fee_amount": 160.00,
       "collected_amount": 1000.00,
+      "product_family": "FAS",
       "post_distribution_flag": false
     },
     {
@@ -31,6 +32,7 @@
       "service_fee_amount": 320.00,
       "collected_amount": 2000.00,
       "post_distribution_flag": false,
+      "product_family": "FAS",
       "split_parent_flag": false
     },
     {
@@ -47,6 +49,7 @@
       "royalty_amount": 1680.00,
       "service_fee_amount": 320.00,
       "collected_amount": 2000.00,
+      "product_family": "FAS",
       "post_distribution_flag": false
     }
   ]

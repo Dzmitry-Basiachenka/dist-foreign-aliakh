@@ -55,6 +55,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -215,14 +217,24 @@ public class UsageService implements IUsageService {
     @Override
     @Transactional
     public void updatePaidInfo(List<PaidUsage> paidUsages) {
+        Function<List<PaidUsage>, List<Usage>> usageMap =
+            paidUsage -> usageArchiveRepository.findByIds(paidUsage.stream()
+                .map(PaidUsage::getId)
+                .collect(Collectors.toList()));
+        Consumer<PaidUsage> consumer = usage -> usageArchiveRepository.insertPaid(usage);
+        updatePaidUsages(paidUsages, usageMap, consumer);
+    }
+
+    @Override
+    @Transactional
+    public void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<PaidUsage>, List<Usage>> function,
+                                 Consumer<PaidUsage> consumer) {
         LogUtils.ILogWrapper paidUsagesCount = LogUtils.size(paidUsages);
         LOGGER.info("Update paid information. Started. UsagesCount={}", paidUsagesCount);
         populateAccountNumbers(paidUsages);
         AtomicInteger newUsagesCount = new AtomicInteger();
         Set<String> notFoundUsageIds = Sets.newHashSet();
-        Map<String, Usage> usageIdToUsageMap = usageArchiveRepository.findByIds(
-            paidUsages.stream().map(PaidUsage::getId).collect(Collectors.toList()))
-            .stream()
+        Map<String, Usage> usageIdToUsageMap = function.apply(paidUsages).stream()
             .collect(Collectors.toMap(Usage::getId, usage -> usage));
         paidUsages.forEach(paidUsage -> {
             String paidUsageId = paidUsage.getId();
@@ -233,7 +245,8 @@ public class UsageService implements IUsageService {
                     String actionReason = Objects.nonNull(paidUsage.getSplitParentFlag())
                         ? "Usage has been created based on Post-Distribution and Split processes"
                         : "Usage has been created based on Post-Distribution process";
-                    insertPaidUsage(buildPaidUsage(usageIdToUsageMap.get(paidUsageId), paidUsage), actionReason);
+                    insertPaidUsage(buildPaidUsage(usageIdToUsageMap.get(paidUsageId), paidUsage), actionReason,
+                        consumer);
                     newUsagesCount.getAndIncrement();
                 } else if (Objects.isNull(paidUsage.getSplitParentFlag())) {
                     updatePaidUsage(paidUsage, buildActionReason(oldAccountNumber, newAccountNumber,
@@ -246,7 +259,7 @@ public class UsageService implements IUsageService {
                         "Scenario has been updated after Split process");
                 } else {
                     insertPaidUsage(buildPaidUsage(usageIdToUsageMap.get(paidUsageId), paidUsage),
-                        "Usage has been created based on Split process");
+                        "Usage has been created based on Split process", consumer);
                     newUsagesCount.getAndIncrement();
                 }
             } else {
@@ -440,8 +453,8 @@ public class UsageService implements IUsageService {
         usageAuditService.logAction(paidUsage.getId(), UsageActionTypeEnum.PAID, actionReason);
     }
 
-    private void insertPaidUsage(PaidUsage paidUsage, String actionReason) {
-        usageArchiveRepository.insertPaid(paidUsage);
+    private void insertPaidUsage(PaidUsage paidUsage, String actionReason, Consumer<PaidUsage> consumer) {
+        consumer.accept(paidUsage);
         usageAuditService.logAction(paidUsage.getId(), UsageActionTypeEnum.PAID, actionReason);
     }
 
@@ -467,6 +480,7 @@ public class UsageService implements IUsageService {
         resultUsage.setSystemTitle(originalUsage.getSystemTitle());
         resultUsage.setServiceFee(originalUsage.getServiceFee());
         resultUsage.setComment(originalUsage.getComment());
+        resultUsage.setAaclUsage(originalUsage.getAaclUsage());
         resultUsage.setNetAmount(paidUsage.getNetAmount());
         resultUsage.setServiceFeeAmount(paidUsage.getServiceFeeAmount());
         resultUsage.setGrossAmount(paidUsage.getGrossAmount());

@@ -14,6 +14,7 @@
       "royalty_amount": 35.82,
       "service_fee_amount": 3.98,
       "collected_amount": 39.80,
+      "product_family": "FAS2",
       "post_distribution_flag": false
     },
     {
@@ -30,6 +31,7 @@
       "royalty_amount": 27.06,
       "service_fee_amount": 12.74,
       "collected_amount": 39.80,
+      "product_family": "FAS2",
       "post_distribution_flag": false
     },
     {
@@ -46,6 +48,7 @@
       "royalty_amount": 27.06,
       "service_fee_amount": 12.74,
       "collected_amount": 39.80,
+      "product_family": "FAS2",
       "post_distribution_flag": false
     },
     {
@@ -62,6 +65,7 @@
       "royalty_amount": 27.06,
       "service_fee_amount": 12.74,
       "collected_amount": 39.80,
+      "product_family": "FAS2",
       "post_distribution_flag": false
     },
     {
@@ -78,6 +82,7 @@
       "royalty_amount": 35.82,
       "service_fee_amount": 3.98,
       "collected_amount": 39.80,
+      "product_family": "FAS2",
       "post_distribution_flag": false
     },
     {
@@ -94,6 +99,7 @@
       "royalty_amount": 68.00,
       "service_fee_amount": 32.00,
       "collected_amount": 100.00,
+      "product_family": "FAS2",
       "post_distribution_flag": true
     }
   ]

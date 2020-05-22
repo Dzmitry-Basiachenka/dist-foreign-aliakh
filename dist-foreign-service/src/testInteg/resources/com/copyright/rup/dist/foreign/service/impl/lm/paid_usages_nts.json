@@ -14,6 +14,7 @@
       "royalty_amount": 272.30,
       "service_fee_amount": 128.14,
       "collected_amount": 400.44,
+      "product_family": "NTS",
       "post_distribution_flag": false
     }
   ]

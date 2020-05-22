@@ -50,6 +50,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 
 /**
@@ -342,6 +343,16 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindAaclUsagesByIds() {
+        List<PaidUsage> actualUsages =
+            usageArchiveRepository.findByIdAndStatus(
+                Arrays.asList("6e8172d6-c16f-4522-8606-e55db1b8e5a4", "1537f313-975e-420e-b745-95f2808a388a"),
+                UsageStatusEnum.LOCKED);
+        verifyPaidUsages(
+            Collections.singletonList("json/aacl/aacl_archived_usage.json"), actualUsages, this::verifyPaidUsage);
+    }
+
+    @Test
     public void testFindPaidIds() {
         List<String> usagesIds = usageArchiveRepository.findPaidIds();
         assertTrue(CollectionUtils.isNotEmpty(usagesIds));
@@ -354,6 +365,19 @@ public class UsageArchiveRepositoryIntegrationTest {
         PaidUsage paidUsage = buildPaidUsage();
         usageArchiveRepository.insertPaid(paidUsage);
         assertUsagePaidInformation(paidUsage);
+    }
+
+    @Test
+    public void testInsertPaidAacl() {
+        List<PaidUsage> paidUsages =
+            loadExpectedPaidUsages(Collections.singletonList("json/aacl/aacl_paid_usage.json"));
+        usageArchiveRepository.insertAaclPaid(paidUsages.get(0));
+        List<PaidUsage> actualUsages =
+            usageArchiveRepository.findByIdAndStatus(Collections.singletonList("278adb86-792d-417f-aa6b-0ee2254c356f"),
+                UsageStatusEnum.PAID);
+        assertEquals(1, actualUsages.size());
+        verifyPaidUsages(
+            Collections.singletonList("json/aacl/aacl_paid_usage.json"), actualUsages, this::verifyPaidUsage);
     }
 
     @Test
@@ -409,7 +433,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         List<Usage> usages = usageArchiveRepository.findByIds(ImmutableList.of(paidUsage.getId()));
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(1, CollectionUtils.size(usages));
-        assertUsage(paidUsage, usages.get(0));
+        verifyUsage(paidUsage, usages.get(0));
     }
 
     @Test
@@ -437,12 +461,35 @@ public class UsageArchiveRepositoryIntegrationTest {
         List<Usage> usages = usageArchiveRepository.findByIds(ImmutableList.of(expectedPaidUsage.getId()));
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(1, CollectionUtils.size(usages));
-        assertUsage(expectedPaidUsage, usages.get(0));
+        verifyUsage(expectedPaidUsage, usages.get(0));
         List<PaidUsage> paidUsages =
             usageArchiveRepository.findByIdAndStatus(ImmutableList.of(expectedPaidUsage.getId()), UsageStatusEnum.PAID);
         assertTrue(CollectionUtils.isNotEmpty(paidUsages));
         assertEquals(1, CollectionUtils.size(paidUsages));
         assertUsagePaidInformation(expectedPaidUsage, paidUsages.get(0));
+    }
+
+    private void verifyPaidUsages(List<String> expectedUsageJsonFiles, List<PaidUsage> actualUsages,
+                                  BiConsumer<PaidUsage, PaidUsage> verifier) {
+        List<PaidUsage> expectedUsages = loadExpectedPaidUsages(expectedUsageJsonFiles);
+        assertEquals(
+            CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
+        IntStream.range(0, expectedUsages.size())
+            .forEach(index -> verifier.accept(expectedUsages.get(index), actualUsages.get(index)));
+    }
+
+    private List<PaidUsage> loadExpectedPaidUsages(List<String> fileNames) {
+        List<PaidUsage> usages = new ArrayList<>();
+        fileNames.forEach(fileName -> {
+            try {
+                String content = TestUtils.fileToString(this.getClass(), fileName);
+                usages.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<PaidUsage>>() {
+                }));
+            } catch (IOException e) {
+                throw new AssertionError(e);
+            }
+        });
+        return usages;
     }
 
     private void assertUsagePaidInformation(PaidUsage expectedPaidUsage, String scenarioId, Long scenarioPayee,
@@ -518,7 +565,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         return paidUsage;
     }
 
-    private void assertUsage(Usage expectedUsage, Usage actualUsage) {
+    private void verifyUsage(Usage expectedUsage, Usage actualUsage) {
         assertEquals(expectedUsage.getBatchId(), actualUsage.getBatchId());
         assertEquals(expectedUsage.getScenarioId(), actualUsage.getScenarioId());
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
@@ -603,6 +650,54 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
         assertEquals(expectedPublicationType.getName(), actualPublicationType.getName());
         assertEquals(expectedPublicationType.getWeight(), actualPublicationType.getWeight());
+    }
+
+    private void verifyPaidUsage(PaidUsage expectedUsage, PaidUsage actualUsage) {
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+        assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
+            actualUsage.getRightsholder().getAccountNumber());
+        assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber());
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
+        assertEquals(expectedUsage.getPublicationDate(), actualUsage.getPublicationDate());
+        assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
+        assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+        assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        assertUsagePaidInformation(expectedUsage, actualUsage);
+        if (Objects.nonNull(actualUsage.getAaclUsage())) {
+            verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
+        }
+    }
+
+    private void verifyAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
+        assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
+        assertEquals(expectedAaclUsage.getPublicationType().getId(), actualAaclUsage.getPublicationType().getId());
+        assertEquals(expectedAaclUsage.getPublicationType().getName(), actualAaclUsage.getPublicationType().getName());
+        assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
+            actualAaclUsage.getPublicationType().getWeight());
+        assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
+        assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
+        assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
+        assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
+        assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
+        assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
+        assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
+        assertEquals(expectedAaclUsage.getValueWeight(), actualAaclUsage.getValueWeight());
+        assertEquals(expectedAaclUsage.getVolumeWeight(), actualAaclUsage.getVolumeWeight());
+        assertEquals(expectedAaclUsage.getVolumeShare(), actualAaclUsage.getVolumeShare());
+        assertEquals(expectedAaclUsage.getValueShare(), actualAaclUsage.getValueShare());
+        assertEquals(expectedAaclUsage.getTotalShare(), actualAaclUsage.getTotalShare());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
+            actualAaclUsage.getDetailLicenseeClass().getId());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getDiscipline(),
+            actualAaclUsage.getDetailLicenseeClass().getDiscipline());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getEnrollmentProfile(),
+            actualAaclUsage.getDetailLicenseeClass().getEnrollmentProfile());
     }
 
     private void setUsageFields(Usage usage, String usageId, String usageBatchId) {
