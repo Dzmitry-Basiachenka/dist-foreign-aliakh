@@ -1,3 +1,8 @@
+10.1.2
+-
+* B-56849 Tech Debt: FDA: remove RMS chunk processing, add transactional for rights consumers
+* B-59011 FDA: Reporting AACL to RC: Implement logic to receive paid information from LM
+
 10.1.1
 -
 * B-56282 FDA: Send AACL scenario to LM: Add 'Send to LM' button
