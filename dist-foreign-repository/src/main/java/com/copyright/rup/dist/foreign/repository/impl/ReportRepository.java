@@ -16,10 +16,10 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclBaselineUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AuditAaclCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.BaselineUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.SendForClassificationCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.WorkSharesByAggLcClassReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.WorkSharesByAggLcClassSummaryReportHandler;
@@ -362,8 +362,8 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
 
     @Override
     public void writeAaclBaselineUsagesCsvReport(int numberOfYears, OutputStream outputStream) {
-        try (BaselineUsagesCsvReportHandler handler =
-                 new BaselineUsagesCsvReportHandler(Objects.requireNonNull(outputStream))) {
+        try (AaclBaselineUsagesCsvReportHandler handler =
+                 new AaclBaselineUsagesCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IReportMapper.findAaclBaselineUsages", numberOfYears, handler);
         }
     }

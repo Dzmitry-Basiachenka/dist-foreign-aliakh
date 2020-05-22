@@ -24,13 +24,13 @@ public class AaclReportMenuBuilder implements IReportMenuBuilder {
             ForeignUi.getMessage("menu.report.work_shares_by_agg_lc_class");
         String workSharesByAggLcClassSummaryReport =
             ForeignUi.getMessage("menu.report.work_shares_by_agg_lc_class_summary");
-        String baselineUsagesReport = ForeignUi.getMessage("menu.report.baseline_usages_report");
+        String aaclBaselineUsagesReport = ForeignUi.getMessage("menu.report.baseline_usages_report");
         rootItem.addItem(workSharesByAggLcClassReport, menuItem -> widget.openReportWindow(workSharesByAggLcClassReport,
             controller.getWorkSharesByAggLcClassReportController()));
         rootItem.addItem(workSharesByAggLcClassSummaryReport,
             menuItem -> widget.openReportWindow(workSharesByAggLcClassSummaryReport,
                 controller.getWorkSharesByAggLcClassSummaryReportController()));
-        rootItem.addItem(baselineUsagesReport,
-            menuItem -> widget.openReportWindow(baselineUsagesReport, controller.getBaselineUsagesReportController()));
+        rootItem.addItem(aaclBaselineUsagesReport, menuItem -> widget.openReportWindow(aaclBaselineUsagesReport,
+            controller.getAaclBaselineUsagesReportController()));
     }
 }

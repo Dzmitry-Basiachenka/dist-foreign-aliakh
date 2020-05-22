@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link BaselineUsagesReportWidget}.
+ * Verifies {@link AaclBaselineUsagesReportWidget}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -29,14 +29,14 @@ import java.util.stream.Collectors;
  *
  * @author Ihar Suvorau
  */
-public class BaselineUsagesReportWidgetTest {
+public class AaclBaselineUsagesReportWidgetTest {
 
-    private BaselineUsagesReportWidget widget;
+    private AaclBaselineUsagesReportWidget widget;
 
     @Before
     public void setUp() {
-        BaselineUsagesReportController controller = new BaselineUsagesReportController();
-        widget = (BaselineUsagesReportWidget) controller.initWidget();
+        AaclBaselineUsagesReportController controller = new AaclBaselineUsagesReportController();
+        widget = (AaclBaselineUsagesReportWidget) controller.initWidget();
     }
 
     @Test

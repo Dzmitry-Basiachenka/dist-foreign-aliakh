@@ -14,7 +14,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.ui.report.api.IBaselineUsagesReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.IAaclBaselineUsagesReportWidget;
 
 import org.easymock.Capture;
 import org.junit.Test;
@@ -28,7 +28,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 /**
- * Verifies {@link BaselineUsagesReportController}.
+ * Verifies {@link AaclBaselineUsagesReportController}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -38,15 +38,15 @@ import java.time.ZoneOffset;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
-public class BaselineUsagesReportControllerTest {
+public class AaclBaselineUsagesReportControllerTest {
 
-    private final BaselineUsagesReportController controller = new BaselineUsagesReportController();
+    private final AaclBaselineUsagesReportController controller = new AaclBaselineUsagesReportController();
 
     @Test
     public void testInstantiateWidget() {
-        IBaselineUsagesReportWidget widget = controller.instantiateWidget();
+        IAaclBaselineUsagesReportWidget widget = controller.instantiateWidget();
         assertNotNull(controller.instantiateWidget());
-        assertEquals(BaselineUsagesReportWidget.class, widget.getClass());
+        assertEquals(AaclBaselineUsagesReportWidget.class, widget.getClass());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class BaselineUsagesReportControllerTest {
         Whitebox.setInternalState(controller, "reportService", reportService);
         OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
-        IBaselineUsagesReportWidget widget = createMock(IBaselineUsagesReportWidget.class);
+        IAaclBaselineUsagesReportWidget widget = createMock(IAaclBaselineUsagesReportWidget.class);
         Whitebox.setInternalState(controller, widget);
         Capture<OutputStream> osCapture = new Capture<>();
         expect(OffsetDateTime.now()).andReturn(now).once();

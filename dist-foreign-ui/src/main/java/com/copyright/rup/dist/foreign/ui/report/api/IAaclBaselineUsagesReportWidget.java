@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.report.api;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
- * Interface for baseline usages report controller.
+ * Interface for AACL baseline usages report controller.
  * <p/>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -11,7 +11,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Ihar Suvorau
  */
-public interface IBaselineUsagesReportWidget extends IWidget<IBaselineUsagesReportController> {
+public interface IAaclBaselineUsagesReportWidget extends IWidget<IAaclBaselineUsagesReportController> {
 
     /**
      * @return selected number of baseline years.
