@@ -1,0 +1,38 @@
+{
+  "details": [
+    {
+      "rh_uid": "60080587-a225-439c-81af-f016cb33aeac",
+      "rollup_uid": "c929c312-bd36-4469-8989-61b824ecefd6",
+      "detail_id": "157b5b4e-cf77-48f5-aeb0-bd3ac75d8585",
+      "distribution_name": "FDA March 17",
+      "distribution_date": "2017-01-14T00:00-05:00",
+      "ccc_event_id": "83288",
+      "check_number": "58788",
+      "check_date": "2017-01-15T00:00-05:00",
+      "period_end_date": "2017-01-16T00:00-05:00",
+      "lm_detail_id": "b86a63d6-48c3-4291-b5bc-3bc9ddef0e66",
+      "product_family": "AACL",
+      "royalty_amount": 80.00,
+      "service_fee_amount": 420.00,
+      "collected_amount": 500.00,
+      "post_distribution_flag": false
+    },
+    {
+      "rh_uid": "60080587-a225-439c-81af-f016cb33aeac",
+      "rollup_uid": "c929c312-bd36-4469-8989-61b824ecefd6",
+      "detail_id": "30930c3f-e3d0-492d-a1af-587a8e9201bb",
+      "distribution_name": "FDA March 17",
+      "distribution_date": "2017-01-14T00:00-05:00",
+      "ccc_event_id": "83291",
+      "check_number": "58791",
+      "check_date": "2017-01-15T00:00-05:00",
+      "period_end_date": "2017-01-16T00:00-05:00",
+      "lm_detail_id": "11ca9410-8ae0-4e7e-bd66-b2c9b9211269",
+      "product_family": "AACL",
+      "royalty_amount": 80.00,
+      "service_fee_amount": 420.00,
+      "collected_amount": 500.00,
+      "post_distribution_flag": false
+    }
+  ]
+}

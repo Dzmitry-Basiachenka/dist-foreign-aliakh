@@ -7,19 +7,16 @@
     "systemTitle": "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )",
     "standardNumber": "12345XX-79068",
     "standardNumberType": "VALISSN",
-    "numberOfCopies": 10,
     "grossAmount": 0.00,
     "reportedValue": 0.00,
     "netAmount": 0.00,
     "serviceFeeAmount": 0.00,
-    "status": "ELIGIBLE",
+    "status": "SENT_TO_LM",
     "productFamily": "AACL",
     "comment": "AACL baseline usage Comment 1",
     "aaclUsage": {
-      "institution": "BIOLA UNIVERSITY",
       "usageSource": "Aug 2018 FR",
       "batchPeriodEndDate": "2019-06-30",
-      "rightLimitation": "ALL",
       "numberOfPages": 15,
       "detailLicenseeClass": {
         "id": 113,
@@ -27,14 +24,11 @@
         "enrollmentProfile": "MU"
       },
       "publicationType": {
-        "id": "1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e",
-        "name": "STMA Journal",
-        "weight": 1.71
+        "name": "STMA Journal"
       },
       "usageAge": {
         "period": 2018
       },
-      "originalPublicationType": "Textbook",
       "baselineId": "4f466373-e8de-4b7d-8137-faba84ccafc2"
     }
   },
@@ -46,19 +40,16 @@
     "systemTitle": "Reclaiming youth at risk : our hope for the future",
     "standardNumber": "12345XX-123117",
     "standardNumberType": "VALISSN",
-    "numberOfCopies": 20,
     "grossAmount": 0.00,
     "reportedValue": 0.00,
     "netAmount": 0.00,
     "serviceFeeAmount": 0.00,
-    "status": "ELIGIBLE",
+    "status": "SENT_TO_LM",
     "productFamily": "AACL",
     "comment": "AACL baseline usage Comment 2",
     "aaclUsage": {
-      "institution": "CORNELL UNIVERSITY",
       "usageSource": "Aug 2018 FR",
       "batchPeriodEndDate": "2019-06-30",
-      "rightLimitation": "PRINT",
       "numberOfPages": 25,
       "detailLicenseeClass": {
         "id": 195,
@@ -66,76 +57,12 @@
         "enrollmentProfile": "HGP"
       },
       "publicationType": {
-        "id": "a3dff475-fc06-4d8c-b7cc-f093073ada6f",
-        "name": "News Source",
-        "weight": 4.29
+        "name": "News Source"
       },
       "usageAge": {
         "period": 2018
       },
-      "originalPublicationType": "Book series",
       "baselineId": "d20e6f4b-bcb5-46f2-a247-165a8909e726"
-    }
-  },
-  {
-    "batchName": "AACL test batch",
-    "paymentDate": "2019-06-30",
-    "wrWrkInst": 963852741,
-    "numberOfCopies": 40,
-    "grossAmount": 0.00,
-    "reportedValue": 0.00,
-    "netAmount": 0.00,
-    "serviceFeeAmount": 0.00,
-    "status": "WORK_NOT_FOUND",
-    "productFamily": "AACL",
-    "comment": "AACL baseline usage Comment 4",
-    "aaclUsage": {
-      "institution": "CORNELL UNIVERSITY",
-      "usageSource": "Aug 2016 FR",
-      "batchPeriodEndDate": "2019-06-30",
-      "numberOfPages": 45,
-      "detailLicenseeClass": {
-        "id": 141,
-        "discipline": "Education",
-        "enrollmentProfile": "MU"
-      },
-      "publicationType": {
-        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
-        "name": "Book",
-        "weight": 3.50
-      },
-      "usageAge": {
-        "period": 2016
-      },
-      "originalPublicationType": "Fiction or Poetry",
-      "baselineId": "623d033b-98bb-4705-a2a0-a05f4cf8450b"
-    }
-  },
-  {
-    "batchName": "AACL test batch",
-    "paymentDate": "2019-06-30",
-    "wrWrkInst": 100009840,
-    "rhAccountNumber": "1000024950",
-    "systemTitle": "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )",
-    "standardNumber": "12345XX-79068",
-    "standardNumberType": "VALISSN",
-    "numberOfCopies": 10,
-    "grossAmount": 0.00,
-    "reportedValue": 0.00,
-    "netAmount": 0.00,
-    "serviceFeeAmount": 0.00,
-    "status": "RH_FOUND",
-    "productFamily": "AACL",
-    "comment": "AACL usage Comment 1",
-    "aaclUsage": {
-      "institution": "CORNELL UNIVERSITY",
-      "usageSource": "Feb 2019 TUR",
-      "batchPeriodEndDate": "2019-06-30",
-      "rightLimitation": "ALL",
-      "numberOfPages": 14,
-      "usageAge": {
-        "period": 2019
-      }
     }
   },
   {
@@ -143,47 +70,68 @@
     "paymentDate": "2019-06-30",
     "wrWrkInst": 100010768,
     "rhAccountNumber": "1000024950",
-    "systemTitle": "Reclaiming youth at risk : our hope for the future",
-    "standardNumber": "12345XX-123117",
+    "systemTitle": "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )",
+    "standardNumber": "12345XX-79068",
     "standardNumberType": "VALISSN",
-    "numberOfCopies": 30,
-    "grossAmount": 0.00,
-    "reportedValue": 0.00,
-    "netAmount": 0.00,
-    "serviceFeeAmount": 0.00,
-    "status": "RH_FOUND",
+    "grossAmount": 500.0000000000,
+    "netAmount": 80.0000000000,
+    "serviceFeeAmount": 420.0000000000,
+    "serviceFee": 0.25000,
+    "checkNumber": "58788",
+    "cccEventId": "83288",
+    "distributionName": "FDA_March_40",
+    "status": "ARCHIVED",
     "productFamily": "AACL",
-    "comment": "AACL usage Comment 2",
+    "comment": "AACL usage Comment 1",
     "aaclUsage": {
-      "institution": "WESTERN MICHIGAN UNIVERSITY",
-      "usageSource": "Aug 2018 TUR",
+      "usageSource": "Feb 2019 TUR",
       "batchPeriodEndDate": "2019-06-30",
-      "rightLimitation": "PRINT",
-      "numberOfPages": 12,
+      "numberOfPages": 14,
       "usageAge": {
         "period": 2019
+      },
+      "publicationType": {
+        "name": "Book"
+      },
+      "detailLicenseeClass": {
+        "id": 195,
+        "discipline": "Medical & Health",
+        "enrollmentProfile": "HGP"
       }
     }
   },
   {
     "batchName": "AACL test batch",
     "paymentDate": "2019-06-30",
-    "wrWrkInst": 963852741,
-    "numberOfCopies": 3,
-    "grossAmount": 0.00,
-    "reportedValue": 0.00,
-    "netAmount": 0.00,
-    "serviceFeeAmount": 0.00,
-    "status": "WORK_NOT_FOUND",
+    "wrWrkInst": 123456789,
+    "rhAccountNumber": "1000024950",
+    "systemTitle": "Reclaiming youth at risk : our hope for the future",
+    "standardNumber": "12345XX-123117",
+    "standardNumberType": "VALISSN",
+    "grossAmount": 500.0000000000,
+    "netAmount": 80.0000000000,
+    "serviceFeeAmount": 420.0000000000,
+    "serviceFee": 0.25000,
+    "checkNumber": "58791",
+    "cccEventId": "83291",
+    "distributionName": "FDA_March_40",
+    "status": "ARCHIVED",
     "productFamily": "AACL",
-    "comment": "AACL usage Comment 4",
+    "comment": "AACL usage Comment 2",
     "aaclUsage": {
-      "institution": "University of Chicago",
-      "usageSource": "Feb 2018 TUR",
+      "usageSource": "Aug 2018 TUR",
       "batchPeriodEndDate": "2019-06-30",
-      "numberOfPages": 17,
+      "numberOfPages": 12,
       "usageAge": {
         "period": 2019
+      },
+      "publicationType": {
+        "name": "Book"
+      },
+      "detailLicenseeClass": {
+        "id": 195,
+        "discipline": "Medical & Health",
+        "enrollmentProfile": "HGP"
       }
     }
   }

@@ -100,7 +100,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<String> expectedPreferencesRightholderIds;
     private String expectedRollupsJson;
     private List<String> expectedRollupsRightsholdersIds;
-    private int expecteLmDetailsMessagesCount;
+    private int expectedLmDetailsMessagesCount;
     private List<String> expectedLmDetailsJsonFiles;
     private String expectedPaidUsagesJsonFile;
     private List<String> expectedPaidUsageLmDetailids;
@@ -147,7 +147,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     WorkflowIntegrationTestBuilder expectLmDetails(int messagesCount, String... lmDetailsJsonFile) {
-        this.expecteLmDetailsMessagesCount = messagesCount;
+        this.expectedLmDetailsMessagesCount = messagesCount;
         this.expectedLmDetailsJsonFiles = Arrays.asList(lmDetailsJsonFile);
         return this;
     }
@@ -258,7 +258,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         void sendScenarioToLm() {
             fasScenarioService.sendToLm(scenario);
-            List<String> lmUsageMessages = Lists.newArrayListWithExpectedSize(expecteLmDetailsMessagesCount);
+            List<String> lmUsageMessages = Lists.newArrayListWithExpectedSize(expectedLmDetailsMessagesCount);
             expectedLmDetailsJsonFiles.forEach(lmDetailsFile ->
                 lmUsageMessages.add(TestUtils.fileToString(this.getClass(), lmDetailsFile)));
             sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmUsageMessages,
