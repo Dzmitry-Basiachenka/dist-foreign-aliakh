@@ -2,8 +2,10 @@ package com.copyright.rup.dist.foreign.service.impl.chain.processor.chunk;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import org.perf4j.aop.Profiled;
@@ -28,14 +30,19 @@ public class DeleteUsageChunkProcessor extends AbstractUsageChainChunkProcessor 
 
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IAaclUsageService aaclUsageService;
 
     @Override
     @Profiled(tag = "DeleteUsageChunkProcessor.process")
     public void process(List<Usage> usages) {
         LOGGER.trace("Usages Delete processor. Started. UsageIds={}", LogUtils.ids(usages));
         usages.forEach(usage -> {
-            usageService.deleteById(usage.getId());
-            LOGGER.trace("Usages Delete processor. Deleted. UsageId={}", usage.getId());
+            if (FdaConstants.AACL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+                aaclUsageService.deleteById(usage.getId());
+            } else {
+                usageService.deleteById(usage.getId());
+            }
         });
         LOGGER.trace("Usages Delete processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }

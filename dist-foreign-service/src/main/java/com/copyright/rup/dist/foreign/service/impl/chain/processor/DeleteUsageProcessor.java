@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import org.perf4j.aop.Profiled;
@@ -24,12 +26,18 @@ public class DeleteUsageProcessor extends AbstractUsageChainProcessor {
 
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IAaclUsageService aaclUsageService;
 
     @Override
     @Profiled(tag = "DeleteUsageProcessor.process")
     public void process(Usage usage) {
         LOGGER.trace("Usage Delete processor. Started. UsageId={}", usage.getId());
-        usageService.deleteById(usage.getId());
+        if (FdaConstants.AACL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+            aaclUsageService.deleteById(usage.getId());
+        } else {
+            usageService.deleteById(usage.getId());
+        }
         LOGGER.trace("Usage Delete processor. Finished. UsageId={}", usage.getId());
     }
 

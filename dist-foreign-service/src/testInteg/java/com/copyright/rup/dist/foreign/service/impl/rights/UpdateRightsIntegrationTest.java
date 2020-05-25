@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -62,6 +63,8 @@ public class UpdateRightsIntegrationTest {
 
     @Autowired
     private IUsageRepository usageRepository;
+    @Autowired
+    private IAaclUsageRepository aaclUsageRepository;
     @Autowired
     private IRightsService rightsService;
     @Autowired
@@ -167,15 +170,16 @@ public class UpdateRightsIntegrationTest {
 
     private void assertAaclUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber,
                                  String expectedRightLimitation) {
-        Usage usage = assertUsage(usageId, expectedStatus, expectedRhAccountNumber);
+        Usage usage = aaclUsageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        assertEquals(expectedStatus, usage.getStatus());
+        assertEquals(expectedRhAccountNumber, usage.getRightsholder().getAccountNumber());
         assertEquals(expectedRightLimitation, usage.getAaclUsage().getRightLimitation());
     }
 
-    private Usage assertUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber) {
+    private void assertUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber) {
         Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
         assertEquals(expectedStatus, usage.getStatus());
         assertEquals(expectedRhAccountNumber, usage.getRightsholder().getAccountNumber());
-        return usage;
     }
 
     private void assertAudit(String usageId, String... reasons) {
