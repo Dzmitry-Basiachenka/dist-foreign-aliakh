@@ -577,18 +577,13 @@
             u.net_amount,
             ufas.is_rh_participating_flag,
             ufas.is_payee_participating_flag,
-            ub.payment_date batch_period_end_date,
-            uaacl.right_limitation,
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,
             u.updated_by_user,
             u.record_version
         from ${schema}.df_usage u
-        <!--TODO {isuvorau/srudak} find solution to not join both tables at a time -->
-        left join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
-        left join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
         left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where u.df_usage_uid in
@@ -612,13 +607,9 @@
         with u as (
             delete from ${schema}.df_usage
             where df_usage_uid = #{usageId}
-        ),
-        fas as (
-            delete from ${schema}.df_usage_fas
-            where df_usage_fas_uid = #{usageId}
         )
-        delete from ${schema}.df_usage_aacl
-        where df_usage_aacl_uid = #{usageId}
+        delete from ${schema}.df_usage_fas
+        where df_usage_fas_uid = #{usageId}
     </delete>
 
     <delete id="deleteByScenarioId" parameterType="string">

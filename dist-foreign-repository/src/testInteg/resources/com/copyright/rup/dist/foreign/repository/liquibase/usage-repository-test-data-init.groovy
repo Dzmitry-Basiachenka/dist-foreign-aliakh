@@ -1703,36 +1703,4 @@ databaseChangeLog {
             column(name: 'classification', value: 'STM')
         }
     }
-
-    changeSet(id: '2020-03-26-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for testDeleteById for AACL usage')
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: 'acd947b4-9879-43af-a90d-db813e4c5e76')
-            column(name: 'name', value: 'AACL batch 1')
-            column(name: 'payment_date', value: '2019-06-30')
-            column(name: 'product_family', value: 'AACL')
-            column(name: 'fiscal_year', value: '2019')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: 'ff853c23-9525-441a-8e78-be2d17201025')
-            column(name: 'df_usage_batch_uid', value: 'acd947b4-9879-43af-a90d-db813e4c5e76')
-            column(name: 'wr_wrk_inst', value: '269040891')
-            column(name: 'rh_account_number', value: '1000000026')
-            column(name: 'status_ind', value: 'RH_FOUND')
-            column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '10')
-            column(name: 'comment', value: 'AACL comment 1')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
-            column(name: 'df_usage_aacl_uid', value: 'ff853c23-9525-441a-8e78-be2d17201025')
-            column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2019')
-            column(name: 'usage_source', value: 'Feb 2019 TUR')
-            column(name: 'number_of_pages', value: '12')
-            column(name: 'right_limitation', value: 'PRINT')
-        }
-    }
 }

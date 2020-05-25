@@ -90,7 +90,6 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
-    // TODO {isuvorau} should be used on service layer for AACL product family
     public List<Usage> findByIds(List<String> usageIds) {
         List<Usage> result = new ArrayList<>();
         Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT)
