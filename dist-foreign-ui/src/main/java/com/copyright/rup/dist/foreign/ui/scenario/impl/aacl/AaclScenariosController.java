@@ -62,7 +62,7 @@ public class AaclScenariosController extends CommonScenariosController implement
         Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenario", scenario.getName()),
             () -> {
                 try {
-                    getScenarioService().sendAaclToLm(scenario);
+                    aaclScenarioService.sendToLm(scenario);
                 } catch (RuntimeException e) {
                     Windows.showNotificationWindow(e.getMessage());
                 }

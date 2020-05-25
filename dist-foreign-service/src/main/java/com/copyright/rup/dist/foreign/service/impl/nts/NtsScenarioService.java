@@ -132,8 +132,6 @@ public class NtsScenarioService implements INtsScenarioService {
         String userName = RupContextUtils.getUserName();
         scenario.setStatus(status);
         scenario.setUpdateUser(userName);
-        LOGGER.info("Change scenario status. {}, User={}, Reason={}", ForeignLogUtils.scenario(scenario), userName,
-            reason);
         scenarioRepository.updateStatus(scenario);
         scenarioAuditService.logAction(scenario.getId(), action, reason);
     }

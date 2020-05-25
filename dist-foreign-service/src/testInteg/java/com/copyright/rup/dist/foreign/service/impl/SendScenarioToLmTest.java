@@ -12,13 +12,14 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 
@@ -66,7 +67,7 @@ public class SendScenarioToLmTest {
     @Autowired
     private INtsScenarioService ntsScenarioService;
     @Autowired
-    private IScenarioService scenarioService;
+    private IAaclScenarioService aaclScenarioService;
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
@@ -124,7 +125,7 @@ public class SendScenarioToLmTest {
         Scenario scenario = new Scenario();
         scenario.setId(AACL_SCENARIO_ID);
         scenario.setProductFamily("AACL");
-        scenarioService.sendAaclToLm(scenario);
+        aaclScenarioService.sendToLm(scenario);
         sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_aacl.json")),
             Collections.emptyList(), ImmutableMap.of("source", "FDA"));
@@ -210,11 +211,9 @@ public class SendScenarioToLmTest {
         assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
         assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
         assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-        assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
+        assertUsageAge(expectedAaclUsage.getUsageAge(), actualAaclUsage.getUsageAge());
         assertPublicationType(expectedAaclUsage.getPublicationType(), actualAaclUsage.getPublicationType());
         assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
-        assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
-            actualAaclUsage.getPublicationType().getWeight());
         assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
             actualAaclUsage.getDetailLicenseeClass().getId());
         assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
@@ -226,6 +225,11 @@ public class SendScenarioToLmTest {
         assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
         assertEquals(expectedPublicationType.getName(), actualPublicationType.getName());
         assertEquals(expectedPublicationType.getWeight(), actualPublicationType.getWeight());
+    }
+
+    private void assertUsageAge(UsageAge expectedUsageAge, UsageAge actualUsageAge) {
+        assertEquals(expectedUsageAge.getPeriod(), actualUsageAge.getPeriod());
+        assertEquals(expectedUsageAge.getWeight(), actualUsageAge.getWeight());
     }
 
     private List<UsageDto> loadExpectedUsageDtos(String fileName) throws IOException {

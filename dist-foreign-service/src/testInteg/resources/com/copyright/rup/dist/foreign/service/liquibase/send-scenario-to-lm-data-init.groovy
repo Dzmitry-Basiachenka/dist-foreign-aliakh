@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2018-01-12-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for sending FAS Scenario to LM test')
+        comment('Inserting test data for testSendToLmFas')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
@@ -184,7 +184,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-06-17-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
-        comment('Inserting test data for sending NTS Scenario to LM test')
+        comment('Inserting test data for testSendToLmNts')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '67027e15-17c6-4b9b-b7f0-12ec414ad344')
@@ -364,7 +364,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-05-15-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment('Inserting test data for sending AACL Scenario to LM test')
+        comment('Inserting test data for testSendToLmAacl')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '98b4a093-b48c-4a41-828b-30cb54ebd387')
@@ -557,7 +557,6 @@ databaseChangeLog {
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'df_publication_type_uid', value: '68fd94c0-a8c0-4a59-bfe3-6674c4b12199')
-            // TODO {srudak} publication_type_weight for SCENARIO_EXCLUDED might be retained by mistake
             column(name: 'publication_type_weight', value: 2.00)
         }
 

@@ -355,8 +355,8 @@ public class AaclUsageService implements IAaclUsageService {
     @Override
     public int getCountByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue) {
         return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
-            ? aaclUsageRepository.findArchivedCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
-            searchValue)
+            ? usageArchiveRepository.findAaclCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
+                searchValue)
             : aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue);
     }
 
@@ -364,10 +364,10 @@ public class AaclUsageService implements IAaclUsageService {
     public List<UsageDto> getByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue,
                                                           Pageable pageable, Sort sort) {
         return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
-            ? aaclUsageRepository.findArchivedByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
-            searchValue, pageable, sort)
+            ? usageArchiveRepository.findAaclByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
+                searchValue, pageable, sort)
             : aaclUsageRepository.findByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue,
-            pageable, sort);
+                pageable, sort);
     }
 
     @Override

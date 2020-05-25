@@ -41,4 +41,11 @@ public interface IAaclScenarioService {
      * @return {@link Scenario} name or {@code null} if none found
      */
     String getScenarioNameByFundPoolId(String fundPoolId);
+
+    /**
+     * Sends given AACL {@link Scenario} to LM.
+     *
+     * @param scenario {@link Scenario} instance
+     */
+    void sendToLm(Scenario scenario);
 }

@@ -264,28 +264,6 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
-    public int findArchivedCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber,
-                                                               String searchValue) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        return selectOne("IAaclUsageMapper.findArchivedCountByScenarioIdAndRhAccountNumber", parameters);
-    }
-
-    @Override
-    public List<UsageDto> findArchivedByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber,
-                                                                     String searchValue, Pageable pageable, Sort sort) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        parameters.put(PAGEABLE_KEY, pageable);
-        parameters.put(SORT_KEY, sort);
-        return selectList("IAaclUsageMapper.findArchivedByScenarioIdAndRhAccountNumber", parameters);
-    }
-
-    @Override
     public void deleteFromScenario(String scenarioId, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));

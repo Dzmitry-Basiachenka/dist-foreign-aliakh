@@ -263,31 +263,6 @@ public interface IAaclUsageRepository {
                                                       Pageable pageable, Sort sort);
 
     /**
-     * Gets count of archived usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
-     * and rightsholder account number.
-     *
-     * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
-     * @param accountNumber selected rightsholder account number
-     * @param searchValue   search value
-     * @return count of usage details
-     */
-    int findArchivedCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue);
-
-    /**
-     * Gets list of archived {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
-     * identifier and rightsholder account number.
-     *
-     * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
-     * @param accountNumber selected rightsholder account number
-     * @param searchValue   search value
-     * @param pageable      instance of {@link Pageable}
-     * @param sort          instance of {@link Sort}
-     * @return list of {@link UsageDto}s
-     */
-    List<UsageDto> findArchivedByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue,
-                                                              Pageable pageable, Sort sort);
-
-    /**
      * Deletes usages from scenario. Updates usages status from
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED} and
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#LOCKED} to
