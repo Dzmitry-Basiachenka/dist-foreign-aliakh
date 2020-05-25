@@ -1551,7 +1551,6 @@ databaseChangeLog {
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'df_publication_type_uid', value: '68fd94c0-a8c0-4a59-bfe3-6674c4b12199')
-            // TODO {srudak} publication_type_weight for SCENARIO_EXCLUDED might be retained by mistake
             column(name: 'publication_type_weight', value: 2.00)
         }
 
@@ -1683,126 +1682,6 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: '250')
             column(name: 'right_limitation', value: 'DIGITAL')
             column(name: 'baseline_uid', value: 'b012c81c-2370-458e-a6cb-349b66d08e6e')
-        }
-    }
-
-    changeSet(id: '2020-05-19-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("Insert test data for testFindArchivedDtosByScenarioId")
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
-            column(name: 'df_fund_pool_uid', value: '87316009-fc5c-4521-8417-72387fa3c65f')
-            column(name: 'product_family', value: 'AACL')
-            column(name: 'name', value: 'AACL Fund Pool 2')
-            column(name: 'total_amount', value: '1000.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
-            column(name: 'df_fund_pool_detail_uid', value: '19135aa2-26d2-45af-a463-95beb0955614')
-            column(name: 'df_fund_pool_uid', value: '87316009-fc5c-4521-8417-72387fa3c65f')
-            column(name: 'df_aggregate_licensee_class_id', value: '141')
-            column(name: 'gross_amount', value: '1000.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: '8cd2b6a3-f535-469a-8b12-47389beea522')
-            column(name: 'name', value: 'AACL Usage Batch 5')
-            column(name: 'payment_date', value: '2021-06-30')
-            column(name: 'product_family', value: 'AACL')
-            column(name: 'fiscal_year', value: '2021')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-            column(name: 'df_scenario_uid', value: '26366b7d-52d3-4e18-bb9b-ebbfa958c0a7')
-            column(name: 'name', value: 'AACL Scenario For Add To Baseline Test')
-            column(name: 'status_ind', value: 'SENT_TO_LM')
-            column(name: 'aacl_fields', value: '{"fund_pool_uid": "87316009-fc5c-4521-8417-72387fa3c65f", "title_cutoff_amount": 100.00, "usageAges": [{"period": 2021, "weight": 1.00}], "publicationTypes": [{"id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "weight": 3.00}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 141}]}')
-            column(name: 'description', value: 'AACL Scenario Description')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: '165e057b-d8d6-485d-872c-b3dddfa7ae86')
-            column(name: 'df_usage_batch_uid', value: '8cd2b6a3-f535-469a-8b12-47389beea522')
-            column(name: 'df_scenario_uid', value: '26366b7d-52d3-4e18-bb9b-ebbfa958c0a7')
-            column(name: 'wr_wrk_inst', value: '269040891')
-            column(name: 'system_title', value: 'Snap to grid')
-            column(name: 'standard_number', value: '9780262122269')
-            column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'rh_account_number', value: '2580011451')
-            column(name: 'payee_account_number', value: '2580011451')
-            column(name: 'gross_amount', value: '500.00')
-            column(name: 'net_amount', value: '375.00')
-            column(name: 'service_fee_amount', value: '125.00')
-            column(name: 'service_fee', value: '0.25000')
-            column(name: 'status_ind', value: 'LOCKED')
-            column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '155')
-            column(name: 'comment', value: 'Newly uploaded LOCKED usage')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
-            column(name: 'df_usage_aacl_uid', value: '165e057b-d8d6-485d-872c-b3dddfa7ae86')
-            column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2021')
-            column(name: 'usage_source', value: 'Feb 2021 TUR')
-            column(name: 'number_of_pages', value: '100')
-            column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'value_weight', value: '24.0000000')
-            column(name: 'volume_weight', value: '5.0000000')
-            column(name: 'volume_share', value: '50.0000000')
-            column(name: 'value_share', value: '60.0000000')
-            column(name: 'total_share', value: '2.0000000')
-            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
-            column(name: 'publication_type_weight', value: 3.00)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: '3c1d28b0-95b8-476a-bfb8-f3418daa4819')
-            column(name: 'df_usage_batch_uid', value: '8cd2b6a3-f535-469a-8b12-47389beea522')
-            column(name: 'df_scenario_uid', value: '26366b7d-52d3-4e18-bb9b-ebbfa958c0a7')
-            column(name: 'wr_wrk_inst', value: '269040891')
-            column(name: 'system_title', value: 'Snap to grid')
-            column(name: 'standard_number', value: '9780262122269')
-            column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'rh_account_number', value: '1000011451')
-            column(name: 'payee_account_number', value: '1000011451')
-            column(name: 'gross_amount', value: '500.00')
-            column(name: 'net_amount', value: '375.00')
-            column(name: 'service_fee_amount', value: '125.00')
-            column(name: 'service_fee', value: '0.25000')
-            column(name: 'status_ind', value: 'LOCKED')
-            column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '155')
-            column(name: 'comment', value: 'Newly uploaded LOCKED usage')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
-            column(name: 'df_usage_aacl_uid', value: '3c1d28b0-95b8-476a-bfb8-f3418daa4819')
-            column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2021')
-            column(name: 'usage_source', value: 'Feb 2021 TUR')
-            column(name: 'number_of_pages', value: '100')
-            column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'value_weight', value: '24.0000000')
-            column(name: 'volume_weight', value: '5.0000000')
-            column(name: 'volume_share', value: '50.0000000')
-            column(name: 'value_share', value: '60.0000000')
-            column(name: 'total_share', value: '2.0000000')
-            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
-            column(name: 'publication_type_weight', value: 3.00)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
-            column(name: 'df_scenario_usage_filter_uid', value: '6cf844c5-8810-47a0-afdf-66d19e3c35a5')
-            column(name: 'df_scenario_uid', value: '26366b7d-52d3-4e18-bb9b-ebbfa958c0a7')
-            column(name: 'product_family', value: 'AACL')
-            column(name: 'status_ind', value: 'ELIGIBLE')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
-            column(name: 'df_scenario_usage_filter_uid', value: '6cf844c5-8810-47a0-afdf-66d19e3c35a5')
-            column(name: 'df_usage_batch_uid', value: '8cd2b6a3-f535-469a-8b12-47389beea522')
         }
     }
 }

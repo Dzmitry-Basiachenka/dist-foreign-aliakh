@@ -70,6 +70,7 @@ public class AaclScenariosControllerTest {
     private Scenario scenario;
     private IUsageService usageService;
     private IScenarioService scenarioService;
+    private IAaclScenarioService aaclScenarioService;
     private AaclScenarioController scenarioController;
     private IAaclScenarioWidget scenarioWidget;
     private IProductFamilyProvider productFamilyProvider;
@@ -79,6 +80,7 @@ public class AaclScenariosControllerTest {
         licenseeClassService = createMock(ILicenseeClassService.class);
         usageService = createMock(IUsageService.class);
         scenarioService = createMock(IScenarioService.class);
+        aaclScenarioService = createMock(IAaclScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         scenariosController = new AaclScenariosController();
         buildScenario();
@@ -95,7 +97,7 @@ public class AaclScenariosControllerTest {
         Whitebox.setInternalState(scenariosController, "usageService", usageService);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
-        Whitebox.setInternalState(scenariosController, "aaclScenarioService", createMock(IAaclScenarioService.class));
+        Whitebox.setInternalState(scenariosController, "aaclScenarioService", aaclScenarioService);
         verify(SecurityUtils.class);
     }
 
@@ -228,14 +230,14 @@ public class AaclScenariosControllerTest {
         expect(Windows.showConfirmDialog(
             eq("Are you sure that you want to send scenario <i><b>" + SCENARIO_NAME + "</b></i> to Liability Manager?"),
             capture(listenerCapture))).andReturn(new Window());
-        scenarioService.sendAaclToLm(scenario);
+        aaclScenarioService.sendToLm(scenario);
         expectLastCall().once();
         scenariosWidget.refresh();
         expectLastCall().once();
-        replay(scenariosWidget, scenarioService, Windows.class);
+        replay(scenariosWidget, aaclScenarioService, Windows.class);
         scenariosController.sendToLm();
         listenerCapture.getValue().onActionConfirmed();
-        verify(scenariosWidget, scenarioService, Windows.class);
+        verify(scenariosWidget, aaclScenarioService, Windows.class);
     }
 
     private void buildScenario() {

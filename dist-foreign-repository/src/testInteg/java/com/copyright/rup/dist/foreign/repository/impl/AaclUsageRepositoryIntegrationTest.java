@@ -626,25 +626,6 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindArchivedCountByScenarioIdAndRhAccountNumber() {
-        assertEquals(1,
-            aaclUsageRepository.findArchivedCountByScenarioIdAndRhAccountNumber("26366b7d-52d3-4e18-bb9b-ebbfa958c0a7",
-                2580011451L, null));
-    }
-
-    @Test
-    public void testFindArchivedByScenarioIdAndRhAccountNumber() {
-        List<UsageDto> expectedUsageDtos =
-            loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_archived_usage_dtos.json"));
-        List<UsageDto> actualUsageDtos =
-            aaclUsageRepository.findArchivedByScenarioIdAndRhAccountNumber("26366b7d-52d3-4e18-bb9b-ebbfa958c0a7",
-                2580011451L, null, null, null);
-        assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
-        IntStream.range(0, expectedUsageDtos.size())
-            .forEach(index -> verifyUsageDto(expectedUsageDtos.get(0), actualUsageDtos.get(0)));
-    }
-
-    @Test
     public void testSortingFindByScenarioIdAndRhAccountNumber() {
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailId", Sort.Direction.ASC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "detailId", Sort.Direction.DESC);

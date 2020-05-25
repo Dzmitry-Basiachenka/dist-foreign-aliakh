@@ -8,6 +8,10 @@
         <result property="id" column="df_usage_archive_uid"/>
     </resultMap>
 
+    <resultMap id="archivedAaclUsageDtoResultMap" type="UsageDto" extends="IAaclUsageMapper.aaclUsageDtoResultMap">
+        <result property="id" column="df_usage_archive_uid"/>
+    </resultMap>
+
     <resultMap id="paidUsageResultMap" type="PaidUsage" extends="IUsageMapper.usageResultMap">
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="checkNumber" column="check_number"/>
@@ -135,6 +139,20 @@
         </if>
     </sql>
 
+    <sql id="selectDtoByScenarioIdSql">
+        select
+            u.df_usage_archive_uid df_usage_uid,
+            <include refid="IUsageMapper.usageDtoColumns"/>
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
+        left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        where df_scenario_uid = #{scenarioId}
+        order by u.rh_account_number, u.df_usage_archive_uid
+    </sql>
+
     <select id="findRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="IUsageMapper.rightsholderTotalsHolderResultMap">
         <include refid="selectRightsholderTotalsHoldersByScenarioIdSql"/>
     </select>
@@ -193,19 +211,20 @@
         </if>
     </select>
 
-    <sql id="selectDtoByScenarioIdSql">
-        select
-            u.df_usage_archive_uid df_usage_uid,
-            <include refid="IUsageMapper.usageDtoColumns"/>
-        from ${schema}.df_usage_archive u
-        join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
-        left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
-        left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
-        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
-        where df_scenario_uid = #{scenarioId}
-        order by u.rh_account_number, u.df_usage_archive_uid
-    </sql>
+    <select id="findAaclCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
+        select count(1)
+        <include refid="IAaclUsageMapper.drillDownFromWhereClauses">
+            <property name="detail_table" value="df_usage_archive"/>
+            <property name="detail_uid" value="df_usage_archive_uid"/>
+        </include>
+    </select>
+
+    <select id="findAaclByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="archivedAaclUsageDtoResultMap">
+        <include refid="IAaclUsageMapper.findByScenarioIdAndRhAccountNumberSql">
+            <property name="detail_table" value="df_usage_archive"/>
+            <property name="detail_uid" value="df_usage_archive_uid"/>
+        </include>
+    </select>
 
     <update id="updatePaidInfo" parameterType="PaidUsage">
         update ${schema}.df_usage_archive

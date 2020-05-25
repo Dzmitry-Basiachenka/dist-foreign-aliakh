@@ -101,13 +101,6 @@ public interface IScenarioService {
     void approve(Scenario scenario, String reason);
 
     /**
-     * Sends given AACL {@link Scenario} to LM.
-     *
-     * @param scenario {@link Scenario} instance
-     */
-    void sendAaclToLm(Scenario scenario);
-
-    /**
      * Updates scenario status to {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#ARCHIVED} if
      * all usages are in {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ARCHIVED} status.
      *

@@ -188,4 +188,29 @@ public interface IUsageArchiveRepository {
      * @return list of {@link UsageDto}s
      */
     List<UsageDto> findAaclDtosByScenarioId(String scenarioId);
+
+    /**
+     * Gets count of archived AACL usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * identifier and rightsholder account number.
+     *
+     * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param accountNumber selected rightsholder account number
+     * @param searchValue   search value
+     * @return count of usage details
+     */
+    int findAaclCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue);
+
+    /**
+     * Gets list of archived AACL {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * identifier and rightsholder account number.
+     *
+     * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param accountNumber selected rightsholder account number
+     * @param searchValue   search value
+     * @param pageable      instance of {@link Pageable}
+     * @param sort          instance of {@link Sort}
+     * @return list of {@link UsageDto}s
+     */
+    List<UsageDto> findAaclByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber,
+                                                          String searchValue, Pageable pageable, Sort sort);
 }

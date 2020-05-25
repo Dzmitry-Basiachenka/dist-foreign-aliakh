@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.aacl;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -10,17 +11,28 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 
+import com.google.common.collect.Iterables;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Implements of {@link IAaclScenarioService}.
@@ -36,6 +48,10 @@ public class AaclScenarioService implements IAaclScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
+    @Value("$RUP{dist.foreign.usages.batch_size}")
+    private int batchSize;
+    @Autowired
+    private IUsageService usageService;
     @Autowired
     private IAaclUsageService aaclUsageService;
     @Autowired
@@ -44,6 +60,8 @@ public class AaclScenarioService implements IAaclScenarioService {
     private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IScenarioUsageFilterService scenarioUsageFilterService;
+    @Autowired
+    private ILmIntegrationService lmIntegrationService;
 
     @Override
     @Transactional
@@ -81,6 +99,37 @@ public class AaclScenarioService implements IAaclScenarioService {
     @Override
     public String getScenarioNameByFundPoolId(String fundPoolId) {
         return scenarioRepository.findNameByAaclFundPoolId(fundPoolId);
+    }
+
+    @Override
+    @Transactional
+    public void sendToLm(Scenario scenario) {
+        LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
+            RupContextUtils.getUserName());
+        List<String> usageIds = aaclUsageService.moveToArchive(scenario);
+        if (CollectionUtils.isNotEmpty(usageIds)) {
+            Iterables.partition(usageIds, batchSize)
+                .forEach(partition ->
+                    lmIntegrationService.sendToLm(usageService.getArchivedUsagesForSendToLmByIds(partition)
+                        .stream().map(ExternalUsage::new).collect(Collectors.toList())));
+            changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
+                StringUtils.EMPTY);
+            LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
+                RupContextUtils.getUserName());
+        } else {
+            throw new RupRuntimeException(String.format("Send scenario to LM. Failed. %s. Reason=Scenario is empty",
+                ForeignLogUtils.scenario(scenario)));
+        }
+    }
+
+    private void changeScenarioState(Scenario scenario, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
+                                     String reason) {
+        Objects.requireNonNull(scenario);
+        String userName = RupContextUtils.getUserName();
+        scenario.setStatus(status);
+        scenario.setUpdateUser(userName);
+        scenarioRepository.updateStatus(scenario);
+        scenarioAuditService.logAction(scenario.getId(), action, reason);
     }
 
     private Scenario buildAaclScenario(String scenarioName, AaclFields aaclFields, String description,

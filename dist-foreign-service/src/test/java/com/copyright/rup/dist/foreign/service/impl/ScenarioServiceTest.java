@@ -10,26 +10,20 @@ import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
-import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
-import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 
 import com.google.common.collect.Lists;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +31,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,9 +55,7 @@ public class ScenarioServiceTest {
     private ScenarioService scenarioService;
     private IScenarioRepository scenarioRepository;
     private IUsageService usageService;
-    private IAaclUsageService aaclUsageService;
     private IScenarioAuditService scenarioAuditService;
-    private ILmIntegrationService lmIntegrationService;
     private IScenarioUsageFilterService scenarioUsageFilterService;
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
 
@@ -74,20 +65,15 @@ public class ScenarioServiceTest {
         scenario.setProductFamily("FAS");
         scenarioRepository = createMock(IScenarioRepository.class);
         usageService = createMock(IUsageService.class);
-        aaclUsageService = createMock(IAaclUsageService.class);
-        lmIntegrationService = createMock(ILmIntegrationService.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
         scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
         rightsholderDiscrepancyService = createMock(IRightsholderDiscrepancyService.class);
         scenarioService = new ScenarioService();
         Whitebox.setInternalState(scenarioService, scenarioRepository);
         Whitebox.setInternalState(scenarioService, usageService);
-        Whitebox.setInternalState(scenarioService, aaclUsageService);
         Whitebox.setInternalState(scenarioService, scenarioAuditService);
-        Whitebox.setInternalState(scenarioService, lmIntegrationService);
         Whitebox.setInternalState(scenarioService, scenarioUsageFilterService);
         Whitebox.setInternalState(scenarioService, rightsholderDiscrepancyService);
-        Whitebox.setInternalState(scenarioService, "batchSize", 1);
     }
 
     @Test
@@ -184,23 +170,5 @@ public class ScenarioServiceTest {
         scenarioService.approve(scenario, REASON);
         assertEquals(ScenarioStatusEnum.APPROVED, scenario.getStatus());
         verify(scenarioRepository, scenarioAuditService, rightsholderDiscrepancyService);
-    }
-
-    @Test
-    public void testSendAaclToLm() {
-        List<String> usageIds = Collections.singletonList(RupPersistUtils.generateUuid());
-        Usage usage = new Usage();
-        expect(aaclUsageService.moveToArchive(scenario)).andReturn(usageIds).once();
-        expect(usageService.getArchivedUsagesForSendToLmByIds(usageIds)).andReturn(Collections.singletonList(usage));
-        lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(usage)));
-        expectLastCall().once();
-        scenarioRepository.updateStatus(scenario);
-        expectLastCall().once();
-        scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
-        expectLastCall().once();
-        replay(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, aaclUsageService);
-        scenarioService.sendAaclToLm(scenario);
-        assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
-        verify(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, aaclUsageService);
     }
 }

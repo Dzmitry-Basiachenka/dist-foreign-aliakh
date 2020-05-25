@@ -48,9 +48,11 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -97,6 +99,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final String PAID_USAGE_ID = "3f8ce825-6514-4307-a118-3ec89187bef3";
     private static final String ARCHIVED_USAGE_ID = "5f90f7d7-566f-402a-975b-d54466862704";
     private static final String LM_DETAIL_ID = "5963a9c2-b639-468c-a4c1-02101a4597c6";
+    private static final String AACL_SCENARIO_ID = "4f1714a1-5e23-4e46-aeb1-b44fbeea17e6";
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -240,7 +243,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByScenarioIdAndRhAccountNumberSearchDetailId() {
+    public void testFindByScenarioIdAndRhAccountNumberSearchByDetailId() {
         assertFindByScenarioIdAndRhSearch("2f660585-35a1-48a5-a506-904c725cda11", 1);
         assertFindByScenarioIdAndRhSearch("48a5", 1);
         assertFindByScenarioIdAndRhSearch("49", 0);
@@ -264,6 +267,53 @@ public class UsageArchiveRepositoryIntegrationTest {
     public void testFindByScenarioIdAndRhAccountNumberSearchBySqlLikePattern() {
         assertFindByScenarioIdAndRhSearch("%", 0);
         assertFindByScenarioIdAndRhSearch("_", 0);
+    }
+
+    @Test
+    public void testFindAaclCountByScenarioIdAndRhAccountNumberWithEmptySearch() {
+        assertEquals(2,
+            usageArchiveRepository.findAaclCountByScenarioIdAndRhAccountNumber(AACL_SCENARIO_ID, 1000009997L, null));
+    }
+
+    @Test
+    public void testFindAaclByScenarioIdAndRhAccountNumberWithEmptySearch() {
+        List<UsageDto> expectedUsageDtos =
+            loadExpectedUsageDtos(Arrays.asList("json/aacl/aacl_archived_usage_dtos.json"));
+        List<UsageDto> actualUsageDtos =
+            usageArchiveRepository.findAaclByScenarioIdAndRhAccountNumber(AACL_SCENARIO_ID, 1000009997L, null,
+                null, null);
+        assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
+        IntStream.range(0, expectedUsageDtos.size())
+            .forEach(index -> assertUsageDto(expectedUsageDtos.get(0), actualUsageDtos.get(0)));
+    }
+
+    @Test
+    public void testFindAaclByScenarioIdAndRhAccountNumberSearchByDetailId() {
+        assertFindAaclByScenarioIdAndRhSearch("cd1a9398-0b86-42f1-bdc9-ff1ac764b1c2", 1);
+        assertFindAaclByScenarioIdAndRhSearch("42f1", 1);
+        assertFindAaclByScenarioIdAndRhSearch("49", 0);
+    }
+
+    @Test
+    public void testFindAaclByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
+        assertFindAaclByScenarioIdAndRhSearch("243904752", 1);
+        assertFindAaclByScenarioIdAndRhSearch("24390", 1);
+        assertFindAaclByScenarioIdAndRhSearch("904", 2);
+        assertFindAaclByScenarioIdAndRhSearch("24390 4752", 0);
+    }
+
+    @Test
+    public void testFindAaclByScenarioIdAndRhAccountNumberSearchByStandardNumber() {
+        assertFindAaclByScenarioIdAndRhSearch("1008902112377654XX", 1);
+        assertFindAaclByScenarioIdAndRhSearch("1008902112377654xx", 1);
+        assertFindAaclByScenarioIdAndRhSearch("21", 2);
+        assertFindAaclByScenarioIdAndRhSearch("100890 2002377655XX", 0);
+    }
+
+    @Test
+    public void testFindAaclByScenarioIdAndRhAccountNumberSearchBySqlLikePattern() {
+        assertFindAaclByScenarioIdAndRhSearch("%", 0);
+        assertFindAaclByScenarioIdAndRhSearch("_", 0);
     }
 
     @Test
@@ -449,9 +499,12 @@ public class UsageArchiveRepositoryIntegrationTest {
     public void testFindAaclDtosByScenarioId() {
         List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos(
             Arrays.asList("json/aacl/aacl_archived_usage_dto_927ea8a1.json",
-                "json/aacl/aacl_archived_usage_dto_cfd3e488.json"));
+                "json/aacl/aacl_archived_usage_dto_cd1a9398.json", "json/aacl/aacl_archived_usage_dto_cfd3e488.json"));
         List<UsageDto> actualUsageDtos =
-            usageArchiveRepository.findAaclDtosByScenarioId("4f1714a1-5e23-4e46-aeb1-b44fbeea17e6");
+            usageArchiveRepository.findAaclDtosByScenarioId(AACL_SCENARIO_ID)
+                .stream()
+                .sorted(Comparator.comparing(UsageDto::getId))
+                .collect(Collectors.toList());
         assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
         IntStream.range(0, expectedUsageDtos.size())
             .forEach(i -> assertUsageDto(expectedUsageDtos.get(i), actualUsageDtos.get(i)));
@@ -528,6 +581,15 @@ public class UsageArchiveRepositoryIntegrationTest {
             searchValue, null, null).size());
         assertEquals(expectedSize,
             usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000002859L, searchValue));
+    }
+
+    private void assertFindAaclByScenarioIdAndRhSearch(String searchValue, int expectedSize) {
+        assertEquals(expectedSize,
+            usageArchiveRepository.findAaclByScenarioIdAndRhAccountNumber(AACL_SCENARIO_ID, 1000009997L, searchValue,
+                null, null).size());
+        assertEquals(expectedSize,
+            usageArchiveRepository.findAaclCountByScenarioIdAndRhAccountNumber(AACL_SCENARIO_ID, 1000009997L,
+                searchValue));
     }
 
     private RightsholderTotalsHolder buildRightsholderTotalsHolder(String rhName, Long rhAccountNumber,
