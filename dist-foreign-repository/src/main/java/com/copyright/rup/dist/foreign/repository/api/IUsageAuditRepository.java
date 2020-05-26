@@ -53,6 +53,13 @@ public interface IUsageAuditRepository {
     void deleteByScenarioId(String scenarioId);
 
     /**
+     * Deletes SCENARIO_EXCLUDED {@link UsageAuditItem}s by scenario id.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteForExcludedByScenarioId(String scenarioId);
+
+    /**
      * Retrieves list of {@link UsageAuditItem}s by {@link com.copyright.rup.dist.foreign.domain.Usage} identifier.
      *
      * @param usageId usage identifier

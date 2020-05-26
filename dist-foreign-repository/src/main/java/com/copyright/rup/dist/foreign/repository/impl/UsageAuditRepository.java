@@ -60,6 +60,14 @@ public class UsageAuditRepository extends BaseRepository implements IUsageAuditR
     }
 
     @Override
+    public void deleteForExcludedByScenarioId(String scenarioId) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put("status", UsageStatusEnum.SCENARIO_EXCLUDED);
+        delete("IUsageAuditMapper.deleteForExcludedByScenarioId", params);
+    }
+
+    @Override
     public List<UsageAuditItem> findByUsageId(String usageId) {
         return selectList("IUsageAuditMapper.findByUsageId", Objects.requireNonNull(usageId));
     }

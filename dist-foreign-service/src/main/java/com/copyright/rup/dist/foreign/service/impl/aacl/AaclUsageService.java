@@ -351,7 +351,6 @@ public class AaclUsageService implements IAaclUsageService {
         return aaclUsageRepository.findCountForAudit(filter);
     }
 
-
     @Override
     public int getCountByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue) {
         return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
@@ -383,7 +382,7 @@ public class AaclUsageService implements IAaclUsageService {
         String userName = RupContextUtils.getUserName();
         aaclUsageRepository.addToBaselineByScenarioId(scenarioId, userName);
         List<String> usageIds = usageArchiveRepository.copyToArchiveByScenarioId(scenarioId, userName);
-        usageAuditService.deleteActionsByScenarioId(scenarioId);
+        usageAuditService.deleteActionsForExcludedByScenarioId(scenarioId);
         aaclUsageRepository.deleteLockedByScenarioId(scenarioId);
         aaclUsageRepository.deleteExcludedByScenarioId(scenarioId);
         LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
