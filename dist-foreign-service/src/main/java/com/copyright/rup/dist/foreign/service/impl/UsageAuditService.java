@@ -67,6 +67,11 @@ public class UsageAuditService implements IUsageAuditService {
     }
 
     @Override
+    public void deleteActionsForExcludedByScenarioId(String scenarioId) {
+        usageAuditRepository.deleteForExcludedByScenarioId(scenarioId);
+    }
+
+    @Override
     public List<UsageAuditItem> getUsageAudit(String usageId) {
         return usageAuditRepository.findByUsageId(usageId);
     }

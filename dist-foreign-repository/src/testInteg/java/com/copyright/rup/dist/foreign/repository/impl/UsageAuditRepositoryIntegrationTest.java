@@ -49,6 +49,8 @@ public class UsageAuditRepositoryIntegrationTest {
 
     private static final String USAGE_UID = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_UID_2 = "3fb43e60-3352-4db4-9080-c30b8a6f6600";
+    private static final String USAGE_UID_3 = "ea85a226-8a4b-45e3-82f8-1233a9cd7ecb";
+    private static final String USAGE_UID_4 = "4b5751aa-6258-44c6-b839-a1ec0edfcf4d";
     private static final BigDecimal AMOUNT_ZERO = new BigDecimal("0.00");
     private static final BigDecimal AMOUNT_TEN = new BigDecimal("10.00");
 
@@ -96,13 +98,20 @@ public class UsageAuditRepositoryIntegrationTest {
 
     @Test
     public void testDeleteByScenarioId() {
-        assertEquals(1,
-            CollectionUtils.size(usageAuditRepository.findByUsageId("ea85a226-8a4b-45e3-82f8-1233a9cd7ecb")));
-        assertEquals(2,
-            CollectionUtils.size(usageAuditRepository.findByUsageId("4b5751aa-6258-44c6-b839-a1ec0edfcf4d")));
+        assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_3)));
+        assertEquals(2, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_4)));
         usageAuditRepository.deleteByScenarioId("fccc8c31-5259-472a-a9ca-508a8ed1cbc0");
-        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("ea85a226-8a4b-45e3-82f8-1233a9cd7ecb")));
-        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("4b5751aa-6258-44c6-b839-a1ec0edfcf4d")));
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(USAGE_UID_3)));
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(USAGE_UID_4)));
+    }
+
+    @Test
+    public void testDeleteForExcludedByScenarioId() {
+        assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_3)));
+        assertEquals(2, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_4)));
+        usageAuditRepository.deleteForExcludedByScenarioId("fccc8c31-5259-472a-a9ca-508a8ed1cbc0");
+        assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_3)));
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(USAGE_UID_4)));
     }
 
     @Test

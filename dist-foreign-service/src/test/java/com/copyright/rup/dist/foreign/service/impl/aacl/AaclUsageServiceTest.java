@@ -602,7 +602,7 @@ public class AaclUsageServiceTest {
         expectLastCall().once();
         expect(usageArchiveRepository.copyToArchiveByScenarioId(SCENARIO_ID, USER_NAME))
             .andReturn(usageIds).once();
-        usageAuditService.deleteActionsByScenarioId(SCENARIO_ID);
+        usageAuditService.deleteActionsForExcludedByScenarioId(SCENARIO_ID);
         expectLastCall().once();
         aaclUsageRepository.deleteLockedByScenarioId(SCENARIO_ID);
         expectLastCall().once();

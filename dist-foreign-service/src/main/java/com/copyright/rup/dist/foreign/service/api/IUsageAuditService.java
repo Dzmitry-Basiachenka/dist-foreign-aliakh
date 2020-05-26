@@ -69,6 +69,14 @@ public interface IUsageAuditService {
     void deleteActionsByScenarioId(String scenarioId);
 
     /**
+     * Deletes usage actions by scenario id for
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED} usages only.
+     *
+     * @param scenarioId scenario id
+     */
+    void deleteActionsForExcludedByScenarioId(String scenarioId);
+
+    /**
      * Gets all actions for usage with given id.
      *
      * @param usageId usage id
