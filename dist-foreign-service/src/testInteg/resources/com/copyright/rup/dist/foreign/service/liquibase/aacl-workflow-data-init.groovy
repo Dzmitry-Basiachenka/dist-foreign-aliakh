@@ -4,6 +4,12 @@ databaseChangeLog {
     changeSet(id: '2020-03-03-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
         comment('Inserting data for testAaclWorkflow')
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '60080587-a225-439c-81af-f016cb33aeac')
+            column(name: 'rh_account_number', value: '1000024950')
+            column(name: 'name', value: '101 Communications, Ltd.')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '4f466373-e8de-4b7d-8137-faba84ccafc2')
             column(name: 'wr_wrk_inst', value: '100009840')
@@ -47,21 +53,6 @@ databaseChangeLog {
             column(name: 'publication_type_weight', value: '2')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'AACL baseline usage Comment 3')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
-            column(name: 'df_usage_baseline_aacl_uid', value: '623d033b-98bb-4705-a2a0-a05f4cf8450b')
-            column(name: 'wr_wrk_inst', value: '963852741')
-            column(name: 'usage_period', value: '2016')
-            column(name: 'usage_source', value: 'Aug 2016 FR')
-            column(name: 'number_of_copies', value: '40')
-            column(name: 'number_of_pages', value: '45')
-            column(name: 'detail_licensee_class_id', value: '141')
-            column(name: 'original_publication_type', value: 'Fiction or Poetry')
-            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
-            column(name: 'publication_type_weight', value: '3.5')
-            column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'comment', value: 'AACL baseline usage Comment 4')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
