@@ -1,0 +1,88 @@
+[
+  {
+    "wrWrkInst": 100010768,
+    "systemTitle": "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )",
+    "standardNumber": "12345XX-79068",
+    "standardNumberType": "VALISSN",
+    "status": "ARCHIVED",
+    "productFamily": "AACL",
+    "numberOfCopies": 10,
+    "grossAmount": 500.0000000000,
+    "netAmount": 80.0000000000,
+    "serviceFee": 0.25000,
+    "serviceFeeAmount": 420.0000000000,
+    "aaclUsage": {
+      "usageSource": "Feb 2019 TUR",
+      "batchPeriodEndDate": "2019-06-30",
+      "numberOfPages": 14,
+      "usageAge": {
+        "period": 2019
+      },
+      "publicationType": {
+        "name": "Book"
+      },
+      "detailLicenseeClass": {
+        "id": 195,
+        "discipline": "Medical & Health",
+        "enrollmentProfile": "HGP"
+      }
+    },
+    "rightsholder": {
+      "accountNumber": 1000024950
+    },
+    "payee": {
+      "accountNumber": 1000010022
+    },
+    "comment": "AACL usage Comment 1",
+    "checkNumber": "58788",
+    "cccEventId": "83288",
+    "periodEndDate": "2017-01-16T00:00-05:00",
+    "distributionName": "FDA March 17",
+    "distributionDate": "2017-01-14T00:00-05:00",
+    "checkDate": "2017-01-15T00:00-05:00",
+    "lmDetailId" : "b86a63d6-48c3-4291-b5bc-3bc9ddef0e66"
+  },
+  {
+    "wrWrkInst": 123456789,
+    "systemTitle": "Reclaiming youth at risk : our hope for the future",
+    "standardNumber": "12345XX-123117",
+    "standardNumberType": "VALISSN",
+    "status": "ARCHIVED",
+    "productFamily": "AACL",
+    "grossAmount": 500.0000000000,
+    "netAmount": 80.0000000000,
+    "serviceFeeAmount": 420.0000000000,
+    "serviceFee": 0.25000,
+    "numberOfCopies": 30,
+    "aaclUsage": {
+      "usageSource": "Aug 2018 TUR",
+      "batchPeriodEndDate": "2019-06-30",
+      "numberOfPages": 12,
+      "usageAge": {
+        "period": 2019
+      },
+      "publicationType": {
+        "name": "Book"
+      },
+      "detailLicenseeClass": {
+        "id": 195,
+        "discipline": "Medical & Health",
+        "enrollmentProfile": "HGP"
+      }
+    },
+    "rightsholder": {
+      "accountNumber": 1000024950
+    },
+    "payee": {
+      "accountNumber": 1000010022
+    },
+    "comment": "AACL usage Comment 2",
+    "checkNumber": "58791",
+    "cccEventId": "83291",
+    "distributionName": "FDA March 17",
+    "distributionDate": "2017-01-14T00:00-05:00",
+    "periodEndDate": "2017-01-16T00:00-05:00",
+    "checkDate": "2017-01-15T00:00-05:00",
+    "lmDetailId" : "11ca9410-8ae0-4e7e-bd66-b2c9b9211269"
+  }
+]

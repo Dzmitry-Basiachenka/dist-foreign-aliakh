@@ -92,6 +92,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private UsageFilter usageFilter;
     private String expectedUsagesJsonFile;
     private String expectedPaidUsagesJsonFile;
+    private String expectedArchivedUsagesJsonFile;
     private List<String> expectedPaidUsageLmDetailIds;
     private AaclFields aaclFields;
     private FundPool fundPool;
@@ -167,6 +168,11 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     AaclWorkflowIntegrationTestBuilder expectUsages(String usagesJsonFile) {
         this.expectedUsagesJsonFile = usagesJsonFile;
+        return this;
+    }
+
+    AaclWorkflowIntegrationTestBuilder expectArchivedUsages(String usagesJsonFile) {
+        this.expectedArchivedUsagesJsonFile = usagesJsonFile;
         return this;
     }
 
@@ -259,8 +265,8 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             receivePaidUsagesFromLm();
             sendToCrm();
             verifyUsages();
-            expectedUsageCommentToAuditMap.forEach((comment, expectedAudit) ->
-                testHelper.assertAudit(actualCommentsToUsages.get(comment).getId(), expectedAudit));
+            testHelper.assertPaidAaclUsages(loadExpectedPaidUsages(expectedArchivedUsagesJsonFile));
+            verifyUsageAudit();
             verifyScenarioAudit();
             testHelper.verifyRestServer();
         }
@@ -367,6 +373,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             AuditFilter filter = new AuditFilter();
             filter.setProductFamily(productFamily);
             filter.setBatchesIds(Collections.singleton(usageBatch.getId()));
+            filter.setStatuses(Collections.singleton(UsageStatusEnum.SENT_TO_LM));
             actualCommentsToUsages = aaclUsageService.getForAudit(filter, null, null).stream()
                 .collect(Collectors.toMap(UsageDto::getComment, usageDto -> usageDto));
             List<UsageDto> expectedUsages = loadExpectedUsages(expectedUsagesJsonFile);
@@ -388,6 +395,15 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             mapper.registerModule(new JavaTimeModule());
             mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
             return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
+            });
+        }
+
+        private List<PaidUsage> loadExpectedPaidUsages(String fileName) throws IOException {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<PaidUsage>>() {
             });
         }
 
@@ -487,5 +503,16 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 Pair.of(ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes"),
                 Pair.of(ScenarioActionTypeEnum.SENT_TO_LM, ""));
         }
+
+        private void verifyUsageAudit() {
+            AuditFilter filter = new AuditFilter();
+            filter.setProductFamily(productFamily);
+            filter.setBatchesIds(Collections.singleton(usageBatch.getId()));
+            actualCommentsToUsages = aaclUsageService.getForAudit(filter, null, null).stream()
+                .collect(Collectors.toMap(UsageDto::getComment, usageDto -> usageDto));
+            expectedUsageCommentToAuditMap.forEach((comment, expectedAudit) ->
+                testHelper.assertAudit(actualCommentsToUsages.get(comment).getId(), expectedAudit));
+        }
+
     }
 }
