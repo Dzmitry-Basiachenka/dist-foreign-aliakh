@@ -217,24 +217,22 @@ public class UsageService implements IUsageService {
     @Override
     @Transactional
     public void updatePaidInfo(List<PaidUsage> paidUsages) {
-        Function<List<PaidUsage>, List<Usage>> usageMap =
-            paidUsage -> usageArchiveRepository.findByIds(paidUsage.stream()
-                .map(PaidUsage::getId)
-                .collect(Collectors.toList()));
-        Consumer<PaidUsage> consumer = usage -> usageArchiveRepository.insertPaid(usage);
-        updatePaidUsages(paidUsages, usageMap, consumer);
+        updatePaidUsages(paidUsages, ids -> usageArchiveRepository.findByIds(ids),
+            usage -> usageArchiveRepository.insertPaid(usage));
     }
 
     @Override
     @Transactional
-    public void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<PaidUsage>, List<Usage>> function,
+    public void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<String>, List<Usage>> function,
                                  Consumer<PaidUsage> consumer) {
         LogUtils.ILogWrapper paidUsagesCount = LogUtils.size(paidUsages);
         LOGGER.info("Update paid information. Started. UsagesCount={}", paidUsagesCount);
         populateAccountNumbers(paidUsages);
         AtomicInteger newUsagesCount = new AtomicInteger();
         Set<String> notFoundUsageIds = Sets.newHashSet();
-        Map<String, Usage> usageIdToUsageMap = function.apply(paidUsages).stream()
+        Map<String, Usage> usageIdToUsageMap = function.apply(paidUsages.stream()
+            .map(PaidUsage::getId)
+            .collect(Collectors.toList())).stream()
             .collect(Collectors.toMap(Usage::getId, usage -> usage));
         paidUsages.forEach(paidUsage -> {
             String paidUsageId = paidUsage.getId();

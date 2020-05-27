@@ -399,7 +399,8 @@ public class UsageArchiveRepositoryIntegrationTest {
                 Arrays.asList("6e8172d6-c16f-4522-8606-e55db1b8e5a4", "1537f313-975e-420e-b745-95f2808a388a"),
                 UsageStatusEnum.LOCKED);
         verifyPaidUsages(
-            Collections.singletonList("json/aacl/aacl_archived_usage.json"), actualUsages, this::verifyPaidUsage);
+            Collections.singletonList("json/aacl/aacl_archived_usage_6e8172d6.json"), actualUsages,
+            this::verifyPaidUsage);
     }
 
     @Test
@@ -420,14 +421,14 @@ public class UsageArchiveRepositoryIntegrationTest {
     @Test
     public void testInsertPaidAacl() {
         List<PaidUsage> paidUsages =
-            loadExpectedPaidUsages(Collections.singletonList("json/aacl/aacl_paid_usage.json"));
+            loadExpectedPaidUsages(Collections.singletonList("json/aacl/aacl_paid_usage_278adb86.json"));
         usageArchiveRepository.insertAaclPaid(paidUsages.get(0));
         List<PaidUsage> actualUsages =
             usageArchiveRepository.findByIdAndStatus(Collections.singletonList("278adb86-792d-417f-aa6b-0ee2254c356f"),
                 UsageStatusEnum.PAID);
         assertEquals(1, actualUsages.size());
         verifyPaidUsages(
-            Collections.singletonList("json/aacl/aacl_paid_usage.json"), actualUsages, this::verifyPaidUsage);
+            Collections.singletonList("json/aacl/aacl_paid_usage_278adb86.json"), actualUsages, this::verifyPaidUsage);
     }
 
     @Test

@@ -60,8 +60,6 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -393,12 +391,8 @@ public class AaclUsageService implements IAaclUsageService {
     @Override
     @Transactional
     public void updatePaidInfo(List<PaidUsage> paidUsages) {
-        Function<List<PaidUsage>, List<Usage>> function =
-            paidUsage -> usageArchiveRepository.findAaclByIds(paidUsage.stream()
-                .map(PaidUsage::getId)
-                .collect(Collectors.toList()));
-        Consumer<PaidUsage> consumer = usage -> usageArchiveRepository.insertAaclPaid(usage);
-        usageService.updatePaidUsages(paidUsages, function, consumer);
+        usageService.updatePaidUsages(paidUsages, ids -> usageArchiveRepository.findAaclByIds(ids),
+            usage -> usageArchiveRepository.insertAaclPaid(usage));
     }
 
     private Set<Integer> getAggregateClassIdsWithAmountsFromFundPool(String fundPoolId) {
