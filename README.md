@@ -1,3 +1,11 @@
+10.1.3
+-
+* B-56234 FDA: AACL export of baseline data: make changes based on comments in CR-DIST-FOREIGN-172
+* B-56282 FDA: Send AACL scenario to LM: Make changes based on comments in CR-DIST-FOREIGN-173
+* B-56849 Tech Debt: FDA: use AACL repository methods for AACL specific logic
+* B-59011 FDA: Reporting AACL to RC: implement workflow integration test for AACL product family
+* CDP-911 FDA: Send AACL scenario to LM: All audit records for AACL usages are deleted after sending scenario to LM
+
 10.1.2
 -
 * B-56849 Tech Debt: FDA: remove RMS chunk processing, add transactional for rights consumers
