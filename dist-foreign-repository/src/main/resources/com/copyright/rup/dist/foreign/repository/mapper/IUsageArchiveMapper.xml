@@ -378,7 +378,6 @@
     <select id="findAaclByIds" resultMap="IAaclUsageMapper.aaclUsageResultMap">
         select
             u.df_usage_archive_uid df_usage_uid,
-            pt.weight publication_type_weight,
             <include refid="IAaclUsageMapper.aaclUsageColumns"/>
         from ${schema}.df_usage_archive u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid

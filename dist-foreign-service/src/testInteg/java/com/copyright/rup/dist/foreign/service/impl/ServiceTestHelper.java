@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
+import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
@@ -16,6 +17,8 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
@@ -41,7 +44,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -65,6 +67,10 @@ public class ServiceTestHelper {
     private IUsageRepository usageRepository;
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
+    @Autowired
+    private IUsageService usageService;
+    @Autowired
+    private IAaclUsageService aaclUsageService;
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
     @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
@@ -215,9 +221,26 @@ public class ServiceTestHelper {
         });
     }
 
-    public void assertPaidUsages(List<PaidUsage> expectedUsages, Function<AuditFilter, List<UsageDto>> function) {
+    public void assertPaidAaclUsages(List<PaidUsage> expectedUsages) {
+        Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus =
+            aaclUsageService.getForAudit(new AuditFilter(), null, null).stream()
+                .collect(Collectors.groupingBy(UsageDto::getStatus,
+                    Collectors.mapping(UsageDto::getId, Collectors.toList())));
+        assertPaidUsages(expectedUsages, usageIdsGroupedByStatus);
+    }
+
+    public void assertPaidUsages(List<PaidUsage> expectedUsages) {
+        Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus =
+            usageService.getForAudit(new AuditFilter(), null, null).stream()
+                .collect(Collectors.groupingBy(UsageDto::getStatus,
+                    Collectors.mapping(UsageDto::getId, Collectors.toList())));
+        assertPaidUsages(expectedUsages, usageIdsGroupedByStatus);
+    }
+
+    private void assertPaidUsages(List<PaidUsage> expectedUsages,
+                                  Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus) {
         expectedUsages.forEach(expectedUsage -> {
-            PaidUsage actualUsage = getPaidUsageByLmDetailId(expectedUsage.getLmDetailId(), function);
+            PaidUsage actualUsage = getPaidUsageByLmDetailId(expectedUsage.getLmDetailId(), usageIdsGroupedByStatus);
             assertUsage(expectedUsage, actualUsage);
             assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
             assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
@@ -239,7 +262,43 @@ public class ServiceTestHelper {
             assertEquals(expectedUsage.getCheckDate(), actualUsage.getCheckDate());
             assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
             assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+            if (Objects.nonNull(actualUsage.getAaclUsage())) {
+                verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
+            }
         });
+    }
+
+    private void verifyAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
+        assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
+        assertEquals(expectedAaclUsage.getPublicationType().getId(), actualAaclUsage.getPublicationType().getId());
+        assertEquals(expectedAaclUsage.getPublicationType().getName(), actualAaclUsage.getPublicationType().getName());
+        assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
+            actualAaclUsage.getPublicationType().getWeight());
+        assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
+        assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
+        assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
+        assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
+        assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
+        assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
+        assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
+        assertEquals(expectedAaclUsage.getUsageAge().getWeight(), actualAaclUsage.getUsageAge().getWeight());
+        assertEquals(expectedAaclUsage.getValueWeight(), actualAaclUsage.getValueWeight());
+        assertEquals(expectedAaclUsage.getVolumeWeight(), actualAaclUsage.getVolumeWeight());
+        assertEquals(expectedAaclUsage.getVolumeShare(), actualAaclUsage.getVolumeShare());
+        assertEquals(expectedAaclUsage.getValueShare(), actualAaclUsage.getValueShare());
+        assertEquals(expectedAaclUsage.getTotalShare(), actualAaclUsage.getTotalShare());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
+            actualAaclUsage.getDetailLicenseeClass().getId());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getDiscipline(),
+            actualAaclUsage.getDetailLicenseeClass().getDiscipline());
+        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getEnrollmentProfile(),
+            actualAaclUsage.getDetailLicenseeClass().getEnrollmentProfile());
+        assertEquals(expectedAaclUsage.getAggregateLicenseeClass().getId(),
+            actualAaclUsage.getAggregateLicenseeClass().getId());
+        assertEquals(expectedAaclUsage.getAggregateLicenseeClass().getDiscipline(),
+            actualAaclUsage.getAggregateLicenseeClass().getDiscipline());
+        assertEquals(expectedAaclUsage.getAggregateLicenseeClass().getEnrollmentProfile(),
+            actualAaclUsage.getAggregateLicenseeClass().getEnrollmentProfile());
     }
 
     private void doReceivePaidUsagesFromLm(String message) throws InterruptedException {
@@ -268,11 +327,9 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
     }
 
-    private PaidUsage getPaidUsageByLmDetailId(String lmDetailId, Function<AuditFilter, List<UsageDto>> function) {
+    private PaidUsage getPaidUsageByLmDetailId(String lmDetailId,
+                                               Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus) {
         assertNotNull(lmDetailId);
-        Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus = function.apply(new AuditFilter()).stream()
-            .collect(Collectors.groupingBy(UsageDto::getStatus,
-                Collectors.mapping(UsageDto::getId, Collectors.toList())));
         List<PaidUsage> usages = usageIdsGroupedByStatus.entrySet().stream()
             .flatMap(entry -> usageArchiveRepository.findByIdAndStatus(entry.getValue(), entry.getKey()).stream())
             .filter(paidUsage -> Objects.equals(lmDetailId, paidUsage.getLmDetailId()))

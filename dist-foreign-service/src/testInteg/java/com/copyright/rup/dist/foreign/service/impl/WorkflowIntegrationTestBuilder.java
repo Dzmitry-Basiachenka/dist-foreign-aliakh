@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
@@ -218,8 +217,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             sendScenarioToLm();
             receivePaidUsagesFromLm();
             sendUsagesToCrm();
-            testHelper.assertPaidUsages(loadExpectedUsages(expectedUsagesJsonFile), usageDtos ->
-                usageService.getForAudit(new AuditFilter(), null, null));
+            testHelper.assertPaidUsages(loadExpectedUsages(expectedUsagesJsonFile));
             verifyScenarioAudit();
             verifyUsagesAudit();
             testHelper.verifyRestServer();

@@ -306,13 +306,12 @@ public interface IUsageService {
     void sendForGettingRights(List<Usage> usages, String batchName);
 
     /**
-     * Updates paid infromation for {@link PaidUsage}s
-     * and status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#PAID}.
+     * Updates paid infromation for {@link PaidUsage}s and status to {@link UsageStatusEnum#PAID}.
      *
      * @param paidUsages list of {@link PaidUsage}s to update
      * @param function   function convert paid usages to map with usage id and original usages
      * @param consumer   consume information for update
      */
-    void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<PaidUsage>, List<Usage>> function,
+    void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<String>, List<Usage>> function,
                           Consumer<PaidUsage> consumer);
 }
