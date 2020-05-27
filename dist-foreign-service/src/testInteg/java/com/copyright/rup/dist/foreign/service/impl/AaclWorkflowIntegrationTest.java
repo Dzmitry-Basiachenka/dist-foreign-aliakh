@@ -73,6 +73,7 @@ public class AaclWorkflowIntegrationTest {
             .withUsageBatch(buildUsageBatch())
             .expectScenario(buildExpectedScenario())
             .expectUsages("usage/aacl/aacl_expected_usages_for_workflow.json")
+            .expectArchivedUsages("usage/aacl/aacl_expected_archived_usages_for_workflow.json")
             .expectRollups("prm/aacl_workflow_rollups_response.json", "60080587-a225-439c-81af-f016cb33aeac")
             .expectRmsRights("rights/aacl/rms_grants_100009840_request_workflow.json",
                 "rights/aacl/rms_grants_100009840_response_workflow.json")
