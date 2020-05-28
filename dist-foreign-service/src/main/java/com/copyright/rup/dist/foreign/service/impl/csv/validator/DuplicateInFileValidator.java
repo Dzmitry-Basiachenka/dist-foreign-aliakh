@@ -2,12 +2,12 @@ package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,17 +34,19 @@ public class DuplicateInFileValidator implements DistCsvProcessor.IValidator<Str
     @Override
     public boolean isValid(String item) {
         ++line;
-        // TODO {apchelnikau} Avoid checking whether item is empty after trying to get lines for this item
-        List<Integer> lines = existingLines.get(item);
-        boolean valid = StringUtils.isEmpty(item) || CollectionUtils.isEmpty(lines);
-        if (valid) {
-            lines = Lists.newArrayList();
-            existingLines.put(item, lines);
-            errorMessage = StringUtils.EMPTY;
-        } else {
-            errorMessage = buildErrorMessage(lines);
+        errorMessage = StringUtils.EMPTY;
+        boolean valid = StringUtils.isEmpty(item);
+        if (!valid) {
+            List<Integer> lines = existingLines.get(item);
+            valid = CollectionUtils.isEmpty(lines);
+            if (valid) {
+                lines = new ArrayList<>();
+                existingLines.put(item, lines);
+            } else {
+                errorMessage = buildErrorMessage(lines);
+            }
+            lines.add(line);
         }
-        lines.add(line);
         return valid;
     }
 
