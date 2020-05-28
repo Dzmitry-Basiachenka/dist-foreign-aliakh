@@ -33,7 +33,6 @@ import java.util.Objects;
  *
  * @author Uladzislau Shalamitski
  */
-// TODO {pliakh} move common REST-expectation and assertion methods to helper, apply in other tests
 @Component
 public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
 

@@ -88,9 +88,6 @@
         <constructor-arg ref="df.service.lm.detail.paid.endpoint"/>
     </bean>
 
-    <bean id="df.common.snsNotificationMessageConverter"
-          class="com.copyright.rup.dist.common.integration.aws.SnsNotificationMessageConverter"/>
-
     <bean id="commonRedrivePolicy" class="com.copyright.rup.dist.foreign.service.impl.common.RedrivePolicyFactoryBean">
         <property name="sqsEndpoint" ref="df.service.common.dlq.endpoint"/>
         <property name="maxReceiveCount" value="$RUP{dist.foreign.sqs.redrive.policy.max.receive.count}"/>
@@ -162,8 +159,12 @@
 
         <route id="df.service.paidUsageRoute">
             <from ref="df.service.lm.detail.paid.endpoint"/>
-            <!-- TODO {pliakh} replace converted with default Jackson unmarshaller -->
-            <bean ref="df.common.snsNotificationMessageConverter"/>
+            <unmarshal>
+                <json library="Jackson"/>
+            </unmarshal>
+            <setBody>
+                <simple>${body[Message]}</simple>
+            </setBody>
             <log message="Consume paid usages from LM. Source=${headers.source}, Body: ${body}"
                  loggingLevel="DEBUG" logName="com.copyright.rup.dist"/>
             <unmarshal>
