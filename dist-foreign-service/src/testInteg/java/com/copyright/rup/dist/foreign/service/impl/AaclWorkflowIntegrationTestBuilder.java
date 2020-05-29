@@ -106,6 +106,8 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<String> predefinedUsageIds;
     private String expectedCrmRequestJsonFile;
     private String expectedCrmResponseJsonFile;
+    private int expectCountScenarioUsages;
+    private List<Pair<ScenarioActionTypeEnum, String>> expectedScenarioAudit;
 
     @Autowired
     private SqsClientMock sqsClientMock;
@@ -138,6 +140,11 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         this.usagesCsvFile = csvFile;
         this.predefinedUsageIds = Arrays.asList(usageIds);
         this.expectedUploadedCount = expectedCount;
+        return this;
+    }
+
+    AaclWorkflowIntegrationTestBuilder expectScenarioAudit(List<Pair<ScenarioActionTypeEnum, String>> scenarioAudit) {
+        this.expectedScenarioAudit = scenarioAudit;
         return this;
     }
 
@@ -212,7 +219,8 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    AaclWorkflowIntegrationTestBuilder expectScenario(Scenario scenario) {
+    AaclWorkflowIntegrationTestBuilder expectScenario(Scenario scenario, int expectCountUsages) {
+        expectCountScenarioUsages = expectCountUsages;
         expectedScenario = scenario;
         return this;
     }
@@ -232,6 +240,9 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     void reset() {
         expectedUsageCommentToAuditMap.clear();
         expectedRmsRequestsToResponses.clear();
+        expectedUsagesJsonFile = null;
+        classifiedUsagesCsvFile = null;
+        this.sqsClientMock.reset();
     }
 
     @Override
@@ -264,7 +275,9 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             sendScenarioToLm();
             receivePaidUsagesFromLm();
             sendToCrm();
-            verifyUsages();
+            if (null != expectedUsagesJsonFile) {
+                verifyUsages();
+            }
             testHelper.assertPaidAaclUsages(loadExpectedPaidUsages(expectedArchivedUsagesJsonFile));
             verifyUsageAudit();
             verifyScenarioAudit();
@@ -297,15 +310,13 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void addToScenario() {
-            List<UsageBatch> aacl = usageBatchService.getUsageBatches("AACL");
-            assertEquals(1, aacl.size());
             usageFilter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
             usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
             aaclFields.setFundPoolId(fundPoolService.getAaclNotAttachedToScenario().get(0).getId());
             scenario = aaclScenarioService.createScenario("Test AACL Scenario", aaclFields, "Test Scenario Description",
                 usageFilter);
             List<Usage> usages = aaclUsageRepository.findByScenarioId(scenario.getId());
-            assertEquals(4, usages.size());
+            assertEquals(expectCountScenarioUsages, usages.size());
             assertScenario();
         }
 
@@ -486,7 +497,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void verifyScenarioAudit() {
-            assertEquals(buildExpectedScenarioAudit(), buildActualScenarioAudit());
+            assertEquals(expectedScenarioAudit, buildActualScenarioAudit());
         }
 
         private List<Pair<ScenarioActionTypeEnum, String>> buildActualScenarioAudit() {
@@ -496,13 +507,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 .collect(Collectors.toList());
         }
 
-        private List<Pair<ScenarioActionTypeEnum, String>> buildExpectedScenarioAudit() {
-            return Arrays.asList(
-                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, ""),
-                Pair.of(ScenarioActionTypeEnum.SUBMITTED, "Submitting scenario for testing purposes"),
-                Pair.of(ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes"),
-                Pair.of(ScenarioActionTypeEnum.SENT_TO_LM, ""));
-        }
 
         private void verifyUsageAudit() {
             AuditFilter filter = new AuditFilter();

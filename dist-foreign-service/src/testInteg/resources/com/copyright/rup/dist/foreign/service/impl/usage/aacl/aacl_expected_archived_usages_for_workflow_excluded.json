@@ -1,0 +1,86 @@
+[
+  {
+    "wrWrkInst": 123456789,
+    "systemTitle": "Reclaiming youth at risk : our hope for the future",
+    "standardNumber": "12345XX-123117",
+    "standardNumberType": "VALISSN",
+    "status": "ARCHIVED",
+    "productFamily": "AACL",
+    "numberOfCopies": 30000,
+    "grossAmount": 997.4300000000,
+    "netAmount": 748.0700000000,
+    "serviceFee": 0.25000,
+    "serviceFeeAmount": 249.3600000000,
+    "aaclUsage": {
+      "usageSource": "Feb 2019 TUR",
+      "batchPeriodEndDate": "2019-06-30",
+      "numberOfPages": 14,
+      "usageAge": {
+        "period": 2019
+      },
+      "publicationType": {
+        "name": "Book"
+      },
+      "detailLicenseeClass": {
+        "id": 195,
+        "discipline": "Medical & Health",
+        "enrollmentProfile": "HGP"
+      }
+    },
+    "rightsholder": {
+      "accountNumber": 1000024950
+    },
+    "payee": {
+      "accountNumber": 1000010022
+    },
+    "comment": "AACL usage Comment 3",
+    "checkNumber": "85248",
+    "cccEventId": "85259",
+    "periodEndDate": "2017-01-16T00:00-05:00",
+    "distributionName": "FDA March 19",
+    "distributionDate": "2017-01-14T00:00-05:00",
+    "checkDate": "2019-01-15T00:00-05:00",
+    "lmDetailId" : "c8bb25a2-0b65-41ee-ad50-32711e7bea97"
+  },
+  {
+    "wrWrkInst": 123456789,
+    "systemTitle": "BIOCHEMISTRY (MOSCOW)",
+    "status": "ARCHIVED",
+    "productFamily": "AACL",
+    "grossAmount": 2.5700000000,
+    "netAmount": 1.9300000000,
+    "serviceFeeAmount": 0.6400000000,
+    "serviceFee": 0.25000,
+    "numberOfCopies": 30,
+    "aaclUsage": {
+      "usageSource": "Aug 2018 TUR",
+      "batchPeriodEndDate": "2019-06-30",
+      "numberOfPages": 12,
+      "usageAge": {
+        "period": 2019
+      },
+      "publicationType": {
+        "name": "Book"
+      },
+      "detailLicenseeClass": {
+        "id": 195,
+        "discipline": "Medical & Health",
+        "enrollmentProfile": "HGP"
+      }
+    },
+    "rightsholder": {
+      "accountNumber": 1000024950
+    },
+    "payee": {
+      "accountNumber": 1000010022
+    },
+    "comment": "AACL usage Comment 4",
+    "checkNumber": "99548",
+    "cccEventId": "99854",
+    "distributionName": "FDA March 19",
+    "distributionDate": "2019-01-14T00:00-05:00",
+    "periodEndDate": "2019-01-16T00:00-05:00",
+    "checkDate": "2019-01-15T00:00-05:00",
+    "lmDetailId" : "6311542c-0f26-4b15-bd70-c82d6b74800b"
+  }
+]
