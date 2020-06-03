@@ -103,14 +103,6 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testWriteAuditFasCsvReportForPostDistribution() throws Exception {
-        AuditFilter auditFilter = new AuditFilter();
-        auditFilter.setSearchValue("75693c90-d6f5-401a-8c26-134adc9745c5");
-        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditFasCsvReport(auditFilter, outputStream),
-            "audit_usages_report_post_distribution.csv");
-    }
-
-    @Test
     public void testWriteAuditFasCsvReportEmptyCsvReport() throws Exception {
         assertEmptyAuditFasReport(new AuditFilter());
     }

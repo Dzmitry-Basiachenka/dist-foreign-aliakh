@@ -223,14 +223,14 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
-    public void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<String>, List<Usage>> function,
-                                 Consumer<PaidUsage> consumer) {
+    public void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<String>, List<Usage>> findByIdsFunction,
+                                 Consumer<PaidUsage> insertPaidConsumer) {
         LogUtils.ILogWrapper paidUsagesCount = LogUtils.size(paidUsages);
         LOGGER.info("Update paid information. Started. UsagesCount={}", paidUsagesCount);
         populateAccountNumbers(paidUsages);
         AtomicInteger newUsagesCount = new AtomicInteger();
         Set<String> notFoundUsageIds = Sets.newHashSet();
-        Map<String, Usage> usageIdToUsageMap = function.apply(paidUsages.stream()
+        Map<String, Usage> usageIdToUsageMap = findByIdsFunction.apply(paidUsages.stream()
             .map(PaidUsage::getId)
             .collect(Collectors.toList())).stream()
             .collect(Collectors.toMap(Usage::getId, usage -> usage));
@@ -244,7 +244,7 @@ public class UsageService implements IUsageService {
                         ? "Usage has been created based on Post-Distribution and Split processes"
                         : "Usage has been created based on Post-Distribution process";
                     insertPaidUsage(buildPaidUsage(usageIdToUsageMap.get(paidUsageId), paidUsage), actionReason,
-                        consumer);
+                        insertPaidConsumer);
                     newUsagesCount.getAndIncrement();
                 } else if (Objects.isNull(paidUsage.getSplitParentFlag())) {
                     updatePaidUsage(paidUsage, buildActionReason(oldAccountNumber, newAccountNumber,
@@ -257,7 +257,7 @@ public class UsageService implements IUsageService {
                         "Scenario has been updated after Split process");
                 } else {
                     insertPaidUsage(buildPaidUsage(usageIdToUsageMap.get(paidUsageId), paidUsage),
-                        "Usage has been created based on Split process", consumer);
+                        "Usage has been created based on Split process", insertPaidConsumer);
                     newUsagesCount.getAndIncrement();
                 }
             } else {
@@ -458,6 +458,7 @@ public class UsageService implements IUsageService {
     private PaidUsage buildPaidUsage(Usage originalUsage, PaidUsage paidUsage) {
         PaidUsage resultUsage = new PaidUsage();
         resultUsage.setId(RupPersistUtils.generateUuid());
+        resultUsage.setBatchId(originalUsage.getBatchId());
         resultUsage.setStatus(UsageStatusEnum.PAID);
         resultUsage.setWrWrkInst(originalUsage.getWrWrkInst());
         resultUsage.setWorkTitle(originalUsage.getWorkTitle());

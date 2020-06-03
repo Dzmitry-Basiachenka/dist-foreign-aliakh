@@ -308,10 +308,10 @@ public interface IUsageService {
     /**
      * Updates paid infromation for {@link PaidUsage}s and status to {@link UsageStatusEnum#PAID}.
      *
-     * @param paidUsages list of {@link PaidUsage}s to update
-     * @param function   function convert paid usages to map with usage id and original usages
-     * @param consumer   consume information for update
+     * @param paidUsages         list of {@link PaidUsage}s to update
+     * @param findByIdsFunction  function convert paid usages to map with usage id and original usages
+     * @param insertPaidConsumer consume information for update
      */
-    void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<String>, List<Usage>> function,
-                          Consumer<PaidUsage> consumer);
+    void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<String>, List<Usage>> findByIdsFunction,
+                          Consumer<PaidUsage> insertPaidConsumer);
 }

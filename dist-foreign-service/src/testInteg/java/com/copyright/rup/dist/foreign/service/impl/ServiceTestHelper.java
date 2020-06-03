@@ -242,6 +242,7 @@ public class ServiceTestHelper {
         expectedUsages.forEach(expectedUsage -> {
             PaidUsage actualUsage = getPaidUsageByLmDetailId(expectedUsage.getLmDetailId(), usageIdsGroupedByStatus);
             assertUsage(expectedUsage, actualUsage);
+            assertEquals(expectedUsage.getBatchId(), actualUsage.getBatchId());
             assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
             assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
             assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());

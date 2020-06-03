@@ -245,6 +245,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: '48189e92-b9d2-46be-94a4-c2adf83f21ce')
+            column(name: 'df_usage_batch_uid', value: '10defe40-ef47-47c9-96b4-be9226f3d591')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')

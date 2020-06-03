@@ -1,6 +1,7 @@
 [
   {
     "id": "e783caf7-586d-434c-baaa-2ddf09afee77",
+    "batchId": "c392b841-33a6-4268-861a-2c4334a7fabc",
     "productFamily": "FAS",
     "status": "PAID",
     "wrWrkInst": "243904752",
@@ -42,7 +43,7 @@
     "comment": "usage from usages.csv"
   },
   {
-    "id": "ef058a3f-b60e-429b-b6e3-14d386eb86ba",
+    "batchId": "244ecf91-bc53-4cf3-a3c4-170019125b46",
     "productFamily": "FAS",
     "status": "PAID",
     "wrWrkInst": "243904752",

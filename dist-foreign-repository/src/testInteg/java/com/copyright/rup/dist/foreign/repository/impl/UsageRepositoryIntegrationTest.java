@@ -119,7 +119,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_31 = "3cf274c5-8eac-4d4a-96be-5921ae026840";
     private static final String USAGE_ID_32 = "f5eb98ce-ab59-44c8-9a50-1afea2b5ae15";
     private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
-    private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String SCENARIO_ID_2 = "abe31cdc-adfb-41c5-9a46-4ca4966a41be";
     private static final String USER_NAME = "user@copyright.com";
@@ -643,12 +642,12 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamily(FAS_PRODUCT_FAMILY);
-        assertEquals(21, usageRepository.findCountForAudit(filter));
+        assertEquals(20, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages =
             usageRepository.findForAudit(filter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));
         verifyUsageDtos(usages, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21,
             USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_11, USAGE_ID_2, USAGE_ID_18, USAGE_ID_5,
-            USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, POST_DISTRIBUTION_USAGE_ID, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20);
+            USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
@@ -657,14 +656,12 @@ public class UsageRepositoryIntegrationTest {
         assertFindForAuditSearch("Nitrates", USAGE_ID_4);
         assertFindForAuditSearch(USAGE_ID_4, USAGE_ID_4);
         assertFindForAuditSearch("Hydronitrous", USAGE_ID_4);
-        assertFindForAuditSearch(POST_DISTRIBUTION_USAGE_ID, POST_DISTRIBUTION_USAGE_ID);
         assertFindForAuditSearch(PERCENT);
         assertFindForAuditSearch(UNDERSCORE);
     }
 
     @Test
     public void testFindForAuditSearchByCccEventId() {
-        assertFindForAuditSearchByCccEventId("53256", USAGE_ID_15, POST_DISTRIBUTION_USAGE_ID);
         assertFindForAuditSearchByCccEventId("53257", USAGE_ID_16);
         assertFindForAuditSearchByCccEventId(PERCENT);
         assertFindForAuditSearchByCccEventId(UNDERSCORE);
@@ -674,8 +671,7 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testFindForAuditSearchByDistributionName() {
-        assertFindForAuditSearchByDistributionName("FDA July 17", USAGE_ID_16);
-        assertFindForAuditSearchByDistributionName("FDA March 17", USAGE_ID_15, POST_DISTRIBUTION_USAGE_ID);
+        assertFindForAuditSearchByDistributionName("FDA March 17", USAGE_ID_15);
         assertFindForAuditSearchByDistributionName(PERCENT);
         assertFindForAuditSearchByDistributionName(UNDERSCORE);
         assertFindForAuditSearchByDistributionName("FDA JULY 17", USAGE_ID_16);
