@@ -1,5 +1,6 @@
 [
   {
+    "batchId": "%1$s",
     "wrWrkInst": 123456789,
     "systemTitle": "Reclaiming youth at risk : our hope for the future",
     "standardNumber": "12345XX-123117",
@@ -43,6 +44,7 @@
     "lmDetailId" : "c8bb25a2-0b65-41ee-ad50-32711e7bea97"
   },
   {
+    "batchId": "%1$s",
     "wrWrkInst": 123456789,
     "systemTitle": "BIOCHEMISTRY (MOSCOW)",
     "status": "ARCHIVED",

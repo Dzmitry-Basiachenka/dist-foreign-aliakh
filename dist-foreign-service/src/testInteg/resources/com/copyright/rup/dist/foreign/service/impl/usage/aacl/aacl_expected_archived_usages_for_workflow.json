@@ -1,5 +1,6 @@
 [
   {
+    "batchId": "%1$s",
     "wrWrkInst": 100010768,
     "systemTitle": "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )",
     "standardNumber": "12345XX-79068",
@@ -43,6 +44,7 @@
     "lmDetailId" : "b86a63d6-48c3-4291-b5bc-3bc9ddef0e66"
   },
   {
+    "batchId": "%1$s",
     "wrWrkInst": 123456789,
     "systemTitle": "Reclaiming youth at risk : our hope for the future",
     "standardNumber": "12345XX-123117",

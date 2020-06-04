@@ -84,23 +84,6 @@
       "collected_amount": 39.80,
       "product_family": "FAS2",
       "post_distribution_flag": false
-    },
-    {
-      "rh_uid": "21075c02-54d7-43f7-b3e8-1858b1006d66",
-      "rollup_uid": "34ac2a6b-73fd-49e8-b97b-0c1b7031b5bf",
-      "detail_id": "bde1e665-b10f-4015-936f-71fb42410e3b",
-      "distribution_name": "FDA April 18",
-      "distribution_date": "2018-04-07T20:00:00-04:00",
-      "ccc_event_id": "53259",
-      "check_number": "578944",
-      "check_date": "2018-04-09T20:00:00-04:00",
-      "period_end_date": "2018-04-11T20:00:00-04:00",
-      "lm_detail_id": "c6a8a6d4-952c-43e2-9f9d-f12212c95fd8",
-      "royalty_amount": 68.00,
-      "service_fee_amount": 32.00,
-      "collected_amount": 100.00,
-      "product_family": "FAS2",
-      "post_distribution_flag": true
     }
   ]
 }
