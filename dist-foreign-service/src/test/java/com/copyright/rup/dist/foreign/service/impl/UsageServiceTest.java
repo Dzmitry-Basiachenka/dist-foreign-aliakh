@@ -689,6 +689,7 @@ public class UsageServiceTest {
     private Usage buildUsage(String usageId) {
         Usage usage = new Usage();
         usage.setId(usageId);
+        usage.setBatchId(BATCH_ID);
         usage.setWrWrkInst(123160519L);
         usage.getRightsholder().setId(RH_ID);
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
@@ -703,6 +704,7 @@ public class UsageServiceTest {
     private PaidUsage buildPaidUsage(UsageStatusEnum status, boolean postDistributionFlag, Boolean splitParentFlag) {
         PaidUsage paidUsage = new PaidUsage();
         paidUsage.setId(USAGE_ID_1);
+        paidUsage.setBatchId(BATCH_ID);
         paidUsage.setStatus(status);
         paidUsage.setCheckNumber("578945");
         paidUsage.setCccEventId("53256");
@@ -726,6 +728,7 @@ public class UsageServiceTest {
     private PaidUsage buildPaidUsageToInsert(PaidUsage usageFromLm, Usage storedUsage, String usegeId) {
         PaidUsage paidUsage = new PaidUsage();
         paidUsage.setId(usegeId);
+        paidUsage.setBatchId(storedUsage.getBatchId());
         paidUsage.setCheckNumber(usageFromLm.getCheckNumber());
         paidUsage.setCccEventId(usageFromLm.getCccEventId());
         paidUsage.setDistributionName(usageFromLm.getDistributionName());
