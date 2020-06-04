@@ -132,30 +132,6 @@
         "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
-      },
-      {
-        "cccEventId": "53259",
-        "product": "FAS",
-        "rorAccountNumber": "1000003066",
-        "payeeAccountNumber": "2000017000",
-        "royaltyAmount": 68.0000000000,
-        "currency": "USD",
-        "licenseCreateDate": "09-14-2018T09:07:41 AM",
-        "serviceFeeAmount": 32.0000000000,
-        "wrWrkInst": "243904752",
-        "publicationName": "100 ROAD MOVIES",
-        "chapterArticleTitle": "DIN EN 779:2013",
-        "omOrderDetailNumber": "1aeb7057-6c59-45f0-8c58-d919ce7e7c93",
-        "totalAmount": 100.0000000000,
-        "periodEndDate": "04/11/2018",
-        "adjustmentFlag": false,
-        "passThroughFlag": true,
-        "market": "Doc Del",
-        "marketPeriodFrom": 2013,
-        "marketPeriodTo": 2017,
-        "serviceNameReporting": "FAS",
-        "createUser": "FDA Distribution",
-        "status": "D - Distributed"
       }
     ]
   }

@@ -295,7 +295,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private List<PaidUsage> loadExpectedUsages(String fileName) throws IOException {
-            String content = TestUtils.fileToString(this.getClass(), fileName);
+            String content = String.format(TestUtils.fileToString(this.getClass(), fileName), usageBatch.getId());
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
             mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
