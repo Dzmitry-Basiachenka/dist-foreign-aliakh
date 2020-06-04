@@ -1,3 +1,12 @@
+10.1.4
+-
+* B-55952 FDA: Post distribution and split usage detail reporting enhancement: adjust paid information processing
+* B-55952 FDA: Post distribution and split usage detail reporting enhancement: adjust workflow tests
+* B-56849 Tech Debt: FDA: replace SnsNotificationMessageConverter by jackson parser, resolve todo in DuplicateInFileValidator
+* B-56849 Tech Debt: implement min by title cutoff amount with exclusion integration test
+* B-59011 FDA: Reporting AACL to RC: Make changes based on CR-DIST-FOREIGN-174
+* B-59011 FDA: Reporting AACL to RC: separate assertion step for paid usages to AACL workflow integration test
+
 10.1.3
 -
 * B-56234 FDA: AACL export of baseline data: make changes based on comments in CR-DIST-FOREIGN-172
