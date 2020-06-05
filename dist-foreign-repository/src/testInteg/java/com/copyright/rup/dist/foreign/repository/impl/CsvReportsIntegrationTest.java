@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 
 import com.google.common.collect.Sets;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
 /**
@@ -464,10 +470,25 @@ public class CsvReportsIntegrationTest {
 
     private void assertFilesWithExecutor(Consumer<PipedOutputStream> reportWriter, String fileName)
         throws IOException {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
         PipedOutputStream outputStream = new PipedOutputStream();
-        // TODO {srudak} use submit() to preserve exceptions; inverstigate the reason of 'Pipe not connected' exception
-        Executors.newSingleThreadExecutor().execute(() -> reportWriter.accept(outputStream));
-        reportTestUtils.assertCsvReport(fileName, new PipedInputStream(outputStream));
+        PipedInputStream inputStream = new PipedInputStream(outputStream);
+        Future<?> writeReportFuture = executorService.submit(() -> reportWriter.accept(outputStream));
+        Future<byte[]> readReportFuture = executorService.submit(() -> {
+            try {
+                return IOUtils.toByteArray(inputStream);
+            } catch (IOException e) {
+                throw new AssertionError(e);
+            }
+        });
+        byte[] actualReportBytes;
+        try {
+            writeReportFuture.get(10, TimeUnit.SECONDS);
+            actualReportBytes = readReportFuture.get(10, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new AssertionError(e);
+        }
+        reportTestUtils.assertCsvReport(fileName, new ByteArrayInputStream(actualReportBytes));
     }
 
     private void assertEmptyAuditFasReport(AuditFilter filter) throws IOException {
