@@ -33,7 +33,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(SecurityUtils.class)
-// TODO {srudak} remove this class and rename the original ScenarioMediatorTest
 public class FasScenarioMediatorTest {
 
     private static final String PERMISSION_NAME = "FDA_EXCLUDE_FROM_SCENARIO";
