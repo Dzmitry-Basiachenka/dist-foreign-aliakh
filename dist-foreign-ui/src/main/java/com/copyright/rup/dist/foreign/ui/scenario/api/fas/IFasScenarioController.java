@@ -56,6 +56,5 @@ public interface IFasScenarioController extends ICommonScenarioController {
      *
      * @param event an instance of {@link ExcludeUsagesEvent}
      */
-    // TODO {srudak} rename?
     void fireWidgetEvent(ExcludeUsagesEvent event);
 }
