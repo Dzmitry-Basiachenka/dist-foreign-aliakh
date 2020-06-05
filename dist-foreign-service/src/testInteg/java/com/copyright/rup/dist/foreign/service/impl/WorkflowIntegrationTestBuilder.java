@@ -313,6 +313,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
                 Pair.of(ScenarioActionTypeEnum.SUBMITTED, "Submitting scenario for testing purposes"),
                 Pair.of(ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes"),
                 Pair.of(ScenarioActionTypeEnum.SENT_TO_LM, ""),
+                Pair.of(ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process"),
                 Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM"));
         }
 
