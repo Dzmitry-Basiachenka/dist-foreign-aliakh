@@ -49,6 +49,8 @@ public class WorkflowIntegrationTest {
     private static final String USAGE_LM_DETAIL_ID_3 = "f9233aec-fa18-4973-a97c-5b550474c2fd";
     private static final String USAGE_LM_DETAIL_ID_4 = "b771be06-0206-4e03-9e9a-740c5714bdae";
     private static final String USAGE_LM_DETAIL_ID_5 = "1cb528e4-9712-4a2a-b456-9eb4316799d4";
+    private static final String USAGE_LM_DETAIL_ID_6 = "ebae756e-6174-4ce7-9988-7722cdc35ce4";
+    private static final String USAGE_LM_DETAIL_ID_7 = "c6a8a6d4-952c-43e2-9f9d-f12212c95fd8";
     private static final String RIGHTHOLDER_ID_1 = "60080587-a225-439c-81af-f016cb33aeac";
     private static final String RIGHTHOLDER_ID_2 = "b0e6b1f6-89e9-4767-b143-db0f49f32769";
     private static final String RIGHTHOLDER_ID_3 = "f366285a-ce46-48b0-96ee-cd35d62fb243";
@@ -91,7 +93,7 @@ public class WorkflowIntegrationTest {
             .expectLmDetails(2, "details/cla_details_to_lm1.json", "details/cla_details_to_lm2.json")
             .expectPaidUsagesFromLm("lm/paid_usages_cla.json")
             .expectPaidUsageLmDetailIds(USAGE_LM_DETAIL_ID_1, USAGE_LM_DETAIL_ID_2, USAGE_LM_DETAIL_ID_3,
-                USAGE_LM_DETAIL_ID_4, USAGE_LM_DETAIL_ID_5)
+                USAGE_LM_DETAIL_ID_4, USAGE_LM_DETAIL_ID_5, USAGE_LM_DETAIL_ID_6, USAGE_LM_DETAIL_ID_7)
             .expectCrmReporting("crm/workflow/rights_distribution_request_cla.json",
                 "crm/workflow/rights_distribution_response_cla.json")
             .expectUsages("usage/expected_usages_for_workflow.json")
@@ -107,12 +109,18 @@ public class WorkflowIntegrationTest {
                 Pair.of(UsageActionTypeEnum.LOADED, AUDIT_UPLOADED_IN_BATCH)))
             .expectUsageAudit(USAGE_LM_DETAIL_ID_5, Arrays.asList(
                 Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
-                Pair.of(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
+                Pair.of(UsageActionTypeEnum.PAID, "Usage has been adjusted based on Split process"),
                 Pair.of(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
                 Pair.of(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 2000139286 was found in RMS"),
                 Pair.of(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100012905 was found by standard number " +
                     "12345XX-12978"),
                 Pair.of(UsageActionTypeEnum.LOADED, AUDIT_UPLOADED_IN_BATCH)))
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_6, Arrays.asList(
+                Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
+                Pair.of(UsageActionTypeEnum.PAID, "Usage has been created based on Split process")))
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_7, Arrays.asList(
+                Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
+                Pair.of(UsageActionTypeEnum.PAID, "Usage has been created based on Post-Distribution process")))
             .build()
             .run();
     }
