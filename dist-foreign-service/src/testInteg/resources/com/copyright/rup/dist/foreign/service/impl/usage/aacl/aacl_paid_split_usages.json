@@ -9,9 +9,9 @@
     "status": "PAID",
     "productFamily": "AACL",
     "numberOfCopies": 300,
-    "grossAmount": 500.0000000000,
-    "netAmount": 80.0000000000,
-    "serviceFeeAmount": 420.0000000000,
+    "grossAmount": 400.0000000000,
+    "netAmount": 336.0000000000,
+    "serviceFeeAmount": 64.0000000000,
     "serviceFee": 0.25000,
     "rightsholder": {
       "id": null,
@@ -51,7 +51,7 @@
     "distributionName": "FDA March 17",
     "distributionDate": "2017-01-14T00:00-05:00",
     "periodEndDate": "2017-01-16T00:00-05:00",
-    "lmDetailId" : "b86a63d6-48c3-4291-b5bc-3bc9ddef0e66"
+    "lmDetailId": "b86a63d6-48c3-4291-b5bc-3bc9ddef0e66"
   },
   {
     "batchId": "2e3d35ce-28a2-4368-a4f3-1d6a87f3b7c2",
@@ -62,9 +62,9 @@
     "status": "PAID",
     "productFamily": "AACL",
     "numberOfCopies": 300,
-    "grossAmount": 500.0000000000,
-    "netAmount": 80.0000000000,
-    "serviceFeeAmount": 420.0000000000,
+    "netAmount": 84.0000000000,
+    "serviceFeeAmount": 16.0000000000,
+    "grossAmount": 100.0000000000,
     "serviceFee": 0.25000,
     "rightsholder": {
       "id": null,
@@ -104,6 +104,113 @@
     "distributionName": "FDA March 17",
     "distributionDate": "2017-01-14T00:00-05:00",
     "periodEndDate": "2017-01-16T00:00-05:00",
-    "lmDetailId" : "05c02720-c1a7-4cde-8229-cd1271612d3f"
+    "lmDetailId": "05c02720-c1a7-4cde-8229-cd1271612d3f"
+  },
+  {
+    "id": "30771d65-8b91-42e5-865c-0c73fddbee0c",
+    "batchId": "2e3d35ce-28a2-4368-a4f3-1d6a87f3b7c2",
+    "wrWrkInst": 243904752,
+    "systemTitle": "Biological Journal",
+    "standardNumber": "4680262122277",
+    "standardNumberType": "VALISBN10",
+    "status": "PAID",
+    "productFamily": "AACL",
+    "numberOfCopies": 20,
+    "grossAmount": 750.0000000000,
+    "netAmount": 562.5000000000,
+    "serviceFeeAmount": 187.5000000000,
+    "serviceFee": 0.25000,
+    "rightsholder": {
+      "id": null,
+      "accountNumber": "7000864232",
+      "name": null
+    },
+    "payee": {
+      "id": null,
+      "accountNumber": "1000010022",
+      "name": null
+    },
+    "aaclUsage": {
+      "batchPeriodEndDate": "2019-06-30",
+      "institution": "University of Michigan",
+      "usageSource": "Feb 2017 TUR",
+      "rightLimitation": "ALL",
+      "numberOfPages": 30,
+      "detailLicenseeClass": {
+        "id": 143,
+        "discipline": "Engineering",
+        "enrollmentProfile": "EXGP"
+      },
+      "usageAge": {
+        "period": 2040
+      },
+      "publicationType": {
+        "id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199",
+        "name": "Business or Trade Journal",
+        "weight": 1.50
+      },
+      "originalPublicationType": "Scholarly Journal"
+    },
+    "comment": "AACL archived usage",
+    "checkNumber": "58788",
+    "checkDate": "2017-01-15T00:00-05:00",
+    "cccEventId": "83288",
+    "distributionName": "FDA March 17",
+    "distributionDate": "2017-01-14T00:00-05:00",
+    "periodEndDate": "2017-01-16T00:00-05:00",
+    "lmDetailId": "c4191f92-c8b6-4a3f-88ab-ede74970135b"
+  },
+  {
+    "batchId": "2e3d35ce-28a2-4368-a4f3-1d6a87f3b7c2",
+    "wrWrkInst": 243904752,
+    "systemTitle": "Biological Journal",
+    "standardNumber": "4680262122277",
+    "standardNumberType": "VALISBN10",
+    "status": "PAID",
+    "productFamily": "AACL",
+    "numberOfCopies": 20,
+    "grossAmount": 750.0000000000,
+    "netAmount": 562.5000000000,
+    "serviceFeeAmount": 187.5000000000,
+    "serviceFee": 0.25000,
+    "rightsholder": {
+      "id": null,
+      "accountNumber": "1000010029",
+      "name": null
+    },
+    "payee": {
+      "id": null,
+      "accountNumber": "1000010022",
+      "name": null
+    },
+    "aaclUsage": {
+      "batchPeriodEndDate": "2019-06-30",
+      "institution": "University of Michigan",
+      "usageSource": "Feb 2017 TUR",
+      "rightLimitation": "ALL",
+      "numberOfPages": 30,
+      "detailLicenseeClass": {
+        "id": 143,
+        "discipline": "Engineering",
+        "enrollmentProfile": "EXGP"
+      },
+      "usageAge": {
+        "period": 2040
+      },
+      "publicationType": {
+        "id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199",
+        "name": "Business or Trade Journal",
+        "weight": 1.50
+      },
+      "originalPublicationType": "Scholarly Journal"
+    },
+    "comment": "AACL archived usage",
+    "checkNumber": "58788",
+    "checkDate": "2017-01-15T00:00-05:00",
+    "cccEventId": "83288",
+    "distributionName": "FDA March 17",
+    "distributionDate": "2017-01-14T00:00-05:00",
+    "periodEndDate": "2017-01-16T00:00-05:00",
+    "lmDetailId": "8203f9d4-9ea6-4afd-a8e9-d77932bac71c"
   }
 ]

@@ -3,13 +3,17 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioAuditRepository;
+
+import com.google.common.collect.Maps;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -39,5 +43,13 @@ public class ScenarioAuditRepository extends BaseRepository implements IScenario
     public List<ScenarioAuditItem> findByScenarioId(String scenarioId) {
         checkArgument(StringUtils.isNotBlank(scenarioId));
         return selectList("IScenarioAuditMapper.findByScenarioId", scenarioId);
+    }
+
+    @Override
+    public boolean isAuditItemExist(String scenarioId, ScenarioActionTypeEnum actionType) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
+        parameters.put("actionType", Objects.requireNonNull(actionType));
+        return selectOne("IScenarioAuditMapper.isAuditItemExist", parameters);
     }
 }

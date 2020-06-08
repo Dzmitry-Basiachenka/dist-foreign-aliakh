@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +25,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -77,6 +80,8 @@ public class ReceivePaidUsagesFromLmTest {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_split_usages_aacl.json");
         testHelper.assertPaidAaclUsages(loadExpectedPaidUsages("usage/aacl/aacl_paid_split_usages.json"));
+        testHelper.assertScenarioAudit("de1d65f6-10c6-462c-bd97-44fcfc976934", Collections.singletonList(
+            Pair.of(ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process")));
     }
 
     @Test
@@ -84,6 +89,8 @@ public class ReceivePaidUsagesFromLmTest {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_split_usages_fas.json");
         testHelper.assertPaidUsages(loadExpectedPaidUsages("usage/paid_split_usages_fas.json"));
+        testHelper.assertScenarioAudit("4924da00-ee87-41b3-9aed-caa5c5ba94f1", Collections.singletonList(
+            Pair.of(ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process")));
     }
 
     @Test

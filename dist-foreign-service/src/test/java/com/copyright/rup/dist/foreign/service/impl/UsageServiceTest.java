@@ -80,6 +80,7 @@ public class UsageServiceTest {
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final String USAGE_ID_2 = "Usage id 2";
     private static final String SCENARIO_ID = "78179a10-ad9e-432e-8aae-30b91fd14ed1";
+    private static final String PAID_SCENARIO_ID = "e4a81dff-719b-4f73-bb0d-fcfc23ea2395";
     private static final String BATCH_ID = "3e2d710d-8753-4432-ad7b-25e327c97e94";
     private static final String USER_NAME = "User name";
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
@@ -377,11 +378,36 @@ public class UsageServiceTest {
         paidUsage.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
         usageArchiveRepository.updatePaidInfo(paidUsage);
         expectLastCall().once();
+        expect(scenarioAuditService.isAuditItemExist(PAID_SCENARIO_ID, ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT))
+            .andReturn(false).once();
         usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
             "Usage has been adjusted based on Split process");
         expectLastCall().once();
-        scenarioAuditService.logAction("e4a81dff-719b-4f73-bb0d-fcfc23ea2395",
-            ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process");
+        scenarioAuditService.logAction(PAID_SCENARIO_ID, ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT,
+            "Scenario has been updated after Split process");
+        expectLastCall().once();
+        replay(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
+        usageService.updatePaidInfo(Collections.singletonList(usage));
+        verify(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
+    }
+
+    @Test
+    public void testUpdatePaidInfoSplitOriginalDetailWithExistingScenarioAudit() {
+        PaidUsage usage = buildPaidUsage(UsageStatusEnum.SENT_TO_LM, false, true);
+        PaidUsage paidUsage = buildPaidUsage(UsageStatusEnum.PAID, false, true);
+        expect(rightsholderService.findAccountNumbersByRightsholderIds(RH_IDS))
+            .andReturn(IDS_TO_ACCOUNT_NUMBER_MAP).once();
+        expect(usageArchiveRepository.findByIds(ImmutableList.of(USAGE_ID_1)))
+            .andReturn(ImmutableList.of(usage))
+            .once();
+        paidUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
+        paidUsage.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
+        usageArchiveRepository.updatePaidInfo(paidUsage);
+        expectLastCall().once();
+        expect(scenarioAuditService.isAuditItemExist(PAID_SCENARIO_ID, ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT))
+            .andReturn(true).once();
+        usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
+            "Usage has been adjusted based on Split process");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
         usageService.updatePaidInfo(Collections.singletonList(usage));
@@ -405,11 +431,13 @@ public class UsageServiceTest {
         paidUsage.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
         usageArchiveRepository.updatePaidInfo(paidUsage);
         expectLastCall().once();
+        expect(scenarioAuditService.isAuditItemExist(PAID_SCENARIO_ID, ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT))
+            .andReturn(false).once();
         usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
             "Usage has been adjusted based on Split process with RH change from 1000001534 to 7000481360");
         expectLastCall().once();
-        scenarioAuditService.logAction("e4a81dff-719b-4f73-bb0d-fcfc23ea2395",
-            ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process");
+        scenarioAuditService.logAction(PAID_SCENARIO_ID, ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT,
+            "Scenario has been updated after Split process");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, scenarioAuditService, rightsholderService);
         usageService.updatePaidInfo(Collections.singletonList(newUsage));
@@ -721,7 +749,7 @@ public class UsageServiceTest {
         paidUsage.setWrWrkInst(123160519L);
         paidUsage.setPostDistributionFlag(postDistributionFlag);
         paidUsage.setSplitParentFlag(splitParentFlag);
-        paidUsage.setScenarioId("e4a81dff-719b-4f73-bb0d-fcfc23ea2395");
+        paidUsage.setScenarioId(PAID_SCENARIO_ID);
         return paidUsage;
     }
 

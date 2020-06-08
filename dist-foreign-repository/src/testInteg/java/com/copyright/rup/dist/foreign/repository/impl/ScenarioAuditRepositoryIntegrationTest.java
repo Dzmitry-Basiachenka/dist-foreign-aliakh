@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -58,6 +59,13 @@ public class ScenarioAuditRepositoryIntegrationTest {
         assertEquals(1, CollectionUtils.size(scenarioAuditRepository.findByScenarioId(SCENARIO_UID)));
         scenarioAuditRepository.deleteByScenarioId(SCENARIO_UID);
         assertTrue(CollectionUtils.isEmpty(scenarioAuditRepository.findByScenarioId(SCENARIO_UID)));
+    }
+
+    @Test
+    public void testIsAuditItemExist() {
+        assertFalse(scenarioAuditRepository.isAuditItemExist(SCENARIO_UID, ScenarioActionTypeEnum.SUBMITTED));
+        scenarioAuditRepository.insert(buildScenarioAuditItem(SCENARIO_UID));
+        assertTrue(scenarioAuditRepository.isAuditItemExist(SCENARIO_UID, ScenarioActionTypeEnum.SUBMITTED));
     }
 
     private ScenarioAuditItem buildScenarioAuditItem(String scenarioId) {

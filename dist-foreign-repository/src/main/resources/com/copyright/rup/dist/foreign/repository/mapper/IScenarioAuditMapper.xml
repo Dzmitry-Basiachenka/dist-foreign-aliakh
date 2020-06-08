@@ -43,4 +43,13 @@
         where df_scenario_uid = #{scenarioId}
         order by created_datetime desc
     </select>
+
+    <select id="isAuditItemExist" parameterType="map" resultType="boolean">
+        select exists (
+            select 1
+            from ${schema}.df_scenario_audit
+            where df_scenario_uid = #{scenarioId}
+                and action_type_ind = #{actionType}
+        )
+    </select>
 </mapper>
