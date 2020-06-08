@@ -9,14 +9,12 @@ import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
-import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
@@ -46,7 +44,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,8 +77,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IUsageService usageService;
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
-    @Autowired
-    private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
@@ -304,7 +299,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void verifyScenarioAudit() {
-            assertEquals(buildExpectedScenarioAudit(), buildActualScenarioAudit());
+            testHelper.assertScenarioAudit(scenario.getId(), buildExpectedScenarioAudit());
         }
 
         private List<Pair<ScenarioActionTypeEnum, String>> buildExpectedScenarioAudit() {
@@ -315,13 +310,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
                 Pair.of(ScenarioActionTypeEnum.SENT_TO_LM, ""),
                 Pair.of(ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process"),
                 Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM"));
-        }
-
-        private List<Pair<ScenarioActionTypeEnum, String>> buildActualScenarioAudit() {
-            return scenarioAuditService.getActions(scenario.getId()).stream()
-                .sorted(Comparator.comparing(ScenarioAuditItem::getCreateDate))
-                .map(a -> Pair.of(a.getActionType(), a.getActionReason()))
-                .collect(Collectors.toList());
         }
 
         private void verifyUsagesAudit() {

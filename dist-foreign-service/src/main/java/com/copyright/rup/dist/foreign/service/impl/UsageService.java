@@ -252,9 +252,7 @@ public class UsageService implements IUsageService {
                 } else if (paidUsage.getSplitParentFlag()) {
                     updatePaidUsage(paidUsage, buildActionReason(oldAccountNumber, newAccountNumber,
                         "Usage has been adjusted based on Split process"));
-                    scenarioAuditService.logAction(usageIdToUsageMap.get(paidUsageId).getScenarioId(),
-                        ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT,
-                        "Scenario has been updated after Split process");
+                    logScenarioSplitAction(usageIdToUsageMap.get(paidUsageId).getScenarioId());
                 } else {
                     insertPaidUsage(buildPaidUsage(usageIdToUsageMap.get(paidUsageId), paidUsage),
                         "Usage has been created based on Split process", insertPaidConsumer);
@@ -426,6 +424,13 @@ public class UsageService implements IUsageService {
                 "Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}",
                 batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));
         });
+    }
+
+    private void logScenarioSplitAction(String scenarioId) {
+        if (!scenarioAuditService.isAuditItemExist(scenarioId, ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT)) {
+            scenarioAuditService.logAction(scenarioId, ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT,
+                "Scenario has been updated after Split process");
+        }
     }
 
     private void populateAccountNumbers(List<PaidUsage> paidUsages) {

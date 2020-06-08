@@ -9,6 +9,8 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -16,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
@@ -26,6 +29,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +43,7 @@ import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -71,6 +76,8 @@ public class ServiceTestHelper {
     private IUsageService usageService;
     @Autowired
     private IAaclUsageService aaclUsageService;
+    @Autowired
+    private IScenarioAuditService scenarioAuditService;
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
     @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
@@ -212,6 +219,13 @@ public class ServiceTestHelper {
                 assertEquals(expectedItem.getActionReason(), actualItem.getActionReason());
                 assertEquals(expectedItem.getActionType(), actualItem.getActionType());
             });
+    }
+
+    public void assertScenarioAudit(String scenarioId, List<Pair<ScenarioActionTypeEnum, String>> expectedAudit) {
+        assertEquals(expectedAudit, scenarioAuditService.getActions(scenarioId).stream()
+            .sorted(Comparator.comparing(ScenarioAuditItem::getCreateDate))
+            .map(a -> Pair.of(a.getActionType(), a.getActionReason()))
+            .collect(Collectors.toList()));
     }
 
     public void assertUsages(List<Usage> expectedUsages) {

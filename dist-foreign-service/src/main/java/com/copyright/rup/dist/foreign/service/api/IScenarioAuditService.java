@@ -49,4 +49,13 @@ public interface IScenarioAuditService {
      * @return list of {@link ScenarioAuditItem}s
      */
     List<ScenarioAuditItem> getActions(String scenarioId);
+
+    /**
+     * Checks whether {@link ScenarioActionTypeEnum} exists for specified scenario id.
+     *
+     * @param scenarioId scenario identifier
+     * @param actionType instance of {@link ScenarioActionTypeEnum}
+     * @return {@code true} - if corresponding record exists, {@code false} - otherwise
+     */
+    boolean isAuditItemExist(String scenarioId, ScenarioActionTypeEnum actionType);
 }

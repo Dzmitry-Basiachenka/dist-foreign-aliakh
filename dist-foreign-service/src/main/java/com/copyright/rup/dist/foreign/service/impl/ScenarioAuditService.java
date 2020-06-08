@@ -48,6 +48,11 @@ public class ScenarioAuditService implements IScenarioAuditService {
         return scenarioAuditRepository.findByScenarioId(scenarioId);
     }
 
+    @Override
+    public boolean isAuditItemExist(String scenarioId, ScenarioActionTypeEnum actionType) {
+        return scenarioAuditRepository.isAuditItemExist(scenarioId, actionType);
+    }
+
     private ScenarioAuditItem buildScenarioAuditItem(String scenarioId, ScenarioActionTypeEnum actionType,
                                                      String actionReason) {
         ScenarioAuditItem scenarioAuditItem = new ScenarioAuditItem();

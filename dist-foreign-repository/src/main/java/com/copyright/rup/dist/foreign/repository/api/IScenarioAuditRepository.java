@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 
 import java.util.List;
@@ -36,4 +37,13 @@ public interface IScenarioAuditRepository {
      * @return list of {@link ScenarioAuditItem}s
      */
     List<ScenarioAuditItem> findByScenarioId(String scenarioId);
+
+    /**
+     * Checks whether {@link ScenarioActionTypeEnum} exists for specified scenario id.
+     *
+     * @param scenarioId scenario identifier
+     * @param actionType instance of {@link ScenarioActionTypeEnum}
+     * @return {@code true} - if corresponding record exists, {@code false} - otherwise
+     */
+    boolean isAuditItemExist(String scenarioId, ScenarioActionTypeEnum actionType);
 }
