@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
@@ -11,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.ImmutableMap;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,8 @@ public class SendAaclToCrmIntegrationTest {
                 "8ab89fcc-abf9-432e-b653-e84f2605697f", buildArchivedUsageAudit(),
                 "e5ae9237-05a0-4c82-b607-0f91f19b2f24", buildArchivedUsageAudit()))
             .expectScenarioAudit(ImmutableMap.of(
-                "351e585c-0b08-429d-9e31-bea283ba33de", buildArchivedScenarioAudit()))
+                "351e585c-0b08-429d-9e31-bea283ba33de", Collections.singletonList(
+                    Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM"))))
             .build()
             .run();
     }
@@ -77,13 +78,6 @@ public class SendAaclToCrmIntegrationTest {
         UsageAuditItem auditItem = new UsageAuditItem();
         auditItem.setActionType(UsageActionTypeEnum.ARCHIVED);
         auditItem.setActionReason("Usage was sent to CRM");
-        return Collections.singletonList(auditItem);
-    }
-
-    private List<ScenarioAuditItem> buildArchivedScenarioAudit() {
-        ScenarioAuditItem auditItem = new ScenarioAuditItem();
-        auditItem.setActionType(ScenarioActionTypeEnum.ARCHIVED);
-        auditItem.setActionReason("All usages from scenario have been sent to CRM");
         return Collections.singletonList(auditItem);
     }
 }

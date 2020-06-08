@@ -1,18 +1,15 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
-import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,11 +36,10 @@ class RefreshScenarioTestBuilder {
     private String productFamily;
     private List<Usage> expectedUsages;
     private Scenario expectedScenario;
+    private List<Pair<ScenarioActionTypeEnum, String>> expectedScenarioAudit;
 
     @Autowired
     private IScenarioService scenarioService;
-    @Autowired
-    private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IScenarioRepository scenarioRepository;
     @Autowired
@@ -81,6 +77,11 @@ class RefreshScenarioTestBuilder {
         return this;
     }
 
+    RefreshScenarioTestBuilder expectScenarioAudit(List<Pair<ScenarioActionTypeEnum, String>> expectedAudit) {
+        this.expectedScenarioAudit = expectedAudit;
+        return this;
+    }
+
     Runner build() {
         return new Runner();
     }
@@ -103,7 +104,7 @@ class RefreshScenarioTestBuilder {
             testHelper.verifyRestServer();
             assertScenario();
             testHelper.assertUsages(expectedUsages);
-            assertScenarioActions(scenarioId);
+            testHelper.assertScenarioAudit(scenarioId, expectedScenarioAudit);
         }
 
         private void assertScenario() {
@@ -119,13 +120,6 @@ class RefreshScenarioTestBuilder {
             assertEquals("SYSTEM", scenario.getCreateUser());
             assertEquals("SYSTEM", scenario.getUpdateUser());
             assertEquals(2, scenario.getVersion());
-        }
-
-        private void assertScenarioActions(String entityId) {
-            List<ScenarioAuditItem> actions = scenarioAuditService.getActions(entityId);
-            assertTrue(CollectionUtils.isNotEmpty(actions));
-            assertEquals(1, CollectionUtils.size(actions));
-            assertEquals(ScenarioActionTypeEnum.ADDED_USAGES, actions.get(0).getActionType());
         }
     }
 }

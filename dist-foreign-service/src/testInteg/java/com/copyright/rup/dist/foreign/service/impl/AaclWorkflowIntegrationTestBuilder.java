@@ -18,7 +18,6 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
@@ -31,7 +30,6 @@ import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
-import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -133,8 +131,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IScenarioService scenarioService;
     @Autowired
     private IResearchService researchService;
-    @Autowired
-    private IScenarioAuditService scenarioAuditService;
 
     AaclWorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, int expectedCount, String... usageIds) {
         this.usagesCsvFile = csvFile;
@@ -280,7 +276,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             }
             testHelper.assertPaidAaclUsages(loadExpectedPaidUsages(expectedArchivedUsagesJsonFile));
             verifyUsageAudit();
-            verifyScenarioAudit();
+            testHelper.assertScenarioAudit(scenario.getId(), expectedScenarioAudit);
             testHelper.verifyRestServer();
         }
 
@@ -495,18 +491,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertTrue(CollectionUtils.isNotEmpty(actualArchivedUsages));
             assertEquals(CollectionUtils.size(expectedArchivedUsageIds), CollectionUtils.size(actualArchivedUsages));
         }
-
-        private void verifyScenarioAudit() {
-            assertEquals(expectedScenarioAudit, buildActualScenarioAudit());
-        }
-
-        private List<Pair<ScenarioActionTypeEnum, String>> buildActualScenarioAudit() {
-            return scenarioAuditService.getActions(scenario.getId()).stream()
-                .sorted(Comparator.comparing(ScenarioAuditItem::getCreateDate))
-                .map(a -> Pair.of(a.getActionType(), a.getActionReason()))
-                .collect(Collectors.toList());
-        }
-
 
         private void verifyUsageAudit() {
             AuditFilter filter = new AuditFilter();

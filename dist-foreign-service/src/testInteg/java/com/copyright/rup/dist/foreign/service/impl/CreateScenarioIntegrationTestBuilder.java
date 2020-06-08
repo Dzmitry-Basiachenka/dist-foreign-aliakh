@@ -9,19 +9,17 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -54,8 +52,6 @@ class CreateScenarioIntegrationTestBuilder {
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
-    private IScenarioAuditService scenarioAuditService;
-    @Autowired
     private IScenarioUsageFilterService scenarioUsageFilterService;
     @Autowired
     private ServiceTestHelper testHelper;
@@ -68,6 +64,7 @@ class CreateScenarioIntegrationTestBuilder {
     private List<Usage> expectedUsages;
     private List<Usage> expectedScenarioExcludedUsages;
     private List<Usage> expectedAlreadyInScenarioUsages;
+    private List<Pair<ScenarioActionTypeEnum, String>> expectedScenarioAudit;
     private Scenario expectedScenario;
 
     CreateScenarioIntegrationTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
@@ -107,6 +104,11 @@ class CreateScenarioIntegrationTestBuilder {
         return this;
     }
 
+    CreateScenarioIntegrationTestBuilder expectScenarioAudit(List<Pair<ScenarioActionTypeEnum, String>> expectedAudit) {
+        this.expectedScenarioAudit = expectedAudit;
+        return this;
+    }
+
     Runner build() {
         return new Runner();
     }
@@ -121,6 +123,7 @@ class CreateScenarioIntegrationTestBuilder {
         expectedAlreadyInScenarioUsages = null;
         expectedScenarioExcludedUsages = null;
         expectedScenario = null;
+        expectedScenarioAudit = null;
     }
 
     /**
@@ -132,10 +135,8 @@ class CreateScenarioIntegrationTestBuilder {
         private final String productFamily = usageFilter.getProductFamily();
 
         Runner() {
-            expectedUsages.forEach(usage -> {
-                usage.setReportedValue(
-                    usageRepository.findByIds(Collections.singletonList(usage.getId())).get(0).getReportedValue());
-            });
+            expectedUsages.forEach(usage -> usage.setReportedValue(
+                usageRepository.findByIds(Collections.singletonList(usage.getId())).get(0).getReportedValue()));
         }
 
         void run() {
@@ -150,7 +151,7 @@ class CreateScenarioIntegrationTestBuilder {
             testHelper.verifyRestServer();
             assertScenario();
             assertUsages();
-            assertScenarioActions();
+            testHelper.assertScenarioAudit(scenarioId, expectedScenarioAudit);
             assertScenarioUsageFilter();
         }
 
@@ -229,13 +230,6 @@ class CreateScenarioIntegrationTestBuilder {
                 assertEquals(0, actualUsage.getNetAmount().compareTo(BigDecimal.ZERO));
                 assertEquals(0, actualUsage.getGrossAmount().compareTo(BigDecimal.ZERO));
             });
-        }
-
-        private void assertScenarioActions() {
-            List<ScenarioAuditItem> actions = scenarioAuditService.getActions(scenarioId);
-            assertTrue(CollectionUtils.isNotEmpty(actions));
-            assertEquals(1, CollectionUtils.size(actions));
-            assertEquals(ScenarioActionTypeEnum.ADDED_USAGES, actions.get(0).getActionType());
         }
     }
 }

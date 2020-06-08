@@ -5,12 +5,15 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +60,8 @@ public class CreateAaclScenarioIntegrationTest {
             .withScenario(SCENARIO_NAME, SCENARIO_DESCRIPTION, buildAaclFields())
             .expectScenario(buildExpectedScenario())
             .expectScenarioFilter(new ScenarioUsageFilter(buildUsageFilter()))
+            .expectScenarioAudit(Collections.singletonList(
+                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY)))
             .expectUsages("usage/aacl/aacl_expected_usages_for_create_scenario.json")
             .build()
             .run();
