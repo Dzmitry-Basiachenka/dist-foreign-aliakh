@@ -3,9 +3,12 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -73,6 +77,7 @@ public class RefreshScenarioTest {
                 buildUsage("0c4c3878-20b8-49e3-a967-91e8b73c7570", 7000429266L, 1000009997L, "1629.8304", "3463.3896",
                     FAS_PRODUCT_FAMILY, 122235134L, "5620.00", "5093.2200000000", SERVICE_FEE_32, false, true)))
             .expectScenario(buildScenario("40002.60", "30626.7296", "9375.8704"))
+            .expectScenarioAudit(buildScenarioAudit())
             .build()
             .run();
     }
@@ -97,6 +102,7 @@ public class RefreshScenarioTest {
                 buildUsage("ec5c39b5-4c16-40a7-b1c8-730320971f11", 1000024950L, 1000024950L, "870.016", "1848.784",
                     FAS2_PRODUCT_FAMILY, 122235139L, "3000.00", "2718.8000000000", SERVICE_FEE_32, false, false)))
             .expectScenario(buildScenario("34909.38", "26832.7356", "8076.6444"))
+            .expectScenarioAudit(buildScenarioAudit())
             .build()
             .run();
     }
@@ -109,6 +115,10 @@ public class RefreshScenarioTest {
         scenario.setServiceFeeTotal(new BigDecimal(serviceFeeTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
         scenario.setDescription("Scenario Description");
         return scenario;
+    }
+
+    private List<Pair<ScenarioActionTypeEnum, String>> buildScenarioAudit() {
+        return Collections.singletonList(Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY));
     }
 
     private Usage buildUsage(String usageId, Long rhAccountNumber, Long payeeAccountNumber, String serviceFeeAmount,

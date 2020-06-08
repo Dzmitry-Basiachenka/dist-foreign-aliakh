@@ -4,10 +4,13 @@ import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,6 +105,8 @@ public class CreateScenarioIntegrationTest {
                 buildUsage("fcdaea01-2439-4c51-b3e2-23649cf710c7", 1000003821L, 1000003821L, SERVICE_FEE_32, "29.00",
                     "61.63", "90.6300000000", 471137470L, FAS_PRODUCT_FAMILY, new BigDecimal("100.00"), false, false)))
             .expectScenario(buildScenario("26348.4248", "34909.38", "8560.9552", null))
+            .expectScenarioAudit(Collections.singletonList(
+                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY)))
             .build()
             .run();
     }
@@ -134,6 +139,8 @@ public class CreateScenarioIntegrationTest {
                 buildUsage("fcdaea01-2439-4c51-b3e2-23649cf710c7", 1000003821L, 1000003821L, SERVICE_FEE_32, "29.00",
                     "61.63", "90.6300000000", 471137470L, FAS_PRODUCT_FAMILY, new BigDecimal("100.00"), false, false)))
             .expectScenario(buildScenario("23738.3784", "34909.38", "11171.0016", null))
+            .expectScenarioAudit(Collections.singletonList(
+                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY)))
             .build()
             .run();
     }
@@ -163,6 +170,8 @@ public class CreateScenarioIntegrationTest {
                     new BigDecimal("0.10000"), "509.322", "4583.898", "5093.2200000000", 471137469L,
                     FAS2_PRODUCT_FAMILY, new BigDecimal("5620.00"), false, false)))
             .expectScenario(buildScenario("26832.7356", "34909.38", "8076.6444", null))
+            .expectScenarioAudit(Collections.singletonList(
+                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY)))
             .build()
             .run();
     }
@@ -193,6 +202,8 @@ public class CreateScenarioIntegrationTest {
             .expectScenario(buildScenario("323.00", "475.00", "152.00",
                 buildNtsFields(new BigDecimal("100.00"), new BigDecimal("255.00"), BigDecimal.ZERO,
                     "c7ca1ca1-7cd8-49cc-aaeb-ac53fe62d903")))
+            .expectScenarioAudit(Collections.singletonList(
+                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY)))
             .build()
             .run();
     }
@@ -223,6 +234,8 @@ public class CreateScenarioIntegrationTest {
                 buildScenarioExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
             .expectScenario(buildScenario("1020.9000000000", "1030.5000000000", "9.6000000000",
                 buildNtsFields(new BigDecimal("5.00"), BigDecimal.ZERO, new BigDecimal("1000.5"), null)))
+            .expectScenarioAudit(Collections.singletonList(
+                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY)))
             .build()
             .run();
     }

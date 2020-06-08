@@ -5,17 +5,17 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
-import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.SendToCrmIntegrationTestBuilder.Runner;
 
 import org.apache.commons.lang3.builder.Builder;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 /**
  * Builder for send to CRM test.
@@ -41,8 +40,6 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private IScenarioService scenarioService;
     @Autowired
-    private IScenarioAuditService scenarioAuditService;
-    @Autowired
     private IUsageService usageService;
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
@@ -52,7 +49,7 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
     private Map<String, UsageStatusEnum> usageIdToExpectedStatus = new HashMap<>();
     private Map<String, List<UsageAuditItem>> usageIdToExpectedAudit = new HashMap<>();
     private Map<String, ScenarioStatusEnum> scenarioIdToExpectedStatus = new HashMap<>();
-    private Map<String, List<ScenarioAuditItem>> scenarioIdToExpectedAudit = new HashMap<>();
+    private Map<String, List<Pair<ScenarioActionTypeEnum, String>>> scenarioIdToExpectedAudit = new HashMap<>();
     private String expectedCrmRequest;
     private String crmResponse;
     private JobInfo expectedJobInfo;
@@ -78,7 +75,8 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    SendToCrmIntegrationTestBuilder expectScenarioAudit(Map<String, List<ScenarioAuditItem>> scenarioIdToAuditMap) {
+    SendToCrmIntegrationTestBuilder expectScenarioAudit(
+        Map<String, List<Pair<ScenarioActionTypeEnum, String>>> scenarioIdToAuditMap) {
         scenarioIdToExpectedAudit = scenarioIdToAuditMap;
         return this;
     }
@@ -121,7 +119,7 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
             verifyUsages();
             verifyScenarios();
             verifyUsageAudit();
-            verifyScenarioAudit();
+            scenarioIdToExpectedAudit.forEach(testHelper::assertScenarioAudit);
             testHelper.verifyRestServer();
         }
 
@@ -152,19 +150,6 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
         private void verifyUsageAudit() {
             usageIdToExpectedAudit.forEach(
                 (usageId, expectedAuditItems) -> testHelper.assertAudit(usageId, expectedAuditItems));
-        }
-
-        private void verifyScenarioAudit() {
-            scenarioIdToExpectedAudit.forEach((scenarioId, expectedAudit) -> {
-                List<ScenarioAuditItem> actualAudit = scenarioAuditService.getActions(scenarioId);
-                assertEquals(expectedAudit.size(), actualAudit.size());
-                IntStream.range(0, expectedAudit.size())
-                    .forEach(index -> {
-                        assertEquals(expectedAudit.get(index).getActionReason(),
-                            actualAudit.get(index).getActionReason());
-                        assertEquals(expectedAudit.get(index).getActionType(), actualAudit.get(index).getActionType());
-                    });
-            });
         }
     }
 }

@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
@@ -13,13 +12,11 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
@@ -30,8 +27,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -61,8 +57,6 @@ public class CreateAaclScenarioIntegrationTestBuilder {
     @Autowired
     private IAaclUsageService aaclUsageService;
     @Autowired
-    private IScenarioAuditService scenarioAuditService;
-    @Autowired
     private IScenarioUsageFilterService scenarioUsageFilterService;
     @Autowired
     private ServiceTestHelper testHelper;
@@ -76,6 +70,7 @@ public class CreateAaclScenarioIntegrationTestBuilder {
     private Scenario expectedScenario;
     private String expectedUsagesJsonFile;
     private ScenarioUsageFilter expectedScenarioFilter;
+    private List<Pair<ScenarioActionTypeEnum, String>> expectedScenarioAudit;
 
     CreateAaclScenarioIntegrationTestBuilder withFilter(UsageFilter usageFilter) {
         scenarioUsageFilter = usageFilter;
@@ -97,6 +92,12 @@ public class CreateAaclScenarioIntegrationTestBuilder {
 
     CreateAaclScenarioIntegrationTestBuilder expectScenario(Scenario scenario) {
         expectedScenario = scenario;
+        return this;
+    }
+
+    CreateAaclScenarioIntegrationTestBuilder expectScenarioAudit(
+        List<Pair<ScenarioActionTypeEnum, String>> expectedAudit) {
+        this.expectedScenarioAudit = expectedAudit;
         return this;
     }
 
@@ -124,6 +125,7 @@ public class CreateAaclScenarioIntegrationTestBuilder {
         expectedScenario = null;
         expectedUsagesJsonFile = null;
         expectedScenarioFilter = null;
+        expectedScenarioAudit = null;
     }
 
     /**
@@ -144,7 +146,7 @@ public class CreateAaclScenarioIntegrationTestBuilder {
             testHelper.verifyRestServer();
             assertScenario();
             assertUsages();
-            assertScenarioActions();
+            testHelper.assertScenarioAudit(scenarioId, expectedScenarioAudit);
             assertScenarioUsageFilter();
         }
 
@@ -167,14 +169,6 @@ public class CreateAaclScenarioIntegrationTestBuilder {
                 assertEquals(1, actualUsages.size());
                 assertUsage(expectedUsage, actualUsages.get(0));
             });
-        }
-
-        private void assertScenarioActions() {
-            List<ScenarioAuditItem> actions = scenarioAuditService.getActions(scenarioId);
-            assertTrue(CollectionUtils.isNotEmpty(actions));
-            assertEquals(1, CollectionUtils.size(actions));
-            assertEquals(ScenarioActionTypeEnum.ADDED_USAGES, actions.get(0).getActionType());
-            assertEquals(StringUtils.EMPTY, actions.get(0).getActionReason());
         }
 
         private void assertScenarioUsageFilter() {

@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
@@ -11,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.ImmutableMap;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class SendFasToCrmIntegrationTest {
         testBuilder
             .withProductFamily("FAS")
             .expectCrmCall("crm/sendToCrm/rights_distribution_request_fas.json",
-            "crm/sendToCrm/rights_distribution_response_fas.json")
+                "crm/sendToCrm/rights_distribution_response_fas.json")
             .expectJobInfo(buildJobInfo())
             .expectUsageStatus(ImmutableMap.of(
                 "0d1829eb-de35-4f93-bb36-2a7435263051", UsageStatusEnum.ARCHIVED,
@@ -65,7 +65,8 @@ public class SendFasToCrmIntegrationTest {
                 "feefdfd2-71fe-4c0a-a701-9dacffa9bccb", Collections.emptyList(),
                 "48189e92-b9d2-46be-94a4-c2adf83f21ce", buildArchivedUsageAudit()))
             .expectScenarioAudit(ImmutableMap.of(
-                "cb7e3237-50c3-46a5-938e-46afd8c1e0bf", buildArchivedScenarioAudit(),
+                "cb7e3237-50c3-46a5-938e-46afd8c1e0bf", Collections.singletonList(
+                    Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM")),
                 "221c5a30-1937-4bf6-977f-93741f9b20f1", Collections.emptyList()))
             .build()
             .run();
@@ -83,13 +84,6 @@ public class SendFasToCrmIntegrationTest {
         UsageAuditItem auditItem = new UsageAuditItem();
         auditItem.setActionType(UsageActionTypeEnum.ARCHIVED);
         auditItem.setActionReason("Usage was sent to CRM");
-        return Collections.singletonList(auditItem);
-    }
-
-    private List<ScenarioAuditItem> buildArchivedScenarioAudit() {
-        ScenarioAuditItem auditItem = new ScenarioAuditItem();
-        auditItem.setActionType(ScenarioActionTypeEnum.ARCHIVED);
-        auditItem.setActionReason("All usages from scenario have been sent to CRM");
         return Collections.singletonList(auditItem);
     }
 }
