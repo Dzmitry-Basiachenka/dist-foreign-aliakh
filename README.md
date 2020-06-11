@@ -1,3 +1,12 @@
+10.1.5
+-
+* B-55952 FDA: Post distribution and split usage detail reporting enhancement: make changes based on comments in CR-DIST-FOREIGN-175
+* B-56849 Tech Debt: FDA: adjust report verification using executor so test doesn't get stuck in case method under test fails with exception
+* B-56849 Tech Debt: FDA: adjust scenario audit verification in integration tests
+* B-56849 Tech Debt: FDA: fix CVE-2020-9484 vulnerability
+* B-56849 Tech Debt: FDA: remove obsolete TODO comments
+* CDP-912 FDA: User is not able to view scenario after FDA receiving Split information of thousands of details from that scenario
+
 10.1.4
 -
 * B-55952 FDA: Post distribution and split usage detail reporting enhancement: adjust paid information processing
