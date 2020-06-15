@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
+import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -10,6 +11,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -91,8 +93,18 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
         initGrid();
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.scenario.search_widget.payee"));
+        searchWidget.setWidth(75, Unit.PERCENTAGE);
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(new CsvStreamSource(controller).getSource());
+        fileDownloader.extend(exportButton);
+        HorizontalLayout toolbar = new HorizontalLayout(exportButton, searchWidget);
+        VaadinUtils.setMaxComponentsWidth(toolbar);
+        toolbar.setComponentAlignment(exportButton, Alignment.BOTTOM_LEFT);
+        toolbar.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
+        toolbar.setExpandRatio(searchWidget, 1f);
+        toolbar.setMargin(new MarginInfo(false, true, false, true));
         HorizontalLayout buttonsLayout = createButtonsLayout();
-        VerticalLayout mainLayout = new VerticalLayout(searchWidget, payeesGrid, buttonsLayout);
+        VerticalLayout mainLayout = new VerticalLayout(toolbar, payeesGrid, buttonsLayout);
         mainLayout.setMargin(new MarginInfo(true, true));
         mainLayout.setSizeFull();
         mainLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -105,6 +117,14 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
         splitPanel.setLocked(true);
         setContent(splitPanel);
         return this;
+    }
+
+    @Override
+    public Set<Long> getSelectedAccountNumbers() {
+        return payeesGrid.getSelectedItems()
+            .stream()
+            .map(holder -> holder.getPayee().getAccountNumber())
+            .collect(Collectors.toSet());
     }
 
     private void initGrid() {
@@ -164,17 +184,14 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
     private void addClickListener(Button button, String dialogMessageProperty,
                                   BiConsumer<Set<Long>, String> actionHandler) {
         button.addClickListener(event -> {
-            Set<PayeeTotalHolder> selectedPayees = payeesGrid.getSelectedItems();
-            if (CollectionUtils.isNotEmpty(selectedPayees)) {
+            Set<Long> selectedAccountNumbers = getSelectedAccountNumbers();
+            if (CollectionUtils.isNotEmpty(selectedAccountNumbers)) {
                 Windows.showConfirmDialogWithReason(
                     ForeignUi.getMessage("window.confirm"),
                     ForeignUi.getMessage(dialogMessageProperty),
                     ForeignUi.getMessage("button.yes"),
                     ForeignUi.getMessage("button.cancel"),
                     reason -> {
-                        Set<Long> selectedAccountNumbers = selectedPayees.stream()
-                            .map(holder -> holder.getPayee().getAccountNumber())
-                            .collect(Collectors.toSet());
                         actionHandler.accept(selectedAccountNumbers, reason);
                         fireEvent(new ExcludeUsagesEvent(this));
                         this.close();

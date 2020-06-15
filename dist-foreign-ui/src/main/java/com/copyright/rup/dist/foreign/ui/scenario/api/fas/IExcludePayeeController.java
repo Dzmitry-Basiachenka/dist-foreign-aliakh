@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.fas;
 
+import com.copyright.rup.dist.common.reporting.api.ICsvReportProvider;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -19,7 +20,7 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IExcludePayeeController extends IController<IExcludePayeeWidget> {
+public interface IExcludePayeeController extends IController<IExcludePayeeWidget>, ICsvReportProvider {
 
     /**
      * {@link #onFilterChanged()}.

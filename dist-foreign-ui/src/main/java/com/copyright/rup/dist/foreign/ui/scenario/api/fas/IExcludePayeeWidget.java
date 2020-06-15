@@ -4,6 +4,8 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
+import java.util.Set;
+
 /**
  * Interface for exclude payees widget.
  * <p>
@@ -27,4 +29,11 @@ public interface IExcludePayeeWidget extends SearchWidget.ISearchController, IRe
      * @param listener instance of {@link IExcludeUsagesListener}
      */
     void addListener(IExcludeUsagesListener listener);
+
+    /**
+     * Gets set of account numbers of selected payees.
+     *
+     * @return set of account numbers of selected payees
+     */
+    Set<Long> getSelectedAccountNumbers();
 }
