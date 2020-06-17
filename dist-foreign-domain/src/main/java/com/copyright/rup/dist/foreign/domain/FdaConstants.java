@@ -52,6 +52,11 @@ public final class FdaConstants {
     public static final String IS_RH_STM_IPRO_CODE = "IS-RH-STM-IPRO";
 
     /**
+     * Rightsholder preference code for TBO flag in PRM.
+     */
+    public static final String TAX_BENEFICIAL_OWNER_CODE = "TAXBENEFICIALOWNER";
+
+    /**
      * Key for all products for reading rightsholder preferences from PRM.
      */
     public static final String ALL_PRODUCTS_KEY = "*";

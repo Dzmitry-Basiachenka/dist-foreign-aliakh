@@ -106,6 +106,13 @@ public class PrmIntegrationService implements IPrmIntegrationService {
             productFamily, FdaConstants.IS_RH_STM_IPRO_CODE);
     }
 
+    @Override
+    public boolean isRightsholderTaxBeneficialOwner(String rightsholderId, String productFamily) {
+        return getBooleanPreference(
+            prmPreferenceService.getPreferencesMap(Collections.singleton(rightsholderId)), rightsholderId,
+            productFamily, FdaConstants.TAX_BENEFICIAL_OWNER_CODE);
+    }
+
     private boolean getBooleanPreference(Map<String, Table<String, String, Object>> preferencesMap,
                                          String rightsholderId, String productFamily, String preferenceCode) {
         Boolean preferenceValue = (Boolean) ObjectUtils.defaultIfNull(
