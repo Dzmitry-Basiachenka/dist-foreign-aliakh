@@ -31,8 +31,8 @@ public class ApplicationContextTest {
             assertNotNull(context);
             assertNotNull(context.getBean(RestTemplate.class));
             assertNotNull(context.getBean(IPrmIntegrationService.class));
-            assertNotNull(context.getBean("df.integration.oracleRhTaxCacheService"));
-            assertNotNull(context.getBean("df.integration.oracleRhTaxService"));
+            assertNotNull(context.getBean("df.integration.oracleRhTaxCountryCacheService"));
+            assertNotNull(context.getBean("df.integration.oracleRhTaxCountryService"));
             assertNotNull(context.getBean("df.integration.piIntegrationCacheService"));
             assertNotNull(context.getBean("df.integration.piIntegrationService"));
             assertNotNull(context.getBean("df.integration.rmsIntegrationService"));

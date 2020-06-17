@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Handler for processing rightsholders tax information response.
+ * Handler for processing rightsholders tax country response.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -19,7 +19,7 @@ import java.util.Objects;
  *
  * @author Uladzislau Shalamitski
  */
-public class OracleRhTaxInformationChunkRestHandler extends CommonRestHandler<Map<Long, Boolean>> {
+public class OracleRhTaxCountryChunkRestHandler extends CommonRestHandler<Map<Long, Boolean>> {
 
     private static final String DOMESTIC_INDICATOR = "D";
 
@@ -28,7 +28,7 @@ public class OracleRhTaxInformationChunkRestHandler extends CommonRestHandler<Ma
      *
      * @param restTemplate instance of {@link RestTemplate}.
      */
-    public OracleRhTaxInformationChunkRestHandler(RestTemplate restTemplate) {
+    public OracleRhTaxCountryChunkRestHandler(RestTemplate restTemplate) {
         super(restTemplate);
     }
 

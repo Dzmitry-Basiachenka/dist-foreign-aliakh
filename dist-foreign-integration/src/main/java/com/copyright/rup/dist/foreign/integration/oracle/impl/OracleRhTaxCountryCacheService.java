@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.oracle.impl;
 
 import com.copyright.rup.common.caching.impl.AbstractCacheService;
-import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxService;
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxCountryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Implementation of {@link IOracleRhTaxService} with caching.
+ * Implementation of {@link IOracleRhTaxCountryService} with caching.
  * See {@link AbstractCacheService}.
  * <p>
  * Copyright (C) 2018 copyright.com
@@ -19,18 +19,19 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Aliaksandr Liakh
  */
-public class OracleRhTaxCacheService extends AbstractCacheService<Long, Boolean> implements IOracleRhTaxService {
+public class OracleRhTaxCountryCacheService extends AbstractCacheService<Long, Boolean>
+    implements IOracleRhTaxCountryService {
 
     @Autowired
-    @Qualifier("df.integration.oracleRhTaxService")
-    private IOracleRhTaxService oracleRhTaxService;
+    @Qualifier("df.integration.oracleRhTaxCountryService")
+    private IOracleRhTaxCountryService oracleRhTaxCountryService;
 
     /**
      * Constructor.
      *
      * @param timeToLive cache expiration time, minutes
      */
-    public OracleRhTaxCacheService(int timeToLive) {
+    public OracleRhTaxCountryCacheService(int timeToLive) {
         super.setExpirationTime(TimeUnit.MINUTES.toSeconds(timeToLive));
     }
 
@@ -41,6 +42,6 @@ public class OracleRhTaxCacheService extends AbstractCacheService<Long, Boolean>
 
     @Override
     protected Boolean loadData(Long accountNumber) {
-        return oracleRhTaxService.isUsTaxCountry(accountNumber);
+        return oracleRhTaxCountryService.isUsTaxCountry(accountNumber);
     }
 }

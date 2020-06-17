@@ -113,11 +113,11 @@
         </bean>
     </util:list>
 
-    <bean id="df.integration.oracleRhTaxCacheService" class="com.copyright.rup.dist.foreign.integration.oracle.impl.OracleRhTaxCacheService">
+    <bean id="df.integration.oracleRhTaxCountryCacheService" class="com.copyright.rup.dist.foreign.integration.oracle.impl.OracleRhTaxCountryCacheService">
         <constructor-arg value="$RUP{dist.foreign.rest.oracle.ttl.minutes}"/>
     </bean>
 
-    <bean id="df.integration.oracleRhTaxChunkCacheService" class="com.copyright.rup.dist.foreign.integration.oracle.impl.OracleRhTaxChunkCacheService">
+    <bean id="df.integration.oracleRhTaxCountryChunkCacheService" class="com.copyright.rup.dist.foreign.integration.oracle.impl.OracleRhTaxCountryChunkCacheService">
         <constructor-arg value="$RUP{dist.foreign.rest.oracle.ttl.minutes}"/>
     </bean>
 

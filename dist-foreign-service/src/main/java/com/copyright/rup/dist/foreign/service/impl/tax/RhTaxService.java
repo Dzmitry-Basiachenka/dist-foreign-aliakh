@@ -4,8 +4,8 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxChunkService;
-import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxService;
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxCountryChunkService;
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxCountryService;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
@@ -36,11 +36,11 @@ public class RhTaxService implements IRhTaxService {
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
-    @Qualifier("df.integration.oracleRhTaxChunkCacheService")
-    private IOracleRhTaxChunkService oracleRhTaxChunkService;
+    @Qualifier("df.integration.oracleRhTaxCountryChunkCacheService")
+    private IOracleRhTaxCountryChunkService oracleRhTaxCountryChunkService;
     @Autowired
-    @Qualifier("df.integration.oracleRhTaxCacheService")
-    private IOracleRhTaxService oracleRhTaxService;
+    @Qualifier("df.integration.oracleRhTaxCountryCacheService")
+    private IOracleRhTaxCountryService oracleRhTaxCountryService;
     @Autowired
     private IUsageService usageService;
 
@@ -49,7 +49,7 @@ public class RhTaxService implements IRhTaxService {
         String usageId = usage.getId();
         Long accountNumber = Objects.requireNonNull(usage.getRightsholder().getAccountNumber());
         LOGGER.debug("Processing RH tax country. Started. UsageId={}, RhAccountNumber={}", usageId, accountNumber);
-        boolean isUsTaxCountry = oracleRhTaxService.isUsTaxCountry(accountNumber);
+        boolean isUsTaxCountry = oracleRhTaxCountryService.isUsTaxCountry(accountNumber);
         if (isUsTaxCountry) {
             usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
             usageService.updateProcessedUsage(usage);
@@ -66,7 +66,8 @@ public class RhTaxService implements IRhTaxService {
             .collect(Collectors.toCollection(TreeSet::new));
         LOGGER.debug("Processing RH tax country. Started. UsageIds={}, RhAccountNumbers={}", usageIdsWrapper,
             accountNumbers);
-        Map<Long, Boolean> accountNumberToUsTaxCountryMap = oracleRhTaxChunkService.isUsTaxCountry(accountNumbers);
+        Map<Long, Boolean> accountNumberToUsTaxCountryMap =
+            oracleRhTaxCountryChunkService.isUsTaxCountry(accountNumbers);
         accountNumberToUsTaxCountryMap.entrySet().stream()
             .filter(Map.Entry::getValue)
             .forEach(entry -> {

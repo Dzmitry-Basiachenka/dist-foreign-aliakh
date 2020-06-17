@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.oracle.api;
 
 /**
- * Interface for working with Oracle AP REST for getting RH tax info.
+ * Interface for working with Oracle AP REST for getting RH tax country.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -9,7 +9,7 @@ package com.copyright.rup.dist.foreign.integration.oracle.api;
  *
  * @author Aliaksandr Liakh
  */
-public interface IOracleRhTaxService {
+public interface IOracleRhTaxCountryService {
 
     /**
      * Checks whether the tax residency country is US or not.

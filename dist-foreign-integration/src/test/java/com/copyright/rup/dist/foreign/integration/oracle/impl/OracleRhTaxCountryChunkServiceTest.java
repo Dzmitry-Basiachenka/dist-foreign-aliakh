@@ -15,6 +15,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.MapUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Set;
 
 /**
- * Verifies {@link OracleRhTaxChunkService}.
+ * Verifies {@link OracleRhTaxCountryChunkService}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -33,34 +34,34 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public class OracleRhTaxChunkServiceTest {
+public class OracleRhTaxCountryChunkServiceTest {
 
-    private static final String RH_TAX_URL =
+    private static final String RH_TAX_COUNTRY_URL =
         "http://localhost:8080/oracle-ap-rest/getRightsholderDataInfo?rightsholderAccountNumbers={accountNumbers}";
     private static final Set<Long> ACCOUNT_NUMBERS = Sets.newHashSet(7001413934L, 1000009522L);
 
-    private OracleRhTaxChunkService oracleRhTaxService;
+    private OracleRhTaxCountryChunkService oracleRhTaxCountryService;
     private RestTemplate restTemplate;
 
     @Before
     public void setUp() {
         restTemplate = createMock(RestTemplate.class);
-        oracleRhTaxService = new OracleRhTaxChunkService();
-        Whitebox.setInternalState(oracleRhTaxService, restTemplate);
-        Whitebox.setInternalState(oracleRhTaxService, "rhTaxUrl", RH_TAX_URL);
+        oracleRhTaxCountryService = new OracleRhTaxCountryChunkService();
+        Whitebox.setInternalState(oracleRhTaxCountryService, restTemplate);
+        Whitebox.setInternalState(oracleRhTaxCountryService, "rhTaxCountryUrl", RH_TAX_COUNTRY_URL);
     }
 
     @Test
     public void testIsUsTaxCountry() {
         restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
         expectLastCall().once();
-        expect(restTemplate.getForObject(RH_TAX_URL, String.class, ImmutableBiMap.of("accountNumbers",
-            Joiner.on(",").skipNulls().join(ACCOUNT_NUMBERS))))
-            .andReturn(loadJson("rh_tax_information_response_1.json"))
+        expect(restTemplate.getForObject(RH_TAX_COUNTRY_URL, String.class,
+            ImmutableBiMap.of("accountNumbers", Joiner.on(",").skipNulls().join(ACCOUNT_NUMBERS))))
+            .andReturn(loadJson("rh_information_response_1.json"))
             .once();
         replay(restTemplate);
         assertEquals(ImmutableMap.of(7001413934L, Boolean.TRUE, 1000009522L, Boolean.FALSE),
-            oracleRhTaxService.isUsTaxCountry(ACCOUNT_NUMBERS));
+            oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBERS));
         verify(restTemplate);
     }
 
@@ -68,12 +69,12 @@ public class OracleRhTaxChunkServiceTest {
     public void testIsUsTaxCountryNotFoundCode() {
         restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
         expectLastCall().once();
-        expect(restTemplate.getForObject(RH_TAX_URL, String.class, ImmutableBiMap.of("accountNumbers",
+        expect(restTemplate.getForObject(RH_TAX_COUNTRY_URL, String.class, ImmutableBiMap.of("accountNumbers",
             Joiner.on(",").skipNulls().join(ACCOUNT_NUMBERS))))
-            .andReturn(loadJson("rh_tax_information_not_found_response.json"))
+            .andReturn(loadJson("rh_information_not_found_response.json"))
             .once();
         replay(restTemplate);
-        assertTrue(MapUtils.isEmpty(oracleRhTaxService.isUsTaxCountry(ACCOUNT_NUMBERS)));
+        assertTrue(MapUtils.isEmpty(oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBERS)));
         verify(restTemplate);
     }
 

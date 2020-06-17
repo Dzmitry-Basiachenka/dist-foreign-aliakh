@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.oracle.impl;
 
 import com.copyright.rup.dist.common.integration.rest.prm.AbstractMultipleCacheService;
-import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxChunkService;
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxCountryChunkService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Implementation of {@link IOracleRhTaxChunkService} with caching.
+ * Implementation of {@link IOracleRhTaxCountryChunkService} with caching.
  * See {@link AbstractMultipleCacheService}.
  * <p>
  * Copyright (C) 2020 copyright.com
@@ -20,19 +20,19 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Uladzislau Shalamitski
  */
-public class OracleRhTaxChunkCacheService extends AbstractMultipleCacheService<Long, Boolean>
-    implements IOracleRhTaxChunkService {
+public class OracleRhTaxCountryChunkCacheService extends AbstractMultipleCacheService<Long, Boolean>
+    implements IOracleRhTaxCountryChunkService {
 
     @Autowired
-    @Qualifier("df.integration.oracleRhTaxChunkService")
-    private IOracleRhTaxChunkService oracleRhTaxChunkService;
+    @Qualifier("df.integration.oracleRhTaxCountryChunkService")
+    private IOracleRhTaxCountryChunkService oracleRhTaxCountryChunkService;
 
     /**
      * Constructor.
      *
      * @param timeToLive cache expiration time, minutes
      */
-    public OracleRhTaxChunkCacheService(int timeToLive) {
+    public OracleRhTaxCountryChunkCacheService(int timeToLive) {
         super.setExpirationTime(TimeUnit.MINUTES.toSeconds(timeToLive));
     }
 
@@ -43,7 +43,7 @@ public class OracleRhTaxChunkCacheService extends AbstractMultipleCacheService<L
 
     @Override
     public Map<Long, Boolean> loadData(Set<Long> accountNumbers) {
-        return oracleRhTaxChunkService.isUsTaxCountry(accountNumbers);
+        return oracleRhTaxCountryChunkService.isUsTaxCountry(accountNumbers);
     }
 
     @Override
