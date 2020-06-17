@@ -101,6 +101,11 @@
         <result property="netAmount" column="net_amount"/>
     </resultMap>
 
+    <resultMap id="aaclUndistributedLiabilitiesReportResultMap" type="FundPool" extends="IFundPoolMapper.fundPoolResultMap">
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
+        <result property="netAmount" column="net_amount"/>
+    </resultMap>
+
     <resultMap id="aaclBaselineUsageDtoMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
         <result property="aaclUsage.baselineId" column="baseline_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
@@ -355,6 +360,22 @@
         select count(1)
         from ${schema}.df_usage_archive ua
         where df_scenario_uid = #{scenarioId}
+    </select>
+
+    <select id="findAaclUndistributedLiabilitiesReportFundPools" parameterType="map"
+            resultMap="aaclUndistributedLiabilitiesReportResultMap">
+        select
+            f.name,
+            f.total_amount,
+            f.total_amount * #{serviceFee} as service_fee_amount,
+            f.total_amount - (f.total_amount * #{serviceFee}) as net_amount
+        from apps.df_fund_pool f
+        left join apps.df_scenario s on s.aacl_fields ->> 'fund_pool_uid' = f.df_fund_pool_uid
+        where f.product_family = #{productFamily}
+            and (s.status_ind is null or s.status_ind in
+                <foreach collection="statuses" item="status" open="(" separator="," close=")">
+                    #{status}
+                </foreach>)
     </select>
 
     <select id="findWorkSharesByAggLcClassSummaryReportDtos" parameterType="map"

@@ -217,4 +217,11 @@ public interface IReportService {
      */
     void writeExcludeDetailsByPayeeCsvReport(Set<String> scenarioIds, Set<Long> selectedAccountNumbers,
                                              PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes AACL Undistributed Liabilities Report into the output stream in csv format.
+     *
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeAaclUndistributedLiabilitiesCsvReport(OutputStream outputStream);
 }

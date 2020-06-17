@@ -19,7 +19,6 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 
 import com.google.common.collect.Sets;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -428,6 +427,16 @@ public class ReportServiceTest {
         expectLastCall().once();
         replay(reportRepository);
         reportService.writeExcludeDetailsByPayeeCsvReport(scenarioIds, selectedAccountNumbers, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testWriteAaclUndistributedLiabilitiesCsvReport() {
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeAaclUndistributedLiabilitiesCsvReport(outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeAaclUndistributedLiabilitiesCsvReport(outputStream);
         verify(reportRepository);
     }
 

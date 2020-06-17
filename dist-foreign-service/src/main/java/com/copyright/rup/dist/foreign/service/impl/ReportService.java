@@ -197,6 +197,11 @@ public class ReportService implements IReportService {
         reportRepository.writeExcludeDetailsByPayeeCsvReport(scenarioIds, selectedAccountNumbers, pipedOutputStream);
     }
 
+    @Override
+    public void writeAaclUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
+        reportRepository.writeAaclUndistributedLiabilitiesCsvReport(outputStream);
+    }
+
     private void handleUsageBatch(NtsWithdrawnBatchesCsvReportHandler handler, UsageBatch usageBatch) {
         DefaultResultContext<UsageBatch> context = new DefaultResultContext<>();
         context.nextResultObject(usageBatch);

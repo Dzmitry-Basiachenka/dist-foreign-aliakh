@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -24,6 +25,8 @@ public class FundPool extends StoredEntity<String> {
     private String name;
     private String comment;
     private BigDecimal totalAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal serviceFeeAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal netAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 
     public String getProductFamily() {
         return productFamily;
@@ -57,6 +60,22 @@ public class FundPool extends StoredEntity<String> {
         this.totalAmount = totalAmount;
     }
 
+    public BigDecimal getServiceFeeAmount() {
+        return serviceFeeAmount;
+    }
+
+    public void setServiceFeeAmount(BigDecimal serviceFeeAmount) {
+        this.serviceFeeAmount = serviceFeeAmount;
+    }
+
+    public BigDecimal getNetAmount() {
+        return netAmount;
+    }
+
+    public void setNetAmount(BigDecimal netAmount) {
+        this.netAmount = netAmount;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -72,6 +91,8 @@ public class FundPool extends StoredEntity<String> {
             .append(name, that.name)
             .append(comment, that.comment)
             .append(totalAmount, that.totalAmount)
+            .append(serviceFeeAmount, that.serviceFeeAmount)
+            .append(netAmount, that.netAmount)
             .isEquals();
     }
 
@@ -83,6 +104,8 @@ public class FundPool extends StoredEntity<String> {
             .append(name)
             .append(comment)
             .append(totalAmount)
+            .append(serviceFeeAmount)
+            .append(netAmount)
             .toHashCode();
     }
 
@@ -94,6 +117,8 @@ public class FundPool extends StoredEntity<String> {
             .append("name", name)
             .append("comment", comment)
             .append("totalAmount", totalAmount)
+            .append("serviceFeeAmount", serviceFeeAmount)
+            .append("netAmount", netAmount)
             .toString();
     }
 }
