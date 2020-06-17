@@ -207,4 +207,14 @@ public interface IReportService {
      */
     void writeWorkClassificationCsvReport(Set<String> batchesIds, String searchValue,
                                           PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds details by scenario ids and writes them with payee exclude status into the output stream in CSV format.
+     *
+     * @param scenarioIds            scenario ids
+     * @param selectedAccountNumbers set of account numbers of selected payees
+     * @param pipedOutputStream      instance of {@link PipedOutputStream}
+     */
+    void writeExcludeDetailsByPayeeCsvReport(Set<String> scenarioIds, Set<Long> selectedAccountNumbers,
+                                             PipedOutputStream pipedOutputStream);
 }

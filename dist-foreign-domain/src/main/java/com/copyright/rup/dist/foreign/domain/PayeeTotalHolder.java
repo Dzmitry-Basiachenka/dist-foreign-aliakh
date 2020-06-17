@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -17,7 +18,7 @@ import java.math.BigDecimal;
  *
  * @author Uladzislau Shalamitski
  */
-public class PayeeTotalHolder {
+public class PayeeTotalHolder extends StoredEntity<String> {
 
     private Rightsholder payee = new Rightsholder();
     private BigDecimal grossTotal;
@@ -75,6 +76,7 @@ public class PayeeTotalHolder {
         }
         PayeeTotalHolder that = (PayeeTotalHolder) obj;
         return new EqualsBuilder()
+            .appendSuper(super.equals(obj))
             .append(payee, that.payee)
             .append(grossTotal, that.grossTotal)
             .append(serviceFeeTotal, that.serviceFeeTotal)
@@ -86,6 +88,7 @@ public class PayeeTotalHolder {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
             .append(payee)
             .append(grossTotal)
             .append(serviceFeeTotal)
@@ -97,6 +100,7 @@ public class PayeeTotalHolder {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+            .appendSuper(super.toString())
             .append("payee", payee)
             .append("grossTotal", grossTotal)
             .append("serviceFeeTotal", serviceFeeTotal)

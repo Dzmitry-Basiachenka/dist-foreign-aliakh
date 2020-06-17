@@ -462,6 +462,21 @@ public class CsvReportsIntegrationTest {
             "aacl_baseline_usages_report.csv");
     }
 
+    @Test
+    public void testWriteExcludeDetailsByPayeeCsvEmptyReport() throws Exception {
+        assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(
+            Collections.singleton("d13ecc44-6795-4b75-90f0-4a3fc191f1b9"), Collections.emptySet(), outputStream),
+            "exclude_by_payee_report_empty.csv");
+    }
+
+    @Test
+    public void testWriteExcludeDetailsByPayeeCsvReport() throws Exception {
+        assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(
+            Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"), Collections.singleton(7000813806L),
+            outputStream),
+            "exclude_by_payee_report.csv");
+    }
+
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         reportWriter.accept(outputStream);

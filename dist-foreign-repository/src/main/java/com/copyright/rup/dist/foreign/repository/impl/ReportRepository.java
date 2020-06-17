@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.SendForClassifica
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.WorkSharesByAggLcClassReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.WorkSharesByAggLcClassSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.AuditFasCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.ExcludeDetailsByPayeeCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasUsageCsvReportHandler;
@@ -365,6 +366,17 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         try (AaclBaselineUsagesCsvReportHandler handler =
                  new AaclBaselineUsagesCsvReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IReportMapper.findAaclBaselineUsages", numberOfYears, handler);
+        }
+    }
+
+    @Override
+    public void writeExcludeDetailsByPayeeCsvReport(Set<String> scenarioIds, Set<Long> selectedAccountNumbers,
+                                                    PipedOutputStream pipedOutputStream) {
+        checkArgument(CollectionUtils.isNotEmpty(scenarioIds));
+        try (ExcludeDetailsByPayeeCsvReportHandler handler = new ExcludeDetailsByPayeeCsvReportHandler(
+            Objects.requireNonNull(pipedOutputStream),
+            Objects.requireNonNull(selectedAccountNumbers))) {
+            getTemplate().select("IUsageMapper.findPayeeTotalHoldersByScenarioIds", scenarioIds, handler);
         }
     }
 

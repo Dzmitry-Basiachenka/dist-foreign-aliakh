@@ -408,7 +408,6 @@ public class ReportServiceTest {
         verify(reportRepository);
     }
 
-
     @Test
     public void testWriteWorkClassificationCsvReportWithSearch() {
         String search = "search";
@@ -416,7 +415,19 @@ public class ReportServiceTest {
         reportRepository.writeWorkClassificationCsvReport(search, outputStream);
         expectLastCall().once();
         replay(reportRepository);
-        reportService.writeWorkClassificationCsvReport(Collections.EMPTY_SET, search, outputStream);
+        reportService.writeWorkClassificationCsvReport(Collections.emptySet(), search, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testWriteExcludeDetailsByPayeeCsvReport() {
+        Set<String> scenarioIds = Collections.singleton(RupPersistUtils.generateUuid());
+        Set<Long> selectedAccountNumbers = Collections.emptySet();
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeExcludeDetailsByPayeeCsvReport(scenarioIds, selectedAccountNumbers, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeExcludeDetailsByPayeeCsvReport(scenarioIds, selectedAccountNumbers, outputStream);
         verify(reportRepository);
     }
 

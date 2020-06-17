@@ -191,6 +191,12 @@ public class ReportService implements IReportService {
         }
     }
 
+    @Override
+    public void writeExcludeDetailsByPayeeCsvReport(Set<String> scenarioIds, Set<Long> selectedAccountNumbers,
+                                                    PipedOutputStream pipedOutputStream) {
+        reportRepository.writeExcludeDetailsByPayeeCsvReport(scenarioIds, selectedAccountNumbers, pipedOutputStream);
+    }
+
     private void handleUsageBatch(NtsWithdrawnBatchesCsvReportHandler handler, UsageBatch usageBatch) {
         DefaultResultContext<UsageBatch> context = new DefaultResultContext<>();
         context.nextResultObject(usageBatch);

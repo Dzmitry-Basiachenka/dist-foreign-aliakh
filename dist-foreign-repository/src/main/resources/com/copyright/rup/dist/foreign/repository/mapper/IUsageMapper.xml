@@ -738,7 +738,7 @@
         <include refid="IUsageMapper.selectRightsholderTotalsHoldersByScenarioIdSql"/>
     </select>
 
-    <select id="findPayeeTotalHoldersByScenarioId" parameterType="string" resultMap="payeeTotalHolderResultMap">
+    <select id="findPayeeTotalHoldersByScenarioIds" parameterType="collection" resultMap="payeeTotalHolderResultMap">
         select
             p.name payee_name,
             u.payee_account_number,
@@ -755,7 +755,10 @@
                 ufas.is_payee_participating_flag
             from ${schema}.df_usage u
             join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
-            where df_scenario_uid = #{scenarioId}
+            where df_scenario_uid in
+            <foreach collection="collection" item="scenarioId" open="(" separator="," close=")">
+                #{scenarioId}
+            </foreach>
             group by payee_account_number, ufas.is_payee_participating_flag
         ) u
         left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
