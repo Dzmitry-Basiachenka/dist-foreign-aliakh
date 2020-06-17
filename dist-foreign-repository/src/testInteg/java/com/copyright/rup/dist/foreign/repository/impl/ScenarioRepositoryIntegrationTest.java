@@ -45,6 +45,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -69,9 +70,12 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String SCENARIO_NAME = "name";
     private static final String DESCRIPTION = "description";
     private static final String USAGE_BATCH_ID = "a5b64c3a-55d2-462e-b169-362dca6a4dd6";
-    private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
+    private static final String SCENARIO_ID_1 = "5fb817fd-c1cb-4b47-a3c9-3dbb16c88b65";
     private static final String SCENARIO_ID_2 = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String SCENARIO_ID_3 = "2369313c-dd17-45ed-a6e9-9461b9232ffd";
+    private static final String SCENARIO_ID_4 = "8cb9092d-a0f7-474e-a13b-af1a134e4c86";
+    private static final String SCENARIO_ID_5 = "8a6a6b15-6922-4fda-b40c-5097fcbd256e";
+    private static final String SENT_TO_LM_AUDIT = "Sent to LM NTS scenario with audit";
     private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
@@ -108,8 +112,8 @@ public class ScenarioRepositoryIntegrationTest {
             "The description of scenario 9", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
         verifyScenario(fasScenarios.get(3), "1230b236-1239-4a60-9fab-123b84199123", "Scenario name 4",
             "The description of scenario 4", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(fasScenarios.get(4), "8a6a6b15-6922-4fda-b40c-5097fcbd256e", "Scenario name 5",
-            "The description of scenario 5", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario(fasScenarios.get(4), SCENARIO_ID_5, "Scenario name 5", "The description of scenario 5",
+            FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
         verifyScenario(fasScenarios.get(5), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
             "The description of scenario 3", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
         verifyScenario(fasScenarios.get(6), "005a33fc-26c5-4e0d-afd3-1d581b62ec70", "Partially Paid Scenario",
@@ -118,11 +122,10 @@ public class ScenarioRepositoryIntegrationTest {
             "All usages are paid and reported to CRM", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
         verifyScenario(fasScenarios.get(8), "a386bd74-c112-4b19-b9b7-c5e4f18c7fcd", "Archived Scenario",
             "Scenario already archived", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.ARCHIVED);
-        List<Scenario> ntsScenarios = scenarioRepository.findByProductFamily("NTS");
+        List<Scenario> ntsScenarios = scenarioRepository.findByProductFamily(NTS_PRODUCT_FAMILY);
         assertEquals(3, ntsScenarios.size());
-        verifyScenario(ntsScenarios.get(0), "8cb9092d-a0f7-474e-a13b-af1a134e4c86",
-            "Sent to LM NTS scenario with audit", "The description of scenario 8", NTS_PRODUCT_FAMILY,
-            ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario(ntsScenarios.get(0), SCENARIO_ID_4, SENT_TO_LM_AUDIT, "The description of scenario 8",
+            NTS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
         assertNotNull(ntsScenarios.get(0).getNtsFields());
         verifyScenario(ntsScenarios.get(1), SCENARIO_ID_3, "Rejected NTS scenario with audit",
             "The description of scenario 7", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
@@ -132,6 +135,22 @@ public class ScenarioRepositoryIntegrationTest {
         assertNotNull(ntsScenario.getNtsFields());
         assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
         assertNotNull(ntsScenarios.get(1).getNtsFields());
+    }
+
+    @Test
+    public void testFindByProductFamiliesAndStatuses() {
+        List<Scenario> scenarios =
+            scenarioRepository.findByProductFamiliesAndStatuses(Sets.newHashSet(NTS_PRODUCT_FAMILY, FAS_PRODUCT_FAMILY),
+                EnumSet.of(ScenarioStatusEnum.SENT_TO_LM));
+        assertEquals(4, scenarios.size());
+        verifyScenario(scenarios.get(0), SCENARIO_ID_4, SENT_TO_LM_AUDIT, "The description of scenario 8",
+            NTS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario(scenarios.get(1), SCENARIO_ID_5, "Scenario name 5",
+            "The description of scenario 5", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario(scenarios.get(2), "005a33fc-26c5-4e0d-afd3-1d581b62ec70", "Partially Paid Scenario",
+            "Not all usages are paid", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario(scenarios.get(3), "a9ee7491-d166-47cd-b36f-fe80ee7450f1", "Fully Paid Scenario",
+            "All usages are paid and reported to CRM", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
     }
 
     @Test
@@ -160,8 +179,8 @@ public class ScenarioRepositoryIntegrationTest {
     @Test
     public void testFindArchivedWithAmountsAndLastActionForFasScenario() {
         Scenario scenario =
-            scenarioRepository.findArchivedWithAmountsAndLastAction("8a6a6b15-6922-4fda-b40c-5097fcbd256e");
-        verifyScenario(scenario, "8a6a6b15-6922-4fda-b40c-5097fcbd256e", "Scenario name 5",
+            scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_5);
+        verifyScenario(scenario, SCENARIO_ID_5, "Scenario name 5",
             "The description of scenario 5", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
         ScenarioAuditItem scenarioAuditItem = scenario.getAuditItem();
         assertEquals(ScenarioActionTypeEnum.SENT_TO_LM, scenarioAuditItem.getActionType());
@@ -208,9 +227,9 @@ public class ScenarioRepositoryIntegrationTest {
     @Test
     public void testFindArchivedWithAmountsAndLastActionForNtsScenario() {
         Scenario scenario =
-            scenarioRepository.findArchivedWithAmountsAndLastAction("8cb9092d-a0f7-474e-a13b-af1a134e4c86");
-        verifyScenario(scenario, "8cb9092d-a0f7-474e-a13b-af1a134e4c86", "Sent to LM NTS scenario with audit",
-            "The description of scenario 8", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
+            scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_4);
+        verifyScenario(scenario, SCENARIO_ID_4, SENT_TO_LM_AUDIT, "The description of scenario 8", NTS_PRODUCT_FAMILY,
+            ScenarioStatusEnum.SENT_TO_LM);
         ScenarioAuditItem scenarioAuditItem = scenario.getAuditItem();
         assertEquals(ScenarioActionTypeEnum.SENT_TO_LM, scenarioAuditItem.getActionType());
         assertNull(scenarioAuditItem.getActionReason());
@@ -263,7 +282,7 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindNameByNtsFundPoolId() {
-        assertEquals("Sent to LM NTS scenario with audit",
+        assertEquals(SENT_TO_LM_AUDIT,
             scenarioRepository.findNameByNtsFundPoolId("815d6736-a34e-4fc8-96c3-662a114fa7f2"));
         assertNull(scenarioRepository.findNameByNtsFundPoolId("59353faf-2e8f-4bf7-a160-4c6eb28e8177"));
     }
@@ -279,7 +298,7 @@ public class ScenarioRepositoryIntegrationTest {
     public void testRemove() {
         scenarioRepository.insert(buildScenario());
         assertEquals(1, scenarioRepository.findCountByName(SCENARIO_NAME));
-        scenarioRepository.remove(SCENARIO_ID);
+        scenarioRepository.remove(SCENARIO_ID_1);
         assertEquals(0, scenarioRepository.findCountByName(SCENARIO_NAME));
     }
 
@@ -315,7 +334,7 @@ public class ScenarioRepositoryIntegrationTest {
         usage = buildUsage();
         usage.setBatchId(batch.getId());
         fasUsageRepository.insert(usage);
-        List<Rightsholder> sourceRros = scenarioRepository.findSourceRros(SCENARIO_ID);
+        List<Rightsholder> sourceRros = scenarioRepository.findSourceRros(SCENARIO_ID_1);
         assertEquals(2, sourceRros.size());
         assertTrue(sourceRros.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toSet()).containsAll(
             Sets.newHashSet(2000017010L, 2000017000L)));
@@ -338,7 +357,7 @@ public class ScenarioRepositoryIntegrationTest {
         fasUsageRepository.insert(usage3);
         usageRepository.addToScenario(Lists.newArrayList(usage1, usage2, usage3));
         List<RightsholderPayeePair> result =
-            scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(SCENARIO_ID, 2000017010L);
+            scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(SCENARIO_ID_1, 2000017010L);
         assertEquals(2, result.size());
         result.sort(Comparator.comparing(RightsholderPayeePair::getRightsholder)
             .thenComparing(RightsholderPayeePair::getPayee));
@@ -385,7 +404,7 @@ public class ScenarioRepositoryIntegrationTest {
         scenarioUsageFilter.setId(RupPersistUtils.generateUuid());
         scenarioUsageFilter.setScenarioId(scenario.getId());
         filterRepository.insert(scenarioUsageFilter);
-        Scenario actualScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID);
+        Scenario actualScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_1);
         AaclFields actualAaclFields = actualScenario.getAaclFields();
         assertNotNull(actualAaclFields);
         assertEquals(new BigDecimal("40.00"), actualAaclFields.getTitleCutoffAmount());
@@ -408,7 +427,7 @@ public class ScenarioRepositoryIntegrationTest {
         scenarioUsageFilter.setId(RupPersistUtils.generateUuid());
         scenarioUsageFilter.setScenarioId(scenario.getId());
         filterRepository.insert(scenarioUsageFilter);
-        Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID);
+        Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_1);
         assertNotNull(ntsScenario.getNtsFields());
         assertEquals(new BigDecimal("700.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
         assertUsages(
@@ -416,7 +435,7 @@ public class ScenarioRepositoryIntegrationTest {
                 buildUsage("244de0db-b50c-45e8-937c-72e033e2a3a9", "921.8750000000"),
                 buildUsage("3caf371f-f2e6-47cd-af6b-1e02b79f6195", "3950.8928571429"),
                 buildUsage("87666035-2bdf-49ef-8c80-1d1b281fdc34", "9877.2321428571")),
-            usageRepository.findByScenarioId(SCENARIO_ID));
+            usageRepository.findByScenarioId(SCENARIO_ID_1));
         assertUsages(
             Arrays.asList(buildScenarioExcludedUsage("0d200064-185a-4c48-bbc9-c67554e7db8e"),
                 buildScenarioExcludedUsage("9bc172f4-edbb-4a62-9ffc-254336e7a56d")),
@@ -448,7 +467,7 @@ public class ScenarioRepositoryIntegrationTest {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
         usage.setBatchId(USAGE_BATCH_ID);
-        usage.setScenarioId(SCENARIO_ID);
+        usage.setScenarioId(SCENARIO_ID_1);
         usage.setWrWrkInst(123456783L);
         usage.setWorkTitle("WorkTitle");
         usage.setRightsholder(buildRightsholder(7000813806L,
@@ -472,7 +491,7 @@ public class ScenarioRepositoryIntegrationTest {
 
     private Scenario buildScenario() {
         Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
+        scenario.setId(SCENARIO_ID_1);
         scenario.setName(SCENARIO_NAME);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenario.setDescription(DESCRIPTION);
@@ -517,7 +536,7 @@ public class ScenarioRepositoryIntegrationTest {
         Usage usage = new Usage();
         usage.setId(usageId);
         usage.setGrossAmount(new BigDecimal(grossAmount));
-        usage.setScenarioId(SCENARIO_ID);
+        usage.setScenarioId(SCENARIO_ID_1);
         usage.setStatus(UsageStatusEnum.LOCKED);
         return usage;
     }

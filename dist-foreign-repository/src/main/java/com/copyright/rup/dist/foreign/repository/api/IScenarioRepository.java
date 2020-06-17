@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for Scenario repository.
@@ -58,6 +59,15 @@ public interface IScenarioRepository {
      * @return list of {@link Scenario}s
      */
     List<Scenario> findByProductFamily(String productFamily);
+
+    /**
+     * Finds list of {@link Scenario}s by product families and statuses.
+     *
+     * @param productFamilies set of product families
+     * @param statuses        set of statuses
+     * @return list of {@link Scenario}s
+     */
+    List<Scenario> findByProductFamiliesAndStatuses(Set<String> productFamilies, Set<ScenarioStatusEnum> statuses);
 
     /**
      * Finds {@link Scenario}s names associated with any of usages from selected usage batch.

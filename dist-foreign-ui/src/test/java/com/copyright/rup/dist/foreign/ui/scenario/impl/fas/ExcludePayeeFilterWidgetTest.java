@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -19,11 +20,13 @@ import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -33,6 +36,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Objects;
 
 /**
@@ -63,12 +67,13 @@ public class ExcludePayeeFilterWidgetTest {
             .once();
         replay(controller);
         assertSame(widget, widget.init());
-        assertEquals(4, widget.getComponentCount());
+        assertEquals(5, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLabel(widget.getComponent(0));
-        verifyParticipatingStatusCombobox(widget.getComponent(1));
-        verifyMinimumThresholdComponent(widget.getComponent(2));
-        verifyButtonsLayout(widget.getComponent(3));
+        verifyScenariosItemsFilterLayout(widget.getComponent(1));
+        verifyParticipatingStatusCombobox(widget.getComponent(2));
+        verifyMinimumThresholdComponent(widget.getComponent(3));
+        verifyButtonsLayout(widget.getComponent(4));
         verify(controller);
     }
 
@@ -103,6 +108,20 @@ public class ExcludePayeeFilterWidgetTest {
         }
         assertEquals(applyEnabled, applyButton.isEnabled());
         assertEquals(filterValue, filter.getNetAmountMinThreshold());
+    }
+
+    private void verifyScenariosItemsFilterLayout(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isSpacing());
+        Iterator<Component> iterator = layout.iterator();
+        assertEquals("(0)", ((Label) iterator.next()).getValue());
+        Button button = (Button) iterator.next();
+        assertEquals("Scenarios", button.getCaption());
+        assertEquals(2, button.getListeners(ClickEvent.class).size());
+        assertTrue(button.isDisableOnClick());
+        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        assertFalse(iterator.hasNext());
     }
 
     private void verifyParticipatingStatusCombobox(Component component) {

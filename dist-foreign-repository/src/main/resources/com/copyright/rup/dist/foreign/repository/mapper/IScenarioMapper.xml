@@ -225,6 +225,30 @@
         order by s.updated_datetime desc
     </select>
 
+    <select id="findByProductFamiliesAndStatuses" parameterType="map" resultMap="scenarioResultMap">
+        select
+            s.df_scenario_uid,
+            s.name,
+            s.status_ind,
+            s.description,
+            s.created_by_user,
+            s.created_datetime,
+            s.updated_by_user,
+            s.updated_datetime,
+            f.product_family
+        from ${schema}.df_scenario s
+        join ${schema}.df_scenario_usage_filter f on s.df_scenario_uid = f.df_scenario_uid
+        where f.product_family in
+            <foreach collection="productFamilies" item="productFamily" separator="," open="(" close=")">
+                #{productFamily}
+            </foreach>
+            and s.status_ind in
+            <foreach collection="statuses" item="status" separator="," open="(" close=")">
+                #{status}
+            </foreach>
+        order by s.updated_datetime desc
+    </select>
+
     <select id="findNamesByUsageBatchId" parameterType="string" resultType="string">
         select distinct name
         from ${schema}.df_scenario

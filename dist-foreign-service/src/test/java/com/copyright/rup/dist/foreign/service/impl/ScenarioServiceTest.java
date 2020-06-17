@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ScenarioService}.
@@ -89,6 +93,18 @@ public class ScenarioServiceTest {
         expect(scenarioRepository.findCountByName(SCENARIO_NAME)).andReturn(0).once();
         replay(scenarioRepository);
         assertFalse(scenarioService.scenarioExists(SCENARIO_NAME));
+        verify(scenarioRepository);
+    }
+
+    @Test
+    public void testGetScenariosByProductFamiliesAndStatuses() {
+        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        Set<String> productFamilies = Sets.newHashSet("FAS", "FAS2");
+        expect(scenarioRepository.findByProductFamiliesAndStatuses(productFamilies,
+            EnumSet.of(ScenarioStatusEnum.IN_PROGRESS))).andReturn(scenarios).once();
+        replay(scenarioRepository);
+        assertSame(scenarios, scenarioService.getScenariosByProductFamiliesAndStatuses(productFamilies,
+            EnumSet.of(ScenarioStatusEnum.IN_PROGRESS)));
         verify(scenarioRepository);
     }
 

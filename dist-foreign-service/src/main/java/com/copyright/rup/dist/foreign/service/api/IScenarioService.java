@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for scenario service.
@@ -25,6 +27,16 @@ public interface IScenarioService {
      * @return list of {@link Scenario}s
      */
     List<Scenario> getScenarios(String productFamily);
+
+    /**
+     * Gets list of {@link Scenario}s by product families and status.
+     *
+     * @param productFamilies set of product families
+     * @param statuses        set of statuses
+     * @return list of {@link Scenario}s
+     */
+    List<Scenario> getScenariosByProductFamiliesAndStatuses(Set<String> productFamilies,
+                                                            Set<ScenarioStatusEnum> statuses);
 
     /**
      * Checks whether {@link Scenario} with specified name already exists in database.
