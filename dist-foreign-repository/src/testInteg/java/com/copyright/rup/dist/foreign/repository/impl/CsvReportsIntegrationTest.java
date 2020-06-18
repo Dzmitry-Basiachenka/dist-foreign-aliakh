@@ -275,6 +275,13 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    public void testAaclUndistributedLiabilitiesCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeAaclUndistributedLiabilitiesCsvReport(outputStream),
+            "aacl_undistributed_liabilities_report.csv");
+    }
+
+    @Test
     public void testExportArchivedScenarioRightsholderTotalsCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeArchivedScenarioRightsholderTotalsCsvReport("ff47dee9-327a-4ff6-b170-d89f5190ccd8",

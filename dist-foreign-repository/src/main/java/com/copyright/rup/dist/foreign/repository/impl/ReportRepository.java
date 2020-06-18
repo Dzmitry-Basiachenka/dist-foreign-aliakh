@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclBaselineUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclScenarioUsagesCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AuditAaclCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.SendForClassificationCsvReportHandler;
@@ -377,6 +378,19 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             Objects.requireNonNull(pipedOutputStream),
             Objects.requireNonNull(selectedAccountNumbers))) {
             getTemplate().select("IUsageMapper.findPayeeTotalHoldersByScenarioIds", scenarioIds, handler);
+        }
+    }
+
+    @Override
+    public void writeAaclUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
+        try (AaclUndistributedLiabilitiesReportHandler handler =
+                 new AaclUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+            parameters.put("serviceFee", 0.25);
+            parameters.put("productFamily", FdaConstants.AACL_PRODUCT_FAMILY);
+            parameters.put("statuses", Arrays.asList(ScenarioStatusEnum.IN_PROGRESS,
+                ScenarioStatusEnum.SUBMITTED, ScenarioStatusEnum.APPROVED));
+            getTemplate().select("IReportMapper.findAaclUndistributedLiabilitiesReportFundPools", parameters, handler);
         }
     }
 
