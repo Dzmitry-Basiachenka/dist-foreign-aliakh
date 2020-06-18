@@ -13,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterController;
@@ -35,15 +36,16 @@ import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -75,7 +77,7 @@ public class ExcludePayeeWidgetTest {
         payeesGrid = createMock(Grid.class);
         widget = new ExcludePayeeWidget();
         widget.setController(controller);
-        filterController = PowerMock.createMock(IExcludePayeeFilterController.class);
+        filterController = createMock(IExcludePayeeFilterController.class);
         filterWidget = new ExcludePayeeFilterWidget();
         filterWidget.setController(filterController);
         initWidget();
@@ -93,7 +95,7 @@ public class ExcludePayeeWidgetTest {
         HorizontalSplitPanel splitPanel = (HorizontalSplitPanel) widget.getContent();
         VerticalLayout content = (VerticalLayout) splitPanel.getSecondComponent();
         assertEquals(3, content.getComponentCount());
-        verifySearchWidget(content.getComponent(0));
+        verifyToolbar(content.getComponent(0));
         verifyGrid(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2));
     }
@@ -122,9 +124,10 @@ public class ExcludePayeeWidgetTest {
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         Windows.showNotificationWindow("Please select at least one Payee");
         expectLastCall().once();
-        replay(clickEvent, controller, Windows.class);
+        expect(payeesGrid.getSelectedItems()).andReturn(Collections.emptySet()).once();
+        replay(clickEvent, controller, payeesGrid, Windows.class);
         buttonClick(0, clickEvent);
-        verify(clickEvent, controller, Windows.class);
+        verify(clickEvent, controller, payeesGrid, Windows.class);
     }
 
     @Test
@@ -151,9 +154,10 @@ public class ExcludePayeeWidgetTest {
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         Windows.showNotificationWindow("Please select at least one Payee");
         expectLastCall().once();
-        replay(clickEvent, controller, Windows.class);
+        expect(payeesGrid.getSelectedItems()).andReturn(Collections.emptySet()).once();
+        replay(clickEvent, controller, payeesGrid, Windows.class);
         buttonClick(1, clickEvent);
-        verify(clickEvent, controller, Windows.class);
+        verify(clickEvent, controller, payeesGrid, Windows.class);
     }
 
     @Test
@@ -178,11 +182,27 @@ public class ExcludePayeeWidgetTest {
         clickListener.buttonClick(clickEvent);
     }
 
+    private void verifyToolbar(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
+        assertEquals(2, layout.getComponentCount());
+        verifyExportButton(layout.getComponent(0));
+        verifySearchWidget(layout.getComponent(1));
+    }
+
     private void verifySearchWidget(Component component) {
         assertTrue(component instanceof SearchWidget);
         SearchWidget searchWidget = (SearchWidget) component;
         assertEquals("Enter Payee Name/Account #",
             Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
+    }
+
+    private void verifyExportButton(Component component) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
+        assertEquals("Export", button.getCaption());
+        assertEquals(1, button.getExtensions().size());
     }
 
     private void verifyGrid(Component component) {
@@ -212,12 +232,16 @@ public class ExcludePayeeWidgetTest {
     }
 
     private void initWidget() {
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
+        expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
         expect(controller.getExcludePayeesFilterController()).andReturn(filterController).once();
         expect(filterController.initWidget()).andReturn(filterWidget).once();
         expect(controller.getPayeeTotalHolders()).andReturn(Collections.emptyList()).once();
-        replay(controller, filterController);
+        replay(controller, filterController, streamSource);
         widget.init();
-        verify(controller, filterController);
-        reset(controller, filterController);
+        verify(controller, filterController, streamSource);
+        reset(controller, filterController, streamSource);
     }
 }

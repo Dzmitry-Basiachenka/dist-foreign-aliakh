@@ -1,7 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -38,6 +42,10 @@ public class ExcludePayeeController extends CommonController<IExcludePayeeWidget
     private IFasUsageService fasUsageService;
     @Autowired
     private IExcludePayeeFilterController payeesFilterController;
+    @Autowired
+    private IReportService reportService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public IExcludePayeeFilterController getExcludePayeesFilterController() {
@@ -72,5 +80,13 @@ public class ExcludePayeeController extends CommonController<IExcludePayeeWidget
     @Override
     public void setScenario(Scenario scenario) {
         this.scenario = scenario;
+    }
+
+    @Override
+    public IStreamSource getCsvStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "exclude_by_payee_",
+            // TODO {aliakh} when is implemented, use set of scenarioIds and ExcludePayeeFilter
+            pos -> reportService.writeExcludeDetailsByPayeeCsvReport(Collections.singleton(scenario.getId()),
+                getWidget().getSelectedAccountNumbers(), pos));
     }
 }
