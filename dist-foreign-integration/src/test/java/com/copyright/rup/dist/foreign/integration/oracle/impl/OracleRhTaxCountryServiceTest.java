@@ -52,7 +52,7 @@ public class OracleRhTaxCountryServiceTest {
         expect(
             restTemplate.getForObject(
                 RH_TAX_COUNTRY_URL, String.class, ImmutableBiMap.of("accountNumbers", ACCOUNT_NUMBER)))
-            .andReturn(loadJson("rh_information_response.json"))
+            .andReturn(loadJson("rh_tax_country_response.json"))
             .once();
         replay(restTemplate);
         assertTrue(oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBER));
@@ -66,7 +66,7 @@ public class OracleRhTaxCountryServiceTest {
         expect(
             restTemplate.getForObject(
                 RH_TAX_COUNTRY_URL, String.class, ImmutableBiMap.of("accountNumbers", ACCOUNT_NUMBER)))
-            .andReturn(loadJson("rh_information_not_found_response.json"))
+            .andReturn(loadJson("rh_tax_country_not_found_response.json"))
             .once();
         replay(restTemplate);
         assertFalse(oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBER));

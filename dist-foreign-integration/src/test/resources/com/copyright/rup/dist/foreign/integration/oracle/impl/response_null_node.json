@@ -1,0 +1,13 @@
+{
+  "response":{
+    "status":{
+      "code":"SUCCESS"
+    },
+    "content":[
+      "java.util.ArrayList",
+      [
+        null
+      ]
+    ]
+  }
+}

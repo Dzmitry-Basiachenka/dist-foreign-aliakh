@@ -77,7 +77,8 @@ public class DomainVerifierTest {
             {PublicationType.class},
             {DetailLicenseeClass.class},
             {AggregateLicenseeClass.class},
-            {FundPoolDetail.class}
+            {FundPoolDetail.class},
+            {RhTaxInformation.class}
         };
         return Arrays.asList(testData);
     }

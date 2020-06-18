@@ -57,7 +57,7 @@ public class OracleRhTaxCountryChunkServiceTest {
         expectLastCall().once();
         expect(restTemplate.getForObject(RH_TAX_COUNTRY_URL, String.class,
             ImmutableBiMap.of("accountNumbers", Joiner.on(",").skipNulls().join(ACCOUNT_NUMBERS))))
-            .andReturn(loadJson("rh_information_response_1.json"))
+            .andReturn(loadJson("rh_tax_country_response_1.json"))
             .once();
         replay(restTemplate);
         assertEquals(ImmutableMap.of(7001413934L, Boolean.TRUE, 1000009522L, Boolean.FALSE),
@@ -71,7 +71,7 @@ public class OracleRhTaxCountryChunkServiceTest {
         expectLastCall().once();
         expect(restTemplate.getForObject(RH_TAX_COUNTRY_URL, String.class, ImmutableBiMap.of("accountNumbers",
             Joiner.on(",").skipNulls().join(ACCOUNT_NUMBERS))))
-            .andReturn(loadJson("rh_information_not_found_response.json"))
+            .andReturn(loadJson("rh_tax_country_not_found_response.json"))
             .once();
         replay(restTemplate);
         assertTrue(MapUtils.isEmpty(oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBERS)));
