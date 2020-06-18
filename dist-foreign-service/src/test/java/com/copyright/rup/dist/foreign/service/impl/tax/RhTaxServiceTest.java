@@ -12,12 +12,13 @@ import static org.junit.Assert.assertNull;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxChunkService;
-import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxService;
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxCountryChunkService;
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxCountryService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -41,40 +42,40 @@ public class RhTaxServiceTest {
 
     private RhTaxService rhTaxService;
     private IUsageService usageService;
-    private IOracleRhTaxService oracleRhTaxService;
-    private IOracleRhTaxChunkService oracleRhTaxChunkService;
+    private IOracleRhTaxCountryService oracleRhTaxCountryService;
+    private IOracleRhTaxCountryChunkService oracleRhTaxCountryChunkService;
 
     @Before
     public void setUp() {
         rhTaxService = new RhTaxService();
         usageService = createMock(IUsageService.class);
-        oracleRhTaxService = createMock(IOracleRhTaxService.class);
-        oracleRhTaxChunkService = createMock(IOracleRhTaxChunkService.class);
+        oracleRhTaxCountryService = createMock(IOracleRhTaxCountryService.class);
+        oracleRhTaxCountryChunkService = createMock(IOracleRhTaxCountryChunkService.class);
         Whitebox.setInternalState(rhTaxService, "usageService", usageService);
-        Whitebox.setInternalState(rhTaxService, "oracleRhTaxService", oracleRhTaxService);
-        Whitebox.setInternalState(rhTaxService, "oracleRhTaxChunkService", oracleRhTaxChunkService);
+        Whitebox.setInternalState(rhTaxService, "oracleRhTaxCountryService", oracleRhTaxCountryService);
+        Whitebox.setInternalState(rhTaxService, "oracleRhTaxCountryChunkService", oracleRhTaxCountryChunkService);
     }
 
     @Test
     public void testProcessTaxCountryCode() {
         Usage usage = buildUsage(1000001534L);
-        expect(oracleRhTaxService.isUsTaxCountry(1000001534L)).andReturn(true).once();
+        expect(oracleRhTaxCountryService.isUsTaxCountry(1000001534L)).andReturn(true).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
-        replay(oracleRhTaxService, usageService);
+        replay(oracleRhTaxCountryService, usageService);
         rhTaxService.processTaxCountryCode(usage);
         assertEquals(UsageStatusEnum.US_TAX_COUNTRY, usage.getStatus());
-        verify(oracleRhTaxService, usageService);
+        verify(oracleRhTaxCountryService, usageService);
     }
 
     @Test
     public void testProcessTaxCountryCodeNonUs() {
         Usage usage = buildUsage(1000001534L);
-        expect(oracleRhTaxService.isUsTaxCountry(1000001534L)).andReturn(false).once();
-        replay(oracleRhTaxService, usageService);
+        expect(oracleRhTaxCountryService.isUsTaxCountry(1000001534L)).andReturn(false).once();
+        replay(oracleRhTaxCountryService, usageService);
         rhTaxService.processTaxCountryCode(usage);
         assertNull(usage.getStatus());
-        verify(oracleRhTaxService, usageService);
+        verify(oracleRhTaxCountryService, usageService);
     }
 
     @Test(expected = NullPointerException.class)
@@ -88,16 +89,16 @@ public class RhTaxServiceTest {
         Usage usTaxUsage = buildUsage(7001413934L);
         Usage notUsTaxUsage = buildUsage(1000009522L);
         List<Usage> usages = Arrays.asList(usTaxUsage, notUsTaxUsage);
-        expect(oracleRhTaxChunkService.isUsTaxCountry(ACCOUNT_NUMBERS))
+        expect(oracleRhTaxCountryChunkService.isUsTaxCountry(ACCOUNT_NUMBERS))
             .andReturn(ImmutableMap.of(7001413934L, Boolean.TRUE, 1000009522L, Boolean.FALSE))
             .once();
         usageService.updateProcessedUsage(usTaxUsage);
         expectLastCall().once();
-        replay(oracleRhTaxChunkService, usageService);
+        replay(oracleRhTaxCountryChunkService, usageService);
         rhTaxService.processTaxCountryCode(usages);
         assertEquals(UsageStatusEnum.US_TAX_COUNTRY, usTaxUsage.getStatus());
         assertNotEquals(UsageStatusEnum.US_TAX_COUNTRY, notUsTaxUsage.getStatus());
-        verify(oracleRhTaxChunkService, usageService);
+        verify(oracleRhTaxCountryChunkService, usageService);
     }
 
     private Usage buildUsage(Long accountNumber) {

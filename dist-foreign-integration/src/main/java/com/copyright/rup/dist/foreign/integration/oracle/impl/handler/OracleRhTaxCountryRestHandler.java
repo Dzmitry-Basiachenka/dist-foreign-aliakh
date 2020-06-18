@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Objects;
 
 /**
- * Handler for processing rightsholders tax information response.
+ * Handler for processing rightsholders tax country response.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -18,7 +18,7 @@ import java.util.Objects;
  *
  * @author Aliaksandr Liakh
  */
-public class OracleRhTaxInformationRestHandler extends CommonRestHandler<Boolean> {
+public class OracleRhTaxCountryRestHandler extends CommonRestHandler<Boolean> {
 
     private static final String DOMESTIC_INDICATOR = "D";
 
@@ -27,7 +27,7 @@ public class OracleRhTaxInformationRestHandler extends CommonRestHandler<Boolean
      *
      * @param restTemplate instance of {@link RestTemplate}.
      */
-    public OracleRhTaxInformationRestHandler(RestTemplate restTemplate) {
+    public OracleRhTaxCountryRestHandler(RestTemplate restTemplate) {
         super(restTemplate);
     }
 

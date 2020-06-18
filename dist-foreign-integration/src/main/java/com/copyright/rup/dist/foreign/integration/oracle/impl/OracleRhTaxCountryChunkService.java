@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.integration.oracle.impl;
 
 import com.copyright.rup.dist.common.integration.IntegrationConnectionException;
-import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxChunkService;
-import com.copyright.rup.dist.foreign.integration.oracle.impl.handler.OracleRhTaxInformationChunkRestHandler;
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxCountryChunkService;
+import com.copyright.rup.dist.foreign.integration.oracle.impl.handler.OracleRhTaxCountryChunkRestHandler;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Implementation of {@link IOracleRhTaxChunkService}.
+ * Implementation of {@link IOracleRhTaxCountryChunkService}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -25,22 +25,22 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-@Service("df.integration.oracleRhTaxChunkService")
-public class OracleRhTaxChunkService implements IOracleRhTaxChunkService {
+@Service("df.integration.oracleRhTaxCountryChunkService")
+public class OracleRhTaxCountryChunkService implements IOracleRhTaxCountryChunkService {
 
     private static final String CONNECTION_EXCEPTION_MESSAGE = "Could not connect to the Oracle AP";
 
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("$RUP{dist.foreign.rest.oracle.rh_tax.url}")
-    private String rhTaxUrl;
+    @Value("$RUP{dist.foreign.rest.oracle.rh_tax_country.url}")
+    private String rhTaxCountryUrl;
 
     @Override
     public Map<Long, Boolean> isUsTaxCountry(Set<Long> accountNumbers) {
         try {
-            OracleRhTaxInformationChunkRestHandler handler = new OracleRhTaxInformationChunkRestHandler(restTemplate);
-            return handler.handleResponse(rhTaxUrl, ImmutableMap.of("accountNumbers",
+            OracleRhTaxCountryChunkRestHandler handler = new OracleRhTaxCountryChunkRestHandler(restTemplate);
+            return handler.handleResponse(rhTaxCountryUrl, ImmutableMap.of("accountNumbers",
                 Joiner.on(",").skipNulls().join(accountNumbers)));
         } catch (HttpClientErrorException | ResourceAccessException e) {
             throw new IntegrationConnectionException(CONNECTION_EXCEPTION_MESSAGE, e);

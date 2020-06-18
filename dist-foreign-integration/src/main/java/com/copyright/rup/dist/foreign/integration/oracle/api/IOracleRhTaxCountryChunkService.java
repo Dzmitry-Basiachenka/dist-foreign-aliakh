@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Interface for working with Oracle AP REST for getting RH tax info.
+ * Interface for working with Oracle AP REST for getting RH tax country.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -12,7 +12,7 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IOracleRhTaxChunkService {
+public interface IOracleRhTaxCountryChunkService {
 
     /**
      * Checks whether the tax residency country is US or not for given account numbers.
