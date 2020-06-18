@@ -1,3 +1,18 @@
+10.1.6
+-
+* B-57599 FDA: Exclude Payees within an FAS/FAS2 scenario: implement scenarios filter for FAS/FAS2 product families
+* B-58556 FDA: Tax Notification Report in FDA: Implement RH Tax Information REST integration
+* B-58556 FDA: Tax Notification Report in FDA: add support for TAXBENEFICIALOWNER preference
+* B-58556 FDA: Tax Notification Report in FDA: rename OracleRhTaxService to OracleRhTaxCountryService
+* B-58556 FDA: Tax Notification Report in FDA: use getCharset() method and fix findbugs warning
+* B-58557 FDA: Ability to Export FAS/FAS2 Excluded Payee: implement Export button on Exclude by Payee modal window
+* B-58557 FDA: Ability to Export FAS/FAS2 Excluded Payee: implement service for exporting payee information
+* B-58558 FDA: AACL undistributed liabilities report: Add query to retrieve data for the report and report handler
+* B-58560 FDA: View/Export NTS withdrawn details on FAS/FAS2 usage tab: move NTS_WITHDRAWN and TO_BE_DISTRIBUTED statuses from NTS to FAS/FAS2 product family on usage and audit tabs
+* B-58560 FDA: View/Export NTS withdrawn details on FAS/FAS2 usage tab: update historical data, change product family from NTS to FAS/FAS2 for details with NTS_WITHDRAWN & TO_BE_DISTRIBUTED statuses
+* B-59199 Tech Debt: update standard dependencies version set to v5_7
+* CDP-916 Upgrade Foreign Distributions to Spring 5
+
 10.1.5
 -
 * B-55952 FDA: Post distribution and split usage detail reporting enhancement: make changes based on comments in CR-DIST-FOREIGN-175
