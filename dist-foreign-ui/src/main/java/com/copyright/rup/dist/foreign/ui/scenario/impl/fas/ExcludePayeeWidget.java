@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
-import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
@@ -18,7 +17,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.ValueProvider;
-import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.SerializableComparator;
 import com.vaadin.shared.ui.MarginInfo;
@@ -32,10 +31,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -60,12 +57,12 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
 
     @Override
     public void performSearch() {
-        resetFilters();
+        refresh();
     }
 
     @Override
     public void refresh() {
-        resetFilters();
+        payeesGrid.setDataProvider(DataProvider.ofCollection(controller.getPayeeTotalHolders()));
     }
 
     @Override
@@ -129,7 +126,6 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
 
     private void initGrid() {
         payeesGrid = new Grid<>();
-        payeesGrid.setItems(controller.getPayeeTotalHolders());
         payeesGrid.setSelectionMode(SelectionMode.MULTI);
         payeesGrid.setSizeFull();
         VaadinUtils.addComponentStyle(payeesGrid, "exclude-details-by-payee-grid");
@@ -200,33 +196,5 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.exclude_payee.empty"));
             }
         });
-    }
-
-    private void resetFilters() {
-        ListDataProvider<PayeeTotalHolder> dataProvider =
-            (ListDataProvider<PayeeTotalHolder>) payeesGrid.getDataProvider();
-        dataProvider.clearFilters();
-        String searchValue = searchWidget.getSearchValue();
-        ExcludePayeeFilter filter = controller.getExcludePayeesFilterController().getWidget().getAppliedFilter();
-        boolean notBlankSearchValue = StringUtils.isNotBlank(searchValue);
-        boolean notEmptyFilter = !filter.isEmpty();
-        if (notBlankSearchValue || notEmptyFilter) {
-            dataProvider.setFilter(holder -> {
-                boolean result = true;
-                if (notBlankSearchValue) {
-                    result =
-                        StringUtils.containsIgnoreCase(holder.getPayee().getAccountNumber().toString(), searchValue)
-                            || StringUtils.containsIgnoreCase(holder.getPayee().getName(), searchValue);
-                }
-                if (notEmptyFilter && Objects.nonNull(filter.getNetAmountMinThreshold())) {
-                    result = result && 0 > holder.getNetTotal().setScale(2, BigDecimal.ROUND_HALF_UP)
-                        .compareTo(filter.getNetAmountMinThreshold());
-                }
-                if (notEmptyFilter && Objects.nonNull(filter.getPayeeParticipating())) {
-                    result = result && filter.getPayeeParticipating().equals(holder.isPayeeParticipating());
-                }
-                return result;
-            });
-        }
     }
 }

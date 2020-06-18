@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -258,9 +259,10 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindPayeeTotalHoldersByScenarioId() {
-        List<PayeeTotalHolder> payeeTotalHolders =
-            usageRepository.findPayeeTotalHoldersByScenarioId("e13ecc44-6795-4b75-90f0-4a3fc191f1b9");
+    public void testFindPayeeTotalHoldersByScenarioFilter() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
+        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(2, CollectionUtils.size(payeeTotalHolders));
         verifyPayeeTotalsHolder(7000813806L,
             "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
@@ -269,6 +271,32 @@ public class UsageRepositoryIntegrationTest {
         verifyPayeeTotalsHolder(1000002859L,
             "John Wiley & Sons - Books", new BigDecimal("200.0000000000"), new BigDecimal("152.0000000000"),
             new BigDecimal("48.0000000000"), false, payeeTotalHolders.get(1));
+    }
+
+    @Test
+    public void testFindPayeeTotalHoldersByScenarioFilterAndSearch() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
+        filter.setSearchValue("Administracion");
+        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
+        assertEquals(1, CollectionUtils.size(payeeTotalHolders));
+        verifyPayeeTotalsHolder(7000813806L,
+            "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
+            new BigDecimal("100.0000000000"), new BigDecimal("68.0000000000"), new BigDecimal("32.0000000000"), true,
+            payeeTotalHolders.get(0));
+    }
+
+    @Test
+    public void testFindPayeeTotalHoldersByScenarioFilterAndThreshold() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
+        filter.setNetAmountMinThreshold(new BigDecimal(150));
+        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
+        assertEquals(1, CollectionUtils.size(payeeTotalHolders));
+        verifyPayeeTotalsHolder(7000813806L,
+            "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
+            new BigDecimal("100.0000000000"), new BigDecimal("68.0000000000"), new BigDecimal("32.0000000000"), true,
+            payeeTotalHolders.get(0));
     }
 
     @Test

@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
@@ -192,9 +193,9 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writeExcludeDetailsByPayeeCsvReport(Set<String> scenarioIds, Set<Long> selectedAccountNumbers,
+    public void writeExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
                                                     PipedOutputStream pipedOutputStream) {
-        reportRepository.writeExcludeDetailsByPayeeCsvReport(scenarioIds, selectedAccountNumbers, pipedOutputStream);
+        reportRepository.writeExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, pipedOutputStream);
     }
 
     @Override

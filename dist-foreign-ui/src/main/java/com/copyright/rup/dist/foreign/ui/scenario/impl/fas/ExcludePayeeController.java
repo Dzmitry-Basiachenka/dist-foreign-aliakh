@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -59,7 +59,9 @@ public class ExcludePayeeController extends CommonController<IExcludePayeeWidget
 
     @Override
     public List<PayeeTotalHolder> getPayeeTotalHolders() {
-        return usageService.getPayeeTotalHoldersByScenarioId(scenario.getId());
+        ExcludePayeeFilter filter = payeesFilterController.getWidget().getAppliedFilter();
+        filter.setSearchValue(getWidget().getSearchValue());
+        return usageService.getPayeeTotalHoldersByFilter(filter);
     }
 
     @Override
@@ -84,9 +86,10 @@ public class ExcludePayeeController extends CommonController<IExcludePayeeWidget
 
     @Override
     public IStreamSource getCsvStreamSource() {
+        ExcludePayeeFilter filter = payeesFilterController.getWidget().getAppliedFilter();
+        filter.setSearchValue(getWidget().getSearchValue());
         return streamSourceHandler.getCsvStreamSource(() -> "exclude_by_payee_",
-            // TODO {aliakh} when is implemented, use set of scenarioIds and ExcludePayeeFilter
-            pos -> reportService.writeExcludeDetailsByPayeeCsvReport(Collections.singleton(scenario.getId()),
-                getWidget().getSelectedAccountNumbers(), pos));
+            pos -> reportService.writeExcludeDetailsByPayeeCsvReport(filter, getWidget().getSelectedAccountNumbers(),
+                pos));
     }
 }

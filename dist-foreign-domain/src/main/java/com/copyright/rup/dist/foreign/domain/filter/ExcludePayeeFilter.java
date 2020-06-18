@@ -1,11 +1,15 @@
 package com.copyright.rup.dist.foreign.domain.filter;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Filter fo exclude payees.
@@ -20,6 +24,8 @@ public class ExcludePayeeFilter {
 
     private Boolean payeeParticipating;
     private BigDecimal netAmountMinThreshold;
+    private Set<String> scenarioIds = new HashSet<>();
+    private String searchValue;
 
     /**
      * Default constructor.
@@ -36,6 +42,8 @@ public class ExcludePayeeFilter {
     public ExcludePayeeFilter(ExcludePayeeFilter filter) {
         this.payeeParticipating = filter.getPayeeParticipating();
         this.netAmountMinThreshold = filter.getNetAmountMinThreshold();
+        this.scenarioIds = filter.getScenarioIds();
+        this.searchValue = filter.getSearchValue();
     }
 
     public Boolean getPayeeParticipating() {
@@ -54,9 +62,27 @@ public class ExcludePayeeFilter {
         this.netAmountMinThreshold = netAmountMinThreshold;
     }
 
+    public Set<String> getScenarioIds() {
+        return scenarioIds;
+    }
+
+    public void setScenarioIds(Set<String> scenarios) {
+        this.scenarioIds = scenarios;
+    }
+
+    public String getSearchValue() {
+        return searchValue;
+    }
+
+    public void setSearchValue(String searchValue) {
+        this.searchValue = searchValue;
+    }
+
     public boolean isEmpty() {
         return Objects.isNull(payeeParticipating)
-            && Objects.isNull(netAmountMinThreshold);
+            && Objects.isNull(netAmountMinThreshold)
+            && CollectionUtils.isEmpty(scenarioIds)
+            && StringUtils.isBlank(searchValue);
     }
 
     @Override
@@ -71,6 +97,8 @@ public class ExcludePayeeFilter {
         return new EqualsBuilder()
             .append(payeeParticipating, that.payeeParticipating)
             .append(netAmountMinThreshold, that.netAmountMinThreshold)
+            .append(scenarioIds, that.scenarioIds)
+            .append(searchValue, that.searchValue)
             .isEquals();
     }
 
@@ -79,6 +107,8 @@ public class ExcludePayeeFilter {
         return new HashCodeBuilder()
             .append(payeeParticipating)
             .append(netAmountMinThreshold)
+            .append(scenarioIds)
+            .append(searchValue)
             .toHashCode();
     }
 
@@ -87,6 +117,8 @@ public class ExcludePayeeFilter {
         return new ToStringBuilder(this)
             .append("payeeParticipating", payeeParticipating)
             .append("netAmountMinThreshold", netAmountMinThreshold)
+            .append("scenarioIds", scenarioIds)
+            .append("searchValue", searchValue)
             .toString();
     }
 }

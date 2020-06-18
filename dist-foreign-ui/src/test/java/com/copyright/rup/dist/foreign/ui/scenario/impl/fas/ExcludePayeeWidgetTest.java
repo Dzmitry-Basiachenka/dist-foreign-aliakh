@@ -32,6 +32,7 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.GridSelectionModel;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -238,7 +239,6 @@ public class ExcludePayeeWidgetTest {
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
         expect(controller.getExcludePayeesFilterController()).andReturn(filterController).once();
         expect(filterController.initWidget()).andReturn(filterWidget).once();
-        expect(controller.getPayeeTotalHolders()).andReturn(Collections.emptyList()).once();
         replay(controller, filterController, streamSource);
         widget.init();
         verify(controller, filterController, streamSource);
