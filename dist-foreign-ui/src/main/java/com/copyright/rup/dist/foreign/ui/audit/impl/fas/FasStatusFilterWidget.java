@@ -23,7 +23,8 @@ public class FasStatusFilterWidget extends CommonStatusFilterWidget {
         Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
             UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND,
             UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.LOCKED, UsageStatusEnum.SENT_TO_LM,
-            UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED);
+            UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED, UsageStatusEnum.NTS_WITHDRAWN,
+            UsageStatusEnum.TO_BE_DISTRIBUTED);
 
     @Override
     public Collection<UsageStatusEnum> loadBeans() {
