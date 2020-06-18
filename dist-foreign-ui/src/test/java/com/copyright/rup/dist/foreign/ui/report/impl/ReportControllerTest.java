@@ -130,4 +130,16 @@ public class ReportControllerTest {
         assertNotNull(reportController.getResearchStatusReportStreamSource().getSource().getValue().get());
         verify(reportService, productFamilyProvider);
     }
+
+    @Test
+    public void testGetAaclUndistributedLiabilitiesReportStreamSource() {
+        reportService.writeAaclUndistributedLiabilitiesCsvReport(anyObject(OutputStream.class));
+        expectLastCall().once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.NTS_PRODUCT_FAMILY).once();
+        replay(reportService, productFamilyProvider);
+        reportController.initWidget();
+        assertNotNull(
+            reportController.getAaclUndistributedLiabilitiesReportStreamSource().getSource().getValue().get());
+        verify(reportService, productFamilyProvider);
+    }
 }
