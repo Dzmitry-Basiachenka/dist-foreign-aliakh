@@ -1,12 +1,15 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
+import com.copyright.rup.dist.foreign.ui.common.ScenarioFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -18,6 +21,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -40,6 +44,7 @@ public class ExcludePayeeFilterWidget extends VerticalLayout implements IExclude
     private ExcludePayeeFilter appliedFilter = new ExcludePayeeFilter();
     private ComboBox<String> participatingComboBox;
     private TextField minimumThreshold;
+    private ScenarioFilterWidget scenarioFilterWidget;
     private Button applyButton;
 
     @Override
@@ -58,6 +63,7 @@ public class ExcludePayeeFilterWidget extends VerticalLayout implements IExclude
     public void clearFilter() {
         participatingComboBox.clear();
         minimumThreshold.clear();
+        scenarioFilterWidget.reset();
         filter = new ExcludePayeeFilter();
         applyFilter();
     }
@@ -70,15 +76,25 @@ public class ExcludePayeeFilterWidget extends VerticalLayout implements IExclude
     @Override
     @SuppressWarnings("unchecked")
     public ExcludePayeeFilterWidget init() {
+        initScenariosFilterWidget();
         initParticipatingFilter();
         initMinimumThresholdFilter();
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        addComponents(buildFiltersHeaderLabel(), participatingComboBox, minimumThreshold, buttonsLayout);
+        addComponents(
+            buildFiltersHeaderLabel(), scenarioFilterWidget, participatingComboBox, minimumThreshold, buttonsLayout);
         setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         setMargin(true);
         setSpacing(true);
         VaadinUtils.addComponentStyle(this, "audit-filter-widget");
         return this;
+    }
+
+    private void initScenariosFilterWidget() {
+        scenarioFilterWidget = new ScenarioFilterWidget(controller::getScenarios);
+        scenarioFilterWidget.addFilterSaveListener((IFilterSaveListener<Scenario>) saveEvent -> {
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(scenarioFilterWidget, "scenarios-filter");
     }
 
     private HorizontalLayout initButtonsLayout() {

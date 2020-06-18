@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Scenario service implementation.
@@ -65,6 +66,12 @@ public class ScenarioService implements IScenarioService {
     @Override
     public List<Scenario> getScenarios(String productFamily) {
         return scenarioRepository.findByProductFamily(productFamily);
+    }
+
+    @Override
+    public List<Scenario> getScenariosByProductFamiliesAndStatuses(Set<String> productFamilies,
+                                                                   Set<ScenarioStatusEnum> statuses) {
+        return scenarioRepository.findByProductFamiliesAndStatuses(productFamilies, statuses);
     }
 
     @Override
