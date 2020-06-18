@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -141,7 +140,6 @@ public class WorkMatchingService implements IWorkMatchingService {
                                                  BigDecimal totalGrossAmount) {
         if (GROSS_AMOUNT_LIMIT.compareTo(totalGrossAmount) > 0) {
             usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
-            usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
             usageService.updateProcessedUsage(usage);
             auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
                 usageGroup.getNtsEligibleReason());

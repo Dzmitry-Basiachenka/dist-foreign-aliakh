@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -101,6 +102,7 @@ public class WorkMatchingServiceTest {
         String batchId = RupPersistUtils.generateUuid();
         Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
         usage.setBatchId(batchId);
+        usage.setProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
         expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, TITLE))
             .andReturn(new Work()).once();
         expect(usageRepository.getTotalAmountByStandardNumberAndBatchId(STANDARD_NUMBER, batchId))
@@ -114,7 +116,7 @@ public class WorkMatchingServiceTest {
         replay(piIntegrationService, usageRepository, auditService);
         workMatchingService.matchByIdno(usage);
         assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
-        assertEquals("NTS", usage.getProductFamily());
+        assertEquals("FAS", usage.getProductFamily());
         verify(piIntegrationService, usageRepository, auditService);
     }
 

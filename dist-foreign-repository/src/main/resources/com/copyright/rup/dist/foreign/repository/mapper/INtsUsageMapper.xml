@@ -168,8 +168,7 @@
 
         update ${schema}.df_usage
         set
-            status_ind = #{statusToSet},
-            product_family = #{productFamily}
+            status_ind = #{statusToSet}
         where df_usage_batch_uid in (select df_usage_batch_uid from works)
             and wr_wrk_inst in (select wr_wrk_inst from works)
         returning df_usage_uid
