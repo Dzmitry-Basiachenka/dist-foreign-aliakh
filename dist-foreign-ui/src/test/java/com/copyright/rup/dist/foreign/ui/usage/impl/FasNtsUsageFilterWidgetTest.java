@@ -21,6 +21,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
@@ -66,13 +67,13 @@ public class FasNtsUsageFilterWidgetTest {
     private static final Long ACCOUNT_NUMBER = 12345678L;
     private static final String FAS_PRODUCT_FAMILY = "FAS";
 
-    private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES = Sets.newHashSet(UsageStatusEnum.NEW,
+    private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES = ImmutableSet.of(UsageStatusEnum.NEW,
         UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
-        UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE);
-    private static final Set<UsageStatusEnum> NTS_STATUSES = Sets.newHashSet(UsageStatusEnum.NTS_WITHDRAWN,
-        UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE,
-        UsageStatusEnum.TO_BE_DISTRIBUTED, UsageStatusEnum.SCENARIO_EXCLUDED);
-
+        UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE,
+        UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED);
+    private static final Set<UsageStatusEnum> NTS_STATUSES =
+        ImmutableSet.of(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED,
+            UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED);
     private IFasNtsUsageFilterController usagesFilterController;
     private FasNtsUsageFilterWidget widget;
 
@@ -257,7 +258,7 @@ public class FasNtsUsageFilterWidgetTest {
         ListDataProvider<UsageStatusEnum> listDataProvider =
             (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
         Collection<?> actualStatuses = listDataProvider.getItems();
-        assertEquals(8, actualStatuses.size());
+        assertEquals(10, actualStatuses.size());
         assertEquals(FAS_FAS2_STATUSES, actualStatuses);
     }
 

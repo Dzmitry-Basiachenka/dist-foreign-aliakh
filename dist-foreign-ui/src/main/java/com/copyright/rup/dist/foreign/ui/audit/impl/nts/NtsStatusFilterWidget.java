@@ -20,10 +20,10 @@ import java.util.Set;
 public class NtsStatusFilterWidget extends CommonStatusFilterWidget {
 
     private static final Set<UsageStatusEnum> NTS_STATUSES =
-        Sets.newHashSet(UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND,
-            UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.TO_BE_DISTRIBUTED,
-            UsageStatusEnum.SCENARIO_EXCLUDED, UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY,
-            UsageStatusEnum.LOCKED, UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED);
+        Sets.newHashSet(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND,
+            UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.SCENARIO_EXCLUDED,
+            UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY, UsageStatusEnum.LOCKED,
+            UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.PAID, UsageStatusEnum.ARCHIVED);
 
     @Override
     public Collection<UsageStatusEnum> loadBeans() {

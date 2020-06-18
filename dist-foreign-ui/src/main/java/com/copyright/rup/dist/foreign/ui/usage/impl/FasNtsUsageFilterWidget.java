@@ -14,7 +14,6 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.ImmutableSet;
-
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
@@ -35,10 +34,11 @@ public class FasNtsUsageFilterWidget extends CommonUsageFilterWidget implements 
 
     private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES = ImmutableSet.of(UsageStatusEnum.NEW,
         UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
-        UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE);
-    private static final Set<UsageStatusEnum> NTS_STATUSES = ImmutableSet.of(UsageStatusEnum.NTS_WITHDRAWN,
-        UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE,
-        UsageStatusEnum.TO_BE_DISTRIBUTED, UsageStatusEnum.SCENARIO_EXCLUDED);
+        UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE,
+        UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED);
+    private static final Set<UsageStatusEnum> NTS_STATUSES = ImmutableSet.of(UsageStatusEnum.WORK_FOUND,
+        UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE,
+        UsageStatusEnum.SCENARIO_EXCLUDED);
 
     private final IFasNtsUsageFilterController controller;
     private LocalDateWidget paymentDateWidget;
