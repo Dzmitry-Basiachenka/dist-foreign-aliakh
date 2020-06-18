@@ -1,0 +1,33 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.adapters.oracle.ap.domain.RhTaxInfo",
+          "payeeAccountNumber": "7001413934",
+          "tboAccountNumber": "7001413934",
+          "tboAccountName": "Castanea / Allen Press, Inc.",
+          "taxOnFile": "1",
+          "notificationsSent": 2,
+          "dateOfLastNotificationSent": "2000-04-10 00:00:00",
+          "addressLine1": "810 E. 10th Street",
+          "addressLine2": "Address line 2",
+          "addressLine3": "Address line 3",
+          "addressLine4": "Address line 4",
+          "city": "Lawrence",
+          "state": "KS",
+          "zip": "66044-8897",
+          "country": "US",
+          "withHoldingIndicator": "U",
+          "typeOfForm": "W8BEN",
+          "payGroup": "RIGHTS"
+        }
+      ]
+    ]
+  }
+}
