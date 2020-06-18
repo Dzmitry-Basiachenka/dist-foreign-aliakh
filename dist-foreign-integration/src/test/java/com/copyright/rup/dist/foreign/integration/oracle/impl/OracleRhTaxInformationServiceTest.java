@@ -78,6 +78,7 @@ public class OracleRhTaxInformationServiceTest {
         assertTrue(urlCapture.getValue().contains(RH_TAX_INFO_URL));
         HttpEntity<String> requestEntity = requestCapture.getValue();
         MediaType contentType = requestEntity.getHeaders().getContentType();
+        assertNotNull(contentType);
         verifyContentType(contentType);
         verify(restTemplate);
     }
@@ -107,6 +108,7 @@ public class OracleRhTaxInformationServiceTest {
         assertTrue(urlCapture.getValue().contains(RH_TAX_INFO_URL));
         HttpEntity<String> requestEntity = requestCapture.getValue();
         MediaType contentType = requestEntity.getHeaders().getContentType();
+        assertNotNull(contentType);
         verifyContentType(contentType);
         verify(restTemplate);
     }
@@ -128,6 +130,7 @@ public class OracleRhTaxInformationServiceTest {
         assertTrue(urlCapture.getValue().contains(RH_TAX_INFO_URL));
         HttpEntity<String> requestEntity = requestCapture.getValue();
         MediaType contentType = requestEntity.getHeaders().getContentType();
+        assertNotNull(contentType);
         verifyContentType(contentType);
         verify(restTemplate);
     }
@@ -153,7 +156,7 @@ public class OracleRhTaxInformationServiceTest {
     }
 
     private void verifyContentType(MediaType contentType) {
-        assertEquals(Charsets.UTF_8, contentType.getCharSet());
+        assertEquals(Charsets.UTF_8, contentType.getCharset());
         assertEquals(MediaType.APPLICATION_JSON.getType(), contentType.getType());
         assertEquals(MediaType.APPLICATION_JSON.getSubtype(), contentType.getSubtype());
     }
