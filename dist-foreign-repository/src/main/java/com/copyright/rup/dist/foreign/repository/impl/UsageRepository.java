@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -335,6 +336,12 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public int findReferencedUsagesCountByIds(String... usageIds) {
         return selectOne("IUsageMapper.findReferencedUsagesCountByIds",
             ImmutableMap.of("usageIds", Objects.requireNonNull(usageIds)));
+    }
+
+    @Override
+    public List<RightsholderPayeeProductFamilyHolder> findRightsholderPayeeProductFamilyHoldersByScenarioIds(
+        Set<String> scenarioIds) {
+        return selectList("IUsageMapper.findRightsholderPayeeProductFamilyHoldersByScenarioIds", scenarioIds);
     }
 
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {

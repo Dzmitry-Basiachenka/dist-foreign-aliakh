@@ -6,12 +6,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -47,6 +49,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -670,12 +673,13 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamily(FAS_PRODUCT_FAMILY);
-        assertEquals(20, usageRepository.findCountForAudit(filter));
+        assertEquals(23, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages =
             usageRepository.findForAudit(filter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));
-        verifyUsageDtos(usages, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21,
-            USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_11, USAGE_ID_2, USAGE_ID_18, USAGE_ID_5,
-            USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20);
+        verifyUsageDtos(usages, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, "37b74bce-8a03-4110-81de-d79958376590",
+            USAGE_ID_1, USAGE_ID_23, "3f06d5e2-81d5-4e12-a784-a7485066d5f3", USAGE_ID_21, USAGE_ID_12, USAGE_ID_3,
+            USAGE_ID_6, USAGE_ID_13, USAGE_ID_11, USAGE_ID_2, USAGE_ID_18, USAGE_ID_5, USAGE_ID_8, USAGE_ID_17,
+            USAGE_ID_22, "cd9307a8-1eeb-4709-a4e2-b6be84771104", USAGE_ID_7, USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
@@ -966,6 +970,25 @@ public class UsageRepositoryIntegrationTest {
             usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus("JAACC_11Dec16", UsageStatusEnum.LOCKED));
     }
 
+    @Test
+    public void testFindRightsholderPayeeProductFamilyHoldersByScenarioIds() throws IOException {
+        Comparator<RightsholderPayeeProductFamilyHolder> comparator = Comparator
+            .comparing(RightsholderPayeeProductFamilyHolder::getProductFamily)
+            .thenComparing(RightsholderPayeeProductFamilyHolder::getRightsholder,
+                Comparator.comparing(Rightsholder::getAccountNumber))
+            .thenComparing(RightsholderPayeeProductFamilyHolder::getPayee,
+                Comparator.comparing(Rightsholder::getAccountNumber));
+        Set<String> scenarioIds = new HashSet<>(
+            Arrays.asList("05ebb365-fa0d-4329-8a47-0b49968c6b82", "642b8342-a322-4b3e-afbd-4446cb218841"));
+        List<RightsholderPayeeProductFamilyHolder> actual =
+            usageRepository.findRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds).stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+        List<RightsholderPayeeProductFamilyHolder> expected =
+            loadExpectedRightsholderPayeeProductFamilyHolders("json/rh_payee_product_family_holders.json");
+        verifyRightsholderPayeeProductFamilyHolders(expected, actual);
+    }
+
     private void verifyFindForAuditSort(AuditFilter filter, String property, Direction direction,
                                         String... expectedIds) {
         List<UsageDto> actualUsageDtos =
@@ -1045,6 +1068,13 @@ public class UsageRepositoryIntegrationTest {
         });
     }
 
+    private List<RightsholderPayeeProductFamilyHolder> loadExpectedRightsholderPayeeProductFamilyHolders(
+        String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        return OBJECT_MAPPER.readValue(content, new TypeReference<List<RightsholderPayeeProductFamilyHolder>>() {
+        });
+    }
+
     private void verifyUsages(List<Usage> expectedUsages, List<Usage> actualUsages) {
         assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
         IntStream.range(0, expectedUsages.size())
@@ -1078,6 +1108,25 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
             actualUsage.getRightsholder().getAccountNumber());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+    }
+
+    private void verifyRightsholderPayeeProductFamilyHolders(List<RightsholderPayeeProductFamilyHolder> expectedHolders,
+                                                             List<RightsholderPayeeProductFamilyHolder> actualHolders) {
+        assertEquals(CollectionUtils.size(expectedHolders), CollectionUtils.size(actualHolders));
+        IntStream.range(0, expectedHolders.size())
+            .forEach(index ->
+                verifyRightsholderPayeeProductFamilyHolder(expectedHolders.get(index), actualHolders.get(index)));
+    }
+
+    private void verifyRightsholderPayeeProductFamilyHolder(RightsholderPayeeProductFamilyHolder expected,
+                                                            RightsholderPayeeProductFamilyHolder actual) {
+        assertEquals(expected.getRightsholder().getId(), actual.getRightsholder().getId());
+        assertEquals(expected.getRightsholder().getAccountNumber(), actual.getRightsholder().getAccountNumber());
+        assertEquals(expected.getRightsholder().getName(), actual.getRightsholder().getName());
+        assertEquals(expected.getPayee().getId(), actual.getPayee().getId());
+        assertEquals(expected.getPayee().getAccountNumber(), actual.getPayee().getAccountNumber());
+        assertEquals(expected.getPayee().getName(), actual.getPayee().getName());
+        assertEquals(expected.getProductFamily(), actual.getProductFamily());
     }
 
     private RightsholderTotalsHolder buildRightsholderTotalsHolder(String rhName, Long rhAccountNumber,

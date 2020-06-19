@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -326,4 +327,13 @@ public interface IUsageRepository {
      * @return the count of usages
      */
     int findReferencedUsagesCountByIds(String... usageIds);
+
+    /**
+     * Finds unique combinations of RH, payee and product family from scenarios.
+     *
+     * @param scenarioIds set of scenario ids
+     * @return list of {@link RightsholderPayeeProductFamilyHolder}s
+     */
+    List<RightsholderPayeeProductFamilyHolder> findRightsholderPayeeProductFamilyHoldersByScenarioIds(
+        Set<String> scenarioIds);
 }

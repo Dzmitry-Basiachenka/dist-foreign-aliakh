@@ -123,6 +123,16 @@
         <result property="payeeParticipating" column="is_payee_participating_flag"/>
     </resultMap>
 
+    <resultMap id="rightsholderPayeeProductFamilyHolderResultMap" type="RightsholderPayeeProductFamilyHolder">
+        <result property="rightsholder.id" column="rh_uid"/>
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="rightsholder.name" column="rh_name"/>
+        <result property="payee.id" column="payee_uid"/>
+        <result property="payee.accountNumber" column="payee_account_number"/>
+        <result property="payee.name" column="payee_name"/>
+        <result property="productFamily" column="product_family"/>
+    </resultMap>
+
     <sql id="usageColumns">
         df_usage_batch_uid,
         df_scenario_uid,
@@ -1257,5 +1267,30 @@
             <foreach collection="usageIds" item="usageId" open="(" separator="," close=")">
                 #{usageId}
             </foreach>)
+    </select>
+
+    <select id="findRightsholderPayeeProductFamilyHoldersByScenarioIds" resultMap="rightsholderPayeeProductFamilyHolderResultMap" parameterType="list">
+        select
+            rh.df_rightsholder_uid rh_uid,
+            rh.name rh_name,
+            u.rh_account_number,
+            payee.df_rightsholder_uid payee_uid,
+            payee.name payee_name,
+            u.payee_account_number,
+            u.product_family
+        from (
+            select
+                rh_account_number,
+                payee_account_number,
+                product_family
+            from ${schema}.df_usage u
+            where df_scenario_uid in
+            <foreach collection="collection" item="scenarioId" open="(" separator="," close=")">
+                #{scenarioId}
+            </foreach>
+            group by u.rh_account_number, u.payee_account_number, u.product_family
+        ) u
+        left join ${schema}.df_rightsholder rh on u.rh_account_number = rh.rh_account_number
+        left join ${schema}.df_rightsholder payee on u.payee_account_number = payee.rh_account_number
     </select>
 </mapper>
