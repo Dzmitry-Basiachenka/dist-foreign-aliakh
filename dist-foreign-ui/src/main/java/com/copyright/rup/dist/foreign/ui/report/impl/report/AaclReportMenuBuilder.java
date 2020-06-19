@@ -32,5 +32,7 @@ public class AaclReportMenuBuilder implements IReportMenuBuilder {
                 controller.getWorkSharesByAggLcClassSummaryReportController()));
         rootItem.addItem(aaclBaselineUsagesReport, menuItem -> widget.openReportWindow(aaclBaselineUsagesReport,
             controller.getAaclBaselineUsagesReportController()));
+        rootItem.addItem(ForeignUi.getMessage("menu.report.undistributed_liabilities"),
+            menuItem -> widget.generateReport(controller.getAaclUndistributedLiabilitiesReportStreamSource()));
     }
 }
