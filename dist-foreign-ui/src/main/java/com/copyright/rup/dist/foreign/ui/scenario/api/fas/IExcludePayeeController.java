@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.scenario.api.fas;
 
 import com.copyright.rup.dist.common.reporting.api.ICsvReportProvider;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.util.ReflectTools;
@@ -57,11 +56,4 @@ public interface IExcludePayeeController extends IController<IExcludePayeeWidget
      * @param reason              reason of exclusion
      */
     void redesignateDetails(Set<Long> payeeAccountNumbers, String reason);
-
-    /**
-     * Sets {@link Scenario}.
-     *
-     * @param scenario instance of {@link Scenario} to set
-     */
-    void setScenario(Scenario scenario);
 }

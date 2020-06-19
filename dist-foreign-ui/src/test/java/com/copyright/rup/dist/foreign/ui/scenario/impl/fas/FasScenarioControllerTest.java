@@ -257,8 +257,6 @@ public class FasScenarioControllerTest {
     @Test
     public void testOnExcludeByPayeeClickedWithoutDiscrepancies() {
         mockStatic(Windows.class);
-        excludePayeesController.setScenario(scenario);
-        expectLastCall().once();
         ExcludePayeeWidget widget = new ExcludePayeeWidget();
         expect(excludePayeesController.initWidget()).andReturn(widget).once();
         Windows.showModalWindow(widget);

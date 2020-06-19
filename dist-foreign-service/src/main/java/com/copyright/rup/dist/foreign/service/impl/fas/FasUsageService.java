@@ -138,17 +138,17 @@ public class FasUsageService implements IFasUsageService {
 
     @Override
     @Transactional
-    public void deleteFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String reason) {
-        Set<String> usageIds = fasUsageRepository
-            .deleteFromScenarioByPayees(scenarioId, accountNumbers, RupContextUtils.getUserName());
+    public void deleteFromScenarioByPayees(Set<String> scenarioIds, Set<Long> accountNumbers, String reason) {
+        Set<String> usageIds =
+            fasUsageRepository.deleteFromScenarioByPayees(scenarioIds, accountNumbers, RupContextUtils.getUserName());
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
     }
 
     @Override
     @Transactional
-    public void redesignateToNtsWithdrawnByPayees(String scenarioId, Set<Long> accountNumbers, String reason) {
-        Set<String> usageIds = fasUsageRepository
-            .redesignateToNtsWithdrawnByPayees(scenarioId, accountNumbers, RupContextUtils.getUserName());
+    public void redesignateToNtsWithdrawnByPayees(Set<String> scenarioIds, Set<Long> accountNumbers, String reason) {
+        Set<String> usageIds = fasUsageRepository.redesignateToNtsWithdrawnByPayees(scenarioIds, accountNumbers,
+            RupContextUtils.getUserName());
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
     }
 
