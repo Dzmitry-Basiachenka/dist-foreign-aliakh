@@ -128,7 +128,7 @@ public class NtsUsageRepositoryIntegrationTest {
             "cbd6768d-a424-476e-b502-a832d9dbe85e", "d5e3c637-155a-4c05-999a-31a07e335491")));
         usageRepository.findByIds(ids).forEach(usage -> {
             assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
-            assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
+            assertEquals("FAS", usage.getProductFamily());
         });
     }
 

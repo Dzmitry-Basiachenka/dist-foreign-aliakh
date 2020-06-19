@@ -81,7 +81,7 @@ public class LoadFasUsagesIntegrationTest {
         testHelper.expectPrmCall("prm/rightsholder_1000024950_response.json", 1000024950L);
         loadUsageBatch();
         testHelper.assertUsages(Arrays.asList(
-            buildUsage(USAGE_ID_1, UsageStatusEnum.NTS_WITHDRAWN, null, null, "NTS",
+            buildUsage(USAGE_ID_1, UsageStatusEnum.NTS_WITHDRAWN, null, null, FAS2_PRODUCT_FAMILY,
                 new BigDecimal("55.0000000000"), new BigDecimal("50.00")),
             buildUsage(USAGE_ID_2, UsageStatusEnum.WORK_NOT_FOUND,
                 null, null, FAS2_PRODUCT_FAMILY, new BigDecimal("165.0000000000"), new BigDecimal("150.00")),
@@ -128,7 +128,7 @@ public class LoadFasUsagesIntegrationTest {
         UsageBatch batch = new UsageBatch();
         batch.setName("Test_Batch");
         batch.setRro(buildRro());
-        batch.setProductFamily("FAS2");
+        batch.setProductFamily(FAS2_PRODUCT_FAMILY);
         batch.setPaymentDate(LocalDate.now());
         batch.setFiscalYear(2018);
         batch.setGrossAmount(BigDecimal.valueOf(550));

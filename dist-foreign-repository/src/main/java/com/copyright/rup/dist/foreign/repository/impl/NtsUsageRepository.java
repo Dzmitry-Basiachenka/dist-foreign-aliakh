@@ -98,7 +98,6 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
         params.put("statusToFind", UsageStatusEnum.RH_NOT_FOUND);
         params.put("statusToSet", UsageStatusEnum.NTS_WITHDRAWN);
-        params.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
         params.put("minimumTotal", new BigDecimal("100"));
         params.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         return selectList("INtsUsageMapper.updateNtsWithdrawnUsagesAndGetIds", params);
