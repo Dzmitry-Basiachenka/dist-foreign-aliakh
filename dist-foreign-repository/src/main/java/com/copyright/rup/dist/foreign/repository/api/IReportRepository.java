@@ -4,6 +4,7 @@ import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
@@ -273,13 +274,13 @@ public interface IReportRepository {
     void writeAaclBaselineUsagesCsvReport(int numberOfYears, OutputStream outputStream);
 
     /**
-     * Finds details by scenario ids and writes them with payee exclude status into the output stream in CSV format.
+     * Finds details by filter and writes them with payee exclude status into the output stream in CSV format.
      *
-     * @param scenarioIds            set of scenario ids
+     * @param filter                 instance of {@link ExcludePayeeFilter}
      * @param selectedAccountNumbers set of account numbers of selected payees
      * @param pipedOutputStream      instance of {@link PipedOutputStream}
      */
-    void writeExcludeDetailsByPayeeCsvReport(Set<String> scenarioIds, Set<Long> selectedAccountNumbers,
+    void writeExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
                                              PipedOutputStream pipedOutputStream);
 
     /**

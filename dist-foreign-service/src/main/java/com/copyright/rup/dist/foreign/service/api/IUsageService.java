@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
@@ -116,12 +117,12 @@ public interface IUsageService {
                                                                           Pageable pageable, Sort sort);
 
     /**
-     * Gets list of {@link PayeeTotalHolder}s by scenario identifier.
+     * Gets list of {@link PayeeTotalHolder}s by filter.
      *
-     * @param scenarioId scenario identifier
+     * @param filter instance of {@link ExcludePayeeFilter}
      * @return list of {@link PayeeTotalHolder}s
      */
-    List<PayeeTotalHolder> getPayeeTotalHoldersByScenarioId(String scenarioId);
+    List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(ExcludePayeeFilter filter);
 
     /**
      * Gets count of {@link RightsholderTotalsHolder}s based on {@link Scenario}.

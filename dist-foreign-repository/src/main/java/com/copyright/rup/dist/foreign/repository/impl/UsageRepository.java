@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
@@ -27,7 +28,6 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -203,9 +203,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<PayeeTotalHolder> findPayeeTotalHoldersByScenarioId(String scenarioId) {
-        return selectList("IUsageMapper.findPayeeTotalHoldersByScenarioIds",
-            Collections.singleton(Objects.requireNonNull(scenarioId)));
+    public List<PayeeTotalHolder> findPayeeTotalHoldersByFilter(ExcludePayeeFilter filter) {
+        return selectList("IUsageMapper.findPayeeTotalHoldersByFilter", Objects.requireNonNull(filter));
     }
 
     @Override

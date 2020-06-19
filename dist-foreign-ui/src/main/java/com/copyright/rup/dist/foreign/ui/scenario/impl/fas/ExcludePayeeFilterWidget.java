@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Interface for exclude payees filter widget.
@@ -76,7 +77,7 @@ public class ExcludePayeeFilterWidget extends VerticalLayout implements IExclude
     @Override
     @SuppressWarnings("unchecked")
     public ExcludePayeeFilterWidget init() {
-        initScenariosFilterWidget();
+        initScenarioFilterWidget();
         initParticipatingFilter();
         initMinimumThresholdFilter();
         HorizontalLayout buttonsLayout = initButtonsLayout();
@@ -89,9 +90,11 @@ public class ExcludePayeeFilterWidget extends VerticalLayout implements IExclude
         return this;
     }
 
-    private void initScenariosFilterWidget() {
+    private void initScenarioFilterWidget() {
         scenarioFilterWidget = new ScenarioFilterWidget(controller::getScenarios);
         scenarioFilterWidget.addFilterSaveListener((IFilterSaveListener<Scenario>) saveEvent -> {
+            filter.setScenarioIds(
+                saveEvent.getSelectedItemsIds().stream().map(Scenario::getId).collect(Collectors.toSet()));
             filterChanged();
         });
         VaadinUtils.addComponentStyle(scenarioFilterWidget, "scenarios-filter");

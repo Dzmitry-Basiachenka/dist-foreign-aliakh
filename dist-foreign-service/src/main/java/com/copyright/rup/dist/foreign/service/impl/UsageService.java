@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
@@ -169,8 +170,10 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public List<PayeeTotalHolder> getPayeeTotalHoldersByScenarioId(String scenarioId) {
-        return usageRepository.findPayeeTotalHoldersByScenarioId(scenarioId);
+    public List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(ExcludePayeeFilter filter) {
+        return !filter.isEmpty()
+            ? usageRepository.findPayeeTotalHoldersByFilter(filter)
+            : Collections.emptyList();
     }
 
     @Override

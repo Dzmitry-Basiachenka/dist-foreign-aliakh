@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 
@@ -471,17 +472,18 @@ public class CsvReportsIntegrationTest {
 
     @Test
     public void testWriteExcludeDetailsByPayeeCsvEmptyReport() throws Exception {
-        assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(
-            Collections.singleton("d13ecc44-6795-4b75-90f0-4a3fc191f1b9"), Collections.emptySet(), outputStream),
-            "exclude_by_payee_report_empty.csv");
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton("d13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
+        assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(filter,
+            Collections.emptySet(), outputStream), "exclude_by_payee_report_empty.csv");
     }
 
     @Test
     public void testWriteExcludeDetailsByPayeeCsvReport() throws Exception {
-        assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(
-            Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"), Collections.singleton(7000813806L),
-            outputStream),
-            "exclude_by_payee_report.csv");
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
+        assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(filter,
+            Collections.singleton(7000813806L), outputStream), "exclude_by_payee_report.csv");
     }
 
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
