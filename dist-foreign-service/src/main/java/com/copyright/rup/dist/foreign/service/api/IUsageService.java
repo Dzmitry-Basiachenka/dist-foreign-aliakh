@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -315,4 +316,13 @@ public interface IUsageService {
      */
     void updatePaidUsages(List<PaidUsage> paidUsages, Function<List<String>, List<Usage>> findByIdsFunction,
                           Consumer<PaidUsage> insertPaidConsumer);
+
+    /**
+     * Gets unique combinations of RH, payee and product family from scenarios.
+     *
+     * @param scenarioIds set of scenario ids
+     * @return list of {@link RightsholderPayeeProductFamilyHolder}s
+     */
+    List<RightsholderPayeeProductFamilyHolder> getRightsholderPayeeProductFamilyHoldersByScenarioIds(
+        Set<String> scenarioIds);
 }

@@ -12,6 +12,7 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -427,6 +428,12 @@ public class UsageService implements IUsageService {
                 "Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}",
                 batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));
         });
+    }
+
+    @Override
+    public List<RightsholderPayeeProductFamilyHolder> getRightsholderPayeeProductFamilyHoldersByScenarioIds(
+        Set<String> scenarioIds) {
+        return usageRepository.findRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds);
     }
 
     private void logScenarioSplitAction(String scenarioId) {
