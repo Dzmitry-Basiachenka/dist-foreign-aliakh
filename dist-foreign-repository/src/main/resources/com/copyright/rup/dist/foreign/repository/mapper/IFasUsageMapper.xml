@@ -110,7 +110,6 @@
             update ${schema}.df_usage u
             set
                 status_ind = #{status},
-                product_family = #{productFamily},
                 df_scenario_uid = null,
                 payee_account_number = null,
                 service_fee = null,

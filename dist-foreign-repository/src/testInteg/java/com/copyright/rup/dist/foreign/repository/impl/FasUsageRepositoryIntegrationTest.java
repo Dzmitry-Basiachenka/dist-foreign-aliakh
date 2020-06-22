@@ -133,7 +133,7 @@ public class FasUsageRepositoryIntegrationTest {
         List<Usage> usages = usageRepository.findByIds(
             Arrays.asList("72f6abdb-c82d-4cee-aadf-570942cf0093", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a"));
         assertEquals(2, CollectionUtils.size(usages));
-        usages.forEach(usage -> verifyUsageExcludedFromScenario(usage, "NTS", UsageStatusEnum.NTS_WITHDRAWN));
+        usages.forEach(usage -> verifyUsageExcludedFromScenario(usage, "FAS2", UsageStatusEnum.NTS_WITHDRAWN));
         List<String> usageIds = usageRepository.findByScenarioId("767a2647-7e6e-4479-b381-e642de480863")
             .stream()
             .map(Usage::getId)
