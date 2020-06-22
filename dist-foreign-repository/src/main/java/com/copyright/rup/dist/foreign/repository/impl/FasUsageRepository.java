@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -40,7 +39,6 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
     private static final String SCENARIO_IDS_KEY = "scenarioIds";
     private static final String UPDATE_USER_KEY = "updateUser";
     private static final String STATUS_KEY = "status";
-    private static final String PRODUCT_FAMILY_KEY = "productFamily";
 
     @Override
     public void insert(Usage usage) {
@@ -83,7 +81,6 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
         parameters.put(SCENARIO_IDS_KEY, Objects.requireNonNull(scenarioIds));
         parameters.put("scenarioStatus", ScenarioStatusEnum.IN_PROGRESS);
         parameters.put(STATUS_KEY, UsageStatusEnum.NTS_WITHDRAWN);
-        parameters.put(PRODUCT_FAMILY_KEY, FdaConstants.NTS_PRODUCT_FAMILY);
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         Iterables.partition(Objects.requireNonNull(accountNumbers), MAX_VARIABLES_COUNT)
             .forEach(partition -> {
