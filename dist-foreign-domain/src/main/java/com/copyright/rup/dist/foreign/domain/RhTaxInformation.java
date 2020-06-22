@@ -20,6 +20,7 @@ public class RhTaxInformation {
 
     private Long payeeAccountNumber;
     private String payeeName;
+    // TODO {srudak} rename to RH
     private Long rorAccountNumber;
     private String rorName;
     private Long tboAccountNumber;

@@ -20,6 +20,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -707,6 +708,18 @@ public class UsageServiceTest {
         assertNotNull(runnable);
         runnable.run();
         verify(chainExecutor);
+    }
+
+    @Test
+    public void testGetRightsholderPayeeProductFamilyHoldersByScenarioIds() {
+        Set<String> scenarioIds = Collections.singleton(SCENARIO_ID);
+        List<RightsholderPayeeProductFamilyHolder> holders =
+            Collections.singletonList(new RightsholderPayeeProductFamilyHolder());
+        expect(usageRepository.findRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds))
+            .andReturn(holders).once();
+        replay(usageRepository);
+        assertEquals(holders, usageService.getRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds));
+        verify(usageRepository);
     }
 
     private void assertResult(List<?> result, int size) {
