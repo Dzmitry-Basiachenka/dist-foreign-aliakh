@@ -52,7 +52,7 @@
                 u.system_title,
                 u.rh_account_number,
                 'ARCHIVED',
-                'NTS',
+                u.product_family,
                 u.standard_number,
                 u.standard_number_type,
                 u.number_of_copies,
