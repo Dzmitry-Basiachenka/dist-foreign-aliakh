@@ -7409,74 +7409,6 @@ databaseChangeLog {
             column(name: 'publication_type_weight', value: 1.00)
         }
 
-        //Shouldn't be included into report as it is associated with PAID scenario
-        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
-            column(name: 'df_fund_pool_uid', value: '412ac743-6b33-4bde-9642-bc4ffa1af994')
-            column(name: 'product_family', value: 'AACL')
-            column(name: 'name', value: 'AACL Fund Pool 4 for testAaclUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '200.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
-            column(name: 'df_fund_pool_detail_uid', value: 'b942c159-9f6b-481b-a0ee-ba253ecef23c')
-            column(name: 'df_fund_pool_uid', value: '412ac743-6b33-4bde-9642-bc4ffa1af994')
-            column(name: 'df_aggregate_licensee_class_id', value: '141')
-            column(name: 'gross_amount', value: '200.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: 'a75ac322-960d-4197-8e04-a72a0b87af2f')
-            column(name: 'name', value: 'AACL Usage Batch 3 for testAaclUndistributedLiabilitiesCsvReport')
-            column(name: 'payment_date', value: '2020-06-30')
-            column(name: 'product_family', value: 'AACL')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-            column(name: 'df_scenario_uid', value: 'e008c833-a51b-4862-803f-048950d0fb59')
-            column(name: 'name', value: 'AACL Scenario For Delete Scenario Test')
-            column(name: 'status_ind', value: 'PAID')
-            column(name: 'aacl_fields', value: '{"usageAges": [{"period": 2020, "weight": 1.00}], "fund_pool_uid": "412ac743-6b33-4bde-9642-bc4ffa1af994", "publicationTypes": [{"name": "Book", "weight": 1.00},{"name": "Business or Trade Journal", "weight": 1.50},{"name": "Consumer Magazine", "weight": 1.00},{"name": "News Source", "weight": 4.00},{"name": "STMA Journal", "weight": 1.10}],"detailLicenseeClasses": [{"detailLicenseeClassId": 171, "aggregateLicenseeClassId": 141}]}')
-            column(name: 'description', value: 'AACL Scenario Description 2')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: '9d381f57-3245-4d41-97fb-c89e74990a23')
-            column(name: 'df_usage_batch_uid', value: 'a75ac322-960d-4197-8e04-a72a0b87af2f')
-            column(name: 'df_scenario_uid', value: 'e008c833-a51b-4862-803f-048950d0fb59')
-            column(name: 'wr_wrk_inst', value: '269040891')
-            column(name: 'work_title', value: 'Snap to grid')
-            column(name: 'system_title', value: 'Snap to grid')
-            column(name: 'standard_number', value: '9780262122269')
-            column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'rh_account_number', value: '1000002797')
-            column(name: 'payee_account_number', value: "1000002797")
-            column(name: 'status_ind', value: 'PAID')
-            column(name: 'product_family', value: 'FAS')
-            column(name: 'standard_number', value: '1008902112317622XX')
-            column(name: 'gross_amount', value: '200.00')
-            column(name: 'net_amount', value: '150.00')
-            column(name: 'service_fee_amount', value: '50.00')
-            column(name: 'service_fee', value: '0.25000')
-            column(name: 'number_of_copies', value: '155')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
-            column(name: 'df_usage_aacl_uid', value: '9d381f57-3245-4d41-97fb-c89e74990a23')
-            column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
-            column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '100')
-            column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '171')
-            column(name: 'value_weight', value: '5.0000000')
-            column(name: 'volume_weight', value: '54.0000000')
-            column(name: 'volume_share', value: '1.0000000')
-            column(name: 'value_share', value: '1.0000000')
-            column(name: 'total_share', value: '1.0000000')
-            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
-            column(name: 'publication_type_weight', value: 1.00)
-        }
-
         //Shouldn't be included into report as it is associated with ARCHIVED scenario
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '3c79d8ee-42ef-4973-bdad-0a27d75504c9')
@@ -7519,8 +7451,7 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002797')
             column(name: 'payee_account_number', value: "1000002797")
             column(name: 'status_ind', value: 'ARCHIVED')
-            column(name: 'product_family', value: 'FAS')
-            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'product_family', value: 'AACL')
             column(name: 'gross_amount', value: '200.00')
             column(name: 'net_amount', value: '150.00')
             column(name: 'service_fee_amount', value: '50.00')
