@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import com.copyright.rup.dist.common.domain.RmsGrant.RightStatusEnum;
+
 import com.google.common.collect.ImmutableSet;
 
 import java.util.EnumSet;
@@ -87,6 +89,12 @@ public final class FdaConstants {
      */
     public static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
         EnumSet.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED);
+
+    /**
+     * Right statuses in RMS.
+     */
+    public static final Set<String> RIGHT_STATUSES_GRANT_DENY =
+        ImmutableSet.of(RightStatusEnum.GRANT.name(), RightStatusEnum.DENY.name());
 
     private FdaConstants() {
         throw new AssertionError("Constructor shouldn't be called directly");

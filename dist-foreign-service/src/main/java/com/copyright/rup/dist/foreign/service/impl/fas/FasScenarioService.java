@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepancyS
 import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepancyService.IDiscrepancyBuilder;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
@@ -41,6 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -123,7 +125,8 @@ public class FasScenarioService implements IFasScenarioService {
             List<RightsholderDiscrepancy> discrepancies =
                 commonDiscrepancyService.getDiscrepancies(
                     entries.stream().flatMap(entry -> entry.getValue().stream()).collect(Collectors.toList()),
-                    Usage::getWrWrkInst, productFamily, new DiscrepancyBuilder(userName));
+                    Usage::getWrWrkInst, productFamily, FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(),
+                    Collections.emptySet(), new DiscrepancyBuilder(userName));
             if (CollectionUtils.isNotEmpty(discrepancies)) {
                 rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
                 rightsholderService.updateRighstholdersAsync(
