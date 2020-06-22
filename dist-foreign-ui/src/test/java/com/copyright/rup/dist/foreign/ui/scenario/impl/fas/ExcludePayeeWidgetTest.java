@@ -45,7 +45,9 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -63,6 +65,7 @@ import java.util.stream.Collectors;
 public class ExcludePayeeWidgetTest {
 
     private static final String REASON = "reason";
+    private static final Long PAYEE_ACCOUNT_NUMBER = 1000009094L;
 
     private ExcludePayeeWidget widget;
     private IExcludePayeeController controller;
@@ -106,7 +109,9 @@ public class ExcludePayeeWidgetTest {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
-        expect(payeesGrid.getSelectedItems()).andReturn(Collections.singleton(new PayeeTotalHolder())).once();
+        expect(payeesGrid.getSelectedItems()).andReturn(buildPayeeTotalHolder()).once();
+        expect(controller.getAccountNumbersInvalidForExclude(Collections.singleton(PAYEE_ACCOUNT_NUMBER)))
+            .andReturn(Collections.emptySet()).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
             eq("Are you sure you want to exclude details with selected Payees?"),
             eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture), anyObject(Validator.class));
@@ -116,6 +121,21 @@ public class ExcludePayeeWidgetTest {
         replay(clickEvent, controller, payeesGrid, Windows.class);
         buttonClick(0, clickEvent);
         actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
+        verify(clickEvent, controller, payeesGrid, Windows.class);
+    }
+
+    @Test
+    public void testExcludeDetailsButtonClickInvalidPayees() {
+        mockStatic(Windows.class);
+        Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
+        expect(payeesGrid.getSelectedItems()).andReturn(buildPayeeTotalHolder()).once();
+        expect(controller.getAccountNumbersInvalidForExclude(Collections.singleton(PAYEE_ACCOUNT_NUMBER)))
+            .andReturn(Collections.singleton(PAYEE_ACCOUNT_NUMBER)).once();
+        Windows.showNotificationWindow(
+            "The following payee(s) have different participation statuses: <i><b>[1000009094]</b></i>");
+        expectLastCall().once();
+        replay(clickEvent, controller, payeesGrid, Windows.class);
+        buttonClick(0, clickEvent);
         verify(clickEvent, controller, payeesGrid, Windows.class);
     }
 
@@ -136,7 +156,9 @@ public class ExcludePayeeWidgetTest {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
-        expect(payeesGrid.getSelectedItems()).andReturn(Collections.singleton(new PayeeTotalHolder())).once();
+        expect(payeesGrid.getSelectedItems()).andReturn(buildPayeeTotalHolder()).once();
+        expect(controller.getAccountNumbersInvalidForExclude(Collections.singleton(PAYEE_ACCOUNT_NUMBER)))
+            .andReturn(Collections.emptySet()).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
             eq("Are you sure you want to redesignate details with selected Payees?"),
             eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture), anyObject(Validator.class));
@@ -146,6 +168,21 @@ public class ExcludePayeeWidgetTest {
         replay(clickEvent, controller, payeesGrid, Windows.class);
         buttonClick(1, clickEvent);
         actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
+        verify(clickEvent, controller, payeesGrid, Windows.class);
+    }
+
+    @Test
+    public void testRedesignateDetailsButtonClickInvalidPayees() {
+        mockStatic(Windows.class);
+        Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
+        expect(payeesGrid.getSelectedItems()).andReturn(buildPayeeTotalHolder()).once();
+        expect(controller.getAccountNumbersInvalidForExclude(Collections.singleton(PAYEE_ACCOUNT_NUMBER)))
+            .andReturn(Collections.singleton(PAYEE_ACCOUNT_NUMBER)).once();
+        Windows.showNotificationWindow(
+            "The following payee(s) have different participation statuses: <i><b>[1000009094]</b></i>");
+        expectLastCall().once();
+        replay(clickEvent, controller, payeesGrid, Windows.class);
+        buttonClick(1, clickEvent);
         verify(clickEvent, controller, payeesGrid, Windows.class);
     }
 
@@ -170,6 +207,14 @@ public class ExcludePayeeWidgetTest {
         replay(clickEvent, payeesGrid);
         buttonClick(2, clickEvent);
         verify(clickEvent, payeesGrid);
+    }
+
+    private Set<PayeeTotalHolder> buildPayeeTotalHolder() {
+        Set<PayeeTotalHolder> payeeTotalHolders = new HashSet<>();
+        PayeeTotalHolder payeeTotalHolder = new PayeeTotalHolder();
+        payeeTotalHolder.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
+        payeeTotalHolders.add(payeeTotalHolder);
+        return payeeTotalHolders;
     }
 
     private void buttonClick(int buttonIndex, Button.ClickEvent clickEvent) {

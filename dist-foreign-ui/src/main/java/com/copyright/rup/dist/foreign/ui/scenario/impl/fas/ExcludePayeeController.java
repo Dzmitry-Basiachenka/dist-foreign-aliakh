@@ -74,6 +74,12 @@ public class ExcludePayeeController extends CommonController<IExcludePayeeWidget
     }
 
     @Override
+    public Set<Long> getAccountNumbersInvalidForExclude(Set<Long> accountNumbers) {
+        return fasUsageService.getAccountNumbersInvalidForExclude(
+            payeesFilterController.getWidget().getAppliedFilter().getScenarioIds(), accountNumbers);
+    }
+
+    @Override
     protected IExcludePayeeWidget instantiateWidget() {
         return new ExcludePayeeWidget();
     }

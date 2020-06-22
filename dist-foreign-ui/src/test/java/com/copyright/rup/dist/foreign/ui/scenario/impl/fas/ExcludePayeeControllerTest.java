@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -85,6 +86,21 @@ public class ExcludePayeeControllerTest {
         expectLastCall().once();
         replay(fasUsageService, filterController, filterWidget);
         controller.excludeDetails(accountNumbers, REASON);
+        verify(fasUsageService, filterController, filterWidget);
+    }
+
+    @Test
+    public void testGetAccountNumbersInvalidForExclude() {
+        Set<Long> accountNumbers = Collections.singleton(2000017566L);
+        Set<String> scenarioIds = Collections.singleton(SCENARIO_ID);
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(scenarioIds);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
+        expect(fasUsageService.getAccountNumbersInvalidForExclude(scenarioIds, accountNumbers))
+            .andReturn(accountNumbers).once();
+        replay(fasUsageService, filterController, filterWidget);
+        assertSame(accountNumbers, controller.getAccountNumbersInvalidForExclude(accountNumbers));
         verify(fasUsageService, filterController, filterWidget);
     }
 

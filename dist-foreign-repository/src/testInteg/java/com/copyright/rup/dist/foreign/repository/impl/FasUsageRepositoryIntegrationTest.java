@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -58,7 +59,9 @@ public class FasUsageRepositoryIntegrationTest {
 
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2018, 12, 11);
     private static final String USAGE_BATCH_ID_1 = "7b8beb5d-1fc8-47bf-8e06-3ac85457ac5b";
-    private static final String SCENARIO_ID = "e726496d-aca1-46d8-b393-999827cc6dda";
+    private static final String SCENARIO_ID_1 = "e726496d-aca1-46d8-b393-999827cc6dda";
+    private static final String SCENARIO_ID_2 = "edbcc8b3-8fa4-4c58-9244-a91627cac7a9";
+    private static final String SCENARIO_ID_3 = "767a2647-7e6e-4479-b381-e642de480863";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final String WORK_TITLE = "100 ROAD MOVIES";
     private static final Integer FISCAL_YEAR = 2019;
@@ -98,18 +101,16 @@ public class FasUsageRepositoryIntegrationTest {
             Arrays.asList("7234feb4-a59e-483b-985a-e8de2e3eb190", "582c86e2-213e-48ad-a885-f9ff49d48a69",
                 "730d7964-f399-4971-9403-dbedc9d7a180"));
         assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
-        usagesBeforeExclude.forEach(usage ->
-            assertEquals("edbcc8b3-8fa4-4c58-9244-a91627cac7a9", usage.getScenarioId()));
-        Set<String> excludedIds =
-            fasUsageRepository.deleteFromScenarioByPayees(Collections.singleton("edbcc8b3-8fa4-4c58-9244-a91627cac7a9"),
-                Collections.singleton(7000813806L), USER_NAME);
+        usagesBeforeExclude.forEach(usage -> assertEquals(SCENARIO_ID_2, usage.getScenarioId()));
+        Set<String> excludedIds = fasUsageRepository.deleteFromScenarioByPayees(Collections.singleton(SCENARIO_ID_2),
+            Collections.singleton(7000813806L), USER_NAME);
         assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("730d7964-f399-4971-9403-dbedc9d7a180"));
         List<Usage> usages = usageRepository.findByIds(
             Arrays.asList("730d7964-f399-4971-9403-dbedc9d7a180", "582c86e2-213e-48ad-a885-f9ff49d48a69"));
         assertEquals(2, CollectionUtils.size(usages));
         usages.forEach(usage -> verifyUsageExcludedFromScenario(usage, "FAS2", UsageStatusEnum.ELIGIBLE));
-        List<String> usageIds = usageRepository.findByScenarioId("edbcc8b3-8fa4-4c58-9244-a91627cac7a9")
+        List<String> usageIds = usageRepository.findByScenarioId(SCENARIO_ID_2)
             .stream()
             .map(Usage::getId)
             .collect(Collectors.toList());
@@ -123,23 +124,30 @@ public class FasUsageRepositoryIntegrationTest {
             Arrays.asList("209a960f-5896-43da-b020-fc52981b9633", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a",
                 "72f6abdb-c82d-4cee-aadf-570942cf0093"));
         assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
-        usagesBeforeExclude.forEach(usage ->
-            assertEquals("767a2647-7e6e-4479-b381-e642de480863", usage.getScenarioId()));
-        Set<String> excludedIds = fasUsageRepository.redesignateToNtsWithdrawnByPayees(
-            Collections.singleton("767a2647-7e6e-4479-b381-e642de480863"), Collections.singleton(7000813806L),
-            USER_NAME);
+        usagesBeforeExclude.forEach(usage -> assertEquals(SCENARIO_ID_3, usage.getScenarioId()));
+        Set<String> excludedIds =
+            fasUsageRepository.redesignateToNtsWithdrawnByPayees(Collections.singleton(SCENARIO_ID_3),
+                Collections.singleton(7000813806L), USER_NAME);
         assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("72f6abdb-c82d-4cee-aadf-570942cf0093"));
         List<Usage> usages = usageRepository.findByIds(
             Arrays.asList("72f6abdb-c82d-4cee-aadf-570942cf0093", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a"));
         assertEquals(2, CollectionUtils.size(usages));
         usages.forEach(usage -> verifyUsageExcludedFromScenario(usage, "FAS2", UsageStatusEnum.NTS_WITHDRAWN));
-        List<String> usageIds = usageRepository.findByScenarioId("767a2647-7e6e-4479-b381-e642de480863")
+        List<String> usageIds = usageRepository.findByScenarioId(SCENARIO_ID_3)
             .stream()
             .map(Usage::getId)
             .collect(Collectors.toList());
         assertEquals(1, CollectionUtils.size(usageIds));
         assertTrue(usageIds.contains("209a960f-5896-43da-b020-fc52981b9633"));
+    }
+
+    @Test
+    public void testFindAccountNumbersInvalidForExclude() {
+        assertEquals(Collections.singleton(7000813806L), fasUsageRepository.findAccountNumbersInvalidForExclude(
+            Sets.newHashSet(SCENARIO_ID_2, SCENARIO_ID_3), Sets.newHashSet(7000813806L, 1000002859L)));
+        assertTrue(fasUsageRepository.findAccountNumbersInvalidForExclude(Sets.newHashSet(SCENARIO_ID_2, SCENARIO_ID_3),
+            Collections.singleton(1000002859L)).isEmpty());
     }
 
     @Test
@@ -151,15 +159,14 @@ public class FasUsageRepositoryIntegrationTest {
         fasUsageRepository.updateResearchedUsages(Arrays.asList(
             buildResearchedUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN"),
             buildResearchedUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", STANDARD_NUMBER_TYPE)));
-        verifyUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN",
-            UsageStatusEnum.WORK_FOUND);
+        verifyUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN", UsageStatusEnum.WORK_FOUND);
         verifyUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", STANDARD_NUMBER_TYPE,
             UsageStatusEnum.WORK_FOUND);
     }
 
     @Test
     public void testFindForReconcile() {
-        List<Usage> usages = fasUsageRepository.findForReconcile(SCENARIO_ID);
+        List<Usage> usages = fasUsageRepository.findForReconcile(SCENARIO_ID_1);
         assertEquals(2, usages.size());
         usages.forEach(usage -> {
             assertEquals(243904752L, usage.getWrWrkInst(), 0);
@@ -172,8 +179,7 @@ public class FasUsageRepositoryIntegrationTest {
 
     @Test
     public void testFindRightsholdersInformation() {
-        Map<Long, Usage> rhInfo =
-            fasUsageRepository.findRightsholdersInformation(SCENARIO_ID);
+        Map<Long, Usage> rhInfo = fasUsageRepository.findRightsholdersInformation(SCENARIO_ID_1);
         assertEquals(1, rhInfo.size());
         Entry<Long, Usage> entry = rhInfo.entrySet().iterator().next();
         assertEquals(1000009523L, entry.getKey(), 0);

@@ -87,6 +87,15 @@ public interface IFasUsageService {
     void redesignateToNtsWithdrawnByPayees(Set<String> scenarioIds, Set<Long> accountNumbers, String reason);
 
     /**
+     * Gets set of payee account numbers that are invalid for exclude due to different payee participating flag.
+     *
+     * @param scenarioIds    set of scenarios identifier
+     * @param accountNumbers set of payees' account numbers
+     * @return set of invalid payees
+     */
+    Set<Long> getAccountNumbersInvalidForExclude(Set<String> scenarioIds, Set<Long> accountNumbers);
+
+    /**
      * Updates researched usage details.
      *
      * @param researchedUsages list of {@link ResearchedUsage}s
