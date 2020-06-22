@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.filter;
 
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -26,6 +28,7 @@ public class ExcludePayeeFilter {
     private BigDecimal netAmountMinThreshold;
     private Set<String> scenarioIds = new HashSet<>();
     private String searchValue;
+    private ScenarioStatusEnum scenarioStatus = ScenarioStatusEnum.IN_PROGRESS;
 
     /**
      * Default constructor.
@@ -78,6 +81,14 @@ public class ExcludePayeeFilter {
         this.searchValue = searchValue;
     }
 
+    public ScenarioStatusEnum getScenarioStatus() {
+        return scenarioStatus;
+    }
+
+    public void setScenarioStatus(ScenarioStatusEnum scenarioStatus) {
+        this.scenarioStatus = scenarioStatus;
+    }
+
     public boolean isEmpty() {
         return Objects.isNull(payeeParticipating)
             && Objects.isNull(netAmountMinThreshold)
@@ -99,6 +110,7 @@ public class ExcludePayeeFilter {
             .append(netAmountMinThreshold, that.netAmountMinThreshold)
             .append(scenarioIds, that.scenarioIds)
             .append(searchValue, that.searchValue)
+            .append(scenarioStatus, that.scenarioStatus)
             .isEquals();
     }
 
@@ -109,6 +121,7 @@ public class ExcludePayeeFilter {
             .append(netAmountMinThreshold)
             .append(scenarioIds)
             .append(searchValue)
+            .append(scenarioStatus)
             .toHashCode();
     }
 
@@ -119,6 +132,7 @@ public class ExcludePayeeFilter {
             .append("netAmountMinThreshold", netAmountMinThreshold)
             .append("scenarioIds", scenarioIds)
             .append("searchValue", searchValue)
+            .append("scenarioStatus", scenarioStatus)
             .toString();
     }
 }

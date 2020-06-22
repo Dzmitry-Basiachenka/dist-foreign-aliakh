@@ -70,7 +70,7 @@
 
     <select id="deleteFromScenarioByPayees" parameterType="map" resultType="string">
         with u as (
-            update ${schema}.df_usage
+            update ${schema}.df_usage u
             set
                 status_ind = #{status},
                 df_scenario_uid = null,
@@ -78,12 +78,21 @@
                 service_fee = null,
                 service_fee_amount = 0,
                 net_amount = 0,
-                <include refid="StoredEntityMapper.update"/>
-            where df_scenario_uid = #{scenarioId}
+                updated_by_user = #{updateUser},
+                updated_datetime = now(),
+                record_version = u.record_version + 1
+            from ${schema}.df_scenario s
+            where s.status_ind = #{scenarioStatus}
                 and payee_account_number in
                 <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
                     #{accountNumber}
                 </foreach>
+                <if test="scenarioIds.size() > 0">
+                    and u.df_scenario_uid in
+                    <foreach collection="scenarioIds" item="scenarioId" open="(" separator="," close=")">
+                        #{scenarioId}
+                    </foreach>
+                </if>
             returning df_usage_uid
         )
         update ${schema}.df_usage_fas
@@ -98,7 +107,7 @@
 
     <select id="redesignateToNtsWithdrawnByPayees" parameterType="map" resultType="string">
         with u as (
-            update ${schema}.df_usage
+            update ${schema}.df_usage u
             set
                 status_ind = #{status},
                 product_family = #{productFamily},
@@ -107,12 +116,21 @@
                 service_fee = null,
                 service_fee_amount = 0,
                 net_amount = 0,
-                <include refid="StoredEntityMapper.update"/>
-            where df_scenario_uid = #{scenarioId}
-                and payee_account_number in
+                updated_by_user = #{updateUser},
+                updated_datetime = now(),
+                record_version = u.record_version + 1
+            from ${schema}.df_scenario s
+            where s.status_ind = #{scenarioStatus}
+            and payee_account_number in
                 <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
                     #{accountNumber}
                 </foreach>
+                <if test="scenarioIds.size() > 0">
+                    and u.df_scenario_uid in
+                    <foreach collection="scenarioIds" item="scenarioId" open="(" separator="," close=")">
+                        #{scenarioId}
+                    </foreach>
+                </if>
             returning df_usage_uid
         )
         update ${schema}.df_usage_fas

@@ -223,29 +223,31 @@ public class FasUsageServiceTest {
 
     @Test
     public void testDeleteFromScenarioByPayees() {
-        Set<String> usageIds = Sets.newHashSet(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
+        Set<String> usageIds =
+            Sets.newHashSet("095eaefe-37de-4adb-928e-be0b888094b9", "7ee9c1ab-57ca-45cf-8a8d-83d7baeb6a9c");
         Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
-        expect(fasUsageRepository.deleteFromScenarioByPayees(scenario.getId(), accountNumbers, USER_NAME))
-            .andReturn(usageIds)
-            .once();
+        Set<String> scenarioIds = Collections.singleton(scenario.getId());
+        expect(fasUsageRepository.deleteFromScenarioByPayees(scenarioIds, accountNumbers, USER_NAME))
+            .andReturn(usageIds).once();
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, REASON);
         expectLastCall().once();
         replay(fasUsageRepository, usageAuditService);
-        usageService.deleteFromScenarioByPayees(scenario.getId(), accountNumbers, REASON);
+        usageService.deleteFromScenarioByPayees(scenarioIds, accountNumbers, REASON);
         verify(fasUsageRepository, usageAuditService);
     }
 
     @Test
     public void testRedisignateToNtsWithdrawnByPayees() {
-        Set<String> usageIds = Sets.newHashSet(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
+        Set<String> usageIds =
+            Sets.newHashSet("2db4877e-e89c-40f3-8c9a-21d8903fac88", "4a324301-d4a4-4639-ac4f-8a75d86b6048");
         Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
-        expect(fasUsageRepository.redesignateToNtsWithdrawnByPayees(scenario.getId(), accountNumbers, USER_NAME))
-            .andReturn(usageIds)
-            .once();
+        Set<String> scenarioIds = Collections.singleton(scenario.getId());
+        expect(fasUsageRepository.redesignateToNtsWithdrawnByPayees(scenarioIds, accountNumbers, USER_NAME))
+            .andReturn(usageIds).once();
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, REASON);
         expectLastCall().once();
         replay(fasUsageRepository, usageAuditService);
-        usageService.redesignateToNtsWithdrawnByPayees(scenario.getId(), accountNumbers, REASON);
+        usageService.redesignateToNtsWithdrawnByPayees(scenarioIds, accountNumbers, REASON);
         verify(fasUsageRepository, usageAuditService);
     }
 

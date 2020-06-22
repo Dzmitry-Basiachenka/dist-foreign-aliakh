@@ -100,8 +100,9 @@ public class FasUsageRepositoryIntegrationTest {
         assertEquals(3, CollectionUtils.size(usagesBeforeExclude));
         usagesBeforeExclude.forEach(usage ->
             assertEquals("edbcc8b3-8fa4-4c58-9244-a91627cac7a9", usage.getScenarioId()));
-        Set<String> excludedIds = fasUsageRepository.deleteFromScenarioByPayees("edbcc8b3-8fa4-4c58-9244-a91627cac7a9",
-            Collections.singleton(7000813806L), USER_NAME);
+        Set<String> excludedIds =
+            fasUsageRepository.deleteFromScenarioByPayees(Collections.singleton("edbcc8b3-8fa4-4c58-9244-a91627cac7a9"),
+                Collections.singleton(7000813806L), USER_NAME);
         assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("730d7964-f399-4971-9403-dbedc9d7a180"));
         List<Usage> usages = usageRepository.findByIds(
@@ -125,7 +126,8 @@ public class FasUsageRepositoryIntegrationTest {
         usagesBeforeExclude.forEach(usage ->
             assertEquals("767a2647-7e6e-4479-b381-e642de480863", usage.getScenarioId()));
         Set<String> excludedIds = fasUsageRepository.redesignateToNtsWithdrawnByPayees(
-            "767a2647-7e6e-4479-b381-e642de480863", Collections.singleton(7000813806L), USER_NAME);
+            Collections.singleton("767a2647-7e6e-4479-b381-e642de480863"), Collections.singleton(7000813806L),
+            USER_NAME);
         assertEquals(2, CollectionUtils.size(excludedIds));
         assertTrue(excludedIds.contains("72f6abdb-c82d-4cee-aadf-570942cf0093"));
         List<Usage> usages = usageRepository.findByIds(

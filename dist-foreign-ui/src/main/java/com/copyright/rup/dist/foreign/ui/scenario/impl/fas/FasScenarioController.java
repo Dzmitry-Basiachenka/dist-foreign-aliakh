@@ -51,7 +51,6 @@ public class FasScenarioController extends CommonScenarioController implements I
 
     @Override
     public void onExcludeByPayeeClicked() {
-        excludePayeesController.setScenario(getScenario());
         IExcludePayeeWidget widget = excludePayeesController.initWidget();
         widget.addListener(this::fireWidgetEvent);
         Windows.showModalWindow((Window) widget);

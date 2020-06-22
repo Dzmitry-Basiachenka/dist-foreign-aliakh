@@ -7,9 +7,7 @@ import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
@@ -41,11 +39,12 @@ import java.util.Set;
 public class ExcludePayeeControllerTest {
 
     private static final String REASON = "reason";
+    private static final String SCENARIO_ID = "44bd227a-8ea7-464c-b283-831ef2f10007";
     private IExcludePayeeController controller;
     private IUsageService usageService;
     private IFasUsageService fasUsageService;
     private IExcludePayeeFilterController filterController;
-    private Scenario scenario;
+    private IExcludePayeeFilterWidget filterWidget;
 
     @Before
     public void setUp() {
@@ -53,36 +52,44 @@ public class ExcludePayeeControllerTest {
         fasUsageService = createMock(IFasUsageService.class);
         controller = new ExcludePayeeController();
         filterController = createMock(IExcludePayeeFilterController.class);
-        scenario = buildScenario();
+        filterWidget = createMock(IExcludePayeeFilterWidget.class);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, fasUsageService);
         Whitebox.setInternalState(controller, filterController);
-        Whitebox.setInternalState(controller, scenario);
     }
 
     @Test
     public void testRedesignateDetails() {
         Set<Long> accountNumbers = Collections.singleton(2000017566L);
-        fasUsageService.redesignateToNtsWithdrawnByPayees(scenario.getId(), accountNumbers, REASON);
+        Set<String> scenarioIds = Collections.singleton(SCENARIO_ID);
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(scenarioIds);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
+        fasUsageService.redesignateToNtsWithdrawnByPayees(scenarioIds, accountNumbers, REASON);
         expectLastCall().once();
-        replay(fasUsageService);
+        replay(fasUsageService, filterController, filterWidget);
         controller.redesignateDetails(accountNumbers, REASON);
-        verify(fasUsageService);
+        verify(fasUsageService, filterController, filterWidget);
     }
 
     @Test
     public void testExcludeDetails() {
         Set<Long> accountNumbers = Collections.singleton(2000017566L);
-        fasUsageService.deleteFromScenarioByPayees(scenario.getId(), accountNumbers, REASON);
+        Set<String> scenarioIds = Collections.singleton(SCENARIO_ID);
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(scenarioIds);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
+        fasUsageService.deleteFromScenarioByPayees(scenarioIds, accountNumbers, REASON);
         expectLastCall().once();
-        replay(fasUsageService);
+        replay(fasUsageService, filterController, filterWidget);
         controller.excludeDetails(accountNumbers, REASON);
-        verify(fasUsageService);
+        verify(fasUsageService, filterController, filterWidget);
     }
 
     @Test
     public void testGetPayeeTotalHolders() {
-        IExcludePayeeFilterWidget filterWidget = createMock(IExcludePayeeFilterWidget.class);
         IExcludePayeeWidget widget = createMock(IExcludePayeeWidget.class);
         Whitebox.setInternalState(controller, widget);
         List<PayeeTotalHolder> payeeTotalHolders = Collections.singletonList(new PayeeTotalHolder());
@@ -94,11 +101,5 @@ public class ExcludePayeeControllerTest {
         replay(usageService, widget, filterWidget, filterController);
         assertEquals(payeeTotalHolders, controller.getPayeeTotalHolders());
         verify(usageService, widget, filterWidget, filterController);
-    }
-
-    private Scenario buildScenario() {
-        Scenario newScenario = new Scenario();
-        newScenario.setId(RupPersistUtils.generateUuid());
-        return newScenario;
     }
 }

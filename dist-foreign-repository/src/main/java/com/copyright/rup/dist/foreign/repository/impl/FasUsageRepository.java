@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -36,7 +37,7 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
      * It's a max value for count of variables in statement.
      */
     private static final int MAX_VARIABLES_COUNT = 32000;
-    private static final String SCENARIO_ID_KEY = "scenarioId";
+    private static final String SCENARIO_IDS_KEY = "scenarioIds";
     private static final String UPDATE_USER_KEY = "updateUser";
     private static final String STATUS_KEY = "status";
     private static final String PRODUCT_FAMILY_KEY = "productFamily";
@@ -59,10 +60,11 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
     }
 
     @Override
-    public Set<String> deleteFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String userName) {
+    public Set<String> deleteFromScenarioByPayees(Set<String> scenarioIds, Set<Long> accountNumbers, String userName) {
         Set<String> result = new HashSet<>();
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
+        parameters.put(SCENARIO_IDS_KEY, Objects.requireNonNull(scenarioIds));
+        parameters.put("scenarioStatus", ScenarioStatusEnum.IN_PROGRESS);
         parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         Iterables.partition(Objects.requireNonNull(accountNumbers), MAX_VARIABLES_COUNT)
@@ -74,10 +76,12 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
     }
 
     @Override
-    public Set<String> redesignateToNtsWithdrawnByPayees(String scenarioId, Set<Long> accountNumbers, String userName) {
+    public Set<String> redesignateToNtsWithdrawnByPayees(Set<String> scenarioIds, Set<Long> accountNumbers,
+                                                         String userName) {
         Set<String> result = new HashSet<>();
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(6);
+        parameters.put(SCENARIO_IDS_KEY, Objects.requireNonNull(scenarioIds));
+        parameters.put("scenarioStatus", ScenarioStatusEnum.IN_PROGRESS);
         parameters.put(STATUS_KEY, UsageStatusEnum.NTS_WITHDRAWN);
         parameters.put(PRODUCT_FAMILY_KEY, FdaConstants.NTS_PRODUCT_FAMILY);
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));

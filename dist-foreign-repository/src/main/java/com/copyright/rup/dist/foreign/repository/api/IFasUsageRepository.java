@@ -37,28 +37,29 @@ public interface IFasUsageRepository {
      * Deletes {@link Usage}s from scenario.
      * Reverts status of {@link Usage}s to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE},
      * sets scenario id, payee account number, service fee to {@code null}, sets rh and payee participating flags to
-     * {@code false}, service fee amount and net amount to 0 for usages with payees from given list of account numbers.
+     * {@code false}, service fee amount and net amount to 0 for usages with payees from given list of account numbers
+     * and in given set of scenarios.
      *
-     * @param scenarioId     {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param scenarioIds    set of {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
      * @param accountNumbers set of payees' account numbers
      * @param userName       user name
      * @return set of excluded usages' identifiers
      */
-    Set<String> deleteFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String userName);
+    Set<String> deleteFromScenarioByPayees(Set<String> scenarioIds, Set<Long> accountNumbers, String userName);
 
     /**
      * Redesignates {@link Usage}s.
      * Sets status of {@link Usage}s to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN},
      * sets product family to NTS, sets scenario id, payee account number, service fee to {@code null},
      * sets rh and payee participating flags to {@code false}, service fee amount and net amount to 0
-     * for usages with payees from given list of account numbers and in given scenario.
+     * for usages with payees from given list of account numbers and in given set of scenarios.
      *
-     * @param scenarioId     {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param scenarioIds    set of {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
      * @param accountNumbers set of payees' account numbers
      * @param userName       user name
      * @return set of redesignated usages' identifiers
      */
-    Set<String> redesignateToNtsWithdrawnByPayees(String scenarioId, Set<Long> accountNumbers, String userName);
+    Set<String> redesignateToNtsWithdrawnByPayees(Set<String> scenarioIds, Set<Long> accountNumbers, String userName);
 
     /**
      * Finds {@link Usage}s for reconcile based on scenario identifier.

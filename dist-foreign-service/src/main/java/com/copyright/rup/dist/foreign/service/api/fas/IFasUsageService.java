@@ -64,13 +64,13 @@ public interface IFasUsageService {
      * Reverts status of {@link com.copyright.rup.dist.foreign.domain.Usage}s to
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, sets scenario id, payee account number,
      * service fee to {@code null}, sets rh and payee participating flags to {@code false}, service fee amount and
-     * net amount to 0 for usages with payees from given list of account numbers.
+     * net amount to 0 for usages with payees from given list of account numbers in given set of scenarios.
      *
-     * @param scenarioId     {@link Scenario} identifier
+     * @param scenarioIds    set of {@link Scenario} identifier
      * @param accountNumbers set of payees' account numbers
      * @param reason         reason provided by user
      */
-    void deleteFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String reason);
+    void deleteFromScenarioByPayees(Set<String> scenarioIds, Set<Long> accountNumbers, String reason);
 
     /**
      * Redesignates {@link com.copyright.rup.dist.foreign.domain.Usage}s.
@@ -78,13 +78,13 @@ public interface IFasUsageService {
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN}, sets product family to NTS,
      * sets scenario id, payee account number, service fee to {@code null}, sets rh and payee participating flags
      * to {@code false}, service fee amount and net amount to 0 for usages with payees from given list of account
-     * numbers and in given scenario.
+     * numbers and in given set of scenarios.
      *
-     * @param scenarioId     {@link Scenario} identifier
+     * @param scenarioIds    set of {@link Scenario} identifier
      * @param accountNumbers set of payees' account numbers
      * @param reason         reason provided by user
      */
-    void redesignateToNtsWithdrawnByPayees(String scenarioId, Set<Long> accountNumbers, String reason);
+    void redesignateToNtsWithdrawnByPayees(Set<String> scenarioIds, Set<Long> accountNumbers, String reason);
 
     /**
      * Updates researched usage details.
