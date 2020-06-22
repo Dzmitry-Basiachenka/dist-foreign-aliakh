@@ -377,7 +377,9 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         try (ExcludeDetailsByPayeeCsvReportHandler handler = new ExcludeDetailsByPayeeCsvReportHandler(
             Objects.requireNonNull(pipedOutputStream),
             Objects.requireNonNull(selectedAccountNumbers))) {
-            getTemplate().select("IUsageMapper.findPayeeTotalHoldersByFilter", Objects.requireNonNull(filter), handler);
+            if (!Objects.requireNonNull(filter).isEmpty()) {
+                getTemplate().select("IUsageMapper.findPayeeTotalHoldersByFilter", filter, handler);
+            }
         }
     }
 

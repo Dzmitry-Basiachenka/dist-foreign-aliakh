@@ -80,10 +80,11 @@ public class ExcludePayeeController extends CommonController<IExcludePayeeWidget
 
     @Override
     public IStreamSource getCsvStreamSource() {
-        ExcludePayeeFilter filter = payeesFilterController.getWidget().getAppliedFilter();
-        filter.setSearchValue(getWidget().getSearchValue());
         return streamSourceHandler.getCsvStreamSource(() -> "exclude_by_payee_",
-            pos -> reportService.writeExcludeDetailsByPayeeCsvReport(filter, getWidget().getSelectedAccountNumbers(),
-                pos));
+            pos -> {
+                ExcludePayeeFilter filter = payeesFilterController.getWidget().getAppliedFilter();
+                filter.setSearchValue(getWidget().getSearchValue());
+                reportService.writeExcludeDetailsByPayeeCsvReport(filter, getWidget().getSelectedAccountNumbers(), pos);
+            });
     }
 }
