@@ -1,3 +1,15 @@
+10.1.7
+-
+* B-57599 FDA: Exclude Payees within an FAS/FAS2 scenario: apply scenarios filter on Exclude Payees window
+* B-57599 FDA: Exclude Payees within an FAS/FAS2 scenario: exclude payee and redesignate to NTS withdrawn for the multiple scenarios
+* B-58556 FDA: Tax Notification Report in FDA: implement repository logic for getting RH/payee pairs from scenario
+* B-58557 FDA: Ability to Export FAS/FAS2 Excluded Payee: apply multiple scenarios filter
+* B-58558 FDA: AACL undistributed liabilities report: Implement report on UI and add sorting
+* B-58558 FDA: AACL undistributed liabilities report: Remove incorrect and redundant test data for testAaclUndistributedLiabilitiesCsvReport
+* B-58560 FDA: View/Export NTS withdrawn details on FAS/FAS2 usage tab: adjust backend logic related to change statuses and product families
+* B-58560 FDA: View/Export NTS withdrawn details on FAS/FAS2 usage tab: remove change product family in redisignate to NTS_WITHDRAWN by payees
+* B-58560 FDA: View/Export NTS withdrawn details on FAS/FAS2 usage tab: update historical data, change product family from NTS to FAS/FAS2 for details with NTS_WITHDRAWN & TO_BE_DISTRIBUTED statuses for archived usages
+
 10.1.6
 -
 * B-57599 FDA: Exclude Payees within an FAS/FAS2 scenario: implement scenarios filter for FAS/FAS2 product families
