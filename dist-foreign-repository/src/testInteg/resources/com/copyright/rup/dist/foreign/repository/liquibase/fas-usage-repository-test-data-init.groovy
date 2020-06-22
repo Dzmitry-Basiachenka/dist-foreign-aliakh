@@ -114,6 +114,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2019')
             column(name: 'reported_value', value: '100.00')
             column(name: 'is_rh_participating_flag', value: true)
+            column(name: 'is_payee_participating_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -226,6 +227,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2019')
             column(name: 'reported_value', value: '100.00')
             column(name: 'is_rh_participating_flag', value: true)
+            column(name: 'is_payee_participating_flag', value: false)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

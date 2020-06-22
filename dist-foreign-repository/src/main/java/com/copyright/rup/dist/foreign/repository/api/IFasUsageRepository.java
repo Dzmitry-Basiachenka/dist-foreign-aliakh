@@ -62,6 +62,15 @@ public interface IFasUsageRepository {
     Set<String> redesignateToNtsWithdrawnByPayees(Set<String> scenarioIds, Set<Long> accountNumbers, String userName);
 
     /**
+     * Finds set of payee account numbers that are invalid for exclude due to different payee participating flag.
+     *
+     * @param scenarioIds    set of scenarios identifier
+     * @param accountNumbers set of payees' account numbers
+     * @return set of invalid payees
+     */
+    Set<Long> findAccountNumbersInvalidForExclude(Set<String> scenarioIds, Set<Long> accountNumbers);
+
+    /**
      * Finds {@link Usage}s for reconcile based on scenario identifier.
      *
      * @param scenarioId scenario identifier

@@ -182,16 +182,22 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
         button.addClickListener(event -> {
             Set<Long> selectedAccountNumbers = getSelectedAccountNumbers();
             if (CollectionUtils.isNotEmpty(selectedAccountNumbers)) {
-                Windows.showConfirmDialogWithReason(
-                    ForeignUi.getMessage("window.confirm"),
-                    ForeignUi.getMessage(dialogMessageProperty),
-                    ForeignUi.getMessage("button.yes"),
-                    ForeignUi.getMessage("button.cancel"),
-                    reason -> {
-                        actionHandler.accept(selectedAccountNumbers, reason);
-                        fireEvent(new ExcludeUsagesEvent(this));
-                        this.close();
-                    }, new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024));
+                Set<Long> invalidPayees = controller.getAccountNumbersInvalidForExclude(selectedAccountNumbers);
+                if (invalidPayees.isEmpty()) {
+                    Windows.showConfirmDialogWithReason(
+                        ForeignUi.getMessage("window.confirm"),
+                        ForeignUi.getMessage(dialogMessageProperty),
+                        ForeignUi.getMessage("button.yes"),
+                        ForeignUi.getMessage("button.cancel"),
+                        reason -> {
+                            actionHandler.accept(selectedAccountNumbers, reason);
+                            fireEvent(new ExcludeUsagesEvent(this));
+                            this.close();
+                        }, new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024));
+                } else {
+                    Windows.showNotificationWindow(
+                        ForeignUi.getMessage("message.exclude_payee.invalid_payees", invalidPayees));
+                }
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.exclude_payee.empty"));
             }

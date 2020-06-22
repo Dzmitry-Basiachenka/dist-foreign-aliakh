@@ -252,6 +252,18 @@ public class FasUsageServiceTest {
     }
 
     @Test
+    public void testGetAccountNumbersInvalidForExclude() {
+        Set<String> scenarioIds = Collections.singleton(scenario.getId());
+        Set<Long> payeeAccountNumbers = Collections.singleton(PAYEE_ACCOUNT_NUMBER);
+        expect(fasUsageRepository.findAccountNumbersInvalidForExclude(scenarioIds, payeeAccountNumbers))
+            .andReturn(payeeAccountNumbers).once();
+        replay(fasUsageRepository);
+        assertSame(payeeAccountNumbers,
+            usageService.getAccountNumbersInvalidForExclude(scenarioIds, payeeAccountNumbers));
+        verify(fasUsageRepository);
+    }
+
+    @Test
     public void testLoadResearchedUsages() {
         String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
         String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";

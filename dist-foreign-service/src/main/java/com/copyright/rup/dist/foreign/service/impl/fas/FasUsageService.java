@@ -153,6 +153,11 @@ public class FasUsageService implements IFasUsageService {
     }
 
     @Override
+    public Set<Long> getAccountNumbersInvalidForExclude(Set<String> scenarioIds, Set<Long> accountNumbers) {
+        return fasUsageRepository.findAccountNumbersInvalidForExclude(scenarioIds, accountNumbers);
+    }
+
+    @Override
     public void loadResearchedUsages(List<ResearchedUsage> researchedUsages) {
         LogUtils.ILogWrapper researchedUsagesCount = LogUtils.size(researchedUsages);
         LOGGER.info("Load researched usages. Started. ResearchedUsagesCount={}", researchedUsagesCount);

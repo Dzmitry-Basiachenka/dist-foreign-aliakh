@@ -120,7 +120,7 @@
                 record_version = u.record_version + 1
             from ${schema}.df_scenario s
             where s.status_ind = #{scenarioStatus}
-            and payee_account_number in
+                and payee_account_number in
                 <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
                     #{accountNumber}
                 </foreach>
@@ -177,6 +177,26 @@
         join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where df_scenario_uid = #{scenarioId}
+    </select>
+
+    <select id="findAccountNumbersInvalidForExclude" parameterType="map" resultType="long">
+        select distinct(payee_account_number)
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+        join ${schema}.df_scenario s on u.df_scenario_uid = s.df_scenario_uid
+        where s.status_ind = #{scenarioStatus}
+            and payee_account_number in
+            <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
+                #{accountNumber}
+            </foreach>
+            <if test="scenarioIds.size() > 0">
+                and u.df_scenario_uid in
+                <foreach collection="scenarioIds" item="scenarioId" open="(" separator="," close=")">
+                    #{scenarioId}
+                </foreach>
+            </if>
+        group by payee_account_number
+        having count(distinct(is_payee_participating_flag)) > 1
     </select>
 
     <select id="findWithAmountsAndRightsholders" resultMap="IUsageMapper.usageAmountResultMap" parameterType="map">

@@ -56,4 +56,12 @@ public interface IExcludePayeeController extends IController<IExcludePayeeWidget
      * @param reason              reason of exclusion
      */
     void redesignateDetails(Set<Long> payeeAccountNumbers, String reason);
+
+    /**
+     * Gets set of payee account numbers that are invalid for exclude due to different payee participating flag.
+     *
+     * @param accountNumbers set of payees' account numbers
+     * @return set of invalid payees
+     */
+    Set<Long> getAccountNumbersInvalidForExclude(Set<Long> accountNumbers);
 }

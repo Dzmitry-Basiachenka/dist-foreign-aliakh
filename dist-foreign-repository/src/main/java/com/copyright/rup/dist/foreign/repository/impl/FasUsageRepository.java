@@ -37,6 +37,7 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
      */
     private static final int MAX_VARIABLES_COUNT = 32000;
     private static final String SCENARIO_IDS_KEY = "scenarioIds";
+    private static final String SCENARIO_STATUS_KEY = "scenarioStatus";
     private static final String UPDATE_USER_KEY = "updateUser";
     private static final String STATUS_KEY = "status";
 
@@ -62,7 +63,7 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
         Set<String> result = new HashSet<>();
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
         parameters.put(SCENARIO_IDS_KEY, Objects.requireNonNull(scenarioIds));
-        parameters.put("scenarioStatus", ScenarioStatusEnum.IN_PROGRESS);
+        parameters.put(SCENARIO_STATUS_KEY, ScenarioStatusEnum.IN_PROGRESS);
         parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         Iterables.partition(Objects.requireNonNull(accountNumbers), MAX_VARIABLES_COUNT)
@@ -79,13 +80,27 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
         Set<String> result = new HashSet<>();
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(6);
         parameters.put(SCENARIO_IDS_KEY, Objects.requireNonNull(scenarioIds));
-        parameters.put("scenarioStatus", ScenarioStatusEnum.IN_PROGRESS);
+        parameters.put(SCENARIO_STATUS_KEY, ScenarioStatusEnum.IN_PROGRESS);
         parameters.put(STATUS_KEY, UsageStatusEnum.NTS_WITHDRAWN);
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         Iterables.partition(Objects.requireNonNull(accountNumbers), MAX_VARIABLES_COUNT)
             .forEach(partition -> {
                 parameters.put("accountNumbers", partition);
                 result.addAll(selectList("IFasUsageMapper.redesignateToNtsWithdrawnByPayees", parameters));
+            });
+        return result;
+    }
+
+    @Override
+    public Set<Long> findAccountNumbersInvalidForExclude(Set<String> scenarioIds, Set<Long> accountNumbers) {
+        Set<Long> result = new HashSet<>();
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(SCENARIO_IDS_KEY, Objects.requireNonNull(scenarioIds));
+        parameters.put(SCENARIO_STATUS_KEY, ScenarioStatusEnum.IN_PROGRESS);
+        Iterables.partition(Objects.requireNonNull(accountNumbers), MAX_VARIABLES_COUNT)
+            .forEach(partition -> {
+                parameters.put("accountNumbers", partition);
+                result.addAll(selectList("IFasUsageMapper.findAccountNumbersInvalidForExclude", parameters));
             });
         return result;
     }
