@@ -38,8 +38,7 @@ public class GetRightsJobTest {
         chainExecutor = createMock(IChainExecutor.class);
         jobExecutionContext = createMock(JobExecutionContext.class);
         getRightsJob = new GetRightsJob();
-        Whitebox.setInternalState(getRightsJob, "chainExecutor", chainExecutor);
-        Whitebox.setInternalState(getRightsJob, "useChunks", false);
+        Whitebox.setInternalState(getRightsJob, chainExecutor);
     }
 
     @Test

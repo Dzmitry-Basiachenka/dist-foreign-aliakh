@@ -46,7 +46,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,13 +99,8 @@ public class UsageService implements IUsageService {
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
-    @Qualifier("usageChainExecutor")
-    private IChainExecutor<Usage> chainExecutor;
-    @Autowired
     @Qualifier("usageChainChunkExecutor")
-    private IChainExecutor<Usage> chainChunkExecutor;
-    @Value("$RUP{dist.foreign.usages.chunks}")
-    private boolean useChunks;
+    private IChainExecutor<Usage> chainExecutor;
 
     @Override
     @Transactional
@@ -405,7 +399,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public void sendForMatching(List<Usage> usages) {
-        IChainExecutor<Usage> currentChainExecutor = useChunks ? chainChunkExecutor : chainExecutor;
+        IChainExecutor<Usage> currentChainExecutor = chainExecutor;
         currentChainExecutor.execute(() -> {
             List<Usage> usagesInNewStatus =
                 usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
@@ -415,7 +409,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public void sendForGettingRights(List<Usage> usages, String batchName) {
-        IChainExecutor<Usage> currentChainExecutor = useChunks ? chainChunkExecutor : chainExecutor;
+        IChainExecutor<Usage> currentChainExecutor = chainExecutor;
         currentChainExecutor.execute(() -> {
             LOGGER.info("Send usages for getting rights. Started. UsageBatchName={}, UsagesCount={}", batchName,
                 LogUtils.size(usages));

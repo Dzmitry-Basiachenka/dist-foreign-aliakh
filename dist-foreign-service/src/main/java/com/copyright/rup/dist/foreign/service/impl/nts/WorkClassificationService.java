@@ -57,8 +57,8 @@ public class WorkClassificationService implements IWorkClassificationService {
     @Autowired
     private INtsUsageRepository ntsUsageRepository;
     @Autowired
-    @Qualifier("df.service.ntsNonBelletristicProcessor")
-    private IChainProcessor<Usage> nonBelletristicProcessor;
+    @Qualifier("df.service.ntsNonBelletristicChunkProcessor")
+    private IChainProcessor<List<Usage>> nonBelletristicProcessor;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private int usagesBatchSize;
     @Value("$RUP{dist.foreign.work_classification.threshold}")
@@ -138,7 +138,7 @@ public class WorkClassificationService implements IWorkClassificationService {
         this.usageRepository = usageRepository;
     }
 
-    void setNonBelletristicProcessor(IChainProcessor<Usage> nonBelletristicProcessor) {
+    void setNonBelletristicProcessor(IChainProcessor<List<Usage>> nonBelletristicProcessor) {
         this.nonBelletristicProcessor = nonBelletristicProcessor;
     }
 
@@ -152,7 +152,7 @@ public class WorkClassificationService implements IWorkClassificationService {
             LOGGER.debug("Update usages based on classification. Started. UsagesCount={}",
                 LogUtils.size(usageIdsToUpdate));
             Iterables.partition(usageIdsToUpdate, usagesBatchSize)
-                .forEach(partition -> usageRepository.findByIds(partition).forEach(nonBelletristicProcessor::process));
+                .forEach(partition -> nonBelletristicProcessor.process(usageRepository.findByIds(partition)));
             LOGGER.debug("Update usages based on classification. Finished. UsagesCount={}",
                 LogUtils.size(usageIdsToUpdate));
         }

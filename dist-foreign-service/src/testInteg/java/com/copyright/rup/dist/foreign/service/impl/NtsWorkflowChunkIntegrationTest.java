@@ -37,8 +37,7 @@ import java.util.List;
  * @author Pavel Liakh
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-    "classpath:com/copyright/rup/dist/foreign/service/dist-foreign-service-chunk-processing-test-context.xml")
+@ContextConfiguration("classpath:com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
 @TestPropertySource(properties = {"test.liquibase.changelog=nts-scenario-workflow-chunk-data-init.groovy"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class NtsWorkflowChunkIntegrationTest {

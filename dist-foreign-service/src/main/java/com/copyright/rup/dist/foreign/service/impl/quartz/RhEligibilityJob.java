@@ -8,7 +8,6 @@ import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -26,20 +25,14 @@ import org.springframework.stereotype.Component;
 public class RhEligibilityJob extends QuartzJobBean {
 
     @Autowired
-    @Qualifier("usageChainExecutor")
-    private IChainExecutor<Usage> chainExecutor;
-    @Autowired
     @Qualifier("usageChainChunkExecutor")
-    private IChainExecutor<Usage> chainChunkExecutor;
-    @Value("$RUP{dist.foreign.usages.chunks}")
-    private boolean useChunks;
+    private IChainExecutor<Usage> chainExecutor;;
 
     /**
      * Finds NTS usages in NON_STM_RH status and send to RH Eligibility queue.
      */
     @Override
     public void executeInternal(JobExecutionContext context) {
-        context.setResult((useChunks ? chainChunkExecutor : chainExecutor)
-            .execute(ChainProcessorTypeEnum.RH_ELIGIBILITY));
+        context.setResult(chainExecutor.execute(ChainProcessorTypeEnum.RH_ELIGIBILITY));
     }
 }

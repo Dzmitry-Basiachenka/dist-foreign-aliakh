@@ -38,8 +38,7 @@ public class RhEligibilityJobTest {
         chainExecutor = createMock(IChainExecutor.class);
         jobExecutionContext = createMock(JobExecutionContext.class);
         rhEligibilityJob = new RhEligibilityJob();
-        Whitebox.setInternalState(rhEligibilityJob, "chainExecutor", chainExecutor);
-        Whitebox.setInternalState(rhEligibilityJob, "useChunks", false);
+        Whitebox.setInternalState(rhEligibilityJob, chainExecutor);
     }
 
     @Test

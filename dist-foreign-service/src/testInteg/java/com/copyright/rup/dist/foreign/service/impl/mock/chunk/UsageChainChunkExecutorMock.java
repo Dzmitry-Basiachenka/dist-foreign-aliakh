@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.mock.chunk;
 
-import com.copyright.rup.dist.foreign.service.impl.chain.executor.chunk.UsageChainChunkExecutor;
+import com.copyright.rup.dist.foreign.service.impl.chain.executor.UsageChainChunkExecutor;
 
 import org.apache.camel.util.concurrent.SynchronousExecutorService;
 

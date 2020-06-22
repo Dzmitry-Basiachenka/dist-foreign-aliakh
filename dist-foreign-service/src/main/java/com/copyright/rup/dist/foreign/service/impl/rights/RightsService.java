@@ -33,7 +33,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,13 +83,8 @@ public class RightsService implements IRightsService {
     @Qualifier("df.service.rmsCacheService")
     private IRmsRightsService rmsRightsService;
     @Autowired
-    @Qualifier("usageChainExecutor")
-    private IChainExecutor<Usage> chainExecutor;
-    @Autowired
     @Qualifier("usageChainChunkExecutor")
-    private IChainExecutor<Usage> chainChunkExecutor;
-    @Value("$RUP{dist.foreign.usages.chunks}")
-    private boolean useChunks;
+    private IChainExecutor<Usage> chainExecutor;
 
     @Override
     @Transactional
@@ -273,8 +267,7 @@ public class RightsService implements IRightsService {
             usageService.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.RH_FOUND, rhAccountNumber);
             auditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
-            (useChunks ? chainChunkExecutor : chainExecutor)
-                .execute(usagesToUpdate, ChainProcessorTypeEnum.ELIGIBILITY);
+            chainExecutor.execute(usagesToUpdate, ChainProcessorTypeEnum.ELIGIBILITY);
         });
         rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
     }
