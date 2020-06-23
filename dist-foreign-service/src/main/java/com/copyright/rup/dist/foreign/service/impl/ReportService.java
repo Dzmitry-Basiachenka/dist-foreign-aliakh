@@ -10,10 +10,9 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
-import com.copyright.rup.dist.foreign.service.impl.csv.NtsWithdrawnBatchesCsvReportHandler;
+import com.copyright.rup.dist.foreign.service.impl.csv.NtsWithdrawnBatchesCsvReportWriter;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.ibatis.executor.result.DefaultResultContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -166,13 +165,12 @@ public class ReportService implements IReportService {
     @Override
     public void writeNtsWithdrawnBatchesCsvReport(List<UsageBatch> batches, BigDecimal totalGrossAmount,
                                                   OutputStream outputStream) {
-        try (NtsWithdrawnBatchesCsvReportHandler handler =
-                 new NtsWithdrawnBatchesCsvReportHandler(outputStream)) {
-            batches.forEach(usageBatch -> handleUsageBatch(handler, usageBatch));
+        try (NtsWithdrawnBatchesCsvReportWriter writer = new NtsWithdrawnBatchesCsvReportWriter(outputStream)) {
+            writer.writeAll(batches);
             UsageBatch usageBatch = new UsageBatch();
             usageBatch.setName("Total");
             usageBatch.setGrossAmount(totalGrossAmount);
-            handleUsageBatch(handler, usageBatch);
+            writer.write(usageBatch);
         }
     }
 
@@ -201,11 +199,5 @@ public class ReportService implements IReportService {
     @Override
     public void writeAaclUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
         reportRepository.writeAaclUndistributedLiabilitiesCsvReport(outputStream);
-    }
-
-    private void handleUsageBatch(NtsWithdrawnBatchesCsvReportHandler handler, UsageBatch usageBatch) {
-        DefaultResultContext<UsageBatch> context = new DefaultResultContext<>();
-        context.nextResultObject(usageBatch);
-        handler.handleResult(context);
     }
 }
