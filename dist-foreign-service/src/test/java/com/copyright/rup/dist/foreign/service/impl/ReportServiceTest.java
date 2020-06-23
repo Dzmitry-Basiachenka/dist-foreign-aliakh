@@ -8,6 +8,8 @@ import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
+import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.RhTaxInformation;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -17,14 +19,20 @@ import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Sets;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PipedInputStream;
@@ -32,6 +40,7 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -49,17 +58,26 @@ public class ReportServiceTest {
         "src/test/resources/com/copyright/rup/dist/foreign/service/impl/csv";
     private static final BigDecimal USAGE_BATCH_GROSS_AMOUNT = BigDecimal.ONE;
     private static final BigDecimal DEFAULT_ESTIMATED_SERVICE_FEE = new BigDecimal("0.18500");
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    static {
+        OBJECT_MAPPER.registerModule(new JavaTimeModule());
+        OBJECT_MAPPER.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+    }
 
     private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_EXPECTED_REPORTS);
 
     private IReportService reportService;
     private IReportRepository reportRepository;
+    private IRhTaxService rhTaxService;
 
     @Before
     public void setUp() {
         reportService = new ReportService();
         reportRepository = createMock(IReportRepository.class);
+        rhTaxService = createMock(IRhTaxService.class);
         Whitebox.setInternalState(reportService, reportRepository);
+        Whitebox.setInternalState(reportService, rhTaxService);
         Whitebox.setInternalState(reportService, "defaultEstimatedServiceFee", DEFAULT_ESTIMATED_SERVICE_FEE);
     }
 
@@ -442,6 +460,18 @@ public class ReportServiceTest {
         verify(reportRepository);
     }
 
+    @Test
+    public void writeTaxNotificationCsvReport() throws IOException {
+        Set<String> scenarioIds = Collections.singleton("629c078f-462f-4ba6-bebd-8d558ccc12aa");
+        expect(rhTaxService.getRhTaxInformation(scenarioIds, 15))
+            .andReturn(loadExpectedRhTaxInformation("json/rh_tax_information_for_tax_notification_report.json")).once();
+        replay(rhTaxService);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        reportService.writeTaxNotificationCsvReport(scenarioIds, 15, outputStream);
+        reportTestUtils.assertCsvReport("tax_notification.csv", new ByteArrayInputStream(outputStream.toByteArray()));
+        verify(rhTaxService);
+    }
+
     private Scenario buildScenario(ScenarioStatusEnum status) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
@@ -455,5 +485,10 @@ public class ReportServiceTest {
         usageBatch.setName("Copibec 25May18");
         usageBatch.setGrossAmount(USAGE_BATCH_GROSS_AMOUNT);
         return usageBatch;
+    }
+
+    private List<RhTaxInformation> loadExpectedRhTaxInformation(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        return OBJECT_MAPPER.readValue(content, new TypeReference<List<RhTaxInformation>>() {});
     }
 }
