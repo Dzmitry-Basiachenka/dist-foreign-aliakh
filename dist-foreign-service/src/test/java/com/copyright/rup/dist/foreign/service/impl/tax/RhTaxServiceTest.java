@@ -11,6 +11,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Country;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.RhTaxInformation;
@@ -182,6 +183,7 @@ public class RhTaxServiceTest {
             .andReturn(false).once();
         expect(oracleRhTaxInformationService.getRhTaxInformation(expectedOracleRequests))
             .andReturn(loadOracleRhTaxInformation("oracle_rh_tax_information.json")).once();
+        expect(prmIntegrationService.getCountries()).andReturn(buildCountries()).once();
         replay(usageService, prmIntegrationService, oracleRhTaxInformationService);
         List<RhTaxInformation> actualRhTaxInformation = rhTaxService.getRhTaxInformation(SCENARIO_IDS, 5).stream()
             .sorted(comparator)
@@ -218,6 +220,7 @@ public class RhTaxServiceTest {
             .andReturn(false).once();
         expect(oracleRhTaxInformationService.getRhTaxInformation(expectedOracleRequests))
             .andReturn(loadOracleRhTaxInformation("oracle_rh_tax_information.json")).once();
+        expect(prmIntegrationService.getCountries()).andReturn(buildCountries()).once();
         replay(usageService, prmIntegrationService, oracleRhTaxInformationService);
         List<RhTaxInformation> actualRhTaxInformation = rhTaxService.getRhTaxInformation(SCENARIO_IDS, 7).stream()
             .sorted(comparator)
@@ -257,6 +260,13 @@ public class RhTaxServiceTest {
         rh.setAccountNumber(accountNumber);
         rh.setName(name);
         return rh;
+    }
+
+    private Map<String, Country> buildCountries() {
+        Country country = new Country();
+        country.setIsoCode("USA");
+        country.setName("United States");
+        return Collections.singletonMap("US", country);
     }
 
     private Map<Long, RhTaxInformation> loadOracleRhTaxInformation(String fileName) throws IOException {

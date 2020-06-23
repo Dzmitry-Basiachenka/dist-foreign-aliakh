@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.integration.prm.api;
 
+import com.copyright.rup.dist.common.domain.Country;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 
 import com.google.common.collect.Table;
@@ -47,6 +48,13 @@ public interface IPrmIntegrationService {
      * @return roll ups for the rightsholders with specified ids
      */
     Map<String, Map<String, Rightsholder>> getRollUps(Set<String> rightsholdersIds);
+
+    /**
+     * Gets countries from PRM.
+     *
+     * @return map of country id to {@link Country}
+     */
+    Map<String, Country> getCountries();
 
     /**
      * Checks whether {@link com.copyright.rup.dist.common.domain.Rightsholder rightsholder} is participating or not.

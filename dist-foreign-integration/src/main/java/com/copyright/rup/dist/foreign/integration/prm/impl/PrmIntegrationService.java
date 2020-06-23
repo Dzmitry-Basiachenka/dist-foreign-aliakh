@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.integration.prm.impl;
 
+import com.copyright.rup.dist.common.domain.Country;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmCountryService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmPreferenceService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
@@ -47,6 +49,9 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
     @Autowired
+    @Qualifier("dist.common.integration.rest.prmCountryService")
+    private IPrmCountryService prmCountryService;
+    @Autowired
     @Qualifier("dist.common.integration.rest.prmPreferenceCacheService")
     private IPrmPreferenceService prmPreferenceService;
     @Value("$RUP{dist.foreign.service_fee.non_participating}")
@@ -74,6 +79,11 @@ public class PrmIntegrationService implements IPrmIntegrationService {
         return prmRollUpAsync
             ? prmRollUpAsyncService.getRollUps(rightsholdersIds)
             : prmRollUpService.getRollUps(rightsholdersIds);
+    }
+
+    @Override
+    public Map<String, Country> getCountries() {
+        return prmCountryService.getCountries();
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.tax;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.domain.Country;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.RhTaxInformation;
@@ -115,11 +116,12 @@ public class RhTaxService implements IRhTaxService {
                 .collect(Collectors.toSet());
             Map<Long, RhTaxInformation> tboToTaxInfoMap =
                 oracleRhTaxInformationService.getRhTaxInformation(oracleRequests);
+            Map<String, Country> countries = prmIntegrationService.getCountries();
             result = holderToTboMap.entrySet().stream()
                 .map(entry -> {
                     RightsholderPayeeProductFamilyHolder holder = entry.getKey();
                     Rightsholder tbo = entry.getValue();
-                    return buildRhTaxInformation(tboToTaxInfoMap.get(tbo.getAccountNumber()), holder);
+                    return buildRhTaxInformation(tboToTaxInfoMap.get(tbo.getAccountNumber()), holder, countries);
                 })
                 .filter(new RhTaxInformationPredicate(numberOfDays))
                 .collect(Collectors.toList());
@@ -138,7 +140,8 @@ public class RhTaxService implements IRhTaxService {
     }
 
     private RhTaxInformation buildRhTaxInformation(RhTaxInformation rhTaxInfo,
-                                                   RightsholderPayeeProductFamilyHolder holder) {
+                                                   RightsholderPayeeProductFamilyHolder holder,
+                                                   Map<String, Country> countries) {
         RhTaxInformation result = new RhTaxInformation();
         result.setPayeeAccountNumber(holder.getPayee().getAccountNumber());
         result.setPayeeName(holder.getPayee().getName());
@@ -158,8 +161,9 @@ public class RhTaxService implements IRhTaxService {
         result.setCity(rhTaxInfo.getCity());
         result.setState(rhTaxInfo.getState());
         result.setZip(rhTaxInfo.getZip());
-        result.setCountryCode(rhTaxInfo.getCountryCode());
-        result.setCountry(rhTaxInfo.getCountry());
+        String countryCode = rhTaxInfo.getCountryCode();
+        result.setCountry(countries.containsKey(countryCode) ? countries.get(countryCode).getName() : countryCode);
+        result.setCountryCode(countryCode);
         result.setWithHoldingIndicator(rhTaxInfo.getWithHoldingIndicator());
         result.setPayGroup(rhTaxInfo.getPayGroup());
         return result;

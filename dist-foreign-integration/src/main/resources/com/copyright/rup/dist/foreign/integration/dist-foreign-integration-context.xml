@@ -17,6 +17,7 @@
     <import resource="classpath:/com/copyright/rup/dist/common/integration/aws/dist-common-sqs-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/common/integration/rest/prm/prm-rh-preference-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/common/integration/rest/prm/prm-rollup-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/common/integration/rest/prm/prm-country-context.xml"/>
 
     <bean id="applicationName" class="java.lang.String">
         <constructor-arg value="dist.foreign"/>
