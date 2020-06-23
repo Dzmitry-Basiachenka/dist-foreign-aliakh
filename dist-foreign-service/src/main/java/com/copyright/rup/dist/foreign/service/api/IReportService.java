@@ -220,9 +220,19 @@ public interface IReportService {
                                              PipedOutputStream pipedOutputStream);
 
     /**
-     * Writes AACL Undistributed Liabilities Report into the output stream in csv format.
+     * Writes AACL Undistributed Liabilities Report into the output stream in CSV format.
      *
      * @param outputStream instance of {@link OutputStream}
      */
     void writeAaclUndistributedLiabilitiesCsvReport(OutputStream outputStream);
+
+    /**
+     * Writes Tax Notification Report into the output stream in CSV format.
+     *
+     * @param scenarioIds  set of scenario ids
+     * @param numberOfDays TBOs who received notification within last {@code numberOfDays} won't be included in the
+     *                     result
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeTaxNotificationCsvReport(Set<String> scenarioIds, int numberOfDays, OutputStream outputStream);
 }

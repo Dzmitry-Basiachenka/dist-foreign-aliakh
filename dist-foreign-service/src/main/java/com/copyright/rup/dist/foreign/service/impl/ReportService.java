@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.RhTaxInformation;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -9,8 +10,10 @@ import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.NtsWithdrawnBatchesCsvReportWriter;
+import com.copyright.rup.dist.foreign.service.impl.csv.RhTaxInformationCsvReportWriter;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,8 @@ public class ReportService implements IReportService {
     private IReportRepository reportRepository;
     @Autowired
     private IFasUsageService fasUsageService;
+    @Autowired
+    private IRhTaxService rhTaxService;
 
     @Value("$RUP{dist.foreign.rro.default_estimated_service_fee}")
     private BigDecimal defaultEstimatedServiceFee;
@@ -199,5 +204,13 @@ public class ReportService implements IReportService {
     @Override
     public void writeAaclUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
         reportRepository.writeAaclUndistributedLiabilitiesCsvReport(outputStream);
+    }
+
+    @Override
+    public void writeTaxNotificationCsvReport(Set<String> scenarioIds, int numberOfDays, OutputStream outputStream) {
+        List<RhTaxInformation> rhTaxInformation = rhTaxService.getRhTaxInformation(scenarioIds, numberOfDays);
+        try (RhTaxInformationCsvReportWriter writer = new RhTaxInformationCsvReportWriter(outputStream)) {
+            writer.writeAll(rhTaxInformation);
+        }
     }
 }
