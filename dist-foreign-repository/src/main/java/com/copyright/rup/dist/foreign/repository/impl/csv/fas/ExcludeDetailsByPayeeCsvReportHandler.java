@@ -21,7 +21,7 @@ import java.util.Set;
 public class ExcludeDetailsByPayeeCsvReportHandler extends BaseCsvReportHandler<PayeeTotalHolder> {
 
     private static final List<String> HEADERS = Arrays.asList("Exclude Status", "Payee Account #", "Payee Name",
-        "Gross Amt in USD", "Service Fee Amt", "Net Amount in USD", "Participating");
+        "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD", "Participating");
 
     private final Set<Long> selectedAccountNumbers;
 
