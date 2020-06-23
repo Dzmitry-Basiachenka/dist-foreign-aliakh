@@ -1,13 +1,13 @@
 Usage Batch Name,RRO Account Number,RRO Name,Payment Date,Load Date,Gross Fund Pool in USD,# non-Eligible Details,Gross USD non-Eligible Details,# Details NTS,Gross USD NTS,# FAS/FAS2 Eligible Details,Gross FAS/FAS2 Eligible USD,# Details in-progress Scenarios,Gross USD in-progress Scenarios,Royalty Payable USD,# Details Return to CLA,Gross USD Return to CLA
 Undistributed Liabilities Reconciliation Report Batch 4,2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/01/2010,01/01/2010,500.00,0,0.00,0,0.00,2,500.00,0,0.00,0.00,0,0.00
-Undistributed Liabilities Reconciliation Report Batch 5,2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/01/2010,01/01/2010,1000.00,2,655.00,2,310.00,1,500.00,0,0.00,0.00,0,0.00
+Undistributed Liabilities Reconciliation Report Batch 5,2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/01/2010,01/01/2010,1000.00,1,500.00,2,310.00,1,500.00,0,0.00,0.00,0,0.00
 Undistributed Liabilities Reconciliation Report Batch 6,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/02/2010,01/01/2010,60.00,0,0.00,1,20.00,2,40.00,0,0.00,0.00,0,0.00
 Batch with rro which is not included into table with estimated service fee,5000581900,The Copyright Company,01/03/2010,01/01/2010,200.00,1,100.00,0,0.00,0,0.00,0,0.00,0.00,0,0.00
 Batch with usages in different statuses,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/03/2010,01/01/2010,800.00,4,800.00,0,0.00,0,0.00,0,0.00,0.00,0,0.00
 Batch with two sent to lm usages and two not included into scenario usages,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",04/21/2010,01/01/2010,400.00,2,200.00,0,0.00,0,0.00,0,0.00,0.00,0,0.00
 AT_service-fee-true-up-report-4_BATCH,2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/01/2013,01/01/2010,500.00,0,0.00,0,0.00,2,500.00,0,0.00,0.00,0,0.00
 AT_service-fee-true-up-report-5_BATCH,2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/01/2013,01/01/2010,1000.00,0,0.00,0,0.00,2,1000.00,0,0.00,0.00,0,0.00
-AT_service-fee-true-up-report-6_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/02/2013,01/01/2010,60.00,1,20.00,1,20.00,2,40.00,0,0.00,0.00,0,0.00
+AT_service-fee-true-up-report-6_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/02/2013,01/01/2010,60.00,0,0.00,1,20.00,2,40.00,0,0.00,0.00,0,0.00
 AT_service-fee-true-up-report-11_BATCH,5000581901,Unknown RRO,01/03/2013,01/01/2010,200.00,1,200.00,0,0.00,0,0.00,0,0.00,0.00,0,0.00
 AT_service-fee-true-up-report-7_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/03/2013,01/01/2010,800.00,4,800.00,0,0.00,0,0.00,0,0.00,0.00,0,0.00
 AT_service-fee-true-up-report-10_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",04/21/2013,01/01/2010,400.00,2,200.00,0,0.00,0,0.00,0,0.00,0.00,0,0.00
