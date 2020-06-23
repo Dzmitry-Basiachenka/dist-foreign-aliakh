@@ -17,6 +17,8 @@ import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancySe
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
@@ -28,6 +30,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +63,8 @@ public class FasScenariosController extends CommonScenariosController implements
     @Autowired
     private IFasScenarioController scenarioController;
     @Autowired
+    private IExcludePayeeController excludePayeesController;
+    @Autowired
     private IReconcileRightsholdersController reconcileRightsholdersController;
     @Autowired
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
@@ -89,6 +94,13 @@ public class FasScenariosController extends CommonScenariosController implements
             Windows.showNotificationWindow(
                 ForeignUi.getMessage("message.warning.action_for_empty_scenario", "recalculated"));
         }
+    }
+
+    @Override
+    public void onExcludePayeesButtonClicked() {
+        IExcludePayeeWidget widget = excludePayeesController.initWidget();
+        widget.addListener((IExcludeUsagesListener) listener -> getWidget().refreshSelectedScenario());
+        Windows.showModalWindow((Window) widget);
     }
 
     @Override

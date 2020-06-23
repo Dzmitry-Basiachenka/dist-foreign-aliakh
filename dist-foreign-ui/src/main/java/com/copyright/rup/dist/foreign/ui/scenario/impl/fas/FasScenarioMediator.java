@@ -23,7 +23,6 @@ import com.vaadin.ui.VerticalLayout;
 class FasScenarioMediator implements IMediator {
 
     private Button excludeByRroButton;
-    private Button excludeByPayeeButton;
     private Button exportDetailsButton;
     private Button exportButton;
     private Grid<RightsholderTotalsHolder> rightsholderGrid;
@@ -34,7 +33,6 @@ class FasScenarioMediator implements IMediator {
     public void applyPermissions() {
         boolean excludePermission = ForeignSecurityUtils.hasExcludeFromScenarioPermission();
         excludeByRroButton.setVisible(excludePermission);
-        excludeByPayeeButton.setVisible(excludePermission);
     }
 
     void setRightsholderGrid(Grid<RightsholderTotalsHolder> rightsholderGrid) {
@@ -50,7 +48,6 @@ class FasScenarioMediator implements IMediator {
     void onScenarioUpdated(boolean scenarioEmpty, Scenario scenario) {
         boolean excludeEnabled = !scenarioEmpty && ScenarioStatusEnum.IN_PROGRESS == scenario.getStatus();
         excludeByRroButton.setEnabled(excludeEnabled);
-        excludeByPayeeButton.setEnabled(excludeEnabled);
         exportDetailsButton.setEnabled(!scenarioEmpty);
         exportButton.setEnabled(!scenarioEmpty);
         rightsholderGrid.setVisible(!scenarioEmpty);
@@ -60,10 +57,6 @@ class FasScenarioMediator implements IMediator {
 
     void setExcludeByRroButton(Button excludeByRroButton) {
         this.excludeByRroButton = excludeByRroButton;
-    }
-
-    void setExcludeByPayeeButton(Button excludeByPayeeButton) {
-        this.excludeByPayeeButton = excludeByPayeeButton;
     }
 
     void setExportDetailsButton(Button exportDetailsButton) {

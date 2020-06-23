@@ -161,18 +161,16 @@ public class FasScenarioWidgetTest {
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(5, horizontalLayout.getComponentCount());
+        assertEquals(4, horizontalLayout.getComponentCount());
         Button excludeByRroButton = (Button) horizontalLayout.getComponent(0);
         assertEquals("Exclude By RRO", excludeByRroButton.getCaption());
-        Button excludeByPayeeButton = (Button) horizontalLayout.getComponent(1);
-        assertEquals("Exclude By Payee", excludeByPayeeButton.getCaption());
-        Button exportDetailsButton = (Button) horizontalLayout.getComponent(2);
+        Button exportDetailsButton = (Button) horizontalLayout.getComponent(1);
         assertEquals("Export Details", exportDetailsButton.getCaption());
         assertEquals("Export_Details", exportDetailsButton.getId());
-        Button exportButton = (Button) horizontalLayout.getComponent(3);
+        Button exportButton = (Button) horizontalLayout.getComponent(2);
         assertEquals("Export", exportButton.getCaption());
         assertEquals("Export", exportButton.getId());
-        Button closeButton = (Button) horizontalLayout.getComponent(4);
+        Button closeButton = (Button) horizontalLayout.getComponent(3);
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());

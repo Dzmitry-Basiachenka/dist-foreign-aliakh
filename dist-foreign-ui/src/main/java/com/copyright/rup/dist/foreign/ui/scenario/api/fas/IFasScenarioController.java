@@ -24,11 +24,6 @@ public interface IFasScenarioController extends ICommonScenarioController {
     void onExcludeByRroClicked();
 
     /**
-     * Handles click on "Exclude By Payee" button.
-     */
-    void onExcludeByPayeeClicked();
-
-    /**
      * @return all source RROs belonging to the scenario.
      */
     List<Rightsholder> getSourceRros();
