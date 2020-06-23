@@ -21,7 +21,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -58,17 +57,19 @@ public class RmsRightsCacheServiceTest {
     public void testGetAllRmsGrants() {
         List<Long> wrWrkInst1 = Collections.singletonList(WR_WRK_INST_1);
         List<Long> wrWrkInst2 = Collections.singletonList(WR_WRK_INST_2);
-        expect(rmsService.getGrants(eq(wrWrkInst1), anyObject(), eq(Collections.emptyList())))
-            .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)))
-            .once();
-        expect(rmsService.getGrants(eq(wrWrkInst2), anyObject(), eq(Collections.emptyList())))
-            .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2)))
-            .once();
+        expect(rmsService.getGrants(eq(wrWrkInst1), anyObject(), eq(Collections.emptySet()), eq(Collections.emptySet()),
+            eq(Collections.emptySet())))
+            .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1))).once();
+        expect(rmsService.getGrants(eq(wrWrkInst2), anyObject(), eq(Collections.emptySet()), eq(Collections.emptySet()),
+            eq(Collections.emptySet())))
+            .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2))).once();
         replay(rmsService);
-        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInst1, LocalDate.now(), Collections.emptyList());
+        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInst1, LocalDate.now(), Collections.emptySet(),
+            Collections.emptySet(), Collections.emptySet());
         assertEquals(1, CollectionUtils.size(grants));
         assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
-        grants = rmsAllRightsCacheService.getGrants(wrWrkInst2, LocalDate.now(), Collections.emptyList());
+        grants = rmsAllRightsCacheService.getGrants(wrWrkInst2, LocalDate.now(), Collections.emptySet(),
+            Collections.emptySet(), Collections.emptySet());
         assertEquals(1, CollectionUtils.size(grants));
         assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2)));
         verify(rmsService);
@@ -77,15 +78,16 @@ public class RmsRightsCacheServiceTest {
     @Test
     public void testGetAllRmsGrantsFromCache() {
         List<Long> wrWrkInst = Collections.singletonList(WR_WRK_INST_1);
-        expect(rmsService.getGrants(eq(wrWrkInst), anyObject(), eq(Collections.emptyList())))
-            .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)))
-            .once();
+        expect(rmsService.getGrants(eq(wrWrkInst), anyObject(), eq(Collections.emptySet()), eq(Collections.emptySet()),
+            eq(Collections.emptySet())))
+            .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1))).once();
         replay(rmsService);
-        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInst, LocalDate.now(), Collections.emptyList());
+        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInst, LocalDate.now(), Collections.emptySet(),
+            Collections.emptySet(), Collections.emptySet());
         assertEquals(1, CollectionUtils.size(grants));
         assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
-        Set<RmsGrant> grantsFromCache =
-            rmsAllRightsCacheService.getGrants(wrWrkInst, LocalDate.now(), Collections.emptyList());
+        Set<RmsGrant> grantsFromCache = rmsAllRightsCacheService.getGrants(wrWrkInst, LocalDate.now(),
+            Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
         assertEquals(1, CollectionUtils.size(grantsFromCache));
         assertTrue(grantsFromCache.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
         verify(rmsService);
@@ -94,15 +96,18 @@ public class RmsRightsCacheServiceTest {
     @Test
     public void testGetAllRmsGrantsFromCacheWithTypeOfUses() {
         LocalDate periodEndDate = LocalDate.of(2019, 6, 30);
-        List<String> typeOfUses = Arrays.asList("PRINT", "DIGITAL");
+        Set<String> typeOfUses = Sets.newHashSet("PRINT", "DIGITAL");
         List<Long> wrWrkInst = Collections.singletonList(WR_WRK_INST_1);
-        expect(rmsService.getGrants(wrWrkInst, periodEndDate, typeOfUses))
+        expect(rmsService.getGrants(wrWrkInst, periodEndDate, Collections.emptySet(), typeOfUses,
+            Collections.emptySet()))
             .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1))).once();
         replay(rmsService);
-        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInst, periodEndDate, typeOfUses);
+        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInst, periodEndDate, Collections.emptySet(),
+            typeOfUses, Collections.emptySet());
         assertEquals(1, CollectionUtils.size(grants));
         assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
-        Set<RmsGrant> grantsFromCache = rmsAllRightsCacheService.getGrants(wrWrkInst, periodEndDate, typeOfUses);
+        Set<RmsGrant> grantsFromCache = rmsAllRightsCacheService.getGrants(wrWrkInst, periodEndDate,
+            Collections.emptySet(), typeOfUses, Collections.emptySet());
         assertEquals(1, CollectionUtils.size(grantsFromCache));
         assertTrue(grantsFromCache.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
         verify(rmsService);
@@ -111,11 +116,11 @@ public class RmsRightsCacheServiceTest {
     @Test
     public void testGetAllRmsGrantsNotFound() {
         List<Long> wrWrkInsts = Collections.singletonList(WR_WRK_INST_1);
-        expect(rmsService.getGrants(eq(wrWrkInsts), anyObject(), eq(Collections.emptyList())))
-            .andReturn(new HashSet<>())
-            .once();
+        expect(rmsService.getGrants(eq(wrWrkInsts), anyObject(), eq(Collections.emptySet()), eq(Collections.emptySet()),
+            eq(Collections.emptySet()))).andReturn(new HashSet<>()).once();
         replay(rmsService);
-        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInsts, LocalDate.now(), Collections.emptyList());
+        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInsts, LocalDate.now(), Collections.emptySet(),
+            Collections.emptySet(), Collections.emptySet());
         assertTrue(CollectionUtils.isEmpty(grants));
         verify(rmsService);
     }

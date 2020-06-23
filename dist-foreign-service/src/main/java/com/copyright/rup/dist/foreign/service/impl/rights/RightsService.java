@@ -24,7 +24,7 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -172,7 +172,8 @@ public class RightsService implements IRightsService {
             Set<String> usageId = Collections.singleton(usage.getId());
             Map<Long, Long> wrWrkInstToRhAccountNumberMap =
                 rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst),
-                    usage.getProductFamily());
+                    usage.getProductFamily(), FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(),
+                    Collections.emptySet());
             Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
             if (Objects.nonNull(rhAccountNumber)) {
                 usage.setRightsholder(buildRightsholder(rhAccountNumber));
@@ -195,7 +196,8 @@ public class RightsService implements IRightsService {
         usages.forEach(usage -> {
             Long wrWrkInst = usage.getWrWrkInst();
             Set<RmsGrant> eligibleGrants = rmsRightsService.getGrants(Collections.singletonList(wrWrkInst),
-                usage.getAaclUsage().getBatchPeriodEndDate(), ImmutableList.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE))
+                usage.getAaclUsage().getBatchPeriodEndDate(), FdaConstants.RIGHT_STATUSES_GRANT_DENY,
+                ImmutableSet.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE), Collections.emptySet())
                 .stream()
                 .filter(grant -> FdaConstants.AACL_PRODUCT_FAMILY.equals(grant.getProductFamily())
                     && RightStatusEnum.GRANT == grant.getRightStatus())
@@ -260,7 +262,7 @@ public class RightsService implements IRightsService {
         String productFamily = usages.iterator().next().getProductFamily();
         Map<Long, Long> wrWrkInstToAccountNumber =
             rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsagesMap.keySet()),
-                productFamily);
+                productFamily, FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(), Collections.emptySet());
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
             List<Usage> usagesToUpdate = wrWrkInstToUsagesMap.get(wrWrkInst);
             Set<String> usageIds = usagesToUpdate.stream().map(Usage::getId).collect(Collectors.toSet());
