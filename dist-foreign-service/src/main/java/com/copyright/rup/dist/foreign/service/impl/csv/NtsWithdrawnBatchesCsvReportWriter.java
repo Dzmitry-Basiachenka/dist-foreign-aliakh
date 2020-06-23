@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
-import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
+import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportWriter;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
 import com.google.common.collect.ImmutableList;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of {@link BaseCsvReportHandler} to write FAS batches with NTS withdrawn usages report.
+ * Implementation of {@link BaseCsvReportWriter} to write FAS batches with NTS withdrawn usages report.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsWithdrawnBatchesCsvReportHandler extends BaseCsvReportHandler<UsageBatch> {
+public class NtsWithdrawnBatchesCsvReportWriter extends BaseCsvReportWriter<UsageBatch> {
 
     private static final List<String> HEADERS = ImmutableList.of("Usage Batch Name", "Gross NTS Withdrawn Amount");
 
@@ -27,7 +27,7 @@ public class NtsWithdrawnBatchesCsvReportHandler extends BaseCsvReportHandler<Us
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    public NtsWithdrawnBatchesCsvReportHandler(OutputStream outputStream) {
+    public NtsWithdrawnBatchesCsvReportWriter(OutputStream outputStream) {
         super(outputStream);
     }
 
