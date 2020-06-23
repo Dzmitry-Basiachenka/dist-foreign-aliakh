@@ -748,7 +748,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'e116e5e0-9080-4abf-9e67-86959f2cae52')
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112317622Xxxx')
             column(name: 'gross_amount', value: '155.0000000007')
         }
@@ -854,7 +854,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '4dd8cdf8-ca10-422e-bdd5-3220105e6379')
             column(name: 'df_usage_batch_uid', value: '502cf0b4-3e28-4712-837a-3728ef57b100')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '5475802112214578XX')
             column(name: 'gross_amount', value: '20')
             column(name: 'created_by_user', value: 'user@copyright.com')
@@ -1712,7 +1712,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -1732,7 +1732,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '8902112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -1980,7 +1980,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -2000,7 +2000,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '8902112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -2227,7 +2227,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -2247,7 +2247,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '8902112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -2408,7 +2408,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -2428,7 +2428,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '8902112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -2589,7 +2589,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -2609,7 +2609,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '8902112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -2824,7 +2824,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -2844,7 +2844,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '8902112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -3059,7 +3059,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -3079,7 +3079,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '8902112317622XX')
             column(name: 'gross_amount', value: '25.00')
         }
@@ -3307,7 +3307,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '112317622XX')
             column(name: 'gross_amount', value: '50.00')
         }
@@ -3327,7 +3327,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '8902112317622XX')
             column(name: 'gross_amount', value: '50.00')
         }
@@ -3388,7 +3388,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '112317622XX')
             column(name: 'gross_amount', value: '50.00')
         }
@@ -3408,7 +3408,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
-            column(name: 'product_family', value: 'NTS')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '8902112317622XX')
             column(name: 'gross_amount', value: '50.00')
         }
@@ -3994,8 +3994,8 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: "df_usage") {
             column(name: "df_usage_uid", value: "022184ed-2adb-4237-8a5f-34eac350bcbc")
             column(name: "df_usage_batch_uid", value: "6b75221e-432e-4349-ba05-796d1fd5900e")
-            column(name: "status_ind", value: "ELIGIBLE_FOR_NTS")
-            column(name: "product_family", value: "NTS")
+            column(name: "status_ind", value: "TO_BE_DISTRIBUTED")
+            column(name: "product_family", value: "FAS")
             column(name: "standard_number", value: "5475802112214578XX")
             column(name: "gross_amount", value: "20")
         }
@@ -5451,7 +5451,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: "df_usage") {
             column(name: "df_usage_uid", value: "66649fd0-c094-4a72-979e-00cf462fb3eb")
             column(name: "df_usage_batch_uid", value: "99966cac-2468-48d4-b346-93d3458a656a")
-            column(name: "product_family", value: "NTS")
+            column(name: "product_family", value: "FAS")
             column(name: "work_title", value: "Wissenschaft & Forschung Japan")
             column(name: "status_ind", value: "NTS_WITHDRAWN")
             column(name: "standard_number", value: "2192-3558")
@@ -5474,7 +5474,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: "df_usage") {
             column(name: "df_usage_uid", value: "6666d6f8-7ac6-4ae7-9bdc-ba33a58a5bad")
             column(name: "df_usage_batch_uid", value: "99966cac-2468-48d4-b346-93d3458a656a")
-            column(name: "product_family", value: "NTS")
+            column(name: "product_family", value: "FAS")
             column(name: "wr_wrk_inst", value: "180382915")
             column(name: "work_title", value: "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA")
             column(name: "status_ind", value: "NTS_WITHDRAWN")
@@ -5499,7 +5499,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: "df_usage") {
             column(name: "df_usage_uid", value: "666644ba-58d6-4adb-9dc1-602eb09052ce")
             column(name: "df_usage_batch_uid", value: "99966cac-2468-48d4-b346-93d3458a656a")
-            column(name: "product_family", value: "NTS")
+            column(name: "product_family", value: "FAS")
             column(name: "work_title", value: "Wissenschaft & Forschung Japan")
             column(name: "status_ind", value: "NTS_WITHDRAWN")
             column(name: "standard_number", value: "2192-3558")
