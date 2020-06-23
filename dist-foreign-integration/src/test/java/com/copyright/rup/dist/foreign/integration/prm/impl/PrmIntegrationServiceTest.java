@@ -10,7 +10,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Country;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmCountryService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmPreferenceService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
@@ -54,6 +56,7 @@ public class PrmIntegrationServiceTest {
     private IPrmRollUpService prmRollUpService;
     private IPrmRollUpService prmRollUpAsyncService;
     private IPrmPreferenceService prmPreferenceService;
+    private IPrmCountryService prmCountryService;
 
     @Before
     public void setUp() {
@@ -62,10 +65,12 @@ public class PrmIntegrationServiceTest {
         prmRollUpService = createMock(IPrmRollUpService.class);
         prmRollUpAsyncService = createMock(IPrmRollUpService.class);
         prmPreferenceService = createMock(IPrmPreferenceService.class);
+        prmCountryService = createMock(IPrmCountryService.class);
         Whitebox.setInternalState(prmIntegrationService, "prmRightsholderService", prmRightsholderService);
         Whitebox.setInternalState(prmIntegrationService, "prmRollUpService", prmRollUpService);
         Whitebox.setInternalState(prmIntegrationService, "prmRollUpAsyncService", prmRollUpAsyncService);
         Whitebox.setInternalState(prmIntegrationService, "prmPreferenceService", prmPreferenceService);
+        Whitebox.setInternalState(prmIntegrationService, "prmCountryService", prmCountryService);
     }
 
     @Test
@@ -133,6 +138,18 @@ public class PrmIntegrationServiceTest {
         replay(prmRollUpAsyncService);
         assertEquals(result, prmIntegrationService.getRollUps(rightsholdersIds));
         verify(prmRollUpAsyncService);
+    }
+
+    @Test
+    public void testGetCountries() {
+        Country country = new Country();
+        country.setIsoCode("BLR");
+        country.setName("Belarus");
+        Map<String, Country> countries = Collections.singletonMap("BY", country);
+        expect(prmCountryService.getCountries()).andReturn(countries);
+        replay(prmCountryService);
+        assertEquals(countries, prmIntegrationService.getCountries());
+        verify(prmCountryService);
     }
 
     @Test
