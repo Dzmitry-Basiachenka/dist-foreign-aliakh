@@ -102,13 +102,8 @@ public class AaclUsageService implements IAaclUsageService {
     @Autowired
     private IUsageService usageService;
     @Autowired
-    @Qualifier("usageChainExecutor")
-    private IChainExecutor<Usage> chainExecutor;
-    @Autowired
     @Qualifier("usageChainChunkExecutor")
-    private IChainExecutor<Usage> chainChunkExecutor;
-    @Value("$RUP{dist.foreign.usages.chunks}")
-    private boolean useChunks;
+    private IChainExecutor<Usage> chainExecutor;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private int usagesBatchSize;
 
@@ -277,7 +272,7 @@ public class AaclUsageService implements IAaclUsageService {
     @Override
     public void sendForMatching(List<String> usageIds, String batchName) {
         AtomicInteger usageIdsCount = new AtomicInteger(0);
-        IChainExecutor<Usage> currentChainExecutor = useChunks ? chainChunkExecutor : chainExecutor;
+        IChainExecutor<Usage> currentChainExecutor = chainExecutor;
         currentChainExecutor.execute(() ->
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> {

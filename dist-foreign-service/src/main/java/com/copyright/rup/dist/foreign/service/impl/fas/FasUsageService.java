@@ -77,13 +77,8 @@ public class FasUsageService implements IFasUsageService {
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
-    @Qualifier("usageChainExecutor")
-    private IChainExecutor<Usage> chainExecutor;
-    @Autowired
     @Qualifier("usageChainChunkExecutor")
-    private IChainExecutor<Usage> chainChunkExecutor;
-    @Value("$RUP{dist.foreign.usages.chunks}")
-    private boolean useChunks;
+    private IChainExecutor<Usage> chainExecutor;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
@@ -166,8 +161,7 @@ public class FasUsageService implements IFasUsageService {
         List<String> usageIds = researchedUsages.stream()
             .map(ResearchedUsage::getUsageId)
             .collect(Collectors.toList());
-        (useChunks ? chainChunkExecutor : chainExecutor)
-            .execute(usageRepository.findByIds(usageIds), ChainProcessorTypeEnum.RIGHTS);
+        chainExecutor.execute(usageRepository.findByIds(usageIds), ChainProcessorTypeEnum.RIGHTS);
         LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", researchedUsagesCount);
     }
 

@@ -38,8 +38,7 @@ public class WorksMatchingJobTest {
         chainExecutor = createMock(IChainExecutor.class);
         jobExecutionContext = createMock(JobExecutionContext.class);
         worksMatchingJob = new WorksMatchingJob();
-        Whitebox.setInternalState(worksMatchingJob, "chainExecutor", chainExecutor);
-        Whitebox.setInternalState(worksMatchingJob, "useChunks", false);
+        Whitebox.setInternalState(worksMatchingJob, chainExecutor);
     }
 
     @Test

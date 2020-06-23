@@ -38,8 +38,7 @@ public class StmRhJobTest {
         chainExecutor = createMock(IChainExecutor.class);
         jobExecutionContext = createMock(JobExecutionContext.class);
         stmRhJob = new StmRhJob();
-        Whitebox.setInternalState(stmRhJob, "chainExecutor", chainExecutor);
-        Whitebox.setInternalState(stmRhJob, "useChunks", false);
+        Whitebox.setInternalState(stmRhJob, chainExecutor);
     }
 
     @Test

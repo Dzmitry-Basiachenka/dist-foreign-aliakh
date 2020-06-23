@@ -91,8 +91,7 @@ public class NtsUsageServiceTest {
         Whitebox.setInternalState(ntsUsageService, usageArchiveRepository);
         Whitebox.setInternalState(ntsUsageService, usageAuditService);
         Whitebox.setInternalState(ntsUsageService, usageService);
-        Whitebox.setInternalState(ntsUsageService, "chainExecutor", chainExecutor);
-        Whitebox.setInternalState(ntsUsageService, "useChunks", false);
+        Whitebox.setInternalState(ntsUsageService, chainExecutor);
         Whitebox.setInternalState(ntsUsageService, "usagesBatchSize", 100);
     }
 

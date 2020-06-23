@@ -43,17 +43,6 @@
         <property name="createCommonTablesOnStartup" value="false"/>
     </bean>
 
-    <!--> Temp solution to override 'dist.foreign.usages.chunks' property. <-->
-    <bean id="systemProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetObject" value="#{@systemProperties}"/>
-        <property name="targetMethod" value="putAll"/>
-        <property name="arguments">
-            <util:properties>
-                <prop key="dist.foreign.usages.chunks">false</prop>
-            </util:properties>
-        </property>
-    </bean>
-
     <!-- Mocks -->
     <bean id="df.service.paidUsageConsumer"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock"/>
@@ -64,7 +53,6 @@
     <bean id="dist.common.integration.rest.prmRightsholderOrganizationAsyncService"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PrmRightsholderOrganizationServiceMock"/>
 
-    <bean id="usageChainExecutor" class="com.copyright.rup.dist.foreign.service.impl.mock.UsageChainExecutorMock"/>
     <bean id="usageChainChunkExecutor" class="com.copyright.rup.dist.foreign.service.impl.mock.chunk.UsageChainChunkExecutorMock"/>
 
     <bean id="aaclUsageService" class="com.copyright.rup.dist.foreign.service.impl.mock.AaclUsageServiceMock"/>

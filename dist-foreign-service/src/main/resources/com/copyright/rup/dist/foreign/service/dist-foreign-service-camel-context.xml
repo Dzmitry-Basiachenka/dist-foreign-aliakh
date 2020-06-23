@@ -9,71 +9,72 @@
 
     <import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-job-status-context.xml"/>
 
-    <bean id="df.service.usageMarshaller"
-          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageMarshaller"/>
+    <bean id="df.service.usageChunkMarshaller"
+          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageChunkMarshaller"/>
 
-    <bean id="df.service.usageUnmarshaller"
-          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageUnmarshaller"/>
+    <bean id="df.service.usageChunkUnmarshaller"
+          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageChunkUnmarshaller"/>
 
-    <bean id="df.service.matchingMarshaller" parent="df.service.usageMarshaller">
-        <property name="serializer" ref="df.service.commonUsageSerializer" />
+    <bean id="df.service.matchingChunkMarshaller" parent="df.service.usageChunkMarshaller">
+        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
     </bean>
 
-    <bean id="df.service.matchingUnmarshaller" parent="df.service.usageUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageDeserializer" />
+    <bean id="df.service.matchingChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
     </bean>
 
-    <bean id="df.service.rightsMarshaller" parent="df.service.usageMarshaller">
-        <property name="serializer" ref="df.service.commonUsageSerializer" />
+    <bean id="df.service.rightsChunkMarshaller" parent="df.service.usageChunkMarshaller">
+        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
     </bean>
 
-    <bean id="df.service.rightsUnmarshaller" parent="df.service.usageUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageDeserializer" />
+    <bean id="df.service.rightsChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
     </bean>
 
-    <bean id="df.service.rhTaxMarshaller" parent="df.service.usageMarshaller">
-        <property name="serializer" ref="df.service.commonUsageSerializer" />
+    <bean id="df.service.rhTaxChunkMarshaller" parent="df.service.usageChunkMarshaller">
+        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
     </bean>
 
-    <bean id="df.service.rhTaxUnmarshaller" parent="df.service.usageUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageDeserializer" />
+    <bean id="df.service.rhTaxChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
     </bean>
 
-    <bean id="df.service.stmRhMarshaller" parent="df.service.usageMarshaller">
-        <property name="serializer" ref="df.service.commonUsageSerializer" />
+    <bean id="df.service.stmRhChunkMarshaller" parent="df.service.usageChunkMarshaller">
+        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
     </bean>
 
-    <bean id="df.service.stmRhUnmarshaller" parent="df.service.usageUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageDeserializer" />
+    <bean id="df.service.stmRhChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
     </bean>
 
-    <bean id="df.service.rhEligibilityMarshaller" parent="df.service.usageMarshaller">
-        <property name="serializer" ref="df.service.commonUsageSerializer" />
+    <bean id="df.service.rhEligibilityChunkMarshaller" parent="df.service.usageChunkMarshaller">
+        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
     </bean>
 
-    <bean id="df.service.rhEligibilityUnmarshaller" parent="df.service.usageUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageDeserializer" />
+    <bean id="df.service.rhEligibilityChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
     </bean>
 
-    <bean id="df.service.usageProducer" class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageProducer" />
+    <bean id="df.service.usageChunkProducer"
+          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageChunkProducer"/>
 
-    <bean id="df.service.rightsProducer" parent="df.service.usageProducer">
+    <bean id="df.service.rightsChunkProducer" parent="df.service.usageChunkProducer">
         <property name="endPoint" value="direct:df.service.rights"/>
     </bean>
 
-    <bean id="df.service.rhTaxProducer" parent="df.service.usageProducer">
+    <bean id="df.service.rhTaxChunkProducer" parent="df.service.usageChunkProducer">
         <property name="endPoint" value="direct:df.service.tax"/>
     </bean>
 
-    <bean id="df.service.stmRhProducer" parent="df.service.usageProducer">
+    <bean id="df.service.stmRhChunkProducer" parent="df.service.usageChunkProducer">
         <property name="endPoint" value="direct:df.service.stm.rh"/>
     </bean>
 
-    <bean id="df.service.rhEligibilityProducer" parent="df.service.usageProducer">
+    <bean id="df.service.rhEligibilityChunkProducer" parent="df.service.usageChunkProducer">
         <property name="endPoint" value="direct:df.service.eligibility"/>
     </bean>
 
-    <bean id="df.service.matchingProducer" parent="df.service.usageProducer">
+    <bean id="df.service.matchingChunkProducer" parent="df.service.usageChunkProducer">
         <property name="endPoint" value="direct:df.service.matching"/>
     </bean>
 
@@ -103,37 +104,22 @@
 
         <endpoint id="df.service.common.dlq.endpoint" uri="$RUP{dist.foreign.endpoint.common.dlq}"/>
 
-        <endpoint id="df.service.internal.matching.endpoint" uri="direct:df.service.matching"/>
-        <endpoint id="df.service.matching.endpoint" uri="$RUP{dist.foreign.endpoint.matching}"/>
-
-        <endpoint id="df.service.internal.rights.endpoint" uri="direct:df.service.rights"/>
-        <endpoint id="df.service.rights.endpoint" uri="$RUP{dist.foreign.endpoint.rights}"/>
-
-        <endpoint id="df.service.internal.stm.rh.endpoint" uri="direct:df.service.stm.rh"/>
-        <endpoint id="df.service.stm.rh.endpoint" uri="$RUP{dist.foreign.endpoint.stm_rh}"/>
-
-        <endpoint id="df.service.internal.tax.endpoint" uri="direct:df.service.tax"/>
-        <endpoint id="df.service.rh.tax.endpoint" uri="$RUP{dist.foreign.endpoint.rh_tax}"/>
-
-        <endpoint id="df.service.internal.eligibility.endpoint" uri="direct:df.service.eligibility"/>
-        <endpoint id="df.service.rh.eligibility.endpoint" uri="$RUP{dist.foreign.endpoint.rh_eligibility}"/>
-
         <!--chunk-based endpoints started -->
 
-        <endpoint id="df.service.internal.matching.chunk.endpoint" uri="direct:df.service.chunk.matching"/>
-        <endpoint id="df.service.matching.chunk.endpoint" uri="#{chunkUriFormatter.format('$RUP{dist.foreign.endpoint.matching}')}"/>
+        <endpoint id="df.service.internal.matching.chunk.endpoint" uri="direct:df.service.matching"/>
+        <endpoint id="df.service.matching.chunk.endpoint" uri="$RUP{dist.foreign.endpoint.matching}"/>
 
-        <endpoint id="df.service.internal.rights.chunk.endpoint" uri="direct:df.service.chunk.rights"/>
-        <endpoint id="df.service.rights.chunk.endpoint" uri="#{chunkUriFormatter.format('$RUP{dist.foreign.endpoint.rights}')}"/>
+        <endpoint id="df.service.internal.rights.chunk.endpoint" uri="direct:df.service.rights"/>
+        <endpoint id="df.service.rights.chunk.endpoint" uri="$RUP{dist.foreign.endpoint.rights}"/>
 
-        <endpoint id="df.service.internal.stm.rh.chunk.endpoint" uri="direct:df.service.chunk.stm.rh"/>
-        <endpoint id="df.service.stm.rh.chunk.endpoint" uri="#{chunkUriFormatter.format('$RUP{dist.foreign.endpoint.stm_rh}')}"/>
+        <endpoint id="df.service.internal.stm.rh.chunk.endpoint" uri="direct:df.service.stm.rh"/>
+        <endpoint id="df.service.stm.rh.chunk.endpoint" uri="$RUP{dist.foreign.endpoint.stm_rh}"/>
 
-        <endpoint id="df.service.internal.tax.chunk.endpoint" uri="direct:df.service.chunk.tax"/>
-        <endpoint id="df.service.rh.tax.chunk.endpoint" uri="#{chunkUriFormatter.format('$RUP{dist.foreign.endpoint.rh_tax}')}"/>
+        <endpoint id="df.service.internal.tax.chunk.endpoint" uri="direct:df.service.tax"/>
+        <endpoint id="df.service.rh.tax.chunk.endpoint" uri="$RUP{dist.foreign.endpoint.rh_tax}"/>
 
-        <endpoint id="df.service.internal.eligibility.chunk.endpoint" uri="direct:df.service.chunk.eligibility"/>
-        <endpoint id="df.service.rh.eligibility.chunk.endpoint" uri="#{chunkUriFormatter.format('$RUP{dist.foreign.endpoint.rh_eligibility}')}"/>
+        <endpoint id="df.service.internal.eligibility.chunk.endpoint" uri="direct:df.service.eligibility"/>
+        <endpoint id="df.service.rh.eligibility.chunk.endpoint" uri="$RUP{dist.foreign.endpoint.rh_eligibility}"/>
 
         <!--chunk-based endpoints finished -->
 
@@ -179,161 +165,6 @@
                     <constant>true</constant>
                 </handled>
                 <log message="Exception during message processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
-                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
-            </onException>
-        </route>
-
-        <route id="df.service.matchingInternalRoute">
-            <from ref="df.service.internal.matching.endpoint"/>
-            <marshal>
-                <custom ref="df.service.matchingMarshaller"/>
-            </marshal>
-            <to ref="df.service.matching.endpoint"/>
-        </route>
-
-        <route id="df.service.matchingRoute">
-            <from ref="df.service.matching.endpoint"/>
-            <unmarshal>
-                <custom ref="df.service.matchingUnmarshaller"/>
-            </unmarshal>
-
-            <choice>
-                <when>
-                    <simple>
-                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.FAS_PRODUCT_FAMILY} ||
-                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.CLA_FAS_PRODUCT_FAMILY}
-                    </simple>
-                    <bean ref="df.service.fasMatchingConsumer"/>
-                </when>
-                <when>
-                    <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.AACL_PRODUCT_FAMILY}</simple>
-                    <bean ref="df.service.aaclMatchingConsumer"/>
-                </when>
-            </choice>
-
-            <onException useOriginalMessage="true">
-                <exception>java.lang.Exception</exception>
-                <handled>
-                    <constant>false</constant>
-                </handled>
-                <log message="Exception during matching processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
-                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
-            </onException>
-        </route>
-
-        <route id="df.service.rightsInternalRoute">
-            <from ref="df.service.internal.rights.endpoint"/>
-            <marshal>
-                <custom ref="df.service.rightsMarshaller"/>
-            </marshal>
-            <to ref="df.service.rights.endpoint"/>
-        </route>
-
-        <route id="df.service.rightsRoute">
-            <from ref="df.service.rights.endpoint"/>
-            <unmarshal>
-                <custom ref="df.service.rightsUnmarshaller"/>
-            </unmarshal>
-
-            <choice>
-                <when>
-                    <simple>
-                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.FAS_PRODUCT_FAMILY} ||
-                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.CLA_FAS_PRODUCT_FAMILY}
-                    </simple>
-                    <bean ref="df.service.fasRightsConsumer"/>
-                </when>
-                <when>
-                    <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.NTS_PRODUCT_FAMILY}</simple>
-                    <bean ref="df.service.ntsRightsConsumer"/>
-                </when>
-                <when>
-                    <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.AACL_PRODUCT_FAMILY}</simple>
-                    <bean ref="df.service.aaclRightsConsumer"/>
-                </when>
-            </choice>
-
-            <onException useOriginalMessage="true">
-                <exception>java.lang.Exception</exception>
-                <handled>
-                    <constant>false</constant>
-                </handled>
-                <log message="Exception during rights processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
-                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
-            </onException>
-        </route>
-
-        <route id="df.service.taxInternalRoute">
-            <from ref="df.service.internal.tax.endpoint"/>
-            <marshal>
-                <custom ref="df.service.rhTaxMarshaller"/>
-            </marshal>
-            <to ref="df.service.rh.tax.endpoint"/>
-        </route>
-
-        <route id="df.service.taxRoute">
-            <from ref="df.service.rh.tax.endpoint"/>
-            <unmarshal>
-                <custom ref="df.service.rhTaxUnmarshaller"/>
-            </unmarshal>
-            <bean ref="df.service.rhTaxConsumer"/>
-
-            <onException useOriginalMessage="true">
-                <exception>java.lang.Exception</exception>
-                <handled>
-                    <constant>false</constant>
-                </handled>
-                <log message="Exception during RH tax processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
-                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
-            </onException>
-        </route>
-
-        <route id="df.service.stmRhInternalRoute">
-            <from ref="df.service.internal.stm.rh.endpoint"/>
-            <marshal>
-                <custom ref="df.service.stmRhMarshaller"/>
-            </marshal>
-            <to ref="df.service.stm.rh.endpoint"/>
-        </route>
-
-        <route id="df.service.stmRhRoute">
-            <from ref="df.service.stm.rh.endpoint"/>
-            <unmarshal>
-                <custom ref="df.service.stmRhUnmarshaller"/>
-            </unmarshal>
-            <bean ref="df.service.stmRhConsumer"/>
-
-            <onException useOriginalMessage="true">
-                <exception>java.lang.Exception</exception>
-                <handled>
-                    <constant>false</constant>
-                </handled>
-                <log message="Exception during processing STM RH usages. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
-                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
-            </onException>
-        </route>
-
-        <route id="df.service.eligibilityInternalRoute">
-            <from ref="df.service.internal.eligibility.endpoint"/>
-            <marshal>
-                <custom ref="df.service.rhEligibilityMarshaller"/>
-            </marshal>
-            <to ref="df.service.rh.eligibility.endpoint"/>
-        </route>
-
-        <route id="df.service.eligibilityRoute">
-            <from ref="df.service.rh.eligibility.endpoint"/>
-            <unmarshal>
-                <custom ref="df.service.rhEligibilityUnmarshaller"/>
-            </unmarshal>
-            <bean ref="df.service.rhEligibilityConsumer"/>
-
-            <onException useOriginalMessage="true">
-                <exception>java.lang.Exception</exception>
-                <handled>
-                    <constant>false</constant>
-                </handled>
-                <log message="Exception during RH eligibility processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
                      loggingLevel="WARN" logName="com.copyright.rup.dist"/>
             </onException>
         </route>

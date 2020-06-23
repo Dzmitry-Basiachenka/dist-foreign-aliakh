@@ -18,8 +18,8 @@ import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IWorkClassificationRepository;
-import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
+import com.copyright.rup.dist.foreign.service.api.processor.IChainChunkProcessor;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -65,7 +65,7 @@ public class WorkClassificationServiceTest {
     private IWorkClassificationRepository workClassificationRepository;
     private IUsageRepository usageRepository;
     private INtsUsageRepository ntsUsageRepository;
-    private IChainProcessor<Usage> nonBelletristicProcessorMock;
+    private IChainChunkProcessor<List<Usage>, Usage> nonBelletristicProcessorMock;
 
     @Before
     public void setUp() {
@@ -73,7 +73,7 @@ public class WorkClassificationServiceTest {
         workClassificationRepository = createMock(IWorkClassificationRepository.class);
         usageRepository = createMock(IUsageRepository.class);
         ntsUsageRepository = createMock(INtsUsageRepository.class);
-        nonBelletristicProcessorMock = createMock(IChainProcessor.class);
+        nonBelletristicProcessorMock = createMock(IChainChunkProcessor.class);
         workClassificationService.setWorkClassificationRepository(workClassificationRepository);
         workClassificationService.setUsageRepository(usageRepository);
         workClassificationService.setNonBelletristicProcessor(nonBelletristicProcessorMock);
@@ -106,11 +106,11 @@ public class WorkClassificationServiceTest {
             .andReturn(Arrays.asList(usage1.getId(), usage2.getId())).once();
         expect(usageRepository.findByIds(Collections.singletonList(usage1.getId())))
             .andReturn(Collections.singletonList(usage1)).once();
-        nonBelletristicProcessorMock.process(usage1);
+        nonBelletristicProcessorMock.process(Collections.singletonList(usage1));
         expectLastCall().once();
         expect(usageRepository.findByIds(Collections.singletonList(usage2.getId())))
             .andReturn(Collections.singletonList(usage2)).once();
-        nonBelletristicProcessorMock.process(usage2);
+        nonBelletristicProcessorMock.process(Collections.singletonList(usage2));
         expectLastCall().once();
         replay(workClassificationRepository, ntsUsageRepository, usageRepository, nonBelletristicProcessorMock);
         workClassificationService.insertOrUpdateClassifications(

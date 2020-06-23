@@ -38,8 +38,7 @@ public class RhTaxJobTest {
         chainExecutor = createMock(IChainExecutor.class);
         jobExecutionContext = createMock(JobExecutionContext.class);
         rhTaxJob = new RhTaxJob();
-        Whitebox.setInternalState(rhTaxJob, "chainExecutor", chainExecutor);
-        Whitebox.setInternalState(rhTaxJob, "useChunks", false);
+        Whitebox.setInternalState(rhTaxJob, chainExecutor);
     }
 
     @Test

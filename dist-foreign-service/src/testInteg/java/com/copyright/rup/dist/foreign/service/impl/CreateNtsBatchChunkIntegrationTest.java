@@ -38,8 +38,7 @@ import java.util.List;
  * @author Uladzislau Shalamitski
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-    "classpath:com/copyright/rup/dist/foreign/service/dist-foreign-service-chunk-processing-test-context.xml")
+@ContextConfiguration("classpath:com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
 @TestPropertySource(properties = {"test.liquibase.changelog=create-nts-batch-chunk-data-init.groovy"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Transactional
