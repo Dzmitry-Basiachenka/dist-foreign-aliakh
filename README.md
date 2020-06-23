@@ -1,3 +1,15 @@
+10.1.8
+-
+* B-57599 FDA: Exclude Payees within an FAS/FAS2 scenario: implement participating statuses validation for different scenarios
+* B-57599 FDA: Exclude Payees within an FAS/FAS2 scenario: move exclude payees logic to Scenarios tab
+* B-58556 FDA: Tax Notification Report in FDA: get country from PRM
+* B-58556 FDA: Tax Notification Report in FDA: implement service logic for getting RH Tax Information
+* B-59199 Tech Debt: FDA: eliminate support of dist.foreign.usages.chunks property
+* B-59772 FDA: Improve RMS integration: add and populate license_type column in the df_grant_priority table
+* B-59772 FDA: Improve RMS integration: fix failed build
+* B-59772 FDA: Improve RMS integration: implement sending rights statuses and license types in RMS grants request; refactoring RmsRightsCacheService to support rights statuses and license types
+* CDP-920 FDA: FAS Batch Summary Report: NTSWITHDRAWN and TOBE_DISTRIBUTED usages are not displayed in the '# Details NTS' and 'Gross USD NTS' columns of the report
+
 10.1.7
 -
 * B-57599 FDA: Exclude Payees within an FAS/FAS2 scenario: apply scenarios filter on Exclude Payees window
