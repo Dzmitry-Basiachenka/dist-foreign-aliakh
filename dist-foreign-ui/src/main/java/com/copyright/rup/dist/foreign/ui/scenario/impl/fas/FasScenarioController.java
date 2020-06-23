@@ -6,15 +6,11 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-
-import com.vaadin.ui.Window;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -40,20 +36,11 @@ public class FasScenarioController extends CommonScenarioController implements I
     @Autowired
     private IFasDrillDownByRightsholderController drillDownByRightsholderController;
     @Autowired
-    private IExcludePayeeController excludePayeesController;
-    @Autowired
     private IFasScenarioService fasScenarioService;
 
     @Override
     public void onExcludeByRroClicked() {
         Windows.showModalWindow(new ExcludeSourceRroWindow(this));
-    }
-
-    @Override
-    public void onExcludeByPayeeClicked() {
-        IExcludePayeeWidget widget = excludePayeesController.initWidget();
-        widget.addListener(this::fireWidgetEvent);
-        Windows.showModalWindow((Window) widget);
     }
 
     @Override

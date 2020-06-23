@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -185,23 +184,24 @@ public class FasScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        assertEquals(8, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "View");
-        verifyButton(layout.getComponent(1), "Delete");
-        verifyButton(layout.getComponent(2), "Reconcile Rightsholders");
-        verifyButton(layout.getComponent(3), "Submit for Approval");
-        verifyButton(layout.getComponent(4), "Reject");
-        verifyButton(layout.getComponent(5), "Approve");
-        verifyButton(layout.getComponent(6), "Send to LM");
-        verifyButton(layout.getComponent(7), "Refresh Scenario");
+        assertEquals(9, layout.getComponentCount());
+        verifyButton(layout.getComponent(0), "View", false);
+        verifyButton(layout.getComponent(1), "Delete", false);
+        verifyButton(layout.getComponent(2), "Exclude Payees", true);
+        verifyButton(layout.getComponent(3), "Reconcile Rightsholders", false);
+        verifyButton(layout.getComponent(4), "Submit for Approval", false);
+        verifyButton(layout.getComponent(5), "Reject", false);
+        verifyButton(layout.getComponent(6), "Approve", false);
+        verifyButton(layout.getComponent(7), "Send to LM", false);
+        verifyButton(layout.getComponent(8), "Refresh Scenario", false);
     }
 
-    private void verifyButton(Component component, String caption) {
+    private void verifyButton(Component component, String caption, boolean isEnabled) {
         assertTrue(component instanceof Button);
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(caption.replaceAll(StringUtils.SPACE, "_"), button.getId());
-        assertFalse(button.isEnabled());
+        assertEquals(isEnabled, button.isEnabled());
         assertTrue(button.isDisableOnClick());
         assertEquals(2, button.getListeners(ClickEvent.class).size());
     }

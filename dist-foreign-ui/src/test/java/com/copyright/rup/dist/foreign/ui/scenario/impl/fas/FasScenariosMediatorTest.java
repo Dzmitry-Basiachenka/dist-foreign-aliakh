@@ -37,6 +37,7 @@ public class FasScenariosMediatorTest {
     private FasScenariosMediator mediator;
     private Button deleteButton;
     private Button viewButton;
+    private Button excludePayeesButton;
     private Button reconcileRightsholdersButton;
     private Button submitButton;
     private Button rejectButton;
@@ -52,6 +53,8 @@ public class FasScenariosMediatorTest {
         mediator.setDeleteButton(deleteButton);
         viewButton = new Button("View");
         mediator.setViewButton(viewButton);
+        excludePayeesButton = new Button("Exclude Payees");
+        mediator.setExcludePayeesButton(excludePayeesButton);
         reconcileRightsholdersButton = new Button("Reconcile Rightsholders");
         mediator.setReconcileRightsholdersButton(reconcileRightsholdersButton);
         submitButton = new Button("Submit for approval");
@@ -72,6 +75,7 @@ public class FasScenariosMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
+        assertFalse(excludePayeesButton.isVisible());
         assertFalse(reconcileRightsholdersButton.isVisible());
         assertTrue(viewButton.isVisible());
         assertFalse(submitButton.isVisible());
@@ -88,6 +92,7 @@ public class FasScenariosMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
+        assertFalse(excludePayeesButton.isVisible());
         assertFalse(reconcileRightsholdersButton.isVisible());
         assertTrue(viewButton.isVisible());
         assertFalse(submitButton.isVisible());
@@ -104,6 +109,7 @@ public class FasScenariosMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(deleteButton.isVisible());
+        assertTrue(excludePayeesButton.isVisible());
         assertTrue(reconcileRightsholdersButton.isVisible());
         assertTrue(viewButton.isVisible());
         assertTrue(submitButton.isVisible());
@@ -118,6 +124,7 @@ public class FasScenariosMediatorTest {
     public void testSelectedScenarioChangedNullScenario() {
         mediator.selectedScenarioChanged(null);
         assertFalse(deleteButton.isEnabled());
+        assertTrue(excludePayeesButton.isEnabled());
         assertFalse(reconcileRightsholdersButton.isEnabled());
         assertFalse(viewButton.isEnabled());
         assertFalse(submitButton.isEnabled());
@@ -134,6 +141,7 @@ public class FasScenariosMediatorTest {
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         mediator.selectedScenarioChanged(scenario);
         assertTrue(deleteButton.isEnabled());
+        assertTrue(excludePayeesButton.isEnabled());
         assertTrue(reconcileRightsholdersButton.isEnabled());
         assertTrue(viewButton.isEnabled());
         assertTrue(submitButton.isEnabled());
@@ -150,6 +158,7 @@ public class FasScenariosMediatorTest {
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
         mediator.selectedScenarioChanged(scenario);
         assertFalse(deleteButton.isEnabled());
+        assertTrue(excludePayeesButton.isEnabled());
         assertFalse(reconcileRightsholdersButton.isEnabled());
         assertTrue(viewButton.isEnabled());
         assertFalse(submitButton.isEnabled());
@@ -166,6 +175,7 @@ public class FasScenariosMediatorTest {
         scenario.setStatus(ScenarioStatusEnum.APPROVED);
         mediator.selectedScenarioChanged(scenario);
         assertFalse(deleteButton.isEnabled());
+        assertTrue(excludePayeesButton.isEnabled());
         assertFalse(reconcileRightsholdersButton.isEnabled());
         assertTrue(viewButton.isEnabled());
         assertFalse(submitButton.isEnabled());
@@ -182,6 +192,7 @@ public class FasScenariosMediatorTest {
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
         mediator.selectedScenarioChanged(scenario);
         assertFalse(deleteButton.isEnabled());
+        assertTrue(excludePayeesButton.isEnabled());
         assertFalse(reconcileRightsholdersButton.isEnabled());
         assertTrue(viewButton.isEnabled());
         assertFalse(submitButton.isEnabled());
@@ -217,6 +228,7 @@ public class FasScenariosMediatorTest {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_EXCLUDE_FROM_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_RECONCILE_RIGHTSHOLDERS")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_SUBMIT_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_DISTRIBUTE_SCENARIO")).andReturn(true).once();

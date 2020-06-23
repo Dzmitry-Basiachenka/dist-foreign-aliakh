@@ -33,6 +33,7 @@ import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IReconcileRightsholdersController;
@@ -82,6 +83,7 @@ public class FasScenariosControllerTest {
     private IScenarioService scenarioService;
     private IFasScenarioService fasScenarioService;
     private FasScenarioController scenarioController;
+    private IExcludePayeeController excludePayeesController;
     private Scenario scenario;
     private IFasScenariosWidget scenariosWidget;
     private IFasScenarioWidget scenarioWidget;
@@ -94,6 +96,7 @@ public class FasScenariosControllerTest {
         scenarioService = createMock(IScenarioService.class);
         fasScenarioService = createMock(IFasScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
+        excludePayeesController = createMock(IExcludePayeeController.class);
         scenariosController = new FasScenariosController();
         buildScenario();
         scenarioController = createMock(FasScenarioController.class);
@@ -110,6 +113,7 @@ public class FasScenariosControllerTest {
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
         Whitebox.setInternalState(scenariosController, "fasScenarioService", fasScenarioService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
+        Whitebox.setInternalState(scenariosController, excludePayeesController);
         verify(SecurityUtils.class);
     }
 
@@ -176,6 +180,18 @@ public class FasScenariosControllerTest {
         replay(scenariosWidget, fasScenarioService, rightsholderDiscrepancyService, Windows.class);
         scenariosController.onReconcileRightsholdersButtonClicked();
         verify(scenariosWidget, fasScenarioService, rightsholderDiscrepancyService, Windows.class);
+    }
+
+    @Test
+    public void testOnExcludePayeesButtonClicked() {
+        mockStatic(Windows.class);
+        ExcludePayeeWidget widget = new ExcludePayeeWidget();
+        expect(excludePayeesController.initWidget()).andReturn(widget).once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        replay(scenarioService, excludePayeesController, Windows.class);
+        scenariosController.onExcludePayeesButtonClicked();
+        verify(scenarioService, excludePayeesController, Windows.class);
     }
 
     @Test

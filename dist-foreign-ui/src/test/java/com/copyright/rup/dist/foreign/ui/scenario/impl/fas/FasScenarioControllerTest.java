@@ -16,7 +16,6 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
@@ -31,7 +30,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IWidget;
@@ -75,7 +73,7 @@ import java.util.function.Supplier;
 public class FasScenarioControllerTest {
 
     private static final OffsetDateTime NOW = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
-    private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
+    private static final String SCENARIO_ID = "eddb76d9-3d22-47d7-b63f-85e8f7874fa4";
 
     private FasScenarioController controller;
     private IUsageService usageService;
@@ -83,7 +81,6 @@ public class FasScenarioControllerTest {
     private IFasScenarioService fasScenarioService;
     private IReportService reportService;
     private IStreamSourceHandler streamSourceHandler;
-    private IExcludePayeeController excludePayeesController;
     private Scenario scenario;
 
     @Before
@@ -101,14 +98,12 @@ public class FasScenarioControllerTest {
         fasScenarioService = createMock(IFasScenarioService.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
-        excludePayeesController = createMock(IExcludePayeeController.class);
         mockStatic(ForeignSecurityUtils.class);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, fasScenarioService);
         Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
-        Whitebox.setInternalState(controller, excludePayeesController);
     }
 
     @Test
@@ -252,18 +247,6 @@ public class FasScenarioControllerTest {
         replay(fasScenarioService, Windows.class);
         controller.onExcludeByRroClicked();
         verify(fasScenarioService, Windows.class);
-    }
-
-    @Test
-    public void testOnExcludeByPayeeClickedWithoutDiscrepancies() {
-        mockStatic(Windows.class);
-        ExcludePayeeWidget widget = new ExcludePayeeWidget();
-        expect(excludePayeesController.initWidget()).andReturn(widget).once();
-        Windows.showModalWindow(widget);
-        expectLastCall().once();
-        replay(scenarioService, excludePayeesController, Windows.class);
-        controller.onExcludeByPayeeClicked();
-        verify(scenarioService, excludePayeesController, Windows.class);
     }
 
     @Test

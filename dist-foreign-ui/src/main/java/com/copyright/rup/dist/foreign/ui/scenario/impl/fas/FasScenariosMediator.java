@@ -25,6 +25,7 @@ class FasScenariosMediator implements IScenariosMediator {
     private Button approveButton;
     private Button sendToLmButton;
     private Button reconcileRightsholdersButton;
+    private Button excludePayeesButton;
     private Button refreshScenarioButton;
 
     @Override
@@ -35,6 +36,7 @@ class FasScenariosMediator implements IScenariosMediator {
         approveButton.setVisible(ForeignSecurityUtils.hasApproveScenarioPermission());
         sendToLmButton.setVisible(ForeignSecurityUtils.hasSendScenarioToLmPermission());
         reconcileRightsholdersButton.setVisible(ForeignSecurityUtils.hasReconcileRightsholdersPermission());
+        excludePayeesButton.setVisible(ForeignSecurityUtils.hasExcludeFromScenarioPermission());
         refreshScenarioButton.setVisible(ForeignSecurityUtils.hasRefreshScenarioPermission());
         viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
     }
@@ -91,6 +93,10 @@ class FasScenariosMediator implements IScenariosMediator {
 
     void setReconcileRightsholdersButton(Button reconcileRightsholdersButton) {
         this.reconcileRightsholdersButton = reconcileRightsholdersButton;
+    }
+
+    void setExcludePayeesButton(Button excludePayeesButton) {
+        this.excludePayeesButton = excludePayeesButton;
     }
 
     void setRefreshScenarioButton(Button refreshScenarioButton) {

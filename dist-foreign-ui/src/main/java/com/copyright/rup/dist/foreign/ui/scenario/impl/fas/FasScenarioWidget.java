@@ -31,7 +31,6 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
     private Button exportDetailsButton;
     private Button exportButton;
     private Button excludeByRroButton;
-    private Button excludeByPayeeButton;
     private FasScenarioMediator mediator;
 
     /**
@@ -69,7 +68,6 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
     public IMediator initMediator() {
         mediator = new FasScenarioMediator();
         mediator.setExcludeByRroButton(excludeByRroButton);
-        mediator.setExcludeByPayeeButton(excludeByPayeeButton);
         mediator.setExportDetailsButton(exportDetailsButton);
         mediator.setExportButton(exportButton);
         mediator.setEmptyUsagesLayout(getEmptyUsagesLayout());
@@ -99,10 +97,8 @@ public class FasScenarioWidget extends CommonScenarioWidget implements IFasScena
         exportScenarioFileDownloader.extend(exportButton);
         excludeByRroButton = new Button(ForeignUi.getMessage("button.exclude_by_rro"));
         excludeByRroButton.addClickListener(event -> scenarioController.onExcludeByRroClicked());
-        excludeByPayeeButton = new Button(ForeignUi.getMessage("button.exclude_by_payee"));
-        excludeByPayeeButton.addClickListener(event -> scenarioController.onExcludeByPayeeClicked());
-        HorizontalLayout buttons = new HorizontalLayout(excludeByRroButton, excludeByPayeeButton, exportDetailsButton,
-            exportButton, Buttons.createCloseButton(this));
+        HorizontalLayout buttons = new HorizontalLayout(excludeByRroButton, exportDetailsButton, exportButton,
+            Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");
         buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;
