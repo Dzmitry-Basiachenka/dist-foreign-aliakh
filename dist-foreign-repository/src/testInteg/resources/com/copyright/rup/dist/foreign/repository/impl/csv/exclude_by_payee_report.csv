@@ -1,3 +1,3 @@
-Exclude Status,Payee Account #,Payee Name,Gross Amt in USD,Service Fee Amt,Net Amount in USD,Participating
+Exclude Status,Payee Account #,Payee Name,Gross Amt in USD,Service Fee Amount,Net Amt in USD,Participating
 [X],7000813806,"CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",100.00,32.00,68.00,Y
 [_],1000002859,John Wiley & Sons - Books,200.00,48.00,152.00,N
