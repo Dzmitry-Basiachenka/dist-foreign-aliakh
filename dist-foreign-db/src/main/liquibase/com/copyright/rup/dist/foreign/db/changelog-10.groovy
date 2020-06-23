@@ -112,7 +112,7 @@ databaseChangeLog {
                     "and product_family in ('FAS', 'FAS2', 'NTS')"
         }
 
-        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_grant_priority', columnName: 'license_type')
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_grant_priority', columnName: 'license_type', columnDataType: 'VARCHAR(128)')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
             column(name: 'df_grant_priority_uid', value: 'bedcc0e3-ce44-4ef6-a8fc-d89f82e6d1d4')
