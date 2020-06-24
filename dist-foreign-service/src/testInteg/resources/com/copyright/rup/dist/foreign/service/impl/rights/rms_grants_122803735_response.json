@@ -47,25 +47,6 @@
           "license_type": "AACL",
           "product_family": "AACL",
           "rh_account_number": "1000000322"
-        },
-        {
-          "wr_wrk_inst": "122803735",
-          "status": "DENY",
-          "type_of_use": "DIGITAL",
-          "market": "ACADEMIC",
-          "distribution": "INTERNAL",
-          "region": "WORLDWIDE",
-          "right_begin_date": "08/12/2011",
-          "right_end_date": "12/31/3000",
-          "publication_begin_date": "01/01/2011",
-          "publication_end_date": "12/31/3000",
-          "agreement_begin_date": "08/12/2011",
-          "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "2000017002",
-          "right_id": "5118110e-ce4a-4456-9323-2e9d50a0efa4",
-          "license_type": "AACL",
-          "product_family": "AACL",
-          "rh_account_number": "2000017002"
         }
       ]
     }

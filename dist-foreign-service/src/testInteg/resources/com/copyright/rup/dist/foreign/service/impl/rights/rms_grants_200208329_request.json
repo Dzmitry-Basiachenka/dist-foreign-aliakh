@@ -1,10 +1,11 @@
 {
   "works": [
     {
-      "status": ["GRANT", "DENY"],
+      "status": ["GRANT"],
       "wr_wrk_inst": 200208329,
       "period_end_date": "06/30/2015",
-      "type_of_use": ["PRINT", "DIGITAL"]
+      "type_of_use": ["PRINT", "DIGITAL"],
+      "license_type": ["AACL"]
     }
   ]
 }

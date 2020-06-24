@@ -60,6 +60,7 @@ public class RightsService implements IRightsService {
 
     private static final String PRINT_TYPE_OF_USE = "PRINT";
     private static final String DIGITAL_TYPE_OF_USE = "DIGITAL";
+    private static final String AACL_LICENSE_TYPE = "AACL";
     private static final String NTS_WITHDRAWN_AUDIT_MESSAGE =
         "Detail was made eligible for NTS because sum of gross amounts, grouped by Wr Wrk Inst, is less than $100";
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -196,11 +197,10 @@ public class RightsService implements IRightsService {
         usages.forEach(usage -> {
             Long wrWrkInst = usage.getWrWrkInst();
             Set<RmsGrant> eligibleGrants = rmsRightsService.getGrants(Collections.singletonList(wrWrkInst),
-                usage.getAaclUsage().getBatchPeriodEndDate(), FdaConstants.RIGHT_STATUSES_GRANT_DENY,
-                ImmutableSet.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE), Collections.emptySet())
+                usage.getAaclUsage().getBatchPeriodEndDate(), Collections.singleton(RightStatusEnum.GRANT.name()),
+                ImmutableSet.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE), Collections.singleton(AACL_LICENSE_TYPE))
                 .stream()
-                .filter(grant -> FdaConstants.AACL_PRODUCT_FAMILY.equals(grant.getProductFamily())
-                    && RightStatusEnum.GRANT == grant.getRightStatus())
+                .filter(grant -> FdaConstants.AACL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
                 .collect(Collectors.toSet());
             RmsGrant result = ObjectUtils.defaultIfNull(findGrantByTypeOfUse(eligibleGrants, DIGITAL_TYPE_OF_USE),
                 findGrantByTypeOfUse(eligibleGrants, PRINT_TYPE_OF_USE));
