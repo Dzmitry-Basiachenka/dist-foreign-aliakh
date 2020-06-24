@@ -96,6 +96,17 @@ public final class FdaConstants {
     public static final Set<String> RIGHT_STATUSES_GRANT_DENY =
         ImmutableSet.of(RightStatusEnum.GRANT.name(), RightStatusEnum.DENY.name());
 
+    /**
+     * Set of FAS/FAS2/NTS license types.
+     */
+    public static final Set<String> FAS_FAS2_NTS_LICENSE_TYPE_SET = ImmutableSet.of("NGT_PHOTOCOPY", "VGW", "AACL",
+        "NGT_ELECTRONIC_COURSE_MATERIALS", "ACL", "JACDCL", "NGT_PRINT_COURSE_MATERIALS", "MACL");
+
+    /**
+     * AACL license type.
+     */
+    public static final String AACL_LICENSE_TYPE = "AACL";
+
     private FdaConstants() {
         throw new AssertionError("Constructor shouldn't be called directly");
     }

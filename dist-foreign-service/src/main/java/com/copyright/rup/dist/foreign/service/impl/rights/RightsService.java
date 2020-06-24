@@ -27,7 +27,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
@@ -60,7 +59,6 @@ public class RightsService implements IRightsService {
 
     private static final String PRINT_TYPE_OF_USE = "PRINT";
     private static final String DIGITAL_TYPE_OF_USE = "DIGITAL";
-    private static final String AACL_LICENSE_TYPE = "AACL";
     private static final String NTS_WITHDRAWN_AUDIT_MESSAGE =
         "Detail was made eligible for NTS because sum of gross amounts, grouped by Wr Wrk Inst, is less than $100";
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -174,7 +172,7 @@ public class RightsService implements IRightsService {
             Map<Long, Long> wrWrkInstToRhAccountNumberMap =
                 rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst),
                     usage.getProductFamily(), FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(),
-                    Collections.emptySet());
+                    FdaConstants.FAS_FAS2_NTS_LICENSE_TYPE_SET);
             Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
             if (Objects.nonNull(rhAccountNumber)) {
                 usage.setRightsholder(buildRightsholder(rhAccountNumber));
@@ -198,7 +196,8 @@ public class RightsService implements IRightsService {
             Long wrWrkInst = usage.getWrWrkInst();
             Set<RmsGrant> eligibleGrants = rmsRightsService.getGrants(Collections.singletonList(wrWrkInst),
                 usage.getAaclUsage().getBatchPeriodEndDate(), Collections.singleton(RightStatusEnum.GRANT.name()),
-                ImmutableSet.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE), Collections.singleton(AACL_LICENSE_TYPE))
+                ImmutableSet.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE),
+                Collections.singleton(FdaConstants.AACL_LICENSE_TYPE))
                 .stream()
                 .filter(grant -> FdaConstants.AACL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
                 .collect(Collectors.toSet());
@@ -262,7 +261,8 @@ public class RightsService implements IRightsService {
         String productFamily = usages.iterator().next().getProductFamily();
         Map<Long, Long> wrWrkInstToAccountNumber =
             rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsagesMap.keySet()),
-                productFamily, FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(), Collections.emptySet());
+                productFamily, FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(),
+                FdaConstants.FAS_FAS2_NTS_LICENSE_TYPE_SET);
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
             List<Usage> usagesToUpdate = wrWrkInstToUsagesMap.get(wrWrkInst);
             Set<String> usageIds = usagesToUpdate.stream().map(Usage::getId).collect(Collectors.toSet());
