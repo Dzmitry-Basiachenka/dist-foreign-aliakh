@@ -1,3 +1,12 @@
+10.1.9
+-
+* B-58556 FDA: Tax Notification Report in FDA: get rid of using MyBatis API in ReportService
+* B-58556 FDA: Tax Notification Report in FDA: implement service logic for generating CSV report
+* B-58557 FDA: Ability to Export FAS/FAS2 Excluded Payee: correct headers of the 'Service Fee Amount', 'Net Amt in USD' columns
+* B-59772 FDA: Improve RMS integration: FDA: implement sending license types in RMS grants request for FAS/FAS2/NTS product families
+* B-59772 FDA: Improve RMS integration: refactor updating rights for AACL product family by sending sending rights statuses and license types
+* CDP-921: FDA: FAS Batch Summary Report: TO_BE_DISTRIBUTED usages are displayed in the '# non-Eligible Details' and 'Gross USD non-Eligible Details' columns of the report
+
 10.1.8
 -
 * B-57599 FDA: Exclude Payees within an FAS/FAS2 scenario: implement participating statuses validation for different scenarios
