@@ -126,7 +126,7 @@ public class FasScenarioService implements IFasScenarioService {
                 commonDiscrepancyService.getDiscrepancies(
                     entries.stream().flatMap(entry -> entry.getValue().stream()).collect(Collectors.toList()),
                     Usage::getWrWrkInst, productFamily, FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(),
-                    Collections.emptySet(), new DiscrepancyBuilder(userName));
+                    FdaConstants.FAS_FAS2_NTS_LICENSE_TYPE_SET, new DiscrepancyBuilder(userName));
             if (CollectionUtils.isNotEmpty(discrepancies)) {
                 rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
                 rightsholderService.updateRighstholdersAsync(
