@@ -6,9 +6,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
-import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.replayAll;
-import static org.powermock.api.easymock.PowerMock.verify;
 import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
@@ -92,6 +90,7 @@ public class ReportWidgetTest {
         expectProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
         replayAll();
         reportWidget.refresh();
+        verifyAll();
         assertReportsMenuFasFas2();
     }
 
@@ -100,6 +99,7 @@ public class ReportWidgetTest {
         expectProductFamily(FdaConstants.CLA_FAS_PRODUCT_FAMILY);
         replayAll();
         reportWidget.refresh();
+        verifyAll();
         assertReportsMenuFasFas2();
     }
 
@@ -108,7 +108,17 @@ public class ReportWidgetTest {
         expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
         replayAll();
         reportWidget.refresh();
+        verifyAll();
         assertReportsMenuNts();
+    }
+
+    @Test
+    public void testRefreshProductFamilyAacl() {
+        expectProductFamily(FdaConstants.AACL_PRODUCT_FAMILY);
+        replayAll();
+        reportWidget.refresh();
+        verifyAll();
+        assertReportsMenuAacl();
     }
 
     @Test
@@ -187,10 +197,10 @@ public class ReportWidgetTest {
         expectLastCall().once();
         widget.setCaption("Undistributes Liabilities Reconciliation Report");
         expectLastCall().once();
-        replay(controller, widget, Windows.class);
+        replayAll();
         Whitebox.invokeMethod(reportWidget, "openReportWindow", "Undistributes Liabilities Reconciliation Report",
             controller);
-        verify(controller, widget, Windows.class);
+        verifyAll();
     }
 
     @Test
@@ -201,7 +211,7 @@ public class ReportWidgetTest {
         Map.Entry<Supplier<String>, Supplier<InputStream>> source =
             new SimpleImmutableEntry<>(() -> fileName, () -> is);
         expect(streamSource.getSource()).andReturn(source).times(2);
-        replay(streamSource, is);
+        replayAll();
         ReportStreamSource reportStreamSource = new ReportStreamSource(streamSource);
         DownloadStream stream = reportStreamSource.getStream();
         assertEquals(0, stream.getCacheTime());
@@ -210,7 +220,7 @@ public class ReportWidgetTest {
         assertEquals("private,no-cache,no-store", stream.getParameter(HttpHeaders.CACHE_CONTROL));
         assertEquals(String.format("attachment; filename=\"%s\"", fileName),
             stream.getParameter(HttpHeaders.CONTENT_DISPOSITION));
-        verify(streamSource, is);
+        verifyAll();
     }
 
     private void selectMenuItem(int index) {
@@ -242,19 +252,32 @@ public class ReportWidgetTest {
     private void assertReportsMenuFasFas2() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(6, CollectionUtils.size(menuItems));
+        assertEquals(7, CollectionUtils.size(menuItems));
         assertEquals("FAS Batch Summary Report", menuItems.get(0).getText());
         assertEquals("Summary of Market Report", menuItems.get(1).getText());
         assertEquals("Research Status Report", menuItems.get(2).getText());
         assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
         assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(4).getText());
         assertEquals("Ownership Adjustment Report", menuItems.get(5).getText());
+        assertEquals("Tax Notification Report", menuItems.get(6).getText());
     }
 
     private void assertReportsMenuNts() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(1, CollectionUtils.size(menuItems));
+        assertEquals(2, CollectionUtils.size(menuItems));
         assertEquals("NTS Withdrawn Batch Summary Report", menuItems.get(0).getText());
+        assertEquals("Tax Notification Report", menuItems.get(1).getText());
+    }
+
+    private void assertReportsMenuAacl() {
+        assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
+        List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
+        assertEquals(5, CollectionUtils.size(menuItems));
+        assertEquals("Work Shares by Aggregate Licensee Class Report", menuItems.get(0).getText());
+        assertEquals("Work Shares by Aggregate Licensee Class Summary Report", menuItems.get(1).getText());
+        assertEquals("Baseline Usages Report", menuItems.get(2).getText());
+        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(3).getText());
+        assertEquals("Tax Notification Report", menuItems.get(4).getText());
     }
 }

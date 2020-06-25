@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -49,6 +50,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     private ICommonScenarioReportController workSharesByAggLcClassSummaryReportController;
     @Autowired
     private IAaclBaselineUsagesReportController aaclBaselineUsagesReportController;
+    @Autowired
+    private ITaxNotificationReportController taxNotificationReportController;
     @Autowired
     private IReportService reportService;
     @Autowired
@@ -100,8 +103,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     }
 
     @Override
-    protected IReportWidget instantiateWidget() {
-        return new ReportWidget();
+    public ITaxNotificationReportController getTaxNotificationReportController() {
+        return taxNotificationReportController;
     }
 
     @Override
@@ -126,5 +129,10 @@ public class ReportController extends CommonController<IReportWidget> implements
     public IStreamSource getAaclUndistributedLiabilitiesReportStreamSource() {
         return new ByteArrayStreamSource("undistributed_liabilities_",
             outputStream -> reportService.writeAaclUndistributedLiabilitiesCsvReport(outputStream));
+    }
+
+    @Override
+    protected IReportWidget instantiateWidget() {
+        return new ReportWidget();
     }
 }
