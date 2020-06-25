@@ -66,12 +66,15 @@ public class RhTaxServiceTest {
     private static final String RH_ID_1 = "5bcf2c37-2f32-48e9-90fe-c9d75298eeed";
     private static final String RH_ID_2 = "8a0dbf78-d9c9-49d9-a895-05f55cfc8329";
     private static final String RH_ID_3 = "e9c9f51b-6048-4474-848a-2db1c410e463";
+    private static final String RH_ID_4 = "63319ddb-4a9d-4e86-aa88-1f046cd80ddf";
     private static final long ACC_NUMBER_1 = 1000002859L;
     private static final long ACC_NUMBER_2 = 1000005413L;
     private static final long ACC_NUMBER_3 = 1000002797L;
+    private static final long ACC_NUMBER_4 = 2000017000L;
     private static final String RH_NAME_1 = "John Wiley & Sons - Books";
     private static final String RH_NAME_2 = "Kluwer Academic Publishers - Dordrecht";
     private static final String RH_NAME_3 = "British Film Institute (BFI)";
+    private static final String RH_NAME_4 = "CLA, The Copyright Licensing Agency Ltd.";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FAS2_PRODUCT_FAMILY = "FAS2";
 
@@ -164,15 +167,19 @@ public class RhTaxServiceTest {
         Rightsholder rh1 = buildRightsholder(RH_ID_1, ACC_NUMBER_1, RH_NAME_1);
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
         Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
+        Rightsholder rh4 = buildRightsholder(RH_ID_4, ACC_NUMBER_4, RH_NAME_4);
         List<RightsholderPayeeProductFamilyHolder> holders = Arrays.asList(
             buildHolder(rh2, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_2, included in the result
             buildHolder(rh1, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_1, excluded as included in the result
             buildHolder(rh1, rh2, FAS2_PRODUCT_FAMILY),  // TBO = RH_1, excluded as included in the result
-            buildHolder(rh2, rh3, FAS2_PRODUCT_FAMILY)); // TBO = RH_3, excluded as number of notifications > 3
+            buildHolder(rh2, rh3, FAS2_PRODUCT_FAMILY),  // TBO = RH_3, excluded as number of notifications > 3
+            buildHolder(rh2, rh4, FAS2_PRODUCT_FAMILY)   // TBO = RH_4, excluded as no information from Oracle
+        );
         Set<OracleRhTaxInformationRequest> expectedOracleRequests = Sets.newHashSet(
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_1),
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_2),
-            new OracleRhTaxInformationRequest(ACC_NUMBER_3, ACC_NUMBER_3));
+            new OracleRhTaxInformationRequest(ACC_NUMBER_3, ACC_NUMBER_3),
+            new OracleRhTaxInformationRequest(ACC_NUMBER_4, ACC_NUMBER_4));
         expect(usageService.getRightsholderPayeeProductFamilyHoldersByScenarioIds(SCENARIO_IDS))
             .andReturn(holders).once();
         expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_1, FAS_PRODUCT_FAMILY))
@@ -180,7 +187,7 @@ public class RhTaxServiceTest {
         expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_1, FAS2_PRODUCT_FAMILY))
             .andReturn(false).once();
         expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_2, FAS2_PRODUCT_FAMILY))
-            .andReturn(false).once();
+            .andReturn(false).times(2);
         expect(oracleRhTaxInformationService.getRhTaxInformation(expectedOracleRequests))
             .andReturn(loadOracleRhTaxInformation("oracle_rh_tax_information.json")).once();
         expect(prmIntegrationService.getCountries()).andReturn(buildCountries()).once();
@@ -201,15 +208,19 @@ public class RhTaxServiceTest {
         Rightsholder rh1 = buildRightsholder(RH_ID_1, ACC_NUMBER_1, RH_NAME_1);
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
         Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
+        Rightsholder rh4 = buildRightsholder(RH_ID_4, ACC_NUMBER_4, RH_NAME_4);
         List<RightsholderPayeeProductFamilyHolder> holders = Arrays.asList(
             buildHolder(rh2, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_2, included in the result
             buildHolder(rh1, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_1, excluded as last not. date within numberOfDays
             buildHolder(rh1, rh2, FAS2_PRODUCT_FAMILY),  // TBO = RH_1, excluded as last not. date within numberOfDays
-            buildHolder(rh2, rh3, FAS2_PRODUCT_FAMILY)); // TBO = RH_3, excluded as number of notifications > 3
+            buildHolder(rh2, rh3, FAS2_PRODUCT_FAMILY),  // TBO = RH_3, excluded as number of notifications > 3
+            buildHolder(rh2, rh4, FAS2_PRODUCT_FAMILY)   // TBO = RH_4, excluded as no info from Oracle
+        );
         Set<OracleRhTaxInformationRequest> expectedOracleRequests = Sets.newHashSet(
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_1),
             new OracleRhTaxInformationRequest(ACC_NUMBER_2, ACC_NUMBER_2),
-            new OracleRhTaxInformationRequest(ACC_NUMBER_3, ACC_NUMBER_3));
+            new OracleRhTaxInformationRequest(ACC_NUMBER_3, ACC_NUMBER_3),
+            new OracleRhTaxInformationRequest(ACC_NUMBER_4, ACC_NUMBER_4));
         expect(usageService.getRightsholderPayeeProductFamilyHoldersByScenarioIds(SCENARIO_IDS))
             .andReturn(holders).once();
         expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_1, FAS_PRODUCT_FAMILY))
@@ -217,7 +228,7 @@ public class RhTaxServiceTest {
         expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_1, FAS2_PRODUCT_FAMILY))
             .andReturn(false).once();
         expect(prmIntegrationService.isRightsholderTaxBeneficialOwner(RH_ID_2, FAS2_PRODUCT_FAMILY))
-            .andReturn(false).once();
+            .andReturn(false).times(2);
         expect(oracleRhTaxInformationService.getRhTaxInformation(expectedOracleRequests))
             .andReturn(loadOracleRhTaxInformation("oracle_rh_tax_information.json")).once();
         expect(prmIntegrationService.getCountries()).andReturn(buildCountries()).once();
