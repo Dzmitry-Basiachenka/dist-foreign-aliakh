@@ -46,16 +46,6 @@ public interface INtsUsageRepository {
     int findUnclassifiedUsagesCountByWrWrkInsts(Set<Long> wrWrkInsts);
 
     /**
-     * Updates under minimum usages grouped by Wr Wrk Inst in
-     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} status.
-     * Sets NTS product family and
-     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN} status.
-     *
-     * @return updated usages ids
-     */
-    List<String> updateNtsWithdrawnUsagesAndGetIds();
-
-    /**
      * Calculates service fee and net amounts for usages with given RH account number and scenario id.
      * Sets payee account number, participating flag and service fee percent.
      *

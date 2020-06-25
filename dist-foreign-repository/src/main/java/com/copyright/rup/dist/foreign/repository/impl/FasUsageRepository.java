@@ -14,6 +14,7 @@ import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -124,5 +125,15 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
         parameters.put("filter", Objects.requireNonNull(filter));
         parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
         return selectList("IFasUsageMapper.findWithAmountsAndRightsholders", parameters);
+    }
+
+    @Override
+    public List<String> updateNtsWithdrawnUsagesAndGetIds() {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put("statusToFind", UsageStatusEnum.RH_NOT_FOUND);
+        params.put("statusToSet", UsageStatusEnum.NTS_WITHDRAWN);
+        params.put("minimumTotal", new BigDecimal("100"));
+        params.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
+        return selectList("IFasUsageMapper.updateNtsWithdrawnUsagesAndGetIds", params);
     }
 }

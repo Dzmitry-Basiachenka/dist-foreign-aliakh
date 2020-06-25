@@ -103,11 +103,6 @@ public class NtsUsageService implements INtsUsageService {
     }
 
     @Override
-    public List<String> updateNtsWithdrawnUsagesAndGetIds() {
-        return ntsUsageRepository.updateNtsWithdrawnUsagesAndGetIds();
-    }
-
-    @Override
     @Transactional
     public void populatePayeeAndCalculateAmountsForScenarioUsages(Scenario scenario) {
         String userName = RupContextUtils.getUserName();

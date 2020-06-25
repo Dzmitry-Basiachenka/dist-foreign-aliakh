@@ -146,6 +146,15 @@ public interface IFasUsageService {
     void recalculateUsagesForRefresh(UsageFilter filter, Scenario scenario);
 
     /**
+     * Updates under minimum usages grouped by Wr Wrk Inst in
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} status.
+     * Sets {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN} status.
+     *
+     * @return updated usages ids
+     */
+    List<String> updateNtsWithdrawnUsagesAndGetIds();
+
+    /**
      * Gets the {@link Usage}s for reconcile based on {@link Scenario} identifier.
      *
      * @param scenarioId identifier of {@link Scenario}

@@ -165,6 +165,18 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testUpdateNtsWithdrawnUsagesAndGetIds() {
+        List<String> ids = fasUsageRepository.updateNtsWithdrawnUsagesAndGetIds();
+        assertEquals(3, ids.size());
+        assertTrue(ids.containsAll(Arrays.asList("2f2ca785-a7d3-4a7f-abd9-2bad80ac71dd",
+            "cbd6768d-a424-476e-b502-a832d9dbe85e", "d5e3c637-155a-4c05-999a-31a07e335491")));
+        usageRepository.findByIds(ids).forEach(usage -> {
+            assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
+            assertEquals("FAS", usage.getProductFamily());
+        });
+    }
+
+    @Test
     public void testFindForReconcile() {
         List<Usage> usages = fasUsageRepository.findForReconcile(SCENARIO_ID_1);
         assertEquals(2, usages.size());
