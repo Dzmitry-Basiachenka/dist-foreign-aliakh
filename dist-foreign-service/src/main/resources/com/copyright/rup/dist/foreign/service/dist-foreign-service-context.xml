@@ -18,6 +18,7 @@
     <bean id="df.service.rmsCacheService" class="com.copyright.rup.dist.foreign.integration.rms.impl.RmsRightsCacheService">
         <constructor-arg ref="dist.common.integration.rmsRightsService"/>
         <constructor-arg value="$RUP{dist.foreign.rest.rms.ttl.minutes}"/>
+        <constructor-arg value="$RUP{dist.foreign.rest.rms.rights.cache}"/>
     </bean>
 
     <bean id="df.service.rmsGrantProcessorService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsGrantProcessorService">

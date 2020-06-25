@@ -48,7 +48,7 @@ public class RmsRightsCacheServiceTest {
     @Before
     public void setUp() {
         rmsService = createMock(IRmsRightsService.class);
-        rmsAllRightsCacheService = new RmsRightsCacheService(rmsService, 10);
+        rmsAllRightsCacheService = new RmsRightsCacheService(rmsService, 10, true);
         Whitebox.setInternalState(rmsAllRightsCacheService, rmsService);
         rmsAllRightsCacheService.createCache();
     }
