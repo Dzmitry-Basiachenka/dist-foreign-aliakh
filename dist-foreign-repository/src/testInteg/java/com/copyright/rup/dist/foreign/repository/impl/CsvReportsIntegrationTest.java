@@ -471,7 +471,7 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void writeExcludeDetailsByPayeeCsvReportNoData() throws IOException {
+    public void testWriteExcludeDetailsByPayeeCsvReportNoData() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton("d13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(filter,
@@ -479,7 +479,7 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void writeExcludeDetailsByPayeeCsvReportEmptyFilter() throws IOException {
+    public void testWriteExcludeDetailsByPayeeCsvReportEmptyFilter() throws IOException {
         assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(
             new ExcludePayeeFilter(), Collections.emptySet(), outputStream), "exclude_by_payee_report_empty.csv");
     }
