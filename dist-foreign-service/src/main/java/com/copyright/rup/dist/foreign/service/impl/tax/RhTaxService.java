@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -117,14 +118,18 @@ public class RhTaxService implements IRhTaxService {
             Map<Long, RhTaxInformation> tboToTaxInfoMap =
                 oracleRhTaxInformationService.getRhTaxInformation(oracleRequests);
             Map<String, Country> countries = prmIntegrationService.getCountries();
-            result = holderToTboMap.entrySet().stream()
-                .map(entry -> {
-                    RightsholderPayeeProductFamilyHolder holder = entry.getKey();
-                    Rightsholder tbo = entry.getValue();
-                    return buildRhTaxInformation(tboToTaxInfoMap.get(tbo.getAccountNumber()), holder, countries);
-                })
-                .filter(new RhTaxInformationPredicate(numberOfDays))
-                .collect(Collectors.toList());
+            RhTaxInformationPredicate numberOfDaysPredicate = new RhTaxInformationPredicate(numberOfDays);
+            result = new ArrayList<>();
+            holderToTboMap.forEach((holder, tbo) -> {
+                Long tboAccountNumber = tbo.getAccountNumber();
+                if (tboToTaxInfoMap.containsKey(tboAccountNumber)) {
+                    RhTaxInformation rhTaxInfo =
+                        buildRhTaxInformation(tboToTaxInfoMap.get(tboAccountNumber), holder, tbo, countries);
+                    if (numberOfDaysPredicate.test(rhTaxInfo)) {
+                        result.add(rhTaxInfo);
+                    }
+                }
+            });
         } else {
             result = Collections.emptyList();
         }
@@ -141,14 +146,15 @@ public class RhTaxService implements IRhTaxService {
 
     private RhTaxInformation buildRhTaxInformation(RhTaxInformation rhTaxInfo,
                                                    RightsholderPayeeProductFamilyHolder holder,
+                                                   Rightsholder tbo,
                                                    Map<String, Country> countries) {
         RhTaxInformation result = new RhTaxInformation();
         result.setPayeeAccountNumber(holder.getPayee().getAccountNumber());
         result.setPayeeName(holder.getPayee().getName());
         result.setRorAccountNumber(holder.getRightsholder().getAccountNumber());
         result.setRorName(holder.getRightsholder().getName());
-        result.setTboAccountNumber(rhTaxInfo.getTboAccountNumber());
-        result.setTboName(rhTaxInfo.getTboName());
+        result.setTboAccountNumber(tbo.getAccountNumber());
+        result.setTboName(tbo.getName());
         result.setProductFamily(holder.getProductFamily());
         result.setTaxOnFile(rhTaxInfo.getTaxOnFile());
         result.setNotificationsSent(rhTaxInfo.getNotificationsSent());
