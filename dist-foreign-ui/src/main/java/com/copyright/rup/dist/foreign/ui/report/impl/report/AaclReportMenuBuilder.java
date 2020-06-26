@@ -25,6 +25,7 @@ public class AaclReportMenuBuilder implements IReportMenuBuilder {
         String workSharesByAggLcClassSummaryReport =
             ForeignUi.getMessage("menu.report.work_shares_by_agg_lc_class_summary");
         String aaclBaselineUsagesReport = ForeignUi.getMessage("menu.report.baseline_usages_report");
+        String taxNotificationReport = ForeignUi.getMessage("menu.report.tax_notification_report");
         rootItem.addItem(workSharesByAggLcClassReport, menuItem -> widget.openReportWindow(workSharesByAggLcClassReport,
             controller.getWorkSharesByAggLcClassReportController()));
         rootItem.addItem(workSharesByAggLcClassSummaryReport,
@@ -34,5 +35,7 @@ public class AaclReportMenuBuilder implements IReportMenuBuilder {
             controller.getAaclBaselineUsagesReportController()));
         rootItem.addItem(ForeignUi.getMessage("menu.report.undistributed_liabilities"),
             menuItem -> widget.generateReport(controller.getAaclUndistributedLiabilitiesReportStreamSource()));
+        rootItem.addItem(taxNotificationReport, menuItem ->
+            widget.openReportWindow(taxNotificationReport, controller.getTaxNotificationReportController()));
     }
 }

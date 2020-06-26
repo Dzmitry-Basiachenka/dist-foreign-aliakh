@@ -24,6 +24,7 @@ public class FasReportMenuBuilder implements IReportMenuBuilder {
         String serviceFeeTrueUpReport = ForeignUi.getMessage("menu.report.service_fee_true_up");
         String summaryMarketReport = ForeignUi.getMessage("menu.report.market_summary");
         String ownershipAdjustmentReport = ForeignUi.getMessage("menu.report.ownership_adjustment_report");
+        String taxNotificationReport = ForeignUi.getMessage("menu.report.tax_notification_report");
         rootItem.addItem(ForeignUi.getMessage("menu.report.batch_summary"), menuItem ->
             widget.generateReport(controller.getFasBatchSummaryReportStreamSource()));
         rootItem.addItem(summaryMarketReport, menuItem ->
@@ -37,5 +38,7 @@ public class FasReportMenuBuilder implements IReportMenuBuilder {
                 controller.getUndistributedLiabilitiesReportController()));
         rootItem.addItem(ownershipAdjustmentReport, menuItem ->
             widget.openReportWindow(ownershipAdjustmentReport, controller.getOwnershipAdjustmentReportController()));
+        rootItem.addItem(taxNotificationReport, menuItem ->
+            widget.openReportWindow(taxNotificationReport, controller.getTaxNotificationReportController()));
     }
 }

@@ -20,7 +20,10 @@ public class NtsReportMenuBuilder implements IReportMenuBuilder {
 
     @Override
     public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
+        String taxNotificationReport = ForeignUi.getMessage("menu.report.tax_notification_report");
         rootItem.addItem(ForeignUi.getMessage("menu.report.nts_batch_summary"), menuItem ->
             widget.generateReport(controller.getNtsWithdrawnBatchSummaryReportStreamSource()));
+        rootItem.addItem(taxNotificationReport, menuItem ->
+            widget.openReportWindow(taxNotificationReport, controller.getTaxNotificationReportController()));
     }
 }
