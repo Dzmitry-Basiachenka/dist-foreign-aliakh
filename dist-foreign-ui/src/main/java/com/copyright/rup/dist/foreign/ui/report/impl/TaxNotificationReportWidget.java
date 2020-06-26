@@ -126,9 +126,11 @@ public class TaxNotificationReportWidget extends Window implements ITaxNotificat
         numberOfDaysField.addValueChangeListener(event -> updateExportButtonState());
         binder = new Binder<>();
         binder.forField(numberOfDaysField)
-            .withValidator(StringUtils::isNotBlank, StringUtils.EMPTY)
-            .withConverter(new StringToIntegerConverter(StringUtils.EMPTY))
-            .withValidator(new IntegerRangeValidator(StringUtils.EMPTY, DAYS_MIN_VALUE, DAYS_MAX_VALUE))
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withConverter(new StringToIntegerConverter(ForeignUi.getMessage("field.error.not_numeric")))
+            .withValidator(new IntegerRangeValidator(
+                ForeignUi.getMessage("field.error.positive_number_or_zero_and_max_value", DAYS_MAX_VALUE + 1),
+                DAYS_MIN_VALUE, DAYS_MAX_VALUE))
             .bind(s -> s, (s, v) -> s = v)
             .validate();
     }
