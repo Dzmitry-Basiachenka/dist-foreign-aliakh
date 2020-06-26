@@ -1,3 +1,13 @@
+10.1.10
+-
+* B-58556 FDA: Tax Notification Report in FDA: adjust service logic so case, when no information was received from Oracle, is handled correctly
+* B-59199 Tech Debt: FDA: fix vulnerabilities postgres
+* B-58557 FDA: Ability to Export FAS/FAS2 Excluded Payee: make changes based on comments in CR-DIST-FOREIGN-176
+* B-59772 FDA: Improve RMS integration: implement RUP property to switch off RMS rights caching
+* B-58556 FDA: Tax Notification Report in FDA: implement UI for report
+* B-59560 FDA:  View/Export NTS withdrawn details on FAS/FAS2 usage tab: make changes based on CR-DIST-FOREIGN-178
+* B-58556 FDA: Tax Notification Report in FDA: adjust 'number of days' field validation message
+
 10.1.9
 -
 * B-58556 FDA: Tax Notification Report in FDA: get rid of using MyBatis API in ReportService
