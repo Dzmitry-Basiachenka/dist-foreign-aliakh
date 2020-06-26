@@ -123,15 +123,6 @@ public class NtsUsageServiceTest {
     }
 
     @Test
-    public void testUpdateNtsWithdrawnUsagesAndGetIds() {
-        List<String> ids = Collections.singletonList("55e6ab53-3fb2-494f-8cb2-94ebf8a9f8d3");
-        expect(ntsUsageRepository.updateNtsWithdrawnUsagesAndGetIds()).andReturn(ids).once();
-        replay(ntsUsageRepository);
-        assertEquals(ids, ntsUsageService.updateNtsWithdrawnUsagesAndGetIds());
-        verify(ntsUsageRepository);
-    }
-
-    @Test
     public void testPopulatePayeeAndCalculateAmountsForScenarioUsages() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();

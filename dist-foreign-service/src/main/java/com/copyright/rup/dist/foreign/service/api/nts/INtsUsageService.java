@@ -42,15 +42,6 @@ public interface INtsUsageService {
     int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts);
 
     /**
-     * Updates under minimum usages grouped by Wr Wrk Inst in
-     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} status.
-     * Sets product family and {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN} status.
-     *
-     * @return updated usages ids
-     */
-    List<String> updateNtsWithdrawnUsagesAndGetIds();
-
-    /**
      * Populates payee and calculates amounts for usages of given scenario.
      * Calculates service fee and service fee amount based on RHs participation status,
      * proportionally distributes Post Service Fee Amount among usages and updates gross and net amounts,

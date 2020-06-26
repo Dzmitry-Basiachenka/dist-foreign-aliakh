@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -91,16 +90,6 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
                     selectOne("INtsUsageMapper.findUnclassifiedUsagesCountByWrWrkInsts", parameters));
             });
         return count.get();
-    }
-
-    @Override
-    public List<String> updateNtsWithdrawnUsagesAndGetIds() {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
-        params.put("statusToFind", UsageStatusEnum.RH_NOT_FOUND);
-        params.put("statusToSet", UsageStatusEnum.NTS_WITHDRAWN);
-        params.put("minimumTotal", new BigDecimal("100"));
-        params.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
-        return selectList("INtsUsageMapper.updateNtsWithdrawnUsagesAndGetIds", params);
     }
 
     @Override

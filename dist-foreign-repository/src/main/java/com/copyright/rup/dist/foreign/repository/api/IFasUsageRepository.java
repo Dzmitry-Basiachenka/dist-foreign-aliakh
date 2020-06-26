@@ -95,4 +95,13 @@ public interface IFasUsageRepository {
      * @return the list of {@link Usage}s only with information about gross amount, net amount and reported value
      */
     List<Usage> findWithAmountsAndRightsholders(UsageFilter filter);
+
+    /**
+     * Updates under minimum usages grouped by Wr Wrk Inst in
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} status.
+     * Sets {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN} status.
+     *
+     * @return updated usages ids
+     */
+    List<String> updateNtsWithdrawnUsagesAndGetIds();
 }

@@ -113,6 +113,15 @@ public class FasUsageServiceTest {
     }
 
     @Test
+    public void testUpdateNtsWithdrawnUsagesAndGetIds() {
+        List<String> ids = Collections.singletonList("55e6ab53-3fb2-494f-8cb2-94ebf8a9f8d3");
+        expect(fasUsageRepository.updateNtsWithdrawnUsagesAndGetIds()).andReturn(ids).once();
+        replay(fasUsageRepository);
+        assertEquals(ids, fasUsageRepository.updateNtsWithdrawnUsagesAndGetIds());
+        verify(fasUsageRepository);
+    }
+
+    @Test
     public void testGetUsagesCount() {
         UsageFilter filter = new UsageFilter();
         filter.setFiscalYear(2017);

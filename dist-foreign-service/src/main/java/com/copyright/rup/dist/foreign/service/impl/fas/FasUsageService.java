@@ -271,6 +271,11 @@ public class FasUsageService implements IFasUsageService {
     }
 
     @Override
+    public List<String> updateNtsWithdrawnUsagesAndGetIds() {
+        return fasUsageRepository.updateNtsWithdrawnUsagesAndGetIds();
+    }
+
+    @Override
     public Long getClaAccountNumber() {
         return claAccountNumber;
     }

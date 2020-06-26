@@ -21,12 +21,13 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
-import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
+import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
@@ -68,7 +69,7 @@ public class RightsService implements IRightsService {
     @Autowired
     private IUsageService usageService;
     @Autowired
-    private INtsUsageService ntsUsageService;
+    private IFasUsageService fasUsageService;
     @Autowired
     private IAaclUsageService aaclUsageService;
     @Autowired
@@ -224,7 +225,7 @@ public class RightsService implements IRightsService {
 
     private void updateNtsWithdrawnUsages() {
         LOGGER.info("Update RH_NOT_FOUND usages to NTS_WITHDRAWN status. Started.");
-        List<String> updatedIds = ntsUsageService.updateNtsWithdrawnUsagesAndGetIds();
+        List<String> updatedIds = fasUsageService.updateNtsWithdrawnUsagesAndGetIds();
         if (CollectionUtils.isNotEmpty(updatedIds)) {
             updatedIds.forEach(usageId ->
                 auditService.logAction(usageId, UsageActionTypeEnum.ELIGIBLE_FOR_NTS, NTS_WITHDRAWN_AUDIT_MESSAGE)

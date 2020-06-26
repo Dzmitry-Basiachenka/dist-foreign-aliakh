@@ -154,26 +154,6 @@
             and coalesce(wc.classification, '') != #{excludeClassification}
     </sql>
 
-    <select id="updateNtsWithdrawnUsagesAndGetIds" parameterType="map" resultType="string">
-        with works as (
-            select
-                df_usage_batch_uid,
-                wr_wrk_inst,
-                sum(gross_amount)
-            from ${schema}.df_usage
-            where status_ind  = #{statusToFind}
-            group by wr_wrk_inst, df_usage_batch_uid
-            having sum(gross_amount) &lt; #{minimumTotal}
-        )
-
-        update ${schema}.df_usage
-        set
-            status_ind = #{statusToSet}
-        where df_usage_batch_uid in (select df_usage_batch_uid from works)
-            and wr_wrk_inst in (select wr_wrk_inst from works)
-        returning df_usage_uid
-    </select>
-
     <update id="calculateAmountsAndUpdatePayeeByAccountNumber" parameterType="map">
         with u as (
             update ${schema}.df_usage
