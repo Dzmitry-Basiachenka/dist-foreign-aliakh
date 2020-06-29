@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.rights;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.domain.GrantPriority;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.RmsGrant;
 import com.copyright.rup.dist.common.domain.RmsGrant.RightStatusEnum;
@@ -8,6 +10,7 @@ import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
+import com.copyright.rup.dist.common.repository.api.IGrantPriorityRepository;
 import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantProcessorService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
@@ -36,7 +39,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -58,6 +60,7 @@ import java.util.stream.Collectors;
 @Service
 public class RightsService implements IRightsService {
 
+    private static final int PRODUCT_FAMILIES_COUNT = 1;
     private static final String PRINT_TYPE_OF_USE = "PRINT";
     private static final String DIGITAL_TYPE_OF_USE = "DIGITAL";
     private static final String NTS_WITHDRAWN_AUDIT_MESSAGE =
@@ -85,6 +88,8 @@ public class RightsService implements IRightsService {
     @Autowired
     @Qualifier("usageChainChunkExecutor")
     private IChainExecutor<Usage> chainExecutor;
+    @Autowired
+    private IGrantPriorityRepository grantPriorityRepository;
 
     @Override
     @Transactional
@@ -131,17 +136,15 @@ public class RightsService implements IRightsService {
     @Override
     @Transactional
     public JobInfo updateRightsSentForRaUsages() {
-        List<String> fasProductFamilies =
-            Arrays.asList(FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY);
         JobInfo jobInfo = null;
-        for (String productFamily : fasProductFamilies) {
+        for (String productFamily : FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET) {
             List<Usage> usages =
                 usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, productFamily);
             if (CollectionUtils.isNotEmpty(usages)) {
                 LogUtils.ILogWrapper usagesCount = LogUtils.size(usages);
                 String message = String.format("ProductFamily=%s, UsagesCount=%s; ", productFamily, usagesCount);
                 LOGGER.info("Update rights for SEND_FOR_RA usages. Started. {}", message);
-                updateSentForRaUsagesRightsholders(usages);
+                updateSentForRaUsagesRightsholders(usages, productFamily);
                 LOGGER.info("Update rights for SEND_FOR_RA usages. Finished. {}", message);
                 if (Objects.isNull(jobInfo)) {
                     jobInfo = new JobInfo(JobStatusEnum.FINISHED, message);
@@ -168,14 +171,15 @@ public class RightsService implements IRightsService {
     @Transactional
     public void updateRights(List<Usage> usages, boolean logAction) {
         if (CollectionUtils.isNotEmpty(usages)) {
+            String productFamily = validateAndGetProductFamily(usages);
             List<Long> wrWrkInsts = usages.stream()
                 .map(Usage::getWrWrkInst)
                 .distinct()
                 .collect(Collectors.toList());
+            Set<String> licenseTypes = getLicenseTypes(productFamily);
             Map<Long, Long> wrWrkInstToRhAccountNumberMap =
-                rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(wrWrkInsts, usages.get(0).getProductFamily(),
-                    FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(),
-                    FdaConstants.FAS_FAS2_NTS_LICENSE_TYPE_SET);
+                rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(wrWrkInsts, productFamily,
+                    FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(), licenseTypes);
             usages.forEach(usage -> {
                 Long wrWrkInst = usage.getWrWrkInst();
                 Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
@@ -198,43 +202,45 @@ public class RightsService implements IRightsService {
     @Override
     @Transactional
     public void updateAaclRights(List<Usage> usages) {
-        Map<LocalDate, List<Usage>> batchPeriodEndDatesToUsages = usages
-            .stream()
-            .collect(Collectors.groupingBy(usage -> usage.getAaclUsage().getBatchPeriodEndDate()));
-        batchPeriodEndDatesToUsages.forEach((batchPeriodEndDate, groupedUsages) -> {
-            List<Long> wrWrkInsts = groupedUsages
+        if (CollectionUtils.isNotEmpty(usages)) {
+            String productFamily = validateAndGetProductFamily(usages);
+            Map<LocalDate, List<Usage>> batchPeriodEndDatesToUsages = usages
                 .stream()
-                .map(Usage::getWrWrkInst)
-                .collect(Collectors.toList());
-            Map<Long, List<RmsGrant>> wrWrkInstToGrants = rmsRightsService.getGrants(wrWrkInsts,
-                batchPeriodEndDate, Collections.singleton(RightStatusEnum.GRANT.name()),
-                ImmutableSet.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE),
-                Collections.singleton(FdaConstants.AACL_LICENSE_TYPE))
-                .stream()
-                .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
-            groupedUsages.forEach(usage -> {
-                Set<RmsGrant> eligibleGrants = wrWrkInstToGrants
-                    .getOrDefault(usage.getWrWrkInst(), Collections.emptyList())
+                .collect(Collectors.groupingBy(usage -> usage.getAaclUsage().getBatchPeriodEndDate()));
+            batchPeriodEndDatesToUsages.forEach((batchPeriodEndDate, groupedUsages) -> {
+                List<Long> wrWrkInsts = groupedUsages
                     .stream()
-                    .filter(grant -> FdaConstants.AACL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
-                    .collect(Collectors.toSet());
-                RmsGrant grant = ObjectUtils.defaultIfNull(
-                    findGrantByTypeOfUse(eligibleGrants, DIGITAL_TYPE_OF_USE),
-                    findGrantByTypeOfUse(eligibleGrants, PRINT_TYPE_OF_USE));
-                if (Objects.nonNull(grant)) {
-                    Long rhAccountNumber = grant.getWorkGroupOwnerOrgNumber().longValueExact();
-                    usage.setRightsholder(buildRightsholder(rhAccountNumber));
-                    usage.setStatus(UsageStatusEnum.RH_FOUND);
-                    usage.getAaclUsage().setRightLimitation(
-                        DIGITAL_TYPE_OF_USE.equals(grant.getTypeOfUse()) ? "ALL" : PRINT_TYPE_OF_USE);
-                    aaclUsageService.updateProcessedUsage(usage);
-                    logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
-                        String.format("Rightsholder account %s was found in RMS", rhAccountNumber), true);
-                } else {
-                    usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
-                }
+                    .map(Usage::getWrWrkInst)
+                    .collect(Collectors.toList());
+                Map<Long, List<RmsGrant>> wrWrkInstToGrants = rmsRightsService.getGrants(wrWrkInsts,
+                    batchPeriodEndDate, Collections.singleton(RightStatusEnum.GRANT.name()),
+                    ImmutableSet.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE), getLicenseTypes(productFamily))
+                    .stream()
+                    .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
+                groupedUsages.forEach(usage -> {
+                    Set<RmsGrant> eligibleGrants = wrWrkInstToGrants
+                        .getOrDefault(usage.getWrWrkInst(), Collections.emptyList())
+                        .stream()
+                        .filter(grant -> FdaConstants.AACL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
+                        .collect(Collectors.toSet());
+                    RmsGrant grant = ObjectUtils.defaultIfNull(
+                        findGrantByTypeOfUse(eligibleGrants, DIGITAL_TYPE_OF_USE),
+                        findGrantByTypeOfUse(eligibleGrants, PRINT_TYPE_OF_USE));
+                    if (Objects.nonNull(grant)) {
+                        Long rhAccountNumber = grant.getWorkGroupOwnerOrgNumber().longValueExact();
+                        usage.setRightsholder(buildRightsholder(rhAccountNumber));
+                        usage.setStatus(UsageStatusEnum.RH_FOUND);
+                        usage.getAaclUsage().setRightLimitation(
+                            DIGITAL_TYPE_OF_USE.equals(grant.getTypeOfUse()) ? "ALL" : PRINT_TYPE_OF_USE);
+                        aaclUsageService.updateProcessedUsage(usage);
+                        logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
+                            String.format("Rightsholder account %s was found in RMS", rhAccountNumber), true);
+                    } else {
+                        usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                    }
+                });
             });
-        });
+        }
     }
 
     private RmsGrant findGrantByTypeOfUse(Set<RmsGrant> grants, String typeOfUse) {
@@ -274,14 +280,13 @@ public class RightsService implements IRightsService {
         return rightsholder;
     }
 
-    private void updateSentForRaUsagesRightsholders(List<Usage> usages) {
+    private void updateSentForRaUsagesRightsholders(List<Usage> usages, String productFamily) {
         Map<Long, List<Usage>> wrWrkInstToUsagesMap = usages.stream()
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));
-        String productFamily = usages.iterator().next().getProductFamily();
         Map<Long, Long> wrWrkInstToAccountNumber =
             rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsagesMap.keySet()),
                 productFamily, FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(),
-                FdaConstants.FAS_FAS2_NTS_LICENSE_TYPE_SET);
+                getLicenseTypes(productFamily));
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
             List<Usage> usagesToUpdate = wrWrkInstToUsagesMap.get(wrWrkInst);
             Set<String> usageIds = usagesToUpdate.stream().map(Usage::getId).collect(Collectors.toSet());
@@ -291,5 +296,21 @@ public class RightsService implements IRightsService {
             chainExecutor.execute(usagesToUpdate, ChainProcessorTypeEnum.ELIGIBILITY);
         });
         rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
+    }
+
+    private Set<String> getLicenseTypes(String productFamily) {
+        return grantPriorityRepository.findByProductFamily(productFamily).stream()
+            .map(GrantPriority::getLicenseType)
+            .collect(Collectors.toSet());
+    }
+
+    private String validateAndGetProductFamily(List<Usage> usages) {
+        Set<String> productFamilies = usages.stream()
+            .map(Usage::getProductFamily)
+            .collect(Collectors.toSet());
+        if (PRODUCT_FAMILIES_COUNT < productFamilies.size()) {
+            throw new RupRuntimeException("The list of usages to update rights contains multiple product families");
+        }
+        return productFamilies.iterator().next();
     }
 }
