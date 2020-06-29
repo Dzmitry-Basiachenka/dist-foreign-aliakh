@@ -27,7 +27,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
@@ -167,27 +166,32 @@ public class RightsService implements IRightsService {
     @Override
     @Transactional
     public void updateRights(List<Usage> usages, boolean logAction) {
-        usages.forEach(usage -> {
-            Long wrWrkInst = usage.getWrWrkInst();
-            Set<String> usageId = Collections.singleton(usage.getId());
+        if (CollectionUtils.isNotEmpty(usages)) {
+            List<Long> wrWrkInsts = usages.stream()
+                .map(Usage::getWrWrkInst)
+                .distinct()
+                .collect(Collectors.toList());
             Map<Long, Long> wrWrkInstToRhAccountNumberMap =
-                rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst),
-                    usage.getProductFamily(), FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(),
+                rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(wrWrkInsts, usages.get(0).getProductFamily(),
+                    FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(),
                     FdaConstants.FAS_FAS2_NTS_LICENSE_TYPE_SET);
-            Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
-            if (Objects.nonNull(rhAccountNumber)) {
-                usage.setRightsholder(buildRightsholder(rhAccountNumber));
-                usage.setStatus(UsageStatusEnum.RH_FOUND);
-                usageService.updateProcessedUsage(usage);
-                logAction(usageId, UsageActionTypeEnum.RH_FOUND,
-                    String.format("Rightsholder account %s was found in RMS", rhAccountNumber), logAction);
-            } else {
-                usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
-                usageService.updateProcessedUsage(usage);
-                logAction(usageId, UsageActionTypeEnum.RH_NOT_FOUND,
-                    String.format("Rightsholder account for %s was not found in RMS", wrWrkInst), logAction);
-            }
-        });
+            usages.forEach(usage -> {
+                Long wrWrkInst = usage.getWrWrkInst();
+                Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
+                if (Objects.nonNull(rhAccountNumber)) {
+                    usage.setRightsholder(buildRightsholder(rhAccountNumber));
+                    usage.setStatus(UsageStatusEnum.RH_FOUND);
+                    usageService.updateProcessedUsage(usage);
+                    logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
+                        String.format("Rightsholder account %s was found in RMS", rhAccountNumber), logAction);
+                } else {
+                    usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                    usageService.updateProcessedUsage(usage);
+                    logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_NOT_FOUND,
+                        String.format("Rightsholder account for %s was not found in RMS", wrWrkInst), logAction);
+                }
+            });
+        }
     }
 
     @Override
