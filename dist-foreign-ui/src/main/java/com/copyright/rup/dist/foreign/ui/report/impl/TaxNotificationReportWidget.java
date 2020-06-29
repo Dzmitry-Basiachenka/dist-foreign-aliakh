@@ -29,6 +29,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -114,7 +115,9 @@ public class TaxNotificationReportWidget extends Window implements ITaxNotificat
         grid.setSizeFull();
         grid.setSelectionMode(SelectionMode.MULTI);
         grid.addColumn(Scenario::getName)
-            .setCaption(ForeignUi.getMessage("table.column.scenario_name"));
+            .setCaption(ForeignUi.getMessage("table.column.scenario_name"))
+            .setComparator((scenario1, scenario2) ->
+                Comparator.comparing(Scenario::getName, String::compareToIgnoreCase).compare(scenario1, scenario2));
         grid.addSelectionListener(event -> updateExportButtonState());
     }
 
@@ -129,7 +132,7 @@ public class TaxNotificationReportWidget extends Window implements ITaxNotificat
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .withValidator(new IntegerRangeValidator(
-                ForeignUi.getMessage("field.error.positive_number_or_zero_and_max_value", DAYS_MAX_VALUE + 1),
+                ForeignUi.getMessage("field.error.positive_number_or_zero_and_max_value", DAYS_MAX_VALUE),
                 DAYS_MIN_VALUE, DAYS_MAX_VALUE))
             .bind(s -> s, (s, v) -> s = v)
             .validate();
