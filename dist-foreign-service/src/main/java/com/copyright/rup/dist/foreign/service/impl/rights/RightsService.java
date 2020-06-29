@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -193,29 +194,42 @@ public class RightsService implements IRightsService {
     @Override
     @Transactional
     public void updateAaclRights(List<Usage> usages) {
-        usages.forEach(usage -> {
-            Long wrWrkInst = usage.getWrWrkInst();
-            Set<RmsGrant> eligibleGrants = rmsRightsService.getGrants(Collections.singletonList(wrWrkInst),
-                usage.getAaclUsage().getBatchPeriodEndDate(), Collections.singleton(RightStatusEnum.GRANT.name()),
+        Map<LocalDate, List<Usage>> batchPeriodEndDatesToUsages = usages
+            .stream()
+            .collect(Collectors.groupingBy(usage -> usage.getAaclUsage().getBatchPeriodEndDate()));
+        batchPeriodEndDatesToUsages.forEach((batchPeriodEndDate, groupedUsages) -> {
+            List<Long> wrWrkInsts = groupedUsages
+                .stream()
+                .map(Usage::getWrWrkInst)
+                .collect(Collectors.toList());
+            Map<Long, List<RmsGrant>> wrWrkInstToGrants = rmsRightsService.getGrants(wrWrkInsts,
+                batchPeriodEndDate, Collections.singleton(RightStatusEnum.GRANT.name()),
                 ImmutableSet.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE),
                 Collections.singleton(FdaConstants.AACL_LICENSE_TYPE))
                 .stream()
-                .filter(grant -> FdaConstants.AACL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
-                .collect(Collectors.toSet());
-            RmsGrant result = ObjectUtils.defaultIfNull(findGrantByTypeOfUse(eligibleGrants, DIGITAL_TYPE_OF_USE),
-                findGrantByTypeOfUse(eligibleGrants, PRINT_TYPE_OF_USE));
-            if (Objects.nonNull(result)) {
-                Long rhAccountNumber = result.getWorkGroupOwnerOrgNumber().longValueExact();
-                usage.setRightsholder(buildRightsholder(rhAccountNumber));
-                usage.setStatus(UsageStatusEnum.RH_FOUND);
-                usage.getAaclUsage()
-                    .setRightLimitation(DIGITAL_TYPE_OF_USE.equals(result.getTypeOfUse()) ? "ALL" : PRINT_TYPE_OF_USE);
-                aaclUsageService.updateProcessedUsage(usage);
-                logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
-                    String.format("Rightsholder account %s was found in RMS", rhAccountNumber), true);
-            } else {
-                usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
-            }
+                .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
+            groupedUsages.forEach(usage -> {
+                Set<RmsGrant> eligibleGrants = wrWrkInstToGrants
+                    .getOrDefault(usage.getWrWrkInst(), Collections.emptyList())
+                    .stream()
+                    .filter(grant -> FdaConstants.AACL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
+                    .collect(Collectors.toSet());
+                RmsGrant grant = ObjectUtils.defaultIfNull(
+                    findGrantByTypeOfUse(eligibleGrants, DIGITAL_TYPE_OF_USE),
+                    findGrantByTypeOfUse(eligibleGrants, PRINT_TYPE_OF_USE));
+                if (Objects.nonNull(grant)) {
+                    Long rhAccountNumber = grant.getWorkGroupOwnerOrgNumber().longValueExact();
+                    usage.setRightsholder(buildRightsholder(rhAccountNumber));
+                    usage.setStatus(UsageStatusEnum.RH_FOUND);
+                    usage.getAaclUsage().setRightLimitation(
+                        DIGITAL_TYPE_OF_USE.equals(grant.getTypeOfUse()) ? "ALL" : PRINT_TYPE_OF_USE);
+                    aaclUsageService.updateProcessedUsage(usage);
+                    logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
+                        String.format("Rightsholder account %s was found in RMS", rhAccountNumber), true);
+                } else {
+                    usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                }
+            });
         });
     }
 
