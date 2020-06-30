@@ -1,3 +1,9 @@
+10.1.11
+-
+* B-58556 FDA: Tax Notification Report in FDA: make scenario sorting case insensitive, adjust 'number of days' field validation message
+* B-59772 FDA: Improve RMS integration: refactor RightsService.updateAaclRights to read rights for list of wrWrkInst
+* B-59772 FDA: Improve RMS integration: Refactor RightsServices to read  rights by list of wrWrkInst for FAS/FAS2/NTS product families
+
 10.1.10
 -
 * B-58556 FDA: Tax Notification Report in FDA: adjust service logic so case, when no information was received from Oracle, is handled correctly
