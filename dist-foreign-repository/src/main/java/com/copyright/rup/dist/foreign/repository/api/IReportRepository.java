@@ -289,4 +289,12 @@ public interface IReportRepository {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeAaclUndistributedLiabilitiesCsvReport(OutputStream outputStream);
+
+    /**
+     * Writes NTS Undistributed Liabilities Report into the output stream in csv format.
+     *
+     * @param estimatedServiceFee estimated service fee
+     * @param outputStream        instance of {@link OutputStream}
+     */
+    void writeNtsUndistributedLiabilitiesCsvReport(BigDecimal estimatedServiceFee, OutputStream outputStream);
 }

@@ -492,6 +492,14 @@ public class CsvReportsIntegrationTest {
             Collections.singleton(7000813806L), outputStream), "exclude_by_payee_report.csv");
     }
 
+    @Test
+    public void testWriteNtsUndistributedLiabilitiesCsvReport() throws IOException {
+        assertFiles(
+            outputStream -> reportRepository.writeNtsUndistributedLiabilitiesCsvReport(DEFAULT_ESTIMATED_SERVICE_FEE,
+                outputStream),
+            "nts_undistributed_liabilities_report.csv");
+    }
+
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         reportWriter.accept(outputStream);

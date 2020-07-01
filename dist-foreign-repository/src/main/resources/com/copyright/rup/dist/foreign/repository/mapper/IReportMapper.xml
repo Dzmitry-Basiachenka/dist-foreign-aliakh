@@ -15,6 +15,13 @@
         <result property="withdrawnGrossAmount" column="withdrawn_gross_amount"/>
     </resultMap>
 
+    <resultMap id="ntsUndistributedLiabilitiesReportDtoResultMap" type="UndistributedLiabilitiesReportDto">
+        <result property="grossAmount" column="usages_gross_amount"/>
+        <result property="estimatedServiceFeeAmount" column="estimated_service_fee_amount"/>
+        <result property="estimatedNetAmount" column="estimated_net_amount"/>
+        <result property="estimatedServiceFee" column="estimated_service_fee"/>
+    </resultMap>
+
     <resultMap id="serviceFeeTrueUpReportDtoResultMap" type="ServiceFeeTrueUpReportDto">
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="rroName" column="rro_name"/>
@@ -150,6 +157,30 @@
             wr_wrk_inst, system_title, rh.rh_account_number, rh.name
         order by alc.aggregate_licensee_class_id
     </sql>
+
+    <select id="findNtsUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="ntsUndistributedLiabilitiesReportDtoResultMap">
+        select
+            usages_gross_amount,
+            usages_gross_amount * #{estimatedServiceFee}  as estimated_service_fee_amount,
+            usages_gross_amount - (usages_gross_amount * #{estimatedServiceFee}) estimated_net_amount,
+            #{estimatedServiceFee} as estimated_service_fee
+        from (
+            select
+                sum(u.gross_amount) usages_gross_amount
+            from apps.df_usage u
+            join apps.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+            left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map sufb on ub.df_usage_batch_uid = sufb.df_usage_batch_uid
+            left join ${schema}.df_scenario_usage_filter f on sufb.df_scenario_usage_filter_uid = f.df_scenario_usage_filter_uid
+            left join ${schema}.df_scenario s on f.df_scenario_uid = s.df_scenario_uid
+            where ub.product_family = #{productFamily}
+                and (s.status_ind is null or s.status_ind not in
+                    <foreach collection="statuses" item="status" open="(" separator="," close=")">
+                        #{status}
+                    </foreach>)
+        ) as reportInfo
+        where usages_gross_amount != 0
+        group by reportInfo.usages_gross_amount
+    </select>
 
     <select id="findUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="undistributedLiabilitiesReportDtoResultMap">
         select
