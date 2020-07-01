@@ -38,6 +38,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.fas.SummaryMarketRepor
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.UndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.AuditNtsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsScenarioUsagesCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
@@ -393,6 +394,20 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             parameters.put("statuses", Arrays.asList(ScenarioStatusEnum.IN_PROGRESS,
                 ScenarioStatusEnum.SUBMITTED, ScenarioStatusEnum.APPROVED));
             getTemplate().select("IReportMapper.findAaclUndistributedLiabilitiesReportFundPools", parameters, handler);
+        }
+    }
+
+    @Override
+    public void writeNtsUndistributedLiabilitiesCsvReport(BigDecimal estimatedServiceFee,
+                                                          OutputStream outputStream) {
+        try (NtsUndistributedLiabilitiesReportHandler handler =
+                 new NtsUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+            parameters.put("estimatedServiceFee", estimatedServiceFee);
+            parameters.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
+            parameters.put("statuses", Arrays.asList(ScenarioStatusEnum.IN_PROGRESS,
+                ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
+            getTemplate().select("IReportMapper.findNtsUndistributedLiabilitiesReportDtos", parameters, handler);
         }
     }
 
