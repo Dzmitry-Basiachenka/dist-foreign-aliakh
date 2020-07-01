@@ -119,6 +119,7 @@ public class TaxNotificationReportWidget extends Window implements ITaxNotificat
             .setComparator((scenario1, scenario2) ->
                 Comparator.comparing(Scenario::getName, String::compareToIgnoreCase).compare(scenario1, scenario2));
         grid.addSelectionListener(event -> updateExportButtonState());
+        VaadinUtils.addComponentStyle(grid, "tax-notification-report-scenarios-grid");
     }
 
     private void initNumberOfDaysField() {
@@ -127,6 +128,7 @@ public class TaxNotificationReportWidget extends Window implements ITaxNotificat
         numberOfDaysField.setWidth(100, Sizeable.Unit.PERCENTAGE);
         numberOfDaysField.setRequiredIndicatorVisible(true);
         numberOfDaysField.addValueChangeListener(event -> updateExportButtonState());
+        VaadinUtils.addComponentStyle(numberOfDaysField, "number-of-days-field");
         binder = new Binder<>();
         binder.forField(numberOfDaysField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
