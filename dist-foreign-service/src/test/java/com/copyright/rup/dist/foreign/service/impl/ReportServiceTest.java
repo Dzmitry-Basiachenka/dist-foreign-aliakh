@@ -461,6 +461,16 @@ public class ReportServiceTest {
     }
 
     @Test
+    public void testWriteNtsUndistributedLiabilitiesCsvReport() {
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeNtsUndistributedLiabilitiesCsvReport(DEFAULT_ESTIMATED_SERVICE_FEE, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeNtsUndistributedLiabilitiesReport(outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
     public void writeTaxNotificationCsvReport() throws IOException {
         Set<String> scenarioIds = Collections.singleton("629c078f-462f-4ba6-bebd-8d558ccc12aa");
         expect(rhTaxService.getRhTaxInformation(scenarioIds, 15))

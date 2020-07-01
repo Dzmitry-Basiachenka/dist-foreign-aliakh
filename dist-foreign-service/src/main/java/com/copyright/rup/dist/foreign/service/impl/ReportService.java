@@ -207,6 +207,11 @@ public class ReportService implements IReportService {
     }
 
     @Override
+    public void writeNtsUndistributedLiabilitiesReport(OutputStream outputStream) {
+        reportRepository.writeNtsUndistributedLiabilitiesCsvReport(defaultEstimatedServiceFee, outputStream);
+    }
+
+    @Override
     public void writeTaxNotificationCsvReport(Set<String> scenarioIds, int numberOfDays, OutputStream outputStream) {
         List<RhTaxInformation> rhTaxInformation = rhTaxService.getRhTaxInformation(scenarioIds, numberOfDays);
         try (RhTaxInformationCsvReportWriter writer = new RhTaxInformationCsvReportWriter(outputStream)) {
