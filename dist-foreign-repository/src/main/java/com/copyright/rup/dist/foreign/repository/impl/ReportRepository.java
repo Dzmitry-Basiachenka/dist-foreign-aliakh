@@ -405,8 +405,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
             parameters.put("estimatedServiceFee", estimatedServiceFee);
             parameters.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
-            parameters.put("statuses", Arrays.asList(ScenarioStatusEnum.IN_PROGRESS,
-                ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
+            parameters.put("statuses", Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
             getTemplate().select("IReportMapper.findNtsUndistributedLiabilitiesReportDtos", parameters, handler);
         }
     }
