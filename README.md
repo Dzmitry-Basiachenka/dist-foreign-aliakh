@@ -1,3 +1,7 @@
+10.1.13
+-
+* B-58556 FDA: Tax Notification Report in FDA: add sorting for report entries
+
 10.1.12
 -
 * B-58556 FDA: Tax Notification Report in FDA: add styles to window components
