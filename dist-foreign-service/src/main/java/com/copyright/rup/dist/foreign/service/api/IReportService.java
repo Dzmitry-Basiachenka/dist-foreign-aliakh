@@ -154,6 +154,13 @@ public interface IReportService {
     void writeNtsWithdrawnBatchSummaryCsvReport(OutputStream outputStream);
 
     /**
+     * Writes NTS Undistributed Liabilities Report into the output stream in CSV format.
+     *
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeNtsUndistributedLiabilitiesReport(OutputStream outputStream);
+
+    /**
      * Writes Research Status Report into the output stream in csv format.
      *
      * @param outputStream instance of {@link OutputStream}
