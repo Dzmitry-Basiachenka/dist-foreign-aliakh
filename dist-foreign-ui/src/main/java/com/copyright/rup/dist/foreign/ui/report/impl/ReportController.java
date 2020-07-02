@@ -126,6 +126,12 @@ public class ReportController extends CommonController<IReportWidget> implements
     }
 
     @Override
+    public IStreamSource getNtsUndistributedLiabilitiesReportStreamSource() {
+        return new ByteArrayStreamSource("undistributed_liabilities_",
+            outputStream -> reportService.writeNtsUndistributedLiabilitiesReport(outputStream));
+    }
+
+    @Override
     public IStreamSource getAaclUndistributedLiabilitiesReportStreamSource() {
         return new ByteArrayStreamSource("undistributed_liabilities_",
             outputStream -> reportService.writeAaclUndistributedLiabilitiesCsvReport(outputStream));

@@ -23,6 +23,8 @@ public class NtsReportMenuBuilder implements IReportMenuBuilder {
         String taxNotificationReport = ForeignUi.getMessage("menu.report.tax_notification_report");
         rootItem.addItem(ForeignUi.getMessage("menu.report.nts_batch_summary"), menuItem ->
             widget.generateReport(controller.getNtsWithdrawnBatchSummaryReportStreamSource()));
+        rootItem.addItem(ForeignUi.getMessage("menu.report.undistributed_liabilities"), menuItem ->
+            widget.generateReport(controller.getNtsUndistributedLiabilitiesReportStreamSource()));
         rootItem.addItem(taxNotificationReport, menuItem ->
             widget.openReportWindow(taxNotificationReport, controller.getTaxNotificationReportController()));
     }

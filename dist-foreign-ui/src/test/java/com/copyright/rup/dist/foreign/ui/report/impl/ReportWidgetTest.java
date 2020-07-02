@@ -153,6 +153,15 @@ public class ReportWidgetTest {
     }
 
     @Test
+    public void testNtsUndistributedLiabilitiesReportSelected() {
+        expectReportGenerated(reportController.getNtsUndistributedLiabilitiesReportStreamSource());
+        expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+        replayAll();
+        selectMenuItem(1);
+        verifyAll();
+    }
+
+    @Test
     public void testSummaryMarketReportSelected() {
         ISummaryMarketReportController summaryMarketReportController = createMock(ISummaryMarketReportController.class);
         expect(reportController.getSummaryMarketReportController()).andReturn(summaryMarketReportController).once();
@@ -265,9 +274,10 @@ public class ReportWidgetTest {
     private void assertReportsMenuNts() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(2, CollectionUtils.size(menuItems));
+        assertEquals(3, CollectionUtils.size(menuItems));
         assertEquals("NTS Withdrawn Batch Summary Report", menuItems.get(0).getText());
-        assertEquals("Tax Notification Report", menuItems.get(1).getText());
+        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(1).getText());
+        assertEquals("Tax Notification Report", menuItems.get(2).getText());
     }
 
     private void assertReportsMenuAacl() {
