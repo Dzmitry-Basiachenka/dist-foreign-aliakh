@@ -20,9 +20,8 @@ public class RhTaxInformation {
 
     private Long payeeAccountNumber;
     private String payeeName;
-    // TODO {srudak} rename to RH
-    private Long rorAccountNumber;
-    private String rorName;
+    private Long rhAccountNumber;
+    private String rhName;
     private Long tboAccountNumber;
     private String tboName;
     private String productFamily;
@@ -58,20 +57,20 @@ public class RhTaxInformation {
         this.payeeName = payeeName;
     }
 
-    public Long getRorAccountNumber() {
-        return rorAccountNumber;
+    public Long getRhAccountNumber() {
+        return rhAccountNumber;
     }
 
-    public void setRorAccountNumber(Long rorAccountNumber) {
-        this.rorAccountNumber = rorAccountNumber;
+    public void setRhAccountNumber(Long rhAccountNumber) {
+        this.rhAccountNumber = rhAccountNumber;
     }
 
-    public String getRorName() {
-        return rorName;
+    public String getRhName() {
+        return rhName;
     }
 
-    public void setRorName(String rorName) {
-        this.rorName = rorName;
+    public void setRhName(String rhName) {
+        this.rhName = rhName;
     }
 
     public Long getTboAccountNumber() {
@@ -230,8 +229,8 @@ public class RhTaxInformation {
         return new EqualsBuilder()
             .append(this.payeeAccountNumber, that.payeeAccountNumber)
             .append(this.payeeName, that.payeeName)
-            .append(this.rorAccountNumber, that.rorAccountNumber)
-            .append(this.rorName, that.rorName)
+            .append(this.rhAccountNumber, that.rhAccountNumber)
+            .append(this.rhName, that.rhName)
             .append(this.tboAccountNumber, that.tboAccountNumber)
             .append(this.tboName, that.tboName)
             .append(this.productFamily, that.productFamily)
@@ -258,8 +257,8 @@ public class RhTaxInformation {
         return new HashCodeBuilder()
             .append(payeeAccountNumber)
             .append(payeeName)
-            .append(rorAccountNumber)
-            .append(rorName)
+            .append(rhAccountNumber)
+            .append(rhName)
             .append(tboAccountNumber)
             .append(tboName)
             .append(productFamily)
@@ -286,8 +285,8 @@ public class RhTaxInformation {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("payeeAccountNumber", payeeAccountNumber)
             .append("payeeName", payeeName)
-            .append("rorAccountNumber", rorAccountNumber)
-            .append("rorName", rorName)
+            .append("rhAccountNumber", rhAccountNumber)
+            .append("rhName", rhName)
             .append("tboAccountNumber", tboAccountNumber)
             .append("tboName", tboName)
             .append("productFamily", productFamily)
