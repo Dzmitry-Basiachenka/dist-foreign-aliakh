@@ -1,7 +1,7 @@
 [
   {
-    "rorAccountNumber": "1000002859",
-    "rorName": "John Wiley & Sons - Books",
+    "rhAccountNumber": "1000002859",
+    "rhName": "John Wiley & Sons - Books",
     "payeeAccountNumber": "1000005413",
     "payeeName": "Kluwer Academic Publishers - Dordrecht",
     "tboAccountNumber": "1000002859",
@@ -24,8 +24,8 @@
     "payGroup": "RIGHTS"
   },
   {
-    "rorAccountNumber": "1000005413",
-    "rorName": "Kluwer Academic Publishers - Dordrecht",
+    "rhAccountNumber": "1000005413",
+    "rhName": "Kluwer Academic Publishers - Dordrecht",
     "payeeAccountNumber": "1000005413",
     "payeeName": "Kluwer Academic Publishers - Dordrecht",
     "tboAccountNumber": "1000005413",
@@ -48,8 +48,8 @@
     "payGroup": "RIGHTS"
   },
   {
-    "rorAccountNumber": "1000002859",
-    "rorName": "John Wiley & Sons - Books",
+    "rhAccountNumber": "1000002859",
+    "rhName": "John Wiley & Sons - Books",
     "payeeAccountNumber": "1000005413",
     "payeeName": "Kluwer Academic Publishers - Dordrecht",
     "tboAccountNumber": "1000005413",

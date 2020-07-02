@@ -44,8 +44,8 @@ public class RhTaxInformationCsvReportWriter extends BaseCsvReportWriter<RhTaxIn
         beanProperties.add(bean.getProductFamily());
         beanProperties.add(getBeanPropertyAsString(bean.getPayeeAccountNumber()));
         beanProperties.add(bean.getPayeeName());
-        beanProperties.add(getBeanPropertyAsString(bean.getRorAccountNumber()));
-        beanProperties.add(bean.getRorName());
+        beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
+        beanProperties.add(bean.getRhName());
         beanProperties.add(getBeanPropertyAsString(bean.getTboAccountNumber()));
         beanProperties.add(bean.getTboName());
         beanProperties.add(StringUtils.EMPTY);

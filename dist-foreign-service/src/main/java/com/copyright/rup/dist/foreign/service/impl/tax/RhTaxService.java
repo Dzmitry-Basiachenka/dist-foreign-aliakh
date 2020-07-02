@@ -151,8 +151,8 @@ public class RhTaxService implements IRhTaxService {
         RhTaxInformation result = new RhTaxInformation();
         result.setPayeeAccountNumber(holder.getPayee().getAccountNumber());
         result.setPayeeName(holder.getPayee().getName());
-        result.setRorAccountNumber(holder.getRightsholder().getAccountNumber());
-        result.setRorName(holder.getRightsholder().getName());
+        result.setRhAccountNumber(holder.getRightsholder().getAccountNumber());
+        result.setRhName(holder.getRightsholder().getName());
         result.setTboAccountNumber(tbo.getAccountNumber());
         result.setTboName(tbo.getName());
         result.setProductFamily(holder.getProductFamily());

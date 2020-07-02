@@ -162,7 +162,7 @@ public class RhTaxServiceTest {
     public void testGetRhTaxInformation() throws IOException {
         Comparator<RhTaxInformation> comparator = Comparator
             .comparing(RhTaxInformation::getProductFamily)
-            .thenComparing(RhTaxInformation::getRorAccountNumber)
+            .thenComparing(RhTaxInformation::getRhAccountNumber)
             .thenComparing(RhTaxInformation::getPayeeAccountNumber);
         Rightsholder rh1 = buildRightsholder(RH_ID_1, ACC_NUMBER_1, RH_NAME_1);
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
@@ -203,7 +203,7 @@ public class RhTaxServiceTest {
     public void testGetRhTaxInformationWithFilteredByNotificationDate() throws IOException {
         Comparator<RhTaxInformation> comparator = Comparator
             .comparing(RhTaxInformation::getProductFamily)
-            .thenComparing(RhTaxInformation::getRorAccountNumber)
+            .thenComparing(RhTaxInformation::getRhAccountNumber)
             .thenComparing(RhTaxInformation::getPayeeAccountNumber);
         Rightsholder rh1 = buildRightsholder(RH_ID_1, ACC_NUMBER_1, RH_NAME_1);
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
