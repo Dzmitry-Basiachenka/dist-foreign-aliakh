@@ -1,3 +1,13 @@
+10.1.12
+-
+* B-58556 FDA: Tax Notification Report in FDA: add styles to window components
+* B-58556 FDA: Tax Notification Report in FDA: make changes based on comments in CR-DIST-FOREIGN-180
+* B-58559 FDA: NTS undistributed liabilities reconciliation report: add NTS  Undistributed Liabilities Reconciliation Report to UI
+* B-58559 FDA: NTS undistributed liabilities reconciliation report: adjust  service logic for generating report
+* B-58559 FDA: NTS undistributed liabilities reconciliation report: implement query for retrieving report data
+* B-59199 Tech Debt: FDA: implement logging HTTP POST body and headers in error message
+* B-59772 FDA: Improve RMS integration: get license types from db
+
 10.1.11
 -
 * B-58556 FDA: Tax Notification Report in FDA: make scenario sorting case insensitive, adjust 'number of days' field validation message
