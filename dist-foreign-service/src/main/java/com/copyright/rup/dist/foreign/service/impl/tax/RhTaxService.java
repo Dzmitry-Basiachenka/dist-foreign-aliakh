@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -130,6 +131,9 @@ public class RhTaxService implements IRhTaxService {
                     }
                 }
             });
+            result.sort(Comparator
+                .comparing(RhTaxInformation::getTypeOfForm, Comparator.nullsFirst(Comparator.naturalOrder()))
+                .thenComparing(RhTaxInformation::getPayeeName, Comparator.nullsFirst(Comparator.naturalOrder())));
         } else {
             result = Collections.emptyList();
         }

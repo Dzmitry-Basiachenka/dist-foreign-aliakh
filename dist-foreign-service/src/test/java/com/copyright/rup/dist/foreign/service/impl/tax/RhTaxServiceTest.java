@@ -44,7 +44,6 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -160,18 +159,14 @@ public class RhTaxServiceTest {
 
     @Test
     public void testGetRhTaxInformation() throws IOException {
-        Comparator<RhTaxInformation> comparator = Comparator
-            .comparing(RhTaxInformation::getProductFamily)
-            .thenComparing(RhTaxInformation::getRhAccountNumber)
-            .thenComparing(RhTaxInformation::getPayeeAccountNumber);
         Rightsholder rh1 = buildRightsholder(RH_ID_1, ACC_NUMBER_1, RH_NAME_1);
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
         Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
         Rightsholder rh4 = buildRightsholder(RH_ID_4, ACC_NUMBER_4, RH_NAME_4);
         List<RightsholderPayeeProductFamilyHolder> holders = Arrays.asList(
             buildHolder(rh2, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_2, included in the result
-            buildHolder(rh1, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_1, excluded as included in the result
-            buildHolder(rh1, rh2, FAS2_PRODUCT_FAMILY),  // TBO = RH_1, excluded as included in the result
+            buildHolder(rh1, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_1, included in the result
+            buildHolder(rh1, rh2, FAS2_PRODUCT_FAMILY),  // TBO = RH_2, included in the result
             buildHolder(rh2, rh3, FAS2_PRODUCT_FAMILY),  // TBO = RH_3, excluded as number of notifications > 3
             buildHolder(rh2, rh4, FAS2_PRODUCT_FAMILY)   // TBO = RH_4, excluded as no information from Oracle
         );
@@ -192,27 +187,22 @@ public class RhTaxServiceTest {
             .andReturn(loadOracleRhTaxInformation("oracle_rh_tax_information.json")).once();
         expect(prmIntegrationService.getCountries()).andReturn(buildCountries()).once();
         replay(usageService, prmIntegrationService, oracleRhTaxInformationService);
-        List<RhTaxInformation> actualRhTaxInformation = rhTaxService.getRhTaxInformation(SCENARIO_IDS, 5).stream()
-            .sorted(comparator)
-            .collect(Collectors.toList());
-        assertEquals(loadExpectedRhTaxInformation("expected_rh_tax_information_1.json"), actualRhTaxInformation);
+        assertEquals(
+            loadExpectedRhTaxInformation("expected_rh_tax_information_1.json"),
+            rhTaxService.getRhTaxInformation(SCENARIO_IDS, 5));
         verify(usageService, prmIntegrationService, oracleRhTaxInformationService);
     }
 
     @Test
     public void testGetRhTaxInformationWithFilteredByNotificationDate() throws IOException {
-        Comparator<RhTaxInformation> comparator = Comparator
-            .comparing(RhTaxInformation::getProductFamily)
-            .thenComparing(RhTaxInformation::getRhAccountNumber)
-            .thenComparing(RhTaxInformation::getPayeeAccountNumber);
         Rightsholder rh1 = buildRightsholder(RH_ID_1, ACC_NUMBER_1, RH_NAME_1);
         Rightsholder rh2 = buildRightsholder(RH_ID_2, ACC_NUMBER_2, RH_NAME_2);
         Rightsholder rh3 = buildRightsholder(RH_ID_3, ACC_NUMBER_3, RH_NAME_3);
         Rightsholder rh4 = buildRightsholder(RH_ID_4, ACC_NUMBER_4, RH_NAME_4);
         List<RightsholderPayeeProductFamilyHolder> holders = Arrays.asList(
-            buildHolder(rh2, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_2, included in the result
-            buildHolder(rh1, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_1, excluded as last not. date within numberOfDays
-            buildHolder(rh1, rh2, FAS2_PRODUCT_FAMILY),  // TBO = RH_1, excluded as last not. date within numberOfDays
+            buildHolder(rh2, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_2, excluded as last not. date within numberOfDays
+            buildHolder(rh1, rh2, FAS_PRODUCT_FAMILY),   // TBO = RH_1, included in the result
+            buildHolder(rh1, rh2, FAS2_PRODUCT_FAMILY),  // TBO = RH_2, excluded as last not. date within numberOfDays
             buildHolder(rh2, rh3, FAS2_PRODUCT_FAMILY),  // TBO = RH_3, excluded as number of notifications > 3
             buildHolder(rh2, rh4, FAS2_PRODUCT_FAMILY)   // TBO = RH_4, excluded as no info from Oracle
         );
@@ -233,10 +223,9 @@ public class RhTaxServiceTest {
             .andReturn(loadOracleRhTaxInformation("oracle_rh_tax_information.json")).once();
         expect(prmIntegrationService.getCountries()).andReturn(buildCountries()).once();
         replay(usageService, prmIntegrationService, oracleRhTaxInformationService);
-        List<RhTaxInformation> actualRhTaxInformation = rhTaxService.getRhTaxInformation(SCENARIO_IDS, 7).stream()
-            .sorted(comparator)
-            .collect(Collectors.toList());
-        assertEquals(loadExpectedRhTaxInformation("expected_rh_tax_information_2.json"), actualRhTaxInformation);
+        assertEquals(
+            loadExpectedRhTaxInformation("expected_rh_tax_information_2.json"),
+            rhTaxService.getRhTaxInformation(SCENARIO_IDS, 7));
         verify(usageService, prmIntegrationService, oracleRhTaxInformationService);
     }
 
