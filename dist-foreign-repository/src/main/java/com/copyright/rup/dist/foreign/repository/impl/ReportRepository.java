@@ -379,7 +379,10 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             Objects.requireNonNull(pipedOutputStream),
             Objects.requireNonNull(selectedAccountNumbers))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {
-                getTemplate().select("IUsageMapper.findPayeeTotalHoldersByFilter", filter, handler);
+                Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+                parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+                parameters.put("scenarioStatus", ScenarioStatusEnum.IN_PROGRESS);
+                getTemplate().select("IUsageMapper.findPayeeTotalHoldersByFilter", parameters, handler);
             }
         }
     }

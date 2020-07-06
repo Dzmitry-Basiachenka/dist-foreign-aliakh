@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -205,7 +206,10 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public List<PayeeTotalHolder> findPayeeTotalHoldersByFilter(ExcludePayeeFilter filter) {
-        return selectList("IUsageMapper.findPayeeTotalHoldersByFilter", Objects.requireNonNull(filter));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        parameters.put("scenarioStatus", ScenarioStatusEnum.IN_PROGRESS);
+        return selectList("IUsageMapper.findPayeeTotalHoldersByFilter", parameters);
     }
 
     @Override
