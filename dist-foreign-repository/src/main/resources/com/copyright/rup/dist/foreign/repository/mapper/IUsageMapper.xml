@@ -768,23 +768,23 @@
             join ${schema}.df_rightsholder payee on u.payee_account_number = payee.rh_account_number
             join ${schema}.df_scenario s on u.df_scenario_uid = s.df_scenario_uid
             where s.status_ind = #{scenarioStatus}
-                <if test="scenarioIds.size() > 0">
+                <if test="filter.scenarioIds.size() > 0">
                     and u.df_scenario_uid in
-                    <foreach collection="scenarioIds" item="scenarioId" open="(" separator="," close=")">
+                    <foreach collection="filter.scenarioIds" item="scenarioId" open="(" separator="," close=")">
                         #{scenarioId}
                     </foreach>
                 </if>
-                <if test="null != payeeParticipating">
+                <if test="null != filter.payeeParticipating">
                     and ufas.is_payee_participating_flag = ${payeeParticipating}
                 </if>
-                <if test="null != searchValue">
+                <if test="null != filter.searchValue">
                     and
-                    (payee.name ilike '%' || #{searchValue} || '%' or
-                    cast(u.payee_account_number as text) like '%' || #{searchValue} || '%')
+                    (payee.name ilike '%' || #{filter.searchValue} || '%' or
+                    cast(u.payee_account_number as text) like '%' || #{filter.searchValue} || '%')
                 </if>
             group by payee_account_number, ufas.is_payee_participating_flag
-            <if test="null != netAmountMinThreshold">
-                having sum(u.net_amount) &lt; ${netAmountMinThreshold}
+            <if test="null != filter.netAmountMinThreshold">
+                having sum(u.net_amount) &lt; ${filter.netAmountMinThreshold}
             </if>
         ) u
         left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
