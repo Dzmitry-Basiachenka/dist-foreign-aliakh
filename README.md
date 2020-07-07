@@ -1,3 +1,8 @@
+10.1.14
+-
+* B-58556 FDA: Tax Notification Report in FDA: make report sorting case insensitive
+* B-57599 FDA: Exclude Payees within an FAS scenario: make changes based on comments in CR-DIST-FOREIGN-179
+
 10.1.13
 -
 * B-58556 FDA: Tax Notification Report in FDA: add sorting for report entries
