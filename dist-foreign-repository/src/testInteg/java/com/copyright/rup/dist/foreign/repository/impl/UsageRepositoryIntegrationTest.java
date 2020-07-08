@@ -125,6 +125,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String SCENARIO_ID_2 = "abe31cdc-adfb-41c5-9a46-4ca4966a41be";
+    private static final String SCENARIO_ID_3 = "e13ecc44-6795-4b75-90f0-4a3fc191f1b9";
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
     private static final String PERCENT = "%";
@@ -264,7 +265,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindPayeeTotalHoldersByScenarioFilter() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
+        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_3));
         List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(2, CollectionUtils.size(payeeTotalHolders));
         verifyPayeeTotalsHolder(7000813806L,
@@ -279,7 +280,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindPayeeTotalHoldersByScenarioFilterAndSearch() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
+        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_3));
         filter.setSearchValue("Administracion");
         List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(1, CollectionUtils.size(payeeTotalHolders));
@@ -292,7 +293,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindPayeeTotalHoldersByScenarioFilterAndThreshold() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
+        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_3));
         filter.setNetAmountMinThreshold(new BigDecimal(150));
         List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(1, CollectionUtils.size(payeeTotalHolders));
@@ -300,6 +301,18 @@ public class UsageRepositoryIntegrationTest {
             "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
             new BigDecimal("100.0000000000"), new BigDecimal("68.0000000000"), new BigDecimal("32.0000000000"), true,
             payeeTotalHolders.get(0));
+    }
+
+    @Test
+    public void testFindPayeeTotalHoldersByScenarioFilterAndParticipationStatus() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_3));
+        filter.setPayeeParticipating(false);
+        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
+        assertEquals(1, CollectionUtils.size(payeeTotalHolders));
+        verifyPayeeTotalsHolder(1000002859L,
+            "John Wiley & Sons - Books", new BigDecimal("200.0000000000"), new BigDecimal("152.0000000000"),
+            new BigDecimal("48.0000000000"), false, payeeTotalHolders.get(0));
     }
 
     @Test

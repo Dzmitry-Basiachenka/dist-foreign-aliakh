@@ -775,7 +775,7 @@
                     </foreach>
                 </if>
                 <if test="null != filter.payeeParticipating">
-                    and ufas.is_payee_participating_flag = ${payeeParticipating}
+                    and ufas.is_payee_participating_flag = ${filter.payeeParticipating}
                 </if>
                 <if test="null != filter.searchValue">
                     and
