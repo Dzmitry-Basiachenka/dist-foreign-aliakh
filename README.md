@@ -1,3 +1,7 @@
+10.1.16
+-
+* CDP-922 FDA: FAS Exclude Details by Payee filter error
+
 10.1.15
 -
 * B-59772 FDA: Improve RMS integration: make changes based on comments in CR-DIST-FOREIGN-181
