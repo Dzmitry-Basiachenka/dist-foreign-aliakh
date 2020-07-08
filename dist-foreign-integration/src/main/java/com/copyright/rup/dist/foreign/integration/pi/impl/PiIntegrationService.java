@@ -30,6 +30,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 /**
  * This service allows searching works in Published Inventory with help of RUP ES API.
@@ -105,6 +106,16 @@ public class PiIntegrationService implements IPiIntegrationService {
     void init() {
         mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
+    /**
+     * Closes search API.
+     */
+    @PreDestroy
+    void destroy() {
+        if (Objects.nonNull(rupEsApi)) {
+            rupEsApi.closeConnection();
+        }
     }
 
     /**
@@ -223,7 +234,6 @@ public class PiIntegrationService implements IPiIntegrationService {
         RupSearchRequest request = RupSearchRequest.of(piIndex);
         RupQueryStringQueryBuilder builder = RupQueryStringQueryBuilder.of(queryString);
         request.setQueryBuilder(builder);
-        request.setTypes("work");
         request.setSearchType(RupSearchRequest.RupSearchType.DFS_QUERY_AND_FETCH);
         request.setFields(MAIN_TITLE, HOST_IDNO);
         request.setFetchSource(true);
