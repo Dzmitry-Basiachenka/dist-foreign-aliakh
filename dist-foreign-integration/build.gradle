@@ -1,13 +1,15 @@
 apply plugin: 'rup-camel'
 
+configurations {
+    compile.exclude group: 'org.apache.activemq'
+}
+
 dependencies {
     compile project(':dist-foreign-domain')
 
     compile("com.copyright.rup.aws:rup-aws-sns:${rupAwsVersion}")
     compile("com.copyright.rup.aws:rup-aws-sqs:${rupAwsVersion}")
-    compile("com.copyright.rup.dist.common:dist-common-integration:${distCommonVersion}") {
-        exclude group: "org.apache.activemq"
-    }
+    compile("com.copyright.rup.dist.common:dist-common-integration:${distCommonVersion}") 
     compile("com.copyright.rup.es.api:rup-es-api:${rupEsApiVersion}")
     //updated jackson-databind version due to vulnerabilities CVE-2020-9546, CVE-2020-9547, CVE-2020-9548 in com.fasterxml.jackson.core:jackson-databind:2.9.10.3
     compile("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
@@ -18,8 +20,6 @@ dependencies {
     compile("org.apache.commons:commons-collections4:${commonsCollectionsVersion}")
     compile("org.apache.httpcomponents:httpasyncclient:${httpAsyncClientVersion}")
     compile("org.springframework:spring-web:${rupJava.standardDependencies.spring.version}")
-    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}") {
-        exclude group: "org.apache.activemq"
-    }
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
     testRuntime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")
 }
