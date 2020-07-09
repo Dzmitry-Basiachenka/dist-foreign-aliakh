@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -47,12 +48,13 @@ public class FasMatchingChunkConsumer implements IConsumer<List<Usage>> {
 
     @Override
     @Profiled(tag = "FasMatchingChunkConsumer.consume")
+    @Transactional
     public void consume(List<Usage> usages) {
         if (Objects.nonNull(usages)) {
             LOGGER.trace("Consume FAS usages for matching processing. Started. UsageIds={}", LogUtils.ids(usages));
             usages.forEach(usage -> {
                 if (StringUtils.isNoneEmpty(usage.getStandardNumber())) {
-                    workMatchingService.matchByIdno(usage);
+                    workMatchingService.matchByStandardNumber(usage);
                     LOGGER.trace(MATCHING_BY_IDNO_FINISHED_LOG, usage.getId(), usage.getStandardNumber(),
                         usage.getWorkTitle(), usage.getWrWrkInst(), usage.getStatus());
                 } else if (StringUtils.isNoneEmpty(usage.getWorkTitle())) {

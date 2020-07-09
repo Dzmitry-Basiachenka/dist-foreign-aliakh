@@ -48,8 +48,8 @@ public class WorkMatchingService implements IWorkMatchingService {
 
     @Override
     @Transactional
-    public void matchByIdno(Usage usage) {
-        Work work = doMatchByIdno(usage);
+    public void matchByStandardNumber(Usage usage) {
+        Work work = doMatchByStandardNumber(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
             usageService.updateProcessedUsage(usage);
             String searchParameter = work.isHostIdnoFlag() ? "host IDNO" : "standard number";
@@ -121,8 +121,8 @@ public class WorkMatchingService implements IWorkMatchingService {
         return work;
     }
 
-    private Work doMatchByIdno(Usage usage) {
-        Work work = piIntegrationService.findWorkByIdnoAndTitle(usage.getStandardNumber(), usage.getWorkTitle());
+    private Work doMatchByStandardNumber(Usage usage) {
+        Work work = piIntegrationService.findWorkByStandardNumber(usage.getStandardNumber());
         if (Objects.nonNull(work.getWrWrkInst())) {
             usage.setWrWrkInst(work.getWrWrkInst());
             if (Objects.isNull(usage.getWorkTitle())) {

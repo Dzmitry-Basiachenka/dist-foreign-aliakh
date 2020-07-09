@@ -35,6 +35,8 @@ import java.util.Collections;
  */
 public class PiIntegrationServiceTest {
 
+    private static final String FORBIDDEN_RIGHTS_REVIEW =
+        "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)";
     private static final String ANNUAIRE_TITLE = "Annuaire de la communication en Rhône-Alpes";
     private static final String OCULAR_TITLE = "Ocular Tissue Culture";
     private static final String FORBIDDEN_RIGHTS = "Forbidden rites";
@@ -78,59 +80,48 @@ public class PiIntegrationServiceTest {
     }
 
     @Test
-    public void testFindWorkByIdnoAndTitle() {
-        expectGetSearchResponseByIdno();
-        replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
-            searchHit6);
+    public void testFindWorkByStandardNumber() {
+        expectGetSearchResponseByStandardNumber();
+        replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5);
         assertEquals(new Work(123059057L, ANNUAIRE_TITLE, IDNO_1, "VALISSN"),
-            piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
+            piIntegrationService.findWorkByStandardNumber(IDNO_1));
         assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10),
-            piIntegrationService.findWorkByIdnoAndTitle("0-271-01750-3", null));
+            piIntegrationService.findWorkByStandardNumber("0-271-01750-3"));
         assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS, IDNO_3, VALISBN13),
-            piIntegrationService.findWorkByIdnoAndTitle(IDNO_3, null));
-        assertEquals(
-            new Work(112942199L, "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)",
-                IDNO_4, "DOI"),
-            piIntegrationService.findWorkByIdnoAndTitle(IDNO_4, null));
+            piIntegrationService.findWorkByStandardNumber(IDNO_3));
+        assertEquals(new Work(112942199L, FORBIDDEN_RIGHTS_REVIEW, IDNO_4, "DOI"),
+            piIntegrationService.findWorkByStandardNumber(IDNO_4));
         assertEquals(new Work(123067577L, OCULAR_TITLE, IDNO_3, VALISBN13),
-            piIntegrationService.findWorkByIdnoAndTitle(IDNO_2, OCULAR_TITLE));
-        assertEquals(new Work(), piIntegrationService.findWorkByIdnoAndTitle(IDNO_2, "Medical Journal"));
-        verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
-            searchHit6);
+            piIntegrationService.findWorkByStandardNumber(IDNO_3));
+        assertEquals(new Work(), piIntegrationService.findWorkByStandardNumber(IDNO_2));
+        verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5);
     }
 
     @Test
     public void testFindWorkByIdnoWithSingleHostIndo() {
         expect(searchResponse.getResults()).andReturn(searchResults).times(2);
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit1)).once();
-        expect(searchHit1.getFields()).andReturn(
-            ImmutableMap.of("hostIdno", Collections.singletonList(IDNO_2))).once();
+        expect(searchHit1.getFields()).andReturn(ImmutableMap.of("hostIdno", Collections.singletonList(IDNO_2))).once();
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit2)).once();
         expectSearchHitSource(searchHit2, SEARCH_HIT_2);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(2);
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2);
         Work work = new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10);
         work.setHostIdnoFlag(true);
-        assertEquals(work, piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
+        assertEquals(work, piIntegrationService.findWorkByStandardNumber(IDNO_1));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2);
     }
 
     @Test
     public void testFindWorkByIdnoWithSingleHostIndoMultipleResult() {
-        expect(searchResponse.getResults()).andReturn(searchResults).times(5);
+        expect(searchResponse.getResults()).andReturn(searchResults).times(6);
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit1)).once();
-        expect(searchHit1.getFields()).andReturn(
-            ImmutableMap.of("hostIdno", Collections.singletonList(IDNO_2))).once();
-        expect(searchResults.getHits()).andReturn(Collections.emptyList()).times(3);
+        expect(searchHit1.getFields()).andReturn(ImmutableMap.of("hostIdno", Collections.singletonList(IDNO_2))).once();
+        expect(searchResults.getHits()).andReturn(Collections.emptyList()).times(4);
         expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit2, searchHit3)).once();
-        expectSearchHitSource(searchHit2, SEARCH_HIT_2);
-        expectSearchHitSource(searchHit3, SEARCH_HIT_3);
-        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(5);
+        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(6);
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
-        Work expectedResult = new Work();
-        expectedResult.setMultipleMatches(true);
-        expectedResult.setHostIdnoFlag(false);
-        assertEquals(expectedResult, piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
+        assertEquals(new Work(), piIntegrationService.findWorkByStandardNumber(IDNO_1));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
     }
 
@@ -144,7 +135,7 @@ public class PiIntegrationServiceTest {
         replay(rupEsApi, searchResponse, searchResults, searchHit1);
         Work expectedResult = new Work();
         expectedResult.setMultipleMatches(true);
-        assertEquals(expectedResult, piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null));
+        assertEquals(expectedResult, piIntegrationService.findWorkByStandardNumber(IDNO_1));
         verify(rupEsApi, searchResponse, searchResults, searchHit1);
     }
 
@@ -186,7 +177,7 @@ public class PiIntegrationServiceTest {
     @Test
     public void testBuildQueryString() {
         assertEquals("idno:\"\\\"0.1353\\/PGN.1999.0081\"",
-            piIntegrationService.buildQueryString("idno", "   \"0.1353/PGN.1999.0081   "));
+            piIntegrationService.buildQueryString("idno", "   \"0.1353/PGN.1999.0081   ", true));
     }
 
     private void expectGetSearchResponseByWrWrkInst() {
@@ -216,13 +207,13 @@ public class PiIntegrationServiceTest {
         expectSearchHitSourceWithEmptyFields(searchHit6, "pi_search_hit6.json");
     }
 
-    private void expectGetSearchResponseByIdno() {
+    private void expectGetSearchResponseByStandardNumber() {
         expectGetResponseWithIssn();
         expectGetResponseWithIsbn10();
         expectGetResponseWithIsbn13();
-        expectGetResponseWithIdno();
-        expectGetResponseWithIdnoAndTitle();
-        getEmptySearchResponseByIdnoAndTitle();
+        expectGetResponseWithDoi();
+        expectGetResponseWithStdId();
+        getEmptySearchResponseByStdId();
     }
 
     private void expectGetResponseWithIssn() {
@@ -249,7 +240,7 @@ public class PiIntegrationServiceTest {
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(3);
     }
 
-    private void expectGetResponseWithIdno() {
+    private void expectGetResponseWithDoi() {
         expect(searchResponse.getResults()).andReturn(searchResults).times(4);
         expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
         expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
@@ -259,24 +250,21 @@ public class PiIntegrationServiceTest {
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(4);
     }
 
-    private void expectGetResponseWithIdnoAndTitle() {
-        expect(searchResponse.getResults()).andReturn(searchResults).times(4);
+    private void expectGetResponseWithStdId() {
+        expect(searchResponse.getResults()).andReturn(searchResults).times(5);
         expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
         expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
         expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
-        expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit5, searchHit6)).once();
-        expect(searchHit5.getFields()).andReturn(
-            ImmutableMap.of("mainTitle", Collections.singletonList(FORBIDDEN_RIGHTS))).once();
-        expect(searchHit6.getFields()).andReturn(
-            ImmutableMap.of("mainTitle", Collections.singletonList(OCULAR_TITLE))).times(2);
-        expectSearchHitSource(searchHit6, "pi_search_hit6.json");
-        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(4);
+        expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit5)).once();
+        expectSearchHitSourceWithEmptyFields(searchHit5, "pi_search_hit6.json");
+        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(5);
     }
 
-    private void getEmptySearchResponseByIdnoAndTitle() {
-        expect(searchResponse.getResults()).andReturn(searchResults).times(4);
-        expect(searchResults.getHits()).andReturn(Collections.emptyList()).times(4);
-        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(4);
+    private void getEmptySearchResponseByStdId() {
+        expect(searchResponse.getResults()).andReturn(searchResults).times(5);
+        expect(searchResults.getHits()).andReturn(Collections.emptyList()).times(5);
+        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(5);
     }
 
     private void expectSearchHitSourceWithEmptyFields(RupSearchHit searchHit, String sourceFileName) {

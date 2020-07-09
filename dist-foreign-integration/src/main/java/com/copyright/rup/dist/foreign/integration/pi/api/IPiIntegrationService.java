@@ -14,13 +14,12 @@ import com.copyright.rup.dist.foreign.domain.Work;
 public interface IPiIntegrationService {
 
     /**
-     * Finds {@link Work} for given IDNO and title.
+     * Finds {@link Work} for given standard number.
      *
-     * @param idno  idno to match
-     * @param title title to match
+     * @param standardNumber standard number to match
      * @return instance of {@link Work}
      */
-    Work findWorkByIdnoAndTitle(String idno, String title);
+    Work findWorkByStandardNumber(String standardNumber);
 
     /**
      * Finds {@link Work} for given title.
