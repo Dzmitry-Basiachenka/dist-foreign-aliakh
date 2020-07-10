@@ -174,7 +174,7 @@ public class FasMatchingChunkConsumerTest {
         }
 
         @Override
-        public void matchByIdno(Usage usage) {
+        public void matchByStandardNumber(Usage usage) {
             if (Objects.equals(VALID_STANDARD_NUMBER, usage.getStandardNumber())) {
                 usage.setWrWrkInst(WR_WRK_INST);
                 usage.setStatus(UsageStatusEnum.WORK_FOUND);

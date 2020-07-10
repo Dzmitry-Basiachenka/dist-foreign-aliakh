@@ -41,8 +41,8 @@ public class PiIntegrationCacheService extends AbstractCacheService<Triple<Long,
     }
 
     @Override
-    public Work findWorkByIdnoAndTitle(String idno, String title) {
-        return getFromCache(Triple.of(null, idno, title));
+    public Work findWorkByStandardNumber(String standardNumber) {
+        return getFromCache(Triple.of(null, standardNumber, null));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class PiIntegrationCacheService extends AbstractCacheService<Triple<Long,
         if (Objects.nonNull(wrWrkInst)) {
             result = piIntegrationService.findWorkByWrWrkInst(wrWrkInst);
         } else if (Objects.nonNull(standardNumber)) {
-            result = piIntegrationService.findWorkByIdnoAndTitle(standardNumber, title);
+            result = piIntegrationService.findWorkByStandardNumber(standardNumber);
         } else {
             result = piIntegrationService.findWorkByTitle(title);
         }

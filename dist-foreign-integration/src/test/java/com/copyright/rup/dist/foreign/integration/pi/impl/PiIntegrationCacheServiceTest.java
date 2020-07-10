@@ -39,19 +39,19 @@ public class PiIntegrationCacheServiceTest {
     }
 
     @Test
-    public void testFindWorkByIdnoAndTitle() {
+    public void testFindWorkByStandardNumber() {
         Work work1 = new Work(1111L, NECROMANCER, IDNO_1, "VALISSN");
         Work work2 = new Work(2222L, FORBIDDEN_RITES, IDNO_2, "VALISBN10");
         Work work3 = new Work(3333L, OCULAR_TITLE, IDNO_3, "VALISBN13");
-        expect(piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, null)).andReturn(work1).once();
-        expect(piIntegrationService.findWorkByIdnoAndTitle(IDNO_2, FORBIDDEN_RITES)).andReturn(work2).once();
-        expect(piIntegrationService.findWorkByIdnoAndTitle(IDNO_3, OCULAR_TITLE)).andReturn(work3).once();
+        expect(piIntegrationService.findWorkByStandardNumber(IDNO_1)).andReturn(work1).once();
+        expect(piIntegrationService.findWorkByStandardNumber(IDNO_2)).andReturn(work2).once();
+        expect(piIntegrationService.findWorkByStandardNumber(IDNO_3)).andReturn(work3).once();
         replay(piIntegrationService);
-        assertEquals(work1, piIntegrationCacheService.findWorkByIdnoAndTitle(IDNO_1, null));
-        assertEquals(work2, piIntegrationCacheService.findWorkByIdnoAndTitle(IDNO_2, FORBIDDEN_RITES));
-        assertEquals(work3, piIntegrationCacheService.findWorkByIdnoAndTitle(IDNO_3, OCULAR_TITLE));
-        assertEquals(work2, piIntegrationCacheService.findWorkByIdnoAndTitle(IDNO_2, FORBIDDEN_RITES));
-        assertEquals(work3, piIntegrationCacheService.findWorkByIdnoAndTitle(IDNO_3, OCULAR_TITLE));
+        assertEquals(work1, piIntegrationCacheService.findWorkByStandardNumber(IDNO_1));
+        assertEquals(work2, piIntegrationCacheService.findWorkByStandardNumber(IDNO_2));
+        assertEquals(work3, piIntegrationCacheService.findWorkByStandardNumber(IDNO_3));
+        assertEquals(work2, piIntegrationCacheService.findWorkByStandardNumber(IDNO_2));
+        assertEquals(work3, piIntegrationCacheService.findWorkByStandardNumber(IDNO_3));
         verify(piIntegrationService);
     }
 

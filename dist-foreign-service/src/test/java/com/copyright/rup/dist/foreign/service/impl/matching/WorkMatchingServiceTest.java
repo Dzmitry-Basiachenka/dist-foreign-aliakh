@@ -59,17 +59,17 @@ public class WorkMatchingServiceTest {
     }
 
     @Test
-    public void testMatchByIdno() {
+    public void testMatchByStandardNumber() {
         Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
         Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, "valisbn10");
-        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, TITLE)).andReturn(work).once();
+        expect(piIntegrationService.findWorkByStandardNumber(STANDARD_NUMBER)).andReturn(work).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
             "Wr Wrk Inst 112930820 was found by standard number 000043122-1");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService, usageService);
-        workMatchingService.matchByIdno(usage);
+        workMatchingService.matchByStandardNumber(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals("VALISBN10", usage.getStandardNumberType());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
@@ -82,14 +82,14 @@ public class WorkMatchingServiceTest {
         Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
         Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, "valisbn10");
         work.setHostIdnoFlag(true);
-        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, TITLE)).andReturn(work).once();
+        expect(piIntegrationService.findWorkByStandardNumber(STANDARD_NUMBER)).andReturn(work).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
             "Wr Wrk Inst 112930820 was found by host IDNO 000043122-1");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService, usageService);
-        workMatchingService.matchByIdno(usage);
+        workMatchingService.matchByStandardNumber(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals("VALISBN10", usage.getStandardNumberType());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
@@ -98,12 +98,12 @@ public class WorkMatchingServiceTest {
     }
 
     @Test
-    public void testMatchByIdnoForNts() {
+    public void testMatchByStandardNumberForNts() {
         String batchId = RupPersistUtils.generateUuid();
         Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
         usage.setBatchId(batchId);
         usage.setProductFamily(FdaConstants.FAS_PRODUCT_FAMILY);
-        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, TITLE))
+        expect(piIntegrationService.findWorkByStandardNumber(STANDARD_NUMBER))
             .andReturn(new Work()).once();
         expect(usageRepository.getTotalAmountByStandardNumberAndBatchId(STANDARD_NUMBER, batchId))
             .andReturn(new BigDecimal("99.00")).once();
@@ -114,7 +114,7 @@ public class WorkMatchingServiceTest {
                 "is less than $100");
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
-        workMatchingService.matchByIdno(usage);
+        workMatchingService.matchByStandardNumber(usage);
         assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
         assertEquals("FAS", usage.getProductFamily());
         verify(piIntegrationService, usageRepository, auditService);

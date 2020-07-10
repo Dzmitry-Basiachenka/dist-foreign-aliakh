@@ -18,7 +18,7 @@ public interface IWorkMatchingService {
      *
      * @param usage {@link Usage} to be matched
      */
-    void matchByIdno(Usage usage);
+    void matchByStandardNumber(Usage usage);
 
     /**
      * Finds Wr Wrk Inst for given usage and matches result by work title.

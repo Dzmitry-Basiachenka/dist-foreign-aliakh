@@ -23,7 +23,7 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
         "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )";
 
     @Override
-    public Work findWorkByIdnoAndTitle(String idno, String title) {
+    public Work findWorkByStandardNumber(String idno) {
         Work work = new Work();
         if (Objects.equals("978-0-7695-2365-2", idno)) {
             work = new Work(876543210L, "Medical Journal", idno, VALISSN);
@@ -31,9 +31,9 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
             work = new Work(987654321L, "Technical Journal", idno, VALISSN);
         } else if (Objects.equals("978-0-271-01750-1", idno)) {
             work = new Work(123059057L, "BIOCHEMISTRY (MOSCOW)", idno, VALISSN);
-        } else if (Objects.equals("1906011", idno) && Objects.equals("Solar Cells", title)) {
+        } else if (Objects.equals("1906011", idno)) {
             work = new Work(292891647L, "Solar Cells", idno, VALISSN);
-        } else if (Objects.equals("12345XX-12978", idno) && Objects.equals(TITLE_1, title)) {
+        } else if (Objects.equals("12345XX-12978", idno)) {
             work = new Work(100012905L, TITLE_1, idno, "VALISBN13");
         }
         return work;

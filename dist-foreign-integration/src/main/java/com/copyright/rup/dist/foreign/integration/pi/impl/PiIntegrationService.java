@@ -14,10 +14,8 @@ import com.copyright.rup.es.api.request.RupSearchRequest;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.elasticsearch.ElasticsearchException;
 import org.slf4j.Logger;
@@ -48,7 +46,6 @@ public class PiIntegrationService implements IPiIntegrationService {
     private static final int EXPECTED_HOST_INDOS_COUNT = 1;
     private static final String MAIN_TITLE = "mainTitle";
     private static final String HOST_IDNO = "hostIdno";
-    private static final String IDNO = "IDNO";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Value("$RUP{dist.foreign.pi.cluster}")
@@ -67,14 +64,14 @@ public class PiIntegrationService implements IPiIntegrationService {
     }
 
     @Override
-    public Work findWorkByIdnoAndTitle(String idno, String title) {
-        return findWorkByIdnoAndTitle(idno, title, false);
+    public Work findWorkByStandardNumber(String standardNumber) {
+        return findWorkByStandardNumber(standardNumber, false);
     }
 
     @Override
     public Work findWorkByTitle(String title) {
         Work result = new Work();
-        RupSearchResponse searchResponse = doSearch(MAIN_TITLE, title);
+        RupSearchResponse searchResponse = doSearch(MAIN_TITLE, title, true);
         List<RupSearchHit> searchHits = searchResponse.getResults().getHits();
         if (CollectionUtils.isNotEmpty(searchHits) && EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
             result = searchByHostIdnoIfExists(searchHits, MAIN_TITLE, title, false);
@@ -121,66 +118,44 @@ public class PiIntegrationService implements IPiIntegrationService {
     /**
      * Builds query string based on field to search and value.
      *
-     * @param field field to search
-     * @param value value
+     * @param field    field to search
+     * @param value    value
+     * @param isEscape {@code true} if value should be escaped, otherwise {@code false}
      * @return query string
      */
-    String buildQueryString(String field, Object value) {
+    String buildQueryString(String field, Object value, boolean isEscape) {
         return String.format("%s:\"%s\"", field, value instanceof String
-            ? QueryParser.escape(((String) value).trim())
+            ? isEscape ? QueryParser.escape(((String) value).trim()) : ((String) value).trim()
             : value);
     }
 
-    private Work findWorkByIdnoAndTitle(String idno, String title, boolean isHostIdno) {
-        Work result = findWork("issn", idno, isHostIdno);
+    private Work findWorkByStandardNumber(String standardNumber, boolean isHostIdno) {
+        Work result = findWork("issn", standardNumber, isHostIdno, true);
         if (Objects.nonNull(result)) {
             return result;
         }
-        result = findWork("isbn10", idno, isHostIdno);
+        result = findWork("isbn10", standardNumber, isHostIdno, true);
         if (Objects.nonNull(result)) {
             return result;
         }
-        result = findWork("isbn13", idno, isHostIdno);
+        result = findWork("isbn13", standardNumber, isHostIdno, true);
         if (Objects.nonNull(result)) {
             return result;
         }
-        return matchByIdnoAndTitle(idno, title, isHostIdno);
+        result = findWork("doi", standardNumber, isHostIdno, false);
+        if (Objects.nonNull(result)) {
+            return result;
+        }
+        result = findWork("stdid", standardNumber, isHostIdno, true);
+        if (Objects.nonNull(result)) {
+            return result;
+        }
+        return new Work();
     }
 
-    private Work matchByIdnoAndTitle(String idno, String title, boolean isHostIdno) {
-        List<RupSearchHit> searchHits = doSearch("idno", idno).getResults().getHits();
-        Work result = new Work();
-        if (CollectionUtils.isNotEmpty(searchHits)) {
-            if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
-                result = searchByHostIdnoIfExists(searchHits, idno, IDNO, isHostIdno);
-            } else if (isHostIdno) {
-                result.setMultipleMatches(true);
-                LOGGER.debug("Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst=MultiResults, Hits={}",
-                    idno, title, searchHits.stream().map(RupSearchHit::getSource).collect(Collectors.joining(";")));
-            } else {
-                List<RupSearchHit> filteredByTitleHits = searchHits.stream().filter(searchHit -> {
-                    List<Object> mainTitles = searchHit.getFields().get(MAIN_TITLE);
-                    return CollectionUtils.isNotEmpty(mainTitles) && StringUtils.equalsIgnoreCase(title,
-                        mainTitles.iterator().next().toString());
-                }).collect(Collectors.toList());
-                if (EXPECTED_SEARCH_HITS_COUNT == filteredByTitleHits.size()) {
-                    return searchByHostIdnoIfExists(filteredByTitleHits, IDNO, idno, false);
-                } else {
-                    result.setMultipleMatches(true);
-                    LOGGER.debug("Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst=MultiResults, Hits={}",
-                        idno, title, searchHits.stream().map(RupSearchHit::getSource).collect(Collectors.joining(";")));
-                }
-            }
-        } else {
-            result.setMultipleMatches(false);
-            LOGGER.debug("Search works. By IDNO. IDNO={}, WrWrkInst=Not Found, Hits=Empty", idno);
-        }
-        return result;
-    }
-
-    private Work findWork(String parameter, Object value, boolean isHostIdno) {
+    private Work findWork(String parameter, Object value, boolean isHostIdno, boolean isEscape) {
         Work result = null;
-        List<RupSearchHit> searchHits = doSearch(parameter, value).getResults().getHits();
+        List<RupSearchHit> searchHits = doSearch(parameter, value, isEscape).getResults().getHits();
         if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
             result = searchByHostIdnoIfExists(searchHits, parameter, value, isHostIdno);
         }
@@ -197,7 +172,7 @@ public class PiIntegrationService implements IPiIntegrationService {
             if (Objects.isNull(hostIdnos)) {
                 result = parseWorkFromSearchHit(searchHits, parameter, value, false);
             } else if (EXPECTED_HOST_INDOS_COUNT == hostIdnos.size()) {
-                result = findWorkByIdnoAndTitle(hostIdnos.get(0).toString(), null, true);
+                result = findWorkByStandardNumber(hostIdnos.get(0).toString(), true);
             } else {
                 result.setMultipleMatches(true);
                 LOGGER.debug("Search works. By {}. ParameterValue={}, WrWrkInst=MultiResults, Hits={}", parameter,
@@ -208,7 +183,7 @@ public class PiIntegrationService implements IPiIntegrationService {
     }
 
     private Work findByWrWrkInst(Object value) {
-        List<RupSearchHit> searchHits = doSearch("wrWrkInst", value).getResults().getHits();
+        List<RupSearchHit> searchHits = doSearch("wrWrkInst", value, false).getResults().getHits();
         return EXPECTED_SEARCH_HITS_COUNT == searchHits.size()
             ? parseWorkFromSearchHit(searchHits, "wrWrkInst", value, false)
             : null;
@@ -229,8 +204,8 @@ public class PiIntegrationService implements IPiIntegrationService {
         }
     }
 
-    private RupSearchResponse doSearch(String field, Object value) {
-        String queryString = buildQueryString(field, value);
+    private RupSearchResponse doSearch(String field, Object value, boolean isEscape) {
+        String queryString = buildQueryString(field, value, isEscape);
         RupSearchRequest request = RupSearchRequest.of(piIndex);
         RupQueryStringQueryBuilder builder = RupQueryStringQueryBuilder.of(queryString);
         request.setQueryBuilder(builder);
