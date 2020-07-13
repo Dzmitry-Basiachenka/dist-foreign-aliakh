@@ -489,7 +489,15 @@ public class CsvReportsIntegrationTest {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(filter,
-            Collections.singleton(7000813806L), outputStream), "exclude_by_payee_report.csv");
+            Collections.singleton(7000813806L), outputStream), "exclude_by_payee_report_scenario_filter.csv");
+        filter.setSearchValue("John Wiley");
+        assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(filter,
+            Collections.singleton(1000002859L), outputStream), "exclude_by_payee_report_search_filter.csv");
+        filter.setPayeeParticipating(true);
+        filter.setSearchValue("000");
+        assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(filter,
+            Collections.singleton(7000813806L), outputStream),
+            "exclude_by_payee_report_participation_status_filter.csv");
     }
 
     @Test

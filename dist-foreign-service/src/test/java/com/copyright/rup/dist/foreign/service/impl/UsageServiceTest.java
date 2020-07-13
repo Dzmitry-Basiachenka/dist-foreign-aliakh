@@ -20,6 +20,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -32,6 +33,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -214,6 +216,43 @@ public class UsageServiceTest {
         scenario.setStatus(ScenarioStatusEnum.ARCHIVED);
         assertEquals(3, usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY));
         verify(usageRepository, usageArchiveRepository);
+    }
+
+    @Test
+    public void testGetPayeeTotalHoldersByEmptyFilter() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        replay(usageRepository);
+        assertTrue(usageService.getPayeeTotalHoldersByFilter(filter, null, null).isEmpty());
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetPayeeTotalHoldersCountByEmptyFilter() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        replay(usageRepository);
+        assertEquals(0, usageService.getPayeeTotalHoldersCountByFilter(filter));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetPayeeTotalHoldersByFilter() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton(SCENARIO_ID));
+        List<PayeeTotalHolder> payeeTotalHolders = Collections.singletonList(new PayeeTotalHolder());
+        expect(usageRepository.findPayeeTotalHoldersByFilter(filter, null, null)).andReturn(payeeTotalHolders).once();
+        replay(usageRepository);
+        assertSame(payeeTotalHolders, usageService.getPayeeTotalHoldersByFilter(filter, null, null));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetPayeeTotalHoldersCountByFilter() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton(SCENARIO_ID));
+        expect(usageRepository.findPayeeTotalHoldersCountByFilter(filter)).andReturn(1).once();
+        replay(usageRepository);
+        assertEquals(1, usageService.getPayeeTotalHoldersCountByFilter(filter));
+        verify(usageRepository);
     }
 
     @Test

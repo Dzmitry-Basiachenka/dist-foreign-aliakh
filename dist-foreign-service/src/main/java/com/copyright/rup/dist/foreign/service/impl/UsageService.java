@@ -165,10 +165,16 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(ExcludePayeeFilter filter) {
+    public List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(ExcludePayeeFilter filter, Pageable pageable,
+                                                               Sort sort) {
         return !filter.isEmpty()
-            ? usageRepository.findPayeeTotalHoldersByFilter(filter)
+            ? usageRepository.findPayeeTotalHoldersByFilter(filter, pageable, sort)
             : Collections.emptyList();
+    }
+
+    @Override
+    public int getPayeeTotalHoldersCountByFilter(ExcludePayeeFilter filter) {
+        return !filter.isEmpty() ? usageRepository.findPayeeTotalHoldersCountByFilter(filter) : 0;
     }
 
     @Override

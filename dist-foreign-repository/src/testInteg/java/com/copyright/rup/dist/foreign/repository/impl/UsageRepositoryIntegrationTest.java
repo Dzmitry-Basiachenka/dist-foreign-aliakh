@@ -266,7 +266,7 @@ public class UsageRepositoryIntegrationTest {
     public void testFindPayeeTotalHoldersByScenarioFilter() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton(SCENARIO_ID_3));
-        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
+        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter, null, null);
         assertEquals(2, CollectionUtils.size(payeeTotalHolders));
         verifyPayeeTotalsHolder(7000813806L,
             "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
@@ -282,7 +282,7 @@ public class UsageRepositoryIntegrationTest {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton(SCENARIO_ID_3));
         filter.setSearchValue("Administracion");
-        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
+        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter, null, null);
         assertEquals(1, CollectionUtils.size(payeeTotalHolders));
         verifyPayeeTotalsHolder(7000813806L,
             "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
@@ -295,7 +295,7 @@ public class UsageRepositoryIntegrationTest {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton(SCENARIO_ID_3));
         filter.setNetAmountMinThreshold(new BigDecimal(150));
-        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
+        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter, null, null);
         assertEquals(1, CollectionUtils.size(payeeTotalHolders));
         verifyPayeeTotalsHolder(7000813806L,
             "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
@@ -308,11 +308,22 @@ public class UsageRepositoryIntegrationTest {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton(SCENARIO_ID_3));
         filter.setPayeeParticipating(false);
-        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter);
+        List<PayeeTotalHolder> payeeTotalHolders = usageRepository.findPayeeTotalHoldersByFilter(filter, null, null);
         assertEquals(1, CollectionUtils.size(payeeTotalHolders));
         verifyPayeeTotalsHolder(1000002859L,
             "John Wiley & Sons - Books", new BigDecimal("200.0000000000"), new BigDecimal("152.0000000000"),
             new BigDecimal("48.0000000000"), false, payeeTotalHolders.get(0));
+    }
+
+    @Test
+    public void testFindPayeeTotalHoldersCountByFilter() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_3));
+        assertEquals(2, usageRepository.findPayeeTotalHoldersCountByFilter(filter));
+        filter.setNetAmountMinThreshold(new BigDecimal(150));
+        assertEquals(1, usageRepository.findPayeeTotalHoldersCountByFilter(filter));
+        filter.setPayeeParticipating(false);
+        assertEquals(0, usageRepository.findPayeeTotalHoldersCountByFilter(filter));
     }
 
     @Test
