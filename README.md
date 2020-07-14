@@ -1,3 +1,10 @@
+11.1.0
+-
+* B-57817 FDA: Update the FDA integration with the latest version of Elastic Search for the RUP ES API: migrate to rup-es-api 11.4.+
+* B-58527 FDA: Matching enhancements for works: Remove matching by 'idno' and add by 'doi' and 'stdid'
+* B57743 CDP: Migrating Oracle integrations from ActiveMQ to SQS: FDA: apply new dist-common version 51.3.+
+* CDP-923 FDA: FAS/FAS2 Exclude Payees: Previously marked payees checkboxes are cleared when Search string is applied or canceled
+
 10.1.16
 -
 * CDP-922 FDA: FAS Exclude Details by Payee filter error
