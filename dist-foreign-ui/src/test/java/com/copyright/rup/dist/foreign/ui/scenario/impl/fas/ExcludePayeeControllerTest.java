@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -8,6 +10,8 @@ import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -17,6 +21,10 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterCon
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
 
+import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.shared.data.sort.SortDirection;
+
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -110,12 +118,19 @@ public class ExcludePayeeControllerTest {
         Whitebox.setInternalState(controller, widget);
         List<PayeeTotalHolder> payeeTotalHolders = Collections.singletonList(new PayeeTotalHolder());
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        Capture<Pageable> pageableCapture = new Capture<>();
+        Capture<Sort> sortCapture = new Capture<>();
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(widget.getSearchValue()).andReturn("Search value").once();
-        expect(usageService.getPayeeTotalHoldersByFilter(filter)).andReturn(payeeTotalHolders).once();
+        expect(usageService.getPayeeTotalHoldersByFilter(eq(filter), capture(pageableCapture), capture(sortCapture)))
+            .andReturn(payeeTotalHolders).once();
         replay(usageService, widget, filterWidget, filterController);
-        assertEquals(payeeTotalHolders, controller.getPayeeTotalHolders());
+        assertEquals(payeeTotalHolders, controller.getPayeeTotalHolders(0, 20,
+            Collections.singletonList(new QuerySortOrder("SORT_PROPERTY", SortDirection.DESCENDING))));
+        assertEquals(0, pageableCapture.getValue().getOffset());
+        assertEquals(20, pageableCapture.getValue().getLimit());
+        assertEquals("SORT_PROPERTY", sortCapture.getValue().getProperty());
         verify(usageService, widget, filterWidget, filterController);
     }
 }

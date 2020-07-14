@@ -748,6 +748,28 @@
         <include refid="IUsageMapper.selectRightsholderTotalsHoldersByScenarioIdSql"/>
     </select>
 
+    <sql id="payeeTotalHolderFilterSql">
+        where s.status_ind = #{scenarioStatus}
+        <if test="filter.scenarioIds.size() > 0">
+            and u.df_scenario_uid in
+            <foreach collection="filter.scenarioIds" item="scenarioId" open="(" separator="," close=")">
+                #{scenarioId}
+            </foreach>
+        </if>
+        <if test="null != filter.payeeParticipating">
+            and ufas.is_payee_participating_flag = ${filter.payeeParticipating}
+        </if>
+        <if test="null != searchValue">
+            and
+            (payee.name ilike '%' || #{searchValue} || '%' or
+            cast(u.payee_account_number as text) like '%' || #{searchValue} || '%')
+        </if>
+        group by payee_account_number, ufas.is_payee_participating_flag
+        <if test="null != filter.netAmountMinThreshold">
+            having sum(u.net_amount) &lt; ${filter.netAmountMinThreshold}
+        </if>
+    </sql>
+
     <select id="findPayeeTotalHoldersByFilter" parameterType="map" resultMap="payeeTotalHolderResultMap">
         select
             p.name payee_name,
@@ -767,28 +789,52 @@
             join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
             join ${schema}.df_rightsholder payee on u.payee_account_number = payee.rh_account_number
             join ${schema}.df_scenario s on u.df_scenario_uid = s.df_scenario_uid
-            where s.status_ind = #{scenarioStatus}
-                <if test="filter.scenarioIds.size() > 0">
-                    and u.df_scenario_uid in
-                    <foreach collection="filter.scenarioIds" item="scenarioId" open="(" separator="," close=")">
-                        #{scenarioId}
-                    </foreach>
-                </if>
-                <if test="null != filter.payeeParticipating">
-                    and ufas.is_payee_participating_flag = ${filter.payeeParticipating}
-                </if>
-                <if test="null != filter.searchValue">
-                    and
-                    (payee.name ilike '%' || #{filter.searchValue} || '%' or
-                    cast(u.payee_account_number as text) like '%' || #{filter.searchValue} || '%')
-                </if>
-            group by payee_account_number, ufas.is_payee_participating_flag
-            <if test="null != filter.netAmountMinThreshold">
-                having sum(u.net_amount) &lt; ${filter.netAmountMinThreshold}
-            </if>
+            <include refid="IUsageMapper.payeeTotalHolderFilterSql"/>
         ) u
         left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
-        order by p.name asc
+        order by
+        <choose>
+            <when test="null != sort">
+                <choose>
+                    <when test="sort.property == 'payee.name'">
+                        p.name <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'payee.accountNumber'">
+                        u.payee_account_number <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'grossTotal'">
+                        u.gross_total <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'serviceFeeTotal'">
+                        u.service_fee_total <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'netTotal'">
+                        u.net_total <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'payeeParticipating'">
+                        u.is_payee_participating_flag <include refid="IUsageMapper.direction"/>
+                    </when>
+                </choose>,
+                p.name
+            </when>
+            <otherwise>
+                p.name
+            </otherwise>
+        </choose>
+        <include refid="IUsageMapper.ifPageable"/>
+    </select>
+
+    <select id="findPayeeTotalHoldersCountByFilter" parameterType="map" resultType="int">
+        select count(1) from (
+            select
+                u.payee_account_number,
+                ufas.is_payee_participating_flag
+            from apps.df_usage u
+            join apps.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+            join apps.df_rightsholder payee on u.payee_account_number = payee.rh_account_number
+            join apps.df_scenario s on u.df_scenario_uid = s.df_scenario_uid
+            <include refid="IUsageMapper.payeeTotalHolderFilterSql"/>
+        ) u
     </select>
 
     <select id="getTotalAmountByStandardNumberAndBatchId" parameterType="map" resultType="BigDecimal">
