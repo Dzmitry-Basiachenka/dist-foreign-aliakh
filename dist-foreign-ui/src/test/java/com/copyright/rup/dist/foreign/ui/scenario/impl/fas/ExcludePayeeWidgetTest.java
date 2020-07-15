@@ -283,6 +283,7 @@ public class ExcludePayeeWidgetTest {
             createMock(Supplier.class))).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
         expect(controller.getExcludePayeesFilterController()).andReturn(filterController).once();
+        expect(controller.getPayeeTotalHolders()).andReturn(Collections.emptyList()).once();
         expect(filterController.initWidget()).andReturn(filterWidget).once();
         replay(controller, filterController, streamSource);
         widget.init();

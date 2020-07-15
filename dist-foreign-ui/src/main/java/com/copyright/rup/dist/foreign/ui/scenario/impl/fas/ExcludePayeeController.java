@@ -56,9 +56,7 @@ public class ExcludePayeeController extends CommonController<IExcludePayeeWidget
 
     @Override
     public List<PayeeTotalHolder> getPayeeTotalHolders() {
-        ExcludePayeeFilter filter = payeesFilterController.getWidget().getAppliedFilter();
-        filter.setSearchValue(getWidget().getSearchValue());
-        return usageService.getPayeeTotalHoldersByFilter(filter);
+        return usageService.getPayeeTotalHoldersByFilter(payeesFilterController.getWidget().getAppliedFilter());
     }
 
     @Override

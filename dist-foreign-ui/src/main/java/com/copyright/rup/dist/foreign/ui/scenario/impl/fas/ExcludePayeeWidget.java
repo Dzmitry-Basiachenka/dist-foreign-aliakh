@@ -18,6 +18,7 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.SerializableComparator;
 import com.vaadin.shared.ui.MarginInfo;
@@ -31,6 +32,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -54,15 +56,12 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
     private SearchWidget searchWidget;
     private IExcludePayeeController controller;
     private Grid<PayeeTotalHolder> payeesGrid;
-
-    @Override
-    public void performSearch() {
-        refresh();
-    }
+    private ListDataProvider<PayeeTotalHolder> dataProvider;
 
     @Override
     public void refresh() {
-        payeesGrid.setDataProvider(DataProvider.ofCollection(controller.getPayeeTotalHolders()));
+        initDataProvider();
+        performSearch();
     }
 
     @Override
@@ -83,12 +82,14 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
     @Override
     @SuppressWarnings("unchecked")
     public ExcludePayeeWidget init() {
+        IExcludePayeeFilterWidget filterWidget = controller.getExcludePayeesFilterController().initWidget();
+        filterWidget.addListener(FilterChangedEvent.class, controller, IExcludePayeeController.ON_FILTER_CHANGED);
         setWidth(1200, Unit.PIXELS);
         setHeight(500, Unit.PIXELS);
         setCaption(ForeignUi.getMessage("window.exclude.payee"));
         VaadinUtils.addComponentStyle(this, "exclude-details-by-payee-window");
         initGrid();
-        searchWidget = new SearchWidget(this);
+        searchWidget = new SearchWidget(this::performSearch);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.scenario.search_widget.payee"));
         searchWidget.setWidth(75, Unit.PERCENTAGE);
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
@@ -106,8 +107,6 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
         mainLayout.setSizeFull();
         mainLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         mainLayout.setExpandRatio(payeesGrid, 1);
-        IExcludePayeeFilterWidget filterWidget = controller.getExcludePayeesFilterController().initWidget();
-        filterWidget.addListener(FilterChangedEvent.class, controller, IExcludePayeeController.ON_FILTER_CHANGED);
         HorizontalSplitPanel splitPanel = new HorizontalSplitPanel();
         splitPanel.addComponents(filterWidget, mainLayout);
         splitPanel.setSplitPosition(200, Unit.PIXELS);
@@ -128,8 +127,14 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
         payeesGrid = new Grid<>();
         payeesGrid.setSelectionMode(SelectionMode.MULTI);
         payeesGrid.setSizeFull();
+        initDataProvider();
         VaadinUtils.addComponentStyle(payeesGrid, "exclude-details-by-payee-grid");
         addColumns();
+    }
+
+    private void initDataProvider() {
+        dataProvider = DataProvider.ofCollection(controller.getPayeeTotalHolders());
+        payeesGrid.setDataProvider(dataProvider);
     }
 
     private void addColumns() {
@@ -202,5 +207,15 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.exclude_payee.empty"));
             }
         });
+    }
+
+    private void performSearch() {
+        dataProvider.clearFilters();
+        String searchValue = searchWidget.getSearchValue();
+        if (StringUtils.isNotBlank(searchValue)) {
+            dataProvider.setFilter(holder ->
+                StringUtils.containsIgnoreCase(holder.getPayee().getAccountNumber().toString(), searchValue)
+                    || StringUtils.containsIgnoreCase(holder.getPayee().getName(), searchValue));
+        }
     }
 }

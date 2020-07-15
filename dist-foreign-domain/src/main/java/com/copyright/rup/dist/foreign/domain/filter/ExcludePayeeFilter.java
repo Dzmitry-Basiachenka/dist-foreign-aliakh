@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.domain.filter;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -81,8 +80,7 @@ public class ExcludePayeeFilter {
     public boolean isEmpty() {
         return Objects.isNull(payeeParticipating)
             && Objects.isNull(netAmountMinThreshold)
-            && CollectionUtils.isEmpty(scenarioIds)
-            && StringUtils.isBlank(searchValue);
+            && CollectionUtils.isEmpty(scenarioIds);
     }
 
     @Override
