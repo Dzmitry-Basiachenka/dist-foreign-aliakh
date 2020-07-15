@@ -4,7 +4,6 @@ import com.copyright.rup.dist.common.reporting.api.ICsvReportProvider;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.vaadin.widget.api.IController;
 
-import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
@@ -38,19 +37,9 @@ public interface IExcludePayeeController extends IController<IExcludePayeeWidget
     IExcludePayeeFilterController getExcludePayeesFilterController();
 
     /**
-     * Gets list of {@link PayeeTotalHolder}s to be displayed on UI.
-     *
-     * @param startIndex start index
-     * @param count      count
-     * @param sortOrders set of {@link QuerySortOrder}s
-     * @return list of {@link PayeeTotalHolder}s
+     * @return list of {@link PayeeTotalHolder}s to be displayed on UI.
      */
-    List<PayeeTotalHolder> getPayeeTotalHolders(int startIndex, int count, List<QuerySortOrder> sortOrders);
-
-    /**
-     * @return count of {@link PayeeTotalHolder}s
-     */
-    int getPayeeTotalHoldersCount();
+    List<PayeeTotalHolder> getPayeeTotalHolders();
 
     /**
      * Exclude details from corresponding scenario with selected payees' account numbers.

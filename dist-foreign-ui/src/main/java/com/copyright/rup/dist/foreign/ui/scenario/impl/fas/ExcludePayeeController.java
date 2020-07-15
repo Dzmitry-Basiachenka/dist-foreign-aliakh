@@ -2,9 +2,6 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
-import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
@@ -15,10 +12,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterCon
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
-import com.vaadin.data.provider.QuerySortOrder;
-import com.vaadin.shared.data.sort.SortDirection;
-
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -62,22 +55,10 @@ public class ExcludePayeeController extends CommonController<IExcludePayeeWidget
     }
 
     @Override
-    public List<PayeeTotalHolder> getPayeeTotalHolders(int startIndex, int count, List<QuerySortOrder> sortOrders) {
+    public List<PayeeTotalHolder> getPayeeTotalHolders() {
         ExcludePayeeFilter filter = payeesFilterController.getWidget().getAppliedFilter();
         filter.setSearchValue(getWidget().getSearchValue());
-        Sort sort = null;
-        if (CollectionUtils.isNotEmpty(sortOrders)) {
-            QuerySortOrder sortOrder = sortOrders.get(0);
-            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
-        }
-        return usageService.getPayeeTotalHoldersByFilter(filter, new Pageable(startIndex, count), sort);
-    }
-
-    @Override
-    public int getPayeeTotalHoldersCount() {
-        ExcludePayeeFilter filter = payeesFilterController.getWidget().getAppliedFilter();
-        filter.setSearchValue(getWidget().getSearchValue());
-        return usageService.getPayeeTotalHoldersCountByFilter(filter);
+        return usageService.getPayeeTotalHoldersByFilter(filter);
     }
 
     @Override

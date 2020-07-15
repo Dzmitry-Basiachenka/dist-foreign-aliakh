@@ -10,7 +10,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
@@ -55,11 +54,15 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
     private SearchWidget searchWidget;
     private IExcludePayeeController controller;
     private Grid<PayeeTotalHolder> payeesGrid;
-    private DataProvider<PayeeTotalHolder, Void> dataProvider;
+
+    @Override
+    public void performSearch() {
+        refresh();
+    }
 
     @Override
     public void refresh() {
-        initDataProvider();
+        payeesGrid.setDataProvider(DataProvider.ofCollection(controller.getPayeeTotalHolders()));
     }
 
     @Override
@@ -85,7 +88,7 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
         setCaption(ForeignUi.getMessage("window.exclude.payee"));
         VaadinUtils.addComponentStyle(this, "exclude-details-by-payee-window");
         initGrid();
-        searchWidget = new SearchWidget(() -> dataProvider.refreshAll());
+        searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.scenario.search_widget.payee"));
         searchWidget.setWidth(75, Unit.PERCENTAGE);
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
@@ -127,15 +130,6 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
         payeesGrid.setSizeFull();
         VaadinUtils.addComponentStyle(payeesGrid, "exclude-details-by-payee-grid");
         addColumns();
-        initDataProvider();
-    }
-
-    private void initDataProvider() {
-        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
-            query ->
-                controller.getPayeeTotalHolders(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
-            query -> controller.getPayeeTotalHoldersCount());
-        payeesGrid.setDataProvider(dataProvider);
     }
 
     private void addColumns() {
