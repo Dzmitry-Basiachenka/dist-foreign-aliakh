@@ -182,20 +182,10 @@ public interface IUsageRepository {
     /**
      * Gets list of {@link PayeeTotalHolder}s by filter.
      *
-     * @param filter   instance of {@link ExcludePayeeFilter}
-     * @param pageable instance of {@link Pageable}
-     * @param sort     instance of {@link Sort}
+     * @param filter instance of {@link ExcludePayeeFilter}
      * @return list of {@link PayeeTotalHolder}s
      */
-    List<PayeeTotalHolder> findPayeeTotalHoldersByFilter(ExcludePayeeFilter filter, Pageable pageable, Sort sort);
-
-    /**
-     * Finds count of {@link PayeeTotalHolder}s by filter.
-     *
-     * @param filter instance of {@link ExcludePayeeFilter}
-     * @return count of {@link PayeeTotalHolder}s
-     */
-    int findPayeeTotalHoldersCountByFilter(ExcludePayeeFilter filter);
+    List<PayeeTotalHolder> findPayeeTotalHoldersByFilter(ExcludePayeeFilter filter);
 
     /**
      * Gets count of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}

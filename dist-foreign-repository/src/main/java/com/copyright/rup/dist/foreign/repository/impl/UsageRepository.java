@@ -205,24 +205,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<PayeeTotalHolder> findPayeeTotalHoldersByFilter(ExcludePayeeFilter filter, Pageable pageable,
-                                                                Sort sort) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
+    public List<PayeeTotalHolder> findPayeeTotalHoldersByFilter(ExcludePayeeFilter filter) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
         parameters.put("scenarioStatus", ScenarioStatusEnum.IN_PROGRESS);
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(filter.getSearchValue()));
-        parameters.put(PAGEABLE_KEY, pageable);
-        parameters.put(SORT_KEY, sort);
         return selectList("IUsageMapper.findPayeeTotalHoldersByFilter", parameters);
-    }
-
-    @Override
-    public int findPayeeTotalHoldersCountByFilter(ExcludePayeeFilter filter) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        parameters.put("scenarioStatus", ScenarioStatusEnum.IN_PROGRESS);
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(filter.getSearchValue()));
-        return selectOne("IUsageMapper.findPayeeTotalHoldersCountByFilter", parameters);
     }
 
     @Override

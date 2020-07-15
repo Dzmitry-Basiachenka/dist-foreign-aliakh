@@ -120,20 +120,10 @@ public interface IUsageService {
     /**
      * Gets list of {@link PayeeTotalHolder}s by filter.
      *
-     * @param filter   instance of {@link ExcludePayeeFilter}
-     * @param pageable instance of {@link Pageable}
-     * @param sort     instance of {@link Sort}
+     * @param filter instance of {@link ExcludePayeeFilter}
      * @return list of {@link PayeeTotalHolder}s
      */
-    List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(ExcludePayeeFilter filter, Pageable pageable, Sort sort);
-
-    /**
-     * Gets count of {@link PayeeTotalHolder}s based on {@link ExcludePayeeFilter}.
-     *
-     * @param filter instance of {@link ExcludePayeeFilter}
-     * @return count of {@link PayeeTotalHolder}s
-     */
-    int getPayeeTotalHoldersCountByFilter(ExcludePayeeFilter filter);
+    List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(ExcludePayeeFilter filter);
 
     /**
      * Gets count of {@link RightsholderTotalsHolder}s based on {@link Scenario}.

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.fas;
 
+import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -14,7 +15,8 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IExcludePayeeWidget extends IRefreshable, IWidget<IExcludePayeeController> {
+public interface IExcludePayeeWidget extends SearchWidget.ISearchController, IRefreshable,
+    IWidget<IExcludePayeeController> {
 
     /**
      * @return search value string.
