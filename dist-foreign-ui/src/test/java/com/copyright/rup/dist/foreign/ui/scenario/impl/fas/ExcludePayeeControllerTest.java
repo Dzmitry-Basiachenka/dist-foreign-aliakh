@@ -112,7 +112,6 @@ public class ExcludePayeeControllerTest {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
-        expect(widget.getSearchValue()).andReturn("Search value").once();
         expect(usageService.getPayeeTotalHoldersByFilter(filter)).andReturn(payeeTotalHolders).once();
         replay(usageService, widget, filterWidget, filterController);
         assertEquals(payeeTotalHolders, controller.getPayeeTotalHolders());
