@@ -35,11 +35,11 @@ import java.util.Collections;
  */
 public class PiIntegrationServiceTest {
 
-    private static final String FORBIDDEN_RIGHTS_REVIEW =
+    private static final String FORBIDDEN_RITES_REVIEW =
         "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)";
     private static final String ANNUAIRE_TITLE = "Annuaire de la communication en Rhône-Alpes";
     private static final String OCULAR_TITLE = "Ocular Tissue Culture";
-    private static final String FORBIDDEN_RIGHTS = "Forbidden rites";
+    private static final String FORBIDDEN_RITES = "Forbidden rites";
     private static final String VALISBN10 = "VALISBN10";
     private static final String VALISBN13 = "VALISBN13";
     private static final String IDNO_1 = "1140-9126";
@@ -85,11 +85,11 @@ public class PiIntegrationServiceTest {
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5);
         assertEquals(new Work(123059057L, ANNUAIRE_TITLE, IDNO_1, "VALISSN"),
             piIntegrationService.findWorkByStandardNumber(IDNO_1));
-        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10),
+        assertEquals(new Work(123059058L, FORBIDDEN_RITES, IDNO_2, VALISBN10),
             piIntegrationService.findWorkByStandardNumber("0-271-01750-3"));
-        assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS, IDNO_3, VALISBN13),
+        assertEquals(new Work(156427025L, FORBIDDEN_RITES, IDNO_3, VALISBN13),
             piIntegrationService.findWorkByStandardNumber(IDNO_3));
-        assertEquals(new Work(112942199L, FORBIDDEN_RIGHTS_REVIEW, IDNO_4, "DOI"),
+        assertEquals(new Work(112942199L, FORBIDDEN_RITES_REVIEW, IDNO_4, "DOI"),
             piIntegrationService.findWorkByStandardNumber(IDNO_4));
         assertEquals(new Work(123067577L, OCULAR_TITLE, IDNO_3, VALISBN13),
             piIntegrationService.findWorkByStandardNumber(IDNO_3));
@@ -106,7 +106,7 @@ public class PiIntegrationServiceTest {
         expectSearchHitSource(searchHit2, SEARCH_HIT_2);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(2);
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2);
-        Work work = new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10);
+        Work work = new Work(123059058L, FORBIDDEN_RITES, IDNO_2, VALISBN10);
         work.setHostIdnoFlag(true);
         assertEquals(work, piIntegrationService.findWorkByStandardNumber(IDNO_1));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2);
@@ -145,14 +145,14 @@ public class PiIntegrationServiceTest {
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
         assertEquals(new Work(123059057L, ANNUAIRE_TITLE, IDNO_1, "VALISSN"),
-            piIntegrationService.findWorkByTitle(FORBIDDEN_RIGHTS));
-        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10),
+            piIntegrationService.findWorkByTitle(FORBIDDEN_RITES));
+        assertEquals(new Work(123059058L, FORBIDDEN_RITES, IDNO_2, VALISBN10),
             piIntegrationService.findWorkByTitle("Forbidden rites : a necromancer's manual of the fifteenth century"));
         assertEquals(new Work(), piIntegrationService.findWorkByTitle(
             "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century"));
         assertEquals(new Work(), piIntegrationService.findWorkByTitle(
             "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)"));
-        assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS, IDNO_5, VALISBN13),
+        assertEquals(new Work(156427025L, FORBIDDEN_RITES, IDNO_5, VALISBN13),
             piIntegrationService.findWorkByTitle(ANNUAIRE_TITLE));
         assertEquals(new Work(123067577L, OCULAR_TITLE, IDNO_3, VALISBN13),
             piIntegrationService.findWorkByTitle(OCULAR_TITLE));
@@ -166,9 +166,9 @@ public class PiIntegrationServiceTest {
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
         assertEquals(new Work(123059057L, ANNUAIRE_TITLE, IDNO_1, "VALISSN"),
             piIntegrationService.findWorkByWrWrkInst(123059057L));
-        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, IDNO_2, VALISBN10),
+        assertEquals(new Work(123059058L, FORBIDDEN_RITES, IDNO_2, VALISBN10),
             piIntegrationService.findWorkByWrWrkInst(123059058L));
-        assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS, IDNO_3, VALISBN13),
+        assertEquals(new Work(156427025L, FORBIDDEN_RITES, IDNO_3, VALISBN13),
             piIntegrationService.findWorkByWrWrkInst(156427025L));
         assertEquals(new Work(), piIntegrationService.findWorkByWrWrkInst(1000009552L));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
