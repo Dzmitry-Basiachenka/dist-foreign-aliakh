@@ -1,3 +1,9 @@
+11.1.1
+-
+* B-58527 FDA: Matching enhancements for works: make changes based on comments in CR-DIST-FOREIGN-185
+* CDP-923 FDA: FAS/FAS2 Exclude Payees: Previously marked payees checkboxes are cleared when Search string is applied or canceled
+* Revert "CDP-923 FDA: FAS/FAS2 Exclude Payees: Previously marked payees checkboxes are cleared when Search string is applied or canceled"
+
 11.1.0
 -
 * B-57817 FDA: Update the FDA integration with the latest version of Elastic Search for the RUP ES API: migrate to rup-es-api 11.4.+
