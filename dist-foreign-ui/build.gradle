@@ -18,6 +18,10 @@ vaadin {
     manageRepositories = false
 }
 
+configurations {
+    compile.exclude group: 'org.apache.activemq'
+}
+
 dependencies {
     compile project(':dist-foreign-domain')
     compile project(':dist-foreign-service')
@@ -35,17 +39,12 @@ dependencies {
     compile("org.springframework:spring-webmvc:${rupJava.standardDependencies.spring.version}")
 
     runtime("com.copyright.rup.common:rup-common-web:${rupCommonVersion}")
-    runtime("com.copyright.rup.dist.common:dist-common-web:${distCommonVersion}") {
-        exclude group: "org.apache.activemq"
-    }
+    runtime("com.copyright.rup.dist.common:dist-common-web:${distCommonVersion}")
     runtime("com.copyright.rup.security.auth:rup-auth-consumer:${rupAuthVersion}")
-    runtime("com.vaadin:vaadin-push:${vaadinVersion}")
     runtime("org.codehaus.janino:janino:${janinoVersion}")
     runtime("org.springframework.security:spring-security-core:${springSecurityVersion}")
 
-    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}"){
-        exclude group: "org.apache.activemq"
-    }
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
     testCompile("org.apache.commons:commons-text:${commonsTextVersion}")
 
     testRuntime("cglib:cglib-nodep:${cglibNodepVersion}")
