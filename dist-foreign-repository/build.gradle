@@ -13,9 +13,7 @@ dependencies {
     compile("org.apache.commons:commons-collections4:${commonsCollectionsVersion}")
     compile("org.mybatis:mybatis-typehandlers-jsr310:${mybatisTypehandlersVersion}")
 
-    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}") {
-        exclude group: "org.apache.activemq"
-    }
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
 
     testIntegCompile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${rupCamel.standardDependencies.jackson.version}")
     testIntegRuntime project(":dist-foreign-db")

@@ -1,7 +1,5 @@
 dependencies {
     compile("com.copyright.rup.dist.common:dist-common-domain:${distCommonVersion}")
 
-    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}"){
-        exclude group: "org.apache.activemq"
-    }
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
 }
