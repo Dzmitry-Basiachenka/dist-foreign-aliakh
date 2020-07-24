@@ -1,0 +1,130 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ISalUsageMapper">
+
+    <resultMap id="salUsageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_usage_uid"/>
+        <result property="batchName" column="batch_name"/>
+        <result property="periodEndDate" column="batch_period_end_date"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="standardNumber" column="standard_number"/>
+        <result property="standardNumberType" column="standard_number_type"/>
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="rhName" column="rh_name"/>
+        <result property="licenseeAccountNumber" column="licensee_account_number"/>
+        <result property="licenseeName" column="licensee_name"/>
+        <result property="status" column="status_ind"/>
+        <result property="productFamily" column="product_family"/>
+        <result property="comment" column="comment"/>
+        <result property="salUsage.detailType" column="detail_type"/>
+        <result property="salUsage.grade" column="grade"/>
+        <result property="salUsage.gradeGroup" column="grade_group"/>
+        <result property="salUsage.assessmentName" column="assessment_name"/>
+        <result property="salUsage.assessmentType" column="assessment_type"/>
+        <result property="salUsage.reportedWorkPortionId" column="reported_work_portion_id"/>
+        <result property="salUsage.reportedTitle" column="reported_title"/>
+        <result property="salUsage.reportedArticle" column="reported_article"/>
+        <result property="salUsage.reportedStandardNumber" column="reported_standard_number"/>
+        <result property="salUsage.reportedAuthor" column="reported_author"/>
+        <result property="salUsage.reportedPublisher" column="reported_publisher"/>
+        <result property="salUsage.reportedPublicationDate" column="reported_publication_date"/>
+        <result property="salUsage.reportedPageRange" column="reported_page_range"/>
+        <result property="salUsage.reportedVolNumberSeries" column="reported_vol_number_series"/>
+        <result property="salUsage.reportedMediaType" column="reported_media_type"/>
+        <result property="salUsage.mediaTypeWeight" column="media_type_weight"/>
+        <result property="salUsage.coverageYear" column="coverage_year"/>
+        <result property="salUsage.scoredAssessmentDate" column="scored_assessment_date"/>
+        <result property="salUsage.questionIdentifier" column="question_identifier"/>
+        <result property="salUsage.states" column="states"/>
+        <result property="salUsage.numberOfViews" column="number_of_views"/>
+    </resultMap>
+
+    <sql id="salUsageColumns">
+        ub.name batch_name,
+        ub.payment_date batch_period_end_date,
+        u.wr_wrk_inst,
+        u.system_title,
+        u.standard_number,
+        u.standard_number_type,
+        u.rh_account_number,
+        rh.name rh_name,
+        null licensee_account_number, <!--TODO {aliakh} replace with ub.sal_fields->>'licensee_account_number'-->
+        null licensee_name, <!--TODO {aliakh} replace with ub.sal_fields->>'licensee_name'-->
+        u.status_ind,
+        u.product_family,
+        u.comment,
+        usal.detail_type,
+        usal.grade,
+        usal.grade_group,
+        usal.assessment_name,
+        usal.assessment_type,
+        usal.reported_work_portion_id,
+        usal.reported_title,
+        usal.reported_article,
+        usal.reported_standard_number,
+        usal.reported_author,
+        usal.reported_publisher,
+        usal.reported_publication_date,
+        usal.reported_page_range,
+        usal.reported_vol_number_series,
+        usal.reported_media_type,
+        usal.media_type_weight,
+        usal.coverage_year,
+        usal.scored_assessment_date,
+        usal.question_identifier,
+        usal.states,
+        usal.number_of_views,
+        u.created_datetime,
+        u.updated_datetime,
+        u.created_by_user,
+        u.updated_by_user,
+        u.record_version
+    </sql>
+
+    <sql id="usageFilter">
+        <where>
+            <if test="filter.usageBatchesIds.size() > 0">
+                and
+                <foreach collection="filter.usageBatchesIds" item="usageBatchId" open="(" separator=" or " close=")">
+                    u.df_usage_batch_uid = #{usageBatchId}
+                </foreach>
+            </if>
+            <if test="null != filter.productFamily">
+                and u.product_family = #{filter.productFamily}
+            </if>
+            <if test="null != filter.usageStatus">
+                and u.status_ind = #{filter.usageStatus}
+            </if>
+            <if test="null != filter.salDetailType">
+                and usal.detail_type = #{filter.salDetailType}
+            </if>
+        </where>
+    </sql>
+
+    <select id="findCountByFilter" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        <include refid="usageFilter"/>
+            and u.df_scenario_uid is null
+    </select>
+
+    <select id="findDtosByFilter" resultMap="salUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        select
+            u.df_usage_uid,
+            <include refid="salUsageColumns"/>
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        <include refid="usageFilter"/>
+            and u.df_scenario_uid is null
+        <include refid="IUsageMapper.ifSortable"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </select>
+</mapper>

@@ -11,13 +11,12 @@ databaseChangeLog {
             column(name: 'detail_type', type: 'VARCHAR(32)', remarks: 'The detail type') {
                 constraints(nullable: false)
             }
+            column(name: 'grade', type: 'VARCHAR(32)', remarks: 'The grade')
+            column(name: 'grade_group', type: 'VARCHAR(32)', remarks: 'The grade group')
             column(name: 'assessment_name', type: 'VARCHAR(1000)', remarks: 'The assessment name') {
                 constraints(nullable: false)
             }
             column(name: 'assessment_type', type: 'VARCHAR(1000)', remarks: 'The assessment type') {
-                constraints(nullable: false)
-            }
-            column(name: 'date_of_scored_assessment', type: 'TIMESTAMPTZ', remarks: 'The date of scored assessment') {
                 constraints(nullable: false)
             }
             column(name: 'reported_work_portion_id', type: 'VARCHAR(1000)', remarks: 'The reported work portion id') {
@@ -36,11 +35,12 @@ databaseChangeLog {
             column(name: 'coverage_year', type: 'VARCHAR(100)', remarks: 'The coverage year') {
                 constraints(nullable: false)
             }
+            column(name: 'scored_assessment_date', type: 'TIMESTAMPTZ', remarks: 'The scored assessment date') {
+                constraints(nullable: false)
+            }
             column(name: 'question_identifier', type: 'VARCHAR(1000)', remarks: 'The question identifier') {
                 constraints(nullable: false)
             }
-            column(name: 'grade', type: 'VARCHAR(32)', remarks: 'The grade')
-            column(name: 'grade_group', type: 'VARCHAR(32)', remarks: 'The grade group')
             column(name: 'states', type: 'VARCHAR(1000)', remarks: 'The states') {
                 constraints(nullable: false)
             }
