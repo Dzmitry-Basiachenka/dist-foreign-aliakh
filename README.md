@@ -1,3 +1,11 @@
+11.1.2
+-
+* B-59200 Tech Debt: FDA: fix CVE-2020-9484 and CVE-2020-11996 vulnerabilities
+* B-59200 Tech Debt: FDA: fix CVE-2018-8088 and CVE-2020-1941 vulnerabilities by removing unused dependencies
+* B-59200 Tech Debt: FDA: fix CVE-2020-9488 vulnerability
+* B-59200 Tech Debt: FDA: apply last version of rup-vaadin
+* B-59200 Tech Debt: FDA: adjust matching for works to search by doi using normalized standard number
+
 11.1.1
 -
 * B-58527 FDA: Matching enhancements for works: make changes based on comments in CR-DIST-FOREIGN-185
