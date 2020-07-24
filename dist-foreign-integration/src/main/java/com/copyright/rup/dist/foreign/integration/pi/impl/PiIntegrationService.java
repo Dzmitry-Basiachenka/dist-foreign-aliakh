@@ -71,7 +71,7 @@ public class PiIntegrationService implements IPiIntegrationService {
     @Override
     public Work findWorkByTitle(String title) {
         Work result = new Work();
-        RupSearchResponse searchResponse = doSearch(MAIN_TITLE, title, true);
+        RupSearchResponse searchResponse = doSearch(MAIN_TITLE, title);
         List<RupSearchHit> searchHits = searchResponse.getResults().getHits();
         if (CollectionUtils.isNotEmpty(searchHits) && EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
             result = searchByHostIdnoIfExists(searchHits, MAIN_TITLE, title, false);
@@ -118,44 +118,43 @@ public class PiIntegrationService implements IPiIntegrationService {
     /**
      * Builds query string based on field to search and value.
      *
-     * @param field    field to search
-     * @param value    value
-     * @param isEscape {@code true} if value should be escaped, otherwise {@code false}
+     * @param field field to search
+     * @param value value
      * @return query string
      */
-    String buildQueryString(String field, Object value, boolean isEscape) {
+    String buildQueryString(String field, Object value) {
         return String.format("%s:\"%s\"", field, value instanceof String
-            ? isEscape ? QueryParser.escape(((String) value).trim()) : ((String) value).trim()
+            ? QueryParser.escape(((String) value).trim())
             : value);
     }
 
     private Work findWorkByStandardNumber(String standardNumber, boolean isHostIdno) {
-        Work result = findWork("issn", standardNumber, isHostIdno, true);
+        Work result = findWork("issn", standardNumber, isHostIdno);
         if (Objects.nonNull(result)) {
             return result;
         }
-        result = findWork("isbn10", standardNumber, isHostIdno, true);
+        result = findWork("isbn10", standardNumber, isHostIdno);
         if (Objects.nonNull(result)) {
             return result;
         }
-        result = findWork("isbn13", standardNumber, isHostIdno, true);
+        result = findWork("isbn13", standardNumber, isHostIdno);
         if (Objects.nonNull(result)) {
             return result;
         }
-        result = findWork("doi", standardNumber, isHostIdno, false);
+        result = findWork("doi", standardNumber, isHostIdno);
         if (Objects.nonNull(result)) {
             return result;
         }
-        result = findWork("stdid", standardNumber, isHostIdno, true);
+        result = findWork("stdid", standardNumber, isHostIdno);
         if (Objects.nonNull(result)) {
             return result;
         }
         return new Work();
     }
 
-    private Work findWork(String parameter, Object value, boolean isHostIdno, boolean isEscape) {
+    private Work findWork(String parameter, Object value, boolean isHostIdno) {
         Work result = null;
-        List<RupSearchHit> searchHits = doSearch(parameter, value, isEscape).getResults().getHits();
+        List<RupSearchHit> searchHits = doSearch(parameter, value).getResults().getHits();
         if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
             result = searchByHostIdnoIfExists(searchHits, parameter, value, isHostIdno);
         }
@@ -183,7 +182,7 @@ public class PiIntegrationService implements IPiIntegrationService {
     }
 
     private Work findByWrWrkInst(Object value) {
-        List<RupSearchHit> searchHits = doSearch("wrWrkInst", value, false).getResults().getHits();
+        List<RupSearchHit> searchHits = doSearch("wrWrkInst", value).getResults().getHits();
         return EXPECTED_SEARCH_HITS_COUNT == searchHits.size()
             ? parseWorkFromSearchHit(searchHits, "wrWrkInst", value, false)
             : null;
@@ -204,10 +203,9 @@ public class PiIntegrationService implements IPiIntegrationService {
         }
     }
 
-    private RupSearchResponse doSearch(String field, Object value, boolean isEscape) {
-        String queryString = buildQueryString(field, value, isEscape);
+    private RupSearchResponse doSearch(String field, Object value) {
         RupSearchRequest request = RupSearchRequest.of(piIndex);
-        RupQueryStringQueryBuilder builder = RupQueryStringQueryBuilder.of(queryString);
+        RupQueryStringQueryBuilder builder = RupQueryStringQueryBuilder.of(buildQueryString(field, value));
         request.setQueryBuilder(builder);
         request.setSearchType(RupSearchRequest.RupSearchType.DFS_QUERY_AND_FETCH);
         request.setFields(MAIN_TITLE, HOST_IDNO);
