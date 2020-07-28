@@ -5,7 +5,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 import java.time.LocalDate;
 
 /**
- * Interface for service fee true-up report controller.
+ * Interface for service fee true-up report controller for FAS/FAS2.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -13,7 +13,7 @@ import java.time.LocalDate;
  *
  * @author Uladzislau_Shalamitski
  */
-public interface IServiceFeeTrueUpReportWidget extends IWidget<IServiceFeeTrueUpReportController> {
+public interface IFasServiceFeeTrueUpReportWidget extends IWidget<IFasServiceFeeTrueUpReportController> {
 
     /**
      * @return selected to date.

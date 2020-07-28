@@ -4,7 +4,7 @@ import com.copyright.rup.dist.common.reporting.api.ICsvReportProvider;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 /**
- * Interface for service fee true-up report controller.
+ * Interface for service fee true-up report controller for FAS/FAS2.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -12,6 +12,6 @@ import com.copyright.rup.vaadin.widget.api.IController;
  *
  * @author Uladzislau_Shalamitski
  */
-public interface IServiceFeeTrueUpReportController extends IController<IServiceFeeTrueUpReportWidget>,
+public interface IFasServiceFeeTrueUpReportController extends IController<IFasServiceFeeTrueUpReportWidget>,
     ICsvReportProvider {
 }

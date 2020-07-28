@@ -399,17 +399,17 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testWriteServiceFeeTrueUpCsvReport() throws IOException {
-        assertFiles(outputStream -> reportRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2012, 1, 1),
+    public void testWriteFasServiceFeeTrueUpCsvReport() throws IOException {
+        assertFiles(outputStream -> reportRepository.writeFasServiceFeeTrueUpCsvReport(LocalDate.of(2012, 1, 1),
             LocalDate.of(2012, 3, 15), LocalDate.of(2014, 5, 5), outputStream, 2000017000L,
-            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report.csv");
+            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report_fas.csv");
     }
 
     @Test
-    public void testWriteServiceFeeTrueUpCsvEmptyReport() throws IOException {
-        assertFiles(outputStream -> reportRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2013, 1, 1),
+    public void testWriteFasServiceFeeTrueUpCsvEmptyReport() throws IOException {
+        assertFiles(outputStream -> reportRepository.writeFasServiceFeeTrueUpCsvReport(LocalDate.of(2013, 1, 1),
             LocalDate.of(2012, 1, 1), LocalDate.of(2014, 5, 5), outputStream, 2000017000L,
-            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report_empty.csv");
+            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report_fas_empty.csv");
     }
 
     @Test

@@ -105,7 +105,7 @@ public class ReportServiceTest {
     }
 
     @Test
-    public void testServiceFeeTrueUpCsvReport() {
+    public void testWriteFasServiceFeeTrueUpCsvReport() {
         LocalDate fromDate = LocalDate.now();
         LocalDate toDate = LocalDate.now();
         LocalDate paymentDateTo = LocalDate.now();
@@ -113,11 +113,11 @@ public class ReportServiceTest {
         Whitebox.setInternalState(reportService, fasUsageService);
         expect(fasUsageService.getClaAccountNumber()).andReturn(2000017000L).once();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        reportRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream, 2000017000L,
+        reportRepository.writeFasServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream, 2000017000L,
             DEFAULT_ESTIMATED_SERVICE_FEE);
         expectLastCall().once();
         replay(reportRepository, fasUsageService);
-        reportService.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);
+        reportService.writeFasServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);
         verify(reportRepository, fasUsageService);
     }
 

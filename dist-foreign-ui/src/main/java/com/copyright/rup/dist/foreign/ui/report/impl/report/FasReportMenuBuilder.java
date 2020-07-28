@@ -32,7 +32,7 @@ public class FasReportMenuBuilder implements IReportMenuBuilder {
         rootItem.addItem(ForeignUi.getMessage("menu.report.research_status"), menuItem ->
             widget.generateReport(controller.getResearchStatusReportStreamSource()));
         rootItem.addItem(serviceFeeTrueUpReport, menuItem ->
-            widget.openReportWindow(serviceFeeTrueUpReport, controller.getServiceFeeTrueUpReportController()));
+            widget.openReportWindow(serviceFeeTrueUpReport, controller.getFasServiceFeeTrueUpReportController()));
         rootItem.addItem(undistributedLiabilitiesReport, menuItem ->
             widget.openReportWindow(undistributedLiabilitiesReport,
                 controller.getUndistributedLiabilitiesReportController()));

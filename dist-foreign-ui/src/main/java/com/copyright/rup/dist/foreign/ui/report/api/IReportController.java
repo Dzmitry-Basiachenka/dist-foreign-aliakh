@@ -31,9 +31,9 @@ public interface IReportController extends IController<IReportWidget> {
     IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController();
 
     /**
-     * @return service fee true-up report controller.
+     * @return service fee true-up report controller for FAS/FAS2.
      */
-    IServiceFeeTrueUpReportController getServiceFeeTrueUpReportController();
+    IFasServiceFeeTrueUpReportController getFasServiceFeeTrueUpReportController();
 
     /**
      * @return summary market report controller.
