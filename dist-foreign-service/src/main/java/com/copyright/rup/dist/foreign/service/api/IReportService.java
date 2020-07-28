@@ -168,15 +168,15 @@ public interface IReportService {
     void writeResearchStatusCsvReport(OutputStream outputStream);
 
     /**
-     * Writes Service Fee True-up Report into the output stream in csv format.
+     * Writes Service Fee True-up Report for FAS/FAS2 into the output stream in csv format.
      *
      * @param fromDate      from date
      * @param toDate        to date
      * @param paymentDateTo payment date to
      * @param outputStream  instance of {@link OutputStream}
      */
-    void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
-                                        OutputStream outputStream);
+    void writeFasServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
+                                           OutputStream outputStream);
 
     /**
      * Writes Summary of Market Report into the output stream in csv format based on batches.

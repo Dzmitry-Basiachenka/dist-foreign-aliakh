@@ -98,21 +98,22 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     }
 
     @Override
-    public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
-                                               OutputStream outputStream, Long claAccountNumber,
-                                               BigDecimal defaultEstimatedServiceFee) {
+    public void writeFasServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
+                                                  OutputStream outputStream, Long claAccountNumber,
+                                                  BigDecimal defaultEstimatedServiceFee) {
         try (ServiceFeeTrueUpReportHandler handler =
                  new ServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(8);
             parameters.put("paymentDateTo", Objects.requireNonNull(paymentDateTo));
             parameters.put("fromDate", Objects.requireNonNull(fromDate));
             parameters.put("toDate", Objects.requireNonNull(toDate));
+            parameters.put("productFamilies", FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
             parameters.put("productFamilyClaFas", FdaConstants.CLA_FAS_PRODUCT_FAMILY);
             parameters.put("accountNumberClaFas", claAccountNumber);
             parameters.put("action", ScenarioActionTypeEnum.SENT_TO_LM);
             parameters.put("status", UsageStatusEnum.SENT_TO_LM);
             parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
-            getTemplate().select("IReportMapper.findServiceFeeTrueUpReportDtos", parameters, handler);
+            getTemplate().select("IReportMapper.findFasServiceFeeTrueUpReportDtos", parameters, handler);
         }
     }
 

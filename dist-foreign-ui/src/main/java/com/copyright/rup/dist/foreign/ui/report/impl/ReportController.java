@@ -6,9 +6,9 @@ import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.IAaclBaselineUsagesReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
@@ -36,7 +36,7 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Autowired
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
     @Autowired
-    private IServiceFeeTrueUpReportController serviceFeeTrueUpReportController;
+    private IFasServiceFeeTrueUpReportController serviceFeeTrueUpReportController;
     @Autowired
     private ISummaryMarketReportController summaryMarketReportController;
     @Autowired
@@ -73,7 +73,7 @@ public class ReportController extends CommonController<IReportWidget> implements
     }
 
     @Override
-    public IServiceFeeTrueUpReportController getServiceFeeTrueUpReportController() {
+    public IFasServiceFeeTrueUpReportController getFasServiceFeeTrueUpReportController() {
         return serviceFeeTrueUpReportController;
     }
 

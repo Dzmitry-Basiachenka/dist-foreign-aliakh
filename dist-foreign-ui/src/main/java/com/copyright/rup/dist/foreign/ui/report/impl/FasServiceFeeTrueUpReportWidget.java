@@ -2,8 +2,8 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -28,9 +28,9 @@ import java.util.Objects;
  *
  * @author Uladzislau_Shalamitski
  */
-public class ServiceFeeTrueUpReportWidget extends Window implements IServiceFeeTrueUpReportWidget {
+public class FasServiceFeeTrueUpReportWidget extends Window implements IFasServiceFeeTrueUpReportWidget {
 
-    private IServiceFeeTrueUpReportController controller;
+    private IFasServiceFeeTrueUpReportController controller;
     private LocalDateWidget paymentDateToWidget;
     private LocalDateWidget toDateWidget;
     private LocalDateWidget fromDateWidget;
@@ -38,7 +38,7 @@ public class ServiceFeeTrueUpReportWidget extends Window implements IServiceFeeT
 
     @Override
     @SuppressWarnings("unchecked")
-    public IServiceFeeTrueUpReportWidget init() {
+    public IFasServiceFeeTrueUpReportWidget init() {
         initDatesFilters();
         VerticalLayout content =
             new VerticalLayout(fromDateWidget, toDateWidget, paymentDateToWidget, getButtonsLayout());
@@ -51,7 +51,7 @@ public class ServiceFeeTrueUpReportWidget extends Window implements IServiceFeeT
     }
 
     @Override
-    public void setController(IServiceFeeTrueUpReportController controller) {
+    public void setController(IFasServiceFeeTrueUpReportController controller) {
         this.controller = controller;
     }
 

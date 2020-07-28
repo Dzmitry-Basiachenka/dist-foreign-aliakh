@@ -13,7 +13,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportWidget;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -29,7 +29,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 /**
- * Verifies {@link ServiceFeeTrueUpReportController}.
+ * Verifies {@link FasServiceFeeTrueUpReportController}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -39,23 +39,23 @@ import java.time.ZoneOffset;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
-public class ServiceFeeTrueUpReportControllerTest {
+public class FasServiceFeeTrueUpReportControllerTest {
 
     private IReportService reportService;
-    private ServiceFeeTrueUpReportController controller;
+    private FasServiceFeeTrueUpReportController controller;
 
     @Before
     public void setUp() {
-        controller = new ServiceFeeTrueUpReportController();
+        controller = new FasServiceFeeTrueUpReportController();
         reportService = createMock(IReportService.class);
         Whitebox.setInternalState(controller, reportService);
     }
 
     @Test
     public void testInstantiateWidget() {
-        IServiceFeeTrueUpReportWidget widget = controller.instantiateWidget();
+        IFasServiceFeeTrueUpReportWidget widget = controller.instantiateWidget();
         assertNotNull(controller.instantiateWidget());
-        assertEquals(ServiceFeeTrueUpReportWidget.class, widget.getClass());
+        assertEquals(FasServiceFeeTrueUpReportWidget.class, widget.getClass());
     }
 
     @Test
@@ -65,7 +65,7 @@ public class ServiceFeeTrueUpReportControllerTest {
         LocalDate fromDate = LocalDate.now();
         LocalDate toDate = LocalDate.now().plusDays(1);
         LocalDate paymentDateTo = LocalDate.now().plusDays(2);
-        IServiceFeeTrueUpReportWidget widget = createMock(IServiceFeeTrueUpReportWidget.class);
+        IFasServiceFeeTrueUpReportWidget widget = createMock(IFasServiceFeeTrueUpReportWidget.class);
         Whitebox.setInternalState(controller, widget);
         Capture<LocalDate> fromDateCapture = new Capture<>();
         Capture<LocalDate> toDateCapture = new Capture<>();
@@ -75,7 +75,7 @@ public class ServiceFeeTrueUpReportControllerTest {
         expect(widget.getFromDate()).andReturn(fromDate).once();
         expect(widget.getToDate()).andReturn(toDate).once();
         expect(widget.getPaymentDateTo()).andReturn(paymentDateTo).once();
-        reportService.writeServiceFeeTrueUpCsvReport(capture(fromDateCapture), capture(toDateCapture),
+        reportService.writeFasServiceFeeTrueUpCsvReport(capture(fromDateCapture), capture(toDateCapture),
             capture(paymentDateToCapture), capture(osCapture));
         expectLastCall().once();
         replay(OffsetDateTime.class, widget, reportService);

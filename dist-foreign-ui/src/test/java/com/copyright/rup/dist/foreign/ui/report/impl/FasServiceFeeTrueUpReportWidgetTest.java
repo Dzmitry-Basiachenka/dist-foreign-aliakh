@@ -21,7 +21,7 @@ import org.powermock.reflect.Whitebox;
 import java.time.LocalDate;
 
 /**
- * Verifies {@link ServiceFeeTrueUpReportWidget}.
+ * Verifies {@link FasServiceFeeTrueUpReportWidget}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -29,14 +29,14 @@ import java.time.LocalDate;
  *
  * @author Uladzislau_Shalamitski
  */
-public class ServiceFeeTrueUpReportWidgetTest {
+public class FasServiceFeeTrueUpReportWidgetTest {
 
-    private ServiceFeeTrueUpReportWidget widget;
+    private FasServiceFeeTrueUpReportWidget widget;
 
     @Before
     public void setUp() {
-        ServiceFeeTrueUpReportController controller = new ServiceFeeTrueUpReportController();
-        widget = (ServiceFeeTrueUpReportWidget) controller.initWidget();
+        FasServiceFeeTrueUpReportController controller = new FasServiceFeeTrueUpReportController();
+        widget = (FasServiceFeeTrueUpReportWidget) controller.initWidget();
     }
 
     @Test

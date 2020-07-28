@@ -184,9 +184,9 @@ public class ReportWidgetTest {
     }
 
     @Test
-    public void testServiceFeeTrueUpReportSelected() {
-        expect(reportController.getServiceFeeTrueUpReportController())
-            .andReturn(new ServiceFeeTrueUpReportController()).once();
+    public void testFasServiceFeeTrueUpReportSelected() {
+        expect(reportController.getFasServiceFeeTrueUpReportController())
+            .andReturn(new FasServiceFeeTrueUpReportController()).once();
         expect(ResourceReference.create(anyObject(), anyObject(), anyObject())).andReturn(resourceReference).once();
         Windows.showModalWindow(anyObject());
         expectLastCall().once();

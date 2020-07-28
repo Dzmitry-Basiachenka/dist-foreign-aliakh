@@ -37,7 +37,7 @@ public interface IReportRepository {
                                                 BigDecimal defaultEstimatedServiceFee, Set<String> productFamilies);
 
     /**
-     * Writes Service Fee True-up Report into the output stream in csv format.
+     * Writes Service Fee True-up Report for FAS/FAS2 into the output stream in csv format.
      *
      * @param fromDate                   from date
      * @param toDate                     to date
@@ -46,9 +46,9 @@ public interface IReportRepository {
      * @param claAccountNumber           CLA account number
      * @param defaultEstimatedServiceFee default estimated service fee
      */
-    void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
-                                        OutputStream outputStream, Long claAccountNumber,
-                                        BigDecimal defaultEstimatedServiceFee);
+    void writeFasServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
+                                           OutputStream outputStream, Long claAccountNumber,
+                                           BigDecimal defaultEstimatedServiceFee);
 
     /**
      * Writes Summary of Market Report into the output stream in csv format based on batch ids.

@@ -155,9 +155,9 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
-                                               OutputStream outputStream) {
-        reportRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream,
+    public void writeFasServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
+                                                  OutputStream outputStream) {
+        reportRepository.writeFasServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream,
             fasUsageService.getClaAccountNumber(), defaultEstimatedServiceFee);
     }
 
