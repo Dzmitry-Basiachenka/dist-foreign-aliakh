@@ -1,3 +1,7 @@
+11.1.3
+-
+* CDP-924 FDA: Service Fee True-Up Report for FAS/FAS2: AACL data is displayed in the report
+
 11.1.2
 -
 * B-59200 Tech Debt: FDA: fix CVE-2020-9484 and CVE-2020-11996 vulnerabilities
