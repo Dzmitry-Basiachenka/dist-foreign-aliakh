@@ -10,15 +10,13 @@ import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.LocalDateConverter;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.Converter;
-import com.vaadin.data.Result;
-import com.vaadin.data.ValueContext;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.SerializablePredicate;
@@ -213,29 +211,12 @@ public class AaclUsageBatchUploadWindow extends Window {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
         usageBatch.setProductFamily(FdaConstants.AACL_PRODUCT_FAMILY);
-        usageBatch.setPaymentDate(convertYearToDate(periodEndDateField.getValue()));
+        usageBatch.setPaymentDate(LocalDate.of(Integer.parseInt(periodEndDateField.getValue()), 6, 30));
         usageBatch.setNumberOfBaselineYears(Integer.parseInt(StringUtils.trim(numberOfBaselineYears.getValue())));
         return usageBatch;
     }
 
     private SerializablePredicate<String> getYearValidator() {
         return value -> Integer.parseInt(value) >= MIN_YEAR && Integer.parseInt(value) <= MAX_YEAR;
-    }
-
-    private LocalDate convertYearToDate(String value) {
-        return LocalDate.of(Integer.parseInt(value), 6, 30);
-    }
-
-    private class LocalDateConverter implements Converter<String, LocalDate> {
-
-        @Override
-        public Result<LocalDate> convertToModel(String value, ValueContext context) {
-            return Result.ok(convertYearToDate(value));
-        }
-
-        @Override
-        public String convertToPresentation(LocalDate value, ValueContext context) {
-            return String.valueOf(value.getYear());
-        }
     }
 }
