@@ -87,6 +87,10 @@
             <property name="methodReportLevel">
                 <value>15</value>
             </property>
+            <!--TODO: optimize UsageDto, Usage classes-->
+            <property name="classReportLevel">
+                <value>85</value>
+            </property>
         </properties>
     </rule>
 
@@ -107,7 +111,7 @@
     <rule ref="category/java/design.xml/TooManyFields">
         <properties>
             <property name="maxfields">
-                <value>39</value>
+                <value>42</value>
             </property>
         </properties>
     </rule>

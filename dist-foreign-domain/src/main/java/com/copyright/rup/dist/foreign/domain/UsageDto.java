@@ -46,6 +46,8 @@ public class UsageDto extends StoredEntity<String> {
     private String author;
     private Long payeeAccountNumber;
     private String payeeName;
+    private Long licenseeAccountNumber;
+    private String licenseeName;
     private BigDecimal grossAmount = DEFAULT_AMOUNT;
     private BigDecimal reportedValue = DEFAULT_AMOUNT;
     private BigDecimal batchGrossAmount;
@@ -63,6 +65,7 @@ public class UsageDto extends StoredEntity<String> {
     private LocalDate periodEndDate;
     private String comment;
     private AaclUsage aaclUsage;
+    private SalUsage salUsage;
 
     public String getBatchName() {
         return batchName;
@@ -280,6 +283,22 @@ public class UsageDto extends StoredEntity<String> {
         this.payeeName = payeeName;
     }
 
+    public Long getLicenseeAccountNumber() {
+        return licenseeAccountNumber;
+    }
+
+    public void setLicenseeAccountNumber(Long licenseeAccountNumber) {
+        this.licenseeAccountNumber = licenseeAccountNumber;
+    }
+
+    public String getLicenseeName() {
+        return licenseeName;
+    }
+
+    public void setLicenseeName(String licenseeName) {
+        this.licenseeName = licenseeName;
+    }
+
     public BigDecimal getNetAmount() {
         return netAmount;
     }
@@ -376,6 +395,14 @@ public class UsageDto extends StoredEntity<String> {
         this.aaclUsage = aaclUsage;
     }
 
+    public SalUsage getSalUsage() {
+        return salUsage;
+    }
+
+    public void setSalUsage(SalUsage salUsage) {
+        this.salUsage = salUsage;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -414,6 +441,8 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.productFamily, that.productFamily)
             .append(this.payeeAccountNumber, that.payeeAccountNumber)
             .append(this.payeeName, that.payeeName)
+            .append(this.licenseeAccountNumber, that.licenseeAccountNumber)
+            .append(this.licenseeName, that.licenseeName)
             .append(this.netAmount, that.netAmount)
             .append(this.serviceFee, that.serviceFee)
             .append(this.serviceFeeAmount, that.serviceFeeAmount)
@@ -426,6 +455,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.periodEndDate, that.periodEndDate)
             .append(this.comment, that.comment)
             .append(this.aaclUsage, that.aaclUsage)
+            .append(this.salUsage, that.salUsage)
             .isEquals();
     }
 
@@ -460,6 +490,8 @@ public class UsageDto extends StoredEntity<String> {
             .append(productFamily)
             .append(payeeAccountNumber)
             .append(payeeName)
+            .append(licenseeAccountNumber)
+            .append(licenseeName)
             .append(netAmount)
             .append(serviceFee)
             .append(serviceFeeAmount)
@@ -472,6 +504,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(periodEndDate)
             .append(comment)
             .append(aaclUsage)
+            .append(salUsage)
             .toHashCode();
     }
 
@@ -506,6 +539,8 @@ public class UsageDto extends StoredEntity<String> {
             .append("productFamily", productFamily)
             .append("payeeAccountNumber", payeeAccountNumber)
             .append("payeeName", payeeName)
+            .append("licenseeAccountNumber", licenseeAccountNumber)
+            .append("licenseeName", licenseeName)
             .append("netAmount", netAmount)
             .append("serviceFee", serviceFee)
             .append("serviceFeeAmount", serviceFeeAmount)
@@ -518,6 +553,7 @@ public class UsageDto extends StoredEntity<String> {
             .append("periodEndDate", periodEndDate)
             .append("comment", comment)
             .append("aaclUsage", aaclUsage)
+            .append("salUsage", salUsage)
             .toString();
     }
 }
