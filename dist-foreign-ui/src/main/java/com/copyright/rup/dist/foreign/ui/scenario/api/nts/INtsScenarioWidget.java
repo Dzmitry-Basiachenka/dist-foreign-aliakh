@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.nts;
 
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
+import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
+import com.copyright.rup.vaadin.widget.api.IRefreshable;
 
 /**
  * Interface for scenario view widget for NTS product family.
@@ -11,7 +13,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
  *
  * @author Stanislau Rudak
  */
-public interface INtsScenarioWidget extends ICommonScenarioWidget {
+public interface INtsScenarioWidget extends ICommonScenarioWidget, IRefreshable, IMediatorProvider {
 
     /**
      * Fires {@link com.vaadin.ui.Component.Event}.

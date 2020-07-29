@@ -44,4 +44,9 @@ public class NtsScenarioController extends CommonScenarioController implements I
     protected void writeScenarioUsagesCsvReport(Scenario scenarioForReport, PipedOutputStream pos) {
         getReportService().writeNtsScenarioUsagesCsvReport(scenarioForReport, pos);
     }
+
+    @Override
+    public void onExcludeRhButtonClicked() {
+        //todo {aazarenka} will be implement later
+    }
 }
