@@ -22,6 +22,7 @@
         <typeAlias alias="Rightsholder" type="com.copyright.rup.dist.common.domain.Rightsholder"/>
         <typeAlias alias="StoredEntity" type="com.copyright.rup.dist.common.domain.StoredEntity"/>
         <typeAlias alias="Usage" type="com.copyright.rup.dist.foreign.domain.Usage"/>
+        <typeAlias alias="SalUsage" type="com.copyright.rup.dist.foreign.domain.SalUsage"/>
         <typeAlias alias="PaidUsage" type="com.copyright.rup.dist.foreign.domain.PaidUsage"/>
         <typeAlias alias="UsageBatch" type="com.copyright.rup.dist.foreign.domain.UsageBatch"/>
         <typeAlias alias="UsageFilter" type="com.copyright.rup.dist.foreign.domain.filter.UsageFilter"/>
@@ -73,6 +74,7 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAaclUsageMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/INtsUsageMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IFasUsageMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/ISalUsageMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageArchiveMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageBatchMapper.xml"/>

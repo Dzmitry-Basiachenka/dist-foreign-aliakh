@@ -19,9 +19,10 @@ import java.time.LocalDate;
 public class SalUsage {
 
     private SalDetailTypeEnum detailType;
+    private String grade;
+    private String gradeGroup;
     private String assessmentName;
     private String assessmentType;
-    private LocalDate dateOfScoredAssessment;
     private String reportedWorkPortionId;
     private String reportedTitle;
     private String reportedArticle;
@@ -34,9 +35,8 @@ public class SalUsage {
     private String reportedMediaType;
     private BigDecimal mediaTypeWeight;
     private String coverageYear;
+    private LocalDate scoredAssessmentDate;
     private String questionIdentifier;
-    private String grade;
-    private String gradeGroup;
     private String states;
     private int numberOfViews;
 
@@ -46,6 +46,22 @@ public class SalUsage {
 
     public void setDetailType(SalDetailTypeEnum detailType) {
         this.detailType = detailType;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getGradeGroup() {
+        return gradeGroup;
+    }
+
+    public void setGradeGroup(String gradeGroup) {
+        this.gradeGroup = gradeGroup;
     }
 
     public String getAssessmentName() {
@@ -62,14 +78,6 @@ public class SalUsage {
 
     public void setAssessmentType(String assessmentType) {
         this.assessmentType = assessmentType;
-    }
-
-    public LocalDate getDateOfScoredAssessment() {
-        return dateOfScoredAssessment;
-    }
-
-    public void setDateOfScoredAssessment(LocalDate dateOfScoredAssessment) {
-        this.dateOfScoredAssessment = dateOfScoredAssessment;
     }
 
     public String getReportedWorkPortionId() {
@@ -168,28 +176,20 @@ public class SalUsage {
         this.coverageYear = coverageYear;
     }
 
+    public LocalDate getScoredAssessmentDate() {
+        return scoredAssessmentDate;
+    }
+
+    public void setScoredAssessmentDate(LocalDate scoredAssessmentDate) {
+        this.scoredAssessmentDate = scoredAssessmentDate;
+    }
+
     public String getQuestionIdentifier() {
         return questionIdentifier;
     }
 
     public void setQuestionIdentifier(String questionIdentifier) {
         this.questionIdentifier = questionIdentifier;
-    }
-
-    public String getGrade() {
-        return grade;
-    }
-
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-
-    public String getGradeGroup() {
-        return gradeGroup;
-    }
-
-    public void setGradeGroup(String gradeGroup) {
-        this.gradeGroup = gradeGroup;
     }
 
     public String getStates() {
@@ -218,12 +218,12 @@ public class SalUsage {
         }
         SalUsage that = (SalUsage) obj;
         return new EqualsBuilder()
-            .append(this.grade, that.grade)
             .append(this.numberOfViews, that.numberOfViews)
             .append(this.detailType, that.detailType)
+            .append(this.grade, that.grade)
+            .append(this.gradeGroup, that.gradeGroup)
             .append(this.assessmentName, that.assessmentName)
             .append(this.assessmentType, that.assessmentType)
-            .append(this.dateOfScoredAssessment, that.dateOfScoredAssessment)
             .append(this.reportedWorkPortionId, that.reportedWorkPortionId)
             .append(this.reportedTitle, that.reportedTitle)
             .append(this.reportedArticle, that.reportedArticle)
@@ -236,8 +236,8 @@ public class SalUsage {
             .append(this.reportedMediaType, that.reportedMediaType)
             .append(this.mediaTypeWeight, that.mediaTypeWeight)
             .append(this.coverageYear, that.coverageYear)
+            .append(this.scoredAssessmentDate, that.scoredAssessmentDate)
             .append(this.questionIdentifier, that.questionIdentifier)
-            .append(this.gradeGroup, that.gradeGroup)
             .append(this.states, that.states)
             .isEquals();
     }
@@ -246,9 +246,10 @@ public class SalUsage {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(detailType)
+            .append(grade)
+            .append(gradeGroup)
             .append(assessmentName)
             .append(assessmentType)
-            .append(dateOfScoredAssessment)
             .append(reportedWorkPortionId)
             .append(reportedTitle)
             .append(reportedArticle)
@@ -261,9 +262,8 @@ public class SalUsage {
             .append(reportedMediaType)
             .append(mediaTypeWeight)
             .append(coverageYear)
+            .append(scoredAssessmentDate)
             .append(questionIdentifier)
-            .append(grade)
-            .append(gradeGroup)
             .append(states)
             .append(numberOfViews)
             .toHashCode();
@@ -273,9 +273,10 @@ public class SalUsage {
     public String toString() {
         return new ToStringBuilder(this)
             .append("detailType", detailType)
+            .append("grade", grade)
+            .append("gradeGroup", gradeGroup)
             .append("assessmentName", assessmentName)
             .append("assessmentType", assessmentType)
-            .append("dateOfScoredAssessment", dateOfScoredAssessment)
             .append("reportedWorkPortionId", reportedWorkPortionId)
             .append("reportedTitle", reportedTitle)
             .append("reportedArticle", reportedArticle)
@@ -288,9 +289,8 @@ public class SalUsage {
             .append("reportedMediaType", reportedMediaType)
             .append("mediaTypeWeight", mediaTypeWeight)
             .append("coverageYear", coverageYear)
+            .append("scoredAssessmentDate", scoredAssessmentDate)
             .append("questionIdentifier", questionIdentifier)
-            .append("grade", grade)
-            .append("gradeGroup", gradeGroup)
             .append("states", states)
             .append("numberOfViews", numberOfViews)
             .toString();
