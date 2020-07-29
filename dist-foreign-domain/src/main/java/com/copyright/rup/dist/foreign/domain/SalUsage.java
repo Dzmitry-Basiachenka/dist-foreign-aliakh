@@ -1,0 +1,298 @@
+package com.copyright.rup.dist.foreign.domain;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+/**
+ * Represents SAL specific usage details.
+ * <p>
+ * Copyright (C) 2020 copyright.com
+ * <p>
+ * Date: 07/28/2020
+ *
+ * @author Uladzislau Shalamitski
+ */
+public class SalUsage {
+
+    private SalDetailTypeEnum detailType;
+    private String assessmentName;
+    private String assessmentType;
+    private LocalDate dateOfScoredAssessment;
+    private String reportedWorkPortionId;
+    private String reportedTitle;
+    private String reportedArticle;
+    private String reportedStandardNumber;
+    private String reportedAuthor;
+    private String reportedPublisher;
+    private LocalDate reportedPublicationDate;
+    private String reportedPageRange;
+    private String reportedVolNumberSeries;
+    private String reportedMediaType;
+    private BigDecimal mediaTypeWeight;
+    private String coverageYear;
+    private String questionIdentifier;
+    private String grade;
+    private String gradeGroup;
+    private String states;
+    private int numberOfViews;
+
+    public SalDetailTypeEnum getDetailType() {
+        return detailType;
+    }
+
+    public void setDetailType(SalDetailTypeEnum detailType) {
+        this.detailType = detailType;
+    }
+
+    public String getAssessmentName() {
+        return assessmentName;
+    }
+
+    public void setAssessmentName(String assessmentName) {
+        this.assessmentName = assessmentName;
+    }
+
+    public String getAssessmentType() {
+        return assessmentType;
+    }
+
+    public void setAssessmentType(String assessmentType) {
+        this.assessmentType = assessmentType;
+    }
+
+    public LocalDate getDateOfScoredAssessment() {
+        return dateOfScoredAssessment;
+    }
+
+    public void setDateOfScoredAssessment(LocalDate dateOfScoredAssessment) {
+        this.dateOfScoredAssessment = dateOfScoredAssessment;
+    }
+
+    public String getReportedWorkPortionId() {
+        return reportedWorkPortionId;
+    }
+
+    public void setReportedWorkPortionId(String reportedWorkPortionId) {
+        this.reportedWorkPortionId = reportedWorkPortionId;
+    }
+
+    public String getReportedTitle() {
+        return reportedTitle;
+    }
+
+    public void setReportedTitle(String reportedTitle) {
+        this.reportedTitle = reportedTitle;
+    }
+
+    public String getReportedArticle() {
+        return reportedArticle;
+    }
+
+    public void setReportedArticle(String reportedArticle) {
+        this.reportedArticle = reportedArticle;
+    }
+
+    public String getReportedStandardNumber() {
+        return reportedStandardNumber;
+    }
+
+    public void setReportedStandardNumber(String reportedStandardNumber) {
+        this.reportedStandardNumber = reportedStandardNumber;
+    }
+
+    public String getReportedAuthor() {
+        return reportedAuthor;
+    }
+
+    public void setReportedAuthor(String reportedAuthor) {
+        this.reportedAuthor = reportedAuthor;
+    }
+
+    public String getReportedPublisher() {
+        return reportedPublisher;
+    }
+
+    public void setReportedPublisher(String reportedPublisher) {
+        this.reportedPublisher = reportedPublisher;
+    }
+
+    public LocalDate getReportedPublicationDate() {
+        return reportedPublicationDate;
+    }
+
+    public void setReportedPublicationDate(LocalDate reportedPublicationDate) {
+        this.reportedPublicationDate = reportedPublicationDate;
+    }
+
+    public String getReportedPageRange() {
+        return reportedPageRange;
+    }
+
+    public void setReportedPageRange(String reportedPageRange) {
+        this.reportedPageRange = reportedPageRange;
+    }
+
+    public String getReportedVolNumberSeries() {
+        return reportedVolNumberSeries;
+    }
+
+    public void setReportedVolNumberSeries(String reportedVolNumberSeries) {
+        this.reportedVolNumberSeries = reportedVolNumberSeries;
+    }
+
+    public String getReportedMediaType() {
+        return reportedMediaType;
+    }
+
+    public void setReportedMediaType(String reportedMediaType) {
+        this.reportedMediaType = reportedMediaType;
+    }
+
+    public BigDecimal getMediaTypeWeight() {
+        return mediaTypeWeight;
+    }
+
+    public void setMediaTypeWeight(BigDecimal mediaTypeWeight) {
+        this.mediaTypeWeight = mediaTypeWeight;
+    }
+
+    public String getCoverageYear() {
+        return coverageYear;
+    }
+
+    public void setCoverageYear(String coverageYear) {
+        this.coverageYear = coverageYear;
+    }
+
+    public String getQuestionIdentifier() {
+        return questionIdentifier;
+    }
+
+    public void setQuestionIdentifier(String questionIdentifier) {
+        this.questionIdentifier = questionIdentifier;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getGradeGroup() {
+        return gradeGroup;
+    }
+
+    public void setGradeGroup(String gradeGroup) {
+        this.gradeGroup = gradeGroup;
+    }
+
+    public String getStates() {
+        return states;
+    }
+
+    public void setStates(String states) {
+        this.states = states;
+    }
+
+    public int getNumberOfViews() {
+        return numberOfViews;
+    }
+
+    public void setNumberOfViews(int numberOfViews) {
+        this.numberOfViews = numberOfViews;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (null == obj || getClass() != obj.getClass()) {
+            return false;
+        }
+        SalUsage that = (SalUsage) obj;
+        return new EqualsBuilder()
+            .append(this.grade, that.grade)
+            .append(this.numberOfViews, that.numberOfViews)
+            .append(this.detailType, that.detailType)
+            .append(this.assessmentName, that.assessmentName)
+            .append(this.assessmentType, that.assessmentType)
+            .append(this.dateOfScoredAssessment, that.dateOfScoredAssessment)
+            .append(this.reportedWorkPortionId, that.reportedWorkPortionId)
+            .append(this.reportedTitle, that.reportedTitle)
+            .append(this.reportedArticle, that.reportedArticle)
+            .append(this.reportedStandardNumber, that.reportedStandardNumber)
+            .append(this.reportedAuthor, that.reportedAuthor)
+            .append(this.reportedPublisher, that.reportedPublisher)
+            .append(this.reportedPublicationDate, that.reportedPublicationDate)
+            .append(this.reportedPageRange, that.reportedPageRange)
+            .append(this.reportedVolNumberSeries, that.reportedVolNumberSeries)
+            .append(this.reportedMediaType, that.reportedMediaType)
+            .append(this.mediaTypeWeight, that.mediaTypeWeight)
+            .append(this.coverageYear, that.coverageYear)
+            .append(this.questionIdentifier, that.questionIdentifier)
+            .append(this.gradeGroup, that.gradeGroup)
+            .append(this.states, that.states)
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+            .append(detailType)
+            .append(assessmentName)
+            .append(assessmentType)
+            .append(dateOfScoredAssessment)
+            .append(reportedWorkPortionId)
+            .append(reportedTitle)
+            .append(reportedArticle)
+            .append(reportedStandardNumber)
+            .append(reportedAuthor)
+            .append(reportedPublisher)
+            .append(reportedPublicationDate)
+            .append(reportedPageRange)
+            .append(reportedVolNumberSeries)
+            .append(reportedMediaType)
+            .append(mediaTypeWeight)
+            .append(coverageYear)
+            .append(questionIdentifier)
+            .append(grade)
+            .append(gradeGroup)
+            .append(states)
+            .append(numberOfViews)
+            .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+            .append("detailType", detailType)
+            .append("assessmentName", assessmentName)
+            .append("assessmentType", assessmentType)
+            .append("dateOfScoredAssessment", dateOfScoredAssessment)
+            .append("reportedWorkPortionId", reportedWorkPortionId)
+            .append("reportedTitle", reportedTitle)
+            .append("reportedArticle", reportedArticle)
+            .append("reportedStandardNumber", reportedStandardNumber)
+            .append("reportedAuthor", reportedAuthor)
+            .append("reportedPublisher", reportedPublisher)
+            .append("reportedPublicationDate", reportedPublicationDate)
+            .append("reportedPageRange", reportedPageRange)
+            .append("reportedVolNumberSeries", reportedVolNumberSeries)
+            .append("reportedMediaType", reportedMediaType)
+            .append("mediaTypeWeight", mediaTypeWeight)
+            .append("coverageYear", coverageYear)
+            .append("questionIdentifier", questionIdentifier)
+            .append("grade", grade)
+            .append("gradeGroup", gradeGroup)
+            .append("states", states)
+            .append("numberOfViews", numberOfViews)
+            .toString();
+    }
+}

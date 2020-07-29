@@ -31,6 +31,7 @@ public class Usage extends StoredEntity<String> {
     private String systemTitle;
     private Rightsholder rightsholder = new Rightsholder();
     private Rightsholder payee = new Rightsholder();
+    private Rightsholder licensee = new Rightsholder();
     private String article;
     private String standardNumber;
     private String standardNumberType;
@@ -52,6 +53,7 @@ public class Usage extends StoredEntity<String> {
     private boolean payeeParticipating;
     private String comment;
     private AaclUsage aaclUsage;
+    private SalUsage salUsage;
 
     public String getBatchId() {
         return batchId;
@@ -107,6 +109,14 @@ public class Usage extends StoredEntity<String> {
 
     public void setRightsholder(Rightsholder rightsholder) {
         this.rightsholder = rightsholder;
+    }
+
+    public Rightsholder getLicensee() {
+        return licensee;
+    }
+
+    public void setLicensee(Rightsholder licensee) {
+        this.licensee = licensee;
     }
 
     public String getArticle() {
@@ -285,6 +295,14 @@ public class Usage extends StoredEntity<String> {
         this.aaclUsage = aaclUsage;
     }
 
+    public SalUsage getSalUsage() {
+        return salUsage;
+    }
+
+    public void setSalUsage(SalUsage salUsage) {
+        this.salUsage = salUsage;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -321,10 +339,12 @@ public class Usage extends StoredEntity<String> {
             .append(this.status, that.status)
             .append(this.productFamily, that.productFamily)
             .append(this.payee, that.payee)
+            .append(this.licensee, that.licensee)
             .append(this.rhParticipating, that.rhParticipating)
             .append(this.payeeParticipating, that.payeeParticipating)
             .append(this.comment, that.comment)
             .append(this.aaclUsage, that.aaclUsage)
+            .append(this.salUsage, that.salUsage)
             .isEquals();
     }
 
@@ -357,10 +377,12 @@ public class Usage extends StoredEntity<String> {
             .append(status)
             .append(productFamily)
             .append(payee)
+            .append(licensee)
             .append(rhParticipating)
             .append(payeeParticipating)
             .append(comment)
             .append(aaclUsage)
+            .append(salUsage)
             .toHashCode();
     }
 
@@ -393,10 +415,12 @@ public class Usage extends StoredEntity<String> {
             .append("status", status)
             .append("productFamily", productFamily)
             .append("payee", payee)
+            .append("licensee", licensee)
             .append("rhParticipating", rhParticipating)
             .append("payeeParticipating", payeeParticipating)
             .append("comment", comment)
             .append("aaclUsage", aaclUsage)
+            .append("salUsage", salUsage)
             .toString();
     }
 }

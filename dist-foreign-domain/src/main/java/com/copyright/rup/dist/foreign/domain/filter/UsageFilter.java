@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.domain.filter;
 
+import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.Sets;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,6 +32,7 @@ public class UsageFilter {
     private LocalDate paymentDate;
     private Integer fiscalYear;
     private Integer usagePeriod;
+    private SalDetailTypeEnum salDetailType;
 
     /**
      * Default constructor.
@@ -54,6 +55,7 @@ public class UsageFilter {
             setFiscalYear(filter.getFiscalYear());
             setProductFamily(filter.getProductFamily());
             setUsagePeriod(filter.getUsagePeriod());
+            setSalDetailType(filter.getSalDetailType());
         }
     }
 
@@ -63,6 +65,7 @@ public class UsageFilter {
      * @param usageFilter instance of {@link ScenarioUsageFilter}
      */
     public UsageFilter(ScenarioUsageFilter usageFilter) {
+        //TODO: set setSalDetailType once it is added to ScenarioUsageFilter
         Objects.requireNonNull(usageFilter);
         setRhAccountNumbers(usageFilter.getRhAccountNumbers());
         setUsageBatchesIds(usageFilter.getUsageBatchesIds());
@@ -128,6 +131,14 @@ public class UsageFilter {
         this.usagePeriod = usagePeriod;
     }
 
+    public SalDetailTypeEnum getSalDetailType() {
+        return salDetailType;
+    }
+
+    public void setSalDetailType(SalDetailTypeEnum salDetailType) {
+        this.salDetailType = salDetailType;
+    }
+
     /**
      * @return {@code true} if filter does not contain any criteria except Product Family, otherwise {@code false}.
      */
@@ -137,7 +148,8 @@ public class UsageFilter {
             && null == paymentDate
             && null == fiscalYear
             && null == usageStatus
-            && null == usagePeriod;
+            && null == usagePeriod
+            && null == salDetailType;
     }
 
     @Override
@@ -157,6 +169,7 @@ public class UsageFilter {
             .append(this.paymentDate, that.paymentDate)
             .append(this.fiscalYear, that.fiscalYear)
             .append(this.usagePeriod, that.usagePeriod)
+            .append(this.salDetailType, that.salDetailType)
             .isEquals();
     }
 
@@ -170,6 +183,7 @@ public class UsageFilter {
             .append(paymentDate)
             .append(fiscalYear)
             .append(usagePeriod)
+            .append(salDetailType)
             .toHashCode();
     }
 
@@ -183,6 +197,7 @@ public class UsageFilter {
             .append("paymentDate", paymentDate)
             .append("fiscalYear", fiscalYear)
             .append("usagePeriod", usagePeriod)
+            .append("salDetailType", salDetailType)
             .toString();
     }
 }
