@@ -348,6 +348,16 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectList("IUsageMapper.findRightsholderPayeeProductFamilyHoldersByScenarioIds", scenarioIds);
     }
 
+    @Override
+    public List<String> deleteFromScenarioByRightsholder(String scenarioId, Set<Long> accountNumbers, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("accountNumbers", Objects.requireNonNull(accountNumbers));
+        params.put(STATUS_KEY, UsageStatusEnum.SCENARIO_EXCLUDED);
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        return selectList("IUsageMapper.deleteFromScenarioByRightsholder", params);
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
