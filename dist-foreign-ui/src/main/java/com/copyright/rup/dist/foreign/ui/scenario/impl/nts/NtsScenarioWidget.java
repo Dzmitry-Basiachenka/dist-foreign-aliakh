@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -29,6 +30,8 @@ public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScena
     private final INtsScenarioController scenarioController;
     private Button exportDetailsButton;
     private Button exportButton;
+    private Button excludeRhButton;
+    private NtsScenarioMediator mediator;
 
     /**
      * Constructor.
@@ -37,6 +40,18 @@ public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScena
      */
     public NtsScenarioWidget(INtsScenarioController ntsScenarioController) {
         this.scenarioController = ntsScenarioController;
+    }
+
+    @Override
+    public IMediator initMediator() {
+        mediator = new NtsScenarioMediator();
+        mediator.setExcludeRhButton(excludeRhButton);
+        mediator.setExportButton(exportButton);
+        mediator.setExportDetailsButton(exportDetailsButton);
+        mediator.setEmptyUsagesLayout(getEmptyUsagesLayout());
+        mediator.setRightsholderGrid(getRightsholdersGrid());
+        mediator.setSearchWidget(getSearchWidget());
+        return mediator;
     }
 
     @Override
@@ -50,12 +65,13 @@ public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScena
         VerticalLayout layout = new VerticalLayout(searchLayout, grid, emptyUsagesLayout, buttons);
         layout.setExpandRatio(grid, 1);
         layout.setExpandRatio(emptyUsagesLayout, 1);
-        updateLayouts();
         return layout;
     }
 
     @Override
     protected HorizontalLayout initButtons() {
+        excludeRhButton = Buttons.createButton(ForeignUi.getMessage("button.exclude_by_rightsholder"));
+        excludeRhButton.addClickListener(event -> scenarioController.onExcludeRhButtonClicked());
         exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
         OnDemandFileDownloader exportDetailsFileDownloader =
             new OnDemandFileDownloader(scenarioController.getExportScenarioUsagesStreamSource().getSource());
@@ -65,18 +81,14 @@ public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScena
             scenarioController.getExportScenarioRightsholderTotalsStreamSource().getSource());
         exportScenarioFileDownloader.extend(exportButton);
         HorizontalLayout buttons =
-            new HorizontalLayout(exportDetailsButton, exportButton, Buttons.createCloseButton(this));
+            new HorizontalLayout(excludeRhButton, exportDetailsButton, exportButton, Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");
         buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;
     }
 
-    private void updateLayouts() {
-        boolean scenarioEmpty = scenarioController.isScenarioEmpty();
-        exportDetailsButton.setEnabled(!scenarioEmpty);
-        exportButton.setEnabled(!scenarioEmpty);
-        getRightsholdersGrid().setVisible(!scenarioEmpty);
-        getSearchWidget().setVisible(!scenarioEmpty);
-        getEmptyUsagesLayout().setVisible(scenarioEmpty);
+    @Override
+    public void refresh() {
+        mediator.onScenarioUpdated(scenarioController.isScenarioEmpty(), scenarioController.getScenario());
     }
 }

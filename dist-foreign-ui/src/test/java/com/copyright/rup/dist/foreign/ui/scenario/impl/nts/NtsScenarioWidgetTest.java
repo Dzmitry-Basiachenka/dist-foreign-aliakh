@@ -78,7 +78,6 @@ public class NtsScenarioWidgetTest {
         expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
-        expect(controller.isScenarioEmpty()).andReturn(false).once();
         replay(controller, streamSource, ForeignSecurityUtils.class);
         scenarioWidget.init();
         verify(controller, streamSource, ForeignSecurityUtils.class);
@@ -144,14 +143,16 @@ public class NtsScenarioWidgetTest {
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(3, horizontalLayout.getComponentCount());
-        Button exportDetailsButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals(4, horizontalLayout.getComponentCount());
+        Button excludeRhButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals("Exclude by RH", excludeRhButton.getCaption());
+        Button exportDetailsButton = (Button) horizontalLayout.getComponent(1);
         assertEquals("Export Details", exportDetailsButton.getCaption());
         assertEquals("Export_Details", exportDetailsButton.getId());
-        Button exportButton = (Button) horizontalLayout.getComponent(1);
+        Button exportButton = (Button) horizontalLayout.getComponent(2);
         assertEquals("Export", exportButton.getCaption());
         assertEquals("Export", exportButton.getId());
-        Button closeButton = (Button) horizontalLayout.getComponent(2);
+        Button closeButton = (Button) horizontalLayout.getComponent(3);
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());
