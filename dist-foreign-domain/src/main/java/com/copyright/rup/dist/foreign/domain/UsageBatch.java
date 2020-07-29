@@ -31,6 +31,7 @@ public class UsageBatch extends StoredEntity<String> {
     private Integer fiscalYear;
     private BigDecimal grossAmount;
     private NtsFields ntsFields;
+    private SalFields salFields;
     private Integer numberOfBaselineYears;
 
     public Integer getNumberOfBaselineYears() {
@@ -97,6 +98,14 @@ public class UsageBatch extends StoredEntity<String> {
         this.ntsFields = ntsFields;
     }
 
+    public SalFields getSalFields() {
+        return salFields;
+    }
+
+    public void setSalFields(SalFields salFields) {
+        this.salFields = salFields;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -115,6 +124,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(this.fiscalYear, that.fiscalYear)
             .append(this.grossAmount, that.grossAmount)
             .append(this.ntsFields, that.ntsFields)
+            .append(this.salFields, that.salFields)
             .append(this.numberOfBaselineYears, that.numberOfBaselineYears)
             .isEquals();
     }
@@ -130,6 +140,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(fiscalYear)
             .append(grossAmount)
             .append(ntsFields)
+            .append(salFields)
             .append(numberOfBaselineYears)
             .toHashCode();
     }
@@ -145,6 +156,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append("fiscalYear", fiscalYear)
             .append("grossAmount", grossAmount)
             .append("ntsFields", ntsFields)
+            .append("salFields", salFields)
             .append("numberOfBaselineYears", numberOfBaselineYears)
             .toString();
     }
@@ -273,6 +285,62 @@ public class UsageBatch extends StoredEntity<String> {
                 .append("nonStmMinimumAmount", nonStmMinimumAmount)
                 .append("markets", markets)
                 .append("excludingStm", excludingStm)
+                .toString();
+        }
+    }
+
+    /**
+     * Represents SAL specific fields.
+     */
+    public static class SalFields {
+
+        private Long licenseeAccountNumber;
+        private String licenseeName;
+
+        public Long getLicenseeAccountNumber() {
+            return licenseeAccountNumber;
+        }
+
+        public void setLicenseeAccountNumber(Long licenseeAccountNumber) {
+            this.licenseeAccountNumber = licenseeAccountNumber;
+        }
+
+        public String getLicenseeName() {
+            return licenseeName;
+        }
+
+        public void setLicenseeName(String licenseeName) {
+            this.licenseeName = licenseeName;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (null == obj || getClass() != obj.getClass()) {
+                return false;
+            }
+            SalFields that = (SalFields) obj;
+            return new EqualsBuilder()
+                .append(licenseeAccountNumber, that.licenseeAccountNumber)
+                .append(licenseeName, that.licenseeName)
+                .isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder()
+                .append(licenseeAccountNumber)
+                .append(licenseeName)
+                .toHashCode();
+        }
+
+        @Override
+        public String toString() {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("licenseeAccountNumber", licenseeAccountNumber)
+                .append("licenseeName", licenseeName)
                 .toString();
         }
     }
