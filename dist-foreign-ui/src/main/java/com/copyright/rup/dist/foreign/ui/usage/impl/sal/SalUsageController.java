@@ -1,12 +1,24 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
+import com.vaadin.data.provider.QuerySortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of {@link ISalUsageController}.
@@ -19,14 +31,55 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class SalUsageController implements ISalUsageController {
+public class SalUsageController extends CommonUsageController implements ISalUsageController {
 
     @Autowired
     private IUsageBatchService usageBatchService;
+    @Autowired
+    private ISalUsageFilterController salUsageFilterController;
 
     @Override
     //TODO {isuvorau} reuse CommonUsageController#usageBatchExists method after extending CommonUsageController
     public boolean itemBankExists(String name) {
         return usageBatchService.usageBatchExists(name);
+    }
+
+    @Override
+    public int getBeansCount() {
+        //TODO: use service logic here
+        return 0;
+    }
+
+    @Override
+    public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
+        //TODO: use service logic here
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void deleteUsageBatch(UsageBatch usageBatch) {
+        //TODO: implement in scope of corresponding story
+    }
+
+    @Override
+    public IStreamSource getExportUsagesStreamSource() {
+        //TODO: implement in scope of corresponding story
+        return null;
+    }
+
+    @Override
+    public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
+        //TODO: implement in scope of corresponding story
+        return false;
+    }
+
+    @Override
+    public ICommonUsageFilterController getUsageFilterController() {
+        return salUsageFilterController;
+    }
+
+    @Override
+    protected ICommonUsageWidget instantiateWidget() {
+        return new SalUsageWidget();
     }
 }

@@ -2,12 +2,12 @@ package com.copyright.rup.dist.foreign.ui.main.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
-
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
-import com.google.common.collect.ImmutableMap;
+import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 
+import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -34,6 +34,8 @@ public class UsagesControllerProvider extends CommonControllerProvider<ICommonUs
     private INtsUsageController ntsUsagesController;
     @Autowired
     private IAaclUsageController aaclUsagesController;
+    @Autowired
+    private ISalUsageController salUsagesController;
 
     @Override
     protected Map<String, ICommonUsageController> getProductFamilyToControllerMap() {
@@ -41,7 +43,8 @@ public class UsagesControllerProvider extends CommonControllerProvider<ICommonUs
             FdaConstants.FAS_PRODUCT_FAMILY, fasUsagesController,
             FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasUsagesController,
             FdaConstants.NTS_PRODUCT_FAMILY, ntsUsagesController,
-            FdaConstants.AACL_PRODUCT_FAMILY, aaclUsagesController
+            FdaConstants.AACL_PRODUCT_FAMILY, aaclUsagesController,
+            FdaConstants.SAL_PRODUCT_FAMILY, salUsagesController
         );
     }
 }

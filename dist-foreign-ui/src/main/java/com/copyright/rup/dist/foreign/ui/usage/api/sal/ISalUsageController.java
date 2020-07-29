@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.sal;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
+
 /**
  * Interface for SAL usages controller.
  * <p>
@@ -9,7 +11,7 @@ package com.copyright.rup.dist.foreign.ui.usage.api.sal;
  *
  * @author Ihar Suvorau
  */
-public interface ISalUsageController {
+public interface ISalUsageController  extends ICommonUsageController {
 
     /**
      * Checks whether Item Bank with provided name already exists or not.

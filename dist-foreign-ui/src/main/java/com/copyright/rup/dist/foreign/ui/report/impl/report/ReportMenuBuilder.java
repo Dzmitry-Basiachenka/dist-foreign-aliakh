@@ -55,6 +55,16 @@ public enum ReportMenuBuilder implements IReportMenuBuilder {
         public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
             new AaclReportMenuBuilder().addItems(controller, widget, rootItem);
         }
+    },
+
+    /**
+     * Report builder for SAL product family
+     */
+    SAL(false) {
+        @Override
+        public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
+            //TODO: implement on scope of corresponding story
+        }
     };
 
     private final boolean visible;
