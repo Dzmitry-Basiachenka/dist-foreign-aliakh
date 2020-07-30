@@ -22,6 +22,6 @@ public class SalUsageFilterController extends CommonUsageFilterController implem
 
     @Override
     public SalUsageFilterWidget instantiateWidget() {
-        return new SalUsageFilterWidget();
+        return new SalUsageFilterWidget(this);
     }
 }

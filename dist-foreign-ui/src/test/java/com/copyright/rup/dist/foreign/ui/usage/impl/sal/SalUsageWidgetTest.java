@@ -12,6 +12,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 
 import com.vaadin.data.provider.DataProvider;
@@ -49,7 +50,8 @@ public class SalUsageWidgetTest {
         controller = createMock(ISalUsageController.class);
         usagesWidget = new SalUsageWidget();
         usagesWidget.setController(controller);
-        expect(controller.initUsagesFilterWidget()).andReturn(new SalUsageFilterWidget()).once();
+        expect(controller.initUsagesFilterWidget())
+            .andReturn(new SalUsageFilterWidget(createMock(ISalUsageFilterController.class))).once();
         replay(controller);
         usagesWidget.init();
         verify(controller);
