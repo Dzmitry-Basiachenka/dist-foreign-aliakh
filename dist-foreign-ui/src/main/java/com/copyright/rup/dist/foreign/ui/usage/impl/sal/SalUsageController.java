@@ -4,7 +4,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
 import com.vaadin.data.provider.QuerySortOrder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -34,14 +35,13 @@ import java.util.List;
 public class SalUsageController extends CommonUsageController implements ISalUsageController {
 
     @Autowired
-    private IUsageBatchService usageBatchService;
-    @Autowired
     private ISalUsageFilterController salUsageFilterController;
+    @Autowired
+    private ITelesalesService telesalesService;
 
     @Override
-    //TODO {isuvorau} reuse CommonUsageController#usageBatchExists method after extending CommonUsageController
-    public boolean itemBankExists(String name) {
-        return usageBatchService.usageBatchExists(name);
+    public String getLicenseeName(Long licenseeAccountNumber) {
+        return telesalesService.getLicenseeName(licenseeAccountNumber);
     }
 
     @Override
@@ -80,6 +80,6 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     protected ICommonUsageWidget instantiateWidget() {
-        return new SalUsageWidget();
+        return new SalUsageWidget(this);
     }
 }

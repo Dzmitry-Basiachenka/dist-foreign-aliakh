@@ -11,13 +11,13 @@ import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
  *
  * @author Ihar Suvorau
  */
-public interface ISalUsageController  extends ICommonUsageController {
+public interface ISalUsageController extends ICommonUsageController {
 
     /**
-     * Checks whether Item Bank with provided name already exists or not.
+     * Gets licensee name by provided account number.
      *
-     * @param name item bank name
-     * @return {@code true} - if item bank exists, {@code false} - otherwise
+     * @param licenseeAccountNumber licensee account number
+     * @return licensee name
      */
-    boolean itemBankExists(String name);
+    String getLicenseeName(Long licenseeAccountNumber);
 }

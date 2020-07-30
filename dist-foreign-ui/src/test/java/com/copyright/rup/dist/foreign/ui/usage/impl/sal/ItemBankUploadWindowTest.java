@@ -68,20 +68,41 @@ public class ItemBankUploadWindowTest {
 
     @Test
     public void testConstructor() {
-        replay(usagesController);
         window = new ItemBankUploadWindow(usagesController);
         assertEquals("Upload Item Bank", window.getCaption());
         assertEquals(400, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(260, window.getHeight(), 0);
+        assertEquals(305, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
+    }
+
+    @Test
+    public void testVerifyButtonListener() {
+        window = new ItemBankUploadWindow(usagesController);
+        VerticalLayout verticalLayout = (VerticalLayout) ((VerticalLayout) window.getContent()).getComponent(2);
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
+        TextField accountNumber = (TextField) horizontalLayout.getComponent(0);
+        Button verifyButton = (Button) horizontalLayout.getComponent(1);
+        TextField licenseeName = (TextField) verticalLayout.getComponent(1);
+        expect(usagesController.getLicenseeName(1122L)).andReturn("Orbital ATK, Inc.").once();
+        expect(usagesController.getLicenseeName(1111L)).andReturn("Acuson Corporation").once();
+        replay(usagesController);
+        accountNumber.setValue("value");
+        verifyButton.click();
+        assertEquals(StringUtils.EMPTY, licenseeName.getValue());
+        accountNumber.setValue("1122");
+        verifyButton.click();
+        assertEquals("Orbital ATK, Inc.", licenseeName.getValue());
+        accountNumber.setValue("1111");
+        verifyButton.click();
+        assertEquals("Acuson Corporation", licenseeName.getValue());
         verify(usagesController);
     }
 
     @Test
     public void testIsValid() {
-        expect(usagesController.itemBankExists(ITEM_BANK_NAME)).andReturn(false).times(2);
+        expect(usagesController.usageBatchExists(ITEM_BANK_NAME)).andReturn(false).times(2);
         replay(usagesController);
         window = new ItemBankUploadWindow(usagesController);
         assertFalse(window.isValid());
@@ -141,18 +162,19 @@ public class ItemBankUploadWindowTest {
     }
 
     private void verifyLicenseeComponents(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(3, horizontalLayout.getComponentCount());
+        assertTrue(component instanceof VerticalLayout);
+        VerticalLayout verticalLayout = (VerticalLayout) component;
+        assertEquals(2, verticalLayout.getComponentCount());
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
         TextField numberField = verifyTextField(horizontalLayout.getComponent(0), "Licensee Account #");
         Collection<?> listeners = numberField.getListeners(ValueChangeEvent.class);
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(2, listeners.size());
-        TextField nameField = verifyTextField(horizontalLayout.getComponent(1), "Licensee Name");
-        assertTrue(nameField.isReadOnly());
-        Component verifyComponent = horizontalLayout.getComponent(2);
+        Component verifyComponent = horizontalLayout.getComponent(1);
         assertTrue(verifyComponent instanceof Button);
         assertEquals("Verify", verifyComponent.getCaption());
+        TextField nameField = verifyTextField(verticalLayout.getComponent(1), "Licensee Name");
+        assertTrue(nameField.isReadOnly());
     }
 
     private void verifyPeriodEndDate(Component component) {

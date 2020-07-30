@@ -24,6 +24,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Window for uploading a SAL Item Bank with usages.
@@ -54,13 +55,13 @@ public class ItemBankUploadWindow extends Window {
      *
      * @param usagesController usages controller
      */
-    public ItemBankUploadWindow(ISalUsageController usagesController) {
+    ItemBankUploadWindow(ISalUsageController usagesController) {
         this.usagesController = usagesController;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_item_bank"));
         setResizable(false);
         setWidth(400, Unit.PIXELS);
-        setHeight(260, Unit.PIXELS);
+        setHeight(305, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "usage-upload-window");
     }
 
@@ -126,7 +127,7 @@ public class ItemBankUploadWindow extends Window {
         binder.forField(itemBankNameField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !usagesController.itemBankExists(StringUtils.trimToEmpty(value)),
+            .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Item Bank"))
             .bind(UsageBatch::getName, UsageBatch::setName);
         itemBankNameField.setSizeFull();
@@ -135,17 +136,20 @@ public class ItemBankUploadWindow extends Window {
         return itemBankNameField;
     }
 
-    private HorizontalLayout initLicenseeLayout() {
-        HorizontalLayout licenseeLayout = new HorizontalLayout();
+    private VerticalLayout initLicenseeLayout() {
+        VerticalLayout licenseeLayout = new VerticalLayout();
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
         TextField accountNumber = initLicenseeAccountNumberField();
         TextField licenseeName = initLicenseeNameField();
-        Button verifyButton = Buttons.createButton(ForeignUi.getMessage("button.verify"));
+        Button verifyButton = initVerifyButton();
         verifyButton.setWidth(72, Unit.PIXELS);
-        licenseeLayout.addComponents(accountNumber, licenseeName, verifyButton);
+        horizontalLayout.addComponents(accountNumber, verifyButton);
+        horizontalLayout.setComponentAlignment(verifyButton, Alignment.BOTTOM_RIGHT);
+        horizontalLayout.setExpandRatio(accountNumber, 1);
+        horizontalLayout.setSizeFull();
+        licenseeLayout.addComponents(horizontalLayout, licenseeName);
+        licenseeLayout.setMargin(false);
         licenseeLayout.setSizeFull();
-        licenseeLayout.setExpandRatio(accountNumber, 0.43f);
-        licenseeLayout.setExpandRatio(licenseeName, 0.57f);
-        licenseeLayout.setComponentAlignment(verifyButton, Alignment.BOTTOM_RIGHT);
         return licenseeLayout;
     }
 
@@ -195,5 +199,21 @@ public class ItemBankUploadWindow extends Window {
 
     private SerializablePredicate<String> getYearValidator() {
         return value -> Integer.parseInt(value) >= MIN_YEAR && Integer.parseInt(value) <= MAX_YEAR;
+    }
+
+    private Button initVerifyButton() {
+        Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
+        button.addClickListener(event -> {
+            if (Objects.isNull(accountNumberField.getErrorMessage())) {
+                String licenseeName =
+                    usagesController.getLicenseeName(Long.valueOf(StringUtils.trim(accountNumberField.getValue())));
+                if (StringUtils.isNotBlank(licenseeName)) {
+                    licenseeNameField.setValue(licenseeName);
+                } else {
+                    licenseeNameField.clear();
+                }
+            }
+        });
+        return button;
     }
 }
