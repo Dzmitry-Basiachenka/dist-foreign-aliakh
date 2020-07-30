@@ -77,6 +77,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_BATCH_ID_1 = "56282dbc-2468-48d4-b926-93d3458a656a";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final Long RH_ACCOUNT_NUMBER_2 = 2000017004L;
+    private static final Long RH_ACCOUNT_NUMBER_3 = 2000017004L;
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2018, 12, 11);
     private static final Integer FISCAL_YEAR = 2019;
     private static final String RH_ACCOUNT_NAME_1 = "IEEE - Inst of Electrical and Electronics Engrs";
@@ -129,6 +130,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String SCENARIO_ID_2 = "abe31cdc-adfb-41c5-9a46-4ca4966a41be";
     private static final String SCENARIO_ID_3 = "e13ecc44-6795-4b75-90f0-4a3fc191f1b9";
     private static final String SCENARIO_ID_4 = "03b9357e-0823-4abf-8e31-c615d735bf3b";
+    private static final String SCENARIO_ID_5 = "24d11b82-bc2a-429a-92c4-809849d36e75";
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
     private static final String PERCENT = "%";
@@ -146,6 +148,31 @@ public class UsageRepositoryIntegrationTest {
 
     @Autowired
     private UsageRepository usageRepository;
+
+    @Test
+    public void testApplyNetAmountFromExcludedRightshoders() {
+        List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID_5);
+        assertEquals(3, usages.size());
+        assertEquals(new BigDecimal("840.0000000000"),
+            usages.stream().map(Usage::getNetAmount).reduce(BigDecimal::add).get());
+        usages = usageRepository.findByIds(Arrays.asList("56f91295-db33-4440-b550-9bb515239750"));
+        Usage expectedUsage1 = usages.get(0);
+        usages = usageRepository.findByIds(Arrays.asList("4604c954-e43b-4606-809a-665c81514dbf"));
+        Usage expectedUsage2 = usages.get(0);
+        assertEquals(new BigDecimal("294.0000000000"), expectedUsage1.getNetAmount());
+        assertEquals(new BigDecimal("336.0000000000"), expectedUsage2.getNetAmount());
+        usageRepository.applyNetAmountFromExcludedRightshoders(SCENARIO_ID_5, Sets.newHashSet(RH_ACCOUNT_NUMBER_3));
+        usages = usageRepository.findByIds(
+            Arrays.asList("56f91295-db33-4440-b550-9bb515239750", "4604c954-e43b-4606-809a-665c81514dbf"));
+        assertEquals(new BigDecimal("840.0000000000"),
+            usages.stream().map(Usage::getNetAmount).reduce(BigDecimal::add).get());
+        usages = usageRepository.findByIds(Arrays.asList("56f91295-db33-4440-b550-9bb515239750"));
+        Usage actualUsage1 = usages.get(0);
+        usages = usageRepository.findByIds(Arrays.asList("4604c954-e43b-4606-809a-665c81514dbf"));
+        Usage actualUsage2 = usages.get(0);
+        assertEquals(new BigDecimal("392.0000000000"), actualUsage1.getNetAmount());
+        assertEquals(new BigDecimal("448.0000000000"), actualUsage2.getNetAmount());
+    }
 
     @Test
     public void testDeleteFromScenarioByRightsholder() {

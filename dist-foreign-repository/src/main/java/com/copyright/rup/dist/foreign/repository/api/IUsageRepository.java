@@ -348,4 +348,12 @@ public interface IUsageRepository {
      * @return list of {@link Usage}'s identifiers
      */
     List<String> deleteFromScenarioByRightsholder(String scenarioId, Set<Long> accountNumbers, String userName);
+
+    /**
+     * Proportionally distributes Amounts among scenario usages.
+     *
+     * @param scenarioId     {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param accountNumbers set of rightsholders' account numbers
+     */
+    void applyNetAmountFromExcludedRightshoders(String scenarioId, Set<Long> accountNumbers);
 }

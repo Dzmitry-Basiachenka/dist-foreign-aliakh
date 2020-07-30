@@ -358,6 +358,14 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectList("IUsageMapper.deleteFromScenarioByRightsholder", params);
     }
 
+    @Override
+    public void applyNetAmountFromExcludedRightshoders(String scenarioId, Set<Long> accountNumbers) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("accountNumbers", Objects.requireNonNull(accountNumbers));
+        update("IUsageMapper.applyNetAmountFromExcludedRightshoders", params);
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
