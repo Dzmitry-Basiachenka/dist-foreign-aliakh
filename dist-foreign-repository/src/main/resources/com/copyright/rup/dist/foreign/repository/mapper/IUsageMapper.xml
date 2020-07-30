@@ -603,6 +603,26 @@
         order by u.df_usage_uid
     </select>
 
+    <select id="deleteFromScenarioByRightsholder" parameterType="map" resultType="string">
+        with result as (
+            <include refid="deleteFromScenarioSql"/>
+            where rh_account_number in
+                <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
+                    #{accountNumber}
+                </foreach>
+                and df_scenario_uid = #{scenarioId}
+            returning df_usage_uid
+        )
+        update ${schema}.df_usage_fas
+        set
+            is_rh_participating_flag = false,
+            is_payee_participating_flag = false,
+            <include refid="StoredEntityMapper.update"/>
+        from result
+        where df_usage_fas_uid = result.df_usage_uid
+        returning df_usage_fas_uid
+    </select>
+
     <delete id="deleteByBatchId" parameterType="string">
         with u as (
             delete from ${schema}.df_usage

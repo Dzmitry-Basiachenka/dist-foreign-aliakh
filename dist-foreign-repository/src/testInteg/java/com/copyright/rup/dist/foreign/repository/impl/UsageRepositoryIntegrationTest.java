@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -75,6 +76,7 @@ public class UsageRepositoryIntegrationTest {
 
     private static final String USAGE_BATCH_ID_1 = "56282dbc-2468-48d4-b926-93d3458a656a";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
+    private static final Long RH_ACCOUNT_NUMBER_2 = 2000017004L;
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2018, 12, 11);
     private static final Integer FISCAL_YEAR = 2019;
     private static final String RH_ACCOUNT_NAME_1 = "IEEE - Inst of Electrical and Electronics Engrs";
@@ -126,6 +128,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String SCENARIO_ID_2 = "abe31cdc-adfb-41c5-9a46-4ca4966a41be";
     private static final String SCENARIO_ID_3 = "e13ecc44-6795-4b75-90f0-4a3fc191f1b9";
+    private static final String SCENARIO_ID_4 = "03b9357e-0823-4abf-8e31-c615d735bf3b";
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
     private static final String PERCENT = "%";
@@ -143,6 +146,33 @@ public class UsageRepositoryIntegrationTest {
 
     @Autowired
     private UsageRepository usageRepository;
+
+    @Test
+    public void testDeleteFromScenarioByRightsholder() {
+        List<Usage> usageList = usageRepository.findByScenarioId(SCENARIO_ID_4);
+        assertEquals(4, usageList.size());
+        usageList.forEach(usage -> {
+            assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
+            assertNotEquals(DEFAULT_ZERO_AMOUNT, usage.getServiceFeeAmount());
+            assertNotEquals(DEFAULT_ZERO_AMOUNT, usage.getNetAmount());
+            assertNotEquals(DEFAULT_ZERO_AMOUNT, usage.getServiceFee());
+        });
+        List<String> usageIds =
+            usageRepository.deleteFromScenarioByRightsholder(SCENARIO_ID_4, Sets.newHashSet(RH_ACCOUNT_NUMBER_2),
+                StoredEntity.DEFAULT_USER);
+        assertEquals(2, usageIds.size());
+        usageList = usageRepository.findByIds(usageIds);
+        assertEquals(2, usageList.size());
+        usageList.forEach(usage -> {
+            assertEquals(UsageStatusEnum.SCENARIO_EXCLUDED, usage.getStatus());
+            assertNull(usage.getScenarioId());
+            assertEquals(DEFAULT_ZERO_AMOUNT, usage.getServiceFeeAmount());
+            assertEquals(DEFAULT_ZERO_AMOUNT, usage.getNetAmount());
+            assertFalse(usage.isPayeeParticipating());
+            assertFalse(usage.isRhParticipating());
+            assertNull(usage.getServiceFee());
+        });
+    }
 
     @Test
     public void testFindCountByFilter() {
