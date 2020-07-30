@@ -34,8 +34,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -133,6 +135,15 @@ public class SalUsageWidgetTest {
     }
 
     private void verifyGrid(Grid grid) {
+        List<Grid.Column> columns = grid.getColumns();
+        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Detail Type", "Product Family", "Usage Batch Name",
+            "Period End Date", "Licensee Account #", "Licensee Name", "RH Account #", "RH Name", "Wr Wrk Inst",
+            "System Title", "Standard Number", "Standard Number Type", "Assessment Name", "Assessment Type",
+            "Date of Scored Assessment", "Reported Work Portion ID", "Reported Title",
+            "Reported Article or Chapter Title", "Reported Standard Number", "Reported Author", "Reported Publisher",
+            "Reported Publication Date", "Reported Page range", "Reported Vol/Number/Series", "Reported Media Type",
+            "Coverage Year", "Question Identifier", "Grade", "Grade Group", "States", "Number of Views", "Comment"),
+            columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         verifySize(grid);
     }
 
