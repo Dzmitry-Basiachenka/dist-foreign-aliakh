@@ -1,10 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
@@ -12,13 +16,13 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
 import com.vaadin.data.provider.QuerySortOrder;
-
+import com.vaadin.shared.data.sort.SortDirection;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +39,8 @@ import java.util.List;
 public class SalUsageController extends CommonUsageController implements ISalUsageController {
 
     @Autowired
+    private ISalUsageService salUsageService;
+    @Autowired
     private ISalUsageFilterController salUsageFilterController;
     @Autowired
     private ITelesalesService telesalesService;
@@ -46,14 +52,18 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public int getBeansCount() {
-        //TODO: use service logic here
-        return 0;
+        return salUsageService.getUsagesCount(getUsageFilterController().getWidget().getAppliedFilter());
     }
 
     @Override
     public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
-        //TODO: use service logic here
-        return new ArrayList<>();
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.get(0);
+            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
+        return salUsageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(),
+            new Pageable(startIndex, count), sort);
     }
 
     @Override
