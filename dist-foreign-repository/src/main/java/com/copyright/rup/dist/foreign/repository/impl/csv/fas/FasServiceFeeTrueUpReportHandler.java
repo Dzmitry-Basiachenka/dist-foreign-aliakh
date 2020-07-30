@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv.fas;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
-import com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto;
+import com.copyright.rup.dist.foreign.domain.report.FasServiceFeeTrueUpReportDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Writes service fee true-up into a {@link OutputStream} connected to the {@link java.io.InputStream}.
+ * Writes FAS/FAS2 service fee true-up into a {@link OutputStream} connected to the {@link java.io.InputStream}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Uladzislau Shalamitski
  */
-public class ServiceFeeTrueUpReportHandler extends BaseCsvReportHandler<ServiceFeeTrueUpReportDto> {
+public class FasServiceFeeTrueUpReportHandler extends BaseCsvReportHandler<FasServiceFeeTrueUpReportDto> {
 
     private static final List<String> HEADERS =
         Arrays.asList("Source RRO Account #", "Source RRO Name", "Payment Date", "Total Gross Amount Sent to LM",
@@ -31,12 +31,12 @@ public class ServiceFeeTrueUpReportHandler extends BaseCsvReportHandler<ServiceF
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    public ServiceFeeTrueUpReportHandler(OutputStream outputStream) {
+    public FasServiceFeeTrueUpReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 
     @Override
-    protected List<String> getBeanProperties(ServiceFeeTrueUpReportDto bean) {
+    protected List<String> getBeanProperties(FasServiceFeeTrueUpReportDto bean) {
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(getBeanPropertyAsString(bean.getRroAccountNumber()));
         beanProperties.add(bean.getRroName());

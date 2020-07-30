@@ -6,9 +6,10 @@ import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto;
+import com.copyright.rup.dist.foreign.domain.report.FasServiceFeeTrueUpReportDto;
+import com.copyright.rup.dist.foreign.domain.report.NtsServiceFeeTrueUpReportDto;
 import com.copyright.rup.dist.foreign.domain.report.NtsWithDrawnBatchSummaryReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
-import com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
 
 import org.junit.Test;
@@ -66,7 +67,8 @@ public class DomainVerifierTest {
             {FasBatchSummaryReportDto.class},
             {NtsWithDrawnBatchSummaryReportDto.class},
             {ResearchStatusReportDto.class},
-            {ServiceFeeTrueUpReportDto.class},
+            {FasServiceFeeTrueUpReportDto.class},
+            {NtsServiceFeeTrueUpReportDto.class},
             {BatchStatistic.class},
             {Work.class},
             {WorkClassification.class},

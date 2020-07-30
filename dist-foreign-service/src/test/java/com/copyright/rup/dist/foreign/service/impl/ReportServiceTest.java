@@ -122,6 +122,17 @@ public class ReportServiceTest {
     }
 
     @Test
+    public void testWriteNtsServiceFeeTrueUpCsvReport() {
+        Scenario scenario = new Scenario();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        reportRepository.writeNtsServiceFeeTrueUpCsvReport(scenario, outputStream, DEFAULT_ESTIMATED_SERVICE_FEE);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeNtsServiceFeeTrueUpCsvReport(scenario, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
     public void testWriteFasUsageCsvReport() {
         UsageFilter filter = createMock(UsageFilter.class);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
