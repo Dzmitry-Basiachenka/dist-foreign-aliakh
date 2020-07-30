@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -21,13 +22,21 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link SalUsageWidget}.
@@ -48,7 +57,7 @@ public class SalUsageWidgetTest {
     @Before
     public void setUp() {
         controller = createMock(ISalUsageController.class);
-        usagesWidget = new SalUsageWidget();
+        usagesWidget = new SalUsageWidget(controller);
         usagesWidget.setController(controller);
         expect(controller.initUsagesFilterWidget())
             .andReturn(new SalUsageFilterWidget(createMock(ISalUsageFilterController.class))).once();
@@ -96,6 +105,8 @@ public class SalUsageWidgetTest {
     public void testInitMediator() throws Exception {
         SalUsageMediator mediator = createMock(SalUsageMediator.class);
         expectNew(SalUsageMediator.class).andReturn(mediator).once();
+        mediator.setLoadItemBankMenuItem(anyObject(MenuItem.class));
+        expectLastCall().once();
         replay(SalUsageMediator.class, mediator, controller);
         assertNotNull(usagesWidget.initMediator());
         verify(SalUsageMediator.class, mediator, controller);
@@ -104,7 +115,21 @@ public class SalUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(0, layout.getComponentCount());
+        assertEquals(1, layout.getComponentCount());
+        verifyUsageBatchMenuBar(layout.getComponent(0), Collections.singletonList("Load Item Bank"));
+    }
+
+    private void verifyUsageBatchMenuBar(Component component, List<String> menuItems) {
+        assertTrue(component instanceof MenuBar);
+        MenuBar menuBar = (MenuBar) component;
+        List<MenuItem> parentItems = menuBar.getItems();
+        assertEquals(1, parentItems.size());
+        MenuItem item = parentItems.get(0);
+        assertEquals("Usage Batch", item.getText());
+        List<MenuItem> childItems = item.getChildren();
+        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
+        IntStream.range(0, menuItems.size())
+            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
     }
 
     private void verifyGrid(Grid grid) {
