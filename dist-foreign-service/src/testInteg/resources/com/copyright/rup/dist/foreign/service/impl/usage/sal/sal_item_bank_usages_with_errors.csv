@@ -1,0 +1,14 @@
+Assessment Name,Coverage Year,Grade,Wr Wrk Inst,Reported Work Portion ID,Reported Standard Number,Reported Title,Reported Media Type,Reported Article or Chapter Title,Reported Author,Reported Publisher,Reported Publication Date,Reported Page Range,Reported Vol/Number/Series,Comment
+AssessmentName1,2019-2020,L,122980288,a1,978-0-87664-361-7,ReportedTitle1,Image,,Reported Author1,Reported Publisher1,7/7/2019,,,Invalid Grade
+AssessmentName2,2019-2020,0,131019899,a2,978-2-84096-163-5,ReportedTitle2,Image,,Reported Author2,Reported Publisher2,7/8/2019,,,Invalid Grade
+AssessmentName3,2019-2020,13,122849922,a3,1040-1776,ReportedTitle3,Text,,Reported Author3,Reported Publisher3,7/9/2019,,,Invalid Grade
+,2019-2020,3,122270114,a4,9780,ReportedTitle4,Text,,Reported Author4,Reported Publisher4,7/10/2019,,,Empty AssessmentName
+Assessment Name5,,4,127774358,a5,9.78E+12,ReportedTitle5,Image,Reported Article or Chapter Title,Reported Author5,Reported Publisher5,7/11/2019,Reported Page Range,Reported Vol/Number/Series,Empty Coverage Year
+Assessment Name6,2019-2020,5,,a6,300-1988,ReportedTitle6,Image,Reported Article or Chapter Title,Reported Author6,Reported Publisher6,7/12/2019,Reported Page Range,Reported Vol/Number/Series,Empty Wr Wrk Inst
+Assessment Name7,2019-2020,6,128356274,,0343-1010,ReportedTitle7,Text,Reported Article or Chapter Title,Reported Author7,Reported Publisher7,7/13/2019,Reported Page Range,Reported Vol/Number/Series,Empty Reported Work Portion Id
+Assessment Name8,2019-2020,7,153986341,a6,21510059,ReportedTitle8,Text,Reported Article or Chapter Title,Reported Author8,Reported Publisher8,7/14/2019,Reported Page Range,Reported Vol/Number/Series,Not unique id
+Assessment Name9,2019-2020,8,324900544,a9,10.1016/B978-0-12-509860-1.50008-2,,Image,Reported Article or Chapter Title,Reported Author9,Reported Publisher9,7/15/2019,Reported Page Range,Reported Vol/Number/Series,Empty ReportedTitle
+Assessment Name10,2019-2020,9,413555328,a10,10.1179/HIS.1986.9.4.225,ReportedTitle10,,Reported Article or Chapter Title,Reported Author10,Reported Publisher10,7/16/2019,Reported Page Range,Reported Vol/Number/Series,Empty Reported Media Type
+Assessment Name11,2019-2020,10,26789438a,a11,10.1017/CBO9780511542879.014,ReportedTitle11,Text,Reported Article or Chapter Title,Reported Author11,Reported Publisher11,7/17/2019,Reported Page Range,Reported Vol/Number/Series,Alphanumeric Wr Wrk inst
+Assessment Name12,2019-2020,11,222455572,a12,10.1520/STP270-EB,ReportedTitle12,Text,Reported Article or Chapter Title,Reported Author12,Reported Publisher12,7/18/2019,Reported Page Range,Reported Vol/Number/Series,Unexisting Wr Wrk Inst
+,,12,,,,,,,,,,,,Only Grade presented

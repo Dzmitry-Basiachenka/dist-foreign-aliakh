@@ -93,4 +93,13 @@ public class CsvProcessorFactory {
             new PublicationTypeValidator(publicationTypeService));
         return processor;
     }
+
+    /**
+     * @return instance of {@link SalUsageCsvProcessor}.
+     */
+    public SalUsageCsvProcessor getSalUsageCsvProcessor() {
+        SalUsageCsvProcessor processor = new SalUsageCsvProcessor();
+        processor.addBusinessValidators(new WrWrkInstValidator(piIntegrationService));
+        return processor;
+    }
 }
