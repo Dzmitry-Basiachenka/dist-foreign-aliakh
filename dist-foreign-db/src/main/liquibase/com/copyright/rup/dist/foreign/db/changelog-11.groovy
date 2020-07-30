@@ -73,4 +73,16 @@ databaseChangeLog {
             dropTable(tableName: 'df_usage_sal', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2020-07-30-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-57900 FDA: Create SAL batch (load item bank): add sal_fields column to df_usage_batch table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'sal_fields', type: 'JSONB', remarks: 'The fields of SAL item banks')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'sal_fields')
+        }
+    }
 }

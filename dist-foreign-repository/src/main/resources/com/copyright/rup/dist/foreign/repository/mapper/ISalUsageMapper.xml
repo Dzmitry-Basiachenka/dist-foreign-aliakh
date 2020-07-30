@@ -51,8 +51,8 @@
         u.standard_number_type,
         u.rh_account_number,
         rh.name rh_name,
-        null licensee_account_number, <!--TODO {aliakh} replace with ub.sal_fields->>'licensee_account_number'-->
-        null licensee_name, <!--TODO {aliakh} replace with ub.sal_fields->>'licensee_name'-->
+        ub.sal_fields->>'licensee_account_number' licensee_account_number,
+        ub.sal_fields->>'licensee_name' licensee_name,
         u.status_ind,
         u.product_family,
         u.comment,

@@ -14,6 +14,7 @@
         <result property="fiscalYear" column="fiscal_year"/>
         <result property="grossAmount" column="gross_amount"/>
         <result property="ntsFields" column="nts_fields" typeHandler="NtsBatchFieldsTypeHandler"/>
+        <result property="salFields" column="sal_fields" typeHandler="SalBatchFieldsTypeHandler"/>
         <result property="numberOfBaselineYears" column="baseline_years"/>
     </resultMap>
 
@@ -32,6 +33,7 @@
         ub.fiscal_year,
         ub.gross_amount,
         ub.nts_fields,
+        ub.sal_fields,
         ub.baseline_years,
         ub.created_datetime,
         ub.updated_datetime,
@@ -50,6 +52,7 @@
             fiscal_year,
             gross_amount,
             nts_fields,
+            sal_fields,
             baseline_years,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
@@ -61,6 +64,7 @@
             #{fiscalYear},
             #{grossAmount},
             #{ntsFields, typeHandler=NtsBatchFieldsTypeHandler},
+            #{salFields, typeHandler=SalBatchFieldsTypeHandler},
             #{numberOfBaselineYears},
             <include refid="StoredEntityMapper.insert"/>
         )

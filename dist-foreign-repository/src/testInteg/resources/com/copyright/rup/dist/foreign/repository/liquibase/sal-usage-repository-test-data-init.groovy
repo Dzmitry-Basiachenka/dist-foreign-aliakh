@@ -22,6 +22,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-06-03')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
+            column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -31,6 +32,11 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000000026')
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
+            column(name: 'created_datetime', value: '2015-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2015-02-14 12:00:00+00')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'record_version', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
@@ -65,6 +71,11 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000011450')
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
+            column(name: 'created_datetime', value: '2015-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2015-02-14 12:00:00+00')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'record_version', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
