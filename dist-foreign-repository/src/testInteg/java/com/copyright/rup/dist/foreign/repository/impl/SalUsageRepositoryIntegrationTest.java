@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -47,9 +48,13 @@ import java.util.stream.IntStream;
 @Transactional
 public class SalUsageRepositoryIntegrationTest {
 
-    private static final String USAGE_BATCH_ID = "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64";
+    private static final String USAGE_BATCH_ID_1 = "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64";
+    private static final String USAGE_BATCH_ID_2 = "56069b44-10b1-42d6-9a44-a3fae0029171";
     private static final String SAL_PRODUCT_FAMILY = "SAL";
     private static final String DETAIL_ID_KEY = "detailId";
+    private static final String USAGE_ID_1 = "c95654c0-a607-4683-878f-99606e90c065";
+    private static final String USAGE_ID_2 = "7b5ac9fc-63e2-4162-8d63-953b7023293c";
+    private static final String USAGE_ID_3 = "5ab5e80b-89c0-4d78-9675-54c7ab284450";
 
     @Autowired
     private ISalUsageRepository salUsageRepository;
@@ -64,16 +69,87 @@ public class SalUsageRepositoryIntegrationTest {
     @Test
     public void testFindCountByFilter() {
         assertEquals(1, salUsageRepository.findCountByFilter(buildUsageFilter(
-            Collections.singleton(USAGE_BATCH_ID), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB)));
+            Collections.singleton(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB)));
     }
 
     @Test
-
     public void testFindDtosByFilter() throws IOException {
         verifyUsageDtos(loadExpectedUsageDtos("json/sal_usage_dto.json"),
             salUsageRepository.findDtosByFilter(buildUsageFilter(
-                Collections.singleton(USAGE_BATCH_ID), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB),
+                Collections.singleton(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB),
                 null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)));
+    }
+
+    @Test
+    public void testFindDtosByFilterSort() {
+        assertFindDtosByFilterSort(USAGE_ID_3, "detailId", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "detailId", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "status", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "status", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "detailType", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "detailType", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "productFamily", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "productFamily", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "batchName", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "batchName", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "periodEndDate", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "periodEndDate", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "rhAccountNumber", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "rhAccountNumber", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "rhName", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "rhName", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "licenseeAccountNumber", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "licenseeAccountNumber", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "licenseeName", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "licenseeName", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "wrWrkInst", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "wrWrkInst", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "workTitle", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "workTitle", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "systemTitle", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "systemTitle", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "standardNumber", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "standardNumber", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "standardNumberType", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "standardNumberType", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "assessmentName", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "assessmentName", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "assessmentType", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "assessmentType", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "reportedWorkPortionId", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "reportedWorkPortionId", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "reportedArticle", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "reportedArticle", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "reportedStandardNumber", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "reportedStandardNumber", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "reportedAuthor", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "reportedAuthor", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "reportedPublisher", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "reportedPublisher", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "reportedPublicationDate", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "reportedPublicationDate", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "reportedPageRange", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "reportedPageRange", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "reportedVolNumberSeries", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "reportedVolNumberSeries", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "reportedMediaType", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "reportedMediaType", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "coverageYear", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "coverageYear", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "scoredAssessmentDate", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "scoredAssessmentDate", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "questionIdentifier", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "questionIdentifier", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "grade", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "grade", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "gradeGroup", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "gradeGroup", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "states", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, "states", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "numberOfViews", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "numberOfViews", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "comment", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "comment", Sort.Direction.DESC);
     }
 
     private UsageFilter buildUsageFilter(Set<String> usageBatchIds, UsageStatusEnum status, String productFamily,
@@ -102,5 +178,13 @@ public class SalUsageRepositoryIntegrationTest {
                 assertNotNull(actualUsage);
                 assertEquals(expectedUsage.toString(), actualUsage.toString());
             });
+    }
+
+    private void assertFindDtosByFilterSort(String detailId, String sortProperty, Sort.Direction sortDirection) {
+        List<UsageDto> usageDtos = salUsageRepository.findDtosByFilter(buildUsageFilter(
+            Sets.newHashSet(USAGE_BATCH_ID_1, USAGE_BATCH_ID_2), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, null), null,
+            new Sort(sortProperty, sortDirection));
+        assertEquals(3, CollectionUtils.size(usageDtos));
+        assertEquals(detailId, usageDtos.get(0).getId());
     }
 }
