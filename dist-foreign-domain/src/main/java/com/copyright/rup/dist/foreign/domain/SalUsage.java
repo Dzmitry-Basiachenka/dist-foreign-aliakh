@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.domain;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -271,7 +272,7 @@ public class SalUsage {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("detailType", detailType)
             .append("grade", grade)
             .append("gradeGroup", gradeGroup)

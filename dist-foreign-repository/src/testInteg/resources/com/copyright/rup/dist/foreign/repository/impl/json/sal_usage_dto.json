@@ -1,0 +1,54 @@
+[
+  {
+    "id": "5ab5e80b-89c0-4d78-9675-54c7ab284450",
+    "batchName": "SAL usage batch 1",
+    "periodEndDate": [
+      2015,
+      6,
+      3
+    ],
+    "wrWrkInst": 269040891,
+    "rhAccountNumber": 1000000026,
+    "rhName": "Georgia State University Business Press [C]",
+    "licenseeAccountNumber": 7001293454,
+    "licenseeName": "Synergy Publishers",
+    "status": "NEW",
+    "productFamily": "SAL",
+    "salUsage": {
+      "detailType": "IB",
+      "grade": "5",
+      "gradeGroup": "GRADE3_5",
+      "assessmentName": "Spring2014 Eng Lang/Math",
+      "assessmentType": "ELA",
+      "reportedWorkPortionId": "1101001IB2361",
+      "reportedTitle": "Science News for students",
+      "reportedArticle": "Learning in Your Sleep",
+      "reportedStandardNumber": "450220996",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": [
+        2015,
+        1,
+        2
+      ],
+      "reportedPageRange": "14-17",
+      "reportedVolNumberSeries": "Vol 17, Issue 2",
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": 1.0,
+      "coverageYear": "2014-2015",
+      "scoredAssessmentDate": [
+        2015,
+        7,
+        1
+      ],
+      "questionIdentifier": "SB9",
+      "states": "CA,WV",
+      "numberOfViews": 1765
+    },
+    "createDate": 1423915200000,
+    "updateDate": 1423915200000,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "version": 1
+  }
+]
