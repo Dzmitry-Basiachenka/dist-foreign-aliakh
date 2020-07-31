@@ -22,7 +22,6 @@ databaseChangeLog {
             column(name: 'reported_work_portion_id', type: 'VARCHAR(1000)', remarks: 'The reported work portion id') {
                 constraints(nullable: false)
             }
-            column(name: 'reported_title', type: 'VARCHAR(1000)', remarks: 'The reported article or chapter title')
             column(name: 'reported_article', type: 'VARCHAR(1000)', remarks: 'The reported article or chapter title')
             column(name: 'reported_standard_number', type: 'VARCHAR(1000)', remarks: 'The reported_standard_number')
             column(name: 'reported_author', type: 'VARCHAR(1000)', remarks: 'The reported author')

@@ -25,7 +25,6 @@ public class SalUsage {
     private String assessmentName;
     private String assessmentType;
     private String reportedWorkPortionId;
-    private String reportedTitle;
     private String reportedArticle;
     private String reportedStandardNumber;
     private String reportedAuthor;
@@ -87,14 +86,6 @@ public class SalUsage {
 
     public void setReportedWorkPortionId(String reportedWorkPortionId) {
         this.reportedWorkPortionId = reportedWorkPortionId;
-    }
-
-    public String getReportedTitle() {
-        return reportedTitle;
-    }
-
-    public void setReportedTitle(String reportedTitle) {
-        this.reportedTitle = reportedTitle;
     }
 
     public String getReportedArticle() {
@@ -226,7 +217,6 @@ public class SalUsage {
             .append(this.assessmentName, that.assessmentName)
             .append(this.assessmentType, that.assessmentType)
             .append(this.reportedWorkPortionId, that.reportedWorkPortionId)
-            .append(this.reportedTitle, that.reportedTitle)
             .append(this.reportedArticle, that.reportedArticle)
             .append(this.reportedStandardNumber, that.reportedStandardNumber)
             .append(this.reportedAuthor, that.reportedAuthor)
@@ -252,7 +242,6 @@ public class SalUsage {
             .append(assessmentName)
             .append(assessmentType)
             .append(reportedWorkPortionId)
-            .append(reportedTitle)
             .append(reportedArticle)
             .append(reportedStandardNumber)
             .append(reportedAuthor)
@@ -279,7 +268,6 @@ public class SalUsage {
             .append("assessmentName", assessmentName)
             .append("assessmentType", assessmentType)
             .append("reportedWorkPortionId", reportedWorkPortionId)
-            .append("reportedTitle", reportedTitle)
             .append("reportedArticle", reportedArticle)
             .append("reportedStandardNumber", reportedStandardNumber)
             .append("reportedAuthor", reportedAuthor)
