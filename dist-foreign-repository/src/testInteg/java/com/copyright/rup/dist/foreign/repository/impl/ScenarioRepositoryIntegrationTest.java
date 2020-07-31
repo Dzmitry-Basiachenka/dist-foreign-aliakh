@@ -94,6 +94,38 @@ public class ScenarioRepositoryIntegrationTest {
     private IScenarioUsageFilterRepository filterRepository;
 
     @Test
+    public void testFindRightsholdersByScenarioId() {
+        scenarioRepository.insert(buildScenario());
+        Usage usage1 = buildUsage();
+        Usage usage2 = buildUsage();
+        Usage usage3 = buildUsage();
+        usage1.setRightsholder(buildRightsholder(2000017004L,
+            "Access Copyright, The Canadian Copyright Agency"));
+        usage1.setProductFamily(NTS_PRODUCT_FAMILY);
+        usage2.setRightsholder(buildRightsholder(2000017010L,
+            "JAC, Japan Academic Association for Copyright Clearance, Inc."));
+        usage2.setProductFamily(NTS_PRODUCT_FAMILY);
+        usage3.setProductFamily(NTS_PRODUCT_FAMILY);
+        fasUsageRepository.insert(usage1);
+        fasUsageRepository.insert(usage2);
+        fasUsageRepository.insert(usage3);
+        usageRepository.addToScenario(Lists.newArrayList(usage1, usage2, usage3));
+        List<RightsholderPayeePair> result =
+            scenarioRepository.findRightsholdersByScenarioId(SCENARIO_ID_1);
+        assertEquals(3, result.size());
+        result.sort(Comparator.comparing(RightsholderPayeePair::getRightsholder));
+        RightsholderPayeePair pair1 = result.get(0);
+        assertEquals(usage1.getRightsholder(), pair1.getRightsholder());
+        assertEquals(usage1.getPayee(), pair1.getPayee());
+        RightsholderPayeePair pair2 = result.get(2);
+        assertEquals(usage2.getRightsholder(), pair2.getRightsholder());
+        assertEquals(usage2.getPayee(), pair2.getPayee());
+        RightsholderPayeePair pair3 = result.get(1);
+        assertEquals(usage3.getRightsholder(), pair3.getRightsholder());
+        assertEquals(usage3.getPayee(), pair3.getPayee());
+    }
+
+    @Test
     public void testFindCountByName() {
         assertEquals(0, scenarioRepository.findCountByName(SCENARIO_NAME));
         scenarioRepository.insert(buildScenario());
