@@ -179,6 +179,14 @@ public interface IReportService {
                                            OutputStream outputStream);
 
     /**
+     * Writes Service Fee True-up Report for NTS into the output stream in csv format.
+     *
+     * @param scenario     a {@link Scenario}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeNtsServiceFeeTrueUpCsvReport(Scenario scenario, OutputStream outputStream);
+
+    /**
      * Writes Summary of Market Report into the output stream in csv format based on batches.
      *
      * @param batches      list of batches

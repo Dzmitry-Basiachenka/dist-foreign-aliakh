@@ -22,7 +22,7 @@
         <result property="estimatedServiceFee" column="estimated_service_fee"/>
     </resultMap>
 
-    <resultMap id="serviceFeeTrueUpReportDtoResultMap" type="ServiceFeeTrueUpReportDto">
+    <resultMap id="fasServiceFeeTrueUpReportDtoResultMap" type="FasServiceFeeTrueUpReportDto">
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="rroName" column="rro_name"/>
         <result property="paymentDate" column="payment_date"/>
@@ -38,6 +38,22 @@
         <result property="serviceFeeAmountReturnToCla" column="service_fee_amount_return_to_cla"/>
         <result property="netAmountReturnToCla" column="net_amount_return_to_cla"/>
         <result property="serviceFeeTrueUpReturnToCla" column="service_fee_true_up_return_to_cla"/>
+    </resultMap>
+
+    <resultMap id="ntsServiceFeeTrueUpReportDtoResultMap" type="NtsServiceFeeTrueUpReportDto">
+        <result property="batchGrossAmount" column="batch_gross_amount"/>
+        <result property="preServiceFeeAmount" column="pre_service_fee_amount"/>
+        <result property="preServiceFeeFunds" column="pre_service_fee_funds"/>
+        <result property="postServiceFeeAmount" column="post_service_fee_amount"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="estimatedServiceFee" column="estimated_service_fee"/>
+        <result property="estimatedServiceFeeAmount" column="estimated_service_fee_amount"/>
+        <result property="estimatedNetAmount" column="estimated_net_amount"/>
+        <result property="grossAmountSentToLm" column="gross_amount_sent_to_lm"/>
+        <result property="serviceFeeSentToLm" column="service_fee_sent_to_lm"/>
+        <result property="serviceFeeAmountSentToLm" column="service_fee_amount_sent_to_lm"/>
+        <result property="netAmountSentToLm" column="net_amount_sent_to_lm"/>
+        <result property="serviceFeeTrueUpAmount" column="service_fee_true_up"/>
     </resultMap>
 
     <resultMap id="researchStatusReportDtoResultMap" type="ResearchStatusReportDto">
@@ -323,7 +339,7 @@
         order by batch_name
     </select>
 
-    <select id="findFasServiceFeeTrueUpReportDtos" resultMap="serviceFeeTrueUpReportDtoResultMap">
+    <select id="findFasServiceFeeTrueUpReportDtos" resultMap="fasServiceFeeTrueUpReportDtoResultMap">
         select
             nestedReport.rro_account_number,
             rh.name rro_name,
@@ -380,6 +396,59 @@
         left join ${schema}.df_rro_estimated_service_fee_percentage fee on fee.rro_account_number = nestedReport.rro_account_number
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = nestedReport.rro_account_number
         order by nestedReport.payment_date, rh.rh_account_number
+    </select>
+
+    <select id="findNtsServiceFeeTrueUpReportDtos" resultMap="ntsServiceFeeTrueUpReportDtoResultMap">
+        select
+            batch_gross_amount,
+            pre_service_fee_funds,
+            pre_service_fee_amount,
+            post_service_fee_amount,
+            gross_amount,
+            estimated_service_fee,
+            estimated_service_fee_amount,
+            batch_gross_amount - estimated_service_fee_amount estimated_net_amount,
+            gross_amount_sent_to_lm,
+            net_amount_sent_to_lm,
+            service_fee_amount_sent_to_lm,
+            service_fee_amount_sent_to_lm / (batch_gross_amount + pre_service_fee_funds + pre_service_fee_amount) service_fee_sent_to_lm,
+            estimated_service_fee_amount - service_fee_amount_sent_to_lm service_fee_true_up
+        from (
+            select
+                batch_gross_amount,
+                pre_service_fee_funds,
+                pre_service_fee_amount,
+                post_service_fee_amount,
+                batch_gross_amount + pre_service_fee_funds + pre_service_fee_amount + post_service_fee_amount gross_amount,
+                #{defaultEstimatedServiceFee} estimated_service_fee,
+                (batch_gross_amount + pre_service_fee_funds + pre_service_fee_amount) * #{defaultEstimatedServiceFee} estimated_service_fee_amount
+            from (
+                select
+                    coalesce(fp.total_amount, 0) pre_service_fee_funds,
+                    (s.nts_fields ->> 'pre_service_fee_amount')::numeric pre_service_fee_amount,
+                    (s.nts_fields ->> 'post_service_fee_amount')::numeric post_service_fee_amount
+                from ${schema}.df_scenario s
+                left join ${schema}.df_fund_pool fp on fp.df_fund_pool_uid = s.nts_fields ->> 'pre_service_fee_fund_uid'
+                where s.df_scenario_uid = #{scenarioId}
+            ) scenario_amounts
+            <!-- concatenating 2 column sets: both tables always have a single row -->
+            cross join (
+                select sum((ub.nts_fields ->> 'stm_amount')::numeric + (ub.nts_fields ->> 'non_stm_amount')::numeric) batch_gross_amount
+                from ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map batch_filter
+                join ${schema}.df_scenario_usage_filter f on f.df_scenario_usage_filter_uid = batch_filter.df_scenario_usage_filter_uid
+                join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = batch_filter.df_usage_batch_uid
+                where f.df_scenario_uid = #{scenarioId}
+            ) batch_amounts
+        ) estimated_amounts
+        <!-- concatenating 2 column sets: both tables always have a single row -->
+        cross join (
+            select
+                sum(gross_amount) gross_amount_sent_to_lm,
+                sum(net_amount) net_amount_sent_to_lm,
+                sum(service_fee_amount) service_fee_amount_sent_to_lm
+            from ${schema}.df_usage_archive
+            where df_scenario_uid = #{scenarioId}
+        ) sent_to_lm_amounts
     </select>
 
     <select id="findOwnershipAdjustmentReportDtos" parameterType="map" resultMap="IRightsholderDiscrepancyMapper.rightsholderDiscrepancyResultMap">

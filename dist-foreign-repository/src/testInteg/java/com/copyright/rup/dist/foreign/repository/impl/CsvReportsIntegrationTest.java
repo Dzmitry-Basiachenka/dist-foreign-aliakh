@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -410,6 +411,33 @@ public class CsvReportsIntegrationTest {
         assertFiles(outputStream -> reportRepository.writeFasServiceFeeTrueUpCsvReport(LocalDate.of(2013, 1, 1),
             LocalDate.of(2012, 1, 1), LocalDate.of(2014, 5, 5), outputStream, 2000017000L,
             DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report_fas_empty.csv");
+    }
+
+    @Test
+    public void testWriteNtsServiceFeeTrueUpCsvReportWithFundPool() throws IOException {
+        Scenario scenario = new Scenario();
+        scenario.setId("a537da01-b211-4b81-b2b9-7dc0c791811a");
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertFiles(outputStream -> reportRepository.writeNtsServiceFeeTrueUpCsvReport(scenario, outputStream,
+            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report_nts_1.csv");
+    }
+
+    @Test
+    public void testWriteNtsServiceFeeTrueUpCsvReportWithoutFundPool() throws IOException {
+        Scenario scenario = new Scenario();
+        scenario.setId("dc6df4bd-7059-4975-8898-78b4a50d30b0");
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertFiles(outputStream -> reportRepository.writeNtsServiceFeeTrueUpCsvReport(scenario, outputStream,
+            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report_nts_2.csv");
+    }
+
+    @Test
+    public void testWriteNtsServiceFeeTrueUpCsvEmptyReport() throws IOException {
+        Scenario scenario = new Scenario();
+        scenario.setId("1871799a-157a-4fb2-82ab-9092bb3b6395");
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        assertFiles(outputStream -> reportRepository.writeNtsServiceFeeTrueUpCsvReport(scenario, outputStream,
+            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report_nts_empty.csv");
     }
 
     @Test

@@ -162,6 +162,11 @@ public class ReportService implements IReportService {
     }
 
     @Override
+    public void writeNtsServiceFeeTrueUpCsvReport(Scenario scenario, OutputStream outputStream) {
+        reportRepository.writeNtsServiceFeeTrueUpCsvReport(scenario, outputStream, defaultEstimatedServiceFee);
+    }
+
+    @Override
     public void writeSummaryMarkerCsvReport(List<UsageBatch> batches, OutputStream outputStream) {
         reportRepository.writeSummaryMarketCsvReport(
             batches.stream().map(UsageBatch::getId).collect(Collectors.toList()), outputStream);

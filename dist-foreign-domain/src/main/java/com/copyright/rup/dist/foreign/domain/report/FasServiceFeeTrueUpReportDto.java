@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * Represents service fee true-up report record.
+ * Represents FAS/FAS2 service fee true-up report record.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -17,7 +17,7 @@ import java.time.LocalDate;
  *
  * @author Uladzislau Shalamitski
  */
-public class ServiceFeeTrueUpReportDto extends StoredEntity<String> {
+public class FasServiceFeeTrueUpReportDto extends StoredEntity<String> {
 
     private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 
@@ -165,7 +165,7 @@ public class ServiceFeeTrueUpReportDto extends StoredEntity<String> {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        ServiceFeeTrueUpReportDto that = (ServiceFeeTrueUpReportDto) obj;
+        FasServiceFeeTrueUpReportDto that = (FasServiceFeeTrueUpReportDto) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(rroAccountNumber, that.rroAccountNumber)

@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
@@ -48,6 +49,16 @@ public interface IReportRepository {
      */
     void writeFasServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
                                            OutputStream outputStream, Long claAccountNumber,
+                                           BigDecimal defaultEstimatedServiceFee);
+
+    /**
+     * Writes Service Fee True-up Report for NTS into the output stream in csv format.
+     *
+     * @param scenario                   a {@link Scenario}
+     * @param outputStream               instance of {@link OutputStream}
+     * @param defaultEstimatedServiceFee default estimated service fee
+     */
+    void writeNtsServiceFeeTrueUpCsvReport(Scenario scenario, OutputStream outputStream,
                                            BigDecimal defaultEstimatedServiceFee);
 
     /**

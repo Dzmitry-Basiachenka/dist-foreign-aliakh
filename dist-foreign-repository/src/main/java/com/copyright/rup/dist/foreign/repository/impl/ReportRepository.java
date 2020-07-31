@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -29,11 +30,12 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.fas.AuditFasCsvReportH
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.ExcludeDetailsByPayeeCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasScenarioUsagesCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasServiceFeeTrueUpReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasUsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.NtsServiceFeeTrueUpReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.OwnershipAdjustmentReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.ResearchStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.SendForResearchCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.fas.ServiceFeeTrueUpReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.SummaryMarketReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.UndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.AuditNtsCsvReportHandler;
@@ -101,8 +103,8 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     public void writeFasServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
                                                   OutputStream outputStream, Long claAccountNumber,
                                                   BigDecimal defaultEstimatedServiceFee) {
-        try (ServiceFeeTrueUpReportHandler handler =
-                 new ServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
+        try (FasServiceFeeTrueUpReportHandler handler =
+                 new FasServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(8);
             parameters.put("paymentDateTo", Objects.requireNonNull(paymentDateTo));
             parameters.put("fromDate", Objects.requireNonNull(fromDate));
@@ -114,6 +116,20 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             parameters.put("status", UsageStatusEnum.SENT_TO_LM);
             parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
             getTemplate().select("IReportMapper.findFasServiceFeeTrueUpReportDtos", parameters, handler);
+        }
+    }
+
+    @Override
+    public void writeNtsServiceFeeTrueUpCsvReport(Scenario scenario, OutputStream outputStream,
+                                                  BigDecimal defaultEstimatedServiceFee) {
+        try (NtsServiceFeeTrueUpReportHandler handler =
+                 new NtsServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
+            if (ScenarioStatusEnum.SENT_TO_LM == Objects.requireNonNull(scenario).getStatus()) {
+                Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+                parameters.put("scenarioId", Objects.requireNonNull(scenario.getId()));
+                parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
+                getTemplate().select("IReportMapper.findNtsServiceFeeTrueUpReportDtos", parameters, handler);
+            }
         }
     }
 
