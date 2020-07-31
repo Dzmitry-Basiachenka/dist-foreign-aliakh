@@ -84,4 +84,29 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'sal_fields')
         }
     }
+
+    changeSet(id: '2020-07-31-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-57883 FDA: SAL UI usage view: remove NOT NULL constraints from " +
+                "assessment_type, scored_assessment_date, question_identifier, states, number_of_views " +
+                "columns of df_usage_sal table")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_sal', columnName: 'assessment_type')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_sal', columnName: 'scored_assessment_date')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_sal', columnName: 'question_identifier')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_sal', columnName: 'states')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_sal', columnName: 'number_of_views')
+
+        rollback {
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_sal', columnName: 'assessment_type',
+                    columnDataType: 'VARCHAR(1000)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_sal', columnName: 'scored_assessment_date',
+                    columnDataType: 'TIMESTAMPTZ')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_sal', columnName: 'question_identifier',
+                    columnDataType: 'VARCHAR(1000)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_sal', columnName: 'states',
+                    columnDataType: 'VARCHAR(1000)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_sal', columnName: 'number_of_views',
+                    columnDataType: 'NUMERIC(38)')
+        }
+    }
 }
