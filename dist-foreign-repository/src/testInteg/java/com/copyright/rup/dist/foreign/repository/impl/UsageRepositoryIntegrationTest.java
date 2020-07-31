@@ -46,6 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -183,18 +184,20 @@ public class UsageRepositoryIntegrationTest {
             assertNotEquals(DEFAULT_ZERO_AMOUNT, usage.getServiceFeeAmount());
             assertNotEquals(DEFAULT_ZERO_AMOUNT, usage.getNetAmount());
             assertNotEquals(DEFAULT_ZERO_AMOUNT, usage.getServiceFee());
+            assertNotEquals(DEFAULT_ZERO_AMOUNT, usage.getGrossAmount());
         });
-        List<String> usageIds =
+        Set<String> usageIds =
             usageRepository.deleteFromScenarioByRightsholder(SCENARIO_ID_4, Sets.newHashSet(RH_ACCOUNT_NUMBER_2),
                 StoredEntity.DEFAULT_USER);
         assertEquals(2, usageIds.size());
-        usageList = usageRepository.findByIds(usageIds);
+        usageList = usageRepository.findByIds(new ArrayList<>(usageIds));
         assertEquals(2, usageList.size());
         usageList.forEach(usage -> {
             assertEquals(UsageStatusEnum.SCENARIO_EXCLUDED, usage.getStatus());
             assertNull(usage.getScenarioId());
             assertEquals(DEFAULT_ZERO_AMOUNT, usage.getServiceFeeAmount());
             assertEquals(DEFAULT_ZERO_AMOUNT, usage.getNetAmount());
+            assertEquals(DEFAULT_ZERO_AMOUNT, usage.getGrossAmount());
             assertFalse(usage.isPayeeParticipating());
             assertFalse(usage.isRhParticipating());
             assertNull(usage.getServiceFee());

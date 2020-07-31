@@ -30,6 +30,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -349,13 +350,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<String> deleteFromScenarioByRightsholder(String scenarioId, Set<Long> accountNumbers, String userName) {
+    public Set<String> deleteFromScenarioByRightsholder(String scenarioId, Set<Long> accountNumbers, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put("accountNumbers", Objects.requireNonNull(accountNumbers));
         params.put(STATUS_KEY, UsageStatusEnum.SCENARIO_EXCLUDED);
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
-        return selectList("IUsageMapper.deleteFromScenarioByRightsholder", params);
+        return new HashSet<>(selectList("IUsageMapper.deleteFromScenarioByRightsholder", params));
     }
 
     @Override

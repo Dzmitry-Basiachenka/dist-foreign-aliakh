@@ -340,14 +340,15 @@ public interface IUsageRepository {
     /**
      * Deletes {@link Usage}s from scenario.
      * Sets status of {@link Usage}s to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED}
-     * sets scenario id, payee account number, service fee to {@code null}, service fee amount and net amount to 0.
+     * sets scenario id, payee account number, service fee to {@code null}, service fee amount, gross amount and
+     * net amount to 0.
      *
      * @param scenarioId     {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
      * @param accountNumbers set of rightsholders' account numbers
      * @param userName       user name
-     * @return list of {@link Usage}'s identifiers
+     * @return set of {@link Usage}'s identifiers
      */
-    List<String> deleteFromScenarioByRightsholder(String scenarioId, Set<Long> accountNumbers, String userName);
+    Set<String> deleteFromScenarioByRightsholder(String scenarioId, Set<Long> accountNumbers, String userName);
 
     /**
      * Proportionally distributes Amounts among scenario usages.

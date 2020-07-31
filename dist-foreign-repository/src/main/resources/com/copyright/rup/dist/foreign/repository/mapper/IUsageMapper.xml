@@ -605,7 +605,8 @@
 
     <select id="deleteFromScenarioByRightsholder" parameterType="map" resultType="string">
         with result as (
-            <include refid="deleteFromScenarioSql"/>
+            <include refid="deleteFromScenarioSql"/>,
+            gross_amount = 0
             where rh_account_number in
                 <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
                     #{accountNumber}

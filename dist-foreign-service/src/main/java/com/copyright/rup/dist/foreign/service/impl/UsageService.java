@@ -430,6 +430,15 @@ public class UsageService implements IUsageService {
         return usageRepository.findRightsholderPayeeProductFamilyHoldersByScenarioIds(scenarioIds);
     }
 
+    @Override
+    @Transactional
+    public void deleteFromScenarioByRightsHolders(String scenarioId, Set<Long> accountNumbers, String reason) {
+        usageRepository.applyNetAmountFromExcludedRightshoders(scenarioId, accountNumbers);
+        Set<String> usageIds = usageRepository.deleteFromScenarioByRightsholder(scenarioId, accountNumbers,
+            RupContextUtils.getUserName());
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
+    }
+
     private void logScenarioSplitAction(String scenarioId) {
         if (!scenarioAuditService.isAuditItemExist(scenarioId, ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT)) {
             scenarioAuditService.logAction(scenarioId, ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT,
