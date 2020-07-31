@@ -623,6 +623,46 @@
         returning df_usage_fas_uid
     </select>
 
+    <update id="applyNetAmountFromExcludedRightshoders" parameterType="map">
+        <!-- Calculates net amount totals of excluded rightsholders-->
+        with exclude_amounts as (
+            select
+                sum(net_amount) as net_amount_excluded
+            from ${schema}.df_usage u
+            where df_scenario_uid = #{scenarioId}
+            and rh_account_number in
+                <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
+                    #{accountNumber}
+                </foreach>
+        ),
+        <!-- Calculates scenario net amount totals without of excluded rightsholders-->
+        net_amount_totals as (
+            select
+                sum(net_amount) net_amount_total
+            from ${schema}.df_usage u
+            where df_scenario_uid = #{scenarioId}
+            and rh_account_number not in
+                <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
+                    #{accountNumber}
+                </foreach>
+        ),
+        <!-- Calculate GT factor based on scenario net totals and net amount totals of excluded rightsholders -->
+        gt_factor as (
+            select
+                ((select net_amount_total from net_amount_totals) + (select net_amount_excluded from exclude_amounts)::numeric)
+                / (select net_amount_total from net_amount_totals) net_amount_gt_factor
+            from ${schema}.df_scenario
+            where df_scenario_uid = #{scenarioId}
+        )
+        update ${schema}.df_usage u
+        set
+            net_amount = u.net_amount * net_amount_gt_factor,
+            service_fee_amount = u.service_fee_amount* net_amount_gt_factor,
+            gross_amount = u.gross_amount * net_amount_gt_factor
+        from gt_factor
+        where u.df_scenario_uid = #{scenarioId}
+    </update>
+
     <delete id="deleteByBatchId" parameterType="string">
         with u as (
             delete from ${schema}.df_usage
