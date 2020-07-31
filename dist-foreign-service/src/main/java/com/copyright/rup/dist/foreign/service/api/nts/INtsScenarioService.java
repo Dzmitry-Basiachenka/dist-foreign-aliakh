@@ -1,8 +1,11 @@
 package com.copyright.rup.dist.foreign.service.api.nts;
 
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+
+import java.util.List;
 
 /**
  * Represents service interface for NTS specific scenario business logic.
@@ -47,4 +50,12 @@ public interface INtsScenarioService {
      * @param scenario {@link Scenario} instance
      */
     void sendToLm(Scenario scenario);
+
+    /**
+     * Finds all {@link RightsholderPayeePair}s within the {@link Scenario} with given id.
+     *
+     * @param scenarioId       {@link Scenario} id
+     * @return list of {@link RightsholderPayeePair}s
+     */
+    List<RightsholderPayeePair> getRightsholdersByScenarioId(String scenarioId);
 }
