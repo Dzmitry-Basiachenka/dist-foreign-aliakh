@@ -1,3 +1,23 @@
+11.1.4
+-
+* B-57883 FDA: SAL UI usage view: implement Liquibase script to create df_usage_sal table
+* B-57883 FDA: SAL UI usage view: implement MyBatis mapping to map SAL domain objects to database records; reorder fields of SAL usages
+* B-57883 FDA: SAL UI usage view: implement columns sorting in SAL usage grid
+* B-57883 FDA: SAL UI usage view: implement domain objects
+* B-57883 FDA: SAL UI usage view: implement empty Usages tab
+* B-57883 FDA: SAL UI usage view: implement filters on Usages tab
+* B-57883 FDA: SAL UI usage view: implement grid on Usages tab
+* B-57883 FDA: SAL UI usage view: implement repository to read SAL usages
+* B-57883 FDA: SAL UI usage view: implement service to read SAL usages
+* B-57900 FDA: Create SAL batch (load item bank): implement upload Item Bank window
+* B-57900 FDA: Create SAL batch (load item bank): introduce SAL Usage Batch menu bar, apply telesales integration to get licensee name
+* B-57900 FDA: Create SAL batch (load item bank): introduce sal_fields column in df_usage_batch  table to store SAL related info
+* B-58546 FDA: Exclude RH's within a NTS scenario: add Exclude by RH button to NTS scenario tab
+* B-58546 FDA: Exclude RH's within a NTS scenario: implement logic to exclude details by RH from scenario
+* B-58546 FDA: Exclude RH's within a NTS scenario: implement logic to get RH's of scenario
+* B-58546 FDA: Exclude RH's within a NTS scenario: implement logic to reallocate funds from excluded RH
+* B-58903 FDA: NTS service fee true-up report: implement logic for generating report
+
 11.1.3
 -
 * CDP-924 FDA: Service Fee True-Up Report for FAS/FAS2: AACL data is displayed in the report
