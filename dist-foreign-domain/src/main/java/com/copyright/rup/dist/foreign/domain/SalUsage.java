@@ -19,6 +19,8 @@ import java.time.LocalDate;
  */
 public class SalUsage {
 
+    private Long licenseeAccountNumber;
+    private String licenseeName;
     private SalDetailTypeEnum detailType;
     private String grade;
     private String gradeGroup;
@@ -38,7 +40,23 @@ public class SalUsage {
     private LocalDate scoredAssessmentDate;
     private String questionIdentifier;
     private String states;
-    private int numberOfViews;
+    private Integer numberOfViews;
+
+    public Long getLicenseeAccountNumber() {
+        return licenseeAccountNumber;
+    }
+
+    public void setLicenseeAccountNumber(Long licenseeAccountNumber) {
+        this.licenseeAccountNumber = licenseeAccountNumber;
+    }
+
+    public String getLicenseeName() {
+        return licenseeName;
+    }
+
+    public void setLicenseeName(String licenseeName) {
+        this.licenseeName = licenseeName;
+    }
 
     public SalDetailTypeEnum getDetailType() {
         return detailType;
@@ -192,11 +210,11 @@ public class SalUsage {
         this.states = states;
     }
 
-    public int getNumberOfViews() {
+    public Integer getNumberOfViews() {
         return numberOfViews;
     }
 
-    public void setNumberOfViews(int numberOfViews) {
+    public void setNumberOfViews(Integer numberOfViews) {
         this.numberOfViews = numberOfViews;
     }
 
@@ -210,7 +228,8 @@ public class SalUsage {
         }
         SalUsage that = (SalUsage) obj;
         return new EqualsBuilder()
-            .append(this.numberOfViews, that.numberOfViews)
+            .append(this.licenseeAccountNumber, that.licenseeAccountNumber)
+            .append(this.licenseeName, that.licenseeName)
             .append(this.detailType, that.detailType)
             .append(this.grade, that.grade)
             .append(this.gradeGroup, that.gradeGroup)
@@ -230,12 +249,15 @@ public class SalUsage {
             .append(this.scoredAssessmentDate, that.scoredAssessmentDate)
             .append(this.questionIdentifier, that.questionIdentifier)
             .append(this.states, that.states)
+            .append(this.numberOfViews, that.numberOfViews)
             .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+            .append(licenseeAccountNumber)
+            .append(licenseeName)
             .append(detailType)
             .append(grade)
             .append(gradeGroup)
@@ -262,6 +284,8 @@ public class SalUsage {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+            .append("licenseeAccountNumber", licenseeAccountNumber)
+            .append("licenseeName", licenseeName)
             .append("detailType", detailType)
             .append("grade", grade)
             .append("gradeGroup", gradeGroup)

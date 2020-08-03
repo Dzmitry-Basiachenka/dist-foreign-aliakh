@@ -11,11 +11,11 @@
     "workTitle": "Science News for students",
     "rhAccountNumber": 1000000026,
     "rhName": "Georgia State University Business Press [C]",
-    "licenseeAccountNumber": 7001293454,
-    "licenseeName": "Synergy Publishers",
     "status": "NEW",
     "productFamily": "SAL",
     "salUsage": {
+      "licenseeAccountNumber": 7001293454,
+      "licenseeName": "Synergy Publishers",
       "detailType": "IB",
       "grade": "5",
       "gradeGroup": "GRADE3_5",

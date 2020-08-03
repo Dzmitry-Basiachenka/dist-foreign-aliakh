@@ -55,9 +55,10 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", true, 145);
         addColumn(usageDto -> CommonDateUtils.format(usageDto.getPeriodEndDate(),
             RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.period_end_date", "periodEndDate", true, 115);
-        addColumn(UsageDto::getLicenseeAccountNumber, "table.column.licensee_account_number", "licenseeAccountNumber",
-            true, 150);
-        addColumn(UsageDto::getLicenseeName, "table.column.licensee_name", "licenseeName", true, 300);
+        addColumn(usage -> usage.getSalUsage().getLicenseeAccountNumber(), "table.column.licensee_account_number",
+            "licenseeAccountNumber", true, 150);
+        addColumn(usage -> usage.getSalUsage().getLicenseeName(), "table.column.licensee_name", "licenseeName", true,
+            300);
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", true, 115);
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);
