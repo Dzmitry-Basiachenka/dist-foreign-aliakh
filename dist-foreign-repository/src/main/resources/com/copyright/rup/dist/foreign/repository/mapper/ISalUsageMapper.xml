@@ -15,8 +15,8 @@
         <result property="standardNumberType" column="standard_number_type"/>
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
-        <result property="licenseeAccountNumber" column="licensee_account_number"/>
-        <result property="licenseeName" column="licensee_name"/>
+        <result property="salUsage.licenseeAccountNumber" column="licensee_account_number"/>
+        <result property="salUsage.licenseeName" column="licensee_name"/>
         <result property="status" column="status_ind"/>
         <result property="productFamily" column="product_family"/>
         <result property="comment" column="comment"/>

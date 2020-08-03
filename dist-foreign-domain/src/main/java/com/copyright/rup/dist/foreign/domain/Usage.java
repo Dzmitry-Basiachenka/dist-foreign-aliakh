@@ -31,7 +31,6 @@ public class Usage extends StoredEntity<String> {
     private String systemTitle;
     private Rightsholder rightsholder = new Rightsholder();
     private Rightsholder payee = new Rightsholder();
-    private Rightsholder licensee = new Rightsholder();
     private String article;
     private String standardNumber;
     private String standardNumberType;
@@ -109,14 +108,6 @@ public class Usage extends StoredEntity<String> {
 
     public void setRightsholder(Rightsholder rightsholder) {
         this.rightsholder = rightsholder;
-    }
-
-    public Rightsholder getLicensee() {
-        return licensee;
-    }
-
-    public void setLicensee(Rightsholder licensee) {
-        this.licensee = licensee;
     }
 
     public String getArticle() {
@@ -339,7 +330,6 @@ public class Usage extends StoredEntity<String> {
             .append(this.status, that.status)
             .append(this.productFamily, that.productFamily)
             .append(this.payee, that.payee)
-            .append(this.licensee, that.licensee)
             .append(this.rhParticipating, that.rhParticipating)
             .append(this.payeeParticipating, that.payeeParticipating)
             .append(this.comment, that.comment)
@@ -377,7 +367,6 @@ public class Usage extends StoredEntity<String> {
             .append(status)
             .append(productFamily)
             .append(payee)
-            .append(licensee)
             .append(rhParticipating)
             .append(payeeParticipating)
             .append(comment)
@@ -415,7 +404,6 @@ public class Usage extends StoredEntity<String> {
             .append("status", status)
             .append("productFamily", productFamily)
             .append("payee", payee)
-            .append("licensee", licensee)
             .append("rhParticipating", rhParticipating)
             .append("payeeParticipating", payeeParticipating)
             .append("comment", comment)
