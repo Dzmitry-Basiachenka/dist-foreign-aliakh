@@ -36,6 +36,11 @@ public interface IReportController extends IController<IReportWidget> {
     IFasServiceFeeTrueUpReportController getFasServiceFeeTrueUpReportController();
 
     /**
+     * @return service fee true-up report controller for NTS.
+     */
+    ICommonScenarioReportController getNtsServiceFeeTrueUpReportController();
+
+    /**
      * @return summary market report controller.
      */
     ISummaryMarketReportController getSummaryMarketReportController();

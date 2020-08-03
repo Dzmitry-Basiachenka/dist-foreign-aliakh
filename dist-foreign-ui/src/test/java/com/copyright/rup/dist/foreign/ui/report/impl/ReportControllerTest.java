@@ -15,6 +15,8 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
+import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
 
@@ -43,6 +45,8 @@ import java.time.ZoneOffset;
 public class ReportControllerTest {
 
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
+    private IFasServiceFeeTrueUpReportController fasServiceFeeTrueUpReportController;
+    private ICommonScenarioReportController ntsServiceFeeTrueUpReportController;
     private ReportController reportController;
     private IReportService reportService;
     private IProductFamilyProvider productFamilyProvider;
@@ -51,9 +55,14 @@ public class ReportControllerTest {
     public void setUp() {
         reportController = new ReportController();
         reportService = createMock(IReportService.class);
-        undistributedLiabilitiesReportController = new UndistributedLiabilitiesReportController();
+        undistributedLiabilitiesReportController = createMock(IUndistributedLiabilitiesReportController.class);
+        fasServiceFeeTrueUpReportController = createMock(IFasServiceFeeTrueUpReportController.class);
+        ntsServiceFeeTrueUpReportController = createMock(ICommonScenarioReportController.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(reportController, undistributedLiabilitiesReportController);
+        Whitebox.setInternalState(reportController, fasServiceFeeTrueUpReportController);
+        Whitebox.setInternalState(reportController,
+            "ntsServiceFeeTrueUpReportController", ntsServiceFeeTrueUpReportController);
         Whitebox.setInternalState(reportController, reportService);
         Whitebox.setInternalState(reportController, productFamilyProvider);
     }
@@ -61,6 +70,16 @@ public class ReportControllerTest {
     @Test
     public void testProductFamilyProvider() {
         assertSame(productFamilyProvider, reportController.getProductFamilyProvider());
+    }
+
+    @Test
+    public void testGetFasServiceFeeTrueUpReportController() {
+        assertSame(fasServiceFeeTrueUpReportController, reportController.getFasServiceFeeTrueUpReportController());
+    }
+
+    @Test
+    public void testGetNtsServiceFeeTrueUpReportController() {
+        assertSame(ntsServiceFeeTrueUpReportController, reportController.getNtsServiceFeeTrueUpReportController());
     }
 
     @Test
