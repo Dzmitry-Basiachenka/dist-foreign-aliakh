@@ -77,6 +77,7 @@ import java.util.Set;
 @PrepareForTest({RupContextUtils.class, RupPersistUtils.class, CalculationUtils.class})
 public class UsageServiceTest {
 
+    private static final String REASON = "reason";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final String USAGE_ID_2 = "Usage id 2";
@@ -244,6 +245,23 @@ public class UsageServiceTest {
         assertEquals(3, usageService.getCountByScenarioAndRhAccountNumber(RH_ACCOUNT_NUMBER, scenario,
             StringUtils.EMPTY));
         verify(usageRepository, usageArchiveRepository);
+    }
+
+    @Test
+    public void testExcludeRightsHoldersFromScenario() {
+        Set<String> usageIds =
+            Sets.newHashSet("095eaefe-37de-4adb-928e-be0b888094b9", "7ee9c1ab-57ca-45cf-8a8d-83d7baeb6a9c");
+        Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
+        String scenarioId = scenario.getId();
+        usageRepository.applyNetAmountFromExcludedRightshoders(scenarioId, accountNumbers);
+        expectLastCall().once();
+        expect(usageRepository.deleteFromScenarioByRightsholder(scenarioId, accountNumbers,
+            RupContextUtils.getUserName())).andReturn(usageIds).once();
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, REASON);
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService);
+        usageService.deleteFromScenarioByRightsHolders(scenarioId, accountNumbers, REASON);
+        verify(usageRepository, usageAuditService);
     }
 
     @Test
