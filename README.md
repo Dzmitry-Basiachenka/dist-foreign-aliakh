@@ -1,3 +1,11 @@
+11.1.5
+-
+* B-57883 FDA: SAL UI usage view: remove NOT NULL constraints from scored_assessment_date, question_identifier, states, number_of_views columns of df_usage_sal table
+* B-57900 FDA: Create SAL batch (load item bank): apply Usage CSV processor to get validation messages for uploaded file
+* B-57900 FDA: Create SAL batch (load item bank): introduce SAL item bank usages CSV processor
+* B-58546 FDA: Exclude RH's within a NTS scenario: implement service logic to exclude RH's, relocate amounts and write audit
+* B-58903 FDA: NTS service fee true-up report: implement UI for report
+
 11.1.4
 -
 * B-57883 FDA: SAL UI usage view: implement Liquibase script to create df_usage_sal table
