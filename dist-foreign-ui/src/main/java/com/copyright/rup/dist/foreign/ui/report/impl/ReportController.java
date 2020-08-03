@@ -36,7 +36,10 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Autowired
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
     @Autowired
-    private IFasServiceFeeTrueUpReportController serviceFeeTrueUpReportController;
+    private IFasServiceFeeTrueUpReportController fasServiceFeeTrueUpReportController;
+    @Autowired
+    @Qualifier("df.ntsServiceFeeTrueUpReportController")
+    private ICommonScenarioReportController ntsServiceFeeTrueUpReportController;
     @Autowired
     private ISummaryMarketReportController summaryMarketReportController;
     @Autowired
@@ -74,7 +77,12 @@ public class ReportController extends CommonController<IReportWidget> implements
 
     @Override
     public IFasServiceFeeTrueUpReportController getFasServiceFeeTrueUpReportController() {
-        return serviceFeeTrueUpReportController;
+        return fasServiceFeeTrueUpReportController;
+    }
+
+    @Override
+    public ICommonScenarioReportController getNtsServiceFeeTrueUpReportController() {
+        return ntsServiceFeeTrueUpReportController;
     }
 
     @Override

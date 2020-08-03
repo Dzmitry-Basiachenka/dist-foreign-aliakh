@@ -13,6 +13,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
+import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
@@ -197,6 +198,19 @@ public class ReportWidgetTest {
     }
 
     @Test
+    public void testNtsServiceFeeTrueUpReportSelected() {
+        ICommonScenarioReportController controller = createMock(ICommonScenarioReportController.class);
+        expect(reportController.getNtsServiceFeeTrueUpReportController()).andReturn(controller).once();
+        expect(controller.initWidget()).andReturn(new ScenarioReportWidget()).once();
+        Windows.showModalWindow(anyObject());
+        expectLastCall().once();
+        expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+        replayAll();
+        selectMenuItem(3);
+        verifyAll();
+    }
+
+    @Test
     public void testOpenReportWindow() throws Exception {
         mockStatic(Windows.class);
         IController controller = createMock(IController.class);
@@ -274,10 +288,11 @@ public class ReportWidgetTest {
     private void assertReportsMenuNts() {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(3, CollectionUtils.size(menuItems));
+        assertEquals(4, CollectionUtils.size(menuItems));
         assertEquals("NTS Withdrawn Batch Summary Report", menuItems.get(0).getText());
         assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(1).getText());
         assertEquals("Tax Notification Report", menuItems.get(2).getText());
+        assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
     }
 
     private void assertReportsMenuAacl() {
