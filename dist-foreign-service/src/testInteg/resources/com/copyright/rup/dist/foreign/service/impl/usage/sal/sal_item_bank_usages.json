@@ -1,0 +1,124 @@
+[
+  {
+    "id": "327d9cc9-d965-443e-bc07-d432d926cb90",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 100011725,
+    "workTitle": "Bonnie Blair: Top Speed Skater",
+    "status": "NEW",
+    "productFamily": "SAL",
+    "comment": "usage1",
+    "salUsage": {
+      "assessmentName": "Spring2014 Eng Lang/Mathy",
+      "grade": "K",
+      "detailType": "IB",
+      "reportedMediaType": "Image",
+      "mediaTypeWeight": "0.3",
+      "reportedStandardNumber": "978-0-87664-361-7",
+      "reportedWorkPortionId": "1",
+      "reportedAuthor": "Linda J. S. Allen",
+      "reportedPublisher": "Rosen",
+      "reportedPublicationDate": [
+        2010,
+        7,
+        7
+      ],
+      "reportedPageRange": "25-30",
+      "reportedVolNumberSeries": "55(2)",
+      "coverageYear": "2014-2015"
+    }
+  },
+  {
+    "id": "ba86ffa6-b5da-48e5-b2eb-1f49c9347cb7",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 100011821,
+    "workTitle": "Bonnie Blair: Top Speed Skater",
+    "status": "NEW",
+    "productFamily": "SAL",
+    "comment": "usage2",
+    "salUsage": {
+      "assessmentName": "Spring2015 Eng Lang/Mathy",
+      "detailType": "IB",
+      "reportedMediaType": "Image",
+      "mediaTypeWeight": "0.3",
+      "reportedStandardNumber": "978-2-84096-163-5",
+      "reportedWorkPortionId": "2",
+      "reportedAuthor": "Linda J. S. Allen",
+      "reportedPublisher": "Rosen",
+      "reportedPublicationDate": [
+        2010,
+        7,
+        8
+      ],
+      "reportedPageRange": "25-30",
+      "reportedVolNumberSeries": "55(2)",
+      "coverageYear": "2015-2016"
+    }
+  },
+  {
+    "id": "8c805219-81dd-4d24-98b9-fa2e50f545e2",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 987654321,
+    "workTitle": "Bonnie Blair: Top Speed Skater",
+    "status": "NEW",
+    "productFamily": "SAL",
+    "comment": "usage3",
+    "salUsage": {
+      "assessmentName": "Spring2014 Eng Lang/Mathy",
+      "grade": "2",
+      "detailType": "IB",
+      "reportedMediaType": "Text",
+      "mediaTypeWeight": "1",
+      "reportedStandardNumber": "1040-1776",
+      "reportedWorkPortionId": "3",
+      "reportedAuthor": "Linda J. S. Allen",
+      "reportedPublisher": "Rosen",
+      "reportedPublicationDate": [
+        2010,
+        7,
+        9
+      ],
+      "reportedPageRange": "25-30",
+      "reportedVolNumberSeries": "55(2)",
+      "coverageYear": "2014-2015"
+    }
+  },
+  {
+    "id": "96bcc093-f1b0-4f0c-bfa2-5d16a668ba1d",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 876543210,
+    "workTitle": "Bonnie Blair: Top Speed Skater",
+    "status": "NEW",
+    "productFamily": "SAL",
+    "comment": "usage4",
+    "salUsage": {
+      "assessmentName": "Spring2015 Eng Lang/Mathy",
+      "detailType": "IB",
+      "reportedMediaType": "Text",
+      "mediaTypeWeight": "1",
+      "reportedStandardNumber": "9780",
+      "reportedWorkPortionId": "4",
+      "reportedAuthor": "Linda J. S. Allen",
+      "reportedPublisher": "Rosen",
+      "reportedPublicationDate": [
+        2010,
+        7,
+        10
+      ],
+      "reportedPageRange": "25-30",
+      "reportedVolNumberSeries": "55(2)",
+      "coverageYear": "2015-2016"
+    }
+  }
+]
