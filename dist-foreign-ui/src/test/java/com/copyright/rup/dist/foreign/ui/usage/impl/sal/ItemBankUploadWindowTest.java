@@ -1,16 +1,24 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.SalFields;
+import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
@@ -37,6 +45,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -58,6 +68,8 @@ public class ItemBankUploadWindowTest {
     private static final String ACCOUNT_NUMBER = "5588";
     private static final String ITEM_BANK_NAME = "Item bank 2000";
     private static final String LICENSEE_NAME = "RGS Energy Group, Inc.";
+    private static final String PERIOD_END_DATE = "2000";
+    private static final String PERIOD_END_DATE_FIELD = "periodEndDateField";
     private ItemBankUploadWindow window;
     private ISalUsageController usagesController;
 
@@ -116,7 +128,7 @@ public class ItemBankUploadWindowTest {
         licenseeName.setValue(LICENSEE_NAME);
         licenseeName.setReadOnly(true);
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "periodEndDateField")).setValue("2000");
+        ((TextField) Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD)).setValue(PERIOD_END_DATE);
         assertFalse(window.isValid());
         ((TextField) Whitebox.getInternalState(window, "itemBankNameField")).setValue(ITEM_BANK_NAME);
         assertTrue(window.isValid());
@@ -124,11 +136,36 @@ public class ItemBankUploadWindowTest {
     }
 
     @Test
+    public void testOnUploadClickedValidFields() {
+        mockStatic(Windows.class);
+        UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile");
+        SalUsageCsvProcessor processor = createMock(SalUsageCsvProcessor.class);
+        ProcessingResult<Usage> processingResult = buildCsvProcessingResult();
+        window = createPartialMock(ItemBankUploadWindow.class, "isValid");
+        Whitebox.setInternalState(window, "usagesController", usagesController);
+        Whitebox.setInternalState(window, "uploadField", uploadField);
+        Whitebox.setInternalState(window, "itemBankNameField", new TextField("Item Bank Name", ITEM_BANK_NAME));
+        Whitebox.setInternalState(window, "accountNumberField", new TextField("Licensee Account #", ACCOUNT_NUMBER));
+        Whitebox.setInternalState(window, "licenseeNameField", new TextField("Licensee Name", LICENSEE_NAME));
+        Whitebox.setInternalState(window, PERIOD_END_DATE_FIELD, new TextField("Period End Date", PERIOD_END_DATE));
+        expect(window.isValid()).andReturn(true).once();
+        expect(usagesController.getSalUsageCsvProcessor()).andReturn(processor).once();
+        expect(processor.process(anyObject())).andReturn(processingResult).once();
+        expect(usagesController.loadItemBank(buildUsageBatch(), processingResult.get())).andReturn(1).once();
+        expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
+        Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
+        expectLastCall().once();
+        replay(window, usagesController, Windows.class, processor, uploadField);
+        window.onUploadClicked();
+        verify(window, usagesController, Windows.class, processor, uploadField);
+    }
+
+    @Test
     public void testPeriodEndDateValidation() {
         replay(usagesController);
         window = new ItemBankUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
-        TextField periodEndDate = Whitebox.getInternalState(window, "periodEndDateField");
+        TextField periodEndDate = Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD);
         verifyField(periodEndDate, "null", binder, "Field value should be specified", false);
         verifyField(periodEndDate, "a", binder, "Field value should contain numeric values only", false);
         verifyField(periodEndDate, "1000", binder, "Field value should be in range from 1950 to 2099", false);
@@ -200,7 +237,7 @@ public class ItemBankUploadWindowTest {
             Whitebox.getInternalState(window, "uploadField"),
             Whitebox.getInternalState(window, "accountNumberField"),
             Whitebox.getInternalState(window, "licenseeNameField"),
-            Whitebox.getInternalState(window, "periodEndDateField"));
+            Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD));
         Windows.showValidationErrorWindow(fields);
         expectLastCall().once();
         replay(Windows.class);
@@ -227,5 +264,27 @@ public class ItemBankUploadWindowTest {
         assertTrue(component instanceof TextField);
         assertEquals(caption, component.getCaption());
         return (TextField) component;
+    }
+
+    private ProcessingResult<Usage> buildCsvProcessingResult() {
+        ProcessingResult<Usage> processingResult = new ProcessingResult<>();
+        try {
+            Whitebox.invokeMethod(processingResult, "addRecord", new Usage());
+        } catch (Exception e) {
+            fail();
+        }
+        return processingResult;
+    }
+
+    private UsageBatch buildUsageBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(ITEM_BANK_NAME);
+        usageBatch.setProductFamily("SAL");
+        usageBatch.setPaymentDate(LocalDate.of(2000, 6, 30));
+        SalFields salFields = new SalFields();
+        salFields.setLicenseeName(LICENSEE_NAME);
+        salFields.setLicenseeAccountNumber(5588L);
+        usageBatch.setSalFields(salFields);
+        return usageBatch;
     }
 }
