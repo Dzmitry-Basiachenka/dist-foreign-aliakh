@@ -3,15 +3,18 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -27,6 +30,21 @@ import java.util.Objects;
  */
 @Repository
 public class SalUsageRepository extends BaseRepository implements ISalUsageRepository {
+
+    private static final int MAX_VARIABLES_COUNT = 32000;
+
+    @Override
+    public void insert(Usage usage) {
+        insert("ISalUsageMapper.insert", Objects.requireNonNull(usage));
+    }
+
+    @Override
+    public List<Usage> findByIds(List<String> usageIds) {
+        List<Usage> result = new ArrayList<>();
+        Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT)
+            .forEach(partition -> result.addAll(selectList("ISalUsageMapper.findByIds", partition)));
+        return result;
+    }
 
     @Override
     public int findCountByFilter(UsageFilter filter) {

@@ -33,9 +33,8 @@ public interface ISalUsageController extends ICommonUsageController {
      *
      * @param itemBank {@link UsageBatch} instance
      * @param usages   list of {@link Usage}s
-     * @return count of inserted usages
      */
-    int loadItemBank(UsageBatch itemBank, List<Usage> usages);
+    void loadItemBank(UsageBatch itemBank, List<Usage> usages);
 
     /**
      * @return instance of {@link SalUsageCsvProcessor}

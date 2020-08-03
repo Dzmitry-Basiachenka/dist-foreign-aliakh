@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageCsvProcessor;
@@ -55,6 +56,8 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     private IStreamSourceHandler streamSourceHandler;
     @Autowired
     private ITelesalesService telesalesService;
+    @Autowired
+    private IUsageBatchService usageBatchService;
 
     @Override
     public String getLicenseeName(Long licenseeAccountNumber) {
@@ -62,9 +65,8 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
-    public int loadItemBank(UsageBatch itemBank, List<Usage> usages) {
-        //TODO apply service logic
-        return 0;
+    public void loadItemBank(UsageBatch itemBank, List<Usage> usages) {
+        usageBatchService.insertSalBatch(itemBank, usages);
     }
 
     @Override

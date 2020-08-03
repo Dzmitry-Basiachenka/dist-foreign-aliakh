@@ -1,0 +1,37 @@
+[
+  {
+    "id": "3883a15d-53d3-4e51-af30-b8d8abfcbd4d",
+    "batchId": "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64",
+    "wrWrkInst": 269040891,
+    "workTitle": "Science News for students",
+    "status": "NEW",
+    "productFamily": "SAL",
+    "salUsage": {
+      "licenseeAccountNumber": 7001293454,
+      "licenseeName": "Synergy Publishers",
+      "detailType": "IB",
+      "grade": "5",
+      "assessmentName": "FY16 AIR",
+      "reportedWorkPortionId": "1101001IB2361",
+      "reportedArticle": "Learning in Your Sleep",
+      "reportedStandardNumber": "450220996",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": [
+        2015,
+        1,
+        2
+      ],
+      "reportedPageRange": "14-17",
+      "reportedVolNumberSeries": "Vol 17, Issue 2",
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": 1.0,
+      "coverageYear": "2014-2015"
+    },
+    "createDate": 1423915200000,
+    "updateDate": 1423915200000,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "version": 1
+  }
+]

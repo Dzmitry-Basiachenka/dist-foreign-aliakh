@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
+import com.copyright.rup.dist.foreign.domain.SalUsage;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -67,6 +69,16 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testInsert() throws IOException {
+        Usage expectedUsage = loadExpectedUsages("json/sal/sal_usage_3883a15d.json").get(0);
+        salUsageRepository.insert(expectedUsage);
+        List<Usage> actualUsages =
+            salUsageRepository.findByIds(Collections.singletonList("3883a15d-53d3-4e51-af30-b8d8abfcbd4d"));
+        assertEquals(1, actualUsages.size());
+        verifyUsage(expectedUsage, actualUsages.get(0));
+    }
+
+    @Test
     public void testFindCountByFilter() {
         assertEquals(1, salUsageRepository.findCountByFilter(buildUsageFilter(
             Collections.singleton(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB)));
@@ -74,7 +86,7 @@ public class SalUsageRepositoryIntegrationTest {
 
     @Test
     public void testFindDtosByFilter() throws IOException {
-        verifyUsageDtos(loadExpectedUsageDtos("json/sal_usage_dto.json"),
+        verifyUsageDtos(loadExpectedUsageDtos("json/sal/sal_usage_dto.json"),
             salUsageRepository.findDtosByFilter(buildUsageFilter(
                 Collections.singleton(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB),
                 null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)));
@@ -168,6 +180,12 @@ public class SalUsageRepositoryIntegrationTest {
         });
     }
 
+    private List<Usage> loadExpectedUsages(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        return OBJECT_MAPPER.readValue(content, new TypeReference<List<Usage>>() {
+        });
+    }
+
     private void verifyUsageDtos(List<UsageDto> expectedUsages, List<UsageDto> actualUsages) {
         assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
         IntStream.range(0, expectedUsages.size())
@@ -178,6 +196,39 @@ public class SalUsageRepositoryIntegrationTest {
                 assertNotNull(actualUsage);
                 assertEquals(expectedUsage.toString(), actualUsage.toString());
             });
+    }
+
+    private void verifyUsage(Usage expectedUsage, Usage actualUsage) {
+        assertEquals(expectedUsage.getId(), actualUsage.getId());
+        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        assertSalUsageFields(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
+    }
+
+    private void assertSalUsageFields(SalUsage expectedUsage, SalUsage actualUsage) {
+        assertEquals(expectedUsage.getAssessmentName(), actualUsage.getAssessmentName());
+        assertEquals(expectedUsage.getCoverageYear(), actualUsage.getCoverageYear());
+        assertEquals(expectedUsage.getGrade(), actualUsage.getGrade());
+        assertEquals(expectedUsage.getDetailType(), actualUsage.getDetailType());
+        assertEquals(expectedUsage.getReportedWorkPortionId(), actualUsage.getReportedWorkPortionId());
+        assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
+        assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());
+        assertEquals(expectedUsage.getMediaTypeWeight(), actualUsage.getMediaTypeWeight());
+        assertEquals(expectedUsage.getReportedArticle(), actualUsage.getReportedArticle());
+        assertEquals(expectedUsage.getReportedAuthor(), actualUsage.getReportedAuthor());
+        assertEquals(expectedUsage.getReportedPublisher(), actualUsage.getReportedPublisher());
+        assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
+        assertEquals(expectedUsage.getReportedPageRange(), actualUsage.getReportedPageRange());
+        assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
+        assertEquals(expectedUsage.getAssessmentType(), actualUsage.getAssessmentType());
+        assertEquals(expectedUsage.getStates(), actualUsage.getStates());
+        assertEquals(expectedUsage.getNumberOfViews(), actualUsage.getNumberOfViews());
+        assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
+        assertEquals(expectedUsage.getScoredAssessmentDate(), actualUsage.getScoredAssessmentDate());
+        assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
     }
 
     private void assertFindDtosByFilterSort(String detailId, String sortProperty, Sort.Direction sortDirection) {

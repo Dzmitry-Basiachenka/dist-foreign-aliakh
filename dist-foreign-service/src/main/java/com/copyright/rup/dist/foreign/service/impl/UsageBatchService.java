@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
 import com.google.common.collect.Maps;
 
@@ -69,6 +70,8 @@ public class UsageBatchService implements IUsageBatchService {
     private IFasUsageService fasUsageService;
     @Autowired
     private IAaclUsageService aaclUsageService;
+    @Autowired
+    private ISalUsageService salUsageService;
     @Autowired
     private IRightsholderService rightsholderService;
 
@@ -159,6 +162,21 @@ public class UsageBatchService implements IUsageBatchService {
             .map(Usage::getId)
             .collect(Collectors.toList());
         return ListUtils.union(uploadedUsageIds, baselineUsageIds);
+    }
+
+    @Override
+    @Transactional
+    public void insertSalBatch(UsageBatch usageBatch, List<Usage> uploadedUsages) {
+        String userName = RupContextUtils.getUserName();
+        usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setCreateUser(userName);
+        usageBatch.setUpdateUser(userName);
+        LOGGER.info("Insert SAL batch. Started. UsageBatchName={}, UserName={}, UploadedCount={}", usageBatch.getName(),
+            userName, LogUtils.size(uploadedUsages));
+        usageBatchRepository.insert(usageBatch);
+        salUsageService.insertUsages(usageBatch, uploadedUsages);
+        LOGGER.info("Insert SAL batch. Finished. UsageBatchName={}, UserName={}, UploadedCount={}",
+            usageBatch.getName(), userName, LogUtils.size(uploadedUsages));
     }
 
     @Override
