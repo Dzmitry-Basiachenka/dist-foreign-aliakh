@@ -1,22 +1,29 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
+import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
+import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -43,11 +50,21 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     @Autowired
     private ISalUsageFilterController salUsageFilterController;
     @Autowired
+    private CsvProcessorFactory csvProcessorFactory;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
+    @Autowired
     private ITelesalesService telesalesService;
 
     @Override
     public String getLicenseeName(Long licenseeAccountNumber) {
         return telesalesService.getLicenseeName(licenseeAccountNumber);
+    }
+
+    @Override
+    public int loadItemBank(UsageBatch itemBank, List<Usage> usages) {
+        //TODO apply service logic
+        return 0;
     }
 
     @Override
@@ -81,6 +98,18 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
         //TODO: implement in scope of corresponding story
         return false;
+    }
+
+    @Override
+    public SalUsageCsvProcessor getSalUsageCsvProcessor() {
+        return csvProcessorFactory.getSalUsageCsvProcessor();
+    }
+
+    @Override
+    public IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult processingResult) {
+        return streamSourceHandler.getCsvStreamSource(
+            () -> String.format("Error_for_%s", Files.getNameWithoutExtension(fileName)), null,
+            processingResult::writeToFile);
     }
 
     @Override

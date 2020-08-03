@@ -1,8 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch.SalFields;
+import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.LocalDateConverter;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
@@ -23,6 +31,7 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -69,7 +78,29 @@ public class ItemBankUploadWindow extends Window {
      * Initiates file uploading.
      */
     void onUploadClicked() {
-        if (!isValid()) {
+        if (isValid()) {
+            try {
+                SalUsageCsvProcessor processor = usagesController.getSalUsageCsvProcessor();
+                ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
+                if (processingResult.isSuccessful()) {
+                    int usagesCount = usagesController.loadItemBank(buildItemBank(), processingResult.get());
+                    close();
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
+                } else {
+                    Windows.showModalWindow(
+                        new ErrorUploadWindow(
+                            usagesController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
+                            ForeignUi.getMessage("message.error.upload")));
+                }
+            } catch (ThresholdExceededException e) {
+                Windows.showModalWindow(
+                    new ErrorUploadWindow(
+                        usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
+                        e.getMessage() + "<br>Press Download button to see detailed list of errors"));
+            } catch (ValidationException e) {
+                Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
+            }
+        } else {
             Windows.showValidationErrorWindow(
                 Arrays.asList(itemBankNameField, uploadField, accountNumberField, licenseeNameField,
                     periodEndDateField));
@@ -215,5 +246,17 @@ public class ItemBankUploadWindow extends Window {
             }
         });
         return button;
+    }
+
+    private UsageBatch buildItemBank() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(StringUtils.trim(itemBankNameField.getValue()));
+        usageBatch.setProductFamily(FdaConstants.SAL_PRODUCT_FAMILY);
+        usageBatch.setPaymentDate(LocalDate.of(Integer.parseInt(periodEndDateField.getValue()), 6, 30));
+        SalFields salFields = new SalFields();
+        salFields.setLicenseeAccountNumber(Long.valueOf(accountNumberField.getValue()));
+        salFields.setLicenseeName(StringUtils.trim(licenseeNameField.getValue()));
+        usageBatch.setSalFields(salFields);
+        return usageBatch;
     }
 }
