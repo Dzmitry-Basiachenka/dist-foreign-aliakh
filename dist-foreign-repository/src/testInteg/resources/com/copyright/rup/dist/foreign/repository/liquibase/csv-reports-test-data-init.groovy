@@ -7877,8 +7877,8 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2019-12-12-01', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment('Inserting test data for testFindArchivedWithAmountsAndLastActionForNtsScenario')
+    changeSet(id: '2020-07-30-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
+        comment('Inserting test data for testWriteNtsServiceFeeTrueUpCsvReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '78fa8e33-6194-4cf6-85a6-ad72f811b8af')
