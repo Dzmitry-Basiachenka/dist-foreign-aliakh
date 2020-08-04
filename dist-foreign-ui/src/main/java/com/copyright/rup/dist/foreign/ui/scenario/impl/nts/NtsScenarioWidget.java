@@ -60,6 +60,12 @@ public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScena
     }
 
     @Override
+    public void refreshTable() {
+        getDataProvider().refreshAll();
+        updateFooter();
+    }
+
+    @Override
     protected VerticalLayout initLayout(VerticalLayout searchLayout, Grid<RightsholderTotalsHolder> grid,
                                         VerticalLayout emptyUsagesLayout, HorizontalLayout buttons) {
         VerticalLayout layout = new VerticalLayout(searchLayout, grid, emptyUsagesLayout, buttons);

@@ -1,11 +1,17 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsDrillDownByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeByRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeByRightsholderWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+
+import com.vaadin.ui.Window;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -29,6 +35,8 @@ public class NtsScenarioController extends CommonScenarioController implements I
 
     @Autowired
     private INtsDrillDownByRightsholderController drillDownByRightsholderController;
+    @Autowired
+    private INtsExcludeByRightsholderController excludeController;
 
     @Override
     protected INtsScenarioWidget instantiateWidget() {
@@ -47,6 +55,14 @@ public class NtsScenarioController extends CommonScenarioController implements I
 
     @Override
     public void onExcludeRhButtonClicked() {
-        //todo {aazarenka} will be implement later
+        excludeController.setSelectedScenario(this.getScenario());
+        INtsExcludeByRightsholderWidget widget = excludeController.initWidget();
+        widget.addListener(this::fireWidgetEvent);
+        Windows.showModalWindow((Window) widget);
+    }
+
+    @Override
+    public void fireWidgetEvent(ExcludeUsagesEvent event) {
+        ((INtsScenarioWidget) getWidget()).fireWidgetEvent(event);
     }
 }

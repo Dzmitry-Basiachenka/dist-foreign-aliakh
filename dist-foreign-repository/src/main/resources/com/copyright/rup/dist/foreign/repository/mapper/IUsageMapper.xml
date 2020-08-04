@@ -657,9 +657,9 @@
         )
         update ${schema}.df_usage u
         set
-            net_amount = u.net_amount * net_amount_gt_factor,
-            service_fee_amount = u.service_fee_amount* net_amount_gt_factor,
-            gross_amount = u.gross_amount * net_amount_gt_factor
+            net_amount = case when net_amount_gt_factor is not null then u.net_amount * net_amount_gt_factor else 0 end,
+            service_fee_amount = case when net_amount_gt_factor is not null then u.service_fee_amount * net_amount_gt_factor else 0 end,
+            gross_amount = case when net_amount_gt_factor is not null then u.gross_amount * net_amount_gt_factor else 0 end
         from gt_factor
         where u.df_scenario_uid = #{scenarioId}
     </update>
