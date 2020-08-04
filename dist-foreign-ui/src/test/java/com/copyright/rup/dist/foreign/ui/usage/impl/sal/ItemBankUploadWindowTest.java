@@ -151,7 +151,8 @@ public class ItemBankUploadWindowTest {
         expect(window.isValid()).andReturn(true).once();
         expect(usagesController.getSalUsageCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
-        expect(usagesController.loadItemBank(buildUsageBatch(), processingResult.get())).andReturn(1).once();
+        usagesController.loadItemBank(buildUsageBatch(), processingResult.get());
+        expectLastCall().once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
         Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
         expectLastCall().once();

@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
@@ -17,6 +18,21 @@ import java.util.List;
  * @author Aliaksandr Liakh
  */
 public interface ISalUsageRepository {
+
+    /**
+     * Inserts SAL usage into database.
+     *
+     * @param usage {@link Usage} instance
+     */
+    void insert(Usage usage);
+
+    /**
+     * Finds list of SAL {@link Usage}s by their ids.
+     *
+     * @param usageIds list of {@link Usage}s identifiers
+     * @return list of {@link Usage}s
+     */
+    List<Usage> findByIds(List<String> usageIds);
 
     /**
      * Finds usages count by usage filter.

@@ -13,8 +13,11 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
@@ -22,6 +25,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageWidget;
 
 import com.vaadin.ui.HorizontalLayout;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,6 +75,19 @@ public class SalUsageControllerTest {
         replay(usagesWidget);
         controller.onFilterChanged(new FilterChangedEvent(new HorizontalLayout()));
         verify(usagesWidget);
+    }
+
+    @Test
+    public void testLoadItemBank() {
+        IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
+        Whitebox.setInternalState(controller, usageBatchService);
+        UsageBatch itemBank = new UsageBatch();
+        List<Usage> usages = Collections.singletonList(new Usage());
+        usageBatchService.insertSalBatch(itemBank, usages);
+        expectLastCall().once();
+        replay(usageBatchService);
+        controller.loadItemBank(itemBank, usages);
+        verify(usageBatchService);
     }
 
     @Test

@@ -91,6 +91,14 @@ public interface IUsageBatchService {
     List<String> insertAaclBatch(UsageBatch usageBatch, List<Usage> uploadedUsages);
 
     /**
+     * Inserts SAL batch and its usages.
+     *
+     * @param usageBatch     {@link UsageBatch} to insert
+     * @param uploadedUsages list of {@link Usage}s
+     */
+    void insertSalBatch(UsageBatch usageBatch, List<Usage> uploadedUsages);
+
+    /**
      * Deletes given {@link UsageBatch} and all it's usage details.
      *
      * @param usageBatch {@link UsageBatch}

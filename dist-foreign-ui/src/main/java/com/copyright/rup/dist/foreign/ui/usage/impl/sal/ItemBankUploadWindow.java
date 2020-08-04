@@ -33,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -83,9 +84,10 @@ public class ItemBankUploadWindow extends Window {
                 SalUsageCsvProcessor processor = usagesController.getSalUsageCsvProcessor();
                 ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
                 if (processingResult.isSuccessful()) {
-                    int usagesCount = usagesController.loadItemBank(buildItemBank(), processingResult.get());
+                    List<Usage> usages = processingResult.get();
+                    usagesController.loadItemBank(buildItemBank(), usages);
                     close();
-                    Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usages.size()));
                 } else {
                     Windows.showModalWindow(
                         new ErrorUploadWindow(
