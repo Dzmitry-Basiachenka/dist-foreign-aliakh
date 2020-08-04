@@ -411,7 +411,7 @@
             gross_amount_sent_to_lm,
             net_amount_sent_to_lm,
             service_fee_amount_sent_to_lm,
-            service_fee_amount_sent_to_lm / (batch_gross_amount + pre_service_fee_funds + pre_service_fee_amount) service_fee_sent_to_lm,
+            service_fee_amount_sent_to_lm / gross_amount_sent_to_lm service_fee_sent_to_lm,
             estimated_service_fee_amount - service_fee_amount_sent_to_lm service_fee_true_up
         from (
             select
