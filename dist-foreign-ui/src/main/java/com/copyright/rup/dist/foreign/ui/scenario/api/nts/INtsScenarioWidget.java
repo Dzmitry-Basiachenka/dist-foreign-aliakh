@@ -22,4 +22,9 @@ public interface INtsScenarioWidget extends ICommonScenarioWidget, IRefreshable,
      * @see com.vaadin.server.AbstractClientConnector#fireEvent(java.util.EventObject)
      */
     void fireWidgetEvent(Event event);
+
+    /**
+     * Refresh table.
+     */
+    void refreshTable();
 }
