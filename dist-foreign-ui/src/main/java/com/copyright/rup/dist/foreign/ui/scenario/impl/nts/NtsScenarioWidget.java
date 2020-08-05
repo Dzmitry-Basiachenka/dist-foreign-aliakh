@@ -55,6 +55,12 @@ public class NtsScenarioWidget extends CommonScenarioWidget implements INtsScena
     }
 
     @Override
+    public void attach() {
+        super.attach();
+        refresh();
+    }
+
+    @Override
     public void fireWidgetEvent(Event event) {
         fireEvent(event);
     }
