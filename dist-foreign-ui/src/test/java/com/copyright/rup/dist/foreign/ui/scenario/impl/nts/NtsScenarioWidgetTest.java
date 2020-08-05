@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -13,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -58,13 +60,16 @@ public class NtsScenarioWidgetTest {
 
     private NtsScenarioWidget scenarioWidget;
     private INtsScenarioController controller;
+    private NtsScenarioMediator mediator;
 
     @Before
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(INtsScenarioController.class);
+        mediator = createMock(NtsScenarioMediator.class);
         scenarioWidget = new NtsScenarioWidget(controller);
         scenarioWidget.setController(controller);
+        Whitebox.setInternalState(scenarioWidget, "mediator", mediator);
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName("Scenario name");
@@ -82,6 +87,19 @@ public class NtsScenarioWidgetTest {
         scenarioWidget.init();
         verify(controller, streamSource, ForeignSecurityUtils.class);
         reset(controller);
+    }
+
+    @Test
+    public void testRefresh() {
+        Scenario scenario = new Scenario();
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        expect(controller.isScenarioEmpty()).andReturn(false).once();
+        expect(controller.getScenario()).andReturn(scenario).once();
+        mediator.onScenarioUpdated(false, scenario);
+        expectLastCall().once();
+        replay(mediator, controller);
+        scenarioWidget.refresh();
+        verify(mediator, controller);
     }
 
     @Test
