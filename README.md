@@ -1,3 +1,12 @@
+11.1.6
+-
+* B-57883 FDA: SAL UI usage view: make changes based on comments in CR-DIST-FOREIGN-186
+* B-57900 FDA: Create SAL batch (load item bank): implement backend logic to save item bank with usages to database
+* B-57900 FDA: Create SAL batch (load item bank): implement integration test to cover upload SAL item bank usages functionality, update property for sales_info healthcheck
+* B-58546 FDA: Exclude RH's within a NTS scenario: create Exclude Details By Rightsholder modal view
+* B-58903 FDA: NTS service fee true-up report: adjust formula for actual service fee value
+* B-58903 FDA: NTS service fee true-up report: make changes based on comments in CR-DIST-FOREIGN-187
+
 11.1.5
 -
 * B-57883 FDA: SAL UI usage view: remove NOT NULL constraints from scored_assessment_date, question_identifier, states, number_of_views columns of df_usage_sal table
