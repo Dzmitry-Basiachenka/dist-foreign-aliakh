@@ -1,3 +1,10 @@
+11.1.7
+-
+* 58546 FDA: Exclude RH's within a NTS scenario: fix export and search are not disabled for empty NTS scenarios, empty scenario label is not displayed
+* B-59201 Tech Debt: FDA: fix issue with checkstyle
+* B-59201 Tech Debt: FDA: update PI node and cluster values
+* CDP-929: FDA: Exclude from NTS scenario: Wrong calculation of redistributed money for gross and service fee amounts
+
 11.1.6
 -
 * B-57883 FDA: SAL UI usage view: make changes based on comments in CR-DIST-FOREIGN-186
