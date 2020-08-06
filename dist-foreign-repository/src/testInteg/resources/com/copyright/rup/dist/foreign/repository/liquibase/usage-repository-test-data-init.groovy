@@ -2171,9 +2171,9 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'number_of_copies', value: '1')
             column(name: 'gross_amount', value: '250')
-            column(name: 'service_fee', value: '0.16')
-            column(name: 'service_fee_amount', value: '40')
-            column(name: 'net_amount', value: '210')
+            column(name: 'service_fee', value: '0.32')
+            column(name: 'service_fee_amount', value: '80')
+            column(name: 'net_amount', value: '170')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
