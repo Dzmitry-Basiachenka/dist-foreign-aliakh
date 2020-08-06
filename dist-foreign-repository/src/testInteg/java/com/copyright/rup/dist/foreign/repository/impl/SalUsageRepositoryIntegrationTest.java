@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -162,6 +164,13 @@ public class SalUsageRepositoryIntegrationTest {
         assertFindDtosByFilterSort(USAGE_ID_3, "numberOfViews", Sort.Direction.DESC);
         assertFindDtosByFilterSort(USAGE_ID_3, "comment", Sort.Direction.ASC);
         assertFindDtosByFilterSort(USAGE_ID_3, "comment", Sort.Direction.DESC);
+    }
+
+    @Test
+    public void testWorkPortionIdExists() {
+        assertTrue(salUsageRepository.workPortionIdExists("1101001IB2361"));
+        assertTrue(salUsageRepository.workPortionIdExists("1101024IB2192"));
+        assertFalse(salUsageRepository.workPortionIdExists("1101024IB"));
     }
 
     private UsageFilter buildUsageFilter(Set<String> usageBatchIds, UsageStatusEnum status, String productFamily,

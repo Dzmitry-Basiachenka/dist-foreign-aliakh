@@ -109,4 +109,17 @@ databaseChangeLog {
                     columnDataType: 'NUMERIC(38)')
         }
     }
+
+    changeSet(id: '2020-08-06-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-57900 FDA: Create SAL batch (load item bank): add index to reported_work_portion_id field")
+
+        createIndex(indexName: 'ix_df_usage_sal_reported_work_portion_id', schemaName: dbAppsSchema,
+                tableName: 'df_usage_sal', tablespace: dbIndexTablespace) {
+            column(name: 'reported_work_portion_id')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_usage_sal_reported_work_portion_id")
+        }
+    }
 }

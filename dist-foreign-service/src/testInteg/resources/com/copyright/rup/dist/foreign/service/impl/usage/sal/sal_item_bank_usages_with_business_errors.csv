@@ -1,0 +1,4 @@
+Assessment Name,Coverage Year,Grade,Wr Wrk Inst,Reported Work Portion ID,Reported Standard Number,Reported Title,Reported Media Type,Reported Article or Chapter Title,Reported Author,Reported Publisher,Reported Publication Date,Reported Page Range,Reported Vol/Number/Series,Comment
+AssessmentName1,2019-2020,1,123456789,a1,978-0-87664-361-7,ReportedTitle1,Image,,Reported Author1,Reported Publisher1,7/7/2019,,,Invalid Work Portion Id
+AssessmentName2,2019-2020,2,131019899,a2,978-2-84096-163-5,ReportedTitle2,Image,,Reported Author2,Reported Publisher2,7/8/2019,,,Invalid Wr Wrk Inst
+AssessmentName3,2019-2020,3,123456789,a3,1040-1776,ReportedTitle3,Text,,Reported Author3,Reported Publisher3,7/9/2019,,,Invalid Work Portion Id

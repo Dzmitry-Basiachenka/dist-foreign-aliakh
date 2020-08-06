@@ -53,6 +53,11 @@ public class SalUsageService implements ISalUsageService {
     }
 
     @Override
+    public boolean workPortionIdExists(String workPortionId) {
+        return salUsageRepository.workPortionIdExists(workPortionId);
+    }
+
+    @Override
     @Transactional
     public void insertUsages(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();

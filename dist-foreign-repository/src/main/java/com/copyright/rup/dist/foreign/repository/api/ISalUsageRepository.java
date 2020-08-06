@@ -51,4 +51,12 @@ public interface ISalUsageRepository {
      * @return the list of {@link UsageDto}
      */
     List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * Checks whether provided Work Portion ID already exists in the system.
+     *
+     * @param workPortionId work portion id
+     * @return {@code true} - if Work Portion ID exists, {@code false} - otherwise
+     */
+    boolean workPortionIdExists(String workPortionId);
 }

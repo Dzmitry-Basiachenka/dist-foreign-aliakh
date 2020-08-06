@@ -60,4 +60,9 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
         parameters.put("sort", sort);
         return selectList("ISalUsageMapper.findDtosByFilter", parameters);
     }
+
+    @Override
+    public boolean workPortionIdExists(String workPortionId) {
+        return selectOne("ISalUsageMapper.workPortionIdExists", Objects.requireNonNull(workPortionId));
+    }
 }

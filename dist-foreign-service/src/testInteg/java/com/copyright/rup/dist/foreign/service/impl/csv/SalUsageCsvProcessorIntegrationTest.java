@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayOutputStream;
@@ -47,6 +48,7 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
+@TestPropertySource(properties = {"test.liquibase.changelog=sal-usages-csv-processor-data-init.groovy"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class SalUsageCsvProcessorIntegrationTest {
 
@@ -96,6 +98,15 @@ public class SalUsageCsvProcessorIntegrationTest {
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
         Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
         reportTestUtils.assertCsvReport("sal_item_bank_usages_with_errors_report.csv", pipedInputStream);
+    }
+
+    @Test
+    public void testProcessorForNegativePathBusinessValidation() throws Exception {
+        ProcessingResult<Usage> result = processFile("sal_item_bank_usages_with_business_errors.csv");
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
+        Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
+        reportTestUtils.assertCsvReport("sal_item_bank_usages_with_business_errors_report.csv", pipedInputStream);
     }
 
     @Test

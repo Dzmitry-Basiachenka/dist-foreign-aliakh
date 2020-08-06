@@ -364,4 +364,12 @@
         <include refid="ifSortable"/>
         <include refid="IUsageMapper.ifPageable"/>
     </select>
+
+    <select id="workPortionIdExists" resultType="boolean" parameterType="string">
+        select exists (
+            select 1
+            from ${schema}.df_usage_sal
+            where reported_work_portion_id = #{workPortionId}
+        )
+    </select>
 </mapper>

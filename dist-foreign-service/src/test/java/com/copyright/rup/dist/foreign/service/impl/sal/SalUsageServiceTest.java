@@ -97,6 +97,14 @@ public class SalUsageServiceTest {
     }
 
     @Test
+    public void testWorkPortionIdExists() {
+        expect(salUsageRepository.workPortionIdExists("1201064IB2199")).andReturn(true).once();
+        replay(salUsageRepository);
+        assertTrue(salUsageService.workPortionIdExists("1201064IB2199"));
+        verify(salUsageRepository);
+    }
+
+    @Test
     public void testInsertUsages() {
         mockStatic(RupContextUtils.class);
         Usage usage = new Usage();
