@@ -139,6 +139,7 @@ public class UsageRepositoryIntegrationTest {
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.00");
     private static final BigDecimal DEFAULT_ZERO_AMOUNT = new BigDecimal("0.0000000000");
+    private static final BigDecimal SERVICE_FEE_AMOUNT = new BigDecimal("200.0000000000");
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -158,7 +159,7 @@ public class UsageRepositoryIntegrationTest {
             usages.stream().map(Usage::getNetAmount).reduce(BigDecimal::add).get());
         assertEquals(new BigDecimal("1000.0000000000"),
             usages.stream().map(Usage::getGrossAmount).reduce(BigDecimal::add).get());
-        assertEquals(new BigDecimal("200.0000000000"),
+        assertEquals(SERVICE_FEE_AMOUNT,
             usages.stream().map(Usage::getServiceFeeAmount).reduce(BigDecimal::add).get());
         usages = usageRepository.findByIds(Arrays.asList("56f91295-db33-4440-b550-9bb515239750"));
         Usage expectedUsage1 = usages.get(0);
@@ -184,7 +185,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(new BigDecimal("1000.0000000000"),
             actualUsage1.getGrossAmount().add(actualUsage2.getGrossAmount()));
         assertEquals(new BigDecimal("800.0000000000"), actualUsage1.getNetAmount().add(actualUsage2.getNetAmount()));
-        assertEquals(new BigDecimal("200.0000000000"),
+        assertEquals(SERVICE_FEE_AMOUNT,
             actualUsage1.getServiceFeeAmount().add(actualUsage2.getServiceFeeAmount()));
     }
 
