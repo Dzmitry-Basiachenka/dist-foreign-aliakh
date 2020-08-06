@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AggregateLicenseeClassValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedWrWrkInstValidator;
@@ -13,6 +14,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.PublicationType
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.RightsholderWrWrkInstValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.WorkPortionIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.WorkTitleStandardNumberValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.WrWrkInstValidator;
 
@@ -41,6 +43,8 @@ public class CsvProcessorFactory {
     private ILicenseeClassService licenseeClassService;
     @Autowired
     private IPublicationTypeService publicationTypeService;
+    @Autowired
+    private ISalUsageService salUsageService;
 
     /**
      * Initialized UsageCsvProcessor.
@@ -99,7 +103,9 @@ public class CsvProcessorFactory {
      */
     public SalUsageCsvProcessor getSalUsageCsvProcessor() {
         SalUsageCsvProcessor processor = new SalUsageCsvProcessor();
-        processor.addBusinessValidators(new WrWrkInstValidator(piIntegrationService));
+        processor.addBusinessValidators(
+            new WrWrkInstValidator(piIntegrationService),
+            new WorkPortionIdValidator(salUsageService));
         return processor;
     }
 }

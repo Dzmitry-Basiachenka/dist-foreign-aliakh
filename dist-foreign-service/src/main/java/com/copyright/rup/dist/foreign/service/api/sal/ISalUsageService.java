@@ -29,6 +29,14 @@ public interface ISalUsageService {
     void insertUsages(UsageBatch usageBatch, List<Usage> usages);
 
     /**
+     * Checks whether provided Work Portion ID already exists in the system.
+     *
+     * @param workPortionId work portion id
+     * @return {@code true} - if Work Portion ID exists, {@code false} - otherwise
+     */
+    boolean workPortionIdExists(String workPortionId);
+
+    /**
      * Gets usages count by usage filter.
      *
      * @param filter instance of {@link UsageFilter}
