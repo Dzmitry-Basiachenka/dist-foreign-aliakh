@@ -625,10 +625,12 @@
     </select>
 
     <update id="applyNetAmountFromExcludedRightshoders" parameterType="map">
-        <!-- Calculates net amount totals of excluded rightsholders-->
+        <!-- Calculates amounts totals of excluded rightsholders-->
         with exclude_amounts as (
             select
-                sum(net_amount) as net_amount_excluded
+                sum(net_amount) as net_amount_excluded,
+                sum(service_fee_amount) as service_fee_excluded,
+                sum(gross_amount) as gross_amount_excluded
             from ${schema}.df_usage u
             where df_scenario_uid = #{scenarioId}
             and rh_account_number in
@@ -636,10 +638,12 @@
                     #{accountNumber}
                 </foreach>
         ),
-        <!-- Calculates scenario net amount totals without of excluded rightsholders-->
-        net_amount_totals as (
+        <!-- Calculates scenario amounts totals without of excluded rightsholders-->
+        amounts_totals as (
             select
-                sum(net_amount) net_amount_total
+                sum(net_amount) as net_amount_total,
+                sum(service_fee_amount) as service_fee_total,
+                sum(gross_amount) as gross_amount_total
             from ${schema}.df_usage u
             where df_scenario_uid = #{scenarioId}
             and rh_account_number not in
@@ -647,19 +651,23 @@
                     #{accountNumber}
                 </foreach>
         ),
-        <!-- Calculate GT factor based on scenario net totals and net amount totals of excluded rightsholders -->
+        <!-- Calculate GT factor based on scenario totals amounts and net amounts totals of excluded rightsholders -->
         gt_factor as (
             select
-                ((select net_amount_total from net_amount_totals) + (select net_amount_excluded from exclude_amounts)::numeric)
-                / (select net_amount_total from net_amount_totals) net_amount_gt_factor
+                ((select net_amount_total from amounts_totals) + (select net_amount_excluded from exclude_amounts)::numeric)
+                / (select net_amount_total from amounts_totals) as net_amount_gt_factor,
+                ((select service_fee_total from amounts_totals) + (select service_fee_excluded from exclude_amounts)::numeric)
+                / (select service_fee_total from amounts_totals) as service_fee_amount_gt_factor,
+                ((select gross_amount_total from amounts_totals) + (select gross_amount_excluded from exclude_amounts)::numeric)
+                / (select gross_amount_total from amounts_totals) as  gross_amount_gt_factor
             from ${schema}.df_scenario
             where df_scenario_uid = #{scenarioId}
         )
         update ${schema}.df_usage u
         set
             net_amount = case when net_amount_gt_factor is not null then u.net_amount * net_amount_gt_factor else 0 end,
-            service_fee_amount = case when net_amount_gt_factor is not null then u.service_fee_amount * net_amount_gt_factor else 0 end,
-            gross_amount = case when net_amount_gt_factor is not null then u.gross_amount * net_amount_gt_factor else 0 end
+            service_fee_amount = case when net_amount_gt_factor is not null then u.service_fee_amount * service_fee_amount_gt_factor else 0 end,
+            gross_amount = case when net_amount_gt_factor is not null then u.gross_amount * gross_amount_gt_factor else 0 end
         from gt_factor
         where u.df_scenario_uid = #{scenarioId}
     </update>

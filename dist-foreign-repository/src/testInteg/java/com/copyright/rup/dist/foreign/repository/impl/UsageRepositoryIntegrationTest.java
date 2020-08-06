@@ -154,8 +154,12 @@ public class UsageRepositoryIntegrationTest {
     public void testApplyNetAmountFromExcludedRightshoders() {
         List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID_5);
         assertEquals(3, usages.size());
-        assertEquals(new BigDecimal("840.0000000000"),
+        assertEquals(new BigDecimal("800.0000000000"),
             usages.stream().map(Usage::getNetAmount).reduce(BigDecimal::add).get());
+        assertEquals(new BigDecimal("1000.0000000000"),
+            usages.stream().map(Usage::getGrossAmount).reduce(BigDecimal::add).get());
+        assertEquals(new BigDecimal("200.0000000000"),
+            usages.stream().map(Usage::getServiceFeeAmount).reduce(BigDecimal::add).get());
         usages = usageRepository.findByIds(Arrays.asList("56f91295-db33-4440-b550-9bb515239750"));
         Usage expectedUsage1 = usages.get(0);
         usages = usageRepository.findByIds(Arrays.asList("4604c954-e43b-4606-809a-665c81514dbf"));
@@ -165,14 +169,23 @@ public class UsageRepositoryIntegrationTest {
         usageRepository.applyNetAmountFromExcludedRightshoders(SCENARIO_ID_5, Sets.newHashSet(RH_ACCOUNT_NUMBER_3));
         usages = usageRepository.findByIds(
             Arrays.asList("56f91295-db33-4440-b550-9bb515239750", "4604c954-e43b-4606-809a-665c81514dbf"));
-        assertEquals(new BigDecimal("840.0000000000"),
+        assertEquals(new BigDecimal("800.0000000000"),
             usages.stream().map(Usage::getNetAmount).reduce(BigDecimal::add).get());
         usages = usageRepository.findByIds(Arrays.asList("56f91295-db33-4440-b550-9bb515239750"));
         Usage actualUsage1 = usages.get(0);
         usages = usageRepository.findByIds(Arrays.asList("4604c954-e43b-4606-809a-665c81514dbf"));
         Usage actualUsage2 = usages.get(0);
-        assertEquals(new BigDecimal("392.0000000000"), actualUsage1.getNetAmount());
-        assertEquals(new BigDecimal("448.0000000000"), actualUsage2.getNetAmount());
+        assertEquals(new BigDecimal("373.3333333333"), actualUsage1.getNetAmount());
+        assertEquals(new BigDecimal("426.6666666667"), actualUsage2.getNetAmount());
+        assertEquals(new BigDecimal("466.6666666667"), actualUsage1.getGrossAmount());
+        assertEquals(new BigDecimal("533.3333333333"), actualUsage2.getGrossAmount());
+        assertEquals(new BigDecimal("93.3333333333"), actualUsage1.getServiceFeeAmount());
+        assertEquals(new BigDecimal("106.6666666667"), actualUsage2.getServiceFeeAmount());
+        assertEquals(new BigDecimal("1000.0000000000"),
+            actualUsage1.getGrossAmount().add(actualUsage2.getGrossAmount()));
+        assertEquals(new BigDecimal("800.0000000000"), actualUsage1.getNetAmount().add(actualUsage2.getNetAmount()));
+        assertEquals(new BigDecimal("200.0000000000"),
+            actualUsage1.getServiceFeeAmount().add(actualUsage2.getServiceFeeAmount()));
     }
 
     @Test
