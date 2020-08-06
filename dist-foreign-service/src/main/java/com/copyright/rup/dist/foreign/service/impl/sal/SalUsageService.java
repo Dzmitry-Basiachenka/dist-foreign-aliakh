@@ -59,7 +59,7 @@ public class SalUsageService implements ISalUsageService {
 
     @Override
     @Transactional
-    public void insertUsages(UsageBatch usageBatch, List<Usage> usages) {
+    public void insertItemBankDetails(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
         LOGGER.info("Insert SAL usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),

@@ -88,7 +88,7 @@ public class SalUsageRepositoryIntegrationTest {
 
     @Test
     public void testFindDtosByFilter() throws IOException {
-        verifyUsageDtos(loadExpectedUsageDtos("json/sal/sal_usage_dto.json"),
+        verifyUsageDtos(loadExpectedUsageDtos("json/sal/sal_usage_dto_5ab5e80b.json"),
             salUsageRepository.findDtosByFilter(buildUsageFilter(
                 Collections.singleton(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB),
                 null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)));

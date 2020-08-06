@@ -57,9 +57,11 @@ public class TelesalesService implements ITelesalesService {
             LOGGER.debug("Handle company information response. Finished. URL={}, UrlVariables={}, Response={}",
                 salesInfoUrl, urlVariables, response);
         } catch (ResourceAccessException | HttpClientErrorException e) {
-            LOGGER.warn("Telesales is not responding", e);
+            LOGGER.warn("Telesales is not responding. URL={}, UrlVariables={}, Reason={}", salesInfoUrl,
+                urlVariables, e);
         } catch (IOException e) {
-            LOGGER.warn("Company information REST call failed. URL={}, Reason={}", salesInfoUrl, e);
+            LOGGER.warn("Company information REST call failed. URL={}, UrlVariables={}, Reason={}", salesInfoUrl,
+                urlVariables, e);
         }
         return result;
     }

@@ -105,7 +105,7 @@ public class SalUsageServiceTest {
     }
 
     @Test
-    public void testInsertUsages() {
+    public void testInsertItemBankDetails() {
         mockStatic(RupContextUtils.class);
         Usage usage = new Usage();
         usage.setProductFamily("SAL");
@@ -116,7 +116,7 @@ public class SalUsageServiceTest {
         usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, "Uploaded in 'SAL Batch' Batch");
         expectLastCall().once();
         replay(salUsageRepository, usageAuditService, RupContextUtils.class);
-        salUsageService.insertUsages(buildUsageBatch(), Collections.singletonList(usage));
+        salUsageService.insertItemBankDetails(buildUsageBatch(), Collections.singletonList(usage));
         verify(salUsageRepository, usageAuditService, RupContextUtils.class);
     }
 
