@@ -1,3 +1,7 @@
+11.1.8
+-
+* CDP-930 FDA: Load SAL Item Bank: There is no validation for uniqueness of Reported Work Portion ID in the system
+
 11.1.7
 -
 * 58546 FDA: Exclude RH's within a NTS scenario: fix export and search are not disabled for empty NTS scenarios, empty scenario label is not displayed
