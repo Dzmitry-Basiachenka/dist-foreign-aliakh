@@ -171,11 +171,11 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
-        LOGGER.info("Insert SAL batch. Started. UsageBatchName={}, UserName={}, UploadedCount={}", usageBatch.getName(),
-            userName, LogUtils.size(uploadedUsages));
+        LOGGER.info("Insert SAL batch. Started. UsageBatchName={}, UserName={}, ItemBankDetailsCount={}",
+            usageBatch.getName(), userName, LogUtils.size(uploadedUsages));
         usageBatchRepository.insert(usageBatch);
-        salUsageService.insertUsages(usageBatch, uploadedUsages);
-        LOGGER.info("Insert SAL batch. Finished. UsageBatchName={}, UserName={}, UploadedCount={}",
+        salUsageService.insertItemBankDetails(usageBatch, uploadedUsages);
+        LOGGER.info("Insert SAL batch. Finished. UsageBatchName={}, UserName={}, ItemBankDetailsCount={}",
             usageBatch.getName(), userName, LogUtils.size(uploadedUsages));
     }
 

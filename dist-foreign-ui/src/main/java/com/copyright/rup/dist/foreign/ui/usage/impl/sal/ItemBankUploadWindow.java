@@ -218,7 +218,7 @@ public class ItemBankUploadWindow extends Window {
     }
 
     private TextField initLicenseeNameField() {
-        licenseeNameField = new TextField(ForeignUi.getMessage("label.licensee_account_name"));
+        licenseeNameField = new TextField(ForeignUi.getMessage("label.licensee_name"));
         licenseeNameField.setRequiredIndicatorVisible(true);
         licenseeNameField.setReadOnly(true);
         binder.forField(licenseeNameField)

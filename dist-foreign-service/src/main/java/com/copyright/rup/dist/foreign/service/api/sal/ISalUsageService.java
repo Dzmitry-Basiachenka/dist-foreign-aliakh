@@ -21,12 +21,12 @@ import java.util.List;
 public interface ISalUsageService {
 
     /**
-     * Inserts AACL usages.
+     * Inserts SAL item bank details.
      *
      * @param usageBatch usage batch
      * @param usages     list of {@link Usage}s
      */
-    void insertUsages(UsageBatch usageBatch, List<Usage> usages);
+    void insertItemBankDetails(UsageBatch usageBatch, List<Usage> usages);
 
     /**
      * Checks whether provided Work Portion ID already exists in the system.
