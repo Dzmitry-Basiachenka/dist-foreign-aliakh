@@ -106,4 +106,17 @@ public interface INtsUsageService {
      * @param batchName batch name
      */
     void sendForGettingRights(List<String> usageIds, String batchName);
+
+    /**
+     * Deletes {@link com.copyright.rup.dist.foreign.domain.Usage}s from scenario.
+     * Reverts status of {@link com.copyright.rup.dist.foreign.domain.Usage}s to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED}, sets scenario id,
+     * payee account number, sets service fee to {@code null}, sets rh and payee participating flags to {@code false},
+     * service fee amount, gross amount and net amount to 0.
+     *
+     * @param scenarioId     set of {@link Scenario} identifier
+     * @param accountNumbers set of rightsholders' account numbers
+     * @param reason         reason provided by user
+     */
+    void deleteFromScenarioByRightsholders(String scenarioId, Set<Long> accountNumbers, String reason);
 }

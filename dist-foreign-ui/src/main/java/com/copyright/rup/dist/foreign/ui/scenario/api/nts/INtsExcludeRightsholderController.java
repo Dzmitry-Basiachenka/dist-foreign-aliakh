@@ -16,14 +16,14 @@ import java.util.Set;
  *
  * @author Anton Azarenka
  */
-public interface INtsExcludeByRightsholderController extends IController<INtsExcludeByRightsholderWidget> {
+public interface INtsExcludeRightsholderController extends IController<INtsExcludeRightsholderWidget> {
 
     /**
      * Finds all {@link RightsholderPayeePair}s within the chosen scenario.
      *
      * @return list of {@link RightsholderPayeePair}s
      */
-    List<RightsholderPayeePair> getRightsholderPayeePair();
+    List<RightsholderPayeePair> getRightsholderPayeePairs();
 
     /**
      * Exclude details from corresponding scenario with selected payees' account numbers.

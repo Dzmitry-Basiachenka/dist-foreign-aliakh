@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.impl.CommonRightsholderRepository;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 
 import com.google.common.collect.Maps;
@@ -71,5 +72,10 @@ public class RightsholderRepository extends CommonRightsholderRepository impleme
     @Override
     protected String getPrefix() {
         return "df";
+    }
+
+    @Override
+    public List<RightsholderPayeePair> findRhPayeePairByScenarioId(String scenarioId) {
+        return selectList("RightsholderMapper.findRhPayeeByScenarioIds", scenarioId);
     }
 }

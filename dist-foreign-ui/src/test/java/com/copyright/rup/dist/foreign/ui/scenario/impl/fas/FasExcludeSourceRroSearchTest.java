@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies search functionality on {@link ExcludeSourceRroWindow}.
+ * Verifies search functionality on {@link FasExcludeSourceRroWindow}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -39,7 +39,7 @@ import java.util.Set;
  * @author Ihar Suvorau
  */
 @RunWith(Parameterized.class)
-public class ExcludeSourceRroSearchTest {
+public class FasExcludeSourceRroSearchTest {
 
     private static final List<Rightsholder> CONTAINER_DATA = Lists.newArrayList(
         buildRightsholder(1000000413L, "Times Mirror Magazines, Inc. [T]"),
@@ -48,7 +48,7 @@ public class ExcludeSourceRroSearchTest {
         buildRightsholder(7000427902L, "Bruggemann US Inc."));
     private final String value;
     private final Set<Rightsholder> expectedResult;
-    private ExcludeSourceRroWindow window;
+    private FasExcludeSourceRroWindow window;
 
     /**
      * Constructor.
@@ -56,7 +56,7 @@ public class ExcludeSourceRroSearchTest {
      * @param value          value to verify
      * @param expectedResult expected result
      */
-    public ExcludeSourceRroSearchTest(String value, Set<Rightsholder> expectedResult) {
+    public FasExcludeSourceRroSearchTest(String value, Set<Rightsholder> expectedResult) {
         this.value = value;
         this.expectedResult = expectedResult;
     }
@@ -89,7 +89,7 @@ public class ExcludeSourceRroSearchTest {
         IFasScenarioController scenarioController = createMock(IFasScenarioController.class);
         expect(scenarioController.getSourceRros()).andReturn(Collections.emptyList()).once();
         replay(scenarioController);
-        window = new ExcludeSourceRroWindow(scenarioController);
+        window = new FasExcludeSourceRroWindow(scenarioController);
         verify(scenarioController);
     }
 

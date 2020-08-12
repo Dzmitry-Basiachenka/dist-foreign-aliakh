@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.ICommonRightsholderRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 
 import java.util.List;
 
@@ -62,4 +63,12 @@ public interface IRightsholderRepository extends ICommonRightsholderRepository {
      * @return list of {@link Rightsholder}s from usages with given scenario identifier
      */
     List<Rightsholder> findByScenarioId(String scenarioId);
+
+    /**
+     * Finds all {@link RightsholderPayeePair}s within the scenario with given id.
+     *
+     * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} id
+     * @return list of {@link RightsholderPayeePair}s
+     */
+    List<RightsholderPayeePair> findRhPayeePairByScenarioId(String scenarioId);
 }

@@ -40,7 +40,7 @@ import java.util.Iterator;
 import java.util.Objects;
 
 /**
- * Verifies {@link ExcludePayeeFilterWidget}.
+ * Verifies {@link FasExcludePayeeFilterWidget}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -48,15 +48,15 @@ import java.util.Objects;
  *
  * @author Uladzislau Shalamitski
  */
-public class ExcludePayeeFilterWidgetTest {
+public class FasExcludePayeeFilterWidgetTest {
 
     private IExcludePayeeFilterController controller;
-    private ExcludePayeeFilterWidget widget;
+    private FasExcludePayeeFilterWidget widget;
 
     @Before
     public void setUp() {
         controller = createMock(IExcludePayeeFilterController.class);
-        widget = new ExcludePayeeFilterWidget();
+        widget = new FasExcludePayeeFilterWidget();
         widget.setController(controller);
     }
 

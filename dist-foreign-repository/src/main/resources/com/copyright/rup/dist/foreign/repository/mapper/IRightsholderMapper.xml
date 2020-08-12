@@ -10,6 +10,13 @@
         <result property="name" column="name"/>
     </resultMap>
 
+    <resultMap id="rightsholderPayeePairResultMap" type="RightsholderPayeePair">
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="rightsholder.name" column="rh_name"/>
+        <result property="payee.accountNumber" column="payee_account_number"/>
+        <result property="payee.name" column="payee_name"/>
+    </resultMap>
+
     <select id="findRros" resultMap="rroResultMap" parameterType="string">
         select distinct
             ub.rro_account_number,
@@ -116,5 +123,18 @@
         join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         where u.df_scenario_uid = #{scenarioId}
         order by rh.df_rightsholder_uid
+    </select>
+
+    <select id="findRhPayeeByScenarioIds" parameterType="string" resultMap="rightsholderPayeePairResultMap">
+        select distinct
+            u.rh_account_number,
+            r.name rh_name,
+            u.payee_account_number,
+            p.name payee_name
+        from ${schema}.df_usage u
+        left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        where u.df_scenario_uid = #{scenarioId}
+        order by rh_name asc
     </select>
 </mapper>

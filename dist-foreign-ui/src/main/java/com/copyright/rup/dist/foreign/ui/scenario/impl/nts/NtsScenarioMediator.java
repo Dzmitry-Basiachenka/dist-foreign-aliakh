@@ -31,8 +31,7 @@ public class NtsScenarioMediator implements IMediator {
 
     @Override
     public void applyPermissions() {
-        boolean excludePermission = ForeignSecurityUtils.hasExcludeFromScenarioPermission();
-        excludeRhButton.setVisible(excludePermission);
+        excludeRhButton.setVisible(ForeignSecurityUtils.hasExcludeFromScenarioPermission());
     }
 
     /**

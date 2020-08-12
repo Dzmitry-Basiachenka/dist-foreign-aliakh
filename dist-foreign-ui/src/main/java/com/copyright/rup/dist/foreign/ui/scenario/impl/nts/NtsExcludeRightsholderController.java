@@ -2,10 +2,10 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeByRightsholderWidget;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeRightsholderWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Implementation of {@link INtsExcludeByRightsholderController}.
+ * Implementation of {@link INtsExcludeRightsholderController}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -27,29 +27,29 @@ import java.util.Set;
  */
 @Controller
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class NtsExcludeByRightsholderController extends CommonController<INtsExcludeByRightsholderWidget>
-    implements INtsExcludeByRightsholderController {
+public class NtsExcludeRightsholderController extends CommonController<INtsExcludeRightsholderWidget>
+    implements INtsExcludeRightsholderController {
 
     private Scenario selectedScenario;
 
     @Autowired
-    private INtsScenarioService service;
+    private IRightsholderService rightsholderService;
     @Autowired
-    private IUsageService usageService;
+    private INtsUsageService ntsUsageService;
 
     @Override
-    protected INtsExcludeByRightsholderWidget instantiateWidget() {
-        return new NtsExcludeByRightsholderWidget();
+    protected INtsExcludeRightsholderWidget instantiateWidget() {
+        return new NtsExcludeRightsholderWidget();
     }
 
     @Override
-    public List<RightsholderPayeePair> getRightsholderPayeePair() {
-        return service.getRightsholdersByScenarioId(selectedScenario.getId());
+    public List<RightsholderPayeePair> getRightsholderPayeePairs() {
+        return rightsholderService.getRhPayeePairByScenarioId(selectedScenario.getId());
     }
 
     @Override
     public void excludeDetails(Set<Long> rightsholderAccountNumbers, String reason) {
-        usageService.deleteFromScenarioByRightsHolders(selectedScenario.getId(), rightsholderAccountNumbers, reason);
+        ntsUsageService.deleteFromScenarioByRightsholders(selectedScenario.getId(), rightsholderAccountNumbers, reason);
     }
 
     @Override

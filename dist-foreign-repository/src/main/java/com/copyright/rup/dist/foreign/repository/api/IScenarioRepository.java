@@ -158,12 +158,4 @@ public interface IScenarioRepository {
      * @return list of found scenarios ids
      */
     List<String> findIdsForArchiving();
-
-    /**
-     * Finds all {@link RightsholderPayeePair}s within the scenario with given id.
-     *
-     * @param scenarioId {@link Scenario} id
-     * @return list of {@link RightsholderPayeePair}s
-     */
-    List<RightsholderPayeePair> findRightsholdersByScenarioId(String scenarioId);
 }

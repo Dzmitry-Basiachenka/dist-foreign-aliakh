@@ -239,7 +239,7 @@ public class FasScenarioControllerTest {
     @Test
     public void testOnExcludeByRroClickedWithoutDiscrepancies() {
         mockStatic(Windows.class);
-        Windows.showModalWindow(anyObject(ExcludeSourceRroWindow.class));
+        Windows.showModalWindow(anyObject(FasExcludeSourceRroWindow.class));
         expectLastCall().once();
         expect(fasScenarioService.getSourceRros(SCENARIO_ID)).andReturn(
             Collections.singletonList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))

@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * Verifies {@link ExcludeSourceRroWindow}.
+ * Verifies {@link FasExcludeSourceRroWindow}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -42,9 +42,9 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau_Shalamitski
  */
-public class ExcludeSourceRroWindowTest {
+public class FasExcludeSourceRroWindowTest {
 
-    private ExcludeSourceRroWindow window;
+    private FasExcludeSourceRroWindow window;
 
     @Before
     public void setUp() {
@@ -55,7 +55,7 @@ public class ExcludeSourceRroWindowTest {
                 buildRightsholder(2000017006L, "CAL, Copyright Agency Limited")))
             .once();
         replay(scenarioController);
-        window = new ExcludeSourceRroWindow(scenarioController);
+        window = new FasExcludeSourceRroWindow(scenarioController);
         verify(scenarioController);
     }
 

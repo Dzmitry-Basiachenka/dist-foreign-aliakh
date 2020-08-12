@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ExcludePayeeFilterController extends CommonController<IExcludePayeeFilterWidget>
+public class FasExcludePayeeFilterController extends CommonController<IExcludePayeeFilterWidget>
     implements IExcludePayeeFilterController {
 
     private static final Map<String, Boolean> PARTICIPATING_STATUSES = new LinkedHashMap<>();
@@ -57,6 +57,6 @@ public class ExcludePayeeFilterController extends CommonController<IExcludePayee
 
     @Override
     protected IExcludePayeeFilterWidget instantiateWidget() {
-        return new ExcludePayeeFilterWidget();
+        return new FasExcludePayeeFilterWidget();
     }
 }

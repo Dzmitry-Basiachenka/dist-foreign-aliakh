@@ -9,9 +9,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeByRightsholderController;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
+import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeRightsholderController;
 
 import com.google.common.collect.Lists;
 
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies functionality on {@link NtsExcludeByRightsholderController}.
+ * Verifies functionality on {@link NtsExcludeRightsholderController}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -32,34 +32,34 @@ import java.util.Set;
  *
  * @author Anton Azarenka
  */
-public class NtsExcludeByRightsholderControllerTest {
+public class NtsExcludeRightsholderControllerTest {
 
     private static final String SCENARIO_ID = "d022cb1e-7c63-42b1-a50b-4bb03661c492";
     private static final String REASON = "reason";
 
-    private INtsExcludeByRightsholderController controller;
-    private INtsScenarioService service;
-    private IUsageService usageService;
+    private INtsExcludeRightsholderController controller;
+    private INtsUsageService ntsUsageService;
+    private IRightsholderService rightsholderService;
 
     @Before
     public void setUp() {
-        usageService = createMock(IUsageService.class);
-        service = createMock(INtsScenarioService.class);
-        controller = new NtsExcludeByRightsholderController();
+        rightsholderService = createMock(IRightsholderService.class);
+        ntsUsageService = createMock(INtsUsageService.class);
+        controller = new NtsExcludeRightsholderController();
         Scenario scenario = buildScenario();
-        Whitebox.setInternalState(controller, usageService);
-        Whitebox.setInternalState(controller, service);
+        Whitebox.setInternalState(controller, ntsUsageService);
+        Whitebox.setInternalState(controller, rightsholderService);
         Whitebox.setInternalState(controller, scenario);
     }
 
     @Test
     public void testExcludeDetails() {
         Set<Long> accountNumbers = Collections.singleton(2000017566L);
-        usageService.deleteFromScenarioByRightsHolders(SCENARIO_ID, accountNumbers, REASON);
+        ntsUsageService.deleteFromScenarioByRightsholders(SCENARIO_ID, accountNumbers, REASON);
         expectLastCall().once();
-        replay(usageService);
+        replay(ntsUsageService);
         controller.excludeDetails(accountNumbers, REASON);
-        verify(usageService);
+        verify(ntsUsageService);
     }
 
     @Test
@@ -70,10 +70,10 @@ public class NtsExcludeByRightsholderControllerTest {
             buildRightsholderPayeePair(
                 buildRightsholder(7000425474L, "American Dialect Society"),
                 buildRightsholder(2000196395L, "Advance Central Services")));
-        expect(service.getRightsholdersByScenarioId(SCENARIO_ID)).andReturn(list).once();
-        replay(service);
-        controller.getRightsholderPayeePair();
-        verify(service);
+        expect(rightsholderService.getRhPayeePairByScenarioId(SCENARIO_ID)).andReturn(list).once();
+        replay(rightsholderService);
+        controller.getRightsholderPayeePairs();
+        verify(rightsholderService);
     }
 
     private Scenario buildScenario() {

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Verifies {@link ExcludePayeeFilterController}.
+ * Verifies {@link FasExcludePayeeFilterController}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -33,9 +33,9 @@ import java.util.Map;
  *
  * @author Ihar Suvorau
  */
-public class ExcludePayeeFilterControllerTest {
+public class FasExcludePayeeFilterControllerTest {
 
-    private final IExcludePayeeFilterController controller = new ExcludePayeeFilterController();
+    private final IExcludePayeeFilterController controller = new FasExcludePayeeFilterController();
 
     @Test
     public void testGetParticipatingStatuses() {

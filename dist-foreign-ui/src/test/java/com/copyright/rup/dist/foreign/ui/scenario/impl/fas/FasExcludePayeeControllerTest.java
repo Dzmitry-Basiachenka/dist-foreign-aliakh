@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies {@link ExcludePayeeController}.
+ * Verifies {@link FasExcludePayeeController}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -37,7 +37,7 @@ import java.util.Set;
  * @author Uladzislau Shalamitski
  */
 @RunWith(PowerMockRunner.class)
-public class ExcludePayeeControllerTest {
+public class FasExcludePayeeControllerTest {
 
     private static final String REASON = "reason";
     private static final String SCENARIO_ID = "44bd227a-8ea7-464c-b283-831ef2f10007";
@@ -51,7 +51,7 @@ public class ExcludePayeeControllerTest {
     public void setUp() {
         usageService = createMock(IUsageService.class);
         fasUsageService = createMock(IFasUsageService.class);
-        controller = new ExcludePayeeController();
+        controller = new FasExcludePayeeController();
         filterController = createMock(IExcludePayeeFilterController.class);
         filterWidget = createMock(IExcludePayeeFilterWidget.class);
         Whitebox.setInternalState(controller, usageService);

@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau Shalamitski
  */
-public class ExcludePayeeFilterWidget extends VerticalLayout implements IExcludePayeeFilterWidget {
+public class FasExcludePayeeFilterWidget extends VerticalLayout implements IExcludePayeeFilterWidget {
 
     private final Binder<String> binder = new Binder<>();
     private IExcludePayeeFilterController controller;
@@ -76,7 +76,7 @@ public class ExcludePayeeFilterWidget extends VerticalLayout implements IExclude
 
     @Override
     @SuppressWarnings("unchecked")
-    public ExcludePayeeFilterWidget init() {
+    public FasExcludePayeeFilterWidget init() {
         initScenarioFilterWidget();
         initParticipatingFilter();
         initMinimumThresholdFilter();

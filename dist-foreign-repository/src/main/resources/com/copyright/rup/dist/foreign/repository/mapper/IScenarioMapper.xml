@@ -368,17 +368,4 @@
                       from ${schema}.df_usage_archive u
                       where u.df_scenario_uid = ua.df_scenario_uid))
     </select>
-
-    <select id="findRightsholderPayeeByScenarioIds" parameterType="string" resultMap="rightsholderPayeePairResultMap">
-        select distinct
-            u.rh_account_number,
-            r.name rh_name,
-            u.payee_account_number,
-            p.name payee_name
-        from ${schema}.df_usage u
-        left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
-        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
-        where u.df_scenario_uid = #{scenarioId}
-            order by rh_name asc
-    </select>
 </mapper>
