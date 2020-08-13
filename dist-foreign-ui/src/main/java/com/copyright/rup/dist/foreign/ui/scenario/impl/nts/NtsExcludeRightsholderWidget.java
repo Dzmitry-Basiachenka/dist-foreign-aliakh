@@ -4,8 +4,8 @@ import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludeUsagesListener;
-import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeByRightsholderWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeRightsholderWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -42,10 +42,10 @@ import java.util.stream.Collectors;
  *
  * @author Anton Azarenka
  */
-public class NtsExcludeByRightsholderWidget extends Window implements INtsExcludeByRightsholderWidget {
+public class NtsExcludeRightsholderWidget extends Window implements INtsExcludeRightsholderWidget {
 
     private SearchWidget searchWidget;
-    private INtsExcludeByRightsholderController controller;
+    private INtsExcludeRightsholderController controller;
     private Grid<RightsholderPayeePair> rightsholderPayeePairGrid;
     private ListDataProvider<RightsholderPayeePair> dataProvider;
 
@@ -75,7 +75,7 @@ public class NtsExcludeByRightsholderWidget extends Window implements INtsExclud
 
     @Override
     @SuppressWarnings("unchecked")
-    public NtsExcludeByRightsholderWidget init() {
+    public NtsExcludeRightsholderWidget init() {
         setWidth(800, Unit.PIXELS);
         setHeight(500, Unit.PIXELS);
         setCaption(ForeignUi.getMessage("window.exclude.rightsholder"));
@@ -100,7 +100,7 @@ public class NtsExcludeByRightsholderWidget extends Window implements INtsExclud
     }
 
     @Override
-    public void setController(INtsExcludeByRightsholderController controller) {
+    public void setController(INtsExcludeRightsholderController controller) {
         this.controller = controller;
     }
 
@@ -148,7 +148,7 @@ public class NtsExcludeByRightsholderWidget extends Window implements INtsExclud
         addColumn(holder -> holder.getRightsholder().getName(), "table.column.rh_account_name",
             "rightsholder.name")
             .setComparator((SerializableComparator<RightsholderPayeePair>) (holder1, holder2) ->
-                holder1.getPayee().getName().compareToIgnoreCase(holder2.getPayee().getName()));
+                holder1.getRightsholder().getName().compareToIgnoreCase(holder2.getRightsholder().getName()));
         addColumn(holder -> holder.getPayee().getAccountNumber(), "table.column.payee_account_number",
             "payee.accountNumber");
         addColumn(holder -> holder.getPayee().getName(), "table.column.payee_name", "payee.name")
@@ -164,7 +164,7 @@ public class NtsExcludeByRightsholderWidget extends Window implements INtsExclud
     }
 
     private void initDataProvider() {
-        dataProvider = DataProvider.ofCollection(controller.getRightsholderPayeePair());
+        dataProvider = DataProvider.ofCollection(controller.getRightsholderPayeePairs());
         rightsholderPayeePairGrid.setDataProvider(dataProvider);
     }
 

@@ -114,12 +114,4 @@ public class NtsScenarioServiceTest {
         assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
         verify(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService, ntsUsageService);
     }
-
-    @Test
-    public void testGetRightsholdersByScenarioId() {
-        expect(scenarioRepository.findRightsholdersByScenarioId(SCENARIO_ID)).andReturn(Collections.emptyList()).once();
-        replay(scenarioRepository);
-        assertEquals(Collections.emptyList(), ntsScenarioService.getRightsholdersByScenarioId(SCENARIO_ID));
-        verify(scenarioRepository);
-    }
 }

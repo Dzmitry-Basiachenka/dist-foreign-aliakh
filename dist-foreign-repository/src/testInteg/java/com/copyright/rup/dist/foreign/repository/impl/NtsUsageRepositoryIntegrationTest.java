@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -54,6 +56,8 @@ public class NtsUsageRepositoryIntegrationTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String BATCH_ID = "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa";
     private static final String SCENARIO_ID = "ca163655-8978-4a45-8fe3-c3b5572c6879";
+    private static final String SCENARIO_ID_2 = "03b9357e-0823-4abf-8e31-c615d735bf3b";
+    private static final String SCENARIO_ID_3 = "24d11b82-bc2a-429a-92c4-809849d36e75";
     private static final String USAGE_ID_1 = "ba95f0b3-dc94-4925-96f2-93d05db9c469";
     private static final String USAGE_ID_2 = "c09aa888-85a5-4377-8c7a-85d84d255b5a";
     private static final String USAGE_ID_3 = "45445974-5bee-477a-858b-e9e8c1a642b8";
@@ -71,6 +75,9 @@ public class NtsUsageRepositoryIntegrationTest {
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.0000000000");
     private static final BigDecimal HUNDRED_AMOUNT = new BigDecimal("100.00");
+    private static final BigDecimal SERVICE_FEE_AMOUNT = new BigDecimal("200.0000000000");
+    private static final Long RH_ACCOUNT_NUMBER_2 = 2000017004L;
+    private static final Long RH_ACCOUNT_NUMBER_3 = 2000017004L;
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -84,6 +91,74 @@ public class NtsUsageRepositoryIntegrationTest {
 
     @Autowired
     private NtsUsageRepository ntsUsageRepository;
+
+    @Test
+    public void testDeleteFromScenarioByRightsholder() {
+        List<Usage> usageList = usageRepository.findByScenarioId(SCENARIO_ID_2);
+        assertEquals(4, usageList.size());
+        usageList.forEach(usage -> {
+            assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
+            assertNotEquals(ZERO_AMOUNT, usage.getServiceFeeAmount());
+            assertNotEquals(ZERO_AMOUNT, usage.getNetAmount());
+            assertNotEquals(ZERO_AMOUNT, usage.getServiceFee());
+            assertNotEquals(ZERO_AMOUNT, usage.getGrossAmount());
+        });
+        Set<String> usageIds =
+            ntsUsageRepository.deleteFromScenarioByRightsholder(SCENARIO_ID_2, Sets.newHashSet(RH_ACCOUNT_NUMBER_2),
+                StoredEntity.DEFAULT_USER);
+        assertEquals(2, usageIds.size());
+        usageList = usageRepository.findByIds(new ArrayList<>(usageIds));
+        assertEquals(2, usageList.size());
+        usageList.forEach(usage -> {
+            assertEquals(UsageStatusEnum.SCENARIO_EXCLUDED, usage.getStatus());
+            assertNull(usage.getScenarioId());
+            assertEquals(ZERO_AMOUNT, usage.getServiceFeeAmount());
+            assertEquals(ZERO_AMOUNT, usage.getNetAmount());
+            assertEquals(ZERO_AMOUNT, usage.getGrossAmount());
+            assertFalse(usage.isPayeeParticipating());
+            assertFalse(usage.isRhParticipating());
+            assertNull(usage.getServiceFee());
+        });
+    }
+
+    @Test
+    public void testRecalculateAmountsFromExcludedRightshoders() {
+        List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID_3);
+        assertEquals(3, usages.size());
+        assertEquals(new BigDecimal("800.0000000000"),
+            usages.stream().map(Usage::getNetAmount).reduce(BigDecimal::add).get());
+        assertEquals(new BigDecimal("1000.0000000000"),
+            usages.stream().map(Usage::getGrossAmount).reduce(BigDecimal::add).get());
+        assertEquals(SERVICE_FEE_AMOUNT,
+            usages.stream().map(Usage::getServiceFeeAmount).reduce(BigDecimal::add).get());
+        usages = usageRepository.findByIds(Collections.singletonList("56f91295-db33-4440-b550-9bb515239750"));
+        Usage expectedUsage1 = usages.get(0);
+        usages = usageRepository.findByIds(Collections.singletonList("4604c954-e43b-4606-809a-665c81514dbf"));
+        Usage expectedUsage2 = usages.get(0);
+        assertEquals(new BigDecimal("294.0000000000"), expectedUsage1.getNetAmount());
+        assertEquals(new BigDecimal("336.0000000000"), expectedUsage2.getNetAmount());
+        ntsUsageRepository.recalculateAmountsFromExcludedRightshoders(SCENARIO_ID_3,
+            Sets.newHashSet(RH_ACCOUNT_NUMBER_3));
+        usages = usageRepository.findByIds(
+            Arrays.asList("56f91295-db33-4440-b550-9bb515239750", "4604c954-e43b-4606-809a-665c81514dbf"));
+        assertEquals(new BigDecimal("800.0000000000"),
+            usages.stream().map(Usage::getNetAmount).reduce(BigDecimal::add).get());
+        usages = usageRepository.findByIds(Collections.singletonList("56f91295-db33-4440-b550-9bb515239750"));
+        Usage actualUsage1 = usages.get(0);
+        usages = usageRepository.findByIds(Collections.singletonList("4604c954-e43b-4606-809a-665c81514dbf"));
+        Usage actualUsage2 = usages.get(0);
+        assertEquals(new BigDecimal("373.3333333333"), actualUsage1.getNetAmount());
+        assertEquals(new BigDecimal("426.6666666667"), actualUsage2.getNetAmount());
+        assertEquals(new BigDecimal("466.6666666667"), actualUsage1.getGrossAmount());
+        assertEquals(new BigDecimal("533.3333333333"), actualUsage2.getGrossAmount());
+        assertEquals(new BigDecimal("93.3333333333"), actualUsage1.getServiceFeeAmount());
+        assertEquals(new BigDecimal("106.6666666667"), actualUsage2.getServiceFeeAmount());
+        assertEquals(new BigDecimal("1000.0000000000"),
+            actualUsage1.getGrossAmount().add(actualUsage2.getGrossAmount()));
+        assertEquals(new BigDecimal("800.0000000000"), actualUsage1.getNetAmount().add(actualUsage2.getNetAmount()));
+        assertEquals(SERVICE_FEE_AMOUNT,
+            actualUsage1.getServiceFeeAmount().add(actualUsage2.getServiceFeeAmount()));
+    }
 
     @Test
     public void testInsertUsages() {

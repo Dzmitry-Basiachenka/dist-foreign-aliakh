@@ -52,7 +52,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link ExcludePayeeWidget}.
+ * Verifies {@link FasExcludePayeeWidget}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -62,12 +62,12 @@ import java.util.stream.Collectors;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class})
-public class ExcludePayeeWidgetTest {
+public class FasExcludePayeeWidgetTest {
 
     private static final String REASON = "reason";
     private static final Long PAYEE_ACCOUNT_NUMBER = 1000009094L;
 
-    private ExcludePayeeWidget widget;
+    private FasExcludePayeeWidget widget;
     private IExcludePayeeController controller;
     private IExcludePayeeFilterController filterController;
     private IExcludePayeeFilterWidget filterWidget;
@@ -79,10 +79,10 @@ public class ExcludePayeeWidgetTest {
         selectionModel = createMock(GridSelectionModel.class);
         controller = createMock(IExcludePayeeController.class);
         payeesGrid = createMock(Grid.class);
-        widget = new ExcludePayeeWidget();
+        widget = new FasExcludePayeeWidget();
         widget.setController(controller);
         filterController = createMock(IExcludePayeeFilterController.class);
-        filterWidget = new ExcludePayeeFilterWidget();
+        filterWidget = new FasExcludePayeeFilterWidget();
         filterWidget.setController(filterController);
         initWidget();
         Whitebox.setInternalState(widget, payeesGrid);

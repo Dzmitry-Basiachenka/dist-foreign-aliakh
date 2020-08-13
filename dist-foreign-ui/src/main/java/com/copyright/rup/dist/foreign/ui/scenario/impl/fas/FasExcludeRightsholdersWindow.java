@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau_Shalamitski
  */
-public class ExcludeRightsholdersWindow extends Window implements ISearchController {
+public class FasExcludeRightsholdersWindow extends Window implements ISearchController {
 
     private final Long accountNumber;
     private final IFasScenarioController scenarioController;
@@ -51,7 +51,7 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
      * @param rroAccountNumber   rro account number
      * @param scenarioController instance of {@link IFasScenarioController}
      */
-    ExcludeRightsholdersWindow(Long rroAccountNumber, IFasScenarioController scenarioController) {
+    FasExcludeRightsholdersWindow(Long rroAccountNumber, IFasScenarioController scenarioController) {
         this.accountNumber = rroAccountNumber;
         this.scenarioController = scenarioController;
         setCaption(ForeignUi.getMessage("window.exclude.rh", rroAccountNumber));

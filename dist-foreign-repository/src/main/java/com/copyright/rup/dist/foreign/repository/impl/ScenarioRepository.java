@@ -152,9 +152,4 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
         params.put("scenarioStatus", ScenarioStatusEnum.SENT_TO_LM);
         return selectList("IScenarioMapper.findIdsForArchiving", params);
     }
-
-    @Override
-    public List<RightsholderPayeePair> findRightsholdersByScenarioId(String scenarioId) {
-        return selectList("IScenarioMapper.findRightsholderPayeeByScenarioIds", scenarioId);
-    }
 }

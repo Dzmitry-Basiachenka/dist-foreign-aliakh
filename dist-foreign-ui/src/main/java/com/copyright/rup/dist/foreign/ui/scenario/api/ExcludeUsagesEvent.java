@@ -4,7 +4,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Component.Event;
 
 /**
- * Event appears when ExcludeRightsholdersWindow closes.
+ * Event appears when FasExcludeRightsholdersWindow closes.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>

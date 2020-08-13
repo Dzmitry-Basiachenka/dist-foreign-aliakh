@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau_Shalamitski
  */
-public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
+public class FasExcludePayeeWidget extends Window implements IExcludePayeeWidget {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
@@ -81,7 +81,7 @@ public class ExcludePayeeWidget extends Window implements IExcludePayeeWidget {
 
     @Override
     @SuppressWarnings("unchecked")
-    public ExcludePayeeWidget init() {
+    public FasExcludePayeeWidget init() {
         IExcludePayeeFilterWidget filterWidget = controller.getExcludePayeesFilterController().initWidget();
         filterWidget.addListener(FilterChangedEvent.class, controller, IExcludePayeeController.ON_FILTER_CHANGED);
         setWidth(1200, Unit.PIXELS);

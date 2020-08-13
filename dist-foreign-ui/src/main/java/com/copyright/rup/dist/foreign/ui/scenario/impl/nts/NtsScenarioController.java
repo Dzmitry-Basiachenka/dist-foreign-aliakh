@@ -4,8 +4,8 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsDrillDownByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeByRightsholderWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeRightsholderController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeRightsholderWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioController;
@@ -36,7 +36,7 @@ public class NtsScenarioController extends CommonScenarioController implements I
     @Autowired
     private INtsDrillDownByRightsholderController drillDownByRightsholderController;
     @Autowired
-    private INtsExcludeByRightsholderController excludeController;
+    private INtsExcludeRightsholderController excludeController;
 
     @Override
     protected INtsScenarioWidget instantiateWidget() {
@@ -56,7 +56,7 @@ public class NtsScenarioController extends CommonScenarioController implements I
     @Override
     public void onExcludeRhButtonClicked() {
         excludeController.setSelectedScenario(this.getScenario());
-        INtsExcludeByRightsholderWidget widget = excludeController.initWidget();
+        INtsExcludeRightsholderWidget widget = excludeController.initWidget();
         widget.addListener(this::fireWidgetEvent);
         Windows.showModalWindow((Window) widget);
     }

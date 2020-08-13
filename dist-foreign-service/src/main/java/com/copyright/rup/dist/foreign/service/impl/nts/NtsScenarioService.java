@@ -4,7 +4,6 @@ import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -125,11 +124,6 @@ public class NtsScenarioService implements INtsScenarioService {
             throw new RupRuntimeException(String.format("Send scenario to LM. Failed. %s. Reason=Scenario is empty",
                 ForeignLogUtils.scenario(scenario)));
         }
-    }
-
-    @Override
-    public List<RightsholderPayeePair> getRightsholdersByScenarioId(String scenarioId) {
-        return scenarioRepository.findRightsholdersByScenarioId(scenarioId);
     }
 
     private void changeScenarioState(Scenario scenario, ScenarioStatusEnum status, ScenarioActionTypeEnum action,

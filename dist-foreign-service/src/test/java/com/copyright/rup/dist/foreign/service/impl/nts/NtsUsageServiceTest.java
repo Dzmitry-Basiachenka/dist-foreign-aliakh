@@ -15,6 +15,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -60,6 +61,7 @@ import java.util.Set;
 @PrepareForTest({RupContextUtils.class})
 public class NtsUsageServiceTest {
 
+    private static final String REASON = "reason";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "3e2d710d-8753-4432-ad7b-25e327c97e94";
@@ -105,6 +107,22 @@ public class NtsUsageServiceTest {
         replay(RupContextUtils.class, ntsUsageRepository);
         assertEquals(usageIds, ntsUsageService.insertUsages(usageBatch));
         verify(RupContextUtils.class, ntsUsageRepository);
+    }
+
+    @Test
+    public void testExcludeRightsHoldersFromScenario() {
+        Set<String> usageIds =
+            Sets.newHashSet("095eaefe-37de-4adb-928e-be0b888094b9", "7ee9c1ab-57ca-45cf-8a8d-83d7baeb6a9c");
+        Set<Long> accountNumbers = Sets.newHashSet(2000017001L, 2000078999L);
+        ntsUsageRepository.recalculateAmountsFromExcludedRightshoders(SCENARIO_ID, accountNumbers);
+        expectLastCall().once();
+        expect(ntsUsageRepository.deleteFromScenarioByRightsholder(SCENARIO_ID, accountNumbers,
+            RupContextUtils.getUserName())).andReturn(usageIds).once();
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, REASON);
+        expectLastCall().once();
+        replay(ntsUsageRepository, usageAuditService);
+        ntsUsageService.deleteFromScenarioByRightsholders(SCENARIO_ID, accountNumbers, REASON);
+        verify(ntsUsageRepository, usageAuditService);
     }
 
     @Test

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies search functionality on {@link ExcludeRightsholdersWindow}.
+ * Verifies search functionality on {@link FasExcludeRightsholdersWindow}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -39,7 +39,7 @@ import java.util.Set;
  * @author Ihar Suvorau
  */
 @RunWith(Parameterized.class)
-public class ExcludeRightsholdersSearchTest {
+public class FasExcludeRightsholdersSearchTest {
 
     private static final List<RightsholderPayeePair> CONTAINER_DATA = Arrays.asList(
         buildPair(1000000413L, "Times Mirror Magazines, Inc. [T]", 1000004155L, "Spectator Limited"),
@@ -48,7 +48,7 @@ public class ExcludeRightsholdersSearchTest {
         buildPair(7000427902L, "Bruggemann US Inc.", 7000427971L, "New York State College of Ceramics [T]"));
     private final String value;
     private final Set<RightsholderPayeePair> expectedResult;
-    private ExcludeRightsholdersWindow window;
+    private FasExcludeRightsholdersWindow window;
 
     /**
      * Constructor.
@@ -56,7 +56,7 @@ public class ExcludeRightsholdersSearchTest {
      * @param value          value to verify
      * @param expectedResult expected result
      */
-    public ExcludeRightsholdersSearchTest(String value, Set<RightsholderPayeePair> expectedResult) {
+    public FasExcludeRightsholdersSearchTest(String value, Set<RightsholderPayeePair> expectedResult) {
         this.value = value;
         this.expectedResult = expectedResult;
     }
@@ -104,7 +104,7 @@ public class ExcludeRightsholdersSearchTest {
         expect(scenarioController.getRightsholdersPayeePairs(1000009522L))
             .andReturn(CONTAINER_DATA).once();
         replay(scenarioController);
-        window = new ExcludeRightsholdersWindow(1000009522L, scenarioController);
+        window = new FasExcludeRightsholdersWindow(1000009522L, scenarioController);
         verify(scenarioController);
     }
 

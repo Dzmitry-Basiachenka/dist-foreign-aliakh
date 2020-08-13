@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -181,5 +182,23 @@ public class NtsUsageRepository extends BaseRepository implements INtsUsageRepos
         params.put("batchIds", Objects.requireNonNull(batchIds));
         params.put("updateUser", Objects.requireNonNull(userName));
         update("INtsUsageMapper.addWithdrawnUsagesToNtsFundPool", params);
+    }
+
+    @Override
+    public Set<String> deleteFromScenarioByRightsholder(String scenarioId, Set<Long> accountNumbers, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("accountNumbers", Objects.requireNonNull(accountNumbers));
+        params.put(STATUS_KEY, UsageStatusEnum.SCENARIO_EXCLUDED);
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        return new HashSet<>(selectList("INtsUsageMapper.deleteFromScenarioByRightsholder", params));
+    }
+
+    @Override
+    public void recalculateAmountsFromExcludedRightshoders(String scenarioId, Set<Long> accountNumbers) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("accountNumbers", Objects.requireNonNull(accountNumbers));
+        update("INtsUsageMapper.recalculateAmountsFromExcludedRightshoders", params);
     }
 }

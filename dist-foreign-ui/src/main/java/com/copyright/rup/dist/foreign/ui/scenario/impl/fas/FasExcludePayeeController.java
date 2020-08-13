@@ -31,7 +31,8 @@ import java.util.Set;
  */
 @Controller
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ExcludePayeeController extends CommonController<IExcludePayeeWidget> implements IExcludePayeeController {
+public class FasExcludePayeeController extends CommonController<IExcludePayeeWidget>
+    implements IExcludePayeeController {
 
     @Autowired
     private IUsageService usageService;
@@ -79,7 +80,7 @@ public class ExcludePayeeController extends CommonController<IExcludePayeeWidget
 
     @Override
     protected IExcludePayeeWidget instantiateWidget() {
-        return new ExcludePayeeWidget();
+        return new FasExcludePayeeWidget();
     }
 
     @Override

@@ -1,22 +1,15 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
-import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Lists;
-
-import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -24,34 +17,33 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link ExcludeRightsholdersWindow}.
+ * Verifies functionality on {@link NtsExcludeRightsholderWidget}.
  * <p>
- * Copyright (C) 2017 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 11/2/2017
+ * Date: 08/04/20
  *
- * @author Uladzislau_Shalamitski
+ * @author Anton Azarenka
  */
-public class ExcludeRightsholdersWindowTest {
+public class NtsExcludeRightsholderWidgetTest {
 
-    private ExcludeRightsholdersWindow window;
+    private final NtsExcludeRightsholderWidget widget = new NtsExcludeRightsholderWidget();
 
     @Before
     public void setUp() {
-        IFasScenarioController scenarioController = createMock(IFasScenarioController.class);
-        expect(scenarioController.getRightsholdersPayeePairs(1000009522L))
-            .andReturn(Lists.newArrayList(
+        NtsExcludeRightsholderController controller = createMock(NtsExcludeRightsholderController.class);
+        expect(controller.getRightsholderPayeePairs())
+            .andReturn(Arrays.asList(
                 buildRightsholderPayeePair(
                     buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
                     buildRightsholder(2000148821L, "ABR Company, Ltd")),
@@ -59,49 +51,28 @@ public class ExcludeRightsholdersWindowTest {
                     buildRightsholder(7000425474L, "American Dialect Society"),
                     buildRightsholder(2000196395L, "Advance Central Services"))))
             .once();
-        replay(scenarioController);
-        window = new ExcludeRightsholdersWindow(1000009522L, scenarioController);
-        verify(scenarioController);
+        replay(controller);
+        Whitebox.setInternalState(widget, "controller", controller);
+        widget.init();
+        verify(controller);
     }
 
     @Test
     public void testStructure() {
-        assertEquals("Exclude RH Details for Source RRO #: 1000009522", window.getCaption());
-        assertEquals(500, window.getHeight(), 0);
-        assertEquals(830, window.getWidth(), 0);
-        VerticalLayout content = (VerticalLayout) window.getContent();
+        assertEquals("Exclude Details By Rightsholder", widget.getCaption());
+        assertEquals(500, widget.getHeight(), 0);
+        assertEquals(800, widget.getWidth(), 0);
+        VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(3, content.getComponentCount());
         verifyGrid(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2));
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testPerformSearch() {
-        SearchWidget searchWidget = createMock(SearchWidget.class);
-        Whitebox.setInternalState(window, searchWidget);
-        Grid grid = createMock(Grid.class);
-        Whitebox.setInternalState(window, grid);
-        ListDataProvider provider = new ListDataProvider(Collections.EMPTY_LIST);
-        expect(grid.getDataProvider()).andReturn(provider).once();
-        expect(searchWidget.getSearchValue()).andReturn("1000033963").once();
-        PowerMock.replay(searchWidget, grid);
-        window.performSearch();
-        SerializablePredicate filter = provider.getFilter();
-        assertTrue(filter.test(buildRightsholderPayeePair(
-            buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
-            buildRightsholder(2000148821L, "ABR Company, Ltd"))));
-        assertFalse(filter.test(buildRightsholderPayeePair(
-            buildRightsholder(7000425474L, "American Dialect Society"),
-            buildRightsholder(2000196395L, "Advance Central Services"))));
-        PowerMock.verify(searchWidget, grid);
     }
 
     private void verifyGrid(Component component) {
         assertEquals(Grid.class, component.getClass());
         Grid grid = (Grid) component;
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Payee Account #", "Payee Name", "RH Account #", "RH Name"),
+        assertEquals(Arrays.asList("RH Account #", "RH Name", "Payee Account #", "Payee Name"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
@@ -110,8 +81,7 @@ public class ExcludeRightsholdersWindowTest {
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(3, horizontalLayout.getComponentCount());
         Button confirmButton = (Button) horizontalLayout.getComponent(0);
-        assertEquals("Confirm", confirmButton.getCaption());
-        assertEquals("Confirm", confirmButton.getId());
+        assertEquals("Exclude Details", confirmButton.getCaption());
         Button clearButton = (Button) horizontalLayout.getComponent(1);
         assertEquals("Clear", clearButton.getCaption());
         assertEquals("Clear", clearButton.getId());

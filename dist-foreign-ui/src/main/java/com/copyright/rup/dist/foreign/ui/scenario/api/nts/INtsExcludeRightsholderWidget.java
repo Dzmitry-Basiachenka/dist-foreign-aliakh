@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author Anton Azarenka
  */
-public interface INtsExcludeByRightsholderWidget extends IRefreshable, IWidget<INtsExcludeByRightsholderController> {
+public interface INtsExcludeRightsholderWidget extends IRefreshable, IWidget<INtsExcludeRightsholderController> {
 
     /**
      * @return search value string.

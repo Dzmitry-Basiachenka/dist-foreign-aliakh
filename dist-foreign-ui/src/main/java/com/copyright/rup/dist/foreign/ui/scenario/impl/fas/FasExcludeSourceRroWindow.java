@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Uladzislau Shalamitski
  */
-public class ExcludeSourceRroWindow extends Window implements ISearchController {
+public class FasExcludeSourceRroWindow extends Window implements ISearchController {
 
     private final IFasScenarioController scenarioController;
     private SearchWidget searchWidget;
@@ -43,7 +43,7 @@ public class ExcludeSourceRroWindow extends Window implements ISearchController 
      *
      * @param scenarioController instance of {@link IFasScenarioController}
      */
-    ExcludeSourceRroWindow(IFasScenarioController scenarioController) {
+    FasExcludeSourceRroWindow(IFasScenarioController scenarioController) {
         super(ForeignUi.getMessage("label.exclude.rro"));
         this.scenarioController = scenarioController;
         setWidth(880, Unit.PIXELS);
@@ -110,8 +110,8 @@ public class ExcludeSourceRroWindow extends Window implements ISearchController 
             Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.exclude"));
             deleteButton.setId(rightsholder.getId());
             deleteButton.addClickListener(event -> {
-                ExcludeRightsholdersWindow window =
-                    new ExcludeRightsholdersWindow(rightsholder.getAccountNumber(), scenarioController);
+                FasExcludeRightsholdersWindow window =
+                    new FasExcludeRightsholdersWindow(rightsholder.getAccountNumber(), scenarioController);
                 Windows.showModalWindow(window);
                 window.addListener((IExcludeUsagesListener) excludeUsagesEvent -> {
                     close();

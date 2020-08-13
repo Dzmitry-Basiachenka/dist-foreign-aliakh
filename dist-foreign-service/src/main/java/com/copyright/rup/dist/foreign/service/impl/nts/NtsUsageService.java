@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -184,5 +185,14 @@ public class NtsUsageService implements INtsUsageService {
                     LOGGER.info(GET_RIGHTS_FINISHED_LOG_MESSAGE, batchName, usageIdsCount,
                         LogUtils.size(workFoundUsages));
                 }));
+    }
+
+    @Override
+    @Transactional
+    public void deleteFromScenarioByRightsholders(String scenarioId, Set<Long> accountNumbers, String reason) {
+        ntsUsageRepository.recalculateAmountsFromExcludedRightshoders(scenarioId, accountNumbers);
+        Set<String> usageIds = ntsUsageRepository.deleteFromScenarioByRightsholder(scenarioId, accountNumbers,
+            RupContextUtils.getUserName());
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
     }
 }

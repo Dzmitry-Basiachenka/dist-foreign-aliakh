@@ -40,7 +40,7 @@ public class FasScenarioController extends CommonScenarioController implements I
 
     @Override
     public void onExcludeByRroClicked() {
-        Windows.showModalWindow(new ExcludeSourceRroWindow(this));
+        Windows.showModalWindow(new FasExcludeSourceRroWindow(this));
     }
 
     @Override

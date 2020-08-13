@@ -1,11 +1,16 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static com.copyright.rup.dist.foreign.domain.FdaConstants.NTS_PRODUCT_FAMILY;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.Sets;
 
@@ -19,7 +24,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,9 +54,35 @@ public class RightsholderRepositoryIntegrationTest {
     private static final String RH_NAME_2000017004 = "Access Copyright, The Canadian Copyright Agency";
     private static final String RH_NAME_2000017010 = "JAC, Japan Academic Association for Copyright Clearance, Inc.";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String SCENARIO_ID_1 = "f933e8cb-3795-44bb-bc6a-f59d5c37781d";
+    private static final String USAGE_BATCH_ID = "435a1689-8dfd-4a94-8ef5-72e2c4e6f3fa";
 
     @Autowired
     private RightsholderRepository rightsholderRepository;
+
+    @Test
+    public void testFindRhPayeeByScenarioId() {
+        Usage expectedUsage1 = buildUsage();
+        Usage expectedUsage2 = buildUsage();
+        Usage expectedUsage3 = buildUsage();
+        expectedUsage1.setRightsholder(buildRightsholder(2000017004L,
+            "Access Copyright, The Canadian Copyright Agency"));
+        expectedUsage2.setRightsholder(buildRightsholder(2000017010L,
+            "JAC, Japan Academic Association for Copyright Clearance, Inc."));
+        List<RightsholderPayeePair> result =
+            rightsholderRepository.findRhPayeePairByScenarioId(SCENARIO_ID_1);
+        assertEquals(3, result.size());
+        result.sort(Comparator.comparing(RightsholderPayeePair::getRightsholder));
+        RightsholderPayeePair pair1 = result.get(0);
+        assertEquals(expectedUsage1.getRightsholder(), pair1.getRightsholder());
+        assertEquals(expectedUsage1.getPayee(), pair1.getPayee());
+        RightsholderPayeePair pair2 = result.get(2);
+        assertEquals(expectedUsage2.getRightsholder(), pair2.getRightsholder());
+        assertEquals(expectedUsage2.getPayee(), pair2.getPayee());
+        RightsholderPayeePair pair3 = result.get(1);
+        assertEquals(expectedUsage3.getRightsholder(), pair3.getRightsholder());
+        assertEquals(expectedUsage3.getPayee(), pair3.getPayee());
+    }
 
     @Test
     public void testInsertRightsholder() {
@@ -63,7 +97,7 @@ public class RightsholderRepositoryIntegrationTest {
     @Test
     public void testFindAccountNumbers() {
         Set<Long> accountNumbers = rightsholderRepository.findAccountNumbers();
-        assertEquals(10, accountNumbers.size());
+        assertEquals(11, accountNumbers.size());
         assertTrue(accountNumbers.containsAll(Arrays.asList(7000813806L, 2000017004L, 2000017010L, 1000009997L,
             1000002859L, 1000005413L, 1000159997L, 7000800832L, 7001555529L, 2000105646L)));
     }
@@ -167,6 +201,39 @@ public class RightsholderRepositoryIntegrationTest {
         rightsholder.setAccountNumber(12345678L);
         rightsholder.setName(RH_ACCOUNT_NAME);
         rightsholder.setId(RupPersistUtils.generateUuid());
+        return rightsholder;
+    }
+
+    private Usage buildUsage() {
+        Usage usage = new Usage();
+        usage.setId(RupPersistUtils.generateUuid());
+        usage.setBatchId(USAGE_BATCH_ID);
+        usage.setScenarioId(SCENARIO_ID_1);
+        usage.setWrWrkInst(123456783L);
+        usage.setWorkTitle("WorkTitle");
+        usage.setRightsholder(buildRightsholder(7000813806L,
+            "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil"));
+        usage.setPayee(usage.getRightsholder());
+        usage.setStatus(UsageStatusEnum.LOCKED);
+        usage.setProductFamily(NTS_PRODUCT_FAMILY);
+        usage.setArticle("Article");
+        usage.setStandardNumber("StandardNumber");
+        usage.setPublisher("Publisher");
+        usage.setPublicationDate(LocalDate.of(2016, 11, 3));
+        usage.setMarket("Market");
+        usage.setMarketPeriodFrom(2015);
+        usage.setMarketPeriodTo(2017);
+        usage.setAuthor("Author");
+        usage.setNumberOfCopies(1);
+        usage.setReportedValue(new BigDecimal("11.25"));
+        usage.setGrossAmount(new BigDecimal("54.4400000000"));
+        return usage;
+    }
+
+    private Rightsholder buildRightsholder(Long accountNumber, String name) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(accountNumber);
+        rightsholder.setName(name);
         return rightsholder;
     }
 }

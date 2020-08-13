@@ -65,13 +65,13 @@ public class NtsScenarioMediatorTest {
         expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        verify(SecurityUtils.class);
         assertTrue(excludeByRhButton.isVisible());
         assertTrue(exportDetailsButton.isVisible());
         assertTrue(exportButton.isVisible());
         assertTrue(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
+        verify(SecurityUtils.class);
     }
 
     @Test
@@ -95,13 +95,13 @@ public class NtsScenarioMediatorTest {
         mediator.applyPermissions();
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         mediator.onScenarioUpdated(false, scenario);
-        verify(SecurityUtils.class);
         assertTrue(excludeByRhButton.isEnabled());
         assertTrue(exportDetailsButton.isEnabled());
         assertTrue(exportButton.isEnabled());
         assertTrue(grid.isVisible());
         assertFalse(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
+        verify(SecurityUtils.class);
     }
 
     @Test
@@ -111,13 +111,13 @@ public class NtsScenarioMediatorTest {
         mediator.applyPermissions();
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
         mediator.onScenarioUpdated(false, scenario);
-        verify(SecurityUtils.class);
         assertFalse(excludeByRhButton.isEnabled());
         assertTrue(exportDetailsButton.isEnabled());
         assertTrue(exportButton.isEnabled());
         assertTrue(grid.isVisible());
         assertFalse(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
+        verify(SecurityUtils.class);
     }
 
     @Test

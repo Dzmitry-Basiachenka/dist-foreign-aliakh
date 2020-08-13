@@ -128,4 +128,26 @@ public interface INtsUsageRepository {
      * @param userName   user name
      */
     void addWithdrawnUsagesToNtsFundPool(String fundPoolId, Set<String> batchIds, String userName);
+
+    /**
+     * Deletes {@link com.copyright.rup.dist.foreign.domain.Usage}s from scenario.
+     * Sets status of {@link com.copyright.rup.dist.foreign.domain.Usage}s to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED}
+     * sets scenario id, payee account number, service fee to {@code null}, service fee amount, gross amount and
+     * net amount to 0.
+     *
+     * @param scenarioId     {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param accountNumbers set of rightsholders' account numbers
+     * @param userName       user name
+     * @return set of {@link com.copyright.rup.dist.foreign.domain.Usage}'s identifiers
+     */
+    Set<String> deleteFromScenarioByRightsholder(String scenarioId, Set<Long> accountNumbers, String userName);
+
+    /**
+     * Proportionally distributes Amounts among scenario usages.
+     *
+     * @param scenarioId     {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param accountNumbers set of rightsholders' account numbers
+     */
+    void recalculateAmountsFromExcludedRightshoders(String scenarioId, Set<Long> accountNumbers);
 }
