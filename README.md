@@ -1,3 +1,8 @@
+11.1.9
+-
+* 58546 FDA: Exclude RH's within a NTS scenario: make changes based on CR-DIST-FOREIGN-189
+* B-57900 FDA: Create SAL batch: make changes based on comments in CR-DIST-FOREIGN-188
+
 11.1.8
 -
 * CDP-930 FDA: Load SAL Item Bank: There is no validation for uniqueness of Reported Work Portion ID in the system
