@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,6 +47,7 @@ public class AbstractUsageJobChunkProcessorTest {
     private Consumer<List<Usage>> usageConsumer;
     private IUsageService usageService;
     private IAaclUsageService aaclUsageService;
+    private ISalUsageService salUsageService;
     private IChainProcessor<List<Usage>> successProcessor;
     private IChainProcessor<List<Usage>> failureProcessor;
 
@@ -56,11 +58,13 @@ public class AbstractUsageJobChunkProcessorTest {
         usageConsumer = createMock(Consumer.class);
         usageService = createMock(IUsageService.class);
         aaclUsageService = createMock(IAaclUsageService.class);
+        salUsageService = createMock(ISalUsageService.class);
         successProcessor = createMock(IChainProcessor.class);
         failureProcessor = createMock(IChainProcessor.class);
         processor.setUsagesBatchSize(1000);
         Whitebox.setInternalState(processor, usageService);
         Whitebox.setInternalState(processor, aaclUsageService);
+        Whitebox.setInternalState(processor, salUsageService);
         processor.setSuccessProcessor(successProcessor);
         processor.setFailureProcessor(failureProcessor);
         processor.setUsageStatus(UsageStatusEnum.NEW);
@@ -140,14 +144,32 @@ public class AbstractUsageJobChunkProcessorTest {
     }
 
     @Test
+    public void testJobProcessForSal() {
+        Usage usage1 = buildUsage();
+        Usage usage2 = buildUsage();
+        List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq("SAL")))
+            .andReturn(usageIds).once();
+        expect(salUsageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
+        usageConsumer.accept(Collections.singletonList(usage1));
+        expectLastCall().once();
+        usageConsumer.accept(Collections.singletonList(usage2));
+        expectLastCall().once();
+        replay(usageService, usageConsumer, salUsageService);
+        assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=SAL, UsagesCount=2"),
+            processor.jobProcess("SAL"));
+        verify(usageService, usageConsumer, salUsageService);
+    }
+
+    @Test
     public void testJobProcessForUnknownProductFamily() {
-        replay(usageService, usageConsumer, aaclUsageService, successProcessor, failureProcessor);
+        replay(usageService, usageConsumer, aaclUsageService, salUsageService, successProcessor, failureProcessor);
         try {
             processor.jobProcess("CNTPUR");
             fail();
         } catch (IllegalArgumentException e) {
             assertEquals("Product family is not registered. ProductFamily=CNTPUR, " +
-                "RegisteredProductFamilies=[FAS, FAS2, NTS, AACL]", e.getMessage());
+                "RegisteredProductFamilies=[FAS, FAS2, NTS, AACL, SAL]", e.getMessage());
         }
         verify(usageService, usageConsumer, aaclUsageService, successProcessor, failureProcessor);
     }
@@ -156,10 +178,10 @@ public class AbstractUsageJobChunkProcessorTest {
     public void testJobProcessSkipped() {
         expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq(FAS_PRODUCT_FAMILY)))
             .andReturn(Collections.emptyList()).once();
-        replay(usageService, usageConsumer, aaclUsageService, successProcessor, failureProcessor);
+        replay(usageService, usageConsumer, aaclUsageService, salUsageService, successProcessor, failureProcessor);
         assertEquals(new JobInfo(JobStatusEnum.SKIPPED, "ProductFamily=FAS, Reason=There are no usages"),
             processor.jobProcess(FAS_PRODUCT_FAMILY));
-        verify(usageService, usageConsumer, aaclUsageService, successProcessor, failureProcessor);
+        verify(usageService, usageConsumer, aaclUsageService, salUsageService, successProcessor, failureProcessor);
     }
 
     private Usage buildUsage() {

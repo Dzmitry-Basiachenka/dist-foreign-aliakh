@@ -11,15 +11,23 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
+import com.google.common.collect.Iterables;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Implementation of {@link ISalUsageService}.
@@ -39,6 +47,11 @@ public class SalUsageService implements ISalUsageService {
     private IUsageAuditService usageAuditService;
     @Autowired
     private ISalUsageRepository salUsageRepository;
+    @Autowired
+    @Qualifier("usageChainChunkExecutor")
+    private IChainExecutor<Usage> chainExecutor;
+    @Value("$RUP{dist.foreign.usages.batch_size}")
+    private int usagesBatchSize;
 
     @Override
     public int getUsagesCount(UsageFilter filter) {
@@ -74,5 +87,28 @@ public class SalUsageService implements ISalUsageService {
         usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason));
         LOGGER.info("Insert SAL usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}",
             usageBatch.getName(), size, userName);
+    }
+
+    @Override
+    public void sendForMatching(List<String> usageIds, String batchName) {
+        AtomicInteger usageIdsCount = new AtomicInteger(0);
+        IChainExecutor<Usage> currentChainExecutor = chainExecutor;
+        currentChainExecutor.execute(() ->
+            Iterables.partition(usageIds, usagesBatchSize)
+                .forEach(partition -> {
+                    usageIdsCount.addAndGet(partition.size());
+                    LOGGER.info("Send usages for PI matching. Started. UsageBatchName={}, UsagesCount={}", batchName,
+                        usageIdsCount);
+                    currentChainExecutor.execute(getUsagesByIds(partition), ChainProcessorTypeEnum.MATCHING);
+                    LOGGER.info("Send usages for PI matching. Finished. UsageBatchName={}, UsagesCount={}", batchName,
+                        usageIdsCount);
+                }));
+    }
+
+    @Override
+    public List<Usage> getUsagesByIds(List<String> usageIds) {
+        return CollectionUtils.isNotEmpty(usageIds)
+            ? salUsageRepository.findByIds(usageIds)
+            : Collections.emptyList();
     }
 }

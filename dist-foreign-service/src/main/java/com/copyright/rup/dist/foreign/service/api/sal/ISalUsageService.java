@@ -53,4 +53,20 @@ public interface ISalUsageService {
      * @return the list of {@link UsageDto}
      */
     List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * Finds SAL usages by their ids and sends them on queue for PI matching process.
+     *
+     * @param usageIds  list of usages ids
+     * @param batchName batch name
+     */
+    void sendForMatching(List<String> usageIds, String batchName);
+
+    /**
+     * Gets list of {@link Usage}s by specified {@link Usage} ids.
+     *
+     * @param usageIds list of {@link Usage} ids
+     * @return list of {@link Usage}s
+     */
+    List<Usage> getUsagesByIds(List<String> usageIds);
 }

@@ -66,7 +66,8 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public void loadItemBank(UsageBatch itemBank, List<Usage> usages) {
-        usageBatchService.insertSalBatch(itemBank, usages);
+        List<String> insertedUsageIds = usageBatchService.insertSalBatch(itemBank, usages);
+        salUsageService.sendForMatching(insertedUsageIds, itemBank.getName());
     }
 
     @Override
