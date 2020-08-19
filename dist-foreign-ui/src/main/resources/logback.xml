@@ -46,6 +46,7 @@
     <logger name="com.copyright.rup.dist.foreign.service.impl.eligibility.RhEligibilityChunkConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.matching.FasMatchingChunkConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.matching.AaclMatchingChunkConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.SalMatchingChunkConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.rights.chunk.FasRightsChunkConsumerConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.rights.chunk.NtsRightsChunkConsumerConsumer" level="${logLevelUsageProcessing}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.rights.chunk.AaclRightsChunkConsumerConsumer" level="${logLevelUsageProcessing}"/>

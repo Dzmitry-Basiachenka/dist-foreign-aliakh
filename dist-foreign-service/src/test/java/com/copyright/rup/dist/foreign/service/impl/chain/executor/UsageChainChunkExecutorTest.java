@@ -38,6 +38,7 @@ public class UsageChainChunkExecutorTest {
     private IChainProcessor<List<Usage>> fasProcessor;
     private IChainProcessor<List<Usage>> ntsProcessor;
     private IChainProcessor<List<Usage>> aaclProcessor;
+    private IChainProcessor<List<Usage>> salProcessor;
     private IChainProcessor<List<Usage>> fasEligibilityProcessor;
 
     @Before
@@ -47,10 +48,12 @@ public class UsageChainChunkExecutorTest {
         fasProcessor = createMock(IChainProcessor.class);
         ntsProcessor = createMock(IChainProcessor.class);
         aaclProcessor = createMock(IChainProcessor.class);
+        salProcessor = createMock(IChainProcessor.class);
         fasEligibilityProcessor = createMock(IChainProcessor.class);
         Whitebox.setInternalState(executor, "fasProcessor", fasProcessor);
         Whitebox.setInternalState(executor, "ntsProcessor", ntsProcessor);
         Whitebox.setInternalState(executor, "aaclProcessor", aaclProcessor);
+        Whitebox.setInternalState(executor, "salProcessor", salProcessor);
         Whitebox.setInternalState(executor, "chunkSize", 1);
         executor.init();
     }
@@ -69,6 +72,9 @@ public class UsageChainChunkExecutorTest {
         expect(aaclProcessor.getSuccessProcessor())
             .andReturn(new MockProcessor(JobStatusEnum.SKIPPED, "ProductFamily=AACL, Reason=There are no usages"))
             .once();
+        expect(salProcessor.getSuccessProcessor())
+            .andReturn(new MockProcessor(JobStatusEnum.SKIPPED, "ProductFamily=SAL, Reason=There are no usages"))
+            .once();
         expect(fasProcessor.getFailureProcessor())
             .andReturn(new MockProcessor())
             .times(2);
@@ -78,12 +84,16 @@ public class UsageChainChunkExecutorTest {
         expect(aaclProcessor.getFailureProcessor())
             .andReturn(new MockProcessor())
             .once();
-        replay(fasProcessor, ntsProcessor, aaclProcessor);
+        expect(salProcessor.getFailureProcessor())
+            .andReturn(new MockProcessor())
+            .once();
+        replay(fasProcessor, ntsProcessor, aaclProcessor, salProcessor);
         assertEquals(new JobInfo(JobStatusEnum.FINISHED,
                 "ProductFamily=FAS, UsagesCount=2; ProductFamily=FAS2, UsagesCount=5; " +
-                    "ProductFamily=NTS, Reason=There are no usages; ProductFamily=AACL, Reason=There are no usages"),
+                    "ProductFamily=NTS, Reason=There are no usages; ProductFamily=AACL, Reason=There are no usages; " +
+                    "ProductFamily=SAL, Reason=There are no usages"),
             executor.execute(ChainProcessorTypeEnum.RIGHTS));
-        verify(fasProcessor, ntsProcessor, aaclProcessor);
+        verify(fasProcessor, ntsProcessor, aaclProcessor, salProcessor);
     }
 
     @Test

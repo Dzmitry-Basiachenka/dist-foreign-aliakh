@@ -50,6 +50,9 @@ public class UsageChainChunkExecutor implements IChainExecutor<Usage> {
     @Autowired
     @Qualifier("df.service.aaclMatchingChunkProcessor")
     private IChainProcessor<List<Usage>> aaclProcessor;
+    @Autowired
+    @Qualifier("df.service.salMatchingChunkProcessor")
+    private IChainProcessor<List<Usage>> salProcessor;
     @Value("$RUP{dist.foreign.usages.chunk_size}")
     private Integer chunkSize;
 
@@ -66,7 +69,8 @@ public class UsageChainChunkExecutor implements IChainExecutor<Usage> {
             FdaConstants.FAS_PRODUCT_FAMILY, fasProcessor,
             FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasProcessor,
             FdaConstants.NTS_PRODUCT_FAMILY, ntsProcessor,
-            FdaConstants.AACL_PRODUCT_FAMILY, aaclProcessor);
+            FdaConstants.AACL_PRODUCT_FAMILY, aaclProcessor,
+            FdaConstants.SAL_PRODUCT_FAMILY, salProcessor);
     }
 
     @Override

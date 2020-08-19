@@ -73,4 +73,10 @@
         <property name="successProcessor" ref="df.service.aaclBaselineEligibilityChunkProcessor"/>
         <property name="failureProcessor" ref="df.service.deleteUsageChunkProcessor"/>
     </bean>
+
+    <!-- SAL processor -->
+
+    <bean id="df.service.salMatchingChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingChunkProcessor">
+        <property name="usageStatus" value="NEW"/>
+    </bean>
 </beans>
