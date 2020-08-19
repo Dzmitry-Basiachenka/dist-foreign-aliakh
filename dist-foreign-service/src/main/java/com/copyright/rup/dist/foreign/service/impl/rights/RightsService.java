@@ -5,7 +5,6 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.GrantPriority;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.RmsGrant;
-import com.copyright.rup.dist.common.domain.RmsGrant.RightStatusEnum;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
@@ -213,7 +212,7 @@ public class RightsService implements IRightsService {
                     .map(Usage::getWrWrkInst)
                     .collect(Collectors.toList());
                 Map<Long, List<RmsGrant>> wrWrkInstToGrants = rmsRightsService.getGrants(wrWrkInsts,
-                    batchPeriodEndDate, Collections.singleton(RightStatusEnum.GRANT.name()),
+                    batchPeriodEndDate, Collections.singleton(FdaConstants.RIGHT_STATUS_GRANT),
                     ImmutableSet.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE), getLicenseTypes(productFamily))
                     .stream()
                     .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
