@@ -33,6 +33,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -63,7 +64,10 @@ public class SalUsageFilterWidgetTest {
     private static final Long ACCOUNT_NUMBER = 12345678L;
     private static final String SAL_PRODUCT_FAMILY = "SAL";
 
-    private static final Set<UsageStatusEnum> SAL_STATUSES = ImmutableSet.of(UsageStatusEnum.NEW);
+    private static final Set<UsageStatusEnum> SAL_STATUSES =
+        ImmutableSet.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
+            UsageStatusEnum.RH_FOUND, UsageStatusEnum.WORK_NOT_GRANTED, UsageStatusEnum.RH_NOT_FOUND,
+            UsageStatusEnum.ELIGIBLE);
 
     private ISalUsageFilterController usagesFilterController;
     private SalUsageFilterWidget widget;
@@ -223,7 +227,7 @@ public class SalUsageFilterWidgetTest {
         ListDataProvider<UsageStatusEnum> listDataProvider =
             (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
         Collection<?> actualStatuses = listDataProvider.getItems();
-        assertEquals(1, actualStatuses.size());
+        assertEquals(7, actualStatuses.size());
         assertEquals(SAL_STATUSES, actualStatuses);
     }
 

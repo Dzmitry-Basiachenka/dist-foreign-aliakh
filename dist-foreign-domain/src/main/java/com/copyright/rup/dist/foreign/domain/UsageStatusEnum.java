@@ -33,6 +33,11 @@ public enum UsageStatusEnum {
     WORK_FOUND,
 
     /**
+     * Status for usages with work that is not granted.
+     */
+    WORK_NOT_GRANTED,
+
+    /**
      * Status for usages with rhAccountNumber not found in RMS.
      */
     RH_NOT_FOUND,
