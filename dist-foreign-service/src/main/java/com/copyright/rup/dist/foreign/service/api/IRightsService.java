@@ -48,6 +48,20 @@ public interface IRightsService {
     void updateAaclRights(List<Usage> usages);
 
     /**
+     * Sends Wr Wrk Inst to RMS to get Grants and updates usage status and usage RH based on response.
+     * <p>
+     * Sets usage status:
+     * <li>to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_FOUND} and updates RH if RH was found in
+     * RMS
+     * <li>to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_NOT_GRANTED} if RH was found, but right
+     * has {@link com.copyright.rup.dist.common.domain.RmsGrant.RightStatusEnum#DENY} status
+     * <li>to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} otherwise.
+     *
+     * @param usages list of {@link Usage} to update
+     */
+    void updateSalRights(List<Usage> usages);
+
+    /**
      * Finds list of {@link com.copyright.rup.dist.foreign.domain.Usage}s with
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND}
      * status and sends Wr Wrk Insts to RMS for rights assignment.

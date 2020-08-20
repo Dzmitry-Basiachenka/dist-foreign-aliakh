@@ -25,7 +25,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64')
             column(name: 'name', value: 'SAL usage batch 1')
-            column(name: 'payment_date', value: '2015-06-03')
+            column(name: 'payment_date', value: '2015-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
@@ -102,7 +102,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '56069b44-10b1-42d6-9a44-a3fae0029171')
             column(name: 'name', value: 'SAL usage batch 2')
-            column(name: 'payment_date', value: '2015-07-01')
+            column(name: 'payment_date', value: '2016-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
             column(name: 'sal_fields', value: '{"licensee_account_number": 1000000009, "licensee_name": "Tiger Publications"}')
