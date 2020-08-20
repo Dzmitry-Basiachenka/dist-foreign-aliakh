@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
@@ -44,6 +45,8 @@ abstract class AbstractUsageJobChunkProcessor extends AbstractUsageChainChunkPro
     private IUsageService usageService;
     @Autowired
     private IAaclUsageService aaclUsageService;
+    @Autowired
+    private ISalUsageService salUsageService;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private Integer usagesBatchSize;
 
@@ -92,7 +95,8 @@ abstract class AbstractUsageJobChunkProcessor extends AbstractUsageChainChunkPro
             FdaConstants.FAS_PRODUCT_FAMILY, fasNtsUsageLoader,
             FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasNtsUsageLoader,
             FdaConstants.NTS_PRODUCT_FAMILY, fasNtsUsageLoader,
-            FdaConstants.AACL_PRODUCT_FAMILY, ids -> aaclUsageService.getUsagesByIds(ids)
+            FdaConstants.AACL_PRODUCT_FAMILY, ids -> aaclUsageService.getUsagesByIds(ids),
+            FdaConstants.SAL_PRODUCT_FAMILY, ids -> salUsageService.getUsagesByIds(ids)
         );
     }
 

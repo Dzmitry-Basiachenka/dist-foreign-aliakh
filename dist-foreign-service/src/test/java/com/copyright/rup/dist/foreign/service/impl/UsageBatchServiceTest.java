@@ -29,6 +29,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -81,6 +82,7 @@ public class UsageBatchServiceTest {
     private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
     private IPiIntegrationService piIntegrationService;
+    private ISalUsageService salUsageService;
 
     @Before
     @SuppressWarnings("unchecked")
@@ -92,6 +94,7 @@ public class UsageBatchServiceTest {
         ntsUsageService = createMock(INtsUsageService.class);
         rightsholderService = createMock(IRightsholderService.class);
         piIntegrationService = createMock(IPiIntegrationService.class);
+        salUsageService = createMock(ISalUsageService.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, piIntegrationService);
         Whitebox.setInternalState(usageBatchService, usageBatchRepository);
@@ -100,6 +103,7 @@ public class UsageBatchServiceTest {
         Whitebox.setInternalState(usageBatchService, fasUsageService);
         Whitebox.setInternalState(usageBatchService, ntsUsageService);
         Whitebox.setInternalState(usageBatchService, rightsholderService);
+        Whitebox.setInternalState(usageBatchService, salUsageService);
     }
 
     @Test
@@ -244,6 +248,32 @@ public class UsageBatchServiceTest {
         assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
         assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
         verify(usageBatchRepository, aaclUsageService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testInsertSalBatch() {
+        mockStatic(RupContextUtils.class);
+        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(BATCH_NAME);
+        usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
+        usageBatch.setNumberOfBaselineYears(3);
+        Usage uploadedUsage = new Usage();
+        uploadedUsage.setId("945b9f3c-f878-44a2-9570-19e2053c529a");
+        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        usageBatchRepository.insert(capture(captureUsageBatch));
+        expectLastCall().once();
+        salUsageService.insertItemBankDetails(usageBatch, uploadedUsages);
+        expectLastCall().once();
+        replay(usageBatchRepository, salUsageService, RupContextUtils.class);
+        assertEquals(Collections.singletonList("945b9f3c-f878-44a2-9570-19e2053c529a"),
+            usageBatchService.insertSalBatch(usageBatch, uploadedUsages));
+        UsageBatch insertedItemBank = captureUsageBatch.getValue();
+        assertNotNull(insertedItemBank.getId());
+        assertEquals(USER_NAME, insertedItemBank.getCreateUser());
+        assertEquals(USER_NAME, insertedItemBank.getUpdateUser());
+        verify(usageBatchRepository, salUsageService, RupContextUtils.class);
     }
 
     @Test

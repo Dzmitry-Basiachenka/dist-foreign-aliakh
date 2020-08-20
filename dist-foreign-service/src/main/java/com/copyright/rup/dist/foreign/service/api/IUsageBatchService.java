@@ -95,8 +95,9 @@ public interface IUsageBatchService {
      *
      * @param usageBatch     {@link UsageBatch} to insert
      * @param uploadedUsages list of {@link Usage}s
+     * @return ids of inserted usages
      */
-    void insertSalBatch(UsageBatch usageBatch, List<Usage> uploadedUsages);
+    List<String> insertSalBatch(UsageBatch usageBatch, List<Usage> uploadedUsages);
 
     /**
      * Deletes given {@link UsageBatch} and all it's usage details.

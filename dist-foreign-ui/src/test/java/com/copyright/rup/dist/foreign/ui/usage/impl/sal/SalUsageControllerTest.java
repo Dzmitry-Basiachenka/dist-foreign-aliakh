@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -82,8 +83,10 @@ public class SalUsageControllerTest {
         IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
         Whitebox.setInternalState(controller, usageBatchService);
         UsageBatch itemBank = new UsageBatch();
+        List<String> usageIds = new ArrayList<>();
         List<Usage> usages = Collections.singletonList(new Usage());
-        usageBatchService.insertSalBatch(itemBank, usages);
+        expect(usageBatchService.insertSalBatch(itemBank, usages)).andReturn(usageIds).once();
+        salUsageService.sendForMatching(usageIds,itemBank.getName());
         expectLastCall().once();
         replay(usageBatchService);
         controller.loadItemBank(itemBank, usages);

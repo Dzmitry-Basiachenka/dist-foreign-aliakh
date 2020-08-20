@@ -166,7 +166,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public void insertSalBatch(UsageBatch usageBatch, List<Usage> uploadedUsages) {
+    public List<String> insertSalBatch(UsageBatch usageBatch, List<Usage> uploadedUsages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
@@ -177,6 +177,9 @@ public class UsageBatchService implements IUsageBatchService {
         salUsageService.insertItemBankDetails(usageBatch, uploadedUsages);
         LOGGER.info("Insert SAL batch. Finished. UsageBatchName={}, UserName={}, ItemBankDetailsCount={}",
             usageBatch.getName(), userName, LogUtils.size(uploadedUsages));
+        return uploadedUsages.stream()
+            .map(Usage::getId)
+            .collect(Collectors.toList());
     }
 
     @Override
