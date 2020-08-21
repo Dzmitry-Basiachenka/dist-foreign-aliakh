@@ -10,4 +10,5 @@ databaseChangeLog {
     include(file: 'changelog-9.groovy', relativeToChangelogFile: true)
     include(file: 'changelog-10.groovy', relativeToChangelogFile: true)
     include(file: 'changelog-11.groovy', relativeToChangelogFile: true)
+    include(file: 'changelog-12.groovy', relativeToChangelogFile: true)
 }

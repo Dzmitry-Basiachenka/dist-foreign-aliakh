@@ -40,6 +40,7 @@
         <result property="salUsage.questionIdentifier" column="question_identifier"/>
         <result property="salUsage.states" column="states"/>
         <result property="salUsage.numberOfViews" column="number_of_views"/>
+        <result property="salUsage.batchPeriodEndDate" column="batch_period_end_date"/>
     </resultMap>
 
     <resultMap id="salUsageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
@@ -78,6 +79,7 @@
         <result property="salUsage.questionIdentifier" column="question_identifier"/>
         <result property="salUsage.states" column="states"/>
         <result property="salUsage.numberOfViews" column="number_of_views"/>
+        <result property="salUsage.batchPeriodEndDate" column="batch_period_end_date"/>
     </resultMap>
 
     <sql id="salUsageColumns">
@@ -116,6 +118,7 @@
         usal.question_identifier,
         usal.states,
         usal.number_of_views,
+        ub.payment_date batch_period_end_date,
         u.created_datetime,
         u.updated_datetime,
         u.created_by_user,

@@ -52,6 +52,11 @@ public enum UsageActionTypeEnum {
     RH_NOT_FOUND,
 
     /**
+     * Action type for case when right for a work was found in RMS, but is denied for RH.
+     */
+    WORK_NOT_GRANTED,
+
+    /**
      * Action type for sending {@link Usage} to RMS for Rights Assignment.
      */
     SENT_FOR_RA,

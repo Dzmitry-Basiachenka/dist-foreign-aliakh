@@ -5,7 +5,7 @@
     "periodEndDate": [
       2015,
       6,
-      3
+      30
     ],
     "wrWrkInst": 269040891,
     "workTitle": "Science News for students",
@@ -43,7 +43,8 @@
       ],
       "questionIdentifier": "SB9",
       "states": "CA,WV",
-      "numberOfViews": 1765
+      "numberOfViews": 1765,
+      "batchPeriodEndDate": "2015-06-30"
     },
     "createDate": 1423915200000,
     "updateDate": 1423915200000,

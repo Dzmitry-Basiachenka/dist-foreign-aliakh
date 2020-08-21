@@ -238,6 +238,7 @@ public class SalUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
         assertEquals(expectedUsage.getScoredAssessmentDate(), actualUsage.getScoredAssessmentDate());
         assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
+        assertEquals(expectedUsage.getBatchPeriodEndDate(), actualUsage.getBatchPeriodEndDate());
     }
 
     private void assertFindDtosByFilterSort(String detailId, String sortProperty, Sort.Direction sortDirection) {

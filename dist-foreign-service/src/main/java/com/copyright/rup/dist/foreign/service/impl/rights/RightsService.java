@@ -30,6 +30,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
@@ -66,6 +67,7 @@ public class RightsService implements IRightsService {
     private static final String NTS_WITHDRAWN_AUDIT_MESSAGE =
         "Detail was made eligible for NTS because sum of gross amounts, grouped by Wr Wrk Inst, is less than $100";
     private static final Logger LOGGER = RupLogUtils.getLogger();
+    private static final String RH_FOUND_REASON_FORMAT = "Rightsholder account %s was found in RMS";
 
     @Autowired
     private IUsageBatchService usageBatchService;
@@ -188,7 +190,7 @@ public class RightsService implements IRightsService {
                     usage.setStatus(UsageStatusEnum.RH_FOUND);
                     usageService.updateProcessedUsage(usage);
                     logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
-                        String.format("Rightsholder account %s was found in RMS", rhAccountNumber), logAction);
+                        String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber), logAction);
                 } else {
                     usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
                     usageService.updateProcessedUsage(usage);
@@ -234,7 +236,7 @@ public class RightsService implements IRightsService {
                             DIGITAL_TYPE_OF_USE.equals(grant.getTypeOfUse()) ? "ALL" : PRINT_TYPE_OF_USE);
                         aaclUsageService.updateProcessedUsage(usage);
                         logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
-                            String.format("Rightsholder account %s was found in RMS", rhAccountNumber), true);
+                            String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber), true);
                     } else {
                         usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
                     }
@@ -243,8 +245,72 @@ public class RightsService implements IRightsService {
         }
     }
 
+    @Override
+    @Transactional
+    public void updateSalRights(List<Usage> usages) {
+        if (CollectionUtils.isNotEmpty(usages)) {
+            String productFamily = validateAndGetProductFamily(usages);
+            Map<LocalDate, List<Usage>> batchPeriodEndDatesToUsages = usages
+                .stream()
+                .collect(Collectors.groupingBy(usage -> usage.getSalUsage().getBatchPeriodEndDate()));
+            batchPeriodEndDatesToUsages.forEach((batchPeriodEndDate, groupedUsages) -> {
+                List<Long> wrWrkInsts = groupedUsages
+                    .stream()
+                    .map(Usage::getWrWrkInst)
+                    .collect(Collectors.toList());
+                Map<Long, List<RmsGrant>> wrWrkInstToGrants = rmsRightsService.getGrants(wrWrkInsts,
+                    batchPeriodEndDate, Sets.newHashSet(RightStatusEnum.GRANT.name(), RightStatusEnum.DENY.name()),
+                    ImmutableSet.of(DIGITAL_TYPE_OF_USE), getLicenseTypes(productFamily))
+                    .stream()
+                    .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
+                groupedUsages.forEach(usage -> {
+                    Long wrWrkInst = usage.getWrWrkInst();
+                    Set<RmsGrant> eligibleGrants = wrWrkInstToGrants
+                        .getOrDefault(wrWrkInst, Collections.emptyList())
+                        .stream()
+                        .filter(grant -> FdaConstants.SAL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
+                        .collect(Collectors.toSet());
+                    RmsGrant grant = ObjectUtils.defaultIfNull(
+                        findGrantByStatus(eligibleGrants, RightStatusEnum.GRANT),
+                        findGrantByStatus(eligibleGrants, RightStatusEnum.DENY));
+                    if (Objects.nonNull(grant)) {
+                        Long rhAccountNumber = grant.getWorkGroupOwnerOrgNumber().longValueExact();
+                        if (RightStatusEnum.GRANT == grant.getRightStatus()) {
+                            usage.setRightsholder(buildRightsholder(rhAccountNumber));
+                            usage.setStatus(UsageStatusEnum.RH_FOUND);
+                            usageService.updateProcessedUsage(usage);
+                            logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_FOUND,
+                                String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber), true);
+                        } else {
+                            usage.setStatus(UsageStatusEnum.WORK_NOT_GRANTED);
+                            usageService.updateProcessedUsage(usage);
+                            logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.WORK_NOT_GRANTED,
+                                String.format("Right for %s is denied for rightsholder account %s",
+                                    wrWrkInst, rhAccountNumber), true);
+                        }
+                    } else {
+                        usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                        usageService.updateProcessedUsage(usage);
+                        logAction(Collections.singleton(usage.getId()), UsageActionTypeEnum.RH_NOT_FOUND,
+                            String.format("Rightsholder account for %s was not found in RMS", wrWrkInst), true);
+                    }
+                });
+            });
+        }
+    }
+
     private RmsGrant findGrantByTypeOfUse(Set<RmsGrant> grants, String typeOfUse) {
-        return grants.stream().filter(rmsGrant -> typeOfUse.equals(rmsGrant.getTypeOfUse())).findFirst().orElse(null);
+        return grants.stream()
+            .filter(rmsGrant -> typeOfUse.equals(rmsGrant.getTypeOfUse()))
+            .findFirst()
+            .orElse(null);
+    }
+
+    private RmsGrant findGrantByStatus(Set<RmsGrant> grants, RightStatusEnum rightStatus) {
+        return grants.stream()
+            .filter(rmsGrant -> rightStatus == rmsGrant.getRightStatus())
+            .findFirst()
+            .orElse(null);
     }
 
     private void updateNtsWithdrawnUsages() {
@@ -292,7 +358,7 @@ public class RightsService implements IRightsService {
             Set<String> usageIds = usagesToUpdate.stream().map(Usage::getId).collect(Collectors.toSet());
             usageService.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.RH_FOUND, rhAccountNumber);
             auditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
-                String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
+                String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber));
             chainExecutor.execute(usagesToUpdate, ChainProcessorTypeEnum.ELIGIBILITY);
         });
         rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));

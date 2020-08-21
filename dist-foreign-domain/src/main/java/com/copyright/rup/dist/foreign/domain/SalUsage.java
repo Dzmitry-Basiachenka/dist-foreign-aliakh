@@ -41,6 +41,7 @@ public class SalUsage {
     private String questionIdentifier;
     private String states;
     private Integer numberOfViews;
+    private LocalDate batchPeriodEndDate;
 
     public Long getLicenseeAccountNumber() {
         return licenseeAccountNumber;
@@ -218,6 +219,14 @@ public class SalUsage {
         this.numberOfViews = numberOfViews;
     }
 
+    public LocalDate getBatchPeriodEndDate() {
+        return batchPeriodEndDate;
+    }
+
+    public void setBatchPeriodEndDate(LocalDate batchPeriodEndDate) {
+        this.batchPeriodEndDate = batchPeriodEndDate;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -250,6 +259,7 @@ public class SalUsage {
             .append(this.questionIdentifier, that.questionIdentifier)
             .append(this.states, that.states)
             .append(this.numberOfViews, that.numberOfViews)
+            .append(this.batchPeriodEndDate, that.batchPeriodEndDate)
             .isEquals();
     }
 
@@ -278,6 +288,7 @@ public class SalUsage {
             .append(questionIdentifier)
             .append(states)
             .append(numberOfViews)
+            .append(batchPeriodEndDate)
             .toHashCode();
     }
 
@@ -306,6 +317,7 @@ public class SalUsage {
             .append("questionIdentifier", questionIdentifier)
             .append("states", states)
             .append("numberOfViews", numberOfViews)
+            .append("batchPeriodEndDate", batchPeriodEndDate)
             .toString();
     }
 }
