@@ -24,6 +24,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -38,7 +39,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -71,8 +72,18 @@ public class LoadSalUsagesIntegrationTest {
     @Autowired
     private ServiceTestHelper testHelper;
 
+    private Map<String, String> commentToUsageIdMap;
+
     @Test
     public void testLoadUsages() throws Exception {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/rms_grants_122769471_request.json",
+            "rights/rms_grants_122769471_response.json");
+        testHelper.expectGetRmsRights("rights/rms_grants_243618757_request.json",
+            "rights/rms_grants_243618757_response.json");
+        testHelper.expectGetRmsRights("rights/rms_grants_140160102_request.json",
+            "rights/rms_grants_empty_response.json");
+        testHelper.expectPrmCall("prm/rightsholder_1000000322_response.json", 1000000322L);
         loadUsageBatch();
         assertUsages();
         assertAudit();
@@ -84,7 +95,15 @@ public class LoadSalUsagesIntegrationTest {
         ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
         assertTrue(result.isSuccessful());
         List<Usage> usages = result.get();
-        usageBatchService.insertSalBatch(batch, usages);
+        List<String> insertedUsageIds = usageBatchService.insertSalBatch(batch, usages);
+        List<Usage> actualUsages = salUsageService.getUsagesByIds(insertedUsageIds);
+        commentToUsageIdMap = actualUsages.stream()
+            .collect(Collectors.toMap(Usage::getComment, Usage::getId));
+        List<String> orderedIds = actualUsages.stream()
+            .sorted(Comparator.comparing(Usage::getComment))
+            .map(Usage::getId)
+            .collect(Collectors.toList());
+        salUsageService.sendForMatching(orderedIds, batch.getName());
     }
 
     private UsageBatch buildUsageBatch() {
@@ -152,9 +171,24 @@ public class LoadSalUsagesIntegrationTest {
     }
 
     private void assertAudit() {
-        List<UsageAuditItem> audit =
-            buildUsageAuditItems(Collections.singletonMap(UsageActionTypeEnum.LOADED, UPLOADED_REASON));
-        getActualUsages().stream().map(UsageDto::getId).forEach(id -> testHelper.assertAudit(id, audit));
+        testHelper.assertAudit(commentToUsageIdMap.get("usage1"), buildUsageAuditItems(ImmutableMap.of(
+            UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible",
+            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000000322 was found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 122769471 was found in PI",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(commentToUsageIdMap.get("usage2"), buildUsageAuditItems(ImmutableMap.of(
+            UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible",
+            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000000322 was found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 122769471 was found in PI",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(commentToUsageIdMap.get("usage3"), buildUsageAuditItems(ImmutableMap.of(
+            UsageActionTypeEnum.WORK_NOT_GRANTED, "Right for 243618757 is denied for rightsholder account 1000000322",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 243618757 was found in PI",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
+        testHelper.assertAudit(commentToUsageIdMap.get("usage4"), buildUsageAuditItems(ImmutableMap.of(
+            UsageActionTypeEnum.RH_NOT_FOUND, "Rightsholder account for 140160102 was not found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 140160102 was found in PI",
+            UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
     }
 
     private List<UsageAuditItem> buildUsageAuditItems(Map<UsageActionTypeEnum, String> map) {

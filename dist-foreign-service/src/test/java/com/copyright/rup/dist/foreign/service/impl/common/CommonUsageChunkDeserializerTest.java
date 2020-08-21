@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
@@ -40,14 +41,53 @@ public class CommonUsageChunkDeserializerTest {
     }
 
     @Test
-    public void testDeserializeMessage() throws Exception {
+    public void testDeserializeMessageFas() throws Exception {
         JsonParser parser = new JsonFactory().createParser(
-            TestUtils.fileToString(this.getClass(), "usage_message.json"));
+            TestUtils.fileToString(this.getClass(), "usage_message_fas.json"));
         parser.setCodec(new ObjectMapper());
-        assertEquals(buildUsages(), deserializer.deserialize(parser, null));
+        assertEquals(buildFasUsages(), deserializer.deserialize(parser, null));
     }
 
-    private List<Usage> buildUsages() {
+    @Test
+    public void testDeserializeMessageAacl() throws Exception {
+        JsonParser parser = new JsonFactory().createParser(
+            TestUtils.fileToString(this.getClass(), "usage_message_aacl.json"));
+        parser.setCodec(new ObjectMapper());
+        assertEquals(buildAaclUsages(), deserializer.deserialize(parser, null));
+    }
+
+    @Test
+    public void testDeserializeMessageSal() throws Exception {
+        JsonParser parser = new JsonFactory().createParser(
+            TestUtils.fileToString(this.getClass(), "usage_message_sal.json"));
+        parser.setCodec(new ObjectMapper());
+        assertEquals(buildSalUsages(), deserializer.deserialize(parser, null));
+    }
+
+    private List<Usage> buildFasUsages() {
+        Usage usage = buildUsage();
+        usage.setProductFamily("FAS");
+        return Collections.singletonList(usage);
+    }
+
+    private List<Usage> buildAaclUsages() {
+        Usage usage = buildUsage();
+        usage.setProductFamily("AACL");
+        usage.setAaclUsage(new AaclUsage());
+        usage.getAaclUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
+        usage.getAaclUsage().setBaselineId("e98d77bf-af0a-4c40-a46a-f211607e239f");
+        return Collections.singletonList(usage);
+    }
+
+    private List<Usage> buildSalUsages() {
+        Usage usage = buildUsage();
+        usage.setProductFamily("SAL");
+        usage.setSalUsage(new SalUsage());
+        usage.getSalUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
+        return Collections.singletonList(usage);
+    }
+
+    private Usage buildUsage() {
         Usage usage = new Usage();
         usage.setId("ac00c194-5363-463a-a718-ff02643aebf3");
         usage.setBatchId("5da597e4-f418-4b70-b43a-7990e82e6367");
@@ -58,12 +98,9 @@ public class CommonUsageChunkDeserializerTest {
         usage.setWorkTitle("True directions : living your sacred instructions");
         usage.setSystemTitle("True directions : living your sacred instructions");
         usage.setStatus(UsageStatusEnum.WORK_FOUND);
-        usage.setProductFamily("AACL");
-        usage.setAaclUsage(new AaclUsage());
-        usage.getAaclUsage().setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
-        usage.getAaclUsage().setBaselineId("e98d77bf-af0a-4c40-a46a-f211607e239f");
         usage.setRightsholder(buildRightsholder());
-        return Collections.singletonList(usage);
+        usage.setVersion(99);
+        return usage;
     }
 
     private Rightsholder buildRightsholder() {

@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
+@TestPropertySource(properties = {"test.liquibase.changelog=sal-workflow-data-init.groovy"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class SalWorkflowIntegrationTest {
 
@@ -46,17 +48,26 @@ public class SalWorkflowIntegrationTest {
             .withProductFamily(SAL_PRODUCT_FAMILY)
             .withUsagesCsvFile("usage/sal/sal_item_bank_usages_for_workflow.csv", USAGE_ID_1, USAGE_ID_2, USAGE_ID_3)
             .withUsageBatch(buildItemBank())
+            .expectRmsRights("rights/rms_grants_122769471_request.json", "rights/rms_grants_122769471_response.json")
+            .expectRmsRights("rights/rms_grants_243618757_request.json", "rights/rms_grants_243618757_response.json")
+            .expectRmsRights("rights/rms_grants_140160102_request.json", "rights/rms_grants_empty_response.json")
             .expectUsages("usage/sal/sal_expected_item_bank_usages_for workflow.json", 3)
             .expectUsageAudit(USAGE_ID_1, Arrays.asList(
-                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100011725 was found in PI"),
+                buildAuditItem(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
+                buildAuditItem(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000000322 was found in RMS"),
+                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 122769471 was found in PI"),
                 buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
             ))
             .expectUsageAudit(USAGE_ID_2, Arrays.asList(
-                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 100011821 was found in PI"),
+                buildAuditItem(UsageActionTypeEnum.WORK_NOT_GRANTED,
+                    "Right for 243618757 is denied for rightsholder account 1000000322"),
+                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 243618757 was found in PI"),
                 buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
             ))
             .expectUsageAudit(USAGE_ID_3, Arrays.asList(
-                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 123456789 was found in PI"),
+                buildAuditItem(UsageActionTypeEnum.RH_NOT_FOUND,
+                    "Rightsholder account for 140160102 was not found in RMS"),
+                buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 140160102 was found in PI"),
                 buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
             ))
             .build()

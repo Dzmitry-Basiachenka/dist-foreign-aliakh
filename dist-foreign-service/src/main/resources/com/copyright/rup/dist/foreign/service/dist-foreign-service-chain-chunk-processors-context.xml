@@ -78,5 +78,11 @@
 
     <bean id="df.service.salMatchingChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingChunkProcessor">
         <property name="usageStatus" value="NEW"/>
+        <property name="successProcessor" ref="df.service.salRightsChunkProcessor"/>
+    </bean>
+
+    <bean id="df.service.salRightsChunkProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsChunkProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.commonEligibilityChunkProcessor"/>
     </bean>
 </beans>
