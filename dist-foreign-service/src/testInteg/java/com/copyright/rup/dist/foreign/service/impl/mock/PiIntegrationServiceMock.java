@@ -17,6 +17,7 @@ import java.util.Objects;
 public class PiIntegrationServiceMock extends PiIntegrationService {
 
     private static final String VALISSN = "VALISSN";
+    private static final String VALISBN13 = "VALISBN13";
     private static final String TITLE_1 = "At-risk youth : a comprehensive response : for counselors teachers " +
         "psychologists and human service professionals";
     private static final String TITLE_2 =
@@ -34,7 +35,7 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
         } else if (Objects.equals("1906011", idno)) {
             work = new Work(292891647L, "Solar Cells", idno, VALISSN);
         } else if (Objects.equals("12345XX-12978", idno)) {
-            work = new Work(100012905L, TITLE_1, idno, "VALISBN13");
+            work = new Work(100012905L, TITLE_1, idno, VALISBN13);
         }
         return work;
     }
@@ -66,6 +67,12 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
             work = new Work(658824345L, "Medical Journal", "1008902112377654XX", VALISSN);
         } else if (Objects.equals(854030732L, wrWrkInst)) {
             work = new Work(854030732L, "Technical Journal", "2998622115929154XX", VALISSN);
+        } else if (Objects.equals(122769471L, wrWrkInst)) {
+            work = new Work(122769471L, "life and death of Mozart", "978-0-7474-0150-6", VALISBN13);
+        } else if (Objects.equals(243618757L, wrWrkInst)) {
+            work = new Work(243618757L, "Midbus", "978-0-947731-91-5", VALISBN13);
+        } else if (Objects.equals(140160102L, wrWrkInst)) {
+            work = new Work(140160102L, "Rimas", "978-84-08-04782-7", VALISBN13);
         }
         return work;
     }

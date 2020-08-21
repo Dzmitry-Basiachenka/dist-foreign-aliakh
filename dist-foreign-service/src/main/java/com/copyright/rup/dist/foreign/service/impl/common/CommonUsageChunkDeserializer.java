@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
@@ -74,6 +75,10 @@ public class CommonUsageChunkDeserializer extends JsonDeserializer<List<Usage>> 
             usage.getAaclUsage()
                 .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get("batch_period_end_date")));
             usage.getAaclUsage().setBaselineId(JsonUtils.getStringValue(jsonNode.get("baselineId")));
+        } else if (FdaConstants.SAL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+            usage.setSalUsage(new SalUsage());
+            usage.getSalUsage()
+                .setBatchPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get("batch_period_end_date")));
         }
         usage.setVersion(JsonUtils.getIntegerValue(jsonNode.get("record_version")));
         return usage;

@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -54,6 +55,7 @@ import java.util.stream.Collectors;
 public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     private final Map<String, List<UsageAuditItem>> expectedUsageCommentToAuditMap = Maps.newHashMap();
+    private final Map<String, String> expectedRmsRequestsToResponses = new LinkedHashMap<>();
     private List<String> predefinedUsageIds;
     private String usagesCsvFile;
     private String productFamily;
@@ -83,6 +85,11 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     SalWorkflowIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
         this.usageBatch = batch;
+        return this;
+    }
+
+    SalWorkflowIntegrationTestBuilder expectRmsRights(String rmsRequest, String rmsResponse) {
+        this.expectedRmsRequestsToResponses.put(rmsRequest, rmsResponse);
         return this;
     }
 
@@ -119,6 +126,8 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private List<UsageDto> actualUsages;
 
         public void run() throws IOException {
+            testHelper.createRestServer();
+            testHelper.expectGetRmsRights(expectedRmsRequestsToResponses);
             loadUsageBatch();
             UsageFilter filter = new UsageFilter();
             filter.setProductFamily(productFamily);
@@ -126,6 +135,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             actualUsages = salUsageService.getUsageDtos(filter, null, null);
             verifyUsages();
             expectedUsageCommentToAuditMap.forEach(testHelper::assertAudit);
+            testHelper.verifyRestServer();
         }
 
         private void loadUsageBatch() throws IOException {

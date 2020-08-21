@@ -72,6 +72,8 @@ public class CommonUsageChunkSerializer extends StdSerializer<List<Usage>> {
             if (FdaConstants.AACL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
                 writeNotNullField(jsonGenerator, "batch_period_end_date", usage.getAaclUsage().getBatchPeriodEndDate());
                 writeNotNullField(jsonGenerator, "baselineId", usage.getAaclUsage().getBaselineId());
+            } else if (FdaConstants.SAL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+                writeNotNullField(jsonGenerator, "batch_period_end_date", usage.getSalUsage().getBatchPeriodEndDate());
             }
             jsonGenerator.writeNumberField("record_version", usage.getVersion());
         }

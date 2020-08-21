@@ -56,6 +56,7 @@
     <bean id="usageChainChunkExecutor" class="com.copyright.rup.dist.foreign.service.impl.mock.chunk.UsageChainChunkExecutorMock"/>
 
     <bean id="aaclUsageService" class="com.copyright.rup.dist.foreign.service.impl.mock.AaclUsageServiceMock"/>
+    <bean id="salUsageService" class="com.copyright.rup.dist.foreign.service.impl.mock.SalUsageServiceMock"/>
 
     <bean id="usageService" class="com.copyright.rup.dist.foreign.service.impl.mock.UsageServiceMock"/>
 
