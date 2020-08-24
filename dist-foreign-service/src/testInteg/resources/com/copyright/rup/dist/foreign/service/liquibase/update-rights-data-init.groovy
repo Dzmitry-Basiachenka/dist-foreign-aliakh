@@ -386,7 +386,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-08-20-00', author: 'Stanislau Rudak<srudak@copyright.com>') {
-        comment('Inserting test data for UpdateSalRights test')
+        comment('Inserting test data for testUpdateSalRights test')
 
         insert(schemaName: "apps", tableName: "df_usage_batch") {
             column(name: "df_usage_batch_uid", value: "73ebd1d1-20f7-41ce-84e7-e064034e7564")

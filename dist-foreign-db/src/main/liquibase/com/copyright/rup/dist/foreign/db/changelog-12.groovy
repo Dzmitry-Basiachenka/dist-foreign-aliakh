@@ -14,18 +14,9 @@ databaseChangeLog {
             column(name: 'license_type', value: 'SAL')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
-            column(name: 'df_grant_priority_uid', value: '7e46693e-ec28-405d-9c82-5811d0f5c8bd')
-            column(name: 'product_family', value: 'SAL')
-            column(name: 'grant_product_family', value: 'SAL')
-            column(name: 'type_of_use', value: 'PRINT')
-            column(name: 'priority', value: '1')
-            column(name: 'license_type', value: 'SAL')
-        }
-
         rollback {
             delete(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
-                where "df_grant_priority_uid in ('84c12ad6-a2b0-41e6-be90-9142f8f2a830','7e46693e-ec28-405d-9c82-5811d0f5c8bd')"
+                where "df_grant_priority_uid = '84c12ad6-a2b0-41e6-be90-9142f8f2a830'"
             }
         }
     }

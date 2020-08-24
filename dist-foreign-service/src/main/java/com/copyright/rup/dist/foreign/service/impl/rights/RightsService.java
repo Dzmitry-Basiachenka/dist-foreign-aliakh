@@ -66,8 +66,8 @@ public class RightsService implements IRightsService {
     private static final String DIGITAL_TYPE_OF_USE = "DIGITAL";
     private static final String NTS_WITHDRAWN_AUDIT_MESSAGE =
         "Detail was made eligible for NTS because sum of gross amounts, grouped by Wr Wrk Inst, is less than $100";
-    private static final Logger LOGGER = RupLogUtils.getLogger();
     private static final String RH_FOUND_REASON_FORMAT = "Rightsholder account %s was found in RMS";
+    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     private IUsageBatchService usageBatchService;

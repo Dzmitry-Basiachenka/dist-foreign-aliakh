@@ -63,7 +63,6 @@ public class SalUsageFilterWidgetTest {
 
     private static final Long ACCOUNT_NUMBER = 12345678L;
     private static final String SAL_PRODUCT_FAMILY = "SAL";
-
     private static final Set<UsageStatusEnum> SAL_STATUSES =
         ImmutableSet.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND,
             UsageStatusEnum.WORK_NOT_GRANTED, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.ELIGIBLE);
