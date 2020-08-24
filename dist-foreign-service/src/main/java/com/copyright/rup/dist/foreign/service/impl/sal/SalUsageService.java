@@ -75,8 +75,8 @@ public class SalUsageService implements ISalUsageService {
     public void insertItemBankDetails(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
-        LOGGER.info("Insert SAL usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
-            size, userName);
+        LOGGER.info("Insert SAL item bank details. Started. UsageBatchName={}, UsagesCount={}, UserName={}",
+            usageBatch.getName(), size, userName);
         usages.forEach(usage -> {
             usage.setBatchId(usageBatch.getId());
             usage.setCreateUser(userName);
@@ -85,7 +85,7 @@ public class SalUsageService implements ISalUsageService {
         });
         String loadedReason = "Uploaded in '" + usageBatch.getName() + "' Batch";
         usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason));
-        LOGGER.info("Insert SAL usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}",
+        LOGGER.info("Insert SAL item bank details. Finished. UsageBatchName={}, UsagesCount={}, UserName={}",
             usageBatch.getName(), size, userName);
     }
 
