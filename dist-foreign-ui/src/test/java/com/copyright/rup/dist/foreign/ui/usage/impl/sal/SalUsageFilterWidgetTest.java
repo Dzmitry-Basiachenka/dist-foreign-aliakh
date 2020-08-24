@@ -65,9 +65,8 @@ public class SalUsageFilterWidgetTest {
     private static final String SAL_PRODUCT_FAMILY = "SAL";
 
     private static final Set<UsageStatusEnum> SAL_STATUSES =
-        ImmutableSet.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
-            UsageStatusEnum.RH_FOUND, UsageStatusEnum.WORK_NOT_GRANTED, UsageStatusEnum.RH_NOT_FOUND,
-            UsageStatusEnum.ELIGIBLE);
+        ImmutableSet.of(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND,
+            UsageStatusEnum.WORK_NOT_GRANTED, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.ELIGIBLE);
 
     private ISalUsageFilterController usagesFilterController;
     private SalUsageFilterWidget widget;
@@ -227,7 +226,7 @@ public class SalUsageFilterWidgetTest {
         ListDataProvider<UsageStatusEnum> listDataProvider =
             (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
         Collection<?> actualStatuses = listDataProvider.getItems();
-        assertEquals(7, actualStatuses.size());
+        assertEquals(6, actualStatuses.size());
         assertEquals(SAL_STATUSES, actualStatuses);
     }
 
