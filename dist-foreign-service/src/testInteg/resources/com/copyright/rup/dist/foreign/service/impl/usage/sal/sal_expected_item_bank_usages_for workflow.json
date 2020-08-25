@@ -100,5 +100,37 @@
       "reportedVolNumberSeries": "55(2)",
       "coverageYear": "2014-2016"
     }
+  },
+  {
+    "id": "be80c884-1008-4e12-869c-1c094218803f",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 963852741,
+    "standardNumberType": "VALISBN13",
+    "workTitle": "Bonnie Blair: Top Speed Skater",
+    "status": "WORK_NOT_FOUND",
+    "productFamily": "SAL",
+    "comment": "usage4",
+    "salUsage": {
+      "assessmentName": "Spring2014 Eng Lang/Mathy",
+      "grade": "2",
+      "detailType": "IB",
+      "reportedMediaType": "Text",
+      "mediaTypeWeight": "1.0",
+      "reportedStandardNumber": "1040-1776",
+      "reportedWorkPortionId": "4",
+      "reportedAuthor": "Linda J. S. Allen",
+      "reportedPublisher": "Rosen",
+      "reportedPublicationDate": [
+        2010,
+        7,
+        9
+      ],
+      "reportedPageRange": "25-30",
+      "reportedVolNumberSeries": "55(2)",
+      "coverageYear": "2014-2016"
+    }
   }
 ]

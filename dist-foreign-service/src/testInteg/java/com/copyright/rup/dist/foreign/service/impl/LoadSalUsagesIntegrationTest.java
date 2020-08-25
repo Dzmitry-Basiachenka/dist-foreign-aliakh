@@ -177,9 +177,7 @@ public class LoadSalUsagesIntegrationTest {
             UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 122769471 was found in PI",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.assertAudit(commentToUsageIdMap.get("usage2"), buildUsageAuditItems(ImmutableMap.of(
-            UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible",
-            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000000322 was found in RMS",
-            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 122769471 was found in PI",
+            UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 963852741 was not found in PI",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
         testHelper.assertAudit(commentToUsageIdMap.get("usage3"), buildUsageAuditItems(ImmutableMap.of(
             UsageActionTypeEnum.WORK_NOT_GRANTED, "Right for 243618757 is denied for rightsholder account 1000000322",
