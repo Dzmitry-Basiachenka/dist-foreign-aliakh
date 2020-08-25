@@ -125,7 +125,7 @@ public class CommonUsageChunkSerializerTest {
         usage.setSystemTitle("True directions : living your sacred instructions");
         usage.setStatus(UsageStatusEnum.WORK_FOUND);
         usage.setRightsholder(buildRightsholder());
-        usage.setVersion(99);
+        usage.setVersion(5);
         return usage;
     }
 
