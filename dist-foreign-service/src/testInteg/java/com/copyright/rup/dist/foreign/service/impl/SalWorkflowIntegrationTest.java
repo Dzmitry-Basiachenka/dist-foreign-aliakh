@@ -35,6 +35,7 @@ public class SalWorkflowIntegrationTest {
     private static final String USAGE_ID_1 = "6c59d64f-a56e-4ca8-a914-a8ac299c6082";
     private static final String USAGE_ID_2 = "98d17e37-2900-4478-b105-6dd99f48d22b";
     private static final String USAGE_ID_3 = "47d1a298-18bd-4432-a04b-fd958732a87f";
+    private static final String USAGE_ID_4 = "be80c884-1008-4e12-869c-1c094218803f";
     private static final String UPLOADED_REASON = "Uploaded in 'SAL test batch' Batch";
     private static final String SAL_PRODUCT_FAMILY = "SAL";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2019, 6, 30);
@@ -46,12 +47,13 @@ public class SalWorkflowIntegrationTest {
     public void testSalWorkflow() throws IOException {
         testBuilder
             .withProductFamily(SAL_PRODUCT_FAMILY)
-            .withUsagesCsvFile("usage/sal/sal_item_bank_usages_for_workflow.csv", USAGE_ID_1, USAGE_ID_2, USAGE_ID_3)
+            .withUsagesCsvFile("usage/sal/sal_item_bank_usages_for_workflow.csv", USAGE_ID_1, USAGE_ID_2, USAGE_ID_3,
+                USAGE_ID_4)
             .withUsageBatch(buildItemBank())
             .expectRmsRights("rights/rms_grants_122769471_request.json", "rights/rms_grants_122769471_response.json")
             .expectRmsRights("rights/rms_grants_243618757_request.json", "rights/rms_grants_243618757_response.json")
             .expectRmsRights("rights/rms_grants_140160102_request.json", "rights/rms_grants_empty_response.json")
-            .expectUsages("usage/sal/sal_expected_item_bank_usages_for workflow.json", 3)
+            .expectUsages("usage/sal/sal_expected_item_bank_usages_for workflow.json", 4)
             .expectUsageAudit(USAGE_ID_1, Arrays.asList(
                 buildAuditItem(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
                 buildAuditItem(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000000322 was found in RMS"),
@@ -68,6 +70,10 @@ public class SalWorkflowIntegrationTest {
                 buildAuditItem(UsageActionTypeEnum.RH_NOT_FOUND,
                     "Rightsholder account for 140160102 was not found in RMS"),
                 buildAuditItem(UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 140160102 was found in PI"),
+                buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
+            ))
+            .expectUsageAudit(USAGE_ID_4, Arrays.asList(
+                buildAuditItem(UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 963852741 was not found in PI"),
                 buildAuditItem(UsageActionTypeEnum.LOADED, UPLOADED_REASON)
             ))
             .build()

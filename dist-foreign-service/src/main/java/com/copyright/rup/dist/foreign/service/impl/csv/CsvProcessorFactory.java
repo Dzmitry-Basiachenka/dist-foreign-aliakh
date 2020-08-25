@@ -103,9 +103,7 @@ public class CsvProcessorFactory {
      */
     public SalUsageCsvProcessor getSalUsageCsvProcessor() {
         SalUsageCsvProcessor processor = new SalUsageCsvProcessor();
-        processor.addBusinessValidators(
-            new WrWrkInstValidator(piIntegrationService),
-            new WorkPortionIdValidator(salUsageService));
+        processor.addBusinessValidators(new WorkPortionIdValidator(salUsageService));
         return processor;
     }
 }
