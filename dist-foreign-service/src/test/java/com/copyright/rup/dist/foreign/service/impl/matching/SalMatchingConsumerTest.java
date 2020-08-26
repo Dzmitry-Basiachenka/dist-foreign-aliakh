@@ -11,7 +11,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainChunkProcessor;
@@ -42,6 +41,7 @@ public class SalMatchingConsumerTest {
     private static final String TITLE = "Red Riding Hood's maths adventure";
     private static final String STANDARD_NUMBER = "978-0-7112-1567-2";
     private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
+    private static final String USAGE_ID = "49ead60e-97f4-47c8-8ebe-d19d07457cca";
 
     private final SalMatchingChunkConsumer consumer = new SalMatchingChunkConsumer();
     private IChainChunkProcessor<List<Usage>, Usage> matchingProcessor;
@@ -62,13 +62,13 @@ public class SalMatchingConsumerTest {
         expectLastCall().once();
         replay(matchingProcessor);
         consumer.consume(usages);
-        verify(matchingProcessor);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(VALID_WR_WRK_INST, usage.getWrWrkInst());
         assertEquals(TITLE, usage.getSystemTitle());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         assertEquals(STANDARD_NUMBER_TYPE, usage.getStandardNumberType());
         assertTrue(successPredicateCapture.getValue().test(usage));
+        verify(matchingProcessor);
     }
 
     @Test
@@ -80,18 +80,18 @@ public class SalMatchingConsumerTest {
         expectLastCall().once();
         replay(matchingProcessor);
         consumer.consume(usages);
-        verify(matchingProcessor);
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertEquals(MISSING_WR_WRK_INST, usage.getWrWrkInst());
         assertNull(usage.getSystemTitle());
         assertNull(usage.getStandardNumber());
         assertNull(usage.getStandardNumberType());
         assertFalse(successPredicateCapture.getValue().test(usage));
+        verify(matchingProcessor);
     }
 
     private Usage buildUsage(Long wrWrkInst) {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId(USAGE_ID);
         usage.setWrWrkInst(wrWrkInst);
         usage.setStatus(UsageStatusEnum.NEW);
         return usage;

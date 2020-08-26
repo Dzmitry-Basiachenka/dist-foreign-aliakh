@@ -78,7 +78,7 @@ public class AbstractUsageJobChunkProcessorTest {
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq(FAS_PRODUCT_FAMILY)))
             .andReturn(usageIds).once();
-        expect(usageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
+        expect(usageService.getUsagesByIds(usageIds)).andReturn(Arrays.asList(usage1, usage2)).once();
         usageConsumer.accept(Collections.singletonList(usage1));
         expectLastCall().once();
         usageConsumer.accept(Collections.singletonList(usage2));
@@ -94,7 +94,7 @@ public class AbstractUsageJobChunkProcessorTest {
         Usage usage1 = buildUsage();
         Usage usage2 = buildUsage();
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
-        expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq("FAS2")))
+        expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "FAS2"))
             .andReturn(usageIds).once();
         expect(usageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
         usageConsumer.accept(Collections.singletonList(usage1));
@@ -112,7 +112,7 @@ public class AbstractUsageJobChunkProcessorTest {
         Usage usage1 = buildUsage();
         Usage usage2 = buildUsage();
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
-        expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq("NTS")))
+        expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "NTS"))
             .andReturn(usageIds).once();
         expect(usageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
         usageConsumer.accept(Collections.singletonList(usage1));
@@ -130,7 +130,7 @@ public class AbstractUsageJobChunkProcessorTest {
         Usage usage1 = buildUsage();
         Usage usage2 = buildUsage();
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
-        expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq("AACL")))
+        expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "AACL"))
             .andReturn(usageIds).once();
         expect(aaclUsageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
         usageConsumer.accept(Collections.singletonList(usage1));
@@ -148,7 +148,7 @@ public class AbstractUsageJobChunkProcessorTest {
         Usage usage1 = buildUsage();
         Usage usage2 = buildUsage();
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
-        expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq("SAL")))
+        expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "SAL"))
             .andReturn(usageIds).once();
         expect(salUsageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
         usageConsumer.accept(Collections.singletonList(usage1));
@@ -176,7 +176,7 @@ public class AbstractUsageJobChunkProcessorTest {
 
     @Test
     public void testJobProcessSkipped() {
-        expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq(FAS_PRODUCT_FAMILY)))
+        expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY))
             .andReturn(Collections.emptyList()).once();
         replay(usageService, usageConsumer, aaclUsageService, salUsageService, successProcessor, failureProcessor);
         assertEquals(new JobInfo(JobStatusEnum.SKIPPED, "ProductFamily=FAS, Reason=There are no usages"),

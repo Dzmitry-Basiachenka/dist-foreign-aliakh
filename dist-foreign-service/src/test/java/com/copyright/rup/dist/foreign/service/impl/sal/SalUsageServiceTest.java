@@ -11,7 +11,6 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -55,7 +54,8 @@ import java.util.List;
 public class SalUsageServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
-    private static final String USAGE_ID = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
+    private static final String USAGE_ID_1 = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
+    private static final String USAGE_ID_2 = "c72554d7-687e-4173-8406-dbddef74da98";
     private final ISalUsageService salUsageService = new SalUsageService();
 
     private ISalUsageRepository salUsageRepository;
@@ -134,7 +134,7 @@ public class SalUsageServiceTest {
 
     @Test
     public void testSendForMatching() {
-        List<String> usageIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
+        List<String> usageIds = Arrays.asList(USAGE_ID_1, USAGE_ID_2);
         Usage usage1 = new Usage();
         usage1.setStatus(UsageStatusEnum.NEW);
         Usage usage2 = new Usage();
@@ -157,7 +157,7 @@ public class SalUsageServiceTest {
 
     @Test
     public void testGetUsagesByIds() {
-        List<String> usageIds = Collections.singletonList(USAGE_ID);
+        List<String> usageIds = Collections.singletonList(USAGE_ID_1);
         List<Usage> usages = Collections.singletonList(new Usage());
         expect(salUsageRepository.findByIds(usageIds)).andReturn(usages).once();
         replay(salUsageRepository);

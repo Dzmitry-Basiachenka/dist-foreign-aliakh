@@ -47,13 +47,13 @@ public class SalWorkflowIntegrationTest {
     public void testSalWorkflow() throws IOException {
         testBuilder
             .withProductFamily(SAL_PRODUCT_FAMILY)
-            .withUsagesCsvFile("usage/sal/sal_item_bank_usages_for_workflow.csv", USAGE_ID_1, USAGE_ID_2, USAGE_ID_3,
+            .withUsagesCsvFile("usage/sal/sal_item_bank_details_for_workflow.csv", USAGE_ID_1, USAGE_ID_2, USAGE_ID_3,
                 USAGE_ID_4)
             .withUsageBatch(buildItemBank())
             .expectRmsRights("rights/rms_grants_122769471_request.json", "rights/rms_grants_122769471_response.json")
             .expectRmsRights("rights/rms_grants_243618757_request.json", "rights/rms_grants_243618757_response.json")
             .expectRmsRights("rights/rms_grants_140160102_request.json", "rights/rms_grants_empty_response.json")
-            .expectUsages("usage/sal/sal_expected_item_bank_usages_for workflow.json", 4)
+            .expectUsages("usage/sal/sal_expected_item_bank_details_for_workflow.json", 4)
             .expectUsageAudit(USAGE_ID_1, Arrays.asList(
                 buildAuditItem(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
                 buildAuditItem(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000000322 was found in RMS"),
