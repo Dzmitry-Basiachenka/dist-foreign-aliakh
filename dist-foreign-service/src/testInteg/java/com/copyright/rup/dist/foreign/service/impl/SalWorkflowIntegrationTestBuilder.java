@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
 @Component
 public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
-    private final Map<String, List<UsageAuditItem>> expectedUsageCommentToAuditMap = Maps.newHashMap();
+    private final Map<String, List<UsageAuditItem>> expectedUsageIdToAuditMap = Maps.newHashMap();
     private final Map<String, String> expectedRmsRequestsToResponses = new LinkedHashMap<>();
     private List<String> predefinedUsageIds;
     private String usagesCsvFile;
@@ -100,7 +100,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     SalWorkflowIntegrationTestBuilder expectUsageAudit(String usageId, List<UsageAuditItem> usageAudit) {
-        this.expectedUsageCommentToAuditMap.put(usageId, usageAudit);
+        this.expectedUsageIdToAuditMap.put(usageId, usageAudit);
         return this;
     }
 
@@ -110,7 +110,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
         productFamily = null;
         usageBatch = null;
         expectedUsagesJsonFile = null;
-        expectedUsageCommentToAuditMap.clear();
+        expectedUsageIdToAuditMap.clear();
     }
 
     @Override
@@ -134,7 +134,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             filter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
             actualUsages = salUsageService.getUsageDtos(filter, null, null);
             verifyUsages();
-            expectedUsageCommentToAuditMap.forEach(testHelper::assertAudit);
+            expectedUsageIdToAuditMap.forEach(testHelper::assertAudit);
             testHelper.verifyRestServer();
         }
 

@@ -92,14 +92,13 @@ public class SalUsageService implements ISalUsageService {
     @Override
     public void sendForMatching(List<String> usageIds, String batchName) {
         AtomicInteger usageIdsCount = new AtomicInteger(0);
-        IChainExecutor<Usage> currentChainExecutor = chainExecutor;
-        currentChainExecutor.execute(() ->
+        chainExecutor.execute(() ->
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> {
                     usageIdsCount.addAndGet(partition.size());
                     LOGGER.info("Send usages for PI matching. Started. UsageBatchName={}, UsagesCount={}", batchName,
                         usageIdsCount);
-                    currentChainExecutor.execute(getUsagesByIds(partition), ChainProcessorTypeEnum.MATCHING);
+                    chainExecutor.execute(getUsagesByIds(partition), ChainProcessorTypeEnum.MATCHING);
                     LOGGER.info("Send usages for PI matching. Finished. UsageBatchName={}, UsagesCount={}", batchName,
                         usageIdsCount);
                 }));
