@@ -1,3 +1,20 @@
+12.1.0
+-
+* B-57902 FDA: Get rights information from RMS for SAL usages (get grants): add statues to Usages tab filter
+* B-57901 FDA: SAL Retrieve system title, standard number, and standard number type: implement SAL matching consumer
+* B-61574 FDA: Get special request rights for rights holder reconciliation: update dist-common version to 51.4.+
+* B-57901 FDA: SAL Retrieve system title, standard number, and standard number type: implement service logic for sending SAL usage for matching
+* B-57902 FDA: Get rights information from RMS for SAL usages (get grants): implement service logic for getting rights
+* B-57901 FDA: SAL Retrieve system title, standard number, and standard number type: implement SAL workflow integration test
+* B-57902 FDA: Get rights information from RMS for SAL usages (get grants): add processors for getting rights, adjust integration tests
+* B-57900 FDA: Create SAL batch: update log message for inserting SAL item bank details
+* B-57902 FDA: Get rights information from RMS for SAL usages (get grants): remove WORK_NOT_FOUND status from SAL filter view
+* B-57902 FDA: Get rights information from RMS for SAL usages (get grants): make changes based on comments in CR-DIST-FOREIGN-191
+* B-57901 FDA: SAL Retrieve system title, standard number, and standard number type: revert WORK_NOT_FOUND status to usage tab for SAL product family
+* B-57901 FDA: SAL Retrieve system title, standard number, and standard number type: adjust upload item bank for SAL product family
+* B-57901 FDA: SAL Retrieve system title, standard number, and standard number type: make changes based on comments in CR-DIST-FOREIGN-190
+* CDP-937 FDA: Delete NTS Scenario: Payee Account #/Name are not cleared after deleting scenario
+
 11.1.9
 -
 * 58546 FDA: Exclude RH's within a NTS scenario: make changes based on CR-DIST-FOREIGN-189
