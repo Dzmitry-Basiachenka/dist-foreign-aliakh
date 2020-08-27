@@ -484,6 +484,7 @@ databaseChangeLog {
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'payee_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
@@ -504,6 +505,8 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '900')
+            column(name: 'is_rh_participating_flag', value: true)
+            column(name: 'is_payee_participating_flag', value: true)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -513,6 +516,7 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'system_title', value: 'Cell Biology')
             column(name: 'status_ind', value: 'SCENARIO_EXCLUDED')
+            column(name: 'rh_account_number', value: '1000002859')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'number_of_copies', value: '1')

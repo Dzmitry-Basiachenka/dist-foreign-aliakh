@@ -255,6 +255,7 @@
                 service_fee_amount = 0,
                 net_amount = 0,
                 gross_amount = 0,
+                payee_account_number = null,
                 <include refid="StoredEntityMapper.update"/>
             from (
                 select
@@ -273,6 +274,7 @@
         update ${schema}.df_usage_fas
         set
             is_rh_participating_flag = false,
+            is_payee_participating_flag = false,
             <include refid="StoredEntityMapper.update"/>
         from usage_ids
         where df_usage_fas_uid = usage_ids.df_usage_uid
