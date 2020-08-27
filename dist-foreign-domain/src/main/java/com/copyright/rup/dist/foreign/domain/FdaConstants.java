@@ -1,7 +1,5 @@
 package com.copyright.rup.dist.foreign.domain;
 
-import com.copyright.rup.dist.common.domain.RmsGrant.RightStatusEnum;
-
 import com.google.common.collect.ImmutableSet;
 
 import java.util.EnumSet;
@@ -84,6 +82,16 @@ public final class FdaConstants {
     public static final String NON_STM_CLASSIFICATION = "NON-STM";
 
     /**
+     * Right status GRANT.
+     */
+    public static final String RIGHT_STATUS_GRANT = "GRANT";
+
+    /**
+     * Right status DENY.
+     */
+    public static final String RIGHT_STATUS_DENY = "DENY";
+
+    /**
      * Set of FAS and FAS2 product families.
      */
     public static final Set<String> FAS_FAS2_PRODUCT_FAMILY_SET =
@@ -99,7 +107,7 @@ public final class FdaConstants {
      * Right statuses in RMS.
      */
     public static final Set<String> RIGHT_STATUSES_GRANT_DENY =
-        ImmutableSet.of(RightStatusEnum.GRANT.name(), RightStatusEnum.DENY.name());
+        ImmutableSet.of(RIGHT_STATUS_GRANT, RIGHT_STATUS_DENY);
 
     private FdaConstants() {
         throw new AssertionError("Constructor shouldn't be called directly");
