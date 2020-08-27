@@ -279,18 +279,18 @@ public class NtsUsageRepositoryIntegrationTest {
     public void testDeleteFromNtsScenario() {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_2, USAGE_ID_3));
         assertEquals(2, usages.size());
-        verifyUsage(usages.get(0), UsageStatusEnum.SCENARIO_EXCLUDED, null, StoredEntity.DEFAULT_USER, ZERO_AMOUNT,
-            HUNDRED_AMOUNT, null, ZERO_AMOUNT, ZERO_AMOUNT);
-        verifyUsage(usages.get(1), UsageStatusEnum.LOCKED, SCENARIO_ID, StoredEntity.DEFAULT_USER,
-            new BigDecimal("900.0000000000"), new BigDecimal("900.00"), new BigDecimal("0.32000"),
-            new BigDecimal("288.0000000000"), new BigDecimal("612.0000000000"));
+        verifyUsage(usages.get(0), UsageStatusEnum.SCENARIO_EXCLUDED, null, false, false, null,
+            StoredEntity.DEFAULT_USER, ZERO_AMOUNT, HUNDRED_AMOUNT, null, ZERO_AMOUNT, ZERO_AMOUNT);
+        verifyUsage(usages.get(1), UsageStatusEnum.LOCKED, 1000009997L, true, true, SCENARIO_ID,
+            StoredEntity.DEFAULT_USER, new BigDecimal("900.0000000000"), new BigDecimal("900.00"),
+            new BigDecimal("0.32000"), new BigDecimal("288.0000000000"), new BigDecimal("612.0000000000"));
         ntsUsageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
         usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_2, USAGE_ID_3));
         assertEquals(2, usages.size());
-        verifyUsage(usages.get(0), UsageStatusEnum.ELIGIBLE, null, USER_NAME, ZERO_AMOUNT, HUNDRED_AMOUNT, null,
-            ZERO_AMOUNT, ZERO_AMOUNT);
-        verifyUsage(usages.get(1), UsageStatusEnum.UNCLASSIFIED, null, USER_NAME, ZERO_AMOUNT, new BigDecimal("900.00"),
-            null, ZERO_AMOUNT, ZERO_AMOUNT);
+        verifyUsage(usages.get(0), UsageStatusEnum.ELIGIBLE, null, false, false, null, USER_NAME, ZERO_AMOUNT,
+            HUNDRED_AMOUNT, null, ZERO_AMOUNT, ZERO_AMOUNT);
+        verifyUsage(usages.get(1), UsageStatusEnum.UNCLASSIFIED, null, false, false, null, USER_NAME, ZERO_AMOUNT,
+            new BigDecimal("900.00"), null, ZERO_AMOUNT, ZERO_AMOUNT);
     }
 
     @Test
@@ -375,12 +375,15 @@ public class NtsUsageRepositoryIntegrationTest {
         assertTrue(CollectionUtils.containsAll(usagesIdsBeforeDeletion, expectedUsageIds));
     }
 
-    private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String username,
-                             BigDecimal grossAmount, BigDecimal reportedValue, BigDecimal serviceFee,
-                             BigDecimal serviceFeeAmount, BigDecimal netAmount) {
+    private void verifyUsage(Usage usage, UsageStatusEnum status, Long payeeAccountNumber, boolean isPayeeParticipating,
+                             boolean isRhParticipating, String scenarioId, String username, BigDecimal grossAmount,
+                             BigDecimal reportedValue, BigDecimal serviceFee, BigDecimal serviceFeeAmount,
+                             BigDecimal netAmount) {
         assertEquals(status, usage.getStatus());
         assertEquals(scenarioId, usage.getScenarioId());
-        assertNull(usage.getPayee().getAccountNumber());
+        assertEquals(payeeAccountNumber, usage.getPayee().getAccountNumber());
+        assertEquals(isPayeeParticipating, usage.isPayeeParticipating());
+        assertEquals(isRhParticipating, usage.isRhParticipating());
         assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
         assertEquals(username, usage.getUpdateUser());
         assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
