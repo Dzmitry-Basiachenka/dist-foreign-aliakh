@@ -29,7 +29,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
@@ -258,7 +257,7 @@ public class RightsService implements IRightsService {
                     .map(Usage::getWrWrkInst)
                     .collect(Collectors.toList());
                 Map<Long, List<RmsGrant>> wrWrkInstToGrants = rmsRightsService.getGrants(wrWrkInsts,
-                    batchPeriodEndDate, Sets.newHashSet(RightStatusEnum.GRANT.name(), RightStatusEnum.DENY.name()),
+                    batchPeriodEndDate, FdaConstants.RIGHT_STATUSES_GRANT_DENY,
                     ImmutableSet.of(DIGITAL_TYPE_OF_USE), getLicenseTypes(productFamily))
                     .stream()
                     .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
@@ -270,11 +269,11 @@ public class RightsService implements IRightsService {
                         .filter(grant -> FdaConstants.SAL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
                         .collect(Collectors.toSet());
                     RmsGrant grant = ObjectUtils.defaultIfNull(
-                        findGrantByStatus(eligibleGrants, RightStatusEnum.GRANT),
-                        findGrantByStatus(eligibleGrants, RightStatusEnum.DENY));
+                        findGrantByStatus(eligibleGrants, FdaConstants.RIGHT_STATUS_GRANT),
+                        findGrantByStatus(eligibleGrants, FdaConstants.RIGHT_STATUS_DENY));
                     if (Objects.nonNull(grant)) {
                         Long rhAccountNumber = grant.getWorkGroupOwnerOrgNumber().longValueExact();
-                        if (RightStatusEnum.GRANT == grant.getRightStatus()) {
+                        if (FdaConstants.RIGHT_STATUS_GRANT.equals(grant.getRightStatus())) {
                             usage.setRightsholder(buildRightsholder(rhAccountNumber));
                             usage.setStatus(UsageStatusEnum.RH_FOUND);
                             usageService.updateProcessedUsage(usage);
@@ -305,9 +304,9 @@ public class RightsService implements IRightsService {
             .orElse(null);
     }
 
-    private RmsGrant findGrantByStatus(Set<RmsGrant> grants, RightStatusEnum rightStatus) {
+    private RmsGrant findGrantByStatus(Set<RmsGrant> grants, String rightStatus) {
         return grants.stream()
-            .filter(rmsGrant -> rightStatus == rmsGrant.getRightStatus())
+            .filter(rmsGrant -> rightStatus.equals(rmsGrant.getRightStatus()))
             .findFirst()
             .orElse(null);
     }
