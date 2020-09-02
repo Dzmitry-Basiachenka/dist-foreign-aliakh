@@ -222,10 +222,14 @@
             </foreach>
     </select>
 
-    <select id="findBatchNamesWithRhNotFoundUsages" resultType="string">
+    <select id="findBatchNamesForRightsAssignment" parameterType="map" resultType="string">
         select distinct ub.name
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
-        where u.status_ind = #{status}
+        where ub.product_family in
+            <foreach collection="productFamilies" item="productFamily" separator="," open="(" close=")">
+                #{productFamily}
+            </foreach>
+            and u.status_ind = #{status}
     </select>
 </mapper>

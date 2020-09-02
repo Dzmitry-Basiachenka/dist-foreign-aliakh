@@ -167,5 +167,5 @@ public interface IUsageBatchService {
      *
      * @return list of found batch names
      */
-    List<String> getBatchNamesAvailableForRightsAssignment();
+    List<String> getBatchNamesForRightsAssignment();
 }

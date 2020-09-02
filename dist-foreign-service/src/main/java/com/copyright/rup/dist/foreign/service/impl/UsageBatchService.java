@@ -243,8 +243,8 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public List<String> getBatchNamesAvailableForRightsAssignment() {
-        return usageBatchRepository.findBatchNamesWithRhNotFoundUsages();
+    public List<String> getBatchNamesForRightsAssignment() {
+        return usageBatchRepository.findBatchNamesForRightsAssignment();
     }
 
     private void populateTitlesStandardNumberAndType(List<Usage> usages) {

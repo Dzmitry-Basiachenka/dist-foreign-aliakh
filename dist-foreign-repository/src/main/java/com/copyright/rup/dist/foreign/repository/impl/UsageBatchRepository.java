@@ -103,8 +103,11 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public List<String> findBatchNamesWithRhNotFoundUsages() {
-        return selectList("IUsageBatchMapper.findBatchNamesWithRhNotFoundUsages", UsageStatusEnum.RH_NOT_FOUND);
+    public List<String> findBatchNamesForRightsAssignment() {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("productFamilies", FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
+        params.put("status", UsageStatusEnum.RH_NOT_FOUND);
+        return selectList("IUsageBatchMapper.findBatchNamesForRightsAssignment", params);
     }
 
     /**
