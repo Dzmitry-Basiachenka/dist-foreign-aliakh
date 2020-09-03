@@ -107,10 +107,10 @@ public interface IUsageBatchRepository {
     Map<String, String> findBatchesNamesToScenariosNames(Set<String> batchesIds);
 
     /**
-     * Finds list of batch names that have usages
+     * Finds list of FAS/FAS2 batch names that have usages
      * in {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} status.
      *
      * @return list of found batch names
      */
-    List<String> findBatchNamesWithRhNotFoundUsages();
+    List<String> findBatchNamesForRightsAssignment();
 }

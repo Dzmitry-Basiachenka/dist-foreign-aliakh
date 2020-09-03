@@ -434,11 +434,11 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void testGetBatchNamesAvailableForRightsAssignment() {
+    public void testGetBatchNamesForRightsAssignment() {
         List<String> expectedList = Collections.singletonList("FAS Batch");
-        expect(usageBatchRepository.findBatchNamesWithRhNotFoundUsages()).andReturn(expectedList).once();
+        expect(usageBatchRepository.findBatchNamesForRightsAssignment()).andReturn(expectedList).once();
         replay(usageBatchRepository);
-        assertEquals(expectedList, usageBatchService.getBatchNamesAvailableForRightsAssignment());
+        assertEquals(expectedList, usageBatchService.getBatchNamesForRightsAssignment());
         verify(usageBatchRepository);
     }
 

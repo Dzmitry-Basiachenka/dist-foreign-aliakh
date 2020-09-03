@@ -96,7 +96,7 @@ public class RightsService implements IRightsService {
     public JobInfo sendForRightsAssignment() {
         updateNtsWithdrawnUsages();
         JobInfo jobInfo;
-        List<String> availableBatches = usageBatchService.getBatchNamesAvailableForRightsAssignment();
+        List<String> availableBatches = usageBatchService.getBatchNamesForRightsAssignment();
         LOGGER.info("Send for Rights Assignment. Started. BatchesCount={}", availableBatches.size());
         AtomicInteger updatedUsagesCount = new AtomicInteger(0);
         AtomicInteger failedUsagesCount = new AtomicInteger(0);

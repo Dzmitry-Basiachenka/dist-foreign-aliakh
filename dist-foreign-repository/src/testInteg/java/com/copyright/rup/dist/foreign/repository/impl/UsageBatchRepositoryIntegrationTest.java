@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UsageBatchRepository}.
@@ -122,16 +123,16 @@ public class UsageBatchRepositoryIntegrationTest {
     @Test
     public void testDeleteUsageBatch() {
         String batchId = "56282dbc-2468-48d4-b926-93d3458a656a";
-        assertEquals(11, usageBatchRepository.findAll().size());
+        assertEquals(12, usageBatchRepository.findAll().size());
         usageRepository.deleteByBatchId(batchId);
         usageBatchRepository.deleteUsageBatch(batchId);
-        assertEquals(10, usageBatchRepository.findAll().size());
+        assertEquals(11, usageBatchRepository.findAll().size());
     }
 
     @Test
     public void testFindAll() {
         List<UsageBatch> usageBatches = usageBatchRepository.findAll();
-        assertEquals(11, usageBatches.size());
+        assertEquals(12, usageBatches.size());
         assertEquals("13027b25-2269-3bec-48ea-5126431eedb0", usageBatches.get(0).getId());
         assertEquals(NTS_USAGE_BATCH_ID_3, usageBatches.get(1).getId());
         assertEquals(NTS_USAGE_BATCH_ID_2, usageBatches.get(2).getId());
@@ -143,6 +144,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals("66282dbc-2468-48d4-b926-93d3458a656b", usageBatches.get(8).getId());
         assertEquals("071ebf56-eb38-49fc-b26f-cc210a374d3a", usageBatches.get(9).getId());
         assertEquals("033cc3dd-b121-41d5-91e6-cf4ddf71c141", usageBatches.get(10).getId());
+        assertEquals("1f332dc2-f3c2-453a-aba0-9baa69b803d4", usageBatches.get(11).getId());
     }
 
     @Test
@@ -247,10 +249,11 @@ public class UsageBatchRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindBatchIdToNameMapWithRhNotFoundUsages() {
+    public void testFindBatchNamesAvailableForRightsAssignment() {
         List<String> expectedBatches =
-            Arrays.asList("FAS2 Batch With RH Not Found usages", "FAS2 Batch With Eligible and RH Not Found usages");
-        expectedBatches.containsAll(usageBatchRepository.findBatchNamesWithRhNotFoundUsages());
+            Arrays.asList("FAS2 Batch With Eligible and RH Not Found usages", "FAS2 Batch With RH Not Found usages");
+        assertEquals(expectedBatches,
+            usageBatchRepository.findBatchNamesForRightsAssignment().stream().sorted().collect(Collectors.toList()));
     }
 
     private UsageBatch buildUsageBatch() {
