@@ -6,7 +6,6 @@ import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -30,6 +29,7 @@ import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -87,22 +87,26 @@ public class RightsAssignmentServiceIntegrationTest {
     }
 
     private void assertNtsWithdrawnUsage() {
-        List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.NTS_WITHDRAWN);
-        assertEquals(3, usages.size());
-        usages.forEach(usage -> {
-            List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usage.getId());
+        List<String> usageIds = usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.NTS_WITHDRAWN, "FAS");
+        assertEquals(3, usageIds.size());
+        usageIds.forEach(usageId -> {
+            List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
             assertEquals(AUDIT_MESSAGE, auditItems.get(0).getActionReason());
         });
+        assertEquals(Collections.emptyList(),
+            usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.NTS_WITHDRAWN, "SAL"));
     }
 
     private void assertSentForRaUsages() {
-        List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.SENT_FOR_RA);
-        assertEquals(4, usages.size());
-        usages.stream()
-            .filter(usage -> USAGE_IDS.contains(usage.getId()))
-            .forEach(usage -> {
-                List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usage.getId());
+        List<String> usageIds = usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, "FAS");
+        assertEquals(4, usageIds.size());
+        usageIds.stream()
+            .filter(USAGE_IDS::contains)
+            .forEach(usageId -> {
+                List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
                 assertEquals("Sent for RA: job name 'SENT_FOR_RA_TEST'", auditItems.get(0).getActionReason());
             });
+        assertEquals(Collections.emptyList(),
+            usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, "SAL"));
     }
 }

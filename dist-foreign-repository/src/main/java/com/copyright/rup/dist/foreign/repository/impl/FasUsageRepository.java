@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -129,7 +130,8 @@ public class FasUsageRepository extends BaseRepository implements IFasUsageRepos
 
     @Override
     public List<String> updateNtsWithdrawnUsagesAndGetIds() {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+        params.put("productFamilies", FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
         params.put("statusToFind", UsageStatusEnum.RH_NOT_FOUND);
         params.put("statusToSet", UsageStatusEnum.NTS_WITHDRAWN);
         params.put("minimumTotal", new BigDecimal("100"));
