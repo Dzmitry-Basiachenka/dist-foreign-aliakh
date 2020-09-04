@@ -71,13 +71,18 @@
     <select id="updateNtsWithdrawnUsagesAndGetIds" parameterType="map" resultType="string">
         with works as (
             select
-                df_usage_batch_uid,
-                wr_wrk_inst,
-                sum(gross_amount)
-            from ${schema}.df_usage
-            where status_ind  = #{statusToFind}
-            group by wr_wrk_inst, df_usage_batch_uid
-            having sum(gross_amount) &lt; #{minimumTotal}
+                u.df_usage_batch_uid,
+                u.wr_wrk_inst,
+                sum(u.gross_amount)
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+            where ub.product_family in
+                <foreach collection="productFamilies" item="productFamily" separator="," open="(" close=")">
+                    #{productFamily}
+                </foreach>
+                and u.status_ind  = #{statusToFind}
+            group by u.wr_wrk_inst, u.df_usage_batch_uid
+            having sum(u.gross_amount) &lt; #{minimumTotal}
         )
         update ${schema}.df_usage
         set
