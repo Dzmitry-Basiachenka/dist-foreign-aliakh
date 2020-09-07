@@ -1,3 +1,7 @@
+12.1.2
+-
+* CDP-939 FDA: SAL Workflow: System sends SAL-usages in RH_NOT_FOUND status for rights assignment using scheduled job
+
 12.1.1
 -
 * B-59202 Tech Debt: FDA: fix security vulnerabilities CVE-2020-24616
