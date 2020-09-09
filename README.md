@@ -1,3 +1,7 @@
+12.1.3
+-
+* B-62030 FDA: Migrate to Amazon Corretto: use the new version of dist-common
+
 12.1.2
 -
 * CDP-939 FDA: SAL Workflow: System sends SAL-usages in RH_NOT_FOUND status for rights assignment using scheduled job
