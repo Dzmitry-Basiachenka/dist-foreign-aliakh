@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.api.aacl;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
 
 /**
- * Interface for scenario view widget for NTS product family.
+ * Interface for scenario view widget for AACL product family.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
