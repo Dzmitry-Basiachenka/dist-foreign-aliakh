@@ -241,6 +241,16 @@ public class FundPoolServiceTest {
         verify(fundPoolRepository);
     }
 
+    @Test
+    public void testDeleteSalFundPoolById() {
+        FundPool fundPool = new FundPool();
+        fundPool.setId(FUND_POOL_ID);
+        expect(fundPoolRepository.delete(fundPool.getId())).andReturn(1).once();
+        replay(fundPoolRepository);
+        fundPoolService.deleteSalFundPool(fundPool);
+        verify(fundPoolRepository);
+    }
+
     private void verifyDetail(FundPoolDetail expected, FundPoolDetail actual) {
         assertEquals(expected.getId(), actual.getId());
         AggregateLicenseeClass expectedAggregate = expected.getAggregateLicenseeClass();

@@ -281,6 +281,12 @@
         where aacl_fields->>'fund_pool_uid' = #{fundPoolId}
     </select>
 
+    <select id="findNameBySalFundPoolId" parameterType="string" resultType="string">
+        select name
+        from ${schema}.df_scenario
+        where sal_fields->>'fund_pool_uid' = #{fundPoolId}
+    </select>
+
     <delete id="remove" parameterType="string">
         delete from ${schema}.df_scenario
         where df_scenario_uid = #{scenarioId}

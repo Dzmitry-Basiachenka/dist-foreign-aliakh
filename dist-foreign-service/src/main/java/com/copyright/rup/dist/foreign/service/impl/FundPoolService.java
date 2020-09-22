@@ -133,6 +133,14 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    public void deleteSalFundPool(FundPool fundPool) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Delete SAL fund pool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+        fundPoolRepository.delete(fundPool.getId());
+        LOGGER.info("Delete SAL fund pool. Finished. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+    }
+
+    @Override
     public List<String> getNtsFundPoolNamesByUsageBatchId(String batchId) {
         return fundPoolRepository.findNamesByUsageBatchId(batchId);
     }
