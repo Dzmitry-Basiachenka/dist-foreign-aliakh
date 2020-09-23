@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
+import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 
@@ -19,11 +20,13 @@ class SalUsageMediator implements IMediator {
 
     private MenuBar.MenuItem loadItemBankMenuItem;
     private MenuBar.MenuItem loadFundPoolMenuItem;
+    private Button addToScenarioButton;
 
     @Override
     public void applyPermissions() {
         loadItemBankMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
         loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission());
+        addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
     }
 
     void setLoadItemBankMenuItem(MenuItem loadItemBankMenuItem) {
@@ -32,5 +35,9 @@ class SalUsageMediator implements IMediator {
 
     void setLoadFundPoolMenuItem(MenuItem loadFundPoolMenuItem) {
         this.loadFundPoolMenuItem = loadFundPoolMenuItem;
+    }
+
+    void setAddToScenarioButton(Button addToScenarioButton) {
+        this.addToScenarioButton = addToScenarioButton;
     }
 }

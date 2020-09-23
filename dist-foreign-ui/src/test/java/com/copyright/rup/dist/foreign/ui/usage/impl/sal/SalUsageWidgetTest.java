@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -111,6 +112,8 @@ public class SalUsageWidgetTest {
         expectLastCall().once();
         mediator.setLoadFundPoolMenuItem(anyObject(MenuItem.class));
         expectLastCall().once();
+        mediator.setAddToScenarioButton(anyObject(Button.class));
+        expectLastCall().once();
         replay(SalUsageMediator.class, mediator, controller);
         assertNotNull(usagesWidget.initMediator());
         verify(SalUsageMediator.class, mediator, controller);
@@ -119,9 +122,11 @@ public class SalUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(2, layout.getComponentCount());
+        assertEquals(3, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Usage Batch", Collections.singletonList("Load Item Bank"));
         verifyMenuBar(layout.getComponent(1), "Fund Pool", Collections.singletonList("Load"));
+        Button addToScenarioButton = (Button) layout.getComponent(2);
+        assertEquals("Add To Scenario", addToScenarioButton.getCaption());
     }
 
     private void verifyMenuBar(Component component, String menuName, List<String> menuItems) {

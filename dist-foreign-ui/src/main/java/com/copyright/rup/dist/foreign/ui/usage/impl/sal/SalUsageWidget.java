@@ -7,10 +7,12 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
+import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
+import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 
@@ -30,6 +32,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     private MenuBar fundPoolMenuBar;
     private MenuBar.MenuItem loadItemBankMenuItem;
     private MenuBar.MenuItem loadFundPoolMenuItem;
+    private Button addToScenarioButton;
 
     /**
      * Controller.
@@ -45,6 +48,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         SalUsageMediator mediator = new SalUsageMediator();
         mediator.setLoadItemBankMenuItem(loadItemBankMenuItem);
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
+        mediator.setAddToScenarioButton(addToScenarioButton);
         return mediator;
     }
 
@@ -113,7 +117,9 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     protected HorizontalLayout initButtonsLayout() {
         initUsageBatchMenuBar();
         initFundPoolMenuBar();
-        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar);
+        initAddToScenarioButton();
+        VaadinUtils.setButtonsAutoDisabled(addToScenarioButton);
+        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, addToScenarioButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -139,5 +145,11 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df-sal");
+    }
+
+    private void initAddToScenarioButton() {
+        addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
+        addToScenarioButton.addClickListener(
+            event -> showCreateScenarioWindow(new CreateSalScenarioWindow(controller)));
     }
 }
