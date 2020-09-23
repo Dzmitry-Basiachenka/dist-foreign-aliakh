@@ -117,6 +117,15 @@ public class SalUsageServiceTest {
     }
 
     @Test
+    public void testWorkPortionIdExistsInBatch() {
+        expect(salUsageRepository.workPortionIdExists("2312175IB3200", "b72159b1-479d-4d73-8168-556a60800602"))
+            .andReturn(true).once();
+        replay(salUsageRepository);
+        assertTrue(salUsageService.workPortionIdExists("2312175IB3200", "b72159b1-479d-4d73-8168-556a60800602"));
+        verify(salUsageRepository);
+    }
+
+    @Test
     public void testInsertItemBankDetails() {
         mockStatic(RupContextUtils.class);
         Usage usage = new Usage();

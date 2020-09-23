@@ -13,7 +13,7 @@ import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
  *
  * @author Ihar Suvorau
  */
-public class WorkPortionIdValidator implements DistCsvProcessor.IValidator<Usage> {
+public class ItemBankWorkPortionIdValidator implements DistCsvProcessor.IValidator<Usage> {
 
     private final ISalUsageService salUsageService;
 
@@ -22,7 +22,7 @@ public class WorkPortionIdValidator implements DistCsvProcessor.IValidator<Usage
      *
      * @param salUsageService instance of {@link ISalUsageService}
      */
-    public WorkPortionIdValidator(ISalUsageService salUsageService) {
+    public ItemBankWorkPortionIdValidator(ISalUsageService salUsageService) {
         this.salUsageService = salUsageService;
     }
 

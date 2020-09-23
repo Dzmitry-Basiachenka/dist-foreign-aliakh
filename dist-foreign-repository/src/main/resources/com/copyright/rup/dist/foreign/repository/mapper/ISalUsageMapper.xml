@@ -375,4 +375,14 @@
             where reported_work_portion_id = #{workPortionId}
         )
     </select>
+
+    <select id="workPortionIdExistsInBatch" resultType="boolean" parameterType="map">
+        select exists (
+            select 1
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_sal usal on df_usage_uid = usal.df_usage_sal_uid
+            where u.df_usage_batch_uid = #{batchId}
+                and usal.reported_work_portion_id = #{workPortionId}
+        )
+    </select>
 </mapper>
