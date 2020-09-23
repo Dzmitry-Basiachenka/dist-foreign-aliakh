@@ -173,6 +173,12 @@ public class SalUsageRepositoryIntegrationTest {
         assertFalse(salUsageRepository.workPortionIdExists("1101024IB"));
     }
 
+    @Test
+    public void testWorkPortionIdExistsInBatch() {
+        assertTrue(salUsageRepository.workPortionIdExists("1101001IB2361", "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64"));
+        assertFalse(salUsageRepository.workPortionIdExists("1101001IB2361", "56069b44-10b1-42d6-9a44-a3fae0029171"));
+    }
+
     private UsageFilter buildUsageFilter(Set<String> usageBatchIds, UsageStatusEnum status, String productFamily,
                                          SalDetailTypeEnum salDetailType) {
         UsageFilter usageFilter = new UsageFilter();

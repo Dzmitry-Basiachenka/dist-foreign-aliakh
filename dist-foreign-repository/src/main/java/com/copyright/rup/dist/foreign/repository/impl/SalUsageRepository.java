@@ -65,4 +65,12 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     public boolean workPortionIdExists(String workPortionId) {
         return selectOne("ISalUsageMapper.workPortionIdExists", Objects.requireNonNull(workPortionId));
     }
+
+    @Override
+    public boolean workPortionIdExists(String workPortionId, String batchId) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("workPortionId", Objects.requireNonNull(workPortionId));
+        parameters.put("batchId", Objects.requireNonNull(batchId));
+        return selectOne("ISalUsageMapper.workPortionIdExistsInBatch", parameters);
+    }
 }

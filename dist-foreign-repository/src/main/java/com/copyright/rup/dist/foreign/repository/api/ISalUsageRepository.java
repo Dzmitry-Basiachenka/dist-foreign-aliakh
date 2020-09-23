@@ -59,4 +59,13 @@ public interface ISalUsageRepository {
      * @return {@code true} - if Work Portion ID exists, {@code false} - otherwise
      */
     boolean workPortionIdExists(String workPortionId);
+
+    /**
+     * Checks whether provided Work Portion ID exists in the given batch.
+     *
+     * @param workPortionId work portion id
+     * @param batchId       batch id
+     * @return {@code true} - if Work Portion ID exists, {@code false} - otherwise
+     */
+    boolean workPortionIdExists(String workPortionId, String batchId);
 }

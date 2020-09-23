@@ -9,12 +9,12 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.AggregateLicens
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DetailLicenseeClassValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ItemBankWorkPortionIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.PublicationTypeValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.RightsholderWrWrkInstValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.WorkPortionIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.WorkTitleStandardNumberValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.WrWrkInstValidator;
 
@@ -103,7 +103,7 @@ public class CsvProcessorFactory {
      */
     public SalUsageCsvProcessor getSalUsageCsvProcessor() {
         SalUsageCsvProcessor processor = new SalUsageCsvProcessor();
-        processor.addBusinessValidators(new WorkPortionIdValidator(salUsageService));
+        processor.addBusinessValidators(new ItemBankWorkPortionIdValidator(salUsageService));
         return processor;
     }
 }
