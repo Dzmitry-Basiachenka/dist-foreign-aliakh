@@ -213,6 +213,20 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    public void testWriteSalUsagesCsvReport() throws IOException {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("da616e09-ca76-4815-b178-637abf32a76e"));
+        assertFilesWithExecutor(outputStream -> reportRepository.writeSalUsagesCsvReport(usageFilter, outputStream),
+            "usages_report_sal.csv");
+    }
+
+    @Test
+    public void testWriteSalUsagesEmptyCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeSalUsagesCsvReport(new UsageFilter(), outputStream), "usages_report_sal_empty.csv");
+    }
+
+    @Test
     public void testWriteNtsUsagesCsvReport() throws IOException {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Sets.newHashSet("f20ac1a3-eee4-4027-b5fb-def9adf0f871",
@@ -279,7 +293,7 @@ public class CsvReportsIntegrationTest {
     @Test
     public void testAaclUndistributedLiabilitiesCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
-            reportRepository.writeAaclUndistributedLiabilitiesCsvReport(outputStream),
+                reportRepository.writeAaclUndistributedLiabilitiesCsvReport(outputStream),
             "aacl_undistributed_liabilities_report.csv");
     }
 

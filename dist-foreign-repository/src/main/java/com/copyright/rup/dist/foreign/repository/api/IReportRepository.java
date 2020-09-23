@@ -120,6 +120,15 @@ public interface IReportRepository {
     void writeAaclUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
+     * Finds SAL usages according to given {@link UsageFilter} and writes them to the output stream
+     * in CSV format.
+     *
+     * @param filter            filter
+     * @param pipedOutputStream stream
+     */
+    void writeSalUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
      * Writes FAS usages for work research found by filter into the output stream in CSV format
      * and returns identifiers of those usages.
      *

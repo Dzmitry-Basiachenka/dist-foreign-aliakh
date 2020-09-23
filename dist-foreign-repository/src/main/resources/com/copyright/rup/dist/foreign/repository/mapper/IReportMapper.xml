@@ -606,6 +606,14 @@
         <include refid="IAaclUsageMapper.selectDtosByFilterSql"/>
     </select>
 
+    <select id="findSalUsagesCountByFilter" parameterType="map" resultType="int">
+        <include refid="ISalUsageMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findSalUsageReportDtos" resultMap="ISalUsageMapper.salUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="ISalUsageMapper.selectDtosByFilterSql"/>
+    </select>
+
     <select id="findAaclUsagesCountForAudit" resultType="int" parameterType="map">
         <include refid="IAaclUsageMapper.selectCountForAuditSql"/>
     </select>

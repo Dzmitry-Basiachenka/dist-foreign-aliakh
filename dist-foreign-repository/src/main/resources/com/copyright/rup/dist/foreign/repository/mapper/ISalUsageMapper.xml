@@ -237,7 +237,7 @@
         order by
         <choose>
             <when test="null != sort">
-                <include refid="chooseSortProperty">
+                <include refid="ISalUsageMapper.chooseSortProperty">
                     <property name="detail_uid" value="u.df_usage_uid"/>
                 </include>
             </when>
@@ -266,6 +266,30 @@
                 and usal.detail_type = #{filter.salDetailType}
             </if>
         </where>
+    </sql>
+
+    <sql id="selectDtosByFilterSql">
+        select
+            u.df_usage_uid,
+            <include refid="ISalUsageMapper.salUsageColumns"/>
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        <include refid="ISalUsageMapper.usageFilter"/>
+            and u.df_scenario_uid is null
+        <include refid="ISalUsageMapper.ifSortable"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <sql id="selectCountByFilterSql">
+        select count(1)
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        <include refid="ISalUsageMapper.usageFilter"/>
+        and u.df_scenario_uid is null
     </sql>
 
     <insert id="insert" parameterType="Usage">
@@ -331,6 +355,14 @@
         )
     </insert>
 
+    <select id="findCountByFilter" parameterType="map" resultType="int">
+        <include refid="ISalUsageMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findDtosByFilter" resultMap="salUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="ISalUsageMapper.selectDtosByFilterSql"/>
+    </select>
+
     <select id="findByIds" resultMap="salUsageResultMap">
         select
             u.df_usage_uid,
@@ -346,29 +378,6 @@
         order by u.df_usage_uid
     </select>
 
-    <select id="findCountByFilter" parameterType="map" resultType="int">
-        select count(1)
-        from ${schema}.df_usage u
-        join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
-        <include refid="usageFilter"/>
-            and u.df_scenario_uid is null
-    </select>
-
-    <select id="findDtosByFilter" resultMap="salUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
-        select
-            u.df_usage_uid,
-            <include refid="salUsageColumns"/>
-        from ${schema}.df_usage u
-        join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
-        <include refid="usageFilter"/>
-            and u.df_scenario_uid is null
-        <include refid="ifSortable"/>
-        <include refid="IUsageMapper.ifPageable"/>
-    </select>
 
     <select id="workPortionIdExists" resultType="boolean" parameterType="string">
         select exists (

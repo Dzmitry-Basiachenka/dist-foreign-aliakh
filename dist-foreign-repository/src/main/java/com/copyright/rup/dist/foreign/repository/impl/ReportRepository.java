@@ -44,6 +44,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUndistributedLi
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUsageCsvReportHandler;
 
 import com.google.common.collect.Maps;
 
@@ -283,6 +284,15 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         writeCsvReportByParts("IReportMapper.findAaclUsagesCountByFilter", "IReportMapper.findAaclUsageReportDtos",
             parameters, !filter.isEmpty(),
             () -> new AaclUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeSalUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        writeCsvReportByParts("IReportMapper.findSalUsagesCountByFilter", "IReportMapper.findSalUsageReportDtos",
+            parameters, !filter.isEmpty(),
+            () -> new SalUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
