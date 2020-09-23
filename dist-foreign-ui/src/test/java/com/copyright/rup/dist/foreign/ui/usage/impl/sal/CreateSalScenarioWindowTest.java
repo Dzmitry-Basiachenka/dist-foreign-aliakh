@@ -50,7 +50,7 @@ public class CreateSalScenarioWindowTest {
 
     private static final String DATE =
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
-    private static final String SCENARIO_NAME = "AACL Distribution " + DATE;
+    private static final String SCENARIO_NAME = "SAL Distribution " + DATE;
     private static final String SAL_PRODUCT_FAMILY = "SAL";
 
     private ISalUsageController controller;
