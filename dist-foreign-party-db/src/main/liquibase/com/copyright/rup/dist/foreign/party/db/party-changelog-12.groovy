@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2020-09-23-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("B-58887 FDA: iew and Delete SAL fund pool: add permission to delete Fund Pool")
+        comment("B-58887 FDA: View and Delete SAL fund pool: add permission to delete Fund Pool")
 
         insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
             column(name: 'cm_permission_uid', value: 'baseline-fda-delete-fund-pool')
