@@ -20,4 +20,16 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2020-09-23-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-57917 FDA: Load SAL fund pool: add sal_fields column to df_fund_pool")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'sal_fields', type: 'JSONB', remarks: 'The fields of SAL fund pool')
+        }
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }

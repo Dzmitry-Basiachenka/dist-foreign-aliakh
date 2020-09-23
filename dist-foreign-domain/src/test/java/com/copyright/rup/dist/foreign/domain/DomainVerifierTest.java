@@ -73,6 +73,7 @@ public class DomainVerifierTest {
             {Work.class},
             {WorkClassification.class},
             {FundPool.class},
+            {FundPool.SalFields.class},
             {ExcludePayeeFilter.class},
             {PayeeTotalHolder.class},
             {AaclClassifiedUsage.class},
