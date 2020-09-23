@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosController;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -34,6 +35,8 @@ public class ScenariosControllerProvider extends CommonControllerProvider<ICommo
     private INtsScenariosController ntsScenariosController;
     @Autowired
     private IAaclScenariosController aaclScenariosController;
+    @Autowired
+    private ISalScenariosController salScenariosController;
 
     @Override
     protected Map<String, ICommonScenariosController> getProductFamilyToControllerMap() {
@@ -41,7 +44,8 @@ public class ScenariosControllerProvider extends CommonControllerProvider<ICommo
             FdaConstants.FAS_PRODUCT_FAMILY, fasScenariosController,
             FdaConstants.CLA_FAS_PRODUCT_FAMILY, fasScenariosController,
             FdaConstants.NTS_PRODUCT_FAMILY, ntsScenariosController,
-            FdaConstants.AACL_PRODUCT_FAMILY, aaclScenariosController
+            FdaConstants.AACL_PRODUCT_FAMILY, aaclScenariosController,
+            FdaConstants.SAL_PRODUCT_FAMILY, salScenariosController
         );
     }
 }
