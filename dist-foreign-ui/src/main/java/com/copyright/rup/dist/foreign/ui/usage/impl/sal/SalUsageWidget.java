@@ -27,7 +27,9 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
 
     private final ISalUsageController controller;
     private MenuBar usageBatchMenuBar;
+    private MenuBar fundPoolMenuBar;
     private MenuBar.MenuItem loadItemBankMenuItem;
+    private MenuBar.MenuItem loadFundPoolMenuItem;
 
     /**
      * Controller.
@@ -42,6 +44,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     public IMediator initMediator() {
         SalUsageMediator mediator = new SalUsageMediator();
         mediator.setLoadItemBankMenuItem(loadItemBankMenuItem);
+        mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         return mediator;
     }
 
@@ -109,7 +112,8 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     @Override
     protected HorizontalLayout initButtonsLayout() {
         initUsageBatchMenuBar();
-        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar);
+        initFundPoolMenuBar();
+        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -124,5 +128,16 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df-sal");
+    }
+
+    private void initFundPoolMenuBar() {
+        fundPoolMenuBar = new MenuBar();
+        MenuBar.MenuItem menuItem =
+            fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
+        loadFundPoolMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
+            item -> {/*TODO: show Create Fund Pool window*/});
+        VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
+        VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
+        VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df-sal");
     }
 }

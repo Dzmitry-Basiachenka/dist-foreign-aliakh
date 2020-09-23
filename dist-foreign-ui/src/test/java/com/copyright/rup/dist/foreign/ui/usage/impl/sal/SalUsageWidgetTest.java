@@ -109,6 +109,8 @@ public class SalUsageWidgetTest {
         expectNew(SalUsageMediator.class).andReturn(mediator).once();
         mediator.setLoadItemBankMenuItem(anyObject(MenuItem.class));
         expectLastCall().once();
+        mediator.setLoadFundPoolMenuItem(anyObject(MenuItem.class));
+        expectLastCall().once();
         replay(SalUsageMediator.class, mediator, controller);
         assertNotNull(usagesWidget.initMediator());
         verify(SalUsageMediator.class, mediator, controller);
@@ -117,17 +119,18 @@ public class SalUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(1, layout.getComponentCount());
-        verifyUsageBatchMenuBar(layout.getComponent(0), Collections.singletonList("Load Item Bank"));
+        assertEquals(2, layout.getComponentCount());
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", Collections.singletonList("Load Item Bank"));
+        verifyMenuBar(layout.getComponent(1), "Fund Pool", Collections.singletonList("Load"));
     }
 
-    private void verifyUsageBatchMenuBar(Component component, List<String> menuItems) {
+    private void verifyMenuBar(Component component, String menuName, List<String> menuItems) {
         assertTrue(component instanceof MenuBar);
         MenuBar menuBar = (MenuBar) component;
         List<MenuItem> parentItems = menuBar.getItems();
         assertEquals(1, parentItems.size());
         MenuItem item = parentItems.get(0);
-        assertEquals("Usage Batch", item.getText());
+        assertEquals(menuName, item.getText());
         List<MenuItem> childItems = item.getChildren();
         assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
         IntStream.range(0, menuItems.size())
