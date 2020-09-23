@@ -13,6 +13,7 @@
     "salUsage": {
       "assessmentName": "Spring2014 Eng Lang/Mathy",
       "grade": "K",
+      "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Image",
       "mediaTypeWeight": "0.3",
@@ -43,6 +44,7 @@
     "comment": "usage2",
     "salUsage": {
       "assessmentName": "Spring2015 Eng Lang/Mathy",
+      "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Image",
       "mediaTypeWeight": "0.3",
@@ -74,6 +76,7 @@
     "salUsage": {
       "assessmentName": "Spring2014 Eng Lang/Mathy",
       "grade": "2",
+      "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Text",
       "mediaTypeWeight": "1",
@@ -104,6 +107,7 @@
     "comment": "usage4",
     "salUsage": {
       "assessmentName": "Spring2015 Eng Lang/Mathy",
+      "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Text",
       "mediaTypeWeight": "1",

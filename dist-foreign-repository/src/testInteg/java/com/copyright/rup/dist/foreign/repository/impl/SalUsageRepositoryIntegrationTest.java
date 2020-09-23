@@ -156,8 +156,8 @@ public class SalUsageRepositoryIntegrationTest {
         assertFindDtosByFilterSort(USAGE_ID_3, "questionIdentifier", Sort.Direction.DESC);
         assertFindDtosByFilterSort(USAGE_ID_2, "grade", Sort.Direction.ASC);
         assertFindDtosByFilterSort(USAGE_ID_1, "grade", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "gradeGroup", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "gradeGroup", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, "gradeGroup", Sort.Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, "gradeGroup", Sort.Direction.DESC);
         assertFindDtosByFilterSort(USAGE_ID_3, "states", Sort.Direction.ASC);
         assertFindDtosByFilterSort(USAGE_ID_2, "states", Sort.Direction.DESC);
         assertFindDtosByFilterSort(USAGE_ID_1, "numberOfViews", Sort.Direction.ASC);
@@ -227,6 +227,7 @@ public class SalUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getAssessmentName(), actualUsage.getAssessmentName());
         assertEquals(expectedUsage.getCoverageYear(), actualUsage.getCoverageYear());
         assertEquals(expectedUsage.getGrade(), actualUsage.getGrade());
+        assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
         assertEquals(expectedUsage.getDetailType(), actualUsage.getDetailType());
         assertEquals(expectedUsage.getReportedWorkPortionId(), actualUsage.getReportedWorkPortionId());
         assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
@@ -241,7 +242,6 @@ public class SalUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getAssessmentType(), actualUsage.getAssessmentType());
         assertEquals(expectedUsage.getStates(), actualUsage.getStates());
         assertEquals(expectedUsage.getNumberOfViews(), actualUsage.getNumberOfViews());
-        assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
         assertEquals(expectedUsage.getScoredAssessmentDate(), actualUsage.getScoredAssessmentDate());
         assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
         assertEquals(expectedUsage.getBatchPeriodEndDate(), actualUsage.getBatchPeriodEndDate());
