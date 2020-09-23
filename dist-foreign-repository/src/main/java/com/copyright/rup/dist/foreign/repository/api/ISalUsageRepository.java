@@ -68,4 +68,12 @@ public interface ISalUsageRepository {
      * @return {@code true} - if Work Portion ID exists, {@code false} - otherwise
      */
     boolean workPortionIdExists(String workPortionId, String batchId);
+
+    /**
+     * Finds {@link com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum#IB} detail grade by work portion id.
+     *
+     * @param workPortionId work portion id
+     * @return {@link com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum#IB} detail grade
+     */
+    String findItemBankDetailGradeByWorkPortionId(String workPortionId);
 }

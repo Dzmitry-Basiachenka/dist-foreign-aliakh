@@ -387,4 +387,11 @@
                 and usal.reported_work_portion_id = #{workPortionId}
         )
     </select>
+
+    <select id="findItemBankDetailGradeByWorkPortionId" resultType="string" parameterType="map">
+        select grade
+        from ${schema}.df_usage_sal
+        where reported_work_portion_id = #{workPortionId}
+            and detail_type = #{detailType}
+    </select>
 </mapper>

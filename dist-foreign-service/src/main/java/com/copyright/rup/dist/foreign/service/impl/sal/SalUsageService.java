@@ -115,4 +115,9 @@ public class SalUsageService implements ISalUsageService {
             ? salUsageRepository.findByIds(usageIds)
             : Collections.emptyList();
     }
+
+    @Override
+    public String getItemBankDetailGradeByWorkPortionId(String workPortionId) {
+        return salUsageRepository.findItemBankDetailGradeByWorkPortionId(workPortionId);
+    }
 }
