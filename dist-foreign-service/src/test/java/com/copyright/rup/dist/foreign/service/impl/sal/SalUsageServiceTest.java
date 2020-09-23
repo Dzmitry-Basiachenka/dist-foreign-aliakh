@@ -174,6 +174,14 @@ public class SalUsageServiceTest {
         verify(salUsageRepository);
     }
 
+    @Test
+    public void testGetItemBankDetailGradeByWorkPortionId() {
+        expect(salUsageRepository.findItemBankDetailGradeByWorkPortionId("2401064IB2188")).andReturn("K").once();
+        replay(salUsageRepository);
+        assertEquals("K", salUsageService.getItemBankDetailGradeByWorkPortionId("2401064IB2188"));
+        verify(salUsageRepository);
+    }
+
     private UsageBatch buildUsageBatch() {
         UsageBatch batch = new UsageBatch();
         batch.setId("38ea9a39-0e20-4c3d-8054-0e88d403dd67");

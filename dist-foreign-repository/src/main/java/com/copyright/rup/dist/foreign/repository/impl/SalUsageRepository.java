@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -72,5 +73,13 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
         parameters.put("workPortionId", Objects.requireNonNull(workPortionId));
         parameters.put("batchId", Objects.requireNonNull(batchId));
         return selectOne("ISalUsageMapper.workPortionIdExistsInBatch", parameters);
+    }
+
+    @Override
+    public String findItemBankDetailGradeByWorkPortionId(String workPortionId) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("workPortionId", Objects.requireNonNull(workPortionId));
+        parameters.put("detailType", SalDetailTypeEnum.IB);
+        return selectOne("ISalUsageMapper.findItemBankDetailGradeByWorkPortionId", parameters);
     }
 }

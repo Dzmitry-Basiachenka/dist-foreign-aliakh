@@ -136,5 +136,68 @@ databaseChangeLog {
             column(name: 'states', value: 'MN,OR')
             column(name: 'number_of_views', value: 254)
         }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '3572dcec-b0b8-4a19-a18e-319be139f0d2')
+            column(name: 'name', value: 'SAL usage batch 3')
+            column(name: 'payment_date', value: '2016-06-30')
+            column(name: 'product_family', value: 'SAL')
+            column(name: 'fiscal_year', value: '2015')
+            column(name: 'sal_fields', value: '{"licensee_account_number": 1000000009, "licensee_name": "Tiger Publications"}')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'fc56debb-4265-4f92-b0bb-4189a2c694a8')
+            column(name: 'df_usage_batch_uid', value: '3572dcec-b0b8-4a19-a18e-319be139f0d2')
+            column(name: 'wr_wrk_inst', value: '379047791')
+            column(name: 'rh_account_number', value: '1000000001')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'SAL')
+            column(name: 'created_datetime', value: '2015-03-10 12:00:00+00')
+            column(name: 'updated_datetime', value: '2015-03-10 12:00:00+00')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'record_version', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
+            column(name: 'df_usage_sal_uid', value: 'fc56debb-4265-4f92-b0bb-4189a2c694a8')
+            column(name: 'detail_type', value: 'IB')
+            column(name: 'assessment_name', value: 'FY16 EOC')
+            column(name: 'assessment_type', value: 'EOC')
+            column(name: 'reported_work_portion_id', value: '1201064IB2200')
+            column(name: 'coverage_year', value: '2011-2012')
+            column(name: 'scored_assessment_date', value: '2015-02-05')
+            column(name: 'question_identifier', value: 'SB245')
+            column(name: 'states', value: 'MN,OR')
+            column(name: 'number_of_views', value: 254)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'f646ef53-081a-4216-a025-f20d8b233a62')
+            column(name: 'df_usage_batch_uid', value: '3572dcec-b0b8-4a19-a18e-319be139f0d2')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'SAL')
+            column(name: 'created_datetime', value: '2015-03-10 12:00:00+00')
+            column(name: 'updated_datetime', value: '2015-03-10 12:00:00+00')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'record_version', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
+            column(name: 'df_usage_sal_uid', value: 'f646ef53-081a-4216-a025-f20d8b233a62')
+            column(name: 'detail_type', value: 'UD')
+            column(name: 'grade', value: '10')
+            column(name: 'assessment_name', value: 'FY16 EOC')
+            column(name: 'assessment_type', value: 'EOC')
+            column(name: 'question_identifier', value: 'Q1')
+            column(name: 'reported_work_portion_id', value: '1201064IB2200')
+            column(name: 'coverage_year', value: '2011-2012')
+            column(name: 'scored_assessment_date', value: '2015-02-05')
+            column(name: 'question_identifier', value: 'SB245')
+            column(name: 'states', value: 'MN,OR')
+            column(name: 'number_of_views', value: 254)
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -59,6 +60,7 @@ public class SalUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_1 = "c95654c0-a607-4683-878f-99606e90c065";
     private static final String USAGE_ID_2 = "7b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_3 = "5ab5e80b-89c0-4d78-9675-54c7ab284450";
+    private static final String WORK_PORTION_ID_3 = "1101001IB2361";
 
     @Autowired
     private ISalUsageRepository salUsageRepository;
@@ -168,15 +170,21 @@ public class SalUsageRepositoryIntegrationTest {
 
     @Test
     public void testWorkPortionIdExists() {
-        assertTrue(salUsageRepository.workPortionIdExists("1101001IB2361"));
+        assertTrue(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3));
         assertTrue(salUsageRepository.workPortionIdExists("1101024IB2192"));
         assertFalse(salUsageRepository.workPortionIdExists("1101024IB"));
     }
 
     @Test
     public void testWorkPortionIdExistsInBatch() {
-        assertTrue(salUsageRepository.workPortionIdExists("1101001IB2361", "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64"));
-        assertFalse(salUsageRepository.workPortionIdExists("1101001IB2361", "56069b44-10b1-42d6-9a44-a3fae0029171"));
+        assertTrue(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3, "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64"));
+        assertFalse(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3, "56069b44-10b1-42d6-9a44-a3fae0029171"));
+    }
+
+    @Test
+    public void testFindItemBankDetailGradeByWorkPortionId() {
+        assertEquals("5", salUsageRepository.findItemBankDetailGradeByWorkPortionId(WORK_PORTION_ID_3));
+        assertNull(salUsageRepository.findItemBankDetailGradeByWorkPortionId("1201064IB2200"));
     }
 
     private UsageFilter buildUsageFilter(Set<String> usageBatchIds, UsageStatusEnum status, String productFamily,

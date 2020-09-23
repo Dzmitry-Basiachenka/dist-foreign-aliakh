@@ -78,4 +78,12 @@ public interface ISalUsageService {
      * @return list of {@link Usage}s
      */
     List<Usage> getUsagesByIds(List<String> usageIds);
+
+    /**
+     * Gets {@link com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum#IB} detail grade by work portion id.
+     *
+     * @param workPortionId work portion id
+     * @return {@link com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum#IB} detail grade
+     */
+    String getItemBankDetailGradeByWorkPortionId(String workPortionId);
 }
