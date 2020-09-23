@@ -138,8 +138,7 @@ public class SalUsageCsvProcessorIntegrationTest {
         }
     }
 
-    private ProcessingResult<Usage> processFile(String file)
-        throws IOException {
+    private ProcessingResult<Usage> processFile(String file) throws IOException {
         ProcessingResult<Usage> result;
         try (InputStream stream = this.getClass().getResourceAsStream(BASE_PATH + "/" + file);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {

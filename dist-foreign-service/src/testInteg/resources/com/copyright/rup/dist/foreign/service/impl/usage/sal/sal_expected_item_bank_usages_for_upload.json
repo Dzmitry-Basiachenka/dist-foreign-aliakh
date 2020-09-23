@@ -17,6 +17,7 @@
     "salUsage": {
       "assessmentName": "Spring2014 Eng Lang/Mathy",
       "grade": "K",
+      "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Image",
       "mediaTypeWeight": "0.3",
@@ -81,6 +82,7 @@
     "salUsage": {
       "assessmentName": "Spring2014 Eng Lang/Mathy",
       "grade": "2",
+      "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Text",
       "mediaTypeWeight": "1.0",

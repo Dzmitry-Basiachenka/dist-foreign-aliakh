@@ -249,7 +249,7 @@ databaseChangeLog {
             column(name: 'df_usage_sal_uid', value: '4bfd3af6-a28f-4068-a151-1423948d589b')
             column(name: 'detail_type', value: 'IB')
             column(name: 'grade', value: '5')
-            column(name: 'grade_group', value: 'GRADE3_5')
+            column(name: 'grade_group', value: 'ITEM_BANK')
             column(name: 'assessment_name', value: 'FY16 AIR')
             column(name: 'assessment_type', value: 'AIR')
             column(name: 'reported_work_portion_id', value: '1101001IB2361')

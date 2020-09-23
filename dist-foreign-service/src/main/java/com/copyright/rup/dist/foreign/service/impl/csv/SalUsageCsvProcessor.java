@@ -131,6 +131,7 @@ public class SalUsageCsvProcessor extends DistCsvProcessor<Usage> {
             salUsage.setAssessmentName(getString(row, Header.ASSESSMENT_NAME, headers));
             salUsage.setCoverageYear(getString(row, Header.COVERAGE_YEAR, headers));
             salUsage.setGrade(getString(row, Header.GRADE, headers));
+            salUsage.setGradeGroup("ITEM_BANK");
             salUsage.setReportedWorkPortionId(getString(row, Header.REPORTED_WORK_PORTION_ID, headers));
             salUsage.setReportedStandardNumber(getString(row, Header.REPORTED_STANDARD_NUMBER, headers));
             salUsage.setReportedMediaType(getString(row, Header.REPORTED_MEDIA_TYPE, headers));
