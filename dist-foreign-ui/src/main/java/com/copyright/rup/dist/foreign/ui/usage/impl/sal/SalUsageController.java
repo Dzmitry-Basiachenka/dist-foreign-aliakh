@@ -14,7 +14,7 @@ import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesServic
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
-import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
@@ -105,8 +105,8 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
-    public SalUsageCsvProcessor getSalUsageCsvProcessor() {
-        return csvProcessorFactory.getSalUsageCsvProcessor();
+    public SalItemBankCsvProcessor getSalItemBankCsvProcessor() {
+        return csvProcessorFactory.getSalItemBankCsvProcessor();
     }
 
     @Override

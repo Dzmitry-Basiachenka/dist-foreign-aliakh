@@ -15,6 +15,8 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.PublicationType
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.RightsholderWrWrkInstValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.UsageDataGradeValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.UsageDataWorkPortionIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.WorkTitleStandardNumberValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.WrWrkInstValidator;
 
@@ -99,11 +101,25 @@ public class CsvProcessorFactory {
     }
 
     /**
-     * @return instance of {@link SalUsageCsvProcessor}.
+     * @return instance of {@link SalItemBankCsvProcessor}.
      */
-    public SalUsageCsvProcessor getSalUsageCsvProcessor() {
-        SalUsageCsvProcessor processor = new SalUsageCsvProcessor();
+    public SalItemBankCsvProcessor getSalItemBankCsvProcessor() {
+        SalItemBankCsvProcessor processor = new SalItemBankCsvProcessor();
         processor.addBusinessValidators(new ItemBankWorkPortionIdValidator(salUsageService));
+        return processor;
+    }
+
+    /**
+     * Builds {@link SalUsageDataCsvProcessor} instance.
+     *
+     * @param batchId batch id
+     * @return instance of {@link SalUsageDataCsvProcessor}.
+     */
+    public SalUsageDataCsvProcessor getSalUsageDataCsvProcessor(String batchId) {
+        SalUsageDataCsvProcessor processor = new SalUsageDataCsvProcessor();
+        processor.addBusinessValidators(
+            new UsageDataWorkPortionIdValidator(salUsageService, batchId),
+            new UsageDataGradeValidator(salUsageService));
         return processor;
     }
 }

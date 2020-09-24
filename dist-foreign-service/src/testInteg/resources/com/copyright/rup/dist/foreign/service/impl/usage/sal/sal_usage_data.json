@@ -1,0 +1,46 @@
+[
+  {
+    "status": "ELIGIBLE",
+    "productFamily": "SAL",
+    "comment": "Comment 1-1",
+    "salUsage": {
+      "scoredAssessmentDate": "2014-09-14",
+      "reportedWorkPortionId": "A1",
+      "assessmentType": "ELA",
+      "questionIdentifier": "P401A1",
+      "grade": "3",
+      "states": "FL;WY",
+      "numberOfViews": "258",
+      "detailType": "UD"
+    }
+  },
+  {
+    "status": "ELIGIBLE",
+    "productFamily": "SAL",
+    "comment": "Comment 1-2",
+    "salUsage": {
+      "scoredAssessmentDate": "2014-09-14",
+      "reportedWorkPortionId": "A1",
+      "assessmentType": "ELA",
+      "questionIdentifier": "P402A1",
+      "states": "FL;WY",
+      "numberOfViews": "258",
+      "detailType": "UD"
+    }
+  },
+  {
+    "status": "ELIGIBLE",
+    "productFamily": "SAL",
+    "comment": "Comment 2-1",
+    "salUsage": {
+      "scoredAssessmentDate": "2014-09-14",
+      "reportedWorkPortionId": "A2",
+      "assessmentType": "ELA",
+      "questionIdentifier": "P403A2",
+      "grade": "4",
+      "states": "FL;WY",
+      "numberOfViews": "258",
+      "detailType": "UD"
+    }
+  }
+]

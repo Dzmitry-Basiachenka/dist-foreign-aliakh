@@ -7,7 +7,7 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.SalFields;
-import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
@@ -81,7 +81,7 @@ public class ItemBankUploadWindow extends Window {
     void onUploadClicked() {
         if (isValid()) {
             try {
-                SalUsageCsvProcessor processor = usagesController.getSalUsageCsvProcessor();
+                SalItemBankCsvProcessor processor = usagesController.getSalItemBankCsvProcessor();
                 ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
                 if (processingResult.isSuccessful()) {
                     List<Usage> usages = processingResult.get();
