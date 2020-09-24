@@ -32,6 +32,7 @@ public class Scenario extends StoredEntity<String> {
     private ScenarioAuditItem auditItem;
     private AaclFields aaclFields;
     private NtsFields ntsFields;
+    private SalFields salFields;
 
     public String getName() {
         return name;
@@ -113,6 +114,14 @@ public class Scenario extends StoredEntity<String> {
         this.ntsFields = ntsFields;
     }
 
+    public SalFields getSalFields() {
+        return salFields;
+    }
+
+    public void setSalFields(SalFields salFields) {
+        this.salFields = salFields;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -134,6 +143,7 @@ public class Scenario extends StoredEntity<String> {
             .append(this.auditItem, that.auditItem)
             .append(this.aaclFields, that.aaclFields)
             .append(this.ntsFields, that.ntsFields)
+            .append(this.salFields, that.salFields)
             .isEquals();
     }
 
@@ -151,6 +161,7 @@ public class Scenario extends StoredEntity<String> {
             .append(auditItem)
             .append(aaclFields)
             .append(ntsFields)
+            .append(salFields)
             .toHashCode();
     }
 
@@ -168,7 +179,52 @@ public class Scenario extends StoredEntity<String> {
             .append("auditItem", auditItem)
             .append("aaclFields", aaclFields)
             .append("ntsFields", ntsFields)
+            .append("salFields", salFields)
             .toString();
+    }
+
+    /**
+     * Represents fields specific for SAL scenario.
+     */
+    public static class SalFields {
+
+        private String fundPoolId;
+
+        public String getFundPoolId() {
+            return fundPoolId;
+        }
+
+        public void setFundPoolId(String fundPoolId) {
+            this.fundPoolId = fundPoolId;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (null == obj || this.getClass() != obj.getClass()) {
+                return false;
+            }
+            SalFields that = (SalFields) obj;
+            return new EqualsBuilder()
+                .append(this.fundPoolId, that.fundPoolId)
+                .isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder()
+                .append(fundPoolId)
+                .toHashCode();
+        }
+
+        @Override
+        public String toString() {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("fundPoolId", fundPoolId)
+                .toString();
+        }
     }
 
     /**

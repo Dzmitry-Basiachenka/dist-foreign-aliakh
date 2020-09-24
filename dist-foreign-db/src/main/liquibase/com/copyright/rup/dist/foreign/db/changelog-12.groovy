@@ -32,4 +32,16 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2020-09-24-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-57897 FDA: Create SAL Scenario: add sal_fields column to df_scenario table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'sal_fields', type: 'JSONB', remarks: 'The fields specific for SAL scenario')
+        }
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
