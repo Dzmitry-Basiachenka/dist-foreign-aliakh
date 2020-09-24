@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
@@ -33,6 +34,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     private MenuBar.MenuItem loadItemBankMenuItem;
     private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button addToScenarioButton;
+    private Button exportButton;
 
     /**
      * Controller.
@@ -118,8 +120,10 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         initUsageBatchMenuBar();
         initFundPoolMenuBar();
         initAddToScenarioButton();
+        initExportButton();
         VaadinUtils.setButtonsAutoDisabled(addToScenarioButton);
-        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, addToScenarioButton);
+        HorizontalLayout layout =
+            new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, addToScenarioButton, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -151,5 +155,12 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(
             event -> showCreateScenarioWindow(new CreateSalScenarioWindow(controller)));
+    }
+
+    private void initExportButton() {
+        exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
+        fileDownloader.extend(exportButton);
     }
 }
