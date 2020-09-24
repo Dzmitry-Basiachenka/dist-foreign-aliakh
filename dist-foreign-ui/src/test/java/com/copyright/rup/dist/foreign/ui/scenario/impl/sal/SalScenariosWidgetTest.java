@@ -51,7 +51,6 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Liakh
  */
-// TODO implement the test when SalScenariosWidget is implemented
 public class SalScenariosWidgetTest {
 
     private static final String GRID_ID = "scenarioGrid";

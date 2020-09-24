@@ -49,7 +49,6 @@ import java.util.Collections;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, SecurityUtils.class})
-// TODO implement the test when SalScenariosController is implemented
 public class SalScenariosControllerTest {
 
     private static final String SCENARIO_ID = "abc9deb3-8450-4eac-a13d-d157cf5fc057";
