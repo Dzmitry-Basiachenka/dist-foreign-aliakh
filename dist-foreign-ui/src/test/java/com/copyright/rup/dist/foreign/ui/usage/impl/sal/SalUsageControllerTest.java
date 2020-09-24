@@ -8,15 +8,20 @@ import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -26,14 +31,26 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageWidget;
 
 import com.vaadin.ui.HorizontalLayout;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.InputStream;
+import java.io.PipedOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link SalUsageController}.
@@ -44,13 +61,20 @@ import java.util.List;
  *
  * @author Uladzislau Shalamitski
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({OffsetDateTime.class, StreamSource.class})
 public class SalUsageControllerTest {
+
+    private static final OffsetDateTime DATE = OffsetDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
 
     private ISalUsageService salUsageService;
     private SalUsageController controller;
     private ISalUsageWidget usagesWidget;
     private ISalUsageFilterController filterController;
     private ISalUsageFilterWidget filterWidget;
+    private IStreamSourceHandler streamSourceHandler;
+    private UsageFilter usageFilter;
+    private IReportService reportService;
 
     @Before
     public void setUp() {
@@ -59,9 +83,14 @@ public class SalUsageControllerTest {
         salUsageService = createMock(ISalUsageService.class);
         filterController = createMock(ISalUsageFilterController.class);
         filterWidget = createMock(ISalUsageFilterWidget.class);
+        streamSourceHandler = createMock(IStreamSourceHandler.class);
+        reportService = createMock(IReportService.class);
+        Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, salUsageService);
         Whitebox.setInternalState(controller, filterController);
+        Whitebox.setInternalState(controller, reportService);
+        usageFilter = new UsageFilter();
     }
 
     @Test
@@ -86,7 +115,7 @@ public class SalUsageControllerTest {
         List<String> usageIds = new ArrayList<>();
         List<Usage> usages = Collections.singletonList(new Usage());
         expect(usageBatchService.insertSalBatch(itemBank, usages)).andReturn(usageIds).once();
-        salUsageService.sendForMatching(usageIds,itemBank.getName());
+        salUsageService.sendForMatching(usageIds, itemBank.getName());
         expectLastCall().once();
         replay(usageBatchService);
         controller.loadItemBank(itemBank, usages);
@@ -95,7 +124,6 @@ public class SalUsageControllerTest {
 
     @Test
     public void getBeansCount() {
-        UsageFilter usageFilter = new UsageFilter();
         usageFilter.setSalDetailType(SalDetailTypeEnum.IB);
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
@@ -107,7 +135,6 @@ public class SalUsageControllerTest {
 
     @Test
     public void testLoadBeans() {
-        UsageFilter usageFilter = new UsageFilter();
         usageFilter.setSalDetailType(SalDetailTypeEnum.IB);
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
@@ -122,5 +149,32 @@ public class SalUsageControllerTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         verify(filterWidget, salUsageService, filterController);
+    }
+
+    @Test
+    public void testGetExportUsagesStreamSource() {
+        mockStatic(OffsetDateTime.class);
+        usageFilter.setProductFamily("SAL");
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        String fileName = "export_usage_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(DATE).once();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        reportService.writeSalUsageCsvReport(usageFilter, pos);
+        expectLastCall().once();
+        replay(OffsetDateTime.class, filterWidget, filterController, streamSourceHandler, reportService);
+        IStreamSource streamSource = controller.getExportUsagesStreamSource();
+        assertEquals("export_usage_01_02_2020_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        assertNotNull(posConsumer);
+        posConsumer.accept(pos);
+        verify(OffsetDateTime.class, filterWidget, filterController, streamSourceHandler, reportService);
     }
 }

@@ -93,8 +93,9 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public IStreamSource getExportUsagesStreamSource() {
-        //TODO: implement in scope of corresponding story
-        return null;
+        return streamSourceHandler.getCsvStreamSource(() -> "export_usage_",
+            pos -> getReportService().writeSalUsageCsvReport(
+                getUsageFilterController().getWidget().getAppliedFilter(), pos));
     }
 
     @Override

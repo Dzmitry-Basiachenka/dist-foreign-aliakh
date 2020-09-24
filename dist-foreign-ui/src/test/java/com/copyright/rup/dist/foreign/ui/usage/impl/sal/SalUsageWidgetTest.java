@@ -13,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 
@@ -35,9 +36,11 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -64,9 +67,13 @@ public class SalUsageWidgetTest {
         usagesWidget.setController(controller);
         expect(controller.initUsagesFilterWidget())
             .andReturn(new SalUsageFilterWidget(createMock(ISalUsageFilterController.class))).once();
-        replay(controller);
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
+        expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
+        replay(controller, streamSource);
         usagesWidget.init();
-        verify(controller);
+        verify(controller, streamSource);
         reset(controller);
     }
 
@@ -122,11 +129,13 @@ public class SalUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(3, layout.getComponentCount());
+        assertEquals(4, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Usage Batch", Collections.singletonList("Load Item Bank"));
         verifyMenuBar(layout.getComponent(1), "Fund Pool", Collections.singletonList("Load"));
         Button addToScenarioButton = (Button) layout.getComponent(2);
         assertEquals("Add To Scenario", addToScenarioButton.getCaption());
+        Button exportButton = (Button) layout.getComponent(3);
+        assertEquals("Export", exportButton.getCaption());
     }
 
     private void verifyMenuBar(Component component, String menuName, List<String> menuItems) {
