@@ -183,6 +183,15 @@ public class FundPoolServiceTest {
     }
 
     @Test
+    public void testGetSalNotAttachedToScenario() {
+        List<FundPool> funds = Collections.singletonList(buildSalFundPool());
+        expect(fundPoolRepository.findSalNotAttachedToScenario()).andReturn(funds).once();
+        replay(fundPoolRepository);
+        assertEquals(funds, fundPoolService.getSalNotAttachedToScenario());
+        verify(fundPoolRepository);
+    }
+
+    @Test
     public void testDeleteNtsFundPool() {
         ntsUsageService.deleteFromNtsFundPool(FUND_POOL_ID);
         expectLastCall().once();
@@ -274,6 +283,15 @@ public class FundPoolServiceTest {
         FundPool fundPool = new FundPool();
         fundPool.setId(FUND_POOL_ID);
         fundPool.setProductFamily("AACL");
+        fundPool.setName(FUND_POOL_NAME);
+        fundPool.setTotalAmount(BigDecimal.TEN);
+        return fundPool;
+    }
+
+    private FundPool buildSalFundPool() {
+        FundPool fundPool = new FundPool();
+        fundPool.setId(FUND_POOL_ID);
+        fundPool.setProductFamily("SAL");
         fundPool.setName(FUND_POOL_NAME);
         fundPool.setTotalAmount(BigDecimal.TEN);
         return fundPool;

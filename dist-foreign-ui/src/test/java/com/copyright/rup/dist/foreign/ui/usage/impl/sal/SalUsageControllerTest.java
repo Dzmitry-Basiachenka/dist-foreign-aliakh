@@ -189,6 +189,15 @@ public class SalUsageControllerTest {
     }
 
     @Test
+    public void testGetFundPoolsNotAttachedToScenario() {
+        List<FundPool> fundPools = Collections.singletonList(new FundPool());
+        expect(fundPoolService.getSalNotAttachedToScenario()).andReturn(fundPools).once();
+        replay(fundPoolService);
+        assertEquals(fundPools, controller.getFundPoolsNotAttachedToScenario());
+        verify(fundPoolService);
+    }
+
+    @Test
     public void testGetFundPools() {
         List<FundPool> fundPools = Collections.singletonList(new FundPool());
         expect(fundPoolService.getFundPools("SAL")).andReturn(fundPools).once();

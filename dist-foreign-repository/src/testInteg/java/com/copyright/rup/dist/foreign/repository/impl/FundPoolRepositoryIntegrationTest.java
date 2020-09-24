@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,6 +154,16 @@ public class FundPoolRepositoryIntegrationTest {
         List<String> expectedIds =
             Arrays.asList("6d38454b-ce71-4b0e-8ecf-436d23dc6c3e", "ce9c1258-6d29-4224-a4e6-6f03b6aeef53",
                 "100ce91c-49c1-4197-9f7a-23a8210d5706");
+        assertEquals(expectedIds, actualIds);
+    }
+
+    @Test
+    public void testFindSalNotAttachedToScenario() {
+        List<String> actualIds = fundPoolRepository.findSalNotAttachedToScenario().stream()
+            .map(FundPool::getId)
+            .collect(Collectors.toList());
+        List<String> expectedIds =
+            Arrays.asList("1ea65e2a-22c1-4a96-b55b-b6b4fd7d51ed", "15c3023d-1e68-4b7d-bfe3-18e85806b167");
         assertEquals(expectedIds, actualIds);
     }
 

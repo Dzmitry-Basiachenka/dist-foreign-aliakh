@@ -92,6 +92,7 @@ class CreateSalScenarioWindow extends Window {
 
     private void initFundPoolCombobox() {
         fundPoolComboBox = new ComboBox<>(ForeignUi.getMessage("label.fund_pool"));
+        fundPoolComboBox.setItems(controller.getFundPoolsNotAttachedToScenario());
         fundPoolComboBox.setItemCaptionGenerator(FundPool::getName);
         fundPoolComboBox.setRequiredIndicatorVisible(true);
         fundPoolBinder.forField(fundPoolComboBox)

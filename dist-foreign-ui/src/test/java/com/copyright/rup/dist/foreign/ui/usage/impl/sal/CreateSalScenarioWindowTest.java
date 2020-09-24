@@ -32,6 +32,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +61,8 @@ public class CreateSalScenarioWindowTest {
     public void setUp() {
         controller = createMock(ISalUsageController.class);
         expect(controller.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).anyTimes();
+        expect(controller.getFundPoolsNotAttachedToScenario())
+            .andReturn(Collections.singletonList(buildFundPool())).once();
     }
 
     @Test
@@ -136,5 +139,13 @@ public class CreateSalScenarioWindowTest {
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         return button;
+    }
+
+    private FundPool buildFundPool() {
+        FundPool fundPool = new FundPool();
+        fundPool.setId("0493303b-4b33-47a8-83b4-0ba9f63189c2");
+        fundPool.setName("SAL fund pool 2020");
+        fundPool.setProductFamily(SAL_PRODUCT_FAMILY);
+        return fundPool;
     }
 }
