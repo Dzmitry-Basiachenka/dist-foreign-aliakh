@@ -176,6 +176,12 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testUsageDetailsExistInItemBank() {
+        assertTrue(salUsageRepository.usageDetailsExistsInItemBank("cb932497-086d-4a7e-9b34-e9a62f17adab4"));
+        assertFalse(salUsageRepository.usageDetailsExistsInItemBank("b0e669d2-68d0-4add-9946-34215011f74b"));
+    }
+
+    @Test
     public void testWorkPortionIdExistsInBatch() {
         assertTrue(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3, "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64"));
         assertFalse(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3, "56069b44-10b1-42d6-9a44-a3fae0029171"));

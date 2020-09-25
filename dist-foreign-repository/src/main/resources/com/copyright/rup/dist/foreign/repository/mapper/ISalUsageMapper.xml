@@ -403,4 +403,15 @@
         where reported_work_portion_id = #{workPortionId}
             and detail_type = #{detailType}
     </select>
+
+    <select id="usageDetailsExistsInItemBank" resultType="boolean" parameterType="map">
+        select exists (
+            select 1
+            from ${schema}.df_usage_sal us
+            join ${schema}.df_usage u on us.df_usage_sal_uid = u.df_usage_uid
+            join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+            where us.detail_type = #{detailType}
+                and ub.df_usage_batch_uid = #{batchId}
+        )
+    </select>
 </mapper>
