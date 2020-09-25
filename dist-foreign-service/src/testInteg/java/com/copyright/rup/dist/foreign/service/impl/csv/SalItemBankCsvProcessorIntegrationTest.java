@@ -112,7 +112,7 @@ public class SalItemBankCsvProcessorIntegrationTest {
     @Test
     public void testProcessorWithInvalidHeader() throws Exception {
         try {
-            processFile("invalid_header_item_bank_file.csv");
+            processFile("sal_item_bank_invalid_header.csv");
             fail();
         } catch (HeaderValidationException e) {
             assertEquals(
