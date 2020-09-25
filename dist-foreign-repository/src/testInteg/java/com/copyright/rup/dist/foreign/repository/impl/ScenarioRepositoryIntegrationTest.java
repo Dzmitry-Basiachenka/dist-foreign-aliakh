@@ -29,6 +29,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -292,6 +293,14 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals("AACL Scenario 1",
             scenarioRepository.findNameByAaclFundPoolId("39548ee4-7929-477e-b9d2-bcb1e76f8037"));
         assertNull(scenarioRepository.findNameByAaclFundPoolId("859c35e5-abda-407f-92df-02f3a51f24cf"));
+    }
+
+    @Test
+    @Ignore // TODO {aliakh} enable when processing of the df_scenario.sal_fields column is implemented
+    public void testFindNameBySalFundPoolId() {
+        assertEquals("SAL Scenario 1",
+            scenarioRepository.findNameBySalFundPoolId("462111b6-5d30-4a43-a35b-14796d34d847"));
+        assertNull(scenarioRepository.findNameBySalFundPoolId("c9bc2013-4c77-42f7-8071-77fc115c55a7"));
     }
 
     @Test

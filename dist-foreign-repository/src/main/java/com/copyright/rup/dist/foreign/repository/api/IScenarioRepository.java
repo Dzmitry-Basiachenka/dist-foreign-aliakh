@@ -94,6 +94,14 @@ public interface IScenarioRepository {
     String findNameByAaclFundPoolId(String fundPoolId);
 
     /**
+     * Finds {@link Scenario} name associated with SAL {@link com.copyright.rup.dist.foreign.domain.FundPool}.
+     *
+     * @param fundPoolId fund pool id
+     * @return {@link Scenario} name or {@code null} if none found
+     */
+    String findNameBySalFundPoolId(String fundPoolId);
+
+    /**
      * Removes {@link Scenario} by given identifier.
      *
      * @param scenarioId {@link Scenario} identifier
