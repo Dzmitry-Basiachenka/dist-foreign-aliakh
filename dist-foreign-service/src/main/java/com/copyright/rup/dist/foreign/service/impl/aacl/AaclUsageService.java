@@ -253,8 +253,13 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
-    public void updateAaclUsagesUnderMinimum(String scenarioId, BigDecimal cutoffAmount, String userName) {
-        aaclUsageRepository.updateAaclUsagesUnderMinimum(scenarioId, cutoffAmount, userName);
+    public List<Long> getWrWrkInstsUnderMinimum(String scenarioId, BigDecimal cutoffAmount) {
+        return aaclUsageRepository.findWrWrkInstsUnderMinimum(scenarioId, cutoffAmount);
+    }
+
+    @Override
+    public void updateAaclUsagesUnderMinimum(String scenarioId, List<Long> wrWrkInsts, String userName) {
+        aaclUsageRepository.updateAaclUsagesUnderMinimum(scenarioId, wrWrkInsts, userName);
     }
 
     @Override

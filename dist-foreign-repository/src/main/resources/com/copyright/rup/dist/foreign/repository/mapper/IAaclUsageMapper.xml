@@ -1088,8 +1088,20 @@
         </if>
     </sql>
 
-    <update id="updateAaclUsagesUnderMinimum">
+    <select id="findWrWrkInstsUnderMinimum" resultType="long" parameterType="map">
         <include refid="prepareCalculationSteps"/>
+        select
+            wr_wrk_inst
+        from weights
+        join denominators on denominators.aggregateId = weights.aggregateId
+        join ${schema}.df_scenario sc on weights.df_scenario_uid = sc.df_scenario_uid
+        left join ${schema}.df_fund_pool_detail fpd on fpd.df_aggregate_licensee_class_id = weights.aggregateId
+            and fpd.df_fund_pool_uid = sc.aacl_fields ->> 'fund_pool_uid'
+        group by wr_wrk_inst
+        having coalesce (sum((volume_weight / volume_denominator + value_weight / value_denominator) / 2 * fpd.gross_amount), 0) &lt; #{cutoffAmount}
+    </select>
+
+    <update id="updateAaclUsagesUnderMinimum" parameterType="map">
         update ${schema}.df_usage
         set
             status_ind = 'SCENARIO_EXCLUDED',
@@ -1097,17 +1109,10 @@
             payee_account_number = null,
             <include refid="StoredEntityMapper.update"/>
         where df_scenario_uid = #{scenarioId}
-            and wr_wrk_inst in (
-                select
-                    wr_wrk_inst
-                from weights
-                join denominators on denominators.aggregateId = weights.aggregateId
-                join ${schema}.df_scenario sc on weights.df_scenario_uid = sc.df_scenario_uid
-                left join ${schema}.df_fund_pool_detail fpd on fpd.df_aggregate_licensee_class_id = weights.aggregateId
-                    and fpd.df_fund_pool_uid = sc.aacl_fields ->> 'fund_pool_uid'
-                group by wr_wrk_inst
-                having coalesce (sum((volume_weight / volume_denominator + value_weight / value_denominator) / 2 * fpd.gross_amount), 0) &lt; #{cutoffAmount}
-            )
+            and wr_wrk_inst in
+            <foreach collection="wrWrkInsts" item="wrWrkInst" separator="," open="(" close=")">
+                #{wrWrkInst}
+            </foreach>
     </update>
 
     <update id="calculateAmounts">

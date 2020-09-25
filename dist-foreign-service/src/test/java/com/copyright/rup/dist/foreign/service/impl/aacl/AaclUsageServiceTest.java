@@ -343,12 +343,23 @@ public class AaclUsageServiceTest {
     }
 
     @Test
+    public void testFindWrWrkInstsUnderMinimum() {
+        String scenarioId = "617ece75-b7e9-4889-a128-1423216c0ddc";
+        expect(aaclUsageRepository.findWrWrkInstsUnderMinimum(scenarioId, BigDecimal.TEN))
+            .andReturn(Collections.singletonList(7000000001L)).once();
+        replay(aaclUsageRepository);
+        assertEquals(Collections.singletonList(7000000001L),
+            aaclUsageService.getWrWrkInstsUnderMinimum(scenarioId, BigDecimal.TEN));
+        verify(aaclUsageRepository);
+    }
+
+    @Test
     public void testUpdateAaclUsagesUnderMinimum() {
         String scenarioId = "617ece75-b7e9-4889-a128-1423216c0ddc";
-        aaclUsageRepository.updateAaclUsagesUnderMinimum(scenarioId, BigDecimal.TEN, USER_NAME);
+        aaclUsageRepository.updateAaclUsagesUnderMinimum(scenarioId, Collections.singletonList(7000000001L), USER_NAME);
         expectLastCall().once();
         replay(aaclUsageRepository);
-        aaclUsageService.updateAaclUsagesUnderMinimum(scenarioId, BigDecimal.TEN, USER_NAME);
+        aaclUsageService.updateAaclUsagesUnderMinimum(scenarioId, Collections.singletonList(7000000001L), USER_NAME);
         verify(aaclUsageRepository);
     }
 
