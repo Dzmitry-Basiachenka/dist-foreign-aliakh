@@ -15,7 +15,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,10 +51,12 @@ public class FundPoolRepositoryIntegrationTest {
     private static final String NTS_FUND_POOL_ID_2 = "76282dbc-2468-48d4-b926-93d3458a656b";
     private static final String NTS_FUND_POOL_ID_3 = "6fe5044d-15a3-47fe-913e-69f3bf353bef";
     private static final String AACL_FUND_POOL_ID = "ce9c1258-6d29-4224-a4e6-6f03b6aeef53";
+    private static final String SAL_FUND_POOL_ID = "8b1ba84d-4f51-4072-bb6f-55ab6a65a1e1";
     private static final String NAME_1 = "Q1 2019 100%";
     private static final String NAME_2 = "NTS Q2 2019";
     private static final String COMMENT_1 = "some comment";
     private static final String COMMENT_2 = "other comment";
+    private static final String SAL_PRODUCT_FAMILY = "SAL";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final String USER_NAME = "user@copyright.com";
@@ -77,6 +79,29 @@ public class FundPoolRepositoryIntegrationTest {
         assertEquals(NTS_PRODUCT_FAMILY, actualFundPool.getProductFamily());
         assertEquals(NAME_2, actualFundPool.getName());
         assertEquals(COMMENT_2, actualFundPool.getComment());
+    }
+
+    @Test
+    public void testInsertSalFundPool() {
+        assertNull(fundPoolRepository.findById(SAL_FUND_POOL_ID));
+        FundPool.SalFields salFields = buildSalFields();
+        BigDecimal totalAmount = new BigDecimal("200.00");
+        FundPool fundPool = new FundPool();
+        fundPool.setId(SAL_FUND_POOL_ID);
+        fundPool.setProductFamily(SAL_PRODUCT_FAMILY);
+        fundPool.setName(NAME_2);
+        fundPool.setComment(COMMENT_2);
+        fundPool.setTotalAmount(totalAmount);
+        fundPool.setSalFields(salFields);
+        fundPoolRepository.insert(fundPool);
+        FundPool insertedFundPool = fundPoolRepository.findById(SAL_FUND_POOL_ID);
+        assertNotNull(insertedFundPool);
+        assertEquals(SAL_FUND_POOL_ID, insertedFundPool.getId());
+        assertEquals(SAL_PRODUCT_FAMILY, insertedFundPool.getProductFamily());
+        assertEquals(NAME_2, insertedFundPool.getName());
+        assertEquals(COMMENT_2, insertedFundPool.getComment());
+        assertEquals(totalAmount, insertedFundPool.getTotalAmount());
+        assertEquals(salFields, insertedFundPool.getSalFields());
     }
 
     @Test
@@ -213,7 +238,8 @@ public class FundPoolRepositoryIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper.readValue(content, new TypeReference<List<FundPoolDetail>>() {});
+        return mapper.readValue(content, new TypeReference<List<FundPoolDetail>>() {
+        });
     }
 
     private void assertFundPool(FundPool fundPool, String id, String productFamily, String name, BigDecimal amount,
@@ -234,5 +260,24 @@ public class FundPoolRepositoryIntegrationTest {
         assertEquals(expectedAggregate.getEnrollmentProfile(), actualAggregate.getEnrollmentProfile());
         assertEquals(expectedAggregate.getDiscipline(), actualAggregate.getDiscipline());
         assertEquals(expected.getGrossAmount(), actual.getGrossAmount());
+    }
+
+    private FundPool.SalFields buildSalFields() {
+        FundPool.SalFields salFields = new FundPool.SalFields();
+        salFields.setDateReceived(LocalDate.of(2020, 12, 24));
+        salFields.setAssessmentName("FY2020 COG");
+        salFields.setLicenseeAccountNumber(1000008985L);
+        salFields.setLicenseeName("FarmField Inc.");
+        salFields.setGradeKto5NumberOfStudents(10);
+        salFields.setGrade6to8NumberOfStudents(5);
+        salFields.setGrossAmount(new BigDecimal("1000.00"));
+        salFields.setItemBankAmount(new BigDecimal("15.00"));
+        salFields.setItemBankGrossAmount(new BigDecimal("20.00"));
+        salFields.setGradeKto5GrossAmount(new BigDecimal("490.00"));
+        salFields.setGrade6to8GrossAmount(new BigDecimal("245.00"));
+        salFields.setGrade9to12GrossAmount(new BigDecimal("0.00"));
+        salFields.setItemBankSplitPercent(new BigDecimal("0.02000"));
+        salFields.setServiceFee(new BigDecimal("0.25000"));
+        return salFields;
     }
 }

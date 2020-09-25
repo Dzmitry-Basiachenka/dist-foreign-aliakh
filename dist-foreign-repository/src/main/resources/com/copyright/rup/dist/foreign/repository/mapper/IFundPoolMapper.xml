@@ -10,6 +10,7 @@
         <result property="name" column="name"/>
         <result property="totalAmount" column="total_amount"/>
         <result property="comment" column="comment"/>
+        <result property="salFields" column="sal_fields" typeHandler="SalFundPoolFieldsTypeHandler"/>
     </resultMap>
 
     <resultMap id="aaclFundPoolDetailResultMap" type="FundPoolDetail" extends="StoredEntityMapper.storedEntityResult">
@@ -26,6 +27,7 @@
         name,
         total_amount,
         comment,
+        sal_fields,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
 
@@ -38,6 +40,7 @@
             #{name},
             #{totalAmount},
             #{comment},
+            #{salFields, typeHandler=SalFundPoolFieldsTypeHandler},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
