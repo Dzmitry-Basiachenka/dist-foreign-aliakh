@@ -292,7 +292,7 @@
         and u.df_scenario_uid is null
     </sql>
 
-    <insert id="insert" parameterType="Usage">
+    <insert id="insertItemBankDetail" parameterType="Usage">
         with u as (
             insert into ${schema}.df_usage (
                 df_usage_uid,
@@ -353,6 +353,110 @@
             #{salUsage.detailType},
             <include refid="StoredEntityMapper.insert"/>
         )
+    </insert>
+
+    <insert id="insertUsageDataDetail" parameterType="map">
+        with ibu as (
+            select
+                u.df_usage_batch_uid,
+                u.wr_wrk_inst,
+                u.work_title,
+                u.system_title,
+                u.standard_number,
+                u.standard_number_type,
+                u.rh_account_number,
+                usal.assessment_name,
+                usal.coverage_year,
+                usal.reported_standard_number,
+                usal.reported_media_type,
+                usal.media_type_weight,
+                usal.reported_article,
+                usal.reported_author,
+                usal.reported_publisher,
+                usal.reported_publication_date,
+                usal.reported_page_range,
+                usal.reported_vol_number_series
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
+            where usal.reported_work_portion_id = #{usage.salUsage.reportedWorkPortionId}
+                and usal.detail_type = #{itemBankDetailType}
+        ),
+        u as (
+            insert into ${schema}.df_usage (
+                df_usage_uid,
+                df_usage_batch_uid,
+                wr_wrk_inst,
+                work_title,
+                system_title,
+                standard_number,
+                standard_number_type,
+                rh_account_number,
+                status_ind,
+                product_family,
+                comment,
+                <include refid="StoredEntityMapper.additionalColumns"/>
+            )
+            select
+                #{usage.id},
+                df_usage_batch_uid,
+                wr_wrk_inst,
+                work_title,
+                system_title,
+                standard_number,
+                standard_number_type,
+                rh_account_number,
+                #{usage.status},
+                #{usage.productFamily},
+                #{usage.comment},
+                <include refid="StoredEntityMapper.insert"/>
+            from ibu
+        )
+        insert into ${schema}.df_usage_sal (
+            df_usage_sal_uid,
+            assessment_name,
+            assessment_type,
+            coverage_year,
+            scored_assessment_date,
+            question_identifier,
+            states,
+            number_of_views,
+            grade,
+            reported_work_portion_id,
+            reported_standard_number,
+            reported_media_type,
+            media_type_weight,
+            reported_article,
+            reported_author,
+            reported_publisher,
+            reported_publication_date,
+            reported_page_range,
+            reported_vol_number_series,
+            detail_type,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        )
+        select
+            #{usage.id},
+            assessment_name,
+            #{usage.salUsage.assessmentType},
+            coverage_year,
+            #{usage.salUsage.scoredAssessmentDate},
+            #{usage.salUsage.questionIdentifier},
+            #{usage.salUsage.states},
+            #{usage.salUsage.numberOfViews},
+            #{usage.salUsage.grade},
+            #{usage.salUsage.reportedWorkPortionId},
+            reported_standard_number,
+            reported_media_type,
+            media_type_weight,
+            reported_article,
+            reported_author,
+            reported_publisher,
+            reported_publication_date,
+            reported_page_range,
+            reported_vol_number_series,
+            #{usage.salUsage.detailType},
+            <include refid="StoredEntityMapper.insert"/>
+        from ibu
     </insert>
 
     <select id="findCountByFilter" parameterType="map" resultType="int">

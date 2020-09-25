@@ -1,0 +1,44 @@
+[
+  {
+    "id": "e42e0321-772c-49b8-b3bf-b73b6d784089",
+    "batchId": "48b77da2-c223-40c9-a655-bef4dbe7a807",
+    "wrWrkInst": 876543210,
+    "workTitle": "Med. Journal",
+    "systemTitle": "Medical Journal",
+    "standardNumber": "978-0-7695-2365-2",
+    "standardNumberType": "VALISSN",
+    "rightsholder": {
+      "accountNumber": "1000000001"
+    },
+    "status": "ELIGIBLE",
+    "productFamily": "SAL",
+    "comment": "SAL usage data comment",
+    "salUsage": {
+      "licenseeAccountNumber": 70012934444454,
+      "licenseeName": "Truman State University",
+      "detailType": "UD",
+      "grade": "5",
+      "assessmentName": "Spring2014 Eng Lang/Mathy",
+      "assessmentType": "EOC",
+      "questionIdentifier": "SB245",
+      "reportedWorkPortionId": "2402175IB3307",
+      "reportedArticle": "Learning in Your Sleep",
+      "reportedStandardNumber": "978-0-87664-361-7",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": "2014-01-02",
+      "reportedPageRange": "14-17",
+      "reportedVolNumberSeries": "Vol 17, Issue 2",
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": 1.0,
+      "coverageYear": "2014-2015",
+      "scoredAssessmentDate": "2014-09-14",
+      "states": "FL;WY",
+      "numberOfViews": "258",
+      "batchPeriodEndDate": "2019-06-30"
+    },
+    "createUser": "user@copyright.com",
+    "updateUser": "user@copyright.com",
+    "version": 1
+  }
+]

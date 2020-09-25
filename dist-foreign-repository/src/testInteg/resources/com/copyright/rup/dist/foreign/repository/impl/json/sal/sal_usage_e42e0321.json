@@ -1,0 +1,20 @@
+[
+  {
+    "id": "e42e0321-772c-49b8-b3bf-b73b6d784089",
+    "batchId": "48b77da2-c223-40c9-a655-bef4dbe7a807",
+    "status": "ELIGIBLE",
+    "productFamily": "SAL",
+    "comment": "SAL usage data comment",
+    "salUsage": {
+      "scoredAssessmentDate": "2014-09-14",
+      "reportedWorkPortionId": "2402175IB3307",
+      "assessmentType": "EOC",
+      "questionIdentifier": "SB245",
+      "grade": "5",
+      "states": "FL;WY",
+      "numberOfViews": "258",
+      "detailType": "UD"
+    },
+    "createUser": "user@copyright.com"
+  }
+]

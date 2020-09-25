@@ -132,7 +132,7 @@ public class SalUsageServiceTest {
         usage.setProductFamily("SAL");
         usage.setSalUsage(new SalUsage());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        salUsageRepository.insert(usage);
+        salUsageRepository.insertItemBankDetail(usage);
         expectLastCall().once();
         usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, "Uploaded in 'SAL Batch' Batch");
         expectLastCall().once();
