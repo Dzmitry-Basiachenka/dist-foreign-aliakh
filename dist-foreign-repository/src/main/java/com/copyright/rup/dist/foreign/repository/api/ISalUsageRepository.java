@@ -20,11 +20,18 @@ import java.util.List;
 public interface ISalUsageRepository {
 
     /**
-     * Inserts SAL usage into database.
+     * Inserts SAL item bank detail into database.
      *
      * @param usage {@link Usage} instance
      */
-    void insert(Usage usage);
+    void insertItemBankDetail(Usage usage);
+
+    /**
+     * Inserts SAL usage data detail into database.
+     *
+     * @param usage {@link Usage} instance
+     */
+    void insertUsageDataDetail(Usage usage);
 
     /**
      * Finds list of SAL {@link Usage}s by their ids.

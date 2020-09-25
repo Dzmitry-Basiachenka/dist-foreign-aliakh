@@ -73,11 +73,22 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testInsert() throws IOException {
+    public void testInsertItemBankDetail() throws IOException {
         Usage expectedUsage = loadExpectedUsages("json/sal/sal_usage_3883a15d.json").get(0);
-        salUsageRepository.insert(expectedUsage);
+        salUsageRepository.insertItemBankDetail(expectedUsage);
         List<Usage> actualUsages =
             salUsageRepository.findByIds(Collections.singletonList("3883a15d-53d3-4e51-af30-b8d8abfcbd4d"));
+        assertEquals(1, actualUsages.size());
+        verifyUsage(expectedUsage, actualUsages.get(0));
+    }
+
+    @Test
+    public void testInsertUsageDataDetail() throws IOException {
+        Usage usageToInsert = loadExpectedUsages("json/sal/sal_usage_e42e0321.json").get(0);
+        Usage expectedUsage = loadExpectedUsages("json/sal/expected_sal_usage_e42e0321.json").get(0);
+        salUsageRepository.insertUsageDataDetail(usageToInsert);
+        List<Usage> actualUsages =
+            salUsageRepository.findByIds(Collections.singletonList("e42e0321-772c-49b8-b3bf-b73b6d784089"));
         assertEquals(1, actualUsages.size());
         verifyUsage(expectedUsage, actualUsages.get(0));
     }
@@ -229,11 +240,18 @@ public class SalUsageRepositoryIntegrationTest {
 
     private void verifyUsage(Usage expectedUsage, Usage actualUsage) {
         assertEquals(expectedUsage.getId(), actualUsage.getId());
-        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
+        assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
+            actualUsage.getRightsholder().getAccountNumber());
         assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
         assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        assertEquals(expectedUsage.getCreateUser(), actualUsage.getCreateUser());
+        assertEquals(expectedUsage.getUpdateUser(), actualUsage.getUpdateUser());
         assertSalUsageFields(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
     }
 

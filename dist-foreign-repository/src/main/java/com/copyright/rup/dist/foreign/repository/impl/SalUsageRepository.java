@@ -35,8 +35,18 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     private static final int MAX_VARIABLES_COUNT = 32000;
 
     @Override
-    public void insert(Usage usage) {
-        insert("ISalUsageMapper.insert", Objects.requireNonNull(usage));
+    public void insertItemBankDetail(Usage usage) {
+        insert("ISalUsageMapper.insertItemBankDetail", Objects.requireNonNull(usage));
+    }
+
+    @Override
+    public void insertUsageDataDetail(Usage usage) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put("usage", Objects.requireNonNull(usage));
+        parameters.put("createUser", Objects.requireNonNull(usage.getCreateUser()));
+        parameters.put("updateUser", usage.getCreateUser());
+        parameters.put("itemBankDetailType", SalDetailTypeEnum.IB);
+        insert("ISalUsageMapper.insertUsageDataDetail", parameters);
     }
 
     @Override

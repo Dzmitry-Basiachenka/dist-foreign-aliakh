@@ -86,7 +86,7 @@ public class SalUsageService implements ISalUsageService {
             usage.setBatchId(usageBatch.getId());
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
-            salUsageRepository.insert(usage);
+            salUsageRepository.insertItemBankDetail(usage);
         });
         String loadedReason = "Uploaded in '" + usageBatch.getName() + "' Batch";
         usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason));
