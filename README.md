@@ -1,3 +1,27 @@
+12.1.4
+-
+* B-57891 FDA: Scenario tab modifications for SAL main view: implement the tab
+* B-57891 FDA: Scenario tab modifications for SAL main view: make changes based on comments in CR-DIST-FOREIGN-192
+* B-57897 FDA: Create SAL Scenario: fix CreateSalScenarioWindowTest
+* B-57897 FDA: Create SAL Scenario: implement SAL scenario specific fields
+* B-57897 FDA: Create SAL Scenario: implement create SAL scenario window
+* B-57898 FDA: SAL usage tab export: add export button
+* B-57898 FDA: SAL usage tab export: implement backend logic to export usage batch
+* B-57903 FDA: View and Delete SAL batch: implement repository logic to check is exists usage detail in the Item Bank
+* B-57917 FDA: Load SAL fund pool: Implement Fund Pool menu
+* B-57917 FDA: Load SAL fund pool: Implement liquibase script to add sal_fields column to df_fund_pool table and implement SAL fund pool fields domain
+* B-57917 FDA: Load SAL fund pool: Implement mapper and handler for SAL fund pool fields
+* B-57917 FDA: Load SAL fund pool: Implement repository logic to store SAL fund pool data
+* B-58518 FDA: Load SAL usage data: fix incorrect file in CSV integration test
+* B-58518 FDA: Load SAL usage data: implement CSV processor
+* B-58518 FDA: Load SAL usage data: implement grade validator for UD detail
+* B-58518 FDA: Load SAL usage data: implement logic for retrieving IB detail grade by work portion id
+* B-58518 FDA: Load SAL usage data: implement work portion id validator
+* B-58833 FDA: Generate a Grade Group for SAL usages: populate grade group for Item Bank usages
+* B-58887 FDA: View and Delete SAL fund pool: add permission to delete Fund Pool
+* B-58887 FDA: View and Delete SAL fund pool: implement service and repository methods
+* B-58887 FDA: View and Delete SAL fund pool: use the correct name for the Liquibase script to add permission to delete Fund Pool
+
 12.1.3
 -
 * B-62030 FDA: Migrate to Amazon Corretto: use the new version of dist-common
