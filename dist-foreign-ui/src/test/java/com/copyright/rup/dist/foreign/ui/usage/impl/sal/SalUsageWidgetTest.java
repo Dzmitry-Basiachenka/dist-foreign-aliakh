@@ -131,7 +131,7 @@ public class SalUsageWidgetTest {
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(4, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Usage Batch", Collections.singletonList("Load Item Bank"));
-        verifyMenuBar(layout.getComponent(1), "Fund Pool", Collections.singletonList("Load"));
+        verifyMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
         Button addToScenarioButton = (Button) layout.getComponent(2);
         assertEquals("Add To Scenario", addToScenarioButton.getCaption());
         Button exportButton = (Button) layout.getComponent(3);

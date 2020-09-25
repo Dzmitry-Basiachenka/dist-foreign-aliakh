@@ -29,7 +29,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -296,7 +295,6 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @Ignore // TODO {aliakh} enable when processing of the df_scenario.sal_fields column is implemented
     public void testFindNameBySalFundPoolId() {
         assertEquals("SAL Scenario 1",
             scenarioRepository.findNameBySalFundPoolId("462111b6-5d30-4a43-a35b-14796d34d847"));
