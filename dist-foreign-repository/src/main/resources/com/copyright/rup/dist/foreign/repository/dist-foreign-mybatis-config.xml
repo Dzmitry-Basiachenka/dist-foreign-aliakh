@@ -52,6 +52,7 @@
         <typeAlias alias="FundPoolDetail" type="com.copyright.rup.dist.foreign.domain.FundPoolDetail"/>
         <typeAlias alias="AaclScenarioFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.AaclScenarioFieldsTypeHandler"/>
         <typeAlias alias="NtsScenarioFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.NtsScenarioFieldsTypeHandler"/>
+        <typeAlias alias="SalScenarioFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.SalScenarioFieldsTypeHandler"/>
         <typeAlias alias="batchNameScenarioNamePair" type="com.copyright.rup.dist.foreign.repository.impl.BatchesNamesToScenariosNamesResultHandler$BatchNameScenarioNamePair"/>
         <typeAlias alias="WrWrkInstUsageIdPair" type="com.copyright.rup.dist.foreign.repository.impl.WrWrkInstToUsageIdResultHandler$WrWrkInstUsageIdPair"/>
         <typeAlias alias="PayeeTotalHolder" type="com.copyright.rup.dist.foreign.domain.PayeeTotalHolder"/>
@@ -69,6 +70,7 @@
         <typeHandler handler="SalBatchFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.UsageBatch$SalFields"/>
         <typeHandler handler="AaclScenarioFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.Scenario$AaclFields"/>
         <typeHandler handler="NtsScenarioFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.Scenario$NtsFields"/>
+        <typeHandler handler="SalScenarioFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.Scenario$SalFields"/>
     </typeHandlers>
 
     <mappers>
