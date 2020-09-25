@@ -18,7 +18,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.SalFields;
-import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
@@ -139,7 +139,7 @@ public class ItemBankUploadWindowTest {
     public void testOnUploadClickedValidFields() {
         mockStatic(Windows.class);
         UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile");
-        SalUsageCsvProcessor processor = createMock(SalUsageCsvProcessor.class);
+        SalItemBankCsvProcessor processor = createMock(SalItemBankCsvProcessor.class);
         ProcessingResult<Usage> processingResult = buildCsvProcessingResult();
         window = createPartialMock(ItemBankUploadWindow.class, "isValid");
         Whitebox.setInternalState(window, "usagesController", usagesController);
@@ -149,7 +149,7 @@ public class ItemBankUploadWindowTest {
         Whitebox.setInternalState(window, "licenseeNameField", new TextField("Licensee Name", LICENSEE_NAME));
         Whitebox.setInternalState(window, PERIOD_END_DATE_FIELD, new TextField("Period End Date", PERIOD_END_DATE));
         expect(window.isValid()).andReturn(true).once();
-        expect(usagesController.getSalUsageCsvProcessor()).andReturn(processor).once();
+        expect(usagesController.getSalItemBankCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
         usagesController.loadItemBank(buildUsageBatch(), processingResult.get());
         expectLastCall().once();

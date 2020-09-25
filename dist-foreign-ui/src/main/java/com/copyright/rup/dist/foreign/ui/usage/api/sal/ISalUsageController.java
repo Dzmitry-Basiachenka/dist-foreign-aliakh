@@ -4,7 +4,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 
 import java.util.List;
@@ -37,9 +37,9 @@ public interface ISalUsageController extends ICommonUsageController {
     void loadItemBank(UsageBatch itemBank, List<Usage> usages);
 
     /**
-     * @return instance of {@link SalUsageCsvProcessor}
+     * @return instance of {@link SalItemBankCsvProcessor}
      */
-    SalUsageCsvProcessor getSalUsageCsvProcessor();
+    SalItemBankCsvProcessor getSalItemBankCsvProcessor();
 
     /**
      * Return instance of {@link IStreamSource} for errors result.

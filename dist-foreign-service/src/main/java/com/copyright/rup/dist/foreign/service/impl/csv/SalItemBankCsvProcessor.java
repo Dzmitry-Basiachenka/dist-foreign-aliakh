@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Processor for SAL {@link Usage}.
+ * Processor for SAL Item Bank {@link Usage}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -30,12 +30,12 @@ import java.util.stream.Stream;
  *
  * @author Ihar Suvorau
  */
-public class SalUsageCsvProcessor extends DistCsvProcessor<Usage> {
+public class SalItemBankCsvProcessor extends DistCsvProcessor<Usage> {
 
     /**
      * Constructor.
      */
-    SalUsageCsvProcessor() {
+    SalItemBankCsvProcessor() {
         super();
     }
 

@@ -18,7 +18,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
-import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -91,7 +91,7 @@ public class LoadSalUsagesIntegrationTest {
 
     private void loadUsageBatch() throws IOException {
         UsageBatch batch = buildUsageBatch();
-        SalUsageCsvProcessor csvProcessor = csvProcessorFactory.getSalUsageCsvProcessor();
+        SalItemBankCsvProcessor csvProcessor = csvProcessorFactory.getSalItemBankCsvProcessor();
         ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
         assertTrue(result.isSuccessful());
         List<Usage> usages = result.get();

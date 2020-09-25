@@ -37,7 +37,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 /**
- * Verifies {@link SalUsageCsvProcessor}.
+ * Verifies {@link SalUsageDataCsvProcessor}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -48,12 +48,13 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=sal-usages-csv-processor-data-init.groovy"})
+@TestPropertySource(properties = {"test.liquibase.changelog=sal-usage-data-csv-processor-data-init.groovy"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class SalUsageCsvProcessorIntegrationTest {
+public class SalUsageDataCsvProcessorIntegrationTest {
 
     private static final String BASE_PATH = "/com/copyright/rup/dist/foreign/service/impl/usage/sal/";
     private static final String PATH_TO_CSV = "src/testInteg/resources" + BASE_PATH;
+    private static final String BATCH_ID = "10ddbb20-1b13-434d-8347-6db3f840e70f";
 
     private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_CSV);
 
@@ -62,12 +63,12 @@ public class SalUsageCsvProcessorIntegrationTest {
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
-        ReportTestUtils.setUpTestDirectory(SalUsageCsvProcessorIntegrationTest.class);
+        ReportTestUtils.setUpTestDirectory(SalUsageDataCsvProcessorIntegrationTest.class);
     }
 
     @Test
     public void testProcessor() throws Exception {
-        ProcessingResult<Usage> result = processFile("sal_item_bank_usages.csv");
+        ProcessingResult<Usage> result = processFile("sal_usage_data.csv");
         assertNotNull(result);
         List<Usage> actualUsages = result.get();
         List<Usage> expectedUsages = loadExpectedUsages();
@@ -82,31 +83,31 @@ public class SalUsageCsvProcessorIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
         try {
-            processFile("sal_item_bank_usages_with_2000_errors.csv");
+            processFile("sal_usage_data_with_2000_errors.csv");
             fail();
         } catch (ThresholdExceededException ex) {
             assertEquals("The file could not be uploaded. There are more than 2000 errors", ex.getMessage());
             Executors.newSingleThreadExecutor().execute(() -> ex.getProcessingResult().writeToFile(outputStream));
-            reportTestUtils.assertCsvReport("sal_item_bank_usages_with_2000_errors_report.csv", pipedInputStream);
+            reportTestUtils.assertCsvReport("sal_usage_data_with_2000_errors_report.csv", pipedInputStream);
         }
     }
 
     @Test
     public void testProcessorForNegativePath() throws Exception {
-        ProcessingResult<Usage> result = processFile("sal_item_bank_usages_with_errors.csv");
+        ProcessingResult<Usage> result = processFile("sal_usage_data_with_errors.csv");
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
         Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
-        reportTestUtils.assertCsvReport("sal_item_bank_usages_with_errors_report.csv", pipedInputStream);
+        reportTestUtils.assertCsvReport("sal_usage_data_with_errors_report.csv", pipedInputStream);
     }
 
     @Test
     public void testProcessorForNegativePathBusinessValidation() throws Exception {
-        ProcessingResult<Usage> result = processFile("sal_item_bank_usages_with_business_errors.csv");
+        ProcessingResult<Usage> result = processFile("sal_usage_data_with_business_errors.csv");
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
         Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
-        reportTestUtils.assertCsvReport("sal_item_bank_usages_with_business_errors_report.csv", pipedInputStream);
+        reportTestUtils.assertCsvReport("sal_usage_data_with_business_errors_report.csv", pipedInputStream);
     }
 
     @Test
@@ -118,20 +119,13 @@ public class SalUsageCsvProcessorIntegrationTest {
             assertEquals(
                 "Columns headers are incorrect. Expected columns headers are:\n" +
                     "<ul>" +
-                    "<li>Assessment Name</li>" +
-                    "<li>Coverage Year</li>" +
-                    "<li>Grade</li>" +
-                    "<li>Wr Wrk Inst</li>" +
+                    "<li>Date of Scored Assessment</li>" +
                     "<li>Reported Work Portion ID</li>" +
-                    "<li>Reported Standard Number</li>" +
-                    "<li>Reported Title</li>" +
-                    "<li>Reported Media Type</li>" +
-                    "<li>Reported Article or Chapter Title</li>" +
-                    "<li>Reported Author</li>" +
-                    "<li>Reported Publisher</li>" +
-                    "<li>Reported Publication Date</li>" +
-                    "<li>Reported Page Range</li>" +
-                    "<li>Reported Vol/Number/Series</li>" +
+                    "<li>Assessment Type</li>" +
+                    "<li>Question Identifier</li>" +
+                    "<li>Grade</li>" +
+                    "<li>States</li>" +
+                    "<li>Number of Views</li>" +
                     "<li>Comment</li>" +
                     "</ul>",
                 e.getHtmlMessage());
@@ -143,14 +137,13 @@ public class SalUsageCsvProcessorIntegrationTest {
         try (InputStream stream = this.getClass().getResourceAsStream(BASE_PATH + "/" + file);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             IOUtils.copy(stream, outputStream);
-            SalUsageCsvProcessor processor = csvProcessorFactory.getSalUsageCsvProcessor();
+            SalUsageDataCsvProcessor processor = csvProcessorFactory.getSalUsageDataCsvProcessor(BATCH_ID);
             result = processor.process(outputStream);
         }
         return result;
     }
 
     private void assertUsage(Usage expectedUsage, Usage actualUsage) {
-        assertNotNull(expectedUsage.getId());
         assertNotNull(actualUsage.getId());
         assertStoredEntity(expectedUsage);
         assertStoredEntity(actualUsage);
@@ -164,8 +157,6 @@ public class SalUsageCsvProcessorIntegrationTest {
     }
 
     private void assertUsageFields(Usage expectedUsage, Usage actualUsage) {
-        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
-        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
         assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
         assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
@@ -173,24 +164,18 @@ public class SalUsageCsvProcessorIntegrationTest {
     }
 
     private void assertSalUsageFields(SalUsage expectedUsage, SalUsage actualUsage) {
-        assertEquals(expectedUsage.getAssessmentName(), actualUsage.getAssessmentName());
-        assertEquals(expectedUsage.getCoverageYear(), actualUsage.getCoverageYear());
-        assertEquals(expectedUsage.getGrade(), actualUsage.getGrade());
-        assertEquals(expectedUsage.getDetailType(), actualUsage.getDetailType());
+        assertEquals(expectedUsage.getScoredAssessmentDate(), actualUsage.getScoredAssessmentDate());
         assertEquals(expectedUsage.getReportedWorkPortionId(), actualUsage.getReportedWorkPortionId());
-        assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
-        assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());
-        assertEquals(expectedUsage.getMediaTypeWeight(), actualUsage.getMediaTypeWeight());
-        assertEquals(expectedUsage.getReportedArticle(), actualUsage.getReportedArticle());
-        assertEquals(expectedUsage.getReportedAuthor(), actualUsage.getReportedAuthor());
-        assertEquals(expectedUsage.getReportedPublisher(), actualUsage.getReportedPublisher());
-        assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
-        assertEquals(expectedUsage.getReportedPageRange(), actualUsage.getReportedPageRange());
-        assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
+        assertEquals(expectedUsage.getAssessmentType(), actualUsage.getAssessmentType());
+        assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
+        assertEquals(expectedUsage.getGrade(), actualUsage.getGrade());
+        assertEquals(expectedUsage.getStates(), actualUsage.getStates());
+        assertEquals(expectedUsage.getNumberOfViews(), actualUsage.getNumberOfViews());
+        assertEquals(expectedUsage.getDetailType(), actualUsage.getDetailType());
     }
 
     private List<Usage> loadExpectedUsages() throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), BASE_PATH + "sal_item_bank_usages.json");
+        String content = TestUtils.fileToString(this.getClass(), BASE_PATH + "sal_usage_data.json");
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         return mapper.readValue(content, new TypeReference<List<Usage>>() {
