@@ -76,4 +76,12 @@ public interface ISalUsageRepository {
      * @return {@link com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum#IB} detail grade
      */
     String findItemBankDetailGradeByWorkPortionId(String workPortionId);
+
+    /**
+     * Checks whether usage details exists in the given batch.
+     *
+     * @param batchId batch id
+     * @return {@code true} - if usage details exists, {@code false} - otherwise
+     */
+    boolean usageDetailsExistsInItemBank(String batchId);
 }

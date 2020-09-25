@@ -82,4 +82,12 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
         parameters.put("detailType", SalDetailTypeEnum.IB);
         return selectOne("ISalUsageMapper.findItemBankDetailGradeByWorkPortionId", parameters);
     }
+
+    @Override
+    public boolean usageDetailsExistsInItemBank(String batchId) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("batchId", Objects.requireNonNull(batchId));
+        params.put("detailType", SalDetailTypeEnum.UD);
+        return selectOne("ISalUsageMapper.usageDetailsExistsInItemBank", params);
+    }
 }
