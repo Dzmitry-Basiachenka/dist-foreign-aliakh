@@ -82,6 +82,21 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
+    public void testDeleteByBatchIdAndDetailType() {
+        assertEquals(1,
+            CollectionUtils.size(usageAuditRepository.findByUsageId("51e60822-5b4c-4fa8-9922-05e93065f216")));
+        assertEquals(1,
+            CollectionUtils.size(usageAuditRepository.findByUsageId("9793bfb8-2628-485a-9ceb-0d7652691a1b")));
+        assertEquals(1,
+            CollectionUtils.size(usageAuditRepository.findByUsageId("ad91d122-aedc-4b41-a09e-f7f055f5cb85")));
+        usageAuditRepository.deleteForSalUsageData("129b0e2d-8c2a-4c66-8dcf-456106c823d8");
+        assertEquals(1,
+            CollectionUtils.size(usageAuditRepository.findByUsageId("51e60822-5b4c-4fa8-9922-05e93065f216")));
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("9793bfb8-2628-485a-9ceb-0d7652691a1b")));
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("ad91d122-aedc-4b41-a09e-f7f055f5cb85")));
+    }
+
+    @Test
     public void testDeleteForArchivedByBatchId() {
         assertEquals(1,
             CollectionUtils.size(usageAuditRepository.findByUsageId("422d33c0-4594-451e-a1ca-412c023299aa")));

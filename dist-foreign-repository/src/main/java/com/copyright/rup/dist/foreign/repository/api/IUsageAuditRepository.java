@@ -32,6 +32,14 @@ public interface IUsageAuditRepository {
     void deleteByBatchId(String batchId);
 
     /**
+     * Deletes {@link UsageAuditItem}s by given batch identifier and
+     * {@link com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum#UD}.
+     *
+     * @param batchId batch identifier
+     */
+    void deleteForSalUsageData(String batchId);
+
+    /**
      * Deletes {@link UsageAuditItem}s for archived usages by given batch identifier.
      *
      * @param batchId batch identifier
