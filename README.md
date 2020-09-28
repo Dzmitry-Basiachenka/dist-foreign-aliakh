@@ -1,3 +1,10 @@
+12.1.5
+-
+* B-57772 Tech Debt: FDA: implement partitioning for excluding usages from AACL scenario during calculation
+* B-57903 FDA: View and Delete SAL batch: implement repository logic to remove usage details
+* B-58518 FDA: Load SAL usage data: implement repository logic for saving SAL usage data detail
+* B-58887 FDA: View and Delete SAL fund pool: implement View Fund Pool window
+
 12.1.4
 -
 * B-57891 FDA: Scenario tab modifications for SAL main view: implement the tab
