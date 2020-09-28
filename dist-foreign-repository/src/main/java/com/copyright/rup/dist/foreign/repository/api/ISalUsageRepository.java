@@ -98,4 +98,11 @@ public interface ISalUsageRepository {
      * @param batchId batch id
      */
     void deleteUsageData(String batchId);
+
+    /**
+     * Deletes all {@link Usage}s from the batch with given id.
+     *
+     * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
+     */
+    void deleteByBatchId(String batchId);
 }

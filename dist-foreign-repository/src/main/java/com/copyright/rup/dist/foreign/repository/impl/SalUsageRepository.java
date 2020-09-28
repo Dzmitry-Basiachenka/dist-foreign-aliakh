@@ -108,4 +108,9 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
         params.put("detailType", SalDetailTypeEnum.UD);
         delete("ISalUsageMapper.deleteUsageData", params);
     }
+
+    @Override
+    public void deleteByBatchId(String batchId) {
+        delete("ISalUsageMapper.deleteByBatchId", Objects.requireNonNull(batchId));
+    }
 }
