@@ -146,6 +146,8 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
             fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
         loadFundPoolMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
             item -> {/*TODO: show Create Fund Pool window*/});
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
+            item -> Windows.showModalWindow(new ViewSalFundPoolWindow(controller)));
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df-sal");

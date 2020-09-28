@@ -56,6 +56,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to delete fund pool.
+     */
+    public static boolean hasDeleteFundPoolPermission() {
+        return SecurityUtils.hasPermission("FDA_DELETE_FUND_POOL");
+    }
+
+    /**
      * @return {@code true} if user has permission to load researched usages.
      */
     public static boolean hasLoadResearchedUsagePermission() {

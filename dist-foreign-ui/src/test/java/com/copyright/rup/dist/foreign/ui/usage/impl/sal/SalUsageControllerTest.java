@@ -16,13 +16,16 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
@@ -66,8 +69,11 @@ import java.util.function.Supplier;
 public class SalUsageControllerTest {
 
     private static final OffsetDateTime DATE = OffsetDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+    private static final String FUND_POOL_ID = "76b16c8d-0bea-4135-9611-6c52e53bfbea";
 
     private ISalUsageService salUsageService;
+    private IFundPoolService fundPoolService;
+    private ISalScenarioService salScenarioService;
     private SalUsageController controller;
     private ISalUsageWidget usagesWidget;
     private ISalUsageFilterController filterController;
@@ -81,6 +87,8 @@ public class SalUsageControllerTest {
         controller = new SalUsageController();
         usagesWidget = createMock(ISalUsageWidget.class);
         salUsageService = createMock(ISalUsageService.class);
+        fundPoolService = createMock(IFundPoolService.class);
+        salScenarioService = createMock(ISalScenarioService.class);
         filterController = createMock(ISalUsageFilterController.class);
         filterWidget = createMock(ISalUsageFilterWidget.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
@@ -88,6 +96,8 @@ public class SalUsageControllerTest {
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, salUsageService);
+        Whitebox.setInternalState(controller, fundPoolService);
+        Whitebox.setInternalState(controller, salScenarioService);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, reportService);
         usageFilter = new UsageFilter();
@@ -176,5 +186,32 @@ public class SalUsageControllerTest {
         assertNotNull(posConsumer);
         posConsumer.accept(pos);
         verify(OffsetDateTime.class, filterWidget, filterController, streamSourceHandler, reportService);
+    }
+
+    @Test
+    public void testGetFundPools() {
+        List<FundPool> fundPools = Collections.singletonList(new FundPool());
+        expect(fundPoolService.getFundPools("SAL")).andReturn(fundPools).once();
+        replay(fundPoolService);
+        assertEquals(fundPools, controller.getFundPools());
+        verify(fundPoolService);
+    }
+
+    @Test
+    public void testGetScenarioNameAssociatedWithFundPool() {
+        expect(salScenarioService.getScenarioNameByFundPoolId(FUND_POOL_ID)).andReturn("SAL Scenario").once();
+        replay(salScenarioService);
+        assertEquals("SAL Scenario", controller.getScenarioNameAssociatedWithFundPool(FUND_POOL_ID));
+        verify(salScenarioService);
+    }
+
+    @Test
+    public void testDeleteFundPool() {
+        FundPool fundPool = new FundPool();
+        fundPoolService.deleteSalFundPool(fundPool);
+        expectLastCall().once();
+        replay(fundPoolService);
+        controller.deleteFundPool(fundPool);
+        verify(fundPoolService);
     }
 }

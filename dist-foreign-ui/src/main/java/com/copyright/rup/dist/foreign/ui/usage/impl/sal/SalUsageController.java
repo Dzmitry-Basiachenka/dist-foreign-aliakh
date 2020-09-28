@@ -6,12 +6,16 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
@@ -58,6 +62,10 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     private ITelesalesService telesalesService;
     @Autowired
     private IUsageBatchService usageBatchService;
+    @Autowired
+    private IFundPoolService fundPoolService;
+    @Autowired
+    private ISalScenarioService salScenarioService;
 
     @Override
     public String getLicenseeName(Long licenseeAccountNumber) {
@@ -119,6 +127,21 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     @Override
     public ICommonUsageFilterController getUsageFilterController() {
         return salUsageFilterController;
+    }
+
+    @Override
+    public List<FundPool> getFundPools() {
+        return fundPoolService.getFundPools(FdaConstants.SAL_PRODUCT_FAMILY);
+    }
+
+    @Override
+    public String getScenarioNameAssociatedWithFundPool(String fundPoolId) {
+        return salScenarioService.getScenarioNameByFundPoolId(fundPoolId);
+    }
+
+    @Override
+    public void deleteFundPool(FundPool fundPool) {
+        fundPoolService.deleteSalFundPool(fundPool);
     }
 
     @Override

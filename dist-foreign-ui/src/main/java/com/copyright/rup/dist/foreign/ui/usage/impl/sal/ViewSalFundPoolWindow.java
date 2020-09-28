@@ -1,0 +1,192 @@
+package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
+
+import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
+import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.CurrencyUtils;
+import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.vaadin.widget.SearchWidget;
+
+import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Locale;
+import java.util.Objects;
+
+/**
+ * Modal window that provides functionality for viewing and deleting {@link FundPool}s.
+ * <p/>
+ * Copyright (C) 2020 copyright.com
+ * <p/>
+ * Date: 09/25/2020
+ *
+ * @author Aliaksandr Liakh
+ */
+public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearchController {
+
+    private final SearchWidget searchWidget;
+    private final ISalUsageController controller;
+    private Grid<FundPool> grid;
+    private Button deleteButton;
+
+    /**
+     * Constructor.
+     *
+     * @param controller {@link ISalUsageController}
+     */
+    public ViewSalFundPoolWindow(ISalUsageController controller) {
+        this.controller = controller;
+        setWidth(900, Unit.PIXELS);
+        setHeight(550, Unit.PIXELS);
+        searchWidget = new SearchWidget(this);
+        searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_fund_pool.search"));
+        initGrid();
+        HorizontalLayout buttonsLayout = initButtons();
+        initMediator();
+        VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
+        layout.setSizeFull();
+        layout.setExpandRatio(grid, 1);
+        layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
+        setContent(layout);
+        setCaption(ForeignUi.getMessage("window.view_fund_pool"));
+        VaadinUtils.addComponentStyle(this, "view-sal-fund-pool-window");
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void performSearch() {
+        ListDataProvider<FundPool> dataProvider = (ListDataProvider<FundPool>) grid.getDataProvider();
+        dataProvider.clearFilters();
+        String search = searchWidget.getSearchValue();
+        if (StringUtils.isNotBlank(search)) {
+            dataProvider.setFilter(fundPool -> StringUtils.containsIgnoreCase(fundPool.getName(), search));
+        }
+        // Gets round an issue when Vaadin do not recalculates columns widths once vertical scroll is disappeared
+        grid.recalculateColumnWidths();
+    }
+
+    private void initMediator() {
+        ViewSalFundPoolMediator mediator = new ViewSalFundPoolMediator();
+        mediator.setDeleteButton(deleteButton);
+        mediator.applyPermissions();
+    }
+
+    private HorizontalLayout initButtons() {
+        Button closeButton = Buttons.createCloseButton(this);
+        deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
+        deleteButton.addClickListener(event -> {
+            grid.getSelectedItems().stream().findFirst().ifPresent(selectedFundPool -> {
+                String scenarioName = controller.getScenarioNameAssociatedWithFundPool(selectedFundPool.getId());
+                if (Objects.isNull(scenarioName)) {
+                    Windows.showConfirmDialog(
+                        ForeignUi.getMessage("message.confirm.delete_action", selectedFundPool.getName(), "fund pool"),
+                        () -> {
+                            controller.deleteFundPool(selectedFundPool);
+                            grid.setItems(controller.getFundPools());
+                        });
+                } else {
+                    Windows.showNotificationWindow(
+                        ForeignUi.getMessage("message.error.delete_action", "Fund pool", "scenario",
+                            ' ' + scenarioName));
+                }
+            });
+        });
+        deleteButton.setEnabled(false);
+        HorizontalLayout layout = new HorizontalLayout(deleteButton, closeButton);
+        layout.setSpacing(true);
+        VaadinUtils.addComponentStyle(layout, "view-sal-fund-pool-buttons");
+        return layout;
+    }
+
+    private void initGrid() {
+        grid = new Grid<>();
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setItems(controller.getFundPools());
+        grid.addSelectionListener(event ->
+            deleteButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems()))
+        );
+        grid.setSizeFull();
+        addGridColumns();
+        VaadinUtils.addComponentStyle(grid, "view-sal-fund-pool-grid");
+    }
+
+    private void addGridColumns() {
+        grid.addColumn(FundPool::getName)
+            .setCaption(ForeignUi.getMessage("table.column.fund_pool_name"))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getName().compareToIgnoreCase(fundPool2.getName()))
+            .setExpandRatio(1);
+        grid.addColumn(fundPool -> getStringFromDate(fundPool.getSalFields().getDateReceived()))
+            .setCaption(ForeignUi.getMessage("table.column.date_received"))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getDateReceived()
+                .compareTo(fundPool2.getSalFields().getDateReceived()))
+            .setExpandRatio(0);
+        grid.addColumn(fundPool -> fundPool.getSalFields().getAssessmentName())
+            .setCaption(ForeignUi.getMessage("table.column.assessment_name"))
+            .setWidth(180);
+        grid.addColumn(fundPool -> fundPool.getSalFields().getLicenseeAccountNumber())
+            .setCaption(ForeignUi.getMessage("table.column.licensee_account_number"))
+            .setWidth(150);
+        grid.addColumn(fundPool -> fundPool.getSalFields().getLicenseeName())
+            .setCaption(ForeignUi.getMessage("table.column.licensee_name"))
+            .setWidth(300);
+        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getSalFields().getGrossAmount(), null))
+            .setCaption(ForeignUi.getMessage("table.column.gross_amount"))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getGrossAmount()
+                .compareTo(fundPool2.getSalFields().getGrossAmount()))
+            .setWidth(170);
+        grid.addColumn(fundPool -> fundPool.getSalFields().getServiceFee())
+            .setCaption(ForeignUi.getMessage("table.column.service_fee"))
+            .setWidth(115);
+        grid.addColumn(fundPool -> fundPool.getSalFields().getItemBankSplitPercent())
+            .setCaption(ForeignUi.getMessage("table.column.item_bank_split_percent"))
+            .setWidth(150);
+        grid.addColumn(fundPool -> fundPool.getSalFields().getGradeKto5NumberOfStudents())
+            .setCaption(ForeignUi.getMessage("table.column.grade_K_5_number_of_students"))
+            .setWidth(190);
+        grid.addColumn(fundPool -> fundPool.getSalFields().getGrade6to8NumberOfStudents())
+            .setCaption(ForeignUi.getMessage("table.column.grade_6_8_number_of_students"))
+            .setWidth(190);
+        grid.addColumn(fundPool -> fundPool.getSalFields().getGrade9to12NumberOfStudents())
+            .setCaption(ForeignUi.getMessage("table.column.grade_9_12_number_of_students"))
+            .setWidth(190);
+        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getTotalAmount(), null))
+            .setCaption(ForeignUi.getMessage("table.column.item_bank_gross_amount"))
+            .setComparator((fundPool1, fundPool2) ->
+                fundPool1.getTotalAmount().compareTo(fundPool2.getTotalAmount()))
+            .setWidth(170);
+        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getSalFields().getGradeKto5GrossAmount(), null))
+            .setCaption(ForeignUi.getMessage("table.column.grade_K_5_gross_amount"))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getGradeKto5GrossAmount()
+                .compareTo(fundPool2.getSalFields().getGradeKto5GrossAmount()))
+            .setWidth(170);
+        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getSalFields().getGrade6to8GrossAmount(), null))
+            .setCaption(ForeignUi.getMessage("table.column.grade_6_8_gross_amount"))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getGrade6to8GrossAmount()
+                .compareTo(fundPool2.getSalFields().getGrade6to8GrossAmount()))
+            .setWidth(170);
+        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getSalFields().getGrade9to12GrossAmount(), null))
+            .setCaption(ForeignUi.getMessage("table.column.grade_9_12_gross_amount"))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getGrade9to12GrossAmount()
+                .compareTo(fundPool2.getSalFields().getGrade9to12GrossAmount()))
+            .setWidth(170);
+    }
+
+    private String getStringFromDate(LocalDate date) {
+        return Objects.nonNull(date)
+            ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
+            : StringUtils.EMPTY;
+    }
+}
