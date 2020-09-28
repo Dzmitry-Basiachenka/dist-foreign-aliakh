@@ -9,18 +9,27 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.expectNew;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
-import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.Sets;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -36,8 +45,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.time.LocalDate;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -54,19 +65,24 @@ import java.util.stream.IntStream;
  * @author Uladzislau Shalamitski
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SalUsageWidget.class})
+@PrepareForTest({SalUsageWidget.class, Windows.class})
 public class SalUsageWidgetTest {
 
+    private static final String DATE =
+        CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
+    private static final String BATCH_ID = "3a070817-03ae-4ebd-b25f-dd3168a7ffb0";
     private SalUsageWidget usagesWidget;
     private ISalUsageController controller;
+    private SalUsageFilterWidget filterWidget;
 
     @Before
     public void setUp() {
         controller = createMock(ISalUsageController.class);
         usagesWidget = new SalUsageWidget(controller);
         usagesWidget.setController(controller);
-        expect(controller.initUsagesFilterWidget())
-            .andReturn(new SalUsageFilterWidget(createMock(ISalUsageFilterController.class))).once();
+        filterWidget = new SalUsageFilterWidget(createMock(ISalUsageFilterController.class));
+        filterWidget.getAppliedFilter().setUsageBatchesIds(Collections.singleton(BATCH_ID));
+        expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
@@ -124,6 +140,144 @@ public class SalUsageWidgetTest {
         replay(SalUsageMediator.class, mediator, controller);
         assertNotNull(usagesWidget.initMediator());
         verify(SalUsageMediator.class, mediator, controller);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListener() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.getSelectedProductFamily()).andReturn("SAL").once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getFundPoolsNotAttachedToScenario())
+            .andReturn(Collections.singletonList(new FundPool())).once();
+        expect(controller.scenarioExists("SAL Distribution " + DATE)).andReturn(true).once();
+        Windows.showModalWindow(anyObject(CreateSalScenarioWindow.class));
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        applyAddToScenarioButtonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithEmptyUsages() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getBeansCount()).andReturn(0).once();
+        Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        applyAddToScenarioButtonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithInvalidStatus() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
+        Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        applyAddToScenarioButtonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithInvalidRightsholders() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(700000000L)).once();
+        Windows.showNotificationWindow(
+            "Scenario cannot be created. The following rightsholder(s) are absent in PRM: <i><b>[700000000]</b></i>");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        applyAddToScenarioButtonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithEmptyBatchFilter() {
+        mockStatic(Windows.class);
+        filterWidget.getAppliedFilter().setUsageBatchesIds(Collections.emptySet());
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        Windows.showNotificationWindow("Please apply Batches Filter to create a scenario");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        applyAddToScenarioButtonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithMultipleBatchFilter() {
+        mockStatic(Windows.class);
+        filterWidget.getAppliedFilter()
+            .setUsageBatchesIds(Sets.newHashSet(BATCH_ID, "437d1f1d-c165-404d-8617-b10ef53426be"));
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        Windows.showNotificationWindow("Only one usage batch can be associated with scenario");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        applyAddToScenarioButtonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithProcessingBatches() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
+            .andReturn(Collections.singletonList("Batch Name")).once();
+        Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
+            "<ul><li><i><b>Batch Name</b></i></ul>");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        applyAddToScenarioButtonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithIneligibleBatches() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
+            .andReturn(Collections.singletonList("Batch Name")).once();
+        Windows.showNotificationWindow("The following batches have usages that are not in ELIGIBLE status:" +
+            "<ul><li><i><b>Batch Name</b></i></ul>");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        applyAddToScenarioButtonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    private void applyAddToScenarioButtonClick(ClickEvent event) {
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(2);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(event);
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {

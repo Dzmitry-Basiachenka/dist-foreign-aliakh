@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.api.aacl;
+package com.copyright.rup.dist.foreign.ui.usage.api.sal;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterWidget;
 

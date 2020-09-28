@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
-import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageFilterController;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

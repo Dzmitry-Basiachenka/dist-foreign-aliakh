@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -21,15 +22,17 @@ import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
-import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterController;
-import com.copyright.rup.dist.foreign.ui.usage.api.aacl.ISalUsageFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageWidget;
 
 import com.vaadin.ui.HorizontalLayout;
@@ -52,6 +55,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -72,6 +76,8 @@ public class SalUsageControllerTest {
     private static final String FUND_POOL_ID = "76b16c8d-0bea-4135-9611-6c52e53bfbea";
 
     private ISalUsageService salUsageService;
+    private IUsageService usageService;
+    private IUsageBatchService usageBatchService;
     private IFundPoolService fundPoolService;
     private ISalScenarioService salScenarioService;
     private SalUsageController controller;
@@ -87,6 +93,8 @@ public class SalUsageControllerTest {
         controller = new SalUsageController();
         usagesWidget = createMock(ISalUsageWidget.class);
         salUsageService = createMock(ISalUsageService.class);
+        usageService = createMock(IUsageService.class);
+        usageBatchService = createMock(IUsageBatchService.class);
         fundPoolService = createMock(IFundPoolService.class);
         salScenarioService = createMock(ISalScenarioService.class);
         filterController = createMock(ISalUsageFilterController.class);
@@ -96,7 +104,9 @@ public class SalUsageControllerTest {
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, usagesWidget);
         Whitebox.setInternalState(controller, salUsageService);
+        Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, fundPoolService);
+        Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, salScenarioService);
         Whitebox.setInternalState(controller, filterController);
         Whitebox.setInternalState(controller, reportService);
@@ -119,8 +129,6 @@ public class SalUsageControllerTest {
 
     @Test
     public void testLoadItemBank() {
-        IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
-        Whitebox.setInternalState(controller, usageBatchService);
         UsageBatch itemBank = new UsageBatch();
         List<String> usageIds = new ArrayList<>();
         List<Usage> usages = Collections.singletonList(new Usage());
@@ -186,6 +194,37 @@ public class SalUsageControllerTest {
         assertNotNull(posConsumer);
         posConsumer.accept(pos);
         verify(OffsetDateTime.class, filterWidget, filterController, streamSourceHandler, reportService);
+    }
+
+    @Test
+    public void testIsValidFilteredUsageStatus() {
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(usageService.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        replay(filterController, filterWidget, usageService);
+        assertTrue(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE));
+        verify(filterController, filterWidget, usageService);
+    }
+
+    @Test
+    public void testGetIneligibleBatchesNames() {
+        Set<String> batchIds = Collections.singleton("0ddb1cbf-4516-40b2-bffa-33d8876fa774");
+        List<String> batchNames = Collections.singletonList("batch name");
+        expect(usageBatchService.getIneligibleBatchesNames(batchIds)).andReturn(batchNames).once();
+        replay(usageBatchService);
+        assertEquals(batchNames, controller.getIneligibleBatchesNames(batchIds));
+        verify(usageBatchService);
+    }
+
+    @Test
+    public void testGetProcessingBatchesNames() {
+        Set<String> batchIds = Collections.singleton("7709a5ef-72b7-406c-8428-3422833f6e46");
+        List<String> batchNames = Collections.singletonList("batch name");
+        expect(usageBatchService.getProcessingSalBatchesNames(batchIds)).andReturn(batchNames).once();
+        replay(usageBatchService);
+        assertEquals(batchNames, controller.getProcessingBatchesNames(batchIds));
+        verify(usageBatchService);
     }
 
     @Test
