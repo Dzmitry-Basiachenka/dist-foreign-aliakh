@@ -43,6 +43,7 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
      * It's a max value for count of variables in statement.
      */
     private static final int MAX_VARIABLES_COUNT = 32000;
+    private static final int WORKS_BATCH_SIZE = 1000;
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
@@ -198,12 +199,22 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
-    public void updateAaclUsagesUnderMinimum(String scenarioId, BigDecimal cutoffAmount, String userName) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+    public List<Long> findWrWrkInstsUnderMinimum(String scenarioId, BigDecimal cutoffAmount) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put("cutoffAmount", Objects.requireNonNull(cutoffAmount));
+        return selectList("IAaclUsageMapper.findWrWrkInstsUnderMinimum", params);
+    }
+
+    @Override
+    public void updateAaclUsagesUnderMinimum(String scenarioId, List<Long> wrWrkInsts, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
-        insert("IAaclUsageMapper.updateAaclUsagesUnderMinimum", params);
+        Iterables.partition(Objects.requireNonNull(wrWrkInsts), WORKS_BATCH_SIZE).forEach(partition -> {
+            params.put("wrWrkInsts", Objects.requireNonNull(partition));
+            update("IAaclUsageMapper.updateAaclUsagesUnderMinimum", params);
+        });
     }
 
     @Override
