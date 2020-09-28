@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.SalWorkflowIntegrationTestBuilder.Runner;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageDataCsvProcessor;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -39,6 +40,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -56,12 +58,13 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     private final Map<String, List<UsageAuditItem>> expectedUsageIdToAuditMap = Maps.newHashMap();
     private final Map<String, String> expectedRmsRequestsToResponses = new LinkedHashMap<>();
-    private List<String> predefinedUsageIds;
-    private String usagesCsvFile;
+    private List<String> predefinedItemBankDetailIds;
+    private List<String> predefinedUsageDataDetailIds;
+    private String itemBankCsvFile;
+    private String usageDataCsvFile;
     private String productFamily;
     private UsageBatch usageBatch;
     private String expectedUsagesJsonFile;
-    private int expectedUploadedCount;
 
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
@@ -72,9 +75,15 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private ServiceTestHelper testHelper;
 
-    SalWorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
-        this.usagesCsvFile = csvFile;
-        this.predefinedUsageIds = Arrays.asList(usageIds);
+    SalWorkflowIntegrationTestBuilder withItemBankCsvFile(String csvFile, String... usageIds) {
+        this.itemBankCsvFile = csvFile;
+        this.predefinedItemBankDetailIds = Arrays.asList(usageIds);
+        return this;
+    }
+
+    SalWorkflowIntegrationTestBuilder withUsageDataCsvFile(String csvFile, String... usageIds) {
+        this.usageDataCsvFile = csvFile;
+        this.predefinedUsageDataDetailIds = Arrays.asList(usageIds);
         return this;
     }
 
@@ -93,8 +102,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    SalWorkflowIntegrationTestBuilder expectUsages(String usagesJsonFile, int expectedCountUsages) {
-        this.expectedUploadedCount = expectedCountUsages;
+    SalWorkflowIntegrationTestBuilder expectUsages(String usagesJsonFile) {
         this.expectedUsagesJsonFile = usagesJsonFile;
         return this;
     }
@@ -105,8 +113,10 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     void reset() {
-        usagesCsvFile = null;
-        predefinedUsageIds = null;
+        itemBankCsvFile = null;
+        usageDataCsvFile = null;
+        predefinedItemBankDetailIds = null;
+        predefinedUsageDataDetailIds = null;
         productFamily = null;
         usageBatch = null;
         expectedUsagesJsonFile = null;
@@ -128,7 +138,10 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
         public void run() throws IOException {
             testHelper.createRestServer();
             testHelper.expectGetRmsRights(expectedRmsRequestsToResponses);
-            loadUsageBatch();
+            loadItemBank();
+            if (Objects.nonNull(usageDataCsvFile)) {
+                loadUsageData();
+            }
             UsageFilter filter = new UsageFilter();
             filter.setProductFamily(productFamily);
             filter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
@@ -138,14 +151,14 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             testHelper.verifyRestServer();
         }
 
-        private void loadUsageBatch() throws IOException {
+        private void loadItemBank() throws IOException {
             SalItemBankCsvProcessor csvProcessor = csvProcessorFactory.getSalItemBankCsvProcessor();
-            ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream(usagesCsvFile));
+            ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream(itemBankCsvFile));
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
-            setPredefinedUsageIds(usages);
+            setPredefinedUsageIds(usages, predefinedItemBankDetailIds);
             List<String> insertedUsageIds = usageBatchService.insertSalBatch(usageBatch, usages);
-            assertEquals(expectedUploadedCount, insertedUsageIds.size());
+            assertEquals(predefinedItemBankDetailIds.size(), insertedUsageIds.size());
             List<String> orderedIds = salUsageService.getUsagesByIds(new ArrayList<>(insertedUsageIds)).stream()
                 .sorted(Comparator.comparing(Usage::getComment))
                 .map(Usage::getId)
@@ -153,10 +166,20 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             salUsageService.sendForMatching(orderedIds, usageBatch.getName());
         }
 
+        private void loadUsageData() throws IOException {
+            SalUsageDataCsvProcessor csvProcessor = csvProcessorFactory.getSalUsageDataCsvProcessor(usageBatch.getId());
+            ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream(usageDataCsvFile));
+            assertTrue(result.isSuccessful());
+            List<Usage> usages = result.get();
+            setPredefinedUsageIds(usages, predefinedUsageDataDetailIds);
+            salUsageService.insertUsageDataDetails(usageBatch, usages);
+        }
+
         // predefined usage ids are used, otherwise during every test run the usage ids will be random
-        private void setPredefinedUsageIds(List<Usage> usages) {
+        private void setPredefinedUsageIds(List<Usage> usages, List<String> usageIds) {
+            assertEquals(usages.size(), usageIds.size());
             AtomicInteger usageId = new AtomicInteger(0);
-            usages.forEach(usage -> usage.setId(predefinedUsageIds.get(usageId.getAndIncrement())));
+            usages.forEach(usage -> usage.setId(usageIds.get(usageId.getAndIncrement())));
         }
 
         private ByteArrayOutputStream getCsvOutputStream(String fileName) throws IOException {
@@ -184,12 +207,17 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 expectedUsage -> assertUsage(expectedUsage, actualUsageIdsToUsages.get(expectedUsage.getId())));
         }
 
+        // TODO {srudak} move to ServiceTestHelper
         private void assertUsage(UsageDto expectedUsage, UsageDto actualUsage) {
             assertNotNull(actualUsage);
             assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
             assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
-            assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
             assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+            assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+            assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+            assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
+            assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
+            assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
             assertEquals(expectedUsage.getComment(), actualUsage.getComment());
             assertSalUsage(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
         }
@@ -198,6 +226,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsage.getAssessmentName(), actualUsage.getAssessmentName());
             assertEquals(expectedUsage.getCoverageYear(), actualUsage.getCoverageYear());
             assertEquals(expectedUsage.getGrade(), actualUsage.getGrade());
+            assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
             assertEquals(expectedUsage.getDetailType(), actualUsage.getDetailType());
             assertEquals(expectedUsage.getReportedWorkPortionId(), actualUsage.getReportedWorkPortionId());
             assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
@@ -209,6 +238,11 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
             assertEquals(expectedUsage.getReportedPageRange(), actualUsage.getReportedPageRange());
             assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
+            assertEquals(expectedUsage.getAssessmentType(), actualUsage.getAssessmentType());
+            assertEquals(expectedUsage.getStates(), actualUsage.getStates());
+            assertEquals(expectedUsage.getNumberOfViews(), actualUsage.getNumberOfViews());
+            assertEquals(expectedUsage.getScoredAssessmentDate(), actualUsage.getScoredAssessmentDate());
+            assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
         }
     }
 }

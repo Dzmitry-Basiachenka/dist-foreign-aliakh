@@ -4,6 +4,9 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.common.util.LogUtils.ILogWrapper;
+import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -27,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -79,7 +83,7 @@ public class SalUsageService implements ISalUsageService {
     @Transactional
     public void insertItemBankDetails(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
-        int size = usages.size();
+        ILogWrapper size = LogUtils.size(usages);
         LOGGER.info("Insert SAL item bank details. Started. UsageBatchName={}, UsagesCount={}, UserName={}",
             usageBatch.getName(), size, userName);
         usages.forEach(usage -> {
@@ -91,6 +95,29 @@ public class SalUsageService implements ISalUsageService {
         String loadedReason = "Uploaded in '" + usageBatch.getName() + "' Batch";
         usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason));
         LOGGER.info("Insert SAL item bank details. Finished. UsageBatchName={}, UsagesCount={}, UserName={}",
+            usageBatch.getName(), size, userName);
+    }
+
+    @Override
+    @Transactional
+    public void insertUsageDataDetails(UsageBatch usageBatch, List<Usage> usages) {
+        String userName = RupContextUtils.getUserName();
+        ILogWrapper size = LogUtils.size(usages);
+        LOGGER.info("Insert SAL usage data details. Started. UsageBatchName={}, UsagesCount={}, UserName={}",
+            usageBatch.getName(), size, userName);
+        usages.forEach(usage -> {
+            usage.setBatchId(usageBatch.getId());
+            SalUsage salUsage = usage.getSalUsage();
+            if (Objects.isNull(salUsage.getGrade())) {
+                salUsage.setGrade(getItemBankDetailGradeByWorkPortionId(salUsage.getReportedWorkPortionId()));
+            }
+            usage.setCreateUser(userName);
+            usage.setUpdateUser(userName);
+            salUsageRepository.insertUsageDataDetail(usage);
+        });
+        String loadedReason = "Uploaded in '" + usageBatch.getName() + "' Batch";
+        usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason));
+        LOGGER.info("Insert SAL usage data details. Finished. UsageBatchName={}, UsagesCount={}, UserName={}",
             usageBatch.getName(), size, userName);
     }
 
