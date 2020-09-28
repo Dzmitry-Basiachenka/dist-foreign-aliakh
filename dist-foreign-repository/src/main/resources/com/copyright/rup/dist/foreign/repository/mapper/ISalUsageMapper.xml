@@ -508,7 +508,7 @@
             and detail_type = #{detailType}
     </select>
 
-    <select id="usageDetailsExistsInItemBank" resultType="boolean" parameterType="map">
+    <select id="usageDataExist" resultType="boolean" parameterType="map">
         select exists (
             select 1
             from ${schema}.df_usage_sal us
@@ -518,4 +518,20 @@
                 and ub.df_usage_batch_uid = #{batchId}
         )
     </select>
+
+    <delete id="deleteUsageData" parameterType="map">
+        with usage_ids as (
+            delete from ${schema}.df_usage u
+            where df_usage_uid in (
+                select df_usage_uid
+                from ${schema}.df_usage u
+                join ${schema}.df_usage_sal us on u.df_usage_uid = us.df_usage_sal_uid
+                where us.detail_type = #{detailType}
+                    and u.df_usage_batch_uid = #{batchId}
+            )
+            returning df_usage_uid
+        )
+        delete from ${schema}.df_usage_sal
+        where df_usage_sal_uid in (select df_usage_uid from usage_ids)
+    </delete>
 </mapper>

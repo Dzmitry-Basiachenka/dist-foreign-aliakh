@@ -90,5 +90,12 @@ public interface ISalUsageRepository {
      * @param batchId batch id
      * @return {@code true} - if usage details exists, {@code false} - otherwise
      */
-    boolean usageDetailsExistsInItemBank(String batchId);
+    boolean usageDataExist(String batchId);
+
+    /**
+     * Removes all usage details with detail type UD.
+     *
+     * @param batchId batch id
+     */
+    void deleteUsageData(String batchId);
 }

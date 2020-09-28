@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
@@ -39,6 +40,14 @@ public class UsageAuditRepository extends BaseRepository implements IUsageAuditR
     @Override
     public void deleteByBatchId(String batchId) {
         delete("IUsageAuditMapper.deleteByBatchId", Objects.requireNonNull(batchId));
+    }
+
+    @Override
+    public void deleteForSalUsageData(String batchId) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("batchId", Objects.requireNonNull(batchId));
+        params.put("detailType", SalDetailTypeEnum.UD);
+        delete("IUsageAuditMapper.deleteForSalUsageData", params);
     }
 
     @Override

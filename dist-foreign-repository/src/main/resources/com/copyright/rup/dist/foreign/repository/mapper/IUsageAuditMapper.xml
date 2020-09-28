@@ -92,6 +92,17 @@
             where df_usage_batch_uid = #{batchId})
     </delete>
 
+    <delete id="deleteForSalUsageData">
+        delete from ${schema}.df_usage_audit
+        where df_usage_uid in (
+            select df_usage_uid
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_sal us on u.df_usage_uid = us.df_usage_sal_uid
+            where u.df_usage_batch_uid = #{batchId}
+                and us.detail_type = #{detailType}
+        )
+    </delete>
+
     <delete id="deleteByScenarioId" parameterType="map">
         delete from ${schema}.df_usage_audit
         where df_usage_uid in (

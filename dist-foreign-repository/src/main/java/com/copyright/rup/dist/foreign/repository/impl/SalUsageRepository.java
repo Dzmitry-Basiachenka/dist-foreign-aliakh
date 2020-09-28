@@ -94,10 +94,18 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     }
 
     @Override
-    public boolean usageDetailsExistsInItemBank(String batchId) {
+    public boolean usageDataExist(String batchId) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("batchId", Objects.requireNonNull(batchId));
         params.put("detailType", SalDetailTypeEnum.UD);
-        return selectOne("ISalUsageMapper.usageDetailsExistsInItemBank", params);
+        return selectOne("ISalUsageMapper.usageDataExist", params);
+    }
+
+    @Override
+    public void deleteUsageData(String batchId) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("batchId", Objects.requireNonNull(batchId));
+        params.put("detailType", SalDetailTypeEnum.UD);
+        delete("ISalUsageMapper.deleteUsageData", params);
     }
 }

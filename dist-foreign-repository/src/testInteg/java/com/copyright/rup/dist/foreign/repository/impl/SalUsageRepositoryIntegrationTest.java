@@ -55,6 +55,7 @@ public class SalUsageRepositoryIntegrationTest {
 
     private static final String USAGE_BATCH_ID_1 = "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64";
     private static final String USAGE_BATCH_ID_2 = "56069b44-10b1-42d6-9a44-a3fae0029171";
+    private static final String USAGE_BATCH_ID_3 = "09cc64a7-171a-4921-8d99-500768137cb8";
     private static final String SAL_PRODUCT_FAMILY = "SAL";
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String USAGE_ID_1 = "c95654c0-a607-4683-878f-99606e90c065";
@@ -188,8 +189,8 @@ public class SalUsageRepositoryIntegrationTest {
 
     @Test
     public void testUsageDetailsExistInItemBank() {
-        assertTrue(salUsageRepository.usageDetailsExistsInItemBank("cb932497-086d-4a7e-9b34-e9a62f17adab4"));
-        assertFalse(salUsageRepository.usageDetailsExistsInItemBank("b0e669d2-68d0-4add-9946-34215011f74b"));
+        assertTrue(salUsageRepository.usageDataExist("cb932497-086d-4a7e-9b34-e9a62f17adab4"));
+        assertFalse(salUsageRepository.usageDataExist("b0e669d2-68d0-4add-9946-34215011f74b"));
     }
 
     @Test
@@ -202,6 +203,18 @@ public class SalUsageRepositoryIntegrationTest {
     public void testFindItemBankDetailGradeByWorkPortionId() {
         assertEquals("5", salUsageRepository.findItemBankDetailGradeByWorkPortionId(WORK_PORTION_ID_3));
         assertNull(salUsageRepository.findItemBankDetailGradeByWorkPortionId("1201064IB2200"));
+    }
+
+    @Test
+    public void testDeleteUsageDetailsFromItemBank() {
+        assertTrue(salUsageRepository.usageDataExist(USAGE_BATCH_ID_3));
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.singleton(USAGE_BATCH_ID_3), UsageStatusEnum.NEW,
+                SAL_PRODUCT_FAMILY, null);
+        assertEquals(3, salUsageRepository.findDtosByFilter(usageFilter, null, null).size());
+        salUsageRepository.deleteUsageData(USAGE_BATCH_ID_3);
+        assertFalse(salUsageRepository.usageDataExist(USAGE_BATCH_ID_3));
+        assertEquals(1, salUsageRepository.findDtosByFilter(usageFilter, null, null).size());
     }
 
     private UsageFilter buildUsageFilter(Set<String> usageBatchIds, UsageStatusEnum status, String productFamily,
