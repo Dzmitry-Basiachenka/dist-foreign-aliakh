@@ -29,6 +29,14 @@ public interface ISalUsageService {
     void insertItemBankDetails(UsageBatch usageBatch, List<Usage> usages);
 
     /**
+     * Inserts SAL usage data details.
+     *
+     * @param usageBatch usage batch
+     * @param usages     list of {@link Usage}s
+     */
+    void insertUsageDataDetails(UsageBatch usageBatch, List<Usage> usages);
+
+    /**
      * Checks whether provided Work Portion ID already exists in the system.
      *
      * @param workPortionId work portion id
