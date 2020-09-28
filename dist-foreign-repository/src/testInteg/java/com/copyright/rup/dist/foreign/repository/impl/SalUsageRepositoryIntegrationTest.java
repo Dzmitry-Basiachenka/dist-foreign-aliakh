@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -206,7 +207,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testDeleteUsageDetailsFromItemBank() {
+    public void testDeleteUsageData() {
         assertTrue(salUsageRepository.usageDataExist(USAGE_BATCH_ID_3));
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(USAGE_BATCH_ID_3), UsageStatusEnum.NEW,
@@ -215,6 +216,15 @@ public class SalUsageRepositoryIntegrationTest {
         salUsageRepository.deleteUsageData(USAGE_BATCH_ID_3);
         assertFalse(salUsageRepository.usageDataExist(USAGE_BATCH_ID_3));
         assertEquals(1, salUsageRepository.findDtosByFilter(usageFilter, null, null).size());
+    }
+
+    @Test
+    public void testDeleteByBatchId() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageBatchesIds(ImmutableSet.of("b54293db-bfb9-478a-bc13-d70aef5d3ecb"));
+        assertEquals(2, salUsageRepository.findCountByFilter(filter));
+        salUsageRepository.deleteByBatchId("b54293db-bfb9-478a-bc13-d70aef5d3ecb");
+        assertEquals(0, salUsageRepository.findCountByFilter(filter));
     }
 
     private UsageFilter buildUsageFilter(Set<String> usageBatchIds, UsageStatusEnum status, String productFamily,
