@@ -62,6 +62,13 @@ public interface IFundPoolRepository {
     List<FundPool> findAaclNotAttachedToScenario();
 
     /**
+     * Finds SAL {@link FundPool}s not attached to scenario.
+     *
+     * @return list of {@link FundPool}s
+     */
+    List<FundPool> findSalNotAttachedToScenario();
+
+    /**
      * Find {@link FundPool}s' names associated with batch identifier.
      *
      * @param batchId batch identifier

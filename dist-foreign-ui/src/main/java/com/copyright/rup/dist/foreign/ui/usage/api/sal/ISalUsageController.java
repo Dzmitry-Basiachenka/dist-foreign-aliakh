@@ -57,10 +57,10 @@ public interface ISalUsageController extends ICommonUsageController {
     List<FundPool> getFundPools();
 
     /**
-     * Gets {@link Scenario} name associated with fund pool.
+     * Gets {@link com.copyright.rup.dist.foreign.domain.Scenario} name associated with fund pool.
      *
      * @param fundPoolId fund pool id
-     * @return {@link Scenario} name or {@code null} if none found
+     * @return {@link com.copyright.rup.dist.foreign.domain.Scenario} name or {@code null} if none found
      */
     String getScenarioNameAssociatedWithFundPool(String fundPoolId);
 
@@ -70,4 +70,9 @@ public interface ISalUsageController extends ICommonUsageController {
      * @param fundPool a {@link FundPool} to delete
      */
     void deleteFundPool(FundPool fundPool);
+
+    /**
+     * @return list of {@link FundPool}s that are not attached to a scenario.
+     */
+    List<FundPool> getFundPoolsNotAttachedToScenario();
 }

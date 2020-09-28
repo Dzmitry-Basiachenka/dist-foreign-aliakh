@@ -112,6 +112,11 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    public List<FundPool> getSalNotAttachedToScenario() {
+        return fundPoolRepository.findSalNotAttachedToScenario();
+    }
+
+    @Override
     @Transactional
     public void deleteNtsFundPool(FundPool fundPool) {
         String userName = RupContextUtils.getUserName();

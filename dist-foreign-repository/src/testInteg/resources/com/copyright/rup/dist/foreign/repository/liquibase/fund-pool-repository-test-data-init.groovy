@@ -316,4 +316,42 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'a4407ece-c1b1-48ad-a961-2439cada4e13')
         }
     }
+
+    changeSet(id: '2020-09-28-00', author: 'Ihar Suvorau <srudak@copyright.com>') {
+        comment('Inserting test data for testFindAaclNotAttachedToScenario')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '1ea65e2a-22c1-4a96-b55b-b6b4fd7d51ed')
+            column(name: 'product_family', value: 'SAL')
+            column(name: 'name', value: 'SAL Fund Pool 1')
+            column(name: 'total_amount', value: '1000.00')
+            column(name: 'sal_fields', value: '{"date_received": "09/28/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 5, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_amount": 200.00, "item_bank_gross_amount": 200.00, "grade_K_5_gross_amount": 600.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
+            column(name: 'created_datetime', value: '2020-09-28 11:00:00-04')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '15c3023d-1e68-4b7d-bfe3-18e85806b167')
+            column(name: 'product_family', value: 'SAL')
+            column(name: 'name', value: 'SAL Fund Pool 2')
+            column(name: 'total_amount', value: '100.00')
+            column(name: 'sal_fields', value: '{"date_received": "09/29/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 2, "grade_6_8_number_of_students": 1, "grade_9_12_number_of_students": 0, "gross_amount": 100.00, "item_bank_amount": 20.00, "item_bank_gross_amount": 20.00, "grade_K_5_gross_amount": 60.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
+            column(name: 'created_datetime', value: '2020-09-29 11:00:00-04')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '8bc02d1f-35f8-4626-b206-0e9ffc8d9f97')
+            column(name: 'product_family', value: 'SAL')
+            column(name: 'name', value: 'SAL Fund Pool 3')
+            column(name: 'total_amount', value: '10.00')
+            column(name: 'sal_fields', value: '{"date_received": "12/30/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 2, "grade_6_8_number_of_students": 1, "grade_9_12_number_of_students": 0, "gross_amount": 10.00, "item_bank_amount": 2.00, "item_bank_gross_amount": 2.00, "grade_K_5_gross_amount": 6.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
+            column(name: 'created_datetime', value: '2020-09-30 11:00:00-04')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '3c7b100c-0e30-4381-bd06-787e058af6f1')
+            column(name: 'name', value: 'SAL Scenario 1')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'sal_fields', value: '{"fund_pool_uid": "8bc02d1f-35f8-4626-b206-0e9ffc8d9f97"}')
+        }
+    }
 }

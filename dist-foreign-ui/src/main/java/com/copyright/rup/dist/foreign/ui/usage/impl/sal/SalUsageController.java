@@ -95,6 +95,11 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
+    public List<FundPool> getFundPoolsNotAttachedToScenario() {
+        return fundPoolService.getSalNotAttachedToScenario();
+    }
+
+    @Override
     public void deleteUsageBatch(UsageBatch usageBatch) {
         //TODO: implement in scope of corresponding story
     }

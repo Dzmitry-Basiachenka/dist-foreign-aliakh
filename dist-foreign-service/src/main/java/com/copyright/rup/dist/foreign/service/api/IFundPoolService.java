@@ -74,6 +74,13 @@ public interface IFundPoolService {
     List<FundPool> getAaclNotAttachedToScenario();
 
     /**
+     * Gets SAL {@link FundPool}s not attached to scenario.
+     *
+     * @return list of {@link FundPool}s
+     */
+    List<FundPool> getSalNotAttachedToScenario();
+
+    /**
      * Deletes NTS {@link FundPool}.
      *
      * @param fundPool {@link FundPool} to delete
