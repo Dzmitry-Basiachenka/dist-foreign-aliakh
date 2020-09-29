@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -14,6 +15,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -213,6 +215,17 @@ public class SalUsageServiceTest {
         replay(usageAuditService, salUsageRepository);
         salUsageService.deleteUsageBatchDetails(usageBatch);
         verify(usageAuditService, salUsageRepository);
+    }
+
+    @Test
+    public void testGetUsageDataGradeGroups() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageBatchesIds(Collections.singleton("cdd46087-87b9-4ecd-ab6f-9b5dcf0f82bf"));
+        List<GradeGroupEnum> gradeGroups = Collections.singletonList(GradeGroupEnum.ITEM_BANK);
+        expect(salUsageRepository.findUsageDataGradeGroups(filter)).andReturn(gradeGroups).once();
+        replay(salUsageRepository);
+        assertSame(gradeGroups, salUsageService.getUsageDataGradeGroups(filter));
+        verify(salUsageRepository);
     }
 
     private UsageBatch buildUsageBatch() {

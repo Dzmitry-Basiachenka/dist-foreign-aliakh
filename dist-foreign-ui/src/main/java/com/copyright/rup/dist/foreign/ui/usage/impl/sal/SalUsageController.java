@@ -8,6 +8,8 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -27,6 +29,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -112,6 +115,12 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
+    public Scenario createSalScenario(String scenarioName, String fundPoolId, String description) {
+        //TODO {isuvorau} implement service logic
+        return null;
+    }
+
+    @Override
     public IStreamSource getExportUsagesStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_usage_",
             pos -> getReportService().writeSalUsageCsvReport(
@@ -127,6 +136,11 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     @Override
     public boolean fundPoolExists(String name) {
         return fundPoolService.fundPoolExists(FdaConstants.SAL_PRODUCT_FAMILY, name);
+    }
+
+    @Override
+    public List<GradeGroupEnum> findUsageDataGradeGroups() {
+        return salUsageService.getUsageDataGradeGroups(getUsageFilterController().getWidget().getAppliedFilter());
     }
 
     @Override

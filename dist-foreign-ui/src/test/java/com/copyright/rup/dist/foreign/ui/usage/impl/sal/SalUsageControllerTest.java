@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -18,6 +19,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -233,6 +235,17 @@ public class SalUsageControllerTest {
         replay(fundPoolService);
         assertEquals(fundPools, controller.getFundPoolsNotAttachedToScenario());
         verify(fundPoolService);
+    }
+
+    @Test
+    public void testFindUsageDataGradeGroups() {
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        List<GradeGroupEnum> gradeGroups = Collections.singletonList(GradeGroupEnum.ITEM_BANK);
+        expect(salUsageService.getUsageDataGradeGroups(usageFilter)).andReturn(gradeGroups).once();
+        replay(filterController, filterWidget, salUsageService);
+        assertSame(gradeGroups, controller.findUsageDataGradeGroups());
+        verify(filterController, filterWidget, salUsageService);
     }
 
     @Test

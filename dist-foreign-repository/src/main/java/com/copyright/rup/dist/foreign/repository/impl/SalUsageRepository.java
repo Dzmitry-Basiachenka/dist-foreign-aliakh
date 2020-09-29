@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -33,6 +34,7 @@ import java.util.Objects;
 public class SalUsageRepository extends BaseRepository implements ISalUsageRepository {
 
     private static final int MAX_VARIABLES_COUNT = 32000;
+    private static final String DETAIL_TYPE_KEY = "detailType";
 
     @Override
     public void insertItemBankDetail(Usage usage) {
@@ -89,7 +91,7 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     public String findItemBankDetailGradeByWorkPortionId(String workPortionId) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("workPortionId", Objects.requireNonNull(workPortionId));
-        parameters.put("detailType", SalDetailTypeEnum.IB);
+        parameters.put(DETAIL_TYPE_KEY, SalDetailTypeEnum.IB);
         return selectOne("ISalUsageMapper.findItemBankDetailGradeByWorkPortionId", parameters);
     }
 
@@ -97,7 +99,7 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     public boolean usageDataExist(String batchId) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("batchId", Objects.requireNonNull(batchId));
-        params.put("detailType", SalDetailTypeEnum.UD);
+        params.put(DETAIL_TYPE_KEY, SalDetailTypeEnum.UD);
         return selectOne("ISalUsageMapper.usageDataExist", params);
     }
 
@@ -105,12 +107,20 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     public void deleteUsageData(String batchId) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("batchId", Objects.requireNonNull(batchId));
-        params.put("detailType", SalDetailTypeEnum.UD);
+        params.put(DETAIL_TYPE_KEY, SalDetailTypeEnum.UD);
         delete("ISalUsageMapper.deleteUsageData", params);
     }
 
     @Override
     public void deleteByBatchId(String batchId) {
         delete("ISalUsageMapper.deleteByBatchId", Objects.requireNonNull(batchId));
+    }
+
+    @Override
+    public List<GradeGroupEnum> findUsageDataGradeGroups(UsageFilter filter) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("filter", Objects.requireNonNull(filter));
+        params.put(DETAIL_TYPE_KEY, SalDetailTypeEnum.UD);
+        return selectList("ISalUsageMapper.findUsageDataGradeGroups", params);
     }
 }

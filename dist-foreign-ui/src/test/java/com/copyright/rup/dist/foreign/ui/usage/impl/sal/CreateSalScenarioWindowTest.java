@@ -1,22 +1,32 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.FundPool.SalFields;
+import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -24,6 +34,7 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,8 +42,11 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,16 +67,26 @@ public class CreateSalScenarioWindowTest {
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String SCENARIO_NAME = "SAL Distribution " + DATE;
     private static final String SAL_PRODUCT_FAMILY = "SAL";
+    private static final String FUND_POOL_ID = "8da1b173-fdad-4199-a660-c13e9dbc7257";
 
     private ISalUsageController controller;
+    private ISalUsageFilterController filterController;
     private CreateSalScenarioWindow window;
+    private FundPool fundPool;
 
     @Before
     public void setUp() {
+        fundPool = new FundPool();
+        fundPool.setId(FUND_POOL_ID);
+        fundPool.setName("SAL Fund Pool");
+        SalFields salFields = new SalFields();
+        salFields.setLicenseeAccountNumber(7001293454L);
+        salFields.setGrade6to8GrossAmount(BigDecimal.TEN);
+        fundPool.setSalFields(salFields);
         controller = createMock(ISalUsageController.class);
+        filterController = createMock(ISalUsageFilterController.class);
         expect(controller.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).anyTimes();
-        expect(controller.getFundPoolsNotAttachedToScenario())
-            .andReturn(Collections.singletonList(buildFundPool())).once();
+        expect(controller.getFundPoolsNotAttachedToScenario()).andReturn(Collections.singletonList(fundPool)).once();
     }
 
     @Test
@@ -94,6 +118,79 @@ public class CreateSalScenarioWindowTest {
         validateScenarioNameExistence(scenarioNameField, binder, SCENARIO_NAME);
         validateScenarioNameExistence(scenarioNameField, binder, ' ' + SCENARIO_NAME + ' ');
         verify(controller);
+    }
+
+    @Test
+    public void testConfirmButtonClickListener() {
+        Scenario scenario = new Scenario();
+        UsageBatch usageBatch = buildUsageBatch(7001293454L);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
+        expect(controller.getUsageFilterController()).andReturn(filterController).once();
+        expect(filterController.getUsageBatches()).andReturn(Collections.singletonList(usageBatch)).once();
+        expect(controller.findUsageDataGradeGroups())
+            .andReturn(Collections.singletonList(GradeGroupEnum.GRADE6_8)).once();
+        expect(controller.createSalScenario(SCENARIO_NAME, FUND_POOL_ID, StringUtils.EMPTY)).andReturn(scenario).once();
+        replay(controller, filterController);
+        TestCreateSalScenarioWindow createScenarioWindow = new TestCreateSalScenarioWindow(controller);
+        applyConfirmCreateScenarioAction(createScenarioWindow);
+        EventObject event = createScenarioWindow.getEventObject();
+        assertNotNull(event);
+        assertTrue(event instanceof ScenarioCreateEvent);
+        ScenarioCreateEvent scenarioCreateEvent = (ScenarioCreateEvent) event;
+        assertEquals(scenario, scenarioCreateEvent.getScenarioId());
+        assertEquals(createScenarioWindow, scenarioCreateEvent.getSource());
+        assertTrue(createScenarioWindow.isClosed());
+        verify(controller, filterController);
+    }
+
+    @Test
+    public void testConfirmButtonClickListenerInvalidLicensee() {
+        mockStatic(Windows.class);
+        UsageBatch usageBatch = buildUsageBatch(3333L);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
+        expect(controller.getUsageFilterController()).andReturn(filterController).once();
+        expect(filterController.getUsageBatches()).andReturn(Collections.singletonList(usageBatch)).once();
+        Windows.showNotificationWindow("Licensee Account # of usage batch and selected fund pool should match:" +
+            "<ul><li><i><b>Usage Batch Licensee: 3333</b></i></ul>" +
+            "<ul><li><i><b>Fund Pool Licensee: 7001293454</b></i></ul>");
+        expectLastCall().once();
+        replay(controller, filterController, Windows.class);
+        applyConfirmCreateScenarioAction(new TestCreateSalScenarioWindow(controller));
+        verify(controller, filterController, Windows.class);
+    }
+
+    @Test
+    public void testConfirmButtonClickListenerInvalidGradeDetails() {
+        mockStatic(Windows.class);
+        UsageBatch usageBatch = buildUsageBatch(7001293454L);
+        fundPool.getSalFields().setGradeKto5GrossAmount(BigDecimal.TEN);
+        fundPool.getSalFields().setGrade9to12GrossAmount(BigDecimal.TEN);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
+        expect(controller.getUsageFilterController()).andReturn(filterController).once();
+        expect(filterController.getUsageBatches()).andReturn(Collections.singletonList(usageBatch)).once();
+        expect(controller.findUsageDataGradeGroups())
+            .andReturn(Collections.singletonList(GradeGroupEnum.GRADE6_8)).once();
+        Windows.showNotificationWindow("There are no usage details for GRADEK_5, GRADE9_12 grade group(s)");
+        expectLastCall().once();
+        replay(controller, filterController, Windows.class);
+        applyConfirmCreateScenarioAction(new TestCreateSalScenarioWindow(controller));
+        verify(controller, filterController, Windows.class);
+    }
+
+    @Test
+    public void testConfirmButtonClickListenerInvalidGradeAmounts() {
+        mockStatic(Windows.class);
+        UsageBatch usageBatch = buildUsageBatch(7001293454L);
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
+        expect(controller.getUsageFilterController()).andReturn(filterController).once();
+        expect(filterController.getUsageBatches()).andReturn(Collections.singletonList(usageBatch)).once();
+        expect(controller.findUsageDataGradeGroups()).andReturn(
+            Arrays.asList(GradeGroupEnum.GRADEK_5, GradeGroupEnum.GRADE6_8, GradeGroupEnum.GRADE9_12)).once();
+        Windows.showNotificationWindow("Gross amount for GRADEK_5, GRADE9_12 grade group(s) should be greater than 0");
+        expectLastCall().once();
+        replay(controller, filterController, Windows.class);
+        applyConfirmCreateScenarioAction(new TestCreateSalScenarioWindow(controller));
+        verify(controller, filterController, Windows.class);
     }
 
     private void validateScenarioNameExistence(TextField scenarioNameField, Binder binder, String scenarioName) {
@@ -141,11 +238,50 @@ public class CreateSalScenarioWindowTest {
         return button;
     }
 
-    private FundPool buildFundPool() {
-        FundPool fundPool = new FundPool();
-        fundPool.setId("0493303b-4b33-47a8-83b4-0ba9f63189c2");
-        fundPool.setName("SAL fund pool 2020");
-        fundPool.setProductFamily(SAL_PRODUCT_FAMILY);
-        return fundPool;
+    private UsageBatch buildUsageBatch(Long licenseeAccountNumber) {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId("b01931c9-2d76-44d5-a1a8-603a4d3bba0d");
+        UsageBatch.SalFields salFields = new UsageBatch.SalFields();
+        salFields.setLicenseeAccountNumber(licenseeAccountNumber);
+        usageBatch.setSalFields(salFields);
+        return usageBatch;
+    }
+
+    private void applyConfirmCreateScenarioAction(TestCreateSalScenarioWindow createScenarioWindow) {
+        VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();
+        ComboBox<FundPool> fundPoolComboBox = (ComboBox<FundPool>) content.getComponent(1);
+        fundPoolComboBox.setSelectedItem(fundPool);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(3);
+        Button confirmButton = (Button) buttonsLayout.getComponent(0);
+        ClickListener listener = (ClickListener) confirmButton.getListeners(ClickEvent.class).iterator().next();
+        listener.buttonClick(new ClickEvent(createScenarioWindow));
+    }
+
+    private static class TestCreateSalScenarioWindow extends CreateSalScenarioWindow {
+
+        private EventObject eventObject;
+        private boolean closed;
+
+        TestCreateSalScenarioWindow(ISalUsageController controller) {
+            super(controller);
+        }
+
+        EventObject getEventObject() {
+            return eventObject;
+        }
+
+        boolean isClosed() {
+            return closed;
+        }
+
+        @Override
+        protected void fireEvent(EventObject event) {
+            this.eventObject = event;
+        }
+
+        @Override
+        public void close() {
+            this.closed = true;
+        }
     }
 }

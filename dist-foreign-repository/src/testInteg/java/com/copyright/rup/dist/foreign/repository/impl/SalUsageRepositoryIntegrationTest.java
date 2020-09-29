@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -20,7 +21,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -196,8 +196,8 @@ public class SalUsageRepositoryIntegrationTest {
 
     @Test
     public void testWorkPortionIdExistsInBatch() {
-        assertTrue(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3, "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64"));
-        assertFalse(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3, "56069b44-10b1-42d6-9a44-a3fae0029171"));
+        assertTrue(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3, USAGE_BATCH_ID_1));
+        assertFalse(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3, USAGE_BATCH_ID_2));
     }
 
     @Test
@@ -221,10 +221,21 @@ public class SalUsageRepositoryIntegrationTest {
     @Test
     public void testDeleteByBatchId() {
         UsageFilter filter = new UsageFilter();
-        filter.setUsageBatchesIds(ImmutableSet.of("b54293db-bfb9-478a-bc13-d70aef5d3ecb"));
+        filter.setUsageBatchesIds(Collections.singleton("b54293db-bfb9-478a-bc13-d70aef5d3ecb"));
         assertEquals(2, salUsageRepository.findCountByFilter(filter));
         salUsageRepository.deleteByBatchId("b54293db-bfb9-478a-bc13-d70aef5d3ecb");
         assertEquals(0, salUsageRepository.findCountByFilter(filter));
+    }
+
+    @Test
+    public void testFindUsageDataGradeGroups() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
+        assertEquals(Collections.singletonList(GradeGroupEnum.GRADE9_12),
+            salUsageRepository.findUsageDataGradeGroups(filter));
+        filter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_2));
+        assertEquals(Collections.singletonList(GradeGroupEnum.GRADE6_8),
+            salUsageRepository.findUsageDataGradeGroups(filter));
     }
 
     private UsageFilter buildUsageFilter(Set<String> usageBatchIds, UsageStatusEnum status, String productFamily,

@@ -546,4 +546,13 @@
         delete from ${schema}.df_usage_sal
         where df_usage_sal_uid in (select df_usage_uid from usage_ids)
     </delete>
+
+    <select id="findUsageDataGradeGroups" resultType="GradeGroupEnum" parameterType="map">
+        select distinct grade_group
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
+        <include refid="ISalUsageMapper.usageFilter"/>
+            and detail_type = #{detailType}
+        order by grade_group
+    </select>
 </mapper>

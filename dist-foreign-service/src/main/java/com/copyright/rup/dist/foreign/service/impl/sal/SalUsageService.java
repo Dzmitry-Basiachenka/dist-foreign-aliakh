@@ -176,4 +176,9 @@ public class SalUsageService implements ISalUsageService {
         salUsageRepository.deleteByBatchId(usageBatch.getId());
         LOGGER.info("Delete SAL usage details. Finished. UsageBatchName={}, UserName={}", batchName, userName);
     }
+
+    @Override
+    public List<GradeGroupEnum> getUsageDataGradeGroups(UsageFilter filter) {
+        return salUsageRepository.findUsageDataGradeGroups(filter);
+    }
 }
