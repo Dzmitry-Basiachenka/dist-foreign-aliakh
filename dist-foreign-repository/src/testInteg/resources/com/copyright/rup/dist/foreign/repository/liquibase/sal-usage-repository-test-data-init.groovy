@@ -306,7 +306,7 @@ databaseChangeLog {
             column(name: 'df_usage_sal_uid', value: 'e3b4dfc5-a208-4b6e-996a-c667c705a08d')
             column(name: 'detail_type', value: 'IB')
             column(name: 'grade', value: '7')
-            column(name: 'grade_group', value: 'ITEM BANK')
+            column(name: 'grade_group', value: 'ITEM_BANK')
             column(name: 'assessment_name', value: 'FY17 EOC')
             column(name: 'assessment_type', value: 'EOC')
             column(name: 'reported_work_portion_id', value: '33064IB2190')
