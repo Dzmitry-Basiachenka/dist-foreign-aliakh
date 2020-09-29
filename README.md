@@ -1,3 +1,14 @@
+12.1.6
+-
+* B-57897 FDA: Create SAL Scenario: implement validation for filtered data to create SAL scenario
+* B-57897 FDA: Create SAL Scenario: retrieve SAL fund pools to display on create scenario window
+* B-57903 FDA: View and Delete SAL batch: create view-delete SAL batch modal window
+* B-57903 FDA: View and Delete SAL batch: implement repository logic to remove usage batch
+* B-57917 FDA: Load SAL fund pool: Implement ui components and validation on Load Fund Pool window
+* B-58518 FDA: Load SAL usage data: implement service logic for saving usages
+* B-58833 FDA: Generate a Grade Group for SAL usages: populate grade group for UD usages
+* B-58887 FDA: View and Delete SAL fund pool: use correct date formatting
+
 12.1.5
 -
 * B-57772 Tech Debt: FDA: implement partitioning for excluding usages from AACL scenario during calculation
