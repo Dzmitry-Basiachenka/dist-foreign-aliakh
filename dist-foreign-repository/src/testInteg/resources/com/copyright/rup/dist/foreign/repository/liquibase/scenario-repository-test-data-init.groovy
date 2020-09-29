@@ -1467,7 +1467,6 @@ databaseChangeLog {
             column(name: 'grade', value: '5')
             column(name: 'grade_group', value: 'ITEM_BANK')
             column(name: 'assessment_name', value: 'FY16 AIR')
-            column(name: 'assessment_type', value: 'AIR')
             column(name: 'reported_work_portion_id', value: '1101001IB2361')
             column(name: 'reported_article', value: 'Learning in Your Sleep')
             column(name: 'reported_standard_number', value: '450220996')
@@ -1479,10 +1478,6 @@ databaseChangeLog {
             column(name: 'reported_media_type', value: 'TEXT')
             column(name: 'media_type_weight', value: 1.0)
             column(name: 'coverage_year', value: '2014-2015')
-            column(name: 'scored_assessment_date', value: '2015-07-01')
-            column(name: 'question_identifier', value: 'SB9')
-            column(name: 'states', value: 'CA,WV')
-            column(name: 'number_of_views', value: 1765)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
