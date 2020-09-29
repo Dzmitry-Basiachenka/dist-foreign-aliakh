@@ -49,12 +49,15 @@ import java.util.stream.Collectors;
 @Service
 public class UsageBatchService implements IUsageBatchService {
 
-    private static final EnumSet<UsageStatusEnum> PROCESSED_NTS_BATCH_USAGE_STATUSES = EnumSet.of(
-        UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.SCENARIO_EXCLUDED,
-        UsageStatusEnum.LOCKED);
-    private static final EnumSet<UsageStatusEnum> PROCESSED_AACL_BATCH_USAGE_STATUSES = EnumSet.of(
-        UsageStatusEnum.ELIGIBLE, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND,
-        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED, UsageStatusEnum.SCENARIO_EXCLUDED);
+    private static final EnumSet<UsageStatusEnum> PROCESSED_NTS_BATCH_USAGE_STATUSES =
+        EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.SCENARIO_EXCLUDED,
+            UsageStatusEnum.LOCKED);
+    private static final EnumSet<UsageStatusEnum> PROCESSED_AACL_BATCH_USAGE_STATUSES =
+        EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_FOUND,
+            UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED, UsageStatusEnum.SCENARIO_EXCLUDED);
+    private static final EnumSet<UsageStatusEnum> PROCESSED_SAL_BATCH_USAGE_STATUSES =
+        EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.WORK_NOT_GRANTED, UsageStatusEnum.RH_NOT_FOUND,
+            UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.LOCKED);
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -227,8 +230,13 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     public List<String> getProcessingAaclBatchesNames(Set<String> batchesIds) {
-        return usageBatchRepository
-            .findIneligibleForScenarioBatchNames(batchesIds, PROCESSED_AACL_BATCH_USAGE_STATUSES);
+        return usageBatchRepository.findIneligibleForScenarioBatchNames(batchesIds,
+            PROCESSED_AACL_BATCH_USAGE_STATUSES);
+    }
+
+    @Override
+    public List<String> getProcessingSalBatchesNames(Set<String> batchesIds) {
+        return usageBatchRepository.findIneligibleForScenarioBatchNames(batchesIds, PROCESSED_SAL_BATCH_USAGE_STATUSES);
     }
 
     @Override

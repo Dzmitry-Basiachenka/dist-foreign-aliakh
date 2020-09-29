@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for SAL usages controller.
@@ -75,4 +76,20 @@ public interface ISalUsageController extends ICommonUsageController {
      * @return list of {@link FundPool}s that are not attached to a scenario.
      */
     List<FundPool> getFundPoolsNotAttachedToScenario();
+
+    /**
+     * Gets names of processing batches (with usages in statuses besides WORK_NOT_FOUND, ELIGIBLE).
+     *
+     * @param batchesIds set of batches ids
+     * @return list of batches names
+     */
+    List<String> getProcessingBatchesNames(Set<String> batchesIds);
+
+    /**
+     * Gets names of batches with usages in status, different from ELIGIBLE.
+     *
+     * @param batchesIds set of batches ids
+     * @return list of batches names
+     */
+    List<String> getIneligibleBatchesNames(Set<String> batchesIds);
 }

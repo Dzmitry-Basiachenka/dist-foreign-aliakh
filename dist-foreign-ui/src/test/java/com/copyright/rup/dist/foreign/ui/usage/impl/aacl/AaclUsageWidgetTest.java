@@ -130,8 +130,6 @@ public class AaclUsageWidgetTest {
     @Test
     public void testAddToScenarioButtonClickListener() {
         mockStatic(Windows.class);
-        Grid grid = new Grid();
-        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
@@ -165,8 +163,6 @@ public class AaclUsageWidgetTest {
     @Test
     public void testAddToScenarioButtonClickListenerWithEmptyUsages() {
         mockStatic(Windows.class);
-        Grid grid = new Grid();
-        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
@@ -184,8 +180,6 @@ public class AaclUsageWidgetTest {
     @Test
     public void testAddToScenarioButtonClickListenerWithInvalidStatus() {
         mockStatic(Windows.class);
-        Grid grid = new Grid();
-        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
@@ -204,8 +198,6 @@ public class AaclUsageWidgetTest {
     @Test
     public void testAddToScenarioButtonClickListenerWithInvalidRightsholders() {
         mockStatic(Windows.class);
-        Grid grid = new Grid();
-        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
@@ -226,8 +218,6 @@ public class AaclUsageWidgetTest {
     @Test
     public void testAddToScenarioButtonClickListenerWithProcessingBatches() {
         mockStatic(Windows.class);
-        Grid grid = new Grid();
-        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
@@ -250,8 +240,6 @@ public class AaclUsageWidgetTest {
     @Test
     public void testAddToScenarioButtonClickListenerWithAttachedToScenarioBatches() {
         mockStatic(Windows.class);
-        Grid grid = new Grid();
-        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
@@ -276,8 +264,6 @@ public class AaclUsageWidgetTest {
     @Test
     public void testAddToScenarioButtonClickListenerWithIneligibleBatches() {
         mockStatic(Windows.class);
-        Grid grid = new Grid();
-        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
@@ -336,8 +322,6 @@ public class AaclUsageWidgetTest {
     @Test
     public void testSendForClassification() {
         mockStatic(Windows.class);
-        Grid grid = new Grid();
-        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         CloseEvent closeEvent = createMock(CloseEvent.class);
         Capture<Window> notificationWindowCapture = new Capture<>();
@@ -381,8 +365,6 @@ public class AaclUsageWidgetTest {
     @Test
     public void testSendForClassificationInvalidUsagesState() {
         mockStatic(Windows.class);
-        Grid grid = new Grid();
-        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button sendForClassificationButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
