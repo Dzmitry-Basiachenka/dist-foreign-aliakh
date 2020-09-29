@@ -100,4 +100,19 @@ public interface ISalUsageController extends ICommonUsageController {
      * @return list of batches names
      */
     List<String> getIneligibleBatchesNames(Set<String> batchesIds);
+
+    /**
+     * Checks whether usage details exist in the given batch.
+     *
+     * @param batchId batch id
+     * @return {@code true} - if usage details exist, {@code false} - otherwise
+     */
+    boolean usageDataExists(String batchId);
+
+    /**
+     * Deletes {@link Usage}s with detail type UD.
+     *
+     * @param usageBatch {@link UsageBatch} to delete usage details
+     */
+    void deleteUsageDetails(UsageBatch usageBatch);
 }

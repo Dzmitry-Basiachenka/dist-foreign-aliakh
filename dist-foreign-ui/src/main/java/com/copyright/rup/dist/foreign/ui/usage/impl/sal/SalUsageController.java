@@ -162,6 +162,17 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
+    public boolean usageDataExists(String batchId) {
+        //TODO {aazarenka} implement this logic later
+        return false;
+    }
+
+    @Override
+    public void deleteUsageDetails(UsageBatch usageBatch) {
+        //TODO {aazarenka} implement this logic later
+    }
+
+    @Override
     protected ICommonUsageWidget instantiateWidget() {
         return new SalUsageWidget(this);
     }
