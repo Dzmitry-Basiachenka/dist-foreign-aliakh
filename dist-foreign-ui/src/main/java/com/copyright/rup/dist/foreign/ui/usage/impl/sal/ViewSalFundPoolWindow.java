@@ -21,9 +21,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Locale;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -128,7 +126,8 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
             .setCaption(ForeignUi.getMessage("table.column.fund_pool_name"))
             .setComparator((fundPool1, fundPool2) -> fundPool1.getName().compareToIgnoreCase(fundPool2.getName()))
             .setExpandRatio(1);
-        grid.addColumn(fundPool -> getStringFromDate(fundPool.getSalFields().getDateReceived()))
+        grid.addColumn(fundPool -> fundPool.getSalFields().getDateReceived()
+                .format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)))
             .setCaption(ForeignUi.getMessage("table.column.date_received"))
             .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getDateReceived()
                 .compareTo(fundPool2.getSalFields().getDateReceived()))
@@ -182,11 +181,5 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
             .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getGrade9to12GrossAmount()
                 .compareTo(fundPool2.getSalFields().getGrade9to12GrossAmount()))
             .setWidth(170);
-    }
-
-    private String getStringFromDate(LocalDate date) {
-        return Objects.nonNull(date)
-            ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
-            : StringUtils.EMPTY;
     }
 }
