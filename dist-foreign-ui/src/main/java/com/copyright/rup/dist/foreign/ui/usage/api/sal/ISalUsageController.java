@@ -43,6 +43,14 @@ public interface ISalUsageController extends ICommonUsageController {
     SalItemBankCsvProcessor getSalItemBankCsvProcessor();
 
     /**
+     * Checks whether SAL fund pool with provided name already exists or not.
+     *
+     * @param name SAL fund pool name
+     * @return {@code true} if fund pool exists, otherwise {@code false}
+     */
+    boolean fundPoolExists(String name);
+
+    /**
      * Return instance of {@link IStreamSource} for errors result.
      *
      * @param fileName         name of processed file
