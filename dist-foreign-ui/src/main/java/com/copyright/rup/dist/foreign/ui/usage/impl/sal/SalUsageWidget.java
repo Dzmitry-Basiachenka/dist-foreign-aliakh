@@ -143,6 +143,8 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
             usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
         loadItemBankMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load.item_bank"), null,
             item -> Windows.showModalWindow(new ItemBankUploadWindow(controller)));
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
+            item -> Windows.showModalWindow(new ViewSalUsageBatchWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df-sal");
