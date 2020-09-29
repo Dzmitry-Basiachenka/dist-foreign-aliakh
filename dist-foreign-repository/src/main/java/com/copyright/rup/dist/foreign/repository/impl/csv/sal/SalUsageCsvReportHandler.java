@@ -70,7 +70,7 @@ public class SalUsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getSalUsage().getCoverageYear());
         beanProperties.add(bean.getSalUsage().getQuestionIdentifier());
         beanProperties.add(bean.getSalUsage().getGrade());
-        beanProperties.add(bean.getSalUsage().getGradeGroup());
+        beanProperties.add(getBeanPropertyAsString(bean.getSalUsage().getGradeGroup()));
         beanProperties.add(bean.getSalUsage().getStates());
         beanProperties.add(getBeanPropertyAsString(bean.getSalUsage().getNumberOfViews()));
         beanProperties.add(bean.getComment());
