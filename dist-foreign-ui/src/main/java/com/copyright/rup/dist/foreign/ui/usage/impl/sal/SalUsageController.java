@@ -142,6 +142,11 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
+    public FundPool calculateFundPoolAmounts(FundPool fundPool) {
+        return fundPoolService.calculateSalFundPoolAmounts(fundPool);
+    }
+
+    @Override
     public ICommonUsageFilterController getUsageFilterController() {
         return salUsageFilterController;
     }

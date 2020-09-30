@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +36,9 @@ import java.util.stream.Collectors;
 @Service
 public class FundPoolService implements IFundPoolService {
 
+    private static final int DEFAULT_SCALE = 2;
+    private static final int SCALE_10 = 10;
+    private static final BigDecimal SAL_SERVICE_FEE = new BigDecimal("0.25");
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -158,6 +162,64 @@ public class FundPoolService implements IFundPoolService {
         return licenseeClassService.getAggregateLicenseeClasses().stream()
             .map(alc -> classIdToDetail.getOrDefault(alc.getId(), buildZeroFundPoolDetail(alc)))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public FundPool calculateSalFundPoolAmounts(FundPool fundPool) {
+        FundPool.SalFields salFields = fundPool.getSalFields();
+        BigDecimal itemBankSplitPercent = salFields.getItemBankSplitPercent();
+        BigDecimal netAmount =
+            multiplyWithDefaultScaling(salFields.getGrossAmount(), BigDecimal.ONE.subtract(SAL_SERVICE_FEE));
+        if (0 == BigDecimal.ONE.compareTo(itemBankSplitPercent)) {
+            fundPool.setTotalAmount(netAmount);
+            salFields.setItemBankAmount(netAmount);
+            salFields.setItemBankGrossAmount(salFields.getGrossAmount());
+            salFields.setGradeKto5GrossAmount(BigDecimal.ZERO);
+            salFields.setGrade6to8GrossAmount(BigDecimal.ZERO);
+            salFields.setGrade9to12GrossAmount(BigDecimal.ZERO);
+        } else {
+            BigDecimal multiplier = netAmount.multiply(BigDecimal.ONE.subtract(itemBankSplitPercent));
+            BigDecimal totalStudents = BigDecimal.valueOf(
+                salFields.getGradeKto5NumberOfStudents()
+                    + salFields.getGrade6to8NumberOfStudents()
+                    + salFields.getGrade9to12NumberOfStudents());
+            salFields.setGradeKto5GrossAmount(
+                calculateGradeAmount(multiplier, totalStudents, salFields.getGradeKto5NumberOfStudents()));
+            salFields.setGrade6to8GrossAmount(
+                calculateGradeAmount(multiplier, totalStudents, salFields.getGrade6to8NumberOfStudents()));
+            salFields.setGrade9to12GrossAmount(
+                calculateGradeAmount(multiplier, totalStudents, salFields.getGrade9to12NumberOfStudents()));
+            salFields.setItemBankAmount(
+                netAmount.subtract(salFields.getGradeKto5GrossAmount())
+                    .subtract(salFields.getGrade6to8GrossAmount())
+                    .subtract(salFields.getGrade9to12GrossAmount()));
+            salFields.setItemBankGrossAmount(
+                multiplyWithDefaultScaling(salFields.getGrossAmount(), itemBankSplitPercent));
+            fundPool.setTotalAmount(salFields.getItemBankAmount()
+                .add(salFields.getGradeKto5GrossAmount()
+                    .add(salFields.getGrade6to8GrossAmount())
+                    .add(salFields.getGrade9to12GrossAmount())));
+        }
+        return fundPool;
+    }
+
+    // Used for calculating grade gross amounts.
+    // RoundingMode.DOWN is used while calculating to be consistent with current calculation in SC
+    private static BigDecimal calculateGradeAmount(BigDecimal multiplier, BigDecimal totalStudentsCount,
+                                                   int studentsCount) {
+        BigDecimal amount;
+        if (0 < studentsCount) {
+            amount = multiplier.multiply(BigDecimal.valueOf(studentsCount)
+                .divide(totalStudentsCount, SCALE_10, RoundingMode.DOWN))
+                .setScale(DEFAULT_SCALE, RoundingMode.DOWN);
+        } else {
+            amount = BigDecimal.ZERO;
+        }
+        return amount;
+    }
+
+    private BigDecimal multiplyWithDefaultScaling(BigDecimal left, BigDecimal right) {
+        return left.multiply(right).setScale(DEFAULT_SCALE, RoundingMode.HALF_UP);
     }
 
     private FundPoolDetail buildZeroFundPoolDetail(AggregateLicenseeClass aggregateLicenseeClass) {

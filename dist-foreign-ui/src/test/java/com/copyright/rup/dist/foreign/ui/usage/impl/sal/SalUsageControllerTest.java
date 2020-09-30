@@ -36,7 +36,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageWidget;
 
 import com.vaadin.ui.HorizontalLayout;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -290,5 +289,14 @@ public class SalUsageControllerTest {
         replay(salUsageService);
         assertTrue(controller.usageDataExists(batchId));
         verify(salUsageService);
+    }
+
+    @Test
+    public void testCalculateFundPoolAmounts() {
+        FundPool fundPool = new FundPool();
+        expect(fundPoolService.calculateSalFundPoolAmounts(fundPool)).andReturn(fundPool).once();
+        replay(fundPoolService);
+        assertEquals(fundPool, controller.calculateFundPoolAmounts(fundPool));
+        verify(fundPoolService);
     }
 }
