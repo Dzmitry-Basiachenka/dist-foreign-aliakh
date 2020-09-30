@@ -114,5 +114,5 @@ public interface ISalUsageController extends ICommonUsageController {
      *
      * @param usageBatch {@link UsageBatch} to delete usage details
      */
-    void deleteUsageDetails(UsageBatch usageBatch);
+    void deleteUsageData(UsageBatch usageBatch);
 }

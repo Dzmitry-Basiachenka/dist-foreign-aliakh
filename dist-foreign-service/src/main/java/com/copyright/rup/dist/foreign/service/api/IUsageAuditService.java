@@ -101,4 +101,12 @@ public interface IUsageAuditService {
      * @return list of {@link BatchStatistic}
      */
     List<BatchStatistic> getBatchesStatisticByDateFromAndDateTo(LocalDate dateFrom, LocalDate dateTo);
+
+    /**
+     * Deletes {@link UsageAuditItem}s by given batch identifier and
+     * {@link com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum#UD}.
+     *
+     * @param batchId batch identifier
+     */
+    void deleteActionsForSalUsageData(String batchId);
 }

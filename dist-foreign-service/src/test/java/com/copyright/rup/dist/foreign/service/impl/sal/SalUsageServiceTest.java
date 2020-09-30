@@ -182,6 +182,39 @@ public class SalUsageServiceTest {
         verify(salUsageRepository);
     }
 
+    @Test
+    public void testUsageDetailsExist() {
+        String batchId = "78a76524-ed6e-4998-9833-2e2051830d42";
+        expect(salUsageRepository.usageDataExist(batchId)).andReturn(true).once();
+        replay(salUsageRepository);
+        assertTrue(salUsageService.usageDataExists(batchId));
+        verify(salUsageRepository);
+    }
+
+    @Test
+    public void testDeleteUsageData() {
+        UsageBatch usageBatch = buildUsageBatch();
+        usageAuditService.deleteActionsForSalUsageData(usageBatch.getId());
+        expectLastCall().once();
+        salUsageRepository.deleteUsageData(usageBatch.getId());
+        expectLastCall().once();
+        replay(usageAuditService, salUsageRepository);
+        salUsageService.deleteUsageData(usageBatch);
+        verify(usageAuditService, salUsageRepository);
+    }
+
+    @Test
+    public void testDeleteUsageBatchDetails() {
+        UsageBatch usageBatch = buildUsageBatch();
+        usageAuditService.deleteActionsByBatchId(usageBatch.getId());
+        expectLastCall().once();
+        salUsageRepository.deleteByBatchId(usageBatch.getId());
+        expectLastCall().once();
+        replay(usageAuditService, salUsageRepository);
+        salUsageService.deleteUsageBatchDetails(usageBatch);
+        verify(usageAuditService, salUsageRepository);
+    }
+
     private UsageBatch buildUsageBatch() {
         UsageBatch batch = new UsageBatch();
         batch.setId("38ea9a39-0e20-4c3d-8054-0e88d403dd67");

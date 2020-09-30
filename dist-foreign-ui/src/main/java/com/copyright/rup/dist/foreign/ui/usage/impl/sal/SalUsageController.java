@@ -108,7 +108,7 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public void deleteUsageBatch(UsageBatch usageBatch) {
-        //TODO: implement in scope of corresponding story
+        getUsageBatchService().deleteSalUsageBatch(usageBatch);
     }
 
     @Override
@@ -163,13 +163,12 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public boolean usageDataExists(String batchId) {
-        //TODO {aazarenka} implement this logic later
-        return false;
+        return salUsageService.usageDataExists(batchId);
     }
 
     @Override
-    public void deleteUsageDetails(UsageBatch usageBatch) {
-        //TODO {aazarenka} implement this logic later
+    public void deleteUsageData(UsageBatch usageBatch) {
+        salUsageService.deleteUsageData(usageBatch);
     }
 
     @Override

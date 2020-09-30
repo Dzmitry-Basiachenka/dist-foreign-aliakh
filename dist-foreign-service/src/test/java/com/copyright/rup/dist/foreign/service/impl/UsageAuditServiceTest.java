@@ -168,6 +168,16 @@ public class UsageAuditServiceTest {
         }
     }
 
+    @Test
+    public void testDeleteActionsForSalUsageData(){
+        String batchId = "7ab04433-7663-43e0-bc19-3aacb4d7b4c7";
+        usageAuditRepository.deleteForSalUsageData(batchId);
+        expectLastCall().once();
+        replay(usageAuditRepository);
+        usageAuditService.deleteActionsForSalUsageData(batchId);
+        verify(usageAuditRepository);
+    }
+
     private void verifyCapturedAuditItem(Capture<UsageAuditItem> usageAuditItemCapture, String expectedUsageItemId) {
         UsageAuditItem usageAuditItem = usageAuditItemCapture.getValue();
         assertEquals(REASON, usageAuditItem.getActionReason());

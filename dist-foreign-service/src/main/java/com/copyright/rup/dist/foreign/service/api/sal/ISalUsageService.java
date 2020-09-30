@@ -94,4 +94,26 @@ public interface ISalUsageService {
      * @return {@link com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum#IB} detail grade
      */
     String getItemBankDetailGradeByWorkPortionId(String workPortionId);
+
+    /**
+     * Checks whether usage details exist in the given batch.
+     *
+     * @param batchId batch id
+     * @return {@code true} - if usage details exist, {@code false} - otherwise
+     */
+    boolean usageDataExists(String batchId);
+
+    /**
+     * Deletes {@link Usage}s with detail type UD.
+     *
+     * @param usageBatch {@link UsageBatch} to delete usage details
+     */
+    void deleteUsageData(UsageBatch usageBatch);
+
+    /**
+     * Deletes all {@link Usage}s associated with the given SAL {@link UsageBatch}.
+     *
+     * @param usageBatch {@link UsageBatch} to delete usages from
+     */
+    void deleteUsageBatchDetails(UsageBatch usageBatch);
 }

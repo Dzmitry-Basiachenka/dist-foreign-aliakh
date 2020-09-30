@@ -113,7 +113,7 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
             if (CollectionUtils.isEmpty(scenariosNames)) {
                 Windows.showConfirmDialog(
                     ForeignUi.getMessage("message.confirm.delete_action", usageBatch.getName(), "usage details"),
-                    () -> performDelete(controller::deleteUsageDetails, usageBatch));
+                    () -> performDelete(controller::deleteUsageData, usageBatch));
             } else {
                 Windows.showNotificationWindow(
                     buildNotificationMessage("message.error.delete_usage_details", "Usage details", "scenarios",
