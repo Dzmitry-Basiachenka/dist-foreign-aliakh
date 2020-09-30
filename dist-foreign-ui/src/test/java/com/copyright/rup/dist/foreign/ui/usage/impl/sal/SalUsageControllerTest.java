@@ -38,6 +38,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageWidget;
 
 import com.vaadin.ui.HorizontalLayout;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -302,6 +303,15 @@ public class SalUsageControllerTest {
         replay(salUsageService);
         assertTrue(controller.usageDataExists(batchId));
         verify(salUsageService);
+    }
+
+    @Test
+    public void testGetBatchesNotAttachedToScenario() {
+        List<UsageBatch> batches = Collections.singletonList(new UsageBatch());
+        expect(usageBatchService.getSalNotAttachedToScenario()).andReturn(batches).once();
+        replay(usageBatchService);
+        assertEquals(batches, controller.getBatchesNotAttachedToScenario());
+        verify(usageBatchService);
     }
 
     @Test

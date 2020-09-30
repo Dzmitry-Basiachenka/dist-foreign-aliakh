@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageDataCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
@@ -76,6 +77,11 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     public void loadItemBank(UsageBatch itemBank, List<Usage> usages) {
         List<String> insertedUsageIds = getUsageBatchService().insertSalBatch(itemBank, usages);
         salUsageService.sendForMatching(insertedUsageIds, itemBank.getName());
+    }
+
+    @Override
+    public void loadUsageData(UsageBatch itemBank, List<Usage> usages) {
+        salUsageService.insertUsageDataDetails(itemBank, usages);
     }
 
     @Override
@@ -149,6 +155,11 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
+    public SalUsageDataCsvProcessor getSalUsageDataCsvProcessor(String itemBankId) {
+        return csvProcessorFactory.getSalUsageDataCsvProcessor(itemBankId);
+    }
+
+    @Override
     public IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult processingResult) {
         return streamSourceHandler.getCsvStreamSource(
             () -> String.format("Error_for_%s", Files.getNameWithoutExtension(fileName)), null,
@@ -188,6 +199,11 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     @Override
     public void deleteUsageData(UsageBatch usageBatch) {
         salUsageService.deleteUsageData(usageBatch);
+    }
+
+    @Override
+    public List<UsageBatch> getBatchesNotAttachedToScenario() {
+        return getUsageBatchService().getSalNotAttachedToScenario();
     }
 
     @Override
