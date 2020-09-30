@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -36,6 +37,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -244,6 +246,34 @@ public class SalFundPoolLoadWindowTest {
         verify(usagesController);
     }
 
+    @Test
+    public void testOnLoadButtonClick() {
+        mockStatic(Windows.class);
+        FundPool fundPool = buildFundPool();
+        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(20);
+        expect(usagesController.calculateFundPoolAmounts(eq(fundPool))).andReturn(fundPool).times(2);
+        usagesController.createFundPool(fundPool);
+        expectLastCall().once();
+        Windows.showNotificationWindow("Upload has been successfully completed");
+        expectLastCall().once();
+        replay(usagesController, Windows.class);
+        setTextFieldValue(FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(ASSESSMENT_NAME_FIELD, "FY2020 COG");
+        setTextFieldValue(GROSS_AMOUNT_FIELD, "1000");
+        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "2");
+        setTextFieldValue(ACCOUNT_NUMBER_FIELD, "1000008985");
+        setTextFieldValue(LICENSEE_NAME_FIELD, "FarmField Inc.");
+        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "10");
+        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "5");
+        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
+        setLocalDateWidgetValue(DATE_RECEIVED_FIELD, LocalDate.of(2020, 12, 12));
+        VerticalLayout rootLayout = (VerticalLayout) window.getContent();
+        HorizontalLayout buttonsLayout = (HorizontalLayout) rootLayout.getComponent(9);
+        Button loadButton = (Button) buttonsLayout.getComponent(0);
+        loadButton.click();
+        verify(usagesController, Windows.class);
+    }
+
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
@@ -353,5 +383,21 @@ public class SalFundPoolLoadWindowTest {
         binder.validate();
         AbstractComponent textField = Whitebox.getInternalState(window, fieldName);
         assertNull(textField.getErrorMessage());
+    }
+
+    private FundPool buildFundPool() {
+        FundPool fundPool = new FundPool();
+        fundPool.setName("SAL Fund Pool");
+        FundPool.SalFields salFields = new FundPool.SalFields();
+        salFields.setDateReceived(LocalDate.of(2020, 12, 12));
+        salFields.setAssessmentName("FY2020 COG");
+        salFields.setLicenseeAccountNumber(1000008985L);
+        salFields.setLicenseeName("FarmField Inc.");
+        salFields.setGradeKto5NumberOfStudents(10);
+        salFields.setGrade6to8NumberOfStudents(5);
+        salFields.setGrossAmount(new BigDecimal("1000.00"));
+        salFields.setItemBankSplitPercent(new BigDecimal("0.02"));
+        fundPool.setSalFields(salFields);
+        return fundPool;
     }
 }

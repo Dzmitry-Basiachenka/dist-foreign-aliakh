@@ -86,7 +86,12 @@ class SalFundPoolLoadWindow extends Window {
      * Initiates file uploading.
      */
     void onUploadClicked() {
-        if (!binder.isValid()) {
+        if (binder.isValid()) {
+            FundPool calculatedFundPool = usagesController.calculateFundPoolAmounts(buildFundPool());
+            usagesController.createFundPool(calculatedFundPool);
+            close();
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_successfully_completed"));
+        } else {
             Windows.showValidationErrorWindow(Arrays.asList(fundPoolNameField, assessmentName, grossAmountField,
                 itemBankSplitPercent, accountNumberField, licenseeNameField, dateReceived, gradeKto5NumberOfStudents,
                 grade6to8NumberOfStudents, grade9to12NumberOfStudents));

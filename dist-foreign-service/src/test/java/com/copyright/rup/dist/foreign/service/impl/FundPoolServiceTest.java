@@ -66,6 +66,7 @@ public class FundPoolServiceTest {
     private static final String FUND_POOL_NAME = "FAS Q3 2019";
     private static final String USER_NAME = "User Name";
     private static final String AMOUNT_1000 = "1000.00";
+    private static final BigDecimal SAL_SERVICE_FEE = new BigDecimal("0.25");
 
     private FundPoolService fundPoolService;
     private INtsUsageService ntsUsageService;
@@ -277,6 +278,7 @@ public class FundPoolServiceTest {
         assertEquals(5, fundPool.getSalFields().getGrade6to8NumberOfStudents());
         assertEquals(0, fundPool.getSalFields().getGrade9to12NumberOfStudents());
         assertEquals("FY2020 COG", fundPool.getSalFields().getAssessmentName());
+        assertEquals(SAL_SERVICE_FEE, fundPool.getSalFields().getServiceFee());
     }
 
     @Test
@@ -295,6 +297,22 @@ public class FundPoolServiceTest {
         assertEquals(0, fundPool.getSalFields().getGrade6to8NumberOfStudents());
         assertEquals(0, fundPool.getSalFields().getGrade9to12NumberOfStudents());
         assertEquals("FY2020 COG", fundPool.getSalFields().getAssessmentName());
+        assertEquals(SAL_SERVICE_FEE, fundPool.getSalFields().getServiceFee());
+    }
+
+    @Test
+    public void testCreateSalFundPool() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        FundPool fundPool = new FundPool();
+        fundPoolRepository.insert(fundPool);
+        expectLastCall().once();
+        replay(RupContextUtils.class, fundPoolRepository);
+        fundPoolService.createSalFundPool(fundPool);
+        assertEquals(fundPool.getCreateUser(), USER_NAME);
+        assertEquals(fundPool.getUpdateUser(), USER_NAME);
+        assertNotNull(fundPool.getId());
+        verify(RupContextUtils.class, fundPoolRepository);
     }
 
     private void verifyDetail(FundPoolDetail expected, FundPoolDetail actual) {
@@ -361,7 +379,7 @@ public class FundPoolServiceTest {
         salFields.setGrade6to8NumberOfStudents(grade6to8NumberOfStudents);
         salFields.setGrossAmount(new BigDecimal(AMOUNT_1000));
         salFields.setItemBankSplitPercent(splitPercent);
-        salFields.setServiceFee(new BigDecimal("0.25000"));
+        salFields.setServiceFee(SAL_SERVICE_FEE);
         fundPool.setSalFields(salFields);
         return fundPool;
     }
