@@ -83,44 +83,45 @@
 
     <select id="findNtsNotAttachedToScenario" resultMap="fundPoolResultMap">
         select
-            fund.df_fund_pool_uid,
-            fund.name
-        from ${schema}.df_fund_pool fund
+            df_fund_pool_uid,
+            name
+        from ${schema}.df_fund_pool
         where product_family = #{productFamily}
             and df_fund_pool_uid not in (
                 select nts_fields->>'pre_service_fee_fund_uid'
                 from ${schema}.df_scenario
                 where nts_fields->>'pre_service_fee_fund_uid' is not null
             )
-        order by fund.updated_datetime desc
+        order by updated_datetime desc
     </select>
 
     <select id="findAaclNotAttachedToScenario" resultMap="fundPoolResultMap">
         select
-            fund.df_fund_pool_uid,
-            fund.name
-        from ${schema}.df_fund_pool fund
+            df_fund_pool_uid,
+            name
+        from ${schema}.df_fund_pool
         where product_family = #{productFamily}
             and df_fund_pool_uid not in (
                 select aacl_fields->>'fund_pool_uid'
                 from ${schema}.df_scenario
                 where aacl_fields->>'fund_pool_uid' is not null
             )
-        order by fund.updated_datetime desc
+        order by updated_datetime desc
     </select>
 
     <select id="findSalNotAttachedToScenario" resultMap="fundPoolResultMap">
         select
-            fund.df_fund_pool_uid,
-            fund.name
-        from ${schema}.df_fund_pool fund
+            df_fund_pool_uid,
+            name,
+            sal_fields
+        from ${schema}.df_fund_pool
         where product_family = #{productFamily}
             and df_fund_pool_uid not in (
                 select sal_fields->>'fund_pool_uid'
                 from ${schema}.df_scenario
                 where sal_fields->>'fund_pool_uid' is not null
             )
-        order by fund.updated_datetime desc
+        order by updated_datetime desc
     </select>
 
     <select id="fundPoolExists" parameterType="map" resultType="boolean">

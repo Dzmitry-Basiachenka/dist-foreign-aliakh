@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -105,4 +106,12 @@ public interface ISalUsageRepository {
      * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
      */
     void deleteByBatchId(String batchId);
+
+    /**
+     * Finds grade groups from filtered UD usages.
+     *
+     * @param filter instance of {@link UsageFilter}
+     * @return list of {@link GradeGroupEnum}
+     */
+    List<GradeGroupEnum> findUsageDataGradeGroups(UsageFilter filter);
 }

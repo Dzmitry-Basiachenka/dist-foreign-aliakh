@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.ui.usage.api.sal;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
@@ -50,6 +52,13 @@ public interface ISalUsageController extends ICommonUsageController {
      * @return {@code true} if fund pool exists, otherwise {@code false}
      */
     boolean fundPoolExists(String name);
+
+    /**
+     * Gets presented grade groups from filtered UD usages.
+     *
+     * @return list of {@link GradeGroupEnum}
+     */
+    List<GradeGroupEnum> findUsageDataGradeGroups();
 
     /**
      * Return instance of {@link IStreamSource} for errors result.
@@ -124,4 +133,14 @@ public interface ISalUsageController extends ICommonUsageController {
      * @return calculated SAL {@link FundPool}
      */
     FundPool calculateFundPoolAmounts(FundPool fundPool);
+
+    /**
+     * Creates SAL scenario by entered scenario name and description.
+     *
+     * @param scenarioName name of scenario
+     * @param fundPoolId   fund pool identifier
+     * @param description  description for creating scenario
+     * @return created {@link Scenario}
+     */
+    Scenario createSalScenario(String scenarioName, String fundPoolId, String description);
 }

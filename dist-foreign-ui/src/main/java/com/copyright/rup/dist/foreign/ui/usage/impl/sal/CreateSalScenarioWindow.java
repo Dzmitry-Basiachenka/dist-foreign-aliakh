@@ -3,13 +3,17 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.google.common.collect.Maps;
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
@@ -21,11 +25,17 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * Window to create SAL scenario.
@@ -120,8 +130,71 @@ class CreateSalScenarioWindow extends Window {
     }
 
     private void onConfirmButtonClicked() {
-        if (!scenarioBinder.isValid() || !fundPoolBinder.isValid()) {
+        if (scenarioBinder.isValid() && fundPoolBinder.isValid()) {
+            fundPoolComboBox.getSelectedItem().ifPresent(fundPool -> {
+                if (isValidLicenseeAccount(fundPool) && isValidaGradeGroups(fundPool)) {
+                    fireEvent(new ScenarioCreateEvent(this,
+                        controller.createSalScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()),
+                            fundPool.getId(), StringUtils.trimToEmpty(descriptionArea.getValue()))));
+                    close();
+                }
+            });
+        } else {
             Windows.showValidationErrorWindow(Arrays.asList(scenarioNameField, fundPoolComboBox, descriptionArea));
         }
+    }
+
+    private boolean isValidLicenseeAccount(FundPool fundPool) {
+        UsageBatch selectedBatch = controller.getUsageFilterController().getUsageBatches().iterator().next();
+        Long usageBatchLicensee = selectedBatch.getSalFields().getLicenseeAccountNumber();
+        Long fundPoolLicensee = fundPool.getSalFields().getLicenseeAccountNumber();
+        if (!fundPoolLicensee.equals(usageBatchLicensee)) {
+            Windows.showNotificationWindow(
+                ForeignUi.getMessage("message.error.invalid_licensee_account", usageBatchLicensee, fundPoolLicensee));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidaGradeGroups(FundPool fundPool) {
+        List<GradeGroupEnum> existingGradeGroups = controller.findUsageDataGradeGroups();
+        Map<GradeGroupEnum, BigDecimal> gradeGroupAmountMap = Maps.newHashMapWithExpectedSize(3);
+        gradeGroupAmountMap.put(GradeGroupEnum.GRADEK_5, fundPool.getSalFields().getGradeKto5GrossAmount());
+        gradeGroupAmountMap.put(GradeGroupEnum.GRADE6_8, fundPool.getSalFields().getGrade6to8GrossAmount());
+        gradeGroupAmountMap.put(GradeGroupEnum.GRADE9_12, fundPool.getSalFields().getGrade9to12GrossAmount());
+        return isValidaGradeGroupAmounts(gradeGroupAmountMap, existingGradeGroups)
+            && isValidaGradeGroupDetails(gradeGroupAmountMap, existingGradeGroups);
+    }
+
+    private boolean isValidaGradeGroupAmounts(Map<GradeGroupEnum, BigDecimal> gradeGroupAmountMap,
+                                              List<GradeGroupEnum> existingGradeGroups) {
+        List<GradeGroupEnum> invalidGradeGroupDetails = gradeGroupAmountMap.entrySet()
+            .stream()
+            .filter(entry -> 0 > BigDecimal.ZERO.compareTo(entry.getValue())
+                && !existingGradeGroups.contains(entry.getKey()))
+            .map(Entry::getKey)
+            .sorted()
+            .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(invalidGradeGroupDetails)) {
+            showGradeGroupErrorWindow(invalidGradeGroupDetails, "message.error.invalid_grade_group_usages");
+        }
+        return CollectionUtils.isEmpty(invalidGradeGroupDetails);
+    }
+
+    private boolean isValidaGradeGroupDetails(Map<GradeGroupEnum, BigDecimal> gradeGroupAmountMap,
+                                              List<GradeGroupEnum> existingGradeGroups) {
+        List<GradeGroupEnum> invalidGradeGroupAmounts = existingGradeGroups.stream()
+            .filter(gradeGroup -> 0 == BigDecimal.ZERO.compareTo(gradeGroupAmountMap.get(gradeGroup)))
+            .sorted()
+            .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(invalidGradeGroupAmounts)) {
+            showGradeGroupErrorWindow(invalidGradeGroupAmounts, "message.error.invalid_grade_group_amounts");
+        }
+        return CollectionUtils.isEmpty(invalidGradeGroupAmounts);
+    }
+
+    private void showGradeGroupErrorWindow(List<GradeGroupEnum> invalidGradeGroups, String errorMessage) {
+        Windows.showNotificationWindow(ForeignUi.getMessage(errorMessage,
+            invalidGradeGroups.stream().map(GradeGroupEnum::name).collect(Collectors.joining(", "))));
     }
 }
