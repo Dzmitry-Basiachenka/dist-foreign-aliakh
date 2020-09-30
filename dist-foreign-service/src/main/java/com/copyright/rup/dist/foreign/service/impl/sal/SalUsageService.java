@@ -149,4 +149,31 @@ public class SalUsageService implements ISalUsageService {
     public String getItemBankDetailGradeByWorkPortionId(String workPortionId) {
         return salUsageRepository.findItemBankDetailGradeByWorkPortionId(workPortionId);
     }
+
+    @Override
+    public boolean usageDataExists(String batchId) {
+        return salUsageRepository.usageDataExist(batchId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUsageData(UsageBatch usageBatch) {
+        String userName = RupContextUtils.getUserName();
+        String batchName = usageBatch.getName();
+        LOGGER.info("Delete SAL usage data. Started. UsageBatchName={}, UserName={}", batchName, userName);
+        usageAuditService.deleteActionsForSalUsageData(usageBatch.getId());
+        salUsageRepository.deleteUsageData(usageBatch.getId());
+        LOGGER.info("Delete SAL usage data. Finished. UsageBatchName={}, UserName={}", batchName, userName);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUsageBatchDetails(UsageBatch usageBatch) {
+        String userName = RupContextUtils.getUserName();
+        String batchName = usageBatch.getName();
+        LOGGER.info("Delete SAL usage details. Started. UsageBatchName={}, UserName={}", batchName, userName);
+        usageAuditService.deleteActionsByBatchId(usageBatch.getId());
+        salUsageRepository.deleteByBatchId(usageBatch.getId());
+        LOGGER.info("Delete SAL usage details. Finished. UsageBatchName={}, UserName={}", batchName, userName);
+    }
 }

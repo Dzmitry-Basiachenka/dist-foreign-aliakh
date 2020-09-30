@@ -262,4 +262,33 @@ public class SalUsageControllerTest {
         controller.deleteFundPool(fundPool);
         verify(fundPoolService);
     }
+
+    @Test
+    public void testDeleteUsageData() {
+        UsageBatch usageBatch = new UsageBatch();
+        salUsageService.deleteUsageData(usageBatch);
+        expectLastCall().once();
+        replay(salScenarioService);
+        controller.deleteUsageData(usageBatch);
+        verify(salScenarioService);
+    }
+
+    @Test
+    public void testDeleteUsageBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatchService.deleteSalUsageBatch(usageBatch);
+        expectLastCall().once();
+        replay(usageBatchService);
+        controller.deleteUsageBatch(usageBatch);
+        verify(usageBatchService);
+    }
+
+    @Test
+    public void testUsageDataExists() {
+        String batchId = "5f59edf0-422b-40fd-8e54-c8e64f2af385";
+        expect(salUsageService.usageDataExists(batchId)).andReturn(true).once();
+        replay(salUsageService);
+        assertTrue(controller.usageDataExists(batchId));
+        verify(salUsageService);
+    }
 }

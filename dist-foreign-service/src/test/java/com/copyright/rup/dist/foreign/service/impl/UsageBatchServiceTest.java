@@ -354,9 +354,9 @@ public class UsageBatchServiceTest {
         expectLastCall().once();
         usageBatchRepository.deleteUsageBatch(usageBatch.getId());
         expectLastCall().once();
-        replay(usageService, usageBatchRepository, RupContextUtils.class);
+        replay(aaclUsageService, usageBatchRepository, RupContextUtils.class);
         usageBatchService.deleteAaclUsageBatch(usageBatch);
-        verify(usageService, usageBatchRepository, RupContextUtils.class);
+        verify(aaclUsageService, usageBatchRepository, RupContextUtils.class);
     }
 
     @Test
@@ -440,6 +440,21 @@ public class UsageBatchServiceTest {
         replay(usageBatchRepository);
         assertEquals(expectedList, usageBatchService.getBatchNamesForRightsAssignment());
         verify(usageBatchRepository);
+    }
+
+    @Test
+    public void testDeleteSalUsageBatch() {
+        mockStatic(RupContextUtils.class);
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId("4094fb3c-2554-4cab-842f-7fcb99d8983d");
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        salUsageService.deleteUsageBatchDetails(usageBatch);
+        expectLastCall().once();
+        usageBatchRepository.deleteUsageBatch(usageBatch.getId());
+        expectLastCall().once();
+        replay(salUsageService, usageBatchRepository, RupContextUtils.class);
+        usageBatchService.deleteSalUsageBatch(usageBatch);
+        verify(salUsageService, usageBatchRepository, RupContextUtils.class);
     }
 
     private Rightsholder buildRro() {

@@ -47,7 +47,7 @@ public class UsageAuditService implements IUsageAuditService {
     }
 
     @Override
-    public void deleteActionsByBatchId(String batchId) {
+    public void updatedeleteActionsByBatchId(String batchId) {
         usageAuditRepository.deleteByBatchId(batchId);
     }
 
@@ -88,6 +88,11 @@ public class UsageAuditService implements IUsageAuditService {
         checkArgument(dateFrom.compareTo(dateTo) <= 0,
             "The parameter 'dateFrom' must be less than or equal to the parameter 'dateTo'");
         return usageAuditRepository.findBatchesStatisticByDateFromAndDateTo(dateFrom, dateTo);
+    }
+
+    @Override
+    public void deleteActionsForSalUsageData(String batchId) {
+        usageAuditRepository.deleteForSalUsageData(batchId);
     }
 
     private UsageAuditItem buildUsageAuditItem(String usageId, UsageActionTypeEnum actionType, String actionReason) {
