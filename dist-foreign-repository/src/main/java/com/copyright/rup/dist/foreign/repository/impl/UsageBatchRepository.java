@@ -110,6 +110,11 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
         return selectList("IUsageBatchMapper.findBatchNamesForRightsAssignment", params);
     }
 
+    @Override
+    public List<UsageBatch> findSalNotAttachedToScenario() {
+        return selectList("IUsageBatchMapper.findSalNotAttachedToScenario", FdaConstants.SAL_PRODUCT_FAMILY);
+    }
+
     /**
      * Finds usage batch by provided name.
      *

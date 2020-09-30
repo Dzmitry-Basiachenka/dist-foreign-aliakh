@@ -123,16 +123,16 @@ public class UsageBatchRepositoryIntegrationTest {
     @Test
     public void testDeleteUsageBatch() {
         String batchId = "56282dbc-2468-48d4-b926-93d3458a656a";
-        assertEquals(12, usageBatchRepository.findAll().size());
+        assertEquals(13, usageBatchRepository.findAll().size());
         usageRepository.deleteByBatchId(batchId);
         usageBatchRepository.deleteUsageBatch(batchId);
-        assertEquals(11, usageBatchRepository.findAll().size());
+        assertEquals(12, usageBatchRepository.findAll().size());
     }
 
     @Test
     public void testFindAll() {
         List<UsageBatch> usageBatches = usageBatchRepository.findAll();
-        assertEquals(12, usageBatches.size());
+        assertEquals(13, usageBatches.size());
         assertEquals("13027b25-2269-3bec-48ea-5126431eedb0", usageBatches.get(0).getId());
         assertEquals(NTS_USAGE_BATCH_ID_3, usageBatches.get(1).getId());
         assertEquals(NTS_USAGE_BATCH_ID_2, usageBatches.get(2).getId());
@@ -145,6 +145,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals("071ebf56-eb38-49fc-b26f-cc210a374d3a", usageBatches.get(9).getId());
         assertEquals("033cc3dd-b121-41d5-91e6-cf4ddf71c141", usageBatches.get(10).getId());
         assertEquals("1f332dc2-f3c2-453a-aba0-9baa69b803d4", usageBatches.get(11).getId());
+        assertEquals("f0de407a-a615-4171-8e98-9fc28fab5324", usageBatches.get(12).getId());
     }
 
     @Test
@@ -246,6 +247,21 @@ public class UsageBatchRepositoryIntegrationTest {
         assertNotNull(batchesNamesToScenariosNames);
         assertEquals(1, batchesNamesToScenariosNames.size());
         assertEquals("Scenario name 4", batchesNamesToScenariosNames.get("NEW_26_OCT_2017"));
+    }
+
+    @Test
+    public void testFindSalNotAttachedToScenario() {
+        List<String> actualBatchIds = usageBatchRepository.findByProductFamily("SAL").stream()
+            .map(UsageBatch::getId)
+            .sorted()
+            .collect(Collectors.toList());
+        assertEquals(Arrays.asList("1f332dc2-f3c2-453a-aba0-9baa69b803d4", "f0de407a-a615-4171-8e98-9fc28fab5324"),
+            actualBatchIds);
+        List<String> actualNotAttachedBatchIds = usageBatchRepository.findSalNotAttachedToScenario().stream()
+            .map(UsageBatch::getId)
+            .sorted()
+            .collect(Collectors.toList());
+        assertEquals(Collections.singletonList("1f332dc2-f3c2-453a-aba0-9baa69b803d4"), actualNotAttachedBatchIds);
     }
 
     @Test
