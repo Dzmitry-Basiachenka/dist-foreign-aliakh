@@ -115,4 +115,13 @@ public interface ISalUsageController extends ICommonUsageController {
      * @param usageBatch {@link UsageBatch} to delete usage details
      */
     void deleteUsageData(UsageBatch usageBatch);
+
+    /**
+     * Calculates Total Amount, Item Bank Amount, Item Bank Gross Amount, Grade K-5 Gross Amount,
+     * Grade 6-8 Gross Amount, Grade 9-12 Gross Amount for given SAL {@link FundPool}.
+     *
+     * @param fundPool SAL fund pool to calculate
+     * @return calculated SAL {@link FundPool}
+     */
+    FundPool calculateFundPoolAmounts(FundPool fundPool);
 }

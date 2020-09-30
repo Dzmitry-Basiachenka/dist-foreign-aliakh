@@ -45,7 +45,8 @@ class SalFundPoolLoadWindow extends Window {
 
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
     private static final String NOT_NUMERIC_MESSAGE = "field.error.not_numeric";
-    private static final BigDecimal HUNDRED = new BigDecimal("100.0");
+    private static final BigDecimal HUNDRED = new BigDecimal("100");
+    private static final int DEFAULT_SCALE = 2;
 
     private final ISalUsageController usagesController;
     private final Binder<FundPool> binder = new Binder<>();
@@ -59,6 +60,11 @@ class SalFundPoolLoadWindow extends Window {
     private TextField gradeKto5NumberOfStudents;
     private TextField grade6to8NumberOfStudents;
     private TextField grade9to12NumberOfStudents;
+    private TextField gradeKto5GrossAmount;
+    private TextField grade6to8GrossAmount;
+    private TextField grade9to12GrossAmount;
+    private TextField totalAmount;
+    private TextField itemBankAmount;
     private LocalDateWidget dateReceived;
 
     /**
@@ -105,6 +111,22 @@ class SalFundPoolLoadWindow extends Window {
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         binder.validate();
+        binder.addStatusChangeListener(event -> {
+            if (event.getBinder().isValid()) {
+                FundPool fundPool = usagesController.calculateFundPoolAmounts(buildFundPool());
+                totalAmount.setValue(fundPool.getTotalAmount().toString());
+                itemBankAmount.setValue(fundPool.getSalFields().getItemBankAmount().toString());
+                gradeKto5GrossAmount.setValue(fundPool.getSalFields().getGradeKto5GrossAmount().toString());
+                grade6to8GrossAmount.setValue(fundPool.getSalFields().getGrade6to8GrossAmount().toString());
+                grade9to12GrossAmount.setValue(fundPool.getSalFields().getGrade9to12GrossAmount().toString());
+            } else {
+                totalAmount.clear();
+                itemBankAmount.clear();
+                gradeKto5GrossAmount.clear();
+                grade6to8GrossAmount.clear();
+                grade9to12GrossAmount.clear();
+            }
+        });
         return rootLayout;
     }
 
@@ -261,34 +283,34 @@ class SalFundPoolLoadWindow extends Window {
     }
 
     private TextField initGradeKto5AmountField() {
-        TextField grossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.grade_k_5_gross_amount"));
-        grossAmount.setSizeFull();
-        grossAmount.setReadOnly(true);
-        VaadinUtils.setMaxComponentsWidth(grossAmount);
-        VaadinUtils.addComponentStyle(grossAmount, "grade-k-5-gross-amount-field");
-        return grossAmount;
+        gradeKto5GrossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.grade_k_5_gross_amount"));
+        gradeKto5GrossAmount.setSizeFull();
+        gradeKto5GrossAmount.setReadOnly(true);
+        VaadinUtils.setMaxComponentsWidth(gradeKto5GrossAmount);
+        VaadinUtils.addComponentStyle(gradeKto5GrossAmount, "grade-k-5-gross-amount-field");
+        return gradeKto5GrossAmount;
     }
 
     private TextField initGrade6to8AmountField() {
-        TextField grossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.grade_6_8_gross_amount"));
-        grossAmount.setSizeFull();
-        grossAmount.setReadOnly(true);
-        VaadinUtils.setMaxComponentsWidth(grossAmount);
-        VaadinUtils.addComponentStyle(grossAmount, "grade-6-8-gross-amount-field");
-        return grossAmount;
+        grade6to8GrossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.grade_6_8_gross_amount"));
+        grade6to8GrossAmount.setSizeFull();
+        grade6to8GrossAmount.setReadOnly(true);
+        VaadinUtils.setMaxComponentsWidth(grade6to8GrossAmount);
+        VaadinUtils.addComponentStyle(grade6to8GrossAmount, "grade-6-8-gross-amount-field");
+        return grade6to8GrossAmount;
     }
 
     private TextField initGrade9to12AmountField() {
-        TextField grossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.grade_9_12_gross_amount"));
-        grossAmount.setSizeFull();
-        grossAmount.setReadOnly(true);
-        VaadinUtils.setMaxComponentsWidth(grossAmount);
-        VaadinUtils.addComponentStyle(grossAmount, "grade-9-12-gross-amount-field");
-        return grossAmount;
+        grade9to12GrossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.grade_9_12_gross_amount"));
+        grade9to12GrossAmount.setSizeFull();
+        grade9to12GrossAmount.setReadOnly(true);
+        VaadinUtils.setMaxComponentsWidth(grade9to12GrossAmount);
+        VaadinUtils.addComponentStyle(grade9to12GrossAmount, "grade-9-12-gross-amount-field");
+        return grade9to12GrossAmount;
     }
 
     private TextField initItemBankAmountField() {
-        TextField itemBankAmount = new TextField(ForeignUi.getMessage("label.fund_pool.item_bank_amount"));
+        itemBankAmount = new TextField(ForeignUi.getMessage("label.fund_pool.item_bank_amount"));
         itemBankAmount.setSizeFull();
         itemBankAmount.setReadOnly(true);
         VaadinUtils.setMaxComponentsWidth(itemBankAmount);
@@ -297,7 +319,7 @@ class SalFundPoolLoadWindow extends Window {
     }
 
     private TextField initTotalAmountField() {
-        TextField totalAmount = new TextField(ForeignUi.getMessage("label.total_amount"));
+        totalAmount = new TextField(ForeignUi.getMessage("label.total_amount"));
         totalAmount.setSizeFull();
         totalAmount.setReadOnly(true);
         VaadinUtils.setMaxComponentsWidth(totalAmount);
@@ -401,5 +423,25 @@ class SalFundPoolLoadWindow extends Window {
         } else {
             return true;
         }
+    }
+
+    private FundPool buildFundPool() {
+        FundPool fundPool = new FundPool();
+        fundPool.setName(StringUtils.trimToEmpty(fundPoolNameField.getValue()));
+        FundPool.SalFields salFields = new FundPool.SalFields();
+        salFields.setAssessmentName(StringUtils.trimToEmpty(assessmentName.getValue()));
+        salFields.setGrossAmount(
+            new BigDecimal(grossAmountField.getValue()).setScale(DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+        BigDecimal splitPercent =
+            new BigDecimal(itemBankSplitPercent.getValue()).divide(HUNDRED, DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        salFields.setItemBankSplitPercent(splitPercent);
+        salFields.setDateReceived(dateReceived.getValue());
+        salFields.setLicenseeAccountNumber(Long.valueOf(accountNumberField.getValue()));
+        salFields.setLicenseeName(licenseeNameField.getValue());
+        salFields.setGradeKto5NumberOfStudents(Integer.parseInt(gradeKto5NumberOfStudents.getValue()));
+        salFields.setGrade6to8NumberOfStudents(Integer.parseInt(grade6to8NumberOfStudents.getValue()));
+        salFields.setGrade9to12NumberOfStudents(Integer.parseInt(grade9to12NumberOfStudents.getValue()));
+        fundPool.setSalFields(salFields);
+        return fundPool;
     }
 }

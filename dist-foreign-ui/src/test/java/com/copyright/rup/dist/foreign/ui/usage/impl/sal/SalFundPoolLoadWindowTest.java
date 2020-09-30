@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -98,7 +99,11 @@ public class SalFundPoolLoadWindowTest {
 
     @Test
     public void testIsValid() {
-        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(6);
+        FundPool fundPool = new FundPool();
+        FundPool.SalFields salFields = new FundPool.SalFields();
+        fundPool.setSalFields(salFields);
+        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(20);
+        expect(usagesController.calculateFundPoolAmounts(anyObject(FundPool.class))).andReturn(fundPool).times(1);
         replay(usagesController);
         Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER_FIELD);
         assertFalse(binder.isValid());
@@ -118,8 +123,8 @@ public class SalFundPoolLoadWindowTest {
 
     @Test
     public void testIsValidFundPoolName() {
-        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(true).times(2);
-        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(1);
+        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(true).times(4);
+        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(2);
         replay(usagesController);
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
         setTextFieldValue(FUND_POOL_NAME_FIELD, StringUtils.EMPTY);

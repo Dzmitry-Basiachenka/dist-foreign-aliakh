@@ -116,4 +116,13 @@ public interface IFundPoolService {
      * @return list of {@link FundPoolDetail}s
      */
     List<FundPoolDetail> getDetailsByFundPoolId(String fundPoolId);
+
+    /**
+     * Calculates Total Amount, Item Bank Amount, Item Bank Gross Amount, Grade K-5 Gross Amount,
+     * Grade 6-8 Gross Amount, Grade 9-12 Gross Amount for given SAL {@link FundPool}.
+     *
+     * @param fundPool SAL fund pool to calculate
+     * @return calculated SAL {@link FundPool}
+     */
+    FundPool calculateSalFundPoolAmounts(FundPool fundPool);
 }
