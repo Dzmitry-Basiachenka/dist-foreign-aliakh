@@ -232,4 +232,24 @@
             </foreach>
             and u.status_ind = #{status}
     </select>
+
+    <select id="findSalNotAttachedToScenario" parameterType="string" resultMap="usageBatchResultMap">
+        select
+            ub.df_usage_batch_uid,
+            ub.name,
+            ub.product_family,
+            ub.payment_date,
+            ub.fiscal_year,
+            ub.sal_fields,
+            ub.created_datetime,
+            ub.updated_datetime,
+            ub.created_by_user,
+            ub.updated_by_user,
+            ub.record_version
+        from ${schema}.df_usage_batch ub
+        left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map batch_filter on batch_filter.df_usage_batch_uid = ub.df_usage_batch_uid
+        where ub.product_family = #{productFamily}
+            and batch_filter.df_usage_batch_uid is null
+        order by ub.updated_datetime desc
+    </select>
 </mapper>

@@ -457,6 +457,15 @@ public class UsageBatchServiceTest {
         verify(salUsageService, usageBatchRepository, RupContextUtils.class);
     }
 
+    @Test
+    public void testGetSalNotAttachedToScenario() {
+        List<UsageBatch> expectedList = Collections.singletonList(new UsageBatch());
+        expect(usageBatchRepository.findSalNotAttachedToScenario()).andReturn(expectedList).once();
+        replay(usageBatchRepository);
+        assertEquals(expectedList, usageBatchService.getSalNotAttachedToScenario());
+        verify(usageBatchRepository);
+    }
+
     private Rightsholder buildRro() {
         Rightsholder rightsholder = buildRightsholder(RRO_ACCOUNT_NUMBER);
         rightsholder.setName(RRO_NAME);

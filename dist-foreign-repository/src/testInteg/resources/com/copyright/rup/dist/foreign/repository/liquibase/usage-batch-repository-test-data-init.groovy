@@ -708,4 +708,101 @@ databaseChangeLog {
             column(name: 'number_of_views', value: 762)
         }
     }
+
+    changeSet(id: '2020-09-29-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
+        comment('Inserting test data for testFindSalNotAttachedToScenario')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'f0de407a-a615-4171-8e98-9fc28fab5324')
+            column(name: 'name', value: 'SAL usage batch attached to a scenario')
+            column(name: 'payment_date', value: '2015-06-30')
+            column(name: 'product_family', value: 'SAL')
+            column(name: 'fiscal_year', value: '2015')
+            column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
+            column(name: 'updated_datetime', value: '2017-01-09 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '91be9a6b-dd23-46dd-a05f-a9d09a99cebc')
+            column(name: 'product_family', value: 'SAL')
+            column(name: 'name', value: 'SAL Fund Pool 3')
+            column(name: 'total_amount', value: '10.00')
+            column(name: 'sal_fields', value: '{"date_received": "12/30/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 2, "grade_6_8_number_of_students": 1, "grade_9_12_number_of_students": 0, "gross_amount": 10.00, "item_bank_amount": 2.00, "item_bank_gross_amount": 2.00, "grade_K_5_gross_amount": 6.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
+            column(name: 'created_datetime', value: '2020-09-30 11:00:00-04')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: 'c7bc7812-01fc-416e-9d15-ac241a3cd3cb')
+            column(name: 'name', value: 'SAL Scenario 1')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'sal_fields', value: '{"fund_pool_uid": "91be9a6b-dd23-46dd-a05f-a9d09a99cebc"}')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '466e9c9d-0a2d-472c-aae3-cb8f8c3d6605')
+            column(name: 'df_usage_batch_uid', value: 'f0de407a-a615-4171-8e98-9fc28fab5324')
+            column(name: 'df_scenario_uid', value: 'c7bc7812-01fc-416e-9d15-ac241a3cd3cb')
+            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'work_title', value: 'Science News for students')
+            column(name: 'rh_account_number', value: '1000000026')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'SAL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
+            column(name: 'df_usage_sal_uid', value: '466e9c9d-0a2d-472c-aae3-cb8f8c3d6605')
+            column(name: 'detail_type', value: 'IB')
+            column(name: 'grade', value: '5')
+            column(name: 'grade_group', value: 'ITEM_BANK')
+            column(name: 'assessment_name', value: 'FY16 AIR')
+            column(name: 'reported_work_portion_id', value: '1101024IB2192')
+            column(name: 'reported_article', value: 'Learning in Your Sleep')
+            column(name: 'reported_standard_number', value: '450220996')
+            column(name: 'reported_author', value: 'Stephen Ornes')
+            column(name: 'reported_publisher', value: 'Associated Press')
+            column(name: 'reported_publication_date', value: '2015-01-02')
+            column(name: 'reported_page_range', value: '14-17')
+            column(name: 'reported_vol_number_series', value: 'Vol 17, Issue 2')
+            column(name: 'reported_media_type', value: 'TEXT')
+            column(name: 'media_type_weight', value: 1.0)
+            column(name: 'coverage_year', value: '2014-2015')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'd50d0e16-cbd5-41e2-a628-76087e331a03')
+            column(name: 'df_usage_batch_uid', value: 'f0de407a-a615-4171-8e98-9fc28fab5324')
+            column(name: 'df_scenario_uid', value: 'c7bc7812-01fc-416e-9d15-ac241a3cd3cb')
+            column(name: 'wr_wrk_inst', value: '122830308')
+            column(name: 'rh_account_number', value: '1000011450')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'SAL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
+            column(name: 'df_usage_sal_uid', value: 'd50d0e16-cbd5-41e2-a628-76087e331a03')
+            column(name: 'detail_type', value: 'UD')
+            column(name: 'grade', value: '11')
+            column(name: 'grade_group', value: 'GRADE9_12')
+            column(name: 'assessment_name', value: 'FY16 Smarter Balanaced ELA')
+            column(name: 'assessment_type', value: 'ELA')
+            column(name: 'reported_work_portion_id', value: '1101024IB2192')
+            column(name: 'coverage_year', value: '2012-2013')
+            column(name: 'scored_assessment_date', value: '2015-10-03')
+            column(name: 'question_identifier', value: 'SB7663')
+            column(name: 'states', value: 'SD,VT')
+            column(name: 'number_of_views', value: 762)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: 'fe7713dd-4b19-436f-b7e0-34ad644faf78')
+            column(name: 'df_scenario_uid', value: 'c7bc7812-01fc-416e-9d15-ac241a3cd3cb')
+            column(name: 'product_family', value: 'SAL')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: 'fe7713dd-4b19-436f-b7e0-34ad644faf78')
+            column(name: 'df_usage_batch_uid', value: 'f0de407a-a615-4171-8e98-9fc28fab5324')
+        }
+    }
 }

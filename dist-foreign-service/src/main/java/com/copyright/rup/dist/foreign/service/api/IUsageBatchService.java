@@ -183,4 +183,9 @@ public interface IUsageBatchService {
      * @return list of found batch names
      */
     List<String> getBatchNamesForRightsAssignment();
+
+    /**
+     * @return list of SAL {@link UsageBatch}es that are not attached to a scenario.
+     */
+    List<UsageBatch> getSalNotAttachedToScenario();
 }

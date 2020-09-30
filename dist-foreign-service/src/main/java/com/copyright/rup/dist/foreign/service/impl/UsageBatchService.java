@@ -266,6 +266,11 @@ public class UsageBatchService implements IUsageBatchService {
         return usageBatchRepository.findBatchNamesForRightsAssignment();
     }
 
+    @Override
+    public List<UsageBatch> getSalNotAttachedToScenario() {
+        return usageBatchRepository.findSalNotAttachedToScenario();
+    }
+
     private void populateTitlesStandardNumberAndType(List<Usage> usages) {
         usages.stream()
             .filter(usage -> Objects.nonNull(usage.getWrWrkInst()))
