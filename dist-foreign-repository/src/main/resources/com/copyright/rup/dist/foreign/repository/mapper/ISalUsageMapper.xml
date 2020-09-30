@@ -289,7 +289,7 @@
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         <include refid="ISalUsageMapper.usageFilter"/>
-        and u.df_scenario_uid is null
+            and u.df_scenario_uid is null
     </sql>
 
     <insert id="insertItemBankDetail" parameterType="Usage">

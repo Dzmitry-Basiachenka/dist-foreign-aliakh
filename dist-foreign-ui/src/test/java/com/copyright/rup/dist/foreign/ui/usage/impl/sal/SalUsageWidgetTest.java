@@ -312,7 +312,7 @@ public class SalUsageWidgetTest {
             "System Title", "Standard Number", "Standard Number Type", "Assessment Name", "Assessment Type",
             "Date of Scored Assessment", "Reported Work Portion ID", "Reported Title",
             "Reported Article or Chapter Title", "Reported Standard Number", "Reported Author", "Reported Publisher",
-            "Reported Publication Date", "Reported Page range", "Reported Vol/Number/Series", "Reported Media Type",
+            "Reported Publication Date", "Reported Page Range", "Reported Vol/Number/Series", "Reported Media Type",
             "Coverage Year", "Question Identifier", "Grade", "Grade Group", "States", "Number of Views", "Comment"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         verifySize(grid);
