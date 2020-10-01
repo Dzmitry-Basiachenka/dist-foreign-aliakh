@@ -1,3 +1,15 @@
+12.1.7
+-
+* B-57897 FDA: Create SAL Scenario: implement grade group and licensees validations
+* B-57898 FDA: SAL usage tab export: make changes based on comments in CR-DIST-FOREIGN-193
+* B-57903 FDA: View and Delete SAL batch: implement service logic to delete sal batch
+* B-57903 FDA: View and Delete SAL batch: rename method
+* B-57917 FDA: Load SAL fund pool: Implement SAL Fund Pool calculation
+* B-57917 FDA: Load SAL fund pool: Implement load SAL Fund Pool logic
+* B-58518 FDA: Load SAL usage data: implement UI
+* B-58518 FDA: Load SAL usage data: implement logic for retrieving SAL batches for uploading usage data
+* B-58887 FDA: View and Delete SAL fund pool: make changes based on comments in CR-DIST-FOREIGN-194
+
 12.1.6
 -
 * B-57897 FDA: Create SAL Scenario: implement validation for filtered data to create SAL scenario
