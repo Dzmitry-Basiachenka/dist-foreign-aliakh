@@ -114,4 +114,23 @@ public interface ISalUsageRepository {
      * @return list of {@link GradeGroupEnum}
      */
     List<GradeGroupEnum> findUsageDataGradeGroups(UsageFilter filter);
+
+    /**
+     * Attaches usages to scenario.
+     *
+     * @param scenarioId id of scenario to add usages to
+     * @param filter     {@link UsageFilter} instance
+     * @param userName   user name
+     */
+    void addToScenario(String scenarioId, UsageFilter filter, String userName);
+
+    /**
+     * Sets payee account number for usages with given RH account number and scenario id.
+     *
+     * @param rhAccountNumber    RH account number
+     * @param scenarioId         scenario id
+     * @param payeeAccountNumber payee account number
+     * @param userName           user name
+     */
+    void updatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, Long payeeAccountNumber, String userName);
 }

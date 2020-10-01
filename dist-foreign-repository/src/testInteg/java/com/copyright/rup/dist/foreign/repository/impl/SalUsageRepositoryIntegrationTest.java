@@ -33,6 +33,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -57,12 +58,14 @@ public class SalUsageRepositoryIntegrationTest {
     private static final String USAGE_BATCH_ID_1 = "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64";
     private static final String USAGE_BATCH_ID_2 = "56069b44-10b1-42d6-9a44-a3fae0029171";
     private static final String USAGE_BATCH_ID_3 = "09cc64a7-171a-4921-8d99-500768137cb8";
+    private static final String SCENARIO_ID_1 = "6252afe5-e756-42d4-b96a-708afeda9122";
     private static final String SAL_PRODUCT_FAMILY = "SAL";
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String USAGE_ID_1 = "c95654c0-a607-4683-878f-99606e90c065";
     private static final String USAGE_ID_2 = "7b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_3 = "5ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String WORK_PORTION_ID_3 = "1101001IB2361";
+    private static final String USER_NAME = "user@copyright.com";
 
     @Autowired
     private ISalUsageRepository salUsageRepository;
@@ -236,6 +239,35 @@ public class SalUsageRepositoryIntegrationTest {
         filter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_2));
         assertEquals(Collections.singletonList(GradeGroupEnum.GRADE6_8),
             salUsageRepository.findUsageDataGradeGroups(filter));
+    }
+
+    @Test
+    public void testUpdatePayeeByAccountNumber() {
+        List<String> usageIds =
+            Arrays.asList("d7764071-935f-4281-a643-656354ccf690", "ad4caa00-c95a-453e-9253-f9810d84d269");
+        salUsageRepository.findByIds(usageIds).forEach(usage -> assertNull(usage.getPayee().getAccountNumber()));
+        salUsageRepository.updatePayeeByAccountNumber(1000000001L, SCENARIO_ID_1, 7000813806L, USER_NAME);
+        salUsageRepository.findByIds(usageIds)
+            .forEach(usage -> assertEquals(7000813806L, usage.getPayee().getAccountNumber(), 0));
+    }
+
+    @Test
+    public void testAddToScenario() {
+        List<String> usageIds =
+            Arrays.asList("e823d079-3e82-4a5c-bdad-a8707b47b665", "9439530a-d7a9-40a9-a881-f892d13eaf9f");
+        salUsageRepository.findByIds(usageIds).forEach(usage -> {
+            assertNull(usage.getScenarioId());
+            assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+        });
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.singleton("87a8b327-6fcc-417f-8fd6-bb6615103b53"), UsageStatusEnum.ELIGIBLE,
+                SAL_PRODUCT_FAMILY, null);
+        salUsageRepository.addToScenario(SCENARIO_ID_1, usageFilter, USER_NAME);
+        salUsageRepository.findByIds(usageIds).forEach(usage -> {
+            assertEquals(SCENARIO_ID_1, usage.getScenarioId());
+            assertEquals(USER_NAME, usage.getUpdateUser());
+            assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
+        });
     }
 
     private UsageFilter buildUsageFilter(Set<String> usageBatchIds, UsageStatusEnum status, String productFamily,

@@ -56,7 +56,9 @@ public class SalWorkflowIntegrationTest {
             .withItemBankCsvFile("usage/sal/sal_item_bank_details_for_workflow.csv",
                 IB_USAGE_ID_1, IB_USAGE_ID_2, IB_USAGE_ID_3)
             .withUsageBatch(buildItemBank())
+            .withFundPoolId("077383cf-8d9b-42ac-bdac-073cde78fa1e")
             .expectRmsRights("rights/rms_grants_122769471_request.json", "rights/rms_grants_122769471_response.json")
+            .expectRollups("prm/sal_workflow_rollups_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
             .expectUsages("usage/sal/sal_expected_details_for_workflow_1.json")
             .expectUsageAudit(IB_USAGE_ID_1, buildExpectedItemBankDetailAudit())
             .expectUsageAudit(IB_USAGE_ID_2, buildExpectedItemBankDetailAudit())
@@ -74,7 +76,9 @@ public class SalWorkflowIntegrationTest {
             .withUsageDataCsvFile("usage/sal/sal_usage_data_for_workflow.csv",
                 UD_USAGE_ID_1, UD_USAGE_ID_2, UD_USAGE_ID_3, UD_USAGE_ID_4)
             .withUsageBatch(buildItemBank())
+            .withFundPoolId("1aa3a67a-b206-4953-96e7-a9c213db2902")
             .expectRmsRights("rights/rms_grants_122769471_request.json", "rights/rms_grants_122769471_response.json")
+            .expectRollups("prm/sal_workflow_rollups_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
             .expectUsages("usage/sal/sal_expected_details_for_workflow_2.json")
             .expectUsageAudit(IB_USAGE_ID_1, buildExpectedItemBankDetailAudit())
             .expectUsageAudit(IB_USAGE_ID_2, buildExpectedItemBankDetailAudit())

@@ -15,6 +15,7 @@
         <result property="reportedTotal" column="reported_total"/>
         <result property="description" column="description"/>
         <result property="aaclFields" column="aacl_fields" typeHandler="AaclScenarioFieldsTypeHandler"/>
+        <result property="salFields" column="sal_fields" typeHandler="SalScenarioFieldsTypeHandler"/>
         <result property="ntsFields" column="nts_fields" typeHandler="NtsScenarioFieldsTypeHandler"/>
         <result property="ntsFields.preServiceFeeFundName" column="pre_service_fee_fund_name"/>
         <result property="ntsFields.preServiceFeeFundTotal" column="pre_service_fee_fund_total"/>
@@ -35,6 +36,7 @@
         description,
         aacl_fields,
         nts_fields,
+        sal_fields,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
 
@@ -49,6 +51,7 @@
         s.description,
         s.aacl_fields,
         s.nts_fields,
+        s.sal_fields,
         fund.name pre_service_fee_fund_name,
         fund.total_amount pre_service_fee_fund_total,
         a1.df_scenario_audit_uid action_df_scenario_audit_uid,
@@ -77,6 +80,7 @@
             #{description},
             #{aaclFields, typeHandler=AaclScenarioFieldsTypeHandler},
             #{ntsFields, typeHandler=NtsScenarioFieldsTypeHandler},
+            #{salFields, typeHandler=SalScenarioFieldsTypeHandler},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
@@ -101,6 +105,7 @@
                 #{scenario.description},
                 null,
                 #{scenario.ntsFields, typeHandler=NtsScenarioFieldsTypeHandler},
+                null,
                 <include refid="StoredEntityMapper.insert"/>
             )
         ),

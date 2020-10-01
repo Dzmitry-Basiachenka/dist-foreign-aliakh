@@ -122,8 +122,8 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public Scenario createSalScenario(String scenarioName, String fundPoolId, String description) {
-        //TODO {isuvorau} implement service logic
-        return null;
+        return salScenarioService.createScenario(scenarioName, fundPoolId, description,
+            getUsageFilterController().getWidget().getAppliedFilter());
     }
 
     @Override

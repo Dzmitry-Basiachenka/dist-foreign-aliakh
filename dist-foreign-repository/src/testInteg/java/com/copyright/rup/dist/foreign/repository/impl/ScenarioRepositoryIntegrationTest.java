@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
+import com.copyright.rup.dist.foreign.domain.Scenario.SalFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -77,6 +78,7 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String SCENARIO_ID_5 = "8a6a6b15-6922-4fda-b40c-5097fcbd256e";
     private static final String SENT_TO_LM_AUDIT = "Sent to LM NTS scenario with audit";
     private static final String AACL_PRODUCT_FAMILY = "AACL";
+    private static final String SAL_PRODUCT_FAMILY = "SAL";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USER = "user@copyright.com";
@@ -408,7 +410,7 @@ public class ScenarioRepositoryIntegrationTest {
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         usageFilter.setProductFamily(AACL_PRODUCT_FAMILY);
         ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter(usageFilter);
-        scenarioUsageFilter.setId(RupPersistUtils.generateUuid());
+        scenarioUsageFilter.setId("c96cfa30-92a3-409b-adef-a76fc9e7ec1f");
         scenarioUsageFilter.setScenarioId(scenario.getId());
         filterRepository.insert(scenarioUsageFilter);
         Scenario actualScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_1);
@@ -417,6 +419,27 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("40.00"), actualAaclFields.getTitleCutoffAmount());
         assertEquals("95faddb9-27b6-422e-9de8-01f3aaa9c64d", actualAaclFields.getFundPoolId());
         assertEquals(pubTypes, actualAaclFields.getPublicationTypes());
+    }
+
+    @Test
+    public void testInsertSalScenario() {
+        Scenario scenario = buildScenario();
+        scenario.setProductFamily(SAL_PRODUCT_FAMILY);
+        SalFields salFields = new SalFields();
+        scenario.setSalFields(salFields);
+        salFields.setFundPoolId("9888ce49-c550-4444-a8de-a05affa4927c");
+        scenarioRepository.insert(scenario);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        usageFilter.setProductFamily(SAL_PRODUCT_FAMILY);
+        ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter(usageFilter);
+        scenarioUsageFilter.setId("2395bfa7-de54-4946-acd2-a7526806dca1");
+        scenarioUsageFilter.setScenarioId(scenario.getId());
+        filterRepository.insert(scenarioUsageFilter);
+        Scenario actualScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_1);
+        SalFields actualSalFields = actualScenario.getSalFields();
+        assertNotNull(actualSalFields);
+        assertEquals("9888ce49-c550-4444-a8de-a05affa4927c", actualSalFields.getFundPoolId());
     }
 
     @Test
@@ -431,7 +454,7 @@ public class ScenarioRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter();
         scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
         ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter(usageFilter);
-        scenarioUsageFilter.setId(RupPersistUtils.generateUuid());
+        scenarioUsageFilter.setId("4ea7c95a-c98a-4552-a566-bd4bcec37652");
         scenarioUsageFilter.setScenarioId(scenario.getId());
         filterRepository.insert(scenarioUsageFilter);
         Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_1);

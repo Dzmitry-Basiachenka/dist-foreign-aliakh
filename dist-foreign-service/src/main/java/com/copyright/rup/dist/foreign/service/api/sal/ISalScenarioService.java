@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.service.api.sal;
 
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+
 /**
  * Represents service interface for SAL specific scenarios business logic.
  * <p>
@@ -18,4 +21,15 @@ public interface ISalScenarioService {
      * @return {@link Scenario} name or {@code null} if none found
      */
     String getScenarioNameByFundPoolId(String fundPoolId);
+
+    /**
+     * Creates scenario and adds usages to it.
+     *
+     * @param scenarioName name of scenario
+     * @param fundPoolId   attached fund pool identifier
+     * @param description  description
+     * @param usageFilter  instance of {@link UsageFilter} for usages to be added
+     * @return {@link Scenario}
+     */
+    Scenario createScenario(String scenarioName, String fundPoolId, String description, UsageFilter usageFilter);
 }

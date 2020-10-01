@@ -35,6 +35,9 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
 
     private static final int MAX_VARIABLES_COUNT = 32000;
     private static final String DETAIL_TYPE_KEY = "detailType";
+    private static final String FILTER_KEY = "filter";
+    private static final String SCENARIO_ID_KEY = "scenarioId";
+    private static final String UPDATE_USER_KEY = "updateUser";
 
     @Override
     public void insertItemBankDetail(Usage usage) {
@@ -62,13 +65,13 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     @Override
     public int findCountByFilter(UsageFilter filter) {
         return selectOne("ISalUsageMapper.findCountByFilter",
-            ImmutableMap.of("filter", Objects.requireNonNull(filter)));
+            ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
     }
 
     @Override
     public List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("filter", Objects.requireNonNull(filter));
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
         parameters.put("pageable", pageable);
         parameters.put("sort", sort);
         return selectList("ISalUsageMapper.findDtosByFilter", parameters);
@@ -119,8 +122,28 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     @Override
     public List<GradeGroupEnum> findUsageDataGradeGroups(UsageFilter filter) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
-        params.put("filter", Objects.requireNonNull(filter));
+        params.put(FILTER_KEY, Objects.requireNonNull(filter));
         params.put(DETAIL_TYPE_KEY, SalDetailTypeEnum.UD);
         return selectList("ISalUsageMapper.findUsageDataGradeGroups", params);
+    }
+
+    @Override
+    public void addToScenario(String scenarioId, UsageFilter filter, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(FILTER_KEY, Objects.requireNonNull(filter));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        update("ISalUsageMapper.addToScenario", params);
+    }
+
+    @Override
+    public void updatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, Long payeeAccountNumber,
+                                           String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("rhAccountNumber", Objects.requireNonNull(rhAccountNumber));
+        params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        update("ISalUsageMapper.updatePayeeByAccountNumber", params);
     }
 }
