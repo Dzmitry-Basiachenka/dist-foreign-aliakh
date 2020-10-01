@@ -40,6 +40,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     private MenuBar usageBatchMenuBar;
     private MenuBar fundPoolMenuBar;
     private MenuBar.MenuItem loadItemBankMenuItem;
+    private MenuBar.MenuItem loadUsageDataMenuItem;
     private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button addToScenarioButton;
     private Button exportButton;
@@ -57,6 +58,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     public IMediator initMediator() {
         SalUsageMediator mediator = new SalUsageMediator();
         mediator.setLoadItemBankMenuItem(loadItemBankMenuItem);
+        mediator.setLoadUsageDataMenuItem(loadUsageDataMenuItem);
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         mediator.setAddToScenarioButton(addToScenarioButton);
         return mediator;
@@ -143,7 +145,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
             usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
         loadItemBankMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load.item_bank"), null,
             item -> Windows.showModalWindow(new ItemBankUploadWindow(controller)));
-        loadItemBankMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load.usage_data"), null,
+        loadUsageDataMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load.usage_data"), null,
             item -> Windows.showModalWindow(new UsageDataUploadWindow(controller)));
         menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
             item -> Windows.showModalWindow(new ViewSalUsageBatchWindow(controller)));

@@ -133,6 +133,8 @@ public class SalUsageWidgetTest {
         expectNew(SalUsageMediator.class).andReturn(mediator).once();
         mediator.setLoadItemBankMenuItem(anyObject(MenuItem.class));
         expectLastCall().once();
+        mediator.setLoadUsageDataMenuItem(anyObject(MenuItem.class));
+        expectLastCall().once();
         mediator.setLoadFundPoolMenuItem(anyObject(MenuItem.class));
         expectLastCall().once();
         mediator.setAddToScenarioButton(anyObject(Button.class));
