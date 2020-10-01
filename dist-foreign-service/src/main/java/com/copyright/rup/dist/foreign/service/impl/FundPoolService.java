@@ -5,6 +5,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
@@ -106,6 +107,18 @@ public class FundPoolService implements IFundPoolService {
     }
 
     @Override
+    public void createSalFundPool(FundPool fundPool) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Insert SAL fund pool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+        fundPool.setId(RupPersistUtils.generateUuid());
+        fundPool.setProductFamily(FdaConstants.SAL_PRODUCT_FAMILY);
+        fundPool.setCreateUser(userName);
+        fundPool.setUpdateUser(userName);
+        fundPoolRepository.insert(fundPool);
+        LOGGER.info("Insert SAL fund pool. Finished. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+    }
+
+    @Override
     public List<FundPool> getNtsNotAttachedToScenario() {
         return fundPoolRepository.findNtsNotAttachedToScenario();
     }
@@ -170,6 +183,7 @@ public class FundPoolService implements IFundPoolService {
         BigDecimal itemBankSplitPercent = salFields.getItemBankSplitPercent();
         BigDecimal netAmount =
             multiplyWithDefaultScaling(salFields.getGrossAmount(), BigDecimal.ONE.subtract(SAL_SERVICE_FEE));
+        salFields.setServiceFee(SAL_SERVICE_FEE);
         if (0 == BigDecimal.ONE.compareTo(itemBankSplitPercent)) {
             fundPool.setTotalAmount(netAmount);
             salFields.setItemBankAmount(netAmount);

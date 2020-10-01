@@ -165,4 +165,11 @@ public interface ISalUsageController extends ICommonUsageController {
      * @return created {@link Scenario}
      */
     Scenario createSalScenario(String scenarioName, String fundPoolId, String description);
+
+    /**
+     * Creates SAL Fund Pool.
+     *
+     * @param fundPool instance of {@link FundPool}
+     */
+    void createFundPool(FundPool fundPool);
 }

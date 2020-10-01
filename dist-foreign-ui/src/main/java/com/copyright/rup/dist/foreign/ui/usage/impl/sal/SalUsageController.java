@@ -172,6 +172,11 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
+    public void createFundPool(FundPool fundPool) {
+        fundPoolService.createSalFundPool(fundPool);
+    }
+
+    @Override
     public ICommonUsageFilterController getUsageFilterController() {
         return salUsageFilterController;
     }

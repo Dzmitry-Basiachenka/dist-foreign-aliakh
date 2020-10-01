@@ -60,6 +60,13 @@ public interface IFundPoolService {
     int createAaclFundPool(FundPool fundPool, List<FundPoolDetail> details);
 
     /**
+     * Creates SAL Fund Pool.
+     *
+     * @param fundPool instance of {@link FundPool}
+     */
+    void createSalFundPool(FundPool fundPool);
+
+    /**
      * Gets NTS {@link FundPool}s not attached to scenario.
      *
      * @return list of {@link FundPool}s

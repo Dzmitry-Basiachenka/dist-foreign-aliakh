@@ -322,4 +322,14 @@ public class SalUsageControllerTest {
         assertEquals(fundPool, controller.calculateFundPoolAmounts(fundPool));
         verify(fundPoolService);
     }
+
+    @Test
+    public void testCreateFundPool() {
+        FundPool fundPool = new FundPool();
+        fundPoolService.createSalFundPool(fundPool);
+        expectLastCall().once();
+        replay(fundPoolService);
+        controller.createFundPool(fundPool);
+        verify(fundPoolService);
+    }
 }
