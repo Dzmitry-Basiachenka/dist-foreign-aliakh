@@ -19,18 +19,24 @@ import com.vaadin.ui.MenuBar.MenuItem;
 class SalUsageMediator implements IMediator {
 
     private MenuBar.MenuItem loadItemBankMenuItem;
+    private MenuBar.MenuItem loadUsageDataMenuItem;
     private MenuBar.MenuItem loadFundPoolMenuItem;
     private Button addToScenarioButton;
 
     @Override
     public void applyPermissions() {
         loadItemBankMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
+        loadUsageDataMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
         loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
     }
 
     void setLoadItemBankMenuItem(MenuItem loadItemBankMenuItem) {
         this.loadItemBankMenuItem = loadItemBankMenuItem;
+    }
+
+    void setLoadUsageDataMenuItem(MenuItem loadUsageDataMenuItem) {
+        this.loadUsageDataMenuItem = loadUsageDataMenuItem;
     }
 
     void setLoadFundPoolMenuItem(MenuItem loadFundPoolMenuItem) {

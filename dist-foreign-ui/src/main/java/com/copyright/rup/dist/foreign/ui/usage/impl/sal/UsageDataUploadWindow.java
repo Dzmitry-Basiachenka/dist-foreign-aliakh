@@ -170,6 +170,7 @@ public class UsageDataUploadWindow extends Window {
             .bind(s -> s, (s, v) -> s = v);
         itemBankComboBox.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(itemBankComboBox);
+        VaadinUtils.addComponentStyle(itemBankComboBox, "item-banks-filter");
         return itemBankComboBox;
     }
 }
