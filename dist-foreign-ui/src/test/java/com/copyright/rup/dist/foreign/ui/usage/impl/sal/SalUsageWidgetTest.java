@@ -284,7 +284,8 @@ public class SalUsageWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(4, layout.getComponentCount());
-        verifyMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load Item Bank", "View"));
+        verifyMenuBar(layout.getComponent(0), "Usage Batch",
+            Arrays.asList("Load Item Bank", "Load Usage Data", "View"));
         verifyMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
         Button addToScenarioButton = (Button) layout.getComponent(2);
         assertEquals("Add To Scenario", addToScenarioButton.getCaption());

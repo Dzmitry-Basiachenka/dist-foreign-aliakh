@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageDataCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 
 import java.util.List;
@@ -41,6 +42,14 @@ public interface ISalUsageController extends ICommonUsageController {
     void loadItemBank(UsageBatch itemBank, List<Usage> usages);
 
     /**
+     * Inserts usage data.
+     *
+     * @param itemBank {@link UsageBatch} instance
+     * @param usages   list of {@link Usage}s
+     */
+    void loadUsageData(UsageBatch itemBank, List<Usage> usages);
+
+    /**
      * @return instance of {@link SalItemBankCsvProcessor}
      */
     SalItemBankCsvProcessor getSalItemBankCsvProcessor();
@@ -59,6 +68,14 @@ public interface ISalUsageController extends ICommonUsageController {
      * @return list of {@link GradeGroupEnum}
      */
     List<GradeGroupEnum> findUsageDataGradeGroups();
+
+    /**
+     * Gets SAL usage data CSV processor.
+     *
+     * @param itemBankId item bank id
+     * @return instance of {@link SalUsageDataCsvProcessor}
+     */
+    SalUsageDataCsvProcessor getSalUsageDataCsvProcessor(String itemBankId);
 
     /**
      * Return instance of {@link IStreamSource} for errors result.
@@ -124,6 +141,11 @@ public interface ISalUsageController extends ICommonUsageController {
      * @param usageBatch {@link UsageBatch} to delete usage details
      */
     void deleteUsageData(UsageBatch usageBatch);
+
+    /**
+     * @return list of SAL {@link UsageBatch}es that are not attached to a scenario.
+     */
+    List<UsageBatch> getBatchesNotAttachedToScenario();
 
     /**
      * Calculates Total Amount, Item Bank Amount, Item Bank Gross Amount, Grade K-5 Gross Amount,
