@@ -1,3 +1,11 @@
+12.1.8
+-
+* B-57772 Tech Debt: FDA: clear usage filters after item bank or usage data is loaded
+* B-57897 FDA: Create SAL Scenario: implement service logic to create scenario
+* B-57903 FDA: View and Delete SAL batch:  CDP-942: FDA: Delete SAL Usage Bach: Usages from deleted usage batch are still displayed filtered on ‘Usages’ table in case the usage batch is previously filtered on ‘Usages’ tab
+* B-57917 FDA: Load SAL fund pool: Adjust SAL Fund Pool calculation and rename Total Amount and Item Bank Amount columns on Load Fund Pool window
+* CDP-941 FDA: Load SAL Item Bank: User with 'Manager' and 'View Only' roles is able to load Item Bank
+
 12.1.7
 -
 * B-57897 FDA: Create SAL Scenario: implement grade group and licensees validations
