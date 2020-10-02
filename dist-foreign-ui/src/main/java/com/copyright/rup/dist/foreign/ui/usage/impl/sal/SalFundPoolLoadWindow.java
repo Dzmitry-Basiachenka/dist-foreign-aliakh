@@ -47,6 +47,7 @@ class SalFundPoolLoadWindow extends Window {
     private static final String NOT_NUMERIC_MESSAGE = "field.error.not_numeric";
     private static final BigDecimal HUNDRED = new BigDecimal("100");
     private static final int DEFAULT_SCALE = 2;
+    private static final int SCALE_5 = 5;
 
     private final ISalUsageController usagesController;
     private final Binder<FundPool> binder = new Binder<>();
@@ -64,7 +65,7 @@ class SalFundPoolLoadWindow extends Window {
     private TextField grade6to8GrossAmount;
     private TextField grade9to12GrossAmount;
     private TextField totalAmount;
-    private TextField itemBankAmount;
+    private TextField itemBankGrossAmount;
     private LocalDateWidget dateReceived;
 
     /**
@@ -120,13 +121,13 @@ class SalFundPoolLoadWindow extends Window {
             if (event.getBinder().isValid()) {
                 FundPool fundPool = usagesController.calculateFundPoolAmounts(buildFundPool());
                 totalAmount.setValue(fundPool.getTotalAmount().toString());
-                itemBankAmount.setValue(fundPool.getSalFields().getItemBankAmount().toString());
+                itemBankGrossAmount.setValue(fundPool.getSalFields().getItemBankGrossAmount().toString());
                 gradeKto5GrossAmount.setValue(fundPool.getSalFields().getGradeKto5GrossAmount().toString());
                 grade6to8GrossAmount.setValue(fundPool.getSalFields().getGrade6to8GrossAmount().toString());
                 grade9to12GrossAmount.setValue(fundPool.getSalFields().getGrade9to12GrossAmount().toString());
             } else {
                 totalAmount.clear();
-                itemBankAmount.clear();
+                itemBankGrossAmount.clear();
                 gradeKto5GrossAmount.clear();
                 grade6to8GrossAmount.clear();
                 grade9to12GrossAmount.clear();
@@ -315,16 +316,16 @@ class SalFundPoolLoadWindow extends Window {
     }
 
     private TextField initItemBankAmountField() {
-        itemBankAmount = new TextField(ForeignUi.getMessage("label.fund_pool.item_bank_amount"));
-        itemBankAmount.setSizeFull();
-        itemBankAmount.setReadOnly(true);
-        VaadinUtils.setMaxComponentsWidth(itemBankAmount);
-        VaadinUtils.addComponentStyle(itemBankAmount, "item-bank-amount-field");
-        return itemBankAmount;
+        itemBankGrossAmount = new TextField(ForeignUi.getMessage("label.fund_pool.item_bank_gross_amount"));
+        itemBankGrossAmount.setSizeFull();
+        itemBankGrossAmount.setReadOnly(true);
+        VaadinUtils.setMaxComponentsWidth(itemBankGrossAmount);
+        VaadinUtils.addComponentStyle(itemBankGrossAmount, "item-bank-amount-field");
+        return itemBankGrossAmount;
     }
 
     private TextField initTotalAmountField() {
-        totalAmount = new TextField(ForeignUi.getMessage("label.total_amount"));
+        totalAmount = new TextField(ForeignUi.getMessage("label.total_gross_amount"));
         totalAmount.setSizeFull();
         totalAmount.setReadOnly(true);
         VaadinUtils.setMaxComponentsWidth(totalAmount);
@@ -438,7 +439,7 @@ class SalFundPoolLoadWindow extends Window {
         salFields.setGrossAmount(
             new BigDecimal(grossAmountField.getValue()).setScale(DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
         BigDecimal splitPercent =
-            new BigDecimal(itemBankSplitPercent.getValue()).divide(HUNDRED, DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+            new BigDecimal(itemBankSplitPercent.getValue()).divide(HUNDRED, SCALE_5, BigDecimal.ROUND_HALF_UP);
         salFields.setItemBankSplitPercent(splitPercent);
         salFields.setDateReceived(dateReceived.getValue());
         salFields.setLicenseeAccountNumber(Long.valueOf(accountNumberField.getValue()));

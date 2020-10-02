@@ -181,18 +181,15 @@ public class FundPoolService implements IFundPoolService {
     public FundPool calculateSalFundPoolAmounts(FundPool fundPool) {
         FundPool.SalFields salFields = fundPool.getSalFields();
         BigDecimal itemBankSplitPercent = salFields.getItemBankSplitPercent();
-        BigDecimal netAmount =
-            multiplyWithDefaultScaling(salFields.getGrossAmount(), BigDecimal.ONE.subtract(SAL_SERVICE_FEE));
         salFields.setServiceFee(SAL_SERVICE_FEE);
         if (0 == BigDecimal.ONE.compareTo(itemBankSplitPercent)) {
-            fundPool.setTotalAmount(netAmount);
-            salFields.setItemBankAmount(netAmount);
+            fundPool.setTotalAmount(salFields.getGrossAmount());
             salFields.setItemBankGrossAmount(salFields.getGrossAmount());
             salFields.setGradeKto5GrossAmount(BigDecimal.ZERO);
             salFields.setGrade6to8GrossAmount(BigDecimal.ZERO);
             salFields.setGrade9to12GrossAmount(BigDecimal.ZERO);
         } else {
-            BigDecimal multiplier = netAmount.multiply(BigDecimal.ONE.subtract(itemBankSplitPercent));
+            BigDecimal multiplier = salFields.getGrossAmount().multiply(BigDecimal.ONE.subtract(itemBankSplitPercent));
             BigDecimal totalStudents = BigDecimal.valueOf(
                 salFields.getGradeKto5NumberOfStudents()
                     + salFields.getGrade6to8NumberOfStudents()
@@ -203,13 +200,11 @@ public class FundPoolService implements IFundPoolService {
                 calculateGradeAmount(multiplier, totalStudents, salFields.getGrade6to8NumberOfStudents()));
             salFields.setGrade9to12GrossAmount(
                 calculateGradeAmount(multiplier, totalStudents, salFields.getGrade9to12NumberOfStudents()));
-            salFields.setItemBankAmount(
-                netAmount.subtract(salFields.getGradeKto5GrossAmount())
+            salFields.setItemBankGrossAmount(
+                salFields.getGrossAmount().subtract(salFields.getGradeKto5GrossAmount())
                     .subtract(salFields.getGrade6to8GrossAmount())
                     .subtract(salFields.getGrade9to12GrossAmount()));
-            salFields.setItemBankGrossAmount(
-                multiplyWithDefaultScaling(salFields.getGrossAmount(), itemBankSplitPercent));
-            fundPool.setTotalAmount(salFields.getItemBankAmount()
+            fundPool.setTotalAmount(salFields.getItemBankGrossAmount()
                 .add(salFields.getGradeKto5GrossAmount()
                     .add(salFields.getGrade6to8GrossAmount())
                     .add(salFields.getGrade9to12GrossAmount())));
@@ -230,10 +225,6 @@ public class FundPoolService implements IFundPoolService {
             amount = BigDecimal.ZERO;
         }
         return amount;
-    }
-
-    private BigDecimal multiplyWithDefaultScaling(BigDecimal left, BigDecimal right) {
-        return left.multiply(right).setScale(DEFAULT_SCALE, RoundingMode.HALF_UP);
     }
 
     private FundPoolDetail buildZeroFundPoolDetail(AggregateLicenseeClass aggregateLicenseeClass) {

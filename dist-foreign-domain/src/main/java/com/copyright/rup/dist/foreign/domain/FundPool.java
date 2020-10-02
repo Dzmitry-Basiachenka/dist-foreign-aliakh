@@ -148,7 +148,6 @@ public class FundPool extends StoredEntity<String> {
         private int grade6to8NumberOfStudents;
         private int grade9to12NumberOfStudents;
         private BigDecimal grossAmount = BigDecimal.ZERO;
-        private BigDecimal itemBankAmount = BigDecimal.ZERO;
         private BigDecimal itemBankGrossAmount = BigDecimal.ZERO;
         private BigDecimal gradeKto5GrossAmount = BigDecimal.ZERO;
         private BigDecimal grade6to8GrossAmount = BigDecimal.ZERO;
@@ -236,14 +235,6 @@ public class FundPool extends StoredEntity<String> {
             this.serviceFee = serviceFee;
         }
 
-        public BigDecimal getItemBankAmount() {
-            return itemBankAmount;
-        }
-
-        public void setItemBankAmount(BigDecimal itemBankAmount) {
-            this.itemBankAmount = itemBankAmount;
-        }
-
         public BigDecimal getItemBankGrossAmount() {
             return itemBankGrossAmount;
         }
@@ -294,7 +285,6 @@ public class FundPool extends StoredEntity<String> {
                 .append(this.licenseeName, that.licenseeName)
                 .append(this.licenseeAccountNumber, that.licenseeAccountNumber)
                 .append(this.grossAmount, that.grossAmount)
-                .append(this.itemBankAmount, that.itemBankAmount)
                 .append(this.itemBankGrossAmount, that.itemBankGrossAmount)
                 .append(this.gradeKto5GrossAmount, that.gradeKto5GrossAmount)
                 .append(this.grade6to8GrossAmount, that.grade6to8GrossAmount)
@@ -315,7 +305,6 @@ public class FundPool extends StoredEntity<String> {
                 .append(grade6to8NumberOfStudents)
                 .append(grade9to12NumberOfStudents)
                 .append(grossAmount)
-                .append(itemBankAmount)
                 .append(itemBankGrossAmount)
                 .append(gradeKto5GrossAmount)
                 .append(grade6to8GrossAmount)
@@ -336,7 +325,6 @@ public class FundPool extends StoredEntity<String> {
                 .append("grade6to8NumberOfStudents", grade6to8NumberOfStudents)
                 .append("grade9to12NumberOfStudents", grade9to12NumberOfStudents)
                 .append("grossAmount", grossAmount)
-                .append("itemBankAmount", itemBankAmount)
                 .append("itemBankGrossAmount", itemBankGrossAmount)
                 .append("gradeKto5GrossAmount", gradeKto5GrossAmount)
                 .append("grade6to8GrossAmount", grade6to8GrossAmount)

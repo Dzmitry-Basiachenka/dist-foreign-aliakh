@@ -7,10 +7,9 @@
   "grade_6_8_number_of_students": 5,
   "grade_9_12_number_of_students": 0,
   "gross_amount": 1000.00,
-  "item_bank_amount": 15.00,
-  "item_bank_gross_amount": 20.00,
-  "grade_K_5_gross_amount": 490.00,
-  "grade_6_8_gross_amount": 245.00,
+  "item_bank_gross_amount": 20.01,
+  "grade_K_5_gross_amount": 653.33,
+  "grade_6_8_gross_amount": 326.66,
   "grade_9_12_gross_amount": 0.00,
   "item_bank_split_percent": 0.02000,
   "service_fee": 0.25000

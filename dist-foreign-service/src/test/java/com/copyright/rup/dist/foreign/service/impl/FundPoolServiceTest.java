@@ -266,11 +266,10 @@ public class FundPoolServiceTest {
     public void testCalculateSalFundPool() {
         BigDecimal splitPercent = new BigDecimal("0.02");
         FundPool fundPool = fundPoolService.calculateSalFundPoolAmounts(buildFundPool(splitPercent, 10, 5));
-        assertEquals(new BigDecimal("750.00"), fundPool.getTotalAmount());
-        assertEquals(new BigDecimal("15.02"), fundPool.getSalFields().getItemBankAmount());
-        assertEquals(new BigDecimal("20.00"), fundPool.getSalFields().getItemBankGrossAmount());
-        assertEquals(new BigDecimal("489.99"), fundPool.getSalFields().getGradeKto5GrossAmount());
-        assertEquals(new BigDecimal("244.99"), fundPool.getSalFields().getGrade6to8GrossAmount());
+        assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getTotalAmount());
+        assertEquals(new BigDecimal("20.01"), fundPool.getSalFields().getItemBankGrossAmount());
+        assertEquals(new BigDecimal("653.33"), fundPool.getSalFields().getGradeKto5GrossAmount());
+        assertEquals(new BigDecimal("326.66"), fundPool.getSalFields().getGrade6to8GrossAmount());
         assertEquals(BigDecimal.ZERO, fundPool.getSalFields().getGrade9to12GrossAmount());
         assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getSalFields().getGrossAmount());
         assertEquals(splitPercent, fundPool.getSalFields().getItemBankSplitPercent());
@@ -285,8 +284,7 @@ public class FundPoolServiceTest {
     public void testCalculateSalFundPoolSplitPercentIsHundred() {
         BigDecimal splitPercent = new BigDecimal("1.00");
         FundPool fundPool = fundPoolService.calculateSalFundPoolAmounts(buildFundPool(splitPercent, 0, 0));
-        assertEquals(new BigDecimal("750.00"), fundPool.getTotalAmount());
-        assertEquals(new BigDecimal("750.00"), fundPool.getSalFields().getItemBankAmount());
+        assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getTotalAmount());
         assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getSalFields().getItemBankGrossAmount());
         assertEquals(BigDecimal.ZERO, fundPool.getSalFields().getGradeKto5GrossAmount());
         assertEquals(BigDecimal.ZERO, fundPool.getSalFields().getGrade6to8GrossAmount());
