@@ -291,9 +291,12 @@ public class SalUsageControllerTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatchService.deleteSalUsageBatch(usageBatch);
         expectLastCall().once();
-        replay(usageBatchService);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        filterWidget.clearFilter();
+        expectLastCall().once();
+        replay(usageBatchService, filterController, filterWidget);
         controller.deleteUsageBatch(usageBatch);
-        verify(usageBatchService);
+        verify(usageBatchService, filterController, filterWidget);
     }
 
     @Test
