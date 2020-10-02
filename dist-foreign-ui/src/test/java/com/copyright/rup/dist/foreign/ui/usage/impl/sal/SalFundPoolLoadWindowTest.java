@@ -161,7 +161,7 @@ public class SalFundPoolLoadWindowTest {
         verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, NEGATIVE_OR_LONG_ERROR_MESSAGE);
         setTextFieldValue(GROSS_AMOUNT_FIELD, ZERO);
         verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, NEGATIVE_OR_LONG_ERROR_MESSAGE);
-        setTextFieldValue(GROSS_AMOUNT_FIELD, "5000.56");
+        setTextFieldValue(GROSS_AMOUNT_FIELD, " 5000.56 ");
         verifyFieldIsValid(binder, GROSS_AMOUNT_FIELD);
         verify(usagesController);
     }
@@ -178,7 +178,7 @@ public class SalFundPoolLoadWindowTest {
         verifyFieldErrorMessage(binder, ITEM_BANK_SPLIT_PERCENT_FIELD, ITEM_BANK_SPLIT_PERCENT_ERROR_MESSAGE);
         setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "97.34");
         verifyFieldErrorMessage(binder, ITEM_BANK_SPLIT_PERCENT_FIELD, ITEM_BANK_SPLIT_PERCENT_ERROR_MESSAGE);
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "97.3");
+        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, " 97.3 ");
         verifyFieldIsValid(binder, ITEM_BANK_SPLIT_PERCENT_FIELD);
         verify(usagesController);
     }
@@ -199,7 +199,7 @@ public class SalFundPoolLoadWindowTest {
         setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "100.0");
         verifyFieldErrorMessage(binder, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, NUM_OF_STUDENTS_NOT_ZERO_ERROR_MESSAGE);
         setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "5");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "2.0");
+        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, " 2.0 ");
         verifyFieldIsValid(binder, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD);
         verify(usagesController);
     }
@@ -220,7 +220,7 @@ public class SalFundPoolLoadWindowTest {
         setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "100.0");
         verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, NUM_OF_STUDENTS_NOT_ZERO_ERROR_MESSAGE);
         setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "6");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "3.0");
+        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, " 3.0 ");
         verifyFieldIsValid(binder, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD);
         verify(usagesController);
     }
@@ -241,7 +241,7 @@ public class SalFundPoolLoadWindowTest {
         setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "100");
         verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, NUM_OF_STUDENTS_NOT_ZERO_ERROR_MESSAGE);
         setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, "8");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "5.0");
+        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, " 5.0 ");
         verifyFieldIsValid(binder, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD);
         verify(usagesController);
     }

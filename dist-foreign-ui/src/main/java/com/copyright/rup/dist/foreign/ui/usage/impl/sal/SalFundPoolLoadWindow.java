@@ -436,17 +436,19 @@ class SalFundPoolLoadWindow extends Window {
         fundPool.setName(StringUtils.trimToEmpty(fundPoolNameField.getValue()));
         FundPool.SalFields salFields = new FundPool.SalFields();
         salFields.setAssessmentName(StringUtils.trimToEmpty(assessmentName.getValue()));
-        salFields.setGrossAmount(
-            new BigDecimal(grossAmountField.getValue()).setScale(DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
-        BigDecimal splitPercent =
-            new BigDecimal(itemBankSplitPercent.getValue()).divide(HUNDRED, SCALE_5, BigDecimal.ROUND_HALF_UP);
-        salFields.setItemBankSplitPercent(splitPercent);
+        salFields.setGrossAmount(new BigDecimal(StringUtils.trimToEmpty(grossAmountField.getValue()))
+            .setScale(DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+        salFields.setItemBankSplitPercent(new BigDecimal(StringUtils.trimToEmpty(itemBankSplitPercent.getValue()))
+            .divide(HUNDRED, SCALE_5, BigDecimal.ROUND_HALF_UP));
         salFields.setDateReceived(dateReceived.getValue());
-        salFields.setLicenseeAccountNumber(Long.valueOf(accountNumberField.getValue()));
+        salFields.setLicenseeAccountNumber(Long.valueOf(StringUtils.trimToEmpty(accountNumberField.getValue())));
         salFields.setLicenseeName(licenseeNameField.getValue());
-        salFields.setGradeKto5NumberOfStudents(Integer.parseInt(gradeKto5NumberOfStudents.getValue()));
-        salFields.setGrade6to8NumberOfStudents(Integer.parseInt(grade6to8NumberOfStudents.getValue()));
-        salFields.setGrade9to12NumberOfStudents(Integer.parseInt(grade9to12NumberOfStudents.getValue()));
+        salFields.setGradeKto5NumberOfStudents(
+            Integer.parseInt(StringUtils.trimToEmpty(gradeKto5NumberOfStudents.getValue())));
+        salFields.setGrade6to8NumberOfStudents(
+            Integer.parseInt(StringUtils.trimToEmpty(grade6to8NumberOfStudents.getValue())));
+        salFields.setGrade9to12NumberOfStudents(
+            Integer.parseInt(StringUtils.trimToEmpty(grade9to12NumberOfStudents.getValue())));
         fundPool.setSalFields(salFields);
         return fundPool;
     }
