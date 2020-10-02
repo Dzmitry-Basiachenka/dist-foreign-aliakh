@@ -10,8 +10,13 @@
     "systemTitle": "life and death of Mozart",
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
-    "rhAccountNumber": 1000000322,
-    "status": "ELIGIBLE",
+    "rightsholder": {
+      "accountNumber": "1000000322"
+    },
+    "payee": {
+      "accountNumber": "1000024950"
+    },
+    "status": "LOCKED",
     "productFamily": "SAL",
     "comment": "usage1-IB",
     "salUsage": {
@@ -42,8 +47,13 @@
     "systemTitle": "life and death of Mozart",
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
-    "rhAccountNumber": 1000000322,
-    "status": "ELIGIBLE",
+    "rightsholder": {
+      "accountNumber": "1000000322"
+    },
+    "payee": {
+      "accountNumber": "1000024950"
+    },
+    "status": "LOCKED",
     "productFamily": "SAL",
     "comment": "usage1-UD-1",
     "salUsage": {
@@ -79,8 +89,13 @@
     "systemTitle": "life and death of Mozart",
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
-    "rhAccountNumber": 1000000322,
-    "status": "ELIGIBLE",
+    "rightsholder": {
+      "accountNumber": "1000000322"
+    },
+    "payee": {
+      "accountNumber": "1000024950"
+    },
+    "status": "LOCKED",
     "productFamily": "SAL",
     "comment": "usage1-UD-2",
     "salUsage": {
@@ -116,8 +131,13 @@
     "systemTitle": "life and death of Mozart",
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
-    "rhAccountNumber": 1000000322,
-    "status": "ELIGIBLE",
+    "rightsholder": {
+      "accountNumber": "1000000322"
+    },
+    "payee": {
+      "accountNumber": "1000024950"
+    },
+    "status": "LOCKED",
     "productFamily": "SAL",
     "comment": "usage1-UD-3",
     "salUsage": {
@@ -153,8 +173,13 @@
     "systemTitle": "life and death of Mozart",
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
-    "rhAccountNumber": 1000000322,
-    "status": "ELIGIBLE",
+    "rightsholder": {
+      "accountNumber": "1000000322"
+    },
+    "payee": {
+      "accountNumber": "1000024950"
+    },
+    "status": "LOCKED",
     "productFamily": "SAL",
     "comment": "usage2-IB",
     "salUsage": {
@@ -184,8 +209,13 @@
     "systemTitle": "life and death of Mozart",
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
-    "rhAccountNumber": 1000000322,
-    "status": "ELIGIBLE",
+    "rightsholder": {
+      "accountNumber": "1000000322"
+    },
+    "payee": {
+      "accountNumber": "1000024950"
+    },
+    "status": "LOCKED",
     "productFamily": "SAL",
     "comment": "usage2-UD-1",
     "salUsage": {
@@ -221,8 +251,13 @@
     "systemTitle": "life and death of Mozart",
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
-    "rhAccountNumber": 1000000322,
-    "status": "ELIGIBLE",
+    "rightsholder": {
+      "accountNumber": "1000000322"
+    },
+    "payee": {
+      "accountNumber": "1000024950"
+    },
+    "status": "LOCKED",
     "productFamily": "SAL",
     "comment": "usage3-IB",
     "salUsage": {

@@ -7,6 +7,7 @@
     <resultMap id="salUsageResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_usage_uid"/>
         <result property="batchId" column="df_usage_batch_uid"/>
+        <result property="scenarioId" column="df_scenario_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="workTitle" column="work_title"/>
         <result property="systemTitle" column="system_title"/>
@@ -15,6 +16,9 @@
         <result property="rightsholder.id" column="rh_id"/>
         <result property="rightsholder.accountNumber" column="rh_account_number"/>
         <result property="rightsholder.name" column="rh_name"/>
+        <result property="payee.id" column="payee_id"/>
+        <result property="payee.accountNumber" column="payee_account_number"/>
+        <result property="payee.name" column="payee_name"/>
         <result property="status" column="status_ind"/>
         <result property="productFamily" column="product_family"/>
         <result property="comment" column="comment"/>
@@ -472,11 +476,16 @@
     <select id="findByIds" resultMap="salUsageResultMap">
         select
             u.df_usage_uid,
+            u.df_scenario_uid,
+            u.payee_account_number,
+            p.name payee_name,
+            p.df_rightsholder_uid payee_id,
             <include refid="salUsageColumns"/>
         from ${schema}.df_usage u
         join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where u.df_usage_uid in
         <foreach collection="list" item="usageId" open="(" separator="," close=")">
             #{usageId}
@@ -555,4 +564,26 @@
             and detail_type = #{detailType}
         order by grade_group
     </select>
+
+    <update id="addToScenario" parameterType="map">
+        update ${schema}.df_usage u
+        set
+            df_scenario_uid = #{scenarioId},
+            status_ind = 'LOCKED',
+            updated_by_user = #{updateUser},
+            updated_datetime = now(),
+            record_version = u.record_version + 1
+        from ${schema}.df_usage_sal usal
+        <include refid="ISalUsageMapper.usageFilter"/>
+            and u.df_usage_uid = usal.df_usage_sal_uid
+    </update>
+
+    <update id="updatePayeeByAccountNumber" parameterType="map">
+        update ${schema}.df_usage
+        set
+            payee_account_number = #{payeeAccountNumber},
+            <include refid="StoredEntityMapper.update"/>
+        where rh_account_number = #{rhAccountNumber}
+            and df_scenario_uid = #{scenarioId}
+    </update>
 </mapper>

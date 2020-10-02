@@ -1,19 +1,26 @@
 package com.copyright.rup.dist.foreign.service.impl.sal;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.common.util.LogUtils.ILogWrapper;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
@@ -30,9 +37,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link ISalUsageService}.
@@ -55,6 +66,10 @@ public class SalUsageService implements ISalUsageService {
     @Autowired
     @Qualifier("usageChainChunkExecutor")
     private IChainExecutor<Usage> chainExecutor;
+    @Autowired
+    private IPrmIntegrationService prmIntegrationService;
+    @Autowired
+    private IRightsholderService rightsholderService;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private int usagesBatchSize;
 
@@ -136,6 +151,29 @@ public class SalUsageService implements ISalUsageService {
                     LOGGER.info("Send usages for PI matching. Finished. UsageBatchName={}, UsagesCount={}", batchName,
                         usageIdsCount);
                 }));
+    }
+
+    @Override
+    public void addUsagesToScenario(Scenario scenario, UsageFilter filter) {
+        salUsageRepository.addToScenario(scenario.getId(), filter, scenario.getUpdateUser());
+    }
+
+    @Override
+    @Transactional
+    public void populatePayees(String scenarioId) {
+        String userName = RupContextUtils.getUserName();
+        Set<Long> payeeAccountNumbers = new HashSet<>();
+        List<Rightsholder> rightsholders = rightsholderService.getByScenarioId(scenarioId);
+        Set<String> rightsholdersIds = rightsholders.stream().map(BaseEntity::getId).collect(Collectors.toSet());
+        Map<String, Map<String, Rightsholder>> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        rightsholders.forEach(rightsholder -> {
+            Long payeeAccountNumber = PrmRollUpService.getPayee(rollUps, rightsholder, FdaConstants.SAL_PRODUCT_FAMILY)
+                .getAccountNumber();
+            payeeAccountNumbers.add(payeeAccountNumber);
+            salUsageRepository.updatePayeeByAccountNumber(rightsholder.getAccountNumber(), scenarioId,
+                payeeAccountNumber, userName);
+        });
+        rightsholderService.updateRighstholdersAsync(payeeAccountNumbers);
     }
 
     @Override

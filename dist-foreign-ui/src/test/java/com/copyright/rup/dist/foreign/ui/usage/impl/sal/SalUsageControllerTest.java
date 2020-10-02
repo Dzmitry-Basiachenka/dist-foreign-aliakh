@@ -21,6 +21,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -76,6 +77,7 @@ public class SalUsageControllerTest {
 
     private static final OffsetDateTime DATE = OffsetDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
     private static final String FUND_POOL_ID = "76b16c8d-0bea-4135-9611-6c52e53bfbea";
+    private static final String SCENARIO_NAME = "SAL Scenario 2020";
 
     private ISalUsageService salUsageService;
     private IUsageService usageService;
@@ -351,5 +353,18 @@ public class SalUsageControllerTest {
         replay(fundPoolService);
         controller.createFundPool(fundPool);
         verify(fundPoolService);
+    }
+
+    @Test
+    public void testCreateSalScenario() {
+        Scenario scenario = new Scenario();
+        scenario.setName(SCENARIO_NAME);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(salScenarioService.createScenario(SCENARIO_NAME, FUND_POOL_ID, "description", usageFilter))
+            .andReturn(scenario).once();
+        replay(filterController, filterWidget, salScenarioService);
+        assertSame(scenario, controller.createSalScenario(SCENARIO_NAME, FUND_POOL_ID, "description"));
+        verify(filterController, filterWidget, salScenarioService);
     }
 }

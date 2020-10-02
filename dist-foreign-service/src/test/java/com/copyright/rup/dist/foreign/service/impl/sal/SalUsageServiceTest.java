@@ -12,6 +12,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -23,11 +24,15 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
+
+import com.google.common.collect.ImmutableMap;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -40,7 +45,9 @@ import org.powermock.reflect.Whitebox;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Verifies {@link SalUsageService}.
@@ -58,6 +65,7 @@ public class SalUsageServiceTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final String USAGE_ID_1 = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
     private static final String USAGE_ID_2 = "c72554d7-687e-4173-8406-dbddef74da98";
+    private static final String RIGHTSHOLDER_ID = "4914f51d-866c-4e48-8b03-fb4b29b1a5f3";
     private final ISalUsageService salUsageService = new SalUsageService();
 
     private ISalUsageRepository salUsageRepository;
@@ -226,6 +234,41 @@ public class SalUsageServiceTest {
         replay(salUsageRepository);
         assertSame(gradeGroups, salUsageService.getUsageDataGradeGroups(filter));
         verify(salUsageRepository);
+    }
+
+    @Test
+    public void testPopulatePayees() {
+        IRightsholderService rightsholderService = createMock(IRightsholderService.class);
+        IPrmIntegrationService prmIntegrationService = createMock(IPrmIntegrationService.class);
+        Whitebox.setInternalState(salUsageService, rightsholderService);
+        Whitebox.setInternalState(salUsageService, prmIntegrationService);
+        String scenarioId = "fe08f50c-bea8-4856-8787-3e3e9e46669c";
+        expect(rightsholderService.getByScenarioId(scenarioId)).andReturn(
+            Collections.singletonList(buildRightsholder(RIGHTSHOLDER_ID, 2000073957L))).once();
+        expect(prmIntegrationService.getRollUps(Collections.singleton(RIGHTSHOLDER_ID)))
+            .andReturn(buildRollupsMap()).once();
+        salUsageRepository.updatePayeeByAccountNumber(2000073957L, scenarioId, 1000005413L, "SYSTEM");
+        expectLastCall().once();
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(1000005413L));
+        expectLastCall().once();
+        replay(salUsageRepository, rightsholderService, prmIntegrationService);
+        salUsageService.populatePayees(scenarioId);
+        verify(salUsageRepository, rightsholderService, prmIntegrationService);
+    }
+
+    private Map<String, Map<String, Rightsholder>> buildRollupsMap() {
+        Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
+        rollUps.put(RIGHTSHOLDER_ID, ImmutableMap.of(
+            "*", buildRightsholder("fb37dc6f-1c17-4da4-9a7c-6a614d6811ce", 1000023401L),
+            "SAL", buildRightsholder("8496882a-9c08-4211-845c-ce407878ec8a", 1000005413L)));
+        return rollUps;
+    }
+
+    private Rightsholder buildRightsholder(String rhId, Long accountNumber) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId(rhId);
+        rightsholder.setAccountNumber(accountNumber);
+        return rightsholder;
     }
 
     private UsageBatch buildUsageBatch() {

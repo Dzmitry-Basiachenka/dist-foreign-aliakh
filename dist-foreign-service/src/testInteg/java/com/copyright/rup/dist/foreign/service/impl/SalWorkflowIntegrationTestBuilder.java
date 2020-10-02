@@ -7,12 +7,15 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.SalWorkflowIntegrationTestBuilder.Runner;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -42,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -58,10 +62,13 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     private final Map<String, List<UsageAuditItem>> expectedUsageIdToAuditMap = Maps.newHashMap();
     private final Map<String, String> expectedRmsRequestsToResponses = new LinkedHashMap<>();
+    private String expectedRollupsJson;
+    private List<String> expectedRollupsRightholderIds;
     private List<String> predefinedItemBankDetailIds;
     private List<String> predefinedUsageDataDetailIds;
     private String itemBankCsvFile;
     private String usageDataCsvFile;
+    private String fundPoolId;
     private String productFamily;
     private UsageBatch usageBatch;
     private String expectedUsagesJsonFile;
@@ -72,6 +79,8 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IUsageBatchService usageBatchService;
     @Autowired
     private ISalUsageService salUsageService;
+    @Autowired
+    private ISalScenarioService salScenarioService;
     @Autowired
     private ServiceTestHelper testHelper;
 
@@ -97,8 +106,19 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    SalWorkflowIntegrationTestBuilder withFundPoolId(String fundId) {
+        this.fundPoolId = fundId;
+        return this;
+    }
+
     SalWorkflowIntegrationTestBuilder expectRmsRights(String rmsRequest, String rmsResponse) {
         this.expectedRmsRequestsToResponses.put(rmsRequest, rmsResponse);
+        return this;
+    }
+
+    SalWorkflowIntegrationTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
+        this.expectedRollupsJson = rollupsJson;
+        this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
         return this;
     }
 
@@ -120,6 +140,9 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
         productFamily = null;
         usageBatch = null;
         expectedUsagesJsonFile = null;
+        fundPoolId = null;
+        expectedRollupsJson = null;
+        expectedRollupsRightholderIds = null;
         expectedUsageIdToAuditMap.clear();
     }
 
@@ -133,19 +156,17 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
      */
     public class Runner {
 
-        private List<UsageDto> actualUsages;
+        private final List<String> usageIds = new ArrayList<>();
 
         public void run() throws IOException {
             testHelper.createRestServer();
             testHelper.expectGetRmsRights(expectedRmsRequestsToResponses);
+            testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
             loadItemBank();
             if (Objects.nonNull(usageDataCsvFile)) {
                 loadUsageData();
             }
-            UsageFilter filter = new UsageFilter();
-            filter.setProductFamily(productFamily);
-            filter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
-            actualUsages = salUsageService.getUsageDtos(filter, null, null);
+            addToScenario();
             verifyUsages();
             expectedUsageIdToAuditMap.forEach(testHelper::assertAudit);
             testHelper.verifyRestServer();
@@ -159,6 +180,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             setPredefinedUsageIds(usages, predefinedItemBankDetailIds);
             List<String> insertedUsageIds = usageBatchService.insertSalBatch(usageBatch, usages);
             assertEquals(predefinedItemBankDetailIds.size(), insertedUsageIds.size());
+            usageIds.addAll(predefinedItemBankDetailIds);
             List<String> orderedIds = salUsageService.getUsagesByIds(new ArrayList<>(insertedUsageIds)).stream()
                 .sorted(Comparator.comparing(Usage::getComment))
                 .map(Usage::getId)
@@ -172,14 +194,32 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
             setPredefinedUsageIds(usages, predefinedUsageDataDetailIds);
+            usageIds.addAll(predefinedUsageDataDetailIds);
             salUsageService.insertUsageDataDetails(usageBatch, usages);
         }
 
+        private void addToScenario() {
+            UsageFilter filter = new UsageFilter();
+            filter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
+            filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+            filter.setProductFamily(productFamily);
+            Scenario scenario = salScenarioService.createScenario("Test SAL Scenario", fundPoolId,
+                "Test Scenario Description", filter);
+            assertScenario(scenario);
+        }
+
+        private void assertScenario(Scenario scenario) {
+            assertEquals("Test SAL Scenario", scenario.getName());
+            assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
+            assertEquals("Test Scenario Description", scenario.getDescription());
+            assertEquals(fundPoolId, scenario.getSalFields().getFundPoolId());
+        }
+
         // predefined usage ids are used, otherwise during every test run the usage ids will be random
-        private void setPredefinedUsageIds(List<Usage> usages, List<String> usageIds) {
-            assertEquals(usages.size(), usageIds.size());
+        private void setPredefinedUsageIds(List<Usage> usages, List<String> predefinedDetailIds) {
+            assertEquals(usages.size(), predefinedDetailIds.size());
             AtomicInteger usageId = new AtomicInteger(0);
-            usages.forEach(usage -> usage.setId(usageIds.get(usageId.getAndIncrement())));
+            usages.forEach(usage -> usage.setId(predefinedDetailIds.get(usageId.getAndIncrement())));
         }
 
         private ByteArrayOutputStream getCsvOutputStream(String fileName) throws IOException {
@@ -189,26 +229,26 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             return out;
         }
 
-        private List<UsageDto> loadExpectedUsages(String fileName) throws IOException {
+        private List<Usage> loadExpectedUsages(String fileName) throws IOException {
             String content = TestUtils.fileToString(this.getClass(), fileName);
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
             mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-            return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
+            return mapper.readValue(content, new TypeReference<List<Usage>>() {
             });
         }
 
         private void verifyUsages() throws IOException {
-            List<UsageDto> expectedUsages = loadExpectedUsages(expectedUsagesJsonFile);
-            assertEquals(expectedUsages.size(), actualUsages.size());
-            Map<String, UsageDto> actualUsageIdsToUsages = actualUsages.stream()
-                .collect(Collectors.toMap(UsageDto::getId, usageDto -> usageDto));
+            List<Usage> expectedUsages = loadExpectedUsages(expectedUsagesJsonFile);
+            assertEquals(expectedUsages.size(), usageIds.size());
+            Map<String, Usage> actualUsageIdsToUsages = salUsageService.getUsagesByIds(usageIds).stream()
+                .collect(Collectors.toMap(Usage::getId, Function.identity()));
             expectedUsages.forEach(
                 expectedUsage -> assertUsage(expectedUsage, actualUsageIdsToUsages.get(expectedUsage.getId())));
         }
 
         // TODO {srudak} move to ServiceTestHelper
-        private void assertUsage(UsageDto expectedUsage, UsageDto actualUsage) {
+        private void assertUsage(Usage expectedUsage, Usage actualUsage) {
             assertNotNull(actualUsage);
             assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
             assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
@@ -216,7 +256,9 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
             assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
             assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
-            assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
+            assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
+                actualUsage.getRightsholder().getAccountNumber());
+            assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber());
             assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
             assertEquals(expectedUsage.getComment(), actualUsage.getComment());
             assertSalUsage(expectedUsage.getSalUsage(), actualUsage.getSalUsage());

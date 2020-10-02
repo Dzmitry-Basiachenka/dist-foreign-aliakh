@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.api.sal;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -79,6 +80,21 @@ public interface ISalUsageService {
      * @param batchName batch name
      */
     void sendForMatching(List<String> usageIds, String batchName);
+
+    /**
+     * Adds usages to the scenario by filter.
+     *
+     * @param scenario {@link Scenario} to add usages to
+     * @param filter   instance of {@link UsageFilter}
+     */
+    void addUsagesToScenario(Scenario scenario, UsageFilter filter);
+
+    /**
+     * Gets rollups from PRM service and populates for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void populatePayees(String scenarioId);
 
     /**
      * Gets list of {@link Usage}s by specified {@link Usage} ids.
