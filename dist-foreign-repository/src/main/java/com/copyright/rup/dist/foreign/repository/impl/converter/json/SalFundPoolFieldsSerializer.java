@@ -41,7 +41,6 @@ public class SalFundPoolFieldsSerializer extends StdSerializer<FundPool.SalField
         generator.writeNumberField("grade_6_8_number_of_students", salFields.getGrade6to8NumberOfStudents());
         generator.writeNumberField("grade_9_12_number_of_students", salFields.getGrade9to12NumberOfStudents());
         generator.writeNumberField("gross_amount", salFields.getGrossAmount());
-        generator.writeNumberField("item_bank_amount", salFields.getItemBankAmount());
         generator.writeNumberField("item_bank_gross_amount", salFields.getItemBankGrossAmount());
         generator.writeNumberField("grade_K_5_gross_amount", salFields.getGradeKto5GrossAmount());
         generator.writeNumberField("grade_6_8_gross_amount", salFields.getGrade6to8GrossAmount());

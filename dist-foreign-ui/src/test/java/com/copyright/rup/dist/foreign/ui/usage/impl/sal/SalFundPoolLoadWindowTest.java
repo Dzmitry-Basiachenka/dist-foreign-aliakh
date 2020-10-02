@@ -260,7 +260,7 @@ public class SalFundPoolLoadWindowTest {
         setTextFieldValue(FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
         setTextFieldValue(ASSESSMENT_NAME_FIELD, "FY2020 COG");
         setTextFieldValue(GROSS_AMOUNT_FIELD, "1000");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "2");
+        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "2.5");
         setTextFieldValue(ACCOUNT_NUMBER_FIELD, "1000008985");
         setTextFieldValue(LICENSEE_NAME_FIELD, "FarmField Inc.");
         setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "10");
@@ -295,8 +295,8 @@ public class SalFundPoolLoadWindowTest {
         verifyTextFieldComponent(grade9to12Layout.getComponent(0), "Grade 9-12 Number of Students", false);
         verifyTextFieldComponent(grade9to12Layout.getComponent(1), "Grade 9-12 Gross Amount", true);
         HorizontalLayout itemBankAndTotalAmountLayout = (HorizontalLayout) verticalLayout.getComponent(8);
-        verifyTextFieldComponent(itemBankAndTotalAmountLayout.getComponent(0), "Item Bank Amount", true);
-        verifyTextFieldComponent(itemBankAndTotalAmountLayout.getComponent(1), "Total Amount", true);
+        verifyTextFieldComponent(itemBankAndTotalAmountLayout.getComponent(0), "Item Bank Gross Amount", true);
+        verifyTextFieldComponent(itemBankAndTotalAmountLayout.getComponent(1), "Total Gross Amount", true);
         verifyButtonsLayout(verticalLayout.getComponent(9));
     }
 
@@ -396,7 +396,7 @@ public class SalFundPoolLoadWindowTest {
         salFields.setGradeKto5NumberOfStudents(10);
         salFields.setGrade6to8NumberOfStudents(5);
         salFields.setGrossAmount(new BigDecimal("1000.00"));
-        salFields.setItemBankSplitPercent(new BigDecimal("0.02"));
+        salFields.setItemBankSplitPercent(new BigDecimal("0.02500"));
         fundPool.setSalFields(salFields);
         return fundPool;
     }

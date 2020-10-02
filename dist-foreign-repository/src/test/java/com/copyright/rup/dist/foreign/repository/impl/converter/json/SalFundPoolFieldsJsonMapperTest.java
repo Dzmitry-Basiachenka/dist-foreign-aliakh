@@ -63,10 +63,9 @@ public class SalFundPoolFieldsJsonMapperTest {
         salFields.setGradeKto5NumberOfStudents(10);
         salFields.setGrade6to8NumberOfStudents(5);
         salFields.setGrossAmount(new BigDecimal("1000.00"));
-        salFields.setItemBankAmount(new BigDecimal("15.00"));
-        salFields.setItemBankGrossAmount(new BigDecimal("20.00"));
-        salFields.setGradeKto5GrossAmount(new BigDecimal("490.00"));
-        salFields.setGrade6to8GrossAmount(new BigDecimal("245.00"));
+        salFields.setItemBankGrossAmount(new BigDecimal("20.01"));
+        salFields.setGradeKto5GrossAmount(new BigDecimal("653.33"));
+        salFields.setGrade6to8GrossAmount(new BigDecimal("326.66"));
         salFields.setGrade9to12GrossAmount(new BigDecimal("0.00"));
         salFields.setItemBankSplitPercent(new BigDecimal("0.02000"));
         salFields.setServiceFee(new BigDecimal("0.25000"));

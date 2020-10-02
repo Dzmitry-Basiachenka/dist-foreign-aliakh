@@ -325,7 +325,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool 1')
             column(name: 'total_amount', value: '1000.00')
-            column(name: 'sal_fields', value: '{"date_received": "09/28/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 5, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_amount": 200.00, "item_bank_gross_amount": 200.00, "grade_K_5_gross_amount": 600.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
+            column(name: 'sal_fields', value: '{"date_received": "09/28/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 5, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_gross_amount": 200.01, "grade_K_5_gross_amount": 533.33, "grade_6_8_gross_amount": 266.66, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
             column(name: 'created_datetime', value: '2020-09-28 11:00:00-04')
         }
 
@@ -334,7 +334,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool 2')
             column(name: 'total_amount', value: '100.00')
-            column(name: 'sal_fields', value: '{"date_received": "09/29/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 2, "grade_6_8_number_of_students": 1, "grade_9_12_number_of_students": 0, "gross_amount": 100.00, "item_bank_amount": 20.00, "item_bank_gross_amount": 20.00, "grade_K_5_gross_amount": 60.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
+            column(name: 'sal_fields', value: '{"date_received": "09/29/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 2, "grade_6_8_number_of_students": 1, "grade_9_12_number_of_students": 0, "gross_amount": 100.00, "item_bank_gross_amount": 20.01, "grade_K_5_gross_amount": 53.33, "grade_6_8_gross_amount": 26.66, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
             column(name: 'created_datetime', value: '2020-09-29 11:00:00-04')
         }
 
@@ -343,7 +343,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool 3')
             column(name: 'total_amount', value: '10.00')
-            column(name: 'sal_fields', value: '{"date_received": "12/30/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 2, "grade_6_8_number_of_students": 1, "grade_9_12_number_of_students": 0, "gross_amount": 10.00, "item_bank_amount": 2.00, "item_bank_gross_amount": 2.00, "grade_K_5_gross_amount": 6.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
+            column(name: 'sal_fields', value: '{"date_received": "12/30/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 2, "grade_6_8_number_of_students": 1, "grade_9_12_number_of_students": 0, "gross_amount": 10.00, "item_bank_gross_amount": 2.01, "grade_K_5_gross_amount": 5.33, "grade_6_8_gross_amount": 2.66, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
             column(name: 'created_datetime', value: '2020-09-30 11:00:00-04')
         }
 

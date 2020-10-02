@@ -29,7 +29,6 @@ public class SalFundPoolFieldsDeserializer extends StdDeserializer<FundPool.SalF
     private static final String GRADE_6_8_NUMBER_OF_STUDENTS = "grade_6_8_number_of_students";
     private static final String GRADE_9_12_NUMBER_OF_STUDENTS = "grade_9_12_number_of_students";
     private static final String GROSS_AMOUNT = "gross_amount";
-    private static final String ITEM_BANK_AMOUNT = "item_bank_amount";
     private static final String ITEM_BANK_GROSS_AMOUNT = "item_bank_gross_amount";
     private static final String GRADE_K_5_GROSS_AMOUNT = "grade_K_5_gross_amount";
     private static final String GRADE_6_8_GROSS_AMOUNT = "grade_6_8_gross_amount";
@@ -99,9 +98,6 @@ public class SalFundPoolFieldsDeserializer extends StdDeserializer<FundPool.SalF
         switch (parser.getCurrentName()) {
             case GROSS_AMOUNT:
                 salFields.setGrossAmount(parser.getDecimalValue());
-                break;
-            case ITEM_BANK_AMOUNT:
-                salFields.setItemBankAmount(parser.getDecimalValue());
                 break;
             case ITEM_BANK_GROSS_AMOUNT:
                 salFields.setItemBankGrossAmount(parser.getDecimalValue());
