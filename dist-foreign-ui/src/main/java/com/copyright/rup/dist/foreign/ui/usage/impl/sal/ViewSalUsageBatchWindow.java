@@ -71,6 +71,7 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void performSearch() {
         ListDataProvider<UsageBatch> dataProvider = (ListDataProvider<UsageBatch>) grid.getDataProvider();
         dataProvider.clearFilters();

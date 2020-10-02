@@ -118,6 +118,7 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     @Override
     public void deleteUsageBatch(UsageBatch usageBatch) {
         getUsageBatchService().deleteSalUsageBatch(usageBatch);
+        getUsageFilterController().getWidget().clearFilter();
     }
 
     @Override
