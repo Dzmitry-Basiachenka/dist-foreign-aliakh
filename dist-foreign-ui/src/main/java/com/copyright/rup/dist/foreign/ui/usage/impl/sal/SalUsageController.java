@@ -77,11 +77,13 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     public void loadItemBank(UsageBatch itemBank, List<Usage> usages) {
         List<String> insertedUsageIds = getUsageBatchService().insertSalBatch(itemBank, usages);
         salUsageService.sendForMatching(insertedUsageIds, itemBank.getName());
+        getUsageFilterController().getWidget().clearFilter();
     }
 
     @Override
     public void loadUsageData(UsageBatch itemBank, List<Usage> usages) {
         salUsageService.insertUsageDataDetails(itemBank, usages);
+        getUsageFilterController().getWidget().clearFilter();
     }
 
     @Override

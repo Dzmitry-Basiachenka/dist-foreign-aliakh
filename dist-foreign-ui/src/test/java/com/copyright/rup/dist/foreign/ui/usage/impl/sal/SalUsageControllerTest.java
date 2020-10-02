@@ -137,9 +137,26 @@ public class SalUsageControllerTest {
         expect(usageBatchService.insertSalBatch(itemBank, usages)).andReturn(usageIds).once();
         salUsageService.sendForMatching(usageIds, itemBank.getName());
         expectLastCall().once();
-        replay(usageBatchService);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        filterWidget.clearFilter();
+        expectLastCall().once();
+        replay(usageBatchService, salUsageService, filterController, filterWidget);
         controller.loadItemBank(itemBank, usages);
-        verify(usageBatchService);
+        verify(usageBatchService, salUsageService, filterController, filterWidget);
+    }
+
+    @Test
+    public void testLoadUsageData() {
+        UsageBatch itemBank = new UsageBatch();
+        List<Usage> usages = Collections.singletonList(new Usage());
+        salUsageService.insertUsageDataDetails(itemBank, usages);
+        expectLastCall().once();
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        filterWidget.clearFilter();
+        expectLastCall().once();
+        replay(salUsageService, filterController, filterWidget);
+        controller.loadUsageData(itemBank, usages);
+        verify(salUsageService, filterController, filterWidget);
     }
 
     @Test
