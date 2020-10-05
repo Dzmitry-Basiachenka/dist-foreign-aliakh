@@ -21,6 +21,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -34,6 +35,8 @@ import java.util.Objects;
  * @author Aliaksandr Liakh
  */
 public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearchController {
+
+    private static final int SCALE_1 = 1;
 
     private final SearchWidget searchWidget;
     private final ISalUsageController controller;
@@ -127,7 +130,7 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
             .setComparator((fundPool1, fundPool2) -> fundPool1.getName().compareToIgnoreCase(fundPool2.getName()))
             .setExpandRatio(1);
         grid.addColumn(fundPool -> fundPool.getSalFields().getDateReceived()
-                .format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)))
+            .format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)))
             .setCaption(ForeignUi.getMessage("table.column.date_received"))
             .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getDateReceived()
                 .compareTo(fundPool2.getSalFields().getDateReceived()))
@@ -146,10 +149,10 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
             .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getGrossAmount()
                 .compareTo(fundPool2.getSalFields().getGrossAmount()))
             .setWidth(170);
-        grid.addColumn(fundPool -> fundPool.getSalFields().getServiceFee())
+        grid.addColumn(fundPool -> getPercentColumnAsString(fundPool.getSalFields().getServiceFee()))
             .setCaption(ForeignUi.getMessage("table.column.service_fee"))
             .setWidth(115);
-        grid.addColumn(fundPool -> fundPool.getSalFields().getItemBankSplitPercent())
+        grid.addColumn(fundPool -> getPercentColumnAsString(fundPool.getSalFields().getItemBankSplitPercent()))
             .setCaption(ForeignUi.getMessage("table.column.item_bank_split_percent"))
             .setWidth(150);
         grid.addColumn(fundPool -> fundPool.getSalFields().getGradeKto5NumberOfStudents())
@@ -161,10 +164,10 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
         grid.addColumn(fundPool -> fundPool.getSalFields().getGrade9to12NumberOfStudents())
             .setCaption(ForeignUi.getMessage("table.column.grade_9_12_number_of_students"))
             .setWidth(190);
-        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getTotalAmount(), null))
+        grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getSalFields().getItemBankGrossAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.item_bank_gross_amount"))
-            .setComparator((fundPool1, fundPool2) ->
-                fundPool1.getTotalAmount().compareTo(fundPool2.getTotalAmount()))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getItemBankGrossAmount()
+                .compareTo(fundPool2.getSalFields().getItemBankGrossAmount()))
             .setWidth(170);
         grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getSalFields().getGradeKto5GrossAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.grade_K_5_gross_amount"))
@@ -181,5 +184,11 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
             .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getGrade9to12GrossAmount()
                 .compareTo(fundPool2.getSalFields().getGrade9to12GrossAmount()))
             .setWidth(170);
+    }
+
+    private String getPercentColumnAsString(BigDecimal value) {
+        return Objects.nonNull(value)
+            ? Objects.toString(value.multiply(new BigDecimal("100")).setScale(SCALE_1, BigDecimal.ROUND_HALF_UP))
+            : StringUtils.EMPTY;
     }
 }
