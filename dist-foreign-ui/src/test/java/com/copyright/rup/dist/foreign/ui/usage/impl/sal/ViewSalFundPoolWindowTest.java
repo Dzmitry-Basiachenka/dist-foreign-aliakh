@@ -31,7 +31,6 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +39,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -55,6 +56,7 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Liakh
  */
+@SuppressWarnings("unchecked")
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, ForeignSecurityUtils.class, ViewSalFundPoolWindow.class})
 public class ViewSalFundPoolWindowTest {
@@ -155,6 +157,28 @@ public class ViewSalFundPoolWindowTest {
         verify(searchWidget, grid);
     }
 
+    @Test
+    public void testGridValueRendering() {
+        FundPool fundPoolToRender = buildFundPool();
+        VerticalLayout content = (VerticalLayout) viewSalFundPoolWindow.getContent();
+        List<Grid.Column> columns = ((Grid) content.getComponent(1)).getColumns();
+        assertEquals("SAL Fund Pool", columns.get(0).getValueProvider().apply(fundPoolToRender));
+        assertEquals("12/24/2020", columns.get(1).getValueProvider().apply(fundPoolToRender));
+        assertEquals("FY2020 COG", columns.get(2).getValueProvider().apply(fundPoolToRender));
+        assertEquals(1000008985L, columns.get(3).getValueProvider().apply(fundPoolToRender));
+        assertEquals("FarmField Inc.", columns.get(4).getValueProvider().apply(fundPoolToRender));
+        assertEquals("1,000.00", columns.get(5).getValueProvider().apply(fundPoolToRender));
+        assertEquals("25.0", columns.get(6).getValueProvider().apply(fundPoolToRender));
+        assertEquals("2.5", columns.get(7).getValueProvider().apply(fundPoolToRender));
+        assertEquals(10, columns.get(8).getValueProvider().apply(fundPoolToRender));
+        assertEquals(5, columns.get(9).getValueProvider().apply(fundPoolToRender));
+        assertEquals(0, columns.get(10).getValueProvider().apply(fundPoolToRender));
+        assertEquals("25.00", columns.get(11).getValueProvider().apply(fundPoolToRender));
+        assertEquals("487.49", columns.get(12).getValueProvider().apply(fundPoolToRender));
+        assertEquals("243.74", columns.get(13).getValueProvider().apply(fundPoolToRender));
+        assertEquals("0.00", columns.get(14).getValueProvider().apply(fundPoolToRender));
+    }
+
     private void verifySize(Component component) {
         assertEquals(900, component.getWidth(), 0);
         assertEquals(550, component.getHeight(), 0);
@@ -193,6 +217,21 @@ public class ViewSalFundPoolWindowTest {
 
     private FundPool buildFundPool() {
         FundPool salFundPool = new FundPool();
+        FundPool.SalFields salFields = new FundPool.SalFields();
+        salFields.setDateReceived(LocalDate.of(2020, 12, 24));
+        salFields.setAssessmentName("FY2020 COG");
+        salFields.setLicenseeAccountNumber(1000008985L);
+        salFields.setLicenseeName("FarmField Inc.");
+        salFields.setGradeKto5NumberOfStudents(10);
+        salFields.setGrade6to8NumberOfStudents(5);
+        salFields.setGrossAmount(new BigDecimal("1000.00"));
+        salFields.setItemBankSplitPercent(new BigDecimal("0.02500"));
+        salFields.setServiceFee(new BigDecimal("0.25000"));
+        salFields.setItemBankGrossAmount(new BigDecimal("25.00"));
+        salFields.setGradeKto5GrossAmount(new BigDecimal("487.49"));
+        salFields.setGrade6to8GrossAmount(new BigDecimal("243.74"));
+        salFields.setGrade9to12GrossAmount(new BigDecimal("0.00"));
+        salFundPool.setSalFields(salFields);
         salFundPool.setId(FUND_POOL_ID);
         salFundPool.setName("SAL Fund Pool");
         return salFundPool;
