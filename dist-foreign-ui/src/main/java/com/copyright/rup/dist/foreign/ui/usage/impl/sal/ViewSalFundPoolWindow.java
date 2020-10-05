@@ -137,12 +137,16 @@ public class ViewSalFundPoolWindow extends Window implements SearchWidget.ISearc
             .setExpandRatio(0);
         grid.addColumn(fundPool -> fundPool.getSalFields().getAssessmentName())
             .setCaption(ForeignUi.getMessage("table.column.assessment_name"))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getAssessmentName()
+                .compareToIgnoreCase(fundPool2.getSalFields().getAssessmentName()))
             .setWidth(180);
         grid.addColumn(fundPool -> fundPool.getSalFields().getLicenseeAccountNumber())
             .setCaption(ForeignUi.getMessage("table.column.licensee_account_number"))
             .setWidth(150);
         grid.addColumn(fundPool -> fundPool.getSalFields().getLicenseeName())
             .setCaption(ForeignUi.getMessage("table.column.licensee_name"))
+            .setComparator((fundPool1, fundPool2) -> fundPool1.getSalFields().getLicenseeName()
+                .compareToIgnoreCase(fundPool2.getSalFields().getLicenseeName()))
             .setWidth(300);
         grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getSalFields().getGrossAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.gross_amount"))
