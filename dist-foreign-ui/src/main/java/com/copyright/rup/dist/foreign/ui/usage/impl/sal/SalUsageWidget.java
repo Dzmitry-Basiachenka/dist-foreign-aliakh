@@ -4,6 +4,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageWidget;
@@ -203,11 +204,14 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
 
     private String getSalScenarioValidationMessage() {
         String message;
-        Set<String> batchesIds = getFilterWidget().getAppliedFilter().getUsageBatchesIds();
+        UsageFilter appliedFilter = getFilterWidget().getAppliedFilter();
+        Set<String> batchesIds = appliedFilter.getUsageBatchesIds();
         if (CollectionUtils.isEmpty(batchesIds)) {
             message = ForeignUi.getMessage("message.error.empty_usage_batches");
         } else if (EXPECTED_BATCH_SIZE != CollectionUtils.size(batchesIds)) {
             message = ForeignUi.getMessage("message.error.invalid_batch_size");
+        } else if (Objects.nonNull(appliedFilter.getSalDetailType())) {
+            message = ForeignUi.getMessage("message.error.invalid_detail_type_filter");
         } else {
             message = validateSelectedBatch(batchesIds);
         }
