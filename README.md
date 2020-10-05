@@ -1,3 +1,11 @@
+12.1.9
+-
+* B-57897 FDA: Create SAL Scenario: implement validation for Detail Type filter
+* CDP-942: FDA: Delete SAL Usage Bach: Usages from deleted usage batch are still displayed filtered on ‘Usages’ table in case the usage batch is previously filtered on ‘Usages’ tab
+* CDP-943 FDA: View SAL Fund Pool: Item Bank Split %, Service fee % and Item Bank Gross Amount columns values mismatch
+* CDP-944 FDA: Load SAL Fund Pool window: Exception occurs after typing leading or trailing space into any numeric field
+* CDP-945 FDA: Create SAL scenario: while validation of Usage Batch and Fund Pool Licensee Account # matching, the System takes Licensee Account # of the last uploaded SAL batch
+
 12.1.8
 -
 * B-57772 Tech Debt: FDA: clear usage filters after item bank or usage data is loaded
