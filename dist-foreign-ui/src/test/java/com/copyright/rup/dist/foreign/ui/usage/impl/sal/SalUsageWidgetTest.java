@@ -18,6 +18,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
@@ -231,6 +232,21 @@ public class SalUsageWidgetTest {
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         Windows.showNotificationWindow("Only one usage batch can be associated with scenario");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        applyAddToScenarioButtonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerWithDetailTypeFilter() {
+        mockStatic(Windows.class);
+        filterWidget.getAppliedFilter().setSalDetailType(SalDetailTypeEnum.IB);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getBeansCount()).andReturn(1).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        Windows.showNotificationWindow("Detail Type filter should not be applied to create scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         applyAddToScenarioButtonClick(clickEvent);
