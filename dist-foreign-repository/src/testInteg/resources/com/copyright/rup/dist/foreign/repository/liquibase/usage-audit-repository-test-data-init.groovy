@@ -1239,7 +1239,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-09-25-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for testDeleteByBatchIdAndDetailType")
+        comment("Insert test data for testDeleteByBatchId")
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '129b0e2d-8c2a-4c66-8dcf-456106c823d8')

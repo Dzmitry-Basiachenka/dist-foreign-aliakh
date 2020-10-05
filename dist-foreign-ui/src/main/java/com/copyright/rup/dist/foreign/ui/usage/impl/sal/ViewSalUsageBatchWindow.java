@@ -108,7 +108,7 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
 
     private void deleteUsageDetails(UsageBatch usageBatch) {
         if (!controller.usageDataExists(usageBatch.getId())) {
-            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.no_usage_details"));
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.no_usage_details.sal"));
         } else {
             List<String> scenariosNames = controller.getScenariosNamesAssociatedWithUsageBatch(usageBatch.getId());
             if (CollectionUtils.isEmpty(scenariosNames)) {

@@ -171,7 +171,7 @@ public class UsageAuditServiceTest {
     @Test
     public void testDeleteActionsForSalUsageData(){
         String batchId = "7ab04433-7663-43e0-bc19-3aacb4d7b4c7";
-        usageAuditRepository.deleteForSalUsageData(batchId);
+        usageAuditRepository.deleteForSalUsageDataByBatchId(batchId);
         expectLastCall().once();
         replay(usageAuditRepository);
         usageAuditService.deleteActionsForSalUsageData(batchId);

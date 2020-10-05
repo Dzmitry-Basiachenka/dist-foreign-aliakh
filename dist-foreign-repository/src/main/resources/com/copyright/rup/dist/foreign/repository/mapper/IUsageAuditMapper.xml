@@ -92,7 +92,7 @@
             where df_usage_batch_uid = #{batchId})
     </delete>
 
-    <delete id="deleteForSalUsageData">
+    <delete id="deleteForSalUsageDataByBatchId">
         delete from ${schema}.df_usage_audit
         where df_usage_uid in (
             select df_usage_uid
