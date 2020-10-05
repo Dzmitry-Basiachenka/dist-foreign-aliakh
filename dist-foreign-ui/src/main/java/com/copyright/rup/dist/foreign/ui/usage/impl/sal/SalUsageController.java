@@ -185,6 +185,12 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
+    public UsageBatch getSelectedUsageBatch() {
+        return getUsageBatchService().getUsageBatchById(
+            getUsageFilterController().getWidget().getAppliedFilter().getUsageBatchesIds().iterator().next());
+    }
+
+    @Override
     public List<FundPool> getFundPools() {
         return fundPoolService.getFundPools(FdaConstants.SAL_PRODUCT_FAMILY);
     }
