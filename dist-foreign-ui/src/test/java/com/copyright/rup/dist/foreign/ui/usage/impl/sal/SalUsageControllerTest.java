@@ -356,6 +356,21 @@ public class SalUsageControllerTest {
     }
 
     @Test
+    public void testGetSelectedUsageBatch() {
+        String batchId = "5b5793c4-6efc-494c-be2a-ffd1b0564bf8";
+        usageFilter.setUsageBatchesIds(Collections.singleton(batchId));
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId(batchId);
+        expect(usageBatchService.getUsageBatchById("5b5793c4-6efc-494c-be2a-ffd1b0564bf8"))
+            .andReturn(usageBatch).once();
+        replay(usageBatchService, filterController, filterWidget);
+        assertSame(usageBatch, controller.getSelectedUsageBatch());
+        verify(usageBatchService, filterController, filterWidget);
+    }
+
+    @Test
     public void testCreateSalScenario() {
         Scenario scenario = new Scenario();
         scenario.setName(SCENARIO_NAME);

@@ -172,4 +172,11 @@ public interface ISalUsageController extends ICommonUsageController {
      * @param fundPool instance of {@link FundPool}
      */
     void createFundPool(FundPool fundPool);
+
+    /**
+     * Gets {@link UsageBatch} by filtered identifier.
+     *
+     * @return instance of {@link UsageBatch}
+     */
+    UsageBatch getSelectedUsageBatch();
 }

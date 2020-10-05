@@ -125,8 +125,7 @@ public class CreateSalScenarioWindowTest {
         Scenario scenario = new Scenario();
         UsageBatch usageBatch = buildUsageBatch(7001293454L);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
-        expect(controller.getUsageFilterController()).andReturn(filterController).once();
-        expect(filterController.getUsageBatches()).andReturn(Collections.singletonList(usageBatch)).once();
+        expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
         expect(controller.findUsageDataGradeGroups())
             .andReturn(Collections.singletonList(GradeGroupEnum.GRADE6_8)).once();
         expect(controller.createSalScenario(SCENARIO_NAME, FUND_POOL_ID, StringUtils.EMPTY)).andReturn(scenario).once();
@@ -148,8 +147,7 @@ public class CreateSalScenarioWindowTest {
         mockStatic(Windows.class);
         UsageBatch usageBatch = buildUsageBatch(3333L);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
-        expect(controller.getUsageFilterController()).andReturn(filterController).once();
-        expect(filterController.getUsageBatches()).andReturn(Collections.singletonList(usageBatch)).once();
+        expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
         Windows.showNotificationWindow("Licensee Account # of usage batch and selected fund pool should match:" +
             "<ul><li><i><b>Usage Batch Licensee: 3333</b></i></ul>" +
             "<ul><li><i><b>Fund Pool Licensee: 7001293454</b></i></ul>");
@@ -166,8 +164,7 @@ public class CreateSalScenarioWindowTest {
         fundPool.getSalFields().setGradeKto5GrossAmount(BigDecimal.TEN);
         fundPool.getSalFields().setGrade9to12GrossAmount(BigDecimal.TEN);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
-        expect(controller.getUsageFilterController()).andReturn(filterController).once();
-        expect(filterController.getUsageBatches()).andReturn(Collections.singletonList(usageBatch)).once();
+        expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
         expect(controller.findUsageDataGradeGroups())
             .andReturn(Collections.singletonList(GradeGroupEnum.GRADE6_8)).once();
         Windows.showNotificationWindow("There are no usage details for GRADEK_5, GRADE9_12 grade group(s)");
@@ -182,8 +179,7 @@ public class CreateSalScenarioWindowTest {
         mockStatic(Windows.class);
         UsageBatch usageBatch = buildUsageBatch(7001293454L);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
-        expect(controller.getUsageFilterController()).andReturn(filterController).once();
-        expect(filterController.getUsageBatches()).andReturn(Collections.singletonList(usageBatch)).once();
+        expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
         expect(controller.findUsageDataGradeGroups()).andReturn(
             Arrays.asList(GradeGroupEnum.GRADEK_5, GradeGroupEnum.GRADE6_8, GradeGroupEnum.GRADE9_12)).once();
         Windows.showNotificationWindow("Gross amount for GRADEK_5, GRADE9_12 grade group(s) should be greater than 0");

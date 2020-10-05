@@ -5,7 +5,6 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
@@ -145,8 +144,7 @@ class CreateSalScenarioWindow extends Window {
     }
 
     private boolean isValidLicenseeAccount(FundPool fundPool) {
-        UsageBatch selectedBatch = controller.getUsageFilterController().getUsageBatches().iterator().next();
-        Long usageBatchLicensee = selectedBatch.getSalFields().getLicenseeAccountNumber();
+        Long usageBatchLicensee = controller.getSelectedUsageBatch().getSalFields().getLicenseeAccountNumber();
         Long fundPoolLicensee = fundPool.getSalFields().getLicenseeAccountNumber();
         if (!fundPoolLicensee.equals(usageBatchLicensee)) {
             Windows.showNotificationWindow(
