@@ -211,10 +211,10 @@ public class UsageBatchService implements IUsageBatchService {
     public void deleteSalUsageBatch(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         String batchName = usageBatch.getName();
-        LOGGER.info("Delete SAL usage batch. Started. UsageBatchName={}, UserName={}", batchName, userName);
+        LOGGER.info("Delete SAL usage batch. Started. BatchName={}, UserName={}", batchName, userName);
         salUsageService.deleteUsageBatchDetails(usageBatch);
         usageBatchRepository.deleteUsageBatch(usageBatch.getId());
-        LOGGER.info("Delete SAL usage batch. Finished. UsageBatchName={}, UserName={}", batchName, userName);
+        LOGGER.info("Delete SAL usage batch. Finished. BatchName={}, UserName={}", batchName, userName);
     }
 
     @Override

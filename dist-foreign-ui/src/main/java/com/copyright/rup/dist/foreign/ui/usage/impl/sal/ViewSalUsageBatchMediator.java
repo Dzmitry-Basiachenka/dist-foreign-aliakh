@@ -6,7 +6,7 @@ import com.copyright.rup.vaadin.widget.api.IMediator;
 import com.vaadin.ui.Button;
 
 /**
- * Mediator for the SAL usages widget.
+ * Mediator for the SAL usage batches view.
  *
  * <p>
  * Copyright (C) 2020 copyright.com

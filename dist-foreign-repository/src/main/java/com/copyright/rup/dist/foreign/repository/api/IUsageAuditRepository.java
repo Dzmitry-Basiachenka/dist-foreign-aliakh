@@ -37,7 +37,7 @@ public interface IUsageAuditRepository {
      *
      * @param batchId batch identifier
      */
-    void deleteForSalUsageData(String batchId);
+    void deleteForSalUsageDataByBatchId(String batchId);
 
     /**
      * Deletes {@link UsageAuditItem}s for archived usages by given batch identifier.

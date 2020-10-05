@@ -198,10 +198,10 @@ public class SalUsageService implements ISalUsageService {
     public void deleteUsageData(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         String batchName = usageBatch.getName();
-        LOGGER.info("Delete SAL usage data. Started. UsageBatchName={}, UserName={}", batchName, userName);
+        LOGGER.info("Delete SAL usage data. Started. BatchName={}, UserName={}", batchName, userName);
         usageAuditService.deleteActionsForSalUsageData(usageBatch.getId());
         salUsageRepository.deleteUsageData(usageBatch.getId());
-        LOGGER.info("Delete SAL usage data. Finished. UsageBatchName={}, UserName={}", batchName, userName);
+        LOGGER.info("Delete SAL usage data. Finished. BatchName={}, UserName={}", batchName, userName);
     }
 
     @Override
@@ -209,10 +209,10 @@ public class SalUsageService implements ISalUsageService {
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         String batchName = usageBatch.getName();
-        LOGGER.info("Delete SAL usage details. Started. UsageBatchName={}, UserName={}", batchName, userName);
+        LOGGER.info("Delete SAL usage details. Started. BatchName={}, UserName={}", batchName, userName);
         usageAuditService.deleteActionsByBatchId(usageBatch.getId());
         salUsageRepository.deleteByBatchId(usageBatch.getId());
-        LOGGER.info("Delete SAL usage details. Finished. UsageBatchName={}, UserName={}", batchName, userName);
+        LOGGER.info("Delete SAL usage details. Finished. BatchName={}, UserName={}", batchName, userName);
     }
 
     @Override

@@ -43,11 +43,11 @@ public class UsageAuditRepository extends BaseRepository implements IUsageAuditR
     }
 
     @Override
-    public void deleteForSalUsageData(String batchId) {
+    public void deleteForSalUsageDataByBatchId(String batchId) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("batchId", Objects.requireNonNull(batchId));
         params.put("detailType", SalDetailTypeEnum.UD);
-        delete("IUsageAuditMapper.deleteForSalUsageData", params);
+        delete("IUsageAuditMapper.deleteForSalUsageDataByBatchId", params);
     }
 
     @Override

@@ -92,7 +92,7 @@ public class UsageAuditService implements IUsageAuditService {
 
     @Override
     public void deleteActionsForSalUsageData(String batchId) {
-        usageAuditRepository.deleteForSalUsageData(batchId);
+        usageAuditRepository.deleteForSalUsageDataByBatchId(batchId);
     }
 
     private UsageAuditItem buildUsageAuditItem(String usageId, UsageActionTypeEnum actionType, String actionReason) {

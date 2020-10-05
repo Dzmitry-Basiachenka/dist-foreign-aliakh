@@ -192,7 +192,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUsageDetailsExistInItemBank() {
+    public void testUsageDetailsExist() {
         assertTrue(salUsageRepository.usageDataExist("cb932497-086d-4a7e-9b34-e9a62f17adab4"));
         assertFalse(salUsageRepository.usageDataExist("b0e669d2-68d0-4add-9946-34215011f74b"));
     }
