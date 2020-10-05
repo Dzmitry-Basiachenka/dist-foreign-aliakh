@@ -300,6 +300,8 @@ public class SalUsageControllerTest {
         UsageBatch usageBatch = new UsageBatch();
         salUsageService.deleteUsageData(usageBatch);
         expectLastCall().once();
+        controller.refreshWidget();
+        expectLastCall();
         replay(salScenarioService);
         controller.deleteUsageData(usageBatch);
         verify(salScenarioService);
