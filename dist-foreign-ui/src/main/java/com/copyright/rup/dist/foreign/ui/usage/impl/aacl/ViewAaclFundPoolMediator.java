@@ -20,7 +20,7 @@ class ViewAaclFundPoolMediator implements IMediator {
 
     @Override
     public void applyPermissions() {
-        deleteButton.setVisible(ForeignSecurityUtils.hasDeleteAaclFundPoolPermission());
+        deleteButton.setVisible(ForeignSecurityUtils.hasDeleteFundPoolPermission());
     }
 
     public void setDeleteButton(Button deleteButton) {

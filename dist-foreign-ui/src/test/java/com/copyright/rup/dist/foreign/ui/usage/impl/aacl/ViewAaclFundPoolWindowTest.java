@@ -76,7 +76,7 @@ public class ViewAaclFundPoolWindowTest {
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAaclUsageController.class);
-        expect(ForeignSecurityUtils.hasDeleteAaclFundPoolPermission()).andReturn(true).once();
+        expect(ForeignSecurityUtils.hasDeleteFundPoolPermission()).andReturn(true).once();
         expect(controller.getFundPools()).andReturn(Collections.singletonList(fundPool)).once();
         replay(controller, ForeignSecurityUtils.class);
         viewAaclFundPoolWindow = new ViewAaclFundPoolWindow(controller);
