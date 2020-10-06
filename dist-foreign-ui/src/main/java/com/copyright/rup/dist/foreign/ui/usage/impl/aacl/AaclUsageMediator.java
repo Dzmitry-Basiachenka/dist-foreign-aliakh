@@ -27,7 +27,7 @@ class AaclUsageMediator implements IMediator {
     @Override
     public void applyPermissions() {
         loadUsageBatchMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
-        loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadAaclFundPoolPermission());
+        loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission());
         sendForClassificationButton.setVisible(ForeignSecurityUtils.hasSendForClassificationPermission());
         loadClassifiedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadClassifiedUsagePermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());

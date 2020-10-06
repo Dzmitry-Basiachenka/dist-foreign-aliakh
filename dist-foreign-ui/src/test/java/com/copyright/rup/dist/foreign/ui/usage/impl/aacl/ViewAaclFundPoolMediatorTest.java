@@ -44,7 +44,7 @@ public class ViewAaclFundPoolMediatorTest {
     @Test
     public void testApplyPermissionsDistributionManagerOrViewOnly() {
         mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.hasPermission("FDA_DELETE_AACL_FUND_POOL")).andReturn(false).once();
+        expect(SecurityUtils.hasPermission("FDA_DELETE_FUND_POOL")).andReturn(false).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
@@ -55,7 +55,7 @@ public class ViewAaclFundPoolMediatorTest {
     public void testApplyPermissionsDistributionSpecialist() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
-        expect(SecurityUtils.hasPermission("FDA_DELETE_AACL_FUND_POOL")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_DELETE_FUND_POOL")).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(deleteButton.isVisible());
