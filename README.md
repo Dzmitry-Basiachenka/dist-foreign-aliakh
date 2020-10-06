@@ -1,3 +1,10 @@
+12.1.10
+-
+* B-57772 FDA: Tech Debt: delete permissions FDA_LOAD_AACL_FUND_POOL, FDA_DELETE_AACL_FUND_POOL and use instead of them FDA_LOAD_FUND_POOL, FDA_DELETE_FUND_POOL
+* B-57772 Tech Debt: FDA: fix CVE-2019-13990 vulnerability
+* B-57903 FDA: View and Delete SAL batch: make changes based on comments in CR-DIST-FOREIGN-195
+* B-58887 FDA: View and Delete SAL fund pool: make sorting on View/Delete SAL fund pool case-insensitive for Assessment Name, License Name columns
+
 12.1.9
 -
 * B-57897 FDA: Create SAL Scenario: implement validation for Detail Type filter
