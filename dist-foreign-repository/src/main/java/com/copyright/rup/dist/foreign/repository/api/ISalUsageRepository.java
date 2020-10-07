@@ -133,4 +133,15 @@ public interface ISalUsageRepository {
      * @param userName           user name
      */
     void updatePayeeByAccountNumber(Long rhAccountNumber, String scenarioId, Long payeeAccountNumber, String userName);
+
+    /**
+     * Deletes usages from scenario. Updates usages status from
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#LOCKED} to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}.
+     * Sets scenario id to {@code null}, payee account number to {@code null}, amounts to 0.
+     *
+     * @param scenarioId scenario id
+     * @param userName   user name
+     */
+    void deleteFromScenario(String scenarioId, String userName);
 }

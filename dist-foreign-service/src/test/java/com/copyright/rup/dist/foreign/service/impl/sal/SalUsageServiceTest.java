@@ -256,6 +256,17 @@ public class SalUsageServiceTest {
         verify(salUsageRepository, rightsholderService, prmIntegrationService);
     }
 
+    public void testDeleteFromScenario() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        String scenarioId = "36ef8941-5ac3-4894-9f3e-246ee9fbcd56";
+        salUsageRepository.deleteFromScenario(scenarioId, USER_NAME);
+        expectLastCall().once();
+        replay(RupContextUtils.class, salUsageRepository);
+        salUsageService.deleteFromScenario(scenarioId);
+        verify(RupContextUtils.class, salUsageRepository);
+    }
+
     private Map<String, Map<String, Rightsholder>> buildRollupsMap() {
         Map<String, Map<String, Rightsholder>> rollUps = new HashMap<>();
         rollUps.put(RIGHTSHOLDER_ID, ImmutableMap.of(

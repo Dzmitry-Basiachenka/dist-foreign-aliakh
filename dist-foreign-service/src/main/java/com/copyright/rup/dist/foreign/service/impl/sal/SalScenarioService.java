@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.SalFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
@@ -65,6 +66,19 @@ public class SalScenarioService implements ISalScenarioService {
         LOGGER.info("Insert SAL scenario. Finished. Name={}, Description={}, UsageFilter={}",
             scenarioName, description, usageFilter);
         return scenario;
+    }
+
+    @Override
+    @Transactional
+    public void deleteScenario(Scenario scenario) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Delete scenario. Started. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
+        String scenarioId = scenario.getId();
+        salUsageService.deleteFromScenario(scenarioId);
+        scenarioAuditService.deleteActions(scenarioId);
+        scenarioUsageFilterService.removeByScenarioId(scenarioId);
+        scenarioRepository.remove(scenarioId);
+        LOGGER.info("Delete scenario. Finished. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
     }
 
     private Scenario buildScenario(String scenarioName, String fundPoolId, String description) {

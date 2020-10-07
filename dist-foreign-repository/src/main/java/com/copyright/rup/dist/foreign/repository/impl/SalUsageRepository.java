@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
 
@@ -145,5 +146,15 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
         params.put("payeeAccountNumber", Objects.requireNonNull(payeeAccountNumber));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("ISalUsageMapper.updatePayeeByAccountNumber", params);
+    }
+
+    @Override
+    public void deleteFromScenario(String scenarioId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("updateStatusTo", UsageStatusEnum.ELIGIBLE);
+        params.put("updateStatusFrom", UsageStatusEnum.LOCKED);
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        update("ISalUsageMapper.deleteFromScenario", params);
     }
 }

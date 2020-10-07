@@ -219,4 +219,9 @@ public class SalUsageService implements ISalUsageService {
     public List<GradeGroupEnum> getUsageDataGradeGroups(UsageFilter filter) {
         return salUsageRepository.findUsageDataGradeGroups(filter);
     }
+
+    @Override
+    public void deleteFromScenario(String scenarioId) {
+        salUsageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
+    }
 }

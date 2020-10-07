@@ -141,4 +141,14 @@ public interface ISalUsageService {
      * @return list of {@link GradeGroupEnum}
      */
     List<GradeGroupEnum> getUsageDataGradeGroups(UsageFilter filter);
+
+    /**
+     * Deletes usages from scenario. Updates usages status from
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#LOCKED} to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}.
+     * Sets scenario id to {@code null}, payee account number to {@code null}, amounts to 0.
+     *
+     * @param scenarioId scenario id
+     */
+    void deleteFromScenario(String scenarioId);
 }

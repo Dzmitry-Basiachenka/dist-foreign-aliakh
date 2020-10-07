@@ -64,6 +64,7 @@ public class SalUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_1 = "c95654c0-a607-4683-878f-99606e90c065";
     private static final String USAGE_ID_2 = "7b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_3 = "5ab5e80b-89c0-4d78-9675-54c7ab284450";
+    private static final String USAGE_ID_4 = "d8daeed3-e4ee-4b09-b6ec-ef12a12bcd3d";
     private static final String WORK_PORTION_ID_3 = "1101001IB2361";
     private static final String USER_NAME = "user@copyright.com";
 
@@ -267,6 +268,34 @@ public class SalUsageRepositoryIntegrationTest {
             assertEquals(SCENARIO_ID_1, usage.getScenarioId());
             assertEquals(USER_NAME, usage.getUpdateUser());
             assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
+        });
+    }
+
+    @Test
+    public void testDeleteFromScenario() {
+        List<Usage> usages = salUsageRepository.findByIds(Collections.singletonList(USAGE_ID_4));
+        assertEquals(1, usages.size());
+        usages.forEach(usage -> {
+            assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
+            assertNotNull(usage.getScenarioId());
+            assertNotNull(usage.getPayee().getAccountNumber());
+//            TODO uncomment when SAL scenario calculation is implemented
+//            assertTrue(BigDecimal.ZERO.compareTo(usage.getServiceFeeAmount()) < 0);
+//            assertTrue(BigDecimal.ZERO.compareTo(usage.getNetAmount()) < 0);
+//            assertTrue(BigDecimal.ZERO.compareTo(usage.getGrossAmount()) < 0);
+//            assertTrue(BigDecimal.ZERO.compareTo(usage.getServiceFee()) < 0);
+        });
+        salUsageRepository.deleteFromScenario("c0b30809-4a38-46cc-a0dc-641924d1fc43", "SYSTEM");
+        usages = salUsageRepository.findByIds(Collections.singletonList(USAGE_ID_4));
+        assertEquals(1, usages.size());
+        usages.forEach(usage -> {
+            assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+            assertNull(usage.getScenarioId());
+            assertNull(usage.getPayee().getAccountNumber());
+//            assertEquals(ZERO_AMOUNT, usage.getServiceFeeAmount());
+//            assertEquals(ZERO_AMOUNT, usage.getNetAmount());
+//            assertEquals(ZERO_AMOUNT, usage.getGrossAmount());
+//            assertNull(usage.getServiceFee());
         });
     }
 
