@@ -131,7 +131,7 @@ class CreateSalScenarioWindow extends Window {
     private void onConfirmButtonClicked() {
         if (scenarioBinder.isValid() && fundPoolBinder.isValid()) {
             fundPoolComboBox.getSelectedItem().ifPresent(fundPool -> {
-                if (isValidLicenseeAccount(fundPool) && isValidaGradeGroups(fundPool)) {
+                if (isValidLicenseeAccount(fundPool) && isValidGradeGroups(fundPool)) {
                     fireEvent(new ScenarioCreateEvent(this,
                         controller.createSalScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()),
                             fundPool.getId(), StringUtils.trimToEmpty(descriptionArea.getValue()))));
@@ -154,18 +154,18 @@ class CreateSalScenarioWindow extends Window {
         return true;
     }
 
-    private boolean isValidaGradeGroups(FundPool fundPool) {
-        List<GradeGroupEnum> existingGradeGroups = controller.findUsageDataGradeGroups();
+    private boolean isValidGradeGroups(FundPool fundPool) {
+        List<GradeGroupEnum> existingGradeGroups = controller.getUsageDataGradeGroups();
         Map<GradeGroupEnum, BigDecimal> gradeGroupAmountMap = Maps.newHashMapWithExpectedSize(3);
         gradeGroupAmountMap.put(GradeGroupEnum.GRADEK_5, fundPool.getSalFields().getGradeKto5GrossAmount());
         gradeGroupAmountMap.put(GradeGroupEnum.GRADE6_8, fundPool.getSalFields().getGrade6to8GrossAmount());
         gradeGroupAmountMap.put(GradeGroupEnum.GRADE9_12, fundPool.getSalFields().getGrade9to12GrossAmount());
-        return isValidaGradeGroupAmounts(gradeGroupAmountMap, existingGradeGroups)
-            && isValidaGradeGroupDetails(gradeGroupAmountMap, existingGradeGroups);
+        return isValidGradeGroupAmounts(gradeGroupAmountMap, existingGradeGroups)
+            && isValidGradeGroupDetails(gradeGroupAmountMap, existingGradeGroups);
     }
 
-    private boolean isValidaGradeGroupAmounts(Map<GradeGroupEnum, BigDecimal> gradeGroupAmountMap,
-                                              List<GradeGroupEnum> existingGradeGroups) {
+    private boolean isValidGradeGroupAmounts(Map<GradeGroupEnum, BigDecimal> gradeGroupAmountMap,
+                                             List<GradeGroupEnum> existingGradeGroups) {
         List<GradeGroupEnum> invalidGradeGroupDetails = gradeGroupAmountMap.entrySet()
             .stream()
             .filter(entry -> 0 > BigDecimal.ZERO.compareTo(entry.getValue())
@@ -179,8 +179,8 @@ class CreateSalScenarioWindow extends Window {
         return CollectionUtils.isEmpty(invalidGradeGroupDetails);
     }
 
-    private boolean isValidaGradeGroupDetails(Map<GradeGroupEnum, BigDecimal> gradeGroupAmountMap,
-                                              List<GradeGroupEnum> existingGradeGroups) {
+    private boolean isValidGradeGroupDetails(Map<GradeGroupEnum, BigDecimal> gradeGroupAmountMap,
+                                             List<GradeGroupEnum> existingGradeGroups) {
         List<GradeGroupEnum> invalidGradeGroupAmounts = existingGradeGroups.stream()
             .filter(gradeGroup -> 0 == BigDecimal.ZERO.compareTo(gradeGroupAmountMap.get(gradeGroup)))
             .sorted()

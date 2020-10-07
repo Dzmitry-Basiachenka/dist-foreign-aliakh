@@ -184,50 +184,6 @@ public class Scenario extends StoredEntity<String> {
     }
 
     /**
-     * Represents fields specific for SAL scenario.
-     */
-    public static class SalFields {
-
-        private String fundPoolId;
-
-        public String getFundPoolId() {
-            return fundPoolId;
-        }
-
-        public void setFundPoolId(String fundPoolId) {
-            this.fundPoolId = fundPoolId;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (null == obj || this.getClass() != obj.getClass()) {
-                return false;
-            }
-            SalFields that = (SalFields) obj;
-            return new EqualsBuilder()
-                .append(this.fundPoolId, that.fundPoolId)
-                .isEquals();
-        }
-
-        @Override
-        public int hashCode() {
-            return new HashCodeBuilder()
-                .append(fundPoolId)
-                .toHashCode();
-        }
-
-        @Override
-        public String toString() {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("fundPoolId", fundPoolId)
-                .toString();
-        }
-    }
-
-    /**
      * Represents fields specific for AACL scenario.
      */
     public static class AaclFields {
@@ -419,6 +375,50 @@ public class Scenario extends StoredEntity<String> {
                 .append("preServiceFeeFundId", preServiceFeeFundId)
                 .append("preServiceFeeFundName", preServiceFeeFundName)
                 .append("preServiceFeeFundTotal", preServiceFeeFundTotal)
+                .toString();
+        }
+    }
+
+    /**
+     * Represents fields specific for SAL scenario.
+     */
+    public static class SalFields {
+
+        private String fundPoolId;
+
+        public String getFundPoolId() {
+            return fundPoolId;
+        }
+
+        public void setFundPoolId(String fundPoolId) {
+            this.fundPoolId = fundPoolId;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (null == obj || this.getClass() != obj.getClass()) {
+                return false;
+            }
+            SalFields that = (SalFields) obj;
+            return new EqualsBuilder()
+                .append(this.fundPoolId, that.fundPoolId)
+                .isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder()
+                .append(fundPoolId)
+                .toHashCode();
+        }
+
+        @Override
+        public String toString() {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("fundPoolId", fundPoolId)
                 .toString();
         }
     }

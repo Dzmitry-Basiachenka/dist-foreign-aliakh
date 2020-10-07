@@ -125,8 +125,10 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public Scenario createSalScenario(String scenarioName, String fundPoolId, String description) {
-        return salScenarioService.createScenario(scenarioName, fundPoolId, description,
+        Scenario scenario = salScenarioService.createScenario(scenarioName, fundPoolId, description,
             getUsageFilterController().getWidget().getAppliedFilter());
+        getUsageFilterController().getWidget().clearFilter();
+        return scenario;
     }
 
     @Override
@@ -148,7 +150,7 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
-    public List<GradeGroupEnum> findUsageDataGradeGroups() {
+    public List<GradeGroupEnum> getUsageDataGradeGroups() {
         return salUsageService.getUsageDataGradeGroups(getUsageFilterController().getWidget().getAppliedFilter());
     }
 
