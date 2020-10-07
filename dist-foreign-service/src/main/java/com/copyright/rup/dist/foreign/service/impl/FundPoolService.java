@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.service.api.nts.INtsUsageService;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +40,11 @@ public class FundPoolService implements IFundPoolService {
 
     private static final int DEFAULT_SCALE = 2;
     private static final int SCALE_10 = 10;
-    private static final BigDecimal SAL_SERVICE_FEE = new BigDecimal("0.25");
+    private static final BigDecimal ZERO = new BigDecimal("0.00");
     private static final Logger LOGGER = RupLogUtils.getLogger();
+
+    @Value("$RUP{dist.foreign.service_fee.sal}")
+    private BigDecimal salServiceFee;
 
     @Autowired
     private IFundPoolRepository fundPoolRepository;
@@ -181,13 +185,13 @@ public class FundPoolService implements IFundPoolService {
     public FundPool calculateSalFundPoolAmounts(FundPool fundPool) {
         FundPool.SalFields salFields = fundPool.getSalFields();
         BigDecimal itemBankSplitPercent = salFields.getItemBankSplitPercent();
-        salFields.setServiceFee(SAL_SERVICE_FEE);
+        salFields.setServiceFee(salServiceFee);
         if (0 == BigDecimal.ONE.compareTo(itemBankSplitPercent)) {
             fundPool.setTotalAmount(salFields.getGrossAmount());
             salFields.setItemBankGrossAmount(salFields.getGrossAmount());
-            salFields.setGradeKto5GrossAmount(BigDecimal.ZERO);
-            salFields.setGrade6to8GrossAmount(BigDecimal.ZERO);
-            salFields.setGrade9to12GrossAmount(BigDecimal.ZERO);
+            salFields.setGradeKto5GrossAmount(ZERO);
+            salFields.setGrade6to8GrossAmount(ZERO);
+            salFields.setGrade9to12GrossAmount(ZERO);
         } else {
             BigDecimal multiplier = salFields.getGrossAmount().multiply(BigDecimal.ONE.subtract(itemBankSplitPercent));
             BigDecimal totalStudents = BigDecimal.valueOf(
@@ -222,7 +226,7 @@ public class FundPoolService implements IFundPoolService {
                 .divide(totalStudentsCount, SCALE_10, RoundingMode.DOWN))
                 .setScale(DEFAULT_SCALE, RoundingMode.DOWN);
         } else {
-            amount = BigDecimal.ZERO;
+            amount = ZERO;
         }
         return amount;
     }
