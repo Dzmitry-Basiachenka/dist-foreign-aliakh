@@ -1,3 +1,10 @@
+12.1.11
+-
+* B-57772 Tech Debt: FDA: fix  CVE-2020-5421 vulnerability
+* B-57772 Tech Debt: FDA: fix CVE-2019-13990 vulnerability
+* B-57897 FDA: Create SAL Scenario: make changes based on comments in CR-DIST-FOREIGN-196
+* B-57917 FDA: Load SAL fund pool: Make changes based on comments in CR-DIST-FOREIGN-200
+
 12.1.10
 -
 * B-57772 FDA: Tech Debt: delete permissions FDA_LOAD_AACL_FUND_POOL, FDA_DELETE_AACL_FUND_POOL and use instead of them FDA_LOAD_FUND_POOL, FDA_DELETE_FUND_POOL
