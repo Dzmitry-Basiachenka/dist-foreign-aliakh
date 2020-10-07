@@ -69,8 +69,10 @@ public class SalFundPoolLoadWindowTest {
     private static final String GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD = "grade9to12NumberOfStudents";
     private static final String EMPTY_FIELD_ERROR_MESSAGE = "Field value should be specified";
     private static final String FUND_POOL_EXISTS_ERROR_MESSAGE = "Fund Pool with such name already exists";
-    private static final String NEGATIVE_OR_LONG_ERROR_MESSAGE =
+    private static final String POSITIVE_AND_LENGTH_ERROR_MESSAGE =
         "Field value should be positive number and should not exceed 10 digits";
+    private static final String POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE =
+        "Field value should be positive number or zero and should not exceed 10 digits";
     private static final String ITEM_BANK_SPLIT_PERCENT_ERROR_MESSAGE =
         "Field value must be greater than 0 and less than or equal to 100 and allows entry for one decimal place";
     private static final String NO_NUM_OF_STUDENTS_ERROR_MESSAGE =
@@ -104,7 +106,7 @@ public class SalFundPoolLoadWindowTest {
         FundPool fundPool = new FundPool();
         FundPool.SalFields salFields = new FundPool.SalFields();
         fundPool.setSalFields(salFields);
-        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(20);
+        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(3);
         expect(usagesController.calculateFundPoolAmounts(anyObject(FundPool.class))).andReturn(fundPool).times(1);
         replay(usagesController);
         Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER_FIELD);
@@ -125,8 +127,8 @@ public class SalFundPoolLoadWindowTest {
 
     @Test
     public void testIsValidFundPoolName() {
-        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(true).times(4);
-        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(2);
+        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(true).times(2);
+        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(1);
         replay(usagesController);
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
         setTextFieldValue(FUND_POOL_NAME_FIELD, StringUtils.EMPTY);
@@ -156,11 +158,13 @@ public class SalFundPoolLoadWindowTest {
         setTextFieldValue(GROSS_AMOUNT_FIELD, StringUtils.EMPTY);
         verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
         setTextFieldValue(GROSS_AMOUNT_FIELD, "-10");
-        verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, NEGATIVE_OR_LONG_ERROR_MESSAGE);
-        setTextFieldValue(GROSS_AMOUNT_FIELD, "10000000000.34");
-        verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, NEGATIVE_OR_LONG_ERROR_MESSAGE);
+        verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, POSITIVE_AND_LENGTH_ERROR_MESSAGE);
         setTextFieldValue(GROSS_AMOUNT_FIELD, ZERO);
-        verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, NEGATIVE_OR_LONG_ERROR_MESSAGE);
+        verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, POSITIVE_AND_LENGTH_ERROR_MESSAGE);
+        setTextFieldValue(GROSS_AMOUNT_FIELD, "10000000000.34");
+        verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, POSITIVE_AND_LENGTH_ERROR_MESSAGE);
+        setTextFieldValue(GROSS_AMOUNT_FIELD, ZERO);
+        verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, POSITIVE_AND_LENGTH_ERROR_MESSAGE);
         setTextFieldValue(GROSS_AMOUNT_FIELD, " 5000.56 ");
         verifyFieldIsValid(binder, GROSS_AMOUNT_FIELD);
         verify(usagesController);
@@ -190,6 +194,9 @@ public class SalFundPoolLoadWindowTest {
         setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, StringUtils.EMPTY);
         setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
         verifyFieldErrorMessage(binder, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
+        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "123456789102");
+        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "94.0");
+        verifyFieldErrorMessage(binder, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE);
         setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
         setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
         setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
@@ -211,6 +218,9 @@ public class SalFundPoolLoadWindowTest {
         setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, StringUtils.EMPTY);
         setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
         verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
+        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "123456789102");
+        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "94.0");
+        verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE);
         setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
         setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
         setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
@@ -232,6 +242,9 @@ public class SalFundPoolLoadWindowTest {
         setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, StringUtils.EMPTY);
         setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
         verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
+        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, "123456789102");
+        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "94.0");
+        verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE);
         setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
         setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
         setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
@@ -250,7 +263,7 @@ public class SalFundPoolLoadWindowTest {
     public void testOnLoadButtonClick() {
         mockStatic(Windows.class);
         FundPool fundPool = buildFundPool();
-        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(20);
+        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(3);
         expect(usagesController.calculateFundPoolAmounts(eq(fundPool))).andReturn(fundPool).times(2);
         usagesController.createFundPool(fundPool);
         expectLastCall().once();

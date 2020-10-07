@@ -67,6 +67,9 @@ class SalFundPoolLoadWindow extends Window {
     private TextField totalAmount;
     private TextField itemBankGrossAmount;
     private LocalDateWidget dateReceived;
+    private Binder.Binding<FundPool, Integer> gradeKto5NumberOfStudentsBinding;
+    private Binder.Binding<FundPool, Integer> grade6to8NumberOfStudentsBinding;
+    private Binder.Binding<FundPool, Integer> grade9to12NumberOfStudentsBinding;
 
     /**
      * Constructor.
@@ -118,7 +121,7 @@ class SalFundPoolLoadWindow extends Window {
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         binder.validate();
         binder.addStatusChangeListener(event -> {
-            if (event.getBinder().isValid()) {
+            if (areNotEmptyRequiredFields() && event.getBinder().isValid()) {
                 FundPool fundPool = usagesController.calculateFundPoolAmounts(buildFundPool());
                 totalAmount.setValue(fundPool.getTotalAmount().toString());
                 itemBankGrossAmount.setValue(fundPool.getSalFields().getItemBankGrossAmount().toString());
@@ -171,7 +174,7 @@ class SalFundPoolLoadWindow extends Window {
         assessmentName = new TextField(ForeignUi.getMessage("label.fund_pool.assessment_name"));
         binder.forField(assessmentName)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 255), 0, 255))
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 255), 0, 255))
             .bind(fundPool -> fundPool.getSalFields().getAssessmentName(),
                 (fundPool, string) -> fundPool.getSalFields().setAssessmentName(string));
         assessmentName.setRequiredIndicatorVisible(true);
@@ -207,7 +210,7 @@ class SalFundPoolLoadWindow extends Window {
                 (fundPool, percent) -> fundPool.getSalFields().setItemBankSplitPercent(percent));
         itemBankSplitPercent.setRequiredIndicatorVisible(true);
         itemBankSplitPercent.setSizeFull();
-        itemBankSplitPercent.addValueChangeListener(event -> binder.validate());
+        itemBankSplitPercent.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());
         VaadinUtils.setMaxComponentsWidth(itemBankSplitPercent);
         VaadinUtils.addComponentStyle(itemBankSplitPercent, "item-bank-split-percent-field");
         return itemBankSplitPercent;
@@ -215,10 +218,10 @@ class SalFundPoolLoadWindow extends Window {
 
     private TextField initGradeKto5NumberOfStudentsField() {
         gradeKto5NumberOfStudents = new TextField(ForeignUi.getMessage("label.fund_pool.grade_k_5_number_of_students"));
-        binder.forField(gradeKto5NumberOfStudents)
+        gradeKto5NumberOfStudentsBinding = binder.forField(gradeKto5NumberOfStudents)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero"))
+                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(),
                 ForeignUi.getMessage("field.error.number_of_students_zero"))
@@ -226,7 +229,7 @@ class SalFundPoolLoadWindow extends Window {
                 ForeignUi.getMessage("field.error.number_of_students_not_all_zero"))
             .bind(fundPool -> fundPool.getSalFields().getGradeKto5NumberOfStudents(),
                 (fundPool, number) -> fundPool.getSalFields().setGradeKto5NumberOfStudents(number));
-        gradeKto5NumberOfStudents.addValueChangeListener(event -> binder.validate());
+        gradeKto5NumberOfStudents.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());
         gradeKto5NumberOfStudents.setRequiredIndicatorVisible(true);
         gradeKto5NumberOfStudents.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(gradeKto5NumberOfStudents);
@@ -236,10 +239,10 @@ class SalFundPoolLoadWindow extends Window {
 
     private TextField initGrade6to8NumberOfStudentsField() {
         grade6to8NumberOfStudents = new TextField(ForeignUi.getMessage("label.fund_pool.grade_6_8_number_of_students"));
-        binder.forField(grade6to8NumberOfStudents)
+        grade6to8NumberOfStudentsBinding = binder.forField(grade6to8NumberOfStudents)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero"))
+                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(),
                 ForeignUi.getMessage("field.error.number_of_students_zero"))
@@ -247,7 +250,7 @@ class SalFundPoolLoadWindow extends Window {
                 ForeignUi.getMessage("field.error.number_of_students_not_all_zero"))
             .bind(fundPool -> fundPool.getSalFields().getGrade6to8NumberOfStudents(),
                 (fundPool, number) -> fundPool.getSalFields().setGrade6to8NumberOfStudents(number));
-        grade6to8NumberOfStudents.addValueChangeListener(event -> binder.validate());
+        grade6to8NumberOfStudents.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());
         grade6to8NumberOfStudents.setRequiredIndicatorVisible(true);
         grade6to8NumberOfStudents.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(grade6to8NumberOfStudents);
@@ -258,10 +261,10 @@ class SalFundPoolLoadWindow extends Window {
     private TextField initGrade9to12NumberOfStudentsField() {
         grade9to12NumberOfStudents =
             new TextField(ForeignUi.getMessage("label.fund_pool.grade_9_12_number_of_students"));
-        binder.forField(grade9to12NumberOfStudents)
+        grade9to12NumberOfStudentsBinding = binder.forField(grade9to12NumberOfStudents)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero"))
+                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(),
                 ForeignUi.getMessage("field.error.number_of_students_zero"))
@@ -269,7 +272,7 @@ class SalFundPoolLoadWindow extends Window {
                 ForeignUi.getMessage("field.error.number_of_students_not_all_zero"))
             .bind(fundPool -> fundPool.getSalFields().getGrade9to12NumberOfStudents(),
                 (fundPool, number) -> fundPool.getSalFields().setGrade9to12NumberOfStudents(number));
-        grade9to12NumberOfStudents.addValueChangeListener(event -> binder.validate());
+        grade9to12NumberOfStudents.addValueChangeListener(event -> validateGradeNumberOfStudentsFields());
         grade9to12NumberOfStudents.setRequiredIndicatorVisible(true);
         grade9to12NumberOfStudents.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(grade9to12NumberOfStudents);
@@ -338,7 +341,7 @@ class SalFundPoolLoadWindow extends Window {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         TextField accountNumber = initLicenseeAccountNumberField();
         TextField licenseeName = initLicenseeNameField();
-        Button verifyButton = initVerifyButton();
+        Button verifyButton = getVerifyButton();
         verifyButton.setWidth(72, Unit.PIXELS);
         horizontalLayout.addComponents(accountNumber, verifyButton);
         horizontalLayout.setComponentAlignment(verifyButton, Alignment.BOTTOM_RIGHT);
@@ -379,7 +382,7 @@ class SalFundPoolLoadWindow extends Window {
         return licenseeNameField;
     }
 
-    private Button initVerifyButton() {
+    private Button getVerifyButton() {
         Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         button.addClickListener(event -> {
             if (Objects.isNull(accountNumberField.getErrorMessage())) {
@@ -407,10 +410,13 @@ class SalFundPoolLoadWindow extends Window {
 
     private SerializablePredicate<Integer> gradeNumberOfStudentsAtLeastOneNotZeroValidator() {
         return value -> {
+            String gradeKto5NumOfStudents = gradeKto5NumberOfStudents.getValue();
+            String grade6to8NumOfStudents = grade6to8NumberOfStudents.getValue();
+            String grade9to12NumOfStudents = grade9to12NumberOfStudents.getValue();
             if (isNotItemBankSplitPercentEqualToHundred()
-                && StringUtils.isNumeric(gradeKto5NumberOfStudents.getValue())
-                && StringUtils.isNumeric(grade6to8NumberOfStudents.getValue())
-                && StringUtils.isNumeric(grade9to12NumberOfStudents.getValue())) {
+                && StringUtils.isNumeric(gradeKto5NumOfStudents) && 10 >= StringUtils.length(gradeKto5NumOfStudents)
+                && StringUtils.isNumeric(grade6to8NumOfStudents) && 10 >= StringUtils.length(grade6to8NumOfStudents)
+                && StringUtils.isNumeric(grade9to12NumOfStudents) && 10 >= StringUtils.length(grade6to8NumOfStudents)) {
                 return 0 < Integer.parseInt(gradeKto5NumberOfStudents.getValue()) ||
                     0 < Integer.parseInt(grade6to8NumberOfStudents.getValue()) ||
                     0 < Integer.parseInt(grade9to12NumberOfStudents.getValue());
@@ -451,5 +457,24 @@ class SalFundPoolLoadWindow extends Window {
             Integer.parseInt(StringUtils.trimToEmpty(grade9to12NumberOfStudents.getValue())));
         fundPool.setSalFields(salFields);
         return fundPool;
+    }
+
+    private boolean areNotEmptyRequiredFields() {
+        return StringUtils.isNotBlank(fundPoolNameField.getValue())
+            && StringUtils.isNotBlank(assessmentName.getValue())
+            && StringUtils.isNotBlank(grossAmountField.getValue())
+            && StringUtils.isNotBlank(itemBankSplitPercent.getValue())
+            && StringUtils.isNotBlank(accountNumberField.getValue())
+            && StringUtils.isNotBlank(licenseeNameField.getValue())
+            && StringUtils.isNotBlank(gradeKto5NumberOfStudents.getValue())
+            && StringUtils.isNotBlank(grade6to8NumberOfStudents.getValue())
+            && StringUtils.isNotBlank(grade9to12NumberOfStudents.getValue())
+            && !dateReceived.isEmpty();
+    }
+
+    private void validateGradeNumberOfStudentsFields() {
+        gradeKto5NumberOfStudentsBinding.validate();
+        grade6to8NumberOfStudentsBinding.validate();
+        grade9to12NumberOfStudentsBinding.validate();
     }
 }
