@@ -67,7 +67,7 @@ public interface ISalUsageController extends ICommonUsageController {
      *
      * @return list of {@link GradeGroupEnum}
      */
-    List<GradeGroupEnum> findUsageDataGradeGroups();
+    List<GradeGroupEnum> getUsageDataGradeGroups();
 
     /**
      * Gets SAL usage data CSV processor.

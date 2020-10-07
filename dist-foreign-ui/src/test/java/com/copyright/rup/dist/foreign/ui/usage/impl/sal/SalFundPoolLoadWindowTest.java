@@ -29,6 +29,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,7 +77,7 @@ public class SalFundPoolLoadWindowTest {
     private static final String ITEM_BANK_SPLIT_PERCENT_ERROR_MESSAGE =
         "Field value must be greater than 0 and less than or equal to 100 and allows entry for one decimal place";
     private static final String NO_NUM_OF_STUDENTS_ERROR_MESSAGE =
-        "Number of students should be entered for at least one group of grades";
+        "Number of students should be entered for at least one grade group";
     private static final String NUM_OF_STUDENTS_NOT_ZERO_ERROR_MESSAGE =
         "Field value should be 0 when Item Bank Split % is 100";
 

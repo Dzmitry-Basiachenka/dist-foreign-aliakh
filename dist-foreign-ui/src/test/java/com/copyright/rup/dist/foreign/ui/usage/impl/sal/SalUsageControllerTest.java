@@ -258,13 +258,13 @@ public class SalUsageControllerTest {
     }
 
     @Test
-    public void testFindUsageDataGradeGroups() {
+    public void testGetUsageDataGradeGroups() {
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         List<GradeGroupEnum> gradeGroups = Collections.singletonList(GradeGroupEnum.ITEM_BANK);
         expect(salUsageService.getUsageDataGradeGroups(usageFilter)).andReturn(gradeGroups).once();
         replay(filterController, filterWidget, salUsageService);
-        assertSame(gradeGroups, controller.findUsageDataGradeGroups());
+        assertSame(gradeGroups, controller.getUsageDataGradeGroups());
         verify(filterController, filterWidget, salUsageService);
     }
 
@@ -376,8 +376,10 @@ public class SalUsageControllerTest {
     public void testCreateSalScenario() {
         Scenario scenario = new Scenario();
         scenario.setName(SCENARIO_NAME);
-        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterController.getWidget()).andReturn(filterWidget).times(2);
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        filterWidget.clearFilter();
+        expectLastCall().once();
         expect(salScenarioService.createScenario(SCENARIO_NAME, FUND_POOL_ID, "description", usageFilter))
             .andReturn(scenario).once();
         replay(filterController, filterWidget, salScenarioService);

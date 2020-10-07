@@ -23,7 +23,7 @@ databaseChangeLog {
             column(name: 'total_amount', value: '1000.00')
             column(name: 'sal_fields', value: '{"date_received": "09/28/2020", "assessment_name": "FY2020 COG", "licensee_account_number": "4444", ' +
                     '"licensee_name": "Truman State University", "grade_K_5_number_of_students": 0, "grade_6_8_number_of_students": 0, ' +
-                    '"grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_amount": 750.00, "item_bank_gross_amount": 750.00, ' +
+                    '"grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_gross_amount": 750.00, ' +
                     '"grade_K_5_gross_amount": 0.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 1.00000, "service_fee": 0.25000}')
         }
 
@@ -34,8 +34,8 @@ databaseChangeLog {
             column(name: 'total_amount', value: '1000.00')
             column(name: 'sal_fields', value: '{"date_received": "09/28/2020", "assessment_name": "FY2020 COG", "licensee_account_number": "4444", ' +
                     '"licensee_name": "Truman State University", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 0, ' +
-                    '"grade_9_12_number_of_students": 5, "gross_amount": 1000.00, "item_bank_amount": 200.00, "item_bank_gross_amount": 200.00, ' +
-                    '"grade_K_5_gross_amount": 600.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 200.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
+                    '"grade_9_12_number_of_students": 5, "gross_amount": 1000.00, "item_bank_gross_amount": 200.00, "grade_K_5_gross_amount": 600.00, ' +
+                    '"grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 200.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
         }
 
         rollback ""

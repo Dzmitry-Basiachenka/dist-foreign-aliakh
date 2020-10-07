@@ -126,7 +126,7 @@ public class CreateSalScenarioWindowTest {
         UsageBatch usageBatch = buildUsageBatch(7001293454L);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
-        expect(controller.findUsageDataGradeGroups())
+        expect(controller.getUsageDataGradeGroups())
             .andReturn(Collections.singletonList(GradeGroupEnum.GRADE6_8)).once();
         expect(controller.createSalScenario(SCENARIO_NAME, FUND_POOL_ID, StringUtils.EMPTY)).andReturn(scenario).once();
         replay(controller, filterController);
@@ -165,7 +165,7 @@ public class CreateSalScenarioWindowTest {
         fundPool.getSalFields().setGrade9to12GrossAmount(BigDecimal.TEN);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
-        expect(controller.findUsageDataGradeGroups())
+        expect(controller.getUsageDataGradeGroups())
             .andReturn(Collections.singletonList(GradeGroupEnum.GRADE6_8)).once();
         Windows.showNotificationWindow("There are no usage details for GRADEK_5, GRADE9_12 grade group(s)");
         expectLastCall().once();
@@ -180,7 +180,7 @@ public class CreateSalScenarioWindowTest {
         UsageBatch usageBatch = buildUsageBatch(7001293454L);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
         expect(controller.getSelectedUsageBatch()).andReturn(usageBatch).once();
-        expect(controller.findUsageDataGradeGroups()).andReturn(
+        expect(controller.getUsageDataGradeGroups()).andReturn(
             Arrays.asList(GradeGroupEnum.GRADEK_5, GradeGroupEnum.GRADE6_8, GradeGroupEnum.GRADE9_12)).once();
         Windows.showNotificationWindow("Gross amount for GRADEK_5, GRADE9_12 grade group(s) should be greater than 0");
         expectLastCall().once();
