@@ -82,6 +82,8 @@ public class AaclUsageWidgetTest {
     private static final String DATE =
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String BATCH_ID = "3a070817-03ae-4ebd-b25f-dd3168a7ffb0";
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
+    private static final String AACL_SCENARIO_NAME_PREFIX = "AACL Distribution ";
 
     private AaclUsageWidget usagesWidget;
     private IAaclUsageController controller;
@@ -89,8 +91,7 @@ public class AaclUsageWidgetTest {
     @Before
     public void setUp() {
         controller = createMock(IAaclUsageController.class);
-        AaclUsageFilterWidget filterWidget =
-            new AaclUsageFilterWidget(createMock(IAaclUsageFilterController.class));
+        AaclUsageFilterWidget filterWidget = new AaclUsageFilterWidget(createMock(IAaclUsageFilterController.class));
         filterWidget.getAppliedFilter().setUsageBatchesIds(Collections.singleton(BATCH_ID));
         usagesWidget = new AaclUsageWidget(controller);
         usagesWidget.setController(controller);
@@ -133,8 +134,8 @@ public class AaclUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
-        expect(controller.getSelectedProductFamily()).andReturn("AACL").once();
         expect(controller.getBeansCount()).andReturn(1).once();
+        prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
@@ -143,13 +144,6 @@ public class AaclUsageWidgetTest {
             .andReturn(Collections.emptyMap()).once();
         expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
-        expect(controller.getFundPoolsNotAttachedToScenario())
-            .andReturn(Collections.singletonList(new FundPool())).once();
-        expect(controller.getUsageAges()).andReturn(Collections.singletonList(new UsageAge())).once();
-        expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(new PublicationType())).once();
-        expect(controller.getDetailLicenseeClasses())
-            .andReturn(Collections.singletonList(new DetailLicenseeClass())).once();
-        expect(controller.scenarioExists("AACL Distribution " + DATE)).andReturn(true).once();
         Windows.showModalWindow(anyObject(CreateAaclScenarioWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -167,6 +161,7 @@ public class AaclUsageWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
         expect(controller.getBeansCount()).andReturn(0).once();
+        prepareCreateScenarioExpectation();
         Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -183,6 +178,7 @@ public class AaclUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
+        prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
@@ -201,6 +197,7 @@ public class AaclUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
+        prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(700000000L)).once();
@@ -221,6 +218,7 @@ public class AaclUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
+        prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
@@ -243,6 +241,7 @@ public class AaclUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
+        prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
@@ -267,6 +266,7 @@ public class AaclUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(4);
+        prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
@@ -395,6 +395,17 @@ public class AaclUsageWidgetTest {
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         verify(clickEvent, Windows.class, controller);
+    }
+
+    private void prepareCreateScenarioExpectation() {
+        expect(controller.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
+        expect(controller.getUsageAges()).andReturn(Collections.singletonList(new UsageAge())).once();
+        expect(controller.getPublicationTypes()).andReturn(Collections.singletonList(new PublicationType())).once();
+        expect(controller.getDetailLicenseeClasses())
+            .andReturn(Collections.singletonList(new DetailLicenseeClass())).once();
+        expect(controller.getFundPoolsNotAttachedToScenario())
+            .andReturn(Collections.singletonList(new FundPool())).once();
+        expect(controller.scenarioExists(AACL_SCENARIO_NAME_PREFIX + DATE)).andReturn(false).once();
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {

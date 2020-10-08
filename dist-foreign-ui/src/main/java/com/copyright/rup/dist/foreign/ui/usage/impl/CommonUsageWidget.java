@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageFilterWidget;
@@ -19,7 +20,10 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -133,11 +137,46 @@ public abstract class CommonUsageWidget extends HorizontalSplitPanel implements 
     /**
      * Shows create scenario window.
      *
-     * @param window window to show
+     * @param window implementation of window
      */
-    protected void showCreateScenarioWindow(Window window) {
+    protected void onAddToScenarioClicked(Window window) {
+        String message = getScenarioValidationMessage();
+        if (null != message) {
+            Windows.showNotificationWindow(message);
+        } else {
+            showCreateScenarioWindow(window);
+        }
+    }
+
+    /**
+     * Gets specific validation message.
+     *
+     * @return message
+     */
+    protected abstract String getProductFamilySpecificScenarioValidationMessage();
+
+    private void showCreateScenarioWindow(Window window) {
         window.addListener(ScenarioCreateEvent.class, getController(), ICommonUsageController.ON_SCENARIO_CREATED);
         Windows.showModalWindow(window);
+    }
+
+    private String getScenarioValidationMessage() {
+        String message;
+        if (0 == controller.getBeansCount()) {
+            message = ForeignUi.getMessage("message.error.empty_usages");
+        } else if (!controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)) {
+            message = ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.ELIGIBLE,
+                "added to scenario");
+        } else {
+            List<Long> accountNumbers = controller.getInvalidRightsholders();
+            if (CollectionUtils.isNotEmpty(accountNumbers)) {
+                message = ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
+                    accountNumbers);
+            } else {
+                message = getProductFamilySpecificScenarioValidationMessage();
+            }
+        }
+        return message;
     }
 
     private VerticalLayout initUsagesLayout() {

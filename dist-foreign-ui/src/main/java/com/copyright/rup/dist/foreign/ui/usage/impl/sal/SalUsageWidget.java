@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
@@ -127,6 +126,23 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     }
 
     @Override
+    protected String getProductFamilySpecificScenarioValidationMessage() {
+        String message;
+        UsageFilter appliedFilter = getFilterWidget().getAppliedFilter();
+        Set<String> batchesIds = appliedFilter.getUsageBatchesIds();
+        if (CollectionUtils.isEmpty(batchesIds)) {
+            message = ForeignUi.getMessage("message.error.empty_usage_batches");
+        } else if (EXPECTED_BATCH_SIZE != CollectionUtils.size(batchesIds)) {
+            message = ForeignUi.getMessage("message.error.invalid_batch_size");
+        } else if (Objects.nonNull(appliedFilter.getSalDetailType())) {
+            message = ForeignUi.getMessage("message.error.invalid_detail_type_filter");
+        } else {
+            message = validateSelectedBatch(batchesIds);
+        }
+        return message;
+    }
+
+    @Override
     protected HorizontalLayout initButtonsLayout() {
         initUsageBatchMenuBar();
         initFundPoolMenuBar();
@@ -170,52 +186,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
 
     private void initAddToScenarioButton() {
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
-        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked());
-    }
-
-    //TODO move common logic to CommonUsageWidget
-    private void onAddToScenarioClicked() {
-        String message = getScenarioValidationMessage();
-        if (Objects.nonNull(message)) {
-            Windows.showNotificationWindow(message);
-        } else {
-            showCreateScenarioWindow(new CreateSalScenarioWindow(controller));
-        }
-    }
-
-    private String getScenarioValidationMessage() {
-        String message;
-        if (0 == controller.getBeansCount()) {
-            message = ForeignUi.getMessage("message.error.empty_usages");
-        } else if (!controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)) {
-            message = ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.ELIGIBLE,
-                "added to scenario");
-        } else {
-            List<Long> accountNumbers = controller.getInvalidRightsholders();
-            if (CollectionUtils.isNotEmpty(accountNumbers)) {
-                message = ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
-                    accountNumbers);
-            } else {
-                message = getSalScenarioValidationMessage();
-            }
-        }
-        return message;
-    }
-
-    private String getSalScenarioValidationMessage() {
-        String message;
-        UsageFilter appliedFilter = getFilterWidget().getAppliedFilter();
-        Set<String> batchesIds = appliedFilter.getUsageBatchesIds();
-        if (CollectionUtils.isEmpty(batchesIds)) {
-            message = ForeignUi.getMessage("message.error.empty_usage_batches");
-        } else if (EXPECTED_BATCH_SIZE != CollectionUtils.size(batchesIds)) {
-            message = ForeignUi.getMessage("message.error.invalid_batch_size");
-        } else if (Objects.nonNull(appliedFilter.getSalDetailType())) {
-            message = ForeignUi.getMessage("message.error.invalid_detail_type_filter");
-        } else {
-            message = validateSelectedBatch(batchesIds);
-        }
-        return message;
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateSalScenarioWindow(controller)));
     }
 
     private String validateSelectedBatch(Set<String> batchesIds) {
