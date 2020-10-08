@@ -66,7 +66,7 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2014-2015')
             column(name: 'scored_assessment_date', value: '2015-07-01')
             column(name: 'question_identifier', value: 'SB9')
-            column(name: 'states', value: 'CA,WV')
+            column(name: 'states', value: 'CA;WV')
             column(name: 'number_of_views', value: 1765)
         }
 
@@ -95,7 +95,7 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2012-2013')
             column(name: 'scored_assessment_date', value: '2015-10-03')
             column(name: 'question_identifier', value: 'SB7663')
-            column(name: 'states', value: 'SD,VT')
+            column(name: 'states', value: 'SD;VT')
             column(name: 'number_of_views', value: 762)
         }
 
@@ -133,7 +133,7 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2011-2012')
             column(name: 'scored_assessment_date', value: '2015-02-05')
             column(name: 'question_identifier', value: 'SB245')
-            column(name: 'states', value: 'MN,OR')
+            column(name: 'states', value: 'MN;OR')
             column(name: 'number_of_views', value: 254)
         }
 
@@ -172,7 +172,7 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2011-2012')
             column(name: 'scored_assessment_date', value: '2015-02-05')
             column(name: 'question_identifier', value: 'SB245')
-            column(name: 'states', value: 'MN,OR')
+            column(name: 'states', value: 'MN;OR')
             column(name: 'number_of_views', value: 254)
         }
 
@@ -199,7 +199,7 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2011-2012')
             column(name: 'scored_assessment_date', value: '2015-02-05')
             column(name: 'question_identifier', value: 'SB245')
-            column(name: 'states', value: 'MN,OR')
+            column(name: 'states', value: 'MN;OR')
             column(name: 'number_of_views', value: 254)
         }
     }
@@ -275,7 +275,7 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2012-2013')
             column(name: 'scored_assessment_date', value: '2015-10-03')
             column(name: 'question_identifier', value: 'SB7663')
-            column(name: 'states', value: 'SD,VT')
+            column(name: 'states', value: 'SD;VT')
             column(name: 'number_of_views', value: 762)
         }
 
@@ -313,7 +313,7 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2011-2012')
             column(name: 'scored_assessment_date', value: '2015-02-05')
             column(name: 'question_identifier', value: 'SB245')
-            column(name: 'states', value: 'MN,OR')
+            column(name: 'states', value: 'MN;OR')
             column(name: 'number_of_views', value: 254)
         }
     }
@@ -433,7 +433,7 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2012-2013')
             column(name: 'scored_assessment_date', value: '2015-10-03')
             column(name: 'question_identifier', value: 'SB7663')
-            column(name: 'states', value: 'SD,VT')
+            column(name: 'states', value: 'SD;VT')
             column(name: 'number_of_views', value: 762)
         }
 
@@ -462,7 +462,7 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2011-2012')
             column(name: 'scored_assessment_date', value: '2015-02-05')
             column(name: 'question_identifier', value: 'SB245')
-            column(name: 'states', value: 'MN,OR')
+            column(name: 'states', value: 'MN;OR')
             column(name: 'number_of_views', value: 254)
         }
     }
@@ -538,7 +538,7 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2012-2013')
             column(name: 'scored_assessment_date', value: '2015-10-03')
             column(name: 'question_identifier', value: 'SB7663')
-            column(name: 'states', value: 'SD,VT')
+            column(name: 'states', value: 'SD;VT')
             column(name: 'number_of_views', value: 762)
         }
     }
@@ -633,7 +633,7 @@ databaseChangeLog {
             column(name: 'assessment_type', value: 'ELA')
             column(name: 'scored_assessment_date', value: '2015-10-03')
             column(name: 'question_identifier', value: 'SB7663')
-            column(name: 'states', value: 'SD,VT')
+            column(name: 'states', value: 'SD;VT')
             column(name: 'number_of_views', value: 27)
         }
 
@@ -699,7 +699,7 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2012-2013')
             column(name: 'scored_assessment_date', value: '2015-10-03')
             column(name: 'question_identifier', value: 'SB7663')
-            column(name: 'states', value: 'SD,VT')
+            column(name: 'states', value: 'SD;VT')
             column(name: 'number_of_views', value: 42)
         }
     }

@@ -27,7 +27,7 @@ import org.junit.Test;
 public class UsageDataGradeValidatorTest {
 
     private static final String WORK_PORTION_ID = "1101001IB2361";
-    private static final String GRADE = "K";
+    private static final String GRADE_K = "K";
 
     private UsageDataGradeValidator validator;
     private ISalUsageService salUsageService;
@@ -41,13 +41,13 @@ public class UsageDataGradeValidatorTest {
     @Test
     public void testIsValidWithGradeInUsageData() {
         replay(salUsageService);
-        assertTrue(validator.isValid(buildUsage(GRADE)));
+        assertTrue(validator.isValid(buildUsage(GRADE_K)));
         verify(salUsageService);
     }
 
     @Test
     public void testIsValidWithGradeInItemBank() {
-        expect(salUsageService.getItemBankDetailGradeByWorkPortionId(WORK_PORTION_ID)).andReturn(GRADE).once();
+        expect(salUsageService.getItemBankDetailGradeByWorkPortionId(WORK_PORTION_ID)).andReturn(GRADE_K).once();
         replay(salUsageService);
         assertTrue(validator.isValid(buildUsage(null)));
         verify(salUsageService);
