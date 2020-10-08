@@ -586,4 +586,20 @@
         where rh_account_number = #{rhAccountNumber}
             and df_scenario_uid = #{scenarioId}
     </update>
+
+    <update id="deleteFromScenario" parameterType="map">
+        update
+            ${schema}.df_usage u
+        set
+            status_ind = #{updateStatusTo},
+            df_scenario_uid = null,
+            payee_account_number = null,
+            service_fee = null,
+            service_fee_amount = 0,
+            net_amount = 0,
+            gross_amount = 0,
+            <include refid="StoredEntityMapper.update"/>
+        where <include refid="IUsageMapper.scenarioBatchesFilter"/>
+            and u.status_ind = #{updateStatusFrom}
+    </update>
 </mapper>

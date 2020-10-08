@@ -32,4 +32,11 @@ public interface ISalScenarioService {
      * @return {@link Scenario}
      */
     Scenario createScenario(String scenarioName, String fundPoolId, String description, UsageFilter usageFilter);
+
+    /**
+     * Deletes {@link Scenario} by given identifier.
+     *
+     * @param scenario instance of {@link Scenario}
+     */
+    void deleteScenario(Scenario scenario);
 }
