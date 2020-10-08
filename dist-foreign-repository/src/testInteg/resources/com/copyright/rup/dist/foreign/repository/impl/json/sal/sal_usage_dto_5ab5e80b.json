@@ -42,7 +42,7 @@
         1
       ],
       "questionIdentifier": "SB9",
-      "states": "CA,WV",
+      "states": "CA;WV",
       "numberOfViews": 1765,
       "batchPeriodEndDate": "2015-06-30"
     },
