@@ -22,10 +22,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 
-import org.apache.commons.collections4.CollectionUtils;
-
-import java.util.List;
-
 /**
  * Usage widget for FAS and FAS2 product families.
  * <p>
@@ -105,7 +101,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         loadResearchedUsagesButton.addClickListener(event ->
             Windows.showModalWindow(new ResearchedUsagesUploadWindow(controller)));
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
-        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked());
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateScenarioWindow(controller)));
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
@@ -136,6 +132,11 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         return layout;
     }
 
+    @Override
+    protected String getProductFamilySpecificScenarioValidationMessage() {
+        return null;
+    }
+
     private void initUsageBatchMenuBar() {
         usageBatchMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem =
@@ -146,32 +147,6 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
             item -> Windows.showModalWindow(new ViewUsageBatchWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
-    }
-
-    private void onAddToScenarioClicked() {
-        String message = getScenarioValidationMessage();
-        if (null != message) {
-            Windows.showNotificationWindow(message);
-        } else {
-            showCreateScenarioWindow(new CreateScenarioWindow(controller));
-        }
-    }
-
-    private String getScenarioValidationMessage() {
-        String message = null;
-        if (0 == controller.getBeansCount()) {
-            message = ForeignUi.getMessage("message.error.empty_usages");
-        } else if (!controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)) {
-            message = ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.ELIGIBLE,
-                "added to scenario");
-        } else {
-            List<Long> accountNumbers = controller.getInvalidRightsholders();
-            if (CollectionUtils.isNotEmpty(accountNumbers)) {
-                message = ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
-                    accountNumbers);
-            }
-        }
-        return message;
     }
 
     private static class SendForResearchFileDownloader extends OnDemandFileDownloader {

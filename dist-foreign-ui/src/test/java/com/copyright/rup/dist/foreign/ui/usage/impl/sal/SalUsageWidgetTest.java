@@ -72,6 +72,8 @@ public class SalUsageWidgetTest {
     private static final String DATE =
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String BATCH_ID = "3a070817-03ae-4ebd-b25f-dd3168a7ffb0";
+    private static final String SAL_SCENARIO_NAME_PREFIX = "SAL Distribution ";
+    private static final String SAL_PRODUCT_FAMILY = "SAL";
     private SalUsageWidget usagesWidget;
     private ISalUsageController controller;
     private SalUsageFilterWidget filterWidget;
@@ -149,17 +151,14 @@ public class SalUsageWidgetTest {
     public void testAddToScenarioButtonClickListener() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
+        prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.getSelectedProductFamily()).andReturn("SAL").once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
-        expect(controller.getFundPoolsNotAttachedToScenario())
-            .andReturn(Collections.singletonList(new FundPool())).once();
-        expect(controller.scenarioExists("SAL Distribution " + DATE)).andReturn(true).once();
         Windows.showModalWindow(anyObject(CreateSalScenarioWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -172,6 +171,7 @@ public class SalUsageWidgetTest {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(0).once();
+        prepareCreateScenarioExpectation();
         Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -184,6 +184,7 @@ public class SalUsageWidgetTest {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
+        prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
         expectLastCall().once();
@@ -197,6 +198,7 @@ public class SalUsageWidgetTest {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
+        prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(700000000L)).once();
         Windows.showNotificationWindow(
@@ -213,6 +215,7 @@ public class SalUsageWidgetTest {
         filterWidget.getAppliedFilter().setUsageBatchesIds(Collections.emptySet());
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
+        prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         Windows.showNotificationWindow("Please apply Batches Filter to create a scenario");
@@ -229,6 +232,7 @@ public class SalUsageWidgetTest {
             .setUsageBatchesIds(Sets.newHashSet(BATCH_ID, "437d1f1d-c165-404d-8617-b10ef53426be"));
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
+        prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         Windows.showNotificationWindow("Only one usage batch can be associated with scenario");
@@ -244,6 +248,7 @@ public class SalUsageWidgetTest {
         filterWidget.getAppliedFilter().setSalDetailType(SalDetailTypeEnum.IB);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
+        prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         Windows.showNotificationWindow("Detail Type filter should not be applied to create scenario");
@@ -262,6 +267,7 @@ public class SalUsageWidgetTest {
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.singletonList("Batch Name")).once();
+        prepareCreateScenarioExpectation();
         Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
         expectLastCall().once();
@@ -281,6 +287,7 @@ public class SalUsageWidgetTest {
             .andReturn(Collections.emptyList()).once();
         expect(controller.getIneligibleBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.singletonList("Batch Name")).once();
+        prepareCreateScenarioExpectation();
         Windows.showNotificationWindow("The following batches have usages that are not in ELIGIBLE status:" +
             "<ul><li><i><b>Batch Name</b></i></ul>");
         expectLastCall().once();
@@ -335,6 +342,13 @@ public class SalUsageWidgetTest {
             "Coverage Year", "Question Identifier", "Grade", "Grade Group", "States", "Number of Views", "Comment"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         verifySize(grid);
+    }
+
+    private void prepareCreateScenarioExpectation() {
+        expect(controller.getSelectedProductFamily()).andReturn(SAL_PRODUCT_FAMILY).once();
+        expect(controller.getFundPoolsNotAttachedToScenario())
+            .andReturn(Collections.singletonList(new FundPool())).once();
+        expect(controller.scenarioExists(SAL_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
     }
 
     private void verifySize(Component component) {

@@ -31,7 +31,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable.Unit;
@@ -81,6 +80,7 @@ public class NtsUsageWidgetTest {
     private static final String DATE =
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String NTS_PRODUCT_FAMILY = "NTS";
+    private static final String NTS_SCENARIO_NAME_PREFIX = "NTS Distribution ";
     private NtsUsageWidget usagesWidget;
     private INtsUsageController controller;
     private IFasNtsUsageFilterWidget filterWidget;
@@ -175,7 +175,7 @@ public class NtsUsageWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
-        expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
+        prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
@@ -188,8 +188,6 @@ public class NtsUsageWidgetTest {
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
             filterWidget.getAppliedFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", Collections.emptyList(), "NON-STM", Collections.emptyList())).once();
-        expect(controller.getAdditionalFundsNotAttachedToScenario()).andReturn(Collections.emptyList()).once();
-        expect(controller.scenarioExists("NTS Distribution " + DATE)).andReturn(true).once();
         Windows.showModalWindow(anyObject(CreateNtsScenarioWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -209,6 +207,7 @@ public class NtsUsageWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
+        prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
@@ -234,6 +233,7 @@ public class NtsUsageWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
+        prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
@@ -262,6 +262,7 @@ public class NtsUsageWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
+        prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
@@ -291,6 +292,7 @@ public class NtsUsageWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getBeansCount()).andReturn(1).once();
+        prepareCreateScenarioExpectation();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getAppliedFilter().getUsageBatchesIds()))
@@ -322,6 +324,7 @@ public class NtsUsageWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
+        prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
         expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
@@ -391,6 +394,12 @@ public class NtsUsageWidgetTest {
         assertTrue(CollectionUtils.isNotEmpty(extensions));
         assertEquals(1, extensions.size());
         assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
+    }
+
+    private void prepareCreateScenarioExpectation() {
+        expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
+        expect(controller.scenarioExists(NTS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
+        expect(controller.getAdditionalFundsNotAttachedToScenario()).andReturn(Collections.emptyList()).once();
     }
 
     private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems) {

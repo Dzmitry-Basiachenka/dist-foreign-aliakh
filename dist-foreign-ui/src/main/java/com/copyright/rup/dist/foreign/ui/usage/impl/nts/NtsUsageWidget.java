@@ -5,7 +5,6 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
@@ -108,7 +107,7 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
     @Override
     protected HorizontalLayout initButtonsLayout() {
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
-        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked());
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateNtsScenarioWindow(controller)));
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
@@ -124,6 +123,33 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
+    }
+
+    @Override
+    protected String getProductFamilySpecificScenarioValidationMessage() {
+        String message;
+        Set<String> batchesIds = getFilterWidget().getAppliedFilter().getUsageBatchesIds();
+        if (CollectionUtils.isEmpty(batchesIds)) {
+            message = ForeignUi.getMessage("message.error.empty_usage_batches");
+        } else {
+            List<String> batchesNames = controller.getProcessingBatchesNames(batchesIds);
+            if (CollectionUtils.isNotEmpty(batchesNames)) {
+                message = ForeignUi.getMessage("message.error.processing_batches_names",
+                    String.join(BATCH_NAMES_LIST_SEPARATOR, batchesNames));
+            } else {
+                Map<String, String> batchesNamesToScenarioNames =
+                    controller.getBatchesNamesToScenariosNames(batchesIds);
+                if (batchesNamesToScenarioNames.isEmpty()) {
+                    message = getClassificationValidationMessage(batchesIds);
+                } else {
+                    message = ForeignUi.getMessage("message.error.batches_already_associated_with_scenarios",
+                        batchesNamesToScenarioNames.entrySet().stream()
+                            .map(entry -> entry.getKey() + " : " + entry.getValue())
+                            .collect(Collectors.joining(BATCH_NAMES_LIST_SEPARATOR)));
+                }
+            }
+        }
+        return message;
     }
 
     private void initFundPoolMenuBar() {
@@ -165,60 +191,6 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
             });
         window.addListener(FilterWindow.FilterSaveEvent.class, widget, FilterWindow.IFilterSaveListener.SAVE_HANDLER);
         return window;
-    }
-
-    private void onAddToScenarioClicked() {
-        String message = getScenarioValidationMessage();
-        if (null != message) {
-            Windows.showNotificationWindow(message);
-        } else {
-            showCreateScenarioWindow(new CreateNtsScenarioWindow(controller));
-        }
-    }
-
-    private String getScenarioValidationMessage() {
-        String message;
-        if (0 == controller.getBeansCount()) {
-            message = ForeignUi.getMessage("message.error.empty_usages");
-        } else if (!controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)) {
-            message = ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.ELIGIBLE,
-                "added to scenario");
-        } else {
-            List<Long> accountNumbers = controller.getInvalidRightsholders();
-            if (CollectionUtils.isNotEmpty(accountNumbers)) {
-                message = ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
-                    accountNumbers);
-            } else {
-                message = getNtsScenarioValidationMessage();
-            }
-        }
-        return message;
-    }
-
-    private String getNtsScenarioValidationMessage() {
-        String message;
-        Set<String> batchesIds = getFilterWidget().getAppliedFilter().getUsageBatchesIds();
-        if (CollectionUtils.isEmpty(batchesIds)) {
-            message = ForeignUi.getMessage("message.error.empty_usage_batches");
-        } else {
-            List<String> batchesNames = controller.getProcessingBatchesNames(batchesIds);
-            if (CollectionUtils.isNotEmpty(batchesNames)) {
-                message = ForeignUi.getMessage("message.error.processing_batches_names",
-                    String.join(BATCH_NAMES_LIST_SEPARATOR, batchesNames));
-            } else {
-                Map<String, String> batchesNamesToScenarioNames =
-                    controller.getBatchesNamesToScenariosNames(batchesIds);
-                if (batchesNamesToScenarioNames.isEmpty()) {
-                    message = getClassificationValidationMessage(batchesIds);
-                } else {
-                    message = ForeignUi.getMessage("message.error.batches_already_associated_with_scenarios",
-                        batchesNamesToScenarioNames.entrySet().stream()
-                            .map(entry -> entry.getKey() + " : " + entry.getValue())
-                            .collect(Collectors.joining(BATCH_NAMES_LIST_SEPARATOR)));
-                }
-            }
-        }
-        return message;
     }
 
     private String getClassificationValidationMessage(Set<String> batchesIds) {

@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
@@ -124,6 +123,37 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         return layout;
     }
 
+    @Override
+    protected String getProductFamilySpecificScenarioValidationMessage() {
+        String message = null;
+        Set<String> batchesIds = getFilterWidget().getAppliedFilter().getUsageBatchesIds();
+        if (CollectionUtils.isEmpty(batchesIds)) {
+            message = ForeignUi.getMessage("message.error.empty_usage_batches");
+        } else {
+            List<String> processingBatchesNames = controller.getProcessingBatchesNames(batchesIds);
+            if (CollectionUtils.isNotEmpty(processingBatchesNames)) {
+                message = ForeignUi.getMessage("message.error.processing_batches_names",
+                    String.join(BATCH_NAMES_LIST_SEPARATOR, processingBatchesNames));
+            } else {
+                Map<String, String> batchesNamesToScenarioNames =
+                    controller.getBatchesNamesToScenariosNames(batchesIds);
+                if (batchesNamesToScenarioNames.isEmpty()) {
+                    List<String> ineligibleBatchNames = controller.getIneligibleBatchesNames(batchesIds);
+                    if (CollectionUtils.isNotEmpty(ineligibleBatchNames)) {
+                        message = ForeignUi.getMessage("message.error.batches_with_non_eligible_usages",
+                            String.join(BATCH_NAMES_LIST_SEPARATOR, ineligibleBatchNames));
+                    }
+                } else {
+                    message = ForeignUi.getMessage("message.error.batches_already_associated_with_scenarios",
+                        batchesNamesToScenarioNames.entrySet().stream()
+                            .map(entry -> entry.getKey() + " : " + entry.getValue())
+                            .collect(Collectors.joining(BATCH_NAMES_LIST_SEPARATOR)));
+                }
+            }
+        }
+        return message;
+    }
+
     private void initUsageBatchMenuBar() {
         usageBatchMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem =
@@ -175,7 +205,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
 
     private void initAddToScenarioButton() {
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
-        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked());
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked(new CreateAaclScenarioWindow(controller)));
     }
 
     private void initExportButton() {
@@ -183,64 +213,6 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
         fileDownloader.extend(exportButton);
-    }
-
-    private void onAddToScenarioClicked() {
-        String message = getScenarioValidationMessage();
-        if (null != message) {
-            Windows.showNotificationWindow(message);
-        } else {
-            showCreateScenarioWindow(new CreateAaclScenarioWindow(controller));
-        }
-    }
-
-    private String getScenarioValidationMessage() {
-        String message;
-        if (0 == controller.getBeansCount()) {
-            message = ForeignUi.getMessage("message.error.empty_usages");
-        } else if (!controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)) {
-            message = ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.ELIGIBLE,
-                "added to scenario");
-        } else {
-            List<Long> accountNumbers = controller.getInvalidRightsholders();
-            if (CollectionUtils.isNotEmpty(accountNumbers)) {
-                message = ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
-                    accountNumbers);
-            } else {
-                message = getAaclScenarioValidationMessage();
-            }
-        }
-        return message;
-    }
-
-    private String getAaclScenarioValidationMessage() {
-        String message = null;
-        Set<String> batchesIds = getFilterWidget().getAppliedFilter().getUsageBatchesIds();
-        if (CollectionUtils.isEmpty(batchesIds)) {
-            message = ForeignUi.getMessage("message.error.empty_usage_batches");
-        } else {
-            List<String> processingBatchesNames = controller.getProcessingBatchesNames(batchesIds);
-            if (CollectionUtils.isNotEmpty(processingBatchesNames)) {
-                message = ForeignUi.getMessage("message.error.processing_batches_names",
-                    String.join(BATCH_NAMES_LIST_SEPARATOR, processingBatchesNames));
-            } else {
-                Map<String, String> batchesNamesToScenarioNames =
-                    controller.getBatchesNamesToScenariosNames(batchesIds);
-                if (batchesNamesToScenarioNames.isEmpty()) {
-                    List<String> ineligibleBatchNames = controller.getIneligibleBatchesNames(batchesIds);
-                    if (CollectionUtils.isNotEmpty(ineligibleBatchNames)) {
-                        message = ForeignUi.getMessage("message.error.batches_with_non_eligible_usages",
-                            String.join(BATCH_NAMES_LIST_SEPARATOR, ineligibleBatchNames));
-                    }
-                } else {
-                    message = ForeignUi.getMessage("message.error.batches_already_associated_with_scenarios",
-                        batchesNamesToScenarioNames.entrySet().stream()
-                            .map(entry -> entry.getKey() + " : " + entry.getValue())
-                            .collect(Collectors.joining(BATCH_NAMES_LIST_SEPARATOR)));
-                }
-            }
-        }
-        return message;
     }
 
     private static class SendForClassificationFileDownloader extends OnDemandFileDownloader {
