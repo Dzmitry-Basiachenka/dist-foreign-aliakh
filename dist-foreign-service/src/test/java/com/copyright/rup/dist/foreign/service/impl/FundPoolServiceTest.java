@@ -265,18 +265,18 @@ public class FundPoolServiceTest {
 
     @Test
     public void testCalculateSalFundPool() {
-        BigDecimal splitPercent = new BigDecimal("0.02");
-        FundPool fundPool = fundPoolService.calculateSalFundPoolAmounts(buildFundPool(splitPercent, 10, 5));
+        BigDecimal splitPercent = new BigDecimal("0.10");
+        FundPool fundPool = fundPoolService.calculateSalFundPoolAmounts(buildFundPool(splitPercent, 9, 6, 3));
         assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getTotalAmount());
-        assertEquals(new BigDecimal("20.01"), fundPool.getSalFields().getItemBankGrossAmount());
-        assertEquals(new BigDecimal("653.33"), fundPool.getSalFields().getGradeKto5GrossAmount());
-        assertEquals(new BigDecimal("326.66"), fundPool.getSalFields().getGrade6to8GrossAmount());
-        assertEquals(new BigDecimal("0.00"), fundPool.getSalFields().getGrade9to12GrossAmount());
+        assertEquals(new BigDecimal("100.00"), fundPool.getSalFields().getItemBankGrossAmount());
+        assertEquals(new BigDecimal("450.00"), fundPool.getSalFields().getGradeKto5GrossAmount());
+        assertEquals(new BigDecimal("300.00"), fundPool.getSalFields().getGrade6to8GrossAmount());
+        assertEquals(new BigDecimal("150.00"), fundPool.getSalFields().getGrade9to12GrossAmount());
         assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getSalFields().getGrossAmount());
         assertEquals(splitPercent, fundPool.getSalFields().getItemBankSplitPercent());
-        assertEquals(10, fundPool.getSalFields().getGradeKto5NumberOfStudents());
-        assertEquals(5, fundPool.getSalFields().getGrade6to8NumberOfStudents());
-        assertEquals(0, fundPool.getSalFields().getGrade9to12NumberOfStudents());
+        assertEquals(9, fundPool.getSalFields().getGradeKto5NumberOfStudents());
+        assertEquals(6, fundPool.getSalFields().getGrade6to8NumberOfStudents());
+        assertEquals(3, fundPool.getSalFields().getGrade9to12NumberOfStudents());
         assertEquals("FY2020 COG", fundPool.getSalFields().getAssessmentName());
         assertEquals(SAL_SERVICE_FEE, fundPool.getSalFields().getServiceFee());
     }
@@ -285,7 +285,7 @@ public class FundPoolServiceTest {
     public void testCalculateSalFundPoolSplitPercentIsHundred() {
         BigDecimal splitPercent = new BigDecimal("1.00");
         BigDecimal gradeGrossAmount = new BigDecimal("0.00");
-        FundPool fundPool = fundPoolService.calculateSalFundPoolAmounts(buildFundPool(splitPercent, 0, 0));
+        FundPool fundPool = fundPoolService.calculateSalFundPoolAmounts(buildFundPool(splitPercent, 0, 0, 0));
         assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getTotalAmount());
         assertEquals(new BigDecimal(AMOUNT_1000), fundPool.getSalFields().getItemBankGrossAmount());
         assertEquals(gradeGrossAmount, fundPool.getSalFields().getGradeKto5GrossAmount());
@@ -368,7 +368,7 @@ public class FundPoolServiceTest {
     }
 
     private FundPool buildFundPool(BigDecimal splitPercent, int gradeKto5NumberOfStudents,
-                                   int grade6to8NumberOfStudents) {
+                                   int grade6to8NumberOfStudents, int grade9to12NumberOfStudents) {
         FundPool fundPool = new FundPool();
         FundPool.SalFields salFields = new FundPool.SalFields();
         salFields.setDateReceived(LocalDate.of(2020, 12, 24));
@@ -377,6 +377,7 @@ public class FundPoolServiceTest {
         salFields.setLicenseeName("FarmField Inc.");
         salFields.setGradeKto5NumberOfStudents(gradeKto5NumberOfStudents);
         salFields.setGrade6to8NumberOfStudents(grade6to8NumberOfStudents);
+        salFields.setGrade9to12NumberOfStudents(grade9to12NumberOfStudents);
         salFields.setGrossAmount(new BigDecimal(AMOUNT_1000));
         salFields.setItemBankSplitPercent(splitPercent);
         salFields.setServiceFee(SAL_SERVICE_FEE);
