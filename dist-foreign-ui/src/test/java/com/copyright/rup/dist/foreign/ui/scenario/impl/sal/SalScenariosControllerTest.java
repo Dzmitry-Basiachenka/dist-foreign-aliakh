@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.sal;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -18,17 +19,20 @@ import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Validator;
 import com.vaadin.ui.Window;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,6 +64,7 @@ public class SalScenariosControllerTest {
     private Scenario scenario;
     private IUsageService usageService;
     private IScenarioService scenarioService;
+    private ISalScenarioService salScenarioService;
     private SalScenarioController scenarioController;
     private ISalScenarioWidget scenarioWidget;
     private IProductFamilyProvider productFamilyProvider;
@@ -68,6 +73,7 @@ public class SalScenariosControllerTest {
     public void setUp() {
         usageService = createMock(IUsageService.class);
         scenarioService = createMock(IScenarioService.class);
+        salScenarioService = createMock(ISalScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         scenariosController = new SalScenariosController();
         buildScenario();
@@ -82,6 +88,7 @@ public class SalScenariosControllerTest {
         scenariosController.initActionHandlers();
         Whitebox.setInternalState(scenariosController, "usageService", usageService);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
+        Whitebox.setInternalState(scenariosController, "salScenarioService", salScenarioService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
         verify(SecurityUtils.class);
     }
@@ -112,6 +119,24 @@ public class SalScenariosControllerTest {
         replay(scenariosWidget, scenarioController, Windows.class);
         scenariosController.onViewButtonClicked();
         verify(scenariosWidget, scenarioController, Windows.class);
+    }
+
+    @Test
+    public void testOnDeleteButtonClicked() {
+        mockStatic(Windows.class);
+        Capture<IListener> listenerCapture = new Capture<>();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(Windows.showConfirmDialog(
+            eq("Are you sure you want to delete <i><b>'" + SCENARIO_NAME + "'</b></i> scenario?"),
+            capture(listenerCapture))).andReturn(null).once();
+        salScenarioService.deleteScenario(scenario);
+        expectLastCall().once();
+        scenariosWidget.refresh();
+        expectLastCall().once();
+        replay(scenariosWidget, salScenarioService, Windows.class);
+        scenariosController.onDeleteButtonClicked();
+        listenerCapture.getValue().onActionConfirmed();
+        verify(scenariosWidget, salScenarioService, Windows.class);
     }
 
     @Test

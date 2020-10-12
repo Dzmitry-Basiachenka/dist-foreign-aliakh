@@ -1,7 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.sal;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
+
+import com.vaadin.ui.Button;
 
 /**
  * Implementation of {@link IScenariosMediator} for SAL product family.
@@ -14,13 +18,25 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
  */
 class SalScenariosMediator implements IScenariosMediator {
 
+    private Button deleteButton;
+
     @Override
     public void applyPermissions() {
-        // TODO implement buttons visibility for SAL scenarios
+        deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
     }
 
     @Override
     public void selectedScenarioChanged(Scenario scenario) {
-        // TODO implement scenario selecting for SAL scenarios
+        if (null != scenario) {
+            ScenarioStatusEnum status = scenario.getStatus();
+            boolean isInProgressState = ScenarioStatusEnum.IN_PROGRESS == status;
+            deleteButton.setEnabled(isInProgressState);
+        } else {
+            deleteButton.setEnabled(false);
+        }
+    }
+
+    void setDeleteButton(Button deleteButton) {
+        this.deleteButton = deleteButton;
     }
 }
