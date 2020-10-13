@@ -44,6 +44,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUndistributedLi
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUsageCsvReportHandler;
 
 import com.google.common.collect.Maps;
@@ -83,6 +84,9 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String FIND_USAGE_REPORT_DTOS_METHOD_NAME = "IReportMapper.findUsageReportDtos";
     private static final String FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME = "IReportMapper.findUsagesCountByFilter";
+    private static final String FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME = "IReportMapper.findScenarioUsageDtosCount";
+    private static final String FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME =
+        "IReportMapper.findArchivedScenarioUsageDtosCount";
 
     @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
@@ -177,7 +181,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts("IReportMapper.findScenarioUsageDtosCount", "IReportMapper.findScenarioUsageReportDtos",
+        writeCsvReportByParts(FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME, "IReportMapper.findScenarioUsageReportDtos",
             parameters, () -> new FasScenarioUsagesCsvReportHandler(pipedOutputStream));
     }
 
@@ -186,7 +190,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts("IReportMapper.findArchivedScenarioUsageDtosCount",
+        writeCsvReportByParts(FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
             "IReportMapper.findArchivedScenarioUsageReportDtos", parameters,
             () -> new FasScenarioUsagesCsvReportHandler(pipedOutputStream));
     }
@@ -196,7 +200,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts("IReportMapper.findScenarioUsageDtosCount", "IReportMapper.findScenarioUsageReportDtos",
+        writeCsvReportByParts(FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME, "IReportMapper.findScenarioUsageReportDtos",
             parameters, () -> new NtsScenarioUsagesCsvReportHandler(pipedOutputStream));
     }
 
@@ -205,7 +209,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts("IReportMapper.findArchivedScenarioUsageDtosCount",
+        writeCsvReportByParts(FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
             "IReportMapper.findArchivedScenarioUsageReportDtos", parameters,
             () -> new NtsScenarioUsagesCsvReportHandler(pipedOutputStream));
     }
@@ -377,7 +381,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     public void writeArchivedAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts("IReportMapper.findArchivedScenarioUsageDtosCount",
+        writeCsvReportByParts(FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
             "IReportMapper.findAaclArchivedScenarioUsageReportDtos", parameters,
             () -> new AaclScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
@@ -386,7 +390,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     public void writeAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts("IReportMapper.findScenarioUsageDtosCount",
+        writeCsvReportByParts(FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
             "IReportMapper.findAaclScenarioUsageReportDtos",
             parameters, () -> new AaclScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
@@ -438,6 +442,24 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             parameters.put("statuses", Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
             getTemplate().select("IReportMapper.findNtsUndistributedLiabilitiesReportDtos", parameters, handler);
         }
+    }
+
+    @Override
+    public void writeArchivedSalScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        writeCsvReportByParts(FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
+            "IReportMapper.findSalArchivedScenarioUsageReportDtos", parameters,
+            () -> new SalScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeSalScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        writeCsvReportByParts(FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
+            "IReportMapper.findSalScenarioUsageReportDtos", parameters,
+            () -> new SalScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     private void writeCsvReportByParts(String countMethodName, String selectMethodName, Map<String, Object> parameters,

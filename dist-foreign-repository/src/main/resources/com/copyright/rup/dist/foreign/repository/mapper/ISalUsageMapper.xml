@@ -58,6 +58,12 @@
         <result property="standardNumberType" column="standard_number_type"/>
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="serviceFee" column="service_fee"/>
+        <result property="payeeAccountNumber" column="payee_account_number"/>
+        <result property="payeeName" column="payee_name"/>
         <result property="status" column="status_ind"/>
         <result property="productFamily" column="product_family"/>
         <result property="comment" column="comment"/>
@@ -128,6 +134,41 @@
         u.created_by_user,
         u.updated_by_user,
         u.record_version
+    </sql>
+
+    <sql id="selectArchivedDtoByScenarioIdSql">
+        <include refid="ISalUsageMapper.selectUsageDtos">
+            <property name="detail_table" value="df_usage_archive"/>
+            <property name="detail_uid" value="df_usage_archive_uid"/>
+        </include>
+    </sql>
+
+    <sql id="selectDtoByScenarioIdSql">
+        <include refid="ISalUsageMapper.selectUsageDtos">
+            <property name="detail_table" value="df_usage"/>
+            <property name="detail_uid" value="df_usage_uid"/>
+        </include>
+    </sql>
+
+    <sql id="selectUsageDtos">
+        select
+            <include refid="ISalUsageMapper.salUsageColumns"/>,
+            u.${detail_uid} df_usage_uid,
+            u.payee_account_number ,
+            p.name payee_name,
+            u.gross_amount,
+            u.service_fee_amount,
+            u.net_amount,
+            u.service_fee
+        from ${schema}.df_scenario s
+        join ${schema}.${detail_table} u on s.df_scenario_uid = u.df_scenario_uid
+        join ${schema}.df_usage_sal usal on u.${detail_uid} = usal.df_usage_sal_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        where s.df_scenario_uid = #{scenarioId}
+        order by u.rh_account_number, u.${detail_uid}
+        <include refid="IUsageMapper.ifPageable"/>
     </sql>
 
     <sql id="chooseSortProperty">
