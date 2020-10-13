@@ -1,0 +1,82 @@
+[
+  {
+    "id": "d8daeed3-e4ee-4b09-b6ec-ef12a12bcd3d",
+    "batchId": "85df79f3-7e3f-4d74-9931-9aa513195815",
+    "wrWrkInst": 243204754,
+    "status": "LOCKED",
+    "productFamily": "SAL",
+    "workTitle": "Learning in Your Sleep",
+    "systemTitle": "Learning in Your Sleep",
+    "standardNumber": "09639292",
+    "standardNumberType": "VALISSN",
+    "grossAmount": 0,
+    "netAmount": 0,
+    "serviceFeeAmount": 0,
+    "salUsage": {
+      "detailType": "IB",
+      "grade": "6",
+      "gradeGroup": "ITEM_BANK",
+      "assessmentName": "FY16 AIR",
+      "reportedWorkPortionId": "1201001IB2362",
+      "reportedArticle": "Learning in Your Sleep",
+      "reportedStandardNumber": "450220996",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": "2015-01-02",
+      "reportedPageRange": "14-17",
+      "reportedVolNumberSeries": "Vol 7, Issue 2",
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": "1.0",
+      "coverageYear": "2014-2015"
+    },
+    "rightsholder": {
+      "accountNumber": 1000000026
+    },
+    "payee": {
+      "accountNumber": 1000011450
+    },
+    "comment": "SAL usage comment 1"
+  },
+  {
+    "id": "71d1a5d2-ba9f-48b7-9b09-0516840a07ee",
+    "batchId": "85df79f3-7e3f-4d74-9931-9aa513195815",
+    "wrWrkInst": 243204754,
+    "status": "LOCKED",
+    "productFamily": "SAL",
+    "workTitle": "Learning in Your Sleep",
+    "systemTitle": "Learning in Your Sleep",
+    "standardNumber": "09639292",
+    "standardNumberType": "VALISSN",
+    "grossAmount": 0,
+    "netAmount": 0,
+    "serviceFeeAmount": 0,
+    "salUsage": {
+      "detailType": "UD",
+      "grade": "6",
+      "gradeGroup": "GRADE6_8",
+      "assessmentName": "FY16 AIR",
+      "reportedWorkPortionId": "1201001IB2362",
+      "reportedArticle": "Learning in Your Sleep",
+      "reportedStandardNumber": "450220996",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": "2015-03-04",
+      "reportedPageRange": "14-17",
+      "reportedVolNumberSeries": "Vol 6, Issue 3",
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": "1.0",
+      "coverageYear": "2012-2013",
+      "scoredAssessmentDate": "2015-10-03",
+      "questionIdentifier": "SB7663",
+      "states": "SD;VT",
+      "numberOfViews": "42"
+    },
+    "rightsholder": {
+      "accountNumber": 1000000026
+    },
+    "payee": {
+      "accountNumber": 1000011450
+    },
+    "comment": "SAL usage comment 2"
+  }
+]
