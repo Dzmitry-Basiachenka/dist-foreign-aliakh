@@ -537,6 +537,17 @@ public class ReportServiceTest {
         verify(rhTaxService);
     }
 
+    @Test
+    public void testWriteSalLiabilitiesSummaryByRhAndWorkCsvReport() {
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        List<Scenario> scenarios = Collections.singletonList(new Scenario());
+        reportRepository.writeSalLiabilitiesSummaryByRhAndWorkCsvReport(scenarios, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeSalLiabilitiesSummaryByRhAndWorkCsvReport(scenarios, outputStream);
+        verify(reportRepository);
+    }
+
     private Scenario buildScenario(ScenarioStatusEnum status) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());

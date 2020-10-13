@@ -332,7 +332,7 @@ public interface IReportRepository {
      * @param scenarios    list of scenarios
      * @param outputStream instance of {@link OutputStream}
      */
-    void writeLiabilitiesSummaryByRhAndWorkReportCsvReport(List<Scenario> scenarios, OutputStream outputStream);
+    void writeSalLiabilitiesSummaryByRhAndWorkCsvReport(List<Scenario> scenarios, OutputStream outputStream);
 
     /**
      * Finds archived usages by SAL scenario id and writes them into the output stream in CSV format.

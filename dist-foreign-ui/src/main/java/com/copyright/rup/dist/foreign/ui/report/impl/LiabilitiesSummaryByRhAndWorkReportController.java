@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
@@ -38,6 +39,8 @@ public class LiabilitiesSummaryByRhAndWorkReportController extends CommonControl
     private IScenarioService scenarioService;
     @Autowired
     private IProductFamilyProvider productFamilyProvider;
+    @Autowired
+    private IReportService reportService;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -48,9 +51,9 @@ public class LiabilitiesSummaryByRhAndWorkReportController extends CommonControl
 
     @Override
     public IStreamSource getCsvStreamSource() {
-        return new ByteArrayStreamSource("liabilities_summary_by_rightsholder_and_work_", os -> {
-            // TODO {aliakh} implement the service
-        });
+        return new ByteArrayStreamSource("liabilities_summary_by_rightsholder_and_work_",
+            os -> reportService.writeSalLiabilitiesSummaryByRhAndWorkCsvReport(
+                getWidget().getSelectedScenarios(), os));
     }
 
     @Override

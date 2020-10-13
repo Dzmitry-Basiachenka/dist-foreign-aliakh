@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.NtsWithdrawnBatchesCsvReportWriter;
 import com.copyright.rup.dist.foreign.service.impl.csv.RhTaxInformationCsvReportWriter;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -236,5 +235,11 @@ public class ReportService implements IReportService {
         try (RhTaxInformationCsvReportWriter writer = new RhTaxInformationCsvReportWriter(outputStream)) {
             writer.writeAll(rhTaxInformation);
         }
+    }
+
+    @Override
+    public void writeSalLiabilitiesSummaryByRhAndWorkCsvReport(List<Scenario> scenarios,
+                                                               OutputStream outputStream) {
+        reportRepository.writeSalLiabilitiesSummaryByRhAndWorkCsvReport(scenarios, outputStream);
     }
 }

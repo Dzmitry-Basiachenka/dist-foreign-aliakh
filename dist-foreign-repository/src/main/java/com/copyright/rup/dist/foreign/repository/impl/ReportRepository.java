@@ -465,8 +465,8 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     }
 
     @Override
-    public void writeLiabilitiesSummaryByRhAndWorkReportCsvReport(List<Scenario> scenarios,
-                                                                  OutputStream outputStream) {
+    public void writeSalLiabilitiesSummaryByRhAndWorkCsvReport(List<Scenario> scenarios,
+                                                               OutputStream outputStream) {
         try (LiabilitiesSummaryByRhAndWorkReportHandler handler =
                  new LiabilitiesSummaryByRhAndWorkReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);

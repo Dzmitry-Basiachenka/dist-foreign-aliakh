@@ -266,4 +266,12 @@ public interface IReportService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeTaxNotificationCsvReport(Set<String> scenarioIds, int numberOfDays, OutputStream outputStream);
+
+    /**
+     * Writes SAL Liabilities Summary by Rightsholder and Work Report into the output stream in CSV format.
+     *
+     * @param scenarioIds  list of scenario ids
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeSalLiabilitiesSummaryByRhAndWorkCsvReport(List<Scenario> scenarioIds, OutputStream outputStream);
 }
