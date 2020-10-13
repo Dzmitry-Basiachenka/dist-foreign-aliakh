@@ -1,3 +1,10 @@
+12.1.12
+-
+* B-57772 Tech Debt: FDA: implement service to delete SAL scenario
+* B-57772 Tech Debt: FDA: move common logic related to open window of create scenario to common usage window
+* B-58518 FDA: Load SAL usage data: make changes based on comments in CR-DIST-FOREIGN-199
+* CDP-946 FDA: Load Sal Fund Pool: Wrong calculation of grade amounts during fund pool creation
+
 12.1.11
 -
 * B-57772 Tech Debt: FDA: fix  CVE-2020-5421 vulnerability
