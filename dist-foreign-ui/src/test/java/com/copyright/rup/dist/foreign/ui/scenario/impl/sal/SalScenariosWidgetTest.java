@@ -128,7 +128,6 @@ public class SalScenariosWidgetTest {
         replay(controller, usageController);
         scenariosWidget.selectScenario(scenario);
         assertEquals(scenario, grid.getSelectedItems().iterator().next());
-        // TODO assert the scenario
     }
 
     @Test
@@ -180,8 +179,9 @@ public class SalScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        assertEquals(1, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "Delete");
+        assertEquals(2, layout.getComponentCount());
+        verifyButton(layout.getComponent(0), "View");
+        verifyButton(layout.getComponent(1), "Delete");
     }
 
     private void verifyButton(Component component, String caption) {

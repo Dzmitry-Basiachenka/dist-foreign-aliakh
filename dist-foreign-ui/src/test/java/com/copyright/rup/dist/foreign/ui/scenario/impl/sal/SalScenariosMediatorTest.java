@@ -34,12 +34,15 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class SalScenariosMediatorTest {
 
     private SalScenariosMediator mediator;
+    private Button viewButton;
     private Button deleteButton;
 
     @Before
     public void setUp() {
         mockStatic(SecurityUtils.class);
         mediator = new SalScenariosMediator();
+        viewButton = new Button("View");
+        mediator.setViewButton(viewButton);
         deleteButton = new Button("Delete");
         mediator.setDeleteButton(deleteButton);
     }
@@ -49,6 +52,7 @@ public class SalScenariosMediatorTest {
         mockViewOnlyPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
+        assertTrue(viewButton.isVisible());
         assertFalse(deleteButton.isVisible());
         verify(SecurityUtils.class);
     }
@@ -58,6 +62,7 @@ public class SalScenariosMediatorTest {
         mockManagerPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
+        assertTrue(viewButton.isVisible());
         assertFalse(deleteButton.isVisible());
         verify(SecurityUtils.class);
     }
@@ -67,6 +72,7 @@ public class SalScenariosMediatorTest {
         mockSpecialistPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
+        assertTrue(viewButton.isVisible());
         assertTrue(deleteButton.isVisible());
         verify(SecurityUtils.class);
     }
@@ -74,6 +80,7 @@ public class SalScenariosMediatorTest {
     @Test
     public void testSelectedScenarioChangedNullScenario() {
         mediator.selectedScenarioChanged(null);
+        assertTrue(viewButton.isVisible());
         assertFalse(deleteButton.isEnabled());
     }
 
@@ -82,18 +89,22 @@ public class SalScenariosMediatorTest {
         Scenario scenario = new Scenario();
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         mediator.selectedScenarioChanged(scenario);
+        assertTrue(viewButton.isVisible());
         assertTrue(deleteButton.isEnabled());
     }
 
     private void mockViewOnlyPermissions() {
+        expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
     }
 
     private void mockManagerPermissions() {
+        expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
     }
 
     private void mockSpecialistPermissions() {
+        expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
     }
