@@ -222,8 +222,8 @@ public class FundPoolService implements IFundPoolService {
                                                    int studentsCount) {
         BigDecimal amount;
         if (0 < studentsCount) {
-            amount = multiplier.multiply(BigDecimal.valueOf(studentsCount)
-                .divide(totalStudentsCount, SCALE_10, RoundingMode.DOWN))
+            amount = multiplier.multiply(BigDecimal.valueOf(studentsCount))
+                .divide(totalStudentsCount, SCALE_10, RoundingMode.DOWN)
                 .setScale(DEFAULT_SCALE, RoundingMode.DOWN);
         } else {
             amount = ZERO;
