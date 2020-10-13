@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto;
 import com.copyright.rup.dist.foreign.domain.report.FasServiceFeeTrueUpReportDto;
 import com.copyright.rup.dist.foreign.domain.report.LiabilitiesByRhReportDto;
+import com.copyright.rup.dist.foreign.domain.report.LiabilitiesSummaryByRhAndWorkReportDto;
 import com.copyright.rup.dist.foreign.domain.report.NtsServiceFeeTrueUpReportDto;
 import com.copyright.rup.dist.foreign.domain.report.NtsWithDrawnBatchSummaryReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
@@ -85,7 +86,8 @@ public class DomainVerifierTest {
             {RhTaxInformation.class},
             {RightsholderPayeeProductFamilyHolder.class},
             {SalUsage.class},
-            {LiabilitiesByRhReportDto.class}
+            {LiabilitiesByRhReportDto.class},
+            {LiabilitiesSummaryByRhAndWorkReportDto.class}
         };
         return Arrays.asList(testData);
     }
