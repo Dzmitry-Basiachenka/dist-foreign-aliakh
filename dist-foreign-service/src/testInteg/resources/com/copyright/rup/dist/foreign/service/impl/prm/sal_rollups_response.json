@@ -1,0 +1,53 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "60080587-a225-439c-81af-f016cb33aeac",
+          "relatedExternalOrganizationKey": "2000133267",
+          "pmLicenseProductUid": "*",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "00d4ae90-5fe7-47bf-ace1-781c8d76d4da",
+          "rollupExternalOrganizationKey": "1000001820"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "60080587-a225-439c-81af-f016cb33aeac",
+          "relatedExternalOrganizationKey": "2000133267",
+          "pmLicenseProductUid": "AACL",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+          "rollupExternalOrganizationKey": "1000009997"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "60080587-a225-439c-81af-f016cb33aeac",
+          "relatedExternalOrganizationKey": "2000133267",
+          "pmLicenseProductUid": "SAL",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "00d4ae90-5fe7-47bf-ace1-781c8d76d4da",
+          "rollupExternalOrganizationKey": "1000001820"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "b0e6b1f6-89e9-4767-b143-db0f49f32769",
+          "relatedExternalOrganizationKey": "2000073957",
+          "pmLicenseProductUid": "AACL",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "false",
+          "rollupOrganizationUid": "671b8b20-7335-4938-988e-1da803efa6e3",
+          "rollupExternalOrganizationKey": "1000010029"
+        }
+      ]
+    ]
+  }
+}

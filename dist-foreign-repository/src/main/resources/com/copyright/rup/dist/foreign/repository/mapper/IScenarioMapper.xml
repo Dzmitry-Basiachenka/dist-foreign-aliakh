@@ -219,6 +219,7 @@
             s.status_ind,
             s.description,
             s.aacl_fields,
+            s.sal_fields,
             s.nts_fields,
             s.created_by_user,
             s.created_datetime,
