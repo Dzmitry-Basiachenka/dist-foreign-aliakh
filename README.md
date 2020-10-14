@@ -1,3 +1,13 @@
+12.1.13
+-
+* B-57885 FDA: SAL Exports: Scenario-specific usage details: implement backend logic to generate CSV file
+* B-57885 FDA: SAL Exports: Scenario-specific usage details: implement repository logic to generate export usages
+* B-57887 FDA: modify the scenario pop up view for SAL: implement view scenario window with abitility to export Rightsholder details
+* B-57894 FDA: Delete SAL scenario: refactor scenarios widget to delete scenario
+* B-57897 FDA: Create SAL Scenario: add integration test to verify scenario creating
+* B-60438 FDA: SAL liabilities by RH report with splits and counts: implement reports tab and common interfaces
+* B-62518 Tech Debt: FDA: adjust grants priority mapping based on PPS-263
+
 12.1.12
 -
 * B-57772 Tech Debt: FDA: implement service to delete SAL scenario
