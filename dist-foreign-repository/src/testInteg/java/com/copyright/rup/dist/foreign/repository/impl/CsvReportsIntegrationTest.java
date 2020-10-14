@@ -284,6 +284,20 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    public void testWriteSalScenarioUsagesCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeSalScenarioUsagesCsvReport("d79c1cef-b764-49ca-ab54-812d84cca548",
+                outputStream), "scenario_usages_report_sal.csv");
+    }
+
+    @Test
+    public void testWriteArchivedSalScenarioUsagesCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeArchivedSalScenarioUsagesCsvReport("5ba85c68-1f19-45c0-a6f3-a5c0e7737636",
+                outputStream), "archive_scenario_usages_report_sal.csv");
+    }
+
+    @Test
     public void testExportScenarioRightsholderTotalsCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeScenarioRightsholderTotalsCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",

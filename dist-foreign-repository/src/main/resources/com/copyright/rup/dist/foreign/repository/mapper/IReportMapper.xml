@@ -574,12 +574,20 @@
         <include refid="IAaclUsageMapper.selectDtoByScenarioIdSql"/>
     </select>
 
+    <select id="findSalScenarioUsageReportDtos" parameterType="map" resultMap="ISalUsageMapper.salUsageDtoResultMap">
+        <include refid="ISalUsageMapper.selectDtoByScenarioIdSql"/>
+    </select>
+
     <select id="findArchivedScenarioUsageReportDtos" resultMap="IUsageMapper.usageDtoResultMap">
         <include refid="IUsageArchiveMapper.selectDtoByScenarioIdSql"/>
     </select>
 
     <select id="findAaclArchivedScenarioUsageReportDtos" resultMap="IAaclUsageMapper.aaclUsageDtoResultMap">
         <include refid="IAaclUsageMapper.selectArchivedDtoByScenarioIdSql"/>
+    </select>
+
+    <select id="findSalArchivedScenarioUsageReportDtos" parameterType="map" resultMap="ISalUsageMapper.salUsageDtoResultMap">
+        <include refid="ISalUsageMapper.selectArchivedDtoByScenarioIdSql"/>
     </select>
 
     <select id="findRightsholderTotalsHoldersReportDtos" parameterType="map" resultMap="IUsageMapper.rightsholderTotalsHolderResultMap">

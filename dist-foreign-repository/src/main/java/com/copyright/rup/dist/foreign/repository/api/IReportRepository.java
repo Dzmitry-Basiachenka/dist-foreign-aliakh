@@ -317,4 +317,20 @@ public interface IReportRepository {
      * @param outputStream        instance of {@link OutputStream}
      */
     void writeNtsUndistributedLiabilitiesCsvReport(BigDecimal estimatedServiceFee, OutputStream outputStream);
+
+    /**
+     * Finds archived usages by SAL scenario id and writes them into the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeArchivedSalScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds usages by SAL scenario id and writes them into the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeSalScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 }
