@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.sal;
 
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
@@ -7,6 +10,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenarioController
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -30,6 +34,8 @@ public class SalScenariosController extends CommonScenariosController implements
     private IScenarioHistoryController scenarioHistoryController;
     @Autowired
     private ISalScenarioController scenarioController;
+    @Autowired
+    private ISalScenarioService salScenarioService;
 
     @Override
     public void sendToLm() {
@@ -43,7 +49,12 @@ public class SalScenariosController extends CommonScenariosController implements
 
     @Override
     public void onDeleteButtonClicked() {
-        // TODO implement deleting for SAL scenario
+        Scenario scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario"),
+            () -> {
+                salScenarioService.deleteScenario(scenario);
+                getWidget().refresh();
+            });
     }
 
     @Override

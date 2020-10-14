@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -20,6 +21,8 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -177,7 +180,18 @@ public class SalScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        // TODO assert the buttons
+        assertEquals(1, layout.getComponentCount());
+        verifyButton(layout.getComponent(0), "Delete");
+    }
+
+    private void verifyButton(Component component, String caption) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
+        assertEquals(caption, button.getCaption());
+        assertEquals(caption.replaceAll(StringUtils.SPACE, "_"), button.getId());
+        assertFalse(button.isEnabled());
+        assertTrue(button.isDisableOnClick());
+        assertEquals(2, button.getListeners(ClickEvent.class).size());
     }
 
     private void verifySize(Component component) {
