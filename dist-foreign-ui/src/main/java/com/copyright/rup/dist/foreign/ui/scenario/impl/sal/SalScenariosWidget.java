@@ -11,10 +11,14 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Implementation of {@link ISalScenariosWidget}.
@@ -27,9 +31,17 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class SalScenariosWidget extends CommonScenariosWidget implements ISalScenariosWidget {
 
+    private final ISalScenariosController controller;
     private SalScenariosMediator mediator;
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
     private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
+    private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label serviceFeeTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label fundPoolNameLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label selectionCriteriaLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
 
     /**
      * Controller.
@@ -40,6 +52,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
     SalScenariosWidget(ISalScenariosController controller, IScenarioHistoryController historyController) {
         super(historyController);
         setController(controller);
+        this.controller = controller;
     }
 
     @Override
@@ -69,8 +82,10 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
 
     @Override
     protected VerticalLayout initMetadataLayout() {
-        // TODO implement metadata panel for SAL scenarios
-        VerticalLayout metadataLayout = new VerticalLayout();
+        descriptionLabel.setStyleName("v-label-white-space-normal");
+        selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
+        VerticalLayout metadataLayout = new VerticalLayout(ownerLabel, grossTotalLabel, serviceFeeTotalLabel,
+            netTotalLabel, descriptionLabel, selectionCriteriaLabel, fundPoolNameLabel);
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
         return metadataLayout;
@@ -78,7 +93,17 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
 
     @Override
     protected void updateScenarioMetadata(Scenario scenarioWithAmounts) {
-        // TODO implement updating metadata panel for SAL scenarios
+        ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenarioWithAmounts.getCreateUser()));
+        netTotalLabel.setValue(ForeignUi.getMessage("label.net_amount_in_usd",
+            formatAmount(scenarioWithAmounts.getNetTotal())));
+        grossTotalLabel.setValue(ForeignUi.getMessage("label.gross_amount_in_usd",
+            formatAmount(scenarioWithAmounts.getGrossTotal())));
+        serviceFeeTotalLabel.setValue(ForeignUi.getMessage("label.service_fee_amount_in_usd",
+            formatAmount(scenarioWithAmounts.getServiceFeeTotal())));
+        descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenarioWithAmounts.getDescription()));
+        selectionCriteriaLabel.setValue(getController().getCriteriaHtmlRepresentation());
+        fundPoolNameLabel.setValue(ForeignUi.getMessage("label.metadata.fund_pool_name",
+            controller.getFundPoolName(scenarioWithAmounts.getSalFields().getFundPoolId())));
     }
 
     private void addButtonsListeners() {

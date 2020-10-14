@@ -12,6 +12,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.SalFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosController;
@@ -27,6 +28,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
@@ -58,6 +60,9 @@ public class SalScenariosWidgetTest {
 
     private static final String GRID_ID = "scenarioGrid";
     private static final String SCENARIO_ID = "01abf4a3-d7a2-45cb-af79-e217dfe0ac1a";
+    private static final String FUND_POOL_ID = "15ad787b-da14-45d9-aed7-6b1eb119b4dd";
+    private static final String FUND_POOL_NAME = "SAL fund pool";
+    private static final String SELECTION_CRITERIA = "<b>Selection Criteria:</b>";
 
     private SalScenariosWidget scenariosWidget;
     private ISalScenariosController controller;
@@ -78,6 +83,9 @@ public class SalScenariosWidgetTest {
         scenario.setGrossTotal(new BigDecimal("10000.00"));
         scenario.setCreateUser("user@copyright.com");
         scenario.setAuditItem(buildScenarioAuditItem());
+        SalFields salFields = new SalFields();
+        salFields.setFundPoolId(FUND_POOL_ID);
+        scenario.setSalFields(salFields);
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         replay(controller, usageController);
         scenariosWidget.init();
@@ -113,6 +121,8 @@ public class SalScenariosWidgetTest {
     public void testRefresh() {
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).times(2);
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
+        expect(controller.getFundPoolName(FUND_POOL_ID)).andReturn(FUND_POOL_NAME).times(2);
         replay(controller, usageController);
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
@@ -124,7 +134,8 @@ public class SalScenariosWidgetTest {
         Grid grid = Whitebox.getInternalState(scenariosWidget, GRID_ID);
         assertTrue(CollectionUtils.isEmpty(grid.getSelectedItems()));
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
-        expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).once();
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
+        expect(controller.getFundPoolName(FUND_POOL_ID)).andReturn(FUND_POOL_NAME).once();
         replay(controller, usageController);
         scenariosWidget.selectScenario(scenario);
         assertEquals(scenario, grid.getSelectedItems().iterator().next());
@@ -136,6 +147,8 @@ public class SalScenariosWidgetTest {
         Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
+        expect(controller.getFundPoolName(FUND_POOL_ID)).andReturn(FUND_POOL_NAME).once();
         replay(controller, usageController, grid);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();
@@ -210,6 +223,30 @@ public class SalScenariosWidgetTest {
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
+        assertEquals(8, layout.getComponentCount());
+        verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>user@copyright.com");
+        verifyMetadataLabel(layout.getComponent(1),
+            "<b>Gross Amt in USD: </b><span class='label-amount'>10,000.00</span>");
+        verifyMetadataLabel(layout.getComponent(2),
+            "<b>Service Fee Amt in USD: </b><span class='label-amount'>3,200.00</span>");
+        verifyMetadataLabel(layout.getComponent(3),
+            "<b>Net Amt in USD: </b><span class='label-amount'>6,800.00</span>");
+        verifyMetadataLabel(layout.getComponent(4), "<b>Description: </b>Description");
+        verifyMetadataLabel(layout.getComponent(5), SELECTION_CRITERIA);
+        verifyMetadataLabel(layout.getComponent(6), "<b>Fund Pool Name: </b>SAL fund pool");
+        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(7);
+        assertEquals(5, lastActionLayout.getComponentCount());
+        verifyMetadataLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
+        verifyMetadataLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
+        verifyMetadataLabel(lastActionLayout.getComponent(2), "<b>Date:</b> 12/24/2016 12:00 AM");
+        verifyMetadataLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> ");
+        assertTrue(lastActionLayout.getComponent(4) instanceof Button);
+        assertEquals("View All Actions", lastActionLayout.getComponent(4).getCaption());
+    }
+
+    private void verifyMetadataLabel(Component component, String expectedValue) {
+        assertTrue(component instanceof Label);
+        assertEquals(expectedValue, ((Label) component).getValue());
     }
 
     private ScenarioAuditItem buildScenarioAuditItem() {
