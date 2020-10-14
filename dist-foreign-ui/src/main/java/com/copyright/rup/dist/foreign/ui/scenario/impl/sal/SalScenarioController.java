@@ -37,6 +37,6 @@ public class SalScenarioController extends CommonScenarioController implements I
 
     @Override
     protected void writeScenarioUsagesCsvReport(Scenario scenarioForReport, PipedOutputStream pos) {
-        // TODO implement SAL scenario usages CSV report
+        getReportService().writeSalScenarioUsagesCsvReport(scenarioForReport, pos);
     }
 }

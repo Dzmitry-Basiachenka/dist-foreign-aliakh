@@ -310,6 +310,39 @@ public class ReportServiceTest {
     }
 
     @Test
+    public void testWriteSalScenarioUsagesCsvReportStatusArchived() {
+        Scenario scenario = buildScenario(ScenarioStatusEnum.ARCHIVED);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeArchivedSalScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeSalScenarioUsagesCsvReport(scenario, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testWriteSalScenarioUsagesCsvReportStatusInProgress() {
+        Scenario scenario = buildScenario(ScenarioStatusEnum.IN_PROGRESS);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeSalScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeSalScenarioUsagesCsvReport(scenario, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testWriteSalScenarioUsagesCsvReportStatusSentToLM() {
+        Scenario scenario = buildScenario(ScenarioStatusEnum.SENT_TO_LM);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeArchivedSalScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeSalScenarioUsagesCsvReport(scenario, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
     public void testWriteScenarioRightsholderTotalsCsvReportStatusArchived() {
         Scenario scenario = buildScenario(ScenarioStatusEnum.ARCHIVED);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
