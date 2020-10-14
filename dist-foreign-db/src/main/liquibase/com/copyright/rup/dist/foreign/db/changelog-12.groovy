@@ -44,4 +44,31 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2020-10-14-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment("B-62518 Tech Debt: FDA: update grant_product_family column for NGT_PRINT_COURSE_MATERIALS " +
+                "and NGT_ELECTRONIC_COURSE_MATERIALS license types based on PPS-263")
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'APS')
+            where "license_type = 'NGT_PRINT_COURSE_MATERIALS'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'ECC')
+            where "license_type = 'NGT_ELECTRONIC_COURSE_MATERIALS'"
+        }
+
+        rollback {
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'grant_product_family', value: 'NGT_PRINT_COURSE_MATERIALS')
+                where "license_type = 'NGT_PRINT_COURSE_MATERIALS'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'grant_product_family', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+                where "license_type = 'NGT_ELECTRONIC_COURSE_MATERIALS'"
+            }
+        }
+    }
 }
