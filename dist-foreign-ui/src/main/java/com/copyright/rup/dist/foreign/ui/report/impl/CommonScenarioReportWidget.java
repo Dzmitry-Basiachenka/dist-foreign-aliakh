@@ -4,7 +4,7 @@ import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IScenarioReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -19,7 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 /**
- * Implementation of {@link IScenarioReportWidget}.
+ * Implementation of {@link ICommonScenarioReportWidget}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -27,7 +27,7 @@ import com.vaadin.ui.Window;
  *
  * @author Ihar Suvorau
  */
-public class ScenarioReportWidget extends Window implements IScenarioReportWidget {
+public class CommonScenarioReportWidget extends Window implements ICommonScenarioReportWidget {
 
     private ICommonScenarioReportController controller;
     private ComboBox<Scenario> scenarioComboBox;
@@ -35,7 +35,7 @@ public class ScenarioReportWidget extends Window implements IScenarioReportWidge
 
     @Override
     @SuppressWarnings("unchecked")
-    public IScenarioReportWidget init() {
+    public ICommonScenarioReportWidget init() {
         VerticalLayout content = new VerticalLayout(getScenarioCombobox(), getButtonsLayout());
         content.setSpacing(false);
         VaadinUtils.setMaxComponentsWidth(content);

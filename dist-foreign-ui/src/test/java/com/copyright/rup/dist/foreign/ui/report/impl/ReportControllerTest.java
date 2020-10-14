@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
@@ -46,6 +47,7 @@ public class ReportControllerTest {
 
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
     private IFasServiceFeeTrueUpReportController fasServiceFeeTrueUpReportController;
+    private ICommonScenariosReportController liabilitiesByRhReportController;
     private ICommonScenarioReportController ntsServiceFeeTrueUpReportController;
     private ReportController reportController;
     private IReportService reportService;
@@ -56,11 +58,13 @@ public class ReportControllerTest {
         reportController = new ReportController();
         reportService = createMock(IReportService.class);
         undistributedLiabilitiesReportController = createMock(IUndistributedLiabilitiesReportController.class);
+        liabilitiesByRhReportController = createMock(ICommonScenariosReportController.class);
         fasServiceFeeTrueUpReportController = createMock(IFasServiceFeeTrueUpReportController.class);
         ntsServiceFeeTrueUpReportController = createMock(ICommonScenarioReportController.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(reportController, undistributedLiabilitiesReportController);
         Whitebox.setInternalState(reportController, fasServiceFeeTrueUpReportController);
+        Whitebox.setInternalState(reportController, "liabilitiesByRhReportController", liabilitiesByRhReportController);
         Whitebox.setInternalState(reportController,
             "ntsServiceFeeTrueUpReportController", ntsServiceFeeTrueUpReportController);
         Whitebox.setInternalState(reportController, reportService);
@@ -70,6 +74,11 @@ public class ReportControllerTest {
     @Test
     public void testProductFamilyProvider() {
         assertSame(productFamilyProvider, reportController.getProductFamilyProvider());
+    }
+
+    @Test
+    public void testGetLiabilitiesByRhReportController() {
+        assertSame(liabilitiesByRhReportController, reportController.getLiabilitiesByRhReportController());
     }
 
     @Test

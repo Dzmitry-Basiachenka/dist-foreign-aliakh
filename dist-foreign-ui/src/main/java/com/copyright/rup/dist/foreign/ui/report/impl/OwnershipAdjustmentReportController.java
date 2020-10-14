@@ -8,7 +8,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IScenarioReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.collect.ImmutableSet;
@@ -31,7 +31,7 @@ import java.util.Set;
  */
 @Component("df.ownershipAdjustmentReportController")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class OwnershipAdjustmentReportController extends CommonController<IScenarioReportWidget>
+public class OwnershipAdjustmentReportController extends CommonController<ICommonScenarioReportWidget>
     implements ICommonScenarioReportController {
 
     private static final Set<RightsholderDiscrepancyStatusEnum> REPORT_STATUSES =
@@ -60,7 +60,7 @@ public class OwnershipAdjustmentReportController extends CommonController<IScena
     }
 
     @Override
-    protected IScenarioReportWidget instantiateWidget() {
-        return new ScenarioReportWidget();
+    protected ICommonScenarioReportWidget instantiateWidget() {
+        return new CommonScenarioReportWidget();
     }
 }

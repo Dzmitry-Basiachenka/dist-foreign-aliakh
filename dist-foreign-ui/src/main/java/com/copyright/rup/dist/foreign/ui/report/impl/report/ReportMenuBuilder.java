@@ -60,10 +60,10 @@ public enum ReportMenuBuilder implements IReportMenuBuilder {
     /**
      * Report builder for SAL product family
      */
-    SAL(false) {
+    SAL(true) {
         @Override
         public void addItems(IReportController controller, IReportWidget widget, MenuItem rootItem) {
-            //TODO: implement on scope of corresponding story
+            new SalReportMenuBuilder().addItems(controller, widget, rootItem);
         }
     };
 

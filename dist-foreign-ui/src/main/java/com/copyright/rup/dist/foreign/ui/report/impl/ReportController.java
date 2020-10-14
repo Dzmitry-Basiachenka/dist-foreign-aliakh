@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.IAaclBaselineUsagesReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
@@ -51,6 +52,9 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Autowired
     @Qualifier("df.workSharesByAggLcClassSummaryReportController")
     private ICommonScenarioReportController workSharesByAggLcClassSummaryReportController;
+    @Autowired
+    @Qualifier("df.liabilitiesByRhReportController")
+    private ICommonScenariosReportController liabilitiesByRhReportController;
     @Autowired
     private IAaclBaselineUsagesReportController aaclBaselineUsagesReportController;
     @Autowired
@@ -113,6 +117,11 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Override
     public ITaxNotificationReportController getTaxNotificationReportController() {
         return taxNotificationReportController;
+    }
+
+    @Override
+    public ICommonScenariosReportController getLiabilitiesByRhReportController() {
+        return liabilitiesByRhReportController;
     }
 
     @Override
