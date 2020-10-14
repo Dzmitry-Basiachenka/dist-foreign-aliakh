@@ -6,16 +6,20 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -96,6 +100,21 @@ public class SalScenariosControllerTest {
     @Test
     public void testInstantiateWidget() {
         assertNotNull(scenariosController.instantiateWidget());
+    }
+
+    @Test
+    public void testGetFundPoolName() {
+        IFundPoolService fundPoolService = createMock(IFundPoolService.class);
+        Whitebox.setInternalState(scenariosController, fundPoolService);
+        String fundPoolId = "e77cad25-1b5b-45bb-b678-180288f985c1";
+        String fundPoolName = "SAL fund pool";
+        FundPool fundPool = new FundPool();
+        fundPool.setId(fundPoolId);
+        fundPool.setName(fundPoolName);
+        expect(fundPoolService.getFundPoolById(fundPoolId)).andReturn(fundPool).once();
+        replay(fundPoolService);
+        assertEquals(fundPoolName, scenariosController.getFundPoolName(fundPoolId));
+        verify(fundPoolService);
     }
 
     @Test
@@ -207,7 +226,18 @@ public class SalScenariosControllerTest {
         ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter();
         scenarioUsageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         scenarioUsageFilter.setProductFamily(SAL_PRODUCT_FAMILY);
-        // TODO assert criteria
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId("batchId");
+        usageBatch.setName("BatchName");
+        scenarioUsageFilter.setUsageBatches(Collections.singleton(usageBatch));
+        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(scenarioUsageFilter).once();
+        replay(scenariosWidget, scenarioUsageFilterService);
+        String result = scenariosController.getCriteriaHtmlRepresentation();
+        assertTrue(result.contains("<b>Selection Criteria:</b>"));
+        assertTrue(result.contains("<li><b><i>Product Family </i></b>(SAL)</li>"));
+        assertTrue(result.contains("<li><b><i>Batch in </i></b>(BatchName)</li>"));
+        assertTrue(result.contains("<li><b><i>Status </i></b>(ELIGIBLE)</li>"));
+        verify(scenariosWidget, scenarioUsageFilterService);
     }
 
     private void buildScenario() {
