@@ -17,7 +17,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.ui.report.api.IScenarioReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportWidget;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -75,7 +75,7 @@ public class NtsServiceFeeTrueUpReportControllerTest {
         OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
         Scenario scenario = new Scenario();
-        IScenarioReportWidget widget = createMock(IScenarioReportWidget.class);
+        ICommonScenarioReportWidget widget = createMock(ICommonScenarioReportWidget.class);
         Whitebox.setInternalState(controller, widget);
         Capture<OutputStream> osCapture = new Capture<>();
         expect(OffsetDateTime.now()).andReturn(now).once();
@@ -93,8 +93,8 @@ public class NtsServiceFeeTrueUpReportControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        IScenarioReportWidget widget = controller.instantiateWidget();
+        ICommonScenarioReportWidget widget = controller.instantiateWidget();
         assertNotNull(controller.instantiateWidget());
-        assertEquals(ScenarioReportWidget.class, widget.getClass());
+        assertEquals(CommonScenarioReportWidget.class, widget.getClass());
     }
 }

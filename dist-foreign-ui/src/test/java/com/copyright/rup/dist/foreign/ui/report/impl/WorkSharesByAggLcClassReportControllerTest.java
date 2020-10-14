@@ -18,7 +18,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
-import com.copyright.rup.dist.foreign.ui.report.api.IScenarioReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportWidget;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -72,7 +72,7 @@ public class WorkSharesByAggLcClassReportControllerTest {
         OffsetDateTime now = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
         WorkSharesByAggLcClassReportController controller = new WorkSharesByAggLcClassReportController();
-        IScenarioReportWidget widget = createMock(IScenarioReportWidget.class);
+        ICommonScenarioReportWidget widget = createMock(ICommonScenarioReportWidget.class);
         IStreamSourceHandler streamSourceHandler = createMock(IStreamSourceHandler.class);
         IReportService reportService = createMock(IReportService.class);
         Whitebox.setInternalState(controller, widget);
@@ -106,8 +106,8 @@ public class WorkSharesByAggLcClassReportControllerTest {
     @Test
     public void testInstantiateWidget() {
         WorkSharesByAggLcClassReportController controller = new WorkSharesByAggLcClassReportController();
-        IScenarioReportWidget widget = controller.instantiateWidget();
+        ICommonScenarioReportWidget widget = controller.instantiateWidget();
         assertNotNull(controller.instantiateWidget());
-        assertEquals(ScenarioReportWidget.class, widget.getClass());
+        assertEquals(CommonScenarioReportWidget.class, widget.getClass());
     }
 }

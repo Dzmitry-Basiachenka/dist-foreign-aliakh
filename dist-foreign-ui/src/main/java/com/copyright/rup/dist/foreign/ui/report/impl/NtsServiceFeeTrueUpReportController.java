@@ -8,7 +8,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IScenarioReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Component("df.ntsServiceFeeTrueUpReportController")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class NtsServiceFeeTrueUpReportController extends CommonController<IScenarioReportWidget>
+public class NtsServiceFeeTrueUpReportController extends CommonController<ICommonScenarioReportWidget>
     implements ICommonScenarioReportController {
 
     @Autowired
@@ -52,7 +52,7 @@ public class NtsServiceFeeTrueUpReportController extends CommonController<IScena
     }
 
     @Override
-    protected IScenarioReportWidget instantiateWidget() {
-        return new ScenarioReportWidget();
+    protected ICommonScenarioReportWidget instantiateWidget() {
+        return new CommonScenarioReportWidget();
     }
 }

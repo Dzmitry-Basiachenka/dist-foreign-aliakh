@@ -7,7 +7,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IScenarioReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 @Component("df.workSharesByAggLcClassSummaryReportController")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class WorkSharesByAggLcClassSummaryReportController extends CommonController<IScenarioReportWidget>
+public class WorkSharesByAggLcClassSummaryReportController extends CommonController<ICommonScenarioReportWidget>
     implements ICommonScenarioReportController {
 
     @Autowired
@@ -53,7 +53,7 @@ public class WorkSharesByAggLcClassSummaryReportController extends CommonControl
     }
 
     @Override
-    protected IScenarioReportWidget instantiateWidget() {
-        return new ScenarioReportWidget();
+    protected ICommonScenarioReportWidget instantiateWidget() {
+        return new CommonScenarioReportWidget();
     }
 }

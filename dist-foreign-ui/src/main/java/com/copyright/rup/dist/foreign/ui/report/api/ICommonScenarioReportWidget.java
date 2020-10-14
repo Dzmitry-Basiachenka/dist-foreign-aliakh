@@ -12,7 +12,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Ihar Suvorau
  */
-public interface IScenarioReportWidget extends IWidget<ICommonScenarioReportController> {
+public interface ICommonScenarioReportWidget extends IWidget<ICommonScenarioReportController> {
 
     /**
      * @return the selected scenario.

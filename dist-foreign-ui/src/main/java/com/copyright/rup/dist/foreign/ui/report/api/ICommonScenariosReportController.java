@@ -7,15 +7,15 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import java.util.List;
 
 /**
- * Interface for common scenario report controller.
+ * Interface for common scenarios report controller.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 04/22/2020
+ * Date: 10/14/2020
  *
- * @author Ihar Suvorau
+ * @author Uladzislau Shalamitski
  */
-public interface ICommonScenarioReportController extends IController<ICommonScenarioReportWidget>,
+public interface ICommonScenariosReportController extends IController<ICommonScenariosReportWidget>,
     ICsvReportProvider {
 
     /**

@@ -201,7 +201,7 @@ public class ReportWidgetTest {
     public void testNtsServiceFeeTrueUpReportSelected() {
         ICommonScenarioReportController controller = createMock(ICommonScenarioReportController.class);
         expect(reportController.getNtsServiceFeeTrueUpReportController()).andReturn(controller).once();
-        expect(controller.initWidget()).andReturn(new ScenarioReportWidget()).once();
+        expect(controller.initWidget()).andReturn(new CommonScenarioReportWidget()).once();
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
         expectProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);

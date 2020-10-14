@@ -39,7 +39,7 @@ import java.util.Collections;
 import java.util.function.Supplier;
 
 /**
- * Verifies {@link ScenarioReportWidget}.
+ * Verifies {@link CommonScenarioReportWidget}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -47,7 +47,7 @@ import java.util.function.Supplier;
  *
  * @author Ihar Suvorau
  */
-public class ScenarioReportWidgetTest {
+public class CommonScenarioReportWidgetTest {
 
     @Test
     public void testInit() {
@@ -68,13 +68,13 @@ public class ScenarioReportWidgetTest {
         expect(streamSourceHandler.getCsvStreamSource(anyObject(), anyObject())).andReturn(streamSource).once();
         Whitebox.setInternalState(controller, streamSourceHandler);
         replay(scenarioService, streamSourceHandler, streamSource, productFamilyProvider);
-        ScenarioReportWidget widget = (ScenarioReportWidget) controller.initWidget();
+        CommonScenarioReportWidget widget = (CommonScenarioReportWidget) controller.initWidget();
         verify(scenarioService, streamSourceHandler, streamSource, productFamilyProvider);
         verifySize(widget);
         verifyContent(widget.getContent(), scenario);
     }
 
-    private void verifySize(ScenarioReportWidget widget) {
+    private void verifySize(CommonScenarioReportWidget widget) {
         assertEquals(450, widget.getWidth(), 0);
         assertEquals(-1.0, widget.getHeight(), 0);
         assertEquals(Sizeable.Unit.PIXELS, widget.getWidthUnits());
