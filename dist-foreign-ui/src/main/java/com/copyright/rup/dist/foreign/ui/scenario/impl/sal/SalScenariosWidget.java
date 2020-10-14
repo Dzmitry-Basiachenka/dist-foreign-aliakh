@@ -28,6 +28,7 @@ import com.vaadin.ui.VerticalLayout;
 public class SalScenariosWidget extends CommonScenariosWidget implements ISalScenariosWidget {
 
     private SalScenariosMediator mediator;
+    private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
     private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
 
     /**
@@ -44,6 +45,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
     @Override
     public IMediator initMediator() {
         mediator = new SalScenariosMediator();
+        mediator.setViewButton(viewButton);
         mediator.setDeleteButton(deleteButton);
         mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
@@ -58,8 +60,8 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
     protected HorizontalLayout initButtonsLayout() {
         HorizontalLayout layout = new HorizontalLayout();
         addButtonsListeners();
-        VaadinUtils.setButtonsAutoDisabled(deleteButton);
-        layout.addComponents(deleteButton);
+        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton);
+        layout.addComponents(viewButton, deleteButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
@@ -80,6 +82,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
     }
 
     private void addButtonsListeners() {
+        viewButton.addClickListener(event -> getController().onViewButtonClicked());
         deleteButton.addClickListener(event -> getController().onDeleteButtonClicked());
     }
 }
