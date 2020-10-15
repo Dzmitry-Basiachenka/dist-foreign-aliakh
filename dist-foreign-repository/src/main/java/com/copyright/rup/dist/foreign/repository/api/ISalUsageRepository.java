@@ -169,4 +169,20 @@ public interface ISalUsageRepository {
      */
     List<UsageDto> findByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue,
                                                       Pageable pageable, Sort sort);
+
+    /**
+     * Finds usages based on scenario identifier.
+     *
+     * @param scenarioId scenario id
+     * @return the list of {@link Usage}s
+     */
+    List<Usage> findByScenarioId(String scenarioId);
+
+    /**
+     * Calculates gross_amount, service_fee, service_fee_amount and net_amount for all scenario usages.
+     *
+     * @param scenarioId scenario identifier
+     * @param userName   user name
+     */
+    void calculateAmounts(String scenarioId, String userName);
 }

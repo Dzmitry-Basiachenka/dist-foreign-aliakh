@@ -245,4 +245,9 @@ public class SalUsageService implements ISalUsageService {
                 searchValue)
             : salUsageRepository.findCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue);
     }
+
+    @Override
+    public void calculateAmounts(String scenarioId, String userName) {
+        salUsageRepository.calculateAmounts(scenarioId, userName);
+    }
 }

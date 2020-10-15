@@ -19,6 +19,10 @@
         <result property="payee.id" column="payee_id"/>
         <result property="payee.accountNumber" column="payee_account_number"/>
         <result property="payee.name" column="payee_name"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="serviceFee" column="service_fee"/>
         <result property="status" column="status_ind"/>
         <result property="productFamily" column="product_family"/>
         <result property="comment" column="comment"/>
@@ -518,6 +522,10 @@
         select
             u.df_usage_uid,
             u.df_scenario_uid,
+            u.gross_amount,
+            u.service_fee_amount,
+            u.net_amount,
+            u.service_fee,
             u.payee_account_number,
             p.name payee_name,
             p.df_rightsholder_uid payee_id,
@@ -642,5 +650,89 @@
             <include refid="StoredEntityMapper.update"/>
         where <include refid="IUsageMapper.scenarioBatchesFilter"/>
             and u.status_ind = #{updateStatusFrom}
+    </update>
+
+    <select id="findByScenarioId" parameterType="string" resultMap="salUsageResultMap">
+        select
+            u.df_usage_uid,
+            u.gross_amount,
+            u.service_fee_amount,
+            u.net_amount,
+            u.service_fee,
+            u.payee_account_number,
+            p.name payee_name,
+            <include refid="ISalUsageMapper.salUsageColumns"/>
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        where u.df_scenario_uid = #{scenarioId}
+    </select>
+
+    <update id="calculateAmounts" parameterType="map">
+        with total_weights_by_grade_group as (
+            select
+                usal.grade_group,
+                <!-- assuming number_of_views = 1 for IB detail, so total_weight = sum(media_type_weight) -->
+                sum(usal.media_type_weight * coalesce(usal.number_of_views, 1)) total_weight
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
+            where u.df_scenario_uid = #{scenarioId}
+            group by usal.grade_group
+        ),
+        fund_pool_sal_fields as (
+            select
+                (fp.sal_fields ->> 'item_bank_gross_amount')::numeric item_bank_gross_amount,
+                (fp.sal_fields ->> 'grade_K_5_gross_amount')::numeric grade_k_5_gross_amount,
+                (fp.sal_fields ->> 'grade_6_8_gross_amount')::numeric grade_6_8_gross_amount,
+                (fp.sal_fields ->> 'grade_9_12_gross_amount')::numeric grade_9_12_gross_amount,
+                (fp.sal_fields ->> 'service_fee')::numeric service_fee
+            from ${schema}.df_scenario s
+            join ${schema}.df_fund_pool fp on fp.df_fund_pool_uid = s.sal_fields ->> 'fund_pool_uid'
+                and s.df_scenario_uid = #{scenarioId}
+        ),
+        fund_pool_gross_amounts_by_grade_group as (
+            select
+                'ITEM_BANK' grade_group,
+                fpsf.item_bank_gross_amount gross_amount
+            from fund_pool_sal_fields fpsf
+            union
+            select
+                'GRADEK_5' grade_group,
+                fpsf.grade_k_5_gross_amount gross_amount
+            from fund_pool_sal_fields fpsf
+            union
+            select
+                'GRADE6_8' grade_group,
+                fpsf.grade_6_8_gross_amount gross_amount
+            from fund_pool_sal_fields fpsf
+            union
+            select
+                'GRADE9_12' grade_group,
+                fpsf.grade_9_12_gross_amount gross_amount
+            from fund_pool_sal_fields fpsf
+        ),
+        gross_amounts as (
+            select
+                u.df_usage_uid,
+                <!-- assuming number_of_views = 1 for IB detail, so weight = media_type_weight -->
+                fpga.gross_amount * usal.media_type_weight * coalesce(usal.number_of_views, 1) / tw.total_weight gross_amount
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
+            join total_weights_by_grade_group tw on usal.grade_group = tw.grade_group
+            join fund_pool_gross_amounts_by_grade_group fpga on usal.grade_group = fpga.grade_group
+            where u.df_scenario_uid = #{scenarioId}
+        )
+        update ${schema}.df_usage u
+        set
+            gross_amount = ga.gross_amount,
+            net_amount = ga.gross_amount * (1 - fpsf.service_fee),
+            service_fee_amount = ga.gross_amount - ga.gross_amount * (1 - fpsf.service_fee),
+            service_fee = fpsf.service_fee,
+            <include refid="StoredEntityMapper.update"/>
+        from gross_amounts ga
+        join fund_pool_sal_fields fpsf on true
+        where u.df_usage_uid = ga.df_usage_uid
     </update>
 </mapper>

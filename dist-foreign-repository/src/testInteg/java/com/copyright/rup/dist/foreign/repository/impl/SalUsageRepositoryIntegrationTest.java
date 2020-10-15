@@ -33,8 +33,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -59,6 +61,7 @@ public class SalUsageRepositoryIntegrationTest {
     private static final String USAGE_BATCH_ID_2 = "56069b44-10b1-42d6-9a44-a3fae0029171";
     private static final String USAGE_BATCH_ID_3 = "09cc64a7-171a-4921-8d99-500768137cb8";
     private static final String SCENARIO_ID_1 = "6252afe5-e756-42d4-b96a-708afeda9122";
+    private static final String SCENARIO_ID_2 = "71d242e6-4009-4393-9962-45daf962706a";
     private static final String SAL_PRODUCT_FAMILY = "SAL";
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String USAGE_ID_1 = "c95654c0-a607-4683-878f-99606e90c065";
@@ -67,6 +70,7 @@ public class SalUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_4 = "d8daeed3-e4ee-4b09-b6ec-ef12a12bcd3d";
     private static final String WORK_PORTION_ID_3 = "1101001IB2361";
     private static final String USER_NAME = "user@copyright.com";
+    private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.0000000000");
 
     @Autowired
     private ISalUsageRepository salUsageRepository;
@@ -279,24 +283,47 @@ public class SalUsageRepositoryIntegrationTest {
             assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
             assertNotNull(usage.getScenarioId());
             assertNotNull(usage.getPayee().getAccountNumber());
-//            TODO uncomment when SAL scenario calculation is implemented
-//            assertTrue(BigDecimal.ZERO.compareTo(usage.getServiceFeeAmount()) < 0);
-//            assertTrue(BigDecimal.ZERO.compareTo(usage.getNetAmount()) < 0);
-//            assertTrue(BigDecimal.ZERO.compareTo(usage.getGrossAmount()) < 0);
-//            assertTrue(BigDecimal.ZERO.compareTo(usage.getServiceFee()) < 0);
+            assertEquals(new BigDecimal("980.0000000000"), usage.getGrossAmount());
+            assertEquals(new BigDecimal("667.4000000000"), usage.getNetAmount());
+            assertEquals(new BigDecimal("312.6000000000"), usage.getServiceFeeAmount());
+            assertEquals(new BigDecimal("0.32000"), usage.getServiceFee());
+            assertEquals("SYSTEM", usage.getUpdateUser());
         });
-        salUsageRepository.deleteFromScenario("c0b30809-4a38-46cc-a0dc-641924d1fc43", "SYSTEM");
+        salUsageRepository.deleteFromScenario("c0b30809-4a38-46cc-a0dc-641924d1fc43", USER_NAME);
         usages = salUsageRepository.findByIds(Collections.singletonList(USAGE_ID_4));
         assertEquals(1, usages.size());
         usages.forEach(usage -> {
             assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
             assertNull(usage.getScenarioId());
             assertNull(usage.getPayee().getAccountNumber());
-//            assertEquals(ZERO_AMOUNT, usage.getServiceFeeAmount());
-//            assertEquals(ZERO_AMOUNT, usage.getNetAmount());
-//            assertEquals(ZERO_AMOUNT, usage.getGrossAmount());
-//            assertNull(usage.getServiceFee());
+            assertEquals(ZERO_AMOUNT, usage.getGrossAmount());
+            assertEquals(ZERO_AMOUNT, usage.getNetAmount());
+            assertEquals(ZERO_AMOUNT, usage.getServiceFeeAmount());
+            assertNull(usage.getServiceFee());
+            assertEquals(USER_NAME, usage.getUpdateUser());
         });
+    }
+
+    @Test
+    public void testCalculateScenario() {
+        salUsageRepository.calculateAmounts(SCENARIO_ID_2, USER_NAME);
+        List<Usage> actualUsages = salUsageRepository.findByScenarioId(SCENARIO_ID_2);
+        actualUsages.sort(Comparator.comparing(Usage::getId));
+        assertEquals(6, actualUsages.size());
+        verifyUsageWithAmounts(actualUsages.get(0), "86.9608695652", "65.2206521739", "21.7402173913");
+        verifyUsageWithAmounts(actualUsages.get(1), "26.0882608696", "19.5661956522", "6.5220652174");
+        verifyUsageWithAmounts(actualUsages.get(2), "86.9608695652", "65.2206521739", "21.7402173913");
+        verifyUsageWithAmounts(actualUsages.get(3), "296.2944444444", "222.2208333333", "74.0736111111");
+        verifyUsageWithAmounts(actualUsages.get(4), "237.0355555556", "177.7766666667", "59.2588888889");
+        verifyUsageWithAmounts(actualUsages.get(5), "266.6600000000", "199.9950000000", "66.6650000000");
+    }
+
+    private void verifyUsageWithAmounts(Usage usage, String grossAmount, String netAmount, String serviceFeeAmount) {
+        assertEquals(new BigDecimal(grossAmount), usage.getGrossAmount());
+        assertEquals(new BigDecimal(netAmount), usage.getNetAmount());
+        assertEquals(new BigDecimal(serviceFeeAmount), usage.getServiceFeeAmount());
+        assertEquals(new BigDecimal("0.25000"), usage.getServiceFee());
+        assertEquals(USER_NAME, usage.getUpdateUser());
     }
 
     private UsageFilter buildUsageFilter(Set<String> usageBatchIds, UsageStatusEnum status, String productFamily,
