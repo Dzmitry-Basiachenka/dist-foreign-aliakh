@@ -72,6 +72,6 @@ public class AaclDrillDownByRightsholderWidget extends CommonDrillDownByRightsho
 
     @Override
     protected String getSearchPrompt() {
-        return ForeignUi.getMessage("field.prompt.drill_down_by_rightsholder.search_widget.aacl");
+        return ForeignUi.getMessage("field.prompt.drill_down_by_rightsholder.search_widget.aacl_sal");
     }
 }

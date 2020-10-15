@@ -151,4 +151,27 @@ public interface ISalUsageService {
      * @param scenarioId scenario id
      */
     void deleteFromScenario(String scenarioId);
+
+    /**
+     * Gets list of {@link UsageDto}s based on {@link Scenario} and rightsholder account number.
+     *
+     * @param scenario      a {@link Scenario}
+     * @param accountNumber selected rightsholder account number
+     * @param searchValue   search value
+     * @param pageable      instance of {@link Pageable}
+     * @param sort          instance of {@link Sort}
+     * @return list of {@link UsageDto}s
+     */
+    List<UsageDto> getByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue,
+                                                   Pageable pageable, Sort sort);
+
+    /**
+     * Gets count of usage details based on {@link Scenario} and rightsholder account number.
+     *
+     * @param scenario      a {@link Scenario}
+     * @param accountNumber selected rightsholder account number
+     * @param searchValue   search value
+     * @return count of usage details
+     */
+    int getCountByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue);
 }
