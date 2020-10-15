@@ -76,6 +76,11 @@ public interface IReportController extends IController<IReportWidget> {
     ICommonScenariosReportController getLiabilitiesByRhReportController();
 
     /**
+     * @return liabilities summary by rightsholder and work report controller.
+     */
+    ICommonScenariosReportController getLiabilitiesSummaryByRhAndWorkReportController();
+
+    /**
      * @return instance of {@link IStreamSource} for FAS/FAS2 Batch Summary Report.
      */
     IStreamSource getFasBatchSummaryReportStreamSource();

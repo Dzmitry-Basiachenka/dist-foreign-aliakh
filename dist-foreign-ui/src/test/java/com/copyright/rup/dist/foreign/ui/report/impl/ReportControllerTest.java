@@ -48,6 +48,7 @@ public class ReportControllerTest {
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
     private IFasServiceFeeTrueUpReportController fasServiceFeeTrueUpReportController;
     private ICommonScenariosReportController liabilitiesByRhReportController;
+    private ICommonScenariosReportController liabilitiesSummaryByRhAndWorkReportController;
     private ICommonScenarioReportController ntsServiceFeeTrueUpReportController;
     private ReportController reportController;
     private IReportService reportService;
@@ -59,12 +60,15 @@ public class ReportControllerTest {
         reportService = createMock(IReportService.class);
         undistributedLiabilitiesReportController = createMock(IUndistributedLiabilitiesReportController.class);
         liabilitiesByRhReportController = createMock(ICommonScenariosReportController.class);
+        liabilitiesSummaryByRhAndWorkReportController = createMock(ICommonScenariosReportController.class);
         fasServiceFeeTrueUpReportController = createMock(IFasServiceFeeTrueUpReportController.class);
         ntsServiceFeeTrueUpReportController = createMock(ICommonScenarioReportController.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(reportController, undistributedLiabilitiesReportController);
         Whitebox.setInternalState(reportController, fasServiceFeeTrueUpReportController);
         Whitebox.setInternalState(reportController, "liabilitiesByRhReportController", liabilitiesByRhReportController);
+        Whitebox.setInternalState(reportController,
+            "liabilitiesSummaryByRhAndWorkReportController", liabilitiesSummaryByRhAndWorkReportController);
         Whitebox.setInternalState(reportController,
             "ntsServiceFeeTrueUpReportController", ntsServiceFeeTrueUpReportController);
         Whitebox.setInternalState(reportController, reportService);
@@ -79,6 +83,12 @@ public class ReportControllerTest {
     @Test
     public void testGetLiabilitiesByRhReportController() {
         assertSame(liabilitiesByRhReportController, reportController.getLiabilitiesByRhReportController());
+    }
+
+    @Test
+    public void testGetLiabilitiesSummaryByRhAndWorkReportController() {
+        assertSame(liabilitiesSummaryByRhAndWorkReportController,
+            reportController.getLiabilitiesSummaryByRhAndWorkReportController());
     }
 
     @Test

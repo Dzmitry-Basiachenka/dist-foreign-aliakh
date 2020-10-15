@@ -56,6 +56,9 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Qualifier("df.liabilitiesByRhReportController")
     private ICommonScenariosReportController liabilitiesByRhReportController;
     @Autowired
+    @Qualifier("df.liabilitiesSummaryByRhAndWorkReportController")
+    private ICommonScenariosReportController liabilitiesSummaryByRhAndWorkReportController;
+    @Autowired
     private IAaclBaselineUsagesReportController aaclBaselineUsagesReportController;
     @Autowired
     private ITaxNotificationReportController taxNotificationReportController;
@@ -122,6 +125,11 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Override
     public ICommonScenariosReportController getLiabilitiesByRhReportController() {
         return liabilitiesByRhReportController;
+    }
+
+    @Override
+    public ICommonScenariosReportController getLiabilitiesSummaryByRhAndWorkReportController() {
+        return liabilitiesSummaryByRhAndWorkReportController;
     }
 
     @Override
