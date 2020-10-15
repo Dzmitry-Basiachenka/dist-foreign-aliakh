@@ -224,4 +224,17 @@ public class SalUsageService implements ISalUsageService {
     public void deleteFromScenario(String scenarioId) {
         salUsageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
     }
+
+    @Override
+    public List<UsageDto> getByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue,
+                                                          Pageable pageable, Sort sort) {
+        //TODO {aazarenka} implement later
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public int getCountByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue) {
+        //TODO {aazarenka} implement later
+        return 0;
+    }
 }
