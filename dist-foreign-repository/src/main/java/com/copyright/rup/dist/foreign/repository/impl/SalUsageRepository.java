@@ -18,6 +18,7 @@ import com.google.common.collect.Maps;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -156,5 +157,18 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
         params.put("updateStatusFrom", UsageStatusEnum.LOCKED);
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("ISalUsageMapper.deleteFromScenario", params);
+    }
+
+    @Override
+    public int findCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue) {
+        // TODO {aazarenka} implement later
+        return 0;
+    }
+
+    @Override
+    public List<UsageDto> findByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue,
+                                                             Pageable pageable, Sort sort) {
+        // TODO {aazarenka} implement later
+        return Collections.EMPTY_LIST;
     }
 }

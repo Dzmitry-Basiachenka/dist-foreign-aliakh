@@ -18,6 +18,8 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -26,6 +28,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
@@ -66,18 +69,23 @@ public class SalUsageServiceTest {
     private static final String USAGE_ID_1 = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
     private static final String USAGE_ID_2 = "c72554d7-687e-4173-8406-dbddef74da98";
     private static final String RIGHTSHOLDER_ID = "4914f51d-866c-4e48-8b03-fb4b29b1a5f3";
+    private static final String SCENARIO_ID = "2d50e235-34cd-4c38-9e4c-ecd2e748e9ff";
+    private static final String SEARCH = "search";
     private final ISalUsageService salUsageService = new SalUsageService();
 
     private ISalUsageRepository salUsageRepository;
     private IUsageAuditService usageAuditService;
     private IChainExecutor<Usage> chainExecutor;
+    private IUsageArchiveRepository usageArchiveRepository;
 
     @Before
     public void setUp() {
         salUsageRepository = createMock(ISalUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
+        usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         chainExecutor = createMock(IChainExecutor.class);
         Whitebox.setInternalState(salUsageService, salUsageRepository);
+        Whitebox.setInternalState(salUsageService, usageArchiveRepository);
         Whitebox.setInternalState(salUsageService, usageAuditService);
         Whitebox.setInternalState(salUsageService, chainExecutor);
         Whitebox.setInternalState(salUsageService, "usagesBatchSize", 100);
@@ -254,6 +262,59 @@ public class SalUsageServiceTest {
         replay(salUsageRepository, rightsholderService, prmIntegrationService);
         salUsageService.populatePayees(scenarioId);
         verify(salUsageRepository, rightsholderService, prmIntegrationService);
+    }
+
+    @Test
+    public void testGetCountByScenarioAndRhAccountNumber() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        expect(salUsageRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH))
+            .andReturn(10).once();
+        replay(salUsageRepository);
+        assertEquals(10, salUsageService.getCountByScenarioAndRhAccountNumber(scenario, 1000009422L, SEARCH));
+        verify(salUsageRepository);
+    }
+
+    @Test
+    public void testGetCountByScenarioAndRhAccountNumberForArchived() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        expect(usageArchiveRepository.findSalCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH))
+            .andReturn(10).once();
+        replay(usageArchiveRepository);
+        assertEquals(10, salUsageService.getCountByScenarioAndRhAccountNumber(scenario, 1000009422L, SEARCH));
+        verify(usageArchiveRepository);
+    }
+
+    @Test
+    public void testGetByScenarioAndRhAccountNumber() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
+        expect(salUsageRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null, null))
+            .andReturn(usageDtos).once();
+        replay(salUsageRepository);
+        assertEquals(usageDtos,
+            salUsageService.getByScenarioAndRhAccountNumber(scenario, 1000009422L, SEARCH, null, null));
+        verify(salUsageRepository);
+    }
+
+    @Test
+    public void testGetByScenarioAndRhAccountNumberForArchived() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        List<UsageDto> usageDtos = Collections.singletonList(new UsageDto());
+        expect(
+            usageArchiveRepository.findSalByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009422L, SEARCH, null, null))
+            .andReturn(usageDtos).once();
+        replay(usageArchiveRepository);
+        assertEquals(usageDtos,
+            salUsageService.getByScenarioAndRhAccountNumber(scenario, 1000009422L, SEARCH, null, null));
+        verify(usageArchiveRepository);
     }
 
     public void testDeleteFromScenario() {

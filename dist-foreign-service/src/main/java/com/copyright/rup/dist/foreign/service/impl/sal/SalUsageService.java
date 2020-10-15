@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
@@ -61,6 +62,8 @@ public class SalUsageService implements ISalUsageService {
 
     @Autowired
     private IUsageAuditService usageAuditService;
+    @Autowired
+    private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private ISalUsageRepository salUsageRepository;
     @Autowired
@@ -228,13 +231,18 @@ public class SalUsageService implements ISalUsageService {
     @Override
     public List<UsageDto> getByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue,
                                                           Pageable pageable, Sort sort) {
-        //TODO {aazarenka} implement later
-        return Collections.EMPTY_LIST;
+        return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
+            ? usageArchiveRepository.findSalByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
+                searchValue, pageable, sort)
+            : salUsageRepository.findByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue,
+                pageable, sort);
     }
 
     @Override
     public int getCountByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue) {
-        //TODO {aazarenka} implement later
-        return 0;
+        return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
+            ? usageArchiveRepository.findSalCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
+                searchValue)
+            : salUsageRepository.findCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue);
     }
 }
