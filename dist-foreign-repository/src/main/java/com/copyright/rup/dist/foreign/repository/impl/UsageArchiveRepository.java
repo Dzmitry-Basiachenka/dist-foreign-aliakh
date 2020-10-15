@@ -20,6 +20,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -108,6 +109,19 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IUsageArchiveMapper.findAaclByScenarioIdAndRhAccountNumber", parameters);
+    }
+
+    @Override
+    public int findSalCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue) {
+        // TODO {aazarenka} implement later
+        return 0;
+    }
+
+    @Override
+    public List<UsageDto> findSalByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber,
+                                                                String searchValue, Pageable pageable, Sort sort) {
+        // TODO {aazarenka} implement later
+        return Collections.EMPTY_LIST;
     }
 
     @Override

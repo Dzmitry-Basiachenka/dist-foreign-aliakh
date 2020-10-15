@@ -213,4 +213,29 @@ public interface IUsageArchiveRepository {
      */
     List<UsageDto> findAaclByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber,
                                                           String searchValue, Pageable pageable, Sort sort);
+
+    /**
+     * Gets count of archived SAL usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * identifier and rightsholder account number.
+     *
+     * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param accountNumber selected rightsholder account number
+     * @param searchValue   search value
+     * @return count of usage details
+     */
+    int findSalCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue);
+
+    /**
+     * Gets list of archived SAL {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * identifier and rightsholder account number.
+     *
+     * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param accountNumber selected rightsholder account number
+     * @param searchValue   search value
+     * @param pageable      instance of {@link Pageable}
+     * @param sort          instance of {@link Sort}
+     * @return list of {@link UsageDto}s
+     */
+    List<UsageDto> findSalByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber,
+                                                          String searchValue, Pageable pageable, Sort sort);
 }
