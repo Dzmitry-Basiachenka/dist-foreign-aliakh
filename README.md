@@ -1,3 +1,14 @@
+12.1.14
+-
+* B-57893 FDA: Scenario tab modifications for SAL metadata panel: implement UI to display scenario metadata information)
+* B-60438 FDA: SAL liabilities by RH report with splits and counts: implement modal window for selecting scenarios for generating report
+* B-57890 FDA: Modify the scenario drill-down view for SAL: implement drill-down window
+* B-58563 FDA: SAL liabilities summary by RH and Work report: implement menu item and controller
+* B-57890 FDA: Modify the scenario drill-down view for SAL: implement service logic to get RH's information for populate drill down window
+* B-60438 FDA: SAL liabilities by RH report with splits and counts: implement report handler and domain
+* B-58563 FDA: SAL liabilities summary by RH and Work report: use order during selection of scenarios
+* B-57886 FDA: Calculate SAL Scenario: implement service logic for calculating scenario
+
 12.1.13
 -
 * B-57885 FDA: SAL Exports: Scenario-specific usage details: implement backend logic to generate CSV file
