@@ -319,6 +319,14 @@ public interface IReportRepository {
     void writeNtsUndistributedLiabilitiesCsvReport(BigDecimal estimatedServiceFee, OutputStream outputStream);
 
     /**
+     * Writes SAL Liabilities by Rightsholer report into the output stream in csv format.
+     *
+     * @param scenarios    list of scenarios
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeLiabilitiesByRhCsvReport(List<Scenario> scenarios, OutputStream outputStream);
+
+    /**
      * Finds archived usages by SAL scenario id and writes them into the output stream in CSV format.
      *
      * @param scenarioId        scenario id

@@ -50,11 +50,11 @@ public class LiabilitiesByRhReportHandler extends BaseCsvReportHandler<Liabiliti
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(bean.getRhName());
-        beanProperties.add(getBeanPropertyAsString(bean.getGrossAmount()));
-        beanProperties.add(getBeanPropertyAsString(bean.getServiceFeeAmount()));
-        beanProperties.add(getBeanPropertyAsString(bean.getNetAmount()));
-        beanProperties.add(getBeanPropertyAsString(bean.getItemBankNetAmount()));
-        beanProperties.add(getBeanPropertyAsString(bean.getUsageDetailNetAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getServiceFeeAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getNetAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getItemBankNetAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getUsageDetailNetAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getCountOfPassages()));
         return beanProperties;
     }

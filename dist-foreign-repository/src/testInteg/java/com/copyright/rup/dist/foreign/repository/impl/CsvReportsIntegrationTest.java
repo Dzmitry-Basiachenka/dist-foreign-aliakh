@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 
 import com.google.common.collect.Sets;
-
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,6 +30,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -556,6 +556,15 @@ public class CsvReportsIntegrationTest {
             "nts_undistributed_liabilities_report.csv");
     }
 
+    @Test
+    public void testWriteLiabilitiesByRhCsvReport() throws IOException {
+        List<Scenario> scenarios = Arrays.asList(
+            buildScenario("5af9a0e6-4156-416d-b95b-f1aeeefa9545", "SAL Liabilities by Rightsholder report Scenario 1"),
+            buildScenario("ebe447c1-5314-4075-9781-efc0887b6ffc", "SAL Liabilities by Rightsholder report Scenario 2"));
+        assertFiles(outputStream -> reportRepository.writeLiabilitiesByRhCsvReport(scenarios, outputStream),
+            "liabilities_by_rightsholder_report.csv");
+    }
+
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         reportWriter.accept(outputStream);
@@ -598,5 +607,12 @@ public class CsvReportsIntegrationTest {
     private void assertEmptyAuditAaclReport(AuditFilter filter) throws IOException {
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditAaclCsvReport(filter, outputStream),
             "audit_usages_report_aacl_empty.csv");
+    }
+
+    private Scenario buildScenario(String scenarioId, String scenarioName) {
+        Scenario scenario = new Scenario();
+        scenario.setId(scenarioId);
+        scenario.setName(scenarioName);
+        return scenario;
     }
 }
