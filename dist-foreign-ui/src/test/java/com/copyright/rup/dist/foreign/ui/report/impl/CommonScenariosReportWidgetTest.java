@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -103,11 +102,11 @@ public class CommonScenariosReportWidgetTest {
         VerticalLayout content = (VerticalLayout) widget.getContent();
         Grid<Scenario> grid = (Grid<Scenario>) content.getComponent(1);
         grid.select(scenario1);
-        assertEquals(Collections.singleton(scenario1), widget.getSelectedScenarios());
+        assertEquals(Collections.singletonList(scenario1), widget.getSelectedScenarios());
         grid.select(scenario2);
-        assertEquals(Sets.newHashSet(scenario1, scenario2), widget.getSelectedScenarios());
+        assertEquals(Arrays.asList(scenario1, scenario2), widget.getSelectedScenarios());
         grid.deselectAll();
-        assertEquals(Collections.emptySet(), widget.getSelectedScenarios());
+        assertEquals(Collections.emptyList(), widget.getSelectedScenarios());
     }
 
     private void verifyGrid(Grid grid) {
