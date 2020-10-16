@@ -11,6 +11,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializableComparator;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -23,7 +24,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link ICommonScenariosReportWidget}.
@@ -36,6 +38,9 @@ import java.util.Set;
  */
 public class CommonScenariosReportWidget extends Window
     implements ICommonScenariosReportWidget, SearchWidget.ISearchController {
+
+    private static final SerializableComparator<Scenario> SCENARIOS_COMPARATOR = (scenario1, scenario2) ->
+        Comparator.comparing(Scenario::getName, String::compareToIgnoreCase).compare(scenario1, scenario2);
 
     private ICommonScenariosReportController controller;
     private SearchWidget searchWidget;
@@ -74,8 +79,11 @@ public class CommonScenariosReportWidget extends Window
     }
 
     @Override
-    public Set<Scenario> getSelectedScenarios() {
-        return grid.getSelectedItems();
+    public List<Scenario> getSelectedScenarios() {
+        return grid.getSelectedItems()
+            .stream()
+            .sorted(SCENARIOS_COMPARATOR)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -96,8 +104,7 @@ public class CommonScenariosReportWidget extends Window
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.addColumn(Scenario::getName)
             .setCaption(ForeignUi.getMessage("table.column.scenario_name"))
-            .setComparator((scenario1, scenario2) ->
-                Comparator.comparing(Scenario::getName, String::compareToIgnoreCase).compare(scenario1, scenario2));
+            .setComparator(SCENARIOS_COMPARATOR);
         grid.addSelectionListener(event ->
             exportButton.setEnabled(CollectionUtils.isNotEmpty(grid.getSelectedItems())));
         VaadinUtils.addComponentStyle(grid, "tax-notification-report-scenarios-grid");

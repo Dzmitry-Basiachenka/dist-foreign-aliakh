@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.report.api;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Interface for common scenarios report widget.
@@ -19,5 +19,5 @@ public interface ICommonScenariosReportWidget extends IWidget<ICommonScenariosRe
     /**
      * @return list of selected scenarios.
      */
-    Set<Scenario> getSelectedScenarios();
+    List<Scenario> getSelectedScenarios();
 }
