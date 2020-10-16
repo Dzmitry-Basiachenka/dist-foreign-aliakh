@@ -260,6 +260,10 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 actualUsage.getRightsholder().getAccountNumber());
             assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber());
             assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+            assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+            assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+            assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
+            assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
             assertEquals(expectedUsage.getComment(), actualUsage.getComment());
             assertSalUsage(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
         }

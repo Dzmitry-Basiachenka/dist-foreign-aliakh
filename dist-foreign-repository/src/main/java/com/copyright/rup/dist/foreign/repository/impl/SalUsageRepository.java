@@ -171,4 +171,17 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
         // TODO {aazarenka} implement later
         return Collections.EMPTY_LIST;
     }
+
+    @Override
+    public List<Usage> findByScenarioId(String scenarioId) {
+        return selectList("ISalUsageMapper.findByScenarioId", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
+    public void calculateAmounts(String scenarioId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        update("ISalUsageMapper.calculateAmounts", params);
+    }
 }

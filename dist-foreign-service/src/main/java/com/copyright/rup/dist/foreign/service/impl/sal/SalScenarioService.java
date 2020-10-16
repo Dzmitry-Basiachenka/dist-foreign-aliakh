@@ -62,6 +62,7 @@ public class SalScenarioService implements ISalScenarioService {
         salUsageService.addUsagesToScenario(scenario, usageFilter);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
+        salUsageService.calculateAmounts(scenario.getId(), scenario.getCreateUser());
         salUsageService.populatePayees(scenario.getId());
         LOGGER.info("Insert SAL scenario. Finished. Name={}, Description={}, UsageFilter={}",
             scenarioName, description, usageFilter);

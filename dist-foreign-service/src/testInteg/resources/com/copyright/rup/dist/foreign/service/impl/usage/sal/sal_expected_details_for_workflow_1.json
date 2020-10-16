@@ -18,6 +18,10 @@
     },
     "status": "LOCKED",
     "productFamily": "SAL",
+    "grossAmount": 250.0000000000,
+    "netAmount": 187.5000000000,
+    "serviceFeeAmount": 62.5000000000,
+    "serviceFee": 0.25000,
     "comment": "usage1-IB",
     "salUsage": {
       "assessmentName": "Spring2014 Eng Lang/Mathy",
@@ -55,6 +59,10 @@
     },
     "status": "LOCKED",
     "productFamily": "SAL",
+    "grossAmount": 250.0000000000,
+    "netAmount": 187.5000000000,
+    "serviceFeeAmount": 62.5000000000,
+    "serviceFee": 0.25000,
     "comment": "usage2-IB",
     "salUsage": {
       "assessmentName": "Spring2015 Eng Lang/Mathy",
@@ -91,6 +99,10 @@
     },
     "status": "LOCKED",
     "productFamily": "SAL",
+    "grossAmount": 250.0000000000,
+    "netAmount": 187.5000000000,
+    "serviceFeeAmount": 62.5000000000,
+    "serviceFee": 0.25000,
     "comment": "usage3-IB",
     "salUsage": {
       "assessmentName": "Spring2016 Eng Lang/Mathy",

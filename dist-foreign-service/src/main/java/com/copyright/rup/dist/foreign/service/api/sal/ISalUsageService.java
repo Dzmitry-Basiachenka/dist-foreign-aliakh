@@ -174,4 +174,12 @@ public interface ISalUsageService {
      * @return count of usage details
      */
     int getCountByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue);
+
+    /**
+     * Calculates gross_amount, service_fee, service_fee_amount and net_amount for all scenario usages.
+     *
+     * @param scenarioId scenario identifier
+     * @param userName   user name
+     */
+    void calculateAmounts(String scenarioId, String userName);
 }
