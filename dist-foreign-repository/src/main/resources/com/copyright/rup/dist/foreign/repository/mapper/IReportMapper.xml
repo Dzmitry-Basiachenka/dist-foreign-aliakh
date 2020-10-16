@@ -22,6 +22,17 @@
         <result property="estimatedServiceFee" column="estimated_service_fee"/>
     </resultMap>
 
+    <resultMap id="liabilitiesByRhReportDtoResultMap" type="LiabilitiesByRhReportDto">
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="rhName" column="rh_name"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="itemBankNetAmount" column="item_bank_net_amount"/>
+        <result property="usageDetailNetAmount" column="usage_detail_net_amount"/>
+        <result property="countOfPassages" column="count_of_passages"/>
+    </resultMap>
+
     <resultMap id="fasServiceFeeTrueUpReportDtoResultMap" type="FasServiceFeeTrueUpReportDto">
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="rroName" column="rro_name"/>
@@ -183,8 +194,8 @@
         from (
             select
                 sum(u.gross_amount) usages_gross_amount
-            from apps.df_usage u
-            join apps.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
             left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map sufb on ub.df_usage_batch_uid = sufb.df_usage_batch_uid
             left join ${schema}.df_scenario_usage_filter f on sufb.df_scenario_usage_filter_uid = f.df_scenario_usage_filter_uid
             left join ${schema}.df_scenario s on f.df_scenario_uid = s.df_scenario_uid
@@ -196,6 +207,43 @@
         ) as reportInfo
         where usages_gross_amount != 0
         group by reportInfo.usages_gross_amount
+    </select>
+
+    <select id="findLiabilitiesByRhReportDtos" parameterType="map" resultMap="liabilitiesByRhReportDtoResultMap">
+        select
+            nested.rh_account_number,
+            rh.name as rh_name,
+            sum(nested.gross_amount) as gross_amount,
+            sum(nested.net_amount) as net_amount,
+            sum(nested.service_fee_amount) as service_fee_amount,
+            sum(nested.item_bank_net_amount) as item_bank_net_amount,
+            sum(nested.usage_detail_net_amount) as usage_detail_net_amount,
+            sum(nested.count_of_passages) as count_of_passages
+        from (
+            select
+                u.rh_account_number,
+                sum(u.gross_amount) as gross_amount,
+                sum(u.net_amount) as net_amount,
+                sum(u.service_fee_amount) as service_fee_amount,
+                case when us.detail_type = #{itemBankType} then sum(u.net_amount) else 0 end item_bank_net_amount,
+                case when us.detail_type = #{usageDetailType} then sum(u.net_amount) else 0 end usage_detail_net_amount,
+                case when us.detail_type = #{itemBankType} then count(1) else 0 end count_of_passages
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_sal us on u.df_usage_uid = us.df_usage_sal_uid
+            where u.product_family = #{productFamily}
+                and df_scenario_uid in
+                    <foreach collection="scenarioIds" item="scenarioId" open="(" separator="," close=")">
+                        #{scenarioId}
+                    </foreach>
+            group by
+                u.rh_account_number,
+                us.detail_type
+        ) as nested
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = nested.rh_account_number
+        group by
+            nested.rh_account_number,
+            rh.name
+        order by nested.rh_account_number
     </select>
 
     <select id="findUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="undistributedLiabilitiesReportDtoResultMap">

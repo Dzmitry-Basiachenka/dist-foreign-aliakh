@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
+import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -44,11 +45,11 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUndistributedLi
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.sal.LiabilitiesByRhReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUsageCsvReportHandler;
 
 import com.google.common.collect.Maps;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
@@ -64,6 +65,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IReportRepository}.
@@ -441,6 +443,23 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             parameters.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
             parameters.put("statuses", Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
             getTemplate().select("IReportMapper.findNtsUndistributedLiabilitiesReportDtos", parameters, handler);
+        }
+    }
+
+    @Override
+    public void writeLiabilitiesByRhCsvReport(List<Scenario> scenarios, OutputStream outputStream) {
+        try (LiabilitiesByRhReportHandler handler =
+                 new LiabilitiesByRhReportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+            parameters.put("productFamily", FdaConstants.SAL_PRODUCT_FAMILY);
+            parameters.put("itemBankType", SalDetailTypeEnum.IB);
+            parameters.put("usageDetailType", SalDetailTypeEnum.UD);
+            parameters.put("scenarioIds", Objects.requireNonNull(scenarios)
+                .stream()
+                .map(Scenario::getId)
+                .collect(Collectors.toList()));
+            getTemplate().select("IReportMapper.findLiabilitiesByRhReportDtos", parameters, handler);
+            handler.writeScenarioNames(scenarios);
         }
     }
 
