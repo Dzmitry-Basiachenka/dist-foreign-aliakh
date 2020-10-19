@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
-
 import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
@@ -566,13 +565,13 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testWriteLiabilitiesSummaryByRhAndWorkReportCsvReport() throws IOException {
+    public void testWriteSalLiabilitiesSummaryByRhAndWorkReportCsvReport() throws IOException {
         List<Scenario> scenarios = Arrays.asList(
             buildScenario("c0b30809-4a38-46cc-a0dc-641924d1fc43",
                 "SAL Liabilities Summary by Rightsholder and Work report Scenario 1"),
             buildScenario("0a3b533d-d3ed-48dc-b256-f4f9f6527d91",
                 "SAL Liabilities Summary by Rightsholder and Work report Scenario 2"));
-        assertFiles(outputStream -> reportRepository.writeLiabilitiesSummaryByRhAndWorkReportCsvReport(
+        assertFiles(outputStream -> reportRepository.writeSalLiabilitiesSummaryByRhAndWorkCsvReport(
             scenarios, outputStream), "liabilities_summary_by_rightsholder_and_work.csv");
     }
 
