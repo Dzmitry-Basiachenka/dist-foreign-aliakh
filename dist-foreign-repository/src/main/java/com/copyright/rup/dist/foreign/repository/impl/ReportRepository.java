@@ -49,6 +49,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.sal.LiabilitiesByRhRep
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.LiabilitiesSummaryByRhAndWorkReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUsageCsvReportHandler;
+
 import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
@@ -448,7 +449,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     }
 
     @Override
-    public void writeLiabilitiesByRhCsvReport(List<Scenario> scenarios, OutputStream outputStream) {
+    public void writeSalLiabilitiesByRhCsvReport(List<Scenario> scenarios, OutputStream outputStream) {
         try (LiabilitiesByRhReportHandler handler =
                  new LiabilitiesByRhReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);

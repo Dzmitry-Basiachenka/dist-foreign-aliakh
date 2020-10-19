@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Sets;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -39,6 +38,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -522,6 +522,18 @@ public class ReportServiceTest {
         expectLastCall().once();
         replay(reportRepository);
         reportService.writeNtsUndistributedLiabilitiesReport(outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testWriteSalLiabilitiesByRhReport() {
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        List<Scenario> scenarios =
+            Arrays.asList(buildScenario(ScenarioStatusEnum.IN_PROGRESS), buildScenario(ScenarioStatusEnum.SUBMITTED));
+        reportRepository.writeSalLiabilitiesByRhCsvReport(scenarios, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeSalLiabilitiesByRhReport(scenarios, outputStream);
         verify(reportRepository);
     }
 

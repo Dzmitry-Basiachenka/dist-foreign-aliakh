@@ -177,6 +177,14 @@ public interface IReportService {
     void writeNtsUndistributedLiabilitiesReport(OutputStream outputStream);
 
     /**
+     * Writes SAL Liabilities by Rightsholder Report into the output stream in CSV format.
+     *
+     * @param scenarios    list of {@link Scenario}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeSalLiabilitiesByRhReport(List<Scenario> scenarios, OutputStream outputStream);
+
+    /**
      * Writes Research Status Report into the output stream in csv format.
      *
      * @param outputStream instance of {@link OutputStream}

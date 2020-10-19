@@ -556,11 +556,11 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testWriteLiabilitiesByRhCsvReport() throws IOException {
+    public void testWriteSalLiabilitiesByRhCsvReport() throws IOException {
         List<Scenario> scenarios = Arrays.asList(
             buildScenario("5af9a0e6-4156-416d-b95b-f1aeeefa9545", "SAL Liabilities by Rightsholder report Scenario 1"),
             buildScenario("ebe447c1-5314-4075-9781-efc0887b6ffc", "SAL Liabilities by Rightsholder report Scenario 2"));
-        assertFiles(outputStream -> reportRepository.writeLiabilitiesByRhCsvReport(scenarios, outputStream),
+        assertFiles(outputStream -> reportRepository.writeSalLiabilitiesByRhCsvReport(scenarios, outputStream),
             "liabilities_by_rightsholder_report.csv");
     }
 
