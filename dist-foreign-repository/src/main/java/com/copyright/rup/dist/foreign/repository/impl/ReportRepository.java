@@ -46,9 +46,9 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportH
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.LiabilitiesByRhReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.sal.LiabilitiesSummaryByRhAndWorkReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUsageCsvReportHandler;
-
 import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
@@ -84,6 +84,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String SCENARIO_ID_KEY = "scenarioId";
+    private static final String PRODUCT_FAMILY = "productFamily";
     private static final String FIND_USAGE_REPORT_DTOS_METHOD_NAME = "IReportMapper.findUsageReportDtos";
     private static final String FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME = "IReportMapper.findUsagesCountByFilter";
     private static final String FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME = "IReportMapper.findScenarioUsageDtosCount";
@@ -426,7 +427,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
                  new AaclUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
             parameters.put("serviceFee", 0.25);
-            parameters.put("productFamily", FdaConstants.AACL_PRODUCT_FAMILY);
+            parameters.put(PRODUCT_FAMILY, FdaConstants.AACL_PRODUCT_FAMILY);
             parameters.put("statuses", Arrays.asList(ScenarioStatusEnum.IN_PROGRESS,
                 ScenarioStatusEnum.SUBMITTED, ScenarioStatusEnum.APPROVED));
             getTemplate().select("IReportMapper.findAaclUndistributedLiabilitiesReportFundPools", parameters, handler);
@@ -440,7 +441,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
                  new NtsUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
             parameters.put("estimatedServiceFee", estimatedServiceFee);
-            parameters.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
+            parameters.put(PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY);
             parameters.put("statuses", Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
             getTemplate().select("IReportMapper.findNtsUndistributedLiabilitiesReportDtos", parameters, handler);
         }
@@ -451,7 +452,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         try (LiabilitiesByRhReportHandler handler =
                  new LiabilitiesByRhReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-            parameters.put("productFamily", FdaConstants.SAL_PRODUCT_FAMILY);
+            parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
             parameters.put("itemBankType", SalDetailTypeEnum.IB);
             parameters.put("usageDetailType", SalDetailTypeEnum.UD);
             parameters.put("scenarioIds", Objects.requireNonNull(scenarios)
@@ -459,6 +460,22 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
                 .map(Scenario::getId)
                 .collect(Collectors.toList()));
             getTemplate().select("IReportMapper.findLiabilitiesByRhReportDtos", parameters, handler);
+            handler.writeScenarioNames(scenarios);
+        }
+    }
+
+    @Override
+    public void writeLiabilitiesSummaryByRhAndWorkReportCsvReport(List<Scenario> scenarios,
+                                                                  OutputStream outputStream) {
+        try (LiabilitiesSummaryByRhAndWorkReportHandler handler =
+                 new LiabilitiesSummaryByRhAndWorkReportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+            parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
+            parameters.put("scenarioIds", Objects.requireNonNull(scenarios)
+                .stream()
+                .map(Scenario::getId)
+                .collect(Collectors.toList()));
+            getTemplate().select("IReportMapper.findLiabilitiesSummaryByRhAndWorkReportDtos", parameters, handler);
             handler.writeScenarioNames(scenarios);
         }
     }
