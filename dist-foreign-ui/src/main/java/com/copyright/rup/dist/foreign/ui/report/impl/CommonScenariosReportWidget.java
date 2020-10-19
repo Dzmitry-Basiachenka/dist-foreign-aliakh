@@ -107,7 +107,7 @@ public class CommonScenariosReportWidget extends Window
             .setComparator(SCENARIOS_COMPARATOR);
         grid.addSelectionListener(event ->
             exportButton.setEnabled(CollectionUtils.isNotEmpty(grid.getSelectedItems())));
-        VaadinUtils.addComponentStyle(grid, "tax-notification-report-scenarios-grid");
+        VaadinUtils.addComponentStyle(grid, "common-report-scenarios-grid");
     }
 
     private HorizontalLayout initButtonsLayout() {
