@@ -1,7 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -11,12 +14,14 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportWidget;
 
 import com.google.common.collect.Sets;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,13 +29,14 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link CommonScenariosReportControllerTest}.
+ * Verifies {@link LiabilitiesByRhReportController}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -40,9 +46,10 @@ import java.util.List;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
-public class CommonScenariosReportControllerTest {
+public class LiabilitiesByRhReportControllerTest {
 
     private IScenarioService scenarioService;
+    private IReportService reportService;
     private IProductFamilyProvider productFamilyProvider;
     private LiabilitiesByRhReportController controller;
 
@@ -50,8 +57,10 @@ public class CommonScenariosReportControllerTest {
     public void setUp() {
         controller = new LiabilitiesByRhReportController();
         scenarioService = createMock(IScenarioService.class);
+        reportService = createMock(IReportService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(controller, scenarioService);
+        Whitebox.setInternalState(controller, reportService);
         Whitebox.setInternalState(controller, productFamilyProvider);
     }
 
@@ -68,12 +77,19 @@ public class CommonScenariosReportControllerTest {
         mockStatic(OffsetDateTime.class);
         ICommonScenariosReportWidget widget = createMock(ICommonScenariosReportWidget.class);
         Whitebox.setInternalState(controller, widget);
+        Capture<OutputStream> outputStreamCapture = new Capture<>();
+        List<Scenario> scenarios = Collections.singletonList(new Scenario());
         expect(OffsetDateTime.now()).andReturn(now).once();
-        replay(OffsetDateTime.class, widget);
+        expect(widget.getSelectedScenarios()).andReturn(scenarios).once();
+        reportService
+            .writeSalLiabilitiesByRhReport(eq(scenarios), capture(outputStreamCapture));
+        expectLastCall().once();
+        replay(OffsetDateTime.class, widget, reportService);
         IStreamSource streamSource = controller.getCsvStreamSource();
         assertEquals("liabilities_by_rightsholder_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
-        verify(OffsetDateTime.class, widget);
+        assertNotNull(outputStreamCapture.getValue());
+        verify(OffsetDateTime.class, widget, reportService);
     }
 
     @Test

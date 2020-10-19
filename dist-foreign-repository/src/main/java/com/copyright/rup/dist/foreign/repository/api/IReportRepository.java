@@ -324,7 +324,7 @@ public interface IReportRepository {
      * @param scenarios    list of scenarios
      * @param outputStream instance of {@link OutputStream}
      */
-    void writeLiabilitiesByRhCsvReport(List<Scenario> scenarios, OutputStream outputStream);
+    void writeSalLiabilitiesByRhCsvReport(List<Scenario> scenarios, OutputStream outputStream);
 
     /**
      * Writes SAL Liabilities Summary by Rightsholder and Work Report into the output stream in CSV format.
