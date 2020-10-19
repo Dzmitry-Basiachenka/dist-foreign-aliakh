@@ -1,3 +1,11 @@
+12.1.15
+-
+* B-60438 FDA: SAL liabilities by RH report with splits and counts: implement repository logic and query
+* B-58563 FDA: SAL liabilities summary by RH and Work report: implement repository
+* B-58563 FDA: SAL liabilities summary by RH and Work report: implement service logic for generating report
+* B-60438 FDA: SAL liabilities by RH report with splits and counts: implement service logic to generate report
+* B-58563 FDA: SAL liabilities summary by RH and Work report: use the correct id for common scenarios selecting widget
+
 12.1.14
 -
 * B-57893 FDA: Scenario tab modifications for SAL metadata panel: implement UI to display scenario metadata information)
