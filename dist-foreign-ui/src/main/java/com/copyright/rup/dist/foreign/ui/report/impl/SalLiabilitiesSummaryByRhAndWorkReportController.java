@@ -30,9 +30,9 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-@Component("df.liabilitiesSummaryByRhAndWorkReportController")
+@Component("df.salLiabilitiesSummaryByRhAndWorkReportController")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class LiabilitiesSummaryByRhAndWorkReportController extends CommonController<ICommonScenariosReportWidget>
+public class SalLiabilitiesSummaryByRhAndWorkReportController extends CommonController<ICommonScenariosReportWidget>
     implements ICommonScenariosReportController {
 
     @Autowired

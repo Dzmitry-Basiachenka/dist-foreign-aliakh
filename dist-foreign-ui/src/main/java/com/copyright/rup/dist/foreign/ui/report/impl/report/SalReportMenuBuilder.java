@@ -26,6 +26,6 @@ public class SalReportMenuBuilder implements IReportMenuBuilder {
         String liabilitiesSummaryByRhAndWork = ForeignUi.getMessage("menu.report.liabilities_summary_by_rh_and_work");
         rootItem.addItem(liabilitiesSummaryByRhAndWork,
             menuItem -> widget.openReportWindow(liabilitiesSummaryByRhAndWork,
-                controller.getLiabilitiesSummaryByRhAndWorkReportController()));
+                controller.getSalLiabilitiesSummaryByRhAndWorkReportController()));
     }
 }
