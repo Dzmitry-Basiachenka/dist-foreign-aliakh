@@ -33,7 +33,7 @@
         <result property="countOfPassages" column="count_of_passages"/>
     </resultMap>
 
-    <resultMap id="liabilitiesSummaryByRhAndWorkReportDtoResultMap" type="LiabilitiesSummaryByRhAndWorkReportDto">
+    <resultMap id="salLiabilitiesSummaryByRhAndWorkReportDtoResultMap" type="SalLiabilitiesSummaryByRhAndWorkReportDto">
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
@@ -256,8 +256,8 @@
         order by nested.rh_account_number
     </select>
 
-    <select id="findLiabilitiesSummaryByRhAndWorkReportDtos" parameterType="map"
-            resultMap="liabilitiesSummaryByRhAndWorkReportDtoResultMap">
+    <select id="findSalLiabilitiesSummaryByRhAndWorkReportDtos" parameterType="map"
+            resultMap="salLiabilitiesSummaryByRhAndWorkReportDtoResultMap">
         select
             u.rh_account_number,
             rh.name rh_name,

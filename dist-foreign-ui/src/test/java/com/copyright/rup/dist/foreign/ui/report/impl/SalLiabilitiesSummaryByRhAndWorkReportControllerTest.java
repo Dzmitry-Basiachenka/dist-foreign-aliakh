@@ -37,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link LiabilitiesSummaryByRhAndWorkReportController}.
+ * Verifies {@link SalLiabilitiesSummaryByRhAndWorkReportController}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -47,18 +47,18 @@ import java.util.List;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
-public class LiabilitiesSummaryByRhAndWorkReportControllerTest {
+public class SalLiabilitiesSummaryByRhAndWorkReportControllerTest {
 
     private static final String SAL_PRODUCT_FAMILY = "SAL";
 
     private IScenarioService scenarioService;
     private IProductFamilyProvider productFamilyProvider;
     private IReportService reportService;
-    private LiabilitiesSummaryByRhAndWorkReportController controller;
+    private SalLiabilitiesSummaryByRhAndWorkReportController controller;
 
     @Before
     public void setUp() {
-        controller = new LiabilitiesSummaryByRhAndWorkReportController();
+        controller = new SalLiabilitiesSummaryByRhAndWorkReportController();
         scenarioService = createMock(IScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         reportService = createMock(IReportService.class);

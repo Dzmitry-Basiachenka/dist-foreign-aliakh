@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.math.BigDecimal;
 
 /**
- * Represents Liabilities Summary by Rightsholder and Work Report record.
+ * Represents SAL Liabilities Summary by Rightsholder and Work Report record.
  * <p/>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  *
  * @author Aliaksandr Liakh
  */
-public class LiabilitiesSummaryByRhAndWorkReportDto extends StoredEntity<String> {
+public class SalLiabilitiesSummaryByRhAndWorkReportDto extends StoredEntity<String> {
 
     private Long rhAccountNumber;
     private String rhName;
@@ -90,7 +90,7 @@ public class LiabilitiesSummaryByRhAndWorkReportDto extends StoredEntity<String>
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        LiabilitiesSummaryByRhAndWorkReportDto that = (LiabilitiesSummaryByRhAndWorkReportDto) obj;
+        SalLiabilitiesSummaryByRhAndWorkReportDto that = (SalLiabilitiesSummaryByRhAndWorkReportDto) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(rhAccountNumber, that.rhAccountNumber)

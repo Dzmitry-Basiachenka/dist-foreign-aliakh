@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.sal;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.report.LiabilitiesSummaryByRhAndWorkReportDto;
+import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesSummaryByRhAndWorkReportDto;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Implementation of {@link BaseCsvReportHandler} to write Liabilities Summary by Rightsholder and Work Report.
+ * Implementation of {@link BaseCsvReportHandler} to write SAL Liabilities Summary by Rightsholder and Work Report.
  * <p/>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -20,8 +20,8 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public class LiabilitiesSummaryByRhAndWorkReportHandler
-    extends BaseCsvReportHandler<LiabilitiesSummaryByRhAndWorkReportDto> {
+public class SalLiabilitiesSummaryByRhAndWorkReportHandler
+    extends BaseCsvReportHandler<SalLiabilitiesSummaryByRhAndWorkReportDto> {
 
     private static final List<String> HEADERS = ImmutableList.of("RH Account #", "RH Name", "Wr Wrk Inst",
         "Work Title", "Gross Amount", "Service Fee Amount", "Net Amount");
@@ -31,7 +31,7 @@ public class LiabilitiesSummaryByRhAndWorkReportHandler
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    public LiabilitiesSummaryByRhAndWorkReportHandler(OutputStream outputStream) {
+    public SalLiabilitiesSummaryByRhAndWorkReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 
@@ -47,7 +47,7 @@ public class LiabilitiesSummaryByRhAndWorkReportHandler
     }
 
     @Override
-    protected List<String> getBeanProperties(LiabilitiesSummaryByRhAndWorkReportDto bean) {
+    protected List<String> getBeanProperties(SalLiabilitiesSummaryByRhAndWorkReportDto bean) {
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(bean.getRhName());
