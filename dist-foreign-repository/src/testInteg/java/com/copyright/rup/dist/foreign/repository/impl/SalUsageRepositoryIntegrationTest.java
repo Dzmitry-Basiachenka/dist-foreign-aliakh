@@ -318,6 +318,22 @@ public class SalUsageRepositoryIntegrationTest {
         verifyUsageWithAmounts(actualUsages.get(5), "266.6600000000", "199.9950000000", "66.6650000000");
     }
 
+    @Test
+    public void testFindCountByScenarioIdAndRhAccountNumber() {
+        assertEquals(1, salUsageRepository
+            .findCountByScenarioIdAndRhAccountNumber("bafc8277-d9f2-44b6-a68c-9e46165175f8", 1000000026L, null));
+    }
+
+    @Test
+    public void testFindByScenarioIdAndRhAccountNumber() throws IOException {
+        List<UsageDto> expectedUsageDtos =
+            loadExpectedUsageDtos("json/sal/sal_usage_dto_1d437cb1.json");
+        List<UsageDto> actualUsageDtos = salUsageRepository
+            .findByScenarioIdAndRhAccountNumber("bafc8277-d9f2-44b6-a68c-9e46165175f8", 1000000026L, null, null, null);
+        assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
+        verifyUsageDtos(expectedUsageDtos, actualUsageDtos);
+    }
+
     private void verifyUsageWithAmounts(Usage usage, String grossAmount, String netAmount, String serviceFeeAmount) {
         assertEquals(new BigDecimal(grossAmount), usage.getGrossAmount());
         assertEquals(new BigDecimal(netAmount), usage.getNetAmount());
@@ -356,8 +372,25 @@ public class SalUsageRepositoryIntegrationTest {
                 UsageDto actualUsage = actualUsages.get(i);
                 assertNotNull(expectedUsage);
                 assertNotNull(actualUsage);
-                assertEquals(expectedUsage.toString(), actualUsage.toString());
+                verifyUsageDto(expectedUsage, actualUsage);
             });
+    }
+
+    private void verifyUsageDto(UsageDto expectedUsage, UsageDto actualUsage) {
+        assertEquals(expectedUsage.getId(), actualUsage.getId());
+        assertEquals(expectedUsage.getBatchName(), actualUsage.getBatchName());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
+        assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
+        assertEquals(expectedUsage.getRhName(), actualUsage.getRhName());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+        assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+        assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
+        assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
+        assertSalUsageFields(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
     }
 
     private void verifyUsage(Usage expectedUsage, Usage actualUsage) {

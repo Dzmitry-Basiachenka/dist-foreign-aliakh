@@ -12,6 +12,10 @@
         <result property="id" column="df_usage_archive_uid"/>
     </resultMap>
 
+    <resultMap id="archivedSalUsageDtoResultMap" type="UsageDto" extends="ISalUsageMapper.salUsageDtoResultMap">
+        <result property="id" column="df_usage_archive_uid"/>
+    </resultMap>
+
     <resultMap id="paidUsageResultMap" type="PaidUsage" extends="IUsageMapper.usageResultMap">
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="checkNumber" column="check_number"/>
@@ -221,6 +225,21 @@
 
     <select id="findAaclByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="archivedAaclUsageDtoResultMap">
         <include refid="IAaclUsageMapper.findByScenarioIdAndRhAccountNumberSql">
+            <property name="detail_table" value="df_usage_archive"/>
+            <property name="detail_uid" value="df_usage_archive_uid"/>
+        </include>
+    </select>
+
+    <select id="findSalByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="archivedSalUsageDtoResultMap">
+        <include refid="ISalUsageMapper.findByScenarioIdAndRhAccountNumberSql">
+            <property name="detail_table" value="df_usage_archive"/>
+            <property name="detail_uid" value="df_usage_archive_uid"/>
+        </include>
+    </select>
+
+    <select id="findSalCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
+        select count(1)
+        <include refid="ISalUsageMapper.drillDownFromWhereClauses">
             <property name="detail_table" value="df_usage_archive"/>
             <property name="detail_uid" value="df_usage_archive_uid"/>
         </include>

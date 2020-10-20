@@ -1,0 +1,61 @@
+[
+  {
+    "id": "678a3e29-4bc1-4c25-904a-8b2602f358f5",
+    "batchName": "SAL Usage Batch For Drill Down Window",
+    "periodEndDate": [
+      2019,
+      6,
+      30
+    ],
+    "wrWrkInst": 269040891,
+    "rhAccountNumber": 2000017010,
+    "rhName": "JAC, Japan Academic Association for Copyright Clearance, Inc.",
+    "status": "ARCHIVED",
+    "productFamily": "SAL",
+    "systemTitle": "Castanea",
+    "standardNumber": "09639292",
+    "standardNumberType": "VALISSN",
+    "grossAmount": 100.0000000000,
+    "netAmount": 75.0000000000,
+    "serviceFee": 0.25000,
+    "serviceFeeAmount": 25.0000000000,
+    "salUsage": {
+      "licenseeAccountNumber": 7001293454,
+      "licenseeName": "Synergy Publishers",
+      "detailType": "IB",
+      "grade": "5",
+      "gradeGroup": "ITEM_BANK",
+      "assessmentName": "FY16 AIR",
+      "assessmentType": "AIR",
+      "reportedWorkPortionId": "1101001IB2368",
+      "reportedArticle": "Learning in Your Sleep",
+      "reportedStandardNumber": "450220996",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": [
+        2015,
+        1,
+        2
+      ],
+      "reportedPageRange": "14-17",
+      "reportedVolNumberSeries": "Vol 17, Issue 2",
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": 1.0,
+      "coverageYear": "2014-2015",
+      "scoredAssessmentDate": [
+        2015,
+        7,
+        1
+      ],
+      "questionIdentifier": "SB9",
+      "states": "CA;WV",
+      "numberOfViews": 1765,
+      "batchPeriodEndDate": "2019-06-30"
+    },
+    "createDate": 1423915200000,
+    "updateDate": 1423915200000,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "version": 1
+  }
+]
