@@ -25,8 +25,8 @@ class SalScenariosMediator implements IScenariosMediator {
 
     @Override
     public void applyPermissions() {
-        deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
         viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
+        deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
     }
 
     @Override
@@ -37,16 +37,16 @@ class SalScenariosMediator implements IScenariosMediator {
             viewButton.setEnabled(true);
             deleteButton.setEnabled(isInProgressState);
         } else {
-            deleteButton.setEnabled(false);
             viewButton.setEnabled(false);
+            deleteButton.setEnabled(false);
         }
-    }
-
-    void setDeleteButton(Button deleteButton) {
-        this.deleteButton = deleteButton;
     }
 
     void setViewButton(Button viewButton) {
         this.viewButton = viewButton;
+    }
+
+    void setDeleteButton(Button deleteButton) {
+        this.deleteButton = deleteButton;
     }
 }
