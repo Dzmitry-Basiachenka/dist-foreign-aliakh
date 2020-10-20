@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
+
 import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
@@ -561,7 +562,7 @@ public class CsvReportsIntegrationTest {
             buildScenario("5af9a0e6-4156-416d-b95b-f1aeeefa9545", "SAL Liabilities by Rightsholder report Scenario 1"),
             buildScenario("ebe447c1-5314-4075-9781-efc0887b6ffc", "SAL Liabilities by Rightsholder report Scenario 2"));
         assertFiles(outputStream -> reportRepository.writeSalLiabilitiesByRhCsvReport(scenarios, outputStream),
-            "liabilities_by_rightsholder_report.csv");
+            "liabilities_by_rightsholder_report_sal.csv");
     }
 
     @Test

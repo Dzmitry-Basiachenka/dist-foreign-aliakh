@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.math.BigDecimal;
 
 /**
- * Represents Liabilities by Rightsholder report record.
+ * Represents SAL Liabilities by Rightsholder report record.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  *
  * @author Uladzislau Shalamitski
  */
-public class LiabilitiesByRhReportDto extends StoredEntity<String> {
+public class SalLiabilitiesByRhReportDto extends StoredEntity<String> {
 
     private long rhAccountNumber;
     private String rhName;
@@ -100,7 +100,7 @@ public class LiabilitiesByRhReportDto extends StoredEntity<String> {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        LiabilitiesByRhReportDto dto = (LiabilitiesByRhReportDto) obj;
+        SalLiabilitiesByRhReportDto dto = (SalLiabilitiesByRhReportDto) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(rhAccountNumber, dto.rhAccountNumber)

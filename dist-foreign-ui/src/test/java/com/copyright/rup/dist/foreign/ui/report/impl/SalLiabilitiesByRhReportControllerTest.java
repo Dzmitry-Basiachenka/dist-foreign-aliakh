@@ -36,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link LiabilitiesByRhReportController}.
+ * Verifies {@link SalLiabilitiesByRhReportController}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -46,16 +46,16 @@ import java.util.List;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
-public class LiabilitiesByRhReportControllerTest {
+public class SalLiabilitiesByRhReportControllerTest {
 
     private IScenarioService scenarioService;
     private IReportService reportService;
     private IProductFamilyProvider productFamilyProvider;
-    private LiabilitiesByRhReportController controller;
+    private SalLiabilitiesByRhReportController controller;
 
     @Before
     public void setUp() {
-        controller = new LiabilitiesByRhReportController();
+        controller = new SalLiabilitiesByRhReportController();
         scenarioService = createMock(IScenarioService.class);
         reportService = createMock(IReportService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);

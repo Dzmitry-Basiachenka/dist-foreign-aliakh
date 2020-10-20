@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.sal;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.report.LiabilitiesByRhReportDto;
+import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesByRhReportDto;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Writes {@link LiabilitiesByRhReportDto} usages to {@link OutputStream}.
+ * Writes {@link SalLiabilitiesByRhReportDto} usages to {@link OutputStream}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Uladzislau Shalamitski
  */
-public class LiabilitiesByRhReportHandler extends BaseCsvReportHandler<LiabilitiesByRhReportDto> {
+public class SalLiabilitiesByRhReportHandler extends BaseCsvReportHandler<SalLiabilitiesByRhReportDto> {
 
     private static final List<String> HEADERS = Arrays.asList("RH Account #", "RH Name", "Gross Amount",
         "Service Fee Amount", "Net Amount", "Item Bank Net Amount", "Usage Detail Net Amount", "Count of Passages");
@@ -30,7 +30,7 @@ public class LiabilitiesByRhReportHandler extends BaseCsvReportHandler<Liabiliti
      *
      * @param outputStream {@link OutputStream} instance
      */
-    public LiabilitiesByRhReportHandler(OutputStream outputStream) {
+    public SalLiabilitiesByRhReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 
@@ -46,7 +46,7 @@ public class LiabilitiesByRhReportHandler extends BaseCsvReportHandler<Liabiliti
     }
 
     @Override
-    protected List<String> getBeanProperties(LiabilitiesByRhReportDto bean) {
+    protected List<String> getBeanProperties(SalLiabilitiesByRhReportDto bean) {
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(bean.getRhName());

@@ -8534,7 +8534,7 @@ databaseChangeLog {
                     '"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", ' +
                     '"grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, ' +
                     '"gross_amount": 1000.00, "item_bank_gross_amount": 100.00, ' +
-                    '"grade_K_5_gross_amount": 900.00, "grade_6_8_gross_amount": 600.00, "grade_9_12_gross_amount": 0.00, ' +
+                    '"grade_K_5_gross_amount": 900.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, ' +
                     '"item_bank_split_percent": 0.10000, "service_fee": 0.25000}')
         }
 
@@ -8733,7 +8733,7 @@ databaseChangeLog {
                     '"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", ' +
                     '"grade_K_5_number_of_students": 0, "grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 10, ' +
                     '"gross_amount": 1000.00, "item_bank_gross_amount": 100.00, ' +
-                    '"grade_K_5_gross_amount": 0.00, "grade_6_8_gross_amount": 600.00, "grade_9_12_gross_amount": 900.00, ' +
+                    '"grade_K_5_gross_amount": 0.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 900.00, ' +
                     '"item_bank_split_percent": 0.10000, "service_fee": 0.25000}')
         }
 

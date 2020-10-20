@@ -73,7 +73,7 @@ public interface IReportController extends IController<IReportWidget> {
     /**
      * @return liabilities by rightsholder report controller.
      */
-    ICommonScenariosReportController getLiabilitiesByRhReportController();
+    ICommonScenariosReportController getSalLiabilitiesByRhReportController();
 
     /**
      * @return SAL Liabilities Summary by Rightsholder and Work Report controller.
