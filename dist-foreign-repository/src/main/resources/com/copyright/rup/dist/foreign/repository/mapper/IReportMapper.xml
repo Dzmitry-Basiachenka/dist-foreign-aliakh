@@ -22,7 +22,7 @@
         <result property="estimatedServiceFee" column="estimated_service_fee"/>
     </resultMap>
 
-    <resultMap id="liabilitiesByRhReportDtoResultMap" type="LiabilitiesByRhReportDto">
+    <resultMap id="salLiabilitiesByRhReportDtoResultMap" type="SalLiabilitiesByRhReportDto">
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
         <result property="grossAmount" column="gross_amount"/>
@@ -219,7 +219,7 @@
         group by reportInfo.usages_gross_amount
     </select>
 
-    <select id="findLiabilitiesByRhReportDtos" parameterType="map" resultMap="liabilitiesByRhReportDtoResultMap">
+    <select id="findSalLiabilitiesByRhReportDtos" parameterType="map" resultMap="salLiabilitiesByRhReportDtoResultMap">
         select
             nested.rh_account_number,
             rh.name as rh_name,

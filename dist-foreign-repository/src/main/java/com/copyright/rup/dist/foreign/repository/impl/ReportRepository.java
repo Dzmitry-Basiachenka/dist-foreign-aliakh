@@ -45,7 +45,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUndistributedLi
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.sal.LiabilitiesByRhReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalLiabilitiesByRhReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalLiabilitiesSummaryByRhAndWorkReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUsageCsvReportHandler;
@@ -450,8 +450,8 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
 
     @Override
     public void writeSalLiabilitiesByRhCsvReport(List<Scenario> scenarios, OutputStream outputStream) {
-        try (LiabilitiesByRhReportHandler handler =
-                 new LiabilitiesByRhReportHandler(Objects.requireNonNull(outputStream))) {
+        try (SalLiabilitiesByRhReportHandler handler =
+                 new SalLiabilitiesByRhReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
             parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
             parameters.put("itemBankType", SalDetailTypeEnum.IB);
@@ -460,7 +460,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
                 .stream()
                 .map(Scenario::getId)
                 .collect(Collectors.toList()));
-            getTemplate().select("IReportMapper.findLiabilitiesByRhReportDtos", parameters, handler);
+            getTemplate().select("IReportMapper.findSalLiabilitiesByRhReportDtos", parameters, handler);
             handler.writeScenarioNames(scenarios);
         }
     }

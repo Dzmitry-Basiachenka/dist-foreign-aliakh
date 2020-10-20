@@ -47,7 +47,7 @@ public class ReportControllerTest {
 
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
     private IFasServiceFeeTrueUpReportController fasServiceFeeTrueUpReportController;
-    private ICommonScenariosReportController liabilitiesByRhReportController;
+    private ICommonScenariosReportController salLiabilitiesByRhReportController;
     private ICommonScenariosReportController salLiabilitiesSummaryByRhAndWorkReportController;
     private ICommonScenarioReportController ntsServiceFeeTrueUpReportController;
     private ReportController reportController;
@@ -59,18 +59,19 @@ public class ReportControllerTest {
         reportController = new ReportController();
         reportService = createMock(IReportService.class);
         undistributedLiabilitiesReportController = createMock(IUndistributedLiabilitiesReportController.class);
-        liabilitiesByRhReportController = createMock(ICommonScenariosReportController.class);
+        salLiabilitiesByRhReportController = createMock(ICommonScenariosReportController.class);
         salLiabilitiesSummaryByRhAndWorkReportController = createMock(ICommonScenariosReportController.class);
         fasServiceFeeTrueUpReportController = createMock(IFasServiceFeeTrueUpReportController.class);
         ntsServiceFeeTrueUpReportController = createMock(ICommonScenarioReportController.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(reportController, undistributedLiabilitiesReportController);
         Whitebox.setInternalState(reportController, fasServiceFeeTrueUpReportController);
-        Whitebox.setInternalState(reportController, "liabilitiesByRhReportController", liabilitiesByRhReportController);
-        Whitebox.setInternalState(reportController,
-            "salLiabilitiesSummaryByRhAndWorkReportController", salLiabilitiesSummaryByRhAndWorkReportController);
-        Whitebox.setInternalState(reportController,
-            "ntsServiceFeeTrueUpReportController", ntsServiceFeeTrueUpReportController);
+        Whitebox.setInternalState(reportController, "salLiabilitiesByRhReportController",
+            salLiabilitiesByRhReportController);
+        Whitebox.setInternalState(reportController, "salLiabilitiesSummaryByRhAndWorkReportController",
+            salLiabilitiesSummaryByRhAndWorkReportController);
+        Whitebox.setInternalState(reportController, "ntsServiceFeeTrueUpReportController",
+            ntsServiceFeeTrueUpReportController);
         Whitebox.setInternalState(reportController, reportService);
         Whitebox.setInternalState(reportController, productFamilyProvider);
     }
@@ -81,8 +82,8 @@ public class ReportControllerTest {
     }
 
     @Test
-    public void testGetLiabilitiesByRhReportController() {
-        assertSame(liabilitiesByRhReportController, reportController.getLiabilitiesByRhReportController());
+    public void testGetSalLiabilitiesByRhReportController() {
+        assertSame(salLiabilitiesByRhReportController, reportController.getSalLiabilitiesByRhReportController());
     }
 
     @Test
