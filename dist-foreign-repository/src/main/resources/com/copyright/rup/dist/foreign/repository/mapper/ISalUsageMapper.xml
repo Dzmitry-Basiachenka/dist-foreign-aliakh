@@ -279,6 +279,18 @@
             <when test="sort.property == 'numberOfViews'">
                 usal.number_of_views <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'grossAmount'">
+                u.gross_amount <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'serviceFeeAmount'">
+                u.service_fee_amount <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'serviceFee'">
+                u.service_fee <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'netAmount'">
+                u.net_amount <include refid="IUsageMapper.direction"/>
+            </when>
         </choose>
     </sql>
 
@@ -339,6 +351,45 @@
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         <include refid="ISalUsageMapper.usageFilter"/>
             and u.df_scenario_uid is null
+    </sql>
+
+    <sql id="findByScenarioIdAndRhAccountNumberSql">
+        select
+            u.${detail_uid},
+            u.gross_amount,
+            u.service_fee_amount,
+            u.net_amount,
+            u.service_fee,
+            <include refid="ISalUsageMapper.salUsageColumns"/>
+            <include refid="ISalUsageMapper.drillDownFromWhereClauses"/>
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="ISalUsageMapper.chooseSortProperty"/>
+            </when>
+            <otherwise>
+                u.${detail_uid}
+            </otherwise>
+        </choose>
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <sql id="drillDownFromWhereClauses">
+        from ${schema}.df_scenario s
+        join ${schema}.${detail_table} u on s.df_scenario_uid = u.df_scenario_uid
+        join ${schema}.df_usage_sal usal on u.${detail_uid} = usal.df_usage_sal_uid
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        where u.df_scenario_uid = #{scenarioId}
+        and u.rh_account_number = #{accountNumber}
+        <if test="null != searchValue">
+            and (
+            u.${detail_uid} like '%' || #{searchValue} || '%' or
+            u.standard_number ilike '%' || #{searchValue} || '%' or
+            cast(u.wr_wrk_inst as text) like '%' || #{searchValue} || '%'
+            )
+        </if>
     </sql>
 
     <insert id="insertItemBankDetail" parameterType="Usage">
@@ -509,6 +560,21 @@
             <include refid="StoredEntityMapper.insert"/>
         from ibu
     </insert>
+
+    <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="salUsageDtoResultMap">
+        <include refid="ISalUsageMapper.findByScenarioIdAndRhAccountNumberSql">
+            <property name="detail_table" value="df_usage"/>
+            <property name="detail_uid" value="df_usage_uid"/>
+        </include>
+    </select>
+
+    <select id="findCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
+        select count(1)
+        <include refid="drillDownFromWhereClauses">
+            <property name="detail_table" value="df_usage"/>
+            <property name="detail_uid" value="df_usage_uid"/>
+        </include>
+    </select>
 
     <select id="findCountByFilter" parameterType="map" resultType="int">
         <include refid="ISalUsageMapper.selectCountByFilterSql"/>

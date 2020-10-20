@@ -18,7 +18,6 @@ import com.google.common.collect.Maps;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -40,6 +39,10 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     private static final String FILTER_KEY = "filter";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String UPDATE_USER_KEY = "updateUser";
+    private static final String PAGEABLE_KEY = "pageable";
+    private static final String SORT_KEY = "sort";
+    private static final String SEARCH_VALUE_KEY = "searchValue";
+    private static final String ACCOUNT_NUMBER_KEY = "accountNumber";
 
     @Override
     public void insertItemBankDetail(Usage usage) {
@@ -74,8 +77,8 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     public List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        parameters.put("pageable", pageable);
-        parameters.put("sort", sort);
+        parameters.put(PAGEABLE_KEY, pageable);
+        parameters.put(SORT_KEY, sort);
         return selectList("ISalUsageMapper.findDtosByFilter", parameters);
     }
 
@@ -161,15 +164,23 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
 
     @Override
     public int findCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue) {
-        // TODO {aazarenka} implement later
-        return 0;
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        return selectOne("ISalUsageMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
     }
 
     @Override
     public List<UsageDto> findByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue,
                                                              Pageable pageable, Sort sort) {
-        // TODO {aazarenka} implement later
-        return Collections.EMPTY_LIST;
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
+        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        parameters.put(PAGEABLE_KEY, pageable);
+        parameters.put(SORT_KEY, sort);
+        return selectList("ISalUsageMapper.findByScenarioIdAndRhAccountNumber", parameters);
     }
 
     @Override

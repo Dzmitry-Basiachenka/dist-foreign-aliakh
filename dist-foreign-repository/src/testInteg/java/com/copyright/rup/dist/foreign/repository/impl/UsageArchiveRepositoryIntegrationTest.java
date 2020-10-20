@@ -100,6 +100,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final String ARCHIVED_USAGE_ID = "5f90f7d7-566f-402a-975b-d54466862704";
     private static final String LM_DETAIL_ID = "5963a9c2-b639-468c-a4c1-02101a4597c6";
     private static final String AACL_SCENARIO_ID = "4f1714a1-5e23-4e46-aeb1-b44fbeea17e6";
+    private static final String SAL_SCENARIO_ID = "c43c0b55-3665-4863-a28c-0370feccad24";
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -273,6 +274,24 @@ public class UsageArchiveRepositoryIntegrationTest {
     public void testFindAaclCountByScenarioIdAndRhAccountNumberWithEmptySearch() {
         assertEquals(2,
             usageArchiveRepository.findAaclCountByScenarioIdAndRhAccountNumber(AACL_SCENARIO_ID, 1000009997L, null));
+    }
+
+    @Test
+    public void testFindSalCountByScenarioIdAndRhAccountNumberWithEmptySearch() {
+        assertEquals(1,
+            usageArchiveRepository.findSalCountByScenarioIdAndRhAccountNumber(SAL_SCENARIO_ID, 2000017010L, null));
+    }
+
+    @Test
+    public void testFindSalByScenarioIdAndRhAccountNumberWithEmptySearch() {
+        List<UsageDto> expectedUsageDtos =
+            loadExpectedUsageDtos(Arrays.asList("json/sal/sal_archived_usage_dto_678a3e29.json"));
+        List<UsageDto> actualUsageDtos =
+            usageArchiveRepository.findSalByScenarioIdAndRhAccountNumber(SAL_SCENARIO_ID, 2000017010L, null,
+                null, null);
+        assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
+        IntStream.range(0, expectedUsageDtos.size())
+            .forEach(index -> assertUsageDto(expectedUsageDtos.get(0), actualUsageDtos.get(0)));
     }
 
     @Test

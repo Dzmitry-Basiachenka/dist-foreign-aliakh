@@ -20,7 +20,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -113,15 +112,23 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
 
     @Override
     public int findSalCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue) {
-        // TODO {aazarenka} implement later
-        return 0;
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        return selectOne("IUsageArchiveMapper.findSalCountByScenarioIdAndRhAccountNumber", parameters);
     }
 
     @Override
     public List<UsageDto> findSalByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber,
                                                                 String searchValue, Pageable pageable, Sort sort) {
-        // TODO {aazarenka} implement later
-        return Collections.EMPTY_LIST;
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
+        parameters.put(ACCOUNT_NUMBER_KEY, Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        parameters.put(PAGEABLE_KEY, pageable);
+        parameters.put(SORT_KEY, sort);
+        return selectList("IUsageArchiveMapper.findSalByScenarioIdAndRhAccountNumber", parameters);
     }
 
     @Override
