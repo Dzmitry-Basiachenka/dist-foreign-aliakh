@@ -21,7 +21,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportDto extends StoredEntity<Stri
     private Long rhAccountNumber;
     private String rhName;
     private String wrWrkInst;
-    private String workTitle;
+    private String systemTitle;
     private BigDecimal grossAmount;
     private BigDecimal serviceFeeAmount;
     private BigDecimal netAmount;
@@ -50,12 +50,12 @@ public class SalLiabilitiesSummaryByRhAndWorkReportDto extends StoredEntity<Stri
         this.wrWrkInst = wrWrkInst;
     }
 
-    public String getWorkTitle() {
-        return workTitle;
+    public String getSystemTitle() {
+        return systemTitle;
     }
 
-    public void setWorkTitle(String workTitle) {
-        this.workTitle = workTitle;
+    public void setSystemTitle(String systemTitle) {
+        this.systemTitle = systemTitle;
     }
 
     public BigDecimal getGrossAmount() {
@@ -96,7 +96,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportDto extends StoredEntity<Stri
             .append(rhAccountNumber, that.rhAccountNumber)
             .append(rhName, that.rhName)
             .append(wrWrkInst, that.wrWrkInst)
-            .append(workTitle, that.workTitle)
+            .append(systemTitle, that.systemTitle)
             .append(grossAmount, that.grossAmount)
             .append(serviceFeeAmount, that.serviceFeeAmount)
             .append(netAmount, that.netAmount)
@@ -110,7 +110,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportDto extends StoredEntity<Stri
             .append(rhAccountNumber)
             .append(rhName)
             .append(wrWrkInst)
-            .append(workTitle)
+            .append(systemTitle)
             .append(grossAmount)
             .append(serviceFeeAmount)
             .append(netAmount)
@@ -124,7 +124,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportDto extends StoredEntity<Stri
             .append("rhAccountNumber", rhAccountNumber)
             .append("rhName", rhName)
             .append("wrWrkInst", wrWrkInst)
-            .append("workTitle", workTitle)
+            .append("systemTitle", systemTitle)
             .append("grossAmount", grossAmount)
             .append("serviceFeeAmount", serviceFeeAmount)
             .append("netAmount", netAmount)

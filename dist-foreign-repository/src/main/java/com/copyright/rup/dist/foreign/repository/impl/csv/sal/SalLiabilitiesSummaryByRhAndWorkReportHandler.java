@@ -24,7 +24,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportHandler
     extends BaseCsvReportHandler<SalLiabilitiesSummaryByRhAndWorkReportDto> {
 
     private static final List<String> HEADERS = ImmutableList.of("RH Account #", "RH Name", "Wr Wrk Inst",
-        "Work Title", "Gross Amount", "Service Fee Amount", "Net Amount");
+        "System Title", "Gross Amount", "Service Fee Amount", "Net Amount");
 
     /**
      * Constructor.
@@ -52,7 +52,7 @@ public class SalLiabilitiesSummaryByRhAndWorkReportHandler
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(bean.getRhName());
         beanProperties.add(bean.getWrWrkInst());
-        beanProperties.add(bean.getWorkTitle());
+        beanProperties.add(bean.getSystemTitle());
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getServiceFeeAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getNetAmount()));
