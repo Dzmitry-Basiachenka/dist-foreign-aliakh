@@ -62,12 +62,12 @@
         <result property="standardNumberType" column="standard_number_type"/>
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
+        <result property="payeeAccountNumber" column="payee_account_number"/>
+        <result property="payeeName" column="payee_name"/>
         <result property="grossAmount" column="gross_amount"/>
         <result property="serviceFeeAmount" column="service_fee_amount"/>
         <result property="netAmount" column="net_amount"/>
         <result property="serviceFee" column="service_fee"/>
-        <result property="payeeAccountNumber" column="payee_account_number"/>
-        <result property="payeeName" column="payee_name"/>
         <result property="status" column="status_ind"/>
         <result property="productFamily" column="product_family"/>
         <result property="comment" column="comment"/>
@@ -156,9 +156,9 @@
 
     <sql id="selectUsageDtos">
         select
-            <include refid="ISalUsageMapper.salUsageColumns"/>,
             u.${detail_uid} df_usage_uid,
-            u.payee_account_number ,
+            <include refid="ISalUsageMapper.salUsageColumns"/>,
+            u.payee_account_number,
             p.name payee_name,
             u.gross_amount,
             u.service_fee_amount,
