@@ -1,3 +1,11 @@
+12.1.16
+-
+* CDP-947 FDA: Liabilities Summary by Rightsholder and Work Report: 'Work Title' column contains Reported Title instead of System Title
+* B-58563 FDA: SAL liabilities summary by RH and Work report: make changes based on comments in CR-DIST-FOREIGN-204
+* B-57890 FDA: Modify the scenario drill-down view for SAL: implement  repository logic to find RH's information for populate drill down window
+* B-60438 FDA: SAL liabilities by RH report with splits and counts: make changes based on comments in CR-DIST-FOREIGN-205
+* B-57893 FDA: Scenario tab modifications for SAL metadata panel: make changes based on comments in CR-DIST-FOREIGN-203
+
 12.1.15
 -
 * B-60438 FDA: SAL liabilities by RH report with splits and counts: implement repository logic and query
