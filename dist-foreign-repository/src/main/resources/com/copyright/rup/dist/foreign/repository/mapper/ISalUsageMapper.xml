@@ -382,14 +382,14 @@
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where u.df_scenario_uid = #{scenarioId}
-        and u.rh_account_number = #{accountNumber}
-        <if test="null != searchValue">
-            and (
-            u.${detail_uid} like '%' || #{searchValue} || '%' or
-            u.standard_number ilike '%' || #{searchValue} || '%' or
-            cast(u.wr_wrk_inst as text) like '%' || #{searchValue} || '%'
-            )
-        </if>
+            and u.rh_account_number = #{accountNumber}
+            <if test="null != searchValue">
+                and (
+                u.${detail_uid} like '%' || #{searchValue} || '%' or
+                u.standard_number ilike '%' || #{searchValue} || '%' or
+                cast(u.wr_wrk_inst as text) like '%' || #{searchValue} || '%'
+                )
+            </if>
     </sql>
 
     <insert id="insertItemBankDetail" parameterType="Usage">

@@ -201,7 +201,7 @@ public interface IUsageArchiveRepository {
     int findAaclCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue);
 
     /**
-     * Gets list of archived AACL {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * Finds list of archived AACL {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
      * identifier and rightsholder account number.
      *
      * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
@@ -215,7 +215,7 @@ public interface IUsageArchiveRepository {
                                                           String searchValue, Pageable pageable, Sort sort);
 
     /**
-     * Gets count of archived SAL usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * Finds count of archived SAL usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
      * identifier and rightsholder account number.
      *
      * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
