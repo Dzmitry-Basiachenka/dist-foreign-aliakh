@@ -37,7 +37,7 @@
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
-        <result property="workTitle" column="work_title"/>
+        <result property="systemTitle" column="system_title"/>
         <result property="grossAmount" column="gross_amount"/>
         <result property="serviceFeeAmount" column="service_fee_amount"/>
         <result property="netAmount" column="net_amount"/>
@@ -262,7 +262,7 @@
             u.rh_account_number,
             rh.name rh_name,
             u.wr_wrk_inst,
-            u.work_title,
+            u.system_title,
             sum(u.gross_amount) as gross_amount,
             sum(u.service_fee_amount) as service_fee_amount,
             sum(u.net_amount) as net_amount
@@ -274,7 +274,7 @@
             <foreach collection="scenarioIds" item="scenarioId" open="(" separator="," close=")">
                 #{scenarioId}
             </foreach>
-        group by u.rh_account_number, rh.name, u.wr_wrk_inst, u.work_title
+        group by u.rh_account_number, rh.name, u.wr_wrk_inst, u.system_title
         order by u.rh_account_number, u.wr_wrk_inst
     </select>
 
