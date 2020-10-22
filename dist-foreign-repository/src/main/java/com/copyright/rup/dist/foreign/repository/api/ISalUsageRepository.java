@@ -146,7 +146,7 @@ public interface ISalUsageRepository {
     void deleteFromScenario(String scenarioId, String userName);
 
     /**
-     * Gets count of usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
+     * Finds count of usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
      * rightsholder account number.
      *
      * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
@@ -157,7 +157,7 @@ public interface ISalUsageRepository {
     int findCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue);
 
     /**
-     * Gets list of {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
+     * Finds list of {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
      * rightsholder account number.
      *
      * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier

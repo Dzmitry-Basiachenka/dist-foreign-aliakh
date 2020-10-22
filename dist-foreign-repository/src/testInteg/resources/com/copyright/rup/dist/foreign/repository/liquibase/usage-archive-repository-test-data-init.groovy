@@ -941,7 +941,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool 2')
             column(name: 'total_amount', value: '1000.00')
-            column(name: 'sal_fields', value: '{"date_received": "12/24/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 5, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_gross_amount": 20.01, "grade_K_5_gross_amount": 653.3, "grade_6_8_gross_amount": 326.66, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.02000, "service_fee": 0.25000}')
+            column(name: 'sal_fields', value: '{"date_received": "12/24/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 5, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_gross_amount": 20.01, "grade_K_5_gross_amount": 653.3, "grade_6_8_gross_amount": 326.66, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -1002,6 +1002,11 @@ databaseChangeLog {
             column(name: 'reported_media_type', value: 'TEXT')
             column(name: 'media_type_weight', value: 1.0)
             column(name: 'coverage_year', value: '2014-2015')
+            column(name: 'states', value: 'CA;WV')
+            column(name: 'coverage_year', value: '2014-2015')
+            column(name: 'number_of_views', value: 1765)
+            column(name: 'scored_assessment_date', value: '2015-07-01')
+            column(name: 'question_identifier', value: 'SB9')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {

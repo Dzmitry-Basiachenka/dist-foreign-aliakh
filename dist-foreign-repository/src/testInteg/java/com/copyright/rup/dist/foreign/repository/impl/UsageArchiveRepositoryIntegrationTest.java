@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -709,6 +710,11 @@ public class UsageArchiveRepositoryIntegrationTest {
         } else {
             assertNull(actualUsageDto.getAaclUsage());
         }
+        if (Objects.nonNull(expectedUsageDto.getSalUsage())) {
+            assertSalUsageFields(expectedUsageDto.getSalUsage(), actualUsageDto.getSalUsage());
+        } else {
+            assertNull(actualUsageDto.getSalUsage());
+        }
     }
 
     private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
@@ -780,6 +786,30 @@ public class UsageArchiveRepositoryIntegrationTest {
             actualAaclUsage.getDetailLicenseeClass().getDiscipline());
         assertEquals(expectedAaclUsage.getDetailLicenseeClass().getEnrollmentProfile(),
             actualAaclUsage.getDetailLicenseeClass().getEnrollmentProfile());
+    }
+
+    private void assertSalUsageFields(SalUsage expectedUsage, SalUsage actualUsage) {
+        assertEquals(expectedUsage.getAssessmentName(), actualUsage.getAssessmentName());
+        assertEquals(expectedUsage.getCoverageYear(), actualUsage.getCoverageYear());
+        assertEquals(expectedUsage.getGrade(), actualUsage.getGrade());
+        assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
+        assertEquals(expectedUsage.getDetailType(), actualUsage.getDetailType());
+        assertEquals(expectedUsage.getReportedWorkPortionId(), actualUsage.getReportedWorkPortionId());
+        assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
+        assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());
+        assertEquals(expectedUsage.getMediaTypeWeight(), actualUsage.getMediaTypeWeight());
+        assertEquals(expectedUsage.getReportedArticle(), actualUsage.getReportedArticle());
+        assertEquals(expectedUsage.getReportedAuthor(), actualUsage.getReportedAuthor());
+        assertEquals(expectedUsage.getReportedPublisher(), actualUsage.getReportedPublisher());
+        assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
+        assertEquals(expectedUsage.getReportedPageRange(), actualUsage.getReportedPageRange());
+        assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
+        assertEquals(expectedUsage.getAssessmentType(), actualUsage.getAssessmentType());
+        assertEquals(expectedUsage.getStates(), actualUsage.getStates());
+        assertEquals(expectedUsage.getNumberOfViews(), actualUsage.getNumberOfViews());
+        assertEquals(expectedUsage.getScoredAssessmentDate(), actualUsage.getScoredAssessmentDate());
+        assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
+        assertEquals(expectedUsage.getBatchPeriodEndDate(), actualUsage.getBatchPeriodEndDate());
     }
 
     private void setUsageFields(Usage usage, String usageId, String usageBatchId) {
