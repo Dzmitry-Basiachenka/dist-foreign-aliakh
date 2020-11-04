@@ -192,9 +192,12 @@ public class SalScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        assertEquals(2, layout.getComponentCount());
+        assertEquals(5, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "View");
         verifyButton(layout.getComponent(1), "Delete");
+        verifyButton(layout.getComponent(2), "Submit for Approval");
+        verifyButton(layout.getComponent(3), "Reject");
+        verifyButton(layout.getComponent(4), "Approve");
     }
 
     private void verifyButton(Component component, String caption) {
