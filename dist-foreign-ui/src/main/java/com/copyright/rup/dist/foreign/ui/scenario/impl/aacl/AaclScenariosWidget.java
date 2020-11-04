@@ -61,7 +61,6 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     private final Button sendToLmButton = Buttons.createButton(ForeignUi.getMessage("button.send_to_lm"));
     private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private final Label cutoffAmt = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label serviceFeeTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -136,9 +135,9 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
             Collections.emptyList(), () -> new AaclUsageAgeWeightWindow(false));
         descriptionLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout metadataLayout =
-            new VerticalLayout(ownerLabel, grossTotalLabel, serviceFeeTotalLabel, netTotalLabel,
-                cutoffAmt, descriptionLabel, selectionCriteriaLabel, fundPoolButton, licenseeClassMappingWidget,
-                publicationTypeWeightWidget, usageAgeWeightWidget);
+            new VerticalLayout(ownerLabel, grossTotalLabel, serviceFeeTotalLabel, netTotalLabel, descriptionLabel,
+                selectionCriteriaLabel, fundPoolButton, licenseeClassMappingWidget, publicationTypeWeightWidget,
+                usageAgeWeightWidget);
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
         return metadataLayout;
@@ -156,8 +155,6 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
             formatAmount(scenarioWithAmounts.getServiceFeeTotal())));
         netTotalLabel.setValue(ForeignUi.getMessage("label.net_amount_in_usd",
             formatAmount(scenarioWithAmounts.getNetTotal())));
-        cutoffAmt.setValue(ForeignUi.getMessage("label.title_cutoff_amount",
-            formatAmount(scenarioWithAmounts.getAaclFields().getTitleCutoffAmount())));
         descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenarioWithAmounts.getDescription()));
         selectionCriteriaLabel.setValue(getController().getCriteriaHtmlRepresentation());
         licenseeClassMappingWidget.setAppliedParameters(

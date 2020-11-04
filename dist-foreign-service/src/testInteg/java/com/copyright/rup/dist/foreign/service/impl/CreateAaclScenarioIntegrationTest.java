@@ -56,7 +56,7 @@ public class CreateAaclScenarioIntegrationTest {
         builder
             .withFilter(buildUsageFilter())
             .expectRollups("prm/aacl_rollups_response.json", "b0e6b1f6-89e9-4767-b143-db0f49f32769",
-                "60080587-a225-439c-81af-f016cb33aeac")
+                "60080587-a225-439c-81af-f016cb33aeac", "019acfde-91be-43aa-8871-6305642bcb2c")
             .withScenario(SCENARIO_NAME, SCENARIO_DESCRIPTION, buildAaclFields())
             .expectScenario(buildExpectedScenario())
             .expectScenarioFilter(new ScenarioUsageFilter(buildUsageFilter()))
@@ -78,7 +78,6 @@ public class CreateAaclScenarioIntegrationTest {
 
     private AaclFields buildAaclFields() {
         AaclFields aaclFields = new AaclFields();
-        aaclFields.setTitleCutoffAmount(new BigDecimal("50.00"));
         aaclFields.setFundPoolId("753bd683-1db2-47ec-8332-136139c512d0");
         aaclFields.setUsageAges(Arrays.asList(
             buildUsageAge(2019, new BigDecimal("1.00")),

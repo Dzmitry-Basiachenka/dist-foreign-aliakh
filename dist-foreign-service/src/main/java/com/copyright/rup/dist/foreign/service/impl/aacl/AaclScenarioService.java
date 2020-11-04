@@ -74,9 +74,6 @@ public class AaclScenarioService implements IAaclScenarioService {
         aaclUsageService.addUsagesToScenario(scenario, usageFilter);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
-        List<Long> wrWrkInstsToExclude =
-            aaclUsageService.getWrWrkInstsUnderMinimum(scenario.getId(), aaclFields.getTitleCutoffAmount());
-        aaclUsageService.updateAaclUsagesUnderMinimum(scenario.getId(), wrWrkInstsToExclude, scenario.getCreateUser());
         aaclUsageService.calculateAmounts(scenario.getId(), scenario.getCreateUser());
         aaclUsageService.populatePayees(scenario.getId());
         LOGGER.info("Insert AACL scenario. Finished. Name={}, Description={}, UsageFilter={}",

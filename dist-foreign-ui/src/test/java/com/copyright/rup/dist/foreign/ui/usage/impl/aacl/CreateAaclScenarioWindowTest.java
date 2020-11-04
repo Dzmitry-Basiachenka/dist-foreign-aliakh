@@ -114,20 +114,19 @@ public class CreateAaclScenarioWindowTest {
         window = new CreateAaclScenarioWindow(controller);
         verify(controller);
         assertEquals("Create Scenario", window.getCaption());
-        assertEquals(320, window.getWidth(), 0);
+        assertEquals(300, window.getWidth(), 0);
         assertEquals("create-scenario-window", window.getId());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertNotNull(content);
         assertTrue(content.isSpacing());
-        assertEquals(8, content.getComponentCount());
+        assertEquals(7, content.getComponentCount());
         verifyScenarioNameField(content.getComponent(0));
-        verifyTitleCutoffAmountField(content.getComponent(1));
-        verifyFundPoolComboBox(content.getComponent(2), fundPool);
-        verifyScenarioParameterWidget(content.getComponent(3), "Usage Age Weights");
-        verifyScenarioParameterWidget(content.getComponent(4), "Pub Type Weights");
-        verifyScenarioParameterWidget(content.getComponent(5), "Licensee Class Mapping");
-        verifyDescriptionArea(content.getComponent(6));
-        verifyButtonsLayout(content.getComponent(7));
+        verifyFundPoolComboBox(content.getComponent(1), fundPool);
+        verifyScenarioParameterWidget(content.getComponent(2), "Usage Age Weights");
+        verifyScenarioParameterWidget(content.getComponent(3), "Pub Type Weights");
+        verifyScenarioParameterWidget(content.getComponent(4), "Licensee Class Mapping");
+        verifyDescriptionArea(content.getComponent(5));
+        verifyButtonsLayout(content.getComponent(6));
     }
 
     @Test
@@ -136,7 +135,6 @@ public class CreateAaclScenarioWindowTest {
         List<PublicationType> publicationTypes = Collections.singletonList(publicationType);
         List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(detailLicenseeClass);
         AaclFields expectedAaclFields = new AaclFields();
-        expectedAaclFields.setTitleCutoffAmount(new BigDecimal("50"));
         expectedAaclFields.setFundPoolId(FUND_POOL_ID);
         expectedAaclFields.setUsageAges(usageAges);
         expectedAaclFields.setPublicationTypes(publicationTypes);
@@ -149,9 +147,9 @@ public class CreateAaclScenarioWindowTest {
         replay(controller);
         TestCreateAaclScenarioWindow createScenarioWindow = new TestCreateAaclScenarioWindow(controller);
         VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();
-        ComboBox<FundPool> fundPoolComboBox = (ComboBox<FundPool>) content.getComponent(2);
+        ComboBox<FundPool> fundPoolComboBox = (ComboBox<FundPool>) content.getComponent(1);
         fundPoolComboBox.setSelectedItem(fundPool);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(7);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(6);
         Button confirmButton = (Button) buttonsLayout.getComponent(0);
         ClickListener listener = (ClickListener) confirmButton.getListeners(ClickEvent.class).iterator().next();
         listener.buttonClick(new ClickEvent(createScenarioWindow));
@@ -179,9 +177,9 @@ public class CreateAaclScenarioWindowTest {
         replay(controller, Windows.class);
         TestCreateAaclScenarioWindow createScenarioWindow = new TestCreateAaclScenarioWindow(controller);
         VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();
-        ComboBox<FundPool> fundPoolComboBox = (ComboBox<FundPool>) content.getComponent(2);
+        ComboBox<FundPool> fundPoolComboBox = (ComboBox<FundPool>) content.getComponent(1);
         fundPoolComboBox.setSelectedItem(fundPool);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(7);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(6);
         Button confirmButton = (Button) buttonsLayout.getComponent(0);
         ClickListener listener = (ClickListener) confirmButton.getListeners(ClickEvent.class).iterator().next();
         listener.buttonClick(new ClickEvent(createScenarioWindow));
@@ -196,7 +194,7 @@ public class CreateAaclScenarioWindowTest {
         TestCreateAaclScenarioWindow createScenarioWindow = new TestCreateAaclScenarioWindow(controller);
         assertFalse(createScenarioWindow.isClosed());
         VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();
-        Component component = content.getComponent(7);
+        Component component = content.getComponent(6);
         HorizontalLayout buttonsLayout = (HorizontalLayout) component;
         Button cancelButton = (Button) buttonsLayout.getComponent(1);
         ClickListener listener = (ClickListener) cancelButton.getListeners(ClickEvent.class).iterator().next();
@@ -231,13 +229,6 @@ public class CreateAaclScenarioWindowTest {
         assertEquals("Scenario name", scenarioNameField.getCaption());
         assertEquals(SCENARIO_NAME, scenarioNameField.getValue());
         assertEquals("scenario-name", scenarioNameField.getId());
-    }
-
-    private void verifyTitleCutoffAmountField(Component component) {
-        assertNotNull(component);
-        TextField titleCutoffAmountField = (TextField) component;
-        assertEquals("Title Cutoff Amount", titleCutoffAmountField.getCaption());
-        assertEquals("50", titleCutoffAmountField.getValue());
     }
 
     private void verifyFundPoolComboBox(Component component, FundPool expectedFundPool) {

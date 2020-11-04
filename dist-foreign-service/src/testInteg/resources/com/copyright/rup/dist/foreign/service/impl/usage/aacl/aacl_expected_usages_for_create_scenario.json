@@ -6,9 +6,9 @@
     "status": "LOCKED",
     "productFamily": "AACL",
     "numberOfCopies": 10,
-    "grossAmount": 30.9366510346,
-    "netAmount": 23.2024882760,
-    "serviceFeeAmount": 7.7341627587,
+    "grossAmount": 30.5979768711,
+    "netAmount": 22.9484826533,
+    "serviceFeeAmount": 7.6494942178,
     "serviceFee": 0.25000,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
@@ -31,9 +31,9 @@
       },
       "volumeWeight": 3.7000000000,
       "valueWeight": 194.0280000000,
-      "volumeShare": 0.3303571429,
-      "valueShare": 0.4430591330,
-      "totalShare": 0.3867081379
+      "volumeShare": 0.3223698541,
+      "valueShare": 0.4425795677,
+      "totalShare": 0.3824747109
     },
     "rightsholder": {
       "id": "60080587-a225-439c-81af-f016cb33aeac",
@@ -54,9 +54,9 @@
     "status": "LOCKED",
     "productFamily": "AACL",
     "numberOfCopies": 10,
-    "grossAmount": 20.0000000000,
-    "netAmount": 15.0000000000,
-    "serviceFeeAmount": 5.0000000000,
+    "grossAmount": 19.6124629868,
+    "netAmount": 14.7093472401,
+    "serviceFeeAmount": 4.9031157467,
     "serviceFee": 0.25000,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
@@ -79,9 +79,9 @@
       },
       "volumeWeight": 7.5000000000,
       "valueWeight": 111.6000000000,
-      "volumeShare": 1.0000000000,
-      "valueShare": 1.0000000000,
-      "totalShare": 1.0000000000
+      "volumeShare": 0.9643201543,
+      "valueShare": 0.9969261444,
+      "totalShare": 0.9806231493
     },
     "rightsholder": {
       "id": "b0e6b1f6-89e9-4767-b143-db0f49f32769",
@@ -99,12 +99,13 @@
     "id": "a96d23a9-a8e7-48e2-9f0e-c0a1ce3a0eab",
     "batchId": "ea7b6e8d-8454-4052-b639-c0fdb0a3145c",
     "wrWrkInst": 100010768,
-    "status": "SCENARIO_EXCLUDED",
+    "status": "LOCKED",
     "productFamily": "AACL",
     "numberOfCopies": 1,
-    "grossAmount": 0.0000000000,
-    "netAmount": 0.0000000000,
-    "serviceFeeAmount": 0.0000000000,
+    "grossAmount": 0.3875370132,
+    "netAmount": 0.2906527599,
+    "serviceFeeAmount": 0.0968842533,
+    "serviceFee": 0.25000,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
       "batchPeriodEndDate": "2019-06-30",
@@ -123,7 +124,12 @@
       },
       "usageAge": {
         "period": 2017
-      }
+      },
+      "volumeWeight": 0.2775000000,
+      "valueWeight": 0.3441000000,
+      "volumeShare": 0.0356798457,
+      "valueShare": 0.0030738556,
+      "totalShare": 0.0193768507
     },
     "rightsholder": {
       "id": "019acfde-91be-43aa-8871-6305642bcb2c",
@@ -139,9 +145,9 @@
     "status": "LOCKED",
     "productFamily": "AACL",
     "numberOfCopies": 10,
-    "grossAmount": 49.0633489654,
-    "netAmount": 36.7975117240,
-    "serviceFeeAmount": 12.2658372413,
+    "grossAmount": 48.3916177394,
+    "netAmount": 36.2937133046,
+    "serviceFeeAmount": 12.0979044349,
     "serviceFee": 0.25000,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
@@ -165,9 +171,9 @@
       "baselineId": "f517f5b9-5f34-41f6-8984-67eeadf65ad1",
       "volumeWeight": 7.5000000000,
       "valueWeight": 243.9000000000,
-      "volumeShare": 0.6696428571,
-      "valueShare": 0.5569408670,
-      "totalShare": 0.6132918621
+      "volumeShare": 0.6534524069,
+      "valueShare": 0.5563380366,
+      "totalShare": 0.6048952217
     },
     "rightsholder": {
       "id": "b0e6b1f6-89e9-4767-b143-db0f49f32769",
@@ -185,12 +191,13 @@
     "id": "c71c0c80-57c0-43d1-9c40-432c7cd112c6",
     "batchId": "ea7b6e8d-8454-4052-b639-c0fdb0a3145c",
     "wrWrkInst": 100010768,
-    "status": "SCENARIO_EXCLUDED",
+    "status": "LOCKED",
     "productFamily": "AACL",
     "numberOfCopies": 1,
-    "grossAmount": 0.0000000000,
-    "netAmount": 0.0000000000,
-    "serviceFeeAmount": 0.0000000000,
+    "grossAmount": 1.0104053895,
+    "netAmount": 0.7578040421,
+    "serviceFeeAmount": 0.2526013474,
+    "serviceFee": 0.25000,
     "aaclUsage": {
       "institution": "CORNELL UNIVERSITY",
       "batchPeriodEndDate": "2019-06-30",
@@ -210,7 +217,12 @@
       "usageAge": {
         "period": 2017
       },
-      "baselineId": "9aeb87ed-5000-4bee-abcb-e3dfc4f84235"
+      "baselineId": "9aeb87ed-5000-4bee-abcb-e3dfc4f84235",
+      "volumeWeight": 0.2775000000,
+      "valueWeight": 0.4745250000,
+      "volumeShare": 0.0241777391,
+      "valueShare": 0.0010823957,
+      "totalShare": 0.0126300674
     },
     "rightsholder": {
       "id": "b0e6b1f6-89e9-4767-b143-db0f49f32769",

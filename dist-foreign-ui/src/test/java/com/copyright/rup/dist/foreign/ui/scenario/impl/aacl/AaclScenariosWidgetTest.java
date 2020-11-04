@@ -259,7 +259,7 @@ public class AaclScenariosWidgetTest {
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
-        assertEquals(12, layout.getComponentCount());
+        assertEquals(11, layout.getComponentCount());
         verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
         verifyMetadataLabel(layout.getComponent(1),
             "<b>Gross Amt in USD: </b><span class='label-amount'>10,000.00</span>");
@@ -267,24 +267,22 @@ public class AaclScenariosWidgetTest {
             "<b>Service Fee Amt in USD: </b><span class='label-amount'>3,200.00</span>");
         verifyMetadataLabel(layout.getComponent(3),
             "<b>Net Amt in USD: </b><span class='label-amount'>6,800.00</span>");
-        verifyMetadataLabel(layout.getComponent(4),
-            "<b>Title Cutoff Amount: </b><span class='label-amount'>1.35</span>");
-        verifyMetadataLabel(layout.getComponent(5), "<b>Description: </b>Description");
-        verifyMetadataLabel(layout.getComponent(6), SELECTION_CRITERIA);
-        Component fundPool = layout.getComponent(7);
+        verifyMetadataLabel(layout.getComponent(4), "<b>Description: </b>Description");
+        verifyMetadataLabel(layout.getComponent(5), SELECTION_CRITERIA);
+        Component fundPool = layout.getComponent(6);
         assertTrue(fundPool instanceof Button);
         assertEquals("Fund Pool", fundPool.getCaption());
-        assertTrue(layout.getComponent(8) instanceof AaclScenarioParameterWidget);
-        AaclScenarioParameterWidget licenseeClassMappingWidget = (AaclScenarioParameterWidget) layout.getComponent(8);
+        assertTrue(layout.getComponent(7) instanceof AaclScenarioParameterWidget);
+        AaclScenarioParameterWidget licenseeClassMappingWidget = (AaclScenarioParameterWidget) layout.getComponent(7);
         assertEquals("Licensee Class Mapping", licenseeClassMappingWidget.getComponent(0).getCaption());
-        assertTrue(layout.getComponent(9) instanceof AaclScenarioParameterWidget);
-        AaclScenarioParameterWidget pubTypeWeightsWidget = (AaclScenarioParameterWidget) layout.getComponent(9);
+        assertTrue(layout.getComponent(8) instanceof AaclScenarioParameterWidget);
+        AaclScenarioParameterWidget pubTypeWeightsWidget = (AaclScenarioParameterWidget) layout.getComponent(8);
         assertEquals("Pub Type Weights", pubTypeWeightsWidget.getComponent(0).getCaption());
-        assertTrue(layout.getComponent(10) instanceof AaclScenarioParameterWidget);
-        AaclScenarioParameterWidget usageAgeWeightsWidget = (AaclScenarioParameterWidget) layout.getComponent(10);
+        assertTrue(layout.getComponent(9) instanceof AaclScenarioParameterWidget);
+        AaclScenarioParameterWidget usageAgeWeightsWidget = (AaclScenarioParameterWidget) layout.getComponent(9);
         assertEquals("Usage Age Weights", usageAgeWeightsWidget.getComponent(0).getCaption());
-        assertTrue(layout.getComponent(11) instanceof VerticalLayout);
-        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(11);
+        assertTrue(layout.getComponent(10) instanceof VerticalLayout);
+        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(10);
         assertEquals(5, lastActionLayout.getComponentCount());
         verifyMetadataLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
         verifyMetadataLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
@@ -339,7 +337,6 @@ public class AaclScenariosWidgetTest {
     private AaclFields buildAaclFields() {
         AaclFields aaclFields = new AaclFields();
         aaclFields.setFundPoolId(FUND_POOL_ID);
-        aaclFields.setTitleCutoffAmount(new BigDecimal("1.35"));
         aaclFields.setUsageAges(buildUsageAges());
         return aaclFields;
     }

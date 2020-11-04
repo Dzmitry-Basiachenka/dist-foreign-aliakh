@@ -184,7 +184,6 @@ public class CreateAaclScenarioIntegrationTestBuilder {
         }
 
         private void assertAaclFields(AaclFields expected, AaclFields actual) {
-            assertEquals(expected.getTitleCutoffAmount(), actual.getTitleCutoffAmount());
             assertEquals(expected.getFundPoolId(), actual.getFundPoolId());
             assertUsageAges(expected.getUsageAges(), actual.getUsageAges());
             assertPublicationTypes(expected.getPublicationTypes(), actual.getPublicationTypes());

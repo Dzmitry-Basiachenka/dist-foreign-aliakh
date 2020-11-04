@@ -262,7 +262,7 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '450ed474-1919-460b-9485-ccea0f53ce46')
             column(name: 'name', value: 'AACL Scenario 1')
             column(name: 'status_ind', value: 'IN_PROGRESS')
-            column(name: 'aacl_fields', value: '{"fund_pool_uid": "a0c64de1-5b05-4162-83c8-1800402118e6", "title_cutoff_amount": 0, "usageAges": [{"period": 2020, "weight": 1.00}], "publicationTypes": [{"name": "Book", "weight": 1.00}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 108}]}')
+            column(name: 'aacl_fields', value: '{"fund_pool_uid": "a0c64de1-5b05-4162-83c8-1800402118e6", "usageAges": [{"period": 2020, "weight": 1.00}], "publicationTypes": [{"name": "Book", "weight": 1.00}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 108}]}')
             column(name: 'description', value: 'AACL Scenario Description')
         }
 

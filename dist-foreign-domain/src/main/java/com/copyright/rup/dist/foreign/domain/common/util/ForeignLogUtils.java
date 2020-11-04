@@ -59,9 +59,9 @@ public final class ForeignLogUtils {
                 if (null == aaclFields) {
                     result = "AaclFields={NULL}";
                 } else {
-                    result = String.format("AaclFields[TitleCutoffAmount=%s, FundPoolId=%s, UsageAges=%s, " +
-                            "PublicationTypes=%s, DetailLicenseeClasses=%s]",
-                        aaclFields.getTitleCutoffAmount(), aaclFields.getFundPoolId(),
+                    result = String.format(
+                        "AaclFields[FundPoolId=%s, UsageAges=%s, PublicationTypes=%s, DetailLicenseeClasses=%s]",
+                        aaclFields.getFundPoolId(),
                         formatUsageAges(aaclFields.getUsageAges()),
                         formatPublicationTypes(aaclFields.getPublicationTypes()),
                         formatDetailLicenseeClasses(aaclFields.getDetailLicenseeClasses()));

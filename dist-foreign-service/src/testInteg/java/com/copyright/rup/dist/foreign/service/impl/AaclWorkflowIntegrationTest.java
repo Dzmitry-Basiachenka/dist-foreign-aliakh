@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,11 +95,11 @@ public class AaclWorkflowIntegrationTest {
             .withFundPool(buildFundPool("Fund pool"))
             .withFundPoolDetails(Collections.singletonList(buildFundPoolDetail(FUND_POOL_ID_1)))
             .withUsageFilter(buildUsageFilter())
-            .withAaclFields(buildAaclFields(FUND_POOL_ID_1, BigDecimal.ZERO))
+            .withAaclFields(buildAaclFields(FUND_POOL_ID_1))
             .withUsagesCsvFile("usage/aacl/aacl_usages_for_workflow.csv", 6, USAGE_ID_1, USAGE_ID_2, USAGE_ID_3)
             .withClassifiedUsagesCsvFile("usage/aacl/classified/classified_usages_workflow.csv")
             .withUsageBatch(buildUsageBatch("AACL test batch", 2))
-            .expectScenario(buildExpectedScenario(FUND_POOL_ID_1, BigDecimal.ZERO), 4)
+            .expectScenario(buildExpectedScenario(FUND_POOL_ID_1), 4)
             .expectUsages("usage/aacl/aacl_expected_usages_for_workflow.json")
             .expectArchivedUsages("usage/aacl/aacl_expected_archived_usages_for_workflow.json")
             .expectRollups("prm/aacl_workflow_rollups_response.json", "60080587-a225-439c-81af-f016cb33aeac")
@@ -133,18 +134,19 @@ public class AaclWorkflowIntegrationTest {
     }
 
     @Test
+    @Ignore //TODO {isuvorau} add exclude step after service logic will be implemented
     public void testAaclWorkflowWithExcludedByTitleCutoffAmount() throws Exception {
         testBuilder
             .withProductFamily(AACL_PRODUCT_FAMILY)
             .withFundPool(buildFundPool("Fund pool-2"))
             .withFundPoolDetails(Collections.singletonList(buildFundPoolDetail(FUND_POOL_ID_2)))
             .withUsageFilter(buildUsageFilter())
-            .withAaclFields(buildAaclFields(FUND_POOL_ID_2, new BigDecimal("500.00")))
+            .withAaclFields(buildAaclFields(FUND_POOL_ID_2))
             .withUsagesCsvFile("usage/aacl/aacl_usages_for_workflow_excluded.csv", 4, USAGE_ID_4, USAGE_ID_5,
                 USAGE_ID_6, USAGE_ID_7)
             .withClassifiedUsagesCsvFile("usage/aacl/classified/classified_usages_for_workflow_excluded.csv")
             .withUsageBatch(buildUsageBatch("AACL test batch-2", 0))
-            .expectScenario(buildExpectedScenario(FUND_POOL_ID_2, new BigDecimal("500.00")), 2)
+            .expectScenario(buildExpectedScenario(FUND_POOL_ID_2), 2)
             .expectRollups("prm/aacl_workflow_excluded_rollups_response.json", "60080587-a225-439c-81af-f016cb33aeac")
             .expectRmsRights("rights/aacl/rms_grants_100010768_request_workflow.json",
                 "rights/aacl/rms_grants_100010768_response_workflow.json")
@@ -190,11 +192,11 @@ public class AaclWorkflowIntegrationTest {
         return auditItem;
     }
 
-    private Scenario buildExpectedScenario(String fundPoolId, BigDecimal titleCutoffAmount) {
+    private Scenario buildExpectedScenario(String fundPoolId) {
         Scenario scenario = new Scenario();
         scenario.setName("Test AACL Scenario");
         scenario.setDescription("Test Scenario Description");
-        scenario.setAaclFields(buildAaclFields(fundPoolId, titleCutoffAmount));
+        scenario.setAaclFields(buildAaclFields(fundPoolId));
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         return scenario;
     }
@@ -222,10 +224,9 @@ public class AaclWorkflowIntegrationTest {
         return filter;
     }
 
-    private AaclFields buildAaclFields(String fundPoolId, BigDecimal titleCutoffAmount) {
+    private AaclFields buildAaclFields(String fundPoolId) {
         AaclFields fields = new AaclFields();
         fields.setFundPoolId(fundPoolId);
-        fields.setTitleCutoffAmount(titleCutoffAmount);
         fields.setUsageAges(Arrays.asList(
             buildUsageAge(2019, new BigDecimal("4.29")),
             buildUsageAge(2018, new BigDecimal("3.5")),

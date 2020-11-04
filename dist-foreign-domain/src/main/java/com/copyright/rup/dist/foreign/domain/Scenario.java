@@ -188,19 +188,10 @@ public class Scenario extends StoredEntity<String> {
      */
     public static class AaclFields {
 
-        private BigDecimal titleCutoffAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
         private String fundPoolId;
         private List<PublicationType> publicationTypes = new ArrayList<>();
         private List<UsageAge> usageAges = new ArrayList<>();
         private List<DetailLicenseeClass> detailLicenseeClasses = new ArrayList<>();
-
-        public BigDecimal getTitleCutoffAmount() {
-            return titleCutoffAmount;
-        }
-
-        public void setTitleCutoffAmount(BigDecimal titleCutoffAmount) {
-            this.titleCutoffAmount = titleCutoffAmount;
-        }
 
         public String getFundPoolId() {
             return fundPoolId;
@@ -247,7 +238,6 @@ public class Scenario extends StoredEntity<String> {
                 .append(this.publicationTypes, that.publicationTypes)
                 .append(this.usageAges, that.usageAges)
                 .append(this.detailLicenseeClasses, that.detailLicenseeClasses)
-                .append(this.titleCutoffAmount, that.titleCutoffAmount)
                 .append(this.fundPoolId, that.fundPoolId)
                 .isEquals();
         }
@@ -258,7 +248,6 @@ public class Scenario extends StoredEntity<String> {
                 .append(publicationTypes)
                 .append(usageAges)
                 .append(detailLicenseeClasses)
-                .append(titleCutoffAmount)
                 .append(fundPoolId)
                 .toHashCode();
         }
@@ -269,7 +258,6 @@ public class Scenario extends StoredEntity<String> {
                 .append("publicationTypes", publicationTypes)
                 .append("usageAges", usageAges)
                 .append("detailLicenseeClasses", detailLicenseeClasses)
-                .append("titleCutoffAmount", titleCutoffAmount)
                 .append("fundPoolId", fundPoolId)
                 .toString();
         }
