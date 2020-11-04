@@ -123,16 +123,6 @@ public class ReportController extends CommonController<IReportWidget> implements
     }
 
     @Override
-    public ICommonScenariosReportController getSalLiabilitiesByRhReportController() {
-        return salLiabilitiesByRhReportController;
-    }
-
-    @Override
-    public ICommonScenariosReportController getSalLiabilitiesSummaryByRhAndWorkReportController() {
-        return salLiabilitiesSummaryByRhAndWorkReportController;
-    }
-
-    @Override
     public IStreamSource getFasBatchSummaryReportStreamSource() {
         return new ByteArrayStreamSource("fas_batch_summary_report_",
             outputStream -> reportService.writeFasBatchSummaryCsvReport(outputStream));
@@ -160,6 +150,22 @@ public class ReportController extends CommonController<IReportWidget> implements
     public IStreamSource getAaclUndistributedLiabilitiesReportStreamSource() {
         return new ByteArrayStreamSource("undistributed_liabilities_",
             outputStream -> reportService.writeAaclUndistributedLiabilitiesCsvReport(outputStream));
+    }
+
+    @Override
+    public ICommonScenariosReportController getSalLiabilitiesByRhReportController() {
+        return salLiabilitiesByRhReportController;
+    }
+
+    @Override
+    public ICommonScenariosReportController getSalLiabilitiesSummaryByRhAndWorkReportController() {
+        return salLiabilitiesSummaryByRhAndWorkReportController;
+    }
+
+    @Override
+    public IStreamSource getSalUndistributedLiabilitiesReportStreamSource() {
+        return new ByteArrayStreamSource("undistributed_liabilities_",
+            outputStream -> reportService.writeSalUndistributedLiabilitiesCsvReport(outputStream));
     }
 
     @Override
