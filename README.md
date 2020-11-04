@@ -1,3 +1,15 @@
+12.1.17
+-
+* B-57885 FDA: SAL Exports: Scenario-specific usage details: make changes based on comments in CR-DIST-FOREIGN-206
+* B-57890 AT FDA: Modify the scenario drill-down view for SAL: make changes based on commrnts in CR-DIST-FOREIGN-207
+* B-59008 FDA: Send SAL scenario for approval: implement ui logic related to add buttons
+* B-60185 FDA: SAL Undistributed Liabilities report: add Undistributed Liabilities Reconciliation Report menu item under Reports tab
+* B-60185 FDA: SAL Undistributed Liabilities report: create SalUndistributedLiabilitiesReconciliationReportDto domain for matching data from database
+* B-62518 Tech Debt: FDA: rollback the version upgrade of vaadin-spring dependency
+* B-62518 Tech Debt: FDA: update tomcat version to 8.5.58
+* B-62518 Tech Debt: upgrade rup-vaadin and vaadin-spring versions
+* B-63874 FDA: Modify Logic for AACL Scenario Creation: remove title cutoff amount from UI and backend
+
 12.1.16
 -
 * CDP-947 FDA: Liabilities Summary by Rightsholder and Work Report: 'Work Title' column contains Reported Title instead of System Title
