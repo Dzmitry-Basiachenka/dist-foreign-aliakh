@@ -247,4 +247,9 @@ public class ReportService implements IReportService {
                                                                OutputStream outputStream) {
         reportRepository.writeSalLiabilitiesSummaryByRhAndWorkCsvReport(scenarios, outputStream);
     }
+
+    @Override
+    public void writeSalUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
+        //TODO {dbasiachenka} apply repository layer
+    }
 }

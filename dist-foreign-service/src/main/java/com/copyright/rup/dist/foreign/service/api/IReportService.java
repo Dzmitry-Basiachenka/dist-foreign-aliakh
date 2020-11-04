@@ -282,4 +282,11 @@ public interface IReportService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeSalLiabilitiesSummaryByRhAndWorkCsvReport(List<Scenario> scenarioIds, OutputStream outputStream);
+
+    /**
+     * Writes SAL Undistributed Liabilities Report into the output stream in CSV format.
+     *
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeSalUndistributedLiabilitiesCsvReport(OutputStream outputStream);
 }

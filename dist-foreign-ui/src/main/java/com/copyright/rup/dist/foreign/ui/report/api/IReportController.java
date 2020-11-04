@@ -71,16 +71,6 @@ public interface IReportController extends IController<IReportWidget> {
     ITaxNotificationReportController getTaxNotificationReportController();
 
     /**
-     * @return liabilities by rightsholder report controller.
-     */
-    ICommonScenariosReportController getSalLiabilitiesByRhReportController();
-
-    /**
-     * @return SAL Liabilities Summary by Rightsholder and Work Report controller.
-     */
-    ICommonScenariosReportController getSalLiabilitiesSummaryByRhAndWorkReportController();
-
-    /**
      * @return instance of {@link IStreamSource} for FAS/FAS2 Batch Summary Report.
      */
     IStreamSource getFasBatchSummaryReportStreamSource();
@@ -104,4 +94,19 @@ public interface IReportController extends IController<IReportWidget> {
      * @return instance of {@link IStreamSource} for AACL Undistributed Liabilities Report.
      */
     IStreamSource getAaclUndistributedLiabilitiesReportStreamSource();
+
+    /**
+     * @return liabilities by rightsholder report controller.
+     */
+    ICommonScenariosReportController getSalLiabilitiesByRhReportController();
+
+    /**
+     * @return SAL Liabilities Summary by Rightsholder and Work Report controller.
+     */
+    ICommonScenariosReportController getSalLiabilitiesSummaryByRhAndWorkReportController();
+
+    /**
+     * @return instance of {@link IStreamSource} for SAL Undistributed Liabilities Report.
+     */
+    IStreamSource getSalUndistributedLiabilitiesReportStreamSource();
 }

@@ -181,4 +181,16 @@ public class ReportControllerTest {
             reportController.getAaclUndistributedLiabilitiesReportStreamSource().getSource().getValue().get());
         verify(reportService, productFamilyProvider);
     }
+
+    @Test
+    public void testGetSalUndistributedLiabilitiesReportStreamSource() {
+        reportService.writeSalUndistributedLiabilitiesCsvReport(anyObject(OutputStream.class));
+        expectLastCall().once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(FdaConstants.SAL_PRODUCT_FAMILY).once();
+        replay(reportService, productFamilyProvider);
+        reportController.initWidget();
+        assertNotNull(
+            reportController.getSalUndistributedLiabilitiesReportStreamSource().getSource().getValue().get());
+        verify(reportService, productFamilyProvider);
+    }
 }
