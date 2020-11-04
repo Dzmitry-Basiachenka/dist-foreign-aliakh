@@ -48,11 +48,6 @@ public interface ICommonScenariosController extends IController<ICommonScenarios
     void handleAction(ScenarioActionTypeEnum actionType);
 
     /**
-     * Handles send to LM action.
-     */
-    void sendToLm();
-
-    /**
      * Refreshes selected scenario.
      */
     void refreshScenario();

@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
+import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -50,15 +51,19 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
     private final Label preServiceFeeFundLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label selectionCriteriaLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final INtsScenariosController controller;
     private NtsScenariosMediator mediator;
 
     /**
      * Controller.
      *
+     * @param controller        instance of {@link INtsScenariosController}
      * @param historyController instance of {@link IScenarioHistoryController}
      */
-    NtsScenariosWidget(IScenarioHistoryController historyController) {
+    NtsScenariosWidget(INtsScenariosController controller, IScenarioHistoryController historyController) {
         super(historyController);
+        setController(controller);
+        this.controller = controller;
     }
 
     @Override
@@ -122,7 +127,7 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
             preServiceFeeFundLabel.setValue(StringUtils.EMPTY);
         }
         descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenarioWithAmounts.getDescription()));
-        selectionCriteriaLabel.setValue(getController().getCriteriaHtmlRepresentation());
+        selectionCriteriaLabel.setValue(controller.getCriteriaHtmlRepresentation());
     }
 
     @Override
@@ -131,11 +136,11 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
     }
 
     private void addButtonsListeners() {
-        deleteButton.addClickListener(event -> getController().onDeleteButtonClicked());
-        viewButton.addClickListener(event -> getController().onViewButtonClicked());
-        submitButton.addClickListener(event -> getController().handleAction(ScenarioActionTypeEnum.SUBMITTED));
-        rejectButton.addClickListener(event -> getController().handleAction(ScenarioActionTypeEnum.REJECTED));
-        approveButton.addClickListener(event -> getController().handleAction(ScenarioActionTypeEnum.APPROVED));
-        sendToLmButton.addClickListener(event -> getController().sendToLm());
+        deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
+        viewButton.addClickListener(event -> controller.onViewButtonClicked());
+        submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
+        rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
+        approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));
+        sendToLmButton.addClickListener(event -> controller.sendToLm());
     }
 }

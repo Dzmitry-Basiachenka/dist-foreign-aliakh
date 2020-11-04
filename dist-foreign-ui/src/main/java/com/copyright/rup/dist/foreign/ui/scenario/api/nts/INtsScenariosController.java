@@ -12,4 +12,9 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController
  * @author Stanislau Rudak
  */
 public interface INtsScenariosController extends ICommonScenariosController {
+
+    /**
+     * Handles send to LM action.
+     */
+    void sendToLm();
 }

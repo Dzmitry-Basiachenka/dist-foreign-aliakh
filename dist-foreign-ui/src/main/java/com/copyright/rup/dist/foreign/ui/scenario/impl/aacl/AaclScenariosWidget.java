@@ -32,7 +32,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
@@ -181,11 +180,11 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     }
 
     private void addButtonsListeners() {
-        viewButton.addClickListener(event -> getController().onViewButtonClicked());
-        deleteButton.addClickListener(event -> getController().onDeleteButtonClicked());
-        submitButton.addClickListener(event -> getController().handleAction(ScenarioActionTypeEnum.SUBMITTED));
-        rejectButton.addClickListener(event -> getController().handleAction(ScenarioActionTypeEnum.REJECTED));
-        approveButton.addClickListener(event -> getController().handleAction(ScenarioActionTypeEnum.APPROVED));
-        sendToLmButton.addClickListener(event -> getController().sendToLm());
+        viewButton.addClickListener(event -> controller.onViewButtonClicked());
+        deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
+        submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
+        rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
+        approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));
+        sendToLmButton.addClickListener(event -> controller.sendToLm());
     }
 }
