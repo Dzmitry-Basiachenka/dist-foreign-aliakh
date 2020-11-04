@@ -396,7 +396,6 @@ public class ScenarioRepositoryIntegrationTest {
         scenario.setProductFamily(AACL_PRODUCT_FAMILY);
         AaclFields aaclFields = new AaclFields();
         scenario.setAaclFields(aaclFields);
-        aaclFields.setTitleCutoffAmount(new BigDecimal("40.00"));
         aaclFields.setFundPoolId("95faddb9-27b6-422e-9de8-01f3aaa9c64d");
         List<PublicationType> pubTypes = new ArrayList<>();
         aaclFields.setPublicationTypes(pubTypes);
@@ -416,7 +415,6 @@ public class ScenarioRepositoryIntegrationTest {
         Scenario actualScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_1);
         AaclFields actualAaclFields = actualScenario.getAaclFields();
         assertNotNull(actualAaclFields);
-        assertEquals(new BigDecimal("40.00"), actualAaclFields.getTitleCutoffAmount());
         assertEquals("95faddb9-27b6-422e-9de8-01f3aaa9c64d", actualAaclFields.getFundPoolId());
         assertEquals(pubTypes, actualAaclFields.getPublicationTypes());
     }

@@ -422,7 +422,7 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: 'd92e3c8e-7ecc-4080-bf3f-b541f51c9a06')
             column(name: 'name', value: 'AACL Scenario')
             column(name: 'status_ind', value: 'APPROVED')
-            column(name: 'aacl_fields', value: '{"fund_pool_uid": "0ea96c66-72aa-4d59-8128-31c20e7eb9de", "title_cutoff_amount": 100.00, "usageAges": [{"period": 2021, "weight": 1.00}], "publicationTypes": [{"id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "weight": 3.00},{"id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "weight": 2.00}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 141}]}')
+            column(name: 'aacl_fields', value: '{"fund_pool_uid": "0ea96c66-72aa-4d59-8128-31c20e7eb9de", "usageAges": [{"period": 2021, "weight": 1.00}], "publicationTypes": [{"id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "weight": 3.00},{"id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "weight": 2.00}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 141}]}')
             column(name: 'description', value: 'AACL Scenario Description')
         }
 

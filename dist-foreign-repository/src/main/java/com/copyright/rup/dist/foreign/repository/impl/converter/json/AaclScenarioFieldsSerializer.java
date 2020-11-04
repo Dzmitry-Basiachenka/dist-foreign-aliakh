@@ -33,7 +33,6 @@ public class AaclScenarioFieldsSerializer extends StdSerializer<AaclFields> {
     @Override
     public void serialize(AaclFields aaclFields, JsonGenerator jg, SerializerProvider provider) throws IOException {
         jg.writeStartObject();
-        jg.writeNumberField("title_cutoff_amount", aaclFields.getTitleCutoffAmount());
         jg.writeStringField("fund_pool_uid", aaclFields.getFundPoolId());
         jg.writeArrayFieldStart("publicationTypes");
         List<PublicationType> publicationTypes = aaclFields.getPublicationTypes();

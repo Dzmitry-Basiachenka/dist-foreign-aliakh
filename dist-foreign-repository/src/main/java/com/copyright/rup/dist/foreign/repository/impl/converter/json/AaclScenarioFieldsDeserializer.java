@@ -25,7 +25,6 @@ import java.util.List;
  */
 public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> {
 
-    private static final String TITLE_CUTOFF_AMOUNT = "title_cutoff_amount";
     private static final String FUND_POOL_ID = "fund_pool_uid";
     private static final String PUBLICATION_TYPES = "publicationTypes";
     private static final String USAGE_AGES = "usageAges";
@@ -48,10 +47,7 @@ public class AaclScenarioFieldsDeserializer extends StdDeserializer<AaclFields> 
         AaclFields aaclFields = new AaclFields();
         JsonToken currentToken;
         while (null != (currentToken = jp.nextValue())) {
-            if ((JsonToken.VALUE_NUMBER_INT == currentToken || JsonToken.VALUE_NUMBER_FLOAT == currentToken)
-                && TITLE_CUTOFF_AMOUNT.equals(jp.getCurrentName())) {
-                aaclFields.setTitleCutoffAmount(jp.getDecimalValue());
-            } else if (JsonToken.VALUE_STRING == currentToken && FUND_POOL_ID.equals(jp.getCurrentName())) {
+            if (JsonToken.VALUE_STRING == currentToken && FUND_POOL_ID.equals(jp.getCurrentName())) {
                 aaclFields.setFundPoolId(jp.getValueAsString());
             } else if (JsonToken.START_ARRAY == currentToken && PUBLICATION_TYPES.equals(jp.getCurrentName())) {
                 aaclFields.setPublicationTypes(readPubTypes(jp));

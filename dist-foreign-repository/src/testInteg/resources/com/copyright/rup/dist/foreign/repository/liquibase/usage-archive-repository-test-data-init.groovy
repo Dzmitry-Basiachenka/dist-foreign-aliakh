@@ -702,7 +702,7 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '4f1714a1-5e23-4e46-aeb1-b44fbeea17e6')
             column(name: 'name', value: 'AACL Scenario')
             column(name: 'status_ind', value: 'SENT_TO_LM')
-            column(name: 'aacl_fields', value: '{"fund_pool_uid": "0da3bfe2-8cfe-4120-b15b-ac48cab97da9", "title_cutoff_amount": 100.00, "usageAges": [{"period": 2021, "weight": 1.00}], "publicationTypes": [{"id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "weight": 3.00}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 141}]}')
+            column(name: 'aacl_fields', value: '{"fund_pool_uid": "0da3bfe2-8cfe-4120-b15b-ac48cab97da9", "usageAges": [{"period": 2021, "weight": 1.00}], "publicationTypes": [{"id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "weight": 3.00}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 141}]}')
             column(name: 'description', value: 'AACL Scenario Description')
         }
 

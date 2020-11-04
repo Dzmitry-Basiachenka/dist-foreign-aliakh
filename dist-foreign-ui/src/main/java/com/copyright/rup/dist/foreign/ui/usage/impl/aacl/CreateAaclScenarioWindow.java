@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
@@ -18,9 +17,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.validator.StringLengthValidator;
-import com.vaadin.server.Setter;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -33,7 +30,6 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -55,7 +51,6 @@ class CreateAaclScenarioWindow extends Window {
     private final Binder<Scenario> scenarioBinder = new Binder<>();
     private final Binder<AtomicReference<FundPool>> fundPoolBinder = new Binder<>();
     private TextField scenarioNameField;
-    private TextField titleCutoffAmountField;
     private ComboBox<FundPool> fundPoolComboBox;
     private AaclScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
     private AaclScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget;
@@ -70,13 +65,13 @@ class CreateAaclScenarioWindow extends Window {
     CreateAaclScenarioWindow(IAaclUsageController controller) {
         this.controller = controller;
         setResizable(false);
-        setWidth(320, Unit.PIXELS);
+        setWidth(300, Unit.PIXELS);
         setCaption(ForeignUi.getMessage("window.create_scenario"));
         initFields();
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout layout =
-            new VerticalLayout(scenarioNameField, titleCutoffAmountField, fundPoolComboBox, usageAgeWeightWidget,
-                publicationTypeWeightWidget, licenseeClassMappingWidget, descriptionArea, buttonsLayout);
+            new VerticalLayout(scenarioNameField, fundPoolComboBox, usageAgeWeightWidget, publicationTypeWeightWidget,
+                licenseeClassMappingWidget, descriptionArea, buttonsLayout);
         layout.setSpacing(true);
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
@@ -89,7 +84,6 @@ class CreateAaclScenarioWindow extends Window {
 
     private void initFields() {
         initScenarioNameField();
-        initTitleCutoffAmountField();
         initFundPoolCombobox();
         initUsageAgeWeightsWidget();
         initPubTypeWeightsWidget();
@@ -111,22 +105,6 @@ class CreateAaclScenarioWindow extends Window {
             .bind(Scenario::getName, Scenario::setName);
         VaadinUtils.setMaxComponentsWidth(scenarioNameField);
         VaadinUtils.addComponentStyle(scenarioNameField, "scenario-name");
-    }
-
-    private void initTitleCutoffAmountField() {
-        titleCutoffAmountField = new TextField(ForeignUi.getMessage("field.title_cutoff_amount"));
-        titleCutoffAmountField.setValue("50");
-        titleCutoffAmountField.setRequiredIndicatorVisible(true);
-        scenarioBinder.forField(titleCutoffAmountField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
-            .withValidator(value -> new AmountValidator(true).isValid(value),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
-            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
-            .bind(scenario -> scenario.getAaclFields().getTitleCutoffAmount(),
-                (Setter<Scenario, BigDecimal>) (scenario, cutoffAmount) ->
-                    scenario.getAaclFields().setTitleCutoffAmount(cutoffAmount));
-        VaadinUtils.setMaxComponentsWidth(titleCutoffAmountField);
-        VaadinUtils.addComponentStyle(titleCutoffAmountField, "title-cutoff-amount-field");
     }
 
     private void initFundPoolCombobox() {
@@ -180,7 +158,6 @@ class CreateAaclScenarioWindow extends Window {
         if (scenarioBinder.isValid() && fundPoolBinder.isValid()) {
             AaclFields aaclFields = new AaclFields();
             fundPoolComboBox.getSelectedItem().ifPresent(fundPool -> aaclFields.setFundPoolId(fundPool.getId()));
-            aaclFields.setTitleCutoffAmount(new BigDecimal(StringUtils.trimToEmpty(titleCutoffAmountField.getValue())));
             aaclFields.setUsageAges(usageAgeWeightWidget.getAppliedParameters());
             aaclFields.setPublicationTypes(publicationTypeWeightWidget.getAppliedParameters());
             aaclFields.setDetailLicenseeClasses(licenseeClassMappingWidget.getAppliedParameters());
@@ -202,8 +179,7 @@ class CreateAaclScenarioWindow extends Window {
                         String.join("<br><li>", formattedAggregateClasses)));
             }
         } else {
-            Windows.showValidationErrorWindow(
-                Arrays.asList(scenarioNameField, titleCutoffAmountField, fundPoolComboBox, descriptionArea));
+            Windows.showValidationErrorWindow(Arrays.asList(scenarioNameField, fundPoolComboBox, descriptionArea));
         }
     }
 }

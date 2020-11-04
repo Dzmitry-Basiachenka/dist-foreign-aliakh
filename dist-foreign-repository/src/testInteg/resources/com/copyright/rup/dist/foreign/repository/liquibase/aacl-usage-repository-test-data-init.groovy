@@ -986,7 +986,7 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '8b01939c-abda-4090-86d1-6231fc20f679')
             column(name: 'name', value: 'AACL Scenario 1')
             column(name: 'status_ind', value: 'IN_PROGRESS')
-            column(name: 'aacl_fields', value: '{"fund_pool_uid": "9691fe58-b45a-4132-879e-1417eca14c1d", "title_cutoff_amount": 100.00,' +
+            column(name: 'aacl_fields', value: '{"fund_pool_uid": "9691fe58-b45a-4132-879e-1417eca14c1d",' +
                     '"usageAges": [{"period": 2020, "weight": 1.00}, {"period": 2019, "weight": 0.75 }],' +
                     '"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 108},{"detailLicenseeClassId": 111, "aggregateLicenseeClassId": 111},{"detailLicenseeClassId": 113, "aggregateLicenseeClassId": 108}]}')
             column(name: 'description', value: 'AACL Scenario')
@@ -1416,7 +1416,7 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '45f17838-b5cb-47e2-a57a-8d128fa07edf')
             column(name: 'name', value: 'AACL Scenario For Add To Baseline Test')
             column(name: 'status_ind', value: 'APPROVED')
-            column(name: 'aacl_fields', value: '{"fund_pool_uid": "8ec0c5df-ae3c-45a0-89d3-404e9f85dbbb", "title_cutoff_amount": 100.00, "usageAges": [{"period": 2021, "weight": 1.00}], "publicationTypes": [{"id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "weight": 3.00},{"id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "weight": 2.00}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 141}]}')
+            column(name: 'aacl_fields', value: '{"fund_pool_uid": "8ec0c5df-ae3c-45a0-89d3-404e9f85dbbb", "usageAges": [{"period": 2021, "weight": 1.00}], "publicationTypes": [{"id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "weight": 3.00},{"id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "weight": 2.00}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 141}]}')
             column(name: 'description', value: 'AACL Scenario Description')
         }
 

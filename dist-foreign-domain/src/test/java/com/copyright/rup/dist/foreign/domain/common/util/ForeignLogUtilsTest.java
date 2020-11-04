@@ -48,7 +48,6 @@ public class ForeignLogUtilsTest {
     @Test
     public void testAaclFields() {
         AaclFields aaclFields = new AaclFields();
-        aaclFields.setTitleCutoffAmount(new BigDecimal("50.00"));
         aaclFields.setFundPoolId("cc3f6787-d8f5-4bbc-a7b1-268ebed28789");
         aaclFields.setUsageAges(Arrays.asList(
             buildUsageAge(2019, new BigDecimal("1.00")),
@@ -63,7 +62,7 @@ public class ForeignLogUtilsTest {
             buildDetailLicenseeClass(110, 143)
         ));
         String expectedString =
-            "AaclFields[TitleCutoffAmount=50.00, FundPoolId=cc3f6787-d8f5-4bbc-a7b1-268ebed28789, " +
+            "AaclFields[FundPoolId=cc3f6787-d8f5-4bbc-a7b1-268ebed28789, " +
                 "UsageAges=[Period=2019, Weight=1.00], [Period=2018, Weight=0.75], " +
                 "PublicationTypes=[Name=Book, Weight=3.12], [Name=STMA Journal, Weight=0.99], " +
                 "DetailLicenseeClasses=[DLC=108, ALC=141], [DLC=110, ALC=143]]";
@@ -73,20 +72,18 @@ public class ForeignLogUtilsTest {
     @Test
     public void testAaclFieldsWithNullValues() {
         AaclFields aaclFields = new AaclFields();
-        aaclFields.setTitleCutoffAmount(null);
         aaclFields.setFundPoolId(null);
         aaclFields.setUsageAges(null);
         aaclFields.setPublicationTypes(null);
         aaclFields.setDetailLicenseeClasses(null);
-        String expectedString = "AaclFields[TitleCutoffAmount=null, FundPoolId=null, UsageAges=NULL, " +
-            "PublicationTypes=NULL, DetailLicenseeClasses=NULL]";
+        String expectedString =
+            "AaclFields[FundPoolId=null, UsageAges=NULL, PublicationTypes=NULL, DetailLicenseeClasses=NULL]";
         assertEquals(expectedString, ForeignLogUtils.scenarioAaclFields(aaclFields).toString());
     }
 
     @Test
     public void testAaclFieldsWithNullValuesInCollections() {
         AaclFields aaclFields = new AaclFields();
-        aaclFields.setTitleCutoffAmount(new BigDecimal("50.00"));
         aaclFields.setFundPoolId("cc3f6787-d8f5-4bbc-a7b1-268ebed28789");
         aaclFields.setUsageAges(Arrays.asList(
             buildUsageAge(null, new BigDecimal("1.00")),
@@ -104,10 +101,9 @@ public class ForeignLogUtilsTest {
             buildDetailLicenseeClass(110, null)
         ));
         String expectedString =
-            "AaclFields[TitleCutoffAmount=50.00, FundPoolId=cc3f6787-d8f5-4bbc-a7b1-268ebed28789, " +
-                "UsageAges=[Period=null, Weight=1.00], NULL, [Period=2018, Weight=null], " +
-                "PublicationTypes=[Name=null, Weight=3.12], NULL, [Name=STMA Journal, Weight=null], " +
-                "DetailLicenseeClasses=[DLC=null, ALC=141], NULL, [DLC=110, ALC=null]]";
+            "AaclFields[FundPoolId=cc3f6787-d8f5-4bbc-a7b1-268ebed28789, UsageAges=[Period=null, Weight=1.00], NULL, " +
+                "[Period=2018, Weight=null], PublicationTypes=[Name=null, Weight=3.12], NULL, [Name=STMA Journal, " +
+                "Weight=null], DetailLicenseeClasses=[DLC=null, ALC=141], NULL, [DLC=110, ALC=null]]";
         assertEquals(expectedString, ForeignLogUtils.scenarioAaclFields(aaclFields).toString());
     }
 
