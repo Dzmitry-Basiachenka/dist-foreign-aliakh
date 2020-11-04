@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.report.NtsWithDrawnBatchSummaryRepo
 import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesByRhReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesSummaryByRhAndWorkReportDto;
+import com.copyright.rup.dist.foreign.domain.report.SalUndistributedLiabilitiesReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
 
 import org.junit.Test;
@@ -87,7 +88,8 @@ public class DomainVerifierTest {
             {RightsholderPayeeProductFamilyHolder.class},
             {SalUsage.class},
             {SalLiabilitiesByRhReportDto.class},
-            {SalLiabilitiesSummaryByRhAndWorkReportDto.class}
+            {SalLiabilitiesSummaryByRhAndWorkReportDto.class},
+            {SalUndistributedLiabilitiesReportDto.class}
         };
         return Arrays.asList(testData);
     }
