@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 
 import com.vaadin.ui.Button;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +38,7 @@ public class SalScenariosMediatorTest {
     private Button submitButton;
     private Button rejectButton;
     private Button approveButton;
+    private Button sendToLmButton;
 
     @Before
     public void setUp() {
@@ -49,11 +49,13 @@ public class SalScenariosMediatorTest {
         submitButton = new Button("Submit for Approval");
         rejectButton = new Button("Reject");
         approveButton = new Button("Approve");
+        sendToLmButton = new Button("Send to LM");
         mediator.setViewButton(viewButton);
         mediator.setDeleteButton(deleteButton);
         mediator.setSubmitButton(submitButton);
         mediator.setRejectButton(rejectButton);
         mediator.setApproveButton(approveButton);
+        mediator.setSendToLmButton(sendToLmButton);
     }
 
     @Test
@@ -63,6 +65,7 @@ public class SalScenariosMediatorTest {
         mediator.applyPermissions();
         assertTrue(viewButton.isVisible());
         assertFalse(deleteButton.isVisible());
+        assertFalse(sendToLmButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -73,6 +76,7 @@ public class SalScenariosMediatorTest {
         mediator.applyPermissions();
         assertTrue(viewButton.isVisible());
         assertFalse(deleteButton.isVisible());
+        assertFalse(sendToLmButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -83,6 +87,7 @@ public class SalScenariosMediatorTest {
         mediator.applyPermissions();
         assertTrue(viewButton.isVisible());
         assertTrue(deleteButton.isVisible());
+        assertTrue(sendToLmButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -91,6 +96,7 @@ public class SalScenariosMediatorTest {
         mediator.selectedScenarioChanged(null);
         assertTrue(viewButton.isVisible());
         assertFalse(deleteButton.isEnabled());
+        assertTrue(sendToLmButton.isEnabled());
     }
 
     @Test
@@ -103,6 +109,7 @@ public class SalScenariosMediatorTest {
         assertTrue(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
+        assertTrue(sendToLmButton.isEnabled());
     }
 
     @Test
@@ -115,6 +122,7 @@ public class SalScenariosMediatorTest {
         assertFalse(submitButton.isEnabled());
         assertTrue(rejectButton.isEnabled());
         assertTrue(approveButton.isEnabled());
+        assertTrue(sendToLmButton.isEnabled());
     }
 
     @Test
@@ -127,6 +135,7 @@ public class SalScenariosMediatorTest {
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
+        assertTrue(sendToLmButton.isEnabled());
     }
 
     private void mockViewOnlyPermissions() {
@@ -146,5 +155,6 @@ public class SalScenariosMediatorTest {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_SUBMIT_SCENARIO")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_DISTRIBUTE_SCENARIO")).andReturn(true).once();
     }
 }
