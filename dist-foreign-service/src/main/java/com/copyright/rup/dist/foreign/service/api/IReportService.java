@@ -289,4 +289,12 @@ public interface IReportService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeSalUndistributedLiabilitiesCsvReport(OutputStream outputStream);
+
+    /**
+     * Writes SAL Fund Pools Report into the output stream in csv format.
+     *
+     * @param distributionYear distribution year to export
+     * @param outputStream  instance of {@link OutputStream}
+     */
+    void writeSalFundPoolsCsvReport(int distributionYear, OutputStream outputStream);
 }

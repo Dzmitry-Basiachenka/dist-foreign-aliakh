@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportContro
 import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.ISalFundPoolsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
@@ -62,6 +63,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     private IAaclBaselineUsagesReportController aaclBaselineUsagesReportController;
     @Autowired
     private ITaxNotificationReportController taxNotificationReportController;
+    @Autowired
+    private ISalFundPoolsReportController salFundPoolsReportController;
     @Autowired
     private IReportService reportService;
     @Autowired
@@ -166,6 +169,11 @@ public class ReportController extends CommonController<IReportWidget> implements
     public IStreamSource getSalUndistributedLiabilitiesReportStreamSource() {
         return new ByteArrayStreamSource("undistributed_liabilities_",
             outputStream -> reportService.writeSalUndistributedLiabilitiesCsvReport(outputStream));
+    }
+
+    @Override
+    public ISalFundPoolsReportController getSalFundPoolsReportController() {
+        return salFundPoolsReportController;
     }
 
     @Override

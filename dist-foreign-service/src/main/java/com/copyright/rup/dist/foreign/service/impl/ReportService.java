@@ -252,4 +252,9 @@ public class ReportService implements IReportService {
     public void writeSalUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
         //TODO {dbasiachenka} apply repository layer
     }
+
+    @Override
+    public void writeSalFundPoolsCsvReport(int distributionYear, OutputStream outputStream) {
+        //TODO {aazarenka} implement later
+    }
 }

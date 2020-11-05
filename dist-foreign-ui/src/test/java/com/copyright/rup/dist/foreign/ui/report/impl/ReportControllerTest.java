@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenarioReportControl
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.ISalFundPoolsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
 
 import org.junit.Before;
@@ -50,6 +51,7 @@ public class ReportControllerTest {
     private ICommonScenariosReportController salLiabilitiesByRhReportController;
     private ICommonScenariosReportController salLiabilitiesSummaryByRhAndWorkReportController;
     private ICommonScenarioReportController ntsServiceFeeTrueUpReportController;
+    private ISalFundPoolsReportController salFundPoolsReportController;
     private ReportController reportController;
     private IReportService reportService;
     private IProductFamilyProvider productFamilyProvider;
@@ -64,6 +66,7 @@ public class ReportControllerTest {
         fasServiceFeeTrueUpReportController = createMock(IFasServiceFeeTrueUpReportController.class);
         ntsServiceFeeTrueUpReportController = createMock(ICommonScenarioReportController.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
+        salFundPoolsReportController = createMock(ISalFundPoolsReportController.class);
         Whitebox.setInternalState(reportController, undistributedLiabilitiesReportController);
         Whitebox.setInternalState(reportController, fasServiceFeeTrueUpReportController);
         Whitebox.setInternalState(reportController, "salLiabilitiesByRhReportController",
@@ -74,6 +77,7 @@ public class ReportControllerTest {
             ntsServiceFeeTrueUpReportController);
         Whitebox.setInternalState(reportController, reportService);
         Whitebox.setInternalState(reportController, productFamilyProvider);
+        Whitebox.setInternalState(reportController, salFundPoolsReportController);
     }
 
     @Test
@@ -106,6 +110,12 @@ public class ReportControllerTest {
     public void testGetUndistributedLiabilitiesReportController() {
         assertSame(undistributedLiabilitiesReportController,
             reportController.getUndistributedLiabilitiesReportController());
+    }
+
+    @Test
+    public void testGetSalFundPoolsReportController() {
+        assertSame(salFundPoolsReportController,
+            reportController.getSalFundPoolsReportController());
     }
 
     @Test

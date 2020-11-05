@@ -29,5 +29,8 @@ public class SalReportMenuBuilder implements IReportMenuBuilder {
                 controller.getSalLiabilitiesSummaryByRhAndWorkReportController()));
         rootItem.addItem(ForeignUi.getMessage("menu.report.undistributed_liabilities"),
             menuItem -> widget.generateReport(controller.getSalUndistributedLiabilitiesReportStreamSource()));
+        String fundPools = ForeignUi.getMessage("menu.report.fund_pools");
+        rootItem.addItem(fundPools, menuItem -> widget.openReportWindow(fundPools,
+            controller.getSalFundPoolsReportController()));
     }
 }
