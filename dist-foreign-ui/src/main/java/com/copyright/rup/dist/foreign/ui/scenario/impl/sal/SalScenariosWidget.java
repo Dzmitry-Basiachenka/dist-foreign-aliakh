@@ -18,7 +18,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -39,6 +38,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
     private final Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
     private final Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
     private final Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
+    private final Button sendToLmButton = Buttons.createButton(ForeignUi.getMessage("button.send_to_lm"));
     private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -67,6 +67,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
         mediator.setApproveButton(approveButton);
         mediator.setRejectButton(rejectButton);
         mediator.setSubmitButton(submitButton);
+        mediator.setSendToLmButton(sendToLmButton);
         mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
     }
@@ -80,8 +81,9 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
     protected HorizontalLayout initButtonsLayout() {
         HorizontalLayout layout = new HorizontalLayout();
         addButtonsListeners();
-        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton, submitButton, rejectButton, approveButton);
-        layout.addComponents(viewButton, deleteButton, submitButton, rejectButton, approveButton);
+        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton, submitButton, rejectButton, approveButton,
+            sendToLmButton);
+        layout.addComponents(viewButton, deleteButton, submitButton, rejectButton, approveButton, sendToLmButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
@@ -108,16 +110,17 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
         serviceFeeTotalLabel.setValue(ForeignUi.getMessage("label.service_fee_amount_in_usd",
             formatAmount(scenarioWithAmounts.getServiceFeeTotal())));
         descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenarioWithAmounts.getDescription()));
-        selectionCriteriaLabel.setValue(getController().getCriteriaHtmlRepresentation());
+        selectionCriteriaLabel.setValue(controller.getCriteriaHtmlRepresentation());
         fundPoolNameLabel.setValue(ForeignUi.getMessage("label.metadata.fund_pool_name",
             controller.getFundPoolName(scenarioWithAmounts.getSalFields().getFundPoolId())));
     }
 
     private void addButtonsListeners() {
-        viewButton.addClickListener(event -> getController().onViewButtonClicked());
-        deleteButton.addClickListener(event -> getController().onDeleteButtonClicked());
-        submitButton.addClickListener(event -> getController().handleAction(ScenarioActionTypeEnum.SUBMITTED));
-        rejectButton.addClickListener(event -> getController().handleAction(ScenarioActionTypeEnum.REJECTED));
-        approveButton.addClickListener(event -> getController().handleAction(ScenarioActionTypeEnum.APPROVED));
+        viewButton.addClickListener(event -> controller.onViewButtonClicked());
+        deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
+        submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
+        rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
+        approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));
+        sendToLmButton.addClickListener(event -> controller.onSendToLmButtonClicked());
     }
 }

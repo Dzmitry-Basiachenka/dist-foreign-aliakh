@@ -99,6 +99,11 @@ public class SalScenariosController extends CommonScenariosController implements
     }
 
     @Override
+    public void onSendToLmButtonClicked() {
+        Windows.showModalWindow(new SalSendToLmWindow(this));
+    }
+
+    @Override
     public String getFundPoolName(String fundPoolId) {
         return fundPoolService.getFundPoolById(fundPoolId).getName();
     }

@@ -25,6 +25,7 @@ class SalScenariosMediator implements IScenariosMediator {
     private Button submitButton;
     private Button rejectButton;
     private Button approveButton;
+    private Button sendToLmButton;
 
     @Override
     public void applyPermissions() {
@@ -33,6 +34,7 @@ class SalScenariosMediator implements IScenariosMediator {
         submitButton.setVisible(ForeignSecurityUtils.hasSubmitScenarioPermission());
         rejectButton.setVisible(ForeignSecurityUtils.hasRejectScenarioPermission());
         approveButton.setVisible(ForeignSecurityUtils.hasApproveScenarioPermission());
+        sendToLmButton.setVisible(ForeignSecurityUtils.hasSendScenarioToLmPermission());
     }
 
     @Override
@@ -53,6 +55,10 @@ class SalScenariosMediator implements IScenariosMediator {
             rejectButton.setEnabled(false);
             approveButton.setEnabled(false);
         }
+    }
+
+    void setSendToLmButton(Button sendToLmButton) {
+        this.sendToLmButton = sendToLmButton;
     }
 
     void setViewButton(Button viewButton) {

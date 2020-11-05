@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -31,7 +30,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -192,20 +190,21 @@ public class SalScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        assertEquals(5, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "View");
-        verifyButton(layout.getComponent(1), "Delete");
-        verifyButton(layout.getComponent(2), "Submit for Approval");
-        verifyButton(layout.getComponent(3), "Reject");
-        verifyButton(layout.getComponent(4), "Approve");
+        assertEquals(6, layout.getComponentCount());
+        verifyButton(layout.getComponent(0), "View", false);
+        verifyButton(layout.getComponent(1), "Delete", false);
+        verifyButton(layout.getComponent(2), "Submit for Approval", false);
+        verifyButton(layout.getComponent(3), "Reject", false);
+        verifyButton(layout.getComponent(4), "Approve", false);
+        verifyButton(layout.getComponent(5), "Send to LM", true);
     }
 
-    private void verifyButton(Component component, String caption) {
+    private void verifyButton(Component component, String caption, boolean isEnabled) {
         assertTrue(component instanceof Button);
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(caption.replaceAll(StringUtils.SPACE, "_"), button.getId());
-        assertFalse(button.isEnabled());
+        assertEquals(isEnabled, button.isEnabled());
         assertTrue(button.isDisableOnClick());
         assertEquals(2, button.getListeners(ClickEvent.class).size());
     }
