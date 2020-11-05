@@ -23,4 +23,9 @@ public interface IAaclScenariosController extends ICommonScenariosController {
      * @return list of {@link DetailLicenseeClass}es
      */
     List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId);
+
+    /**
+     * Handles send to LM action.
+     */
+    void sendToLm();
 }

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.sal;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
@@ -22,7 +23,10 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -50,8 +54,15 @@ public class SalScenariosController extends CommonScenariosController implements
     private IFundPoolService fundPoolService;
 
     @Override
-    public void sendToLm() {
-        // TODO implement sending to LM for SAL scenario
+    public List<Scenario> getScenariosToSendToLm() {
+        return getScenarioService().getScenariosByProductFamiliesAndStatuses(
+            Collections.singleton(getProductFamilyProvider().getSelectedProductFamily()),
+            Collections.singleton(ScenarioStatusEnum.APPROVED));
+    }
+
+    @Override
+    public void sendToLm(Set<Scenario> scenarios) {
+        //TODO: use service logic to send to LM
     }
 
     @Override

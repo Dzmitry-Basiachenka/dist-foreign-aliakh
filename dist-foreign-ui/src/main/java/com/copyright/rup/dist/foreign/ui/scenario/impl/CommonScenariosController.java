@@ -21,7 +21,6 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 import com.google.common.collect.Maps;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Window;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -134,6 +133,10 @@ public abstract class CommonScenariosController extends CommonController<ICommon
         scenario.setUpdateUser(SecurityUtils.getUserName());
         actionHandler.handleAction(scenario, reason);
         widget.refresh();
+    }
+
+    protected IProductFamilyProvider getProductFamilyProvider() {
+        return productFamilyProvider;
     }
 
     protected IUsageService getUsageService() {

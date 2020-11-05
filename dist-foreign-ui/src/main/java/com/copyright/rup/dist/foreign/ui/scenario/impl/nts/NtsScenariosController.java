@@ -110,7 +110,7 @@ public class NtsScenariosController extends CommonScenariosController implements
 
     @Override
     protected INtsScenariosWidget instantiateWidget() {
-        return new NtsScenariosWidget(scenarioHistoryController);
+        return new NtsScenariosWidget(this, scenarioHistoryController);
     }
 
     @Override

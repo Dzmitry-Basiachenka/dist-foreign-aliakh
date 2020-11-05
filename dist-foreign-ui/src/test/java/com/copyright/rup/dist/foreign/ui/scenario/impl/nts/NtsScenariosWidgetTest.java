@@ -70,8 +70,7 @@ public class NtsScenariosWidgetTest {
     @Before
     public void setUp() {
         controller = createMock(INtsScenariosController.class);
-        scenariosWidget = new NtsScenariosWidget(new ScenarioHistoryController());
-        scenariosWidget.setController(controller);
+        scenariosWidget = new NtsScenariosWidget(controller, new ScenarioHistoryController());
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         NtsFields ntsFields = new NtsFields();

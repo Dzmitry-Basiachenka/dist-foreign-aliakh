@@ -1,6 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.sal;
 
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Controller interface for {@link ISalScenariosWidget}.
@@ -20,4 +24,16 @@ public interface ISalScenariosController extends ICommonScenariosController {
      * @return fund pool name
      */
     String getFundPoolName(String fundPoolId);
+
+    /**
+     * @return list of {@link Scenario}s, which are eligible to send to LM.
+     */
+    List<Scenario> getScenariosToSendToLm();
+
+    /**
+     * Sends {@link Scenario}s to LM.
+     *
+     * @param scenarios scenarios to send to LM
+     */
+    void sendToLm(Set<Scenario> scenarios);
 }
