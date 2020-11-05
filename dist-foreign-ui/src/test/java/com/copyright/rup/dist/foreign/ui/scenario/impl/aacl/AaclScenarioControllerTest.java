@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.ScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -60,7 +61,7 @@ import java.util.function.Supplier;
  * @author Stanislau Rudak
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({OffsetDateTime.class, StreamSource.class})
+@PrepareForTest({OffsetDateTime.class, StreamSource.class, ForeignSecurityUtils.class})
 public class AaclScenarioControllerTest {
 
     private static final OffsetDateTime NOW = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
@@ -88,6 +89,7 @@ public class AaclScenarioControllerTest {
         scenarioService = createMock(ScenarioService.class);
         reportService = createMock(IReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
+        mockStatic(ForeignSecurityUtils.class);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, reportService);
@@ -103,12 +105,12 @@ public class AaclScenarioControllerTest {
         expect(usageService.getRightsholderTotalsHoldersByScenario(eq(scenario), anyString(),
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
         expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
-        expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
         expect(streamSource.getSource())
             .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(streamSource).times(2);
-        replay(usageService, scenarioService, streamSourceHandler, streamSource);
+        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
+        replay(usageService, scenarioService, streamSourceHandler, streamSource, ForeignSecurityUtils.class);
         controller.initWidget();
         List<RightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
@@ -118,7 +120,7 @@ public class AaclScenarioControllerTest {
         assertEquals(0, result.size());
         assertNotNull(fileNameSupplierCapture.getValue());
         assertNotNull(posConsumerCapture.getValue());
-        verify(usageService, scenarioService, streamSourceHandler, streamSource);
+        verify(usageService, scenarioService, streamSourceHandler, streamSource, ForeignSecurityUtils.class);
     }
 
     @Test
@@ -126,7 +128,6 @@ public class AaclScenarioControllerTest {
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         IStreamSource streamSource = createMock(IStreamSource.class);
-        expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
         expect(streamSource.getSource())
             .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).times(2);
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
@@ -134,10 +135,11 @@ public class AaclScenarioControllerTest {
         expect(usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY)).andReturn(1)
             .once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
-        replay(usageService, scenarioService, streamSourceHandler, streamSource);
+        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
+        replay(usageService, scenarioService, streamSourceHandler, streamSource, ForeignSecurityUtils.class);
         controller.initWidget();
         assertEquals(1, controller.getSize());
-        verify(usageService, scenarioService, streamSourceHandler, streamSource);
+        verify(usageService, scenarioService, streamSourceHandler, streamSource, ForeignSecurityUtils.class);
     }
 
     @Test

@@ -12,4 +12,9 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioController;
  * @author Stanislau Rudak
  */
 public interface IAaclScenarioController extends ICommonScenarioController {
+
+    /**
+     * Handles click on "Exclude By Payee" button.
+     */
+    void onExcludeByPayeeClicked();
 }

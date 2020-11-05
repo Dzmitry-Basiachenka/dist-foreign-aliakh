@@ -85,7 +85,7 @@ public class FasScenarioWidgetTest {
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
         replay(controller, streamSource, ForeignSecurityUtils.class, mediator);
         scenarioWidget.init();
-        verify(controller, streamSource, ForeignSecurityUtils.class);
+        verify(controller, streamSource, ForeignSecurityUtils.class, mediator);
         reset(controller, mediator);
     }
 
