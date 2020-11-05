@@ -71,6 +71,11 @@ public interface IReportController extends IController<IReportWidget> {
     ITaxNotificationReportController getTaxNotificationReportController();
 
     /**
+     * @return fund pools report controller.
+     */
+    ISalFundPoolsReportController getSalFundPoolsReportController();
+
+    /**
      * @return instance of {@link IStreamSource} for FAS/FAS2 Batch Summary Report.
      */
     IStreamSource getFasBatchSummaryReportStreamSource();
