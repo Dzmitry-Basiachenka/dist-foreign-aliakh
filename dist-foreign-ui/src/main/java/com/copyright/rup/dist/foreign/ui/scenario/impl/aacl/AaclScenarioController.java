@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclDrillDownByRight
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -29,6 +30,11 @@ public class AaclScenarioController extends CommonScenarioController implements 
 
     @Autowired
     private IAaclDrillDownByRightsholderController drillDownByRightsholderController;
+
+    @Override
+    public void onExcludeByPayeeClicked() {
+        Windows.showModalWindow(new AaclExcludePayeeWidget());
+    }
 
     @Override
     protected IAaclScenarioWidget instantiateWidget() {

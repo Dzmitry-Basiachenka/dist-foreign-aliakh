@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -10,9 +11,9 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -58,19 +59,17 @@ public class AaclScenarioWidgetTest {
 
     private AaclScenarioWidget scenarioWidget;
     private IAaclScenarioController controller;
+    private AaclScenarioMediator mediator;
 
     @Before
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAaclScenarioController.class);
+        mediator = createMock(AaclScenarioMediator.class);
         scenarioWidget = new AaclScenarioWidget(controller);
         scenarioWidget.setController(controller);
-        Scenario scenario = new Scenario();
-        scenario.setId(RupPersistUtils.generateUuid());
-        scenario.setName("Scenario name");
-        scenario.setGrossTotal(new BigDecimal("20000.00"));
-        scenario.setServiceFeeTotal(new BigDecimal("6400.00"));
-        scenario.setNetTotal(new BigDecimal("13600.00"));
+        Whitebox.setInternalState(scenarioWidget, "mediator", mediator);
+        Scenario scenario = buildScenario();
         IStreamSource streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource())
             .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).times(2);
@@ -78,11 +77,10 @@ public class AaclScenarioWidgetTest {
         expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
-        expect(controller.isScenarioEmpty()).andReturn(false).once();
-        replay(controller, streamSource, ForeignSecurityUtils.class);
+        replay(controller, streamSource, ForeignSecurityUtils.class, mediator);
         scenarioWidget.init();
-        verify(controller, streamSource, ForeignSecurityUtils.class);
-        reset(controller);
+        verify(controller, streamSource, ForeignSecurityUtils.class, mediator);
+        reset(controller, mediator);
     }
 
     @Test
@@ -107,6 +105,19 @@ public class AaclScenarioWidgetTest {
         searchWidget.setSearchValue("search");
         Whitebox.setInternalState(scenarioWidget, searchWidget);
         assertEquals("search", scenarioWidget.getSearchValue());
+    }
+
+    @Test
+    public void testRefresh() {
+        Scenario scenario = new Scenario();
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        expect(controller.isScenarioEmpty()).andReturn(false).once();
+        expect(controller.getScenario()).andReturn(scenario).once();
+        mediator.onScenarioUpdated(false, scenario);
+        expectLastCall().once();
+        replay(mediator, controller);
+        scenarioWidget.refresh();
+        verify(mediator, controller);
     }
 
     private void verifySearchWidget(Component component) {
@@ -144,14 +155,17 @@ public class AaclScenarioWidgetTest {
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(3, horizontalLayout.getComponentCount());
-        Button exportDetailsButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals(4, horizontalLayout.getComponentCount());
+        Button excludeByPayeeButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals("Exclude By Payee", excludeByPayeeButton.getCaption());
+        assertEquals("Exclude_By_Payee", excludeByPayeeButton.getId());
+        Button exportDetailsButton = (Button) horizontalLayout.getComponent(1);
         assertEquals("Export Details", exportDetailsButton.getCaption());
         assertEquals("Export_Details", exportDetailsButton.getId());
-        Button exportButton = (Button) horizontalLayout.getComponent(1);
+        Button exportButton = (Button) horizontalLayout.getComponent(2);
         assertEquals("Export", exportButton.getCaption());
         assertEquals("Export", exportButton.getId());
-        Button closeButton = (Button) horizontalLayout.getComponent(2);
+        Button closeButton = (Button) horizontalLayout.getComponent(3);
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());
@@ -163,5 +177,15 @@ public class AaclScenarioWidgetTest {
         assertEquals(100, component.getHeight(), 0);
         assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
+    }
+
+    private Scenario buildScenario() {
+        Scenario scenario = new Scenario();
+        scenario.setId("4a531e7f-dbd5-41f4-96e9-d8450275f0eb");
+        scenario.setName("Scenario name");
+        scenario.setGrossTotal(new BigDecimal("20000.00"));
+        scenario.setServiceFeeTotal(new BigDecimal("6400.00"));
+        scenario.setNetTotal(new BigDecimal("13600.00"));
+        return scenario;
     }
 }
