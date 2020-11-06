@@ -30,12 +30,13 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.sal.ISalScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Validator;
 import com.vaadin.ui.Window;
-
+import org.apache.commons.compress.utils.Sets;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,13 +60,16 @@ import java.util.Collections;
 @PrepareForTest({Windows.class, SecurityUtils.class})
 public class SalScenariosControllerTest {
 
-    private static final String SCENARIO_ID = "abc9deb3-8450-4eac-a13d-d157cf5fc057";
+    private static final String SCENARIO_ID_1 = "abc9deb3-8450-4eac-a13d-d157cf5fc057";
+    private static final String SCENARIO_ID_2 = "4599deb3-7450-45ac-b93d-c888cf5fc052";
     private static final String SAL_PRODUCT_FAMILY = "SAL";
-    private static final String SCENARIO_NAME = "Scenario name";
+    private static final String SCENARIO_NAME_1 = "SAL Distribution 2020";
+    private static final String SCENARIO_NAME_2 = "SAL Distribution 2019";
 
     private SalScenariosController scenariosController;
     private ISalScenariosWidget scenariosWidget;
-    private Scenario scenario;
+    private Scenario scenario1;
+    private Scenario scenario2;
     private IUsageService usageService;
     private IScenarioService scenarioService;
     private ISalScenarioService salScenarioService;
@@ -75,21 +79,22 @@ public class SalScenariosControllerTest {
 
     @Before
     public void setUp() {
+        mockStatic(SecurityUtils.class);
         usageService = createMock(IUsageService.class);
         scenarioService = createMock(IScenarioService.class);
         salScenarioService = createMock(ISalScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
-        scenariosController = new SalScenariosController();
-        buildScenario();
         scenarioController = createMock(SalScenarioController.class);
-        Whitebox.setInternalState(scenariosController, "scenarioController", scenarioController);
         scenariosWidget = createMock(ISalScenariosWidget.class);
+        scenariosController = new SalScenariosController();
         scenarioWidget = new SalScenarioWidget(scenarioController);
-        Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
-        mockStatic(SecurityUtils.class);
+        scenario1 = buildScenario(SCENARIO_ID_1, SCENARIO_NAME_1);
+        scenario2 = buildScenario(SCENARIO_ID_2, SCENARIO_NAME_2);
         expect(SecurityUtils.getUserName()).andReturn("user@copyright.com").anyTimes();
         replay(SecurityUtils.class);
         scenariosController.initActionHandlers();
+        Whitebox.setInternalState(scenariosController, "scenarioController", scenarioController);
+        Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
         Whitebox.setInternalState(scenariosController, "usageService", usageService);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
         Whitebox.setInternalState(scenariosController, "salScenarioService", salScenarioService);
@@ -100,6 +105,26 @@ public class SalScenariosControllerTest {
     @Test
     public void testInstantiateWidget() {
         assertNotNull(scenariosController.instantiateWidget());
+    }
+
+    @Test
+    public void testSendScenarioToLm() {
+        mockStatic(Windows.class);
+        Capture<ConfirmDialogWindow.IListener> listenerCapture = new Capture<>();
+        expect(Windows.showConfirmDialog(
+            eq("Are you sure that you want to send the following scenarios to Liability Manager: <ul><li><i><b>" +
+                SCENARIO_NAME_1 + "<br><li>" + SCENARIO_NAME_2 + "</b></i></ul>"),
+            capture(listenerCapture))).andReturn(null).once();
+        salScenarioService.sendToLm(scenario1);
+        expectLastCall().once();
+        salScenarioService.sendToLm(scenario2);
+        expectLastCall().once();
+        scenariosWidget.refresh();
+        expectLastCall().once();
+        replay(scenariosWidget, salScenarioService, Windows.class);
+        scenariosController.sendToLm(Sets.newHashSet(scenario1, scenario2));
+        listenerCapture.getValue().onActionConfirmed();
+        verify(scenariosWidget, salScenarioService, Windows.class);
     }
 
     @Test
@@ -129,8 +154,8 @@ public class SalScenariosControllerTest {
     @Test
     public void testOnViewButtonClicked() {
         mockStatic(Windows.class);
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        scenarioController.setScenario(scenario);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario1).once();
+        scenarioController.setScenario(scenario1);
         expectLastCall().once();
         expect(scenarioController.initWidget()).andReturn(scenarioWidget).once();
         Windows.showModalWindow((Window) scenarioWidget);
@@ -144,11 +169,11 @@ public class SalScenariosControllerTest {
     public void testOnDeleteButtonClicked() {
         mockStatic(Windows.class);
         Capture<IListener> listenerCapture = new Capture<>();
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario1).once();
         expect(Windows.showConfirmDialog(
-            eq("Are you sure you want to delete <i><b>'" + SCENARIO_NAME + "'</b></i> scenario?"),
+            eq("Are you sure you want to delete <i><b>'" + SCENARIO_NAME_1 + "'</b></i> scenario?"),
             capture(listenerCapture))).andReturn(null).once();
-        salScenarioService.deleteScenario(scenario);
+        salScenarioService.deleteScenario(scenario1);
         expectLastCall().once();
         scenariosWidget.refresh();
         expectLastCall().once();
@@ -160,8 +185,8 @@ public class SalScenariosControllerTest {
 
     @Test
     public void testHandleAction() {
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario1).once();
+        expect(usageService.isScenarioEmpty(scenario1)).andReturn(false).once();
         mockStatic(Windows.class);
         Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
             eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
@@ -173,8 +198,8 @@ public class SalScenariosControllerTest {
 
     @Test
     public void testHandleActionApproved() {
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario1).once();
+        expect(usageService.isScenarioEmpty(scenario1)).andReturn(false).once();
         mockStatic(Windows.class);
         Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
             eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
@@ -186,8 +211,8 @@ public class SalScenariosControllerTest {
 
     @Test
     public void testHandleActionRejected() {
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario1).once();
+        expect(usageService.isScenarioEmpty(scenario1)).andReturn(false).once();
         mockStatic(Windows.class);
         Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
             eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
@@ -199,11 +224,11 @@ public class SalScenariosControllerTest {
 
     @Test
     public void testApplyScenarioAction() {
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario1).once();
         scenariosWidget.refresh();
         expectLastCall().once();
         IActionHandler handler = createMock(IActionHandler.class);
-        handler.handleAction(scenario, "reason");
+        handler.handleAction(scenario1, "reason");
         expectLastCall().once();
         replay(scenariosWidget, handler);
         scenariosController.applyScenarioAction(handler, "reason");
@@ -222,7 +247,7 @@ public class SalScenariosControllerTest {
     public void testGetCriteriaHtmlRepresentation() {
         IScenarioUsageFilterService scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
         Whitebox.setInternalState(scenariosController, scenarioUsageFilterService);
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario1).once();
         ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter();
         scenarioUsageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         scenarioUsageFilter.setProductFamily(SAL_PRODUCT_FAMILY);
@@ -230,7 +255,7 @@ public class SalScenariosControllerTest {
         usageBatch.setId("batchId");
         usageBatch.setName("BatchName");
         scenarioUsageFilter.setUsageBatches(Collections.singleton(usageBatch));
-        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(scenarioUsageFilter).once();
+        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID_1)).andReturn(scenarioUsageFilter).once();
         replay(scenariosWidget, scenarioUsageFilterService);
         String result = scenariosController.getCriteriaHtmlRepresentation();
         assertTrue(result.contains("<b>Selection Criteria:</b>"));
@@ -240,10 +265,11 @@ public class SalScenariosControllerTest {
         verify(scenariosWidget, scenarioUsageFilterService);
     }
 
-    private void buildScenario() {
-        scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
-        scenario.setName(SCENARIO_NAME);
+    private Scenario buildScenario(String id, String name) {
+        Scenario scenario = new Scenario();
+        scenario.setId(id);
+        scenario.setName(name);
         scenario.setProductFamily(SAL_PRODUCT_FAMILY);
+        return scenario;
     }
 }

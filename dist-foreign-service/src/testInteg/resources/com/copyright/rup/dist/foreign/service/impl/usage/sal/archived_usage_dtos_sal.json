@@ -1,0 +1,183 @@
+[
+  {
+    "id": "11d1a5d2-ba9f-48b7-9b09-0516840a07ee",
+    "version": 1,
+    "createDate": 1550472954168,
+    "updateDate": 1550472949058,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "batchName": "SAL Usage Batch 1 for testSendToLmSal",
+    "paymentDate": [
+      2019,
+      6,
+      30
+    ],
+    "wrWrkInst": 243204754,
+    "workTitle": "Learning in Your Sleep",
+    "systemTitle": "Learning in Your Sleep",
+    "rhAccountNumber": 1000000026,
+    "standardNumber": "09639292",
+    "standardNumberType": "VALISSN",
+    "publicationDate": [
+      2013,
+      9,
+      10
+    ],
+    "grossAmount": 506.2500000000,
+    "batchGrossAmount": 30000.00,
+    "netAmount": 379.6875000000,
+    "serviceFee": 0.25000,
+    "serviceFeeAmount": 126.5625000000,
+    "status": "SENT_TO_LM",
+    "productFamily": "SAL",
+    "salUsage": {
+      "assessmentName": "FY16 AIR",
+      "assessmentType": "ELA",
+      "coverageYear": "2012-2013",
+      "gradeGroup": "GRADEK_5",
+      "grade": "1",
+      "detailType": "UD",
+      "states": "SD,VT",
+      "reportedWorkPortionId": "1201001IB2161",
+      "reportedArticle": "Learning in Your Sleep",
+      "reportedStandardNumber": "450220996",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedVolNumberSeries": "Vol 17, Issue 2",
+      "reportedPageRange": "14-17"
+    }
+  },
+  {
+    "id": "18b5445f-2146-4f3d-a34a-aadf1e81aed3",
+    "version": 1,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "batchName": "SAL Usage Batch 1 for testSendToLmSal",
+    "paymentDate": [
+      2019,
+      6,
+      30
+    ],
+    "wrWrkInst": 100004110,
+    "workTitle": "Medical Journal",
+    "systemTitle": "Medical Journal",
+    "rhAccountNumber": 1000000026,
+    "standardNumber": "09639291",
+    "standardNumberType": "VALISSN",
+    "publicationDate": [
+      2013,
+      9,
+      10
+    ],
+    "grossAmount": 50.0000000000,
+    "netAmount": 35.5000000000,
+    "serviceFee": 0.25000,
+    "serviceFeeAmount": 12.5000000000,
+    "status": "SENT_TO_LM",
+    "productFamily": "SAL",
+    "salUsage": {
+      "assessmentName": "FY16 AIR",
+      "assessmentType": "ELA",
+      "coverageYear": "2014-2015",
+      "gradeGroup": "ITEM_BANK",
+      "grade": "1",
+      "detailType": "IB",
+      "reportedWorkPortionId": "1201001IB2162",
+      "reportedArticle": "Medical Journal",
+      "reportedStandardNumber": "09639291",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedVolNumberSeries": "Vol 17, Issue 2",
+      "reportedPageRange": "14-17"
+    }
+  },
+  {
+    "id": "9469ab6e-61e4-4e38-8011-2133cc0546f9",
+    "version": 1,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "batchName": "SAL Usage Batch 1 for testSendToLmSal",
+    "paymentDate": [
+      2019,
+      6,
+      30
+    ],
+    "wrWrkInst": 100004110,
+    "workTitle": "Medical Journal",
+    "systemTitle": "Medical Journal",
+    "rhAccountNumber": 1000000026,
+    "standardNumber": "09639291",
+    "standardNumberType": "VALISSN",
+    "publicationDate": [
+      2013,
+      9,
+      10
+    ],
+    "grossAmount": 393.7500000000,
+    "netAmount": 295.3125000000,
+    "serviceFee": 0.25000,
+    "serviceFeeAmount": 98.4375000000,
+    "status": "SENT_TO_LM",
+    "productFamily": "SAL",
+    "salUsage": {
+      "assessmentName": "FY16 AIR",
+      "assessmentType": "ELA",
+      "coverageYear": "2019-2020",
+      "gradeGroup": "GRADEK_5",
+      "grade": "1",
+      "detailType": "UD",
+      "states": "SD,VT",
+      "reportedWorkPortionId": "1201001IB2162",
+      "reportedArticle": "Medical Journal",
+      "reportedStandardNumber": "09639291",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedVolNumberSeries": "Vol 17, Issue 2",
+      "reportedPageRange": "14-17"
+    }
+  },
+  {
+    "id": "b27b4760-8d15-483b-bf41-6670ce4c15e8",
+    "version": 1,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "batchName": "SAL Usage Batch 1 for testSendToLmSal",
+    "paymentDate": [
+      2019,
+      6,
+      30
+    ],
+    "wrWrkInst": 243204754,
+    "workTitle": "Learning in Your Sleep",
+    "systemTitle": "Learning in Your Sleep",
+    "rhAccountNumber": 1000000026,
+    "standardNumber": "09639292",
+    "standardNumberType": "VALISSN",
+    "publicationDate": [
+      2013,
+      9,
+      10
+    ],
+    "grossAmount": 50.0000000000,
+    "netAmount": 35.5000000000,
+    "serviceFee": 0.25000,
+    "serviceFeeAmount": 12.5000000000,
+    "status": "SENT_TO_LM",
+    "productFamily": "SAL",
+    "salUsage": {
+      "assessmentName": "FY16 AIR",
+      "assessmentType": "ELA",
+      "coverageYear": "2014-2015",
+      "gradeGroup": "ITEM_BANK",
+      "grade": "1",
+      "detailType": "IB",
+      "reportedWorkPortionId": "1201001IB2161",
+      "reportedArticle": "Learning in Your Sleep",
+      "reportedStandardNumber": "450220996",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedVolNumberSeries": "Vol 17, Issue 2",
+      "reportedPageRange": "14-17"
+    }
+  }
+]

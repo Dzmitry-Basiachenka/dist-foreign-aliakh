@@ -39,4 +39,11 @@ public interface ISalScenarioService {
      * @param scenario instance of {@link Scenario}
      */
     void deleteScenario(Scenario scenario);
+
+    /**
+     * Sends given SAL {@link Scenario} to LM.
+     *
+     * @param scenario instance of {@link Scenario} to send to LM
+     */
+    void sendToLm(Scenario scenario);
 }

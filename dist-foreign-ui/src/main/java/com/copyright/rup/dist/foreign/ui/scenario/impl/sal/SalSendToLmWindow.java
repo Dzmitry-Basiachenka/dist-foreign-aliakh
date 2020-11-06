@@ -101,7 +101,10 @@ public class SalSendToLmWindow extends Window implements SearchWidget.ISearchCon
     private HorizontalLayout initButtonsLayout() {
         Button closeButton = Buttons.createCloseButton(this);
         sendToLmButton = Buttons.createButton(ForeignUi.getMessage("button.send_to_lm"));
-        sendToLmButton.addClickListener(event -> controller.sendToLm(grid.getSelectedItems()));
+        sendToLmButton.addClickListener(event -> {
+            controller.sendToLm(grid.getSelectedItems());
+            close();
+        });
         sendToLmButton.setEnabled(false);
         HorizontalLayout layout = new HorizontalLayout(sendToLmButton, closeButton);
         layout.setMargin(new MarginInfo(true, false, false, false));

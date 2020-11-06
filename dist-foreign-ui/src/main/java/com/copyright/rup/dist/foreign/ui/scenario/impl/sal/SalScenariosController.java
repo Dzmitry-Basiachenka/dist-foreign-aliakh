@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.sal;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -43,6 +44,7 @@ import java.util.stream.Collectors;
 public class SalScenariosController extends CommonScenariosController implements ISalScenariosController {
 
     private static final String LIST_SEPARATOR = ", ";
+    private static final String SCENARIO_NAMES_LIST_SEPARATOR = "<br><li>";
 
     @Autowired
     private IScenarioHistoryController scenarioHistoryController;
@@ -62,7 +64,18 @@ public class SalScenariosController extends CommonScenariosController implements
 
     @Override
     public void sendToLm(Set<Scenario> scenarios) {
-        //TODO: use service logic to send to LM
+        String scenarioNames = scenarios
+            .stream()
+            .map(Scenario::getName)
+            .collect(Collectors.joining(SCENARIO_NAMES_LIST_SEPARATOR));
+        Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenarios", scenarioNames), () -> {
+            try {
+                scenarios.forEach(scenario -> salScenarioService.sendToLm(scenario));
+                getWidget().refresh();
+            } catch (RupRuntimeException e) {
+                Windows.showNotificationWindow(e.getMessage());
+            }
+        });
     }
 
     @Override

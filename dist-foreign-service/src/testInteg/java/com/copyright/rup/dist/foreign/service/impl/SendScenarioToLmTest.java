@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -10,6 +9,7 @@ import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -22,6 +22,8 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasScenarioService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,6 +44,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -69,6 +72,10 @@ public class SendScenarioToLmTest {
     @Autowired
     private IAaclScenarioService aaclScenarioService;
     @Autowired
+    private ISalScenarioService salScenarioService;
+    @Autowired
+    private ISalUsageService salUsageService;
+    @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private IAaclUsageRepository aaclUsageRepository;
@@ -80,10 +87,36 @@ public class SendScenarioToLmTest {
     private static final String FAS_SCENARIO_ID = "4c014547-06f3-4840-94ff-6249730d537d";
     private static final String NTS_SCENARIO_ID = "67027e15-17c6-4b9b-b7f0-12ec414ad344";
     private static final String AACL_SCENARIO_ID = "d92e3c8e-7ecc-4080-bf3f-b541f51c9a06";
+    private static final String SAL_SCENARIO_ID = "b32a1abe-0de7-4889-99aa-fd5491c85a94";
+    private static final String QUEUE_NAME = "fda-test-sf-detail.fifo";
+    private static final Map<String, String> SOURCE_MAP = ImmutableMap.of("source", "FDA");
 
     @Before
     public void setUp() {
         sqsClientMock.reset();
+    }
+
+    @Test
+    public void testSendToLmSal() throws IOException {
+        Scenario scenario = new Scenario();
+        scenario.setId(SAL_SCENARIO_ID);
+        scenario.setProductFamily("SAL");
+        salScenarioService.sendToLm(scenario);
+        sqsClientMock.assertSendMessages(QUEUE_NAME,
+            Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_sal.json")),
+            Collections.emptyList(), SOURCE_MAP);
+        List<UsageDto> usageDtos = usageService.getRightsholderTotalsHoldersByScenario(scenario, null, null, null)
+            .stream()
+            .map(RightsholderTotalsHolder::getRightsholder)
+            .map(Rightsholder::getAccountNumber)
+            .flatMap(accountNumber ->
+                salUsageService.getByScenarioAndRhAccountNumber(scenario, accountNumber, null, null, null).stream())
+            .sorted(Comparator.comparing(UsageDto::getRhAccountNumber).thenComparing(UsageDto::getId))
+            .collect(Collectors.toList());
+        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/sal/archived_usage_dtos_sal.json");
+        assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
+        IntStream.range(0, usageDtos.size())
+            .forEach(index -> assertUsageDto(expectedUsageDtos.get(index), usageDtos.get(index)));
     }
 
     @Test
@@ -92,9 +125,9 @@ public class SendScenarioToLmTest {
         scenario.setId(FAS_SCENARIO_ID);
         scenario.setProductFamily("FAS");
         fasScenarioService.sendToLm(scenario);
-        sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
+        sqsClientMock.assertSendMessages(QUEUE_NAME,
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_fas.json")),
-            Collections.emptyList(), ImmutableMap.of("source", "FDA"));
+            Collections.emptyList(), SOURCE_MAP);
         List<UsageDto> usageDtos = findUsageDtos(scenario);
         List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/archived_usage_dtos_fas.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
@@ -109,9 +142,9 @@ public class SendScenarioToLmTest {
         scenario.setId(NTS_SCENARIO_ID);
         scenario.setProductFamily("NTS");
         ntsScenarioService.sendToLm(scenario);
-        sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
+        sqsClientMock.assertSendMessages(QUEUE_NAME,
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_nts.json")),
-            Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
+            Collections.singletonList("detail_id"), SOURCE_MAP);
         List<UsageDto> usageDtos = findUsageDtos(scenario);
         List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/archived_usage_dtos_nts.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
@@ -126,9 +159,9 @@ public class SendScenarioToLmTest {
         scenario.setId(AACL_SCENARIO_ID);
         scenario.setProductFamily("AACL");
         aaclScenarioService.sendToLm(scenario);
-        sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
+        sqsClientMock.assertSendMessages(QUEUE_NAME,
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_aacl.json")),
-            Collections.emptyList(), ImmutableMap.of("source", "FDA"));
+            Collections.emptyList(), SOURCE_MAP);
         List<UsageDto> actualUsageDtos = usageArchiveRepository.findAaclDtosByScenarioId(AACL_SCENARIO_ID);
         List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/aacl/aacl_archived_usage_dtos.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(actualUsageDtos));
@@ -197,6 +230,11 @@ public class SendScenarioToLmTest {
         } else {
             assertNull(actual.getAaclUsage());
         }
+        if (Objects.nonNull(expected.getSalUsage())) {
+            assertSalUsage(expected.getSalUsage(), actual.getSalUsage());
+        } else {
+            assertNull(actual.getSalUsage());
+        }
     }
 
     private void assertBaselineUsage(Usage expectedUsage, Usage actualUsage) {
@@ -206,8 +244,24 @@ public class SendScenarioToLmTest {
         assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
     }
 
+    private void assertSalUsage(SalUsage expectedSalUsage, SalUsage actualSalUsage) {
+        assertEquals(expectedSalUsage.getAssessmentName(), actualSalUsage.getAssessmentName());
+        assertEquals(expectedSalUsage.getAssessmentType(), actualSalUsage.getAssessmentType());
+        assertEquals(expectedSalUsage.getCoverageYear(), actualSalUsage.getCoverageYear());
+        assertEquals(expectedSalUsage.getDetailType(), actualSalUsage.getDetailType());
+        assertEquals(expectedSalUsage.getGradeGroup(), actualSalUsage.getGradeGroup());
+        assertEquals(expectedSalUsage.getGrade(), actualSalUsage.getGrade());
+        assertEquals(expectedSalUsage.getStates(), actualSalUsage.getStates());
+        assertEquals(expectedSalUsage.getReportedWorkPortionId(), actualSalUsage.getReportedWorkPortionId());
+        assertEquals(expectedSalUsage.getReportedArticle(), actualSalUsage.getReportedArticle());
+        assertEquals(expectedSalUsage.getReportedStandardNumber(), actualSalUsage.getReportedStandardNumber());
+        assertEquals(expectedSalUsage.getReportedAuthor(), actualSalUsage.getReportedAuthor());
+        assertEquals(expectedSalUsage.getReportedPublisher(), actualSalUsage.getReportedPublisher());
+        assertEquals(expectedSalUsage.getReportedVolNumberSeries(), actualSalUsage.getReportedVolNumberSeries());
+        assertEquals(expectedSalUsage.getReportedPageRange(), actualSalUsage.getReportedPageRange());
+    }
+
     private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
-        assertNotNull(actualAaclUsage);
         assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
         assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
         assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());

@@ -29,6 +29,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
@@ -36,7 +37,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
 import com.google.common.collect.ImmutableMap;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,6 +73,7 @@ public class SalUsageServiceTest {
     private static final String SEARCH = "search";
     private final ISalUsageService salUsageService = new SalUsageService();
 
+    private IUsageRepository usageRepository;
     private ISalUsageRepository salUsageRepository;
     private IUsageAuditService usageAuditService;
     private IChainExecutor<Usage> chainExecutor;
@@ -80,10 +81,12 @@ public class SalUsageServiceTest {
 
     @Before
     public void setUp() {
+        usageRepository = createMock(IUsageRepository.class);
         salUsageRepository = createMock(ISalUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         chainExecutor = createMock(IChainExecutor.class);
+        Whitebox.setInternalState(salUsageService, usageRepository);
         Whitebox.setInternalState(salUsageService, salUsageRepository);
         Whitebox.setInternalState(salUsageService, usageArchiveRepository);
         Whitebox.setInternalState(salUsageService, usageAuditService);
@@ -317,6 +320,7 @@ public class SalUsageServiceTest {
         verify(usageArchiveRepository);
     }
 
+    @Test
     public void testDeleteFromScenario() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
@@ -326,6 +330,23 @@ public class SalUsageServiceTest {
         replay(RupContextUtils.class, salUsageRepository);
         salUsageService.deleteFromScenario(scenarioId);
         verify(RupContextUtils.class, salUsageRepository);
+    }
+
+    @Test
+    public void testMoveToArchive() {
+        mockStatic(RupContextUtils.class);
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setName("Scenario name");
+        scenario.setStatus(ScenarioStatusEnum.APPROVED);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(usageArchiveRepository.copyToArchiveByScenarioId(SCENARIO_ID, USER_NAME))
+            .andReturn(Collections.singletonList(USAGE_ID_1)).once();
+        usageRepository.deleteByScenarioId(SCENARIO_ID);
+        expectLastCall().once();
+        replay(RupContextUtils.class, usageArchiveRepository, usageRepository);
+        salUsageService.moveToArchive(scenario);
+        verify(RupContextUtils.class, usageArchiveRepository, usageRepository);
     }
 
     private Map<String, Map<String, Rightsholder>> buildRollupsMap() {
