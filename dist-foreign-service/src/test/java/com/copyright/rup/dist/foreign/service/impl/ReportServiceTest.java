@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Sets;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -567,6 +568,15 @@ public class ReportServiceTest {
         expectLastCall().once();
         replay(reportRepository);
         reportService.writeSalUndistributedLiabilitiesCsvReport(outputStream);
+    }
+
+    @Test
+    public void testWriteSalFundPoolsCsvReport() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        reportRepository.writeSalFundPoolsCsvReport(2020, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeSalFundPoolsCsvReport(2020, outputStream);
         verify(reportRepository);
     }
 
