@@ -3,10 +3,12 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.math.BigDecimal;
@@ -217,6 +219,14 @@ public interface IAaclUsageRepository {
      * @param userName   user name
      */
     void calculateAmounts(String scenarioId, String userName);
+
+    /**
+     * Finds list of {@link PayeeTotalHolder}s by filter.
+     *
+     * @param filter instance of {@link ExcludePayeeFilter}
+     * @return list of {@link PayeeTotalHolder}s
+     */
+    List<PayeeTotalHolder> findPayeeTotalHoldersByFilter(ExcludePayeeFilter filter);
 
     /**
      * Finds list of {@link UsageDto}s matching specified filter.

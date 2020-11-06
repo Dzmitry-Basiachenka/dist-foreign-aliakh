@@ -12,10 +12,12 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 
@@ -86,6 +88,7 @@ public class AaclUsageRepositoryIntegrationTest {
     private static final String RIGHT_LIMITATION = "ALL";
     private static final String PERCENT = "%";
     private static final String UNDERSCORE = "_";
+    private static final String AMOUNT_50 = "50.0000000000";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -486,9 +489,43 @@ public class AaclUsageRepositoryIntegrationTest {
         verifyAmounts(usages.get(1), "8.6947406155", "6.5210554616", "2.1736851539", "0.3700000000", "0.7400000000",
             "0.0333033303", "0.0014756321", "0.0173894812");
         verifyAmounts(usages.get(2), "500.0000000000", "375.0000000000", "125.0000000000", "5.0000000000",
-            "50.0000000000", "1.0000000000", "1.0000000000", "1.0000000000");
+            AMOUNT_50, "1.0000000000", "1.0000000000", "1.0000000000");
         verifyAmounts(usages.get(3), "17.0205731987", "12.7654298991", "4.2551432997", "0.7400000000", "0.7400000000",
             "0.0666066607", "0.0014756321", "0.0340411464");
+    }
+
+    @Test
+    public void testFindPayeeTotalHoldersByFilter() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton("59e641bf-48a8-432b-a112-9953b7b7a62e"));
+        List<PayeeTotalHolder> payeeTotalHolders = aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
+        assertEquals(2, payeeTotalHolders.size());
+        verifyPayeeTotalHolder(payeeTotalHolders.get(0), 2580011451L, "Delmar Learning, a division of Cengage Learning",
+            "100.0000000000", "75.0000000000", "25.0000000000");
+        verifyPayeeTotalHolder(payeeTotalHolders.get(1), 1000000027L, "Georgia State University Business Press [C]",
+            "200.0000000000", "150.0000000000", AMOUNT_50);
+    }
+
+    @Test
+    public void testFindPayeeTotalHoldersByFilterWithSearchByName() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton("59e641bf-48a8-432b-a112-9953b7b7a62e"));
+        filter.setSearchValue("Delmar");
+        List<PayeeTotalHolder> payeeTotalHolders = aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
+        assertEquals(1, payeeTotalHolders.size());
+        verifyPayeeTotalHolder(payeeTotalHolders.get(0), 2580011451L, "Delmar Learning, a division of Cengage Learning",
+            "100.0000000000", "75.0000000000", "25.0000000000");
+    }
+
+    @Test
+    public void testFindPayeeTotalHoldersByFilterWithSearchByAccountNumber() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton("59e641bf-48a8-432b-a112-9953b7b7a62e"));
+        filter.setSearchValue("10000");
+        List<PayeeTotalHolder> payeeTotalHolders = aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
+        assertEquals(1, payeeTotalHolders.size());
+        verifyPayeeTotalHolder(payeeTotalHolders.get(0), 1000000027L, "Georgia State University Business Press [C]",
+            "200.0000000000", "150.0000000000", AMOUNT_50);
     }
 
     @Test
@@ -512,9 +549,9 @@ public class AaclUsageRepositoryIntegrationTest {
     public void findAuditByRightsholder() {
         AuditFilter filter = new AuditFilter();
         filter.setRhAccountNumbers(Sets.newHashSet(1000000027L));
-        assertEquals(1, aaclUsageRepository.findCountForAudit(filter));
+        assertEquals(2, aaclUsageRepository.findCountForAudit(filter));
         List<UsageDto> usages = aaclUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
-        verifyUsageDtos(usages, "f89f016d-0cc7-46b6-9f3f-63d2439458d5");
+        verifyUsageDtos(usages, "f89f016d-0cc7-46b6-9f3f-63d2439458d5", "c7c0bbf9-e0a3-4d90-95af-aa9849e69404");
     }
 
     @Test
@@ -751,7 +788,7 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(new BigDecimal("5.0000000000"), usage.getAaclUsage().getVolumeWeight());
         assertEquals(new BigDecimal("1.00"), usage.getAaclUsage().getPublicationType().getWeight());
         assertEquals(new BigDecimal("60.0000000000"), usage.getAaclUsage().getValueShare());
-        assertEquals(new BigDecimal("50.0000000000"), usage.getAaclUsage().getVolumeShare());
+        assertEquals(new BigDecimal(AMOUNT_50), usage.getAaclUsage().getVolumeShare());
         assertEquals(new BigDecimal("2.0000000000"), usage.getAaclUsage().getTotalShare());
         assertNotNull(usage.getGrossAmount());
         assertNotNull(usage.getNetAmount());
@@ -1013,5 +1050,14 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(new BigDecimal(volumeShare), usage.getAaclUsage().getVolumeShare());
         assertEquals(new BigDecimal(valueShare), usage.getAaclUsage().getValueShare());
         assertEquals(new BigDecimal(totalShare), usage.getAaclUsage().getTotalShare());
+    }
+
+    private void verifyPayeeTotalHolder(PayeeTotalHolder holder, Long accountNumber, String name, String grossTotal,
+                                        String netAmount, String serviceFeeAmount) {
+        assertEquals(holder.getPayee().getAccountNumber(), accountNumber);
+        assertEquals(holder.getPayee().getName(), name);
+        assertEquals(holder.getGrossTotal(), new BigDecimal(grossTotal));
+        assertEquals(holder.getNetTotal(), new BigDecimal(netAmount));
+        assertEquals(holder.getServiceFeeTotal(), new BigDecimal(serviceFeeAmount));
     }
 }

@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -22,6 +23,7 @@ import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
@@ -33,6 +35,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
@@ -544,6 +547,30 @@ public class AaclUsageServiceTest {
             aaclUsageService.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, usageFilter, classes);
         verify(licenseeClassService, fundPoolService, aaclUsageRepository);
         assertEquals(Arrays.asList(ALC_2, ALC_4), result);
+    }
+
+    @Test
+    public void testGetPayeeTotalHoldersByEmptyFilter() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        replay(aaclUsageRepository);
+        assertEquals(Collections.emptyList(), aaclUsageService.getPayeeTotalHoldersByFilter(scenario, filter));
+        verify(aaclUsageRepository);
+    }
+
+    @Test
+    public void testGetPayeeTotalHoldersByFilter() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setNetAmountMinThreshold(BigDecimal.TEN);
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        List<PayeeTotalHolder> payeeTotalHolders = Collections.singletonList(new PayeeTotalHolder());
+        expect(aaclUsageRepository.findPayeeTotalHoldersByFilter(filter)).andReturn(payeeTotalHolders).once();
+        replay(aaclUsageRepository);
+        assertSame(payeeTotalHolders, aaclUsageService.getPayeeTotalHoldersByFilter(scenario, filter));
+        assertEquals(Collections.singleton(SCENARIO_ID), filter.getScenarioIds());
+        verify(aaclUsageRepository);
     }
 
     @Test

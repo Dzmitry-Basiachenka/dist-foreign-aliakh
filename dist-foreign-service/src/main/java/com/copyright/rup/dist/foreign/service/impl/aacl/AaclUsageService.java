@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -23,6 +24,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
@@ -339,6 +341,16 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    public List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(Scenario scenario, ExcludePayeeFilter filter) {
+        List<PayeeTotalHolder> result = Collections.emptyList();
+        if (!filter.isEmpty()) {
+            filter.setScenarioIds(Collections.singleton(scenario.getId()));
+            result = aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
+        }
+        return result;
+    }
+
+    @Override
     public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         return aaclUsageRepository.findForAudit(filter, pageable, sort);
     }
@@ -352,7 +364,7 @@ public class AaclUsageService implements IAaclUsageService {
     public int getCountByScenarioAndRhAccountNumber(Scenario scenario, Long accountNumber, String searchValue) {
         return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? usageArchiveRepository.findAaclCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
-                searchValue)
+            searchValue)
             : aaclUsageRepository.findCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue);
     }
 
@@ -361,9 +373,9 @@ public class AaclUsageService implements IAaclUsageService {
                                                           Pageable pageable, Sort sort) {
         return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? usageArchiveRepository.findAaclByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
-                searchValue, pageable, sort)
+            searchValue, pageable, sort)
             : aaclUsageRepository.findByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue,
-                pageable, sort);
+            pageable, sort);
     }
 
     @Override

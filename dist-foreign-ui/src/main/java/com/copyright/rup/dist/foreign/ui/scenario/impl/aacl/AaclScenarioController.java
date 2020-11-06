@@ -38,6 +38,7 @@ public class AaclScenarioController extends CommonScenarioController implements 
 
     @Override
     public void onExcludeByPayeeClicked() {
+        excludePayeeController.setSelectedScenario(this.getScenario());
         Windows.showModalWindow((Window) excludePayeeController.initWidget());
     }
 

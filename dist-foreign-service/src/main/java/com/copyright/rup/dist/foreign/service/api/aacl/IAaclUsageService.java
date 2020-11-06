@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -13,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.math.BigDecimal;
@@ -229,6 +231,15 @@ public interface IAaclUsageService {
      */
     List<AggregateLicenseeClass> getAggregateClassesNotToBeDistributed(String fundPoolId, UsageFilter filter,
                                                                        List<DetailLicenseeClass> mapping);
+
+    /**
+     * Gets list of {@link PayeeTotalHolder}s by filter for specified {@link Scenario}.
+     *
+     * @param scenario selected {@link Scenario}
+     * @param filter   instance of {@link ExcludePayeeFilter}
+     * @return list of {@link PayeeTotalHolder}s
+     */
+    List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(Scenario scenario, ExcludePayeeFilter filter);
 
     /**
      * Gets count of usage details based on {@link Scenario} and rightsholder account number.
