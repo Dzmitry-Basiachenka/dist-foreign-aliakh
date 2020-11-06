@@ -576,6 +576,13 @@ public class CsvReportsIntegrationTest {
             scenarios, outputStream), "liabilities_summary_by_rightsholder_and_work_sal.csv");
     }
 
+    @Test
+    public void testSalUndistributedLiabilitiesCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+                reportRepository.writeSalUndistributedLiabilitiesCsvReport(outputStream),
+            "sal_undistributed_liabilities_report.csv");
+    }
+
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         reportWriter.accept(outputStream);

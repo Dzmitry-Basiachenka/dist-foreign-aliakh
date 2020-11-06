@@ -27,7 +27,7 @@ import java.util.Set;
 public interface IReportRepository {
 
     /**
-     * Writes Undistributed Liabilities Reconciliation Report into the output stream in csv format.
+     * Writes Undistributed Liabilities Reconciliation Report into the output stream in CSV format.
      *
      * @param paymentDate                payment date
      * @param outputStream               instance of {@link OutputStream}
@@ -38,7 +38,7 @@ public interface IReportRepository {
                                                 BigDecimal defaultEstimatedServiceFee, Set<String> productFamilies);
 
     /**
-     * Writes Service Fee True-up Report for FAS/FAS2 into the output stream in csv format.
+     * Writes Service Fee True-up Report for FAS/FAS2 into the output stream in CSV format.
      *
      * @param fromDate                   from date
      * @param toDate                     to date
@@ -52,7 +52,7 @@ public interface IReportRepository {
                                            BigDecimal defaultEstimatedServiceFee);
 
     /**
-     * Writes Service Fee True-up Report for NTS into the output stream in csv format.
+     * Writes Service Fee True-up Report for NTS into the output stream in CSV format.
      *
      * @param scenario                   a {@link Scenario}
      * @param outputStream               instance of {@link OutputStream}
@@ -62,7 +62,7 @@ public interface IReportRepository {
                                            BigDecimal defaultEstimatedServiceFee);
 
     /**
-     * Writes Summary of Market Report into the output stream in csv format based on batch ids.
+     * Writes Summary of Market Report into the output stream in CSV format based on batch ids.
      *
      * @param batchIds     list of batch ids
      * @param outputStream instance of {@link OutputStream}
@@ -70,14 +70,14 @@ public interface IReportRepository {
     void writeSummaryMarketCsvReport(List<String> batchIds, OutputStream outputStream);
 
     /**
-     * Writes FAS/FAS2 Batch Summary Report into the output stream in csv format.
+     * Writes FAS/FAS2 Batch Summary Report into the output stream in CSV format.
      *
      * @param outputStream instance of {@link OutputStream}
      */
     void writeFasBatchSummaryCsvReport(OutputStream outputStream);
 
     /**
-     * Writes Research Status Report into the output stream in csv format.
+     * Writes Research Status Report into the output stream in CSV format.
      *
      * @param outputStream instance of {@link OutputStream}
      */
@@ -199,7 +199,7 @@ public interface IReportRepository {
     void writeArchivedScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
-     * Writes Work Shares by Aggregate Licensee Class Summary Report into the output stream in csv format.
+     * Writes Work Shares by Aggregate Licensee Class Summary Report into the output stream in CSV format.
      *
      * @param scenarioId   scenario id
      * @param status       scenario status
@@ -209,7 +209,7 @@ public interface IReportRepository {
                                                      OutputStream outputStream);
 
     /**
-     * Writes Work Shares by Aggregate Licensee Class Report into the output stream in csv format.
+     * Writes Work Shares by Aggregate Licensee Class Report into the output stream in CSV format.
      *
      * @param scenarioId   scenario id
      * @param status       scenario status
@@ -263,7 +263,7 @@ public interface IReportRepository {
     void writeWorkClassificationCsvReport(String searchValue, PipedOutputStream pipedOutputStream);
 
     /**
-     * Writes NTS Withdrawn Batch Summary Report into the output stream in csv format.
+     * Writes NTS Withdrawn Batch Summary Report into the output stream in CSV format.
      *
      * @param outputStream instance of {@link OutputStream}
      */
@@ -304,14 +304,14 @@ public interface IReportRepository {
                                              PipedOutputStream pipedOutputStream);
 
     /**
-     * Writes AACL Undistributed Liabilities Report into the output stream in csv format.
+     * Writes AACL Undistributed Liabilities Report into the output stream in CSV format.
      *
      * @param outputStream instance of {@link OutputStream}
      */
     void writeAaclUndistributedLiabilitiesCsvReport(OutputStream outputStream);
 
     /**
-     * Writes NTS Undistributed Liabilities Report into the output stream in csv format.
+     * Writes NTS Undistributed Liabilities Report into the output stream in CSV format.
      *
      * @param estimatedServiceFee estimated service fee
      * @param outputStream        instance of {@link OutputStream}
@@ -319,7 +319,7 @@ public interface IReportRepository {
     void writeNtsUndistributedLiabilitiesCsvReport(BigDecimal estimatedServiceFee, OutputStream outputStream);
 
     /**
-     * Writes SAL Liabilities by Rightsholer report into the output stream in csv format.
+     * Writes SAL Liabilities by Rightsholer report into the output stream in CSV format.
      *
      * @param scenarios    list of scenarios
      * @param outputStream instance of {@link OutputStream}
@@ -349,4 +349,11 @@ public interface IReportRepository {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeSalScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes SAL Undistributed Liabilities Reconciliation Report into the output stream in CSV format.
+     *
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeSalUndistributedLiabilitiesCsvReport(OutputStream outputStream);
 }

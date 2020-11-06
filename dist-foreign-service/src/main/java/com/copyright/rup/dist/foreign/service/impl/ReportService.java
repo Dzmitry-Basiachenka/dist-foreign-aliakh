@@ -250,7 +250,7 @@ public class ReportService implements IReportService {
 
     @Override
     public void writeSalUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
-        //TODO {dbasiachenka} apply repository layer
+        reportRepository.writeSalUndistributedLiabilitiesCsvReport(outputStream);
     }
 
     @Override
