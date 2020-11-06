@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeFilterController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeWidget;
@@ -11,7 +13,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -29,8 +30,12 @@ import java.util.Set;
 public class AaclExcludePayeeController extends CommonController<IAaclExcludePayeeWidget>
     implements IAaclExcludePayeeController {
 
+    private Scenario selectedScenario;
+
     @Autowired
     private IAaclExcludePayeeFilterController payeesFilterController;
+    @Autowired
+    private IAaclUsageService usageService;
 
     @Override
     public IAaclExcludePayeeFilterController getExcludePayeesFilterController() {
@@ -44,7 +49,8 @@ public class AaclExcludePayeeController extends CommonController<IAaclExcludePay
 
     @Override
     public List<PayeeTotalHolder> getPayeeTotalHolders() {
-        return Collections.emptyList();
+        return usageService.getPayeeTotalHoldersByFilter(selectedScenario,
+            payeesFilterController.getWidget().getAppliedFilter());
     }
 
     @Override
@@ -52,6 +58,10 @@ public class AaclExcludePayeeController extends CommonController<IAaclExcludePay
         //TODO {isuvorau} call service method
     }
 
+    @Override
+    public void setSelectedScenario(Scenario scenario) {
+        this.selectedScenario = scenario;
+    }
 
     @Override
     protected IAaclExcludePayeeWidget instantiateWidget() {

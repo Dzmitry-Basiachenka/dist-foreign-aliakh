@@ -90,6 +90,14 @@
         <result property="aaclUsage.baselineId" column="baseline_uid"/>
     </resultMap>
 
+    <resultMap id="payeeTotalHolderResultMap" type="PayeeTotalHolder">
+        <result property="payee.name" column="payee_name"/>
+        <result property="payee.accountNumber" column="payee_account_number"/>
+        <result property="grossTotal" column="gross_total"/>
+        <result property="serviceFeeTotal" column="service_fee_total"/>
+        <result property="netTotal" column="net_total"/>
+    </resultMap>
+
     <sql id="aaclUsageColumns">
         u.df_usage_batch_uid,
         u.df_scenario_uid,
@@ -1175,6 +1183,32 @@
                 and uaacl.detail_licensee_class_id = #{detailLicenseeClassId}
                 and u.df_scenario_uid is null
         )
+    </select>
+
+    <select id="findPayeeTotalHoldersByFilter" parameterType="map" resultMap="payeeTotalHolderResultMap">
+        select
+            u.payee_account_number,
+            payee.name payee_name,
+            sum(u.gross_amount) gross_total,
+            sum(u.service_fee_amount) service_fee_total,
+            sum(u.net_amount) net_total
+        from ${schema}.df_usage u
+        join ${schema}.df_rightsholder payee on u.payee_account_number = payee.rh_account_number
+        join ${schema}.df_scenario s on u.df_scenario_uid = s.df_scenario_uid
+        where u.df_scenario_uid in
+            <foreach collection="filter.scenarioIds" item="scenarioId" open="(" separator="," close=")">
+                #{scenarioId}
+            </foreach>
+        <if test="null != filter.searchValue">
+            and
+            (payee.name ilike '%' || #{filter.searchValue} || '%' or
+            cast(u.payee_account_number as text) like '%' || #{filter.searchValue} || '%')
+        </if>
+        group by payee_account_number, payee.name
+        <if test="null != filter.netAmountMinThreshold">
+            having sum(u.net_amount) &lt; ${filter.netAmountMinThreshold}
+        </if>
+        order by payee.name asc
     </select>
 
     <select id="findCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">

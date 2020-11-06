@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.aacl;
 
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.util.ReflectTools;
@@ -47,4 +48,11 @@ public interface IAaclExcludePayeeController extends IController<IAaclExcludePay
      * @param reason              reason of exclusion
      */
     void excludeDetails(Set<Long> payeeAccountNumbers, String reason);
+
+    /**
+     * Sets scenario.
+     *
+     * @param scenario selected scenario
+     */
+    void setSelectedScenario(Scenario scenario);
 }

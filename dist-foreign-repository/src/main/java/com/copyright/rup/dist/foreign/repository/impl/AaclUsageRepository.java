@@ -4,10 +4,12 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 
@@ -223,6 +225,12 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         insert("IAaclUsageMapper.calculateAmounts", params);
+    }
+
+    @Override
+    public List<PayeeTotalHolder> findPayeeTotalHoldersByFilter(ExcludePayeeFilter filter) {
+        return selectList("IAaclUsageMapper.findPayeeTotalHoldersByFilter",
+            ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
     }
 
     @Override
