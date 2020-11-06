@@ -52,6 +52,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUndistributedLi
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUsageCsvReportHandler;
 
 import com.google.common.collect.Maps;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
@@ -511,6 +512,11 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
                 ScenarioStatusEnum.APPROVED));
             getTemplate().select("IReportMapper.findSalUndistributedLiabilitiesReportDtos", parameters, handler);
         }
+    }
+
+    @Override
+    public void writeSalFundPoolsCsvReport(int distributionYear, OutputStream outputStream) {
+        //TODO {aazarenka} will implement later
     }
 
     private void writeCsvReportByParts(String countMethodName, String selectMethodName, Map<String, Object> parameters,
