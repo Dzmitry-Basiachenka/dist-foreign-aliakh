@@ -1,3 +1,13 @@
+12.1.18
+-
+* B-58784 FDA: Send SAL scenarios to LM: implement button to open Send to LM window
+* B-58784 FDA: Send SAL scenarios to LM: implement window to select and send scenarios to LM
+* B-59935 FDA: SAL fund pool Report: implement controller logic and create modal window for report
+* B-60185 FDA: SAL Undistributed Liabilities report: implement SalUndistributedLiabilitiesReportHandler for writing report
+* B-60185 FDA: SAL Undistributed Liabilities report: implement repository logic for generating report
+* B-63875 FDA: Exclude payees from an AACL scenario: implement Exclude Payees filter widget
+* B-63875 FDA: Exclude payees from an AACL scenario: implement Exclude Payees window for AACL product family
+
 12.1.17
 -
 * B-57885 FDA: SAL Exports: Scenario-specific usage details: make changes based on comments in CR-DIST-FOREIGN-206
