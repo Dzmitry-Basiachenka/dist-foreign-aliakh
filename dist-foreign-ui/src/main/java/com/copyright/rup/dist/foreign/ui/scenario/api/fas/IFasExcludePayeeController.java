@@ -19,12 +19,12 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IExcludePayeeController extends IController<IExcludePayeeWidget>, ICsvReportProvider {
+public interface IFasExcludePayeeController extends IController<IFasExcludePayeeWidget>, ICsvReportProvider {
 
     /**
      * {@link #onFilterChanged()}.
      */
-    Method ON_FILTER_CHANGED = ReflectTools.findMethod(IExcludePayeeController.class, "onFilterChanged");
+    Method ON_FILTER_CHANGED = ReflectTools.findMethod(IFasExcludePayeeController.class, "onFilterChanged");
 
     /**
      * Handles filter change event.
@@ -34,7 +34,7 @@ public interface IExcludePayeeController extends IController<IExcludePayeeWidget
     /**
      * @return payee filter controller
      */
-    IExcludePayeeFilterController getExcludePayeesFilterController();
+    IFasExcludePayeeFilterController getExcludePayeesFilterController();
 
     /**
      * @return list of {@link PayeeTotalHolder}s to be displayed on UI.

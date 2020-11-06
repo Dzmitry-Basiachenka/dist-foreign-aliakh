@@ -1,20 +1,21 @@
-package com.copyright.rup.dist.foreign.ui.scenario.api.fas;
+package com.copyright.rup.dist.foreign.ui.scenario.api.aacl;
 
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import java.util.Set;
 
 /**
- * Interface for exclude payees widget.
+ * Interface for exclude AACL payees widget.
  * <p>
- * Copyright (C) 2019 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 10/15/19
+ * Date: 11/05/2020
  *
- * @author Uladzislau Shalamitski
+ * @author Ihar Suvorau
  */
-public interface IExcludePayeeWidget extends IRefreshable, IWidget<IExcludePayeeController> {
+public interface IAaclExcludePayeeWidget extends IRefreshable, IWidget<IAaclExcludePayeeController> {
 
     /**
      * @return search value string.

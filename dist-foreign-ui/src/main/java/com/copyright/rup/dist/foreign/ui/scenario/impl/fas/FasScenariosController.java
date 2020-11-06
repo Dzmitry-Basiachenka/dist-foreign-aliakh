@@ -16,10 +16,10 @@ import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludeUsagesListener;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosController;
@@ -63,7 +63,7 @@ public class FasScenariosController extends CommonScenariosController implements
     @Autowired
     private IFasScenarioController scenarioController;
     @Autowired
-    private IExcludePayeeController excludePayeesController;
+    private IFasExcludePayeeController excludePayeesController;
     @Autowired
     private IReconcileRightsholdersController reconcileRightsholdersController;
     @Autowired
@@ -98,7 +98,7 @@ public class FasScenariosController extends CommonScenariosController implements
 
     @Override
     public void onExcludePayeesButtonClicked() {
-        IExcludePayeeWidget widget = excludePayeesController.initWidget();
+        IFasExcludePayeeWidget widget = excludePayeesController.initWidget();
         widget.addListener((IExcludeUsagesListener) listener -> getWidget().refreshSelectedScenario());
         Windows.showModalWindow((Window) widget);
     }

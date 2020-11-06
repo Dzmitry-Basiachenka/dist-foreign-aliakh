@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.api.nts;
+package com.copyright.rup.dist.foreign.ui.scenario.api.fas;
 
 import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
@@ -7,15 +7,15 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 import java.util.Set;
 
 /**
- * Interface for exclude rightsholder widget.
+ * Interface for exclude payees widget.
  * <p>
- * Copyright (C) 2020 copyright.com
+ * Copyright (C) 2019 copyright.com
  * <p>
- * Date: 08/03/20
+ * Date: 10/15/19
  *
- * @author Anton Azarenka
+ * @author Uladzislau Shalamitski
  */
-public interface INtsExcludeRightsholderWidget extends IRefreshable, IWidget<INtsExcludeRightsholderController> {
+public interface IFasExcludePayeeWidget extends IRefreshable, IWidget<IFasExcludePayeeController> {
 
     /**
      * @return search value string.
@@ -30,9 +30,9 @@ public interface INtsExcludeRightsholderWidget extends IRefreshable, IWidget<INt
     void addListener(IExcludeUsagesListener listener);
 
     /**
-     * Gets set of account numbers of selected rightsholders.
+     * Gets set of account numbers of selected payees.
      *
-     * @return set of account numbers of selected rightsholders
+     * @return set of account numbers of selected payees
      */
     Set<Long> getSelectedAccountNumbers();
 }

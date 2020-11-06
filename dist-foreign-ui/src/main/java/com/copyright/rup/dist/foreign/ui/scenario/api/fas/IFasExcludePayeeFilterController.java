@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IExcludePayeeFilterController extends IFilterController<IExcludePayeeFilterWidget> {
+public interface IFasExcludePayeeFilterController extends IFilterController<IFasExcludePayeeFilterWidget> {
 
     /**
      * @return map of participating statuses, where key is textual representation and value is boolean representation
