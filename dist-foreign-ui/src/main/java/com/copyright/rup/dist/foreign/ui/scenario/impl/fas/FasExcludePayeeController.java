@@ -7,9 +7,9 @@ import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Implementation of {@link IExcludePayeeController}.
+ * Implementation of {@link IFasExcludePayeeController}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -31,22 +31,22 @@ import java.util.Set;
  */
 @Controller
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class FasExcludePayeeController extends CommonController<IExcludePayeeWidget>
-    implements IExcludePayeeController {
+public class FasExcludePayeeController extends CommonController<IFasExcludePayeeWidget>
+    implements IFasExcludePayeeController {
 
     @Autowired
     private IUsageService usageService;
     @Autowired
     private IFasUsageService fasUsageService;
     @Autowired
-    private IExcludePayeeFilterController payeesFilterController;
+    private IFasExcludePayeeFilterController payeesFilterController;
     @Autowired
     private IReportService reportService;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
 
     @Override
-    public IExcludePayeeFilterController getExcludePayeesFilterController() {
+    public IFasExcludePayeeFilterController getExcludePayeesFilterController() {
         return payeesFilterController;
     }
 
@@ -79,7 +79,7 @@ public class FasExcludePayeeController extends CommonController<IExcludePayeeWid
     }
 
     @Override
-    protected IExcludePayeeWidget instantiateWidget() {
+    protected IFasExcludePayeeWidget instantiateWidget() {
         return new FasExcludePayeeWidget();
     }
 

@@ -4,10 +4,10 @@ import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludeUsagesListener;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -49,12 +49,12 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau_Shalamitski
  */
-public class FasExcludePayeeWidget extends Window implements IExcludePayeeWidget {
+public class FasExcludePayeeWidget extends Window implements IFasExcludePayeeWidget {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private SearchWidget searchWidget;
-    private IExcludePayeeController controller;
+    private IFasExcludePayeeController controller;
     private Grid<PayeeTotalHolder> payeesGrid;
     private ListDataProvider<PayeeTotalHolder> dataProvider;
 
@@ -65,7 +65,7 @@ public class FasExcludePayeeWidget extends Window implements IExcludePayeeWidget
     }
 
     @Override
-    public void setController(IExcludePayeeController controller) {
+    public void setController(IFasExcludePayeeController controller) {
         this.controller = controller;
     }
 
@@ -82,8 +82,8 @@ public class FasExcludePayeeWidget extends Window implements IExcludePayeeWidget
     @Override
     @SuppressWarnings("unchecked")
     public FasExcludePayeeWidget init() {
-        IExcludePayeeFilterWidget filterWidget = controller.getExcludePayeesFilterController().initWidget();
-        filterWidget.addListener(FilterChangedEvent.class, controller, IExcludePayeeController.ON_FILTER_CHANGED);
+        IFasExcludePayeeFilterWidget filterWidget = controller.getExcludePayeesFilterController().initWidget();
+        filterWidget.addListener(FilterChangedEvent.class, controller, IFasExcludePayeeController.ON_FILTER_CHANGED);
         setWidth(1200, Unit.PIXELS);
         setHeight(500, Unit.PIXELS);
         setCaption(ForeignUi.getMessage("window.exclude.payee"));

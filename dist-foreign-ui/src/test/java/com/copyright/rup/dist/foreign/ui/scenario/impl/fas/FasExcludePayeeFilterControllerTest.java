@@ -11,7 +11,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterController;
 
 import com.google.common.collect.Sets;
 
@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class FasExcludePayeeFilterControllerTest {
 
-    private final IExcludePayeeFilterController controller = new FasExcludePayeeFilterController();
+    private final IFasExcludePayeeFilterController controller = new FasExcludePayeeFilterController();
 
     @Test
     public void testGetParticipatingStatuses() {

@@ -33,7 +33,7 @@ import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IReconcileRightsholdersController;
@@ -83,7 +83,7 @@ public class FasScenariosControllerTest {
     private IScenarioService scenarioService;
     private IFasScenarioService fasScenarioService;
     private FasScenarioController scenarioController;
-    private IExcludePayeeController excludePayeesController;
+    private IFasExcludePayeeController excludePayeesController;
     private Scenario scenario;
     private IFasScenariosWidget scenariosWidget;
     private IFasScenarioWidget scenarioWidget;
@@ -96,7 +96,7 @@ public class FasScenariosControllerTest {
         scenarioService = createMock(IScenarioService.class);
         fasScenarioService = createMock(IFasScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
-        excludePayeesController = createMock(IExcludePayeeController.class);
+        excludePayeesController = createMock(IFasExcludePayeeController.class);
         scenariosController = new FasScenariosController();
         buildScenario();
         scenarioController = createMock(FasScenarioController.class);

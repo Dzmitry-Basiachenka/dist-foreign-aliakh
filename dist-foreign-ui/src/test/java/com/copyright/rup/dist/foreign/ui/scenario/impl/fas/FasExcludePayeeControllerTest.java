@@ -12,10 +12,10 @@ import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterWidget;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeWidget;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,19 +41,19 @@ public class FasExcludePayeeControllerTest {
 
     private static final String REASON = "reason";
     private static final String SCENARIO_ID = "44bd227a-8ea7-464c-b283-831ef2f10007";
-    private IExcludePayeeController controller;
+    private IFasExcludePayeeController controller;
     private IUsageService usageService;
     private IFasUsageService fasUsageService;
-    private IExcludePayeeFilterController filterController;
-    private IExcludePayeeFilterWidget filterWidget;
+    private IFasExcludePayeeFilterController filterController;
+    private IFasExcludePayeeFilterWidget filterWidget;
 
     @Before
     public void setUp() {
         usageService = createMock(IUsageService.class);
         fasUsageService = createMock(IFasUsageService.class);
         controller = new FasExcludePayeeController();
-        filterController = createMock(IExcludePayeeFilterController.class);
-        filterWidget = createMock(IExcludePayeeFilterWidget.class);
+        filterController = createMock(IFasExcludePayeeFilterController.class);
+        filterWidget = createMock(IFasExcludePayeeFilterWidget.class);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, fasUsageService);
         Whitebox.setInternalState(controller, filterController);
@@ -106,7 +106,7 @@ public class FasExcludePayeeControllerTest {
 
     @Test
     public void testGetPayeeTotalHolders() {
-        IExcludePayeeWidget widget = createMock(IExcludePayeeWidget.class);
+        IFasExcludePayeeWidget widget = createMock(IFasExcludePayeeWidget.class);
         Whitebox.setInternalState(controller, widget);
         List<PayeeTotalHolder> payeeTotalHolders = Collections.singletonList(new PayeeTotalHolder());
         ExcludePayeeFilter filter = new ExcludePayeeFilter();

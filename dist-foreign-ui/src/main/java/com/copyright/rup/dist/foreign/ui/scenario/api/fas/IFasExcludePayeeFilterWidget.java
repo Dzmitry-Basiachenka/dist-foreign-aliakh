@@ -12,7 +12,7 @@ import com.copyright.rup.vaadin.widget.api.IFilterWidget;
  *
  * @author Uladzislau Shalamitski
  */
-public interface IExcludePayeeFilterWidget extends IFilterWidget<IExcludePayeeFilterController> {
+public interface IFasExcludePayeeFilterWidget extends IFilterWidget<IFasExcludePayeeFilterController> {
 
     /**
      * @return currently applied {@link ExcludePayeeFilter}.

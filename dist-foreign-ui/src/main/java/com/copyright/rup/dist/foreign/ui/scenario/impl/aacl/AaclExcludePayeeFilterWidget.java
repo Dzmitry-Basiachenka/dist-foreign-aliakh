@@ -1,22 +1,18 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
-import com.copyright.rup.dist.foreign.ui.common.ScenarioFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
@@ -25,27 +21,22 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
- * Interface for exclude payees filter widget.
+ * Interface for exclude AACL payees filter widget.
  * <p>
- * Copyright (C) 2019 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 10/14/19
+ * Date: 11/05/2020
  *
- * @author Uladzislau Shalamitski
+ * @author Ihar Suvorau
  */
-public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasExcludePayeeFilterWidget {
+public class AaclExcludePayeeFilterWidget extends VerticalLayout implements IAaclExcludePayeeFilterWidget {
 
     private final Binder<String> binder = new Binder<>();
-    private IFasExcludePayeeFilterController controller;
     private ExcludePayeeFilter filter = new ExcludePayeeFilter();
     private ExcludePayeeFilter appliedFilter = new ExcludePayeeFilter();
-    private ComboBox<String> participatingComboBox;
     private TextField minimumThreshold;
-    private ScenarioFilterWidget scenarioFilterWidget;
     private Button applyButton;
 
     @Override
@@ -62,42 +53,26 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
 
     @Override
     public void clearFilter() {
-        participatingComboBox.clear();
         minimumThreshold.clear();
-        scenarioFilterWidget.reset();
         filter = new ExcludePayeeFilter();
         applyFilter();
     }
 
     @Override
-    public void setController(IFasExcludePayeeFilterController controller) {
-        this.controller = controller;
+    public void setController(IAaclExcludePayeeFilterController controller) {
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public FasExcludePayeeFilterWidget init() {
-        initScenarioFilterWidget();
-        initParticipatingFilter();
+    public AaclExcludePayeeFilterWidget init() {
         initMinimumThresholdFilter();
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        addComponents(
-            buildFiltersHeaderLabel(), scenarioFilterWidget, participatingComboBox, minimumThreshold, buttonsLayout);
+        addComponents(buildFiltersHeaderLabel(), minimumThreshold, buttonsLayout);
         setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         setMargin(true);
         setSpacing(true);
         VaadinUtils.addComponentStyle(this, "audit-filter-widget");
         return this;
-    }
-
-    private void initScenarioFilterWidget() {
-        scenarioFilterWidget = new ScenarioFilterWidget(controller::getScenarios);
-        scenarioFilterWidget.addFilterSaveListener((IFilterSaveListener<Scenario>) saveEvent -> {
-            filter.setScenarioIds(
-                saveEvent.getSelectedItemsIds().stream().map(Scenario::getId).collect(Collectors.toSet()));
-            filterChanged();
-        });
-        VaadinUtils.addComponentStyle(scenarioFilterWidget, "scenarios-filter");
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -111,18 +86,6 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
         VaadinUtils.setMaxComponentsWidth(layout, applyButton, clearButton);
         VaadinUtils.addComponentStyle(layout, "filter-buttons");
         return layout;
-    }
-
-    private void initParticipatingFilter() {
-        Map<String, Boolean> participatingStatuses = controller.getParticipatingStatuses();
-        participatingComboBox = new ComboBox<>(ForeignUi.getMessage("label.participating_status"));
-        participatingComboBox.setItems(participatingStatuses.keySet());
-        participatingComboBox.addValueChangeListener(event -> {
-            filter.setPayeeParticipating(participatingStatuses.get(event.getValue()));
-            filterChanged();
-        });
-        VaadinUtils.setMaxComponentsWidth(participatingComboBox);
-        VaadinUtils.addComponentStyle(participatingComboBox, "participating-filter");
     }
 
     private void initMinimumThresholdFilter() {

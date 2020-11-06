@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludeUsagesListener;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsExcludeRightsholderWidget;
 import com.copyright.rup.vaadin.ui.Buttons;

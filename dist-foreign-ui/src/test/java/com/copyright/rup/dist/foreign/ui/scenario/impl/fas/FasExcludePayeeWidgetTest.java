@@ -15,9 +15,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterWidget;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -68,20 +68,20 @@ public class FasExcludePayeeWidgetTest {
     private static final Long PAYEE_ACCOUNT_NUMBER = 1000009094L;
 
     private FasExcludePayeeWidget widget;
-    private IExcludePayeeController controller;
-    private IExcludePayeeFilterController filterController;
-    private IExcludePayeeFilterWidget filterWidget;
+    private IFasExcludePayeeController controller;
+    private IFasExcludePayeeFilterController filterController;
+    private IFasExcludePayeeFilterWidget filterWidget;
     private Grid<PayeeTotalHolder> payeesGrid;
     private GridSelectionModel<PayeeTotalHolder> selectionModel;
 
     @Before
     public void setUp() {
         selectionModel = createMock(GridSelectionModel.class);
-        controller = createMock(IExcludePayeeController.class);
+        controller = createMock(IFasExcludePayeeController.class);
         payeesGrid = createMock(Grid.class);
         widget = new FasExcludePayeeWidget();
         widget.setController(controller);
-        filterController = createMock(IExcludePayeeFilterController.class);
+        filterController = createMock(IFasExcludePayeeFilterController.class);
         filterWidget = new FasExcludePayeeFilterWidget();
         filterWidget.setController(filterController);
         initWidget();

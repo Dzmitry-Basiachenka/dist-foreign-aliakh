@@ -1,6 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.api.fas;
-
-import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
+package com.copyright.rup.dist.foreign.ui.scenario.api;
 
 import com.vaadin.util.ReflectTools;
 

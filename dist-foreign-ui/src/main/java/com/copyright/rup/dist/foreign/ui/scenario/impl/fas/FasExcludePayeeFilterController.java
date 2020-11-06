@@ -5,8 +5,8 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IExcludePayeeFilterWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,8 @@ import java.util.Map;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class FasExcludePayeeFilterController extends CommonController<IExcludePayeeFilterWidget>
-    implements IExcludePayeeFilterController {
+public class FasExcludePayeeFilterController extends CommonController<IFasExcludePayeeFilterWidget>
+    implements IFasExcludePayeeFilterController {
 
     private static final Map<String, Boolean> PARTICIPATING_STATUSES = new LinkedHashMap<>();
 
@@ -56,7 +56,7 @@ public class FasExcludePayeeFilterController extends CommonController<IExcludePa
     }
 
     @Override
-    protected IExcludePayeeFilterWidget instantiateWidget() {
+    protected IFasExcludePayeeFilterWidget instantiateWidget() {
         return new FasExcludePayeeFilterWidget();
     }
 }
