@@ -48,6 +48,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassification
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalLiabilitiesByRhReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalLiabilitiesSummaryByRhAndWorkReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalScenarioUsagesCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUsageCsvReportHandler;
 
 import com.google.common.collect.Maps;
@@ -86,6 +87,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String PRODUCT_FAMILY = "productFamily";
+    private static final String STATUSES = "statuses";
     private static final String FIND_USAGE_REPORT_DTOS_METHOD_NAME = "IReportMapper.findUsageReportDtos";
     private static final String FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME = "IReportMapper.findUsagesCountByFilter";
     private static final String FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME = "IReportMapper.findScenarioUsageDtosCount";
@@ -173,7 +175,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         checkArgument(CollectionUtils.isNotEmpty(statuses));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put("statuses", statuses);
+        parameters.put(STATUSES, statuses);
         try (OwnershipAdjustmentReportHandler handler = new OwnershipAdjustmentReportHandler(
             Objects.requireNonNull(outputStream))) {
             getTemplate().select("IReportMapper.findOwnershipAdjustmentReportDtos", parameters, handler);
@@ -429,7 +431,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
             parameters.put("serviceFee", 0.25);
             parameters.put(PRODUCT_FAMILY, FdaConstants.AACL_PRODUCT_FAMILY);
-            parameters.put("statuses", Arrays.asList(ScenarioStatusEnum.IN_PROGRESS,
+            parameters.put(STATUSES, Arrays.asList(ScenarioStatusEnum.IN_PROGRESS,
                 ScenarioStatusEnum.SUBMITTED, ScenarioStatusEnum.APPROVED));
             getTemplate().select("IReportMapper.findAaclUndistributedLiabilitiesReportFundPools", parameters, handler);
         }
@@ -443,7 +445,7 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
             parameters.put("estimatedServiceFee", estimatedServiceFee);
             parameters.put(PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY);
-            parameters.put("statuses", Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
+            parameters.put(STATUSES, Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
             getTemplate().select("IReportMapper.findNtsUndistributedLiabilitiesReportDtos", parameters, handler);
         }
     }
@@ -497,6 +499,18 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         writeCsvReportByParts(FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
             "IReportMapper.findSalScenarioUsageReportDtos", parameters,
             () -> new SalScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeSalUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
+        try (SalUndistributedLiabilitiesReportHandler handler =
+                 new SalUndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+            parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
+            parameters.put(STATUSES, Arrays.asList(ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED,
+                ScenarioStatusEnum.APPROVED));
+            getTemplate().select("IReportMapper.findSalUndistributedLiabilitiesReportDtos", parameters, handler);
+        }
     }
 
     private void writeCsvReportByParts(String countMethodName, String selectMethodName, Map<String, Object> parameters,

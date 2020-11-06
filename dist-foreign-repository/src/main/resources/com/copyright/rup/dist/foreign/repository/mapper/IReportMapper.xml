@@ -43,6 +43,14 @@
         <result property="netAmount" column="net_amount"/>
     </resultMap>
 
+    <resultMap id="salUndistributedLiabilitiesReportDtoResultMap" type="SalUndistributedLiabilitiesReportDto">
+        <result property="dateReceived" column="date_received"/>
+        <result property="fundPoolName" column="fund_pool_name"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
+        <result property="netAmount" column="net_amount"/>
+    </resultMap>
+
     <resultMap id="fasServiceFeeTrueUpReportDtoResultMap" type="FasServiceFeeTrueUpReportDto">
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="rroName" column="rro_name"/>
@@ -276,6 +284,22 @@
             </foreach>
         group by u.rh_account_number, rh.name, u.wr_wrk_inst, u.system_title
         order by u.rh_account_number, u.wr_wrk_inst
+    </select>
+
+    <select id="findSalUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="salUndistributedLiabilitiesReportDtoResultMap">
+        select
+            (fp.sal_fields ->> 'date_received')::date date_received,
+            fp.name fund_pool_name,
+            fp.total_amount gross_amount,
+            (fp.total_amount * (fp.sal_fields ->> 'service_fee')::numeric) service_fee_amount,
+            (fp.total_amount - (fp.total_amount * (fp.sal_fields ->> 'service_fee')::numeric)) net_amount
+        from ${schema}.df_fund_pool fp
+        left join ${schema}.df_scenario s on s.sal_fields ->> 'fund_pool_uid' = fp.df_fund_pool_uid
+        where fp.product_family = #{productFamily}
+        and (s.status_ind is null or s.status_ind in
+            <foreach collection="statuses" item="status" open="(" separator="," close=")">
+                #{status}
+            </foreach>)
     </select>
 
     <select id="findUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="undistributedLiabilitiesReportDtoResultMap">

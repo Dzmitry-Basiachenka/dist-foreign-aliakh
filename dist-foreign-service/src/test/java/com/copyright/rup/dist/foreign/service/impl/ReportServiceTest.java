@@ -560,6 +560,16 @@ public class ReportServiceTest {
         verify(reportRepository);
     }
 
+    @Test
+    public void testWriteSalUndistributedLiabilitiesCsvReport() {
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeSalUndistributedLiabilitiesCsvReport(outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeSalUndistributedLiabilitiesCsvReport(outputStream);
+        verify(reportRepository);
+    }
+
     private Scenario buildScenario(ScenarioStatusEnum status) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
