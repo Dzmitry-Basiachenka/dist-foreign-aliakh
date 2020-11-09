@@ -45,6 +45,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUndistributedLi
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalFundPoolsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalLiabilitiesByRhReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalLiabilitiesSummaryByRhAndWorkReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalScenarioUsagesCsvReportHandler;
@@ -516,7 +517,13 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
 
     @Override
     public void writeSalFundPoolsCsvReport(int distributionYear, OutputStream outputStream) {
-        //TODO {aazarenka} will implement later
+        try (SalFundPoolsReportHandler handler =
+                 new SalFundPoolsReportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+            parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
+            parameters.put("distributionYear", Objects.requireNonNull(distributionYear));
+            getTemplate().select("IReportMapper.findSalFundPoolsByDistYear", parameters, handler);
+        }
     }
 
     private void writeCsvReportByParts(String countMethodName, String selectMethodName, Map<String, Object> parameters,

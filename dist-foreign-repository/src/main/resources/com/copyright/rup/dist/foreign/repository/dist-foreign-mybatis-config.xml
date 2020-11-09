@@ -46,6 +46,7 @@
         <typeAlias alias="SalLiabilitiesByRhReportDto" type="com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesByRhReportDto"/>
         <typeAlias alias="SalLiabilitiesSummaryByRhAndWorkReportDto" type="com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesSummaryByRhAndWorkReportDto"/>
         <typeAlias alias="SalUndistributedLiabilitiesReportDto" type="com.copyright.rup.dist.foreign.domain.report.SalUndistributedLiabilitiesReportDto"/>
+        <typeAlias alias="SalFundPoolsReportDto" type="com.copyright.rup.dist.foreign.domain.report.SalFundPoolReportDto"/>
         <typeAlias alias="BatchStatistic" type="com.copyright.rup.dist.foreign.domain.report.BatchStatistic"/>
         <typeAlias alias="NtsBatchFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.NtsBatchFieldsTypeHandler"/>
         <typeAlias alias="SalBatchFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.SalBatchFieldsTypeHandler"/>

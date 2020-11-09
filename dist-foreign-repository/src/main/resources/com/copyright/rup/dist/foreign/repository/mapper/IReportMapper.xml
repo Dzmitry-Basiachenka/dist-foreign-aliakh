@@ -175,6 +175,27 @@
         <result property="comment" column="comment"/>
     </resultMap>
 
+    <resultMap id="salFundPollsReportResultMap" type="SalFundPoolsReportDto">
+        <result property="fundPoolName" column="fund_pool_name"/>
+        <result property="scenarioName" column="scenario_name"/>
+        <result property="dateReceived" column="date_received"/>
+        <result property="assessmentName" column="assessment_name"/>
+        <result property="licenseeAccount" column="licensee_account"/>
+        <result property="licenseeName" column="licensee_name"/>
+        <result property="serviceFee" column="service_fee"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="itemBankSplitPercent" column="item_bank_split_percent"/>
+        <result property="gradeKto5GrossAmount" column="grade_K_5_gross_amount"/>
+        <result property="grade6to8GrossAmount" column="grade_6_8_gross_amount"/>
+        <result property="grade9to12GrossAmount" column="grade_9_12_gross_amount"/>
+        <result property="itemBankGrossAmount" column="item_bank_gross_amount"/>
+        <result property="gradeKto5NumberOfStudents" column="grade_K_5_number_of_students"/>
+        <result property="grade6to8NumberOfStudents" column="grade_6_8_number_of_students"/>
+        <result property="grade9to12NumberOfStudents" column="grade_9_12_number_of_students"/>
+        <result property="totalGrossAmount" column="total_gross_amount"/>
+    </resultMap>
+
     <sql id="workSharesByAggLcClassSummaryFromWhereClauses">
         from ${schema}.df_scenario s
         join ${schema}.${usage_table} u on s.df_scenario_uid = u.df_scenario_uid
@@ -202,6 +223,33 @@
             wr_wrk_inst, system_title, rh.rh_account_number, rh.name
         order by alc.aggregate_licensee_class_id
     </sql>
+
+    <select id="findSalFundPoolsByDistYear" parameterType="map" resultMap="salFundPollsReportResultMap">
+        select
+            fp.name fund_pool_name,
+            s.name scenario_name,
+            (fp.sal_fields ->> 'date_received')::date date_received,
+            (fp.sal_fields ->> 'assessment_name')::text assessment_name,
+            (fp.sal_fields ->> 'licensee_account')::numeric licensee_account,
+            (fp.sal_fields ->> 'licensee_name')::text licensee_name,
+            (fp.sal_fields ->> 'service_fee')::numeric service_fee,
+            fp.total_amount - fp.total_amount * (fp.sal_fields ->> 'service_fee')::numeric net_amount,
+            (fp.sal_fields ->> 'gross_amount')::numeric gross_amount,
+            (fp.sal_fields ->> 'item_bank_split_percent')::numeric item_bank_split_percent,
+            (fp.sal_fields ->> 'grade_K_5_gross_amount')::numeric grade_K_5_gross_amount,
+            (fp.sal_fields ->> 'grade_6_8_gross_amount')::numeric grade_6_8_gross_amount,
+            (fp.sal_fields ->> 'grade_9_12_gross_amount')::numeric grade_9_12_gross_amount,
+            (fp.sal_fields ->> 'item_bank_gross_amount')::numeric item_bank_gross_amount,
+            (fp.sal_fields ->> 'grade_K_5_number_of_students')::numeric grade_K_5_number_of_students,
+            (fp.sal_fields ->> 'grade_6_8_number_of_students')::numeric grade_6_8_number_of_students,
+            (fp.sal_fields ->> 'grade_9_12_number_of_students')::numeric grade_9_12_number_of_students,
+            (fp.sal_fields ->> 'grade_K_5_gross_amount')::numeric + (fp.sal_fields ->> 'grade_6_8_gross_amount')::numeric +
+                (fp.sal_fields ->> 'grade_9_12_gross_amount')::numeric + (fp.sal_fields ->> 'item_bank_gross_amount')::numeric total_gross_amount
+        from ${schema}.df_fund_pool fp
+        left join ${schema}.df_scenario s on s.sal_fields ->> 'fund_pool_uid' = fp.df_fund_pool_uid
+        where fp.product_family = #{productFamily}
+            and #{distributionYear} in (select extract(isoyear from date(fp.sal_fields ->> 'date_received')::date))
+    </select>
 
     <select id="findNtsUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="ntsUndistributedLiabilitiesReportDtoResultMap">
         select
