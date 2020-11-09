@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -245,6 +246,7 @@ public class SendScenarioToLmTest {
     }
 
     private void assertSalUsage(SalUsage expectedSalUsage, SalUsage actualSalUsage) {
+        assertNotNull(actualSalUsage);
         assertEquals(expectedSalUsage.getAssessmentName(), actualSalUsage.getAssessmentName());
         assertEquals(expectedSalUsage.getAssessmentType(), actualSalUsage.getAssessmentType());
         assertEquals(expectedSalUsage.getCoverageYear(), actualSalUsage.getCoverageYear());
@@ -262,6 +264,7 @@ public class SendScenarioToLmTest {
     }
 
     private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
+        assertNotNull(actualAaclUsage);
         assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
         assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
         assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
