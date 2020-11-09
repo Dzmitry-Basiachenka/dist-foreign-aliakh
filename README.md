@@ -1,3 +1,10 @@
+12.1.19
+-
+* B-58784 FDA: Send SAL scenarios to LM: implement service logic to send SAL usages to LM
+* B-58784 FDA: Send SAL scenarios to LM: revert removed assert in SendScenarioToLmTest
+* B-59935 FDA: SAL fund pool Report: implement service logic and create report handler and DTO
+* B-63875 FDA: Exclude payees from an AACL scenario: implement service logic to retrieve data for exclude
+
 12.1.18
 -
 * B-58784 FDA: Send SAL scenarios to LM: implement button to open Send to LM window
