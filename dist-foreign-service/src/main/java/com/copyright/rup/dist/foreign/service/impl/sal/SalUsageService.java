@@ -17,10 +17,12 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
@@ -66,6 +68,8 @@ public class SalUsageService implements ISalUsageService {
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private ISalUsageRepository salUsageRepository;
+    @Autowired
+    private IUsageRepository usageRepository;
     @Autowired
     @Qualifier("usageChainChunkExecutor")
     private IChainExecutor<Usage> chainExecutor;
@@ -249,5 +253,17 @@ public class SalUsageService implements ISalUsageService {
     @Override
     public void calculateAmounts(String scenarioId, String userName) {
         salUsageRepository.calculateAmounts(scenarioId, userName);
+    }
+
+    @Override
+    @Transactional
+    public List<String> moveToArchive(Scenario scenario) {
+        LOGGER.info("Move SAL details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
+        String userName = RupContextUtils.getUserName();
+        List<String> usageIds = usageArchiveRepository.copyToArchiveByScenarioId(scenario.getId(), userName);
+        usageRepository.deleteByScenarioId(scenario.getId());
+        LOGGER.info("Move SAL details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
+            LogUtils.size(usageIds));
+        return usageIds;
     }
 }

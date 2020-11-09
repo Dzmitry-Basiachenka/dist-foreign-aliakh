@@ -1,0 +1,40 @@
+{
+  "details": [
+    {
+      "product_family": "SAL",
+      "detail_id": "b27b4760-8d15-483b-bf41-6670ce4c15e8",
+      "royalty_amount": 35.50,
+      "service_fee_amount": 12.50,
+      "collected_amount": 50.00,
+      "wr_wrk_inst": "243204754",
+      "work_title": "Learning in Your Sleep"
+    },
+    {
+      "product_family": "SAL",
+      "detail_id": "11d1a5d2-ba9f-48b7-9b09-0516840a07ee",
+      "royalty_amount": 379.69,
+      "service_fee_amount": 126.56,
+      "collected_amount": 506.25,
+      "wr_wrk_inst": "243204754",
+      "work_title": "Learning in Your Sleep"
+    },
+    {
+      "product_family": "SAL",
+      "detail_id": "18b5445f-2146-4f3d-a34a-aadf1e81aed3",
+      "royalty_amount": 35.50,
+      "service_fee_amount": 12.50,
+      "collected_amount": 50.00,
+      "wr_wrk_inst": "100004110",
+      "work_title": "Medical Journal"
+    },
+    {
+      "product_family": "SAL",
+      "detail_id": "9469ab6e-61e4-4e38-8011-2133cc0546f9",
+      "royalty_amount": 295.31,
+      "service_fee_amount": 98.44,
+      "collected_amount": 393.75,
+      "wr_wrk_inst": "100004110",
+      "work_title": "Medical Journal"
+    }
+  ]
+}
