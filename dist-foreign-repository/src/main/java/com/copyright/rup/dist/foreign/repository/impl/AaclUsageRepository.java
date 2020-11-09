@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -317,6 +318,11 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(STATUS_KEY, UsageStatusEnum.SCENARIO_EXCLUDED);
         delete("IAaclUsageMapper.deleteExcludedByScenarioId", parameters);
+    }
+
+    @Override
+    public List<PayeeAccountAggregateLicenseeClassesPair> findPayeeAggClassesPairsByScenarioId(String scenarioId) {
+        return selectList("IAaclUsageMapper.findPayeeAggClassesPairsByScenarioId", scenarioId);
     }
 
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {

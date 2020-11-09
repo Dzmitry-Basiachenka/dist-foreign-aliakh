@@ -98,6 +98,17 @@
         <result property="netTotal" column="net_total"/>
     </resultMap>
 
+    <resultMap id="payeeAggLicenseeClassesPairResultMap" type="PayeeAccountAggregateLicenseeClassesPair">
+        <result property="payeeAccountNumber" column="payee_account_number"/>
+        <collection property="aggregateLicenseeClasses" javaType="java.util.Set" resultMap="aggregateLicenseeClass"/>
+    </resultMap>
+
+    <resultMap id="aggregateLicenseeClass" type="AggregateLicenseeClass">
+        <result property="id" column="aggregate_licensee_class_id"/>
+        <result property="discipline" column="discipline"/>
+        <result property="enrollmentProfile" column="enrollment_profile"/>
+    </resultMap>
+
     <sql id="aaclUsageColumns">
         u.df_usage_batch_uid,
         u.df_scenario_uid,
@@ -1331,4 +1342,16 @@
         delete from ${schema}.df_usage_aacl
         where df_usage_aacl_uid in (select df_usage_uid from u)
     </delete>
+
+    <select id="findPayeeAggClassesPairsByScenarioId" parameterType="string" resultMap="payeeAggLicenseeClassesPairResultMap">
+        select
+            payee_account_number,
+            aggregate_licensee_class_id,
+            discipline,
+            enrollment_profile
+        from ${schema}.df_usage u
+        left join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
+        left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
+        where df_scenario_uid = #{scenarioId}
+    </select>
 </mapper>

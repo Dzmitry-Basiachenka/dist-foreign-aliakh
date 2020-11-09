@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.aacl;
 
+import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -40,6 +41,11 @@ public interface IAaclExcludePayeeController extends IController<IAaclExcludePay
      * @return list of {@link PayeeTotalHolder}s to be displayed on UI.
      */
     List<PayeeTotalHolder> getPayeeTotalHolders();
+
+    /**
+     * @return list of {@link PayeeAccountAggregateLicenseeClassesPair}s
+     */
+    List<PayeeAccountAggregateLicenseeClassesPair> getPayeeAggClassesPairs();
 
     /**
      * Exclude details from corresponding scenario with selected payees' account numbers.

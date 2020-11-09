@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -338,6 +339,11 @@ public class AaclUsageService implements IAaclUsageService {
             .map(Entry::getKey)
             .collect(Collectors.toSet());
         return getAggregateClassesByIds(Sets.union(unmappedAggregateClassIds, aggregateClassIdsWithNoUsagesFor));
+    }
+
+    @Override
+    public List<PayeeAccountAggregateLicenseeClassesPair> getPayeeAggClassesPairsByScenarioId(String scenarioId) {
+        return aaclUsageRepository.findPayeeAggClassesPairsByScenarioId(scenarioId);
     }
 
     @Override

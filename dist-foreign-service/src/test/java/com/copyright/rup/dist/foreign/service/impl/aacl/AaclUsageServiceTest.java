@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -62,6 +63,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -547,6 +549,16 @@ public class AaclUsageServiceTest {
             aaclUsageService.getAggregateClassesNotToBeDistributed(FUND_POOL_ID, usageFilter, classes);
         verify(licenseeClassService, fundPoolService, aaclUsageRepository);
         assertEquals(Arrays.asList(ALC_2, ALC_4), result);
+    }
+
+    @Test
+    public void testGetPayeeAggClassesPairsByScenarioId() {
+        List<PayeeAccountAggregateLicenseeClassesPair> pairs = new ArrayList<>();
+        pairs.add(new PayeeAccountAggregateLicenseeClassesPair());
+        expect(aaclUsageRepository.findPayeeAggClassesPairsByScenarioId(SCENARIO_ID)).andReturn(pairs).once();
+        replay(aaclUsageRepository);
+        assertSame(pairs, aaclUsageService.getPayeeAggClassesPairsByScenarioId(SCENARIO_ID));
+        verify(aaclUsageRepository);
     }
 
     @Test

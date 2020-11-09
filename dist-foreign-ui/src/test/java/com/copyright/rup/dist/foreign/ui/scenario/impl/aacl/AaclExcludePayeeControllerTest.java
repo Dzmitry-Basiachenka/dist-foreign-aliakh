@@ -2,10 +2,12 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
@@ -19,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,6 +36,8 @@ import java.util.List;
  */
 public class AaclExcludePayeeControllerTest {
 
+    private static final String SCENARIO_ID = "68f9965b-b4f1-426f-be82-03f894deac73";
+
     private IAaclExcludePayeeController controller;
     private IAaclUsageService usageService;
     private IAaclExcludePayeeFilterController filterController;
@@ -46,7 +51,7 @@ public class AaclExcludePayeeControllerTest {
         filterController = createMock(IAaclExcludePayeeFilterController.class);
         filterWidget = createMock(IAaclExcludePayeeFilterWidget.class);
         scenario = new Scenario();
-        scenario.setId("68f9965b-b4f1-426f-be82-03f894deac73");
+        scenario.setId(SCENARIO_ID);
         Whitebox.setInternalState(controller, scenario);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, filterController);
@@ -64,5 +69,15 @@ public class AaclExcludePayeeControllerTest {
         replay(usageService, widget, filterWidget, filterController);
         assertEquals(payeeTotalHolders, controller.getPayeeTotalHolders());
         verify(usageService, widget, filterWidget, filterController);
+    }
+
+    @Test
+    public void testGetPayeeAggClassesPairs() {
+        List<PayeeAccountAggregateLicenseeClassesPair> pairs = new ArrayList<>();
+        pairs.add(new PayeeAccountAggregateLicenseeClassesPair());
+        expect(usageService.getPayeeAggClassesPairsByScenarioId(SCENARIO_ID)).andReturn(pairs).once();
+        replay(usageService);
+        assertSame(pairs, controller.getPayeeAggClassesPairs());
+        verify(usageService);
     }
 }

@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -231,6 +232,14 @@ public interface IAaclUsageService {
      */
     List<AggregateLicenseeClass> getAggregateClassesNotToBeDistributed(String fundPoolId, UsageFilter filter,
                                                                        List<DetailLicenseeClass> mapping);
+
+    /**
+     * Gets {@link PayeeAccountAggregateLicenseeClassesPair}s by scenario identifier.
+     *
+     * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} id
+     * @return list of {@link PayeeAccountAggregateLicenseeClassesPair}s
+     */
+    List<PayeeAccountAggregateLicenseeClassesPair> getPayeeAggClassesPairsByScenarioId(String scenarioId);
 
     /**
      * Gets list of {@link PayeeTotalHolder}s by filter for specified {@link Scenario}.

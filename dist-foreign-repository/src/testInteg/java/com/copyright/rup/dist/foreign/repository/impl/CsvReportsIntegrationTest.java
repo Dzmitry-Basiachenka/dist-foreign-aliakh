@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 
 import com.google.common.collect.Sets;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
