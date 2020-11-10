@@ -948,7 +948,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-04-01-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for testUpdateAaclUsagesUnderMinimum')
+        comment('Inserting test data for testExcludeFromScenarioByPayees')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '9691fe58-b45a-4132-879e-1417eca14c1d')
@@ -992,13 +992,13 @@ databaseChangeLog {
             column(name: 'description', value: 'AACL Scenario')
         }
 
-        //should be excluded from scenario
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '9ccf8b43-4ad5-4199-8c7f-c5884f27e44f')
             column(name: 'df_usage_batch_uid', value: 'add4c0ae-d12e-4c5e-a04b-7f4b0ada3a23')
             column(name: 'df_scenario_uid', value: '8b01939c-abda-4090-86d1-6231fc20f679')
             column(name: 'wr_wrk_inst', value: '269040891')
             column(name: 'rh_account_number', value: '1000000026')
+            column(name: 'payee_account_number', value: '1000000026')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '1')
@@ -1017,13 +1017,13 @@ databaseChangeLog {
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
         }
 
-        //should be excluded from scenario
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'ccb115c7-3444-4dbb-9540-7541961febdf')
             column(name: 'df_usage_batch_uid', value: 'add4c0ae-d12e-4c5e-a04b-7f4b0ada3a23')
             column(name: 'df_scenario_uid', value: '8b01939c-abda-4090-86d1-6231fc20f679')
             column(name: 'wr_wrk_inst', value: '269040891')
             column(name: 'rh_account_number', value: '1000000026')
+            column(name: 'payee_account_number', value: '1000000026')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '2')
@@ -1042,13 +1042,13 @@ databaseChangeLog {
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
         }
 
-        //should not be excluded from scenario
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '83be7d3e-b4c0-4512-b4d4-230f6392ef5e')
             column(name: 'df_usage_batch_uid', value: 'add4c0ae-d12e-4c5e-a04b-7f4b0ada3a23')
             column(name: 'df_scenario_uid', value: '8b01939c-abda-4090-86d1-6231fc20f679')
             column(name: 'wr_wrk_inst', value: '107039807')
             column(name: 'rh_account_number', value: '7000813806')
+            column(name: 'payee_account_number', value: '7000813806')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '10')
@@ -1067,13 +1067,13 @@ databaseChangeLog {
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
         }
 
-        //should not be excluded from scenario
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b28df2d4-359a-4165-8936-fc0c0bdf4ba9')
             column(name: 'df_usage_batch_uid', value: 'add4c0ae-d12e-4c5e-a04b-7f4b0ada3a23')
             column(name: 'df_scenario_uid', value: '8b01939c-abda-4090-86d1-6231fc20f679')
             column(name: 'wr_wrk_inst', value: '107039807')
             column(name: 'rh_account_number', value: '7000813806')
+            column(name: 'payee_account_number', value: '7000813806')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '5')

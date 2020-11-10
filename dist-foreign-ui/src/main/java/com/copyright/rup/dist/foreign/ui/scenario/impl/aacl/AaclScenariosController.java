@@ -7,10 +7,13 @@ import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosController;
@@ -120,6 +123,13 @@ public class AaclScenariosController extends CommonScenariosController implement
 
     @Override
     protected ICommonScenarioWidget initScenarioWidget() {
-        return scenarioController.initWidget();
+        IAaclScenarioWidget scenarioWidget = (IAaclScenarioWidget) scenarioController.initWidget();
+        IExcludeUsagesListener listener = event -> {
+            scenarioWidget.refresh();
+            scenarioWidget.refreshTable();
+            getWidget().refreshSelectedScenario();
+        };
+        scenarioWidget.addListener(ExcludeUsagesEvent.class, listener, IExcludeUsagesListener.EXCLUDE_DETAILS_HANDLER);
+        return scenarioWidget;
     }
 }

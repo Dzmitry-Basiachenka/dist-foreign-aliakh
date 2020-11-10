@@ -195,23 +195,14 @@ public interface IAaclUsageRepository {
     void addToScenario(String scenarioId, UsageFilter filter, String userName);
 
     /**
-     * Finds Wr Wrk Insts that are under cutoff minimum amount.
-     *
-     * @param scenarioId   scenario identifier
-     * @param cutoffAmount minimum amount to exclude from scenario
-     * @return list of Wr Wrk Inst to exclude
-     */
-    List<Long> findWrWrkInstsUnderMinimum(String scenarioId, BigDecimal cutoffAmount);
-
-    /**
-     * Marks usages by Wr Wrk Insts that are under cutoff minimum amount as
+     * Marks usages by Payee Account # as
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED}.
      *
-     * @param scenarioId scenario identifier
-     * @param wrWrkInsts list of Wr Wrk Inst
-     * @param userName   user name
+     * @param scenarioId          scenario identifier
+     * @param payeeAccountNumbers set of payee account numbers
+     * @param userName            user name
      */
-    void updateAaclUsagesUnderMinimum(String scenarioId, List<Long> wrWrkInsts, String userName);
+    void excludeFromScenarioByPayees(String scenarioId, Set<Long> payeeAccountNumbers, String userName);
 
     /**
      * Calculates gross_amount, service_fee, service_fee_amount and net_amount for all scenario usages.

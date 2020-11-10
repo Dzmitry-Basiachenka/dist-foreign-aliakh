@@ -462,15 +462,9 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindWrWrkInstsUnderMinimum() {
-        assertEquals(Collections.singletonList(269040891L),
-            aaclUsageRepository.findWrWrkInstsUnderMinimum(SCENARIO_ID_3, new BigDecimal("150.00")));
-    }
-
-    @Test
-    public void testUpdateAaclUsagesUnderMinimum() {
+    public void testExcludeFromScenarioByPayees() {
         assertEquals(4, aaclUsageRepository.findByScenarioId(SCENARIO_ID_3).size());
-        aaclUsageRepository.updateAaclUsagesUnderMinimum(SCENARIO_ID_3, Collections.singletonList(269040891L),
+        aaclUsageRepository.excludeFromScenarioByPayees(SCENARIO_ID_3, Collections.singleton(1000000026L),
             USER_NAME);
         List<Usage> excludedUsages = aaclUsageRepository.findByIds(
             Arrays.asList("9ccf8b43-4ad5-4199-8c7f-c5884f27e44f", "ccb115c7-3444-4dbb-9540-7541961febdf"));

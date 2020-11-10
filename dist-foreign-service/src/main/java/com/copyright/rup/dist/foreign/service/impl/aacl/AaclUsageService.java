@@ -256,16 +256,6 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
-    public List<Long> getWrWrkInstsUnderMinimum(String scenarioId, BigDecimal cutoffAmount) {
-        return aaclUsageRepository.findWrWrkInstsUnderMinimum(scenarioId, cutoffAmount);
-    }
-
-    @Override
-    public void updateAaclUsagesUnderMinimum(String scenarioId, List<Long> wrWrkInsts, String userName) {
-        aaclUsageRepository.updateAaclUsagesUnderMinimum(scenarioId, wrWrkInsts, userName);
-    }
-
-    @Override
     public void calculateAmounts(String scenarioId, String userName) {
         aaclUsageRepository.calculateAmounts(scenarioId, userName);
     }
@@ -344,6 +334,14 @@ public class AaclUsageService implements IAaclUsageService {
     @Override
     public List<PayeeAccountAggregateLicenseeClassesPair> getPayeeAggClassesPairsByScenarioId(String scenarioId) {
         return aaclUsageRepository.findPayeeAggClassesPairsByScenarioId(scenarioId);
+    }
+
+    @Override
+    @Transactional
+    public void excludeDetailsFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String reason) {
+        String userName = RupContextUtils.getUserName();
+        aaclUsageRepository.excludeFromScenarioByPayees(scenarioId, accountNumbers, userName);
+        calculateAmounts(scenarioId, userName);
     }
 
     @Override
