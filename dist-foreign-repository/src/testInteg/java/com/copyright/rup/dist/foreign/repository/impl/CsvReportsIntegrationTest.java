@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 
 import com.google.common.collect.Sets;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -581,6 +582,12 @@ public class CsvReportsIntegrationTest {
         assertFilesWithExecutor(outputStream ->
                 reportRepository.writeSalUndistributedLiabilitiesCsvReport(outputStream),
             "sal_undistributed_liabilities_report.csv");
+    }
+
+    @Test
+    public void testSalFundPoolsCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            reportRepository.writeSalFundPoolsCsvReport(1990, outputStream), "sal_fund_pools_report.csv");
     }
 
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
