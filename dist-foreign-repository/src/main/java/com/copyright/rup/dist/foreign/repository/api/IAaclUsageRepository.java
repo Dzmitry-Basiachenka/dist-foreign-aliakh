@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -323,4 +324,12 @@ public interface IAaclUsageRepository {
      * @param scenarioId scenario identifier
      */
     void deleteExcludedByScenarioId(String scenarioId);
+
+    /**
+     * Finds {@link PayeeAccountAggregateLicenseeClassesPair}s by scenario identifier.
+     *
+     * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} id
+     * @return list of {@link PayeeAccountAggregateLicenseeClassesPair}s
+     */
+    List<PayeeAccountAggregateLicenseeClassesPair> findPayeeAggClassesPairsByScenarioId(String scenarioId);
 }

@@ -12,6 +12,8 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -72,6 +74,7 @@ public class AaclUsageRepositoryIntegrationTest {
     private static final String SCENARIO_ID_2 = "66d10c81-705e-4996-89f4-11e1635c4c31";
     private static final String SCENARIO_ID_3 = "8b01939c-abda-4090-86d1-6231fc20f679";
     private static final String SCENARIO_ID_4 = "aedbd4ba-8b9f-41dc-94d6-bf651009c180";
+    private static final String SCENARIO_ID_5 = "59e641bf-48a8-432b-a112-9953b7b7a62e";
     private static final String USAGE_ID_1 = "0b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_2 = "6c91f04e-60dc-49e0-9cdc-e782e0b923e2";
     private static final String USAGE_ID_3 = "5b41d618-0a2f-4736-bb75-29da627ad677";
@@ -497,7 +500,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testFindPayeeTotalHoldersByFilter() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton("59e641bf-48a8-432b-a112-9953b7b7a62e"));
+        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_5));
         List<PayeeTotalHolder> payeeTotalHolders = aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(2, payeeTotalHolders.size());
         verifyPayeeTotalHolder(payeeTotalHolders.get(0), 2580011451L, "Delmar Learning, a division of Cengage Learning",
@@ -509,7 +512,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testFindPayeeTotalHoldersByFilterWithSearchByName() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton("59e641bf-48a8-432b-a112-9953b7b7a62e"));
+        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_5));
         filter.setSearchValue("Delmar");
         List<PayeeTotalHolder> payeeTotalHolders = aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(1, payeeTotalHolders.size());
@@ -520,7 +523,7 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testFindPayeeTotalHoldersByFilterWithSearchByAccountNumber() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        filter.setScenarioIds(Collections.singleton("59e641bf-48a8-432b-a112-9953b7b7a62e"));
+        filter.setScenarioIds(Collections.singleton(SCENARIO_ID_5));
         filter.setSearchValue("10000");
         List<PayeeTotalHolder> payeeTotalHolders = aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
         assertEquals(1, payeeTotalHolders.size());
@@ -782,6 +785,16 @@ public class AaclUsageRepositoryIntegrationTest {
             aaclUsageRepository.findReferencedAaclUsagesCountByIds(excludedUsageIds.toArray(new String[]{})));
     }
 
+    @Test
+    public void testFindPayeeAggClassesPairsByScenarioId() {
+        AggregateLicenseeClass aggregateLicenseeClass = buildAggregateLicenseeClass(171, "EXGP", "Arts & Humanities");
+        List<PayeeAccountAggregateLicenseeClassesPair> pairs = Arrays.asList(
+            buildPayeeAggLcPair(2580011451L, aggregateLicenseeClass,
+                buildAggregateLicenseeClass(173, "EXU4", "Arts & Humanities")),
+            buildPayeeAggLcPair(1000000027L, aggregateLicenseeClass));
+        assertEquals(pairs, aaclUsageRepository.findPayeeAggClassesPairsByScenarioId(SCENARIO_ID_5));
+    }
+
     private void verifyUsagesBeforeDeleteScenario(Usage usage) {
         assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
         assertEquals(new BigDecimal("24.0000000000"), usage.getAaclUsage().getValueWeight());
@@ -999,6 +1012,23 @@ public class AaclUsageRepositoryIntegrationTest {
         usage.setWrWrkInst(123456789L);
         usage.setComment("updated comment for AACL classified usage 1");
         return usage;
+    }
+
+    private PayeeAccountAggregateLicenseeClassesPair buildPayeeAggLcPair(Long accountNumber,
+                                                                         AggregateLicenseeClass... aggregateClasses) {
+        PayeeAccountAggregateLicenseeClassesPair pair = new PayeeAccountAggregateLicenseeClassesPair();
+        pair.setPayeeAccountNumber(accountNumber);
+        pair.setAggregateLicenseeClasses(Sets.newHashSet(aggregateClasses));
+        return pair;
+    }
+
+    private AggregateLicenseeClass buildAggregateLicenseeClass(int aggLcId, String enrollmentProfile,
+                                                               String discipline) {
+        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+        aggregateLicenseeClass.setId(aggLcId);
+        aggregateLicenseeClass.setDiscipline(discipline);
+        aggregateLicenseeClass.setEnrollmentProfile(enrollmentProfile);
+        return aggregateLicenseeClass;
     }
 
     private void verifyUsageDtosForAudit(List<UsageDto> expectedUsages, List<UsageDto> actualUsages) {

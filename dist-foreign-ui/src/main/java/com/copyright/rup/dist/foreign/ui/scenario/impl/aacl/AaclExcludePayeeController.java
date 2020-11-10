@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
+import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
@@ -51,6 +52,11 @@ public class AaclExcludePayeeController extends CommonController<IAaclExcludePay
     public List<PayeeTotalHolder> getPayeeTotalHolders() {
         return usageService.getPayeeTotalHoldersByFilter(selectedScenario,
             payeesFilterController.getWidget().getAppliedFilter());
+    }
+
+    @Override
+    public List<PayeeAccountAggregateLicenseeClassesPair> getPayeeAggClassesPairs() {
+        return usageService.getPayeeAggClassesPairsByScenarioId(selectedScenario.getId());
     }
 
     @Override

@@ -1823,7 +1823,7 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Feb 2019 TUR')
             column(name: 'number_of_pages', value: '200')
             column(name: 'right_limitation', value: 'DIGITAL')
-            column(name: 'detail_licensee_class_id', value: '171')
+            column(name: 'detail_licensee_class_id', value: '173')
             column(name: 'value_weight', value: '24.0000000')
             column(name: 'volume_weight', value: '5.0000000')
             column(name: 'volume_share', value: '50.0000000')
