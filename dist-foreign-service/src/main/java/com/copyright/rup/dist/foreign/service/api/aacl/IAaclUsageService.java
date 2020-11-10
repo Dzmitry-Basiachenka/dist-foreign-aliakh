@@ -18,8 +18,8 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents service interface for AACL specific usages business logic.
@@ -148,25 +148,6 @@ public interface IAaclUsageService {
     List<Long> getInvalidRightsholdersByFilter(UsageFilter filter);
 
     /**
-     * Finds Wr Wrk Insts that are under cutoff minimum amount.
-     *
-     * @param scenarioId   scenario identifier
-     * @param cutoffAmount minimum amount to exclude from scenario
-     * @return list of Wr Wrk Inst to exclude
-     */
-    List<Long> getWrWrkInstsUnderMinimum(String scenarioId, BigDecimal cutoffAmount);
-
-    /**
-     * Marks usages by Wr Wrk Insts that are under cutoff minimum amount as
-     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED}.
-     *
-     * @param scenarioId scenario identifier
-     * @param wrWrkInsts list of Wr Wrk Inst
-     * @param userName   user name
-     */
-    void updateAaclUsagesUnderMinimum(String scenarioId, List<Long> wrWrkInsts, String userName);
-
-    /**
      * Calculates gross_amount, service_fee, service_fee_amount and net_amount for all scenario usages.
      *
      * @param scenarioId scenario identifier
@@ -240,6 +221,19 @@ public interface IAaclUsageService {
      * @return list of {@link PayeeAccountAggregateLicenseeClassesPair}s
      */
     List<PayeeAccountAggregateLicenseeClassesPair> getPayeeAggClassesPairsByScenarioId(String scenarioId);
+
+    /**
+     * Deletes {@link com.copyright.rup.dist.foreign.domain.Usage}s from scenario.
+     * Recalculates amounts within each Aggregate licensee class for excluded payee account numbers.
+     * Marks usages as {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED},
+     * sets scenario id, payee account number, amounts to zero for usages with payees from given list of account numbers
+     * in given set of scenarios.
+     *
+     * @param scenarioId     {@link Scenario} identifier
+     * @param accountNumbers set of payees' account numbers
+     * @param reason         reason provided by user
+     */
+    void excludeDetailsFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String reason);
 
     /**
      * Gets list of {@link PayeeTotalHolder}s by filter for specified {@link Scenario}.

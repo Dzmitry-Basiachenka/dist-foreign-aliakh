@@ -348,24 +348,17 @@ public class AaclUsageServiceTest {
     }
 
     @Test
-    public void testFindWrWrkInstsUnderMinimum() {
+    public void testExcludeDetailsFromScenarioByPayees() {
+        mockStatic(RupContextUtils.class);
         String scenarioId = "617ece75-b7e9-4889-a128-1423216c0ddc";
-        expect(aaclUsageRepository.findWrWrkInstsUnderMinimum(scenarioId, BigDecimal.TEN))
-            .andReturn(Collections.singletonList(7000000001L)).once();
-        replay(aaclUsageRepository);
-        assertEquals(Collections.singletonList(7000000001L),
-            aaclUsageService.getWrWrkInstsUnderMinimum(scenarioId, BigDecimal.TEN));
-        verify(aaclUsageRepository);
-    }
-
-    @Test
-    public void testUpdateAaclUsagesUnderMinimum() {
-        String scenarioId = "617ece75-b7e9-4889-a128-1423216c0ddc";
-        aaclUsageRepository.updateAaclUsagesUnderMinimum(scenarioId, Collections.singletonList(7000000001L), USER_NAME);
+        aaclUsageRepository.excludeFromScenarioByPayees(scenarioId, Collections.singleton(7000000001L), USER_NAME);
         expectLastCall().once();
-        replay(aaclUsageRepository);
-        aaclUsageService.updateAaclUsagesUnderMinimum(scenarioId, Collections.singletonList(7000000001L), USER_NAME);
-        verify(aaclUsageRepository);
+        aaclUsageRepository.calculateAmounts(scenarioId, USER_NAME);
+        expectLastCall().once();
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        replay(aaclUsageRepository, RupContextUtils.class);
+        aaclUsageService.excludeDetailsFromScenarioByPayees(scenarioId, Collections.singleton(7000000001L), USER_NAME);
+        verify(aaclUsageRepository, RupContextUtils.class);
     }
 
     @Test

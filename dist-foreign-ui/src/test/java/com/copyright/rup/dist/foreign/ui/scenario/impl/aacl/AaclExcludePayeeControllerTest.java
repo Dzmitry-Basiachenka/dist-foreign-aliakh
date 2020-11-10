@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -24,6 +25,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AaclExcludePayeeController}.
@@ -78,6 +80,17 @@ public class AaclExcludePayeeControllerTest {
         expect(usageService.getPayeeAggClassesPairsByScenarioId(SCENARIO_ID)).andReturn(pairs).once();
         replay(usageService);
         assertSame(pairs, controller.getPayeeAggClassesPairs());
+        verify(usageService);
+    }
+
+    @Test
+    public void testExcludeDetails() {
+        Set<Long> payees = Collections.singleton(2000017002L);
+        String reason = "REASON";
+        usageService.excludeDetailsFromScenarioByPayees(SCENARIO_ID, payees, reason);
+        expectLastCall().once();
+        replay(usageService);
+        controller.excludeDetails(payees, reason);
         verify(usageService);
     }
 }

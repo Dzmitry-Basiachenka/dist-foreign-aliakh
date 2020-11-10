@@ -61,7 +61,7 @@ public class AaclExcludePayeeController extends CommonController<IAaclExcludePay
 
     @Override
     public void excludeDetails(Set<Long> payeeAccountNumbers, String reason) {
-        //TODO {isuvorau} call service method
+        usageService.excludeDetailsFromScenarioByPayees(selectedScenario.getId(), payeeAccountNumbers, reason);
     }
 
     @Override

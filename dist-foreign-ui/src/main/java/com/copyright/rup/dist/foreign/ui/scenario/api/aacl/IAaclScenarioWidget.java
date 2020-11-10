@@ -14,4 +14,17 @@ import com.copyright.rup.vaadin.widget.api.IRefreshable;
  * @author Stanislau Rudak
  */
 public interface IAaclScenarioWidget extends ICommonScenarioWidget, IMediatorProvider, IRefreshable {
+
+    /**
+     * Fires {@link com.vaadin.ui.Component.Event}.
+     *
+     * @param event an {@link com.vaadin.ui.Component.Event} to be fired
+     * @see com.vaadin.server.AbstractClientConnector#fireEvent(java.util.EventObject)
+     */
+    void fireWidgetEvent(Event event);
+
+    /**
+     * Refresh table.
+     */
+    void refreshTable();
 }

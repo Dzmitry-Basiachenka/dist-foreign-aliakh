@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenarioController;
@@ -39,7 +41,9 @@ public class AaclScenarioController extends CommonScenarioController implements 
     @Override
     public void onExcludeByPayeeClicked() {
         excludePayeeController.setSelectedScenario(this.getScenario());
-        Windows.showModalWindow((Window) excludePayeeController.initWidget());
+        IAaclExcludePayeeWidget widget = excludePayeeController.initWidget();
+        widget.addListener(this::fireWidgetEvent);
+        Windows.showModalWindow((Window) widget);
     }
 
     @Override
@@ -55,5 +59,9 @@ public class AaclScenarioController extends CommonScenarioController implements 
     @Override
     protected void writeScenarioUsagesCsvReport(Scenario scenarioForReport, PipedOutputStream pos) {
         getReportService().writeAaclScenarioUsagesCsvReport(scenarioForReport, pos);
+    }
+
+    private void fireWidgetEvent(ExcludeUsagesEvent event) {
+        ((IAaclScenarioWidget) getWidget()).fireWidgetEvent(event);
     }
 }

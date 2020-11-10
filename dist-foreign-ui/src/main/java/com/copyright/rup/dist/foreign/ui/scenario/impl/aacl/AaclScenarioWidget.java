@@ -43,8 +43,25 @@ public class AaclScenarioWidget extends CommonScenarioWidget implements IAaclSce
     }
 
     @Override
+    public void attach() {
+        super.attach();
+        refresh();
+    }
+
+    @Override
+    public void fireWidgetEvent(Event event) {
+        fireEvent(event);
+    }
+
+    @Override
     public void refresh() {
         mediator.onScenarioUpdated(scenarioController.isScenarioEmpty(), scenarioController.getScenario());
+    }
+
+    @Override
+    public void refreshTable() {
+        getDataProvider().refreshAll();
+        updateFooter();
     }
 
     @Override
