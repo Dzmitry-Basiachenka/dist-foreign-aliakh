@@ -596,7 +596,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: 'b32a1abe-0de7-4889-99aa-fd5491c85a94')
             column(name: 'name', value: 'SAL Scenario 1 for testSendToLmSal')
-            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'status_ind', value: 'APPROVED')
             column(name: 'sal_fields', value: '{"fund_pool_uid": "6cb5fe9f-d524-4dad-9d22-feb6a4476ba8"}')
         }
 

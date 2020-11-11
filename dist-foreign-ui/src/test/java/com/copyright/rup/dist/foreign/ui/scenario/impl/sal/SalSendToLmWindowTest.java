@@ -52,7 +52,7 @@ public class SalSendToLmWindowTest {
         scenario1 = buildScenario(SCENARIO_ID_1, "SAL Distribution 10/10/2020");
         scenario2 = buildScenario(SCENARIO_ID_2, "SAL Distribution 10/12/2020");
         ISalScenariosController controller = createMock(ISalScenariosController.class);
-        expect(controller.getScenariosToSendToLm()).andReturn(Arrays.asList(scenario1, scenario2)).once();
+        expect(controller.getApprovedScenarios()).andReturn(Arrays.asList(scenario1, scenario2)).once();
         replay(controller);
         widget = new SalSendToLmWindow(controller);
         verify(controller);

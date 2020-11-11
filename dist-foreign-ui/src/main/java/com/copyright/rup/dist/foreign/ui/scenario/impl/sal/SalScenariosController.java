@@ -56,7 +56,7 @@ public class SalScenariosController extends CommonScenariosController implements
     private IFundPoolService fundPoolService;
 
     @Override
-    public List<Scenario> getScenariosToSendToLm() {
+    public List<Scenario> getApprovedScenarios() {
         return getScenarioService().getScenariosByProductFamiliesAndStatuses(
             Collections.singleton(getProductFamilyProvider().getSelectedProductFamily()),
             Collections.singleton(ScenarioStatusEnum.APPROVED));
