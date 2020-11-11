@@ -230,7 +230,7 @@
             s.name scenario_name,
             (fp.sal_fields ->> 'date_received')::date date_received,
             (fp.sal_fields ->> 'assessment_name')::text assessment_name,
-            (fp.sal_fields ->> 'licensee_account')::numeric licensee_account,
+            (fp.sal_fields ->> 'licensee_account_number')::numeric licensee_account,
             (fp.sal_fields ->> 'licensee_name')::text licensee_name,
             (fp.sal_fields ->> 'service_fee')::numeric service_fee,
             fp.total_amount - fp.total_amount * (fp.sal_fields ->> 'service_fee')::numeric net_amount,
