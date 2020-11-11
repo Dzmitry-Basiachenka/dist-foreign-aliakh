@@ -67,9 +67,10 @@ public class AaclExcludePayeeControllerTest {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
-        expect(usageService.getPayeeTotalHoldersByFilter(scenario, filter)).andReturn(payeeTotalHolders).once();
+        expect(usageService.getPayeeTotalHoldersByFilter(filter)).andReturn(payeeTotalHolders).once();
         replay(usageService, widget, filterWidget, filterController);
         assertEquals(payeeTotalHolders, controller.getPayeeTotalHolders());
+        assertEquals(Collections.singleton(scenario.getId()), filter.getScenarioIds());
         verify(usageService, widget, filterWidget, filterController);
     }
 
