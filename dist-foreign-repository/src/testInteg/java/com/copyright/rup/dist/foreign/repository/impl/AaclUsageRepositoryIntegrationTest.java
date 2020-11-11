@@ -509,6 +509,7 @@ public class AaclUsageRepositoryIntegrationTest {
         excludedUsages.forEach(usage -> {
             assertEquals(UsageStatusEnum.SCENARIO_EXCLUDED, usage.getStatus());
             assertNull(usage.getScenarioId());
+            verifyZeroAmounts(usage);
         });
         assertEquals(4, aaclUsageRepository.findByScenarioId(SCENARIO_ID_3).size());
     }
@@ -1102,12 +1103,12 @@ public class AaclUsageRepositoryIntegrationTest {
         assertEquals(AMOUNT_0, usage.getGrossAmount());
         assertEquals(AMOUNT_0, usage.getNetAmount());
         assertEquals(AMOUNT_0, usage.getServiceFeeAmount());
-        assertEquals(new BigDecimal("0.25000"), usage.getServiceFee());
-        assertEquals(new BigDecimal("5.0000000000"), usage.getAaclUsage().getVolumeWeight());
-        assertEquals(new BigDecimal("24.0000000000"), usage.getAaclUsage().getValueWeight());
-        assertEquals(new BigDecimal("50.0000000000"), usage.getAaclUsage().getVolumeShare());
-        assertEquals(new BigDecimal("60.0000000000"), usage.getAaclUsage().getValueShare());
-        assertEquals(new BigDecimal("2.0000000000"), usage.getAaclUsage().getTotalShare());
+        assertNull(usage.getServiceFee());
+        assertNull(usage.getAaclUsage().getVolumeWeight());
+        assertNull(usage.getAaclUsage().getValueWeight());
+        assertNull(usage.getAaclUsage().getVolumeShare());
+        assertNull(usage.getAaclUsage().getValueShare());
+        assertNull(usage.getAaclUsage().getTotalShare());
     }
 
     private void verifyPayeeTotalHolder(PayeeTotalHolder holder, Long accountNumber, String name, String grossTotal,

@@ -1114,6 +1114,10 @@
                 status_ind = 'SCENARIO_EXCLUDED',
                 df_scenario_uid = null,
                 payee_account_number = null,
+                gross_amount = 0,
+                net_amount = 0,
+                service_fee_amount = 0,
+                service_fee = null,
                 <include refid="StoredEntityMapper.update"/>
             where df_scenario_uid = #{scenarioId}
                 and payee_account_number in
@@ -1141,6 +1145,10 @@
                 status_ind = 'SCENARIO_EXCLUDED',
                 df_scenario_uid = null,
                 payee_account_number = null,
+                gross_amount = 0,
+                net_amount = 0,
+                service_fee_amount = 0,
+                service_fee = null,
                 <include refid="StoredEntityMapper.update"/>
             where df_scenario_uid = #{scenarioId}
                 and gross_amount = 0
