@@ -1,3 +1,12 @@
+12.1.20
+-
+* B-59935 FDA: SAL fund pool Report: fix issue to get licensee account number column
+* B-59935 FDA: SAL fund pool Report: implement repository logic to generate report
+* B-60185 FDA: SAL Undistributed Liabilities report: make changes based on comments in CR-DIST-FOREIGN-210
+* B-63874 FDA: Modify Logic for AACL Scenario Creation: exclude zero amount usages from AACL scenario
+* B-63875 FDA: Exclude payees from an AACL scenario: implement logic to exclude details from scenario and recalculate amounts
+* B-63875 FDA: Exclude payees from an AACL scenario: implement validation for excluded payees to have ability to distribute money within Agg LC
+
 12.1.19
 -
 * B-58784 FDA: Send SAL scenarios to LM: implement service logic to send SAL usages to LM
