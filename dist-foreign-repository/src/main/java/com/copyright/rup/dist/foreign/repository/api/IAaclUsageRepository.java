@@ -213,6 +213,15 @@ public interface IAaclUsageRepository {
     void calculateAmounts(String scenarioId, String userName);
 
     /**
+     * Marks usages with zero gross amount as
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SCENARIO_EXCLUDED}.
+     *
+     * @param scenarioId scenario identifier
+     * @param userName   user name
+     */
+    void excludeZeroAmountUsages(String scenarioId, String userName);
+
+    /**
      * Finds list of {@link PayeeTotalHolder}s by filter.
      *
      * @param filter instance of {@link ExcludePayeeFilter}

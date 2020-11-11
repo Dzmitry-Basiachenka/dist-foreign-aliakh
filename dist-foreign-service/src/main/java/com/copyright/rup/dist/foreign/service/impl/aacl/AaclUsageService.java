@@ -261,6 +261,11 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
+    public void excludeZeroAmountUsages(String scenarioId, String userName) {
+        aaclUsageRepository.excludeZeroAmountUsages(scenarioId, userName);
+    }
+
+    @Override
     @Transactional
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         usageAuditService.deleteActionsByBatchId(usageBatch.getId());

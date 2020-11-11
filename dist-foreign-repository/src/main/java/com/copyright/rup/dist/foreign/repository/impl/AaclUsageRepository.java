@@ -221,6 +221,14 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
+    public void excludeZeroAmountUsages(String scenarioId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        insert("IAaclUsageMapper.excludeZeroAmountUsages", params);
+    }
+
+    @Override
     public List<PayeeTotalHolder> findPayeeTotalHoldersByFilter(ExcludePayeeFilter filter) {
         return selectList("IAaclUsageMapper.findPayeeTotalHoldersByFilter",
             ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));

@@ -1108,17 +1108,54 @@
     </sql>
 
     <update id="excludeFromScenarioByPayees" parameterType="map">
-        update ${schema}.df_usage
+        with ids as (
+            update ${schema}.df_usage
+            set
+                status_ind = 'SCENARIO_EXCLUDED',
+                df_scenario_uid = null,
+                payee_account_number = null,
+                <include refid="StoredEntityMapper.update"/>
+            where df_scenario_uid = #{scenarioId}
+                and payee_account_number in
+                <foreach collection="payeeAccountNumbers" item="payeeAccountNumber" separator="," open="(" close=")">
+                    #{payeeAccountNumber}
+                </foreach>
+            returning df_usage_uid
+        )
+        update ${schema}.df_usage_aacl
         set
-            status_ind = 'SCENARIO_EXCLUDED',
-            df_scenario_uid = null,
-            payee_account_number = null,
+            volume_weight = null,
+            value_weight = null,
+            volume_share = null,
+            value_share = null,
+            total_share = null,
             <include refid="StoredEntityMapper.update"/>
-        where df_scenario_uid = #{scenarioId}
-            and payee_account_number in
-            <foreach collection="payeeAccountNumbers" item="payeeAccountNumber" separator="," open="(" close=")">
-                #{payeeAccountNumber}
-            </foreach>
+        from ids
+        where df_usage_aacl_uid = ids.df_usage_uid
+    </update>
+
+    <update id="excludeZeroAmountUsages" parameterType="map">
+        with ids as (
+            update ${schema}.df_usage
+            set
+                status_ind = 'SCENARIO_EXCLUDED',
+                df_scenario_uid = null,
+                payee_account_number = null,
+                <include refid="StoredEntityMapper.update"/>
+            where df_scenario_uid = #{scenarioId}
+                and gross_amount = 0
+            returning df_usage_uid
+        )
+        update ${schema}.df_usage_aacl
+        set
+            volume_weight = null,
+            value_weight = null,
+            volume_share = null,
+            value_share = null,
+            total_share = null,
+            <include refid="StoredEntityMapper.update"/>
+        from ids
+        where df_usage_aacl_uid = ids.df_usage_uid
     </update>
 
     <update id="calculateAmounts">
