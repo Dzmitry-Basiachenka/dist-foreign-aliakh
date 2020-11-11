@@ -67,7 +67,7 @@ public class SalFundPoolsReportWidgetTest {
     @Test
     public void testDistributionYearValidation() {
         Binder binder = Whitebox.getInternalState(widget, "binder");
-        TextField distributionYear = Whitebox.getInternalState(widget, "reportedYear");
+        TextField distributionYear = Whitebox.getInternalState(widget, "distributionYear");
         Button exportButton = Whitebox.getInternalState(widget, "exportButton");
         verifyField(distributionYear, "", binder, "Field value should be specified", false);
         assertFalse(exportButton.isEnabled());
