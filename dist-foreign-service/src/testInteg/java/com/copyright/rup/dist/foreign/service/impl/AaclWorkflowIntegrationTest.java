@@ -19,7 +19,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +60,6 @@ public class AaclWorkflowIntegrationTest {
     private static final String FUND_POOL_ID_2 = "9fed0f9e-7c97-42f6-bd80-83c759879839";
     private static final String USAGE_COMMENT_1 = "AACL usage Comment 1";
     private static final String USAGE_COMMENT_2 = "AACL usage Comment 2";
-    private static final String USAGE_COMMENT_3 = "AACL usage Comment 3";
-    private static final String USAGE_COMMENT_4 = "AACL usage Comment 4";
     private static final String BASELINE_USAGE_COMMENT_1 = "AACL baseline usage Comment 1";
     private static final String BASELINE_USAGE_COMMENT_2 = "AACL baseline usage Comment 2";
     private static final String UPLOADED_REASON_1 = "Uploaded in 'AACL test batch' Batch";
@@ -134,8 +131,7 @@ public class AaclWorkflowIntegrationTest {
     }
 
     @Test
-    @Ignore //TODO {isuvorau} add exclude step after service logic will be implemented
-    public void testAaclWorkflowWithExcludedByTitleCutoffAmount() throws Exception {
+    public void testAaclWorkflowWithExcludedUsagesByPayees() throws Exception {
         testBuilder
             .withProductFamily(AACL_PRODUCT_FAMILY)
             .withFundPool(buildFundPool("Fund pool-2"))
@@ -146,12 +142,14 @@ public class AaclWorkflowIntegrationTest {
                 USAGE_ID_6, USAGE_ID_7)
             .withClassifiedUsagesCsvFile("usage/aacl/classified/classified_usages_for_workflow_excluded.csv")
             .withUsageBatch(buildUsageBatch("AACL test batch-2", 0))
-            .expectScenario(buildExpectedScenario(FUND_POOL_ID_2), 2)
-            .expectRollups("prm/aacl_workflow_excluded_rollups_response.json", "60080587-a225-439c-81af-f016cb33aeac")
             .expectRmsRights("rights/aacl/rms_grants_100010768_request_workflow.json",
                 "rights/aacl/rms_grants_100010768_response_workflow.json")
             .expectRmsRights("rights/aacl/rms_grants_123456789_request_workflow.json",
                 "rights/aacl/rms_grants_123456789_response_workflow.json")
+            .expectRollups("prm/aacl_workflow_excluded_rollups_response.json",
+                "60080587-a225-439c-81af-f016cb33aeac", "a02af8f9-2ee4-4045-8bb5-79529fc087a6")
+            .expectScenario(buildExpectedScenario(FUND_POOL_ID_2), 4)
+            .withPayeesToExclude(7001508482L)
             .expectLmDetails(1, "details/aacl_details_to_lm2.json")
             .expectPaidUsagesFromLm("lm/paid_usages_aacl_workflow_excluded.json")
             .expectPaidUsageLmDetailIds("c8bb25a2-0b65-41ee-ad50-32711e7bea97", "6311542c-0f26-4b15-bd70-c82d6b74800b")
@@ -159,8 +157,8 @@ public class AaclWorkflowIntegrationTest {
                 "crm/workflow/rights_distribution_response_aacl.json")
             .expectArchivedUsages("usage/aacl/aacl_expected_archived_usages_for_workflow_excluded.json")
             .expectScenarioAudit(buildExpectedScenarioAuditExcluded())
-            .expectUsageAudit(USAGE_COMMENT_3, buildAuditItems(100010768, UPLOADED_REASON_2))
-            .expectUsageAudit(USAGE_COMMENT_4, buildAuditItems(123456789, UPLOADED_REASON_2))
+            .expectUsageAudit(USAGE_COMMENT_1, buildAuditItems(100010768, UPLOADED_REASON_2))
+            .expectUsageAudit(USAGE_COMMENT_2, buildAuditItems(100010768, UPLOADED_REASON_2))
             .build()
             .run();
     }
@@ -205,7 +203,6 @@ public class AaclWorkflowIntegrationTest {
         FundPool fundPool = new FundPool();
         fundPool.setName(name);
         fundPool.setProductFamily(AACL_PRODUCT_FAMILY);
-        fundPool.setTotalAmount(new BigDecimal("1000.00"));
         return fundPool;
     }
 

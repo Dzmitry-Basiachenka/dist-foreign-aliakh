@@ -1,17 +1,17 @@
 [
   {
     "batchId": "%1$s",
-    "wrWrkInst": 123456789,
+    "wrWrkInst": 100010768,
     "systemTitle": "Reclaiming youth at risk : our hope for the future",
     "standardNumber": "12345XX-123117",
     "standardNumberType": "VALISSN",
     "status": "ARCHIVED",
     "productFamily": "AACL",
     "numberOfCopies": 30000,
-    "grossAmount": 997.4300000000,
-    "netAmount": 748.0700000000,
+    "grossAmount": 613.3600000000,
+    "netAmount": 460.0200000000,
     "serviceFee": 0.25000,
-    "serviceFeeAmount": 249.3600000000,
+    "serviceFeeAmount": 153.3400000000,
     "aaclUsage": {
       "usageSource": "Feb 2019 TUR",
       "batchPeriodEndDate": "2019-06-30",
@@ -34,7 +34,7 @@
     "payee": {
       "accountNumber": 1000010022
     },
-    "comment": "AACL usage Comment 3",
+    "comment": "AACL usage Comment 2",
     "checkNumber": "85248",
     "cccEventId": "85259",
     "periodEndDate": "2017-01-16T00:00-05:00",
@@ -45,15 +45,17 @@
   },
   {
     "batchId": "%1$s",
-    "wrWrkInst": 123456789,
-    "systemTitle": "BIOCHEMISTRY (MOSCOW)",
+    "wrWrkInst": 100010768,
+    "systemTitle": "Reclaiming youth at risk : our hope for the future",
+    "standardNumber": "12345XX-123117",
+    "standardNumberType": "VALISSN",
     "status": "ARCHIVED",
     "productFamily": "AACL",
-    "grossAmount": 2.5700000000,
-    "netAmount": 1.9300000000,
-    "serviceFeeAmount": 0.6400000000,
+    "numberOfCopies": 10000,
+    "grossAmount": 386.6400000000,
+    "netAmount":  289.9800000000,
+    "serviceFeeAmount":  96.6600000000,
     "serviceFee": 0.25000,
-    "numberOfCopies": 30,
     "aaclUsage": {
       "usageSource": "Aug 2018 TUR",
       "batchPeriodEndDate": "2019-06-30",
@@ -76,7 +78,7 @@
     "payee": {
       "accountNumber": 1000010022
     },
-    "comment": "AACL usage Comment 4",
+    "comment": "AACL usage Comment 1",
     "checkNumber": "99548",
     "cccEventId": "99854",
     "distributionName": "FDA March 19",

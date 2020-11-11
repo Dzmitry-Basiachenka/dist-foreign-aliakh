@@ -47,6 +47,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -65,6 +66,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -93,6 +95,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedArchivedUsagesJsonFile;
     private List<String> expectedPaidUsageLmDetailIds;
     private AaclFields aaclFields;
+    private Set<Long> payeesToExclude;
     private FundPool fundPool;
     private List<FundPoolDetail> fundPoolDetails;
     private String expectedRollupsJson;
@@ -194,6 +197,11 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    AaclWorkflowIntegrationTestBuilder withPayeesToExclude(Long... payees) {
+        this.payeesToExclude = Sets.newHashSet(payees);
+        return this;
+    }
+
     AaclWorkflowIntegrationTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
         this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
@@ -266,6 +274,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             sendForClassification();
             loadClassification();
             addToScenario();
+            excludeDetailsByPayees();
             scenarioService.submit(scenario, "Submitting scenario for testing purposes");
             scenarioService.approve(scenario, "Approving scenario for testing purposes");
             sendScenarioToLm();
@@ -278,6 +287,21 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             verifyUsageAudit();
             testHelper.assertScenarioAudit(scenario.getId(), expectedScenarioAudit);
             testHelper.verifyRestServer();
+        }
+
+        private void loadUsageBatch() throws IOException {
+            AaclUsageCsvProcessor csvProcessor = csvProcessorFactory.getAaclUsageCsvProcessor();
+            ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream(usagesCsvFile));
+            assertTrue(result.isSuccessful());
+            List<Usage> usages = result.get();
+            setPredefinedUsageIds(usages);
+            List<String> insertedUsageIds = usageBatchService.insertAaclBatch(usageBatch, usages);
+            assertEquals(expectedUploadedCount, insertedUsageIds.size());
+            List<String> orderedIds = aaclUsageService.getUsagesByIds(new ArrayList<>(insertedUsageIds)).stream()
+                .sorted(Comparator.comparing(Usage::getComment))
+                .map(Usage::getId)
+                .collect(Collectors.toList());
+            aaclUsageService.sendForMatching(orderedIds, usageBatch.getName());
         }
 
         private void sendForClassification() {
@@ -296,15 +320,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             aaclUsageService.updateClassifiedUsages(classifiedUsages);
         }
 
-        void sendScenarioToLm() {
-            aaclScenarioService.sendToLm(scenario);
-            List<String> lmUsageMessages = Lists.newArrayListWithExpectedSize(expectedLmDetailsMessagesCount);
-            expectedLmDetailsJsonFiles.forEach(lmDetailsFile ->
-                lmUsageMessages.add(TestUtils.fileToString(this.getClass(), lmDetailsFile)));
-            sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmUsageMessages,
-                Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
-        }
-
         private void addToScenario() {
             usageFilter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
             usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
@@ -316,21 +331,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertScenario();
         }
 
-        private void loadUsageBatch() throws IOException {
-            AaclUsageCsvProcessor csvProcessor = csvProcessorFactory.getAaclUsageCsvProcessor();
-            ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream(usagesCsvFile));
-            assertTrue(result.isSuccessful());
-            List<Usage> usages = result.get();
-            setPredefinedUsageIds(usages);
-            List<String> insertedUsageIds = usageBatchService.insertAaclBatch(usageBatch, usages);
-            assertEquals(expectedUploadedCount, insertedUsageIds.size());
-            List<String> orderedIds = aaclUsageService.getUsagesByIds(new ArrayList<>(insertedUsageIds)).stream()
-                .sorted(Comparator.comparing(Usage::getComment))
-                .map(Usage::getId)
-                .collect(Collectors.toList());
-            aaclUsageService.sendForMatching(orderedIds, usageBatch.getName());
-        }
-
         private void assertScenario() {
             assertEquals(expectedScenario.getName(), scenario.getName());
             assertEquals(expectedScenario.getNetTotal(), scenario.getNetTotal());
@@ -339,6 +339,21 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedScenario.getStatus(), scenario.getStatus());
             assertEquals(expectedScenario.getDescription(), scenario.getDescription());
             assertAaclFields(expectedScenario.getAaclFields(), scenario.getAaclFields());
+        }
+
+        private void excludeDetailsByPayees() {
+            if (CollectionUtils.isNotEmpty(payeesToExclude)) {
+                aaclUsageService.excludeDetailsFromScenarioByPayees(scenario.getId(), payeesToExclude, "SYSTEM");
+            }
+        }
+
+        private void sendScenarioToLm() {
+            aaclScenarioService.sendToLm(scenario);
+            List<String> lmUsageMessages = Lists.newArrayListWithExpectedSize(expectedLmDetailsMessagesCount);
+            expectedLmDetailsJsonFiles.forEach(lmDetailsFile ->
+                lmUsageMessages.add(TestUtils.fileToString(this.getClass(), lmDetailsFile)));
+            sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmUsageMessages,
+                Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
         }
 
         private void receivePaidUsagesFromLm() throws InterruptedException {
