@@ -156,6 +156,14 @@ public interface IAaclUsageService {
     void calculateAmounts(String scenarioId, String userName);
 
     /**
+     * Deletes {@link com.copyright.rup.dist.foreign.domain.Usage}s from scenario with zero gross amounts.
+     *
+     * @param scenarioId scenario identifier
+     * @param userName   user name
+     */
+    void excludeZeroAmountUsages(String scenarioId, String userName);
+
+    /**
      * Deletes all {@link Usage}s associated with the given AACL {@link UsageBatch}.
      *
      * @param usageBatch {@link UsageBatch} to delete usages from

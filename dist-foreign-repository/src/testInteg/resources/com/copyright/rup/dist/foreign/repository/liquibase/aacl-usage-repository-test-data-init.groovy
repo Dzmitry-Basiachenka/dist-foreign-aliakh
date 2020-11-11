@@ -948,7 +948,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-04-01-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for testExcludeFromScenarioByPayees')
+        comment('Inserting test data for testExcludeFromScenarioByPayees, testCalculateAmounts, testExcludeZeroAmountUsages')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '9691fe58-b45a-4132-879e-1417eca14c1d')
@@ -999,6 +999,10 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '269040891')
             column(name: 'rh_account_number', value: '1000000026')
             column(name: 'payee_account_number', value: '1000000026')
+            column(name: 'gross_amount', value: '200.00')
+            column(name: 'net_amount', value: '150.00')
+            column(name: 'service_fee_amount', value: '50.00')
+            column(name: 'service_fee', value: '0.25000')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '1')
@@ -1015,6 +1019,11 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'publication_type_weight', value: '1')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'value_weight', value: '24.0000000')
+            column(name: 'volume_weight', value: '5.0000000')
+            column(name: 'volume_share', value: '50.0000000')
+            column(name: 'value_share', value: '60.0000000')
+            column(name: 'total_share', value: '2.0000000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1024,6 +1033,10 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '269040891')
             column(name: 'rh_account_number', value: '1000000026')
             column(name: 'payee_account_number', value: '1000000026')
+            column(name: 'gross_amount', value: '200.00')
+            column(name: 'net_amount', value: '150.00')
+            column(name: 'service_fee_amount', value: '50.00')
+            column(name: 'service_fee', value: '0.25000')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '2')
@@ -1040,6 +1053,11 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'publication_type_weight', value: '1')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'value_weight', value: '24.0000000')
+            column(name: 'volume_weight', value: '5.0000000')
+            column(name: 'volume_share', value: '50.0000000')
+            column(name: 'value_share', value: '60.0000000')
+            column(name: 'total_share', value: '2.0000000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1049,6 +1067,10 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '107039807')
             column(name: 'rh_account_number', value: '7000813806')
             column(name: 'payee_account_number', value: '7000813806')
+            column(name: 'gross_amount', value: '200.00')
+            column(name: 'net_amount', value: '150.00')
+            column(name: 'service_fee_amount', value: '50.00')
+            column(name: 'service_fee', value: '0.25000')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '10')
@@ -1065,6 +1087,11 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: '113')
             column(name: 'publication_type_weight', value: '1')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'value_weight', value: '24.0000000')
+            column(name: 'volume_weight', value: '5.0000000')
+            column(name: 'volume_share', value: '50.0000000')
+            column(name: 'value_share', value: '60.0000000')
+            column(name: 'total_share', value: '2.0000000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1074,6 +1101,10 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '107039807')
             column(name: 'rh_account_number', value: '7000813806')
             column(name: 'payee_account_number', value: '7000813806')
+            column(name: 'gross_amount', value: '200.00')
+            column(name: 'net_amount', value: '150.00')
+            column(name: 'service_fee_amount', value: '50.00')
+            column(name: 'service_fee', value: '0.25000')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '5')
@@ -1090,6 +1121,78 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: '111')
             column(name: 'publication_type_weight', value: '1')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'value_weight', value: '24.0000000')
+            column(name: 'volume_weight', value: '5.0000000')
+            column(name: 'volume_share', value: '50.0000000')
+            column(name: 'value_share', value: '60.0000000')
+            column(name: 'total_share', value: '2.0000000')
+        }
+
+        //To Exclude by zero amount
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'd88c445f-4b4d-45ef-bc95-fdb9c4ba676d')
+            column(name: 'df_usage_batch_uid', value: 'add4c0ae-d12e-4c5e-a04b-7f4b0ada3a23')
+            column(name: 'df_scenario_uid', value: '8b01939c-abda-4090-86d1-6231fc20f679')
+            column(name: 'wr_wrk_inst', value: '107039807')
+            column(name: 'rh_account_number', value: '7000813806')
+            column(name: 'gross_amount', value: '0.00')
+            column(name: 'net_amount', value: '0.00')
+            column(name: 'service_fee_amount', value: '0.00')
+            column(name: 'service_fee', value: '0.25000')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: '5')
+            column(name: 'comment', value: 'AACL comment')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: 'd88c445f-4b4d-45ef-bc95-fdb9c4ba676d')
+            column(name: 'institution', value: 'CORNELL UNIVERSITY')
+            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_source', value: 'Feb 2020 TUR')
+            column(name: 'number_of_pages', value: '10')
+            column(name: 'right_limitation', value: 'ALL')
+            column(name: 'detail_licensee_class_id', value: '115')
+            column(name: 'publication_type_weight', value: '1')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'value_weight', value: '24.0000000')
+            column(name: 'volume_weight', value: '5.0000000')
+            column(name: 'volume_share', value: '50.0000000')
+            column(name: 'value_share', value: '60.0000000')
+            column(name: 'total_share', value: '2.0000000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '335dd803-3763-4fd7-ae78-31821a453fbf')
+            column(name: 'df_usage_batch_uid', value: 'add4c0ae-d12e-4c5e-a04b-7f4b0ada3a23')
+            column(name: 'df_scenario_uid', value: '8b01939c-abda-4090-86d1-6231fc20f679')
+            column(name: 'wr_wrk_inst', value: '107039807')
+            column(name: 'rh_account_number', value: '7000813806')
+            column(name: 'gross_amount', value: '0.00')
+            column(name: 'net_amount', value: '0.00')
+            column(name: 'service_fee_amount', value: '0.00')
+            column(name: 'service_fee', value: '0.25000')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: '5')
+            column(name: 'comment', value: 'AACL comment')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: '335dd803-3763-4fd7-ae78-31821a453fbf')
+            column(name: 'institution', value: 'CORNELL UNIVERSITY')
+            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_source', value: 'Feb 2020 TUR')
+            column(name: 'number_of_pages', value: '10')
+            column(name: 'right_limitation', value: 'ALL')
+            column(name: 'detail_licensee_class_id', value: '115')
+            column(name: 'publication_type_weight', value: '1')
+            column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
+            column(name: 'value_weight', value: '24.0000000')
+            column(name: 'volume_weight', value: '5.0000000')
+            column(name: 'volume_share', value: '50.0000000')
+            column(name: 'value_share', value: '60.0000000')
+            column(name: 'total_share', value: '2.0000000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
