@@ -12,15 +12,15 @@
       "period_end_date": "2017-01-16T00:00-05:00",
       "lm_detail_id": "c8bb25a2-0b65-41ee-ad50-32711e7bea97",
       "product_family": "AACL",
-      "royalty_amount": 748.07,
-      "service_fee_amount": 249.36,
-      "collected_amount": 997.43,
+      "royalty_amount": 460.02,
+      "service_fee_amount": 153.34,
+      "collected_amount": 613.36,
       "post_distribution_flag": false
     },
     {
       "rh_uid": "60080587-a225-439c-81af-f016cb33aeac",
       "rollup_uid": "c929c312-bd36-4469-8989-61b824ecefd6",
-      "detail_id": "d259aee8-7442-45ba-b399-b0ddfd7a7a20",
+      "detail_id": "63cf2b2c-4c96-443a-bc9d-04cc5a31f1be",
       "distribution_name": "FDA March 19",
       "distribution_date": "2019-01-14T00:00-05:00",
       "ccc_event_id": "99854",
@@ -29,9 +29,9 @@
       "period_end_date": "2019-01-16T00:00-05:00",
       "lm_detail_id": "6311542c-0f26-4b15-bd70-c82d6b74800b",
       "product_family": "AACL",
-      "royalty_amount": 1.93,
-      "service_fee_amount": 0.64,
-      "collected_amount": 2.57,
+      "royalty_amount": 289.98,
+      "service_fee_amount": 96.66,
+      "collected_amount": 386.64,
       "post_distribution_flag": false
     }
   ]

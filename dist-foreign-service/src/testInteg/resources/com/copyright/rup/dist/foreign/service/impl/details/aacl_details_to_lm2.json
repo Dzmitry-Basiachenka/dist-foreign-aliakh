@@ -4,21 +4,21 @@
       "rh_uid": "60080587-a225-439c-81af-f016cb33aeac",
       "product_family": "AACL",
       "detail_id": "5be7d7eb-e25e-4273-a287-5346c2538ea9",
-      "royalty_amount": 748.07,
-      "service_fee_amount": 249.36,
-      "collected_amount": 997.43,
-      "wr_wrk_inst": "123456789",
+      "royalty_amount": 460.02,
+      "service_fee_amount": 153.34,
+      "collected_amount": 613.36,
+      "wr_wrk_inst": "100010768",
       "work_title": "Reclaiming youth at risk : our hope for the future"
     },
     {
       "rh_uid": "60080587-a225-439c-81af-f016cb33aeac",
       "product_family": "AACL",
-      "detail_id": "d259aee8-7442-45ba-b399-b0ddfd7a7a20",
-      "royalty_amount": 1.93,
-      "service_fee_amount": 0.64,
-      "collected_amount": 2.57,
-      "wr_wrk_inst": "123456789",
-      "work_title": "BIOCHEMISTRY (MOSCOW)"
+      "detail_id": "63cf2b2c-4c96-443a-bc9d-04cc5a31f1be",
+      "royalty_amount": 289.98,
+      "service_fee_amount": 96.66,
+      "collected_amount": 386.64,
+      "wr_wrk_inst": "100010768",
+      "work_title": "Reclaiming youth at risk : our hope for the future"
     }
   ]
 }

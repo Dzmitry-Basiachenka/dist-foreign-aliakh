@@ -10,6 +10,12 @@ databaseChangeLog {
             column(name: 'name', value: '101 Communications, Ltd.')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: 'a02af8f9-2ee4-4045-8bb5-79529fc087a6')
+            column(name: 'rh_account_number', value: '7001508482')
+            column(name: 'name', value: '2000 BC Publishing Ltd')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '4f466373-e8de-4b7d-8137-faba84ccafc2')
             column(name: 'wr_wrk_inst', value: '100009840')

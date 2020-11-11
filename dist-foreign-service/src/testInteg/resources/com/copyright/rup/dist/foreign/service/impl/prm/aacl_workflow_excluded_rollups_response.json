@@ -24,7 +24,7 @@
           "pmLicenseProductUid": "AACL",
           "preferenceCode": "PAYEE",
           "preferenceValue": "true",
-          "rollupOrganizationUid": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+          "rollupOrganizationUid": "60080587-a225-439c-81af-f016cb33aeac",
           "rollupExternalOrganizationKey": "1000024950"
         },
         {
@@ -39,13 +39,13 @@
         },
         {
           "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
-          "relatedOrganizationUid": "b0e6b1f6-89e9-4767-b143-db0f49f32769",
-          "relatedExternalOrganizationKey": "2000073957",
+          "relatedOrganizationUid": "a02af8f9-2ee4-4045-8bb5-79529fc087a6",
+          "relatedExternalOrganizationKey": "7001508482",
           "pmLicenseProductUid": "AACL",
           "preferenceCode": "PAYEE",
-          "preferenceValue": "false",
-          "rollupOrganizationUid": "671b8b20-7335-4938-988e-1da803efa6e3",
-          "rollupExternalOrganizationKey": "1000010029"
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "a02af8f9-2ee4-4045-8bb5-79529fc087a6",
+          "rollupExternalOrganizationKey": "7001508482"
         }
       ]
     ]
