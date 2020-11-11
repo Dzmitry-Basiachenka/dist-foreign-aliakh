@@ -102,6 +102,7 @@ public class SalUndistributedLiabilitiesReportDto extends StoredEntity<String> {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+            .appendSuper(super.toString())
             .append("dateReceived", dateReceived)
             .append("fundPoolName", fundPoolName)
             .append("grossAmount", grossAmount)
