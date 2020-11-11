@@ -571,26 +571,13 @@ public class AaclUsageServiceTest {
     }
 
     @Test
-    public void testGetPayeeTotalHoldersByEmptyFilter() {
-        ExcludePayeeFilter filter = new ExcludePayeeFilter();
-        Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
-        replay(aaclUsageRepository);
-        assertEquals(Collections.emptyList(), aaclUsageService.getPayeeTotalHoldersByFilter(scenario, filter));
-        verify(aaclUsageRepository);
-    }
-
-    @Test
     public void testGetPayeeTotalHoldersByFilter() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setNetAmountMinThreshold(BigDecimal.TEN);
-        Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
         List<PayeeTotalHolder> payeeTotalHolders = Collections.singletonList(new PayeeTotalHolder());
         expect(aaclUsageRepository.findPayeeTotalHoldersByFilter(filter)).andReturn(payeeTotalHolders).once();
         replay(aaclUsageRepository);
-        assertSame(payeeTotalHolders, aaclUsageService.getPayeeTotalHoldersByFilter(scenario, filter));
-        assertEquals(Collections.singleton(SCENARIO_ID), filter.getScenarioIds());
+        assertSame(payeeTotalHolders, aaclUsageService.getPayeeTotalHoldersByFilter(filter));
         verify(aaclUsageRepository);
     }
 

@@ -244,13 +244,12 @@ public interface IAaclUsageService {
     void excludeDetailsFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String reason);
 
     /**
-     * Gets list of {@link PayeeTotalHolder}s by filter for specified {@link Scenario}.
+     * Gets list of {@link PayeeTotalHolder}s by filter.
      *
-     * @param scenario selected {@link Scenario}
-     * @param filter   instance of {@link ExcludePayeeFilter}
+     * @param filter instance of {@link ExcludePayeeFilter}
      * @return list of {@link PayeeTotalHolder}s
      */
-    List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(Scenario scenario, ExcludePayeeFilter filter);
+    List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(ExcludePayeeFilter filter);
 
     /**
      * Gets count of usage details based on {@link Scenario} and rightsholder account number.

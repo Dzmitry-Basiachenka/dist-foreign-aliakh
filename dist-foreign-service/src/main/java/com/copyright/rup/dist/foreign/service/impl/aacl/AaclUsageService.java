@@ -350,13 +350,8 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
-    public List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(Scenario scenario, ExcludePayeeFilter filter) {
-        List<PayeeTotalHolder> result = Collections.emptyList();
-        if (!filter.isEmpty()) {
-            filter.setScenarioIds(Collections.singleton(scenario.getId()));
-            result = aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
-        }
-        return result;
+    public List<PayeeTotalHolder> getPayeeTotalHoldersByFilter(ExcludePayeeFilter filter) {
+        return aaclUsageRepository.findPayeeTotalHoldersByFilter(filter);
     }
 
     @Override
