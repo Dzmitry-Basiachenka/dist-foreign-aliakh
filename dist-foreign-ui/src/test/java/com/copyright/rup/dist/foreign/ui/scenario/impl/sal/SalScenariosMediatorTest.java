@@ -65,6 +65,9 @@ public class SalScenariosMediatorTest {
         mediator.applyPermissions();
         assertTrue(viewButton.isVisible());
         assertFalse(deleteButton.isVisible());
+        assertFalse(submitButton.isVisible());
+        assertFalse(rejectButton.isVisible());
+        assertFalse(approveButton.isVisible());
         assertFalse(sendToLmButton.isVisible());
         verify(SecurityUtils.class);
     }
@@ -76,6 +79,9 @@ public class SalScenariosMediatorTest {
         mediator.applyPermissions();
         assertTrue(viewButton.isVisible());
         assertFalse(deleteButton.isVisible());
+        assertFalse(submitButton.isVisible());
+        assertTrue(rejectButton.isVisible());
+        assertTrue(approveButton.isVisible());
         assertFalse(sendToLmButton.isVisible());
         verify(SecurityUtils.class);
     }
@@ -87,6 +93,9 @@ public class SalScenariosMediatorTest {
         mediator.applyPermissions();
         assertTrue(viewButton.isVisible());
         assertTrue(deleteButton.isVisible());
+        assertTrue(submitButton.isVisible());
+        assertFalse(rejectButton.isVisible());
+        assertFalse(approveButton.isVisible());
         assertTrue(sendToLmButton.isVisible());
         verify(SecurityUtils.class);
     }

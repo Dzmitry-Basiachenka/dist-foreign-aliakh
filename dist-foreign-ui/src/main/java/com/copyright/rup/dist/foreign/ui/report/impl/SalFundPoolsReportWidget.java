@@ -37,14 +37,14 @@ public class SalFundPoolsReportWidget extends Window implements ISalFundPoolsRep
     private static final int MAX_YEAR = 2099;
 
     private ISalFundPoolsReportController controller;
-    private TextField reportedYear;
+    private TextField distributionYear;
     private final Binder<Integer> binder = new Binder<>();
     private Button exportButton;
 
     @Override
     public ISalFundPoolsReportWidget init() {
-        initReportedYear();
-        VerticalLayout content = new VerticalLayout(reportedYear, getButtonsLayout());
+        initDistributionYear();
+        VerticalLayout content = new VerticalLayout(distributionYear, getButtonsLayout());
         content.setSpacing(false);
         VaadinUtils.setMaxComponentsWidth(content);
         setContent(content);
@@ -61,7 +61,7 @@ public class SalFundPoolsReportWidget extends Window implements ISalFundPoolsRep
 
     @Override
     public int getDistributionYear() {
-        return Integer.parseInt(StringUtils.trim(reportedYear.getValue()));
+        return Integer.parseInt(StringUtils.trim(distributionYear.getValue()));
     }
 
     private HorizontalLayout getButtonsLayout() {
@@ -78,10 +78,10 @@ public class SalFundPoolsReportWidget extends Window implements ISalFundPoolsRep
         return layout;
     }
 
-    private void initReportedYear() {
-        reportedYear = new TextField(ForeignUi.getMessage("label.distribution_year"));
-        reportedYear.setRequiredIndicatorVisible(true);
-        binder.forField(reportedYear)
+    private void initDistributionYear() {
+        distributionYear = new TextField(ForeignUi.getMessage("label.distribution_year"));
+        distributionYear.setRequiredIndicatorVisible(true);
+        binder.forField(distributionYear)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 "Field value should contain numeric values only")
@@ -89,9 +89,9 @@ public class SalFundPoolsReportWidget extends Window implements ISalFundPoolsRep
             .withConverter(new StringToIntegerConverter("Field value can not be converted"))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
-        VaadinUtils.addComponentStyle(reportedYear, "fund-pools-field-report-window");
-        reportedYear.setWidth(100, Unit.PERCENTAGE);
-        reportedYear.addValueChangeListener(value -> exportButton.setEnabled(binder.isValid()));
+        VaadinUtils.addComponentStyle(distributionYear, "distribution-year-field");
+        distributionYear.setWidth(100, Unit.PERCENTAGE);
+        distributionYear.addValueChangeListener(value -> exportButton.setEnabled(binder.isValid()));
     }
 
     private SerializablePredicate<String> getYearValidator() {
