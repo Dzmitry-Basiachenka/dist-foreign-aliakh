@@ -86,7 +86,7 @@ public class SalSendToLmWindow extends Window implements SearchWidget.ISearchCon
     }
 
     private void initGrid() {
-        dataProvider = new ListDataProvider<>(controller.getScenariosToSendToLm());
+        dataProvider = new ListDataProvider<>(controller.getApprovedScenarios());
         grid = new Grid<>(dataProvider);
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);

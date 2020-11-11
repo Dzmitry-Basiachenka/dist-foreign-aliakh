@@ -26,9 +26,10 @@ public interface ISalScenariosController extends ICommonScenariosController {
     String getFundPoolName(String fundPoolId);
 
     /**
-     * @return list of {@link Scenario}s, which are eligible to send to LM.
+     * @return list of {@link Scenario}s in
+     * {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#APPROVED} status.
      */
-    List<Scenario> getScenariosToSendToLm();
+    List<Scenario> getApprovedScenarios();
 
     /**
      * Sends {@link Scenario}s to LM.
