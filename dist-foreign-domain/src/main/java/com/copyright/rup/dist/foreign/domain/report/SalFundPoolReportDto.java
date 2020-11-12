@@ -26,7 +26,7 @@ public class SalFundPoolReportDto extends StoredEntity<String> {
     private String scenarioName;
     private LocalDate dateReceived;
     private String assessmentName;
-    private Integer licenseeAccount;
+    private Integer licenseeAccountNumber;
     private String licenseeName;
     private BigDecimal serviceFee = DEFAULT_AMOUNT;
     private BigDecimal netAmount = DEFAULT_AMOUNT;
@@ -93,12 +93,12 @@ public class SalFundPoolReportDto extends StoredEntity<String> {
         this.assessmentName = assessmentName;
     }
 
-    public Integer getLicenseeAccount() {
-        return licenseeAccount;
+    public Integer getLicenseeAccountNumber() {
+        return licenseeAccountNumber;
     }
 
-    public void setLicenseeAccount(Integer licenseeAccount) {
-        this.licenseeAccount = licenseeAccount;
+    public void setLicenseeAccountNumber(Integer licenseeAccountNumber) {
+        this.licenseeAccountNumber = licenseeAccountNumber;
     }
 
     public String getLicenseeName() {
@@ -210,7 +210,7 @@ public class SalFundPoolReportDto extends StoredEntity<String> {
             .append(scenarioName, that.scenarioName)
             .append(dateReceived, that.dateReceived)
             .append(assessmentName, that.assessmentName)
-            .append(licenseeAccount, that.licenseeAccount)
+            .append(licenseeAccountNumber, that.licenseeAccountNumber)
             .append(licenseeName, that.licenseeName)
             .append(serviceFee, that.serviceFee)
             .append(netAmount, that.netAmount)
@@ -226,13 +226,13 @@ public class SalFundPoolReportDto extends StoredEntity<String> {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
+        return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(fundPoolName)
             .append(scenarioName)
             .append(dateReceived)
             .append(assessmentName)
-            .append(licenseeAccount)
+            .append(licenseeAccountNumber)
             .append(licenseeName)
             .append(serviceFee)
             .append(netAmount)
@@ -252,11 +252,12 @@ public class SalFundPoolReportDto extends StoredEntity<String> {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+            .appendSuper(super.toString())
             .append("fundPoolName", fundPoolName)
             .append("scenarioName", scenarioName)
             .append("dateReceived", dateReceived)
             .append("assessmentName", assessmentName)
-            .append("licenseeAccount", licenseeAccount)
+            .append("licenseeAccountNumber", licenseeAccountNumber)
             .append("licenseeName", licenseeName)
             .append("serviceFee", serviceFee)
             .append("netAmount", netAmount)

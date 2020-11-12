@@ -31,7 +31,6 @@ public class SalFundPoolsReportHandler extends BaseCsvReportHandler<SalFundPoolR
      *
      * @param outputStream {@link OutputStream} instance
      */
-
     public SalFundPoolsReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
@@ -43,7 +42,7 @@ public class SalFundPoolsReportHandler extends BaseCsvReportHandler<SalFundPoolR
         beanProperties.add(bean.getScenarioName());
         beanProperties.add(getBeanLocalDate(bean.getDateReceived()));
         beanProperties.add(bean.getAssessmentName());
-        beanProperties.add(getBeanPropertyAsString(bean.getLicenseeAccount()));
+        beanProperties.add(getBeanPropertyAsString(bean.getLicenseeAccountNumber()));
         beanProperties.add(bean.getLicenseeName());
         beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
         beanProperties.add(getBeanBigDecimal(bean.getNetAmount()));
