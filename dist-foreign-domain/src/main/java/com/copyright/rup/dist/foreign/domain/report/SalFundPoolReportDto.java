@@ -26,7 +26,7 @@ public class SalFundPoolReportDto extends StoredEntity<String> {
     private String scenarioName;
     private LocalDate dateReceived;
     private String assessmentName;
-    private Integer licenseeAccountNumber;
+    private Long licenseeAccountNumber;
     private String licenseeName;
     private BigDecimal serviceFee = DEFAULT_AMOUNT;
     private BigDecimal netAmount = DEFAULT_AMOUNT;
@@ -93,11 +93,11 @@ public class SalFundPoolReportDto extends StoredEntity<String> {
         this.assessmentName = assessmentName;
     }
 
-    public Integer getLicenseeAccountNumber() {
+    public Long getLicenseeAccountNumber() {
         return licenseeAccountNumber;
     }
 
-    public void setLicenseeAccountNumber(Integer licenseeAccountNumber) {
+    public void setLicenseeAccountNumber(Long licenseeAccountNumber) {
         this.licenseeAccountNumber = licenseeAccountNumber;
     }
 
