@@ -1138,7 +1138,6 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '0.00')
             column(name: 'net_amount', value: '0.00')
             column(name: 'service_fee_amount', value: '0.00')
-            column(name: 'service_fee', value: '0.25000')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '5')
@@ -1155,11 +1154,6 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: '115')
             column(name: 'publication_type_weight', value: '1')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
-            column(name: 'value_weight', value: '24.0000000')
-            column(name: 'volume_weight', value: '5.0000000')
-            column(name: 'volume_share', value: '50.0000000')
-            column(name: 'value_share', value: '60.0000000')
-            column(name: 'total_share', value: '2.0000000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1171,7 +1165,6 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '0.00')
             column(name: 'net_amount', value: '0.00')
             column(name: 'service_fee_amount', value: '0.00')
-            column(name: 'service_fee', value: '0.25000')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '5')
@@ -1188,11 +1181,6 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: '115')
             column(name: 'publication_type_weight', value: '1')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
-            column(name: 'value_weight', value: '24.0000000')
-            column(name: 'volume_weight', value: '5.0000000')
-            column(name: 'volume_share', value: '50.0000000')
-            column(name: 'value_share', value: '60.0000000')
-            column(name: 'total_share', value: '2.0000000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
