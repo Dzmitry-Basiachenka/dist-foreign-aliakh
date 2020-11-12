@@ -1376,14 +1376,22 @@
     </delete>
 
     <select id="findPayeeAggClassesPairsByScenarioId" parameterType="string" resultMap="payeeAggLicenseeClassesPairResultMap">
+        with aggregate_mapping as (
+            select
+                (detailLicenseeClass ->> 'detailLicenseeClassId')::int as detLcId,
+                (detailLicenseeClass ->> 'aggregateLicenseeClassId')::int as aggLcId
+            from ${schema}.df_scenario sc, jsonb_array_elements(sc.aacl_fields -> 'detailLicenseeClasses') as detailLicenseeClass
+            where df_scenario_uid = #{scenarioId}
+        )
         select
             payee_account_number,
-            aggregate_licensee_class_id,
+            aggLcId  aggregate_licensee_class_id,
             discipline,
             enrollment_profile
         from ${schema}.df_usage u
         left join ${schema}.df_usage_aacl uaacl on u.df_usage_uid = uaacl.df_usage_aacl_uid
-        left join ${schema}.df_detail_licensee_class dlc on uaacl.detail_licensee_class_id = dlc.detail_licensee_class_id
+        left join aggregate_mapping am on am.detLcId = uaacl.detail_licensee_class_id
+        left join ${schema}.df_detail_licensee_class dlc on am.aggLcId  = dlc.detail_licensee_class_id
         where df_scenario_uid = #{scenarioId}
     </select>
 </mapper>

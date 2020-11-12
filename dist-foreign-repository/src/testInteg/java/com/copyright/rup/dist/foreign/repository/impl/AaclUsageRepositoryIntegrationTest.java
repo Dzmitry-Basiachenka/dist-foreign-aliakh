@@ -804,10 +804,10 @@ public class AaclUsageRepositoryIntegrationTest {
 
     @Test
     public void testFindPayeeAggClassesPairsByScenarioId() {
-        AggregateLicenseeClass aggregateLicenseeClass = buildAggregateLicenseeClass(171, "EXGP", "Arts & Humanities");
+        AggregateLicenseeClass aggregateLicenseeClass = buildAggregateLicenseeClass(108, "EXGP", "Life Sciences");
         List<PayeeAccountAggregateLicenseeClassesPair> pairs = Arrays.asList(
             buildPayeeAggLcPair(2580011451L, aggregateLicenseeClass,
-                buildAggregateLicenseeClass(173, "EXU4", "Arts & Humanities")),
+                buildAggregateLicenseeClass(113, "MU", "Life Sciences")),
             buildPayeeAggLcPair(1000000027L, aggregateLicenseeClass));
         assertEquals(pairs, aaclUsageRepository.findPayeeAggClassesPairsByScenarioId(SCENARIO_ID_5));
     }

@@ -37,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -225,8 +226,10 @@ public class AaclExcludePayeeWidget extends Window implements IAaclExcludePayeeW
             .filter(pair -> selectedAccountNumbers.contains(pair.getPayeeAccountNumber())
                 && !Collections.disjoint(invalidAggLcs, pair.getAggregateLicenseeClasses()))
             .map(pair -> pair.getPayeeAccountNumber().toString())
+            .sorted()
             .collect(Collectors.joining(", "));
         String formattedAggregateClasses = invalidAggLcs.stream()
+            .sorted(Comparator.comparing(AggregateLicenseeClass::getId))
             .map(aggregateClass -> String.format("%s (%s - %s)", aggregateClass.getId(),
                 aggregateClass.getEnrollmentProfile(), aggregateClass.getDiscipline()))
             .collect(Collectors.joining("<br><li>"));

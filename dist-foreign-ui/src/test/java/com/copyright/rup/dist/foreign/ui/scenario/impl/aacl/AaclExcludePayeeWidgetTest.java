@@ -154,7 +154,7 @@ public class AaclExcludePayeeWidgetTest {
         expect(controller.getPayeeAggClassesPairs()).andReturn(pairs).once();
         Windows.showNotificationWindow("1000009094, 7000429266 payee(s) cannot be excluded. " +
             "There will be no usages for the following Aggregate Licensee Class(es) after exclusion:" +
-            "<ul><li><i><b>171 (EXGP - Arts & Humanities)<br><li>120 (MU - Business Management)</b></i></ul>");
+            "<ul><li><i><b>120 (MU - Business Management)<br><li>171 (EXGP - Arts & Humanities)</b></i></ul>");
         expectLastCall().once();
         replay(clickEvent, controller, payeesGrid, Windows.class);
         buttonClick(0, clickEvent);
