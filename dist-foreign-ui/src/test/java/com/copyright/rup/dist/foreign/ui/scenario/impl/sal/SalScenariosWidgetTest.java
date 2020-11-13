@@ -196,7 +196,7 @@ public class SalScenariosWidgetTest {
         verifyButton(layout.getComponent(2), "Submit for Approval", false);
         verifyButton(layout.getComponent(3), "Reject", false);
         verifyButton(layout.getComponent(4), "Approve", false);
-        verifyButton(layout.getComponent(5), "Send to LM", true);
+        verifyButton(layout.getComponent(5), "Choose Scenarios", true);
     }
 
     private void verifyButton(Component component, String caption, boolean isEnabled) {
