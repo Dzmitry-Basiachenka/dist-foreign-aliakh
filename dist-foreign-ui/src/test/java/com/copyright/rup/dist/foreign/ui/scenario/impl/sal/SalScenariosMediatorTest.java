@@ -38,7 +38,7 @@ public class SalScenariosMediatorTest {
     private Button submitButton;
     private Button rejectButton;
     private Button approveButton;
-    private Button sendToLmButton;
+    private Button chooseScenariosButton;
 
     @Before
     public void setUp() {
@@ -49,13 +49,13 @@ public class SalScenariosMediatorTest {
         submitButton = new Button("Submit for Approval");
         rejectButton = new Button("Reject");
         approveButton = new Button("Approve");
-        sendToLmButton = new Button("Send to LM");
+        chooseScenariosButton = new Button("Choose Scenarios");
         mediator.setViewButton(viewButton);
         mediator.setDeleteButton(deleteButton);
         mediator.setSubmitButton(submitButton);
         mediator.setRejectButton(rejectButton);
         mediator.setApproveButton(approveButton);
-        mediator.setSendToLmButton(sendToLmButton);
+        mediator.setChooseScenariosButton(chooseScenariosButton);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class SalScenariosMediatorTest {
         assertFalse(submitButton.isVisible());
         assertFalse(rejectButton.isVisible());
         assertFalse(approveButton.isVisible());
-        assertFalse(sendToLmButton.isVisible());
+        assertFalse(chooseScenariosButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -82,7 +82,7 @@ public class SalScenariosMediatorTest {
         assertFalse(submitButton.isVisible());
         assertTrue(rejectButton.isVisible());
         assertTrue(approveButton.isVisible());
-        assertFalse(sendToLmButton.isVisible());
+        assertFalse(chooseScenariosButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -96,7 +96,7 @@ public class SalScenariosMediatorTest {
         assertTrue(submitButton.isVisible());
         assertFalse(rejectButton.isVisible());
         assertFalse(approveButton.isVisible());
-        assertTrue(sendToLmButton.isVisible());
+        assertTrue(chooseScenariosButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -105,7 +105,7 @@ public class SalScenariosMediatorTest {
         mediator.selectedScenarioChanged(null);
         assertTrue(viewButton.isVisible());
         assertFalse(deleteButton.isEnabled());
-        assertTrue(sendToLmButton.isEnabled());
+        assertTrue(chooseScenariosButton.isEnabled());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class SalScenariosMediatorTest {
         assertTrue(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
-        assertTrue(sendToLmButton.isEnabled());
+        assertTrue(chooseScenariosButton.isEnabled());
     }
 
     @Test
@@ -131,7 +131,7 @@ public class SalScenariosMediatorTest {
         assertFalse(submitButton.isEnabled());
         assertTrue(rejectButton.isEnabled());
         assertTrue(approveButton.isEnabled());
-        assertTrue(sendToLmButton.isEnabled());
+        assertTrue(chooseScenariosButton.isEnabled());
     }
 
     @Test
@@ -144,7 +144,7 @@ public class SalScenariosMediatorTest {
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
-        assertTrue(sendToLmButton.isEnabled());
+        assertTrue(chooseScenariosButton.isEnabled());
     }
 
     private void mockViewOnlyPermissions() {

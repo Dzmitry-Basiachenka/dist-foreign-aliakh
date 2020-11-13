@@ -38,7 +38,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
     private final Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
     private final Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
     private final Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
-    private final Button sendToLmButton = Buttons.createButton(ForeignUi.getMessage("button.send_to_lm"));
+    private final Button chooseScenariosButton = Buttons.createButton(ForeignUi.getMessage("button.choose_scenarios"));
     private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -67,7 +67,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
         mediator.setApproveButton(approveButton);
         mediator.setRejectButton(rejectButton);
         mediator.setSubmitButton(submitButton);
-        mediator.setSendToLmButton(sendToLmButton);
+        mediator.setChooseScenariosButton(chooseScenariosButton);
         mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
     }
@@ -82,8 +82,9 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
         HorizontalLayout layout = new HorizontalLayout();
         addButtonsListeners();
         VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton, submitButton, rejectButton, approveButton,
-            sendToLmButton);
-        layout.addComponents(viewButton, deleteButton, submitButton, rejectButton, approveButton, sendToLmButton);
+            chooseScenariosButton);
+        layout.addComponents(viewButton, deleteButton, submitButton, rejectButton, approveButton,
+            chooseScenariosButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
@@ -121,6 +122,6 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
         submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
         rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
         approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));
-        sendToLmButton.addClickListener(event -> controller.onSendToLmButtonClicked());
+        chooseScenariosButton.addClickListener(event -> controller.onSendToLmButtonClicked());
     }
 }
