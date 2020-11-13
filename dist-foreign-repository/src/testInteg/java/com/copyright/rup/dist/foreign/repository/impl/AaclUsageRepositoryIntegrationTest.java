@@ -50,6 +50,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -465,10 +466,11 @@ public class AaclUsageRepositoryIntegrationTest {
     @Test
     public void testExcludeFromScenarioByPayees() {
         assertEquals(6, aaclUsageRepository.findByScenarioId(SCENARIO_ID_3).size());
-        aaclUsageRepository.excludeFromScenarioByPayees(SCENARIO_ID_3, Collections.singleton(1000000026L),
-            USER_NAME);
-        List<Usage> excludedUsages = aaclUsageRepository.findByIds(
-            Arrays.asList("9ccf8b43-4ad5-4199-8c7f-c5884f27e44f", "ccb115c7-3444-4dbb-9540-7541961febdf"));
+        Set<String> excludedIds =
+            Sets.newHashSet("9ccf8b43-4ad5-4199-8c7f-c5884f27e44f", "ccb115c7-3444-4dbb-9540-7541961febdf");
+        assertEquals(excludedIds, aaclUsageRepository.excludeFromScenarioByPayees(SCENARIO_ID_3,
+            Collections.singleton(1000000026L), USER_NAME));
+        List<Usage> excludedUsages = aaclUsageRepository.findByIds(new ArrayList<>(excludedIds));
         assertEquals(2, excludedUsages.size());
         excludedUsages.forEach(usage -> {
             assertEquals(UsageStatusEnum.SCENARIO_EXCLUDED, usage.getStatus());
@@ -479,7 +481,6 @@ public class AaclUsageRepositoryIntegrationTest {
             assertNull(usage.getAaclUsage().getVolumeShare());
             assertNull(usage.getAaclUsage().getTotalShare());
         });
-        assertEquals(4, aaclUsageRepository.findByScenarioId(SCENARIO_ID_3).size());
     }
 
     @Test

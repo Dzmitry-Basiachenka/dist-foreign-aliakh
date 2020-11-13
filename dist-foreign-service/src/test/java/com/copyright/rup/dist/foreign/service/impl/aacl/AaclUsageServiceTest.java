@@ -50,6 +50,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -350,14 +351,20 @@ public class AaclUsageServiceTest {
     @Test
     public void testExcludeDetailsFromScenarioByPayees() {
         mockStatic(RupContextUtils.class);
-        aaclUsageRepository.excludeFromScenarioByPayees(SCENARIO_ID, Collections.singleton(7000000001L), USER_NAME);
+        Set<String> ids =
+            Sets.newHashSet("5377be35-29f2-4cc3-95e6-d024f3e91852", "11916ea7-9b3d-484c-9160-fe4fc9b31e52");
+        String reason = "Exclude reason";
+        expect(
+            aaclUsageRepository.excludeFromScenarioByPayees(SCENARIO_ID, Collections.singleton(7000000001L), USER_NAME))
+            .andReturn(ids).once();
+        usageAuditService.logAction(ids, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
         expectLastCall().once();
         aaclUsageRepository.calculateAmounts(SCENARIO_ID, USER_NAME);
         expectLastCall().once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        replay(aaclUsageRepository, RupContextUtils.class);
-        aaclUsageService.excludeDetailsFromScenarioByPayees(SCENARIO_ID, Collections.singleton(7000000001L), USER_NAME);
-        verify(aaclUsageRepository, RupContextUtils.class);
+        replay(aaclUsageRepository, usageAuditService, RupContextUtils.class);
+        aaclUsageService.excludeDetailsFromScenarioByPayees(SCENARIO_ID, Collections.singleton(7000000001L), reason);
+        verify(aaclUsageRepository, usageAuditService, RupContextUtils.class);
     }
 
     @Test

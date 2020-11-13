@@ -343,7 +343,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void excludeDetailsByPayees() {
             if (CollectionUtils.isNotEmpty(payeesToExclude)) {
-                aaclUsageService.excludeDetailsFromScenarioByPayees(scenario.getId(), payeesToExclude, "SYSTEM");
+                aaclUsageService.excludeDetailsFromScenarioByPayees(scenario.getId(), payeesToExclude, "Test Reason");
             }
         }
 
