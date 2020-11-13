@@ -1,3 +1,14 @@
+12.1.21
+-
+* B-58784 FDA: Send SAL scenarios to LM: make changes based on comments in CR-DIST-FOREIGN-211
+* B-59008 FDA: Send SAL scenario for approval: make changes based on comments in CR-DIST-FOREIGN-209
+* B-59935 FDA: SAL fund pool Report: make changes based on comments in CR-DIST-FOREIGN-212
+* B-63875 FDA: Exclude payees from an AACL scenario: adjust AACL workflow test to cover case with excluded payees
+* B-63875 FDA: Exclude payees from an AACL scenario: display payee information on Exclude Payees window without filtering by default
+* CDP-949 FDA: Exclude Payees from AACL scenario: System looks at the detailed licensee class instead of aggregate licensee class while validating remaining usages after exclusion
+* CDP-950 FDA: SAL Fund Pools Report: exception occurs when report is generated for fund pools having licensee account number> 2 147 483 647
+* CDP-951 FDA: Exclude Payees from AACL scenario: System doesn't reset gross, net and service fee amounts for excluded usages
+
 12.1.20
 -
 * B-59935 FDA: SAL fund pool Report: fix issue to get licensee account number column
