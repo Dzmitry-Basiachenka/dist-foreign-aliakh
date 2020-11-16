@@ -202,14 +202,16 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
-    public void excludeFromScenarioByPayees(String scenarioId, Set<Long> payeeAccountNumbers, String userName) {
+    public Set<String> excludeFromScenarioByPayees(String scenarioId, Set<Long> payeeAccountNumbers, String userName) {
+        Set<String> result = new HashSet<>();
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         Iterables.partition(Objects.requireNonNull(payeeAccountNumbers), PAYEES_BATCH_SIZE).forEach(partition -> {
             params.put("payeeAccountNumbers", Objects.requireNonNull(partition));
-            update("IAaclUsageMapper.excludeFromScenarioByPayees", params);
+            result.addAll(selectList("IAaclUsageMapper.excludeFromScenarioByPayees", params));
         });
+        return result;
     }
 
     @Override

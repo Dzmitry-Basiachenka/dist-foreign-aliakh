@@ -345,7 +345,8 @@ public class AaclUsageService implements IAaclUsageService {
     @Transactional
     public void excludeDetailsFromScenarioByPayees(String scenarioId, Set<Long> accountNumbers, String reason) {
         String userName = RupContextUtils.getUserName();
-        aaclUsageRepository.excludeFromScenarioByPayees(scenarioId, accountNumbers, userName);
+        Set<String> usageIds = aaclUsageRepository.excludeFromScenarioByPayees(scenarioId, accountNumbers, userName);
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason);
         calculateAmounts(scenarioId, userName);
     }
 

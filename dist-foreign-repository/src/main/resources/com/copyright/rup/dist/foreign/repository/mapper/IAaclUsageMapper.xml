@@ -1107,7 +1107,7 @@
         </if>
     </sql>
 
-    <update id="excludeFromScenarioByPayees" parameterType="map">
+    <select id="excludeFromScenarioByPayees" parameterType="map" resultType="string">
         with ids as (
             update ${schema}.df_usage
             set
@@ -1136,7 +1136,8 @@
             <include refid="StoredEntityMapper.update"/>
         from ids
         where df_usage_aacl_uid = ids.df_usage_uid
-    </update>
+        returning df_usage_uid
+    </select>
 
     <update id="excludeZeroAmountUsages" parameterType="map">
         with ids as (

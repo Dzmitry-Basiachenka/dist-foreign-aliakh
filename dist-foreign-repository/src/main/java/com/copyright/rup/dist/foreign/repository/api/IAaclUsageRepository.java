@@ -201,8 +201,9 @@ public interface IAaclUsageRepository {
      * @param scenarioId          scenario identifier
      * @param payeeAccountNumbers set of payee account numbers
      * @param userName            user name
+     * @return set of excluded usages ids
      */
-    void excludeFromScenarioByPayees(String scenarioId, Set<Long> payeeAccountNumbers, String userName);
+    Set<String> excludeFromScenarioByPayees(String scenarioId, Set<Long> payeeAccountNumbers, String userName);
 
     /**
      * Calculates gross_amount, service_fee, service_fee_amount and net_amount for all scenario usages.
