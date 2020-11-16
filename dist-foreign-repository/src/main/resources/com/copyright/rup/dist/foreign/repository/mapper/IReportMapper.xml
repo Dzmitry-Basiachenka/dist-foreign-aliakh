@@ -248,7 +248,7 @@
         from ${schema}.df_fund_pool fp
         left join ${schema}.df_scenario s on s.sal_fields ->> 'fund_pool_uid' = fp.df_fund_pool_uid
         where fp.product_family = #{productFamily}
-            and #{distributionYear} = (select extract(isoyear from date(fp.sal_fields ->> 'date_received')::date))
+            and #{distributionYear} = (select extract(year from date(fp.sal_fields ->> 'date_received')::date))
     </select>
 
     <select id="findNtsUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="ntsUndistributedLiabilitiesReportDtoResultMap">
