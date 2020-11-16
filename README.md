@@ -1,3 +1,8 @@
+12.1.22
+-
+* B-58784 FDA: Send SAL scenarios to LM: rename Send to LM button to Choose Scenarios
+* B-63875 FDA: Exclude payees from an AACL scenario: add audit for exclude usages by payee action
+
 12.1.21
 -
 * B-58784 FDA: Send SAL scenarios to LM: make changes based on comments in CR-DIST-FOREIGN-211
