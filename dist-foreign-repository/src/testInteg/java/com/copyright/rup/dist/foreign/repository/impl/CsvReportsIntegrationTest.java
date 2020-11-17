@@ -587,7 +587,7 @@ public class CsvReportsIntegrationTest {
     @Test
     public void testSalFundPoolsCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
-            reportRepository.writeSalFundPoolsCsvReport(1990, outputStream), "sal_fund_pools_report.csv");
+            reportRepository.writeSalFundPoolsCsvReport(2018, outputStream), "sal_fund_pools_report.csv");
     }
 
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {

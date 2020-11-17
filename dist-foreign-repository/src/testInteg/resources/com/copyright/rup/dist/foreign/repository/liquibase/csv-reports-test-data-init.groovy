@@ -9835,7 +9835,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pools for Report 2')
             column(name: 'total_amount', value: '5000.00')
-            column(name: 'sal_fields', value: '{"date_received": "12/24/1990", "assessment_name": "FY1990 COG", ' +
+            column(name: 'sal_fields', value: '{"date_received": "12/31/2018", "assessment_name": "FY1990 COG", ' +
                     '"licensee_account_number": 7001293454, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, ' +
                     '"grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, "gross_amount": 5000.00, ' +
                     '"item_bank_gross_amount": 250.00, "grade_K_5_gross_amount": 4750.00, "grade_6_8_gross_amount": 0.00, ' +
@@ -9847,7 +9847,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pools for Report 3')
             column(name: 'total_amount', value: '1000.00')
-            column(name: 'sal_fields', value: '{"date_received": "12/24/1990", "assessment_name": "FY1990 COG", ' +
+            column(name: 'sal_fields', value: '{"date_received": "12/31/2018", "assessment_name": "FY1990 COG", ' +
                     '"licensee_account_number": 1000003007, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, ' +
                     '"grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, ' +
                     '"item_bank_gross_amount": 100.00, "grade_K_5_gross_amount": 900.0, "grade_6_8_gross_amount": 0.00, ' +
