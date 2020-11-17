@@ -67,6 +67,7 @@ public class SalSendToLmWindowTest {
         assertEquals(Sizeable.Unit.PIXELS, widget.getWidthUnits());
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
         VerticalLayout content = (VerticalLayout) widget.getContent();
+        assertEquals("Choose Scenarios to Send to LM", widget.getCaption());
         assertEquals(3, content.getComponentCount());
         Component searchWidget = content.getComponent(0);
         assertTrue(searchWidget instanceof SearchWidget);
@@ -99,10 +100,10 @@ public class SalSendToLmWindowTest {
 
     private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {
         assertEquals(2, buttonsLayout.getComponentCount());
-        Component exportButton = buttonsLayout.getComponent(0);
-        assertEquals(Button.class, exportButton.getClass());
-        assertEquals("Send to LM", exportButton.getCaption());
-        assertFalse(exportButton.isEnabled());
+        Component sendToLmButton = buttonsLayout.getComponent(0);
+        assertEquals(Button.class, sendToLmButton.getClass());
+        assertEquals("Send to LM", sendToLmButton.getCaption());
+        assertFalse(sendToLmButton.isEnabled());
         Component closeButton = buttonsLayout.getComponent(1);
         assertEquals(Button.class, closeButton.getClass());
         assertEquals("Close", closeButton.getCaption());

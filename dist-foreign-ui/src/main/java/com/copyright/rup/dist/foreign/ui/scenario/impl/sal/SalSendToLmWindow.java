@@ -52,7 +52,7 @@ public class SalSendToLmWindow extends Window implements SearchWidget.ISearchCon
         setWidth(500, Unit.PIXELS);
         setResizable(true);
         setContent(initAndGetContentLayout());
-        setCaption(ForeignUi.getMessage("window.send_to_lm"));
+        setCaption(ForeignUi.getMessage("window.choose_scenarios_to_send_to_lm"));
         VaadinUtils.addComponentStyle(this, "send-to-lm-window");
     }
 
