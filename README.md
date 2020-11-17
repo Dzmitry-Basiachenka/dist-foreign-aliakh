@@ -1,3 +1,8 @@
+12.1.23
+-
+* B-58784 FDA: Send SAL scenarios to LM: rename Send to LM window to Choose Scenarios to Send to LM
+* CDP-952 FDA: SAL Fund Pools Report: if date received of the fund pool falls on the last week of the distribution year and the subsequent year starts from Thursday - Sunday this fund pool is included in the report of subsequent year
+
 12.1.22
 -
 * B-58784 FDA: Send SAL scenarios to LM: rename Send to LM button to Choose Scenarios
