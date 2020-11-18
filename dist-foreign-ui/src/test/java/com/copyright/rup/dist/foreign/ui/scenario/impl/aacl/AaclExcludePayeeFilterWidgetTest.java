@@ -54,15 +54,15 @@ public class AaclExcludePayeeFilterWidgetTest {
         assertEquals(3, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLabel(widget.getComponent(0));
-        verifyMinimumThresholdComponent(widget.getComponent(1));
+        verifyMinimumNetThresholdComponent(widget.getComponent(1));
         verifyButtonsLayout(widget.getComponent(2));
     }
 
     @Test
-    public void testMinimumThresholdChangeValueListener() {
+    public void testMinimumNetThresholdChangeValueListener() {
         widget.init();
         BigDecimal filterValue = new BigDecimal("45.10");
-        TextField threshold = Whitebox.getInternalState(widget, "minimumThreshold");
+        TextField threshold = Whitebox.getInternalState(widget, "minimumNetThreshold");
         Button applyButton = Whitebox.getInternalState(widget, "applyButton");
         ExcludePayeeFilter filter = Whitebox.getInternalState(widget, "filter");
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "45.10", filterValue, true);
@@ -74,13 +74,13 @@ public class AaclExcludePayeeFilterWidgetTest {
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, StringUtils.EMPTY, null, false);
     }
 
-    private void setThresholdAndValidateFilterAndApplyButton(TextField minimumThreshold, Button applyButton,
+    private void setThresholdAndValidateFilterAndApplyButton(TextField minimumNetThreshold, Button applyButton,
                                                              ExcludePayeeFilter filter, String valueToSet,
                                                              BigDecimal filterValue, boolean applyEnabled) {
-        minimumThreshold.setValue(valueToSet);
-        if (Objects.nonNull(minimumThreshold.getErrorMessage())) {
+        minimumNetThreshold.setValue(valueToSet);
+        if (Objects.nonNull(minimumNetThreshold.getErrorMessage())) {
             assertEquals("Field&#32;value&#32;should&#32;be&#32;positive&#32;number&#32;and&#32;should&#32;not&#32;" +
-                "exceed&#32;10&#32;digits", minimumThreshold.getErrorMessage().getFormattedHtmlMessage());
+                "exceed&#32;10&#32;digits", minimumNetThreshold.getErrorMessage().getFormattedHtmlMessage());
         }
         assertEquals(applyEnabled, applyButton.isEnabled());
         assertEquals(filterValue, filter.getNetAmountMinThreshold());
@@ -93,11 +93,11 @@ public class AaclExcludePayeeFilterWidgetTest {
         assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
     }
 
-    private void verifyMinimumThresholdComponent(Component component) {
+    private void verifyMinimumNetThresholdComponent(Component component) {
         assertNotNull(component);
         assertEquals(TextField.class, component.getClass());
         TextField textField = (TextField) component;
-        assertEquals("Minimum Threshold", textField.getCaption());
+        assertEquals("Minimum Net Threshold", textField.getCaption());
         assertEquals(100, textField.getWidth(), 0);
         assertEquals(Sizeable.Unit.PERCENTAGE, textField.getWidthUnits());
     }
