@@ -44,7 +44,7 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
     private ExcludePayeeFilter filter = new ExcludePayeeFilter();
     private ExcludePayeeFilter appliedFilter = new ExcludePayeeFilter();
     private ComboBox<String> participatingComboBox;
-    private TextField minimumThreshold;
+    private TextField minimumNetThreshold;
     private ScenarioFilterWidget scenarioFilterWidget;
     private Button applyButton;
 
@@ -63,7 +63,7 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
     @Override
     public void clearFilter() {
         participatingComboBox.clear();
-        minimumThreshold.clear();
+        minimumNetThreshold.clear();
         scenarioFilterWidget.reset();
         filter = new ExcludePayeeFilter();
         applyFilter();
@@ -79,10 +79,10 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
     public FasExcludePayeeFilterWidget init() {
         initScenarioFilterWidget();
         initParticipatingFilter();
-        initMinimumThresholdFilter();
+        initMinimumNetThresholdFilter();
         HorizontalLayout buttonsLayout = initButtonsLayout();
         addComponents(
-            buildFiltersHeaderLabel(), scenarioFilterWidget, participatingComboBox, minimumThreshold, buttonsLayout);
+            buildFiltersHeaderLabel(), scenarioFilterWidget, participatingComboBox, minimumNetThreshold, buttonsLayout);
         setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         setMargin(true);
         setSpacing(true);
@@ -125,21 +125,21 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
         VaadinUtils.addComponentStyle(participatingComboBox, "participating-filter");
     }
 
-    private void initMinimumThresholdFilter() {
-        minimumThreshold = new TextField(ForeignUi.getMessage("label.minimum_threshold"));
-        binder.forField(minimumThreshold)
+    private void initMinimumNetThresholdFilter() {
+        minimumNetThreshold = new TextField(ForeignUi.getMessage("label.minimum_net_threshold"));
+        binder.forField(minimumNetThreshold)
             .withValidator(value -> new AmountValidator().isValid(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("field.error.positive_number_and_length", 10))
             .bind(source -> source, (beanValue, fieldValue) -> beanValue = fieldValue);
-        minimumThreshold.addValueChangeListener(event -> {
+        minimumNetThreshold.addValueChangeListener(event -> {
             if (!binder.validate().hasErrors()) {
                 filter.setNetAmountMinThreshold(StringUtils.isNotBlank(event.getValue())
                     ? new BigDecimal(StringUtils.trimToEmpty(event.getValue())) : null);
             }
             filterChanged();
         });
-        VaadinUtils.setMaxComponentsWidth(minimumThreshold);
-        VaadinUtils.addComponentStyle(minimumThreshold, "minimum-threshold-filter");
+        VaadinUtils.setMaxComponentsWidth(minimumNetThreshold);
+        VaadinUtils.addComponentStyle(minimumNetThreshold, "minimum-net-threshold-filter");
     }
 
     private void filterChanged() {
