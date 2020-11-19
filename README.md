@@ -1,3 +1,7 @@
+12.1.24
+-
+* B-62519 Tech Debt: FDA: rename minimum threshold filter on Exclude by Payee windows for FAS and AACL product families
+
 12.1.23
 -
 * B-58784 FDA: Send SAL scenarios to LM: rename Send to LM window to Choose Scenarios to Send to LM
