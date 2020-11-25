@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.IFasServiceFeeTrueUpReportCo
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalFundPoolsReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.ISalHistoricalItemBankDetailsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
@@ -59,6 +60,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Autowired
     @Qualifier("df.salLiabilitiesSummaryByRhAndWorkReportController")
     private ICommonScenariosReportController salLiabilitiesSummaryByRhAndWorkReportController;
+    @Autowired
+    private ISalHistoricalItemBankDetailsReportController salHistoricalItemBankDetailsReportController;
     @Autowired
     private IAaclBaselineUsagesReportController aaclBaselineUsagesReportController;
     @Autowired
@@ -174,6 +177,11 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Override
     public ISalFundPoolsReportController getSalFundPoolsReportController() {
         return salFundPoolsReportController;
+    }
+
+    @Override
+    public ISalHistoricalItemBankDetailsReportController getSalHistoricalItemBankDetailsReportController() {
+        return salHistoricalItemBankDetailsReportController;
     }
 
     @Override

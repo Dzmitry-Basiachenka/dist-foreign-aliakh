@@ -114,4 +114,9 @@ public interface IReportController extends IController<IReportWidget> {
      * @return instance of {@link IStreamSource} for SAL Undistributed Liabilities Report.
      */
     IStreamSource getSalUndistributedLiabilitiesReportStreamSource();
+
+    /**
+     * @return SAL Historical Item Bank Details Report controller.
+     */
+    ISalHistoricalItemBankDetailsReportController getSalHistoricalItemBankDetailsReportController();
 }

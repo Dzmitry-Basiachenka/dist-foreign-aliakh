@@ -32,5 +32,9 @@ public class SalReportMenuBuilder implements IReportMenuBuilder {
         String fundPools = ForeignUi.getMessage("menu.report.fund_pools");
         rootItem.addItem(fundPools, menuItem -> widget.openReportWindow(fundPools,
             controller.getSalFundPoolsReportController()));
+        String historicalItemBankDetails = ForeignUi.getMessage("menu.report.historical_item_bank_details");
+        rootItem.addItem(historicalItemBankDetails,
+            menuItem -> widget.openReportWindow(historicalItemBankDetails,
+                controller.getSalHistoricalItemBankDetailsReportController()));
     }
 }
