@@ -34,6 +34,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +68,8 @@ public class RightsService implements IRightsService {
     private static final String RH_FOUND_REASON_FORMAT = "Rightsholder account %s was found in RMS";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
+    @Value("#{$RUP{dist.foreign.rest.rms.rights.statuses}}")
+    private Map<String, Set<String>> productFamilyToRightStatusesMap;
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
@@ -179,7 +182,7 @@ public class RightsService implements IRightsService {
             Set<String> licenseTypes = getLicenseTypes(productFamily);
             Map<Long, Long> wrWrkInstToRhAccountNumberMap =
                 rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(wrWrkInsts, productFamily,
-                    FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(), licenseTypes);
+                    productFamilyToRightStatusesMap.get(productFamily), Collections.emptySet(), licenseTypes);
             usages.forEach(usage -> {
                 Long wrWrkInst = usage.getWrWrkInst();
                 Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
@@ -213,7 +216,7 @@ public class RightsService implements IRightsService {
                     .map(Usage::getWrWrkInst)
                     .collect(Collectors.toList());
                 Map<Long, List<RmsGrant>> wrWrkInstToGrants = rmsRightsService.getGrants(wrWrkInsts,
-                    batchPeriodEndDate, Collections.singleton(FdaConstants.RIGHT_STATUS_GRANT),
+                    batchPeriodEndDate, productFamilyToRightStatusesMap.get(FdaConstants.AACL_PRODUCT_FAMILY),
                     ImmutableSet.of(PRINT_TYPE_OF_USE, DIGITAL_TYPE_OF_USE), getLicenseTypes(productFamily))
                     .stream()
                     .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
@@ -257,7 +260,7 @@ public class RightsService implements IRightsService {
                     .map(Usage::getWrWrkInst)
                     .collect(Collectors.toList());
                 Map<Long, List<RmsGrant>> wrWrkInstToGrants = rmsRightsService.getGrants(wrWrkInsts,
-                    batchPeriodEndDate, FdaConstants.RIGHT_STATUSES_GRANT_DENY,
+                    batchPeriodEndDate, productFamilyToRightStatusesMap.get(FdaConstants.SAL_PRODUCT_FAMILY),
                     ImmutableSet.of(DIGITAL_TYPE_OF_USE), getLicenseTypes(productFamily))
                     .stream()
                     .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
@@ -349,7 +352,7 @@ public class RightsService implements IRightsService {
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));
         Map<Long, Long> wrWrkInstToAccountNumber =
             rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsagesMap.keySet()),
-                productFamily, FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(),
+                productFamily, productFamilyToRightStatusesMap.get(productFamily), Collections.emptySet(),
                 getLicenseTypes(productFamily));
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
             List<Usage> usagesToUpdate = wrWrkInstToUsagesMap.get(wrWrkInst);

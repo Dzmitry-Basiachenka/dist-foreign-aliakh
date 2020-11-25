@@ -103,12 +103,6 @@ public final class FdaConstants {
     public static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
         EnumSet.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED);
 
-    /**
-     * Right statuses in RMS.
-     */
-    public static final Set<String> RIGHT_STATUSES_GRANT_DENY =
-        ImmutableSet.of(RIGHT_STATUS_GRANT, RIGHT_STATUS_DENY);
-
     private FdaConstants() {
         throw new AssertionError("Constructor shouldn't be called directly");
     }
