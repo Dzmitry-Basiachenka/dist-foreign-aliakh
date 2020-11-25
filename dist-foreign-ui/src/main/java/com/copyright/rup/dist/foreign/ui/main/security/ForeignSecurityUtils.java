@@ -112,6 +112,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to update usage rightsholder.
+     */
+    public static boolean hasUpdateRightsholderPermission() {
+        return SecurityUtils.hasPermission("FDA_UPDATE_RIGHTSHOLDER");
+    }
+
+    /**
      * @return {@code true} if user has permission to delete scenarios.
      */
     public static boolean hasDeleteScenarioPermission() {

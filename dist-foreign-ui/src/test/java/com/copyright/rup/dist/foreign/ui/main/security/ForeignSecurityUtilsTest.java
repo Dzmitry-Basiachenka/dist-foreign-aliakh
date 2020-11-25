@@ -107,6 +107,8 @@ public final class ForeignSecurityUtilsTest {
             ForeignSecurityUtils.hasSendForClassificationPermission());
         assertEquals(permissions.contains("FDA_LOAD_CLASSIFIED_USAGE"),
             ForeignSecurityUtils.hasLoadClassifiedUsagePermission());
+        assertEquals(permissions.contains("FDA_UPDATE_RIGHTSHOLDER"),
+            ForeignSecurityUtils.hasUpdateRightsholderPermission());
     }
 
     private static class MockSecurityContext implements SecurityContext {

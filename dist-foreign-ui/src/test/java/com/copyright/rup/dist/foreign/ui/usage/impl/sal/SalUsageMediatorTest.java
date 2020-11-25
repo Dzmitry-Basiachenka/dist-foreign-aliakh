@@ -38,6 +38,7 @@ public class SalUsageMediatorTest {
     private MenuBar.MenuItem loadItemBankMenuItem;
     private MenuBar.MenuItem loadUsageDataMenuItem;
     private MenuBar.MenuItem loadFundPoolMenuItem;
+    private Button updateRightsholdersButton;
     private Button addToScenarioButton;
     private SalUsageMediator mediator;
 
@@ -48,11 +49,13 @@ public class SalUsageMediatorTest {
         loadItemBankMenuItem = usageBatchMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
         loadUsageDataMenuItem = usageBatchMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
         loadFundPoolMenuItem = fundPoolMenuBar.new MenuItem(StringUtils.EMPTY, null, null);
+        updateRightsholdersButton = new Button();
         addToScenarioButton = new Button();
         mediator = new SalUsageMediator();
         mediator.setLoadItemBankMenuItem(loadItemBankMenuItem);
         mediator.setLoadUsageDataMenuItem(loadUsageDataMenuItem);
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
+        mediator.setUpdateRightsholdersButton(updateRightsholdersButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
     }
 
@@ -66,6 +69,7 @@ public class SalUsageMediatorTest {
         assertFalse(loadUsageDataMenuItem.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertFalse(loadFundPoolMenuItem.isVisible());
+        assertFalse(updateRightsholdersButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
@@ -80,6 +84,7 @@ public class SalUsageMediatorTest {
         assertFalse(loadUsageDataMenuItem.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertFalse(loadFundPoolMenuItem.isVisible());
+        assertFalse(updateRightsholdersButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
@@ -94,6 +99,7 @@ public class SalUsageMediatorTest {
         assertTrue(loadUsageDataMenuItem.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertTrue(loadFundPoolMenuItem.isVisible());
+        assertTrue(updateRightsholdersButton.isVisible());
         assertTrue(addToScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
@@ -115,6 +121,7 @@ public class SalUsageMediatorTest {
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_FUND_POOL")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_UPDATE_RIGHTSHOLDER")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_CREATE_EDIT_SCENARIO")).andReturn(true).anyTimes();
     }
 }
