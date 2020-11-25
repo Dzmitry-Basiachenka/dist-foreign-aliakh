@@ -1,7 +1,11 @@
 {
   "works": [
     {
-      "status": ["GRANT", "DENY"],
+      "status": [
+        "GRANT",
+        "DENY",
+        "SPECIAL_REQUEST"
+      ],
       "wr_wrk_inst": 100012905,
       "period_end_date": "02/01/2018",
       "license_type": [

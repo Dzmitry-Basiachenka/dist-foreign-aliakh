@@ -11,7 +11,6 @@ import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepancyS
 import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepancyService.IDiscrepancyBuilder;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
@@ -65,6 +64,8 @@ public class FasScenarioService implements IFasScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
+    @Value("#{$RUP{dist.foreign.rest.rms.rights.statuses}}")
+    private Map<String, Set<String>> productFamilyToRightStatusesMap;
     @Value("$RUP{dist.foreign.discrepancy.partition_size}")
     private int discrepancyPartitionSize;
     @Value("$RUP{dist.foreign.usages.batch_size}")
@@ -131,8 +132,8 @@ public class FasScenarioService implements IFasScenarioService {
             List<RightsholderDiscrepancy> discrepancies =
                 commonDiscrepancyService.getDiscrepancies(
                     entries.stream().flatMap(entry -> entry.getValue().stream()).collect(Collectors.toList()),
-                    Usage::getWrWrkInst, productFamily, FdaConstants.RIGHT_STATUSES_GRANT_DENY, Collections.emptySet(),
-                    licenseTypes, new DiscrepancyBuilder(userName));
+                    Usage::getWrWrkInst, productFamily, productFamilyToRightStatusesMap.get(productFamily),
+                    Collections.emptySet(), licenseTypes, new DiscrepancyBuilder(userName));
             if (CollectionUtils.isNotEmpty(discrepancies)) {
                 rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
                 rightsholderService.updateRighstholdersAsync(

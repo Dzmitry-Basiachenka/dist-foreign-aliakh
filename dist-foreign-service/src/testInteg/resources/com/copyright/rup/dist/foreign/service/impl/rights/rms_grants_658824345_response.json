@@ -6,9 +6,9 @@
     },
     "content": {
       "@class": "com.copyright.rup.rms.rights.domain.GrantWorksResponse",
-      "requestedWorkCount": "4",
-      "processedWorkCount": "4",
-      "foundWorkCount": "13",
+      "requestedWorkCount": "1",
+      "processedWorkCount": "1",
+      "foundWorkCount": "8",
       "rights": [
         {
           "wr_wrk_inst": "658824345",
@@ -28,6 +28,25 @@
           "license_type": "NGT_PHOTOCOPY",
           "product_family": "TRS",
           "rh_account_number": "1000023401"
+        },
+        {
+          "wr_wrk_inst": "658824345",
+          "status": "SPECIAL_REQUEST",
+          "type_of_use": "DIGITAL",
+          "market": "CORPORATE",
+          "distribution": "INTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "08/06/2008",
+          "right_end_date": "12/31/3000",
+          "publication_begin_date": "01/01/1000",
+          "publication_end_date": "12/31/3000",
+          "agreement_begin_date": "08/05/0001",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "1000010088",
+          "right_id": "566ff265-7889-44fc-997c-0b0e346609bb",
+          "license_type": "MACL",
+          "product_family": "MACL",
+          "rh_account_number": "1000010088"
         },
         {
           "wr_wrk_inst": "658824345",
