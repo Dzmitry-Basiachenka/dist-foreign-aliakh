@@ -150,6 +150,23 @@ public class SalUsageWidgetTest {
     }
 
     @Test
+    public void testUpdateRightsholdersButtonClickListener() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Windows.showModalWindow(anyObject(SalDetailForRightsholderUpdateWindow.class));
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Button updateRightsholdersButton =
+            (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+                .getComponent(0)).getComponent(2);
+        Collection<?> listeners = updateRightsholdersButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
     public void testAddToScenarioButtonClickListener() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
