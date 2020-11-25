@@ -42,6 +42,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     private MenuBar.MenuItem loadItemBankMenuItem;
     private MenuBar.MenuItem loadUsageDataMenuItem;
     private MenuBar.MenuItem loadFundPoolMenuItem;
+    private Button updateRightsholdersButton;
     private Button addToScenarioButton;
     private Button exportButton;
 
@@ -60,6 +61,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         mediator.setLoadItemBankMenuItem(loadItemBankMenuItem);
         mediator.setLoadUsageDataMenuItem(loadUsageDataMenuItem);
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
+        mediator.setUpdateRightsholdersButton(updateRightsholdersButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         return mediator;
     }
@@ -146,11 +148,13 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
     protected HorizontalLayout initButtonsLayout() {
         initUsageBatchMenuBar();
         initFundPoolMenuBar();
+        initUpdateRightsholdersButton();
         initAddToScenarioButton();
         initExportButton();
-        VaadinUtils.setButtonsAutoDisabled(addToScenarioButton);
+        VaadinUtils.setButtonsAutoDisabled(updateRightsholdersButton, addToScenarioButton);
         HorizontalLayout layout =
-            new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, addToScenarioButton, exportButton);
+            new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, updateRightsholdersButton, addToScenarioButton,
+                exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -182,6 +186,11 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df-sal");
+    }
+
+    private void initUpdateRightsholdersButton() {
+        updateRightsholdersButton = Buttons.createButton(ForeignUi.getMessage("button.update_rightsholders"));
+        //TODO {dbaraukova} add click listener
     }
 
     private void initAddToScenarioButton() {

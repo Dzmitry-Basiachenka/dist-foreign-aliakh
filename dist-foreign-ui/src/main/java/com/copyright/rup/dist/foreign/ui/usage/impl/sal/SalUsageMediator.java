@@ -21,6 +21,7 @@ class SalUsageMediator implements IMediator {
     private MenuBar.MenuItem loadItemBankMenuItem;
     private MenuBar.MenuItem loadUsageDataMenuItem;
     private MenuBar.MenuItem loadFundPoolMenuItem;
+    private Button updateRightsholdersButton;
     private Button addToScenarioButton;
 
     @Override
@@ -28,6 +29,7 @@ class SalUsageMediator implements IMediator {
         loadItemBankMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
         loadUsageDataMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
         loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission());
+        updateRightsholdersButton.setVisible(ForeignSecurityUtils.hasUpdateRightsholderPermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
     }
 
@@ -41,6 +43,10 @@ class SalUsageMediator implements IMediator {
 
     void setLoadFundPoolMenuItem(MenuItem loadFundPoolMenuItem) {
         this.loadFundPoolMenuItem = loadFundPoolMenuItem;
+    }
+
+    void setUpdateRightsholdersButton(Button updateRightsholdersButton) {
+        this.updateRightsholdersButton = updateRightsholdersButton;
     }
 
     void setAddToScenarioButton(Button addToScenarioButton) {

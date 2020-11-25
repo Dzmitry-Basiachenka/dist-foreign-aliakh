@@ -140,6 +140,8 @@ public class SalUsageWidgetTest {
         expectLastCall().once();
         mediator.setLoadFundPoolMenuItem(anyObject(MenuItem.class));
         expectLastCall().once();
+        mediator.setUpdateRightsholdersButton(anyObject(Button.class));
+        expectLastCall().once();
         mediator.setAddToScenarioButton(anyObject(Button.class));
         expectLastCall().once();
         replay(SalUsageMediator.class, mediator, controller);
@@ -298,7 +300,7 @@ public class SalUsageWidgetTest {
 
     private void applyAddToScenarioButtonClick(ClickEvent event) {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(2);
+            .getComponent(0)).getComponent(3);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
@@ -308,13 +310,15 @@ public class SalUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(4, layout.getComponentCount());
+        assertEquals(5, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Usage Batch",
             Arrays.asList("Load Item Bank", "Load Usage Data", "View"));
         verifyMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
-        Button addToScenarioButton = (Button) layout.getComponent(2);
+        Button updateRightsholdersButton = (Button) layout.getComponent(2);
+        assertEquals("Update Rightsholders", updateRightsholdersButton.getCaption());
+        Button addToScenarioButton = (Button) layout.getComponent(3);
         assertEquals("Add To Scenario", addToScenarioButton.getCaption());
-        Button exportButton = (Button) layout.getComponent(3);
+        Button exportButton = (Button) layout.getComponent(4);
         assertEquals("Export", exportButton.getCaption());
     }
 
