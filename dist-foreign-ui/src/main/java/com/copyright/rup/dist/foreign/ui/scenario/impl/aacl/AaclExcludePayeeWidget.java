@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
+import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
@@ -11,6 +12,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeFilt
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -95,12 +97,20 @@ public class AaclExcludePayeeWidget extends Window implements IAaclExcludePayeeW
         searchWidget = new SearchWidget(this::performSearch);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.scenario.search_widget.payee"));
         searchWidget.setWidth(75, Unit.PERCENTAGE);
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(new CsvStreamSource(controller).getSource());
+        fileDownloader.extend(exportButton);
+        HorizontalLayout toolbar = new HorizontalLayout(exportButton, searchWidget);
+        VaadinUtils.setMaxComponentsWidth(toolbar);
+        toolbar.setComponentAlignment(exportButton, Alignment.BOTTOM_LEFT);
+        toolbar.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
+        toolbar.setExpandRatio(searchWidget, 1f);
+        toolbar.setMargin(new MarginInfo(false, true, false, true));
         HorizontalLayout buttonsLayout = createButtonsLayout();
-        VerticalLayout mainLayout = new VerticalLayout(searchWidget, payeesGrid, buttonsLayout);
+        VerticalLayout mainLayout = new VerticalLayout(toolbar, payeesGrid, buttonsLayout);
         mainLayout.setMargin(new MarginInfo(true, true));
         mainLayout.setSizeFull();
         mainLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
-        mainLayout.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
         mainLayout.setExpandRatio(payeesGrid, 1);
         HorizontalSplitPanel splitPanel = new HorizontalSplitPanel();
         splitPanel.addComponents(filterWidget, mainLayout);
