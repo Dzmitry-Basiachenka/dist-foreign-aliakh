@@ -67,6 +67,7 @@
         <typeAlias alias="WorkSharesByAggLcClassReportDto" type="com.copyright.rup.dist.foreign.domain.report.WorkSharesByAggLcClassReportDto"/>
         <typeAlias alias="RightsholderPayeeProductFamilyHolder" type="com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder"/>
         <typeAlias alias="PayeeAccountAggregateLicenseeClassesPair" type="com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair"/>
+        <typeAlias alias="SalLicensee" type="com.copyright.rup.dist.foreign.domain.report.SalLicensee"/>
     </typeAliases>
 
     <typeHandlers>

@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -269,6 +270,11 @@ public class UsageBatchService implements IUsageBatchService {
     @Override
     public List<UsageBatch> getSalNotAttachedToScenario() {
         return usageBatchRepository.findSalNotAttachedToScenario();
+    }
+
+    @Override
+    public List<SalLicensee> getSalLicensees() {
+        return usageBatchRepository.findSalLicensees();
     }
 
     private void populateTitlesStandardNumberAndType(List<Usage> usages) {

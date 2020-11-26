@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalHistoricalItemBankDetailsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalHistoricalItemBankDetailsReportWidget;
@@ -40,7 +41,7 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
     private ISalHistoricalItemBankDetailsReportController controller;
     private TextField periodEndDateFromField;
     private TextField periodEndDateToField;
-    private ComboBox<String> licenseeComboBox;
+    private ComboBox<SalLicensee> licenseeComboBox;
     private Button exportButton;
 
     @Override
@@ -66,7 +67,7 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
     }
 
     @Override
-    public String getLicensee() {
+    public SalLicensee getSalLicensee() {
         return licenseeComboBox.getValue();
     }
 
@@ -109,11 +110,13 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
 
     private Component getLicenseeCombobox() {
         licenseeComboBox = new ComboBox<>(ForeignUi.getMessage("field.licensee"));
-        licenseeComboBox.setEmptySelectionAllowed(false);
-        licenseeComboBox.setTextInputAllowed(false);
-        licenseeComboBox.addValueChangeListener(event -> exportButton.setEnabled(true));
-        licenseeComboBox.setItems(controller.getLicensees());
+        licenseeComboBox.setRequiredIndicatorVisible(true);
+        licenseeComboBox.addValueChangeListener(event -> exportButton.setEnabled(isValid()));
+        licenseeComboBox.setItems(controller.getSalLicensees());
+        licenseeComboBox.setItemCaptionGenerator(licensee ->
+            licensee.getAccountNumber() + " - " + licensee.getName());
         VaadinUtils.setMaxComponentsWidth(licenseeComboBox);
+        VaadinUtils.addComponentStyle(licenseeComboBox, "sal-licensee-filter");
         return licenseeComboBox;
     }
 
@@ -125,9 +128,9 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
         downloader.extend(exportButton);
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> {
+            licenseeComboBox.clear();
             periodEndDateFromField.clear();
             periodEndDateToField.clear();
-            licenseeComboBox.clear();
         });
         HorizontalLayout layout = new HorizontalLayout(exportButton, clearButton, closeButton);
         layout.setMargin(new MarginInfo(true, false, false, false));
@@ -140,5 +143,9 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
 
     private SerializablePredicate<String> getYearValidator() {
         return value -> Integer.parseInt(value) >= MIN_YEAR && Integer.parseInt(value) <= MAX_YEAR;
+    }
+
+    private boolean isValid() {
+        return !licenseeComboBox.isEmpty() && stringBinder.isValid();
     }
 }

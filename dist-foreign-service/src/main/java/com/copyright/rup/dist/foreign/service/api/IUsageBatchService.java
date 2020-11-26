@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 
 import java.util.List;
 import java.util.Map;
@@ -188,4 +189,11 @@ public interface IUsageBatchService {
      * @return list of SAL {@link UsageBatch}es that are not attached to a scenario.
      */
     List<UsageBatch> getSalNotAttachedToScenario();
+
+    /**
+     * Gets list of {@link SalLicensee}.
+     *
+     * @return list of {@link SalLicensee}
+     */
+    List<SalLicensee> getSalLicensees();
 }
