@@ -1,15 +1,17 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalHistoricalItemBankDetailsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalHistoricalItemBankDetailsReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +29,9 @@ public class SalHistoricalItemBankDetailsReportController
     extends CommonController<ISalHistoricalItemBankDetailsReportWidget>
     implements ISalHistoricalItemBankDetailsReportController {
 
+    @Autowired
+    private IUsageBatchService usageBatchService;
+
     @Override
     public IStreamSource getCsvStreamSource() {
         return new ByteArrayStreamSource("SAL_historical_item_bank_",
@@ -39,7 +44,7 @@ public class SalHistoricalItemBankDetailsReportController
     }
 
     @Override
-    public List<String> getLicensees() {
-        return new ArrayList<>(); // TODO {aliakh} implement loading of licensees
+    public List<SalLicensee> getSalLicensees() {
+        return usageBatchService.getSalLicensees();
     }
 }

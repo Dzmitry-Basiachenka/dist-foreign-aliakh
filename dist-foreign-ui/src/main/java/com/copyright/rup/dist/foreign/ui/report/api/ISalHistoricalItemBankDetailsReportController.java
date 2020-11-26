@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.api;
 
 import com.copyright.rup.dist.common.reporting.api.ICsvReportProvider;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import java.util.List;
@@ -18,9 +19,9 @@ public interface ISalHistoricalItemBankDetailsReportController
     extends IController<ISalHistoricalItemBankDetailsReportWidget>, ICsvReportProvider {
 
     /**
-     * Gets list of licensees.
+     * Gets list of {@link SalLicensee}.
      *
-     * @return list of licensees
+     * @return list of {@link SalLicensee}
      */
-    List<String> getLicensees();
+    List<SalLicensee> getSalLicensees();
 }

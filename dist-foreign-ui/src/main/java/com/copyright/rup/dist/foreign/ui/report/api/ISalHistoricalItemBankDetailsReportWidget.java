@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.api;
 
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
@@ -15,9 +16,9 @@ public interface ISalHistoricalItemBankDetailsReportWidget
     extends IWidget<ISalHistoricalItemBankDetailsReportController> {
 
     /**
-     * Gets selected licensee.
+     * Gets selected {@link SalLicensee}.
      *
-     * @return the selected licensee
+     * @return the selected {@link SalLicensee}
      */
-    String getLicensee();
+    SalLicensee getSalLicensee();
 }

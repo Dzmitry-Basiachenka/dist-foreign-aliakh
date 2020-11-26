@@ -10,6 +10,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import com.google.common.collect.ImmutableSet;
@@ -270,6 +271,18 @@ public class UsageBatchRepositoryIntegrationTest {
             Arrays.asList("FAS2 Batch With Eligible and RH Not Found usages", "FAS2 Batch With RH Not Found usages");
         assertEquals(expectedBatches,
             usageBatchRepository.findBatchNamesForRightsAssignment().stream().sorted().collect(Collectors.toList()));
+    }
+
+    @Test
+    public void testFindSalLicensees() {
+        List<SalLicensee> licensees = usageBatchRepository.findSalLicensees();
+        assertEquals(2, licensees.size());
+        SalLicensee licensee = licensees.get(0);
+        assertEquals(5588L, licensee.getAccountNumber().longValue());
+        assertEquals("RGS Energy Group", licensee.getName());
+        licensee = licensees.get(1);
+        assertEquals(7001293454L, licensee.getAccountNumber().longValue());
+        assertEquals("Synergy Publishers", licensee.getName());
     }
 
     private UsageBatch buildUsageBatch() {

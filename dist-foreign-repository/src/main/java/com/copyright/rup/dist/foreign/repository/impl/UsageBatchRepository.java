@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 
 import com.google.common.collect.Maps;
@@ -113,6 +114,11 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     @Override
     public List<UsageBatch> findSalNotAttachedToScenario() {
         return selectList("IUsageBatchMapper.findSalNotAttachedToScenario", FdaConstants.SAL_PRODUCT_FAMILY);
+    }
+
+    @Override
+    public List<SalLicensee> findSalLicensees() {
+        return selectList("IUsageBatchMapper.findSalLicensees", FdaConstants.SAL_PRODUCT_FAMILY);
     }
 
     /**

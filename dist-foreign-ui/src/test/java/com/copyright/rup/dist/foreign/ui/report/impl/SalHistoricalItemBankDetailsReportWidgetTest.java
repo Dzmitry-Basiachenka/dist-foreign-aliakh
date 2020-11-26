@@ -1,14 +1,15 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.createMock;
-import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalHistoricalItemBankDetailsReportController;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.vaadin.data.Binder;
@@ -55,8 +56,17 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
     @Test
     public void testInit() {
         ISalHistoricalItemBankDetailsReportController controller = new SalHistoricalItemBankDetailsReportController();
+        IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
+        Whitebox.setInternalState(controller, usageBatchService);
+        SalLicensee licensee = new SalLicensee();
+        licensee.setAccountNumber(1114L);
+        licensee.setName("Agway, Inc.");
+        List<SalLicensee> salLicensees = Collections.singletonList(licensee);
+        expect(usageBatchService.getSalLicensees()).andReturn(salLicensees).once();
+        replay(usageBatchService);
         SalHistoricalItemBankDetailsReportWidget widget =
             (SalHistoricalItemBankDetailsReportWidget) controller.initWidget();
+        verify(usageBatchService);
         verifySize(widget);
         verifyContent(widget.getContent());
     }
@@ -71,7 +81,7 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
             createMock(Supplier.class))).once();
         expect(controller.getWidget()).andReturn(widget).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
-        expect(controller.getLicensees()).andReturn(Collections.emptyList()).once();
+        expect(controller.getSalLicensees()).andReturn(Collections.emptyList()).once();
         widget.setController(controller);
         replay(controller, streamSource);
         widget.init();
@@ -110,14 +120,19 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
 
     private void verifyLicenseeCombobox(Component component) {
         assertEquals(ComboBox.class, component.getClass());
-        ComboBox<String> licenseeComboBox = (ComboBox<String>) component;
+        ComboBox<SalLicensee> licenseeComboBox = (ComboBox<SalLicensee>) component;
         assertEquals("Licensee", licenseeComboBox.getCaption());
         assertEquals(100, licenseeComboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, licenseeComboBox.getWidthUnits());
-        assertFalse(licenseeComboBox.isEmptySelectionAllowed());
-        assertFalse(licenseeComboBox.isTextInputAllowed());
-        ListDataProvider<String> listDataProvider = (ListDataProvider<String>) licenseeComboBox.getDataProvider();
-        assertTrue(listDataProvider.getItems().isEmpty());
+        assertTrue(licenseeComboBox.isEmptySelectionAllowed());
+        assertTrue(licenseeComboBox.isTextInputAllowed());
+        ListDataProvider<SalLicensee> listDataProvider =
+            (ListDataProvider<SalLicensee>) licenseeComboBox.getDataProvider();
+        Collection<SalLicensee> licensees = listDataProvider.getItems();
+        assertEquals(1, licensees.size());
+        SalLicensee licensee = licensees.iterator().next();
+        assertEquals(1114L, licensee.getAccountNumber().longValue());
+        assertEquals("Agway, Inc.", licensee.getName());
     }
 
     private void verifyPeriodEndDate(Component component) {

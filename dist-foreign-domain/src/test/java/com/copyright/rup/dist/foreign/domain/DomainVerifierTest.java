@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalFundPoolReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesByRhReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesSummaryByRhAndWorkReportDto;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.domain.report.SalUndistributedLiabilitiesReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
 
@@ -91,7 +92,8 @@ public class DomainVerifierTest {
             {SalLiabilitiesByRhReportDto.class},
             {SalLiabilitiesSummaryByRhAndWorkReportDto.class},
             {SalUndistributedLiabilitiesReportDto.class},
-            {SalFundPoolReportDto.class}
+            {SalFundPoolReportDto.class},
+            {SalLicensee.class}
         };
         return Arrays.asList(testData);
     }

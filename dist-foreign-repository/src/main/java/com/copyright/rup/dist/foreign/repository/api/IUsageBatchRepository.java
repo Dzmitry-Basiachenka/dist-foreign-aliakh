@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 
 import java.util.List;
 import java.util.Map;
@@ -118,4 +119,11 @@ public interface IUsageBatchRepository {
      * @return list of SAL {@link UsageBatch}es that are not attached to a scenario.
      */
     List<UsageBatch> findSalNotAttachedToScenario();
+
+    /**
+     * Finds list of {@link SalLicensee}.
+     *
+     * @return list of {@link SalLicensee}
+     */
+    List<SalLicensee> findSalLicensees();
 }

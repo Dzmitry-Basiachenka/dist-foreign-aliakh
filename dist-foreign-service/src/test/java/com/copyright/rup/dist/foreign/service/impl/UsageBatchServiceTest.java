@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -463,6 +464,15 @@ public class UsageBatchServiceTest {
         expect(usageBatchRepository.findSalNotAttachedToScenario()).andReturn(expectedList).once();
         replay(usageBatchRepository);
         assertEquals(expectedList, usageBatchService.getSalNotAttachedToScenario());
+        verify(usageBatchRepository);
+    }
+
+    @Test
+    public void testGetSalLicensees() {
+        List<SalLicensee> salLicensees = Collections.singletonList(new SalLicensee());
+        expect(usageBatchRepository.findSalLicensees()).andReturn(salLicensees).once();
+        replay(usageBatchRepository);
+        assertEquals(salLicensees, usageBatchService.getSalLicensees());
         verify(usageBatchRepository);
     }
 
