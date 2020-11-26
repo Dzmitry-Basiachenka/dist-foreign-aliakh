@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.aacl;
 
+import com.copyright.rup.dist.common.reporting.api.ICsvReportProvider;
 import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -20,7 +21,7 @@ import java.util.Set;
  *
  * @author Ihar Suvorau
  */
-public interface IAaclExcludePayeeController extends IController<IAaclExcludePayeeWidget> {
+public interface IAaclExcludePayeeController extends IController<IAaclExcludePayeeWidget>, ICsvReportProvider {
 
     /**
      * {@link #onFilterChanged()}.

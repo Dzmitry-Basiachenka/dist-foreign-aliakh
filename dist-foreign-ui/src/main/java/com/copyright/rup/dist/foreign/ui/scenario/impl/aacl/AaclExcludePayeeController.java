@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -39,6 +41,8 @@ public class AaclExcludePayeeController extends CommonController<IAaclExcludePay
     private IAaclExcludePayeeFilterController payeesFilterController;
     @Autowired
     private IAaclUsageService usageService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public IAaclExcludePayeeFilterController getExcludePayeesFilterController() {
@@ -75,5 +79,11 @@ public class AaclExcludePayeeController extends CommonController<IAaclExcludePay
     @Override
     protected IAaclExcludePayeeWidget instantiateWidget() {
         return new AaclExcludePayeeWidget();
+    }
+
+    @Override
+    public IStreamSource getCsvStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "exclude_by_payee_",
+            pos -> {/*TODO {isuvorau} implement service logic*/ });
     }
 }
