@@ -190,7 +190,9 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
 
     private void initUpdateRightsholdersButton() {
         updateRightsholdersButton = Buttons.createButton(ForeignUi.getMessage("button.update_rightsholders"));
-        //TODO {dbaraukova} add click listener
+        //TODO {dbaraukova} add validations for applied filter
+        updateRightsholdersButton.addClickListener(event ->
+            Windows.showModalWindow(new SalDetailForRightsholderUpdateWindow(controller)));
     }
 
     private void initAddToScenarioButton() {
