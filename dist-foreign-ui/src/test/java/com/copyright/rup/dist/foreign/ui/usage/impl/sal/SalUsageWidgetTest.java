@@ -155,6 +155,7 @@ public class SalUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Windows.showModalWindow(anyObject(SalDetailForRightsholderUpdateWindow.class));
         expectLastCall().once();
+        expect(controller.getUsageDtosForRhUpdate()).andReturn(Collections.emptyList());
         replay(controller, clickEvent, Windows.class);
         Button updateRightsholdersButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())

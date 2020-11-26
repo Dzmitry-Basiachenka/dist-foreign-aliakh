@@ -223,6 +223,10 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
         return getUsageBatchService().getSalNotAttachedToScenario();
     }
 
+    public List<UsageDto> getUsageDtosForRhUpdate() {
+        return salUsageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(), null, null);
+    }
+
     @Override
     protected ICommonUsageWidget instantiateWidget() {
         return new SalUsageWidget(this);

@@ -4,12 +4,12 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -17,6 +17,9 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 /**
  * Window to display SAL IB details for RH update.
@@ -31,7 +34,7 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
 
     private SearchWidget searchWidget;
     private Grid<UsageDto> usagesGrid;
-    private DataProvider<UsageDto, Void>  dataProvider;
+    private ListDataProvider<UsageDto> dataProvider;
     private final ISalUsageController controller;
 
     /**
@@ -49,6 +52,7 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
 
     @Override
     public void refresh() {
+        performSearch();
         dataProvider.refreshAll();
     }
 
@@ -67,9 +71,7 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
     }
 
     private void initGrid() {
-        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
-            query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
-                query ->  controller.getBeansCount());
+        dataProvider = DataProvider.ofCollection(controller.getUsageDtosForRhUpdate());
         usagesGrid = new Grid<>(dataProvider);
         usagesGrid.setSizeFull();
         usagesGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
@@ -106,5 +108,15 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
         Button closeButton = Buttons.createCloseButton(this);
         buttonsLayout.addComponents(updateRightsholderButton, closeButton);
         return buttonsLayout;
+    }
+
+    private void performSearch() {
+        dataProvider.clearFilters();
+        String searchValue = searchWidget.getSearchValue();
+        if (StringUtils.isNotBlank(searchValue)) {
+            dataProvider.addFilter(
+                value -> StringUtils.containsIgnoreCase(Objects.toString(value.getWrWrkInst(), null), searchValue)
+                    || StringUtils.containsIgnoreCase(value.getSystemTitle(), searchValue));
+        }
     }
 }
