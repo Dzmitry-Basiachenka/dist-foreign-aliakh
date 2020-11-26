@@ -1,3 +1,11 @@
+12.1.25
+-
+* B-62519 Tech Debt: FDA: update embedded tomcat version to 8.5.59
+* B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: add Update Rightsholders button on Usages tab and apply permission for Specialist
+* B-61657 FDA: Get RightsHolder for all permission types for FAS/FAS2 & NTS: adjust logic for getting rights by sending SPECIAL_REQUEST
+* B-61833 FDA: SAL historical item bank detail report: implement widget to select Licensee and Period End Date
+* B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: implement IB Details for RH Update modal window
+
 12.1.24
 -
 * B-62519 Tech Debt: FDA: rename minimum threshold filter on Exclude by Payee windows for FAS and AACL product families
