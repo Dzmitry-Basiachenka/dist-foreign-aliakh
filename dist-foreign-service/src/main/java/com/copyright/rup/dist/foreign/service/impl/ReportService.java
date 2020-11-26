@@ -258,4 +258,11 @@ public class ReportService implements IReportService {
     public void writeSalFundPoolsCsvReport(int distributionYear, OutputStream outputStream) {
         reportRepository.writeSalFundPoolsCsvReport(distributionYear, outputStream);
     }
+
+    @Override
+    public void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, int periodEndYearFrom,
+                                                        int periodEndYearTo, OutputStream outputStream) {
+        reportRepository.writeSalHistoricalItemBankDetailsReport(licenseeAccountNumber, periodEndYearFrom,
+            periodEndYearTo, outputStream);
+    }
 }

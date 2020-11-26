@@ -297,4 +297,15 @@ public interface IReportService {
      * @param outputStream  instance of {@link OutputStream}
      */
     void writeSalFundPoolsCsvReport(int distributionYear, OutputStream outputStream);
+
+    /**
+     * Writes SAL Historical Item Bank Details Report into the output stream in CSV format.
+     *
+     * @param licenseeAccountNumber licensee account number
+     * @param periodEndYearFrom     period end year from
+     * @param periodEndYearTo       period end year to
+     * @param outputStream          instance of {@link OutputStream}
+     */
+    void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, int periodEndYearFrom,
+                                                 int periodEndYearTo, OutputStream outputStream);
 }

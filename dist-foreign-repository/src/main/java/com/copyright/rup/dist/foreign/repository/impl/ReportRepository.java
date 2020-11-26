@@ -46,6 +46,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportH
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalFundPoolsReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalHistoricalItemBankDetailsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalLiabilitiesByRhReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalLiabilitiesSummaryByRhAndWorkReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalScenarioUsagesCsvReportHandler;
@@ -523,6 +524,21 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
             parameters.put("distributionYear", Objects.requireNonNull(distributionYear));
             getTemplate().select("IReportMapper.findSalFundPoolsByDistYear", parameters, handler);
+        }
+    }
+
+    @Override
+    public void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, int periodEndYearFrom,
+                                                        int periodEndYearTo, OutputStream outputStream) {
+        try (SalHistoricalItemBankDetailsReportHandler handler =
+                 new SalHistoricalItemBankDetailsReportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
+            parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
+            parameters.put("detailType", SalDetailTypeEnum.IB);
+            parameters.put("licenseeAccountNumber", licenseeAccountNumber);
+            parameters.put("periodEndYearFrom", periodEndYearFrom);
+            parameters.put("periodEndYearTo", periodEndYearTo);
+            getTemplate().select("IReportMapper.findSalHistoricalItemBankDetailsReportDtos", parameters, handler);
         }
     }
 

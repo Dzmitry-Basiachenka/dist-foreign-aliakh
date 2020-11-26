@@ -580,6 +580,21 @@ public class ReportServiceTest {
         verify(reportRepository);
     }
 
+    @Test
+    public void testWriteSalHistoricalItemBankDetailsReport() {
+        Long licenseeAccountNumber = 5588L;
+        int periodEndYearFrom = 2019;
+        int periodEndYearTo = 2020;
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        reportRepository.writeSalHistoricalItemBankDetailsReport(licenseeAccountNumber, periodEndYearFrom,
+            periodEndYearTo, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeSalHistoricalItemBankDetailsReport(licenseeAccountNumber, periodEndYearFrom,
+            periodEndYearTo, outputStream);
+        verify(reportRepository);
+    }
+
     private Scenario buildScenario(ScenarioStatusEnum status) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
