@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageDataCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
@@ -179,4 +180,11 @@ public interface ISalUsageController extends ICommonUsageController {
      * @return instance of {@link UsageBatch}
      */
     UsageBatch getSelectedUsageBatch();
+
+    /**
+     * Gets list of {@link UsageDto}s for RH update by applied filter.
+     *
+     * @return list of found {@link UsageDto}s
+     */
+    List<UsageDto> getUsageDtosForRhUpdate();
 }

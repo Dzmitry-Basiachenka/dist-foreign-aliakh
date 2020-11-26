@@ -386,4 +386,18 @@ public class SalUsageControllerTest {
         assertSame(scenario, controller.createSalScenario(SCENARIO_NAME, FUND_POOL_ID, "description"));
         verify(filterController, filterWidget, salScenarioService);
     }
+
+    @Test
+    public void testGetUsageDtosForRhUpdate() {
+        usageFilter.setUsageBatchesIds(Collections.singleton("05e79246-1289-4652-aac6-d69fec90c091"));
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(salUsageService.getUsageDtos(eq(usageFilter), isNull(), isNull()))
+            .andReturn(Collections.singletonList(new UsageDto())).once();
+        replay(filterWidget, salUsageService, filterController);
+        List<UsageDto> result = controller.getUsageDtosForRhUpdate();
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(filterWidget, salUsageService, filterController);
+    }
 }
