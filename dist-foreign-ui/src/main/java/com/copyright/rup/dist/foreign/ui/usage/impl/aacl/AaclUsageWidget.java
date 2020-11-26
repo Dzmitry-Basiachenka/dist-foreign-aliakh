@@ -183,7 +183,7 @@ public class AaclUsageWidget extends CommonUsageWidget implements IAaclUsageWidg
         SendForClassificationFileDownloader sendForClassificationDownloader =
             new SendForClassificationFileDownloader(controller);
         sendForClassificationDownloader.extend(sendForClassificationButton);
-        // Click listener and second isValidFilteredUsageStatus() call were added due to problem with
+        // Click listener and second areValidFilteredUsageStatuses() call were added due to problem with
         // modal window appearance in chrome browser
         sendForClassificationButton.addClickListener(event -> {
             if (!controller.isValidForClassification()) {

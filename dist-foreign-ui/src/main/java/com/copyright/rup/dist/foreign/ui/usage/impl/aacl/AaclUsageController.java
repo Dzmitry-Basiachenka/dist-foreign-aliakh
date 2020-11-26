@@ -158,9 +158,9 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     }
 
     @Override
-    public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
+    public boolean areValidFilteredUsageStatuses(UsageStatusEnum... statuses) {
         return aaclUsageService
-            .isValidFilteredUsageStatus(getUsageFilterController().getWidget().getAppliedFilter(), status);
+            .areValidFilteredUsageStatuses(getUsageFilterController().getWidget().getAppliedFilter(), statuses);
     }
 
     @Override

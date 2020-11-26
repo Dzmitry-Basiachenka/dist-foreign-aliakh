@@ -158,11 +158,11 @@ public class AaclUsageRepository extends BaseRepository implements IAaclUsageRep
     }
 
     @Override
-    public boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status) {
+    public boolean areValidFilteredUsageStatuses(UsageFilter filter, UsageStatusEnum... statuses) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put(FILTER_KEY, Objects.requireNonNull(filter));
-        params.put(STATUS_KEY, Objects.requireNonNull(status));
-        return selectOne("IAaclUsageMapper.isValidFilteredUsageStatus", params);
+        params.put("statuses", Objects.requireNonNull(statuses));
+        return selectOne("IAaclUsageMapper.areValidFilteredUsageStatuses", params);
     }
 
     @Override

@@ -177,13 +177,14 @@ public class NtsUsageControllerTest {
     }
 
     @Test
-    public void testIsValidFilteredUsageStatus() {
+    public void testAreValidFilteredUsageStatuses() {
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
-        expect(usageService.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(usageService.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.ELIGIBLE))
+            .andReturn(true).once();
         replay(filterController, filterWidgetMock, usageService);
-        assertTrue(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE));
+        assertTrue(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE));
         verify(filterController, filterWidgetMock, usageService);
     }
 
