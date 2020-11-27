@@ -302,14 +302,14 @@ public interface IUsageRepository {
     String updateProcessedUsage(Usage usage);
 
     /**
-     * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.
+     * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have one of specified statuses or not.
      *
-     * @param filter {@link UsageFilter} instance
-     * @param status {@link UsageStatusEnum} instance
+     * @param filter   {@link UsageFilter} instance
+     * @param statuses {@link UsageStatusEnum} instance
      * @return {@code true} - if there are no {@link Usage}s found by defined {@link UsageFilter}
      * with status different from specified , {@code false} - otherwise
      */
-    boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
+    boolean areValidFilteredUsageStatuses(UsageFilter filter, UsageStatusEnum... statuses);
 
     /**
      * Finds map of Wr Wrk Insts to usage ids related to specified batch and having specified status.

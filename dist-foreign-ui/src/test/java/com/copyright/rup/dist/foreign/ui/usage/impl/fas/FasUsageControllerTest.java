@@ -309,14 +309,14 @@ public class FasUsageControllerTest {
     }
 
     @Test
-    public void testIsValidFilteredUsageStatus() {
+    public void testAreValidFilteredUsageStatuses() {
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
-        expect(usageService.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND))
+        expect(usageService.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.WORK_NOT_FOUND))
             .andReturn(true).once();
         replay(filterController, filterWidgetMock, usageService);
-        assertTrue(controller.isValidFilteredUsageStatus(UsageStatusEnum.WORK_NOT_FOUND));
+        assertTrue(controller.areValidFilteredUsageStatuses(UsageStatusEnum.WORK_NOT_FOUND));
         verify(filterController, filterWidgetMock, usageService);
     }
 

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
@@ -190,9 +191,7 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
 
     private void initUpdateRightsholdersButton() {
         updateRightsholdersButton = Buttons.createButton(ForeignUi.getMessage("button.update_rightsholders"));
-        //TODO {dbaraukova} add validations for applied filter
-        updateRightsholdersButton.addClickListener(event ->
-            Windows.showModalWindow(new SalDetailForRightsholderUpdateWindow(controller)));
+        updateRightsholdersButton.addClickListener(event -> onUpdateRightsholdersButtonClicked());
     }
 
     private void initAddToScenarioButton() {
@@ -221,5 +220,21 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportUsagesStreamSource().getSource());
         fileDownloader.extend(exportButton);
+    }
+
+    private void onUpdateRightsholdersButtonClicked() {
+        String message = null;
+        if (0 == controller.getBeansCount()) {
+            message = ForeignUi.getMessage("message.error.update_rightsholders.empty_usages");
+        } else if (!controller.areValidFilteredUsageStatuses(UsageStatusEnum.RH_NOT_FOUND,
+            UsageStatusEnum.WORK_NOT_GRANTED)) {
+            message = ForeignUi.getMessage("message.error.invalid_usages_status", "RH_NOT_FOUND or WORK_NOT_GRANTED",
+                "updated");
+        }
+        if (Objects.isNull(message)) {
+            Windows.showModalWindow(new SalDetailForRightsholderUpdateWindow(controller));
+        } else {
+            Windows.showNotificationWindow(message);
+        }
     }
 }

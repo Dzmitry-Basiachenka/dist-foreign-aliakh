@@ -241,8 +241,8 @@ public class AaclUsageService implements IAaclUsageService {
     }
 
     @Override
-    public boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status) {
-        return aaclUsageRepository.isValidFilteredUsageStatus(filter, status);
+    public boolean areValidFilteredUsageStatuses(UsageFilter filter, UsageStatusEnum... statuses) {
+        return aaclUsageRepository.areValidFilteredUsageStatuses(filter, statuses);
     }
 
     @Override

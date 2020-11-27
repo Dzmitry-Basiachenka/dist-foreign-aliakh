@@ -189,7 +189,7 @@ public class CommonUsageControllerTest {
         }
 
         @Override
-        public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
+        public boolean areValidFilteredUsageStatuses(UsageStatusEnum... statuses) {
             return true;
         }
 

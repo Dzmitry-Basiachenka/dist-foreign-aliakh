@@ -618,12 +618,12 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testIsValidFilteredUsageStatus() {
+    public void testAreValidFilteredUsageStatuses() {
         UsageFilter usageFilter = new UsageFilter();
-        expect(usageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND))
+        expect(usageRepository.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.WORK_NOT_FOUND))
             .andReturn(true).once();
         replay(usageRepository);
-        usageService.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND);
+        usageService.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.WORK_NOT_FOUND);
         verify(usageRepository);
     }
 

@@ -136,7 +136,7 @@ public class AaclUsageWidgetTest {
             .getComponent(0)).getComponent(4);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
-        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
@@ -180,7 +180,7 @@ public class AaclUsageWidgetTest {
             .getComponent(0)).getComponent(4);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
+        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -199,7 +199,7 @@ public class AaclUsageWidgetTest {
             .getComponent(0)).getComponent(4);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(700000000L)).once();
         Windows.showNotificationWindow(
             "Scenario cannot be created. The following rightsholder(s) are absent in PRM: <i><b>[700000000]</b></i>");
@@ -220,7 +220,7 @@ public class AaclUsageWidgetTest {
             .getComponent(0)).getComponent(4);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.singletonList("Batch Name")).once();
@@ -243,7 +243,7 @@ public class AaclUsageWidgetTest {
             .getComponent(0)).getComponent(4);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
@@ -268,7 +268,7 @@ public class AaclUsageWidgetTest {
             .getComponent(0)).getComponent(4);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
