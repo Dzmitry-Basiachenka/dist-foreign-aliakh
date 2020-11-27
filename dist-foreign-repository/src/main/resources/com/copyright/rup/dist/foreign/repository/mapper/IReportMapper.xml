@@ -196,6 +196,28 @@
         <result property="totalGrossAmount" column="total_gross_amount"/>
     </resultMap>
 
+    <resultMap id="salHistoricalItemBankDetailsReportDtoResultMap" type="SalHistoricalItemBankDetailsReportDto">
+        <result property="id" column="df_usage_archive_uid"/>
+        <result property="itemBankName" column="name"/>
+        <result property="periodEndDate" column="payment_date"/>
+        <result property="licenseeAccountNumber" column="licensee_account_number"/>
+        <result property="licenseeName" column="licensee_name"/>
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="rhName" column="rh_name"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="standardNumber" column="standard_number"/>
+        <result property="standardNumberType" column="standard_number_type"/>
+        <result property="assessmentName" column="assessment_name"/>
+        <result property="reportedWorkPortionId" column="reported_work_portion_id"/>
+        <result property="reportedTitle" column="work_title"/>
+        <result property="reportedArticle" column="reported_article"/>
+        <result property="reportedStandardNumber" column="reported_standard_number"/>
+        <result property="reportedMediaType" column="reported_media_type"/>
+        <result property="coverageYear" column="coverage_year"/>
+        <result property="grade" column="grade"/>
+    </resultMap>
+
     <sql id="workSharesByAggLcClassSummaryFromWhereClauses">
         from ${schema}.df_scenario s
         join ${schema}.${usage_table} u on s.df_scenario_uid = u.df_scenario_uid
@@ -805,5 +827,38 @@
 
     <select id="findWorkClassificationBySearch" resultMap="IWorkClassificationMapper.workClassificationResultMap" parameterType="map">
         <include refid="IWorkClassificationMapper.findBySearchSql"/>
+    </select>
+
+    <select id="findSalHistoricalItemBankDetailsReportDtos" parameterType="map"
+            resultMap="salHistoricalItemBankDetailsReportDtoResultMap">
+        select
+            ua.df_usage_archive_uid,
+            ub.name,
+            ub.payment_date,
+            (ub.sal_fields->>'licensee_account_number')::numeric licensee_account_number,
+            ub.sal_fields->>'licensee_name' licensee_name,
+            ua.rh_account_number,
+            rh.name rh_name,
+            ua.wr_wrk_inst,
+            ua.system_title,
+            ua.standard_number,
+            ua.standard_number_type,
+            usal.assessment_name,
+            usal.reported_work_portion_id,
+            ua.work_title,
+            usal.reported_article,
+            usal.reported_standard_number,
+            usal.reported_media_type,
+            usal.coverage_year,
+            usal.grade
+        from ${schema}.df_usage_archive ua
+        join ${schema}.df_usage_sal usal on ua.df_usage_archive_uid = usal.df_usage_sal_uid
+        join ${schema}.df_usage_batch ub on ua.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = ua.rh_account_number
+        where ub.product_family = #{productFamily}
+            and usal.detail_type = #{detailType}
+            and (ub.sal_fields->>'licensee_account_number')::numeric = #{licenseeAccountNumber}
+            and extract(year from ub.payment_date) between #{periodEndYearFrom} and #{periodEndYearTo}
+        order by payment_date, name, rh_name, system_title
     </select>
 </mapper>

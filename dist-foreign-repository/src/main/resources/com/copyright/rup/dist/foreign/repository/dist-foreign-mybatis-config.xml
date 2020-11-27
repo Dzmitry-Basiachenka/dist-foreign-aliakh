@@ -68,6 +68,7 @@
         <typeAlias alias="RightsholderPayeeProductFamilyHolder" type="com.copyright.rup.dist.foreign.domain.RightsholderPayeeProductFamilyHolder"/>
         <typeAlias alias="PayeeAccountAggregateLicenseeClassesPair" type="com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair"/>
         <typeAlias alias="SalLicensee" type="com.copyright.rup.dist.foreign.domain.report.SalLicensee"/>
+        <typeAlias alias="SalHistoricalItemBankDetailsReportDto" type="com.copyright.rup.dist.foreign.domain.report.SalHistoricalItemBankDetailsReportDto"/>
     </typeAliases>
 
     <typeHandlers>

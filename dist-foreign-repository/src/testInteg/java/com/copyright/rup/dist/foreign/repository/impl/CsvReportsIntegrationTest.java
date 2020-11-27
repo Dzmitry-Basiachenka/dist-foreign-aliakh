@@ -567,7 +567,7 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testWriteSalLiabilitiesSummaryByRhAndWorkReportCsvReport() throws IOException {
+    public void testWriteSalLiabilitiesSummaryByRhAndWorkCsvReport() throws IOException {
         List<Scenario> scenarios = Arrays.asList(
             buildScenario("c0b30809-4a38-46cc-a0dc-641924d1fc43",
                 "SAL Liabilities Summary by Rightsholder and Work report Scenario 1"),
@@ -588,6 +588,12 @@ public class CsvReportsIntegrationTest {
     public void testSalFundPoolsCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeSalFundPoolsCsvReport(2018, outputStream), "sal_fund_pools_report.csv");
+    }
+
+    @Test
+    public void testWriteSalHistoricalItemBankDetailsCsvReport() throws IOException {
+        assertFiles(outputStream -> reportRepository.writeSalHistoricalItemBankDetailsReport(2000017003L,
+            2019, 2020, outputStream), "sal_historical_item_bank.csv");
     }
 
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {

@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.report.NtsServiceFeeTrueUpReportDto
 import com.copyright.rup.dist.foreign.domain.report.NtsWithDrawnBatchSummaryReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalFundPoolReportDto;
+import com.copyright.rup.dist.foreign.domain.report.SalHistoricalItemBankDetailsReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesByRhReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesSummaryByRhAndWorkReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
@@ -93,7 +94,8 @@ public class DomainVerifierTest {
             {SalLiabilitiesSummaryByRhAndWorkReportDto.class},
             {SalUndistributedLiabilitiesReportDto.class},
             {SalFundPoolReportDto.class},
-            {SalLicensee.class}
+            {SalLicensee.class},
+            {SalHistoricalItemBankDetailsReportDto.class}
         };
         return Arrays.asList(testData);
     }
