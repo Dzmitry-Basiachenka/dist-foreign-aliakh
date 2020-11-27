@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.report.api;
 
-import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
@@ -16,9 +15,23 @@ public interface ISalHistoricalItemBankDetailsReportWidget
     extends IWidget<ISalHistoricalItemBankDetailsReportController> {
 
     /**
-     * Gets selected {@link SalLicensee}.
+     * Gets licensee account number.
      *
-     * @return the selected {@link SalLicensee}
+     * @return the licensee account number
      */
-    SalLicensee getSalLicensee();
+    Long getLicenseeAccountNumber();
+
+    /**
+     * Gets period end year from.
+     *
+     * @return the period end year from
+     */
+    int getPeriodEndYearFrom();
+
+    /**
+     * Gets period end year to.
+     *
+     * @return the period end year to
+     */
+    int getPeriodEndYearTo();
 }
