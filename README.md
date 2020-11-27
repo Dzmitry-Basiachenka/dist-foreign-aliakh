@@ -1,3 +1,13 @@
+12.1.26
+-
+* B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: add applied filter validation for displaying IB Details for RH Update modal window
+* B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: remove lazy loading and implement search on IB Details for RH Update modal window
+* B-61833 FDA: SAL historical item bank detail report: implement MyBatis report handler
+* B-61833 FDA: SAL historical item bank detail report: implement backend to load values into Licensee dropdown
+* B-62520 Tech Debt: FDA: apply 53.0 dist common version
+* B-63949 FDA: Export AACL payee exclusions: add export button to Exclude detail by Payee window
+* B-63949 FDA: Export AACL payee exclusions: implement service logic for report generation
+
 12.1.25
 -
 * B-62519 Tech Debt: FDA: update embedded tomcat version to 8.5.59
