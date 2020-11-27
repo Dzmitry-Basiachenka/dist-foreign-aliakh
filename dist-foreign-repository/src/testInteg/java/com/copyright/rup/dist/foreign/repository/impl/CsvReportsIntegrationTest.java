@@ -528,25 +528,47 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testWriteExcludeDetailsByPayeeCsvReportNoData() throws IOException {
+    public void tesFastWriteExcludeDetailsByPayeeCsvReportNoData() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton("d13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
-        assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(filter,
-            Collections.emptySet(), outputStream), "exclude_by_payee_report_empty.csv");
+        assertFilesWithExecutor(outputStream -> reportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter,
+            Collections.emptySet(), outputStream), "fas_exclude_by_payee_report_empty.csv");
     }
 
     @Test
-    public void testWriteExcludeDetailsByPayeeCsvReportEmptyFilter() throws IOException {
-        assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(
-            new ExcludePayeeFilter(), Collections.emptySet(), outputStream), "exclude_by_payee_report_empty.csv");
+    public void testFasWriteExcludeDetailsByPayeeCsvReportEmptyFilter() throws IOException {
+        assertFilesWithExecutor(outputStream -> reportRepository.writeFasExcludeDetailsByPayeeCsvReport(
+            new ExcludePayeeFilter(), Collections.emptySet(), outputStream), "fas_exclude_by_payee_report_empty.csv");
     }
 
     @Test
-    public void testWriteExcludeDetailsByPayeeCsvReport() throws IOException {
+    public void testFasWriteExcludeDetailsByPayeeCsvReport() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
-        assertFilesWithExecutor(outputStream -> reportRepository.writeExcludeDetailsByPayeeCsvReport(filter,
-            Collections.singleton(7000813806L), outputStream), "exclude_by_payee_report.csv");
+        assertFilesWithExecutor(outputStream -> reportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter,
+            Collections.singleton(7000813806L), outputStream), "fas_exclude_by_payee_report.csv");
+    }
+
+    @Test
+    public void testAaclWriteExcludeDetailsByPayeeCsvReportNoData() throws IOException {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton("2373ef30-1952-4e78-890d-d6b3087de59c"));
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter,
+            Collections.emptySet(), outputStream), "aacl_exclude_by_payee_report_empty.csv");
+    }
+
+    @Test
+    public void testAaclWriteExcludeDetailsByPayeeCsvReportEmptyFilter() throws IOException {
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(
+            new ExcludePayeeFilter(), Collections.emptySet(), outputStream), "aacl_exclude_by_payee_report_empty.csv");
+    }
+
+    @Test
+    public void testAaclWriteExcludeDetailsByPayeeCsvReport() throws IOException {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        filter.setScenarioIds(Collections.singleton("42ad575b-5d0d-4d82-b1c5-d0982f6f6f1b"));
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter,
+            Collections.singleton(1000011881L), outputStream), "aacl_exclude_by_payee_report.csv");
     }
 
     @Test

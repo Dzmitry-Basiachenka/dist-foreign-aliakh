@@ -215,9 +215,15 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writeExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
-                                                    PipedOutputStream pipedOutputStream) {
-        reportRepository.writeExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, pipedOutputStream);
+    public void writeFasExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
+                                                       PipedOutputStream pipedOutputStream) {
+        reportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, pipedOutputStream);
+    }
+
+    @Override
+    public void writeAaclExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
+                                                        PipedOutputStream pipedOutputStream) {
+        reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, pipedOutputStream);
     }
 
     @Override

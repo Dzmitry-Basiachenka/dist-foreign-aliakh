@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClasse
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeFilterController;
@@ -41,6 +42,8 @@ public class AaclExcludePayeeController extends CommonController<IAaclExcludePay
     private IAaclExcludePayeeFilterController payeesFilterController;
     @Autowired
     private IAaclUsageService usageService;
+    @Autowired
+    private IReportService reportService;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
 
@@ -84,6 +87,11 @@ public class AaclExcludePayeeController extends CommonController<IAaclExcludePay
     @Override
     public IStreamSource getCsvStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> "exclude_by_payee_",
-            pos -> {/*TODO {isuvorau} implement service logic*/ });
+            pos -> {
+                ExcludePayeeFilter filter = payeesFilterController.getWidget().getAppliedFilter();
+                filter.setSearchValue(getWidget().getSearchValue());
+                reportService.writeAaclExcludeDetailsByPayeeCsvReport(filter,
+                    getWidget().getSelectedAccountNumbers(), pos);
+            });
     }
 }

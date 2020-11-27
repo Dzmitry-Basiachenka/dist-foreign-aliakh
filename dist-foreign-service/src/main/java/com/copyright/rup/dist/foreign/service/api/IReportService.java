@@ -249,14 +249,24 @@ public interface IReportService {
                                           PipedOutputStream pipedOutputStream);
 
     /**
-     * Finds details by filter and writes them with payee exclude status into the output stream in CSV format.
+     * Finds FAS details by filter and writes them with payee exclude status into the output stream in CSV format.
      *
      * @param filter                 instance of {@link ExcludePayeeFilter}
      * @param selectedAccountNumbers set of account numbers of selected payees
      * @param pipedOutputStream      instance of {@link PipedOutputStream}
      */
-    void writeExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
-                                             PipedOutputStream pipedOutputStream);
+    void writeFasExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
+                                                PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds AACL details by filter and writes them with payee exclude status into the output stream in CSV format.
+     *
+     * @param filter                 instance of {@link ExcludePayeeFilter}
+     * @param selectedAccountNumbers set of account numbers of selected payees
+     * @param pipedOutputStream      instance of {@link PipedOutputStream}
+     */
+    void writeAaclExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
+                                                 PipedOutputStream pipedOutputStream);
 
     /**
      * Writes AACL Undistributed Liabilities Report into the output stream in CSV format.
@@ -294,7 +304,7 @@ public interface IReportService {
      * Writes SAL Fund Pools Report into the output stream in CSV format.
      *
      * @param distributionYear distribution year to export
-     * @param outputStream  instance of {@link OutputStream}
+     * @param outputStream     instance of {@link OutputStream}
      */
     void writeSalFundPoolsCsvReport(int distributionYear, OutputStream outputStream);
 

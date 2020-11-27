@@ -495,14 +495,26 @@ public class ReportServiceTest {
     }
 
     @Test
-    public void testWriteExcludeDetailsByPayeeCsvReport() {
+    public void testFasWriteExcludeDetailsByPayeeCsvReport() {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         Set<Long> selectedAccountNumbers = Collections.emptySet();
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        reportRepository.writeExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, outputStream);
+        reportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, outputStream);
         expectLastCall().once();
         replay(reportRepository);
-        reportService.writeExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, outputStream);
+        reportService.writeFasExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
+    public void testAaclWriteExcludeDetailsByPayeeCsvReport() {
+        ExcludePayeeFilter filter = new ExcludePayeeFilter();
+        Set<Long> selectedAccountNumbers = Collections.emptySet();
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeAaclExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, outputStream);
         verify(reportRepository);
     }
 

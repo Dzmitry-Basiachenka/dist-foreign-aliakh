@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclBaselineUsagesCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclExcludeDetailsByPayeeCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.AaclUsageCsvReportHandler;
@@ -28,8 +29,8 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.SendForClassifica
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.WorkSharesByAggLcClassReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.aacl.WorkSharesByAggLcClassSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.AuditFasCsvReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.fas.ExcludeDetailsByPayeeCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasBatchSummaryReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasExcludeDetailsByPayeeCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasServiceFeeTrueUpReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.fas.FasUsageCsvReportHandler;
@@ -53,6 +54,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalScenarioUsagesC
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalUsageCsvReportHandler;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -413,9 +415,9 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     }
 
     @Override
-    public void writeExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
-                                                    PipedOutputStream pipedOutputStream) {
-        try (ExcludeDetailsByPayeeCsvReportHandler handler = new ExcludeDetailsByPayeeCsvReportHandler(
+    public void writeFasExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
+                                                       PipedOutputStream pipedOutputStream) {
+        try (FasExcludeDetailsByPayeeCsvReportHandler handler = new FasExcludeDetailsByPayeeCsvReportHandler(
             Objects.requireNonNull(pipedOutputStream),
             Objects.requireNonNull(selectedAccountNumbers))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {
@@ -423,6 +425,19 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
                 parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
                 parameters.put("scenarioStatus", ScenarioStatusEnum.IN_PROGRESS);
                 getTemplate().select("IUsageMapper.findPayeeTotalHoldersByFilter", parameters, handler);
+            }
+        }
+    }
+
+    @Override
+    public void writeAaclExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
+                                                        PipedOutputStream pipedOutputStream) {
+        try (AaclExcludeDetailsByPayeeCsvReportHandler handler = new AaclExcludeDetailsByPayeeCsvReportHandler(
+            Objects.requireNonNull(pipedOutputStream),
+            Objects.requireNonNull(selectedAccountNumbers))) {
+            if (!Objects.requireNonNull(filter).isEmpty()) {
+                getTemplate().select("IAaclUsageMapper.findPayeeTotalHoldersByFilter",
+                    ImmutableMap.of(FILTER_KEY, filter), handler);
             }
         }
     }
