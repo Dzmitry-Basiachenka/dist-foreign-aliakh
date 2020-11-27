@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Writes Exclude Details by Payee report into a {@link OutputStream} connected to the {@link java.io.InputStream}.
+ * Writes FAS Exclude Details by Payee report into a {@link OutputStream} connected to the {@link java.io.InputStream}.
  * <p/>
  * Copyright (C) 2020 copyright.com
  * <p/>
@@ -18,7 +18,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public class ExcludeDetailsByPayeeCsvReportHandler extends BaseCsvReportHandler<PayeeTotalHolder> {
+public class FasExcludeDetailsByPayeeCsvReportHandler extends BaseCsvReportHandler<PayeeTotalHolder> {
 
     private static final List<String> HEADERS = Arrays.asList("Exclude Status", "Payee Account #", "Payee Name",
         "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD", "Participating");
@@ -31,7 +31,7 @@ public class ExcludeDetailsByPayeeCsvReportHandler extends BaseCsvReportHandler<
      * @param outputStream           instance of {@link OutputStream}
      * @param selectedAccountNumbers set of account numbers of selected payees
      */
-    public ExcludeDetailsByPayeeCsvReportHandler(OutputStream outputStream, Set<Long> selectedAccountNumbers) {
+    public FasExcludeDetailsByPayeeCsvReportHandler(OutputStream outputStream, Set<Long> selectedAccountNumbers) {
         super(outputStream);
         this.selectedAccountNumbers = selectedAccountNumbers;
     }

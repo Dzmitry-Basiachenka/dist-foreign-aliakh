@@ -89,7 +89,8 @@ public class FasExcludePayeeController extends CommonController<IFasExcludePayee
             pos -> {
                 ExcludePayeeFilter filter = payeesFilterController.getWidget().getAppliedFilter();
                 filter.setSearchValue(getWidget().getSearchValue());
-                reportService.writeExcludeDetailsByPayeeCsvReport(filter, getWidget().getSelectedAccountNumbers(), pos);
+                reportService.writeFasExcludeDetailsByPayeeCsvReport(filter, getWidget().getSelectedAccountNumbers(),
+                    pos);
             });
     }
 }
