@@ -1,3 +1,8 @@
+12.1.27
+-
+* B-61833 FDA: SAL historical item bank detail report: implement CSV report generation
+* B-62520 Tech Debt: FDA: adjust ordering of amount columns for SAL fund pool report
+
 12.1.26
 -
 * B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: add applied filter validation for displaying IB Details for RH Update modal window
