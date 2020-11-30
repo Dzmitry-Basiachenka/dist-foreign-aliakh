@@ -383,6 +383,6 @@ public interface IReportRepository {
      * @param periodEndYearTo       period end year to
      * @param outputStream          instance of {@link OutputStream}
      */
-    void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, int periodEndYearFrom,
-                                                 int periodEndYearTo, OutputStream outputStream);
+    void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, Integer periodEndYearFrom,
+                                                 Integer periodEndYearTo, OutputStream outputStream);
 }

@@ -543,16 +543,16 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
     }
 
     @Override
-    public void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, int periodEndYearFrom,
-                                                        int periodEndYearTo, OutputStream outputStream) {
+    public void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, Integer periodEndYearFrom,
+                                                        Integer periodEndYearTo, OutputStream outputStream) {
         try (SalHistoricalItemBankDetailsReportHandler handler =
                  new SalHistoricalItemBankDetailsReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
             parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
             parameters.put("detailType", SalDetailTypeEnum.IB);
-            parameters.put("licenseeAccountNumber", licenseeAccountNumber);
-            parameters.put("periodEndYearFrom", periodEndYearFrom);
-            parameters.put("periodEndYearTo", periodEndYearTo);
+            parameters.put("licenseeAccountNumber", Objects.requireNonNull(licenseeAccountNumber));
+            parameters.put("periodEndYearFrom", Objects.requireNonNull(periodEndYearFrom));
+            parameters.put("periodEndYearTo", Objects.requireNonNull(periodEndYearTo));
             getTemplate().select("IReportMapper.findSalHistoricalItemBankDetailsReportDtos", parameters, handler);
         }
     }

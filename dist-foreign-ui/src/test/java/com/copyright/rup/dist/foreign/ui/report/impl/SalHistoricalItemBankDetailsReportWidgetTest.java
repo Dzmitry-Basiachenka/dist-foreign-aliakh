@@ -61,8 +61,8 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
         SalLicensee licensee = new SalLicensee();
         licensee.setAccountNumber(1114L);
         licensee.setName("Agway, Inc.");
-        List<SalLicensee> salLicensees = Collections.singletonList(licensee);
-        expect(usageBatchService.getSalLicensees()).andReturn(salLicensees).once();
+        List<SalLicensee> licensees = Collections.singletonList(licensee);
+        expect(usageBatchService.getSalLicensees()).andReturn(licensees).once();
         replay(usageBatchService);
         SalHistoricalItemBankDetailsReportWidget widget =
             (SalHistoricalItemBankDetailsReportWidget) controller.initWidget();

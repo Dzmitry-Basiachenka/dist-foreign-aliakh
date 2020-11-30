@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalHistoricalItemBankDetailsReportController;
@@ -31,11 +32,14 @@ public class SalHistoricalItemBankDetailsReportController
 
     @Autowired
     private IUsageBatchService usageBatchService;
+    @Autowired
+    private IReportService reportService;
 
     @Override
     public IStreamSource getCsvStreamSource() {
         return new ByteArrayStreamSource("SAL_historical_item_bank_",
-            os -> { /*TODO {aliakh} implement report generation */});
+            os -> reportService.writeSalHistoricalItemBankDetailsReport(getWidget().getLicenseeAccountNumber(),
+                getWidget().getPeriodEndYearFrom(), getWidget().getPeriodEndYearTo(), os));
     }
 
     @Override

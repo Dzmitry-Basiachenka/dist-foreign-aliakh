@@ -266,8 +266,8 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, int periodEndYearFrom,
-                                                        int periodEndYearTo, OutputStream outputStream) {
+    public void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, Integer periodEndYearFrom,
+                                                        Integer periodEndYearTo, OutputStream outputStream) {
         reportRepository.writeSalHistoricalItemBankDetailsReport(licenseeAccountNumber, periodEndYearFrom,
             periodEndYearTo, outputStream);
     }

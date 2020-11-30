@@ -52,8 +52,8 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
     @Override
     @SuppressWarnings("unchecked")
     public SalHistoricalItemBankDetailsReportWidget init() {
-        initPeriodFromField();
-        initPeriodToField();
+        initPeriodEndDateFromField();
+        initPeriodEndDateToField();
         HorizontalLayout horizontalLayout = new HorizontalLayout(periodEndDateFromField, periodEndDateToField);
         horizontalLayout.setSizeFull();
         HorizontalLayout buttonsLayout = getButtonsLayout();
@@ -67,15 +67,28 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
     }
 
     @Override
-    public SalLicensee getSalLicensee() {
-        return licenseeComboBox.getValue();
+    public Long getLicenseeAccountNumber() {
+        return licenseeComboBox.getValue().getAccountNumber();
     }
 
-    private void initPeriodFromField() {
+    @Override
+    public int getPeriodEndYearFrom() {
+        return Integer.parseInt(periodEndDateFromField.getValue());
+    }
+
+    @Override
+    public int getPeriodEndYearTo() {
+        return Integer.parseInt(periodEndDateToField.getValue());
+    }
+
+    private void initPeriodEndDateFromField() {
         periodEndDateFromField = new TextField(ForeignUi.getMessage("field.period_end_date_from"));
         periodEndDateFromField.setRequiredIndicatorVisible(true);
         periodEndDateFromField.setSizeFull();
-        periodEndDateFromField.addValueChangeListener(event -> stringBinder.validate());
+        periodEndDateFromField.addValueChangeListener(event -> {
+            stringBinder.validate();
+            exportButton.setEnabled(isValid());
+        });
         VaadinUtils.addComponentStyle(periodEndDateFromField, "period-end-date-from-field");
         stringBinder.forField(periodEndDateFromField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
@@ -86,10 +99,14 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
             .validate();
     }
 
-    private void initPeriodToField() {
+    private void initPeriodEndDateToField() {
         periodEndDateToField = new TextField(ForeignUi.getMessage("field.period_end_date_to"));
         periodEndDateToField.setRequiredIndicatorVisible(true);
         periodEndDateToField.setSizeFull();
+        periodEndDateToField.addValueChangeListener(event -> {
+            stringBinder.validate();
+            exportButton.setEnabled(isValid());
+        });
         VaadinUtils.addComponentStyle(periodEndDateToField, "period-end-date-to-field");
         stringBinder.forField(periodEndDateToField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
@@ -113,8 +130,7 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
         licenseeComboBox.setRequiredIndicatorVisible(true);
         licenseeComboBox.addValueChangeListener(event -> exportButton.setEnabled(isValid()));
         licenseeComboBox.setItems(controller.getSalLicensees());
-        licenseeComboBox.setItemCaptionGenerator(licensee ->
-            licensee.getAccountNumber() + " - " + licensee.getName());
+        licenseeComboBox.setItemCaptionGenerator(licensee -> licensee.getAccountNumber() + " - " + licensee.getName());
         VaadinUtils.setMaxComponentsWidth(licenseeComboBox);
         VaadinUtils.addComponentStyle(licenseeComboBox, "sal-licensee-filter");
         return licenseeComboBox;
