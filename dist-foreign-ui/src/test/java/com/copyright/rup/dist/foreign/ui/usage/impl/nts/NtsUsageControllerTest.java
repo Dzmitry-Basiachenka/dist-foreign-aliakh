@@ -333,22 +333,22 @@ public class NtsUsageControllerTest {
     }
 
     @Test
-    public void testGetRroName() {
+    public void testGetRightsholder() {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setName(RRO_ACCOUNT_NAME);
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
         rightsholder.setId("53686adc-1f20-473a-b57f-25ff23425372");
         expect(prmIntegrationService.getRightsholder(RRO_ACCOUNT_NUMBER)).andReturn(rightsholder).once();
         replay(prmIntegrationService);
-        assertEquals(rightsholder, controller.getRro(RRO_ACCOUNT_NUMBER));
+        assertEquals(rightsholder, controller.getRightsholder(RRO_ACCOUNT_NUMBER));
         verify(prmIntegrationService);
     }
 
     @Test
-    public void testGetNullRroName() {
+    public void testGetRightsholderNullName() {
         expect(prmIntegrationService.getRightsholder(RRO_ACCOUNT_NUMBER)).andReturn(null).once();
         replay(prmIntegrationService);
-        assertEquals(new Rightsholder(), controller.getRro(RRO_ACCOUNT_NUMBER));
+        assertEquals(new Rightsholder(), controller.getRightsholder(RRO_ACCOUNT_NUMBER));
         verify(prmIntegrationService);
     }
 

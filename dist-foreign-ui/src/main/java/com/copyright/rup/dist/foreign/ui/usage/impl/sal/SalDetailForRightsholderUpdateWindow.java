@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
@@ -17,6 +18,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -35,6 +37,7 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
     private SearchWidget searchWidget;
     private Grid<UsageDto> usagesGrid;
     private ListDataProvider<UsageDto> dataProvider;
+    private Button updateRightsholderButton;
     private final ISalUsageController controller;
 
     /**
@@ -76,6 +79,8 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
         usagesGrid.setSizeFull();
         usagesGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
         addGridColumns();
+        usagesGrid.addSelectionListener(event ->
+            updateRightsholderButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
         usagesGrid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(usagesGrid, "ib-details-for-rh-update-grid");
     }
@@ -103,8 +108,11 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
 
     private HorizontalLayout buildButtonsLayout() {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
-        Button updateRightsholderButton = Buttons.createButton(ForeignUi.getMessage("button.update_rightsholder"));
-        //TODO {dbaraukova} add listener for update RH button
+        updateRightsholderButton = Buttons.createButton(ForeignUi.getMessage("button.update_rightsholder"));
+        updateRightsholderButton.addClickListener(event ->
+            Windows.showModalWindow(new SalUpdateRighstholderWindow(controller,
+                usagesGrid.getSelectedItems().stream().findFirst().orElse(null))));
+        updateRightsholderButton.setEnabled(false);
         Button closeButton = Buttons.createCloseButton(this);
         buttonsLayout.addComponents(updateRightsholderButton, closeButton);
         return buttonsLayout;

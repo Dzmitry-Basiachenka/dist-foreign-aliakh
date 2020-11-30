@@ -97,9 +97,9 @@ public class UsageBatchUploadWindowTest {
         claRro.setName("CLA, The Copyright Licensing Agency Ltd.");
         claRro.setId(RupPersistUtils.generateUuid());
         expect(usagesController.getClaAccountNumber()).andReturn(2000017000L).times(2);
-        expect(usagesController.getRro(rroAccountNumber)).andReturn(fasRro).once();
-        expect(usagesController.getRro(2000017000L)).andReturn(claRro).once();
-        expect(usagesController.getRro(20000170L)).andReturn(new Rightsholder()).once();
+        expect(usagesController.getRightsholder(rroAccountNumber)).andReturn(fasRro).once();
+        expect(usagesController.getRightsholder(2000017000L)).andReturn(claRro).once();
+        expect(usagesController.getRightsholder(20000170L)).andReturn(new Rightsholder()).once();
         replay(usagesController);
         window = new UsageBatchUploadWindow(usagesController);
         assertEquals("Upload Usage Batch", window.getCaption());

@@ -64,12 +64,12 @@ public interface ICommonUsageController extends IController<ICommonUsageWidget> 
     void onFilterChanged(FilterChangedEvent event);
 
     /**
-     * Gets RRO from PRM by account number.
+     * Gets RH from PRM by account number.
      *
-     * @param rroAccountNumber RRO account number
-     * @return RRO {@link Rightsholder}
+     * @param rhAccountNumber RH account number
+     * @return {@link Rightsholder}
      */
-    Rightsholder getRro(Long rroAccountNumber);
+    Rightsholder getRightsholder(Long rhAccountNumber);
 
     /**
      * Checks whether usage batch with provided name already exists or not.

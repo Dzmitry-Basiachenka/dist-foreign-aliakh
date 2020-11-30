@@ -187,4 +187,13 @@ public interface ISalUsageController extends ICommonUsageController {
      * @return list of found {@link UsageDto}s
      */
     List<UsageDto> getUsageDtosForRhUpdate();
+
+    /**
+     * Updates usage with provided RH account number.
+     *
+     * @param usageId         usage id
+     * @param rhAccountNumber RH account number
+     * @param reason          reason for RH update
+     */
+    void updateUsageRighstholder(String usageId, Long rhAccountNumber, String reason);
 }
