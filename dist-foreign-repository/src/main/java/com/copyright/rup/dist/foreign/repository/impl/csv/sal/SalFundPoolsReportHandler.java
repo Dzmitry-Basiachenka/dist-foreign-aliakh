@@ -21,8 +21,8 @@ import java.util.List;
 public class SalFundPoolsReportHandler extends BaseCsvReportHandler<SalFundPoolReportDto> {
 
     private static final List<String> HEADERS = ImmutableList.of("Fund Pool Name", "Scenario Name",
-        "Date Received", "Assessment Name", "Licensee Account #", "Licensee Name", "Service Fee %", "Net Amount",
-        "Gross Amount", "Item Bank Split %", "Grade K-5 Number of Students", "Grade 6-8 Number of Students",
+        "Date Received", "Assessment Name", "Licensee Account #", "Licensee Name", "Gross Amount", "Net Amount",
+        "Service Fee %", "Item Bank Split %", "Grade K-5 Number of Students", "Grade 6-8 Number of Students",
         "Grade 9-12 Number of Students", "Item Bank Gross Amount", "Grade K-5 Gross Amount", "Grade 6-8 Gross Amount",
         "Grade 9-12 Gross Amount", "Total Gross Amount");
 
@@ -44,9 +44,9 @@ public class SalFundPoolsReportHandler extends BaseCsvReportHandler<SalFundPoolR
         beanProperties.add(bean.getAssessmentName());
         beanProperties.add(getBeanPropertyAsString(bean.getLicenseeAccountNumber()));
         beanProperties.add(bean.getLicenseeName());
-        beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
-        beanProperties.add(getBeanBigDecimal(bean.getNetAmount()));
         beanProperties.add(getBeanBigDecimal(bean.getGrossAmount()));
+        beanProperties.add(getBeanBigDecimal(bean.getNetAmount()));
+        beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
         beanProperties.add(getBeanServiceFeePercent(bean.getItemBankSplitPercent()));
         beanProperties.add(getBeanPropertyAsString(bean.getGradeKto5NumberOfStudents()));
         beanProperties.add(getBeanPropertyAsString(bean.getGrade6to8NumberOfStudents()));
