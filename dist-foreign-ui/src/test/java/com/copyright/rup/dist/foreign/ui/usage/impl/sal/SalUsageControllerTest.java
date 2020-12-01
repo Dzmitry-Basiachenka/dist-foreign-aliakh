@@ -230,6 +230,16 @@ public class SalUsageControllerTest {
     }
 
     @Test
+    public void testIsStatusFilterApplied() {
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidget, usageService);
+        assertTrue(controller.isStatusFilterApplied());
+        verify(filterController, filterWidget, usageService);
+    }
+
+    @Test
     public void testGetIneligibleBatchesNames() {
         Set<String> batchIds = Collections.singleton("0ddb1cbf-4516-40b2-bffa-33d8876fa774");
         List<String> batchNames = Collections.singletonList("batch name");
@@ -400,5 +410,16 @@ public class SalUsageControllerTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         verify(filterWidget, salUsageService, filterController);
+    }
+
+    @Test
+    public void testUpdateUsageRighstholder() {
+        salUsageService.updateToEligibleWithRhAccountNumber("05e79246-1289-4652-aac6-d69fec90c091", 123456785L,
+            "Manual RH update");
+        expectLastCall().once();
+        replay(salUsageService);
+        controller.updateToEligibleWithRhAccountNumber("05e79246-1289-4652-aac6-d69fec90c091", 123456785L,
+            "Manual RH update");
+        verify(salUsageService);
     }
 }

@@ -801,4 +801,13 @@
         join fund_pool_sal_fields fpsf on true
         where u.df_usage_uid = ga.df_usage_uid
     </update>
+
+    <update id="updateRhAccountNumberAndStatusById" parameterType="map">
+        update ${schema}.df_usage
+        set
+            status_ind = #{status},
+            rh_account_number = #{rhAccountNumber},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid = #{usageId}
+    </update>
 </mapper>

@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -13,9 +16,12 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.google.common.collect.Lists;
+import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
+import com.vaadin.data.Validator;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
@@ -25,6 +31,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,24 +51,26 @@ import java.util.Collection;
  * @author Darya Baraukova
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class})
+@PrepareForTest({Windows.class, SalUpdateRighstholderWindowTest.class})
 public class SalUpdateRighstholderWindowTest {
 
     private static final String RH_ACCOUNT_NUMBER = "2000047356";
     private static final String RH_NAME = "National Geographic Partners";
     private ISalUsageController usageController;
+    private SalDetailForRightsholderUpdateWindow detailsWindow;
     private SalUpdateRighstholderWindow window;
 
     @Before
     public void setUp() {
         usageController = createMock(ISalUsageController.class);
+        detailsWindow = createMock(SalDetailForRightsholderUpdateWindow.class);
     }
 
     @Test
     public void testConstructor() {
         UsageDto usage = new UsageDto();
         replay(usageController);
-        window = new SalUpdateRighstholderWindow(usageController, usage);
+        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
         assertEquals("Update Rightsholder", window.getCaption());
         assertEquals(440, window.getWidth(), 0);
         assertEquals(Sizeable.Unit.PIXELS, window.getWidthUnits());
@@ -87,7 +96,7 @@ public class SalUpdateRighstholderWindowTest {
         expect(usageController.getRightsholder(2000047356L)).andReturn(rh).once();
         expect(usageController.getRightsholder(20000170L)).andReturn(new Rightsholder()).once();
         replay(usageController);
-        window = new SalUpdateRighstholderWindow(usageController, usage);
+        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
         Component content = window.getContent();
         VerticalLayout rootLayout = (VerticalLayout) content;
         assertEquals(2, rootLayout.getComponentCount());
@@ -110,7 +119,7 @@ public class SalUpdateRighstholderWindowTest {
         Rightsholder rh = new Rightsholder();
         rh.setAccountNumber(Long.valueOf(RH_ACCOUNT_NUMBER));
         rh.setName(RH_NAME);
-        window = new SalUpdateRighstholderWindow(usageController, usage);
+        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
         Whitebox.setInternalState(window, "rh", rh);
         Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
             Whitebox.getInternalState(window, "rhAccountNumberField"),
@@ -131,6 +140,53 @@ public class SalUpdateRighstholderWindowTest {
         Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         verify(clickEvent, usageController, Windows.class);
+    }
+
+    @Test
+    public void testSaveButtonClick() {
+        mockStatic(Windows.class);
+        Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
+        UsageDto usage = new UsageDto();
+        usage.setId("ebad7d68-b213-433f-8dbe-a581f6ba55a3");
+        usage.setRhAccountNumber(Long.valueOf(RH_ACCOUNT_NUMBER));
+        Rightsholder rh = new Rightsholder();
+        rh.setAccountNumber(Long.valueOf(RH_ACCOUNT_NUMBER));
+        rh.setName(RH_NAME);
+        Binder<UsageDto> binder = createMock(Binder.class);
+        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
+        Whitebox.setInternalState(window, "salUsageController", usageController);
+        Whitebox.setInternalState(window, "detailsWindow", detailsWindow);
+        Whitebox.setInternalState(window, "selectedUsage", usage);
+        Whitebox.setInternalState(window, "usageBinder", binder);
+        Whitebox.setInternalState(window, "rhAccountNumberField", new TextField("RH Account #", RH_ACCOUNT_NUMBER));
+        Whitebox.setInternalState(window, "rh", rh);
+        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
+        expect(binder.isValid()).andReturn(true).once();
+        Windows.showConfirmDialogWithReason(eq("Confirm action"),
+            eq("Are you sure you want to update selected detail with RH 2000047356?"), eq("Yes"), eq("Cancel"),
+                capture(actionDialogListenerCapture), anyObject(Validator.class));
+        expectLastCall().once();
+        usageController.updateToEligibleWithRhAccountNumber(usage.getId(), usage.getRhAccountNumber(), "Reason");
+        expectLastCall().once();
+        usageController.refreshWidget();
+        expectLastCall().once();
+        detailsWindow.refreshDataProvider();
+        expectLastCall().once();
+        replay(clickEvent, usageController, detailsWindow, binder, Windows.class);
+        Component content = window.getContent();
+        assertTrue(content instanceof VerticalLayout);
+        VerticalLayout contentLayout = (VerticalLayout) content;
+        assertEquals(2, contentLayout.getComponentCount());
+        Component rhLayout = contentLayout.getComponent(0);
+        verifyRightsholderLayout(rhLayout);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) contentLayout.getComponent(1);
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        Collection<?> listeners = saveButton.getListeners(Button.ClickEvent.class);
+        assertEquals(1, listeners.size());
+        Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        actionDialogListenerCapture.getValue().onActionConfirmed("Reason");
+        verify(clickEvent, usageController, detailsWindow, binder, Windows.class);
     }
 
     private void verifyRightsholderLayout(Component component) {

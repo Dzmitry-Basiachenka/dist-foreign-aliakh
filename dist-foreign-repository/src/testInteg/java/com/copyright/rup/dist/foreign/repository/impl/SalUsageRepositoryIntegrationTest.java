@@ -68,6 +68,7 @@ public class SalUsageRepositoryIntegrationTest {
     private static final String USAGE_ID_2 = "7b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_3 = "5ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_ID_4 = "d8daeed3-e4ee-4b09-b6ec-ef12a12bcd3d";
+    private static final String USAGE_ID_5 = "83e26dc4-87af-464d-9edc-bb37611947fa";
     private static final String WORK_PORTION_ID_3 = "1101001IB2361";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.0000000000");
@@ -332,6 +333,21 @@ public class SalUsageRepositoryIntegrationTest {
             .findByScenarioIdAndRhAccountNumber("bafc8277-d9f2-44b6-a68c-9e46165175f8", 1000000026L, null, null, null);
         assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
         verifyUsageDtos(expectedUsageDtos, actualUsageDtos);
+    }
+
+    @Test
+    public void testUpdateRhAccountNumberAndStatusById() {
+        salUsageRepository.findByIds(Collections.singletonList(USAGE_ID_5)).forEach(usage -> {
+            assertNull(usage.getRightsholder().getAccountNumber());
+            assertEquals(UsageStatusEnum.WORK_NOT_GRANTED, usage.getStatus());
+        });
+        salUsageRepository.updateRhAccountNumberAndStatusById(USAGE_ID_5, 1234567856L, UsageStatusEnum.ELIGIBLE,
+            "user@copyright.com");
+        salUsageRepository.findByIds(Collections.singletonList(USAGE_ID_5)).forEach(usage -> {
+            assertEquals(Long.valueOf(1234567856L), usage.getRightsholder().getAccountNumber());
+            assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+            assertEquals("user@copyright.com", usage.getUpdateUser());
+        });
     }
 
     private void verifyUsageWithAmounts(Usage usage, String grossAmount, String netAmount, String serviceFeeAmount) {

@@ -190,4 +190,15 @@ public interface ISalUsageService {
      * @return list of moved to archive {@link com.copyright.rup.dist.foreign.domain.Usage}s ids
      */
     List<String> moveToArchive(Scenario scenario);
+
+    /**
+     * Updates usage with provided RH account number
+     * and {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} status,
+     * writes audit with specified reason.
+     *
+     * @param usageId         usage id
+     * @param rhAccountNumber RH account number
+     * @param reason          reason for RH update
+     */
+    void updateToEligibleWithRhAccountNumber(String usageId, Long rhAccountNumber, String reason);
 }
