@@ -124,31 +124,29 @@ public class UsageBatchRepositoryIntegrationTest {
     @Test
     public void testDeleteUsageBatch() {
         String batchId = "56282dbc-2468-48d4-b926-93d3458a656a";
-        assertEquals(15, usageBatchRepository.findAll().size());
+        assertEquals(13, usageBatchRepository.findAll().size());
         usageRepository.deleteByBatchId(batchId);
         usageBatchRepository.deleteUsageBatch(batchId);
-        assertEquals(14, usageBatchRepository.findAll().size());
+        assertEquals(12, usageBatchRepository.findAll().size());
     }
 
     @Test
     public void testFindAll() {
         List<UsageBatch> usageBatches = usageBatchRepository.findAll();
-        assertEquals(15, usageBatches.size());
-        assertEquals("abd219c1-caae-4542-84e3-f9f4dba0d03b", usageBatches.get(0).getId());
-        assertEquals("55df79f3-7e3f-4d74-9931-9aa513195816", usageBatches.get(1).getId());
-        assertEquals("13027b25-2269-3bec-48ea-5126431eedb0", usageBatches.get(2).getId());
-        assertEquals(NTS_USAGE_BATCH_ID_3, usageBatches.get(3).getId());
-        assertEquals(NTS_USAGE_BATCH_ID_2, usageBatches.get(4).getId());
-        assertEquals(NTS_USAGE_BATCH_ID_1, usageBatches.get(5).getId());
-        assertEquals(NTS_USAGE_BATCH_ID_4, usageBatches.get(6).getId());
-        assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(7).getId());
-        assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(8).getId());
-        assertEquals("a5b64c3a-55d2-462e-b169-362dca6a4dd6", usageBatches.get(9).getId());
-        assertEquals("66282dbc-2468-48d4-b926-93d3458a656b", usageBatches.get(10).getId());
-        assertEquals("071ebf56-eb38-49fc-b26f-cc210a374d3a", usageBatches.get(11).getId());
-        assertEquals("033cc3dd-b121-41d5-91e6-cf4ddf71c141", usageBatches.get(12).getId());
-        assertEquals("1f332dc2-f3c2-453a-aba0-9baa69b803d4", usageBatches.get(13).getId());
-        assertEquals("f0de407a-a615-4171-8e98-9fc28fab5324", usageBatches.get(14).getId());
+        assertEquals(13, usageBatches.size());
+        assertEquals("13027b25-2269-3bec-48ea-5126431eedb0", usageBatches.get(0).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_3, usageBatches.get(1).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_2, usageBatches.get(2).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_1, usageBatches.get(3).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_4, usageBatches.get(4).getId());
+        assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(5).getId());
+        assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(6).getId());
+        assertEquals("a5b64c3a-55d2-462e-b169-362dca6a4dd6", usageBatches.get(7).getId());
+        assertEquals("66282dbc-2468-48d4-b926-93d3458a656b", usageBatches.get(8).getId());
+        assertEquals("071ebf56-eb38-49fc-b26f-cc210a374d3a", usageBatches.get(9).getId());
+        assertEquals("033cc3dd-b121-41d5-91e6-cf4ddf71c141", usageBatches.get(10).getId());
+        assertEquals("1f332dc2-f3c2-453a-aba0-9baa69b803d4", usageBatches.get(11).getId());
+        assertEquals("f0de407a-a615-4171-8e98-9fc28fab5324", usageBatches.get(12).getId());
     }
 
     @Test
@@ -258,14 +256,13 @@ public class UsageBatchRepositoryIntegrationTest {
             .map(UsageBatch::getId)
             .sorted()
             .collect(Collectors.toList());
-        assertEquals(Arrays.asList("1f332dc2-f3c2-453a-aba0-9baa69b803d4", "55df79f3-7e3f-4d74-9931-9aa513195816",
-            "abd219c1-caae-4542-84e3-f9f4dba0d03b", "f0de407a-a615-4171-8e98-9fc28fab5324"), actualBatchIds);
+        assertEquals(Arrays.asList("1f332dc2-f3c2-453a-aba0-9baa69b803d4", "f0de407a-a615-4171-8e98-9fc28fab5324"),
+            actualBatchIds);
         List<String> actualNotAttachedBatchIds = usageBatchRepository.findSalNotAttachedToScenario().stream()
             .map(UsageBatch::getId)
             .sorted()
             .collect(Collectors.toList());
-        assertEquals(Arrays.asList("1f332dc2-f3c2-453a-aba0-9baa69b803d4",
-            "55df79f3-7e3f-4d74-9931-9aa513195816", "abd219c1-caae-4542-84e3-f9f4dba0d03b"), actualNotAttachedBatchIds);
+        assertEquals(Collections.singletonList("1f332dc2-f3c2-453a-aba0-9baa69b803d4"), actualNotAttachedBatchIds);
     }
 
     @Test
@@ -281,11 +278,11 @@ public class UsageBatchRepositoryIntegrationTest {
         List<SalLicensee> licensees = usageBatchRepository.findSalLicensees();
         assertEquals(2, licensees.size());
         SalLicensee licensee = licensees.get(0);
-        assertEquals(1112L, licensee.getAccountNumber().longValue());
-        assertEquals("Coors Brewing Company", licensee.getName());
+        assertEquals(5588L, licensee.getAccountNumber().longValue());
+        assertEquals("RGS Energy Group", licensee.getName());
         licensee = licensees.get(1);
-        assertEquals(2000017003L, licensee.getAccountNumber().longValue());
-        assertEquals("ProLitteris", licensee.getName());
+        assertEquals(7001293454L, licensee.getAccountNumber().longValue());
+        assertEquals("Synergy Publishers", licensee.getName());
     }
 
     private UsageBatch buildUsageBatch() {
