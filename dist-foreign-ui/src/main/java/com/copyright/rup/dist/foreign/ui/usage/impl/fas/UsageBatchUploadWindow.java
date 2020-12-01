@@ -298,7 +298,7 @@ public class UsageBatchUploadWindow extends Window {
         Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         button.addClickListener(event -> {
             if (null == accountNumberField.getErrorMessage()) {
-                rro = usagesController.getRro(Long.valueOf(StringUtils.trim(accountNumberField.getValue())));
+                rro = usagesController.getRightsholder(Long.valueOf(StringUtils.trim(accountNumberField.getValue())));
                 if (StringUtils.isNotBlank(rro.getName())) {
                     accountNameField.setValue(rro.getName());
                     productFamilyField.setValue(

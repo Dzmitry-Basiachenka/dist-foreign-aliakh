@@ -1,26 +1,38 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
-import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,13 +46,16 @@ import java.util.stream.Collectors;
  *
  * @author Darya Baraukova
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Windows.class})
 public class SalDetailForRightsholderUpdateWindowTest {
 
+    private ISalUsageController salUsageController;
     private SalDetailForRightsholderUpdateWindow window;
 
     @Before
     public void setUp() {
-        ISalUsageController salUsageController = createMock(ISalUsageController.class);
+        salUsageController = createMock(ISalUsageController.class);
         expect(salUsageController.getUsageDtosForRhUpdate()).andReturn(Collections.emptyList()).once();
         replay(salUsageController);
         window = new SalDetailForRightsholderUpdateWindow(salUsageController);
@@ -66,6 +81,27 @@ public class SalDetailForRightsholderUpdateWindowTest {
         assertEquals(HorizontalLayout.class, buttonsLayoutComponent.getClass());
         verifyButtonsLayout((HorizontalLayout) buttonsLayoutComponent);
         assertEquals(Alignment.BOTTOM_RIGHT, content.getComponentAlignment(buttonsLayoutComponent));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testOnUpdateRighstholderClicked() {
+        mockStatic(Windows.class);
+        Grid<UsageDto> usagesGrid = createMock(Grid.class);
+        Whitebox.setInternalState(window, "usagesGrid", usagesGrid);
+        VerticalLayout content = (VerticalLayout) window.getContent();
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
+        Button updateRhButton = (Button) buttonsLayout.getComponent(0);
+        Collection<?> listeners = updateRhButton.getListeners(Button.ClickEvent.class);
+        assertEquals(1, CollectionUtils.size(listeners));
+        Button.ClickListener listener = (Button.ClickListener) listeners.iterator().next();
+        UsageDto selectedUsage = new UsageDto();
+        expect(usagesGrid.getSelectedItems()).andReturn(Collections.singleton(selectedUsage)).once();
+        Windows.showModalWindow(anyObject(SalUpdateRighstholderWindow.class));
+        expectLastCall().once();
+        replay(usagesGrid, salUsageController, Windows.class);
+        listener.buttonClick(null);
+        verify(usagesGrid, salUsageController, Windows.class);
     }
 
     private void verifySize(Component component, float width, Unit widthUnit, float height, Unit heightUnit) {

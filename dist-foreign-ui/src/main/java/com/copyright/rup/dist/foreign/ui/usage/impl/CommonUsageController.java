@@ -70,8 +70,8 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
     }
 
     @Override
-    public Rightsholder getRro(Long rroAccountNumber) {
-        return MoreObjects.firstNonNull(prmIntegrationService.getRightsholder(rroAccountNumber), new Rightsholder());
+    public Rightsholder getRightsholder(Long rhAccountNumber) {
+        return MoreObjects.firstNonNull(prmIntegrationService.getRightsholder(rhAccountNumber), new Rightsholder());
     }
 
     @Override

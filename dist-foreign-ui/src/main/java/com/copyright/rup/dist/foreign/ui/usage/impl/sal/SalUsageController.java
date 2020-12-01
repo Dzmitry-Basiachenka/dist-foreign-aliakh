@@ -223,8 +223,14 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
         return getUsageBatchService().getSalNotAttachedToScenario();
     }
 
+    @Override
     public List<UsageDto> getUsageDtosForRhUpdate() {
         return salUsageService.getUsageDtos(getUsageFilterController().getWidget().getAppliedFilter(), null, null);
+    }
+
+    @Override
+    public void updateUsageRighstholder(String usageId, Long rhAccountNumber, String reason) {
+        //TODO {dbaraukova} implement service logic to update RH
     }
 
     @Override

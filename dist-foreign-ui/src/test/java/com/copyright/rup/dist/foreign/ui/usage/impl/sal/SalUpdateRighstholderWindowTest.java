@@ -1,0 +1,209 @@
+package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
+
+import static org.easymock.EasyMock.expect;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
+import static org.powermock.api.easymock.PowerMock.verify;
+
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.google.common.collect.Lists;
+import com.vaadin.data.HasValue;
+import com.vaadin.server.Sizeable;
+import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
+
+import java.util.Collection;
+
+/**
+ * Verifies {@link SalUpdateRighstholderWindow}.
+ * <p>
+ * Copyright (C) 2020 copyright.com
+ * <p>
+ * Date: 11/30/20
+ *
+ * @author Darya Baraukova
+ */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Windows.class})
+public class SalUpdateRighstholderWindowTest {
+
+    private static final String RH_ACCOUNT_NUMBER = "2000047356";
+    private static final String RH_NAME = "National Geographic Partners";
+    private ISalUsageController usageController;
+    private SalUpdateRighstholderWindow window;
+
+    @Before
+    public void setUp() {
+        usageController = createMock(ISalUsageController.class);
+    }
+
+    @Test
+    public void testConstructor() {
+        UsageDto usage = new UsageDto();
+        replay(usageController);
+        window = new SalUpdateRighstholderWindow(usageController, usage);
+        assertEquals("Update Rightsholder", window.getCaption());
+        assertEquals(440, window.getWidth(), 0);
+        assertEquals(Sizeable.Unit.PIXELS, window.getWidthUnits());
+        assertEquals(190, window.getHeight(), 0);
+        assertEquals(Sizeable.Unit.PIXELS, window.getHeightUnits());
+        Component content = window.getContent();
+        assertTrue(content instanceof VerticalLayout);
+        VerticalLayout contentLayout = (VerticalLayout) content;
+        assertEquals(2, contentLayout.getComponentCount());
+        Component rhLayout = contentLayout.getComponent(0);
+        verifyRightsholderLayout(rhLayout);
+        Component buttonsLayout = contentLayout.getComponent(1);
+        verifyButtonsLayout(buttonsLayout);
+        verify(usageController);
+    }
+
+    @Test
+    public void testVerifyButtonClick() {
+        UsageDto usage = new UsageDto();
+        Rightsholder rh = new Rightsholder();
+        rh.setAccountNumber(2000047356L);
+        rh.setName(RH_NAME);
+        expect(usageController.getRightsholder(2000047356L)).andReturn(rh).once();
+        expect(usageController.getRightsholder(20000170L)).andReturn(new Rightsholder()).once();
+        replay(usageController);
+        window = new SalUpdateRighstholderWindow(usageController, usage);
+        Component content = window.getContent();
+        VerticalLayout rootLayout = (VerticalLayout) content;
+        assertEquals(2, rootLayout.getComponentCount());
+        VerticalLayout rhLayout = (VerticalLayout) rootLayout.getComponent(0);
+        HorizontalLayout horizontalLayout = (HorizontalLayout) rhLayout.getComponent(0);
+        TextField numberField = (TextField) horizontalLayout.getComponent(0);
+        Button verifyButton = (Button) horizontalLayout.getComponent(1);
+        TextField nameField = (TextField) rhLayout.getComponent(1);
+        assertVerifyButton(verifyButton, numberField, nameField);
+        verify(usageController);
+    }
+
+    @Test
+    public void testSaveButtonClickNotSetValues() {
+        mockStatic(Windows.class);
+        Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
+        UsageDto usage = new UsageDto();
+        usage.setId("dasdasdasd");
+        usage.setRhAccountNumber(Long.valueOf(RH_ACCOUNT_NUMBER));
+        Rightsholder rh = new Rightsholder();
+        rh.setAccountNumber(Long.valueOf(RH_ACCOUNT_NUMBER));
+        rh.setName(RH_NAME);
+        window = new SalUpdateRighstholderWindow(usageController, usage);
+        Whitebox.setInternalState(window, "rh", rh);
+        Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
+            Whitebox.getInternalState(window, "rhAccountNumberField"),
+            Whitebox.getInternalState(window, "rhNameField"));
+        Windows.showValidationErrorWindow(fields);
+        expectLastCall().once();
+        replay(clickEvent, usageController, Windows.class);
+        Component content = window.getContent();
+        assertTrue(content instanceof VerticalLayout);
+        VerticalLayout contentLayout = (VerticalLayout) content;
+        assertEquals(2, contentLayout.getComponentCount());
+        Component rhLayout = contentLayout.getComponent(0);
+        verifyRightsholderLayout(rhLayout);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) contentLayout.getComponent(1);
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        Collection<?> listeners = saveButton.getListeners(Button.ClickEvent.class);
+        assertEquals(1, listeners.size());
+        Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(clickEvent, usageController, Windows.class);
+    }
+
+    private void verifyRightsholderLayout(Component component) {
+        assertTrue(component instanceof VerticalLayout);
+        VerticalLayout verticalLayout = (VerticalLayout) component;
+        assertEquals(2, verticalLayout.getComponentCount());
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
+        assertEquals(2, horizontalLayout.getComponentCount());
+        TextField numberField = verifyTextField(horizontalLayout.getComponent(0), "RH Account #");
+        assertEquals(100, numberField.getWidth(), 0);
+        assertEquals(Sizeable.Unit.PERCENTAGE, numberField.getWidthUnits());
+        Collection<?> listeners = numberField.getListeners(HasValue.ValueChangeEvent.class);
+        assertTrue(CollectionUtils.isNotEmpty(listeners));
+        assertEquals(2, listeners.size());
+        TextField nameField = verifyTextField(verticalLayout.getComponent(1), "RH Name");
+        assertTrue(nameField.isReadOnly());
+        Component verifyComponent = horizontalLayout.getComponent(1);
+        assertTrue(verifyComponent instanceof Button);
+        Button verifyButton = (Button) verifyComponent;
+        assertEquals("Verify", verifyComponent.getCaption());
+        assertEquals(1, verifyButton.getListeners(Button.ClickEvent.class).size());
+    }
+
+    private TextField verifyTextField(Component component, String caption) {
+        assertTrue(component instanceof TextField);
+        assertEquals(caption, component.getCaption());
+        return (TextField) component;
+    }
+
+    private void assertVerifyButton(Button verifyButton, TextField numberField, TextField nameField) {
+        assertEquals(StringUtils.EMPTY, nameField.getValue());
+        verifyButton.click();
+        assertEquals(StringUtils.EMPTY, nameField.getValue());
+        numberField.setValue("value");
+        verifyButton.click();
+        assertEquals(StringUtils.EMPTY, nameField.getValue());
+        numberField.setValue("123456789874541246");
+        verifyButton.click();
+        assertEquals(StringUtils.EMPTY, nameField.getValue());
+        numberField.setValue("2000047356");
+        verifyButton.click();
+        assertEquals("National Geographic Partners", nameField.getValue());
+        numberField.setValue("20000170");
+        verifyButton.click();
+        assertEquals(StringUtils.EMPTY, nameField.getValue());
+    }
+
+    private void verifyButtonsLayout(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertEquals(2, layout.getComponentCount());
+        Button saveButton = verifyButton(layout.getComponent(0), "Save");
+        verifyButton(layout.getComponent(1), "Close");
+        assertEquals(1, saveButton.getListeners(Button.ClickEvent.class).size());
+        verifySaveClickListener(saveButton);
+    }
+
+    private Button verifyButton(Component component, String caption) {
+        assertTrue(component instanceof Button);
+        assertEquals(caption, component.getCaption());
+        return (Button) component;
+    }
+
+    private void verifySaveClickListener(Button saveButton) {
+        mockStatic(Windows.class);
+        Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
+            Whitebox.getInternalState(window, "rhAccountNumberField"),
+            Whitebox.getInternalState(window, "rhNameField"));
+        Windows.showValidationErrorWindow(fields);
+        expectLastCall().once();
+        replay(Windows.class);
+        saveButton.click();
+        verify(Windows.class);
+        reset(Windows.class);
+    }
+}
