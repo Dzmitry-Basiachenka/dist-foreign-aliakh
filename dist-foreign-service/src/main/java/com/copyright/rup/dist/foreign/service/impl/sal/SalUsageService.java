@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -265,5 +266,19 @@ public class SalUsageService implements ISalUsageService {
         LOGGER.info("Move SAL details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
             LogUtils.size(usageIds));
         return usageIds;
+    }
+
+    @Override
+    @Transactional
+    public void updateToEligibleWithRhAccountNumber(String usageId, Long rhAccountNumber, String reason) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Update RH for SAL detail. Started. UsageId={}, RhAccountNumber={}, Reason={}, UserName={}",
+            usageId, rhAccountNumber, reason, userName);
+        salUsageRepository.updateRhAccountNumberAndStatusById(usageId, rhAccountNumber, UsageStatusEnum.ELIGIBLE,
+            userName);
+        usageAuditService.logAction(usageId, UsageActionTypeEnum.RH_UPDATED,
+            "RH was updated to " + rhAccountNumber + ". Reason: " + reason);
+        LOGGER.info("Update RH for SAL detail. Finished. UsageId={}, RhAccountNumber={}, Reason={}, UserName={}",
+            usageId, rhAccountNumber, reason, userName);
     }
 }

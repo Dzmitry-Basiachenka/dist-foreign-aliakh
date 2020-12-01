@@ -38,6 +38,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -145,6 +146,11 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
+    public boolean isStatusFilterApplied() {
+        return Objects.nonNull(getUsageFilterController().getWidget().getAppliedFilter().getUsageStatus());
+    }
+
+    @Override
     public boolean fundPoolExists(String name) {
         return fundPoolService.fundPoolExists(FdaConstants.SAL_PRODUCT_FAMILY, name);
     }
@@ -229,8 +235,8 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
-    public void updateUsageRighstholder(String usageId, Long rhAccountNumber, String reason) {
-        //TODO {dbaraukova} implement service logic to update RH
+    public void updateToEligibleWithRhAccountNumber(String usageId, Long rhAccountNumber, String reason) {
+        salUsageService.updateToEligibleWithRhAccountNumber(usageId, rhAccountNumber, reason);
     }
 
     @Override

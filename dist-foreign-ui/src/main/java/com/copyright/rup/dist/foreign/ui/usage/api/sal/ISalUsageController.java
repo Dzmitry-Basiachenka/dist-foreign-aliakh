@@ -189,11 +189,19 @@ public interface ISalUsageController extends ICommonUsageController {
     List<UsageDto> getUsageDtosForRhUpdate();
 
     /**
-     * Updates usage with provided RH account number.
+     * Updates usage with provided RH account number
+     * and changes status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}.
      *
      * @param usageId         usage id
      * @param rhAccountNumber RH account number
      * @param reason          reason for RH update
      */
-    void updateUsageRighstholder(String usageId, Long rhAccountNumber, String reason);
+    void updateToEligibleWithRhAccountNumber(String usageId, Long rhAccountNumber, String reason);
+
+    /**
+     * Verifies whether status filter is applied.
+     *
+     * @return {@code true} - if status filter is applied, {@code false} - otherwise
+     */
+    boolean isStatusFilterApplied();
 }

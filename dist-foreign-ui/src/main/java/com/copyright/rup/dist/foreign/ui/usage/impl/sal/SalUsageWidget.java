@@ -226,6 +226,8 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
         String message = null;
         if (0 == controller.getBeansCount()) {
             message = ForeignUi.getMessage("message.error.update_rightsholders.empty_usages");
+        } else if (!controller.isStatusFilterApplied()) {
+            message = ForeignUi.getMessage("message.error.status_not_applied");
         } else if (!controller.areValidFilteredUsageStatuses(UsageStatusEnum.RH_NOT_FOUND,
             UsageStatusEnum.WORK_NOT_GRANTED)) {
             message = ForeignUi.getMessage("message.error.invalid_usages_status", "RH_NOT_FOUND or WORK_NOT_GRANTED",

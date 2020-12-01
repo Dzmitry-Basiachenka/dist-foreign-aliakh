@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
@@ -185,4 +186,15 @@ public interface ISalUsageRepository {
      * @param userName   user name
      */
     void calculateAmounts(String scenarioId, String userName);
+
+    /**
+     * Updates {@link Usage} RH account number and status by provided id.
+     *
+     * @param usageId         {@link Usage} identifier
+     * @param rhAccountNumber RH account number
+     * @param status          {@link UsageStatusEnum} instance
+     * @param userName        user name
+     */
+    void updateRhAccountNumberAndStatusById(String usageId, Long rhAccountNumber, UsageStatusEnum status,
+                                            String userName);
 }

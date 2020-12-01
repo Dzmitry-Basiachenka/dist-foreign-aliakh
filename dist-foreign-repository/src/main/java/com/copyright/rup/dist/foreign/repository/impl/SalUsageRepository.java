@@ -195,4 +195,15 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("ISalUsageMapper.calculateAmounts", params);
     }
+
+    @Override
+    public void updateRhAccountNumberAndStatusById(String usageId, Long rhAccountNumber, UsageStatusEnum status,
+                                                   String userName) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put("usageId", Objects.requireNonNull(usageId));
+        parameters.put("status", Objects.requireNonNull(status));
+        parameters.put("rhAccountNumber", Objects.requireNonNull(rhAccountNumber));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        update("ISalUsageMapper.updateRhAccountNumberAndStatusById", parameters);
+    }
 }

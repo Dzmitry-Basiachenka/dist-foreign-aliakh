@@ -68,6 +68,7 @@ public class SalUsageServiceTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final String USAGE_ID_1 = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
     private static final String USAGE_ID_2 = "c72554d7-687e-4173-8406-dbddef74da98";
+    private static final String USAGE_ID_3 = "64923002-0873-4175-be01-4a9d64aeb99d";
     private static final String RIGHTSHOLDER_ID = "4914f51d-866c-4e48-8b03-fb4b29b1a5f3";
     private static final String SCENARIO_ID = "2d50e235-34cd-4c38-9e4c-ecd2e748e9ff";
     private static final String SEARCH = "search";
@@ -347,6 +348,21 @@ public class SalUsageServiceTest {
         replay(RupContextUtils.class, usageArchiveRepository, usageRepository);
         salUsageService.moveToArchive(scenario);
         verify(RupContextUtils.class, usageArchiveRepository, usageRepository);
+    }
+
+    @Test
+    public void testUpdateToEligibleWithRhAccountNumber() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        salUsageRepository.updateRhAccountNumberAndStatusById(USAGE_ID_3, 1000023401L, UsageStatusEnum.ELIGIBLE,
+            USER_NAME);
+        expectLastCall().once();
+        usageAuditService.logAction(USAGE_ID_3, UsageActionTypeEnum.RH_UPDATED,
+            "RH was updated to 1000023401. Reason: Manual update");
+        expectLastCall().once();
+        replay(RupContextUtils.class, salUsageRepository, usageAuditService);
+        salUsageService.updateToEligibleWithRhAccountNumber(USAGE_ID_3, 1000023401L, "Manual update");
+        verify(RupContextUtils.class, salUsageRepository, usageAuditService);
     }
 
     private Map<String, Map<String, Rightsholder>> buildRollupsMap() {

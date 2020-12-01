@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
-import com.copyright.rup.dist.foreign.ui.usage.api.sal.UpdateRightsholderEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -36,6 +35,7 @@ class SalUpdateRighstholderWindow extends Window {
     private final ISalUsageController salUsageController;
     private final UsageDto selectedUsage;
     private final Binder<Usage> usageBinder = new Binder<>();
+    private final SalDetailForRightsholderUpdateWindow detailsWindow;
     private TextField rhAccountNumberField;
     private TextField rhNameField;
     private Rightsholder rh;
@@ -44,10 +44,13 @@ class SalUpdateRighstholderWindow extends Window {
      * Constructor.
      *
      * @param salUsageController {@link ISalUsageController} instance
+     * @param detailsWindow      {@link SalDetailForRightsholderUpdateWindow} instance
      * @param selectedUsage      selected {@link UsageDto}
      */
-    SalUpdateRighstholderWindow(ISalUsageController salUsageController, UsageDto selectedUsage) {
+    SalUpdateRighstholderWindow(ISalUsageController salUsageController,
+                                SalDetailForRightsholderUpdateWindow detailsWindow, UsageDto selectedUsage) {
         this.salUsageController = salUsageController;
+        this.detailsWindow = detailsWindow;
         this.selectedUsage = selectedUsage;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.update_rightsholder"));
@@ -140,9 +143,10 @@ class SalUpdateRighstholderWindow extends Window {
                     ForeignUi.getMessage("button.yes"),
                     ForeignUi.getMessage("button.cancel"),
                     reason -> {
-                        salUsageController.updateUsageRighstholder(selectedUsage.getId(),
-                            selectedUsage.getRhAccountNumber(), reason);
-                        fireEvent(new UpdateRightsholderEvent(this));
+                        salUsageController.updateToEligibleWithRhAccountNumber(selectedUsage.getId(),
+                            Long.valueOf(rhAccountNumberField.getValue()), reason);
+                        salUsageController.refreshWidget();
+                        detailsWindow.refreshDataProvider();
                         this.close();
                     }, new StringLengthValidator(ForeignUi.getMessage("field.error.empty.length", 1024), 1, 1024));
             } else {

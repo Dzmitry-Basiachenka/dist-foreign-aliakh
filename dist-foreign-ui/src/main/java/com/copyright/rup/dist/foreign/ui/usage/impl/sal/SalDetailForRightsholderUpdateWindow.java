@@ -59,6 +59,14 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
         dataProvider.refreshAll();
     }
 
+    /**
+     * Refreshes data provider and updates usages grid.
+     */
+    void refreshDataProvider() {
+        usagesGrid.setItems(controller.getUsageDtosForRhUpdate());
+        dataProvider.refreshAll();
+    }
+
     private Component initContent() {
         initSearchWidget();
         initGrid();
@@ -110,7 +118,7 @@ class SalDetailForRightsholderUpdateWindow extends Window implements IRefreshabl
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         updateRightsholderButton = Buttons.createButton(ForeignUi.getMessage("button.update_rightsholder"));
         updateRightsholderButton.addClickListener(event ->
-            Windows.showModalWindow(new SalUpdateRighstholderWindow(controller,
+            Windows.showModalWindow(new SalUpdateRighstholderWindow(controller, this,
                 usagesGrid.getSelectedItems().stream().findFirst().orElse(null))));
         updateRightsholderButton.setEnabled(false);
         Button closeButton = Buttons.createCloseButton(this);
