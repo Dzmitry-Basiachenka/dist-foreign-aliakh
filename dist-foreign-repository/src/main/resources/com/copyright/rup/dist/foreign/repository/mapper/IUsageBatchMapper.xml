@@ -260,12 +260,12 @@
 
     <select id="findSalLicensees" parameterType="string" resultMap="salLicenseeResultMap">
         select distinct
-            (ub.sal_fields->>'licensee_account_number')::numeric licensee_account_number,
-            ub.sal_fields->>'licensee_name' licensee_name
-        from ${schema}.df_usage_archive ua
-        join ${schema}.df_usage_sal usal on ua.df_usage_archive_uid = usal.df_usage_sal_uid
-        join ${schema}.df_usage_batch ub on ua.df_usage_batch_uid = ub.df_usage_batch_uid
-        where ub.product_family = #{productFamily}
-        order by (ub.sal_fields->>'licensee_account_number')::numeric
+            (sal_fields->>'licensee_account_number')::numeric licensee_account_number,
+            sal_fields->>'licensee_name' licensee_name
+        from ${schema}.df_usage_batch
+        where product_family = #{productFamily}
+            and sal_fields->>'licensee_account_number' is not null
+            and sal_fields->>'licensee_name' is not null
+        order by (sal_fields->>'licensee_account_number')::numeric
     </select>
 </mapper>
