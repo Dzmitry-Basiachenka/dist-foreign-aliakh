@@ -155,11 +155,9 @@ public class SalUsageWidgetTest {
     public void testUpdateRightsholdersButtonClickListener() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.isValidStatusFilterApplied()).andReturn(true).once();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isStatusFilterApplied()).andReturn(true).once();
         expect(controller.getUsageDtosForRhUpdate()).andReturn(Lists.newArrayList(new UsageDto()));
-        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.WORK_NOT_GRANTED))
-            .andReturn(true).once();
         Windows.showModalWindow(anyObject(SalDetailForRightsholderUpdateWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -177,6 +175,7 @@ public class SalUsageWidgetTest {
     public void testUpdateRightsholdersButtonClickListenerNoUsages() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.isValidStatusFilterApplied()).andReturn(true).once();
         expect(controller.getBeansCount()).andReturn(0).once();
         Windows.showNotificationWindow("There are no usages for RH update");
         expectLastCall().once();
@@ -195,30 +194,8 @@ public class SalUsageWidgetTest {
     public void testUpdateRightsholdersButtonClickListenerStatusNotApplied() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isStatusFilterApplied()).andReturn(false).once();
-        Windows.showNotificationWindow("Status filter should be applied");
-        expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        Button updateRightsholdersButton =
-            (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-                    .getComponent(0)).getComponent(2);
-        Collection<?> listeners = updateRightsholdersButton.getListeners(ClickEvent.class);
-        assertEquals(2, listeners.size());
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
-    }
-
-    @Test
-    public void testUpdateRightsholdersButtonClickListenerInvalidUsageStatus() {
-        mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.isStatusFilterApplied()).andReturn(true).once();
-        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.WORK_NOT_GRANTED))
-            .andReturn(false).once();
-        Windows.showNotificationWindow("Only usages in RH_NOT_FOUND or WORK_NOT_GRANTED status can be updated");
+        expect(controller.isValidStatusFilterApplied()).andReturn(false).once();
+        Windows.showNotificationWindow("RH_NOT_FOUND or WORK_NOT_GRANTED status filter should be applied");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Button updateRightsholdersButton =
