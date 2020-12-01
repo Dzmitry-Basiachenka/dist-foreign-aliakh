@@ -92,8 +92,8 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
         VaadinUtils.addComponentStyle(periodEndDateFromField, "period-end-date-from-field");
         stringBinder.forField(periodEndDateFromField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
-            .withValidator(getNumericValidator(), "Field value should contain numeric values only")
-            .withValidator(getYearValidator(), String.format("Field value should be in range from %d to %d",
+            .withValidator(getNumericValidator(), ForeignUi.getMessage("field.error.not_numeric"))
+            .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
                 MIN_YEAR, MAX_YEAR))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
@@ -110,8 +110,8 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
         VaadinUtils.addComponentStyle(periodEndDateToField, "period-end-date-to-field");
         stringBinder.forField(periodEndDateToField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
-            .withValidator(getNumericValidator(), "Field value should contain numeric values only")
-            .withValidator(getYearValidator(), String.format("Field value should be in range from %d to %d",
+            .withValidator(getNumericValidator(), ForeignUi.getMessage("field.error.not_numeric"))
+            .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
                 MIN_YEAR, MAX_YEAR))
             .withValidator(value -> {
                 String periodFrom = periodEndDateFromField.getValue();

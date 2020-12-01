@@ -264,8 +264,6 @@
             sal_fields->>'licensee_name' licensee_name
         from ${schema}.df_usage_batch
         where product_family = #{productFamily}
-            and sal_fields->>'licensee_account_number' is not null
-            and sal_fields->>'licensee_name' is not null
         order by (sal_fields->>'licensee_account_number')::numeric
     </select>
 </mapper>
