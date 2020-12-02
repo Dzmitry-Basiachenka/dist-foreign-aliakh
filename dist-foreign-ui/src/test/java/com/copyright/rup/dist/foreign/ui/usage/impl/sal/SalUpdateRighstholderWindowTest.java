@@ -114,8 +114,7 @@ public class SalUpdateRighstholderWindowTest {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         UsageDto usage = new UsageDto();
-        usage.setId("dasdasdasd");
-        usage.setRhAccountNumber(Long.valueOf(RH_ACCOUNT_NUMBER));
+        usage.setId("ebad7d68-b213-433f-8dbe-a581f6ba55a3");
         Rightsholder rh = new Rightsholder();
         rh.setAccountNumber(Long.valueOf(RH_ACCOUNT_NUMBER));
         rh.setName(RH_NAME);
@@ -148,7 +147,6 @@ public class SalUpdateRighstholderWindowTest {
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
         UsageDto usage = new UsageDto();
         usage.setId("ebad7d68-b213-433f-8dbe-a581f6ba55a3");
-        usage.setRhAccountNumber(Long.valueOf(RH_ACCOUNT_NUMBER));
         Rightsholder rh = new Rightsholder();
         rh.setAccountNumber(Long.valueOf(RH_ACCOUNT_NUMBER));
         rh.setName(RH_NAME);
@@ -166,7 +164,7 @@ public class SalUpdateRighstholderWindowTest {
             eq("Are you sure you want to update selected detail with RH 2000047356?"), eq("Yes"), eq("Cancel"),
                 capture(actionDialogListenerCapture), anyObject(Validator.class));
         expectLastCall().once();
-        usageController.updateToEligibleWithRhAccountNumber(usage.getId(), usage.getRhAccountNumber(), "Reason");
+        usageController.updateToEligibleWithRhAccountNumber(usage.getId(), 2000047356L, "Reason");
         expectLastCall().once();
         usageController.refreshWidget();
         expectLastCall().once();
