@@ -122,14 +122,14 @@ public interface IAaclUsageService {
     void deleteById(String usageId);
 
     /**
-     * Verifies whether all usages found by defined {@link UsageFilter} have one of specified statuses or not.
+     * Verifies whether all usages found by defined {@link UsageFilter} have specified status or not.
      *
-     * @param filter   {@link UsageFilter} instance
-     * @param statuses {@link UsageStatusEnum} instance
+     * @param filter {@link UsageFilter} instance
+     * @param status {@link UsageStatusEnum} instance
      * @return {@code true} - if all filtered usages have specified {@link UsageStatusEnum},
      * {@code false} - otherwise
      */
-    boolean areValidFilteredUsageStatuses(UsageFilter filter, UsageStatusEnum... statuses);
+    boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
 
     /**
      * Verifies whether all filtered {@link Usage}s are eligible for sending for classification.

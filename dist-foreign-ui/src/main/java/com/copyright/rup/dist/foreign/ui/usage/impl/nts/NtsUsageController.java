@@ -106,9 +106,9 @@ public class NtsUsageController extends CommonUsageController implements INtsUsa
     }
 
     @Override
-    public boolean areValidFilteredUsageStatuses(UsageStatusEnum... statuses) {
+    public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
         return getUsageService()
-            .areValidFilteredUsageStatuses(getUsageFilterController().getWidget().getAppliedFilter(), statuses);
+            .isValidFilteredUsageStatus(getUsageFilterController().getWidget().getAppliedFilter(), status);
     }
 
     @Override

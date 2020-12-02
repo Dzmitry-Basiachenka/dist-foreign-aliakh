@@ -256,14 +256,14 @@ public interface IUsageService {
     List<Usage> getUsagesByStatusAndProductFamily(UsageStatusEnum status, String productFamily);
 
     /**
-     * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have one of specified statuses or not.
+     * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.
      *
-     * @param filter   {@link UsageFilter} instance
-     * @param statuses {@link UsageStatusEnum} instance
+     * @param filter {@link UsageFilter} instance
+     * @param status {@link UsageStatusEnum} instance
      * @return {@code true} - if all filtered {@link Usage}s have specified {@link UsageStatusEnum},
      * {@code false} - otherwise
      */
-    boolean areValidFilteredUsageStatuses(UsageFilter filter, UsageStatusEnum... statuses);
+    boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
 
     /**
      * Updates {@link Usage} and verifies that version of {@link Usage} is the same as in database.

@@ -96,9 +96,9 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     }
 
     @Override
-    public boolean areValidFilteredUsageStatuses(UsageStatusEnum... statuses) {
+    public boolean isValidFilteredUsageStatus(UsageStatusEnum status) {
         return getUsageService()
-            .areValidFilteredUsageStatuses(getUsageFilterController().getWidget().getAppliedFilter(), statuses);
+            .isValidFilteredUsageStatus(getUsageFilterController().getWidget().getAppliedFilter(), status);
     }
 
     @Override

@@ -144,14 +144,14 @@ public interface IAaclUsageRepository {
     List<Integer> findUsagePeriodsByFilter(UsageFilter filter);
 
     /**
-     * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have one of specified statuses or not.
+     * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.
      *
-     * @param filter   {@link UsageFilter} instance
-     * @param statuses {@link UsageStatusEnum} instance
+     * @param filter {@link UsageFilter} instance
+     * @param status {@link UsageStatusEnum} instance
      * @return {@code true} - if there are no {@link Usage}s found by defined {@link UsageFilter}
      * with status different from specified , {@code false} - otherwise
      */
-    boolean areValidFilteredUsageStatuses(UsageFilter filter, UsageStatusEnum... statuses);
+    boolean isValidFilteredUsageStatus(UsageFilter filter, UsageStatusEnum status);
 
     /**
      * Verifies whether all filtered {@link Usage}s are eligible for sending for classification.

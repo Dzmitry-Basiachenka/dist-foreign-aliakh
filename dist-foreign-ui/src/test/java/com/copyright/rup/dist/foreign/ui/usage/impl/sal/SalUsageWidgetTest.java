@@ -214,7 +214,7 @@ public class SalUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         prepareCreateScenarioExpectation();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
@@ -246,7 +246,7 @@ public class SalUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
-        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -260,7 +260,7 @@ public class SalUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
-        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(700000000L)).once();
         Windows.showNotificationWindow(
             "Scenario cannot be created. The following rightsholder(s) are absent in PRM: <i><b>[700000000]</b></i>");
@@ -277,7 +277,7 @@ public class SalUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
-        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         Windows.showNotificationWindow("Please apply Batches Filter to create a scenario");
         expectLastCall().once();
@@ -294,7 +294,7 @@ public class SalUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
-        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         Windows.showNotificationWindow("Only one usage batch can be associated with scenario");
         expectLastCall().once();
@@ -310,7 +310,7 @@ public class SalUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
         prepareCreateScenarioExpectation();
-        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         Windows.showNotificationWindow("Detail Type filter should not be applied to create scenario");
         expectLastCall().once();
@@ -324,7 +324,7 @@ public class SalUsageWidgetTest {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.singletonList("Batch Name")).once();
@@ -342,7 +342,7 @@ public class SalUsageWidgetTest {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getProcessingBatchesNames(Collections.singleton(BATCH_ID)))
             .andReturn(Collections.emptyList()).once();
