@@ -1,3 +1,11 @@
+12.1.28
+-
+* B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: apply service logic to update RH for selected detail and add validation that status filter is applied on Usages tab
+* B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: implement Update Rightsholder modal window
+* B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: remove redundant verification for applied usage status filter
+* B-61833 FDA: SAL historical item bank detail report: implement selection only licensees that have historical IB details
+* Revert "B-61833 FDA: SAL historical item bank detail report: implement selection only licensees that have historical IB details"
+
 12.1.27
 -
 * B-61833 FDA: SAL historical item bank detail report: implement CSV report generation
