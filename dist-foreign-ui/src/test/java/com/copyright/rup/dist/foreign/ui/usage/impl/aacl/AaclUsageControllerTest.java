@@ -175,14 +175,14 @@ public class AaclUsageControllerTest {
     }
 
     @Test
-    public void testAreValidFilteredUsageStatuses() {
+    public void testIsValidFilteredUsageStatus() {
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
-        expect(aaclUsageService.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.RH_FOUND))
+        expect(aaclUsageService.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND))
             .andReturn(true).once();
         replay(filterController, filterWidgetMock, aaclUsageService);
-        assertTrue(controller.areValidFilteredUsageStatuses(UsageStatusEnum.RH_FOUND));
+        assertTrue(controller.isValidFilteredUsageStatus(UsageStatusEnum.RH_FOUND));
         verify(filterController, filterWidgetMock, aaclUsageService);
     }
 

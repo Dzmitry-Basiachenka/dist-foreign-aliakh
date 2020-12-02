@@ -275,26 +275,24 @@ public class AaclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testAreValidFilteredUsageStatusesFilteringByBatchWithUsagesInCorrectStatusOnly() {
+    public void testIsValidFilteredUsageStatusFilteringByBatchWithUsagesInCorrectStatusOnly() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("6e6f656a-e080-4426-b8ea-985b69f8814d"));
-        assertTrue(aaclUsageRepository.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.RH_FOUND));
+        assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
 
     @Test
-    public void testAreValidFilteredUsageStatusesFilteringByBatchWithUsagesInDifferentStatusOnly() {
+    public void testIsValidFilteredUsageStatusFilteringByBatchWithUsagesInDifferentStatusOnly() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("38e3190a-cf2b-4a2a-8a14-1f6e5f09011c"));
-        assertFalse(aaclUsageRepository.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.RH_FOUND));
+        assertFalse(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
 
     @Test
-    public void testAreValidFilteredUsageStatusesFilteringByBatchWithMixedUsageStatuses() {
+    public void testIsValidFilteredUsageStatusFilteringByBatchWithMixedUsageStatuses() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
-        assertFalse(aaclUsageRepository.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.RH_FOUND));
-        assertTrue(aaclUsageRepository.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.RH_FOUND,
-            UsageStatusEnum.WORK_NOT_FOUND));
+        assertFalse(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
 
     @Test
@@ -302,41 +300,41 @@ public class AaclUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
-        assertTrue(aaclUsageRepository.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.RH_FOUND));
+        assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
 
     @Test
-    public void testAreValidFilteredUsageStatusesFilteringByBatchAndDifferentStatus() {
+    public void testIsValidFilteredUsageStatusFilteringByBatchAndDifferentStatus() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        assertFalse(aaclUsageRepository.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.RH_FOUND));
+        assertFalse(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
 
     @Test
-    public void testAreValidFilteredUsageStatusesFilteringByBatchAndStatusAndCorrectUsagePeriod() {
+    public void testIsValidFilteredUsageStatusFilteringByBatchAndStatusAndCorrectUsagePeriod() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
         usageFilter.setUsagePeriod(2020);
-        assertTrue(aaclUsageRepository.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.RH_FOUND));
+        assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
 
     @Test
-    public void testAreValidFilteredUsageStatusesFilteringByBatchAndStatusAndDifferentUsagePeriod() {
+    public void testIsValidFilteredUsageStatusFilteringByBatchAndStatusAndDifferentUsagePeriod() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
         usageFilter.setUsagePeriod(2012);
-        assertTrue(aaclUsageRepository.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.RH_FOUND));
+        assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
 
     @Test
-    public void testAreValidFilteredUsageStatusesFilteringByBatchAndStatusWithNoUsages() {
+    public void testIsValidFilteredUsageStatusFilteringByBatchAndStatusWithNoUsages() {
         UsageFilter usageFilter = buildUsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(BATCH_ID_3));
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        assertTrue(aaclUsageRepository.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.RH_FOUND));
+        assertTrue(aaclUsageRepository.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.RH_FOUND));
     }
 
     @Test

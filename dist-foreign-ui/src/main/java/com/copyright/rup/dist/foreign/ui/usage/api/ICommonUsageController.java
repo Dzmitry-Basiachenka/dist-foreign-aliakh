@@ -143,14 +143,13 @@ public interface ICommonUsageController extends IController<ICommonUsageWidget> 
     void onScenarioCreated(ScenarioCreateEvent event);
 
     /**
-     * Vefiries whether all filtered {@link com.copyright.rup.dist.foreign.domain.Usage}s
-     * in one of specified statuses or not.
+     * Vefiries whether all filtered {@link com.copyright.rup.dist.foreign.domain.Usage}s in specified status or not.
      *
-     * @param statuses {@link UsageStatusEnum} instance
+     * @param status {@link UsageStatusEnum} instance
      * @return {@code true} - if all filtered usages have specified {@link UsageStatusEnum},
      * {@code false} - otherwise
      */
-    boolean areValidFilteredUsageStatuses(UsageStatusEnum... statuses);
+    boolean isValidFilteredUsageStatus(UsageStatusEnum status);
 
     /**
      * @return selected product family from filter

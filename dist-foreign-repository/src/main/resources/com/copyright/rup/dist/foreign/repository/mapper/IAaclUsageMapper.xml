@@ -890,7 +890,7 @@
         where u.df_scenario_uid = #{scenarioId}
     </select>
 
-    <select id="areValidFilteredUsageStatuses" parameterType="map" resultType="boolean">
+    <select id="isValidFilteredUsageStatus" parameterType="map" resultType="boolean">
         select not exists (
             select 1
             from ${schema}.df_usage u
@@ -898,10 +898,7 @@
             join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
             <include refid="IAaclUsageMapper.aaclUsageFilter"/>
                 and u.df_scenario_uid is null
-                and u.status_ind not in
-                    <foreach collection="statuses" item="status" open="(" separator="," close=")">
-                        #{status}
-                    </foreach>
+                and u.status_ind != #{status}
         )
     </select>
 

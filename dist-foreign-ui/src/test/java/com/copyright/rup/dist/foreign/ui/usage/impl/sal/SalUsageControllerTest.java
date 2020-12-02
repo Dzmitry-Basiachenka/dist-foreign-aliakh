@@ -219,14 +219,13 @@ public class SalUsageControllerTest {
     }
 
     @Test
-    public void testAreValidFilteredUsageStatuses() {
+    public void testIsValidFilteredUsageStatus() {
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
-        expect(usageService.areValidFilteredUsageStatuses(usageFilter, UsageStatusEnum.ELIGIBLE))
-            .andReturn(true).once();
+        expect(usageService.isValidFilteredUsageStatus(usageFilter, UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         replay(filterController, filterWidget, usageService);
-        assertTrue(controller.areValidFilteredUsageStatuses(UsageStatusEnum.ELIGIBLE));
+        assertTrue(controller.isValidFilteredUsageStatus(UsageStatusEnum.ELIGIBLE));
         verify(filterController, filterWidget, usageService);
     }
 

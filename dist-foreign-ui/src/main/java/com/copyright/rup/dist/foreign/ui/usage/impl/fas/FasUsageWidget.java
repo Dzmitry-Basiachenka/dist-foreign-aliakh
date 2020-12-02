@@ -112,7 +112,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
         // Click listener and second isWorkNotFoundStatusApplied() call were added due to problem with
         // modal window appearance in chrome browser
         sendForResearchButton.addClickListener(event -> {
-            if (!controller.areValidFilteredUsageStatuses(UsageStatusEnum.WORK_NOT_FOUND)) {
+            if (!controller.isValidFilteredUsageStatus(UsageStatusEnum.WORK_NOT_FOUND)) {
                 Windows.showNotificationWindow(
                     ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.WORK_NOT_FOUND,
                         "sent for research"));
@@ -165,7 +165,7 @@ public class FasUsageWidget extends CommonUsageWidget implements IFasUsageWidget
 
         @Override
         public boolean handleConnectorRequest(VaadinRequest request, VaadinResponse response, String path) {
-            return controller.areValidFilteredUsageStatuses(UsageStatusEnum.WORK_NOT_FOUND)
+            return controller.isValidFilteredUsageStatus(UsageStatusEnum.WORK_NOT_FOUND)
                 && super.handleConnectorRequest(request, response, path);
         }
     }
