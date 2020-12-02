@@ -199,9 +199,11 @@ public interface ISalUsageController extends ICommonUsageController {
     void updateToEligibleWithRhAccountNumber(String usageId, Long rhAccountNumber, String reason);
 
     /**
-     * Verifies whether status filter is applied.
+     * Verifies whether status filter is applied
+     * and has value {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND}
+     * or {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_NOT_GRANTED}.
      *
      * @return {@code true} - if status filter is applied, {@code false} - otherwise
      */
-    boolean isStatusFilterApplied();
+    boolean isValidStatusFilterApplied();
 }

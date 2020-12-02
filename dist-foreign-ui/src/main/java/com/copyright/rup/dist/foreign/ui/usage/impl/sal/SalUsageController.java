@@ -146,8 +146,10 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     }
 
     @Override
-    public boolean isStatusFilterApplied() {
-        return Objects.nonNull(getUsageFilterController().getWidget().getAppliedFilter().getUsageStatus());
+    public boolean isValidStatusFilterApplied() {
+        UsageStatusEnum appliedStatus = getUsageFilterController().getWidget().getAppliedFilter().getUsageStatus();
+        return Objects.nonNull(appliedStatus)
+            && (UsageStatusEnum.RH_NOT_FOUND == appliedStatus || UsageStatusEnum.WORK_NOT_GRANTED == appliedStatus);
     }
 
     @Override

@@ -224,14 +224,11 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
 
     private void onUpdateRightsholdersButtonClicked() {
         String message = null;
-        if (0 == controller.getBeansCount()) {
+        if (!controller.isValidStatusFilterApplied()) {
+            message = ForeignUi.getMessage("message.error.status_not_applied_or_incorrect",
+                UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.WORK_NOT_GRANTED);
+        } else if (0 == controller.getBeansCount()) {
             message = ForeignUi.getMessage("message.error.update_rightsholders.empty_usages");
-        } else if (!controller.isStatusFilterApplied()) {
-            message = ForeignUi.getMessage("message.error.status_not_applied");
-        } else if (!controller.areValidFilteredUsageStatuses(UsageStatusEnum.RH_NOT_FOUND,
-            UsageStatusEnum.WORK_NOT_GRANTED)) {
-            message = ForeignUi.getMessage("message.error.invalid_usages_status", "RH_NOT_FOUND or WORK_NOT_GRANTED",
-                "updated");
         }
         if (Objects.isNull(message)) {
             Windows.showModalWindow(new SalDetailForRightsholderUpdateWindow(controller));

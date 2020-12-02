@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -230,12 +231,32 @@ public class SalUsageControllerTest {
     }
 
     @Test
-    public void testIsStatusFilterApplied() {
+    public void testIsValidStatusFilterAppliedRhNotFound() {
+        usageFilter.setUsageStatus(UsageStatusEnum.RH_NOT_FOUND);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidget, usageService);
+        assertTrue(controller.isValidStatusFilterApplied());
+        verify(filterController, filterWidget, usageService);
+    }
+
+    @Test
+    public void testIsValidStatusFilterAppliedWorkNotGranted() {
+        usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_GRANTED);
+        expect(filterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidget, usageService);
+        assertTrue(controller.isValidStatusFilterApplied());
+        verify(filterController, filterWidget, usageService);
+    }
+
+    @Test
+    public void testIsValidStatusFilterAppliedWorkEligible() {
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         expect(filterWidget.getAppliedFilter()).andReturn(usageFilter).once();
         replay(filterController, filterWidget, usageService);
-        assertTrue(controller.isStatusFilterApplied());
+        assertFalse(controller.isValidStatusFilterApplied());
         verify(filterController, filterWidget, usageService);
     }
 
