@@ -10022,7 +10022,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'abd219c1-caae-4542-84e3-f9f4dba0d03b')
             column(name: 'name', value: 'SAL Historical Item Bank Details report Usage Batch 2')
-            column(name: 'payment_date', value: '2019-06-30')
+            column(name: 'payment_date', value: '2020-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'sal_fields', value: '{"licensee_account_number": 2000017003, "licensee_name": "ProLitteris"}')
