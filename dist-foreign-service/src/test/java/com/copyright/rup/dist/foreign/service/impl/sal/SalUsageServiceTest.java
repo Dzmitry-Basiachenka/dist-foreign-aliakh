@@ -359,10 +359,10 @@ public class SalUsageServiceTest {
         salUsageRepository.updateRhAccountNumberAndStatusById(USAGE_ID_3, 1000023401L, UsageStatusEnum.ELIGIBLE,
             USER_NAME);
         expectLastCall().once();
-        usageAuditService.logAction(USAGE_ID_3, UsageActionTypeEnum.RH_UPDATED,
-            "RH was updated to 1000023401. Reason: Manual update");
+        usageAuditService.logAction(USAGE_ID_3, UsageActionTypeEnum.RH_UPDATED, "Manual update");
         expectLastCall().once();
-        usageAuditService.logAction(USAGE_ID_3, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
+        usageAuditService.logAction(USAGE_ID_3, UsageActionTypeEnum.ELIGIBLE,
+            "Usage has become eligible. RH was updated to 1000023401");
         expectLastCall().once();
         rightsholderService.updateRighstholdersAsync(Collections.singleton(1000023401L));
         expectLastCall().once();

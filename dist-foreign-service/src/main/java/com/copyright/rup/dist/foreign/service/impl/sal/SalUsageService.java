@@ -276,9 +276,9 @@ public class SalUsageService implements ISalUsageService {
             usageId, rhAccountNumber, reason, userName);
         salUsageRepository.updateRhAccountNumberAndStatusById(usageId, rhAccountNumber, UsageStatusEnum.ELIGIBLE,
             userName);
-        usageAuditService.logAction(usageId, UsageActionTypeEnum.RH_UPDATED,
-            "RH was updated to " + rhAccountNumber + ". Reason: " + reason);
-        usageAuditService.logAction(usageId, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
+        usageAuditService.logAction(usageId, UsageActionTypeEnum.RH_UPDATED, reason);
+        usageAuditService.logAction(usageId, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible. " +
+            "RH was updated to " + rhAccountNumber);
         rightsholderService.updateRighstholdersAsync(Collections.singleton(rhAccountNumber));
         LOGGER.info("Update RH for SAL detail. Finished. UsageId={}, RhAccountNumber={}, Reason={}, UserName={}",
             usageId, rhAccountNumber, reason, userName);
