@@ -353,6 +353,8 @@ public class SalUsageServiceTest {
     @Test
     public void testUpdateToEligibleWithRhAccountNumber() {
         mockStatic(RupContextUtils.class);
+        IRightsholderService rightsholderService = createMock(IRightsholderService.class);
+        Whitebox.setInternalState(salUsageService, rightsholderService);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         salUsageRepository.updateRhAccountNumberAndStatusById(USAGE_ID_3, 1000023401L, UsageStatusEnum.ELIGIBLE,
             USER_NAME);
@@ -360,9 +362,13 @@ public class SalUsageServiceTest {
         usageAuditService.logAction(USAGE_ID_3, UsageActionTypeEnum.RH_UPDATED,
             "RH was updated to 1000023401. Reason: Manual update");
         expectLastCall().once();
-        replay(RupContextUtils.class, salUsageRepository, usageAuditService);
+        usageAuditService.logAction(USAGE_ID_3, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
+        expectLastCall().once();
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(1000023401L));
+        expectLastCall().once();
+        replay(RupContextUtils.class, salUsageRepository, usageAuditService, rightsholderService);
         salUsageService.updateToEligibleWithRhAccountNumber(USAGE_ID_3, 1000023401L, "Manual update");
-        verify(RupContextUtils.class, salUsageRepository, usageAuditService);
+        verify(RupContextUtils.class, salUsageRepository, usageAuditService, rightsholderService);
     }
 
     private Map<String, Map<String, Rightsholder>> buildRollupsMap() {
