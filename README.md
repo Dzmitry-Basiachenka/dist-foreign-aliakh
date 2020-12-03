@@ -1,3 +1,9 @@
+12.1.29
+-
+* B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: remove redundant changes for isValidFilteredUsageStatus method
+* B-61833 FDA: SAL historical item bank detail report: make changes based on comments in CR-DIST-FOREIGN-216
+* CDP-953 FDA: SAL: Update Rightsholders: 'null' is displayed instead of RH account number in the message on 'Confirm action' window
+
 12.1.28
 -
 * B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: apply service logic to update RH for selected detail and add validation that status filter is applied on Usages tab
