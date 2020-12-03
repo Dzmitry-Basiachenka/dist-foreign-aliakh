@@ -137,7 +137,7 @@ class SalUpdateRighstholderWindow extends Window {
         Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
         saveButton.addClickListener(event -> {
             if (usageBinder.isValid()) {
-                Long rhAccountNumber = Long.valueOf(rhAccountNumberField.getValue());
+                Long rhAccountNumber = Long.valueOf(rhAccountNumberField.getValue().trim());
                 Windows.showConfirmDialogWithReason(
                     ForeignUi.getMessage("window.confirm"),
                     ForeignUi.getMessage("message.confirm.update_righstholder", rhAccountNumber),

@@ -56,6 +56,8 @@ public class SalUpdateRighstholderWindowTest {
 
     private static final String RH_ACCOUNT_NUMBER = "2000047356";
     private static final String RH_NAME = "National Geographic Partners";
+    private static final String REASON = "Reason";
+    private static final String RH_ACCOUNT_NUMBER_FIELD_NAME = "rhAccountNumberField";
     private ISalUsageController usageController;
     private SalDetailForRightsholderUpdateWindow detailsWindow;
     private SalUpdateRighstholderWindow window;
@@ -121,7 +123,7 @@ public class SalUpdateRighstholderWindowTest {
         window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
         Whitebox.setInternalState(window, "rh", rh);
         Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
-            Whitebox.getInternalState(window, "rhAccountNumberField"),
+            Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
             Whitebox.getInternalState(window, "rhNameField"));
         Windows.showValidationErrorWindow(fields);
         expectLastCall().once();
@@ -156,7 +158,8 @@ public class SalUpdateRighstholderWindowTest {
         Whitebox.setInternalState(window, "detailsWindow", detailsWindow);
         Whitebox.setInternalState(window, "selectedUsage", usage);
         Whitebox.setInternalState(window, "usageBinder", binder);
-        Whitebox.setInternalState(window, "rhAccountNumberField", new TextField("RH Account #", RH_ACCOUNT_NUMBER));
+        Whitebox.setInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME,
+            new TextField("RH Account #", RH_ACCOUNT_NUMBER));
         Whitebox.setInternalState(window, "rh", rh);
         Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
         expect(binder.isValid()).andReturn(true).once();
@@ -164,7 +167,7 @@ public class SalUpdateRighstholderWindowTest {
             eq("Are you sure you want to update selected detail with RH 2000047356?"), eq("Yes"), eq("Cancel"),
                 capture(actionDialogListenerCapture), anyObject(Validator.class));
         expectLastCall().once();
-        usageController.updateToEligibleWithRhAccountNumber(usage.getId(), 2000047356L, "Reason");
+        usageController.updateToEligibleWithRhAccountNumber(usage.getId(), 2000047356L, REASON);
         expectLastCall().once();
         usageController.refreshWidget();
         expectLastCall().once();
@@ -183,7 +186,54 @@ public class SalUpdateRighstholderWindowTest {
         assertEquals(1, listeners.size());
         Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
-        actionDialogListenerCapture.getValue().onActionConfirmed("Reason");
+        actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
+        verify(clickEvent, usageController, detailsWindow, binder, Windows.class);
+    }
+
+    @Test
+    public void testSaveButtonClickRhWithSpaces() {
+        mockStatic(Windows.class);
+        Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
+        UsageDto usage = new UsageDto();
+        usage.setId("ebad7d68-b213-433f-8dbe-a581f6ba55a3");
+        Rightsholder rh = new Rightsholder();
+        rh.setAccountNumber(38042L);
+        rh.setName("Hopkins and Carley");
+        Binder<UsageDto> binder = createMock(Binder.class);
+        window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
+        Whitebox.setInternalState(window, "salUsageController", usageController);
+        Whitebox.setInternalState(window, "detailsWindow", detailsWindow);
+        Whitebox.setInternalState(window, "selectedUsage", usage);
+        Whitebox.setInternalState(window, "usageBinder", binder);
+        Whitebox.setInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME,
+            new TextField("RH Account #", "  38042  "));
+        Whitebox.setInternalState(window, "rh", rh);
+        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = new Capture<>();
+        expect(binder.isValid()).andReturn(true).once();
+        Windows.showConfirmDialogWithReason(eq("Confirm action"),
+            eq("Are you sure you want to update selected detail with RH 38042?"), eq("Yes"), eq("Cancel"),
+            capture(actionDialogListenerCapture), anyObject(Validator.class));
+        expectLastCall().once();
+        usageController.updateToEligibleWithRhAccountNumber(usage.getId(), 38042L, REASON);
+        expectLastCall().once();
+        usageController.refreshWidget();
+        expectLastCall().once();
+        detailsWindow.refreshDataProvider();
+        expectLastCall().once();
+        replay(clickEvent, usageController, detailsWindow, binder, Windows.class);
+        Component content = window.getContent();
+        assertTrue(content instanceof VerticalLayout);
+        VerticalLayout contentLayout = (VerticalLayout) content;
+        assertEquals(2, contentLayout.getComponentCount());
+        Component rhLayout = contentLayout.getComponent(0);
+        verifyRightsholderLayout(rhLayout);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) contentLayout.getComponent(1);
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        Collection<?> listeners = saveButton.getListeners(Button.ClickEvent.class);
+        assertEquals(1, listeners.size());
+        Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
         verify(clickEvent, usageController, detailsWindow, binder, Windows.class);
     }
 
@@ -251,7 +301,7 @@ public class SalUpdateRighstholderWindowTest {
     private void verifySaveClickListener(Button saveButton) {
         mockStatic(Windows.class);
         Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
-            Whitebox.getInternalState(window, "rhAccountNumberField"),
+            Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
             Whitebox.getInternalState(window, "rhNameField"));
         Windows.showValidationErrorWindow(fields);
         expectLastCall().once();
