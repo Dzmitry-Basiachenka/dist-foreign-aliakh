@@ -278,6 +278,8 @@ public class SalUsageService implements ISalUsageService {
             userName);
         usageAuditService.logAction(usageId, UsageActionTypeEnum.RH_UPDATED,
             "RH was updated to " + rhAccountNumber + ". Reason: " + reason);
+        usageAuditService.logAction(usageId, UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(rhAccountNumber));
         LOGGER.info("Update RH for SAL detail. Finished. UsageId={}, RhAccountNumber={}, Reason={}, UserName={}",
             usageId, rhAccountNumber, reason, userName);
     }
