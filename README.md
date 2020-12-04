@@ -1,3 +1,9 @@
+12.1.30
+-
+* B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: adjust audit for IB details for RH update action
+* B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: trim extra spaces for RH Account # field on Update Rightsholder modal window
+* CDP-955 FDA: SAL: Update Rightsholder: RH name is not displayed on usages tab when updated RH account number is absent in the database
+
 12.1.29
 -
 * B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: remove redundant changes for isValidFilteredUsageStatus method
