@@ -71,7 +71,7 @@ public class SalScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<Usag
         beanProperties.add(bean.getSalUsage().getReportedStandardNumber());
         beanProperties.add(bean.getSalUsage().getReportedAuthor());
         beanProperties.add(bean.getSalUsage().getReportedPublisher());
-        beanProperties.add(getBeanLocalDate(bean.getSalUsage().getReportedPublicationDate()));
+        beanProperties.add(bean.getSalUsage().getReportedPublicationDate());
         beanProperties.add(bean.getSalUsage().getReportedPageRange());
         beanProperties.add(bean.getSalUsage().getReportedVolNumberSeries());
         beanProperties.add(bean.getSalUsage().getReportedMediaType());

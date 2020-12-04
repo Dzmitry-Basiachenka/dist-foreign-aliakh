@@ -106,9 +106,8 @@ public class SalUsageWidget extends CommonUsageWidget implements ISalUsageWidget
             "reportedAuthor", true, 150);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedPublisher(), "table.column.reported_publisher",
             "reportedPublisher", true, 150);
-        addColumn(usageDto -> CommonDateUtils.format(usageDto.getSalUsage().getReportedPublicationDate(),
-            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.reported_publication_date",
-            "reportedPublicationDate", true, 200);
+        addColumn(usageDto -> usageDto.getSalUsage().getReportedPublicationDate(),
+            "table.column.reported_publication_date", "reportedPublicationDate", true, 200);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedPageRange(), "table.column.reported_page_range",
             "reportedPageRange", true, 150);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedVolNumberSeries(),

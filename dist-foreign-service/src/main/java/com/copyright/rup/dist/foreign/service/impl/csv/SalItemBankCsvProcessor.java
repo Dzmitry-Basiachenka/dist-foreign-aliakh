@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.DateFormatValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateInFileValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.SalGradeValidator;
 
@@ -54,9 +53,10 @@ public class SalItemBankCsvProcessor extends DistCsvProcessor<Usage> {
     public void initPlainValidators() {
         RequiredValidator requiredValidator = new RequiredValidator();
         LengthValidator lengthValidator1000 = new LengthValidator(1000);
+        LengthValidator lengthValidator100 = new LengthValidator(100);
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.ASSESSMENT_NAME, requiredValidator, lengthValidator1000);
-        addPlainValidators(Header.COVERAGE_YEAR, requiredValidator, new LengthValidator(100));
+        addPlainValidators(Header.COVERAGE_YEAR, requiredValidator, lengthValidator100);
         addPlainValidators(Header.GRADE, new SalGradeValidator(), new LengthValidator(32));
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(9));
         addPlainValidators(Header.REPORTED_WORK_PORTION_ID, requiredValidator, new DuplicateInFileValidator(),
@@ -67,7 +67,7 @@ public class SalItemBankCsvProcessor extends DistCsvProcessor<Usage> {
         addPlainValidators(Header.REPORTED_ARTICLE, lengthValidator1000);
         addPlainValidators(Header.REPORTED_AUTHOR, lengthValidator1000);
         addPlainValidators(Header.REPORTED_PUBLISHER, lengthValidator1000);
-        addPlainValidators(Header.REPORTED_PUBLICATION_DATE, new DateFormatValidator());
+        addPlainValidators(Header.REPORTED_PUBLICATION_DATE, lengthValidator100);
         addPlainValidators(Header.REPORTED_PAGE_RANGE, lengthValidator1000);
         addPlainValidators(Header.REPORTED_VOL_NUMBER_SERIES, lengthValidator1000);
         addPlainValidators(Header.COMMENT, new LengthValidator(100));
@@ -141,7 +141,7 @@ public class SalItemBankCsvProcessor extends DistCsvProcessor<Usage> {
             salUsage.setReportedArticle(getString(row, Header.REPORTED_ARTICLE, headers));
             salUsage.setReportedAuthor(getString(row, Header.REPORTED_AUTHOR, headers));
             salUsage.setReportedPublisher(getString(row, Header.REPORTED_PUBLISHER, headers));
-            salUsage.setReportedPublicationDate(getDate(row, Header.REPORTED_PUBLICATION_DATE, headers));
+            salUsage.setReportedPublicationDate(getString(row, Header.REPORTED_PUBLICATION_DATE, headers));
             salUsage.setReportedVolNumberSeries(getString(row, Header.REPORTED_VOL_NUMBER_SERIES, headers));
             salUsage.setReportedPageRange(getString(row, Header.REPORTED_PAGE_RANGE, headers));
             salUsage.setDetailType(SalDetailTypeEnum.IB);

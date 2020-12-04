@@ -71,4 +71,13 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2020-12-03-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-62518 Tech Debt: FDA: change data type for reported_publication_date to string")
+
+        sql("""alter table apps.df_usage_sal
+               alter column reported_publication_date type VARCHAR(100)""")
+
+        rollback ""
+    }
 }

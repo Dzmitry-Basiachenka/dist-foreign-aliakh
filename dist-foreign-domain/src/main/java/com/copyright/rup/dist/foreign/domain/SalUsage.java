@@ -31,7 +31,7 @@ public class SalUsage {
     private String reportedStandardNumber;
     private String reportedAuthor;
     private String reportedPublisher;
-    private LocalDate reportedPublicationDate;
+    private String reportedPublicationDate;
     private String reportedPageRange;
     private String reportedVolNumberSeries;
     private String reportedMediaType;
@@ -139,11 +139,11 @@ public class SalUsage {
         this.reportedPublisher = reportedPublisher;
     }
 
-    public LocalDate getReportedPublicationDate() {
+    public String getReportedPublicationDate() {
         return reportedPublicationDate;
     }
 
-    public void setReportedPublicationDate(LocalDate reportedPublicationDate) {
+    public void setReportedPublicationDate(String reportedPublicationDate) {
         this.reportedPublicationDate = reportedPublicationDate;
     }
 
