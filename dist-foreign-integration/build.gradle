@@ -1,9 +1,5 @@
 apply plugin: 'rup-camel'
 
-configurations {
-    compile.exclude group: 'org.apache.activemq'
-}
-
 dependencies {
     compile project(':dist-foreign-domain')
 
