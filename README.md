@@ -1,3 +1,7 @@
+12.1.31
+-
+* B-62520 Tech Debt: FDA: change data type for reported_publication_date
+
 12.1.30
 -
 * B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: adjust audit for IB details for RH update action
