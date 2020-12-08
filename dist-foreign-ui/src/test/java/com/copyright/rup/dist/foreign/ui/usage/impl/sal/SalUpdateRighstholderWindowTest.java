@@ -154,9 +154,6 @@ public class SalUpdateRighstholderWindowTest {
         rh.setName(RH_NAME);
         Binder<UsageDto> binder = createMock(Binder.class);
         window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
-        Whitebox.setInternalState(window, "salUsageController", usageController);
-        Whitebox.setInternalState(window, "detailsWindow", detailsWindow);
-        Whitebox.setInternalState(window, "selectedUsage", usage);
         Whitebox.setInternalState(window, "usageBinder", binder);
         Whitebox.setInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME,
             new TextField("RH Account #", RH_ACCOUNT_NUMBER));
@@ -201,9 +198,6 @@ public class SalUpdateRighstholderWindowTest {
         rh.setName("Hopkins and Carley");
         Binder<UsageDto> binder = createMock(Binder.class);
         window = new SalUpdateRighstholderWindow(usageController, detailsWindow, usage);
-        Whitebox.setInternalState(window, "salUsageController", usageController);
-        Whitebox.setInternalState(window, "detailsWindow", detailsWindow);
-        Whitebox.setInternalState(window, "selectedUsage", usage);
         Whitebox.setInternalState(window, "usageBinder", binder);
         Whitebox.setInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME,
             new TextField("RH Account #", "  38042  "));

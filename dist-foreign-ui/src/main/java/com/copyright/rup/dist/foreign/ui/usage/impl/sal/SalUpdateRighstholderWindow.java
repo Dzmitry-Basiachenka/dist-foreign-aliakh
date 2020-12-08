@@ -21,6 +21,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 /**
  * Window for RH update for SAL IB detail.
  * <p>
@@ -119,7 +121,7 @@ class SalUpdateRighstholderWindow extends Window {
     private Button buildVerifyButton() {
         Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         button.addClickListener(event -> {
-            if (null == rhAccountNumberField.getErrorMessage()) {
+            if (Objects.isNull(rhAccountNumberField.getErrorMessage())) {
                 rh = salUsageController.getRightsholder(
                     Long.valueOf(StringUtils.trim(rhAccountNumberField.getValue())));
                 if (StringUtils.isNotBlank(rh.getName())) {

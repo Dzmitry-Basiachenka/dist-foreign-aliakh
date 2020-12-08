@@ -25,7 +25,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Sizeable.Unit;
@@ -157,7 +156,7 @@ public class SalUsageWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(controller.isValidStatusFilterApplied()).andReturn(true).once();
         expect(controller.getBeansCount()).andReturn(1).once();
-        expect(controller.getUsageDtosForRhUpdate()).andReturn(Lists.newArrayList(new UsageDto()));
+        expect(controller.getUsageDtosForRhUpdate()).andReturn(Collections.singletonList(new UsageDto())).once();
         Windows.showModalWindow(anyObject(SalDetailForRightsholderUpdateWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
