@@ -72,8 +72,8 @@
     </typeAliases>
 
     <typeHandlers>
-        <typeHandler handler="org.apache.ibatis.type.LocalDateTypeHandler"/>
-        <typeHandler handler="org.apache.ibatis.type.OffsetDateTimeTypeHandler"/>
+        <typeHandler handler="com.copyright.rup.dist.common.repository.impl.SystemDefaultLocalDateTypeHandler"/>
+        <typeHandler handler="com.copyright.rup.dist.common.repository.impl.SystemDefaultOffsetDateTimeTypeHandler"/>
         <typeHandler handler="NtsBatchFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.UsageBatch$NtsFields"/>
         <typeHandler handler="SalBatchFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.UsageBatch$SalFields"/>
         <typeHandler handler="AaclScenarioFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.Scenario$AaclFields"/>
