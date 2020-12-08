@@ -18,10 +18,6 @@ vaadin {
     manageRepositories = false
 }
 
-configurations {
-    compile.exclude group: 'org.apache.activemq'
-}
-
 dependencies {
     compile project(':dist-foreign-domain')
     compile project(':dist-foreign-service')
