@@ -91,6 +91,6 @@ public class AaclAuditWidget extends CommonAuditWidget implements IAaclAuditWidg
 
     @Override
     public String initSearchMessage() {
-        return "prompt.audit_search_aacl";
+        return "prompt.audit_search_aacl_sal";
     }
 }
