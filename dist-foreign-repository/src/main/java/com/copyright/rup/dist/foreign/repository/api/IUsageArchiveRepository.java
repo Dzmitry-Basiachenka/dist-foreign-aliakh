@@ -174,6 +174,14 @@ public interface IUsageArchiveRepository {
     List<Usage> findAaclByIds(List<String> usageIds);
 
     /**
+     * Finds SAL {@link Usage}s with populated RH uid information by specified ids.
+     *
+     * @param usageIds list of usage ids
+     * @return list of found {@link Usage}s
+     */
+    List<Usage> findSalByIds(List<String> usageIds);
+
+    /**
      * Finds {@link Usage} info for sending to LM.
      *
      * @param usageIds list of usage ids

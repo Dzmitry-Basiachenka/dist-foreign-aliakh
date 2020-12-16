@@ -14,8 +14,10 @@ import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -518,6 +520,15 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindSalUsageByIds() {
+        PaidUsage paidUsage = buildSalPaidUsage();
+        List<Usage> usages = usageArchiveRepository.findSalByIds(ImmutableList.of(paidUsage.getId()));
+        assertTrue(CollectionUtils.isNotEmpty(usages));
+        assertEquals(1, CollectionUtils.size(usages));
+        verifyUsage(paidUsage, usages.get(0));
+    }
+
+    @Test
     public void testFindForSendToLmByIds() {
         List<Usage> expectedUsages = loadExpectedUsages(Collections.singletonList("json/usage_for_send_to_lm.json"));
         List<Usage> actualUsages =
@@ -687,6 +698,11 @@ public class UsageArchiveRepositoryIntegrationTest {
             verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
         } else {
             assertNull(actualUsage.getAaclUsage());
+        }
+        if (Objects.nonNull(expectedUsage.getSalUsage())) {
+            verifySalUsage(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
+        } else {
+            assertNull(actualUsage.getSalUsage());
         }
     }
 
@@ -891,6 +907,59 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertNull(usage.getMarketPeriodFrom());
         assertNull(usage.getMarketPeriodTo());
         assertNull(usage.getComment());
+    }
+
+    private PaidUsage buildSalPaidUsage() {
+        PaidUsage paidUsage = new PaidUsage();
+        paidUsage.setLmDetailId("5375bee0-24f0-4e6c-a808-c62814dd93ae");
+        paidUsage.setCheckNumber("578000");
+        paidUsage.setCheckDate(PAID_DATE);
+        paidUsage.setCccEventId("3356214");
+        paidUsage.setDistributionName("FDA March 18");
+        paidUsage.setDistributionDate(PAID_DATE);
+        paidUsage.setPeriodEndDate(CommonDateUtils.getOffsetDateTime(PUBLICATION_DATE));
+        paidUsage.setStatus(UsageStatusEnum.SENT_TO_LM);
+        paidUsage.setNetAmount(new BigDecimal("75.0000000000"));
+        paidUsage.setServiceFeeAmount(new BigDecimal("25.0000000000"));
+        paidUsage.setGrossAmount(new BigDecimal("100.0000000000"));
+        paidUsage.setServiceFee(new BigDecimal("0.25"));
+        paidUsage.setId("e3ed312b-dd76-40bc-9c86-e382d9e84ab6");
+        paidUsage.setBatchId("4a8ac110-ed00-406f-b3f9-0956dcb39d34");
+        paidUsage.setWrWrkInst(269040891L);
+        paidUsage.setSystemTitle("Castanea");
+        paidUsage.setStandardNumber("09639292");
+        paidUsage.setStandardNumberType(STANDARD_NUMBER_TYPE);
+        paidUsage.getRightsholder().setAccountNumber(2000017010L);
+        paidUsage.getRightsholder().setName("JAC, Japan Academic Association for Copyright Clearance, Inc.");
+        paidUsage.getPayee().setAccountNumber(2000017010L);
+        paidUsage.setProductFamily("SAL");
+        paidUsage.setSalUsage(buildSalUsage());
+        return paidUsage;
+    }
+
+    private SalUsage buildSalUsage() {
+        SalUsage salUsage = new SalUsage();
+        salUsage.setDetailType(SalDetailTypeEnum.IB);
+        salUsage.setGrade("5");
+        salUsage.setGradeGroup(GradeGroupEnum.ITEM_BANK);
+        salUsage.setAssessmentName("FY16 AIR");
+        salUsage.setReportedWorkPortionId("1101001IB2368");
+        salUsage.setReportedArticle("Learning in Your Sleep");
+        salUsage.setReportedStandardNumber("450220996");
+        salUsage.setReportedAuthor("Stephen Ornes");
+        salUsage.setReportedPublisher("Associated Press");
+        salUsage.setReportedPublicationDate("2015-01-02");
+        salUsage.setReportedPageRange("14-17");
+        salUsage.setReportedVolNumberSeries("Vol 17, Issue 2");
+        salUsage.setReportedMediaType("TEXT");
+        salUsage.setMediaTypeWeight(new BigDecimal("1.0"));
+        salUsage.setCoverageYear("2014-2015");
+        salUsage.setStates("CA;WV");
+        salUsage.setNumberOfViews(1765);
+        salUsage.setScoredAssessmentDate(LocalDate.of(2015, 7, 1));
+        salUsage.setQuestionIdentifier("SB9");
+        salUsage.setBatchPeriodEndDate(LocalDate.of(2019, 6, 30));
+        return salUsage;
     }
 
     private List<Usage> loadExpectedUsages(List<String> fileNames) {
