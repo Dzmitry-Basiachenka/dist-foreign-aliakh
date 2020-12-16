@@ -44,7 +44,7 @@ class CreateAdditionalFundWindow extends Window {
     private final Binder<FundPool> binder = new Binder<>();
 
     private TextField fundNameField;
-    private TextArea commentsArea;
+    private TextArea commentArea;
 
     /**
      * Constructor.
@@ -67,10 +67,10 @@ class CreateAdditionalFundWindow extends Window {
         setWidth(320, Unit.PIXELS);
         setCaption(ForeignUi.getMessage("window.create_fund"));
         initPreServiceFeeFundNameField();
-        initCommentsArea();
+        initCommentArea();
         binder.validate();
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout layout = new VerticalLayout(fundNameField, commentsArea, buttonsLayout);
+        VerticalLayout layout = new VerticalLayout(fundNameField, commentArea, buttonsLayout);
         layout.setSpacing(true);
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
@@ -90,12 +90,14 @@ class CreateAdditionalFundWindow extends Window {
         VaadinUtils.setMaxComponentsWidth(fundNameField);
     }
 
-    private void initCommentsArea() {
-        commentsArea = new TextArea(ForeignUi.getMessage("field.comments"));
-        binder.forField(commentsArea)
+    private void initCommentArea() {
+        commentArea = new TextArea(ForeignUi.getMessage("field.comment"));
+        commentArea.setRequiredIndicatorVisible(true);
+        binder.forField(commentArea)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000))
             .bind(FundPool::getComment, FundPool::setComment);
-        VaadinUtils.setMaxComponentsWidth(commentsArea);
+        VaadinUtils.setMaxComponentsWidth(commentArea);
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -122,12 +124,12 @@ class CreateAdditionalFundWindow extends Window {
             fundPool.setId(RupPersistUtils.generateUuid());
             fundPool.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
             fundPool.setName(StringUtils.trimToEmpty(fundNameField.getValue()));
-            fundPool.setComment(StringUtils.trimToEmpty(commentsArea.getValue()));
+            fundPool.setComment(StringUtils.trimToEmpty(commentArea.getValue()));
             fundPool.setTotalAmount(amount);
             controller.createAdditionalFund(fundPool, batchIds);
             closeAllWindows();
         } else {
-            Windows.showValidationErrorWindow(Lists.newArrayList(fundNameField, commentsArea));
+            Windows.showValidationErrorWindow(Lists.newArrayList(fundNameField, commentArea));
         }
     }
 }
