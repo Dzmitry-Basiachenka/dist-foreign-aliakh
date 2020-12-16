@@ -1,7 +1,18 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.sal;
 
+import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.TextField;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
 
 /**
  * Implementation of SAL product family widget.
@@ -12,10 +23,17 @@ import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterWidget;
  *
  * @author Aliaksandr Liakh
  */
-@SuppressWarnings("all") // TODO {aliakh} to remove when the class is implemented
 public class SalAuditFilterWidget extends CommonAuditFilterWidget {
 
     private final ISalAuditFilterController controller;
+
+    private LazyRightsholderFilterWidget rightsholderFilterWidget;
+    private UsageBatchFilterWidget usageBatchFilterWidget;
+    private CommonStatusFilterWidget commonStatusFilterWidget;
+    private ComboBox<SalDetailTypeEnum> salDetailTypeComboBox;
+    private ComboBox<Integer> usagePeriodComboBox;
+    private TextField cccEventIdField;
+    private TextField distributionNameField;
 
     /**
      * Constructor.
@@ -28,19 +46,66 @@ public class SalAuditFilterWidget extends CommonAuditFilterWidget {
 
     @Override
     public void initFields() {
-        // TODO {aliakh} to init fields
+        rightsholderFilterWidget = buildRightsholdersFilter();
+        usageBatchFilterWidget = buildUsageBatchesFilter();
+        cccEventIdField = buildEventIdField();
+        distributionNameField = buildDistributionNameField();
+        initSalDetailTypeComboBox();
+        initUsagePeriodComboBox();
+        initStatusesFilterWidget();
+        addComponents(buildFiltersHeaderLabel(), rightsholderFilterWidget,  usageBatchFilterWidget,
+            commonStatusFilterWidget, salDetailTypeComboBox, usagePeriodComboBox, cccEventIdField,
+            distributionNameField);
     }
 
     @Override
     public void clearFilter() {
         refreshFilter();
-        // TODO {aliakh} to clear fields
+        rightsholderFilterWidget.reset();
+        usageBatchFilterWidget.reset();
+        commonStatusFilterWidget.reset();
+        salDetailTypeComboBox.clear();
+        usagePeriodComboBox.clear();
+        cccEventIdField.setValue(StringUtils.EMPTY);
+        distributionNameField.setValue(StringUtils.EMPTY);
         applyFilter();
     }
 
     @Override
     public void trimFilterValues() {
-        // TODO {aliakh} to trim filter values
+        cccEventIdField.setValue(StringUtils.trim(cccEventIdField.getValue()));
+        distributionNameField.setValue(StringUtils.trim(distributionNameField.getValue()));
         applyFilter();
+    }
+
+    private void initStatusesFilterWidget() {
+        commonStatusFilterWidget = new SalStatusFilterWidget();
+        commonStatusFilterWidget.addFilterSaveListener(event -> {
+            getFilter().setStatuses(event.getSelectedItemsIds());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(commonStatusFilterWidget, "audit-statuses-filter");
+    }
+
+    private void initSalDetailTypeComboBox() {
+        salDetailTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.detail_type"));
+        VaadinUtils.setMaxComponentsWidth(salDetailTypeComboBox);
+        salDetailTypeComboBox.addValueChangeListener(event -> {
+            getFilter().setSalDetailType(salDetailTypeComboBox.getValue());
+            filterChanged();
+        });
+        salDetailTypeComboBox.setItems(Arrays.asList(SalDetailTypeEnum.IB, SalDetailTypeEnum.UD));
+        VaadinUtils.addComponentStyle(salDetailTypeComboBox, "detail-type-filter");
+    }
+
+    private void initUsagePeriodComboBox() {
+        usagePeriodComboBox = new ComboBox<>(ForeignUi.getMessage("label.usage_period"));
+        VaadinUtils.setMaxComponentsWidth(usagePeriodComboBox);
+        usagePeriodComboBox.addValueChangeListener(event -> {
+            getFilter().setUsagePeriod(usagePeriodComboBox.getValue());
+            filterChanged();
+        });
+        usagePeriodComboBox.setItems(controller.getUsagePeriods());
+        VaadinUtils.addComponentStyle(usagePeriodComboBox, "usage-period-filter");
     }
 }

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.domain.filter;
 
+import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.Sets;
@@ -34,6 +35,7 @@ public class AuditFilter {
     private String distributionName;
     private String searchValue;
     private Integer usagePeriod;
+    private SalDetailTypeEnum salDetailType;
 
     /**
      * Default constructor.
@@ -56,6 +58,7 @@ public class AuditFilter {
         setSearchValue(filter.getSearchValue());
         setProductFamily(filter.getProductFamily());
         setUsagePeriod(filter.getUsagePeriod());
+        setSalDetailType(filter.getSalDetailType());
     }
 
     public Integer getUsagePeriod() {
@@ -122,6 +125,14 @@ public class AuditFilter {
         this.distributionName = distributionName;
     }
 
+    public SalDetailTypeEnum getSalDetailType() {
+        return salDetailType;
+    }
+
+    public void setSalDetailType(SalDetailTypeEnum salDetailType) {
+        this.salDetailType = salDetailType;
+    }
+
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(rhAccountNumbers)
             && CollectionUtils.isEmpty(batchesIds)
@@ -129,7 +140,8 @@ public class AuditFilter {
             && StringUtils.isBlank(cccEventId)
             && StringUtils.isBlank(distributionName)
             && StringUtils.isBlank(searchValue)
-            && Objects.isNull(usagePeriod);
+            && Objects.isNull(usagePeriod)
+            && Objects.isNull(salDetailType);
     }
 
     @Override
@@ -150,6 +162,7 @@ public class AuditFilter {
             .append(this.distributionName, that.distributionName)
             .append(this.searchValue, that.searchValue)
             .append(this.usagePeriod, that.usagePeriod)
+            .append(this.salDetailType, that.salDetailType)
             .isEquals();
     }
 
@@ -164,6 +177,7 @@ public class AuditFilter {
             .append(distributionName)
             .append(searchValue)
             .append(usagePeriod)
+            .append(salDetailType)
             .toHashCode();
     }
 
@@ -178,6 +192,7 @@ public class AuditFilter {
             .append("distributionName", distributionName)
             .append("searchValue", searchValue)
             .append("usagePeriod", usagePeriod)
+            .append("salDetailType", salDetailType)
             .toString();
     }
 }
