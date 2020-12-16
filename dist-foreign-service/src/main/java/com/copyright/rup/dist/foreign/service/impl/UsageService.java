@@ -271,6 +271,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    //TODO: analyze possibility to split retrieval of usages from db by product family
     public JobInfo sendToCrm() {
         List<String> paidUsagesIds = usageArchiveRepository.findPaidIds();
         LogUtils.ILogWrapper paidUsagesCount = LogUtils.size(paidUsagesIds);
