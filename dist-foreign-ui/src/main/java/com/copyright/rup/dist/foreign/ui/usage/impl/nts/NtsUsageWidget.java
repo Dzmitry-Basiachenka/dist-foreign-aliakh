@@ -169,8 +169,8 @@ public class NtsUsageWidget extends CommonUsageWidget implements INtsUsageWidget
             additionalFundsMenuBar.addItem(ForeignUi.getMessage("menu.caption.additional_funds"), null, null);
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             item -> Windows.showModalWindow(initAdditionalFundBatchesFilterWindow()));
-        menuItem.addItem(ForeignUi.getMessage("menu.item.delete"), null,
-            item -> Windows.showModalWindow(new DeleteAdditionalFundsWindow(controller)));
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
+            item -> Windows.showModalWindow(new ViewAdditionalFundsWindow(controller)));
         VaadinUtils.addComponentStyle(additionalFundsMenuBar, "additional-funds-menu-bar");
         VaadinUtils.addComponentStyle(additionalFundsMenuBar, "v-menubar-df");
     }

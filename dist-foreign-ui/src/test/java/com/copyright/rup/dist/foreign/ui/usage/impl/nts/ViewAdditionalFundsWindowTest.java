@@ -17,7 +17,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.nts.DeleteAdditionalFundsWindow.SearchController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.nts.ViewAdditionalFundsWindow.SearchController;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -52,7 +52,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link DeleteAdditionalFundsWindow}.
+ * Verifies {@link ViewAdditionalFundsWindow}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -62,11 +62,11 @@ import java.util.stream.Collectors;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Windows.class)
-public class DeleteAdditionalFundsWindowTest {
+public class ViewAdditionalFundsWindowTest {
 
     private static final String FUND_ID = RupPersistUtils.generateUuid();
 
-    private DeleteAdditionalFundsWindow deleteWindow;
+    private ViewAdditionalFundsWindow viewWindow;
     private FundPool fundPool;
     private INtsUsageController controller;
 
@@ -78,16 +78,16 @@ public class DeleteAdditionalFundsWindowTest {
         controller = createMock(INtsUsageController.class);
         expect(controller.getAdditionalFunds()).andReturn(Collections.singletonList(fundPool)).once();
         replay(controller);
-        deleteWindow = new DeleteAdditionalFundsWindow(controller);
+        viewWindow = new ViewAdditionalFundsWindow(controller);
         verify(controller);
         reset(controller);
     }
 
     @Test
     public void testComponentStructure() {
-        assertEquals("Delete NTS Pre-Service Fee Funds", deleteWindow.getCaption());
-        verifySize(deleteWindow, 700, Unit.PIXELS, 450, Unit.PIXELS);
-        VerticalLayout content = (VerticalLayout) deleteWindow.getContent();
+        assertEquals("View NTS Pre-Service Fee Funds", viewWindow.getCaption());
+        verifySize(viewWindow, 700, Unit.PIXELS, 450, Unit.PIXELS);
+        VerticalLayout content = (VerticalLayout) viewWindow.getContent();
         assertEquals(new MarginInfo(true), content.getMargin());
         assertTrue(content.isSpacing());
         verifySize(content, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
@@ -108,7 +108,7 @@ public class DeleteAdditionalFundsWindowTest {
         mockStatic(Windows.class);
         Capture<IListener> listenerCapture = new Capture<>();
         Window confirmWindowCapture = PowerMock.createMock(Window.class);
-        VerticalLayout content = (VerticalLayout) deleteWindow.getContent();
+        VerticalLayout content = (VerticalLayout) viewWindow.getContent();
         Grid grid = (Grid) content.getComponent(1);
         Button deleteButton = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
         Collection<?> listeners = deleteButton.getListeners(ClickEvent.class);
@@ -126,7 +126,7 @@ public class DeleteAdditionalFundsWindowTest {
     @Test
     public void testDeleteClickListenerFundAssociatedWithScenario() {
         mockStatic(Windows.class);
-        VerticalLayout content = (VerticalLayout) deleteWindow.getContent();
+        VerticalLayout content = (VerticalLayout) viewWindow.getContent();
         Grid grid = (Grid) content.getComponent(1);
         Button deleteButton = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
         Collection<?> listeners = deleteButton.getListeners(ClickEvent.class);
@@ -144,10 +144,10 @@ public class DeleteAdditionalFundsWindowTest {
 
     @Test
     public void testSearchController() {
-        SearchController searchController = deleteWindow.new SearchController();
-        SearchWidget searchWidget = Whitebox.getInternalState(deleteWindow, "searchWidget");
+        SearchController searchController = viewWindow.new SearchController();
+        SearchWidget searchWidget = Whitebox.getInternalState(viewWindow, "searchWidget");
         searchWidget.setSearchValue("value");
-        Grid grid = Whitebox.getInternalState(deleteWindow, "grid");
+        Grid grid = Whitebox.getInternalState(viewWindow, "grid");
         ListDataProvider dataProvider = (ListDataProvider) grid.getDataProvider();
         assertNull(dataProvider.getFilter());
         searchController.performSearch();
