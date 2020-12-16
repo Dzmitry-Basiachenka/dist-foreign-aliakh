@@ -12,27 +12,6 @@
     "netAmount": 80.0000000000,
     "serviceFeeAmount": 420.0000000000,
     "serviceFee": 0.25000,
-    "aaclUsage": {
-      "batchPeriodEndDate": "2019-06-30",
-      "institution": "University of Michigan",
-      "usageSource": "Feb 2040 TUR",
-      "rightLimitation": "ALL",
-      "numberOfPages": 341,
-      "detailLicenseeClass": {
-        "id": 143,
-        "discipline": "Engineering",
-        "enrollmentProfile": "EXGP"
-      },
-      "usageAge": {
-        "period": 2040
-      },
-      "publicationType": {
-        "id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199",
-        "name": "Business or Trade Journal",
-        "weight": 1.50
-      },
-      "originalPublicationType": "Scholarly Journal"
-    },
     "comment": "AACL archived usage",
     "checkNumber": "578946",
     "checkDate": "2017-03-15T04:41:52.735531-04:00",

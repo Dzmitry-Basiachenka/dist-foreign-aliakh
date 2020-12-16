@@ -15,7 +15,6 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -29,7 +28,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableList;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
@@ -424,11 +422,23 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindSalUsagesByIds() {
+        List<PaidUsage> actualUsages =
+            usageArchiveRepository.findByIdAndStatus(
+                Arrays.asList("13704648-838e-444f-8987-c4f1dc3aa38d", "2c2cf124-8c96-4662-8949-c56002247f39"),
+                UsageStatusEnum.PAID);
+        verifyPaidUsages(Collections.singletonList("json/sal/sal_archived_usage_13704648.json"), actualUsages,
+            this::verifyPaidUsage);
+    }
+
+    @Test
     public void testFindPaidIds() {
         List<String> usagesIds = usageArchiveRepository.findPaidIds();
         assertTrue(CollectionUtils.isNotEmpty(usagesIds));
-        assertEquals(1, usagesIds.size());
-        assertEquals(PAID_USAGE_ID, usagesIds.get(0));
+        assertEquals(3, usagesIds.size());
+        assertTrue(usagesIds.contains(PAID_USAGE_ID));
+        assertTrue(usagesIds.contains("13704648-838e-444f-8987-c4f1dc3aa38d"));
+        assertTrue(usagesIds.contains("2c2cf124-8c96-4662-8949-c56002247f39"));
     }
 
     @Test
@@ -674,7 +684,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
         if (Objects.nonNull(expectedUsage.getAaclUsage())) {
-            assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
+            verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
         } else {
             assertNull(actualUsage.getAaclUsage());
         }
@@ -706,38 +716,15 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedUsageDto.getServiceFee(), actualUsageDto.getServiceFee());
         assertEquals(expectedUsageDto.getComment(), actualUsageDto.getComment());
         if (Objects.nonNull(expectedUsageDto.getAaclUsage())) {
-            assertAaclUsage(expectedUsageDto.getAaclUsage(), actualUsageDto.getAaclUsage());
+            verifyAaclUsage(expectedUsageDto.getAaclUsage(), actualUsageDto.getAaclUsage());
         } else {
             assertNull(actualUsageDto.getAaclUsage());
         }
         if (Objects.nonNull(expectedUsageDto.getSalUsage())) {
-            assertSalUsageFields(expectedUsageDto.getSalUsage(), actualUsageDto.getSalUsage());
+            verifySalUsage(expectedUsageDto.getSalUsage(), actualUsageDto.getSalUsage());
         } else {
             assertNull(actualUsageDto.getSalUsage());
         }
-    }
-
-    private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
-        assertNotNull(actualAaclUsage);
-        assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
-        assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
-        assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-        assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
-        assertPublicationType(expectedAaclUsage.getPublicationType(), actualAaclUsage.getPublicationType());
-        assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
-        assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
-            actualAaclUsage.getPublicationType().getWeight());
-        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
-            actualAaclUsage.getDetailLicenseeClass().getId());
-        assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
-        assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
-    }
-
-    private void assertPublicationType(PublicationType expectedPublicationType,
-                                       PublicationType actualPublicationType) {
-        assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
-        assertEquals(expectedPublicationType.getName(), actualPublicationType.getName());
-        assertEquals(expectedPublicationType.getWeight(), actualPublicationType.getWeight());
     }
 
     private void verifyPaidUsage(PaidUsage expectedUsage, PaidUsage actualUsage) {
@@ -757,8 +744,15 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
         assertUsagePaidInformation(expectedUsage, actualUsage);
-        if (Objects.nonNull(actualUsage.getAaclUsage())) {
+        if (Objects.nonNull(expectedUsage.getAaclUsage())) {
             verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
+        } else {
+            assertNull(actualUsage.getAaclUsage());
+        }
+        if (Objects.nonNull(expectedUsage.getSalUsage())) {
+            verifySalUsage(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
+        } else {
+            assertNull(actualUsage.getSalUsage());
         }
     }
 
@@ -788,7 +782,7 @@ public class UsageArchiveRepositoryIntegrationTest {
             actualAaclUsage.getDetailLicenseeClass().getEnrollmentProfile());
     }
 
-    private void assertSalUsageFields(SalUsage expectedUsage, SalUsage actualUsage) {
+    private void verifySalUsage(SalUsage expectedUsage, SalUsage actualUsage) {
         assertEquals(expectedUsage.getAssessmentName(), actualUsage.getAssessmentName());
         assertEquals(expectedUsage.getCoverageYear(), actualUsage.getCoverageYear());
         assertEquals(expectedUsage.getGrade(), actualUsage.getGrade());

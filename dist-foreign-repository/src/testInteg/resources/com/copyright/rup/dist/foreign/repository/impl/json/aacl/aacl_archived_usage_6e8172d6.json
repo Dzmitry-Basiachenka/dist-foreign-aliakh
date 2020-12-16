@@ -13,28 +13,6 @@
     "serviceFeeAmount": 420.0000000000,
     "serviceFee": 0.25000,
     "periodEndDate": "2019-06-30T00:00-04:00",
-    "aaclUsage": {
-      "batchPeriodEndDate": "2019-06-30",
-      "institution": "University of Michigan",
-      "usageSource": "Feb 2040 TUR",
-      "rightLimitation": "ALL",
-      "numberOfPages": 341,
-      "baselineId": "c6410335-0745-480d-9494-7ec773918233",
-      "detailLicenseeClass": {
-        "id": 143,
-        "discipline": "Engineering",
-        "enrollmentProfile": "EXGP"
-      },
-      "usageAge": {
-        "period": 2040
-      },
-      "publicationType": {
-        "id": "68fd94c0-a8c0-4a59-bfe3-6674c4b12199",
-        "name": "Business or Trade Journal",
-        "weight": 1.50
-      },
-      "originalPublicationType": "Scholarly Journal"
-    },
     "comment": "AACL archived usage"
   },
   {
@@ -51,28 +29,6 @@
     "serviceFeeAmount": 840.0000000000,
     "serviceFee": 0.25000,
     "periodEndDate": "2019-06-30T00:00-04:00",
-    "aaclUsage": {
-      "batchPeriodEndDate": "2019-06-30",
-      "institution": "University of Chicago",
-      "usageSource": "Feb 2040 TUR",
-      "rightLimitation": "ALL",
-      "numberOfPages": 100,
-      "baselineId": "0f31bd85-397c-4a10-948b-7b97c0767815",
-      "detailLicenseeClass": {
-        "id": 108,
-        "discipline": "Life Sciences",
-        "enrollmentProfile": "EXGP"
-      },
-      "usageAge": {
-        "period": 2040
-      },
-      "publicationType": {
-        "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
-        "name": "Book",
-        "weight": 1.00
-      },
-      "originalPublicationType": "Scholarly Journal"
-    },
     "comment": "AACL archived usage"
   }
 ]

@@ -107,6 +107,14 @@
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
+        <result property="salUsage.reportedArticle" column="reported_article"/>
+        <result property="salUsage.reportedVolNumberSeries" column="reported_vol_number_series"/>
+        <result property="salUsage.grade" column="grade"/>
+        <result property="salUsage.coverageYear" column="coverage_year"/>
+        <result property="salUsage.reportedAuthor" column="reported_author"/>
+        <result property="salUsage.states" column="states"/>
+        <result property="salUsage.assessmentType" column="assessment_type"/>
+        <result property="salUsage.reportedPublicationDate" column="reported_publication_date"/>
     </resultMap>
 
     <resultMap id="wrWrkInstToUsageIdResultMap" type="WrWrkInstUsageIdPair">

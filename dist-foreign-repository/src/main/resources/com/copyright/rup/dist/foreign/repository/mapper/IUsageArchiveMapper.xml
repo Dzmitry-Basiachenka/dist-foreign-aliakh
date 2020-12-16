@@ -310,12 +310,21 @@
             ufas.market_period_to,
             ufas.reported_value,
             ufas.is_rh_participating_flag,
+            usal.reported_article,
+            usal.reported_vol_number_series,
+            usal.grade,
+            usal.coverage_year,
+            usal.reported_author,
+            usal.states,
+            usal.assessment_type,
+            usal.reported_publication_date,
             u.updated_datetime,
             u.created_by_user,
             u.updated_by_user,
             u.record_version
         from ${schema}.df_usage_archive u
         left join ${schema}.df_usage_fas ufas on u.df_usage_archive_uid = ufas.df_usage_fas_uid
+        left join ${schema}.df_usage_sal usal on u.df_usage_archive_uid = usal.df_usage_sal_uid
         left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         where u.status_ind = #{status}
             and u.df_usage_archive_uid in
