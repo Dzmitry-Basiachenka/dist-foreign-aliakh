@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.sal;
 
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterController;
@@ -31,5 +32,10 @@ public class SalAuditFilterController extends CommonAuditFilterController implem
     @Override
     public List<Integer> getUsagePeriods() {
         return Collections.emptyList(); // TODO {aliakh} to implement
+    }
+
+    @Override
+    public List<SalLicensee> getSalLicensees() {
+        return getUsageBatchService().getSalLicensees();
     }
 }

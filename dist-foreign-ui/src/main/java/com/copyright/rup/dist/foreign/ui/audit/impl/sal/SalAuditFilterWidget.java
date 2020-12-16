@@ -1,18 +1,21 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.sal;
 
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of SAL product family widget.
@@ -28,6 +31,7 @@ public class SalAuditFilterWidget extends CommonAuditFilterWidget {
     private final ISalAuditFilterController controller;
 
     private LazyRightsholderFilterWidget rightsholderFilterWidget;
+    private SalLicenseeFilterWidget licenseeFilterWidget;
     private UsageBatchFilterWidget usageBatchFilterWidget;
     private CommonStatusFilterWidget commonStatusFilterWidget;
     private ComboBox<SalDetailTypeEnum> salDetailTypeComboBox;
@@ -47,13 +51,14 @@ public class SalAuditFilterWidget extends CommonAuditFilterWidget {
     @Override
     public void initFields() {
         rightsholderFilterWidget = buildRightsholdersFilter();
+        licenseeFilterWidget = buildLicenseesFilter();
         usageBatchFilterWidget = buildUsageBatchesFilter();
         cccEventIdField = buildEventIdField();
         distributionNameField = buildDistributionNameField();
         initSalDetailTypeComboBox();
         initUsagePeriodComboBox();
         initStatusesFilterWidget();
-        addComponents(buildFiltersHeaderLabel(), rightsholderFilterWidget,  usageBatchFilterWidget,
+        addComponents(buildFiltersHeaderLabel(), rightsholderFilterWidget, licenseeFilterWidget, usageBatchFilterWidget,
             commonStatusFilterWidget, salDetailTypeComboBox, usagePeriodComboBox, cccEventIdField,
             distributionNameField);
     }
@@ -62,6 +67,7 @@ public class SalAuditFilterWidget extends CommonAuditFilterWidget {
     public void clearFilter() {
         refreshFilter();
         rightsholderFilterWidget.reset();
+        licenseeFilterWidget.reset();
         usageBatchFilterWidget.reset();
         commonStatusFilterWidget.reset();
         salDetailTypeComboBox.clear();
@@ -76,6 +82,19 @@ public class SalAuditFilterWidget extends CommonAuditFilterWidget {
         cccEventIdField.setValue(StringUtils.trim(cccEventIdField.getValue()));
         distributionNameField.setValue(StringUtils.trim(distributionNameField.getValue()));
         applyFilter();
+    }
+
+    private SalLicenseeFilterWidget buildLicenseesFilter() {
+        licenseeFilterWidget = new SalLicenseeFilterWidget(controller::getSalLicensees);
+        licenseeFilterWidget.addFilterSaveListener((FilterWindow.IFilterSaveListener<SalLicensee>) event -> {
+            getFilter().setRhAccountNumbers(event.getSelectedItemsIds()
+                .stream()
+                .map(SalLicensee::getAccountNumber)
+                .collect(Collectors.toSet()));
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(licenseeFilterWidget, "audit-licensees-filter");
+        return licenseeFilterWidget;
     }
 
     private void initStatusesFilterWidget() {

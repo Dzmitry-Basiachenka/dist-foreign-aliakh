@@ -27,6 +27,7 @@ import java.util.Set;
 public class AuditFilter {
 
     private Set<Long> rhAccountNumbers = Sets.newHashSet();
+    private Set<Long> licenseeAccountNumbers = Sets.newHashSet();
     private Set<String> batchesIds = Sets.newHashSet();
     // TODO {dbaraukova} investigate options to remove product family field from filter as it is not a part of it
     private String productFamily;
@@ -53,6 +54,7 @@ public class AuditFilter {
         setStatuses(filter.getStatuses());
         setBatchesIds(filter.getBatchesIds());
         setRhAccountNumbers(filter.getRhAccountNumbers());
+        setLicenseeAccountNumbers(filter.getLicenseeAccountNumbers());
         setCccEventId(filter.getCccEventId());
         setDistributionName(filter.getDistributionName());
         setSearchValue(filter.getSearchValue());
@@ -75,6 +77,14 @@ public class AuditFilter {
 
     public void setRhAccountNumbers(Set<Long> rhAccountNumbers) {
         this.rhAccountNumbers = rhAccountNumbers;
+    }
+
+    public Set<Long> getLicenseeAccountNumbers() {
+        return licenseeAccountNumbers;
+    }
+
+    public void setLicenseeAccountNumbers(Set<Long> licenseeAccountNumbers) {
+        this.licenseeAccountNumbers = licenseeAccountNumbers;
     }
 
     public Set<String> getBatchesIds() {
@@ -135,6 +145,7 @@ public class AuditFilter {
 
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(rhAccountNumbers)
+            && CollectionUtils.isEmpty(licenseeAccountNumbers)
             && CollectionUtils.isEmpty(batchesIds)
             && CollectionUtils.isEmpty(statuses)
             && StringUtils.isBlank(cccEventId)
@@ -155,6 +166,7 @@ public class AuditFilter {
         AuditFilter that = (AuditFilter) obj;
         return new EqualsBuilder()
             .append(this.rhAccountNumbers, that.rhAccountNumbers)
+            .append(this.licenseeAccountNumbers, that.licenseeAccountNumbers)
             .append(this.batchesIds, that.batchesIds)
             .append(this.statuses, that.statuses)
             .append(this.productFamily, that.productFamily)
@@ -170,6 +182,7 @@ public class AuditFilter {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(rhAccountNumbers)
+            .append(licenseeAccountNumbers)
             .append(batchesIds)
             .append(statuses)
             .append(productFamily)
@@ -185,6 +198,7 @@ public class AuditFilter {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("rhAccountNumbers", rhAccountNumbers)
+            .append("licenseeAccountNumbers", licenseeAccountNumbers)
             .append("batchesIds", batchesIds)
             .append("statuses", statuses)
             .append("productFamily", productFamily)
