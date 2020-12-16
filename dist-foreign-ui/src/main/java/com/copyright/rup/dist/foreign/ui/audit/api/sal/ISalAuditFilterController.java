@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.ui.audit.api.sal;
 
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
 
+import java.util.List;
+
 /**
  * Interface for SAL audit filter controller.
  * <p>
@@ -12,4 +14,11 @@ import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
  * @author Aliaksandr Liakh
  */
 public interface ISalAuditFilterController extends ICommonAuditFilterController {
+
+    /**
+     * Gets list of usage periods.
+     *
+     * @return list of usage periods
+     */
+    List<Integer> getUsagePeriods();
 }

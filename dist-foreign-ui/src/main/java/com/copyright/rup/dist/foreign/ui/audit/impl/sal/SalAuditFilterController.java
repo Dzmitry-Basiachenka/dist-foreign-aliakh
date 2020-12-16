@@ -7,6 +7,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Implementation of {@link ISalAuditFilterController}.
  * <p>
@@ -23,5 +26,10 @@ public class SalAuditFilterController extends CommonAuditFilterController implem
     @Override
     protected ICommonAuditFilterWidget instantiateWidget() {
         return new SalAuditFilterWidget(this);
+    }
+
+    @Override
+    public List<Integer> getUsagePeriods() {
+        return Collections.emptyList(); // TODO {aliakh} to implement
     }
 }
