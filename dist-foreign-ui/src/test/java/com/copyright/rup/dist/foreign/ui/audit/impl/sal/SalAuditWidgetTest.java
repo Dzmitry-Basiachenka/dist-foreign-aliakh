@@ -165,7 +165,15 @@ public class SalAuditWidgetTest {
         Grid grid = (Grid) component;
         verifySize(grid, 100, Unit.PERCENTAGE, 100);
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList(/* TODO {aliakh} to verify grid columns */),
+        assertEquals(Arrays.asList("Detail ID", "Detail Type", "Detail Status", "Product Family", "Usage Batch Name",
+            "Period End Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst",
+            "System Title", "Standard Number", "Standard Number Type", "Gross Amt in USD", "Service Fee Amount",
+            "Net Amt in USD", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date",
+            "Reported Work Portion ID", "Reported Standard Number", "Reported Title", "Reported Media Type",
+            "Media Type Weight", "Reported Article or Chapter Title", "Reported Author", "Reported Publisher",
+            "Reported Publication Date", "Reported Page Range", "Reported Vol/Number/Series",
+            "Date of Scored Assessment", "Assessment Name", "Coverage Year", "Grade", "Grade Group", "Assessment Type",
+            "Question Identifier", "States", "Number of Views", "Comment"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
