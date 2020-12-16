@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 /**
- * Modal window that provides functionality for deleting {@link FundPool}s.
+ * Modal window that provides functionality for viewing and deleting {@link FundPool}s.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -32,7 +32,7 @@ import java.util.Objects;
  *
  * @author Ihar Suvorau
  */
-class DeleteAdditionalFundsWindow extends Window {
+class ViewAdditionalFundsWindow extends Window {
 
     private final SearchWidget searchWidget;
     private final INtsUsageController controller;
@@ -43,9 +43,9 @@ class DeleteAdditionalFundsWindow extends Window {
      *
      * @param controller instance of {@link INtsUsageController}
      */
-    DeleteAdditionalFundsWindow(INtsUsageController controller) {
+    ViewAdditionalFundsWindow(INtsUsageController controller) {
         this.controller = controller;
-        setCaption(ForeignUi.getMessage("window.delete_fund"));
+        setCaption(ForeignUi.getMessage("window.view_fund"));
         setWidth(700, Unit.PIXELS);
         setHeight(450, Unit.PIXELS);
         searchWidget = new SearchWidget(new SearchController());

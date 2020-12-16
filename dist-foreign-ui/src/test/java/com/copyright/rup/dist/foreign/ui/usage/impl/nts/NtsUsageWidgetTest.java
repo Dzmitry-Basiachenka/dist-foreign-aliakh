@@ -155,14 +155,14 @@ public class NtsUsageWidgetTest {
         Windows.showModalWindow(anyObject(AdditionalFundBatchesFilterWindow.class));
         expectLastCall().once();
         expect(controller.getUsageBatchesForAdditionalFunds()).andReturn(Collections.emptyList()).once();
-        Windows.showModalWindow(anyObject(DeleteAdditionalFundsWindow.class));
+        Windows.showModalWindow(anyObject(ViewAdditionalFundsWindow.class));
         expectLastCall().once();
         replay(controller, Windows.class);
         List<MenuItem> menuItems = getMenuBarItems(1);
         MenuItem menuItemCreate = menuItems.get(0);
-        MenuItem menuItemDelete = menuItems.get(1);
+        MenuItem menuItemView= menuItems.get(1);
         menuItemCreate.getCommand().menuSelected(menuItemCreate);
-        menuItemDelete.getCommand().menuSelected(menuItemDelete);
+        menuItemView.getCommand().menuSelected(menuItemView);
         verify(controller, Windows.class);
     }
 
@@ -385,7 +385,7 @@ public class NtsUsageWidgetTest {
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(5, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Fund Pool", Arrays.asList("Load", "View"));
-        verifyMenuBar(layout.getComponent(1), "Additional Funds", Arrays.asList("Create", "Delete"));
+        verifyMenuBar(layout.getComponent(1), "Additional Funds", Arrays.asList("Create", "View"));
         assertEquals("Assign Classification", layout.getComponent(2).getCaption());
         assertEquals("Add To Scenario", layout.getComponent(3).getCaption());
         Component component = layout.getComponent(4);
