@@ -285,6 +285,11 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals("Synergy Publishers", licensee.getName());
     }
 
+    @Test
+    public void testFindSalUsagePeriods() {
+        assertEquals(Collections.singletonList(2015), usageBatchRepository.findSalUsagePeriods());
+    }
+
     private UsageBatch buildUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());

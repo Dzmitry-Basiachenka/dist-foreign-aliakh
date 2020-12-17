@@ -1,0 +1,53 @@
+[
+  {
+    "id": "870ee1dc-8596-409f-8ffe-717d17a33c9e",
+    "version": 1,
+    "createDate": 1608302929297,
+    "updateDate": 1608302929297,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "batchName": "SAL Usage Batch to test audit 2",
+    "wrWrkInst": 123013764,
+    "workTitle": "Telling stories",
+    "systemTitle": "Telling stories",
+    "rhAccountNumber": 1000002859,
+    "standardNumber": "9780415013871",
+    "standardNumberType": "VALISBN13",
+    "payeeAccountNumber": 1000002859,
+    "grossAmount": 400.0000000000,
+    "reportedValue": 0.00,
+    "netAmount": 300.0000000000,
+    "serviceFee": 0.00,
+    "serviceFeeAmount": 100.0000000000,
+    "status": "ARCHIVED",
+    "productFamily": "SAL",
+    "periodEndDate": [
+      2018,
+      6,
+      30
+    ],
+    "comment": "SAL comment 3",
+    "salUsage": {
+      "detailType": "IB",
+      "grade": "6",
+      "gradeGroup": "ITEM_BANK",
+      "assessmentName": "FY16 AIR",
+      "reportedWorkPortionId": "1101001IB2362",
+      "reportedArticle": "Telling stories",
+      "reportedStandardNumber": "9780415013871",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": "2018-01-02",
+      "reportedPageRange": "14-17",
+      "reportedVolNumberSeries": "Vol 17, Issue 2",
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": 1.0,
+      "coverageYear": "2017-2018",
+      "batchPeriodEndDate": [
+        2018,
+        6,
+        30
+      ]
+    }
+  }
+]
