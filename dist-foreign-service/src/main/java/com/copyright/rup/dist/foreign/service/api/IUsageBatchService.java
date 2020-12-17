@@ -196,4 +196,11 @@ public interface IUsageBatchService {
      * @return list of {@link SalLicensee}
      */
     List<SalLicensee> getSalLicensees();
+
+    /**
+     * Gets list of SAL usage periods.
+     *
+     * @return list of SAL usage periods
+     */
+    List<Integer> getSalUsagePeriods();
 }

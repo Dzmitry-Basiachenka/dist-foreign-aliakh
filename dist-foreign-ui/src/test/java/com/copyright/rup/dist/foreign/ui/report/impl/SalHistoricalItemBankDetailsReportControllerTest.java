@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static junit.framework.Assert.assertSame;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
@@ -93,10 +94,10 @@ public class SalHistoricalItemBankDetailsReportControllerTest {
     public void testGetSalLicensees() {
         IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
         Whitebox.setInternalState(controller, usageBatchService);
-        List<SalLicensee> salLicensees = Collections.singletonList(new SalLicensee());
-        expect(usageBatchService.getSalLicensees()).andReturn(salLicensees).once();
+        List<SalLicensee> licensees = Collections.singletonList(new SalLicensee());
+        expect(usageBatchService.getSalLicensees()).andReturn(licensees).once();
         replay(usageBatchService);
-        assertEquals(salLicensees, controller.getSalLicensees());
+        assertSame(licensees, controller.getSalLicensees());
         verify(usageBatchService);
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ public class SalAuditFilterController extends CommonAuditFilterController implem
 
     @Override
     public List<Integer> getUsagePeriods() {
-        return Collections.emptyList(); // TODO {aliakh} to implement
+        return getUsageBatchService().getSalUsagePeriods();
     }
 
     @Override

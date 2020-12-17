@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -469,10 +470,10 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetSalLicensees() {
-        List<SalLicensee> salLicensees = Collections.singletonList(new SalLicensee());
-        expect(usageBatchRepository.findSalLicensees()).andReturn(salLicensees).once();
+        List<SalLicensee> licensees = Collections.singletonList(new SalLicensee());
+        expect(usageBatchRepository.findSalLicensees()).andReturn(licensees).once();
         replay(usageBatchRepository);
-        assertEquals(salLicensees, usageBatchService.getSalLicensees());
+        assertSame(licensees, usageBatchService.getSalLicensees());
         verify(usageBatchRepository);
     }
 

@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
@@ -282,5 +283,15 @@ public class SalUsageService implements ISalUsageService {
         rightsholderService.updateRighstholdersAsync(Collections.singleton(rhAccountNumber));
         LOGGER.info("Update RH for SAL detail. Finished. UsageId={}, RhAccountNumber={}, Reason={}, UserName={}",
             usageId, rhAccountNumber, reason, userName);
+    }
+
+    @Override
+    public int getCountForAudit(AuditFilter filter) {
+        return salUsageRepository.findCountForAudit(filter);
+    }
+
+    @Override
+    public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
+        return salUsageRepository.findForAudit(filter, pageable, sort);
     }
 }
