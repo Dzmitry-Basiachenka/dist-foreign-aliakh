@@ -46,7 +46,7 @@ class ViewAdditionalFundsWindow extends Window {
     ViewAdditionalFundsWindow(INtsUsageController controller) {
         this.controller = controller;
         setCaption(ForeignUi.getMessage("window.view_fund"));
-        setWidth(700, Unit.PIXELS);
+        setWidth(1100, Unit.PIXELS);
         setHeight(450, Unit.PIXELS);
         searchWidget = new SearchWidget(new SearchController());
         searchWidget.setPrompt(ForeignUi.getMessage("prompt.fund_pool"));
@@ -80,7 +80,11 @@ class ViewAdditionalFundsWindow extends Window {
         grid.addColumn(FundPool::getCreateUser)
             .setCaption(ForeignUi.getMessage("table.column.create_user"))
             .setSortProperty("createUser")
-            .setWidth(140);
+            .setWidth(250);
+        grid.addColumn(FundPool::getComment)
+            .setCaption(ForeignUi.getMessage("table.column.comment"))
+            .setSortProperty("comment")
+            .setExpandRatio(1);
         grid.addComponentColumn(fundPool -> {
             Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
             deleteButton.setId(fundPool.getId());

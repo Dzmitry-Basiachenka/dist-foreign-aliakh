@@ -86,7 +86,7 @@ public class ViewAdditionalFundsWindowTest {
     @Test
     public void testComponentStructure() {
         assertEquals("View NTS Pre-Service Fee Funds", viewWindow.getCaption());
-        verifySize(viewWindow, 700, Unit.PIXELS, 450, Unit.PIXELS);
+        verifySize(viewWindow, 1100, Unit.PIXELS, 450, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) viewWindow.getContent();
         assertEquals(new MarginInfo(true), content.getMargin());
         assertTrue(content.isSpacing());
@@ -166,11 +166,11 @@ public class ViewAdditionalFundsWindowTest {
         assertNull(grid.getCaption());
         verifySize(grid, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Fund Name", "Fund Amount", "Create User", StringUtils.EMPTY),
+        assertEquals(Arrays.asList("Fund Name", "Fund Amount", "Create User", "Comment", StringUtils.EMPTY),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertEquals(100, columns.get(1).getWidth(), 0);
-        assertEquals(140, columns.get(2).getWidth(), 0);
-        assertEquals(90, columns.get(3).getWidth(), 0);
+        assertEquals(250, columns.get(2).getWidth(), 0);
+        assertEquals(90, columns.get(4).getWidth(), 0);
         Button button = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
         assertEquals("Delete", button.getCaption());
     }
