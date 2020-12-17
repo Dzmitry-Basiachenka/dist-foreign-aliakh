@@ -182,6 +182,11 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     }
 
     @Override
+    public void insertSalPaid(PaidUsage paidUsage) {
+        insert("IUsageArchiveMapper.insertSalPaid", Objects.requireNonNull(paidUsage));
+    }
+
+    @Override
     public void moveFundUsagesToArchive(String scenarioId) {
         insert("IUsageArchiveMapper.moveFundUsagesToArchive", Objects.requireNonNull(scenarioId));
     }

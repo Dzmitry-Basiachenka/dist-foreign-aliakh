@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableList;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
@@ -461,6 +462,19 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(1, actualUsages.size());
         verifyPaidUsages(
             Collections.singletonList("json/aacl/aacl_paid_usage_278adb86.json"), actualUsages, this::verifyPaidUsage);
+    }
+
+    @Test
+    public void testInsertPaidSal() {
+        List<PaidUsage> paidUsages =
+            loadExpectedPaidUsages(Collections.singletonList("json/sal/sal_paid_usage_b8a76b66.json"));
+        paidUsages.forEach(paidUsage -> usageArchiveRepository.insertSalPaid(paidUsage));
+        List<PaidUsage> actualUsages =
+            usageArchiveRepository.findByIdAndStatus(Arrays.asList("b8a76b66-1a9f-4208-94fa-2191237b73ef",
+                "6d7cc92d-4662-4665-af57-0c8fdc417b01"), UsageStatusEnum.PAID);
+        assertEquals(2, actualUsages.size());
+        verifyPaidUsages(Collections.singletonList("json/sal/expected_sal_paid_usage_b8a76b66.json"), actualUsages,
+            this::verifyPaidUsage);
     }
 
     @Test
