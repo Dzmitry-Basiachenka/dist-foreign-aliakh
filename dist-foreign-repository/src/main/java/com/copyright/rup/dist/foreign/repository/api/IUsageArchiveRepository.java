@@ -130,6 +130,13 @@ public interface IUsageArchiveRepository {
     void insertAaclPaid(PaidUsage paidUsage);
 
     /**
+     * Insert SAL usage with paid information.
+     *
+     * @param paidUsage {@link PaidUsage} instance
+     */
+    void insertSalPaid(PaidUsage paidUsage);
+
+    /**
      * Moves usages from {@link com.copyright.rup.dist.foreign.domain.FundPool} related to selected
      * {@link com.copyright.rup.dist.foreign.domain.Scenario} to archive table.
      *
@@ -245,5 +252,5 @@ public interface IUsageArchiveRepository {
      * @return list of {@link UsageDto}s
      */
     List<UsageDto> findSalByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber,
-                                                          String searchValue, Pageable pageable, Sort sort);
+                                                         String searchValue, Pageable pageable, Sort sort);
 }

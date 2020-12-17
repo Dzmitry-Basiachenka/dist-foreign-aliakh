@@ -567,6 +567,98 @@
         <include refid="StoredEntityMapper.insert"/>)
     </insert>
 
+    <insert id="insertSalPaid" parameterType="PaidUsage">
+        with result as (
+            insert into ${schema}.df_usage_archive (
+                df_usage_archive_uid,
+                <include refid="IUsageMapper.usageColumns"/>,
+                <include refid="payeeColumns"/>,
+                check_number,
+                check_date,
+                ccc_event_id,
+                distribution_name,
+                distribution_date,
+                period_end_date,
+                lm_detail_id,
+                <include refid="StoredEntityMapper.additionalColumns"/>)
+            values (
+                #{id},
+                #{batchId},
+                #{scenarioId},
+                #{wrWrkInst},
+                #{workTitle},
+                #{systemTitle},
+                #{rightsholder.accountNumber},
+                #{status},
+                #{productFamily},
+                #{standardNumber},
+                #{standardNumberType},
+                #{numberOfCopies},
+                #{grossAmount},
+                #{comment},
+                #{serviceFee},
+                #{serviceFeeAmount},
+                #{netAmount},
+                #{payee.accountNumber},
+                #{checkNumber},
+                #{checkDate},
+                #{cccEventId},
+                #{distributionName},
+                #{distributionDate},
+                #{periodEndDate},
+                #{lmDetailId},
+                <include refid="StoredEntityMapper.insert"/>
+            )
+        )
+        insert into ${schema}.df_usage_sal (
+            df_usage_sal_uid,
+            assessment_name,
+            assessment_type,
+            coverage_year,
+            scored_assessment_date,
+            question_identifier,
+            states,
+            number_of_views,
+            grade,
+            grade_group,
+            reported_work_portion_id,
+            reported_standard_number,
+            reported_media_type,
+            media_type_weight,
+            reported_article,
+            reported_author,
+            reported_publisher,
+            reported_publication_date,
+            reported_page_range,
+            reported_vol_number_series,
+            detail_type,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        )
+        values (
+            #{id},
+            #{salUsage.assessmentName},
+            #{salUsage.assessmentType},
+            #{salUsage.coverageYear},
+            #{salUsage.scoredAssessmentDate},
+            #{salUsage.questionIdentifier},
+            #{salUsage.states},
+            #{salUsage.numberOfViews},
+            #{salUsage.grade},
+            #{salUsage.gradeGroup},
+            #{salUsage.reportedWorkPortionId},
+            #{salUsage.reportedStandardNumber},
+            #{salUsage.reportedMediaType},
+            #{salUsage.mediaTypeWeight},
+            #{salUsage.reportedArticle},
+            #{salUsage.reportedAuthor},
+            #{salUsage.reportedPublisher},
+            #{salUsage.reportedPublicationDate},
+            #{salUsage.reportedPageRange},
+            #{salUsage.reportedVolNumberSeries},
+            #{salUsage.detailType},
+            <include refid="StoredEntityMapper.insert"/>)
+    </insert>
+
     <select id="copyToArchiveByScenarioId" parameterType="map" resultType="string">
         insert into ${schema}.df_usage_archive (
             df_usage_archive_uid,
