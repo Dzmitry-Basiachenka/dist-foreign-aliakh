@@ -1,0 +1,58 @@
+{
+  "list": {
+    "rightsDistribution": [
+      {
+        "cccEventId": "3356214",
+        "product": "SAL",
+        "rorAccountNumber": "2000017010",
+        "payeeAccountNumber": "2000017010",
+        "royaltyAmount": 75.0000000000,
+        "currency": "USD",
+        "licenseCreateDate": "09-03-2020T08:35:38 AM",
+        "serviceFeeAmount": 25.0000000000,
+        "wrWrkInst": "269040891",
+        "publicationName": "Castanea",
+        "author": "Stephen Ornes",
+        "chapterArticleTitle": "Learning in Your Sleep",
+        "omOrderDetailNumber": "14704648-838e-444f-8987-c4f1dc3aa38d_IB",
+        "totalAmount": 100.0000000000,
+        "numberOfCopies": 10,
+        "adjustmentFlag": false,
+        "passThroughFlag": true,
+        "createUser": "FDA Distribution",
+        "status": "D - Distributed",
+        "issueVolumeSeries": "Vol 17, Issue 2",
+        "grade": "5",
+        "academicYear": "2019-2020",
+        "publicationIssueDate": "2015-01-02"
+      },
+      {
+        "cccEventId": "3356214",
+        "product": "SAL",
+        "rorAccountNumber": "2000017010",
+        "payeeAccountNumber": "2000017010",
+        "royaltyAmount": 675.0000000000,
+        "currency": "USD",
+        "licenseCreateDate": "09-03-2020T08:35:38 AM",
+        "serviceFeeAmount": 225.0000000000,
+        "wrWrkInst": "269040891",
+        "publicationName": "Castanea",
+        "author": "Stephen Ornes",
+        "chapterArticleTitle": "Learning in Your Sleep",
+        "omOrderDetailNumber": "2b2cf124-8c96-4662-8949-c56002247f39_UD",
+        "totalAmount": 900.0000000000,
+        "numberOfCopies": 10,
+        "adjustmentFlag": false,
+        "passThroughFlag": true,
+        "createUser": "FDA Distribution",
+        "status": "D - Distributed",
+        "issueVolumeSeries": "Vol 17, Issue 2",
+        "grade": "5",
+        "academicYear": "2019-2020",
+        "state": "CA;WV",
+        "assessmentType": "ELA",
+        "publicationIssueDate": "2015-01-02"
+      }
+    ]
+  }
+}
