@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.ImmutableMap;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,11 +57,10 @@ public class SendFasToCrmIntegrationTest {
                 "cb7e3237-50c3-46a5-938e-46afd8c1e0bf", ScenarioStatusEnum.ARCHIVED,
                 "221c5a30-1937-4bf6-977f-93741f9b20f1", ScenarioStatusEnum.SENT_TO_LM))
             .expectUsageAudit(ImmutableMap.of(
-                "0d1829eb-de35-4f93-bb36-2a7435263051", buildArchivedUsageAudit(),
-                "9e356e22-57b3-49b3-af99-155093a9dc0a", Collections.emptyList()))
-            .expectUsageAudit(ImmutableMap.of(
+                "9e356e22-57b3-49b3-af99-155093a9dc0a", Collections.emptyList(),
                 "53496a2f-fb52-4b5b-9f60-9034cceb69b9", Collections.emptyList(),
                 "feefdfd2-71fe-4c0a-a701-9dacffa9bccb", Collections.emptyList(),
+                "0d1829eb-de35-4f93-bb36-2a7435263051", buildArchivedUsageAudit(),
                 "48189e92-b9d2-46be-94a4-c2adf83f21ce", buildArchivedUsageAudit()))
             .expectScenarioAudit(ImmutableMap.of(
                 "cb7e3237-50c3-46a5-938e-46afd8c1e0bf", Collections.singletonList(

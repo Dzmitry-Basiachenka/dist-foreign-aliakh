@@ -107,6 +107,7 @@
         <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
         <result property="aaclUsage.rightLimitation" column="right_limitation"/>
         <result property="aaclUsage.batchPeriodEndDate" column="batch_period_end_date"/>
+        <result property="salUsage.detailType" column="detail_type"/>
         <result property="salUsage.reportedArticle" column="reported_article"/>
         <result property="salUsage.reportedVolNumberSeries" column="reported_vol_number_series"/>
         <result property="salUsage.grade" column="grade"/>

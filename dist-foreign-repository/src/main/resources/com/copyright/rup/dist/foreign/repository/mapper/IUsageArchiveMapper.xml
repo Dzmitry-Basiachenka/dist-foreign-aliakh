@@ -310,6 +310,7 @@
             ufas.market_period_to,
             ufas.reported_value,
             ufas.is_rh_participating_flag,
+            usal.detail_type,
             usal.reported_article,
             usal.reported_vol_number_series,
             usal.grade,

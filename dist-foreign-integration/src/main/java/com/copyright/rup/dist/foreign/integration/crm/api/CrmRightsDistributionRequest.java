@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -118,6 +117,24 @@ public class CrmRightsDistributionRequest {
     @JsonProperty(value = "status")
     private String status = "D - Distributed";
 
+    @JsonProperty(value = "issueVolumeSeries")
+    private String issueVolumeSeries;
+
+    @JsonProperty(value = "grade")
+    private String grade;
+
+    @JsonProperty(value = "academicYear")
+    private String academicYear;
+
+    @JsonProperty(value = "state")
+    private String state;
+
+    @JsonProperty(value = "assessmentType")
+    private String assessmentType;
+
+    @JsonProperty(value = "publicationIssueDate")
+    private String publicationIssueDate;
+
     /**
      * Constructor for creating request to the CRM service.
      *
@@ -135,8 +152,6 @@ public class CrmRightsDistributionRequest {
         this.serviceFeeAmount = usage.getServiceFeeAmount();
         this.wrWrkInst = usage.getWrWrkInst();
         this.publicationName = usage.getSystemTitle();
-        this.author = usage.getAuthor();
-        this.chapterArticleTitle = usage.getArticle();
         this.omOrderDetailNumber = usage.getId();
         this.totalAmount = usage.getGrossAmount();
         this.periodEndDate = usage.getPeriodEndDate();
@@ -148,6 +163,21 @@ public class CrmRightsDistributionRequest {
         this.arAccountNumber = usage.getRroAccountNumber();
         if (FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(usage.getProductFamily())) {
             this.serviceNameReporting = "FAS";
+            this.author = usage.getAuthor();
+            this.chapterArticleTitle = usage.getArticle();
+        }
+        if (FdaConstants.SAL_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+            this.omOrderDetailNumber = this.omOrderDetailNumber
+                .concat("_")
+                .concat(usage.getSalUsage().getDetailType().name());
+            this.chapterArticleTitle = usage.getSalUsage().getReportedArticle();
+            this.issueVolumeSeries = usage.getSalUsage().getReportedVolNumberSeries();
+            this.grade = usage.getSalUsage().getGrade();
+            this.academicYear = usage.getSalUsage().getCoverageYear();
+            this.author = usage.getSalUsage().getReportedAuthor();
+            this.state = usage.getSalUsage().getStates();
+            this.assessmentType = usage.getSalUsage().getAssessmentType();
+            this.publicationIssueDate = usage.getSalUsage().getReportedPublicationDate();
         }
     }
 
@@ -359,6 +389,54 @@ public class CrmRightsDistributionRequest {
         this.status = status;
     }
 
+    public String getIssueVolumeSeries() {
+        return issueVolumeSeries;
+    }
+
+    public void setIssueVolumeSeries(String issueVolumeSeries) {
+        this.issueVolumeSeries = issueVolumeSeries;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getAcademicYear() {
+        return academicYear;
+    }
+
+    public void setAcademicYear(String academicYear) {
+        this.academicYear = academicYear;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getAssessmentType() {
+        return assessmentType;
+    }
+
+    public void setAssessmentType(String assessmentType) {
+        this.assessmentType = assessmentType;
+    }
+
+    public String getPublicationIssueDate() {
+        return publicationIssueDate;
+    }
+
+    public void setPublicationIssueDate(String publicationIssueDate) {
+        this.publicationIssueDate = publicationIssueDate;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -395,6 +473,12 @@ public class CrmRightsDistributionRequest {
             .append(this.serviceNameReporting, that.serviceNameReporting)
             .append(this.createUser, that.createUser)
             .append(this.status, that.status)
+            .append(this.issueVolumeSeries, that.issueVolumeSeries)
+            .append(this.grade, that.grade)
+            .append(this.academicYear, that.academicYear)
+            .append(this.state, that.state)
+            .append(this.assessmentType, that.assessmentType)
+            .append(this.publicationIssueDate, that.publicationIssueDate)
             .isEquals();
     }
 
@@ -427,6 +511,12 @@ public class CrmRightsDistributionRequest {
             .append(serviceNameReporting)
             .append(createUser)
             .append(status)
+            .append(issueVolumeSeries)
+            .append(grade)
+            .append(academicYear)
+            .append(state)
+            .append(assessmentType)
+            .append(publicationIssueDate)
             .toHashCode();
     }
 
@@ -459,6 +549,12 @@ public class CrmRightsDistributionRequest {
             .append("serviceNameReporting", serviceNameReporting)
             .append("createUser", createUser)
             .append("status", status)
+            .append("issueVolumeSeries", issueVolumeSeries)
+            .append("grade", grade)
+            .append("academicYear", academicYear)
+            .append("state", state)
+            .append("assessmentType", assessmentType)
+            .append("publicationIssueDate", publicationIssueDate)
             .toString();
     }
 }

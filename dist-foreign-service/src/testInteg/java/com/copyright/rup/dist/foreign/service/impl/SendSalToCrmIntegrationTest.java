@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.ImmutableMap;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,20 +22,20 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies logic for sending AACL {@link com.copyright.rup.dist.foreign.domain.PaidUsage}s to CRM.
+ * Verifies logic for sending SAL {@link com.copyright.rup.dist.foreign.domain.PaidUsage}s to CRM.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 05/13/20
+ * Date: 12/17/20
  *
- * @author Anton Azarenka
+ * @author Uladzislau Shalamitski
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=send-aacl-to-crm-data-init.groovy"})
+@TestPropertySource(properties = {"test.liquibase.changelog=send-sal-to-crm-data-init.groovy"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class SendAaclToCrmIntegrationTest {
+public class SendSalToCrmIntegrationTest {
 
     @Autowired
     private SendToCrmIntegrationTestBuilder testBuilder;
@@ -44,20 +43,22 @@ public class SendAaclToCrmIntegrationTest {
     @Test
     public void testSendToCrm() {
         testBuilder
-            .withProductFamily("AACL")
-            .expectCrmCall("crm/sendToCrm/rights_distribution_request_aacl.json",
-                "crm/sendToCrm/rights_distribution_response_aacl.json")
+            .withProductFamily("SAL")
+            .expectCrmCall("crm/sendToCrm/rights_distribution_request_sal.json",
+                "crm/sendToCrm/rights_distribution_response_sal.json")
             .expectJobInfo(buildJobInfo())
             .expectUsageStatus(ImmutableMap.of(
-                "8ab89fcc-abf9-432e-b653-e84f2605697f", UsageStatusEnum.ARCHIVED,
-                "e5ae9237-05a0-4c82-b607-0f91f19b2f24", UsageStatusEnum.ARCHIVED))
+                "14704648-838e-444f-8987-c4f1dc3aa38d", UsageStatusEnum.ARCHIVED,
+                "2b2cf124-8c96-4662-8949-c56002247f39", UsageStatusEnum.ARCHIVED))
             .expectScenarioStatus(ImmutableMap.of(
-                "351e585c-0b08-429d-9e31-bea283ba33de", ScenarioStatusEnum.ARCHIVED))
+                "183c0b55-3665-4863-a28c-0370feccad24", ScenarioStatusEnum.ARCHIVED))
             .expectUsageAudit(ImmutableMap.of(
-                "8ab89fcc-abf9-432e-b653-e84f2605697f", buildArchivedUsageAudit(),
-                "e5ae9237-05a0-4c82-b607-0f91f19b2f24", buildArchivedUsageAudit()))
+                "14704648-838e-444f-8987-c4f1dc3aa38d", buildArchivedUsageAudit(),
+                "2b2cf124-8c96-4662-8949-c56002247f39", buildArchivedUsageAudit(),
+                "52604648-838e-333f-8987-c4f1dc3aa38a", Collections.emptyList(),
+                "563cf124-8c96-4662-8529-c56002247f39", Collections.emptyList()))
             .expectScenarioAudit(ImmutableMap.of(
-                "351e585c-0b08-429d-9e31-bea283ba33de", Collections.singletonList(
+                "183c0b55-3665-4863-a28c-0370feccad24", Collections.singletonList(
                     Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM"))))
             .build()
             .run();
