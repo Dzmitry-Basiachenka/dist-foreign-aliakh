@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.audit.api.sal;
 
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
 
 import java.util.List;
@@ -21,4 +22,11 @@ public interface ISalAuditFilterController extends ICommonAuditFilterController 
      * @return list of usage periods
      */
     List<Integer> getUsagePeriods();
+
+    /**
+     * Gets list of {@link SalLicensee}.
+     *
+     * @return list of {@link SalLicensee}
+     */
+    List<SalLicensee> getSalLicensees();
 }

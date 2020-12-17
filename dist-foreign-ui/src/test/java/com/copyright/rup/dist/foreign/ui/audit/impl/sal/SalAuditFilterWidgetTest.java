@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWindow.IRightsholderFilterSaveListener;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
@@ -70,7 +71,7 @@ public class SalAuditFilterWidgetTest {
         assertTrue(widget.isSpacing());
         assertEquals(new MarginInfo(true), widget.getMargin());
         assertEquals("audit-filter-widget", widget.getStyleName());
-        assertEquals(9, widget.getComponentCount());
+        assertEquals(10, widget.getComponentCount());
         Component component = widget.getComponent(0);
         assertTrue(component instanceof Label);
         verifyLabel((Label) component);
@@ -79,17 +80,21 @@ public class SalAuditFilterWidgetTest {
         assertEquals("Rightsholders", Whitebox.getInternalState(component, Button.class).getCaption());
         assertNotNull(Whitebox.getInternalState(component, IRightsholderFilterSaveListener.class));
         component = widget.getComponent(2);
+        assertTrue(component instanceof SalLicenseeFilterWidget);
+        assertEquals("Licensees", Whitebox.getInternalState(component, Button.class).getCaption());
+        assertNotNull(Whitebox.getInternalState(component, FilterWindow.IFilterSaveListener.class));
+        component = widget.getComponent(3);
         assertTrue(component instanceof UsageBatchFilterWidget);
         verifyFilterWidget((UsageBatchFilterWidget) component, "Batches");
-        component = widget.getComponent(3);
+        component = widget.getComponent(4);
         assertTrue(component instanceof CommonStatusFilterWidget);
         verifyFilterWidget((CommonStatusFilterWidget) component, "Status");
-        verifyComboBox(widget.getComponent(4), "Detail Type", Arrays.asList(SalDetailTypeEnum.IB,
+        verifyComboBox(widget.getComponent(5), "Detail Type", Arrays.asList(SalDetailTypeEnum.IB,
             SalDetailTypeEnum.UD));
-        verifyComboBox(widget.getComponent(5), "Usage Period", buildUsagePeriods());
-        verifyTextField(widget.getComponent(6), "Event ID");
-        verifyTextField(widget.getComponent(7), "Dist. Name");
-        component = widget.getComponent(8);
+        verifyComboBox(widget.getComponent(6), "Usage Period", buildUsagePeriods());
+        verifyTextField(widget.getComponent(7), "Event ID");
+        verifyTextField(widget.getComponent(8), "Dist. Name");
+        component = widget.getComponent(9);
         assertTrue(component instanceof HorizontalLayout);
         verifyButtonsLayout((HorizontalLayout) component);
         assertEquals(Alignment.MIDDLE_RIGHT, widget.getComponentAlignment(component));
@@ -101,6 +106,7 @@ public class SalAuditFilterWidgetTest {
         auditFilter.setProductFamily("SAL");
         assertEquals(auditFilter, widget.getAppliedFilter());
         auditFilter.setRhAccountNumbers(Collections.singleton(1000018380L));
+        auditFilter.setLicenseeAccountNumbers(Collections.singleton(1114L));
         auditFilter.setBatchesIds(Collections.singleton("8f8fbc50-4ad9-4103-af71-7d96b558a81a"));
         auditFilter.setStatuses(Collections.singleton(UsageStatusEnum.ELIGIBLE));
         auditFilter.setCccEventId("53256");

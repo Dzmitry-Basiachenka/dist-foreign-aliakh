@@ -13,9 +13,10 @@ import static org.junit.Assert.assertSame;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -39,7 +40,7 @@ public class SalAuditFilterControllerTest {
     private static final String SAL_PRODUCT_FAMILY = "SAL";
     private static final String SEARCH_VALUE = "searchValue";
 
-    private CommonAuditFilterController controller;
+    private ISalAuditFilterController controller;
     private IUsageBatchService usageBatchService;
     private IRightsholderService rightsholderService;
     private IProductFamilyProvider productFamilyProvider;
@@ -92,5 +93,14 @@ public class SalAuditFilterControllerTest {
         replay(usageBatchService, productFamilyProvider);
         assertSame(usageBatches, controller.getUsageBatches());
         verify(usageBatchService, productFamilyProvider);
+    }
+
+    @Test
+    public void testGetSalLicensees() {
+        List<SalLicensee> licensees = Collections.singletonList(new SalLicensee());
+        expect(usageBatchService.getSalLicensees()).andReturn(licensees).once();
+        replay(usageBatchService);
+        assertSame(licensees, controller.getSalLicensees());
+        verify(usageBatchService);
     }
 }
