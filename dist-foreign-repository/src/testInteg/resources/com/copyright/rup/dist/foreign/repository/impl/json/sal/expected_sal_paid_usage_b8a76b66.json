@@ -25,6 +25,7 @@
       "accountNumber": 2000017010
     },
     "salUsage": {
+      "detailType": "IB",
       "reportedArticle": "Learning in Your Sleep",
       "reportedVolNumberSeries": "Vol 17, Issue 2",
       "grade": "5",
@@ -59,6 +60,7 @@
       "accountNumber": 2000017010
     },
     "salUsage": {
+      "detailType": "UD",
       "reportedArticle": "Learning in Your Sleep",
       "reportedVolNumberSeries": "Vol 17, Issue 2",
       "assessmentType": "ELA",
