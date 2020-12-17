@@ -658,4 +658,25 @@
     <select id="findAaclDtosByScenarioId" resultMap="IAaclUsageMapper.aaclUsageDtoResultMap">
         <include refid="IAaclUsageMapper.selectArchivedDtoByScenarioIdSql"/>
     </select>
+
+    <select id="findSalByIds" resultMap="ISalUsageMapper.salUsageResultMap">
+        select
+            u.df_usage_archive_uid df_usage_uid,
+            u.payee_account_number,
+            p.name payee_name,
+            u.gross_amount,
+            u.service_fee_amount,
+            u.net_amount,
+            u.service_fee,
+            <include refid="ISalUsageMapper.salUsageColumns"/>
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        join ${schema}.df_usage_sal usal on u.df_usage_archive_uid = usal.df_usage_sal_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        where u.df_usage_archive_uid in
+            <foreach collection="list" item="usageId" open="(" separator="," close=")">
+                #{usageId}
+            </foreach>
+    </select>
 </mapper>
