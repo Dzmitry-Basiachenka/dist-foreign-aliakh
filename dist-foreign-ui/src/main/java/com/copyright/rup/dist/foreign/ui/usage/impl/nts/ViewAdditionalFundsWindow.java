@@ -80,11 +80,11 @@ class ViewAdditionalFundsWindow extends Window {
         grid.addColumn(FundPool::getCreateUser)
             .setCaption(ForeignUi.getMessage("table.column.create_user"))
             .setSortProperty("createUser")
-            .setWidth(250);
+            .setWidth(140);
         grid.addColumn(FundPool::getComment)
             .setCaption(ForeignUi.getMessage("table.column.comment"))
             .setSortProperty("comment")
-            .setExpandRatio(1);
+            .setWidth(320);
         grid.addComponentColumn(fundPool -> {
             Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
             deleteButton.setId(fundPool.getId());
@@ -93,7 +93,7 @@ class ViewAdditionalFundsWindow extends Window {
         }).setId("delete")
             .setWidth(90)
             .setSortable(false);
-        VaadinUtils.addComponentStyle(grid, "delete-fund-pool-grid");
+        VaadinUtils.addComponentStyle(grid, "view-fund-pool-grid");
     }
 
     private void deleteFund(FundPool fundPool) {

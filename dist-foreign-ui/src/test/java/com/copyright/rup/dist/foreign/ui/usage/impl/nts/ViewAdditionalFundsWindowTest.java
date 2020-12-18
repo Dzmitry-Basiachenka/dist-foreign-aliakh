@@ -169,7 +169,8 @@ public class ViewAdditionalFundsWindowTest {
         assertEquals(Arrays.asList("Fund Name", "Fund Amount", "Create User", "Comment", StringUtils.EMPTY),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertEquals(100, columns.get(1).getWidth(), 0);
-        assertEquals(250, columns.get(2).getWidth(), 0);
+        assertEquals(140, columns.get(2).getWidth(), 0);
+        assertEquals(320, columns.get(3).getWidth(), 0);
         assertEquals(90, columns.get(4).getWidth(), 0);
         Button button = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
         assertEquals("Delete", button.getCaption());
