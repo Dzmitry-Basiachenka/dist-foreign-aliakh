@@ -1,13 +1,20 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.sal;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditController;
 import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.shared.data.sort.SortDirection;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -31,6 +38,8 @@ public class SalAuditController extends CommonAuditController implements ISalAud
 
     @Autowired
     private ISalAuditFilterController controller;
+    @Autowired
+    private ISalUsageService salUsageService;
 
     @Override
     public ICommonAuditFilterController getAuditFilterController() {
@@ -50,11 +59,20 @@ public class SalAuditController extends CommonAuditController implements ISalAud
 
     @Override
     public int getSize() {
-        return 0; // TODO {aliakh} to implement
+        AuditFilter filter = getFilter();
+        return !filter.isEmpty() ? salUsageService.getCountForAudit(filter) : 0;
     }
 
     @Override
     public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
-        return Collections.emptyList(); // TODO {aliakh} to implement
+        AuditFilter filter = getFilter();
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.get(0);
+            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
+        return !filter.isEmpty()
+            ? salUsageService.getForAudit(filter, new Pageable(startIndex, count), sort)
+            : Collections.emptyList();
     }
 }

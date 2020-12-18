@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
 
@@ -205,5 +206,17 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
         parameters.put("rhAccountNumber", Objects.requireNonNull(rhAccountNumber));
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         update("ISalUsageMapper.updateRhAccountNumberAndStatusById", parameters);
+    }
+
+    @Override
+    @SuppressWarnings("all") // TODO {aliakh} to remove when implemented
+    public int findCountForAudit(AuditFilter filter) {
+        return 0; // TODO {aliakh} to implement
+    }
+
+    @Override
+    @SuppressWarnings("all") // TODO {aliakh} to remove when implemented
+    public List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
+        return new ArrayList<>(); // TODO {aliakh} to implement
     }
 }

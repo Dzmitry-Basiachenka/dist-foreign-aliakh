@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
@@ -197,4 +198,22 @@ public interface ISalUsageRepository {
      */
     void updateRhAccountNumberAndStatusById(String usageId, Long rhAccountNumber, UsageStatusEnum status,
                                             String userName);
+
+    /**
+     * Finds count of {@link UsageDto}s by {@link AuditFilter}.
+     *
+     * @param filter {@link AuditFilter}
+     * @return count of {@link UsageDto}s matching filter
+     */
+    int findCountForAudit(AuditFilter filter);
+
+    /**
+     * Finds list of {@link UsageDto}s by {@link AuditFilter}.
+     *
+     * @param filter   {@link AuditFilter}
+     * @param pageable limit and offset
+     * @param sort     sort criteria
+     * @return list of {@link UsageDto}s
+     */
+    List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort);
 }

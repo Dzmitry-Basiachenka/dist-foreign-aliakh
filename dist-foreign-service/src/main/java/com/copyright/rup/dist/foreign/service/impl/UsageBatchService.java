@@ -277,6 +277,11 @@ public class UsageBatchService implements IUsageBatchService {
         return usageBatchRepository.findSalLicensees();
     }
 
+    @Override
+    public List<Integer> getSalUsagePeriods() {
+        return usageBatchRepository.findSalUsagePeriods();
+    }
+
     private void populateTitlesStandardNumberAndType(List<Usage> usages) {
         usages.stream()
             .filter(usage -> Objects.nonNull(usage.getWrWrkInst()))

@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
@@ -201,4 +202,22 @@ public interface ISalUsageService {
      * @param reason          reason for RH update
      */
     void updateToEligibleWithRhAccountNumber(String usageId, Long rhAccountNumber, String reason);
+
+    /**
+     * Gets count of {@link UsageDto}s by {@link AuditFilter}.
+     *
+     * @param filter {@link AuditFilter}
+     * @return count of items by filter
+     */
+    int getCountForAudit(AuditFilter filter);
+
+    /**
+     * Gets list of {@link UsageDto}s by {@link AuditFilter}.
+     *
+     * @param filter   {@link AuditFilter}
+     * @param pageable {@link Pageable}
+     * @param sort     {@link Sort}
+     * @return list of {@link UsageDto}s
+     */
+    List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
 }

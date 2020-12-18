@@ -126,4 +126,11 @@ public interface IUsageBatchRepository {
      * @return list of {@link SalLicensee}
      */
     List<SalLicensee> findSalLicensees();
+
+    /**
+     * Finds list of SAL usage periods.
+     *
+     * @return list of SAL usage periods
+     */
+    List<Integer> findSalUsagePeriods();
 }
