@@ -44,7 +44,7 @@ public class SendNtsToCrmIntegrationTest {
     @Test
     public void testSendToCrm() {
         testBuilder
-            .withProductFamily("NTS")
+            .withProductFamilies(Collections.singleton("NTS"))
             .expectCrmCall("crm/sendToCrm/rights_distribution_request_nts.json",
                 "crm/sendToCrm/rights_distribution_response_nts.json")
             .expectJobInfo(buildJobInfo())

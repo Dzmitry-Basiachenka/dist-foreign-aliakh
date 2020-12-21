@@ -43,7 +43,7 @@ public class SendFasToCrmIntegrationTest {
     @Test
     public void testSendToCrm() {
         testBuilder
-            .withProductFamily("FAS")
+            .withProductFamilies(Collections.singleton("FAS"))
             .expectCrmCall("crm/sendToCrm/rights_distribution_request_fas.json",
                 "crm/sendToCrm/rights_distribution_response_fas.json")
             .expectJobInfo(buildJobInfo())

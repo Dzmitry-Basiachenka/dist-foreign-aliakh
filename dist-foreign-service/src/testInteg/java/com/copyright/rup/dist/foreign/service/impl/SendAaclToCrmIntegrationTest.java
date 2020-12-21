@@ -44,7 +44,7 @@ public class SendAaclToCrmIntegrationTest {
     @Test
     public void testSendToCrm() {
         testBuilder
-            .withProductFamily("AACL")
+            .withProductFamilies(Collections.singleton("AACL"))
             .expectCrmCall("crm/sendToCrm/rights_distribution_request_aacl.json",
                 "crm/sendToCrm/rights_distribution_response_aacl.json")
             .expectJobInfo(buildJobInfo())
