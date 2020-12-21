@@ -1,3 +1,24 @@
+13.1.0
+-
+* B-56615 FDA: Reporting SAL to RC: Adjust reporting to RC to report SAL
+* B-56615 FDA: Reporting SAL to RC: adjust repository logic to retrieve SAL usage data
+* B-56615 FDA: Reporting SAL to RC: fix failed build
+* B-58562 FDA: Update the item bank detail for denied SAL usage exceptions: make changes based on comments in CR-DIST-FOREIGN-217
+* B-59009 FDA: Update SAL usages with distribution data from LM: implement logic to insert SAL paid usages
+* B-59009 FDA: Update SAL usages with distribution data from LM: implement repository logic related to get usages for updating paid information
+* B-60056 FDA: Enhancements for additional Fund Pool view: add Comment column to View NTS Pre-Service Fee Funds modal window
+* B-60056 FDA: Enhancements for additional Fund Pool view: make Comments field mandatory and rename to Comment on Create NTS Pre-Service Fee Funds window
+* B-60056 FDA: Enhancements for additional Fund Pool view: make changes based on comments in CR-DIST-FOREIGN-218
+* B-60056 FDA: Enhancements for additional Fund Pool view: rename Delete menu item and Delete NTS Pre-Service Fee Funds modal window for additional Fund Pool
+* B-62520 Tech Debt: FDA: fix myBatis vulnerability CVE-2020-26945
+* B-62520 Tech Debt: FDA: fix security vulnerability CVE-2020-17527
+* B-62520 Tech Debt: FDA: migration to RUP Common 11
+* B-63961 FDA: Audit Tab modifications for SAL: implement Audit filter widget
+* B-63961 FDA: Audit Tab modifications for SAL: implement Audit tab
+* B-63961 FDA: Audit Tab modifications for SAL: implement Audit table widget
+* B-63961 FDA: Audit Tab modifications for SAL: implement Licensee multi-select widget
+* B-63961 FDA: Audit Tab modifications for SAL: implement services to search and filter audit records
+
 12.1.31
 -
 * B-62520 Tech Debt: FDA: change data type for reported_publication_date
