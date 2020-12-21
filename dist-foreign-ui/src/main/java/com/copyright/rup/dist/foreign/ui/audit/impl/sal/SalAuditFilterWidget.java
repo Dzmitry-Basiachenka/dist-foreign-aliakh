@@ -87,7 +87,7 @@ public class SalAuditFilterWidget extends CommonAuditFilterWidget {
     private SalLicenseeFilterWidget buildLicenseesFilter() {
         licenseeFilterWidget = new SalLicenseeFilterWidget(controller::getSalLicensees);
         licenseeFilterWidget.addFilterSaveListener((FilterWindow.IFilterSaveListener<SalLicensee>) event -> {
-            getFilter().setRhAccountNumbers(event.getSelectedItemsIds()
+            getFilter().setLicenseeAccountNumbers(event.getSelectedItemsIds()
                 .stream()
                 .map(SalLicensee::getAccountNumber)
                 .collect(Collectors.toSet()));

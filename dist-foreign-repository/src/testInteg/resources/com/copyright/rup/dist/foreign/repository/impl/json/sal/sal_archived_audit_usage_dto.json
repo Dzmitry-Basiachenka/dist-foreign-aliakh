@@ -21,6 +21,12 @@
     "serviceFeeAmount": 100.0000000000,
     "status": "ARCHIVED",
     "productFamily": "SAL",
+    "scenarioName": "SAL Scenario to test audit 2",
+    "checkNumber": "578945",
+    "checkDate": "2016-11-03T00:00-04:00",
+    "cccEventId": "53258",
+    "distributionName": "SAL_March_2017",
+    "distributionDate": "2018-11-03T00:00-04:00",
     "periodEndDate": [
       2018,
       6,
