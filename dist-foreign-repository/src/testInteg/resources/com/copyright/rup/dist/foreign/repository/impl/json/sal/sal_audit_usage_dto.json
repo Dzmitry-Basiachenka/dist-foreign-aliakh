@@ -23,6 +23,7 @@
     "serviceFeeAmount": 200.0000000000,
     "status": "LOCKED",
     "productFamily": "SAL",
+    "scenarioName": "SAL Scenario to test audit 1",
     "periodEndDate": [
       2019,
       6,

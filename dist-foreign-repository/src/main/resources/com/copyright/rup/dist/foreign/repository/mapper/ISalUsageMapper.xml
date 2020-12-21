@@ -68,6 +68,12 @@
         <result property="serviceFeeAmount" column="service_fee_amount"/>
         <result property="netAmount" column="net_amount"/>
         <result property="serviceFee" column="service_fee"/>
+        <result property="scenarioName" column="scenario_name"/>
+        <result property="checkNumber" column="check_number"/>
+        <result property="checkDate" column="check_date"/>
+        <result property="cccEventId" column="ccc_event_id"/>
+        <result property="distributionName" column="distribution_name"/>
+        <result property="distributionDate" column="distribution_date"/>
         <result property="status" column="status_ind"/>
         <result property="productFamily" column="product_family"/>
         <result property="comment" column="comment"/>
@@ -612,7 +618,7 @@
         join ${schema}.df_usage_sal usal on u.df_usage_archive_uid = usal.df_usage_sal_uid
         left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
-        <include refid="ISalUsageMapper.archivedAaclAuditFilterWhereClause"/>)
+        <include refid="ISalUsageMapper.archivedSalAuditFilterWhereClause"/>)
     </sql>
 
     <sql id="selectForAuditSql">
@@ -880,10 +886,10 @@
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
         left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
-        <include refid="ISalUsageMapper.archivedAaclAuditFilterWhereClause"/>
+        <include refid="ISalUsageMapper.archivedSalAuditFilterWhereClause"/>
     </sql>
 
-    <sql id="archivedAaclAuditFilterWhereClause">
+    <sql id="archivedSalAuditFilterWhereClause">
         <where>
             <include refid="ISalUsageMapper.salAuditFilterWhereClause">
                 <property name="detail_uid" value="u.df_usage_archive_uid"/>

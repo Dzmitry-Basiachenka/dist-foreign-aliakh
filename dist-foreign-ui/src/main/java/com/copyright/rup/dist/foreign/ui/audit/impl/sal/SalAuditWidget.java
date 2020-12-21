@@ -47,7 +47,7 @@ public class SalAuditWidget extends CommonAuditWidget implements ISalAuditWidget
             .setCaption(ForeignUi.getMessage("table.column.detail_id"))
             .setSortProperty("detailId")
             .setWidth(130);
-        addColumn(usageDto -> usageDto.getSalUsage().getDetailType(), "table.column.detail_type", "detailType", 115);
+        addColumn(usageDto -> usageDto.getSalUsage().getDetailType(), "table.column.detail_type", "detailType", 90);
         addColumn(UsageDto::getStatus, "table.column.usage_status", "status", 115);
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", 125);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", 140);
@@ -76,11 +76,11 @@ public class SalAuditWidget extends CommonAuditWidget implements ISalAuditWidget
             "table.column.reported_work_portion_id", "reportedWorkPortionId", 180);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedStandardNumber(),
             "table.column.reported_standard_number", "reportedStandardNumber", 200);
-        addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle", 170);
+        addColumn(UsageDto::getWorkTitle, "table.column.reported_title", "workTitle", 300);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedMediaType(), "table.column.reported_media_type",
             "reportedMediaType", 150);
         addColumn(usageDto -> usageDto.getSalUsage().getMediaTypeWeight(), "table.column.media_type_weight",
-            "mediaTypeWeight", 120);
+            "mediaTypeWeight", 130);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedArticle(), "table.column.reported_article",
             "reportedArticle", 240);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedAuthor(), "table.column.reported_author",
@@ -88,27 +88,27 @@ public class SalAuditWidget extends CommonAuditWidget implements ISalAuditWidget
         addColumn(usageDto -> usageDto.getSalUsage().getReportedPublisher(), "table.column.reported_publisher",
             "reportedPublisher", 150);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedPublicationDate(),
-            "table.column.reported_publication_date", "reportedPublicationDate", 200);
+            "table.column.reported_publication_date", "reportedPublicationDate", 180);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedPageRange(), "table.column.reported_page_range",
             "reportedPageRange", 150);
         addColumn(usageDto -> usageDto.getSalUsage().getReportedVolNumberSeries(),
             "table.column.reported_vol_number_series", "reportedVolNumberSeries", 200);
         addColumn(usageDto -> CommonDateUtils.format(usageDto.getSalUsage().getScoredAssessmentDate(),
             RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT), "table.column.scored_assessment_date", "scoredAssessmentDate",
-            200);
+            190);
         addColumn(usageDto -> usageDto.getSalUsage().getAssessmentName(), "table.column.assessment_name",
             "assessmentName", 180);
         addColumn(usageDto -> usageDto.getSalUsage().getCoverageYear(), "table.column.coverage_year", "coverageYear",
             115);
-        addColumn(usageDto -> usageDto.getSalUsage().getGrade(), "table.column.grade", "grade", 115);
-        addColumn(usageDto -> usageDto.getSalUsage().getGradeGroup(), "table.column.grade_group", "gradeGroup", 115);
+        addColumn(usageDto -> usageDto.getSalUsage().getGrade(), "table.column.grade", "grade", 60);
+        addColumn(usageDto -> usageDto.getSalUsage().getGradeGroup(), "table.column.grade_group", "gradeGroup", 110);
         addColumn(usageDto -> usageDto.getSalUsage().getAssessmentType(), "table.column.assessment_type",
             "assessmentType", 150);
         addColumn(usageDto -> usageDto.getSalUsage().getQuestionIdentifier(), "table.column.question_identifier",
             "questionIdentifier", 150);
         addColumn(usageDto -> usageDto.getSalUsage().getStates(), "table.column.states", "states", 115);
         addColumn(usageDto -> usageDto.getSalUsage().getNumberOfViews(), "table.column.number_of_views",
-            "numberOfViews", 150);
+            "numberOfViews", 120);
         addColumn(UsageDto::getComment, "table.column.comment", "comment", 200);
     }
 
