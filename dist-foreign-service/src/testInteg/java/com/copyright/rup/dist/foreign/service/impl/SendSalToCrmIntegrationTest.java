@@ -43,7 +43,7 @@ public class SendSalToCrmIntegrationTest {
     @Test
     public void testSendToCrm() {
         testBuilder
-            .withProductFamily("SAL")
+            .withProductFamilies(Collections.singleton("SAL"))
             .expectCrmCall("crm/sendToCrm/rights_distribution_request_sal.json",
                 "crm/sendToCrm/rights_distribution_response_sal.json")
             .expectJobInfo(buildJobInfo())

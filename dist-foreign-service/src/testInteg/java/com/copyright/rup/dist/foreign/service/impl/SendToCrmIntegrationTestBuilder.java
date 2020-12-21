@@ -19,11 +19,14 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Builder for send to CRM test.
@@ -53,10 +56,10 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
     private String expectedCrmRequest;
     private String crmResponse;
     private JobInfo expectedJobInfo;
-    private String productFamily;
+    private Set<String> productFamiliesSet;
 
-    SendToCrmIntegrationTestBuilder withProductFamily(String scenarioProductFamily) {
-        this.productFamily = scenarioProductFamily;
+    SendToCrmIntegrationTestBuilder withProductFamilies(Set<String> productFamilies) {
+        this.productFamiliesSet = productFamilies;
         return this;
     }
 
@@ -137,8 +140,12 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void verifyScenarios() {
+            Set<Scenario> actualScenarios = productFamiliesSet.stream()
+                .map(productFamily -> scenarioService.getScenarios(productFamily))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
             scenarioIdToExpectedStatus.forEach((scenarioId, expectedStatus) -> {
-                Scenario actualScenario = scenarioService.getScenarios(productFamily).stream()
+                Scenario actualScenario = actualScenarios.stream()
                     .filter(scenario -> Objects.equals(scenarioId, scenario.getId()))
                     .findFirst()
                     .orElseThrow(
