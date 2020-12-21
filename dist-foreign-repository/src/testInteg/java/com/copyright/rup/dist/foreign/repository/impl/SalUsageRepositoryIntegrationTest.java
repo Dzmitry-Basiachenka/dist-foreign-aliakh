@@ -6,7 +6,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
@@ -14,15 +16,14 @@ import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,8 +38,10 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -60,18 +63,79 @@ public class SalUsageRepositoryIntegrationTest {
     private static final String USAGE_BATCH_ID_1 = "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64";
     private static final String USAGE_BATCH_ID_2 = "56069b44-10b1-42d6-9a44-a3fae0029171";
     private static final String USAGE_BATCH_ID_3 = "09cc64a7-171a-4921-8d99-500768137cb8";
+    private static final String USAGE_BATCH_ID_4 = "d67611c2-ee99-445b-9ce3-e798e2ed640a";
     private static final String SCENARIO_ID_1 = "6252afe5-e756-42d4-b96a-708afeda9122";
     private static final String SCENARIO_ID_2 = "71d242e6-4009-4393-9962-45daf962706a";
-    private static final String SAL_PRODUCT_FAMILY = "SAL";
-    private static final String DETAIL_ID_KEY = "detailId";
     private static final String USAGE_ID_1 = "c95654c0-a607-4683-878f-99606e90c065";
     private static final String USAGE_ID_2 = "7b5ac9fc-63e2-4162-8d63-953b7023293c";
     private static final String USAGE_ID_3 = "5ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_ID_4 = "d8daeed3-e4ee-4b09-b6ec-ef12a12bcd3d";
     private static final String USAGE_ID_5 = "83e26dc4-87af-464d-9edc-bb37611947fa";
-    private static final String WORK_PORTION_ID_3 = "1101001IB2361";
+    private static final String USAGE_ID_6 = "7f82f654-d906-4cc3-83cf-0409c69a0891";
+    private static final String USAGE_ID_7 = "c75305bc-9458-40bc-9926-004a47b072fc";
+    private static final String USAGE_ID_8 = "870ee1dc-8596-409f-8ffe-717d17a33c9e";
+    private static final String USAGE_ID_9 = "a85d26e1-deb6-4f3f-96fa-58b4175825f4";
+    private static final String USAGE_ID_10 = "17f35785-8402-4dfc-83c9-d1bedc2e6364";
+    private static final String USAGE_ID_11 = "4ac5174a-6feb-4c9a-a8cd-7d3cc35ab8e2";
+    private static final String USAGE_ID_12 = "71d1a5d2-ba9f-48b7-9b09-0516840a07ee";
+    private static final String USAGE_ID_13 = "7a358ad5-cbcb-4912-b1ad-314617662614";
+    private static final String USAGE_ID_14 = "7b5ac9fc-63e2-4162-8d63-953b7023293c";
+    private static final String USAGE_ID_15 = "80a517a0-9a7a-4361-8840-e59d13d6e8db";
+    private static final String USAGE_ID_16 = "9439530a-d7a9-40a9-a881-f892d13eaf9f";
+    private static final String USAGE_ID_17 = "98eedcf5-cd6d-46ee-9d70-912db0bf2997";
+    private static final String WORK_PORTION_ID_1 = "1101001IB2361";
+    private static final String SAL_PRODUCT_FAMILY = "SAL";
+    private static final String DETAIL_ID_KEY = "detailId";
+    private static final String STATUS_KEY = "status";
+    private static final String PRODUCT_FAMILY_KEY = "productFamily";
+    private static final String BATCH_NAME_KEY = "batchName";
+    private static final String BATCH_PERIOD_END_DATE_KEY = "batchPeriodEndDate";
+    private static final String RH_ACCOUNT_NUMBER_KEY = "rhAccountNumber";
+    private static final String RH_NAME_KEY = "rhName";
+    private static final String WR_WRK_INST_KEY = "wrWrkInst";
+    private static final String WORK_TITLE_KEY = "workTitle";
+    private static final String SYSTEM_TITLE_KEY = "systemTitle";
+    private static final String STANDARD_NUMBER_KEY = "standardNumber";
+    private static final String STANDARD_NUMBER_TYPE_KEY = "standardNumberType";
+    private static final String COMMENT_KEY = "comment";
+    private static final String PERIOD_END_DATE_KEY = "periodEndDate";
+    private static final String SCENARIO_NAME_KEY = "scenarioName";
+    private static final String GROSS_AMOUNT_KEY = "grossAmount";
+    private static final String SERVICE_FEE_AMOUNT_KEY = "serviceFeeAmount";
+    private static final String NET_AMOUNT_KEY = "netAmount";
+    private static final String PAYEE_ACCOUNT_NUMBER_KEY = "payeeAccountNumber";
+    private static final String PAYEE_NAME_KEY = "payeeName";
+    private static final String CHECK_NUMBER_KEY = "checkNumber";
+    private static final String CHECK_DATE_KEY = "checkDate";
+    private static final String CCC_EVENT_ID_KEY = "cccEventId";
+    private static final String DISTRIBUTION_NAME_KEY = "distributionName";
+    private static final String DISTRIBUTION_DATE_KEY = "distributionDate";
+    private static final String DETAIL_TYPE_KEY = "detailType";
+    private static final String LICENSEE_ACCOUNT_NUMBER_KEY = "licenseeAccountNumber";
+    private static final String LICENSEE_NAME_KEY = "licenseeName";
+    private static final String REPORTED_WORK_PORTION_ID_KEY = "reportedWorkPortionId";
+    private static final String REPORTED_ARTICLE_KEY = "reportedArticle";
+    private static final String REPORTED_STANDARD_NUMBER_KEY = "reportedStandardNumber";
+    private static final String REPORTED_AUTHOR_KEY = "reportedAuthor";
+    private static final String REPORTED_PUBLISHER_KEY = "reportedPublisher";
+    private static final String REPORTED_PUBLICATION_DATE_KEY = "reportedPublicationDate";
+    private static final String REPORTED_PAGE_RANGE_KEY = "reportedPageRange";
+    private static final String REPORTED_VOL_NUMBER_SERIES_KEY = "reportedVolNumberSeries";
+    private static final String REPORTED_MEDIA_TYPE_KEY = "reportedMediaType";
+    private static final String MEDIA_TYPE_WEIGHT_KEY = "mediaTypeWeight";
+    private static final String COVERAGE_YEAR_KEY = "coverageYear";
+    private static final String SCORED_ASSESSMENT_DATE_KEY = "scoredAssessmentDate";
+    private static final String QUESTION_IDENTIFIER_KEY = "questionIdentifier";
+    private static final String ASSESSMENT_NAME_KEY = "assessmentName";
+    private static final String ASSESSMENT_TYPE_KEY = "assessmentType";
+    private static final String GRADE_KEY = "grade";
+    private static final String GRADE_GROUP_KEY = "gradeGroup";
+    private static final String STATES_KEY = "states";
+    private static final String NUMBER_OF_VIEWS_KEY = "numberOfViews";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.0000000000");
+    private static final String PERCENT = "%";
+    private static final String UNDERSCORE = "_";
 
     @Autowired
     private ISalUsageRepository salUsageRepository;
@@ -115,84 +179,84 @@ public class SalUsageRepositoryIntegrationTest {
         verifyUsageDtos(loadExpectedUsageDtos("json/sal/sal_usage_dto_5ab5e80b.json"),
             salUsageRepository.findDtosByFilter(buildUsageFilter(
                 Collections.singleton(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB),
-                null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)));
+                null, new Sort(DETAIL_ID_KEY, Direction.ASC)));
     }
 
     @Test
     public void testFindDtosByFilterSort() {
-        assertFindDtosByFilterSort(USAGE_ID_3, "detailId", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "detailId", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "status", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "status", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "detailType", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "detailType", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "productFamily", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "productFamily", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "batchName", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "batchName", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "periodEndDate", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "periodEndDate", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "rhAccountNumber", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "rhAccountNumber", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "rhName", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "rhName", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "licenseeAccountNumber", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "licenseeAccountNumber", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "licenseeName", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "licenseeName", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "wrWrkInst", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "wrWrkInst", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "workTitle", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "workTitle", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "systemTitle", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "systemTitle", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "standardNumber", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "standardNumber", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "standardNumberType", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "standardNumberType", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "assessmentName", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "assessmentName", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "assessmentType", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "assessmentType", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "reportedWorkPortionId", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "reportedWorkPortionId", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "reportedArticle", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "reportedArticle", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "reportedStandardNumber", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "reportedStandardNumber", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "reportedAuthor", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "reportedAuthor", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "reportedPublisher", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "reportedPublisher", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "reportedPublicationDate", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "reportedPublicationDate", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "reportedPageRange", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "reportedPageRange", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "reportedVolNumberSeries", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "reportedVolNumberSeries", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "reportedMediaType", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "reportedMediaType", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "coverageYear", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "coverageYear", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "scoredAssessmentDate", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "scoredAssessmentDate", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "questionIdentifier", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "questionIdentifier", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "grade", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "grade", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "gradeGroup", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "gradeGroup", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "states", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_2, "states", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_1, "numberOfViews", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "numberOfViews", Sort.Direction.DESC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "comment", Sort.Direction.ASC);
-        assertFindDtosByFilterSort(USAGE_ID_3, "comment", Sort.Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, DETAIL_ID_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, DETAIL_ID_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, STATUS_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, STATUS_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, DETAIL_TYPE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, DETAIL_TYPE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, PRODUCT_FAMILY_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, PRODUCT_FAMILY_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, BATCH_NAME_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, BATCH_NAME_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, PERIOD_END_DATE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, PERIOD_END_DATE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, RH_ACCOUNT_NUMBER_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, RH_ACCOUNT_NUMBER_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, RH_NAME_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, RH_NAME_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, LICENSEE_ACCOUNT_NUMBER_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, LICENSEE_ACCOUNT_NUMBER_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, LICENSEE_NAME_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, LICENSEE_NAME_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_2, WR_WRK_INST_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, WR_WRK_INST_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, WORK_TITLE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, WORK_TITLE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, SYSTEM_TITLE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, SYSTEM_TITLE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, STANDARD_NUMBER_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, STANDARD_NUMBER_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, STANDARD_NUMBER_TYPE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, STANDARD_NUMBER_TYPE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, ASSESSMENT_NAME_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, ASSESSMENT_NAME_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, ASSESSMENT_TYPE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, ASSESSMENT_TYPE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, REPORTED_WORK_PORTION_ID_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, REPORTED_WORK_PORTION_ID_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, REPORTED_ARTICLE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, REPORTED_ARTICLE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, REPORTED_STANDARD_NUMBER_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, REPORTED_STANDARD_NUMBER_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, REPORTED_AUTHOR_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, REPORTED_AUTHOR_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, REPORTED_PUBLISHER_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, REPORTED_PUBLISHER_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, REPORTED_PUBLICATION_DATE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, REPORTED_PUBLICATION_DATE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, REPORTED_PAGE_RANGE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, REPORTED_PAGE_RANGE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, REPORTED_VOL_NUMBER_SERIES_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, REPORTED_VOL_NUMBER_SERIES_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, REPORTED_MEDIA_TYPE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, REPORTED_MEDIA_TYPE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, COVERAGE_YEAR_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, COVERAGE_YEAR_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, SCORED_ASSESSMENT_DATE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, SCORED_ASSESSMENT_DATE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, QUESTION_IDENTIFIER_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, QUESTION_IDENTIFIER_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_2, GRADE_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_1, GRADE_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, GRADE_GROUP_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, GRADE_GROUP_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, STATES_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_2, STATES_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_1, NUMBER_OF_VIEWS_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, NUMBER_OF_VIEWS_KEY, Direction.DESC);
+        assertFindDtosByFilterSort(USAGE_ID_3, COMMENT_KEY, Direction.ASC);
+        assertFindDtosByFilterSort(USAGE_ID_3, COMMENT_KEY, Direction.DESC);
     }
 
     @Test
     public void testWorkPortionIdExists() {
-        assertTrue(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3));
+        assertTrue(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_1));
         assertTrue(salUsageRepository.workPortionIdExists("1101024IB2192"));
         assertFalse(salUsageRepository.workPortionIdExists("1101024IB"));
     }
@@ -205,13 +269,13 @@ public class SalUsageRepositoryIntegrationTest {
 
     @Test
     public void testWorkPortionIdExistsInBatch() {
-        assertTrue(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3, USAGE_BATCH_ID_1));
-        assertFalse(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_3, USAGE_BATCH_ID_2));
+        assertTrue(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_1, USAGE_BATCH_ID_1));
+        assertFalse(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_1, USAGE_BATCH_ID_2));
     }
 
     @Test
     public void testFindItemBankDetailGradeByWorkPortionId() {
-        assertEquals("5", salUsageRepository.findItemBankDetailGradeByWorkPortionId(WORK_PORTION_ID_3));
+        assertEquals("5", salUsageRepository.findItemBankDetailGradeByWorkPortionId(WORK_PORTION_ID_1));
         assertNull(salUsageRepository.findItemBankDetailGradeByWorkPortionId("1201064IB2200"));
     }
 
@@ -350,6 +414,215 @@ public class SalUsageRepositoryIntegrationTest {
         });
     }
 
+    @Test
+    public void testFindForAudit() throws IOException {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue(USAGE_ID_7);
+        verifyUsageDtosForAudit(loadExpectedUsageDtos("json/sal/sal_audit_usage_dto.json"),
+            salUsageRepository.findForAudit(filter, null, null));
+    }
+
+    @Test
+    public void testFindForAuditArchived() throws IOException {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue(USAGE_ID_8);
+        verifyUsageDtosForAudit(loadExpectedUsageDtos("json/sal/sal_archived_audit_usage_dto.json"),
+            salUsageRepository.findForAudit(filter, null, null));
+    }
+
+    @Test
+    public void findAuditByRightsholder() {
+        AuditFilter filter = new AuditFilter();
+        filter.setRhAccountNumbers(Collections.singleton(2000173934L));
+        assertEquals(1, salUsageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = salUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, USAGE_ID_6);
+    }
+
+    @Test
+    public void testAuditByLicensee() {
+        AuditFilter filter = new AuditFilter();
+        filter.setLicenseeAccountNumbers(Collections.singleton(2000017003L));
+        assertEquals(2, salUsageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = salUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, USAGE_ID_8, USAGE_ID_9);
+    }
+
+    @Test
+    public void testAuditByBatch() {
+        AuditFilter filter = new AuditFilter();
+        filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
+        assertEquals(2, salUsageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = salUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, USAGE_ID_6, USAGE_ID_7);
+    }
+
+    @Test
+    public void testAuditByStatus() {
+        AuditFilter filter = new AuditFilter();
+        filter.setStatuses(EnumSet.of(UsageStatusEnum.ARCHIVED));
+        assertEquals(2, salUsageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = salUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, USAGE_ID_8, USAGE_ID_9);
+    }
+
+    @Test
+    public void testAuditBySalDetailType() {
+        AuditFilter filter = new AuditFilter();
+        filter.setSalDetailType(SalDetailTypeEnum.UD);
+        assertEquals(15, salUsageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = salUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, USAGE_ID_10, USAGE_ID_11, USAGE_ID_12, USAGE_ID_13, USAGE_ID_14, USAGE_ID_15,
+            USAGE_ID_16, USAGE_ID_17, USAGE_ID_9, USAGE_ID_7);
+    }
+
+    @Test
+    public void testFindForAuditByUsagePeriod() {
+        AuditFilter filter = new AuditFilter();
+        filter.setUsagePeriod(2018);
+        assertEquals(2, salUsageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = salUsageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, USAGE_ID_8, USAGE_ID_9);
+    }
+
+    @Test
+    public void testFindForAuditByCccEventId() {
+        assertFindForAuditByCccEventId("53258", USAGE_ID_8);
+        assertFindForAuditByCccEventId(PERCENT);
+        assertFindForAuditByCccEventId(UNDERSCORE);
+    }
+
+    @Test
+    public void testFindForAuditByDistributionName() {
+        assertFindForAuditByDistributionName("SAL_March_2018", USAGE_ID_9);
+        assertFindForAuditByDistributionName(PERCENT);
+        assertFindForAuditByDistributionName(UNDERSCORE);
+    }
+
+    @Test
+    public void testFindForAuditSearch() {
+        assertFindForAuditSearch(USAGE_ID_6, USAGE_ID_6);
+        assertFindForAuditSearch("f82f654-d906-4cc3-83cf-0409c69a089", USAGE_ID_6);
+        assertFindForAuditSearch("131858485", USAGE_ID_6);
+        assertFindForAuditSearch("3185848", USAGE_ID_6);
+        assertFindForAuditSearch("Leseleiter", USAGE_ID_6);
+        assertFindForAuditSearch("eseleite", USAGE_ID_6);
+        assertFindForAuditSearch(PERCENT);
+        assertFindForAuditSearch(UNDERSCORE);
+    }
+
+    @Test
+    public void testFindForAuditSortingByCommonUsageInfo() {
+        AuditFilter filter = new AuditFilter();
+        filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
+        verifyFindForAuditSort(filter, DETAIL_ID_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, DETAIL_ID_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, STATUS_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, STATUS_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, PRODUCT_FAMILY_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, PRODUCT_FAMILY_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, RH_ACCOUNT_NUMBER_KEY, Direction.ASC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, RH_ACCOUNT_NUMBER_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, RH_NAME_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, RH_NAME_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, WR_WRK_INST_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, WR_WRK_INST_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, WORK_TITLE_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, WORK_TITLE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, SYSTEM_TITLE_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, SYSTEM_TITLE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, STANDARD_NUMBER_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, STANDARD_NUMBER_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, STANDARD_NUMBER_TYPE_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, STANDARD_NUMBER_TYPE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, GROSS_AMOUNT_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, GROSS_AMOUNT_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, SERVICE_FEE_AMOUNT_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, SERVICE_FEE_AMOUNT_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, NET_AMOUNT_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, NET_AMOUNT_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, SCENARIO_NAME_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, SCENARIO_NAME_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, COMMENT_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, COMMENT_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+    }
+
+    @Test
+    public void testFindForAuditSortingBySalUsageInfo() {
+        AuditFilter filter = new AuditFilter();
+        filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
+        verifyFindForAuditSort(filter, DETAIL_TYPE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, DETAIL_TYPE_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, REPORTED_WORK_PORTION_ID_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_WORK_PORTION_ID_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_ARTICLE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_ARTICLE_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, REPORTED_STANDARD_NUMBER_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_STANDARD_NUMBER_KEY, Direction.DESC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, REPORTED_AUTHOR_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_AUTHOR_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_PUBLISHER_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_PUBLISHER_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_PUBLICATION_DATE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_PUBLICATION_DATE_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_PAGE_RANGE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_PAGE_RANGE_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_VOL_NUMBER_SERIES_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_VOL_NUMBER_SERIES_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_MEDIA_TYPE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, REPORTED_MEDIA_TYPE_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, MEDIA_TYPE_WEIGHT_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, MEDIA_TYPE_WEIGHT_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, COVERAGE_YEAR_KEY, Direction.ASC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, COVERAGE_YEAR_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, SCORED_ASSESSMENT_DATE_KEY, Direction.ASC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, SCORED_ASSESSMENT_DATE_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, ASSESSMENT_NAME_KEY, Direction.ASC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, ASSESSMENT_NAME_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, ASSESSMENT_TYPE_KEY, Direction.ASC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, ASSESSMENT_TYPE_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, QUESTION_IDENTIFIER_KEY, Direction.ASC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, QUESTION_IDENTIFIER_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, GRADE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, GRADE_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, GRADE_GROUP_KEY, Direction.ASC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, GRADE_GROUP_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, STATES_KEY, Direction.ASC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, STATES_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, NUMBER_OF_VIEWS_KEY, Direction.ASC, USAGE_ID_7, USAGE_ID_6);
+        verifyFindForAuditSort(filter, NUMBER_OF_VIEWS_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+    }
+
+    @Test
+    public void testFindForAuditSortingByBatchInfo() {
+        AuditFilter filter = new AuditFilter();
+        filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
+        verifyFindForAuditSort(filter, BATCH_NAME_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, BATCH_NAME_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, BATCH_PERIOD_END_DATE_KEY, Direction.ASC, USAGE_ID_6, USAGE_ID_7);
+        verifyFindForAuditSort(filter, BATCH_PERIOD_END_DATE_KEY, Direction.DESC, USAGE_ID_6, USAGE_ID_7);
+    }
+
+    @Test
+    public void testFindForAuditSortingByPaidInfo() {
+        AuditFilter filter = new AuditFilter();
+        filter.setBatchesIds(Collections.singleton("a375c049-1289-4c85-994b-b2bd8ac043cf"));
+        verifyFindForAuditSort(filter, PAYEE_ACCOUNT_NUMBER_KEY, Direction.ASC, USAGE_ID_8, USAGE_ID_9);
+        verifyFindForAuditSort(filter, PAYEE_ACCOUNT_NUMBER_KEY, Direction.DESC, USAGE_ID_8, USAGE_ID_9);
+        verifyFindForAuditSort(filter, PAYEE_NAME_KEY, Direction.ASC, USAGE_ID_8, USAGE_ID_9);
+        verifyFindForAuditSort(filter, PAYEE_NAME_KEY, Direction.DESC, USAGE_ID_8, USAGE_ID_9);
+        verifyFindForAuditSort(filter, CHECK_NUMBER_KEY, Direction.ASC, USAGE_ID_8, USAGE_ID_9);
+        verifyFindForAuditSort(filter, CHECK_NUMBER_KEY, Direction.DESC, USAGE_ID_8, USAGE_ID_9);
+        verifyFindForAuditSort(filter, CHECK_DATE_KEY, Direction.ASC, USAGE_ID_8, USAGE_ID_9);
+        verifyFindForAuditSort(filter, CHECK_DATE_KEY, Direction.DESC, USAGE_ID_9, USAGE_ID_8);
+        verifyFindForAuditSort(filter, CCC_EVENT_ID_KEY, Direction.ASC, USAGE_ID_8, USAGE_ID_9);
+        verifyFindForAuditSort(filter, CCC_EVENT_ID_KEY, Direction.DESC, USAGE_ID_9, USAGE_ID_8);
+        verifyFindForAuditSort(filter, DISTRIBUTION_NAME_KEY, Direction.ASC, USAGE_ID_8, USAGE_ID_9);
+        verifyFindForAuditSort(filter, DISTRIBUTION_NAME_KEY, Direction.DESC, USAGE_ID_9, USAGE_ID_8);
+        verifyFindForAuditSort(filter, DISTRIBUTION_DATE_KEY, Direction.ASC, USAGE_ID_8, USAGE_ID_9);
+        verifyFindForAuditSort(filter, DISTRIBUTION_DATE_KEY, Direction.DESC, USAGE_ID_8, USAGE_ID_9);
+    }
+
     private void verifyUsageWithAmounts(Usage usage, String grossAmount, String netAmount, String serviceFeeAmount) {
         assertEquals(new BigDecimal(grossAmount), usage.getGrossAmount());
         assertEquals(new BigDecimal(netAmount), usage.getNetAmount());
@@ -456,5 +729,85 @@ public class SalUsageRepositoryIntegrationTest {
             new Sort(sortProperty, sortDirection));
         assertEquals(3, CollectionUtils.size(usageDtos));
         assertEquals(detailId, usageDtos.get(0).getId());
+    }
+
+    private void assertFindForAuditSearch(String searchValue, String... usageIds) {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue(searchValue);
+        assertEquals(usageIds.length, salUsageRepository.findCountForAudit(filter));
+        verifyUsageDtos(salUsageRepository.findForAudit(filter, null, null), usageIds);
+    }
+
+    private void assertFindForAuditByCccEventId(String cccEventId, String... usageIds) {
+        AuditFilter filter = new AuditFilter();
+        filter.setCccEventId(cccEventId);
+        assertEquals(usageIds.length, salUsageRepository.findCountForAudit(filter));
+        verifyUsageDtos(salUsageRepository.findForAudit(filter, null, null), usageIds);
+    }
+
+    private void assertFindForAuditByDistributionName(String distributionName, String... usageIds) {
+        AuditFilter filter = new AuditFilter();
+        filter.setDistributionName(distributionName);
+        assertEquals(usageIds.length, salUsageRepository.findCountForAudit(filter));
+        verifyUsageDtos(salUsageRepository.findForAudit(filter, null, null), usageIds);
+    }
+
+    private void verifyUsageDtos(List<UsageDto> usageDtos, String... usageIds) {
+        assertNotNull(usageDtos);
+        usageDtos.sort(Comparator.comparing(UsageDto::getId));
+        Arrays.sort(usageIds);
+        verifyUsageDtosInExactOrder(usageDtos, usageIds);
+    }
+
+    private void verifyFindForAuditSort(AuditFilter filter, String property, Sort.Direction direction,
+                                        String... expectedIds) {
+        List<UsageDto> actualUsageDtos =
+            salUsageRepository.findForAudit(filter, new Pageable(0, 10), new Sort(property, direction));
+        verifyUsageDtosInExactOrder(actualUsageDtos, expectedIds);
+    }
+
+    private void verifyUsageDtosInExactOrder(List<UsageDto> usageDtos, String... expectedIds) {
+        assertNotNull(usageDtos);
+        List<String> actualIds = usageDtos.stream()
+            .map(UsageDto::getId)
+            .collect(Collectors.toList());
+        assertEquals(Arrays.asList(expectedIds), actualIds);
+    }
+
+    private void verifyUsageDtosForAudit(List<UsageDto> expectedUsages, List<UsageDto> actualUsages) {
+        assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
+        IntStream.range(0, expectedUsages.size())
+            .forEach(index -> verifyUsageDtoForAudit(expectedUsages.get(index), actualUsages.get(index)));
+    }
+
+    private void verifyUsageDtoForAudit(UsageDto expectedUsage, UsageDto actualUsage) {
+        assertEquals(expectedUsage.getId(), actualUsage.getId());
+        assertEquals(expectedUsage.getBatchName(), actualUsage.getBatchName());
+        assertEquals(expectedUsage.getPaymentDate(), actualUsage.getPaymentDate());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+        assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
+        assertEquals(expectedUsage.getRhName(), actualUsage.getRhName());
+        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
+        assertEquals(expectedUsage.getPayeeAccountNumber(), actualUsage.getPayeeAccountNumber());
+        assertEquals(expectedUsage.getPayeeName(), actualUsage.getPayeeName());
+        assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+        assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
+        assertEquals(expectedUsage.getBatchGrossAmount(), actualUsage.getBatchGrossAmount());
+        assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+        assertEquals(expectedUsage.getScenarioName(), actualUsage.getScenarioName());
+        assertEquals(expectedUsage.getCheckNumber(), actualUsage.getCheckNumber());
+        assertEquals(expectedUsage.getCheckDate(), actualUsage.getCheckDate());
+        assertEquals(expectedUsage.getCccEventId(), actualUsage.getCccEventId());
+        assertEquals(expectedUsage.getDistributionName(), actualUsage.getDistributionName());
+        assertEquals(expectedUsage.getDistributionDate(), actualUsage.getDistributionDate());
+        assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        assertNotNull(expectedUsage.getUpdateDate());
+        assertSalUsageFields(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
     }
 }

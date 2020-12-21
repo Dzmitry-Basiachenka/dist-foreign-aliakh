@@ -584,6 +584,369 @@
         <include refid="ISalUsageMapper.selectDtosByFilterSql"/>
     </select>
 
+    <sql id="selectCountForAuditSql">
+        select
+        <choose>
+            <when test="null != filter.cccEventId || null != filter.distributionName">
+                <include refid="ISalUsageMapper.selectArchivedCountForAuditSql"/>
+            </when>
+            <otherwise>
+                (select count(1) usage_count
+                from ${schema}.df_usage u
+                join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
+                join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+                left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+                <where>
+                    <include refid="ISalUsageMapper.salAuditFilterWhereClause">
+                        <property name="detail_uid" value="u.df_usage_uid"/>
+                    </include>
+                </where>) +
+                <include refid="ISalUsageMapper.selectArchivedCountForAuditSql"/>
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="selectArchivedCountForAuditSql">
+        (select count(1) usage_count
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_sal usal on u.df_usage_archive_uid = usal.df_usage_sal_uid
+        left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+        <include refid="ISalUsageMapper.archivedAaclAuditFilterWhereClause"/>)
+    </sql>
+
+    <sql id="selectForAuditSql">
+        <choose>
+            <when test="null != filter.cccEventId || null != filter.distributionName">
+                <include refid="ISalUsageMapper.selectArchivedUsagesForAuditSql"/>
+            </when>
+            <otherwise>
+                select
+                    u.df_usage_uid,
+                    u.status_ind,
+                    u.product_family,
+                    ub.name batch_name,
+                    ub.payment_date batch_period_end_date,
+                    u.rh_account_number,
+                    rh.name rh_name,
+                    u.payee_account_number,
+                    payee.name payee_name,
+                    wr_wrk_inst,
+                    work_title,
+                    system_title,
+                    standard_number,
+                    standard_number_type,
+                    u.gross_amount,
+                    u.net_amount,
+                    service_fee_amount,
+                    s.name scenario_name,
+                    null check_number,
+                    null check_date,
+                    null ccc_event_id,
+                    null distribution_name,
+                    null distribution_date,
+                    u.comment,
+                    usal.detail_type,
+                    usal.grade,
+                    usal.grade_group,
+                    usal.assessment_name,
+                    usal.assessment_type,
+                    usal.reported_work_portion_id,
+                    usal.reported_article,
+                    usal.reported_standard_number,
+                    usal.reported_author,
+                    usal.reported_publisher,
+                    usal.reported_publication_date,
+                    usal.reported_page_range,
+                    usal.reported_vol_number_series,
+                    usal.reported_media_type,
+                    usal.media_type_weight,
+                    usal.coverage_year,
+                    usal.scored_assessment_date,
+                    usal.question_identifier,
+                    usal.states,
+                    usal.number_of_views
+                from ${schema}.df_usage u
+                join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+                left join ${schema}.df_usage_sal usal on u.df_usage_uid = usal.df_usage_sal_uid
+                left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+                left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
+                left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+                <where>
+                    <include refid="ISalUsageMapper.salAuditFilterWhereClause">
+                        <property name="detail_uid" value="u.df_usage_uid"/>
+                    </include>
+                </where>
+                union
+                <include refid="ISalUsageMapper.selectArchivedUsagesForAuditSql"/>
+            </otherwise>
+        </choose>
+        order by
+        <choose>
+            <when test="null != sort">
+                <choose>
+                    <when test="sort.property == 'detailId'">
+                        df_usage_uid
+                    </when>
+                    <when test="sort.property == 'status'">
+                        status_ind
+                    </when>
+                    <when test="sort.property == 'productFamily'">
+                        product_family
+                    </when>
+                    <when test="sort.property == 'batchName'">
+                        batch_name
+                    </when>
+                    <when test="sort.property == 'batchPeriodEndDate'">
+                        batch_period_end_date
+                    </when>
+                    <when test="sort.property == 'rhAccountNumber'">
+                        rh_account_number
+                    </when>
+                    <when test="sort.property == 'rhName'">
+                        rh_name
+                    </when>
+                    <when test="sort.property == 'payeeAccountNumber'">
+                        payee_account_number
+                    </when>
+                    <when test="sort.property == 'payeeName'">
+                        payee_name
+                    </when>
+                    <when test="sort.property == 'wrWrkInst'">
+                        wr_wrk_inst
+                    </when>
+                    <when test="sort.property == 'workTitle'">
+                        work_title
+                    </when>
+                    <when test="sort.property == 'systemTitle'">
+                        system_title
+                    </when>
+                    <when test="sort.property == 'standardNumber'">
+                        standard_number
+                    </when>
+                    <when test="sort.property == 'standardNumberType'">
+                        standard_number_type
+                    </when>
+                    <when test="sort.property == 'grossAmount'">
+                        gross_amount
+                    </when>
+                    <when test="sort.property == 'serviceFeeAmount'">
+                        service_fee_amount
+                    </when>
+                    <when test="sort.property == 'netAmount'">
+                        net_amount
+                    </when>
+                    <when test="sort.property == 'scenarioName'">
+                        scenario_name
+                    </when>
+                    <when test="sort.property == 'checkNumber'">
+                        check_number
+                    </when>
+                    <when test="sort.property == 'checkDate'">
+                        check_date
+                    </when>
+                    <when test="sort.property == 'cccEventId'">
+                        ccc_event_id
+                    </when>
+                    <when test="sort.property == 'distributionName'">
+                        distribution_name
+                    </when>
+                    <when test="sort.property == 'distributionDate'">
+                        distribution_date
+                    </when>
+                    <when test="sort.property == 'comment'">
+                        comment
+                    </when>
+                    <when test="sort.property == 'detailType'">
+                        detail_type
+                    </when>
+                    <when test="sort.property == 'grade'">
+                        grade
+                    </when>
+                    <when test="sort.property == 'gradeGroup'">
+                        grade_group
+                    </when>
+                    <when test="sort.property == 'assessmentName'">
+                        assessment_name
+                    </when>
+                    <when test="sort.property == 'assessmentType'">
+                        assessment_type
+                    </when>
+                    <when test="sort.property == 'reportedWorkPortionId'">
+                        reported_work_portion_id
+                    </when>
+                    <when test="sort.property == 'reportedArticle'">
+                        reported_article
+                    </when>
+                    <when test="sort.property == 'reportedStandardNumber'">
+                        reported_standard_number
+                    </when>
+                    <when test="sort.property == 'reportedAuthor'">
+                        reported_author
+                    </when>
+                    <when test="sort.property == 'reportedPublisher'">
+                        reported_publisher
+                    </when>
+                    <when test="sort.property == 'reportedPublicationDate'">
+                        reported_publication_date
+                    </when>
+                    <when test="sort.property == 'reportedPageRange'">
+                        reported_page_range
+                    </when>
+                    <when test="sort.property == 'reportedVolNumberSeries'">
+                        reported_vol_number_series
+                    </when>
+                    <when test="sort.property == 'reportedMediaType'">
+                        reported_media_type
+                    </when>
+                    <when test="sort.property == 'mediaTypeWeight'">
+                        media_type_weight
+                    </when>
+                    <when test="sort.property == 'coverageYear'">
+                        coverage_year
+                    </when>
+                    <when test="sort.property == 'scoredAssessmentDate'">
+                        scored_assessment_date
+                    </when>
+                    <when test="sort.property == 'questionIdentifier'">
+                        question_identifier
+                    </when>
+                    <when test="sort.property == 'states'">
+                        states
+                    </when>
+                    <when test="sort.property == 'numberOfViews'">
+                        number_of_views
+                    </when>
+                </choose>
+                <include refid="IUsageMapper.direction"/>,
+                df_usage_uid
+            </when>
+            <otherwise>
+                df_usage_uid
+            </otherwise>
+        </choose>
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <sql id="selectArchivedUsagesForAuditSql">
+        select
+            df_usage_archive_uid df_usage_uid,
+            u.status_ind,
+            u.product_family,
+            ub.name batch_name,
+            ub.payment_date batch_period_end_date,
+            u.rh_account_number,
+            rh.name rh_name,
+            u.payee_account_number,
+            payee.name payee_name,
+            wr_wrk_inst,
+            work_title,
+            system_title,
+            standard_number,
+            standard_number_type,
+            u.gross_amount,
+            u.net_amount,
+            service_fee_amount,
+            s.name scenario_name,
+            u.check_number,
+            u.check_date,
+            u.ccc_event_id,
+            u.distribution_name,
+            u.distribution_date,
+            u.comment,
+            usal.detail_type,
+            usal.grade,
+            usal.grade_group,
+            usal.assessment_name,
+            usal.assessment_type,
+            usal.reported_work_portion_id,
+            usal.reported_article,
+            usal.reported_standard_number,
+            usal.reported_author,
+            usal.reported_publisher,
+            usal.reported_publication_date,
+            usal.reported_page_range,
+            usal.reported_vol_number_series,
+            usal.reported_media_type,
+            usal.media_type_weight,
+            usal.coverage_year,
+            usal.scored_assessment_date,
+            usal.question_identifier,
+            usal.states,
+            usal.number_of_views
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_sal usal on u.df_usage_archive_uid = usal.df_usage_sal_uid
+        left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
+        left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+        <include refid="ISalUsageMapper.archivedAaclAuditFilterWhereClause"/>
+    </sql>
+
+    <sql id="archivedAaclAuditFilterWhereClause">
+        <where>
+            <include refid="ISalUsageMapper.salAuditFilterWhereClause">
+                <property name="detail_uid" value="u.df_usage_archive_uid"/>
+            </include>
+            <if test="null != filter.cccEventId">
+                and ccc_event_id ilike #{filter.cccEventId}
+            </if>
+            <if test="null != filter.distributionName">
+                and distribution_name ilike #{filter.distributionName}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="salAuditFilterWhereClause">
+        <if test="!filter.rhAccountNumbers.isEmpty()">
+            u.rh_account_number in
+            <foreach collection="filter.rhAccountNumbers" item="accountNumber" separator="," open="(" close=")">
+                #{accountNumber}
+            </foreach>
+        </if>
+        <if test="!filter.licenseeAccountNumbers.isEmpty()">
+            and (ub.sal_fields->>'licensee_account_number')::numeric in
+            <foreach collection="filter.licenseeAccountNumbers" item="licenseeAccountNumber" separator="," open="(" close=")">
+                #{licenseeAccountNumber}
+            </foreach>
+        </if>
+        <if test="!filter.batchesIds.isEmpty()">
+            and ub.df_usage_batch_uid in
+            <foreach collection="filter.batchesIds" item="batchId" separator="," open="(" close=")">
+                #{batchId}
+            </foreach>
+        </if>
+        <if test="!filter.statuses.isEmpty()">
+            and u.status_ind in
+            <foreach collection="filter.statuses" item="status" separator="," open="(" close=")">
+                #{status}
+            </foreach>
+        </if>
+        <if test="null != filter.productFamily">
+            and u.product_family = #{filter.productFamily}
+        </if>
+        <if test="null != filter.salDetailType">
+            and usal.detail_type = #{filter.salDetailType}
+        </if>
+        <if test="null != filter.usagePeriod">
+            and extract(year from ub.payment_date) = #{filter.usagePeriod}
+        </if>
+        <if test="null != filter.searchValue">
+            and (
+            ${detail_uid} like '%' || #{filter.searchValue} || '%' or
+            cast(wr_wrk_inst as text) like '%' || #{filter.searchValue} || '%' or
+            system_title ilike '%' || #{filter.searchValue} || '%')
+        </if>
+    </sql>
+
+    <select id="findCountForAudit" parameterType="map" resultType="int">
+        <include refid="ISalUsageMapper.selectCountForAuditSql"/>
+    </select>
+
+    <select id="findForAudit" parameterType="map" resultMap="salUsageDtoResultMap">
+        <include refid="ISalUsageMapper.selectForAuditSql"/>
+    </select>
+
     <select id="findByIds" resultMap="salUsageResultMap">
         select
             u.df_usage_uid,
@@ -607,7 +970,6 @@
         </foreach>
         order by u.df_usage_uid
     </select>
-
 
     <select id="workPortionIdExists" resultType="boolean" parameterType="string">
         select exists (

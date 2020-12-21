@@ -1,0 +1,64 @@
+[
+  {
+    "id": "c75305bc-9458-40bc-9926-004a47b072fc",
+    "version": 1,
+    "createDate": 1608302810081,
+    "updateDate": 1608302810081,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "batchName": "SAL Usage Batch to test audit 1",
+    "wrWrkInst": 133335135,
+    "workTitle": "Rimas",
+    "systemTitle": "Rimas",
+    "rhAccountNumber": 1000000026,
+    "rhName": "Georgia State University Business Press [C]",
+    "standardNumber": "9788408047827",
+    "standardNumberType": "VALISSN",
+    "payeeAccountNumber": 2000173934,
+    "payeeName": "Amy Mandelker",
+    "grossAmount": 800.0000000000,
+    "reportedValue": 0.00,
+    "netAmount": 600.0000000000,
+    "serviceFee": 0.00,
+    "serviceFeeAmount": 200.0000000000,
+    "status": "LOCKED",
+    "productFamily": "SAL",
+    "periodEndDate": [
+      2019,
+      6,
+      30
+    ],
+    "comment": "SAL comment 2",
+    "salUsage": {
+      "detailType": "UD",
+      "grade": "6",
+      "gradeGroup": "GRADE6_8",
+      "assessmentName": "FY18 AIR",
+      "assessmentType": "ELA",
+      "reportedWorkPortionId": "1201001IB2161",
+      "reportedArticle": "Rimas",
+      "reportedStandardNumber": "9788408047827",
+      "reportedAuthor": "Stephen Ornes",
+      "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": "2015-01-02",
+      "reportedPageRange": "14-17",
+      "reportedVolNumberSeries": "Vol 17, Issue 2",
+      "reportedMediaType": "Image",
+      "mediaTypeWeight": 0.3,
+      "coverageYear": "2014-2015",
+      "scoredAssessmentDate": [
+        2015,
+        10,
+        3
+      ],
+      "questionIdentifier": "SB7663",
+      "states": "SD;VT",
+      "numberOfViews": 5,
+      "batchPeriodEndDate": [
+        2019,
+        6,
+        30
+      ]
+    }
+  }
+]

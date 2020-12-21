@@ -15,7 +15,6 @@ import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -124,7 +123,7 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
 
     @Override
     public List<Integer> findSalUsagePeriods() {
-        return new ArrayList<>(); // TODO {aliakh} to implement
+        return selectList("IUsageBatchMapper.findSalUsagePeriods", FdaConstants.SAL_PRODUCT_FAMILY);
     }
 
     /**

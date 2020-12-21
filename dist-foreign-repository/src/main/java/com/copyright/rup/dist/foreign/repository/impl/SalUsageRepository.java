@@ -209,14 +209,26 @@ public class SalUsageRepository extends BaseRepository implements ISalUsageRepos
     }
 
     @Override
-    @SuppressWarnings("all") // TODO {aliakh} to remove when implemented
     public int findCountForAudit(AuditFilter filter) {
-        return 0; // TODO {aliakh} to implement
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(1);
+        params.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
+        return selectOne("ISalUsageMapper.findCountForAudit", params);
     }
 
     @Override
-    @SuppressWarnings("all") // TODO {aliakh} to remove when implemented
     public List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
-        return new ArrayList<>(); // TODO {aliakh} to implement
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
+        params.put("pageable", pageable);
+        params.put("sort", sort);
+        return selectList("ISalUsageMapper.findForAudit", params);
+    }
+
+    private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
+        AuditFilter filterCopy = new AuditFilter(auditFilter);
+        filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
+        filterCopy.setDistributionName(escapeSqlLikePattern(filterCopy.getDistributionName()));
+        filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
+        return filterCopy;
     }
 }

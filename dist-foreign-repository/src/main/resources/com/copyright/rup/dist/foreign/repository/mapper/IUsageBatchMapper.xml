@@ -266,4 +266,12 @@
         where product_family = #{productFamily}
         order by (sal_fields->>'licensee_account_number')::numeric
     </select>
+
+    <select id="findSalUsagePeriods" parameterType="string" resultType="int">
+        select distinct
+            extract(year from payment_date)
+        from ${schema}.df_usage_batch
+        where product_family = #{productFamily}
+        order by extract(year from payment_date)
+    </select>
 </mapper>
