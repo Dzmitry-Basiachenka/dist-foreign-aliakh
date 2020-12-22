@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
@@ -76,6 +77,8 @@ public class ServiceTestHelper {
     private IUsageService usageService;
     @Autowired
     private IAaclUsageService aaclUsageService;
+    @Autowired
+    private ISalUsageService salUsageService;
     @Autowired
     private IScenarioAuditService scenarioAuditService;
     @Autowired
@@ -238,6 +241,14 @@ public class ServiceTestHelper {
     public void assertPaidAaclUsages(List<PaidUsage> expectedUsages) {
         Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus =
             aaclUsageService.getForAudit(new AuditFilter(), null, null).stream()
+                .collect(Collectors.groupingBy(UsageDto::getStatus,
+                    Collectors.mapping(UsageDto::getId, Collectors.toList())));
+        assertPaidUsages(expectedUsages, usageIdsGroupedByStatus);
+    }
+
+    public void assertPaidSalUsages(List<PaidUsage> expectedUsages) {
+        Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus =
+            salUsageService.getForAudit(new AuditFilter(), null, null).stream()
                 .collect(Collectors.groupingBy(UsageDto::getStatus,
                     Collectors.mapping(UsageDto::getId, Collectors.toList())));
         assertPaidUsages(expectedUsages, usageIdsGroupedByStatus);

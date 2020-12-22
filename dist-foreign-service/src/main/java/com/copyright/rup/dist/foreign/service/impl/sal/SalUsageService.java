@@ -11,6 +11,7 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.common.util.LogUtils.ILogWrapper;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.GradeGroupEnum;
+import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -27,6 +28,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
@@ -79,6 +81,8 @@ public class SalUsageService implements ISalUsageService {
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    private IUsageService usageService;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private int usagesBatchSize;
 
@@ -293,5 +297,12 @@ public class SalUsageService implements ISalUsageService {
     @Override
     public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         return salUsageRepository.findForAudit(filter, pageable, sort);
+    }
+
+    @Override
+    @Transactional
+    public void updatePaidInfo(List<PaidUsage> paidUsages) {
+        usageService.updatePaidUsages(paidUsages, ids -> usageArchiveRepository.findSalByIds(ids),
+            usage -> usageArchiveRepository.insertSalPaid(usage));
     }
 }

@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.service.api.IPaidUsageService;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public interface ISalUsageService {
+public interface ISalUsageService extends IPaidUsageService {
 
     /**
      * Inserts SAL item bank details.

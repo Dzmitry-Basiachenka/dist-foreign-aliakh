@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
+import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -14,7 +16,10 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.SalWorkflowIntegrationTestBuilder.Runner;
@@ -26,8 +31,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +80,13 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String productFamily;
     private UsageBatch usageBatch;
     private String expectedUsagesJsonFile;
+    private int expectedLmDetailsMessagesCount;
+    private List<String> expectedLmDetailsJsonFiles;
+    private String expectedPaidUsagesJsonFile;
+    private List<String> expectedPaidUsageLmDetailIds;
+    private String expectedArchivedUsagesJsonFile;
+    private String expectedCrmRequestJsonFile;
+    private String expectedCrmResponseJsonFile;
 
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
@@ -81,6 +96,14 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private ISalUsageService salUsageService;
     @Autowired
     private ISalScenarioService salScenarioService;
+    @Autowired
+    private IScenarioService scenarioService;
+    @Autowired
+    private IUsageArchiveRepository usageArchiveRepository;
+    @Autowired
+    private IUsageService usageService;
+    @Autowired
+    private SqsClientMock sqsClientMock;
     @Autowired
     private ServiceTestHelper testHelper;
 
@@ -132,18 +155,31 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    void reset() {
-        itemBankCsvFile = null;
-        usageDataCsvFile = null;
-        predefinedItemBankDetailIds = null;
-        predefinedUsageDataDetailIds = null;
-        productFamily = null;
-        usageBatch = null;
-        expectedUsagesJsonFile = null;
-        fundPoolId = null;
-        expectedRollupsJson = null;
-        expectedRollupsRightholderIds = null;
-        expectedUsageIdToAuditMap.clear();
+    SalWorkflowIntegrationTestBuilder expectLmDetails(int messagesCount, String... lmDetailsJsonFile) {
+        this.expectedLmDetailsMessagesCount = messagesCount;
+        this.expectedLmDetailsJsonFiles = Arrays.asList(lmDetailsJsonFile);
+        return this;
+    }
+
+    SalWorkflowIntegrationTestBuilder expectPaidUsagesFromLm(String jsonFile) {
+        this.expectedPaidUsagesJsonFile = jsonFile;
+        return this;
+    }
+
+    SalWorkflowIntegrationTestBuilder expectPaidUsageLmDetailIds(String... usageLmDetailIds) {
+        this.expectedPaidUsageLmDetailIds = Arrays.asList(usageLmDetailIds);
+        return this;
+    }
+
+    SalWorkflowIntegrationTestBuilder expectArchivedUsages(String usagesJsonFile) {
+        this.expectedArchivedUsagesJsonFile = usagesJsonFile;
+        return this;
+    }
+
+    SalWorkflowIntegrationTestBuilder expectCrmReporting(String requestJsonFile, String responseJsonFile) {
+        this.expectedCrmRequestJsonFile = requestJsonFile;
+        this.expectedCrmResponseJsonFile = responseJsonFile;
+        return this;
     }
 
     @Override
@@ -157,17 +193,27 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     public class Runner {
 
         private final List<String> usageIds = new ArrayList<>();
+        private Scenario scenario;
+        private List<PaidUsage> archiveUsages;
 
-        public void run() throws IOException {
+        public void run() throws IOException, InterruptedException {
             testHelper.createRestServer();
             testHelper.expectGetRmsRights(expectedRmsRequestsToResponses);
             testHelper.expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
+            testHelper.expectCrmCall(expectedCrmRequestJsonFile, expectedCrmResponseJsonFile,
+                Arrays.asList("omOrderDetailNumber", "licenseCreateDate"));
             loadItemBank();
             if (Objects.nonNull(usageDataCsvFile)) {
                 loadUsageData();
             }
             addToScenario();
             verifyUsages();
+            scenarioService.submit(scenario, "Submitting scenario for testing purposes");
+            scenarioService.approve(scenario, "Approving scenario for testing purposes");
+            sendScenarioToLm();
+            receivePaidUsagesFromLm();
+            sendToCrm();
+            testHelper.assertPaidSalUsages(loadExpectedPaidUsages(expectedArchivedUsagesJsonFile));
             expectedUsageIdToAuditMap.forEach(testHelper::assertAudit);
             testHelper.verifyRestServer();
         }
@@ -203,16 +249,35 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             filter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
             filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
             filter.setProductFamily(productFamily);
-            Scenario scenario = salScenarioService.createScenario("Test SAL Scenario", fundPoolId,
+            scenario = salScenarioService.createScenario("Test SAL Scenario", fundPoolId,
                 "Test Scenario Description", filter);
             assertScenario(scenario);
         }
 
-        private void assertScenario(Scenario scenario) {
-            assertEquals("Test SAL Scenario", scenario.getName());
-            assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
-            assertEquals("Test Scenario Description", scenario.getDescription());
-            assertEquals(fundPoolId, scenario.getSalFields().getFundPoolId());
+        private void sendScenarioToLm() {
+            salScenarioService.sendToLm(scenario);
+            List<String> lmUsageMessages = Lists.newArrayListWithExpectedSize(expectedLmDetailsMessagesCount);
+            expectedLmDetailsJsonFiles.forEach(lmDetailsFile ->
+                lmUsageMessages.add(TestUtils.fileToString(this.getClass(), lmDetailsFile)));
+            sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo", lmUsageMessages,
+                Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
+        }
+
+        private void receivePaidUsagesFromLm() throws InterruptedException {
+            testHelper.receivePaidUsagesFromLm(expectedPaidUsagesJsonFile);
+            assertPaidUsagesCountByLmDetailIds();
+        }
+
+        private void sendToCrm() {
+            usageService.sendToCrm();
+            assertArchivedUsagesCount();
+        }
+
+        private void assertScenario(Scenario expectedScenario) {
+            assertEquals("Test SAL Scenario", expectedScenario.getName());
+            assertEquals(ScenarioStatusEnum.IN_PROGRESS, expectedScenario.getStatus());
+            assertEquals("Test Scenario Description", expectedScenario.getDescription());
+            assertEquals(fundPoolId, expectedScenario.getSalFields().getFundPoolId());
         }
 
         // predefined usage ids are used, otherwise during every test run the usage ids will be random
@@ -238,6 +303,15 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             });
         }
 
+        private List<PaidUsage> loadExpectedPaidUsages(String fileName) throws IOException {
+            String content = String.format(TestUtils.fileToString(this.getClass(), fileName), usageBatch.getId());
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<PaidUsage>>() {
+            });
+        }
+
         private void verifyUsages() throws IOException {
             List<Usage> expectedUsages = loadExpectedUsages(expectedUsagesJsonFile);
             assertEquals(expectedUsages.size(), usageIds.size());
@@ -245,6 +319,27 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 .collect(Collectors.toMap(Usage::getId, Function.identity()));
             expectedUsages.forEach(
                 expectedUsage -> assertUsage(expectedUsage, actualUsageIdsToUsages.get(expectedUsage.getId())));
+        }
+
+        private void assertPaidUsagesCountByLmDetailIds() {
+            List<String> paidIds = usageArchiveRepository.findPaidIds();
+            List<PaidUsage> actualUsages = usageArchiveRepository.findByIdAndStatus(paidIds, UsageStatusEnum.PAID);
+            assertTrue(CollectionUtils.isNotEmpty(actualUsages));
+            assertEquals(CollectionUtils.size(expectedPaidUsageLmDetailIds), CollectionUtils.size(actualUsages));
+            List<String> actualLmDetailIds =
+                actualUsages.stream().map(PaidUsage::getLmDetailId).distinct().collect(Collectors.toList());
+            assertEquals(CollectionUtils.size(expectedPaidUsageLmDetailIds), CollectionUtils.size(actualLmDetailIds));
+            assertTrue(expectedPaidUsageLmDetailIds.containsAll(actualLmDetailIds));
+            archiveUsages = actualUsages;
+        }
+
+        private void assertArchivedUsagesCount() {
+            List<String> expectedArchivedUsageIds =
+                archiveUsages.stream().map(PaidUsage::getId).collect(Collectors.toList());
+            List<PaidUsage> actualArchivedUsages =
+                usageArchiveRepository.findByIdAndStatus(expectedArchivedUsageIds, UsageStatusEnum.ARCHIVED);
+            assertTrue(CollectionUtils.isNotEmpty(actualArchivedUsages));
+            assertEquals(CollectionUtils.size(expectedArchivedUsageIds), CollectionUtils.size(actualArchivedUsages));
         }
 
         // TODO {srudak} move to ServiceTestHelper

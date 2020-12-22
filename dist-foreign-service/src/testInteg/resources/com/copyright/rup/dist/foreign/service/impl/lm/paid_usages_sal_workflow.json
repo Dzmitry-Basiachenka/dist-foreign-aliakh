@@ -1,0 +1,55 @@
+{
+  "details": [
+    {
+      "rh_uid": "85f864f2-30a5-4215-ac4f-f1f541901218",
+      "rollup_uid": "c929c312-bd36-4469-8989-61b824ecefd6",
+      "detail_id": "cd5dabe8-bada-42ca-8329-12ac72d10ad8",
+      "distribution_name": "FDA March 17",
+      "distribution_date": "2017-01-14T00:00-05:00",
+      "ccc_event_id": "83288",
+      "check_number": "58788",
+      "check_date": "2017-01-15T00:00-05:00",
+      "period_end_date": "2017-01-16T00:00-05:00",
+      "lm_detail_id": "e79ca5fe-9239-45f3-9c48-998f4748d68a",
+      "product_family": "SAL",
+      "royalty_amount": 187.50,
+      "service_fee_amount": 62.50,
+      "collected_amount": 250.00,
+      "post_distribution_flag": false
+    },
+    {
+      "rh_uid": "85f864f2-30a5-4215-ac4f-f1f541901218",
+      "rollup_uid": "c929c312-bd36-4469-8989-61b824ecefd6",
+      "detail_id": "98d17e37-2900-4478-b105-6dd99f48d22b",
+      "distribution_name": "FDA March 17",
+      "distribution_date": "2017-01-14T00:00-05:00",
+      "ccc_event_id": "83291",
+      "check_number": "58791",
+      "check_date": "2017-01-15T00:00-05:00",
+      "period_end_date": "2017-01-16T00:00-05:00",
+      "lm_detail_id": "b1fc2be4-204d-43a2-8f0c-76af9e012cf2",
+      "product_family": "SAL",
+      "royalty_amount": 187.50,
+      "service_fee_amount": 62.50,
+      "collected_amount": 250.00,
+      "post_distribution_flag": false
+    },
+    {
+      "rh_uid": "85f864f2-30a5-4215-ac4f-f1f541901218",
+      "rollup_uid": "c929c312-bd36-4469-8989-61b824ecefd6",
+      "detail_id": "6c59d64f-a56e-4ca8-a914-a8ac299c6082",
+      "distribution_name": "FDA March 17",
+      "distribution_date": "2017-01-14T00:00-05:00",
+      "ccc_event_id": "83291",
+      "check_number": "58791",
+      "check_date": "2017-01-15T00:00-05:00",
+      "period_end_date": "2017-01-16T00:00-05:00",
+      "lm_detail_id": "5c5d105f-1d13-4691-b11d-8d1abb4027f1",
+      "product_family": "SAL",
+      "royalty_amount": 187.50,
+      "service_fee_amount": 62.50,
+      "collected_amount": 250.00,
+      "post_distribution_flag": false
+    }
+  ]
+}

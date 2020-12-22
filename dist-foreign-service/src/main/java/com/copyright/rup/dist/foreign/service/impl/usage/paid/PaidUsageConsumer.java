@@ -5,8 +5,12 @@ import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.service.api.IPaidUsageService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
+
+import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.perf4j.aop.Profiled;
@@ -36,6 +40,8 @@ public class PaidUsageConsumer implements IConsumer<List<PaidUsage>> {
     private IUsageService usageService;
     @Autowired
     private IAaclUsageService aaclUsageService;
+    @Autowired
+    private ISalUsageService salUsageService;
 
     @Override
     @Profiled(tag = "PaidUsageConsumer.consume")
@@ -45,15 +51,22 @@ public class PaidUsageConsumer implements IConsumer<List<PaidUsage>> {
             Map<String, List<PaidUsage>> productFamilyToPaidUsagesMap = usages.stream()
                 .collect(Collectors.groupingBy(PaidUsage::getProductFamily));
             productFamilyToPaidUsagesMap.forEach((productFamily, paidUsages) -> {
-                if (FdaConstants.AACL_PRODUCT_FAMILY.equals(productFamily)) {
-                    aaclUsageService.updatePaidInfo(paidUsages);
-                } else {
-                    usageService.updatePaidInfo(paidUsages);
-                }
+                IPaidUsageService paidUsageService = getProductFamilyToServiceMap().get(productFamily);
+                paidUsageService.updatePaidInfo(paidUsages);
             });
             LOGGER.info("Consume paid information from LM. Finished. UsagesCount={}", LogUtils.size(usages));
         } else {
             LOGGER.warn("Consume paid information from LM. Failed. Reason='Usages list is empty'");
         }
+    }
+
+    protected Map<String, IPaidUsageService> getProductFamilyToServiceMap() {
+        return ImmutableMap.of(
+            FdaConstants.FAS_PRODUCT_FAMILY, usageService,
+            FdaConstants.CLA_FAS_PRODUCT_FAMILY, usageService,
+            FdaConstants.NTS_PRODUCT_FAMILY, usageService,
+            FdaConstants.AACL_PRODUCT_FAMILY, aaclUsageService,
+            FdaConstants.SAL_PRODUCT_FAMILY, salUsageService
+        );
     }
 }
