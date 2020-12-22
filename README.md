@@ -1,3 +1,7 @@
+13.1.2
+-
+*  B-59009 FDA: Update SAL usages with distribution data from LM: implement service logic and adjust paid consumer to update SAL paid usages
+
 13.1.1
 -
 * B-63961 FDA: Audit Tab modifications for SAL: implement repositories to
