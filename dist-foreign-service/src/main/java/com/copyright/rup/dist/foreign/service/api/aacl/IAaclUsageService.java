@@ -5,7 +5,6 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair;
 import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -17,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.service.api.IPaidUsageService;
 
 import java.util.List;
 import java.util.Set;
@@ -30,7 +30,7 @@ import java.util.Set;
  *
  * @author Ihar Suvorau
  */
-public interface IAaclUsageService {
+public interface IAaclUsageService extends IPaidUsageService {
 
     /**
      * Inserts AACL usages.
@@ -290,12 +290,4 @@ public interface IAaclUsageService {
      * @return list of moved to archive {@link com.copyright.rup.dist.foreign.domain.Usage}s ids
      */
     List<String> moveToArchive(Scenario scenario);
-
-    /**
-     * Updates paid information for {@link PaidUsage}s
-     * and status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#PAID}.
-     *
-     * @param paidUsages list of {@link PaidUsage}s to update
-     */
-    void updatePaidInfo(List<PaidUsage> paidUsages);
 }

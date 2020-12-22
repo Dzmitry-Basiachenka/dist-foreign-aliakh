@@ -34,7 +34,7 @@ import java.util.function.Function;
  * @author Mikalai Bezmen
  * @author Aliaksandr Radkevich
  */
-public interface IUsageService {
+public interface IUsageService extends IPaidUsageService {
 
     /**
      * Deletes all {@link Usage}s associated with the given {@link UsageBatch}.
@@ -182,14 +182,6 @@ public interface IUsageService {
      * @return list of {@link UsageDto}s
      */
     List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
-
-    /**
-     * Updates paid infromation for {@link PaidUsage}s
-     * and status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#PAID}.
-     *
-     * @param usages list of {@link PaidUsage}s to update
-     */
-    void updatePaidInfo(List<PaidUsage> usages);
 
     /**
      * Gets list of {@link PaidUsage} available for sending to CRM.
