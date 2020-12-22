@@ -1,3 +1,10 @@
+13.1.1
+-
+* B-63961 FDA: Audit Tab modifications for SAL: implement repositories to
+* B-56615 FDA: Reporting SAL to RC: make changes based on comments in
+* B-63961 FDA: Audit Tab modifications for SAL: adjust widths of the grid
+* B-60056 FDA: Enhancements for additional Fund Pool view: make changes
+
 13.1.0
 -
 * B-56615 FDA: Reporting SAL to RC: Adjust reporting to RC to report SAL
