@@ -21,6 +21,7 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 /**
@@ -83,6 +84,9 @@ class ViewAdditionalFundsWindow extends Window {
             .setWidth(140);
         grid.addColumn(FundPool::getComment)
             .setCaption(ForeignUi.getMessage("table.column.comment"))
+            .setComparator((SerializableComparator<FundPool>) (fund1, fund2) ->
+                Comparator.comparing(FundPool::getComment, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER))
+                    .compare(fund1, fund2))
             .setSortProperty("comment")
             .setWidth(320);
         grid.addComponentColumn(fundPool -> {
