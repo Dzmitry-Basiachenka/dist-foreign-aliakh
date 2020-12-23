@@ -50,6 +50,23 @@
       "service_fee_amount": 62.50,
       "collected_amount": 250.00,
       "post_distribution_flag": false
+    },
+    {
+      "rh_uid": "85f864f2-30a5-4215-ac4f-f1f541901218",
+      "rollup_uid": "c929c312-bd36-4469-8989-61b824ecefd6",
+      "detail_id": "856452f1-a241-4a5a-8386-f6c8cbd0329e",
+      "distribution_name": "FDA March 17",
+      "distribution_date": "2017-01-14T00:00-05:00",
+      "ccc_event_id": "3356215",
+      "check_number": "5780001",
+      "check_date": "2017-01-15T00:00-05:00",
+      "period_end_date": "2017-01-16T00:00-05:00",
+      "lm_detail_id": "4375bee0-24f0-4e6c-a808-c62814dd93ae",
+      "product_family": "SAL",
+      "royalty_amount": 75.00,
+      "service_fee_amount": 25.00,
+      "collected_amount": 100.00,
+      "post_distribution_flag": true
     }
   ]
 }

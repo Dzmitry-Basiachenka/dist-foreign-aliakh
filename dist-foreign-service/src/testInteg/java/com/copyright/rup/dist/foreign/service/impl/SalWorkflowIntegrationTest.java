@@ -41,6 +41,7 @@ public class SalWorkflowIntegrationTest {
     private static final String UD_USAGE_ID_2 = "c1f44067-39b1-42ac-b9b6-7a87f2185b14";
     private static final String UD_USAGE_ID_3 = "20b73f78-c892-4c6d-a023-e6d01f988285";
     private static final String UD_USAGE_ID_4 = "49163e1c-cbdb-454b-8b42-ca775aea2624";
+    private static final String LM_DETAIL_ID = "4375bee0-24f0-4e6c-a808-c62814dd93ae";
     private static final String UPLOADED_REASON = "Uploaded in 'SAL test batch' Batch";
     private static final String SAL_PRODUCT_FAMILY = "SAL";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2019, 6, 30);
@@ -62,13 +63,16 @@ public class SalWorkflowIntegrationTest {
             .expectLmDetails(1, "details/sal_details_to_lm.json")
             .expectPaidUsagesFromLm("lm/paid_usages_sal_workflow.json")
             .expectPaidUsageLmDetailIds("e79ca5fe-9239-45f3-9c48-998f4748d68a", "b1fc2be4-204d-43a2-8f0c-76af9e012cf2",
-                "5c5d105f-1d13-4691-b11d-8d1abb4027f1")
+                "5c5d105f-1d13-4691-b11d-8d1abb4027f1", "4375bee0-24f0-4e6c-a808-c62814dd93ae")
             .expectArchivedUsages("usage/sal/sal_expected_archived_usages_for_workflow.json")
             .expectCrmReporting("crm/workflow/rights_distribution_request_sal.json",
                 "crm/workflow/rights_distribution_response_sal.json")
             .expectUsageAudit(IB_USAGE_ID_1, buildExpectedItemBankDetailAudit())
             .expectUsageAudit(IB_USAGE_ID_2, buildExpectedItemBankDetailAudit())
             .expectUsageAudit(IB_USAGE_ID_3, buildExpectedItemBankDetailAudit())
+            .expectPostDistributionUsageAudit(LM_DETAIL_ID, Arrays.asList(
+                buildAuditItem(UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM"),
+                buildAuditItem(UsageActionTypeEnum.PAID, "Usage has been created based on Post-Distribution process")))
             .build()
             .run();
     }

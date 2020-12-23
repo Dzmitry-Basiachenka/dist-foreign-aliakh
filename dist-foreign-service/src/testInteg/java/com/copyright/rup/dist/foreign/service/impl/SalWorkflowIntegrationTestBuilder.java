@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
@@ -69,6 +70,7 @@ import java.util.stream.Collectors;
 public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     private final Map<String, List<UsageAuditItem>> expectedUsageIdToAuditMap = Maps.newHashMap();
+    private final Map<String, List<UsageAuditItem>> expectedUsageLmDetailIdToAuditMap = Maps.newHashMap();
     private final Map<String, String> expectedRmsRequestsToResponses = new LinkedHashMap<>();
     private String expectedRollupsJson;
     private List<String> expectedRollupsRightholderIds;
@@ -106,6 +108,8 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private SqsClientMock sqsClientMock;
     @Autowired
     private ServiceTestHelper testHelper;
+    @Autowired
+    private IUsageAuditService usageAuditService;
 
     SalWorkflowIntegrationTestBuilder withItemBankCsvFile(String csvFile, String... usageIds) {
         this.itemBankCsvFile = csvFile;
@@ -152,6 +156,12 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     SalWorkflowIntegrationTestBuilder expectUsageAudit(String usageId, List<UsageAuditItem> usageAudit) {
         this.expectedUsageIdToAuditMap.put(usageId, usageAudit);
+        return this;
+    }
+
+    SalWorkflowIntegrationTestBuilder expectPostDistributionUsageAudit(String usageId,
+                                                                       List<UsageAuditItem> usageAudit) {
+        this.expectedUsageLmDetailIdToAuditMap.put(usageId, usageAudit);
         return this;
     }
 
@@ -215,7 +225,25 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             sendToCrm();
             testHelper.assertPaidSalUsages(loadExpectedPaidUsages(expectedArchivedUsagesJsonFile));
             expectedUsageIdToAuditMap.forEach(testHelper::assertAudit);
+            verifyPostDistributionUsageAudit();
             testHelper.verifyRestServer();
+        }
+
+        private void verifyPostDistributionUsageAudit() {
+            Map<String, List<UsageAuditItem>> expectedPostDistributionUsageIdToAuditMap =
+                expectedUsageLmDetailIdToAuditMap.keySet().stream()
+                    .collect(Collectors.toMap(
+                        usageLmDetailIdId ->
+                            archiveUsages.stream()
+                                .filter(usage -> usageLmDetailIdId.equals(usage.getLmDetailId())).findFirst().get()
+                                .getId(),
+                        usageLmDetailIdId ->
+                            usageAuditService.getUsageAudit(
+                                archiveUsages.stream()
+                                    .filter(usage -> usageLmDetailIdId.equals(usage.getLmDetailId())).findFirst().get()
+                                    .getId())
+                    ));
+            expectedPostDistributionUsageIdToAuditMap.forEach(testHelper::assertAudit);
         }
 
         private void loadItemBank() throws IOException {
