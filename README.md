@@ -1,3 +1,7 @@
+13.1.3
+-
+* B-59009 FDA: Update SAL usages with distribution data from LM: fix null SalUsage when insert of post distribution usage
+
 13.1.2
 -
 *  B-59009 FDA: Update SAL usages with distribution data from LM: implement service logic and adjust paid consumer to update SAL paid usages
