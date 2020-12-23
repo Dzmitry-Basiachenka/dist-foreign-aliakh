@@ -55,7 +55,7 @@ public class SalAuditFilterWidget extends CommonAuditFilterWidget {
         usageBatchFilterWidget = buildUsageBatchesFilter();
         cccEventIdField = buildEventIdField();
         distributionNameField = buildDistributionNameField();
-        initSalDetailTypeComboBox();
+        initDetailTypeComboBox();
         initUsagePeriodComboBox();
         initStatusesFilterWidget();
         addComponents(buildFiltersHeaderLabel(), rightsholderFilterWidget, licenseeFilterWidget, usageBatchFilterWidget,
@@ -106,7 +106,7 @@ public class SalAuditFilterWidget extends CommonAuditFilterWidget {
         VaadinUtils.addComponentStyle(commonStatusFilterWidget, "audit-statuses-filter");
     }
 
-    private void initSalDetailTypeComboBox() {
+    private void initDetailTypeComboBox() {
         salDetailTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.detail_type"));
         VaadinUtils.setMaxComponentsWidth(salDetailTypeComboBox);
         salDetailTypeComboBox.addValueChangeListener(event -> {

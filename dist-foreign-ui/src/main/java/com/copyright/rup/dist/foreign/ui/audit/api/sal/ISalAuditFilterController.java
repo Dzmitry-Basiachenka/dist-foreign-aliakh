@@ -17,15 +17,11 @@ import java.util.List;
 public interface ISalAuditFilterController extends ICommonAuditFilterController {
 
     /**
-     * Gets list of usage periods.
-     *
      * @return list of usage periods
      */
     List<Integer> getUsagePeriods();
 
     /**
-     * Gets list of {@link SalLicensee}.
-     *
      * @return list of {@link SalLicensee}
      */
     List<SalLicensee> getSalLicensees();

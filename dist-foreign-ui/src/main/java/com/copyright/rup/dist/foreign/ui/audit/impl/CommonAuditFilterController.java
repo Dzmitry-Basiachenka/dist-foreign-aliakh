@@ -70,6 +70,9 @@ public abstract class CommonAuditFilterController extends CommonController<IComm
         return productFamilyProvider.getSelectedProductFamily();
     }
 
+    /**
+     * @return {@link IUsageBatchService} instance.
+     */
     protected IUsageBatchService getUsageBatchService() {
         return usageBatchService;
     }
