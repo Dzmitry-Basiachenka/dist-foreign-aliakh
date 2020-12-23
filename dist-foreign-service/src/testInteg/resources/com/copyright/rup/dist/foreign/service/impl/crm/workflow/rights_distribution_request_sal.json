@@ -71,6 +71,31 @@
         "grade": "K",
         "academicYear": "2014-2016",
         "publicationIssueDate": "7/7/2010"
+      },
+      {
+        "cccEventId": "3356215",
+        "product": "SAL",
+        "rorAccountNumber": "1000000322",
+        "payeeAccountNumber": "1000010022",
+        "royaltyAmount": 75.0000000000,
+        "currency": "USD",
+        "licenseCreateDate": "12-23-2020T02:23:09 AM",
+        "serviceFeeAmount": 25.0000000000,
+        "wrWrkInst": "269040891",
+        "publicationName": "Castanea",
+        "author": "Stephen Ornes",
+        "chapterArticleTitle": "Learning in Your Sleep",
+        "omOrderDetailNumber": "30a5a8b9-e815-4474-8298-7b3d631d721c_IB",
+        "totalAmount": 100.0000000000,
+        "periodEndDate": "01/16/2017",
+        "adjustmentFlag": false,
+        "passThroughFlag": true,
+        "createUser": "FDA Distribution",
+        "status": "D - Distributed",
+        "issueVolumeSeries": "Vol 17, Issue 2",
+        "grade": "5",
+        "academicYear": "2019-2020",
+        "publicationIssueDate": "2015-01-02"
       }
     ]
   }
