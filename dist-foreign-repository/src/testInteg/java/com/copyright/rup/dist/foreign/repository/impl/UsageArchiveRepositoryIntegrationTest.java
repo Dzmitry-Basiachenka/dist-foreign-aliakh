@@ -467,13 +467,13 @@ public class UsageArchiveRepositoryIntegrationTest {
     @Test
     public void testInsertPaidSal() {
         List<PaidUsage> paidUsages =
-            loadExpectedPaidUsages(Collections.singletonList("json/sal/sal_paid_usage_b8a76b66.json"));
+            loadExpectedPaidUsages(Collections.singletonList("json/sal/sal_paid_usages.json"));
         paidUsages.forEach(paidUsage -> usageArchiveRepository.insertSalPaid(paidUsage));
         List<PaidUsage> actualUsages =
             usageArchiveRepository.findByIdAndStatus(Arrays.asList("b8a76b66-1a9f-4208-94fa-2191237b73ef",
                 "6d7cc92d-4662-4665-af57-0c8fdc417b01"), UsageStatusEnum.PAID);
         assertEquals(2, actualUsages.size());
-        verifyPaidUsages(Collections.singletonList("json/sal/expected_sal_paid_usage_b8a76b66.json"), actualUsages,
+        verifyPaidUsages(Collections.singletonList("json/sal/expected_sal_paid_usages.json"), actualUsages,
             this::verifyPaidUsage);
     }
 
@@ -524,7 +524,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindUsageByIds() {
+    public void testFindSalByIds() {
         PaidUsage paidUsage = buildPaidUsage();
         usageArchiveRepository.insertPaid(paidUsage);
         List<Usage> usages = usageArchiveRepository.findByIds(ImmutableList.of(paidUsage.getId()));
