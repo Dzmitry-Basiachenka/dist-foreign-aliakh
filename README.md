@@ -1,3 +1,7 @@
+13.1.4
+-
+* B-63961 FDA: Audit Tab modifications for SAL: make changes based on comments in CR-DIST-FOREIGN-220
+
 13.1.3
 -
 * B-59009 FDA: Update SAL usages with distribution data from LM: fix null SalUsage when insert of post distribution usage
