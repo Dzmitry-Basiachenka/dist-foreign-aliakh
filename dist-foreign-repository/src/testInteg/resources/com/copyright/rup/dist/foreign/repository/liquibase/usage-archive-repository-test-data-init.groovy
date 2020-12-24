@@ -1158,7 +1158,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-12-16-10', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment('Inserting test data for testFindSalUsageByIds')
+        comment('Inserting test data for testFindSalByIds')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: 'a50b7bc3-4cff-4a35-b14d-9e82601d9e32')
