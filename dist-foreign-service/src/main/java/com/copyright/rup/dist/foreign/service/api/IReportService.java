@@ -50,6 +50,14 @@ public interface IReportService {
     void writeAuditNtsCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
+     * Writes SAL usages found by {@link AuditFilter} into CSV output stream.
+     *
+     * @param filter            {@link AuditFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeAuditSalCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
      * Writes FAS and FAS2 usages found by filter into csv output stream.
      *
      * @param filter            instance of {@link UsageFilter}

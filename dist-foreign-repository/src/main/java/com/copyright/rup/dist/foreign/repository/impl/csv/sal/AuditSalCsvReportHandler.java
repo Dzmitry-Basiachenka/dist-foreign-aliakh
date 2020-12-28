@@ -1,12 +1,14 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv.sal;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
+import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Writes usages into a {@link java.io.PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
@@ -41,13 +43,14 @@ public class AuditSalCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     @Override
     protected List<String> getBeanProperties(UsageDto bean) {
+        SalUsage salUsage = bean.getSalUsage();
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(bean.getId());
-        beanProperties.add(bean.getSalUsage().getDetailType().name());
+        beanProperties.add(salUsage.getDetailType().name());
         beanProperties.add(bean.getStatus().name());
         beanProperties.add(bean.getProductFamily());
         beanProperties.add(bean.getBatchName());
-        beanProperties.add(getBeanLocalDate(bean.getSalUsage().getBatchPeriodEndDate()));
+        beanProperties.add(getBeanLocalDate(salUsage.getBatchPeriodEndDate()));
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(bean.getRhName());
         beanProperties.add(getBeanPropertyAsString(bean.getPayeeAccountNumber()));
@@ -65,26 +68,27 @@ public class AuditSalCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getCccEventId());
         beanProperties.add(bean.getDistributionName());
         beanProperties.add(getBeanOffsetDateTime(bean.getDistributionDate()));
-        beanProperties.add(bean.getSalUsage().getReportedWorkPortionId());
-        beanProperties.add(bean.getSalUsage().getReportedStandardNumber());
+        beanProperties.add(salUsage.getReportedWorkPortionId());
+        beanProperties.add(salUsage.getReportedStandardNumber());
         beanProperties.add(bean.getWorkTitle());
-        beanProperties.add(bean.getSalUsage().getReportedMediaType());
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getSalUsage().getMediaTypeWeight()));
-        beanProperties.add(bean.getSalUsage().getReportedArticle());
-        beanProperties.add(bean.getSalUsage().getReportedAuthor());
-        beanProperties.add(bean.getSalUsage().getReportedPublisher());
-        beanProperties.add(bean.getSalUsage().getReportedPublicationDate());
-        beanProperties.add(bean.getSalUsage().getReportedPageRange());
-        beanProperties.add(bean.getSalUsage().getReportedVolNumberSeries());
-        beanProperties.add(getBeanLocalDate(bean.getSalUsage().getScoredAssessmentDate()));
-        beanProperties.add(bean.getSalUsage().getAssessmentName());
-        beanProperties.add(bean.getSalUsage().getCoverageYear());
-        beanProperties.add(bean.getSalUsage().getGrade());
-        beanProperties.add(bean.getSalUsage().getGradeGroup().name());
-        beanProperties.add(bean.getSalUsage().getAssessmentType());
-        beanProperties.add(bean.getSalUsage().getQuestionIdentifier());
-        beanProperties.add(bean.getSalUsage().getStates());
-        beanProperties.add(getBeanPropertyAsString(bean.getSalUsage().getNumberOfViews()));
+        beanProperties.add(salUsage.getReportedMediaType());
+        beanProperties.add(Objects.nonNull(salUsage.getMediaTypeWeight())
+            ? roundAndGetBeanBigDecimal(salUsage.getMediaTypeWeight()) : null);
+        beanProperties.add(salUsage.getReportedArticle());
+        beanProperties.add(salUsage.getReportedAuthor());
+        beanProperties.add(salUsage.getReportedPublisher());
+        beanProperties.add(salUsage.getReportedPublicationDate());
+        beanProperties.add(salUsage.getReportedPageRange());
+        beanProperties.add(salUsage.getReportedVolNumberSeries());
+        beanProperties.add(getBeanLocalDate(salUsage.getScoredAssessmentDate()));
+        beanProperties.add(salUsage.getAssessmentName());
+        beanProperties.add(salUsage.getCoverageYear());
+        beanProperties.add(salUsage.getGrade());
+        beanProperties.add(Objects.nonNull(salUsage.getGradeGroup()) ? salUsage.getGradeGroup().name() : null);
+        beanProperties.add(salUsage.getAssessmentType());
+        beanProperties.add(salUsage.getQuestionIdentifier());
+        beanProperties.add(salUsage.getStates());
+        beanProperties.add(getBeanPropertyAsString(salUsage.getNumberOfViews()));
         beanProperties.add(bean.getComment());
         return beanProperties;
     }

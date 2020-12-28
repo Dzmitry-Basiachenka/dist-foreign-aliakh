@@ -142,6 +142,11 @@ public class ReportService implements IReportService {
     }
 
     @Override
+    public void writeAuditSalCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
+        reportRepository.writeAuditSalCsvReport(filter, pipedOutputStream);
+    }
+
+    @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
                                                        Set<String> productFamilies) {
         reportRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, defaultEstimatedServiceFee,
