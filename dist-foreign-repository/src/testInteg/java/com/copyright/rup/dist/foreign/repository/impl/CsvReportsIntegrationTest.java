@@ -112,6 +112,15 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    public void testWriteAuditSalCsvReport() throws Exception {
+        AuditFilter auditFilter = new AuditFilter();
+        auditFilter.setBatchesIds(Collections.singleton("a375c049-1289-4c85-994b-b2bd8ac043cf"));
+        auditFilter.setProductFamily("SAL");
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditSalCsvReport(auditFilter, outputStream),
+            "audit_usages_report_sal.csv");
+    }
+
+    @Test
     public void testWriteAuditFasCsvReportEmptyCsvReport() throws Exception {
         assertEmptyAuditFasReport(new AuditFilter());
     }
@@ -181,6 +190,25 @@ public class CsvReportsIntegrationTest {
         assertEmptyAuditAaclReport(filter);
         filter.setDistributionName(SEARCH_WITH_SQL_2);
         assertEmptyAuditAaclReport(filter);
+    }
+
+    @Test
+    public void testWriteAuditSalCsvReportSearchBySqlLikePattern() throws Exception {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue(SEARCH_WITH_SQL_1);
+        assertEmptyAuditSalReport(filter);
+        filter.setSearchValue(SEARCH_WITH_SQL_2);
+        assertEmptyAuditSalReport(filter);
+        filter = new AuditFilter();
+        filter.setCccEventId(SEARCH_WITH_SQL_1);
+        assertEmptyAuditSalReport(filter);
+        filter.setCccEventId(SEARCH_WITH_SQL_2);
+        assertEmptyAuditSalReport(filter);
+        filter = new AuditFilter();
+        filter.setDistributionName(SEARCH_WITH_SQL_1);
+        assertEmptyAuditSalReport(filter);
+        filter.setDistributionName(SEARCH_WITH_SQL_2);
+        assertEmptyAuditSalReport(filter);
     }
 
     @Test
@@ -660,6 +688,11 @@ public class CsvReportsIntegrationTest {
     private void assertEmptyAuditAaclReport(AuditFilter filter) throws IOException {
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditAaclCsvReport(filter, outputStream),
             "audit_usages_report_aacl_empty.csv");
+    }
+
+    private void assertEmptyAuditSalReport(AuditFilter filter) throws IOException {
+        assertFilesWithExecutor(outputStream -> reportRepository.writeAuditSalCsvReport(filter, outputStream),
+            "audit_usages_report_sal_empty.csv");
     }
 
     private Scenario buildScenario(String scenarioId, String scenarioName) {

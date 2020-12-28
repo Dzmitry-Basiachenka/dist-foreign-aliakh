@@ -46,6 +46,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUndistributedLi
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.NtsWithdrawnBatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.nts.WorkClassificationCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.sal.AuditSalCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalFundPoolsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalHistoricalItemBankDetailsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.sal.SalLiabilitiesByRhReportHandler;
@@ -357,6 +358,15 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
         writeCsvReportByParts("IReportMapper.findAaclUsagesCountForAudit", "IReportMapper.findAuditAaclReportDtos",
             parameters, !Objects.requireNonNull(filter).isEmpty(),
             () -> new AuditAaclCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeAuditSalCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
+        parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
+        writeCsvReportByParts("IReportMapper.findSalUsagesCountForAudit", "IReportMapper.findAuditSalReportDtos",
+            parameters, !Objects.requireNonNull(filter).isEmpty(),
+            () -> new AuditSalCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
