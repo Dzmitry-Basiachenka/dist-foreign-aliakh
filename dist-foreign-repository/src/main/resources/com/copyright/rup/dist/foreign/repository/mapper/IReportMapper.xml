@@ -801,6 +801,10 @@
         <include refid="IAaclUsageMapper.selectCountForAuditSql"/>
     </select>
 
+    <select id="findSalUsagesCountForAudit" resultType="int" parameterType="map">
+        <include refid="ISalUsageMapper.selectCountForAuditSql"/>
+    </select>
+
     <select id="findUsagesCountForAudit" resultType="int" parameterType="map">
         <include refid="IUsageMapper.selectCountForAuditSql"/>
     </select>
@@ -811,6 +815,10 @@
 
     <select id="findAuditAaclReportDtos" resultMap="IAaclUsageMapper.aaclUsageDtoResultMap" parameterType="map">
         <include refid="IAaclUsageMapper.selectForAuditSql"/>
+    </select>
+
+    <select id="findAuditSalReportDtos" resultMap="ISalUsageMapper.salUsageDtoResultMap" parameterType="map">
+        <include refid="ISalUsageMapper.selectForAuditSql"/>
     </select>
 
     <select id="findWorkClassificationCountByBatchIds" resultType="int" parameterType="map">
