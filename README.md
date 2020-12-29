@@ -1,3 +1,10 @@
+13.1.5
+-
+* B-59009 FDA: Update SAL usages with distribution data from LM: make changes based on comments in CR-DIST-FOREIGN-221
+* B-63991 FDA: Audit Tab Export for SAL: implement repository for report
+* B-63991 FDA: Audit Tab Export for SAL: implement service for report
+* B-57881 Tech Debt: FDA: unify look and feel of filter widgets
+
 13.1.4
 -
 * B-63961 FDA: Audit Tab modifications for SAL: make changes based on comments in CR-DIST-FOREIGN-220
