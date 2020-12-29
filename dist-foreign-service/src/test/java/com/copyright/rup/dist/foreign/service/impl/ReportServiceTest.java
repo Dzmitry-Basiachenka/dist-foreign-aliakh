@@ -201,6 +201,17 @@ public class ReportServiceTest {
     }
 
     @Test
+    public void testWriteAuditSalCsvReport() {
+        AuditFilter filter = createMock(AuditFilter.class);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        reportRepository.writeAuditSalCsvReport(filter, outputStream);
+        expectLastCall().once();
+        replay(reportRepository);
+        reportService.writeAuditSalCsvReport(filter, outputStream);
+        verify(reportRepository);
+    }
+
+    @Test
     public void testWriteAaclUsageCsvReport() {
         UsageFilter filter = createMock(UsageFilter.class);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);

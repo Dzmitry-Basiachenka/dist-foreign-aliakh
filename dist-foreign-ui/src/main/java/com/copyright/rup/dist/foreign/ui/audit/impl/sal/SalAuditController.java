@@ -54,7 +54,7 @@ public class SalAuditController extends CommonAuditController implements ISalAud
     @Override
     public IStreamSource getCsvStreamSource() {
         return getStreamSourceHandler().getCsvStreamSource(() -> "export_usage_audit_",
-            pos -> { /* TODO to implement generation of the report*/ });
+            pos -> getReportService().writeAuditSalCsvReport(getFilter(), pos));
     }
 
     @Override
