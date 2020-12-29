@@ -52,7 +52,7 @@ public class LazyRightsholderFilterWindow extends Window {
      * @param controller {@link ICommonAuditFilterController} instance
      */
     public LazyRightsholderFilterWindow(String caption, ICommonAuditFilterController controller) {
-        super(caption);
+        super(ForeignUi.getMessage("window.filter_format", caption));
         this.controller = Objects.requireNonNull(controller);
         setWidth(450, Unit.PIXELS);
         setHeight(400, Unit.PIXELS);

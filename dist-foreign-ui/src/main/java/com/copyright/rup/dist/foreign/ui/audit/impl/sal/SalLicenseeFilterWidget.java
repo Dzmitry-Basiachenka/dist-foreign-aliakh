@@ -77,7 +77,8 @@ class SalLicenseeFilterWidget extends BaseItemsFilterWidget<SalLicensee>
 
     @Override
     public FilterWindow<SalLicensee> showFilterWindow() {
-        FilterWindow<SalLicensee> filterWindow = Windows.showFilterWindow(caption, this,
+        FilterWindow<SalLicensee> filterWindow = Windows.showFilterWindow(
+            ForeignUi.getMessage("window.filter_format", caption), this,
             (ValueProvider<SalLicensee, List<String>>) licensee ->
                 Lists.newArrayList(licensee.getName(), licensee.getAccountNumber().toString()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
