@@ -63,12 +63,12 @@ public class LazyRightsholderFilterWindowTest {
     @Before
     public void setUp() {
         controller = createMock(ICommonAuditFilterController.class);
-        filterWindow = new LazyRightsholderFilterWindow("Caption", controller);
+        filterWindow = new LazyRightsholderFilterWindow("Rightsholders", controller);
     }
 
     @Test
     public void testWindowStructure() {
-        assertEquals("Caption", filterWindow.getCaption());
+        assertEquals("Rightsholders filter", filterWindow.getCaption());
         verifySize(filterWindow, 450, Unit.PIXELS, 400, Unit.PIXELS);
         assertFalse(filterWindow.isResizable());
         VerticalLayout content = (VerticalLayout) filterWindow.getContent();
