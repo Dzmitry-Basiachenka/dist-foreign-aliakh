@@ -43,7 +43,7 @@ public class ByteArrayStreamSource implements IStreamSource {
     public Entry<Supplier<String>, Supplier<InputStream>> getSource() {
         return new SimpleImmutableEntry<>(
             () -> FileNameUtils.encodeAndBuildFileName(fileNamePrefix +
-                CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm"), "csv"),
+                CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_yyyy_HH_mm"), "csv"),
             () -> {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 reportWriter.writeReport(baos);
