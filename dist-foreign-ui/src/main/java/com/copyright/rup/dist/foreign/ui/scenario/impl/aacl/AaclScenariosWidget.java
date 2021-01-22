@@ -24,7 +24,6 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
-
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -32,6 +31,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
@@ -53,6 +53,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     private final IAaclScenariosController controller;
     private final IAaclUsageController usageController;
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
+    private final Button editNameButton = Buttons.createButton(ForeignUi.getMessage("button.edit_name"));
     private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
     private final Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
@@ -90,6 +91,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     public IMediator initMediator() {
         mediator = new AaclScenariosMediator();
         mediator.setViewButton(viewButton);
+        mediator.setEditNameButton(editNameButton);
         mediator.setDeleteButton(deleteButton);
         mediator.setApproveButton(approveButton);
         mediator.setRejectButton(rejectButton);
@@ -108,9 +110,10 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     protected HorizontalLayout initButtonsLayout() {
         HorizontalLayout layout = new HorizontalLayout();
         addButtonsListeners();
-        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton, submitButton, rejectButton, approveButton,
-            sendToLmButton);
-        layout.addComponents(viewButton, deleteButton, submitButton, rejectButton, approveButton, sendToLmButton);
+        VaadinUtils.setButtonsAutoDisabled(viewButton, editNameButton, deleteButton, submitButton, rejectButton,
+            approveButton, sendToLmButton);
+        layout.addComponents(viewButton, editNameButton, deleteButton, submitButton, rejectButton,
+            approveButton, sendToLmButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
@@ -181,6 +184,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
 
     private void addButtonsListeners() {
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
+        editNameButton.addClickListener(event -> controller.onEditNameButtonClicked());
         deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
         submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
         rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));

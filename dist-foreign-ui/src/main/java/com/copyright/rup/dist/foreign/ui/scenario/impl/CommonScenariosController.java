@@ -21,6 +21,7 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 import com.google.common.collect.Maps;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -73,6 +74,12 @@ public abstract class CommonScenariosController extends CommonController<ICommon
         Window scenarioWindow = (Window) scenarioWidget;
         Windows.showModalWindow(scenarioWindow);
         scenarioWindow.setPositionY(30);
+    }
+
+    @Override
+    public void onEditNameButtonClicked() {
+        //TODO show Edit Scenario Window
+        Windows.showModalWindow(new Window());
     }
 
     @Override

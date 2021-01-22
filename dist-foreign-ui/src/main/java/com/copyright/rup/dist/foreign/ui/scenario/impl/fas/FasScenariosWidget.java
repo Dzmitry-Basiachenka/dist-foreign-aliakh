@@ -32,8 +32,9 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class FasScenariosWidget extends CommonScenariosWidget implements IFasScenariosWidget {
 
-    private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
+    private final Button editNameButton = Buttons.createButton(ForeignUi.getMessage("button.edit_name"));
+    private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
     private final Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
     private final Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
@@ -66,6 +67,7 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
     public IMediator initMediator() {
         mediator = new FasScenariosMediator();
         mediator.setViewButton(viewButton);
+        mediator.setEditNameButton(editNameButton);
         mediator.setDeleteButton(deleteButton);
         mediator.setApproveButton(approveButton);
         mediator.setRejectButton(rejectButton);
@@ -82,18 +84,21 @@ public class FasScenariosWidget extends CommonScenariosWidget implements IFasSce
     protected HorizontalLayout initButtonsLayout() {
         HorizontalLayout layout = new HorizontalLayout();
         addButtonsListeners();
-        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton, excludePayeesButton, reconcileRightsholdersButton,
-            submitButton, rejectButton, approveButton, sendToLmButton, refreshScenarioButton);
-        layout.addComponents(viewButton, deleteButton, excludePayeesButton, reconcileRightsholdersButton, submitButton,
-            rejectButton, approveButton, sendToLmButton, refreshScenarioButton);
+        VaadinUtils.setButtonsAutoDisabled(viewButton, editNameButton, deleteButton, excludePayeesButton,
+            reconcileRightsholdersButton, submitButton, rejectButton, approveButton, sendToLmButton,
+            refreshScenarioButton);
+        layout.addComponents(viewButton, editNameButton, deleteButton, excludePayeesButton,
+            reconcileRightsholdersButton, submitButton, rejectButton, approveButton, sendToLmButton,
+            refreshScenarioButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
     }
 
     private void addButtonsListeners() {
-        deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
+        editNameButton.addClickListener(event -> controller.onEditNameButtonClicked());
+        deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
         excludePayeesButton.addClickListener(event -> controller.onExcludePayeesButtonClicked());
         reconcileRightsholdersButton.addClickListener(event -> controller.onReconcileRightsholdersButtonClicked());
         submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));

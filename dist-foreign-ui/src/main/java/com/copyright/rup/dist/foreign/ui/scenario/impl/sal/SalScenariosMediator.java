@@ -4,7 +4,6 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
-
 import com.vaadin.ui.Button;
 
 import java.util.Objects;
@@ -21,6 +20,7 @@ import java.util.Objects;
 class SalScenariosMediator implements IScenariosMediator {
 
     private Button viewButton;
+    private Button editNameButton;
     private Button deleteButton;
     private Button submitButton;
     private Button rejectButton;
@@ -40,9 +40,10 @@ class SalScenariosMediator implements IScenariosMediator {
     @Override
     public void selectedScenarioChanged(Scenario scenario) {
         if (Objects.nonNull(scenario)) {
+            viewButton.setEnabled(true);
             ScenarioStatusEnum status = scenario.getStatus();
             boolean isInProgressState = ScenarioStatusEnum.IN_PROGRESS == status;
-            viewButton.setEnabled(true);
+            editNameButton.setEnabled(isInProgressState);
             deleteButton.setEnabled(isInProgressState);
             submitButton.setEnabled(isInProgressState);
             boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
@@ -50,6 +51,7 @@ class SalScenariosMediator implements IScenariosMediator {
             approveButton.setEnabled(isSubmittedState);
         } else {
             viewButton.setEnabled(false);
+            editNameButton.setEnabled(false);
             deleteButton.setEnabled(false);
             submitButton.setEnabled(false);
             rejectButton.setEnabled(false);
@@ -63,6 +65,10 @@ class SalScenariosMediator implements IScenariosMediator {
 
     void setViewButton(Button viewButton) {
         this.viewButton = viewButton;
+    }
+
+    void setEditNameButton(Button editNameButton) {
+        this.editNameButton = editNameButton;
     }
 
     void setDeleteButton(Button deleteButton) {

@@ -19,6 +19,7 @@ import com.vaadin.ui.Button;
 class AaclScenariosMediator implements IScenariosMediator {
 
     private Button viewButton;
+    private Button editNameButton;
     private Button deleteButton;
     private Button submitButton;
     private Button rejectButton;
@@ -41,6 +42,7 @@ class AaclScenariosMediator implements IScenariosMediator {
             viewButton.setEnabled(true);
             ScenarioStatusEnum status = scenario.getStatus();
             boolean isInProgressState = ScenarioStatusEnum.IN_PROGRESS == status;
+            editNameButton.setEnabled(isInProgressState);
             deleteButton.setEnabled(isInProgressState);
             submitButton.setEnabled(isInProgressState);
             boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
@@ -49,6 +51,7 @@ class AaclScenariosMediator implements IScenariosMediator {
             sendToLmButton.setEnabled(ScenarioStatusEnum.APPROVED == status);
         } else {
             viewButton.setEnabled(false);
+            editNameButton.setEnabled(false);
             deleteButton.setEnabled(false);
             submitButton.setEnabled(false);
             rejectButton.setEnabled(false);
@@ -59,6 +62,10 @@ class AaclScenariosMediator implements IScenariosMediator {
 
     void setViewButton(Button viewButton) {
         this.viewButton = viewButton;
+    }
+
+    void setEditNameButton(Button editNameButton) {
+        this.editNameButton = editNameButton;
     }
 
     void setDeleteButton(Button deleteButton) {
