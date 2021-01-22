@@ -35,6 +35,7 @@ public class AaclScenariosMediatorTest {
 
     private AaclScenariosMediator mediator;
     private Button viewButton;
+    private Button editNameButton;
     private Button deleteButton;
     private Button submitButton;
     private Button rejectButton;
@@ -46,7 +47,7 @@ public class AaclScenariosMediatorTest {
         mockStatic(SecurityUtils.class);
         mediator = new AaclScenariosMediator();
         viewButton = new Button("View");
-        Button editNameButton = new Button("Edit Name");
+        editNameButton = new Button("Edit Name");
         deleteButton = new Button("Delete");
         submitButton = new Button("Submit for Approval");
         rejectButton = new Button("Reject");
@@ -67,6 +68,7 @@ public class AaclScenariosMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(viewButton.isVisible());
+        assertFalse(editNameButton.isVisible());
         assertFalse(deleteButton.isVisible());
         assertFalse(submitButton.isVisible());
         assertFalse(rejectButton.isVisible());
@@ -81,6 +83,7 @@ public class AaclScenariosMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(viewButton.isVisible());
+        assertFalse(editNameButton.isVisible());
         assertFalse(deleteButton.isVisible());
         assertFalse(submitButton.isVisible());
         assertTrue(rejectButton.isVisible());
@@ -95,6 +98,7 @@ public class AaclScenariosMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(viewButton.isVisible());
+        assertTrue(editNameButton.isVisible());
         assertTrue(deleteButton.isVisible());
         assertTrue(submitButton.isVisible());
         assertFalse(rejectButton.isVisible());
@@ -107,6 +111,7 @@ public class AaclScenariosMediatorTest {
     public void testSelectedScenarioChangedNullScenario() {
         mediator.selectedScenarioChanged(null);
         assertFalse(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
         assertFalse(deleteButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
@@ -119,8 +124,9 @@ public class AaclScenariosMediatorTest {
         Scenario scenario = new Scenario();
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         mediator.selectedScenarioChanged(scenario);
-        assertTrue(deleteButton.isEnabled());
         assertTrue(viewButton.isEnabled());
+        assertTrue(editNameButton.isEnabled());
+        assertTrue(deleteButton.isEnabled());
         assertTrue(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
@@ -132,8 +138,9 @@ public class AaclScenariosMediatorTest {
         Scenario scenario = new Scenario();
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
         mediator.selectedScenarioChanged(scenario);
-        assertFalse(deleteButton.isEnabled());
         assertTrue(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertTrue(rejectButton.isEnabled());
         assertTrue(approveButton.isEnabled());
@@ -145,8 +152,9 @@ public class AaclScenariosMediatorTest {
         Scenario scenario = new Scenario();
         scenario.setStatus(ScenarioStatusEnum.APPROVED);
         mediator.selectedScenarioChanged(scenario);
-        assertFalse(deleteButton.isEnabled());
         assertTrue(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
@@ -158,8 +166,9 @@ public class AaclScenariosMediatorTest {
         Scenario scenario = new Scenario();
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
         mediator.selectedScenarioChanged(scenario);
-        assertFalse(deleteButton.isEnabled());
         assertTrue(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
@@ -181,6 +190,7 @@ public class AaclScenariosMediatorTest {
     private void mockSpecialistPermissions() {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_EDIT_SCENARIO_NAME")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_SUBMIT_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_DISTRIBUTE_SCENARIO")).andReturn(true).once();

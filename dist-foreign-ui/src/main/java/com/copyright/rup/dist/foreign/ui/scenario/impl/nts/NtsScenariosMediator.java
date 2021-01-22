@@ -28,12 +28,13 @@ class NtsScenariosMediator implements IScenariosMediator {
 
     @Override
     public void applyPermissions() {
+        viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
+        editNameButton.setVisible(ForeignSecurityUtils.hasEditScenarioNamePermission());
         deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
         submitButton.setVisible(ForeignSecurityUtils.hasSubmitScenarioPermission());
         rejectButton.setVisible(ForeignSecurityUtils.hasRejectScenarioPermission());
         approveButton.setVisible(ForeignSecurityUtils.hasApproveScenarioPermission());
         sendToLmButton.setVisible(ForeignSecurityUtils.hasSendScenarioToLmPermission());
-        viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
     }
 
     @Override

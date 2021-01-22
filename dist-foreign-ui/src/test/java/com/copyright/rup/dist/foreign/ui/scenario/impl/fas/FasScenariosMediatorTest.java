@@ -35,8 +35,9 @@ public class FasScenariosMediatorTest {
 
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private FasScenariosMediator mediator;
-    private Button deleteButton;
     private Button viewButton;
+    private Button editNameButton;
+    private Button deleteButton;
     private Button excludePayeesButton;
     private Button reconcileRightsholdersButton;
     private Button submitButton;
@@ -49,7 +50,7 @@ public class FasScenariosMediatorTest {
     public void setUp() {
         mockStatic(SecurityUtils.class);
         mediator = new FasScenariosMediator();
-        Button editNameButton = new Button("Edit Name");
+        editNameButton = new Button("Edit Name");
         mediator.setEditNameButton(editNameButton);
         deleteButton = new Button("Delete");
         mediator.setDeleteButton(deleteButton);
@@ -76,10 +77,11 @@ public class FasScenariosMediatorTest {
         mockViewOnlyPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
+        assertTrue(viewButton.isVisible());
+        assertFalse(editNameButton.isVisible());
         assertFalse(deleteButton.isVisible());
         assertFalse(excludePayeesButton.isVisible());
         assertFalse(reconcileRightsholdersButton.isVisible());
-        assertTrue(viewButton.isVisible());
         assertFalse(submitButton.isVisible());
         assertFalse(rejectButton.isVisible());
         assertFalse(approveButton.isVisible());
@@ -93,10 +95,11 @@ public class FasScenariosMediatorTest {
         mockManagerPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
+        assertTrue(viewButton.isVisible());
+        assertFalse(editNameButton.isVisible());
         assertFalse(deleteButton.isVisible());
         assertFalse(excludePayeesButton.isVisible());
         assertFalse(reconcileRightsholdersButton.isVisible());
-        assertTrue(viewButton.isVisible());
         assertFalse(submitButton.isVisible());
         assertTrue(rejectButton.isVisible());
         assertTrue(approveButton.isVisible());
@@ -110,10 +113,11 @@ public class FasScenariosMediatorTest {
         mockSpecialistPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
+        assertTrue(viewButton.isVisible());
+        assertTrue(editNameButton.isVisible());
         assertTrue(deleteButton.isVisible());
         assertTrue(excludePayeesButton.isVisible());
         assertTrue(reconcileRightsholdersButton.isVisible());
-        assertTrue(viewButton.isVisible());
         assertTrue(submitButton.isVisible());
         assertFalse(rejectButton.isVisible());
         assertFalse(approveButton.isVisible());
@@ -125,10 +129,11 @@ public class FasScenariosMediatorTest {
     @Test
     public void testSelectedScenarioChangedNullScenario() {
         mediator.selectedScenarioChanged(null);
+        assertFalse(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
         assertFalse(deleteButton.isEnabled());
         assertTrue(excludePayeesButton.isEnabled());
         assertFalse(reconcileRightsholdersButton.isEnabled());
-        assertFalse(viewButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
@@ -142,10 +147,11 @@ public class FasScenariosMediatorTest {
         scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         mediator.selectedScenarioChanged(scenario);
+        assertTrue(viewButton.isEnabled());
+        assertTrue(editNameButton.isEnabled());
         assertTrue(deleteButton.isEnabled());
         assertTrue(excludePayeesButton.isEnabled());
         assertTrue(reconcileRightsholdersButton.isEnabled());
-        assertTrue(viewButton.isEnabled());
         assertTrue(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
@@ -159,10 +165,11 @@ public class FasScenariosMediatorTest {
         scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
         mediator.selectedScenarioChanged(scenario);
+        assertTrue(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
         assertFalse(deleteButton.isEnabled());
         assertTrue(excludePayeesButton.isEnabled());
         assertFalse(reconcileRightsholdersButton.isEnabled());
-        assertTrue(viewButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertTrue(rejectButton.isEnabled());
         assertTrue(approveButton.isEnabled());
@@ -176,10 +183,11 @@ public class FasScenariosMediatorTest {
         scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.APPROVED);
         mediator.selectedScenarioChanged(scenario);
+        assertTrue(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
         assertFalse(deleteButton.isEnabled());
         assertTrue(excludePayeesButton.isEnabled());
         assertFalse(reconcileRightsholdersButton.isEnabled());
-        assertTrue(viewButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
@@ -193,10 +201,11 @@ public class FasScenariosMediatorTest {
         scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
         mediator.selectedScenarioChanged(scenario);
+        assertTrue(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
         assertFalse(deleteButton.isEnabled());
         assertTrue(excludePayeesButton.isEnabled());
         assertFalse(reconcileRightsholdersButton.isEnabled());
-        assertTrue(viewButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
@@ -229,6 +238,7 @@ public class FasScenariosMediatorTest {
     private void mockSpecialistPermissions() {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_EDIT_SCENARIO_NAME")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_EXCLUDE_FROM_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_RECONCILE_RIGHTSHOLDERS")).andReturn(true).once();

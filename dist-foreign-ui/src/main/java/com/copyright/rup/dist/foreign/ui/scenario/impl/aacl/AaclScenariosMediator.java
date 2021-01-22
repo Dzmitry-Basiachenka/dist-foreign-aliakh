@@ -28,8 +28,9 @@ class AaclScenariosMediator implements IScenariosMediator {
 
     @Override
     public void applyPermissions() {
-        deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
         viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
+        editNameButton.setVisible(ForeignSecurityUtils.hasEditScenarioNamePermission());
+        deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
         submitButton.setVisible(ForeignSecurityUtils.hasSubmitScenarioPermission());
         rejectButton.setVisible(ForeignSecurityUtils.hasRejectScenarioPermission());
         approveButton.setVisible(ForeignSecurityUtils.hasApproveScenarioPermission());

@@ -77,6 +77,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to edit scenario name.
+     */
+    public static boolean hasEditScenarioNamePermission() {
+        return SecurityUtils.hasPermission("FDA_EDIT_SCENARIO_NAME");
+    }
+
+    /**
      * @return {@code true} if user has permission to send usages for work research.
      */
     public static boolean hasSendForWorkResearchPermission() {
