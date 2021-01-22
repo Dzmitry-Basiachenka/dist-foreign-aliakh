@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
+
 import com.vaadin.ui.Button;
 
 import java.util.Objects;
@@ -32,6 +33,8 @@ class FasScenariosMediator implements IScenariosMediator {
 
     @Override
     public void applyPermissions() {
+        viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
+        editNameButton.setVisible(ForeignSecurityUtils.hasEditScenarioNamePermission());
         deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
         submitButton.setVisible(ForeignSecurityUtils.hasSubmitScenarioPermission());
         rejectButton.setVisible(ForeignSecurityUtils.hasRejectScenarioPermission());
@@ -40,7 +43,6 @@ class FasScenariosMediator implements IScenariosMediator {
         reconcileRightsholdersButton.setVisible(ForeignSecurityUtils.hasReconcileRightsholdersPermission());
         excludePayeesButton.setVisible(ForeignSecurityUtils.hasExcludeFromScenarioPermission());
         refreshScenarioButton.setVisible(ForeignSecurityUtils.hasRefreshScenarioPermission());
-        viewButton.setVisible(ForeignSecurityUtils.hasViewScenarioPermission());
     }
 
     @Override

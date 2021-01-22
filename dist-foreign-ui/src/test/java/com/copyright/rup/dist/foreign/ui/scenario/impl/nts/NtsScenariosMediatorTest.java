@@ -35,8 +35,9 @@ public class NtsScenariosMediatorTest {
 
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private NtsScenariosMediator mediator;
-    private Button deleteButton;
     private Button viewButton;
+    private Button editNameButton;
+    private Button deleteButton;
     private Button submitButton;
     private Button rejectButton;
     private Button approveButton;
@@ -48,7 +49,7 @@ public class NtsScenariosMediatorTest {
         mediator = new NtsScenariosMediator();
         viewButton = new Button("View");
         mediator.setViewButton(viewButton);
-        Button editNameButton = new Button("Edit Name");
+        editNameButton = new Button("Edit Name");
         mediator.setEditNameButton(editNameButton);
         deleteButton = new Button("Delete");
         mediator.setDeleteButton(deleteButton);
@@ -67,8 +68,9 @@ public class NtsScenariosMediatorTest {
         mockViewOnlyPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertFalse(deleteButton.isVisible());
         assertTrue(viewButton.isVisible());
+        assertFalse(editNameButton.isVisible());
+        assertFalse(deleteButton.isVisible());
         assertFalse(submitButton.isVisible());
         assertFalse(rejectButton.isVisible());
         assertFalse(approveButton.isVisible());
@@ -81,8 +83,9 @@ public class NtsScenariosMediatorTest {
         mockManagerPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertFalse(deleteButton.isVisible());
         assertTrue(viewButton.isVisible());
+        assertFalse(editNameButton.isVisible());
+        assertFalse(deleteButton.isVisible());
         assertFalse(submitButton.isVisible());
         assertTrue(rejectButton.isVisible());
         assertTrue(approveButton.isVisible());
@@ -95,8 +98,9 @@ public class NtsScenariosMediatorTest {
         mockSpecialistPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertTrue(deleteButton.isVisible());
         assertTrue(viewButton.isVisible());
+        assertTrue(editNameButton.isVisible());
+        assertTrue(deleteButton.isVisible());
         assertTrue(submitButton.isVisible());
         assertFalse(rejectButton.isVisible());
         assertFalse(approveButton.isVisible());
@@ -107,8 +111,9 @@ public class NtsScenariosMediatorTest {
     @Test
     public void testSelectedScenarioChangedNullScenario() {
         mediator.selectedScenarioChanged(null);
-        assertFalse(deleteButton.isEnabled());
         assertFalse(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
@@ -121,8 +126,9 @@ public class NtsScenariosMediatorTest {
         scenario.setProductFamily(NTS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         mediator.selectedScenarioChanged(scenario);
-        assertTrue(deleteButton.isEnabled());
         assertTrue(viewButton.isEnabled());
+        assertTrue(editNameButton.isEnabled());
+        assertTrue(deleteButton.isEnabled());
         assertTrue(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
@@ -135,8 +141,9 @@ public class NtsScenariosMediatorTest {
         scenario.setProductFamily(NTS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
         mediator.selectedScenarioChanged(scenario);
-        assertFalse(deleteButton.isEnabled());
         assertTrue(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertTrue(rejectButton.isEnabled());
         assertTrue(approveButton.isEnabled());
@@ -149,8 +156,9 @@ public class NtsScenariosMediatorTest {
         scenario.setProductFamily(NTS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.APPROVED);
         mediator.selectedScenarioChanged(scenario);
-        assertFalse(deleteButton.isEnabled());
         assertTrue(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
@@ -163,8 +171,9 @@ public class NtsScenariosMediatorTest {
         scenario.setProductFamily(NTS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
         mediator.selectedScenarioChanged(scenario);
-        assertFalse(deleteButton.isEnabled());
         assertTrue(viewButton.isEnabled());
+        assertFalse(editNameButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
         assertFalse(submitButton.isEnabled());
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
@@ -186,6 +195,7 @@ public class NtsScenariosMediatorTest {
     private void mockSpecialistPermissions() {
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_VIEW_SCENARIO")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_EDIT_SCENARIO_NAME")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_SUBMIT_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_DISTRIBUTE_SCENARIO")).andReturn(true).once();
