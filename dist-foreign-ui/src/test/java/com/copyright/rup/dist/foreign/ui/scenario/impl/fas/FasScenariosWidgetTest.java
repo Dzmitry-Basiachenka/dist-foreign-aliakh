@@ -184,16 +184,17 @@ public class FasScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        assertEquals(9, layout.getComponentCount());
+        assertEquals(10, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "View", false);
-        verifyButton(layout.getComponent(1), "Delete", false);
-        verifyButton(layout.getComponent(2), "Exclude Payees", true);
-        verifyButton(layout.getComponent(3), "Reconcile Rightsholders", false);
-        verifyButton(layout.getComponent(4), "Submit for Approval", false);
-        verifyButton(layout.getComponent(5), "Reject", false);
-        verifyButton(layout.getComponent(6), "Approve", false);
-        verifyButton(layout.getComponent(7), "Send to LM", false);
-        verifyButton(layout.getComponent(8), "Refresh Scenario", false);
+        verifyButton(layout.getComponent(1), "Edit Name", false);
+        verifyButton(layout.getComponent(2), "Delete", false);
+        verifyButton(layout.getComponent(3), "Exclude Payees", true);
+        verifyButton(layout.getComponent(4), "Reconcile Rightsholders", false);
+        verifyButton(layout.getComponent(5), "Submit for Approval", false);
+        verifyButton(layout.getComponent(6), "Reject", false);
+        verifyButton(layout.getComponent(7), "Approve", false);
+        verifyButton(layout.getComponent(8), "Send to LM", false);
+        verifyButton(layout.getComponent(9), "Refresh Scenario", false);
     }
 
     private void verifyButton(Component component, String caption, boolean isEnabled) {

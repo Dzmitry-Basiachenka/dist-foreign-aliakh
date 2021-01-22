@@ -35,8 +35,9 @@ import java.util.Objects;
  */
 public class NtsScenariosWidget extends CommonScenariosWidget implements INtsScenariosWidget {
 
-    private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
+    private final Button editNameButton = Buttons.createButton(ForeignUi.getMessage("button.edit_name"));
+    private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
     private final Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
     private final Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
@@ -70,6 +71,7 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
     public IMediator initMediator() {
         mediator = new NtsScenariosMediator();
         mediator.setViewButton(viewButton);
+        mediator.setEditNameButton(editNameButton);
         mediator.setDeleteButton(deleteButton);
         mediator.setApproveButton(approveButton);
         mediator.setRejectButton(rejectButton);
@@ -83,9 +85,10 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
     protected HorizontalLayout initButtonsLayout() {
         HorizontalLayout layout = new HorizontalLayout();
         addButtonsListeners();
-        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton, submitButton, rejectButton, approveButton,
+        VaadinUtils.setButtonsAutoDisabled(viewButton, editNameButton, deleteButton, submitButton, rejectButton,
+            approveButton, sendToLmButton);
+        layout.addComponents(viewButton, editNameButton, deleteButton, submitButton, rejectButton, approveButton,
             sendToLmButton);
-        layout.addComponents(viewButton, deleteButton, submitButton, rejectButton, approveButton, sendToLmButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
@@ -136,8 +139,9 @@ public class NtsScenariosWidget extends CommonScenariosWidget implements INtsSce
     }
 
     private void addButtonsListeners() {
-        deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
+        editNameButton.addClickListener(event -> controller.onEditNameButtonClicked());
+        deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
         submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
         rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
         approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));

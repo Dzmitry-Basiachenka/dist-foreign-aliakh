@@ -18,6 +18,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -34,6 +35,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
     private final ISalScenariosController controller;
     private SalScenariosMediator mediator;
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
+    private final Button editNameButton = Buttons.createButton(ForeignUi.getMessage("button.edit_name"));
     private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
     private final Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
@@ -63,6 +65,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
     public IMediator initMediator() {
         mediator = new SalScenariosMediator();
         mediator.setViewButton(viewButton);
+        mediator.setEditNameButton(editNameButton);
         mediator.setDeleteButton(deleteButton);
         mediator.setApproveButton(approveButton);
         mediator.setRejectButton(rejectButton);
@@ -81,10 +84,10 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
     protected HorizontalLayout initButtonsLayout() {
         HorizontalLayout layout = new HorizontalLayout();
         addButtonsListeners();
-        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton, submitButton, rejectButton, approveButton,
-            chooseScenariosButton);
-        layout.addComponents(viewButton, deleteButton, submitButton, rejectButton, approveButton,
-            chooseScenariosButton);
+        VaadinUtils.setButtonsAutoDisabled(viewButton, editNameButton, deleteButton, submitButton, rejectButton,
+            approveButton, chooseScenariosButton);
+        layout.addComponents(viewButton, editNameButton, deleteButton, submitButton, rejectButton,
+            approveButton, chooseScenariosButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
@@ -118,6 +121,7 @@ public class SalScenariosWidget extends CommonScenariosWidget implements ISalSce
 
     private void addButtonsListeners() {
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
+        editNameButton.addClickListener(event -> controller.onEditNameButtonClicked());
         deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
         submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
         rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));

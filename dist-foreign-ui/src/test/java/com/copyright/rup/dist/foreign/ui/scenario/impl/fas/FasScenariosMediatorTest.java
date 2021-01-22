@@ -49,6 +49,8 @@ public class FasScenariosMediatorTest {
     public void setUp() {
         mockStatic(SecurityUtils.class);
         mediator = new FasScenariosMediator();
+        Button editNameButton = new Button("Edit Name");
+        mediator.setEditNameButton(editNameButton);
         deleteButton = new Button("Delete");
         mediator.setDeleteButton(deleteButton);
         viewButton = new Button("View");

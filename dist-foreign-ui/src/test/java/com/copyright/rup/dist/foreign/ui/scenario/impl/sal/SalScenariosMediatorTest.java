@@ -45,12 +45,14 @@ public class SalScenariosMediatorTest {
         mockStatic(SecurityUtils.class);
         mediator = new SalScenariosMediator();
         viewButton = new Button("View");
+        Button editNameButton = new Button("Edit Name");
         deleteButton = new Button("Delete");
         submitButton = new Button("Submit for Approval");
         rejectButton = new Button("Reject");
         approveButton = new Button("Approve");
         chooseScenariosButton = new Button("Choose Scenarios");
         mediator.setViewButton(viewButton);
+        mediator.setEditNameButton(editNameButton);
         mediator.setDeleteButton(deleteButton);
         mediator.setSubmitButton(submitButton);
         mediator.setRejectButton(rejectButton);

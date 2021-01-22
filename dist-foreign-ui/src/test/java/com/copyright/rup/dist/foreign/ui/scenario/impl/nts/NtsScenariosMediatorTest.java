@@ -46,10 +46,12 @@ public class NtsScenariosMediatorTest {
     public void setUp() {
         mockStatic(SecurityUtils.class);
         mediator = new NtsScenariosMediator();
-        deleteButton = new Button("Delete");
-        mediator.setDeleteButton(deleteButton);
         viewButton = new Button("View");
         mediator.setViewButton(viewButton);
+        Button editNameButton = new Button("Edit Name");
+        mediator.setEditNameButton(editNameButton);
+        deleteButton = new Button("Delete");
+        mediator.setDeleteButton(deleteButton);
         submitButton = new Button("Submit for approval");
         mediator.setSubmitButton(submitButton);
         rejectButton = new Button("Reject");

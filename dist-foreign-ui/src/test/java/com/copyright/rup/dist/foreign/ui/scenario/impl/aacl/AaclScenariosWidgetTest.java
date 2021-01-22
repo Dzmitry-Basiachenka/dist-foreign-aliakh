@@ -224,13 +224,14 @@ public class AaclScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        assertEquals(6, layout.getComponentCount());
+        assertEquals(7, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "View");
-        verifyButton(layout.getComponent(1), "Delete");
-        verifyButton(layout.getComponent(2), "Submit for Approval");
-        verifyButton(layout.getComponent(3), "Reject");
-        verifyButton(layout.getComponent(4), "Approve");
-        verifyButton(layout.getComponent(5), "Send to LM");
+        verifyButton(layout.getComponent(1), "Edit Name");
+        verifyButton(layout.getComponent(2), "Delete");
+        verifyButton(layout.getComponent(3), "Submit for Approval");
+        verifyButton(layout.getComponent(4), "Reject");
+        verifyButton(layout.getComponent(5), "Approve");
+        verifyButton(layout.getComponent(6), "Send to LM");
     }
 
     private void verifyButton(Component component, String caption) {

@@ -18,8 +18,9 @@ import com.vaadin.ui.Button;
  */
 class NtsScenariosMediator implements IScenariosMediator {
 
-    private Button deleteButton;
     private Button viewButton;
+    private Button editNameButton;
+    private Button deleteButton;
     private Button submitButton;
     private Button rejectButton;
     private Button approveButton;
@@ -41,6 +42,7 @@ class NtsScenariosMediator implements IScenariosMediator {
             viewButton.setEnabled(true);
             ScenarioStatusEnum status = scenario.getStatus();
             boolean isInProgressState = ScenarioStatusEnum.IN_PROGRESS == status;
+            editNameButton.setEnabled(isInProgressState);
             deleteButton.setEnabled(isInProgressState);
             submitButton.setEnabled(isInProgressState);
             boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
@@ -49,6 +51,7 @@ class NtsScenariosMediator implements IScenariosMediator {
             sendToLmButton.setEnabled(ScenarioStatusEnum.APPROVED == status);
         } else {
             deleteButton.setEnabled(false);
+            editNameButton.setEnabled(false);
             viewButton.setEnabled(false);
             submitButton.setEnabled(false);
             rejectButton.setEnabled(false);
@@ -57,12 +60,16 @@ class NtsScenariosMediator implements IScenariosMediator {
         }
     }
 
-    void setDeleteButton(Button deleteButton) {
-        this.deleteButton = deleteButton;
-    }
-
     void setViewButton(Button viewButton) {
         this.viewButton = viewButton;
+    }
+
+    void setEditNameButton(Button editNameButton) {
+        this.editNameButton = editNameButton;
+    }
+
+    void setDeleteButton(Button deleteButton) {
+        this.deleteButton = deleteButton;
     }
 
     void setSubmitButton(Button submitButton) {

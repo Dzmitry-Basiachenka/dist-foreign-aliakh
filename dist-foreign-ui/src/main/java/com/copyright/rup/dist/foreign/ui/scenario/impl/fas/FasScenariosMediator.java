@@ -4,8 +4,9 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosMediator;
-
 import com.vaadin.ui.Button;
+
+import java.util.Objects;
 
 /**
  * Implementation of {@link IScenariosMediator} for FAS product family.
@@ -18,8 +19,9 @@ import com.vaadin.ui.Button;
  */
 class FasScenariosMediator implements IScenariosMediator {
 
-    private Button deleteButton;
     private Button viewButton;
+    private Button editNameButton;
+    private Button deleteButton;
     private Button submitButton;
     private Button rejectButton;
     private Button approveButton;
@@ -43,10 +45,11 @@ class FasScenariosMediator implements IScenariosMediator {
 
     @Override
     public void selectedScenarioChanged(Scenario scenario) {
-        if (null != scenario) {
+        if (Objects.nonNull(scenario)) {
             viewButton.setEnabled(true);
             ScenarioStatusEnum status = scenario.getStatus();
             boolean isInProgressState = ScenarioStatusEnum.IN_PROGRESS == status;
+            editNameButton.setEnabled(isInProgressState);
             deleteButton.setEnabled(isInProgressState);
             submitButton.setEnabled(isInProgressState);
             refreshScenarioButton.setEnabled(isInProgressState);
@@ -57,6 +60,7 @@ class FasScenariosMediator implements IScenariosMediator {
             sendToLmButton.setEnabled(ScenarioStatusEnum.APPROVED == status);
         } else {
             deleteButton.setEnabled(false);
+            editNameButton.setEnabled(false);
             viewButton.setEnabled(false);
             submitButton.setEnabled(false);
             rejectButton.setEnabled(false);
@@ -67,12 +71,16 @@ class FasScenariosMediator implements IScenariosMediator {
         }
     }
 
-    void setDeleteButton(Button deleteButton) {
-        this.deleteButton = deleteButton;
-    }
-
     void setViewButton(Button viewButton) {
         this.viewButton = viewButton;
+    }
+
+    void setEditNameButton(Button editNameButton) {
+        this.editNameButton = editNameButton;
+    }
+
+    void setDeleteButton(Button deleteButton) {
+        this.deleteButton = deleteButton;
     }
 
     void setSubmitButton(Button submitButton) {
