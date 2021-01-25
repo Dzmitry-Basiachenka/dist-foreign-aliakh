@@ -63,6 +63,11 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     }
 
     @Override
+    public boolean scenarioExists(String name) {
+        return scenarioService.scenarioExists(name);
+    }
+
+    @Override
     public Scenario getScenarioWithAmountsAndLastAction(Scenario scenario) {
         return scenarioService.getScenarioWithAmountsAndLastAction(scenario);
     }
@@ -78,8 +83,7 @@ public abstract class CommonScenariosController extends CommonController<ICommon
 
     @Override
     public void onEditNameButtonClicked() {
-        //TODO show Edit Scenario Window
-        Windows.showModalWindow(new Window());
+        Windows.showModalWindow(new EditScenarioNameWindow(this, getWidget().getSelectedScenario()));
     }
 
     @Override

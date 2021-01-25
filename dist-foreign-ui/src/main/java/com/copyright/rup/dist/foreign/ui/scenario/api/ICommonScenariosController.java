@@ -23,6 +23,15 @@ public interface ICommonScenariosController extends IController<ICommonScenarios
     List<Scenario> getScenarios();
 
     /**
+     * Checks whether {@link Scenario} with specified name already exists in database.
+     *
+     * @param scenarioName name of {@link Scenario} to check
+     * @return {@code true} if {@link Scenario} with specified name already exists in database,
+     * {@code false} - if doesn't
+     */
+    boolean scenarioExists(String scenarioName);
+
+    /**
      * Gets {@link Scenario} with calculated amounts and last audit action.
      *
      * @param scenario selected {@link Scenario}
