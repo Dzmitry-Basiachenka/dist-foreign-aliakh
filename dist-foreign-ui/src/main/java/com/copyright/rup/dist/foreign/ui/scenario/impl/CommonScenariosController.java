@@ -106,6 +106,11 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     }
 
     @Override
+    public void editScenarioName(String newScenarioName) {
+        scenarioService.updateName(getWidget().getSelectedScenario().getId(), newScenarioName);
+    }
+
+    @Override
     public void refreshScenario() {
         scenarioService.refreshScenario(getWidget().getSelectedScenario());
         getWidget().refreshSelectedScenario();

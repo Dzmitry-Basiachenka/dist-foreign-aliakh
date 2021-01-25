@@ -111,9 +111,18 @@ public interface IScenarioRepository {
     /**
      * Updates {@link Scenario} status.
      *
-     * @param scenario scenario to update
+     * @param scenario {@link Scenario} to update
      */
     void updateStatus(Scenario scenario);
+
+    /**
+     * Updates {@link Scenario} name by provided id.
+     *
+     * @param scenarioId {@link Scenario} identifier
+     * @param name       new scenario name
+     * @param userName   user name
+     */
+    void updateNameById(String scenarioId, String name, String userName);
 
     /**
      * Updates scenarios status by provided ids.

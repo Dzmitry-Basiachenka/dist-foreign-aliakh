@@ -66,6 +66,14 @@ public interface IScenarioService {
     Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter);
 
     /**
+     * Updates {@link Scenario} name by provided identifier.
+     *
+     * @param scenarioId {@link Scenario} identifier
+     * @param name       new scenario name
+     */
+    void updateName(String scenarioId, String name);
+
+    /**
      * Deletes {@link Scenario} by given identifier.
      *
      * @param scenario instance of {@link Scenario}
