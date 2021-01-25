@@ -1,3 +1,10 @@
+13.1.6
+-
+* B-57881 Tech Debt: FDA: fixing a year formatting error in files' names
+* B-64632 FDA: Edit Scenario name: apply permissions for Edit scenario name action
+* B-64632 FDA: Edit Scenario name: implement window for edit scenario name
+* B-64632 FDA: Edit Scenario name: introduce Edit name button for all product families
+
 13.1.5
 -
 * B-59009 FDA: Update SAL usages with distribution data from LM: make changes based on comments in CR-DIST-FOREIGN-221
