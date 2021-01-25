@@ -36,6 +36,9 @@ import java.util.Set;
 @Repository
 public class ScenarioRepository extends BaseRepository implements IScenarioRepository {
 
+    private static final String SCENARIO_ID_KEY = "scenarioId";
+    private static final String UPDATE_USER_KEY = "updateUser";
+
     @Override
     public void insert(Scenario scenario) {
         insert("IScenarioMapper.insert", checkNotNull(scenario));
@@ -48,7 +51,7 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
         params.put("filter", Objects.requireNonNull(filter));
         params.put("status", UsageStatusEnum.LOCKED);
         params.put("createUser", scenario.getCreateUser());
-        params.put("updateUser", scenario.getUpdateUser());
+        params.put(UPDATE_USER_KEY, scenario.getUpdateUser());
         insert("IScenarioMapper.insertNtsScenarioAndAddUsages", params);
     }
 
@@ -126,18 +129,27 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     public void updateStatus(Scenario scenario) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put("status", Objects.requireNonNull(scenario.getStatus()));
-        params.put("scenarioId", Objects.requireNonNull(scenario.getId()));
-        params.put("updateUser", StoredEntity.DEFAULT_USER);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenario.getId()));
+        params.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         update("IScenarioMapper.updateStatusById", params);
+    }
+
+    @Override
+    public void updateNameById(String scenarioId, String name, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put("name", Objects.requireNonNull(name));
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        update("IScenarioMapper.updateNameById", params);
     }
 
     @Override
     public void updateStatus(List<String> scenarioIds, ScenarioStatusEnum status) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put("status", Objects.requireNonNull(status));
-        params.put("updateUser", StoredEntity.DEFAULT_USER);
+        params.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         scenarioIds.forEach(scenarioId -> {
-            params.put("scenarioId", scenarioId);
+            params.put(SCENARIO_ID_KEY, scenarioId);
             update("IScenarioMapper.updateStatusById", params);
         });
     }
@@ -146,7 +158,7 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     public List<RightsholderPayeePair> findRightsholdersByScenarioIdAndSourceRro(String scenarioId,
                                                                                  Long rroAccountNumber) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
-        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put("rroAccountNumber", Objects.requireNonNull(rroAccountNumber));
         return selectList("IScenarioMapper.findRightsholdersByScenarioIdAndSourceRro", params);
     }

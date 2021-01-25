@@ -47,7 +47,7 @@ class EditScenarioNameWindow extends Window {
         this.scenario = scenario;
         setResizable(false);
         setWidth(320, Unit.PIXELS);
-        setCaption(ForeignUi.getMessage("window.create_scenario"));
+        setCaption(ForeignUi.getMessage("window.edit_scenario_name"));
         initScenarioNameField();
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout layout = new VerticalLayout(scenarioNameField, buttonsLayout);
@@ -56,13 +56,13 @@ class EditScenarioNameWindow extends Window {
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         scenarioNameField.focus();
         setContent(layout);
-        VaadinUtils.addComponentStyle(this, "create-scenario-window");
+        VaadinUtils.addComponentStyle(this, "edit-scenario-name-window");
     }
 
     private HorizontalLayout initButtonsLayout() {
-        Button confirmButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
-        confirmButton.addClickListener(listener -> onSaveButtonClicked());
-        HorizontalLayout layout = new HorizontalLayout(confirmButton, Buttons.createCancelButton(this));
+        Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
+        saveButton.addClickListener(listener -> onSaveButtonClicked());
+        HorizontalLayout layout = new HorizontalLayout(saveButton, Buttons.createCancelButton(this));
         layout.setSpacing(true);
         return layout;
     }
@@ -70,15 +70,16 @@ class EditScenarioNameWindow extends Window {
     private void initScenarioNameField() {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
         scenarioNameField.setRequiredIndicatorVisible(true);
+        scenarioNameField.setValue(scenario.getName());
         binder.forField(scenarioNameField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.scenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Scenario"))
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue);
+            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .validate();
         VaadinUtils.setMaxComponentsWidth(scenarioNameField);
         VaadinUtils.addComponentStyle(scenarioNameField, "scenario-name");
-        scenarioNameField.setValue(scenario.getName());
     }
 
     private boolean isValid() {
@@ -87,8 +88,8 @@ class EditScenarioNameWindow extends Window {
 
     private void onSaveButtonClicked() {
         if (isValid()) {
-            //TODO update scenario name
-            controller.getWidget().refreshSelectedScenario();
+            controller.editScenarioName(scenarioNameField.getValue());
+            controller.getWidget().refresh();
             close();
         } else {
             Windows.showValidationErrorWindow(Collections.singleton(scenarioNameField));

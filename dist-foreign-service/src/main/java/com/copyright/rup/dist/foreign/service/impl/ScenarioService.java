@@ -101,6 +101,14 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
+    public void updateName(String scenarioId, String name) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Update scenario name. Started. ScenarioName={}, User={}", name, userName);
+        scenarioRepository.updateNameById(scenarioId, name, userName);
+        LOGGER.info("Update scenario name. Finished. ScenarioName={}, User={}", name, userName);
+    }
+
+    @Override
     @Transactional
     public void deleteScenario(Scenario scenario) {
         String userName = RupContextUtils.getUserName();

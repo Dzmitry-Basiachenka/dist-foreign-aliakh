@@ -7,6 +7,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
@@ -128,6 +129,17 @@ public class ScenarioServiceTest {
         scenario.setStatus(ScenarioStatusEnum.ARCHIVED);
         assertSame(scenario, scenarioService.getScenarioWithAmountsAndLastAction(scenario));
         verify(scenarioRepository);
+    }
+
+    @Test
+    public void testUpdateName() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn("user@copyright.com").once();
+        scenarioRepository.updateNameById(SCENARIO_ID, SCENARIO_NAME, "user@copyright.com");
+        expectLastCall().once();
+        replay(scenarioRepository, RupContextUtils.class);
+        scenarioService.updateName(SCENARIO_ID, SCENARIO_NAME);
+        verify(scenarioRepository, RupContextUtils.class);
     }
 
     @Test

@@ -62,6 +62,13 @@ public interface ICommonScenariosController extends IController<ICommonScenarios
     void handleAction(ScenarioActionTypeEnum actionType);
 
     /**
+     * Updates name for selected {@link Scenario}.
+     *
+     * @param newScenarioName new scenario name to set
+     */
+    void editScenarioName(String newScenarioName);
+
+    /**
      * Refreshes selected scenario.
      */
     void refreshScenario();
