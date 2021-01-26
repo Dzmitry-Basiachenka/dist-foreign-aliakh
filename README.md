@@ -1,3 +1,7 @@
+13.1.7
+-
+* B-64632 FDA: Edit Scenario name: implement service logic to update scenario name
+
 13.1.6
 -
 * B-57881 Tech Debt: FDA: fixing a year formatting error in files' names
