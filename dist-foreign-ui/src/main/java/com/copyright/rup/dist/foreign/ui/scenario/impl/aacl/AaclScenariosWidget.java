@@ -184,7 +184,7 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
 
     private void addButtonsListeners() {
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
-        editNameButton.addClickListener(event -> controller.onEditNameButtonClicked());
+        editNameButton.addClickListener(event -> onEditNameButtonClicked());
         deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
         submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
         rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));

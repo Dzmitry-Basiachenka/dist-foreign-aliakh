@@ -82,11 +82,6 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     }
 
     @Override
-    public void onEditNameButtonClicked() {
-        Windows.showModalWindow(new EditScenarioNameWindow(this, getWidget().getSelectedScenario()));
-    }
-
-    @Override
     public void handleAction(ScenarioActionTypeEnum actionType) {
         if (!usageService.isScenarioEmpty(getWidget().getSelectedScenario())) {
             IActionHandler actionHandler = actionHandlers.get(actionType);
@@ -106,8 +101,8 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     }
 
     @Override
-    public void editScenarioName(String newScenarioName) {
-        scenarioService.updateName(getWidget().getSelectedScenario().getId(), newScenarioName);
+    public void editScenarioName(String scenarioId, String newScenarioName) {
+        scenarioService.updateName(scenarioId, newScenarioName);
     }
 
     @Override
@@ -131,13 +126,6 @@ public abstract class CommonScenariosController extends CommonController<ICommon
     }
 
     /**
-     * @return rightsholder service
-     */
-    protected IRightsholderService getRightsholderService() {
-        return rightsholderService;
-    }
-
-    /**
      * Applies scenario action.
      *
      * @param actionHandler instance of {@link IActionHandler}
@@ -149,6 +137,13 @@ public abstract class CommonScenariosController extends CommonController<ICommon
         scenario.setUpdateUser(SecurityUtils.getUserName());
         actionHandler.handleAction(scenario, reason);
         widget.refresh();
+    }
+
+    /**
+     * @return rightsholder service
+     */
+    protected IRightsholderService getRightsholderService() {
+        return rightsholderService;
     }
 
     protected IProductFamilyProvider getProductFamilyProvider() {

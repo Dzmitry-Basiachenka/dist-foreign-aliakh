@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
-import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -16,25 +15,20 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
-import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.vaadin.data.Validator;
 import com.vaadin.ui.Window;
 
 import org.easymock.Capture;
@@ -58,7 +52,7 @@ import java.util.List;
  * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class, SecurityUtils.class})
+@PrepareForTest({Windows.class})
 public class AaclScenariosControllerTest {
 
     private static final String SCENARIO_ID = "2fe241c4-7625-437b-9c8f-ff7ba4d3cb07";
@@ -68,7 +62,6 @@ public class AaclScenariosControllerTest {
     private ILicenseeClassService licenseeClassService;
     private IAaclScenariosWidget scenariosWidget;
     private Scenario scenario;
-    private IUsageService usageService;
     private IScenarioService scenarioService;
     private IAaclScenarioService aaclScenarioService;
     private AaclScenarioController scenarioController;
@@ -78,7 +71,6 @@ public class AaclScenariosControllerTest {
     @Before
     public void setUp() {
         licenseeClassService = createMock(ILicenseeClassService.class);
-        usageService = createMock(IUsageService.class);
         scenarioService = createMock(IScenarioService.class);
         aaclScenarioService = createMock(IAaclScenarioService.class);
         productFamilyProvider = createMock(IProductFamilyProvider.class);
@@ -89,12 +81,7 @@ public class AaclScenariosControllerTest {
         scenariosWidget = createMock(IAaclScenariosWidget.class);
         scenarioWidget = new AaclScenarioWidget(scenarioController);
         Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
-        mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.getUserName()).andReturn("user@copyright.com").anyTimes();
-        replay(SecurityUtils.class);
-        scenariosController.initActionHandlers();
         Whitebox.setInternalState(scenariosController, "licenseeClassService", licenseeClassService);
-        Whitebox.setInternalState(scenariosController, "usageService", usageService);
         Whitebox.setInternalState(scenariosController, "scenarioService", scenarioService);
         Whitebox.setInternalState(scenariosController, "productFamilyProvider", productFamilyProvider);
         Whitebox.setInternalState(scenariosController, "aaclScenarioService", aaclScenarioService);
@@ -127,66 +114,6 @@ public class AaclScenariosControllerTest {
         replay(scenariosWidget, scenarioController, Windows.class);
         scenariosController.onViewButtonClicked();
         verify(scenariosWidget, scenarioController, Windows.class);
-    }
-
-    @Test
-    public void testHandleAction() {
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
-        mockStatic(Windows.class);
-        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
-            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
-        expectLastCall().once();
-        replay(Windows.class, usageService, scenariosWidget);
-        scenariosController.handleAction(ScenarioActionTypeEnum.SUBMITTED);
-        verify(Windows.class, usageService, scenariosWidget);
-    }
-
-    @Test
-    public void testHandleActionApproved() {
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
-        mockStatic(Windows.class);
-        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
-            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
-        expectLastCall().once();
-        replay(Windows.class, usageService, scenariosWidget);
-        scenariosController.handleAction(ScenarioActionTypeEnum.APPROVED);
-        verify(Windows.class, usageService, scenariosWidget);
-    }
-
-    @Test
-    public void testHandleActionRejected() {
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        expect(usageService.isScenarioEmpty(scenario)).andReturn(false).once();
-        mockStatic(Windows.class);
-        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
-            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
-        expectLastCall().once();
-        replay(Windows.class, usageService, scenariosWidget);
-        scenariosController.handleAction(ScenarioActionTypeEnum.REJECTED);
-        verify(Windows.class, usageService, scenariosWidget);
-    }
-
-    @Test
-    public void testApplyScenarioAction() {
-        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        scenariosWidget.refresh();
-        expectLastCall().once();
-        IActionHandler handler = createMock(IActionHandler.class);
-        handler.handleAction(scenario, "reason");
-        expectLastCall().once();
-        replay(scenariosWidget, handler);
-        scenariosController.applyScenarioAction(handler, "reason");
-        verify(scenariosWidget, handler);
-    }
-
-    @Test
-    public void testHandleActionNull() {
-        mockStatic(Windows.class);
-        replay(Windows.class);
-        scenariosController.handleAction(null);
-        verify(Windows.class);
     }
 
     @Test

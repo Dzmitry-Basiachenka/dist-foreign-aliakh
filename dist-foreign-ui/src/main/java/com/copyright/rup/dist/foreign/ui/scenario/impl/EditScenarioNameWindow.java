@@ -88,7 +88,7 @@ class EditScenarioNameWindow extends Window {
 
     private void onSaveButtonClicked() {
         if (isValid()) {
-            controller.editScenarioName(scenarioNameField.getValue());
+            controller.editScenarioName(scenario.getId(), scenarioNameField.getValue());
             controller.getWidget().refresh();
             close();
         } else {

@@ -138,6 +138,13 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
         return CurrencyUtils.formatAsHtml(amount.setScale(2, BigDecimal.ROUND_HALF_UP));
     }
 
+    /**
+     * Handles click on 'Edit Name' button.
+     */
+    protected void onEditNameButtonClicked() {
+        Windows.showModalWindow(new EditScenarioNameWindow(controller, controller.getWidget().getSelectedScenario()));
+    }
+
     protected ICommonScenariosController getController() {
         return controller;
     }
