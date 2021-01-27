@@ -51,6 +51,7 @@ public class EditScenarioNameWindowTest {
         controller = createMock(ICommonScenariosController.class);
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
         scenario = new Scenario();
+        scenario.setId("d936a589-176c-4efd-a119-9702b057ec58");
         scenario.setName(SCENARIO_NAME);
     }
 
@@ -76,7 +77,7 @@ public class EditScenarioNameWindowTest {
         ICommonScenariosWidget widget = createMock(ICommonScenariosWidget.class);
         expect(controller.scenarioExists(newScenarioName)).andReturn(false).times(2);
         expect(controller.getWidget()).andReturn(widget).once();
-        controller.editScenarioName(newScenarioName);
+        controller.editScenarioName(scenario.getId(), newScenarioName);
         expectLastCall().once();
         widget.refresh();
         expectLastCall().once();

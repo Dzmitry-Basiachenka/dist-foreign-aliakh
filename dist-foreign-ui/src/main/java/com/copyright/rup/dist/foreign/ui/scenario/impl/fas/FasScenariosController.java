@@ -104,6 +104,16 @@ public class FasScenariosController extends CommonScenariosController implements
     }
 
     @Override
+    public void onDeleteButtonClicked() {
+        Scenario scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario"),
+            () -> {
+                getScenarioService().deleteScenario(scenario);
+                getWidget().refresh();
+            });
+    }
+
+    @Override
     public void onRefreshScenarioButtonClicked() {
         ScenarioUsageFilter filter =
             getScenarioUsageFilterService().getByScenarioId(getWidget().getSelectedScenario().getId());
@@ -197,16 +207,6 @@ public class FasScenariosController extends CommonScenariosController implements
         };
         scenarioWidget.addListener(ExcludeUsagesEvent.class, listener, IExcludeUsagesListener.EXCLUDE_DETAILS_HANDLER);
         return scenarioWidget;
-    }
-
-    @Override
-    public void onDeleteButtonClicked() {
-        Scenario scenario = getWidget().getSelectedScenario();
-        Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario"),
-            () -> {
-                getScenarioService().deleteScenario(scenario);
-                getWidget().refresh();
-            });
     }
 
     private List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders,
