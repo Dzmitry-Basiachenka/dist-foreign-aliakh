@@ -28,6 +28,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
@@ -132,6 +133,8 @@ public class NtsScenarioWidgetTest {
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
         assertEquals(1, horizontalLayout.getComponentCount());
         SearchWidget searchWidget = (SearchWidget) horizontalLayout.getComponent(0);
+        assertEquals("Enter Rightsholder Name/Account # or Payee Name/Account #",
+            Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
         assertEquals(60, searchWidget.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, searchWidget.getWidthUnits());
         assertEquals(Alignment.MIDDLE_CENTER, horizontalLayout.getComponentAlignment(searchWidget));
