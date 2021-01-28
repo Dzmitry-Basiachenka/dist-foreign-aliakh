@@ -416,6 +416,11 @@
         cast(u.rh_account_number as text) like '%' || #{searchValue} || '%')
     </sql>
 
+    <sql id="searchByPayeeWhereClause">
+        (p.name ilike '%' || #{searchValue} || '%' or
+        cast(u.payee_account_number as text) like '%' || #{searchValue} || '%')
+    </sql>
+
     <sql id="drillDownSearchWhereClause">
         ${detail_uid} like '%' || #{searchValue} || '%' or
         u.standard_number ilike '%' || #{searchValue} || '%' or
@@ -750,6 +755,7 @@
         left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
         <if test="null != searchValue">
             where <include refid="IUsageMapper.searchWhereClause"/>
+                or <include refid="IUsageMapper.searchByPayeeWhereClause"/>
         </if>
         <include refid="IUsageMapper.rightsholderTotalHoldersOrderBy"/>
         <include refid="IUsageMapper.ifPageable"/>
@@ -828,12 +834,15 @@
     <select id="findRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
         select count(1)
         from (
-            select distinct rh_account_number
+            select distinct rh_account_number,
+                payee_account_number
             from ${schema}.df_usage
             where df_scenario_uid = #{scenarioId}) u
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
         <if test="null != searchValue">
             where <include refid="searchWhereClause"/>
+                or <include refid="IUsageMapper.searchByPayeeWhereClause"/>
         </if>
     </select>
 
