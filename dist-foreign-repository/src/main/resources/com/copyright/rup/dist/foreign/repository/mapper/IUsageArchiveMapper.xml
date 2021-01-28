@@ -101,12 +101,15 @@
     <select id="findRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
         select count(1)
         from (
-            select distinct rh_account_number
+            select distinct rh_account_number,
+                payee_account_number
             from ${schema}.df_usage_archive
             where df_scenario_uid = #{scenarioId}) u
             left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+            left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
         <if test="null != searchValue">
             where <include refid="IUsageMapper.searchWhereClause"/>
+                or <include refid="IUsageMapper.searchByPayeeWhereClause"/>
         </if>
     </select>
 
@@ -135,6 +138,7 @@
         left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
         <if test="null != searchValue">
             where <include refid="IUsageMapper.searchWhereClause"/>
+                or <include refid="IUsageMapper.searchByPayeeWhereClause"/>
         </if>
         <include refid="IUsageMapper.rightsholderTotalHoldersOrderBy"/>
         <if test="null != pageable">

@@ -77,6 +77,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final String RH_ACCOUNT_NAME_1 = "IEEE - Inst of Electrical and Electronics Engrs";
     private static final String RH_ACCOUNT_NAME_2 = "John Wiley & Sons - Books";
     private static final String RH_ACCOUNT_NAME_3 = "Kluwer Academic Publishers - Dordrecht";
+    private static final String RH_ACCOUNT_NAME_4 = "JAC, Japan Academic Association for Copyright Clearance, Inc.";
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("54.4400000000");
     private static final Long WR_WRK_INST = 123456783L;
     private static final String WORK_TITLE = "Work Title";
@@ -151,12 +152,12 @@ public class UsageArchiveRepositoryIntegrationTest {
             usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, null,
                 null);
         assertEquals(3, rightsholderTotalsHolders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 35000.00, 11200.00, 23800.00),
-            rightsholderTotalsHolders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 67874.80, 21720.00, 46154.80),
-            rightsholderTotalsHolders.get(1));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 2125.24, 680.0768, 1445.1632),
-            rightsholderTotalsHolders.get(2));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, RH_ACCOUNT_NAME_1, 1000009997L,
+            35000.00, 11200.00, 23800.00), rightsholderTotalsHolders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, RH_ACCOUNT_NAME_2, 1000002859L,
+            67874.80, 21720.00, 46154.80), rightsholderTotalsHolders.get(1));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, RH_ACCOUNT_NAME_4, 2000017010L,
+            2125.24, 680.0768, 1445.1632), rightsholderTotalsHolders.get(2));
     }
 
     @Test
@@ -164,20 +165,25 @@ public class UsageArchiveRepositoryIntegrationTest {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
             usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "JoHn", null, null);
         assertEquals(1, rightsholderTotalsHolders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 67874.80, 21720.00, 46154.80),
-            rightsholderTotalsHolders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, RH_ACCOUNT_NAME_2, 1000002859L,
+            67874.80, 21720.00, 46154.80), rightsholderTotalsHolders.get(0));
         rightsholderTotalsHolders =
             usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "IEEE", null, null);
         assertEquals(1, rightsholderTotalsHolders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 35000.00, 11200.00, 23800.00),
-            rightsholderTotalsHolders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, RH_ACCOUNT_NAME_1, 1000009997L,
+            35000.00, 11200.00, 23800.00), rightsholderTotalsHolders.get(0));
+        rightsholderTotalsHolders =
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "Japan Academic", null, null);
+        assertEquals(1, rightsholderTotalsHolders.size());
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, RH_ACCOUNT_NAME_4, 2000017010L,
+            2125.24, 680.0768, 1445.1632), rightsholderTotalsHolders.get(0));
         rightsholderTotalsHolders =
             usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "ec", null, null);
         assertEquals(2, rightsholderTotalsHolders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 35000.00, 11200.00, 23800.00),
-            rightsholderTotalsHolders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 2125.24, 680.0768, 1445.1632),
-            rightsholderTotalsHolders.get(1));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, RH_ACCOUNT_NAME_1, 1000009997L,
+            35000.00, 11200.00, 23800.00), rightsholderTotalsHolders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, RH_ACCOUNT_NAME_4, 2000017010L,
+            2125.24, 680.0768, 1445.1632), rightsholderTotalsHolders.get(1));
         assertEquals(0,
             usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "%", null, null).size());
         assertEquals(0,
@@ -190,12 +196,12 @@ public class UsageArchiveRepositoryIntegrationTest {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
             usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, null,
                 accountNumberSort);
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 67874.80, 21720.00, 46154.80),
-            rightsholderTotalsHolders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 2125.24, 680.0768, 1445.1632),
-            rightsholderTotalsHolders.get(1));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 35000.00, 11200.00, 23800.00),
-            rightsholderTotalsHolders.get(2));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, RH_ACCOUNT_NAME_2, 1000002859L,
+            67874.80, 21720.00, 46154.80), rightsholderTotalsHolders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, RH_ACCOUNT_NAME_4, 2000017010L,
+            2125.24, 680.0768, 1445.1632), rightsholderTotalsHolders.get(1));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, RH_ACCOUNT_NAME_1, 1000009997L,
+            35000.00, 11200.00, 23800.00), rightsholderTotalsHolders.get(2));
     }
 
     @Test
@@ -204,12 +210,12 @@ public class UsageArchiveRepositoryIntegrationTest {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
             usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, null,
                 accountNumberSort);
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 2125.24, 680.0768, 1445.1632),
-            rightsholderTotalsHolders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 67874.80, 21720.00, 46154.80),
-            rightsholderTotalsHolders.get(1));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 35000.00, 11200.00, 23800.00),
-            rightsholderTotalsHolders.get(2));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, RH_ACCOUNT_NAME_4, 2000017010L,
+            2125.24, 680.0768, 1445.1632), rightsholderTotalsHolders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, RH_ACCOUNT_NAME_2, 1000002859L,
+            67874.80, 21720.00, 46154.80), rightsholderTotalsHolders.get(1));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, RH_ACCOUNT_NAME_1, 1000009997L,
+            35000.00, 11200.00, 23800.00), rightsholderTotalsHolders.get(2));
     }
 
     @Test
@@ -232,7 +238,7 @@ public class UsageArchiveRepositoryIntegrationTest {
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByRorName() {
-        assertFindByScenarioIdAndRhSearch("JAC, Japan Academic Association for Copyright Clearance, Inc.", 1);
+        assertFindByScenarioIdAndRhSearch(RH_ACCOUNT_NAME_4, 1);
         assertFindByScenarioIdAndRhSearch("Copyright Clearance, Inc.", 1);
         assertFindByScenarioIdAndRhSearch("CoPyRight", 1);
         assertFindByScenarioIdAndRhSearch("JAC, Japan Acade mic", 0);
@@ -649,13 +655,14 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     private RightsholderTotalsHolder buildRightsholderTotalsHolder(String rhName, Long rhAccountNumber,
+                                                                   String payeeName, Long payeeAccountNumber,
                                                                    Double grossTotal, Double serviceFeeTotal,
                                                                    Double netTotal) {
         RightsholderTotalsHolder rightsholderTotalsHolder = new RightsholderTotalsHolder();
         rightsholderTotalsHolder.getRightsholder().setAccountNumber(rhAccountNumber);
         rightsholderTotalsHolder.getRightsholder().setName(rhName);
-        rightsholderTotalsHolder.getPayee().setAccountNumber(rhAccountNumber);
-        rightsholderTotalsHolder.getPayee().setName(rhName);
+        rightsholderTotalsHolder.getPayee().setAccountNumber(payeeAccountNumber);
+        rightsholderTotalsHolder.getPayee().setName(payeeName);
         rightsholderTotalsHolder.setGrossTotal(BigDecimal.valueOf(grossTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
         rightsholderTotalsHolder.setServiceFeeTotal(
             BigDecimal.valueOf(serviceFeeTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
@@ -944,7 +951,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         paidUsage.setStandardNumber("09639292");
         paidUsage.setStandardNumberType(STANDARD_NUMBER_TYPE);
         paidUsage.getRightsholder().setAccountNumber(2000017010L);
-        paidUsage.getRightsholder().setName("JAC, Japan Academic Association for Copyright Clearance, Inc.");
+        paidUsage.getRightsholder().setName(RH_ACCOUNT_NAME_4);
         paidUsage.getPayee().setAccountNumber(2000017010L);
         paidUsage.setProductFamily("SAL");
         paidUsage.setSalUsage(buildSalUsage());
