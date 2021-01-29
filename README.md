@@ -1,3 +1,9 @@
+13.1.8
+-
+* B-58402 FDA:  Add ability to search by Payee Name or Payee Acct #: adjust service logic to search by Payee Name and Account #
+* B-58402 FDA: Add ability to search by Payee Name or Payee Acct #: adjust search prompt for Scenario view
+* B-64632 FDA: Edit Scenario name: make changes based on comments in CR-DIST-FOREIGN-223
+
 13.1.7
 -
 * B-64632 FDA: Edit Scenario name: implement service logic to update scenario name
