@@ -95,7 +95,8 @@ public class DomainVerifierTest {
             {SalUndistributedLiabilitiesReportDto.class},
             {SalFundPoolReportDto.class},
             {SalLicensee.class},
-            {SalHistoricalItemBankDetailsReportDto.class}
+            {SalHistoricalItemBankDetailsReportDto.class},
+            {UsageBatchStatus.class}
         };
         return Arrays.asList(testData);
     }
