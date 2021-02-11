@@ -1,3 +1,9 @@
+13.1.9
+-
+* B-64694 FDA: Update CCC logo: update RUP-VAADIN to 9.0.+ version
+* B-65718 FDA: Batch Processing View: implement liquibase script to add usages_count column for df_usage_batch table
+* B-65718 FDA: Batch Processing View: introduce UsageBatchStatus domain object
+
 13.1.8
 -
 * B-58402 FDA:  Add ability to search by Payee Name or Payee Acct #: adjust service logic to search by Payee Name and Account #
