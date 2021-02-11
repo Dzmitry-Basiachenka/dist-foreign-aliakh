@@ -48,6 +48,7 @@
         <typeAlias alias="SalUndistributedLiabilitiesReportDto" type="com.copyright.rup.dist.foreign.domain.report.SalUndistributedLiabilitiesReportDto"/>
         <typeAlias alias="SalFundPoolsReportDto" type="com.copyright.rup.dist.foreign.domain.report.SalFundPoolReportDto"/>
         <typeAlias alias="BatchStatistic" type="com.copyright.rup.dist.foreign.domain.report.BatchStatistic"/>
+        <typeAlias alias="UsageBatchStatus" type="com.copyright.rup.dist.foreign.domain.UsageBatchStatus"/>
         <typeAlias alias="NtsBatchFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.NtsBatchFieldsTypeHandler"/>
         <typeAlias alias="SalBatchFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.SalBatchFieldsTypeHandler"/>
         <typeAlias alias="SalFundPoolFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.SalFundPoolFieldsTypeHandler"/>
@@ -103,5 +104,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IReportMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IPublicationTypeMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/ILicenseeClassMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageBatchStatusMapper.xml"/>
     </mappers>
 </configuration>
