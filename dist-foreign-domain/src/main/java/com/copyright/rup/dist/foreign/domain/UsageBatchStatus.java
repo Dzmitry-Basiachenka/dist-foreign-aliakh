@@ -29,7 +29,7 @@ public class UsageBatchStatus {
     private int unclassifiedCount;
     private int eligibleCount;
     private int excludedCount;
-    private boolean completed;
+    private String status;
 
     public String getBatchName() {
         return batchName;
@@ -143,12 +143,12 @@ public class UsageBatchStatus {
         this.excludedCount = excludedCount;
     }
 
-    public boolean isCompleted() {
-        return completed;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
@@ -175,7 +175,7 @@ public class UsageBatchStatus {
             .append(unclassifiedCount, that.unclassifiedCount)
             .append(eligibleCount, that.eligibleCount)
             .append(excludedCount, that.excludedCount)
-            .append(completed, that.completed)
+            .append(status, that.status)
             .isEquals();
     }
 
@@ -196,7 +196,7 @@ public class UsageBatchStatus {
             .append(unclassifiedCount)
             .append(eligibleCount)
             .append(excludedCount)
-            .append(completed)
+            .append(status)
             .toHashCode();
     }
 
@@ -217,7 +217,7 @@ public class UsageBatchStatus {
             .append("unclassifiedCount", unclassifiedCount)
             .append("eligibleCount", eligibleCount)
             .append("excludedCount", excludedCount)
-            .append("completed", completed)
+            .append("status", status)
             .toString();
     }
 }

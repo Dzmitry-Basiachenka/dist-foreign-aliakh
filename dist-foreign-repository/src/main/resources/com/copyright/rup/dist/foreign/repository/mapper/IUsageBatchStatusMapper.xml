@@ -1,0 +1,61 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUsageBatchStatusMapper">
+
+    <resultMap id="usageBatchStatusMap" type="UsageBatchStatus">
+        <result property="batchName" column="batch_name"/>
+        <result property="totalCount" column="total_count"/>
+        <result property="newCount" column="new_count"/>
+        <result property="workNotFoundCount" column="work_not_found_count"/>
+        <result property="workFoundCount" column="work_found_count"/>
+        <result property="ntsWithdrawnCount" column="nts_withdrawn_count"/>
+        <result property="workResearchCount" column="work_research_count"/>
+        <result property="rhNotFoundCount" column="rh_not_found_count"/>
+        <result property="rhFoundCount" column="rh_found_count"/>
+        <result property="workNotGrantedCount" column="work_not_granted_count"/>
+        <result property="sentForRaCount" column="sent_for_ra_count"/>
+        <result property="unclassifiedCount" column="unclassified_count"/>
+        <result property="eligibleCount" column="eligible_count"/>
+        <result property="excludedCount" column="excluded_count"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <select id="getUsageBatchStatusesFas" resultMap="usageBatchStatusMap" parameterType="string">
+        select
+            name batch_name,
+            initial_usages_count total_count,
+            max(new_count) new_count,
+            max(work_found_count) work_found_count,
+            max(work_not_found_count) work_not_found_count,
+            max(nts_withdrawn_count) nts_withdrawn_count,
+            max(work_research_count) work_research_count,
+            max(rh_found_count) rh_found_count,
+            max(rh_not_found_count) rh_not_found_count,
+            max(sent_for_ra_count) sent_for_ra_count,
+            max(eligible_count) eligible_count,
+            case when max(new_count) + max(work_found_count) + max(rh_found_count) = 0 then 'Completed' else 'In Progress' end status
+        from (
+            select
+                name,
+                b.created_datetime,
+                initial_usages_count,
+                case when status_ind = 'NEW' then count(1) else 0 end new_count,
+                case when status_ind = 'WORK_NOT_FOUND' then count(1) else 0 end work_not_found_count,
+                case when status_ind = 'WORK_FOUND' then count(1) else 0 end work_found_count,
+                case when status_ind = 'NTS_WITHDRAWN' then count(1) else 0 end nts_withdrawn_count,
+                case when status_ind = 'WORK_RESEARCH' then count(1) else 0 end work_research_count,
+                case when status_ind = 'RH_NOT_FOUND' then count(1) else 0 end rh_not_found_count,
+                case when status_ind = 'RH_FOUND' then count(1) else 0 end rh_found_count,
+                case when status_ind = 'SENT_FOR_RA' then count(1) else 0 end sent_for_ra_count,
+                case when status_ind = 'ELIGIBLE' then count(1) else 0 end eligible_count
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_batch b on b.df_usage_batch_uid = u.df_usage_batch_uid
+            where u.product_family = #{productFamily}
+            group by status_ind, name, b.created_datetime, initial_usages_count
+        ) nested
+        group by name, created_datetime, initial_usages_count
+        order by created_datetime, name
+    </select>
+</mapper>
