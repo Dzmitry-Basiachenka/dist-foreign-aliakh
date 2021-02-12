@@ -1,0 +1,13 @@
+package com.copyright.rup.dist.foreign.ui.status.api;
+
+/**
+ * Interface for SAL usage batch status widget.
+ * <p>
+ * Copyright (C) 2021 copyright.com
+ * <p>
+ * Date: 02/12/2021
+ *
+ * @author Ihar Suvorau
+ */
+public interface ISalBatchStatusWidget extends ICommonBatchStatusWidget {
+}

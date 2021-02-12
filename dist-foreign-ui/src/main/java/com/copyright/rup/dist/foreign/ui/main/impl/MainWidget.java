@@ -7,6 +7,8 @@ import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosWidget;
+import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
+import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
@@ -32,10 +34,12 @@ public class MainWidget extends TabSheet implements IMainWidget {
     private SwitchableWidget<ICommonUsageWidget, ICommonUsageController> usagesWidget;
     private SwitchableWidget<ICommonScenariosWidget, ICommonScenariosController> scenariosWidget;
     private SwitchableWidget<ICommonAuditWidget, ICommonAuditController> auditWidget;
+    private SwitchableWidget<ICommonBatchStatusWidget, ICommonBatchStatusController> batchStatusWidget;
 
     private Tab usagesTab;
     private Tab scenarioTab;
     private Tab auditTab;
+    private Tab batchStatusTab;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -46,9 +50,11 @@ public class MainWidget extends TabSheet implements IMainWidget {
                 controller, IMainWidgetController.ON_SCENARIO_CREATED));
         scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {});
         auditWidget = new SwitchableWidget<>(controller.getAuditControllerProvider(), widget -> {});
+        batchStatusWidget = new SwitchableWidget<>(controller.getBatchStatusControllerProvider(), widget -> {});
         usagesTab = addTab(usagesWidget, ForeignUi.getMessage("tab.usages"));
         scenarioTab = addTab(scenariosWidget, ForeignUi.getMessage("tab.scenario"));
         auditTab = addTab(auditWidget, ForeignUi.getMessage("tab.audit"));
+        batchStatusTab = addTab(batchStatusWidget, ForeignUi.getMessage("tab.batch_status"));
         addListener(TabSheet.SelectedTabChangeEvent.class, controller, ITabChangeController.TAB_CHANGE_HANDLER);
         updateProductFamily();
         return this;
@@ -59,6 +65,7 @@ public class MainWidget extends TabSheet implements IMainWidget {
         usagesTab.setVisible(usagesWidget.updateProductFamily());
         scenarioTab.setVisible(scenariosWidget.updateProductFamily());
         auditTab.setVisible(auditWidget.updateProductFamily());
+        batchStatusTab.setVisible(batchStatusWidget.updateProductFamily());
     }
 
     @Override

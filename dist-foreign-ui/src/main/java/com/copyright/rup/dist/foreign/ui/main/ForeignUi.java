@@ -48,7 +48,7 @@ public class ForeignUi extends CommonUi {
     private static final ResourceBundle MESSAGES =
         ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages");
 
-    private static final String REPORT_MENU_CSS_POSITION = "left: 265px;";
+    private static final String REPORT_MENU_CSS_POSITION = "left: 385px;";
 
     @Autowired
     private IMainWidgetController controller;
