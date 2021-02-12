@@ -22,7 +22,7 @@
         <result property="status" column="status"/>
     </resultMap>
 
-    <select id="getUsageBatchStatusesFas" resultMap="usageBatchStatusMap" parameterType="string">
+    <select id="findUsageBatchStatusesFas" resultMap="usageBatchStatusMap" parameterType="string">
         select
             name batch_name,
             initial_usages_count total_count,

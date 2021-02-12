@@ -23,27 +23,27 @@ import java.util.List;
 public class UsageBatchStatusRepository extends BaseRepository implements IUsageBatchStatusRepository {
 
     @Override
-    public List<UsageBatchStatus> getUsageBatchStatusesFas() {
-        return selectList("IUsageBatchStatusMapper.getUsageBatchStatusesFas", FdaConstants.FAS_PRODUCT_FAMILY);
+    public List<UsageBatchStatus> findUsageBatchStatusesFas() {
+        return selectList("IUsageBatchStatusMapper.findUsageBatchStatusesFas", FdaConstants.FAS_PRODUCT_FAMILY);
     }
 
     @Override
-    public List<UsageBatchStatus> getUsageBatchStatusesFas2() {
+    public List<UsageBatchStatus> findUsageBatchStatusesFas2() {
         return Collections.emptyList();
     }
 
     @Override
-    public List<UsageBatchStatus> getUsageBatchStatusesNts() {
+    public List<UsageBatchStatus> findUsageBatchStatusesNts() {
         return Collections.emptyList();
     }
 
     @Override
-    public List<UsageBatchStatus> getUsageBatchStatusesAacl() {
+    public List<UsageBatchStatus> findUsageBatchStatusesAacl() {
         return Collections.emptyList();
     }
 
     @Override
-    public List<UsageBatchStatus> getUsageBatchStatusesSal() {
+    public List<UsageBatchStatus> findUsageBatchStatusesSal() {
         return Collections.emptyList();
     }
 }

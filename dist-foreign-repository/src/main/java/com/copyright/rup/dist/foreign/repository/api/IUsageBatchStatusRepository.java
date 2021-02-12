@@ -16,37 +16,37 @@ import java.util.List;
 public interface IUsageBatchStatusRepository {
 
     /**
-     * Gets list of usage batch statuses for FAS product family.
+     * Finds list of usage batch statuses for FAS product family.
      *
      * @return list of {@link UsageBatchStatus}
      */
-    List<UsageBatchStatus> getUsageBatchStatusesFas();
+    List<UsageBatchStatus> findUsageBatchStatusesFas();
 
     /**
-     * Gets list of usage batch statuses for FAS2 product family.
+     * Finds list of usage batch statuses for FAS2 product family.
      *
      * @return list of {@link UsageBatchStatus}
      */
-    List<UsageBatchStatus> getUsageBatchStatusesFas2();
+    List<UsageBatchStatus> findUsageBatchStatusesFas2();
 
     /**
-     * Gets list of usage batch statuses for NTS product family.
+     * Finds list of usage batch statuses for NTS product family.
      *
      * @return list of {@link UsageBatchStatus}
      */
-    List<UsageBatchStatus> getUsageBatchStatusesNts();
+    List<UsageBatchStatus> findUsageBatchStatusesNts();
 
     /**
-     * Gets list of usage batch statuses for AACL product family.
+     * Finds list of usage batch statuses for AACL product family.
      *
      * @return list of {@link UsageBatchStatus}
      */
-    List<UsageBatchStatus> getUsageBatchStatusesAacl();
+    List<UsageBatchStatus> findUsageBatchStatusesAacl();
 
     /**
-     * Gets list of usage batch statuses for SAL product family.
+     * Finds list of usage batch statuses for SAL product family.
      *
      * @return list of {@link UsageBatchStatus}
      */
-    List<UsageBatchStatus> getUsageBatchStatusesSal();
+    List<UsageBatchStatus> findUsageBatchStatusesSal();
 }
