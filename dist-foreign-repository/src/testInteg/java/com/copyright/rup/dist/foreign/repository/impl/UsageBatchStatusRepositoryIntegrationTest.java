@@ -35,8 +35,8 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     private IUsageBatchStatusRepository usageBatchStatusRepository;
 
     @Test
-    public void testGetUsageBatchStatusesFas() {
-        List<UsageBatchStatus> usageBatchStatuses = usageBatchStatusRepository.getUsageBatchStatusesFas();
+    public void testFindUsageBatchStatusesFas() {
+        List<UsageBatchStatus> usageBatchStatuses = usageBatchStatusRepository.findUsageBatchStatusesFas();
         assertEquals(2, usageBatchStatuses.size());
         assertUsageBatchStatus(
             buildUsageBatchStatusFas("FAS completed batch", 8, "Completed", 0, 0, 1, 0, 1, 0, 2, 1, 3),

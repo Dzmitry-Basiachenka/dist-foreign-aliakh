@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2021-02-10-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for testGetUsageBatchStatusesFas')
+        comment('Inserting test data for testFindUsageBatchStatusesFas')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'cf56b889-82fe-4990-b111-9c56ce986281')
