@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.main.api;
 
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
+import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -42,6 +43,11 @@ public interface IMainWidgetController extends IController<IMainWidget>, ITabCha
      * @return instance of {@link IControllerProvider} for {@link ICommonAuditController}.
      */
     IControllerProvider<ICommonAuditController> getAuditControllerProvider();
+
+    /**
+     * @return instance of {@link IControllerProvider} for {@link ICommonAuditController}.
+     */
+    IControllerProvider<ICommonBatchStatusController> getBatchStatusControllerProvider();
 
     /**
      * Handles {@link com.copyright.rup.dist.foreign.domain.Scenario} creation.

@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
+import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.widget.api.TabController;
@@ -41,6 +42,9 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Autowired
     @Qualifier("dist.foreign.auditControllerProvider")
     private IControllerProvider<ICommonAuditController> auditControllerProvider;
+    @Autowired
+    @Qualifier("dist.foreign.batchStatusControllerProvider")
+    private IControllerProvider<ICommonBatchStatusController> batchStatusControllerProvider;
 
     @Override
     public IControllerProvider<ICommonUsageController> getUsagesControllerProvider() {
@@ -55,6 +59,11 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Override
     public IControllerProvider<ICommonAuditController> getAuditControllerProvider() {
         return auditControllerProvider;
+    }
+
+    @Override
+    public IControllerProvider<ICommonBatchStatusController> getBatchStatusControllerProvider() {
+        return batchStatusControllerProvider;
     }
 
     @Override
