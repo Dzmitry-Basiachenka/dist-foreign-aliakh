@@ -1,3 +1,7 @@
+13.1.10
+-
+* B-65718 FDA: Batch Processing View: implement usage batch status repository layer for FAS product family
+
 13.1.9
 -
 * B-64694 FDA: Update CCC logo: update RUP-VAADIN to 9.0.+ version
