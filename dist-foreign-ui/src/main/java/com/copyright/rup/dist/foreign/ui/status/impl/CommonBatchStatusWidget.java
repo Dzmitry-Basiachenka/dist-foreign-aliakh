@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.status.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusWidget;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
@@ -22,11 +24,18 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
 
     private ICommonBatchStatusController controller;
     private ListDataProvider<UsageBatchStatus> dataProvider;
+    private Grid<UsageBatchStatus> batchStatusGrid;
 
     @SuppressWarnings("unchecked")
     @Override
     public ICommonBatchStatusWidget init() {
-        initContent();
+        setSizeFull();
+        dataProvider = new ListDataProvider<>(controller.getBatchStatuses());
+        batchStatusGrid = new Grid<>(dataProvider);
+        addColumns();
+        batchStatusGrid.setSizeFull();
+        addComponent(batchStatusGrid);
+        VaadinUtils.addComponentStyle(batchStatusGrid, "batch-status-grid");
         VaadinUtils.addComponentStyle(this, "batch-status-widget");
         return this;
     }
@@ -51,11 +60,39 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
      */
     protected abstract void addColumns();
 
-    private void initContent() {
-        dataProvider = new ListDataProvider<>(controller.getBatchStatuses());
-        Grid<UsageBatchStatus> grid = new Grid<>(dataProvider);
-        grid.setSizeFull();
-        addColumns();
-        addComponent(grid);
+    /**
+     * Adds column to the grid.
+     *
+     * @param provider        value provider
+     * @param captionProperty property of the column's caption
+     * @param sort            sort property
+     * @param isHidable       sets whether this column can be hidden by the user
+     * @param width           width of the column
+     */
+    protected void addColumn(ValueProvider<UsageBatchStatus, ?> provider, String captionProperty, String sort,
+                             boolean isHidable, double width) {
+        batchStatusGrid.addColumn(provider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setSortable(true)
+            .setSortProperty(sort)
+            .setHidable(isHidable)
+            .setWidth(width);
+    }
+
+    /**
+     * Adds column to the grid.
+     *
+     * @param provider        value provider
+     * @param captionProperty property of the column's caption
+     * @param sort            sort property
+     * @param isHidable       sets whether this column can be hidden by the user
+     */
+    protected void addColumn(ValueProvider<UsageBatchStatus, ?> provider, String captionProperty, String sort,
+                             boolean isHidable) {
+        batchStatusGrid.addColumn(provider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setSortable(true)
+            .setSortProperty(sort)
+            .setHidable(isHidable);
     }
 }
