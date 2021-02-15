@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageBatchStatusRepository
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,12 +29,13 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
 
     @Autowired
     private IUsageBatchStatusRepository usageBatchStatusRepository;
+    @Value("$RUP{dist.foreign.batch_status.number_of_days}")
+    private long numberOfDays;
 
     @Override
     public List<UsageBatchStatus> getUsageBatchStatusesFas() {
-        //TODO apply configurable day value
         Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom(
-            FdaConstants.FAS_PRODUCT_FAMILY, LocalDate.now().minusDays(7));
+            FdaConstants.FAS_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
         return !batchIds.isEmpty()
             ? usageBatchStatusRepository.findUsageBatchStatusesFas(batchIds)
             : Collections.emptyList();

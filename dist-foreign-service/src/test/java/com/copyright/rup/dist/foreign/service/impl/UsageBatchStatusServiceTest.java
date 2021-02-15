@@ -31,6 +31,7 @@ import java.util.Set;
  */
 public class UsageBatchStatusServiceTest {
 
+    private static final long NUMBER_OF_DAYS = 7;
     private final List<UsageBatchStatus> batchStatuses = new ArrayList<>();
     private IUsageBatchStatusService usageBatchStatusService;
     private IUsageBatchStatusRepository usageBatchStatusRepository;
@@ -41,13 +42,14 @@ public class UsageBatchStatusServiceTest {
         usageBatchStatusRepository = createMock(IUsageBatchStatusRepository.class);
         batchStatuses.add(new UsageBatchStatus());
         Whitebox.setInternalState(usageBatchStatusService, usageBatchStatusRepository);
+        Whitebox.setInternalState(usageBatchStatusService, "numberOfDays", NUMBER_OF_DAYS);
     }
 
     @Test
     public void testGetUsageBatchStatusesFas() {
         Set<String> batchIds = Collections.singleton("364401b8-18cd-4b1d-baa1-998aaf39a386");
         expect(usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("FAS",
-            LocalDate.now().minusDays(7))).andReturn(batchIds).once();
+            LocalDate.now().minusDays(NUMBER_OF_DAYS))).andReturn(batchIds).once();
         expect(usageBatchStatusRepository.findUsageBatchStatusesFas(batchIds)).andReturn(batchStatuses).once();
         replay(usageBatchStatusRepository);
         assertSame(batchStatuses, usageBatchStatusService.getUsageBatchStatusesFas());
