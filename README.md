@@ -1,3 +1,13 @@
+13.1.11
+-
+*  B-65718 FDA: Batch Processing View: implement Batch Status widget for FAS
+* B-65718 FDA: Batch Processing View: apply logic to retrieve batches not associated with scenarios for provided start date
+* B-65718 FDA: Batch Processing View: fix Checkstyle issue
+* B-65718 FDA: Batch Processing View: implement Batch Status tab on UI
+* B-65718 FDA: Batch Processing View: implement Batch Status widget for AACL and SAL
+* B-65718 FDA: Batch Processing View: implement Batch Status widget for NTS
+* B-65718 FDA: Batch Processing View: implement Usage batch status service
+
 13.1.10
 -
 * B-65718 FDA: Batch Processing View: implement usage batch status repository layer for FAS product family
