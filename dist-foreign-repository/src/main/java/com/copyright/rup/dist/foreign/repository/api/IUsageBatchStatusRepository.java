@@ -18,7 +18,7 @@ import java.util.Set;
 public interface IUsageBatchStatusRepository {
 
     /**
-     * Finds list of FAS usage batch statuses for specified usage batch ids.
+     * Finds list of FAS/FAS2 usage batch statuses for specified usage batch ids.
      *
      * @param batchIds set of usage batch ids
      * @return list of {@link UsageBatchStatus}
@@ -26,18 +26,12 @@ public interface IUsageBatchStatusRepository {
     List<UsageBatchStatus> findUsageBatchStatusesFas(Set<String> batchIds);
 
     /**
-     * Finds list of usage batch statuses for FAS2 product family.
+     * Finds list of NTS usage batch statuses for specified usage batch ids.
      *
+     * @param batchIds set of usage batch ids
      * @return list of {@link UsageBatchStatus}
      */
-    List<UsageBatchStatus> findUsageBatchStatusesFas2();
-
-    /**
-     * Finds list of usage batch statuses for NTS product family.
-     *
-     * @return list of {@link UsageBatchStatus}
-     */
-    List<UsageBatchStatus> findUsageBatchStatusesNts();
+    List<UsageBatchStatus> findUsageBatchStatusesNts(Set<String> batchIds);
 
     /**
      * Finds list of usage batch statuses for AACL product family.

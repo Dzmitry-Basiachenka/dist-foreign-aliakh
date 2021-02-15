@@ -16,18 +16,12 @@ import java.util.List;
 public interface IUsageBatchStatusService {
 
     /**
-     * Gets list of usage batch statuses for FAS product family.
+     * Gets list of usage batch statuses for FAS/FAS2 product families.
      *
+     * @param productFamily product family
      * @return list of {@link UsageBatchStatus}
      */
-    List<UsageBatchStatus> getUsageBatchStatusesFas();
-
-    /**
-     * Gets list of usage batch statuses for FAS2 product family.
-     *
-     * @return list of {@link UsageBatchStatus}
-     */
-    List<UsageBatchStatus> getUsageBatchStatusesFas2();
+    List<UsageBatchStatus> getUsageBatchStatusesFas(String productFamily);
 
     /**
      * Gets list of usage batch statuses for NTS product family.

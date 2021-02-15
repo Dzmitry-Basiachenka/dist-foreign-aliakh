@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.status.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusWidget;
 import com.copyright.rup.dist.foreign.ui.status.api.IFasBatchStatusController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -23,9 +25,12 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class FasBatchStatusController extends CommonBatchStatusController implements IFasBatchStatusController {
 
+    @Autowired
+    private IProductFamilyProvider productFamilyProvider;
+
     @Override
     public List<UsageBatchStatus> getBatchStatuses() {
-        return getUsageBatchStatusService().getUsageBatchStatusesFas();
+        return getUsageBatchStatusService().getUsageBatchStatusesFas(productFamilyProvider.getSelectedProductFamily());
     }
 
     @Override

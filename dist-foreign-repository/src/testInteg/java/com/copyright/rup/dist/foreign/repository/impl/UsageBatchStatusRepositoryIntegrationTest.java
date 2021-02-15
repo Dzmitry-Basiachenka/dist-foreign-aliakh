@@ -52,6 +52,18 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindUsageBatchStatusesNts() {
+        List<UsageBatchStatus> usageBatchStatuses =
+            usageBatchStatusRepository.findUsageBatchStatusesNts(
+                Sets.newHashSet("359de82f-374b-4d53-88ab-0be3982b22aa", "a34417b5-12c1-48e2-9aed-d3861b49545b"));
+        assertEquals(2, usageBatchStatuses.size());
+        assertUsageBatchStatus(buildUsageBatchStatusNts("NTS completed batch", 5, "Completed", 2, 0, 0, 1, 2),
+            usageBatchStatuses.get(0));
+        assertUsageBatchStatus(buildUsageBatchStatusNts("NTS in progress batch", 7, "In Progress", 3, 1, 2, 0, 1),
+            usageBatchStatuses.get(1));
+    }
+
+    @Test
     public void testFindUsageBatchIdsByProductFamilyAndStartDateFrom() {
         assertEquals(Sets.newHashSet("cf56b889-82fe-4990-b111-9c56ce986281", "515a78e7-2a92-4b15-859a-fd9f70e80982"),
             usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("FAS",
@@ -61,6 +73,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     private void assertUsageBatchStatus(UsageBatchStatus expected, UsageBatchStatus actual) {
         assertEquals(expected.getBatchName(), actual.getBatchName());
         assertEquals(expected.getTotalCount(), actual.getTotalCount());
+        assertEquals(expected.getExcludedCount(), actual.getExcludedCount());
         assertEquals(expected.getStatus(), actual.getStatus());
         assertEquals(expected.getNewCount(), actual.getNewCount());
         assertEquals(expected.getWorkFoundCount(), actual.getWorkFoundCount());
@@ -68,6 +81,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
         assertEquals(expected.getNtsWithdrawnCount(), actual.getNtsWithdrawnCount());
         assertEquals(expected.getWorkResearchCount(), actual.getWorkResearchCount());
         assertEquals(expected.getRhFoundCount(), actual.getRhFoundCount());
+        assertEquals(expected.getUnclassifiedCount(), actual.getUnclassifiedCount());
         assertEquals(expected.getRhNotFoundCount(), actual.getRhNotFoundCount());
         assertEquals(expected.getSentForRaCount(), actual.getSentForRaCount());
         assertEquals(expected.getEligibleCount(), actual.getEligibleCount());
@@ -89,6 +103,21 @@ public class UsageBatchStatusRepositoryIntegrationTest {
         batchStatus.setRhFoundCount(rhFoundCount);
         batchStatus.setRhNotFoundCount(rhNotFoundCount);
         batchStatus.setSentForRaCount(sentForRaCount);
+        batchStatus.setEligibleCount(eligibleCount);
+        return batchStatus;
+    }
+
+    private UsageBatchStatus buildUsageBatchStatusNts(String name, int totalCount, String status, int excludedCount,
+                                                      int workFoundCount, int rhFoundCount, int unclassifiedCount,
+                                                      int eligibleCount) {
+        UsageBatchStatus batchStatus = new UsageBatchStatus();
+        batchStatus.setBatchName(name);
+        batchStatus.setTotalCount(totalCount);
+        batchStatus.setStatus(status);
+        batchStatus.setExcludedCount(excludedCount);
+        batchStatus.setWorkFoundCount(workFoundCount);
+        batchStatus.setRhFoundCount(rhFoundCount);
+        batchStatus.setUnclassifiedCount(unclassifiedCount);
         batchStatus.setEligibleCount(eligibleCount);
         return batchStatus;
     }

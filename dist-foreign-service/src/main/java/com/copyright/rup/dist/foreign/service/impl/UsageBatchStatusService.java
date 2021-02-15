@@ -33,22 +33,21 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
     private long numberOfDays;
 
     @Override
-    public List<UsageBatchStatus> getUsageBatchStatusesFas() {
+    public List<UsageBatchStatus> getUsageBatchStatusesFas(String productFamily) {
         Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom(
-            FdaConstants.FAS_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
+            productFamily, LocalDate.now().minusDays(numberOfDays));
         return !batchIds.isEmpty()
             ? usageBatchStatusRepository.findUsageBatchStatusesFas(batchIds)
             : Collections.emptyList();
     }
 
     @Override
-    public List<UsageBatchStatus> getUsageBatchStatusesFas2() {
-        return usageBatchStatusRepository.findUsageBatchStatusesFas2();
-    }
-
-    @Override
     public List<UsageBatchStatus> getUsageBatchStatusesNts() {
-        return usageBatchStatusRepository.findUsageBatchStatusesNts();
+        Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom(
+            FdaConstants.NTS_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
+        return !batchIds.isEmpty()
+            ? usageBatchStatusRepository.findUsageBatchStatusesNts(batchIds)
+            : Collections.emptyList();
     }
 
     @Override

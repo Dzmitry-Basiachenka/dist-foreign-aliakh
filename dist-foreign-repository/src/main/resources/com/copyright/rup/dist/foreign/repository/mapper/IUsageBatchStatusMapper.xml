@@ -62,6 +62,38 @@
         order by created_datetime, name
     </select>
 
+    <select id="findUsageBatchStatusesNts" resultMap="usageBatchStatusMap" parameterType="string">
+        select
+            name batch_name,
+            initial_usages_count total_count,
+            max(work_found_count) work_found_count,
+            max(rh_found_count) rh_found_count,
+            max(unclassified_count) unclassified_count,
+            max(eligible_count) eligible_count,
+            initial_usages_count - sum(status_count) excluded_count,
+            case when max(work_found_count) + max(rh_found_count) = 0 then 'Completed' else 'In Progress' end status
+        from (
+            select
+                name,
+                b.created_datetime,
+                initial_usages_count,
+                count(1) status_count,
+                case when status_ind = 'WORK_FOUND' then count(1) else 0 end work_found_count,
+                case when status_ind = 'RH_FOUND' then count(1) else 0 end rh_found_count,
+                case when status_ind = 'UNCLASSIFIED' then count(1) else 0 end unclassified_count,
+                case when status_ind = 'ELIGIBLE' then count(1) else 0 end eligible_count
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_batch b on b.df_usage_batch_uid = u.df_usage_batch_uid
+            where b.df_usage_batch_uid in
+                <foreach collection="collection" item="batchId" separator="," open="(" close=")">
+                    #{batchId}
+                </foreach>
+            group by status_ind, name, b.created_datetime, initial_usages_count
+        ) nested
+        group by name, created_datetime, initial_usages_count
+        order by created_datetime, name
+    </select>
+
     <select id="findUsageBatchIdsByProductFamilyAndStartDateFrom" resultType="string" parameterType="map">
         select df_usage_batch_uid from (
             select b.df_usage_batch_uid, df_scenario_uid
