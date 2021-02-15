@@ -19,7 +19,8 @@ public class SalBatchStatusWidget extends CommonBatchStatusWidget implements ISa
         addColumn(UsageBatchStatus::getBatchName, "table.column.batch_name", "batchName", true);
         addColumn(UsageBatchStatus::getTotalCount, "table.column.total_count", "totalCount", true, 130);
         addColumn(UsageBatchStatus::getNewCount, "table.column.new", "newCount", true, 130);
-        addColumn(UsageBatchStatus::getWorkNotFoundCount, "table.column.work_not_found", "workNotFoundCount", true, 130);
+        addColumn(UsageBatchStatus::getWorkNotFoundCount, "table.column.work_not_found", "workNotFoundCount",
+            true, 130);
         addColumn(UsageBatchStatus::getWorkFoundCount, "table.column.work_found", "workFoundCount", true, 130);
         addColumn(UsageBatchStatus::getWorkNotGrantedCount, "table.column.work_not_granted", "workNotGrantedCount",
             true, 130);
