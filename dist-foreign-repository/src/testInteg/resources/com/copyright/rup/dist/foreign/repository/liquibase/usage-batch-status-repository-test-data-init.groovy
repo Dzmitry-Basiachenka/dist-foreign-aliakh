@@ -413,4 +413,121 @@ databaseChangeLog {
             column(name: 'reported_value', value: '100.00')
         }
     }
+
+    changeSet(id: '2021-02-15-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment('Inserting test data for testFindUsageBatchIdsByProductFamilyAndStartDateFrom')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '38b6ae7e-20e4-46cf-a684-8d3c7c67a940')
+            column(name: 'name', value: 'FAS associated with scenario batch')
+            column(name: 'rro_account_number', value: '1000000001')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'payment_date', value: '2022-02-12')
+            column(name: 'fiscal_year', value: '2022')
+            column(name: 'gross_amount', value: '200.00')
+            column(name: 'initial_usages_count', value: '2')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: 'e350b2c2-1102-435b-a8b8-e80516b7d792')
+            column(name: 'name', value: 'FAS Scenario 2')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'description', value: 'Scenario description')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'c0ae8a59-17cb-4fea-821d-9429e06b751e')
+            column(name: 'df_usage_batch_uid', value: '38b6ae7e-20e4-46cf-a684-8d3c7c67a940')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'c0ae8a59-17cb-4fea-821d-9429e06b751e')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3c0c5ae2-0d6a-4f7d-b530-5f89f58ac796')
+            column(name: 'df_usage_batch_uid', value: '38b6ae7e-20e4-46cf-a684-8d3c7c67a940')
+            column(name: 'df_scenario_uid', value: 'e350b2c2-1102-435b-a8b8-e80516b7d792')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3c0c5ae2-0d6a-4f7d-b530-5f89f58ac796')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '0e5af78f-5b2e-469c-9bdc-2e5e396f1436')
+            column(name: 'name', value: 'FAS associated with scenario batch 2')
+            column(name: 'rro_account_number', value: '1000000001')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'payment_date', value: '2022-02-12')
+            column(name: 'fiscal_year', value: '2022')
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'initial_usages_count', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '032640d3-44f4-4dd0-8bcd-168f55c6a59b')
+            column(name: 'name', value: 'FAS 2 Scenario')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'description', value: 'Scenario description')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '4ebb6197-bb64-4405-bace-00116332d583')
+            column(name: 'df_usage_batch_uid', value: '0e5af78f-5b2e-469c-9bdc-2e5e396f1436')
+            column(name: 'df_scenario_uid', value: '032640d3-44f4-4dd0-8bcd-168f55c6a59b')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '4ebb6197-bb64-4405-bace-00116332d583')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '100.00')
+        }
+    }
 }

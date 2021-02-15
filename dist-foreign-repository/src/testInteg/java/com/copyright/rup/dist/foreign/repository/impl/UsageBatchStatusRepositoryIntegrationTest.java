@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchStatusRepository;
 
+import com.google.common.collect.Sets;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -36,7 +39,9 @@ public class UsageBatchStatusRepositoryIntegrationTest {
 
     @Test
     public void testFindUsageBatchStatusesFas() {
-        List<UsageBatchStatus> usageBatchStatuses = usageBatchStatusRepository.findUsageBatchStatusesFas();
+        List<UsageBatchStatus> usageBatchStatuses =
+            usageBatchStatusRepository.findUsageBatchStatusesFas(
+                Sets.newHashSet("cf56b889-82fe-4990-b111-9c56ce986281", "515a78e7-2a92-4b15-859a-fd9f70e80982"));
         assertEquals(2, usageBatchStatuses.size());
         assertUsageBatchStatus(
             buildUsageBatchStatusFas("FAS completed batch", 8, "Completed", 0, 0, 1, 0, 1, 0, 2, 1, 3),
@@ -44,6 +49,13 @@ public class UsageBatchStatusRepositoryIntegrationTest {
         assertUsageBatchStatus(
             buildUsageBatchStatusFas("FAS in progress batch", 9, "In Progress", 1, 1, 2, 1, 0, 1, 1, 0, 2),
             usageBatchStatuses.get(1));
+    }
+
+    @Test
+    public void testFindUsageBatchIdsByProductFamilyAndStartDateFrom() {
+        assertEquals(Sets.newHashSet("cf56b889-82fe-4990-b111-9c56ce986281", "515a78e7-2a92-4b15-859a-fd9f70e80982"),
+            usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("FAS",
+                LocalDate.of(2021, 1, 1)));
     }
 
     private void assertUsageBatchStatus(UsageBatchStatus expected, UsageBatchStatus actual) {

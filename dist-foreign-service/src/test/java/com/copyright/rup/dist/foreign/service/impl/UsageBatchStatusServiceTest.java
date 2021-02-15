@@ -14,8 +14,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UsageBatchStatusService}.
@@ -42,7 +45,10 @@ public class UsageBatchStatusServiceTest {
 
     @Test
     public void testGetUsageBatchStatusesFas() {
-        expect(usageBatchStatusRepository.findUsageBatchStatusesFas()).andReturn(batchStatuses).once();
+        Set<String> batchIds = Collections.singleton("364401b8-18cd-4b1d-baa1-998aaf39a386");
+        expect(usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("FAS",
+            LocalDate.now().minusDays(7))).andReturn(batchIds).once();
+        expect(usageBatchStatusRepository.findUsageBatchStatusesFas(batchIds)).andReturn(batchStatuses).once();
         replay(usageBatchStatusRepository);
         assertSame(batchStatuses, usageBatchStatusService.getUsageBatchStatusesFas());
         verify(usageBatchStatusRepository);

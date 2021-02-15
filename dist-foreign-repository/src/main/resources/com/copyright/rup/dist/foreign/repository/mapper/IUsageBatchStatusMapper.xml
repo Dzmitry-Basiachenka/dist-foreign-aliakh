@@ -52,10 +52,27 @@
                 case when status_ind = 'ELIGIBLE' then count(1) else 0 end eligible_count
             from ${schema}.df_usage u
             join ${schema}.df_usage_batch b on b.df_usage_batch_uid = u.df_usage_batch_uid
-            where u.product_family = #{productFamily}
+            where b.df_usage_batch_uid in
+                <foreach collection="collection" item="batchId" separator="," open="(" close=")">
+                    #{batchId}
+                </foreach>
             group by status_ind, name, b.created_datetime, initial_usages_count
         ) nested
         group by name, created_datetime, initial_usages_count
         order by created_datetime, name
+    </select>
+
+    <select id="findUsageBatchIdsByProductFamilyAndStartDateFrom" resultType="string" parameterType="map">
+        select df_usage_batch_uid from (
+            select b.df_usage_batch_uid, df_scenario_uid
+            from ${schema}.df_usage_batch b
+            join ${schema}.df_usage u on b.df_usage_batch_uid = u.df_usage_batch_uid
+            where b.product_family = #{productFamily}
+                and b.created_datetime >= #{startDate}
+            group by b.df_usage_batch_uid, u.df_scenario_uid
+        ) nested
+        group by df_usage_batch_uid
+        having min(df_scenario_uid) is null
+            and count(1) = 1
     </select>
 </mapper>

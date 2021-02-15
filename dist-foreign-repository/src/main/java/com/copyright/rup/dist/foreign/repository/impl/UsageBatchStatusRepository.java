@@ -1,14 +1,19 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchStatusRepository;
 
+import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUsageBatchStatusRepository}.
@@ -23,8 +28,8 @@ import java.util.List;
 public class UsageBatchStatusRepository extends BaseRepository implements IUsageBatchStatusRepository {
 
     @Override
-    public List<UsageBatchStatus> findUsageBatchStatusesFas() {
-        return selectList("IUsageBatchStatusMapper.findUsageBatchStatusesFas", FdaConstants.FAS_PRODUCT_FAMILY);
+    public List<UsageBatchStatus> findUsageBatchStatusesFas(Set<String> batchIds) {
+        return selectList("IUsageBatchStatusMapper.findUsageBatchStatusesFas", batchIds);
     }
 
     @Override
@@ -45,5 +50,14 @@ public class UsageBatchStatusRepository extends BaseRepository implements IUsage
     @Override
     public List<UsageBatchStatus> findUsageBatchStatusesSal() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public Set<String> findUsageBatchIdsByProductFamilyAndStartDateFrom(String productFamily, LocalDate startDate) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("productFamily", productFamily);
+        params.put("startDate", startDate);
+        return new HashSet<>(
+            selectList("IUsageBatchStatusMapper.findUsageBatchIdsByProductFamilyAndStartDateFrom", params));
     }
 }
