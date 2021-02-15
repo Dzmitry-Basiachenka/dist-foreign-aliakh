@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusWidget;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
@@ -52,7 +53,8 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
 
     @Override
     public void refresh() {
-        dataProvider.refreshAll();
+        dataProvider = DataProvider.ofCollection(controller.getBatchStatuses());
+        batchStatusGrid.setDataProvider(dataProvider);
     }
 
     /**

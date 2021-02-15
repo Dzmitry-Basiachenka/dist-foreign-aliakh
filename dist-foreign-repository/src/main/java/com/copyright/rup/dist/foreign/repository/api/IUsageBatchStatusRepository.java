@@ -2,7 +2,9 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for usage batch status repository.
@@ -16,11 +18,12 @@ import java.util.List;
 public interface IUsageBatchStatusRepository {
 
     /**
-     * Finds list of usage batch statuses for FAS product family.
+     * Finds list of FAS usage batch statuses for specified usage batch ids.
      *
+     * @param batchIds set of usage batch ids
      * @return list of {@link UsageBatchStatus}
      */
-    List<UsageBatchStatus> findUsageBatchStatusesFas();
+    List<UsageBatchStatus> findUsageBatchStatusesFas(Set<String> batchIds);
 
     /**
      * Finds list of usage batch statuses for FAS2 product family.
@@ -49,4 +52,13 @@ public interface IUsageBatchStatusRepository {
      * @return list of {@link UsageBatchStatus}
      */
     List<UsageBatchStatus> findUsageBatchStatusesSal();
+
+    /**
+     * Finds usage batch ids not associated with scenarios for specified product family and start date.
+     *
+     * @param productFamily product family
+     * @param startDate     start date of batch creation
+     * @return set of usage batch ids
+     */
+    Set<String> findUsageBatchIdsByProductFamilyAndStartDateFrom(String productFamily, LocalDate startDate);
 }
