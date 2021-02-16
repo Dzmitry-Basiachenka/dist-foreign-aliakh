@@ -16,6 +16,7 @@
         <result property="ntsFields" column="nts_fields" typeHandler="NtsBatchFieldsTypeHandler"/>
         <result property="salFields" column="sal_fields" typeHandler="SalBatchFieldsTypeHandler"/>
         <result property="numberOfBaselineYears" column="baseline_years"/>
+        <result property="initialUsagesCount" column="initial_usages_count"/>
     </resultMap>
 
     <resultMap id="batchNameScenarioNamePairResultMap" type="BatchNameScenarioNamePair">
@@ -40,6 +41,7 @@
         ub.nts_fields,
         ub.sal_fields,
         ub.baseline_years,
+        ub.initial_usages_count,
         ub.created_datetime,
         ub.updated_datetime,
         ub.created_by_user,
@@ -59,6 +61,7 @@
             nts_fields,
             sal_fields,
             baseline_years,
+            initial_usages_count,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             #{id},
@@ -71,6 +74,7 @@
             #{ntsFields, typeHandler=NtsBatchFieldsTypeHandler},
             #{salFields, typeHandler=SalBatchFieldsTypeHandler},
             #{numberOfBaselineYears},
+            #{initialUsagesCount},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>

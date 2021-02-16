@@ -12,6 +12,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
@@ -23,6 +24,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-08-16')
             column(name: 'fiscal_year', value: '2019')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'updated_datetime', value: '2017-02-21 11:41:52.735531+03')
         }
 
@@ -34,6 +36,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'updated_datetime', value: '2017-02-11 11:41:52.735531+03')
         }
 
@@ -45,6 +48,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-10-30')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'updated_datetime', value: '2017-10-26 14:49:52.735531+03')
         }
 
@@ -181,6 +185,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'updated_datetime', value: '2017-01-14 11:41:52.735531+03')
         }
 
@@ -253,6 +258,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 0, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7, "excluding_stm": true}')
             column(name: 'updated_datetime', value: '2019-01-01 11:41:52.735531+03')
@@ -317,6 +323,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 0, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
             column(name: 'updated_datetime', value: '2019-01-02 11:41:52.735531+03')
@@ -393,6 +400,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
             column(name: 'updated_datetime', value: '2019-01-03 11:41:52.735531+03')
@@ -460,6 +468,7 @@ databaseChangeLog {
                 column(name: 'payment_date', value: '2019-01-11')
                 column(name: 'product_family', value: 'NTS')
                 column(name: 'fiscal_year', value: '2020')
+                column(name: 'initial_usages_count', value: 1)
                 column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, "fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
                 column(name: 'updated_datetime', value: '2019-01-04 12:45:51.335531+03')
             }
@@ -501,6 +510,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'updated_datetime', value: '2017-01-13 11:41:52.735531+03')
         }
 
@@ -560,6 +570,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 3)
             column(name: 'updated_datetime', value: '2017-01-12 11:41:52.735531+03')
         }
 
@@ -645,6 +656,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 5588, "licensee_name": "RGS Energy Group"}')
             column(name: 'updated_datetime', value: '2017-01-10 11:41:52.735531+03')
         }
@@ -718,6 +730,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
             column(name: 'updated_datetime', value: '2017-01-09 11:41:52.735531+03')
         }
