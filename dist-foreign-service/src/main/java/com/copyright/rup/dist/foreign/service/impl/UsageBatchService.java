@@ -114,6 +114,7 @@ public class UsageBatchService implements IUsageBatchService {
     public int insertFasBatch(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setInitialUsagesCount(usages.size());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
         LOGGER.info("Insert usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);

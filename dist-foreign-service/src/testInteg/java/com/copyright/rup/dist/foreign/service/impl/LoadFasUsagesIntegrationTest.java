@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -24,7 +25,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayOutputStream;
@@ -50,7 +50,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=load-researched-usages-data-init.groovy"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class LoadFasUsagesIntegrationTest {
 
@@ -120,6 +119,11 @@ public class LoadFasUsagesIntegrationTest {
         setPredefinedUsageIds(usages);
         int usagesInsertedCount = usageBatchService.insertFasBatch(batch, usages);
         assertEquals(4, usagesInsertedCount);
+        List<UsageBatch> batches = usageBatchService.getUsageBatches(FAS2_PRODUCT_FAMILY);
+        UsageBatch uploadedBatch =
+            batches.stream().filter(b -> "Test_Batch".equals(b.getName())).findFirst().orElse(null);
+        assertNotNull(uploadedBatch);
+        assertEquals(4, uploadedBatch.getInitialUsagesCount());
         usageService.sendForMatching(usages);
         usageService.sendForGettingRights(usages, batch.getName());
     }

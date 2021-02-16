@@ -98,6 +98,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
         assertEquals(GROSS_AMOUNT, usageBatch.getGrossAmount());
+        assertEquals(1000, usageBatch.getInitialUsagesCount());
         assertNull(usageBatch.getNtsFields());
     }
 
@@ -110,6 +111,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
+        assertEquals(1000, usageBatch.getInitialUsagesCount());
         NtsFields ntsFields = usageBatch.getNtsFields();
         assertEquals(2017, ntsFields.getFundPoolPeriodFrom().intValue());
         assertEquals(2018, ntsFields.getFundPoolPeriodTo().intValue());
@@ -157,6 +159,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(LocalDate.of(2019, 1, 11), usageBatch.getPaymentDate());
         assertEquals(2020, usageBatch.getFiscalYear().intValue());
+        assertEquals(2, usageBatch.getInitialUsagesCount());
         NtsFields ntsFields = usageBatch.getNtsFields();
         assertEquals(2013, ntsFields.getFundPoolPeriodFrom().intValue());
         assertEquals(2017, ntsFields.getFundPoolPeriodTo().intValue());
@@ -301,6 +304,7 @@ public class UsageBatchRepositoryIntegrationTest {
         usageBatch.setPaymentDate(PAYMENT_DATE);
         usageBatch.setFiscalYear(FISCAL_YEAR_2017);
         usageBatch.setGrossAmount(GROSS_AMOUNT);
+        usageBatch.setInitialUsagesCount(1000);
         return usageBatch;
     }
 
@@ -310,6 +314,7 @@ public class UsageBatchRepositoryIntegrationTest {
         usageBatch.setProductFamily(NTS_PRODUCT_FAMILY);
         usageBatch.setName(USAGE_BATCH_NAME_2);
         usageBatch.setFiscalYear(FISCAL_YEAR_2017);
+        usageBatch.setInitialUsagesCount(1000);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
         usageBatch.setRro(rightsholder);

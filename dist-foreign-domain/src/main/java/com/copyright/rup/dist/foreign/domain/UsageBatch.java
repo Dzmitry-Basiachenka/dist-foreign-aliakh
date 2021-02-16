@@ -33,14 +33,7 @@ public class UsageBatch extends StoredEntity<String> {
     private NtsFields ntsFields;
     private SalFields salFields;
     private Integer numberOfBaselineYears;
-
-    public Integer getNumberOfBaselineYears() {
-        return numberOfBaselineYears;
-    }
-
-    public void setNumberOfBaselineYears(Integer numberOfBaselineYears) {
-        this.numberOfBaselineYears = numberOfBaselineYears;
-    }
+    private int initialUsagesCount;
 
     public String getName() {
         return name;
@@ -106,6 +99,22 @@ public class UsageBatch extends StoredEntity<String> {
         this.salFields = salFields;
     }
 
+    public Integer getNumberOfBaselineYears() {
+        return numberOfBaselineYears;
+    }
+
+    public void setNumberOfBaselineYears(Integer numberOfBaselineYears) {
+        this.numberOfBaselineYears = numberOfBaselineYears;
+    }
+
+    public int getInitialUsagesCount() {
+        return initialUsagesCount;
+    }
+
+    public void setInitialUsagesCount(int initialUsagesCount) {
+        this.initialUsagesCount = initialUsagesCount;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -126,6 +135,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(this.ntsFields, that.ntsFields)
             .append(this.salFields, that.salFields)
             .append(this.numberOfBaselineYears, that.numberOfBaselineYears)
+            .append(this.initialUsagesCount, that.initialUsagesCount)
             .isEquals();
     }
 
@@ -142,6 +152,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(ntsFields)
             .append(salFields)
             .append(numberOfBaselineYears)
+            .append(initialUsagesCount)
             .toHashCode();
     }
 
@@ -158,6 +169,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append("ntsFields", ntsFields)
             .append("salFields", salFields)
             .append("numberOfBaselineYears", numberOfBaselineYears)
+            .append("initialUsagesCount", initialUsagesCount)
             .toString();
     }
 
