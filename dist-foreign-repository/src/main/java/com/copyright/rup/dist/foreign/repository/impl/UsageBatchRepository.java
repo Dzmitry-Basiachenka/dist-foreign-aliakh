@@ -39,6 +39,15 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
+    public void updateInitialUsagesCount(int initialUsagesCount, String batchId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("initialUsagesCount", initialUsagesCount);
+        params.put("batchId", Objects.requireNonNull(batchId));
+        params.put("updateUser", Objects.requireNonNull(userName));
+        update("IUsageBatchMapper.updateInitialUsagesCount", params);
+    }
+
+    @Override
     public List<Integer> findFiscalYearsByProductFamily(String productFamily) {
         return selectList("IUsageBatchMapper.findFiscalYearsByProductFamily", Objects.requireNonNull(productFamily));
     }

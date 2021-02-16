@@ -79,6 +79,13 @@
         )
     </insert>
 
+    <update id="updateInitialUsagesCount" parameterType="map">
+        update ${schema}.df_usage_batch
+        set initial_usages_count = #{initialUsagesCount},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_batch_uid = #{batchId}
+    </update>
+
     <select id="findFiscalYearsByProductFamily" resultType="int" parameterType="string">
         select distinct fiscal_year
         from ${schema}.df_usage_batch

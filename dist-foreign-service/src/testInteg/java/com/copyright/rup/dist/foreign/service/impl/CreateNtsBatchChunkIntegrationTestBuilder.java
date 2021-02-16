@@ -59,11 +59,17 @@ public class CreateNtsBatchChunkIntegrationTestBuilder implements Builder<Runner
     private final Map<Long, String> expectedAccountToPrmResponseMap = new LinkedHashMap<>();
     private final Map<List<Long>, String> expectedAccountToOracleResponseMap = new LinkedHashMap<>();
     private UsageBatch usageBatch;
+    private int initialUsagesCount;
     private List<Usage> expectedUsages;
     private UsageAuditItem expectedAudit;
 
     CreateNtsBatchChunkIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
         this.usageBatch = batch;
+        return this;
+    }
+
+    CreateNtsBatchChunkIntegrationTestBuilder withInitialUsagesCount(int usagesCount) {
+        this.initialUsagesCount = usagesCount;
         return this;
     }
 
@@ -154,6 +160,7 @@ public class CreateNtsBatchChunkIntegrationTestBuilder implements Builder<Runner
             assertEquals(usageBatch.getGrossAmount(), insertedBatch.getGrossAmount());
             assertEquals(usageBatch.getPaymentDate(), insertedBatch.getPaymentDate());
             assertEquals(usageBatch.getRro().getAccountNumber(), insertedBatch.getRro().getAccountNumber());
+            assertEquals(initialUsagesCount, insertedBatch.getInitialUsagesCount());
             if (expectedAccountToPrmResponseMap.size() > ONE) {
                 assertEquals("American College of Physicians - Journals", insertedBatch.getRro().getName());
             }

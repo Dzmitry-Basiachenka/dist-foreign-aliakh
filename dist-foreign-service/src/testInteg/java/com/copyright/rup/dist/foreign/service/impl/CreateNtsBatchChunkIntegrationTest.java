@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies application workflow for NTS batches.
+ * Verifies creation of NTS batches.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -76,6 +76,7 @@ public class CreateNtsBatchChunkIntegrationTest {
     public void testCreateNtsBatch() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(ImmutableMap.of(
                 RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE))
             .expectPrmCall(ImmutableMap.of(
@@ -95,6 +96,7 @@ public class CreateNtsBatchChunkIntegrationTest {
     public void testCreateNtsBatchExcludingStmWithStmRh() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
+            .withInitialUsagesCount(2)
             .expectRmsRights(ImmutableMap.of(
                 RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE,
                 RMS_GRANTS_958824349_REQUEST, RMS_GRANTS_958824349_RESPONSE))
@@ -115,6 +117,7 @@ public class CreateNtsBatchChunkIntegrationTest {
     public void testCreateNtsBatchExcludingStmWithoutStmRh() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
+            .withInitialUsagesCount(2)
             .expectRmsRights(ImmutableMap.of(
                 RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE,
                 RMS_GRANTS_958824349_REQUEST, RMS_GRANTS_958824349_RESPONSE))
@@ -140,6 +143,7 @@ public class CreateNtsBatchChunkIntegrationTest {
     public void testCreateNtsBatchExcludingStmWithStmRhForAnotherProduct() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
+            .withInitialUsagesCount(2)
             .expectRmsRights(ImmutableMap.of(
                 RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE,
                 RMS_GRANTS_958824349_REQUEST, RMS_GRANTS_958824349_RESPONSE))
@@ -163,6 +167,7 @@ public class CreateNtsBatchChunkIntegrationTest {
     public void testCreateNtsBatchWithUnclassified() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Gov", STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(ImmutableMap.of(
                 "rights/rms_grants_576324545_request.json", "rights/rms_grants_576324545_response.json"))
             .expectPrmCall(ImmutableMap.of(
@@ -181,6 +186,7 @@ public class CreateNtsBatchChunkIntegrationTest {
     public void testCreateNtsBatchWithIneligibleRh() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(ImmutableMap.of(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE))
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
@@ -197,6 +203,7 @@ public class CreateNtsBatchChunkIntegrationTest {
     public void testCreateNtsBatchWithNonUsRhTaxCountry() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(ImmutableMap.of(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE))
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
@@ -211,6 +218,7 @@ public class CreateNtsBatchChunkIntegrationTest {
     public void testCreateNtsBatchWithRhNotFound() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Univ", STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectPrmCall(ImmutableMap.of(2000017001L, PRM_RH_2000017001_RESPONSE))
             .expectRmsRights(
                 ImmutableMap.of("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json"))
@@ -222,6 +230,7 @@ public class CreateNtsBatchChunkIntegrationTest {
     public void testCreateNtsBatchWithUsageUnderMinimum() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Lib", STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(ImmutableMap.of(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE))
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
@@ -239,6 +248,7 @@ public class CreateNtsBatchChunkIntegrationTest {
     public void testCreateNtsBatchZeroStmAmount() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Edu", new BigDecimal("0.000"), false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(ImmutableMap.of(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE))
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,

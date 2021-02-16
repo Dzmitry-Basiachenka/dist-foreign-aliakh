@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
@@ -213,6 +215,8 @@ public class UsageBatchServiceTest {
         rightsholderService.updateRighstholdersAsync(Collections.singleton(RRO_ACCOUNT_NUMBER));
         expectLastCall().once();
         expect(ntsUsageService.insertUsages(usageBatch)).andReturn(usageIds).once();
+        usageBatchRepository.updateInitialUsagesCount(eq(usageIds.size()), anyString(), eq(USER_NAME));
+        expectLastCall().once();
         replay(usageBatchRepository, rightsholderService, ntsUsageService);
         assertEquals(usageIds, usageBatchService.insertNtsBatch(usageBatch, USER_NAME));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();

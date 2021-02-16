@@ -60,11 +60,17 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
     private String expectedPreferencesRightsholderId;
     private Long expectedPrmAccountNumber;
     private UsageBatch usageBatch;
+    private int initialUsagesCount;
     private List<Usage> expectedUsages;
     private UsageAuditItem expectedAudit;
 
     CreateNtsBatchIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
         this.usageBatch = batch;
+        return this;
+    }
+
+    CreateNtsBatchIntegrationTestBuilder withInitialUsagesCount(int usagesCount) {
+        this.initialUsagesCount = usagesCount;
         return this;
     }
 
@@ -173,6 +179,7 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(usageBatch.getGrossAmount(), insertedBatch.getGrossAmount());
             assertEquals(usageBatch.getPaymentDate(), insertedBatch.getPaymentDate());
             assertEquals(usageBatch.getRro().getAccountNumber(), insertedBatch.getRro().getAccountNumber());
+            assertEquals(initialUsagesCount, insertedBatch.getInitialUsagesCount());
             if (Objects.nonNull(expectedPrmResponse)) {
                 assertEquals("American College of Physicians - Journals", insertedBatch.getRro().getName());
             }
