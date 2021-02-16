@@ -52,7 +52,11 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
 
     @Override
     public List<UsageBatchStatus> getUsageBatchStatusesAacl() {
-        return usageBatchStatusRepository.findUsageBatchStatusesAacl();
+        Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom(
+            FdaConstants.AACL_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
+        return !batchIds.isEmpty()
+            ? usageBatchStatusRepository.findUsageBatchStatusesAacl(batchIds)
+            : Collections.emptyList();
     }
 
     @Override

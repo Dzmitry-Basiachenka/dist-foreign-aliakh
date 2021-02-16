@@ -64,6 +64,19 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindUsageBatchStatusesAacl() {
+        List<UsageBatchStatus> usageBatchStatuses =
+            usageBatchStatusRepository.findUsageBatchStatusesAacl(
+                Sets.newHashSet("f77ab6ea-56d3-45dc-8926-9a8cd448f229", "3d7c9de0-3d14-42e4-a500-fb10344a77ff"));
+        assertEquals(2, usageBatchStatuses.size());
+        assertUsageBatchStatus(buildUsageBatchStatusAacl("AACL completed batch", 8, "Completed", 3, 0, 1, 0, 0, 2, 2),
+            usageBatchStatuses.get(0));
+        assertUsageBatchStatus(
+            buildUsageBatchStatusAacl("AACL in progress batch", 7, "In Progress", 1, 1, 0, 2, 2, 0, 1),
+            usageBatchStatuses.get(1));
+    }
+
+    @Test
     public void testFindUsageBatchIdsByProductFamilyAndStartDateFrom() {
         assertEquals(Sets.newHashSet("cf56b889-82fe-4990-b111-9c56ce986281", "515a78e7-2a92-4b15-859a-fd9f70e80982"),
             usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("FAS",
@@ -118,6 +131,23 @@ public class UsageBatchStatusRepositoryIntegrationTest {
         batchStatus.setWorkFoundCount(workFoundCount);
         batchStatus.setRhFoundCount(rhFoundCount);
         batchStatus.setUnclassifiedCount(unclassifiedCount);
+        batchStatus.setEligibleCount(eligibleCount);
+        return batchStatus;
+    }
+
+    private UsageBatchStatus buildUsageBatchStatusAacl(String name, int totalCount, String status, int excludedCount,
+                                                       int newCount, int workNotFoundCount, int workFoundCount,
+                                                       int rhFoundCount, int workResearchCount, int eligibleCount) {
+        UsageBatchStatus batchStatus = new UsageBatchStatus();
+        batchStatus.setBatchName(name);
+        batchStatus.setTotalCount(totalCount);
+        batchStatus.setStatus(status);
+        batchStatus.setExcludedCount(excludedCount);
+        batchStatus.setNewCount(newCount);
+        batchStatus.setWorkNotFoundCount(workNotFoundCount);
+        batchStatus.setWorkFoundCount(workFoundCount);
+        batchStatus.setRhFoundCount(rhFoundCount);
+        batchStatus.setWorkResearchCount(workResearchCount);
         batchStatus.setEligibleCount(eligibleCount);
         return batchStatus;
     }

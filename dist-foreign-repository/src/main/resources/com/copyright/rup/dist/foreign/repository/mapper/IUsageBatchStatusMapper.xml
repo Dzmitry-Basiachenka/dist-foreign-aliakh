@@ -59,7 +59,7 @@
             group by status_ind, name, b.created_datetime, initial_usages_count
         ) nested
         group by name, created_datetime, initial_usages_count
-        order by created_datetime, name
+        order by created_datetime desc
     </select>
 
     <select id="findUsageBatchStatusesNts" resultMap="usageBatchStatusMap" parameterType="string">
@@ -91,7 +91,43 @@
             group by status_ind, name, b.created_datetime, initial_usages_count
         ) nested
         group by name, created_datetime, initial_usages_count
-        order by created_datetime, name
+        order by created_datetime desc
+    </select>
+
+    <select id="findUsageBatchStatusesAacl" resultMap="usageBatchStatusMap" parameterType="string">
+        select
+            name batch_name,
+            initial_usages_count total_count,
+            max(new_count) new_count,
+            max(work_not_found_count) work_not_found_count,
+            max(work_found_count) work_found_count,
+            max(rh_found_count) rh_found_count,
+            max(work_research_count) work_research_count,
+            max(eligible_count) eligible_count,
+            initial_usages_count - sum(status_count) excluded_count,
+            case when max(new_count) + max(work_found_count) = 0 then 'Completed' else 'In Progress' end status
+        from (
+            select
+                name,
+                b.created_datetime,
+                initial_usages_count,
+                count(1) status_count,
+                case when status_ind = 'NEW' then count(1) else 0 end new_count,
+                case when status_ind = 'WORK_NOT_FOUND' then count(1) else 0 end work_not_found_count,
+                case when status_ind = 'WORK_FOUND' then count(1) else 0 end work_found_count,
+                case when status_ind = 'RH_FOUND' then count(1) else 0 end rh_found_count,
+                case when status_ind = 'WORK_RESEARCH' then count(1) else 0 end work_research_count,
+                case when status_ind = 'ELIGIBLE' then count(1) else 0 end eligible_count
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_batch b on b.df_usage_batch_uid = u.df_usage_batch_uid
+            where b.df_usage_batch_uid in
+                <foreach collection="collection" item="batchId" separator="," open="(" close=")">
+                    #{batchId}
+                </foreach>
+            group by status_ind, name, b.created_datetime, initial_usages_count
+        ) nested
+        group by name, created_datetime, initial_usages_count
+        order by created_datetime desc
     </select>
 
     <select id="findUsageBatchIdsByProductFamilyAndStartDateFrom" resultType="string" parameterType="map">

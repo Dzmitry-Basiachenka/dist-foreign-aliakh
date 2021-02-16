@@ -38,8 +38,8 @@ public class UsageBatchStatusRepository extends BaseRepository implements IUsage
     }
 
     @Override
-    public List<UsageBatchStatus> findUsageBatchStatusesAacl() {
-        return Collections.emptyList();
+    public List<UsageBatchStatus> findUsageBatchStatusesAacl(Set<String> batchIds) {
+        return selectList("IUsageBatchStatusMapper.findUsageBatchStatusesAacl", batchIds);
     }
 
     @Override
