@@ -32,6 +32,7 @@ import java.util.Set;
 public class UsageBatchStatusServiceTest {
 
     private static final long NUMBER_OF_DAYS = 7;
+    private final Set<String> batchIds = Collections.singleton("364401b8-18cd-4b1d-baa1-998aaf39a386");
     private final List<UsageBatchStatus> batchStatuses = new ArrayList<>();
     private IUsageBatchStatusService usageBatchStatusService;
     private IUsageBatchStatusRepository usageBatchStatusRepository;
@@ -47,26 +48,19 @@ public class UsageBatchStatusServiceTest {
 
     @Test
     public void testGetUsageBatchStatusesFas() {
-        Set<String> batchIds = Collections.singleton("364401b8-18cd-4b1d-baa1-998aaf39a386");
         expect(usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("FAS",
             LocalDate.now().minusDays(NUMBER_OF_DAYS))).andReturn(batchIds).once();
         expect(usageBatchStatusRepository.findUsageBatchStatusesFas(batchIds)).andReturn(batchStatuses).once();
         replay(usageBatchStatusRepository);
-        assertSame(batchStatuses, usageBatchStatusService.getUsageBatchStatusesFas());
-        verify(usageBatchStatusRepository);
-    }
-
-    @Test
-    public void testGetUsageBatchStatusesFas2() {
-        expect(usageBatchStatusRepository.findUsageBatchStatusesFas2()).andReturn(batchStatuses).once();
-        replay(usageBatchStatusRepository);
-        assertSame(batchStatuses, usageBatchStatusService.getUsageBatchStatusesFas2());
+        assertSame(batchStatuses, usageBatchStatusService.getUsageBatchStatusesFas("FAS"));
         verify(usageBatchStatusRepository);
     }
 
     @Test
     public void testGetUsageBatchStatusesNts() {
-        expect(usageBatchStatusRepository.findUsageBatchStatusesNts()).andReturn(batchStatuses).once();
+        expect(usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("NTS",
+            LocalDate.now().minusDays(NUMBER_OF_DAYS))).andReturn(batchIds).once();
+        expect(usageBatchStatusRepository.findUsageBatchStatusesNts(batchIds)).andReturn(batchStatuses).once();
         replay(usageBatchStatusRepository);
         assertSame(batchStatuses, usageBatchStatusService.getUsageBatchStatusesNts());
         verify(usageBatchStatusRepository);

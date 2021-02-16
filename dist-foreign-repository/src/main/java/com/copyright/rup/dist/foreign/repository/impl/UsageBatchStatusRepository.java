@@ -33,13 +33,8 @@ public class UsageBatchStatusRepository extends BaseRepository implements IUsage
     }
 
     @Override
-    public List<UsageBatchStatus> findUsageBatchStatusesFas2() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<UsageBatchStatus> findUsageBatchStatusesNts() {
-        return Collections.emptyList();
+    public List<UsageBatchStatus> findUsageBatchStatusesNts(Set<String> batchIds) {
+        return selectList("IUsageBatchStatusMapper.findUsageBatchStatusesNts", batchIds);
     }
 
     @Override
