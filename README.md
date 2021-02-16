@@ -1,3 +1,10 @@
+13.1.12
+-
+* B-65718 FDA: Batch Processing View: implement backend logic to get batch status for NTS product family
+* B-65718 FDA: Batch Processing View: make number of days as configurable property for getting Batch Status information
+* B-65718 FDA: Batch Processing View: update upload batch functionality to store initial usages count for FAS/FAS2 product families
+* B-65718 FDA: Batch Processing View: update upload batch functionality to store initial usages count for NTS product family
+
 13.1.11
 -
 *  B-65718 FDA: Batch Processing View: implement Batch Status widget for FAS
