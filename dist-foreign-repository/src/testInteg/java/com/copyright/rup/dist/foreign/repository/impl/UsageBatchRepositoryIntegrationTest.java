@@ -124,6 +124,21 @@ public class UsageBatchRepositoryIntegrationTest {
     }
 
     @Test
+    public void testUpdateInitialUsagesCount() {
+        UsageBatch batch = buildUsageBatchWithFundPool();
+        batch.setInitialUsagesCount(0);
+        usageBatchRepository.insert(batch);
+        UsageBatch usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_2);
+        assertNotNull(usageBatch);
+        assertEquals(0, usageBatch.getInitialUsagesCount());
+        usageBatchRepository.updateInitialUsagesCount(1000, usageBatch.getId(), "user@copyright.com");
+        usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_2);
+        assertNotNull(usageBatch);
+        assertEquals(1000, usageBatch.getInitialUsagesCount());
+        assertEquals("user@copyright.com", usageBatch.getUpdateUser());
+    }
+
+    @Test
     public void testDeleteUsageBatch() {
         String batchId = "56282dbc-2468-48d4-b926-93d3458a656a";
         assertEquals(13, usageBatchRepository.findAll().size());

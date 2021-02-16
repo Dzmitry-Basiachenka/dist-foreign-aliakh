@@ -28,6 +28,15 @@ public interface IUsageBatchRepository {
     void insert(UsageBatch usageBatch);
 
     /**
+     * Update initial usages count by batch id.
+     *
+     * @param initialUsagesCount initial usages count
+     * @param batchId            batch id
+     * @param userName           user name
+     */
+    void updateInitialUsagesCount(int initialUsagesCount, String batchId, String userName);
+
+    /**
      * Gets list of fiscal years from Usage Batches presented in DB and associated with specified Product Family.
      *
      * @param productFamily Product Family

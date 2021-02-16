@@ -71,6 +71,7 @@ public class CreateNtsBatchIntegrationTest {
     public void testCreateNtsBatch() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -86,6 +87,7 @@ public class CreateNtsBatchIntegrationTest {
     public void testCreateNtsBatchExcludingStmWithStmRh() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -99,6 +101,7 @@ public class CreateNtsBatchIntegrationTest {
     public void testCreateNtsBatchExcludingStmWithoutStmRh() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -114,6 +117,7 @@ public class CreateNtsBatchIntegrationTest {
     public void testCreateNtsBatchExcludingStmWithStmRhForAnotherProduct() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -129,6 +133,7 @@ public class CreateNtsBatchIntegrationTest {
     public void testCreateNtsBatchWithUnclassified() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Gov", STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights("rights/rms_grants_576324545_request.json", "rights/rms_grants_576324545_response.json")
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -143,6 +148,7 @@ public class CreateNtsBatchIntegrationTest {
     public void testCreateNtsBatchWithIneligibleRh() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -156,6 +162,7 @@ public class CreateNtsBatchIntegrationTest {
     public void testCreateNtsBatchWithNonUsRhTaxCountry() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(BUS_MARKET, STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -168,6 +175,7 @@ public class CreateNtsBatchIntegrationTest {
     public void testCreateNtsBatchWithRhNotFound() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Univ", STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
             .expectRmsRights("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json")
             .build()
@@ -178,6 +186,7 @@ public class CreateNtsBatchIntegrationTest {
     public void testCreateNtsBatchWithUsageUnderMinimum() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Lib", STM_AMOUNT, false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
@@ -193,6 +202,7 @@ public class CreateNtsBatchIntegrationTest {
     public void testCreateNtsBatchZeroStmAmount() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields("Edu", new BigDecimal("0.000"), false)))
+            .withInitialUsagesCount(1)
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)

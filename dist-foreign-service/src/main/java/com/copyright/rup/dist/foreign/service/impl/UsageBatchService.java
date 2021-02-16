@@ -143,6 +143,7 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatchRepository.insert(usageBatch);
         rightsholderService.updateRighstholdersAsync(Collections.singleton(usageBatch.getRro().getAccountNumber()));
         List<String> ntsUsageIds = ntsUsageService.insertUsages(usageBatch);
+        usageBatchRepository.updateInitialUsagesCount(ntsUsageIds.size(), usageBatch.getId(), userName);
         LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
             usageBatch.getName(), userName, LogUtils.size(ntsUsageIds));
         return ntsUsageIds;
