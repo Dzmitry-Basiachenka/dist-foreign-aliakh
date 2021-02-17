@@ -12,6 +12,10 @@ import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.List;
+
 /**
  * Common implementation for usage batch status widgets.
  * <p>
@@ -23,6 +27,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public abstract class CommonBatchStatusWidget extends VerticalLayout implements ICommonBatchStatusWidget {
 
+    private static final String EMPTY_STYLE_NAME = "empty-batch-status-grid";
+
     private ICommonBatchStatusController controller;
     private ListDataProvider<UsageBatchStatus> dataProvider;
     private Grid<UsageBatchStatus> batchStatusGrid;
@@ -31,8 +37,10 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
     @Override
     public ICommonBatchStatusWidget init() {
         setSizeFull();
-        dataProvider = new ListDataProvider<>(controller.getBatchStatuses());
+        List<UsageBatchStatus> batchStatuses = controller.getBatchStatuses();
+        dataProvider = new ListDataProvider<>(batchStatuses);
         batchStatusGrid = new Grid<>(dataProvider);
+        updateGridStyle(batchStatuses);
         addColumns();
         batchStatusGrid.setSizeFull();
         addComponent(batchStatusGrid);
@@ -53,8 +61,10 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
 
     @Override
     public void refresh() {
-        dataProvider = DataProvider.ofCollection(controller.getBatchStatuses());
+        List<UsageBatchStatus> batchStatuses = controller.getBatchStatuses();
+        dataProvider = DataProvider.ofCollection(batchStatuses);
         batchStatusGrid.setDataProvider(dataProvider);
+        updateGridStyle(batchStatuses);
     }
 
     /**
@@ -96,5 +106,13 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
             .setSortable(true)
             .setSortProperty(sort)
             .setHidable(isHidable);
+    }
+
+    private void updateGridStyle(List<UsageBatchStatus> batchStatusList) {
+        if (CollectionUtils.isNotEmpty(batchStatusList)) {
+            batchStatusGrid.removeStyleName(EMPTY_STYLE_NAME);
+        } else {
+            batchStatusGrid.addStyleName(EMPTY_STYLE_NAME);
+        }
     }
 }

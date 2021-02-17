@@ -92,6 +92,13 @@
         background-position: center center;
     }
 
+    /*=== Styles for Batch Status grid ===*/
+    .empty-batch-status-grid .v-grid-tablewrapper {
+        background-image: url("img/empty_batch_status_table.png");
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
     /*=== Styles for Batches grid ===*/
     .usage-batches-grid .v-grid-tablewrapper .v-grid-row > td,
     .exclude-details-by-rro-grid .v-grid-tablewrapper .v-grid-row > td,
