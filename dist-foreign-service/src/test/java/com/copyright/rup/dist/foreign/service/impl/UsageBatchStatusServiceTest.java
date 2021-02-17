@@ -78,7 +78,9 @@ public class UsageBatchStatusServiceTest {
 
     @Test
     public void testGetUsageBatchStatusesSal() {
-        expect(usageBatchStatusRepository.findUsageBatchStatusesSal()).andReturn(batchStatuses).once();
+        expect(usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("SAL",
+            LocalDate.now().minusDays(NUMBER_OF_DAYS))).andReturn(batchIds).once();
+        expect(usageBatchStatusRepository.findUsageBatchStatusesSal(batchIds)).andReturn(batchStatuses).once();
         replay(usageBatchStatusRepository);
         assertSame(batchStatuses, usageBatchStatusService.getUsageBatchStatusesSal());
         verify(usageBatchStatusRepository);

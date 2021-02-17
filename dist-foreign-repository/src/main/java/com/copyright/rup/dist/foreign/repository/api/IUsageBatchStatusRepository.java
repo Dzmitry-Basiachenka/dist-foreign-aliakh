@@ -42,11 +42,12 @@ public interface IUsageBatchStatusRepository {
     List<UsageBatchStatus> findUsageBatchStatusesAacl(Set<String> batchIds);
 
     /**
-     * Finds list of usage batch statuses for SAL product family.
+     * Finds list of SAL usage batch statuses for specified usage batch ids.
      *
+     * @param batchIds set of usage batch ids
      * @return list of {@link UsageBatchStatus}
      */
-    List<UsageBatchStatus> findUsageBatchStatusesSal();
+    List<UsageBatchStatus> findUsageBatchStatusesSal(Set<String> batchIds);
 
     /**
      * Finds usage batch ids not associated with scenarios for specified product family and start date.

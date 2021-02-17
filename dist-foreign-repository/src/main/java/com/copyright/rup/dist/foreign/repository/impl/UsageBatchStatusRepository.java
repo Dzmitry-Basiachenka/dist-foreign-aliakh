@@ -9,7 +9,6 @@ import com.google.common.collect.Maps;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +42,8 @@ public class UsageBatchStatusRepository extends BaseRepository implements IUsage
     }
 
     @Override
-    public List<UsageBatchStatus> findUsageBatchStatusesSal() {
-        return Collections.emptyList();
+    public List<UsageBatchStatus> findUsageBatchStatusesSal(Set<String> batchIds) {
+        return selectList("IUsageBatchStatusMapper.findUsageBatchStatusesSal", batchIds);
     }
 
     @Override
