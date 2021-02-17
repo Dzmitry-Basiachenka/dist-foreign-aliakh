@@ -61,6 +61,10 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
 
     @Override
     public List<UsageBatchStatus> getUsageBatchStatusesSal() {
-        return usageBatchStatusRepository.findUsageBatchStatusesSal();
+        Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom(
+            FdaConstants.SAL_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
+        return !batchIds.isEmpty()
+            ? usageBatchStatusRepository.findUsageBatchStatusesSal(batchIds)
+            : Collections.emptyList();
     }
 }
