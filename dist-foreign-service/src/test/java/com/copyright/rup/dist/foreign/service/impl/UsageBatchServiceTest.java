@@ -246,6 +246,8 @@ public class UsageBatchServiceTest {
         expectLastCall().once();
         expect(aaclUsageService.insertUsagesFromBaseline(usageBatch))
             .andReturn(Collections.singletonList("b3f2727e-b023-49f0-970a-94dd3537ec6e")).once();
+        usageBatchRepository.updateInitialUsagesCount(eq(2), anyString(), eq(USER_NAME));
+        expectLastCall().once();
         replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
         assertEquals(Arrays.asList("8e12b833-af38-4d49-96d0-221d2665f0dc", "b3f2727e-b023-49f0-970a-94dd3537ec6e"),
             usageBatchService.insertAaclBatch(usageBatch, uploadedUsages));
@@ -254,32 +256,6 @@ public class UsageBatchServiceTest {
         assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
         assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
         verify(usageBatchRepository, aaclUsageService, RupContextUtils.class);
-    }
-
-    @Test
-    public void testInsertSalBatch() {
-        mockStatic(RupContextUtils.class);
-        Capture<UsageBatch> captureUsageBatch = new Capture<>();
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setName(BATCH_NAME);
-        usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
-        usageBatch.setNumberOfBaselineYears(3);
-        Usage uploadedUsage = new Usage();
-        uploadedUsage.setId("945b9f3c-f878-44a2-9570-19e2053c529a");
-        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
-        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        usageBatchRepository.insert(capture(captureUsageBatch));
-        expectLastCall().once();
-        salUsageService.insertItemBankDetails(usageBatch, uploadedUsages);
-        expectLastCall().once();
-        replay(usageBatchRepository, salUsageService, RupContextUtils.class);
-        assertEquals(Collections.singletonList("945b9f3c-f878-44a2-9570-19e2053c529a"),
-            usageBatchService.insertSalBatch(usageBatch, uploadedUsages));
-        UsageBatch insertedItemBank = captureUsageBatch.getValue();
-        assertNotNull(insertedItemBank.getId());
-        assertEquals(USER_NAME, insertedItemBank.getCreateUser());
-        assertEquals(USER_NAME, insertedItemBank.getUpdateUser());
-        verify(usageBatchRepository, salUsageService, RupContextUtils.class);
     }
 
     @Test
@@ -297,6 +273,8 @@ public class UsageBatchServiceTest {
         usageBatchRepository.insert(capture(captureUsageBatch));
         expectLastCall().once();
         aaclUsageService.insertUsages(usageBatch, uploadedUsages);
+        expectLastCall().once();
+        usageBatchRepository.updateInitialUsagesCount(eq(1), anyString(), eq(USER_NAME));
         expectLastCall().once();
         replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
         assertEquals(Collections.singletonList("086ce041-c11a-45af-8229-824ca897cc97"),
@@ -325,6 +303,8 @@ public class UsageBatchServiceTest {
         aaclUsageService.insertUsages(usageBatch, uploadedUsages);
         expectLastCall().once();
         expect(aaclUsageService.insertUsagesFromBaseline(usageBatch)).andReturn(Collections.emptyList()).once();
+        usageBatchRepository.updateInitialUsagesCount(eq(1), anyString(), eq(USER_NAME));
+        expectLastCall().once();
         replay(usageBatchRepository, aaclUsageService, RupContextUtils.class);
         assertEquals(Collections.singletonList("abc1a3de-151b-465e-8b90-9fedd13d6e79"),
             usageBatchService.insertAaclBatch(usageBatch, uploadedUsages));
@@ -333,6 +313,53 @@ public class UsageBatchServiceTest {
         assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
         assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
         verify(usageBatchRepository, aaclUsageService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testInsertSalBatch() {
+        mockStatic(RupContextUtils.class);
+        Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(BATCH_NAME);
+        usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
+        Usage uploadedUsage = new Usage();
+        uploadedUsage.setId("945b9f3c-f878-44a2-9570-19e2053c529a");
+        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        usageBatchRepository.insert(capture(captureUsageBatch));
+        expectLastCall().once();
+        salUsageService.insertItemBankDetails(usageBatch, uploadedUsages);
+        expectLastCall().once();
+        usageBatchRepository.updateInitialUsagesCount(eq(1), anyString(), eq(USER_NAME));
+        expectLastCall().once();
+        replay(usageBatchRepository, salUsageService, RupContextUtils.class);
+        assertEquals(Collections.singletonList("945b9f3c-f878-44a2-9570-19e2053c529a"),
+            usageBatchService.insertSalBatch(usageBatch, uploadedUsages));
+        UsageBatch insertedItemBank = captureUsageBatch.getValue();
+        assertNotNull(insertedItemBank.getId());
+        assertEquals(USER_NAME, insertedItemBank.getCreateUser());
+        assertEquals(USER_NAME, insertedItemBank.getUpdateUser());
+        verify(usageBatchRepository, salUsageService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testAddUsageDataToSalBatch() {
+        mockStatic(RupContextUtils.class);
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(BATCH_NAME);
+        usageBatch.setPaymentDate(LocalDate.of(2019, 6, 30));
+        usageBatch.setInitialUsagesCount(2);
+        Usage uploadedUsage = new Usage();
+        uploadedUsage.setId("3d394b30-66ad-49f7-9531-211b1fa35e9b");
+        List<Usage> uploadedUsages = Collections.singletonList(uploadedUsage);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        salUsageService.insertUsageDataDetails(usageBatch, uploadedUsages, USER_NAME);
+        expectLastCall().once();
+        usageBatchRepository.updateInitialUsagesCount(eq(3), anyString(), eq(USER_NAME));
+        expectLastCall().once();
+        replay(usageBatchRepository, salUsageService, RupContextUtils.class);
+        usageBatchService.addUsageDataToSalBatch(usageBatch, uploadedUsages);
+        verify(usageBatchRepository, salUsageService, RupContextUtils.class);
     }
 
     @Test

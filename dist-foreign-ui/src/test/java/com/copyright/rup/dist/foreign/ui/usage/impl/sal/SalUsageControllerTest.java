@@ -152,7 +152,7 @@ public class SalUsageControllerTest {
     public void testLoadUsageData() {
         UsageBatch itemBank = new UsageBatch();
         List<Usage> usages = Collections.singletonList(new Usage());
-        salUsageService.insertUsageDataDetails(itemBank, usages);
+        usageBatchService.addUsageDataToSalBatch(itemBank, usages);
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidget).once();
         filterWidget.clearFilter();

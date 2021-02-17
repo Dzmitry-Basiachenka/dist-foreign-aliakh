@@ -85,6 +85,7 @@ public class LoadSalUsagesIntegrationTest {
             "rights/rms_grants_empty_response.json");
         testHelper.expectPrmCall("prm/rightsholder_1000000322_response.json", 1000000322L);
         loadUsageBatch();
+        assertUsageBatch();
         assertUsages();
         assertAudit();
     }
@@ -123,6 +124,16 @@ public class LoadSalUsagesIntegrationTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         IOUtils.write(csvText, out, StandardCharsets.UTF_8);
         return out;
+    }
+
+    private void assertUsageBatch() {
+        UsageBatch batch = usageBatchService.getUsageBatches("SAL")
+            .stream()
+            .filter(b ->"SAL test batch".equals(b.getName()))
+            .findFirst()
+            .orElse(null);
+        assertNotNull(batch);
+        assertEquals(4, batch.getInitialUsagesCount());
     }
 
     private void assertUsages() throws IOException {

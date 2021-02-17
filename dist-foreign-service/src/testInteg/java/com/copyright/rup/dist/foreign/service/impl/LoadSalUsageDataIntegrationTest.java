@@ -75,6 +75,7 @@ public class LoadSalUsageDataIntegrationTest {
     @Test
     public void testLoadUsageData() throws Exception {
         loadUsageData();
+        assertUsageBatch();
         assertUsages();
         assertAudit();
     }
@@ -85,7 +86,7 @@ public class LoadSalUsageDataIntegrationTest {
         ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
         assertTrue(result.isSuccessful());
         List<Usage> usages = result.get();
-        salUsageService.insertUsageDataDetails(batch, usages);
+        usageBatchService.addUsageDataToSalBatch(batch, usages);
         commentToUsageIdMap = usages.stream()
             .collect(Collectors.toMap(Usage::getComment, Usage::getId));
     }
@@ -95,6 +96,12 @@ public class LoadSalUsageDataIntegrationTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         IOUtils.write(csvText, out, StandardCharsets.UTF_8);
         return out;
+    }
+
+    private void assertUsageBatch() {
+        UsageBatch batch = usageBatchService.getUsageBatchById("a04ad469-03ad-40dc-abaa-5770386c9367");
+        assertNotNull(batch);
+        assertEquals(5, batch.getInitialUsagesCount());
     }
 
     private void assertUsages() throws IOException {

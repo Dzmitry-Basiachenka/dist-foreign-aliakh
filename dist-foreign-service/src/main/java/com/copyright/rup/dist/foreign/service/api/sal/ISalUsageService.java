@@ -37,8 +37,9 @@ public interface ISalUsageService extends IPaidUsageService {
      *
      * @param usageBatch usage batch
      * @param usages     list of {@link Usage}s
+     * @param userName   user name
      */
-    void insertUsageDataDetails(UsageBatch usageBatch, List<Usage> usages);
+    void insertUsageDataDetails(UsageBatch usageBatch, List<Usage> usages, String userName);
 
     /**
      * Checks whether provided Work Portion ID already exists in the system.

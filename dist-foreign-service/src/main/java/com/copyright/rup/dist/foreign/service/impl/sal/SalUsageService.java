@@ -129,8 +129,7 @@ public class SalUsageService implements ISalUsageService {
 
     @Override
     @Transactional
-    public void insertUsageDataDetails(UsageBatch usageBatch, List<Usage> usages) {
-        String userName = RupContextUtils.getUserName();
+    public void insertUsageDataDetails(UsageBatch usageBatch, List<Usage> usages, String userName) {
         ILogWrapper size = LogUtils.size(usages);
         LOGGER.info("Insert SAL usage data details. Started. UsageBatchName={}, UsagesCount={}, UserName={}",
             usageBatch.getName(), size, userName);

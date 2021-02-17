@@ -83,7 +83,7 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
 
     @Override
     public void loadUsageData(UsageBatch itemBank, List<Usage> usages) {
-        salUsageService.insertUsageDataDetails(itemBank, usages);
+        getUsageBatchService().addUsageDataToSalBatch(itemBank, usages);
         getUsageFilterController().getWidget().clearFilter();
     }
 
