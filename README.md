@@ -1,3 +1,9 @@
+13.1.13
+-
+* B-65718 FDA: Batch Processing View: implement backend logic to get batch status for AACL product family
+* B-65718 FDA: Batch Processing View: implement backend logic to get batch status for SAL product family
+* B-65718 FDA: Batch Processing View: update upload batch functionality to store initial usages count for AACL/SAL product families
+
 13.1.12
 -
 * B-65718 FDA: Batch Processing View: implement backend logic to get batch status for NTS product family
