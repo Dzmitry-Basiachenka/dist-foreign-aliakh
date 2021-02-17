@@ -93,6 +93,7 @@ public class LoadAaclUsagesIntegrationTest {
             "rights/rms_grants_empty_response.json");
         testHelper.expectPrmCall("prm/rightsholder_1000024950_response.json", 1000024950L);
         loadUsageBatch();
+        assertUsageBatch();
         assertUsages();
         assertAudit();
         testHelper.verifyRestServer();
@@ -127,6 +128,16 @@ public class LoadAaclUsagesIntegrationTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         IOUtils.write(csvText, out, StandardCharsets.UTF_8);
         return out;
+    }
+
+    private void assertUsageBatch() {
+        UsageBatch batch = usageBatchService.getUsageBatches("AACL")
+            .stream()
+            .filter(b ->"AACL test batch".equals(b.getName()))
+            .findFirst()
+            .orElse(null);
+        assertNotNull(batch);
+        assertEquals(8, batch.getInitialUsagesCount());
     }
 
     private void assertUsages() throws IOException {

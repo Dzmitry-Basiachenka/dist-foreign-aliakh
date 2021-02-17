@@ -256,6 +256,7 @@
             ub.product_family,
             ub.payment_date,
             ub.fiscal_year,
+            ub.initial_usages_count,
             ub.sal_fields,
             ub.created_datetime,
             ub.updated_datetime,

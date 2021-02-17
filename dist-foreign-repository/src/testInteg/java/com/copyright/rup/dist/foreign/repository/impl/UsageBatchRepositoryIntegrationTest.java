@@ -276,7 +276,10 @@ public class UsageBatchRepositoryIntegrationTest {
             .collect(Collectors.toList());
         assertEquals(Arrays.asList("1f332dc2-f3c2-453a-aba0-9baa69b803d4", "f0de407a-a615-4171-8e98-9fc28fab5324"),
             actualBatchIds);
-        List<String> actualNotAttachedBatchIds = usageBatchRepository.findSalNotAttachedToScenario().stream()
+        List<UsageBatch> notAttachedBatches = usageBatchRepository.findSalNotAttachedToScenario();
+        assertEquals(1, notAttachedBatches.size());
+        assertEquals(2, notAttachedBatches.get(0).getInitialUsagesCount());
+        List<String> actualNotAttachedBatchIds = notAttachedBatches.stream()
             .map(UsageBatch::getId)
             .sorted()
             .collect(Collectors.toList());

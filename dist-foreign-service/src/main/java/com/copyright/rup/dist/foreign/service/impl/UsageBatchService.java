@@ -162,6 +162,8 @@ public class UsageBatchService implements IUsageBatchService {
         List<String> baselineUsageIds = 0 < Objects.requireNonNull(usageBatch.getNumberOfBaselineYears())
             ? aaclUsageService.insertUsagesFromBaseline(usageBatch)
             : Collections.emptyList();
+        usageBatchRepository.updateInitialUsagesCount(uploadedUsages.size() + baselineUsageIds.size(),
+            usageBatch.getId(), userName);
         LOGGER.info("Insert AACL batch. Finished. UsageBatchName={}, UserName={}, UploadedCount={}, BaselineCount={}",
             usageBatch.getName(), userName, LogUtils.size(uploadedUsages), LogUtils.size(baselineUsageIds));
         List<String> uploadedUsageIds = uploadedUsages.stream()
@@ -181,11 +183,26 @@ public class UsageBatchService implements IUsageBatchService {
             usageBatch.getName(), userName, LogUtils.size(uploadedUsages));
         usageBatchRepository.insert(usageBatch);
         salUsageService.insertItemBankDetails(usageBatch, uploadedUsages);
+        usageBatchRepository.updateInitialUsagesCount(uploadedUsages.size(), usageBatch.getId(), userName);
         LOGGER.info("Insert SAL batch. Finished. UsageBatchName={}, UserName={}, ItemBankDetailsCount={}",
             usageBatch.getName(), userName, LogUtils.size(uploadedUsages));
         return uploadedUsages.stream()
             .map(Usage::getId)
             .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void addUsageDataToSalBatch(UsageBatch usageBatch, List<Usage> usages) {
+        String userName = RupContextUtils.getUserName();
+        LogUtils.ILogWrapper size = LogUtils.size(usages);
+        LOGGER.info("Add usage data to SAL Batch. Started. UsageBatchName={}, UsagesCount={}, UserName={}",
+            usageBatch.getName(), size, userName);
+        salUsageService.insertUsageDataDetails(usageBatch, usages, userName);
+        usageBatchRepository.updateInitialUsagesCount(usageBatch.getInitialUsagesCount() + usages.size(),
+            usageBatch.getId(), userName);
+        LOGGER.info("Add usage data to SAL Batch. Finished. UsageBatchName={}, UsagesCount={}, UserName={}",
+            usageBatch.getName(), size, userName);
     }
 
     @Override

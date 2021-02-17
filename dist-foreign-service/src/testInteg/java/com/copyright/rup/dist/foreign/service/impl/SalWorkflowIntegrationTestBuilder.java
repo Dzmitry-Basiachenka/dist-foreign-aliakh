@@ -269,7 +269,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             List<Usage> usages = result.get();
             setPredefinedUsageIds(usages, predefinedUsageDataDetailIds);
             usageIds.addAll(predefinedUsageDataDetailIds);
-            salUsageService.insertUsageDataDetails(usageBatch, usages);
+            usageBatchService.addUsageDataToSalBatch(usageBatch, usages);
         }
 
         private void addToScenario() {
