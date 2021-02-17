@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
+
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
@@ -61,7 +62,7 @@ public class AaclBatchStatusWidgetTest {
         assertEquals("batch-status-grid", grid.getId());
         List<Grid.Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Usage Batch Name", "Total Count", "New", "Work Not Found", "Work Found",
-            "RH Found", "Eligible", "Excluded", "Status"),
+            "RH Found", "Sent For Classification", "Eligible", "Excluded", "Status"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         columns.forEach(column -> assertTrue(column.isSortable()));
     }

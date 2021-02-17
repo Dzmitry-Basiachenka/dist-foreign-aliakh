@@ -68,7 +68,9 @@ public class UsageBatchStatusServiceTest {
 
     @Test
     public void testGetUsageBatchStatusesAacl() {
-        expect(usageBatchStatusRepository.findUsageBatchStatusesAacl()).andReturn(batchStatuses).once();
+        expect(usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("AACL",
+            LocalDate.now().minusDays(NUMBER_OF_DAYS))).andReturn(batchIds).once();
+        expect(usageBatchStatusRepository.findUsageBatchStatusesAacl(batchIds)).andReturn(batchStatuses).once();
         replay(usageBatchStatusRepository);
         assertSame(batchStatuses, usageBatchStatusService.getUsageBatchStatusesAacl());
         verify(usageBatchStatusRepository);

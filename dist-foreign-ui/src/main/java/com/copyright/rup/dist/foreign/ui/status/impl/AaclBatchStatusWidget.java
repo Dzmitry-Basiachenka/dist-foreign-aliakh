@@ -23,6 +23,8 @@ public class AaclBatchStatusWidget extends CommonBatchStatusWidget implements IA
             true, 130);
         addColumn(UsageBatchStatus::getWorkFoundCount, "table.column.work_found", "workFoundCount", true, 130);
         addColumn(UsageBatchStatus::getRhFoundCount, "table.column.rh_found", "rhFoundCount", true, 130);
+        addColumn(UsageBatchStatus::getWorkResearchCount, "table.column.sent_for_classification", "workResearchCount",
+            true, 170);
         addColumn(UsageBatchStatus::getEligibleCount, "table.column.eligible", "eligibleCount", true, 130);
         addColumn(UsageBatchStatus::getExcludedCount, "table.column.excluded", "excludedCount", true, 130);
         addColumn(UsageBatchStatus::getStatus, "table.column.status", "status", true);
