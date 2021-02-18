@@ -22,6 +22,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -70,6 +71,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2018')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -100,6 +102,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2020-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -175,6 +178,7 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL batch 4')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -206,6 +210,7 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL batch')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -321,6 +326,7 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL batch 1 for testFindUsagePeriodsByFilter')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -368,6 +374,7 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL batch 2 for testFindUsagePeriodsByFilter')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -420,6 +427,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -526,6 +534,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -634,6 +643,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2000')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -800,6 +810,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -878,6 +889,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -980,6 +992,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'baseline_years', value: '2')
+            column(name: 'initial_usages_count', value: 6)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -1222,6 +1235,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -1230,6 +1244,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2020-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -1348,6 +1363,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -1501,6 +1517,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2021')
+            column(name: 'initial_usages_count', value: 4)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -1668,6 +1685,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2020-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1724,6 +1742,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2020-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1799,6 +1818,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {

@@ -28,6 +28,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
@@ -105,6 +106,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2016-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'sal_fields', value: '{"licensee_account_number": 1000000009, "licensee_name": "Tiger Publications"}')
         }
 
@@ -143,6 +145,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2016-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 1000000009, "licensee_name": "Tiger Publications"}')
         }
 
@@ -213,6 +216,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
@@ -285,6 +289,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2016-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'sal_fields', value: '{"licensee_account_number": 1000000009, "licensee_name": "Tiger Publications"}')
         }
 
@@ -326,6 +331,7 @@ databaseChangeLog {
             column(name: 'name', value: 'SAL usage batch 4')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'sal_fields', value: '{"licensee_name": "Truman State University", "licensee_account_number": "4444"}')
         }
 
@@ -371,6 +377,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
+            column(name: 'initial_usages_count', value: 3)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
@@ -476,6 +483,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2015')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
@@ -551,6 +559,7 @@ databaseChangeLog {
             column(name: 'name', value: 'SAL batch 1')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
+            column(name: 'initial_usages_count', value: 4)
             column(name: 'sal_fields', value: '{"licensee_name": "Truman State University", "licensee_account_number": "4444"}')
         }
 
@@ -726,6 +735,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
@@ -853,6 +863,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 6)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
@@ -1124,6 +1135,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
@@ -1199,6 +1211,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
@@ -1271,6 +1284,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001573389, "licensee_name": "Questar Assessment"}')
         }
 
@@ -1395,6 +1409,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2018')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 2000017003, "licensee_name": "ProLitteris"}')
         }
 

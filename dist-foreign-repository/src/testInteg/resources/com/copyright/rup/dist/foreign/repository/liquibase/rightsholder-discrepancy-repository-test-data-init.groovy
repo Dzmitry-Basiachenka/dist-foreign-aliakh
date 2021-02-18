@@ -12,6 +12,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '30000')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -70,6 +71,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
