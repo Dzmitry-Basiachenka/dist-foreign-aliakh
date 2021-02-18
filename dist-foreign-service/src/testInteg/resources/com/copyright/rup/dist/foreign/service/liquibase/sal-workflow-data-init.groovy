@@ -58,6 +58,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 

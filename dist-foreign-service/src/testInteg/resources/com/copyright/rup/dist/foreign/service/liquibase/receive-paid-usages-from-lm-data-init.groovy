@@ -19,6 +19,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '1000.00')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -74,6 +75,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '2000.00')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -196,6 +198,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2000')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {

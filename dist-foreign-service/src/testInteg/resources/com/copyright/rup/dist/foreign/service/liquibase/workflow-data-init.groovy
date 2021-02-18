@@ -48,6 +48,7 @@ databaseChangeLog {
             column(name: "payment_date", value: "2013-01-03")
             column(name: "fiscal_year", value: "2013")
             column(name: "gross_amount", value: "200.00")
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_scenario") {

@@ -26,6 +26,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 6)
         }
 
         // usage won't be added to new scenario during test run
@@ -246,6 +247,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 5)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -428,6 +430,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
+            column(name: 'initial_usages_count', value: 5)
             column(name: 'nts_fields', value: '{"markets": ["Bus,Univ,Doc Del"], "stm_amount": 10, "non_stm_amount": 20, "stm_minimum_amount": 30, "non_stm_minimum_amount": 40, "fund_pool_period_to": 2017, "fund_pool_period_from": 2017}')
         }
 
@@ -552,6 +555,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '190.00')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

@@ -36,6 +36,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-26')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '5000.00')
+            column(name: 'initial_usages_count', value: 10)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -294,6 +295,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-26')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '84.00')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -328,6 +330,7 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL Usage Batch 2015')
             column(name: 'product_family', value: 'AACL')
             column(name: 'payment_date', value: '2015-06-30')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -393,6 +396,7 @@ databaseChangeLog {
             column(name: "name", value: "SAL Usage Batch 2020")
             column(name: "payment_date", value: "2020-06-30")
             column(name: "product_family", value: "SAL")
+            column(name: 'initial_usages_count', value: 3)
             column(name: "sal_fields", value: "{\"licensee_name\": \"RGS Energy Group, Inc.\", \"licensee_account_number\": 5588}")
         }
 

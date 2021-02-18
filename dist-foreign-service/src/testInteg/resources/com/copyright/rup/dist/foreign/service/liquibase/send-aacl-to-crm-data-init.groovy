@@ -36,6 +36,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2020-05-24')
             column(name: 'product_family', value: 'AACL')
             column(name: 'gross_amount', value: '1000.00')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {

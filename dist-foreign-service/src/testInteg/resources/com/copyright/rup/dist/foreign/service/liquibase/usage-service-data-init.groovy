@@ -12,6 +12,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '40300.00')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
@@ -23,6 +24,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '10250.00')
+            column(name: 'initial_usages_count', value: 3)
             column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
@@ -250,6 +252,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '15000.00')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
