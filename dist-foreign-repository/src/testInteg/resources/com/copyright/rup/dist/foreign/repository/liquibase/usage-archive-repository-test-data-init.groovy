@@ -36,6 +36,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -46,6 +47,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-08-16')
             column(name: 'fiscal_year', value: '2019')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -56,6 +58,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '70000.00')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -216,6 +219,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '185.60')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -297,6 +301,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '1000.00')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -351,6 +356,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '15000.00')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -404,6 +410,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2021')
             column(name: 'gross_amount', value: '1500.00')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -413,6 +420,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2021')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 0, "stm_minimum_amount": 0, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 0}')
         }
@@ -518,6 +526,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2022-02-12')
             column(name: 'fiscal_year', value: '2022')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -593,6 +602,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2022-02-12')
             column(name: 'fiscal_year', value: '2022')
             column(name: 'gross_amount', value: '300.00')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -641,6 +651,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2022-02-12')
             column(name: 'fiscal_year', value: '2022')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -696,6 +707,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2021')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -838,6 +850,7 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL batch')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
@@ -950,6 +963,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
@@ -1039,6 +1053,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
@@ -1174,6 +1189,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 1000008985, "licensee_name": "Synergy Publishers"}')
         }
 

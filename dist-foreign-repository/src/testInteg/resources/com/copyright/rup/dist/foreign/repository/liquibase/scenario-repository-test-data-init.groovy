@@ -30,6 +30,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '30000')
+            column(name: 'initial_usages_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -40,6 +41,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -50,6 +52,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-10-30')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '35000')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -60,6 +63,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-01')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '1000')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -480,6 +484,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '1000.00')
+            column(name: 'initial_usages_count', value: 5)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -723,6 +728,7 @@ databaseChangeLog {
                 column(name: 'payment_date', value: '2010-09-10')
                 column(name: 'product_family', value: 'NTS')
                 column(name: 'fiscal_year', value: '2011')
+                column(name: 'initial_usages_count', value: 1)
             }
 
             insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -775,6 +781,7 @@ databaseChangeLog {
                 column(name: 'payment_date', value: '2019-01-11')
                 column(name: 'product_family', value: 'NTS')
                 column(name: 'fiscal_year', value: '2020')
+                column(name: 'initial_usages_count', value: 5)
                 column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 10000, "stm_minimum_amount": 50, ' +
                         '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
             }
@@ -917,6 +924,7 @@ databaseChangeLog {
                 column(name: 'payment_date', value: '2019-01-11')
                 column(name: 'product_family', value: 'NTS')
                 column(name: 'fiscal_year', value: '2020')
+                column(name: 'initial_usages_count', value: 1)
                 column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 0, "non_stm_amount": 0, "stm_minimum_amount": 50, ' +
                         '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
             }
@@ -955,6 +963,7 @@ databaseChangeLog {
                 column(name: 'payment_date', value: '2021-01-11')
                 column(name: 'product_family', value: 'NTS')
                 column(name: 'fiscal_year', value: '2020')
+                column(name: 'initial_usages_count', value: 1)
                 column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 2000, "non_stm_amount": 20000, "stm_minimum_amount": 50, ' +
                         '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
             }
@@ -993,6 +1002,7 @@ databaseChangeLog {
                 column(name: 'payment_date', value: '2019-01-11')
                 column(name: 'product_family', value: 'NTS')
                 column(name: 'fiscal_year', value: '2021')
+                column(name: 'initial_usages_count', value: 1)
                 column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 2000, "non_stm_amount": 20000, "stm_minimum_amount": 50, ' +
                         '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
             }
@@ -1031,6 +1041,7 @@ databaseChangeLog {
                 column(name: 'payment_date', value: '2019-01-11')
                 column(name: 'product_family', value: 'NTS')
                 column(name: 'fiscal_year', value: '2019')
+                column(name: 'initial_usages_count', value: 1)
                 column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 2000, "non_stm_amount": 20000, "stm_minimum_amount": 50, ' +
                         '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
             }
@@ -1076,6 +1087,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '50')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -1085,6 +1097,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 900, "non_stm_amount": 1000, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
@@ -1212,6 +1225,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '50')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -1221,6 +1235,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 900, "non_stm_amount": 1000, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
         }
@@ -1375,6 +1390,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -1440,6 +1456,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 1)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
