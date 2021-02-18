@@ -12,6 +12,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-24')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '1500.00')
+            column(name: 'initial_usages_count', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

@@ -25,6 +25,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2020-05-24')
             column(name: 'product_family', value: 'AACL')
             column(name: 'gross_amount', value: '500.00')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
@@ -103,6 +104,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '1000.00')
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -238,6 +240,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 
@@ -359,6 +362,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
             column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
 

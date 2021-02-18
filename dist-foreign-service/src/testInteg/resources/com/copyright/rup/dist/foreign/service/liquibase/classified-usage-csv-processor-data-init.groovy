@@ -11,6 +11,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'AACL')
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 12)
         }
 
         // Usage with all fields valid and Detail Licensee Class Id missing in CSV
