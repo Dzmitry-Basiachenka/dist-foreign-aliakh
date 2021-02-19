@@ -95,9 +95,9 @@ public class UsageBatchStatusRepositoryIntegrationTest {
 
     @Test
     public void testFindUsageBatchIdsByProductFamilyAndStartDateFrom() {
-        assertEquals(Sets.newHashSet("cf56b889-82fe-4990-b111-9c56ce986281", "515a78e7-2a92-4b15-859a-fd9f70e80982"),
+        assertEquals(Sets.newHashSet("515a78e7-2a92-4b15-859a-fd9f70e80982"),
             usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("FAS",
-                LocalDate.of(2021, 1, 1)));
+                LocalDate.of(2021, 2, 14)));
     }
 
     private void assertUsageBatchStatus(UsageBatchStatus expected, UsageBatchStatus actual) {

@@ -173,7 +173,7 @@
             from ${schema}.df_usage_batch b
             join ${schema}.df_usage u on b.df_usage_batch_uid = u.df_usage_batch_uid
             where b.product_family = #{productFamily}
-                and b.created_datetime >= #{startDate}
+                and b.created_datetime::date > #{startDate}
             group by b.df_usage_batch_uid, u.df_scenario_uid
         ) nested
         group by df_usage_batch_uid
