@@ -26,6 +26,8 @@ public class UsageBatchStatus {
     private int rhFoundCount;
     private int workNotGrantedCount;
     private int sentForRaCount;
+    private int nonStmRhCount;
+    private int usTaxCountryCount;
     private int unclassifiedCount;
     private int eligibleCount;
     private int excludedCount;
@@ -119,6 +121,22 @@ public class UsageBatchStatus {
         this.sentForRaCount = sentForRaCount;
     }
 
+    public int getNonStmRhCount() {
+        return nonStmRhCount;
+    }
+
+    public void setNonStmRhCount(int nonStmRhCount) {
+        this.nonStmRhCount = nonStmRhCount;
+    }
+
+    public int getUsTaxCountryCount() {
+        return usTaxCountryCount;
+    }
+
+    public void setUsTaxCountryCount(int usTaxCountryCount) {
+        this.usTaxCountryCount = usTaxCountryCount;
+    }
+
     public int getUnclassifiedCount() {
         return unclassifiedCount;
     }
@@ -172,6 +190,8 @@ public class UsageBatchStatus {
             .append(rhFoundCount, that.rhFoundCount)
             .append(workNotGrantedCount, that.workNotGrantedCount)
             .append(sentForRaCount, that.sentForRaCount)
+            .append(nonStmRhCount, that.nonStmRhCount)
+            .append(usTaxCountryCount, that.usTaxCountryCount)
             .append(unclassifiedCount, that.unclassifiedCount)
             .append(eligibleCount, that.eligibleCount)
             .append(excludedCount, that.excludedCount)
@@ -193,6 +213,8 @@ public class UsageBatchStatus {
             .append(rhFoundCount)
             .append(workNotGrantedCount)
             .append(sentForRaCount)
+            .append(nonStmRhCount)
+            .append(usTaxCountryCount)
             .append(unclassifiedCount)
             .append(eligibleCount)
             .append(excludedCount)
@@ -214,6 +236,8 @@ public class UsageBatchStatus {
             .append("rhFoundCount", rhFoundCount)
             .append("workNotGrantedCount", workNotGrantedCount)
             .append("sentForRaCount", sentForRaCount)
+            .append("nonStmRhCount", nonStmRhCount)
+            .append("usTaxCountryCount", usTaxCountryCount)
             .append("unclassifiedCount", unclassifiedCount)
             .append("eligibleCount", eligibleCount)
             .append("excludedCount", excludedCount)

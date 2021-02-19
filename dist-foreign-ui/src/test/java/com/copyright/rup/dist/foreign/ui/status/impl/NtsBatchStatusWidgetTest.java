@@ -8,9 +8,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
+
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -59,8 +61,8 @@ public class NtsBatchStatusWidgetTest {
         assertEquals(Sizeable.Unit.PERCENTAGE, grid.getWidthUnits());
         assertEquals("batch-status-grid", grid.getId());
         List<Grid.Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Usage Batch Name", "Total Count", "Work Found", "RH Found", "Unclassified",
-            "Eligible", "Excluded", "Status"),
+        assertEquals(Arrays.asList("Usage Batch Name", "Total Count", "Work Found", "RH Found", "Non-STM RH",
+            "US Tax Country", "Unclassified", "Eligible", "Excluded", "Status"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         columns.forEach(column -> assertTrue(column.isSortable()));
     }

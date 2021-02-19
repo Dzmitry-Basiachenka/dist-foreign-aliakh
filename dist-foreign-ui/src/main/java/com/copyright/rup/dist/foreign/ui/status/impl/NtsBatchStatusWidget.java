@@ -20,6 +20,9 @@ public class NtsBatchStatusWidget extends CommonBatchStatusWidget implements INt
         addColumn(UsageBatchStatus::getTotalCount, "table.column.total_count", "totalCount", true, 130);
         addColumn(UsageBatchStatus::getWorkFoundCount, "table.column.work_found", "workFoundCount", true, 130);
         addColumn(UsageBatchStatus::getRhFoundCount, "table.column.rh_found", "rhFoundCount", true, 130);
+        addColumn(UsageBatchStatus::getNonStmRhCount, "table.column.non_stm_rh", "nonStmRhCount", true, 130);
+        addColumn(UsageBatchStatus::getUsTaxCountryCount, "table.column.us_tax_country", "usTaxCountryCount", true,
+            130);
         addColumn(UsageBatchStatus::getUnclassifiedCount, "table.column.unclassified", "unclassifiedCount", true, 130);
         addColumn(UsageBatchStatus::getEligibleCount, "table.column.eligible", "eligibleCount", true, 130);
         addColumn(UsageBatchStatus::getExcludedCount, "table.column.excluded", "excludedCount", true, 130);
