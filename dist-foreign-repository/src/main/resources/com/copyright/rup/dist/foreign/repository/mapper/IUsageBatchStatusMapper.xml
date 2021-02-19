@@ -16,6 +16,8 @@
         <result property="rhFoundCount" column="rh_found_count"/>
         <result property="workNotGrantedCount" column="work_not_granted_count"/>
         <result property="sentForRaCount" column="sent_for_ra_count"/>
+        <result property="nonStmRhCount" column="non_stm_rh_count"/>
+        <result property="usTaxCountryCount" column="us_tax_country_count"/>
         <result property="unclassifiedCount" column="unclassified_count"/>
         <result property="eligibleCount" column="eligible_count"/>
         <result property="excludedCount" column="excluded_count"/>
@@ -35,7 +37,7 @@
             max(rh_not_found_count) rh_not_found_count,
             max(sent_for_ra_count) sent_for_ra_count,
             max(eligible_count) eligible_count,
-            case when max(new_count) + max(work_found_count) + max(rh_found_count) = 0 then 'Completed' else 'In Progress' end status
+            case when max(new_count) + max(work_found_count) + max(rh_found_count) = 0 then 'COMPLETED' else 'IN_PROGRESS' end status
         from (
             select
                 name,
@@ -68,10 +70,12 @@
             initial_usages_count total_count,
             max(work_found_count) work_found_count,
             max(rh_found_count) rh_found_count,
+            max(non_stm_rh_count) non_stm_rh_count,
+            max(us_tax_country_count) us_tax_country_count,
             max(unclassified_count) unclassified_count,
             max(eligible_count) eligible_count,
             initial_usages_count - sum(status_count) excluded_count,
-            case when max(work_found_count) + max(rh_found_count) = 0 then 'Completed' else 'In Progress' end status
+            case when max(work_found_count) + max (non_stm_rh_count) + max(us_tax_country_count) + max(rh_found_count) = 0 then 'COMPLETED' else 'IN_PROGRESS' end status
         from (
             select
                 name,
@@ -80,6 +84,8 @@
                 count(1) status_count,
                 case when status_ind = 'WORK_FOUND' then count(1) else 0 end work_found_count,
                 case when status_ind = 'RH_FOUND' then count(1) else 0 end rh_found_count,
+                case when status_ind = 'NON_STM_RH' then count(1) else 0 end non_stm_rh_count,
+                case when status_ind = 'US_TAX_COUNTRY' then count(1) else 0 end us_tax_country_count,
                 case when status_ind = 'UNCLASSIFIED' then count(1) else 0 end unclassified_count,
                 case when status_ind = 'ELIGIBLE' then count(1) else 0 end eligible_count
             from ${schema}.df_usage u
@@ -105,7 +111,7 @@
             max(work_research_count) work_research_count,
             max(eligible_count) eligible_count,
             initial_usages_count - sum(status_count) excluded_count,
-            case when max(new_count) + max(work_found_count) = 0 then 'Completed' else 'In Progress' end status
+            case when max(new_count) + max(work_found_count) = 0 then 'COMPLETED' else 'IN_PROGRESS' end status
         from (
             select
                 name,
@@ -141,7 +147,7 @@
             max(rh_not_found_count) rh_not_found_count,
             max(rh_found_count) rh_found_count,
             max(eligible_count) eligible_count,
-            case when max(new_count) + max(work_found_count) + max(rh_found_count) = 0 then 'Completed' else 'In Progress' end status
+            case when max(new_count) + max(work_found_count) + max(rh_found_count) = 0 then 'COMPLETED' else 'IN_PROGRESS' end status
         from (
             select
                 name,

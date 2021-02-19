@@ -34,8 +34,8 @@ import java.util.List;
 @Transactional
 public class UsageBatchStatusRepositoryIntegrationTest {
 
-    private static final String COMPLETED_STATUS = "Completed";
-    private static final String IN_PROGRESS_STATUS = "In Progress";
+    private static final String COMPLETED_STATUS = "COMPLETED";
+    private static final String IN_PROGRESS_STATUS = "IN_PROGRESS";
     @Autowired
     private IUsageBatchStatusRepository usageBatchStatusRepository;
 
@@ -59,9 +59,11 @@ public class UsageBatchStatusRepositoryIntegrationTest {
             usageBatchStatusRepository.findUsageBatchStatusesNts(
                 Sets.newHashSet("359de82f-374b-4d53-88ab-0be3982b22aa", "a34417b5-12c1-48e2-9aed-d3861b49545b"));
         assertEquals(2, usageBatchStatuses.size());
-        assertUsageBatchStatus(buildUsageBatchStatusNts("NTS completed batch", 5, COMPLETED_STATUS, 2, 0, 0, 1, 2),
+        assertUsageBatchStatus(
+            buildUsageBatchStatusNts("NTS completed batch", 5, COMPLETED_STATUS, 2, 0, 0, 0, 0, 1, 2),
             usageBatchStatuses.get(0));
-        assertUsageBatchStatus(buildUsageBatchStatusNts("NTS in progress batch", 7, IN_PROGRESS_STATUS, 3, 1, 2, 0, 1),
+        assertUsageBatchStatus(
+            buildUsageBatchStatusNts("NTS in progress batch", 9, IN_PROGRESS_STATUS, 3, 1, 2, 1, 1, 0, 1),
             usageBatchStatuses.get(1));
     }
 
@@ -111,6 +113,8 @@ public class UsageBatchStatusRepositoryIntegrationTest {
         assertEquals(expected.getNtsWithdrawnCount(), actual.getNtsWithdrawnCount());
         assertEquals(expected.getWorkResearchCount(), actual.getWorkResearchCount());
         assertEquals(expected.getRhFoundCount(), actual.getRhFoundCount());
+        assertEquals(expected.getNonStmRhCount(), actual.getNonStmRhCount());
+        assertEquals(expected.getUsTaxCountryCount(), actual.getUsTaxCountryCount());
         assertEquals(expected.getUnclassifiedCount(), actual.getUnclassifiedCount());
         assertEquals(expected.getRhNotFoundCount(), actual.getRhNotFoundCount());
         assertEquals(expected.getWorkNotGrantedCount(), actual.getWorkNotGrantedCount());
@@ -139,8 +143,8 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     private UsageBatchStatus buildUsageBatchStatusNts(String name, int totalCount, String status, int excludedCount,
-                                                      int workFoundCount, int rhFoundCount, int unclassifiedCount,
-                                                      int eligibleCount) {
+                                                      int workFoundCount, int rhFoundCount, int nonStmRhCount,
+                                                      int usTaxCountryCount, int unclassifiedCount, int eligibleCount) {
         UsageBatchStatus batchStatus = new UsageBatchStatus();
         batchStatus.setBatchName(name);
         batchStatus.setTotalCount(totalCount);
@@ -148,6 +152,8 @@ public class UsageBatchStatusRepositoryIntegrationTest {
         batchStatus.setExcludedCount(excludedCount);
         batchStatus.setWorkFoundCount(workFoundCount);
         batchStatus.setRhFoundCount(rhFoundCount);
+        batchStatus.setNonStmRhCount(nonStmRhCount);
+        batchStatus.setUsTaxCountryCount(usTaxCountryCount);
         batchStatus.setUnclassifiedCount(unclassifiedCount);
         batchStatus.setEligibleCount(eligibleCount);
         return batchStatus;
