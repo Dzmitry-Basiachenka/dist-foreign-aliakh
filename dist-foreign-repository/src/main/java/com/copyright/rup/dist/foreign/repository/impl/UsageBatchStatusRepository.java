@@ -47,11 +47,20 @@ public class UsageBatchStatusRepository extends BaseRepository implements IUsage
     }
 
     @Override
-    public Set<String> findUsageBatchIdsByProductFamilyAndStartDateFrom(String productFamily, LocalDate startDate) {
+    public Set<String> findFasUsageBatchIdsEligibleForStatistic(String productFamily, LocalDate startDate) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("productFamily", productFamily);
         params.put("startDate", startDate);
         return new HashSet<>(
-            selectList("IUsageBatchStatusMapper.findUsageBatchIdsByProductFamilyAndStartDateFrom", params));
+            selectList("IUsageBatchStatusMapper.findFasUsageBatchIdsEligibleForStatistic", params));
+    }
+
+    @Override
+    public Set<String> findUsageBatchIdsEligibleForStatistic(String productFamily, LocalDate startDate) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("productFamily", productFamily);
+        params.put("startDate", startDate);
+        return new HashSet<>(
+            selectList("IUsageBatchStatusMapper.findUsageBatchIdsEligibleForStatistic", params));
     }
 }

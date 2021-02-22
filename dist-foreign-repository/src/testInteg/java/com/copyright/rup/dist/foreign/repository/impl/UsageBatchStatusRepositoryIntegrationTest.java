@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -96,10 +97,15 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindUsageBatchIdsByProductFamilyAndStartDateFrom() {
-        assertEquals(Sets.newHashSet("515a78e7-2a92-4b15-859a-fd9f70e80982"),
-            usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("FAS",
-                LocalDate.of(2021, 2, 14)));
+    public void testFindFasUsageBatchIdsEligibleForStatistic() {
+        assertEquals(Collections.singleton("515a78e7-2a92-4b15-859a-fd9f70e80982"),
+            usageBatchStatusRepository.findFasUsageBatchIdsEligibleForStatistic("FAS", LocalDate.of(2021, 2, 14)));
+    }
+
+    @Test
+    public void testFindUsageBatchIdsEligibleForStatistic() {
+        assertEquals(Collections.singleton("359de82f-374b-4d53-88ab-0be3982b22aa"),
+            usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic("NTS", LocalDate.of(2021, 2, 14)));
     }
 
     private void assertUsageBatchStatus(UsageBatchStatus expected, UsageBatchStatus actual) {

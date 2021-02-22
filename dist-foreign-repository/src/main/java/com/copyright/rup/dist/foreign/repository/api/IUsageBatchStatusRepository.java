@@ -50,11 +50,21 @@ public interface IUsageBatchStatusRepository {
     List<UsageBatchStatus> findUsageBatchStatusesSal(Set<String> batchIds);
 
     /**
+     * Finds usage batch ids not associated with scenarios and pre-service fee funds for FAS/FAS2 product families
+     * and start date.
+     *
+     * @param productFamily product family
+     * @param startDate     start date of batch creation
+     * @return set of usage batch ids
+     */
+    Set<String> findFasUsageBatchIdsEligibleForStatistic(String productFamily, LocalDate startDate);
+
+    /**
      * Finds usage batch ids not associated with scenarios for specified product family and start date.
      *
      * @param productFamily product family
      * @param startDate     start date of batch creation
      * @return set of usage batch ids
      */
-    Set<String> findUsageBatchIdsByProductFamilyAndStartDateFrom(String productFamily, LocalDate startDate);
+    Set<String> findUsageBatchIdsEligibleForStatistic(String productFamily, LocalDate startDate);
 }

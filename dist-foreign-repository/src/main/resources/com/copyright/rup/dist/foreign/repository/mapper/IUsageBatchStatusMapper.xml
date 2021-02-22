@@ -173,17 +173,34 @@
         order by created_datetime desc
     </select>
 
-    <select id="findUsageBatchIdsByProductFamilyAndStartDateFrom" resultType="string" parameterType="map">
-        select df_usage_batch_uid from (
-            select b.df_usage_batch_uid, df_scenario_uid
+    <select id="findFasUsageBatchIdsEligibleForStatistic" resultType="string" parameterType="map">
+        select df_usage_batch_uid
+        from (
+            select
+                b.df_usage_batch_uid,
+                u.df_scenario_uid,
+                ufas.df_fund_pool_uid
             from ${schema}.df_usage_batch b
             join ${schema}.df_usage u on b.df_usage_batch_uid = u.df_usage_batch_uid
+            join ${schema}.df_usage_fas ufas on u.df_usage_uid = ufas.df_usage_fas_uid
+            left join ${schema}.df_usage_archive ua on b.df_usage_batch_uid = ua.df_usage_batch_uid
             where b.product_family = #{productFamily}
                 and b.created_datetime::date > #{startDate}
-            group by b.df_usage_batch_uid, u.df_scenario_uid
+                and ua.df_usage_batch_uid is null
+            group by b.df_usage_batch_uid, u.df_scenario_uid, ufas.df_fund_pool_uid
         ) nested
         group by df_usage_batch_uid
         having min(df_scenario_uid) is null
+            and min(df_fund_pool_uid) is null
             and count(1) = 1
+    </select>
+
+    <select id="findUsageBatchIdsEligibleForStatistic" resultType="string" parameterType="map">
+        select b.df_usage_batch_uid
+        from ${schema}.df_usage_batch b
+        left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map map on b.df_usage_batch_uid = map.df_usage_batch_uid
+        where b.product_family = #{productFamily}
+            and b.created_datetime::date > #{startDate}
+            and map.df_usage_batch_uid is null
     </select>
 </mapper>
