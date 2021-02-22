@@ -1,3 +1,12 @@
+13.1.14
+-
+* CDP-959 FDA: Batch status tab: Usage batch is displayed on Batch status tab after sending scenario containing this usage batch to LM
+* B-65718 FDA: Batch Processing View: add NON_STM_RH and US_TAX_COUNTRY statuses to NTS batch status
+* B-65718 FDA: Batch Processing View: adjust logic to get Usage Batches for Batch Status tab based on number of days property
+* B-65718 FDA: Batch Processing View: populate initial_usages_count column for test data on service layer
+* B-65718 FDA: Batch Processing View: populate initial_usages_count column for test data on repository layer
+* B-65718 FDA: Batch Processing View: introduce empty style name for batch status table
+
 13.1.13
 -
 * B-65718 FDA: Batch Processing View: implement backend logic to get batch status for AACL product family
