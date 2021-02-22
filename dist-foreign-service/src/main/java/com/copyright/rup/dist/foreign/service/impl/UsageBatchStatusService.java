@@ -34,7 +34,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
 
     @Override
     public List<UsageBatchStatus> getUsageBatchStatusesFas(String productFamily) {
-        Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom(
+        Set<String> batchIds = usageBatchStatusRepository.findFasUsageBatchIdsEligibleForStatistic(
             productFamily, LocalDate.now().minusDays(numberOfDays));
         return !batchIds.isEmpty()
             ? usageBatchStatusRepository.findUsageBatchStatusesFas(batchIds)
@@ -43,7 +43,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
 
     @Override
     public List<UsageBatchStatus> getUsageBatchStatusesNts() {
-        Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom(
+        Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic(
             FdaConstants.NTS_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
         return !batchIds.isEmpty()
             ? usageBatchStatusRepository.findUsageBatchStatusesNts(batchIds)
@@ -52,7 +52,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
 
     @Override
     public List<UsageBatchStatus> getUsageBatchStatusesAacl() {
-        Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom(
+        Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic(
             FdaConstants.AACL_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
         return !batchIds.isEmpty()
             ? usageBatchStatusRepository.findUsageBatchStatusesAacl(batchIds)
@@ -61,7 +61,7 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
 
     @Override
     public List<UsageBatchStatus> getUsageBatchStatusesSal() {
-        Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom(
+        Set<String> batchIds = usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic(
             FdaConstants.SAL_PRODUCT_FAMILY, LocalDate.now().minusDays(numberOfDays));
         return !batchIds.isEmpty()
             ? usageBatchStatusRepository.findUsageBatchStatusesSal(batchIds)

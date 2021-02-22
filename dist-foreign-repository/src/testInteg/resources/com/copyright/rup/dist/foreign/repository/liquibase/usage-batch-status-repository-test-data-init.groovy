@@ -10,9 +10,9 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: '1000000001')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2022-02-12')
-            column(name: 'fiscal_year', value: '2022')
+            column(name: 'fiscal_year', value: 2022)
             column(name: 'gross_amount', value: '600.00')
-            column(name: 'initial_usages_count', value: '9')
+            column(name: 'initial_usages_count', value: 9)
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
         }
 
@@ -30,8 +30,8 @@ databaseChangeLog {
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: '25.00')
         }
 
@@ -52,8 +52,8 @@ databaseChangeLog {
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: '25.00')
         }
 
@@ -72,8 +72,8 @@ databaseChangeLog {
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: '150.01')
         }
 
@@ -92,8 +92,8 @@ databaseChangeLog {
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: '49.99')
         }
 
@@ -112,8 +112,8 @@ databaseChangeLog {
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: '50.00')
         }
 
@@ -126,7 +126,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -136,8 +136,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
@@ -150,7 +150,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1228902112377655XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -160,8 +160,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
@@ -175,7 +175,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -185,8 +185,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
@@ -200,7 +200,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -210,8 +210,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
@@ -222,9 +222,9 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: '1000000001')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2022-02-12')
-            column(name: 'fiscal_year', value: '2022')
+            column(name: 'fiscal_year', value: 2022)
             column(name: 'gross_amount', value: '700.00')
-            column(name: 'initial_usages_count', value: '8')
+            column(name: 'initial_usages_count', value: 8)
             column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
         }
 
@@ -243,8 +243,8 @@ databaseChangeLog {
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: '50.00')
         }
 
@@ -263,8 +263,8 @@ databaseChangeLog {
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publication_date', value: '2019-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: '50.00')
         }
 
@@ -276,7 +276,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1228902112377655XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -286,8 +286,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
@@ -300,7 +300,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1228902112377655XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -310,8 +310,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
@@ -324,7 +324,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1228902112377655XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -334,8 +334,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
@@ -349,7 +349,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -359,8 +359,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
@@ -374,7 +374,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -384,8 +384,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
@@ -399,7 +399,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -409,31 +409,99 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
     }
 
     changeSet(id: '2021-02-15-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for testFindUsageBatchIdsByProductFamilyAndStartDateFrom')
+        comment('Inserting test data for findFasUsageBatchIdsEligibleForStatistic, findUsageBatchIdsEligibleForStatistic')
 
+        // Associated with NTS pre-service fee fund
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'fc4dc9a9-c301-4b1a-9e39-169ae47556d8')
+            column(name: 'name', value: 'FAS associated with pre-service fee fund batch')
+            column(name: 'rro_account_number', value: '1000000001')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'payment_date', value: '2021-02-12')
+            column(name: 'fiscal_year', value: 2021)
+            column(name: 'gross_amount', value: '200.00')
+            column(name: 'initial_usages_count', value: 2)
+            column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '3b7e7275-f9f6-48c3-b0e9-84e109a1f732')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'name', value: 'NTS pre service fee fund')
+            column(name: 'comment', value: 'Test comment')
+            column(name: 'total_amount', value: '150.01')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'b6973c70-33bd-4cac-8b27-f746a791967c')
+            column(name: 'df_usage_batch_uid', value: 'fc4dc9a9-c301-4b1a-9e39-169ae47556d8')
+            column(name: 'work_title', value: 'Speculum')
+            column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '10457143')
+            column(name: 'gross_amount', value: '150.01')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'b6973c70-33bd-4cac-8b27-f746a791967c')
+            column(name: 'df_fund_pool_uid', value: '3b7e7275-f9f6-48c3-b0e9-84e109a1f732')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publication_date', value: '2019-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'reported_value', value: '150.01')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'e810c237-84e9-48b4-ae61-1a2d6556502a')
+            column(name: 'df_usage_batch_uid', value: 'fc4dc9a9-c301-4b1a-9e39-169ae47556d8')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'number_of_copies', value: 2502232)
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'e810c237-84e9-48b4-ae61-1a2d6556502a')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '100.00')
+        }
+
+        // Associated with IN_PROGRESS scenario
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '38b6ae7e-20e4-46cf-a684-8d3c7c67a940')
-            column(name: 'name', value: 'FAS associated with scenario batch')
+            column(name: 'name', value: 'FAS associated with IN_PROGRESS scenario batch')
             column(name: 'rro_account_number', value: '1000000001')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2022-02-12')
-            column(name: 'fiscal_year', value: '2022')
+            column(name: 'fiscal_year', value: 2022)
             column(name: 'gross_amount', value: '200.00')
-            column(name: 'initial_usages_count', value: '2')
-            column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
+            column(name: 'initial_usages_count', value: 2)
+            column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: 'e350b2c2-1102-435b-a8b8-e80516b7d792')
-            column(name: 'name', value: 'FAS Scenario 2')
+            column(name: 'name', value: 'FAS In progress scenario')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'Scenario description')
         }
@@ -447,7 +515,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -457,8 +525,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
@@ -473,7 +541,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -483,42 +551,67 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
         }
 
+        // Associated with SENT_TO_LM scenario
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '0e5af78f-5b2e-469c-9bdc-2e5e396f1436')
-            column(name: 'name', value: 'FAS associated with scenario batch 2')
+            column(name: 'name', value: 'FAS associated with SENT_TO_LM scenario batch')
             column(name: 'rro_account_number', value: '1000000001')
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2022-02-12')
-            column(name: 'fiscal_year', value: '2022')
+            column(name: 'fiscal_year', value: 2022)
             column(name: 'gross_amount', value: '100.00')
-            column(name: 'initial_usages_count', value: '1')
+            column(name: 'initial_usages_count', value: 2)
             column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'a90436a0-1998-4959-8de5-ebdf1ed1321c')
+            column(name: 'df_usage_batch_uid', value: '0e5af78f-5b2e-469c-9bdc-2e5e396f1436')
+            column(name: 'wr_wrk_inst', value: '251235125')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'status_ind', value: 'SENT_FOR_RA')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '1228902112377655XX')
+            column(name: 'number_of_copies', value: 2502232)
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'a90436a0-1998-4959-8de5-ebdf1ed1321c')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '100.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '032640d3-44f4-4dd0-8bcd-168f55c6a59b')
-            column(name: 'name', value: 'FAS 2 Scenario')
-            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'name', value: 'FAS Sent to LM Scenario')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'Scenario description')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '4ebb6197-bb64-4405-bace-00116332d583')
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: '4ebb6197-bb64-4405-bace-00116332d583')
             column(name: 'df_usage_batch_uid', value: '0e5af78f-5b2e-469c-9bdc-2e5e396f1436')
             column(name: 'df_scenario_uid', value: '032640d3-44f4-4dd0-8bcd-168f55c6a59b')
             column(name: 'wr_wrk_inst', value: '180382914')
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: '1000009997')
-            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'number_of_copies', value: 2502232)
             column(name: 'gross_amount', value: '100.00')
         }
 
@@ -528,10 +621,93 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '21aa1fab-cef7-4d22-be72-1336be7ff9fc')
+            column(name: 'name', value: 'NTS associated with scenario batch')
+            column(name: 'rro_account_number', value: '1000000001')
+            column(name: 'payment_date', value: '2021-01-11')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'fiscal_year', value: 2021)
+            column(name: 'initial_usages_count', value: 2)
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 1000, "stm_minimum_amount": 50, ' +
+                    '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
+            column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: 'a74f7b4a-cb79-4f73-8513-cc16c4887d0e')
+            column(name: 'name', value: 'NTS scenario')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'nts_fields', value: '{"rh_minimum_amount":300.00}')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '738e43f5-46b6-44e9-aee9-a2cde425f279')
+            column(name: 'df_scenario_uid', value: 'a74f7b4a-cb79-4f73-8513-cc16c4887d0e')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: '738e43f5-46b6-44e9-aee9-a2cde425f279')
+            column(name: 'df_usage_batch_uid', value: '21aa1fab-cef7-4d22-be72-1336be7ff9fc')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '6090f212-2396-43d5-b975-2092f4b14aa4')
+            column(name: 'df_usage_batch_uid', value: '21aa1fab-cef7-4d22-be72-1336be7ff9fc')
+            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'work_title', value: 'A theory of cognitive dissonance')
+            column(name: 'system_title', value: 'A theory of cognitive dissonance')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'SCENARIO_EXCLUDED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'number_of_copies', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '6090f212-2396-43d5-b975-2092f4b14aa4')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '900')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '76cdf597-e8fc-49e7-8067-11b029858114')
+            column(name: 'df_usage_batch_uid', value: '21aa1fab-cef7-4d22-be72-1336be7ff9fc')
+            column(name: 'df_scenario_uid', value: 'a74f7b4a-cb79-4f73-8513-cc16c4887d0e')
+            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'work_title', value: 'A theory of cognitive dissonance')
+            column(name: 'system_title', value: 'A theory of cognitive dissonance')
+            column(name: 'rh_account_number', value: '1000009999')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'number_of_copies', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '76cdf597-e8fc-49e7-8067-11b029858114')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '900')
         }
     }
 
@@ -544,8 +720,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: '1000000001')
             column(name: 'payment_date', value: '2021-01-11')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'fiscal_year', value: '2021')
-            column(name: 'initial_usages_count', value: '9')
+            column(name: 'fiscal_year', value: 2021)
+            column(name: 'initial_usages_count', value: 9)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 1000, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
@@ -561,7 +737,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -570,8 +746,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '900')
         }
@@ -585,7 +761,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -594,8 +770,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '900')
         }
@@ -610,7 +786,7 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -619,8 +795,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100')
         }
@@ -635,7 +811,7 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -644,8 +820,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100')
         }
@@ -660,7 +836,7 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -669,8 +845,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100')
         }
@@ -685,7 +861,7 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -694,8 +870,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '100')
         }
@@ -706,8 +882,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: '1000000001')
             column(name: 'payment_date', value: '2021-01-11')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'fiscal_year', value: '2021')
-            column(name: 'initial_usages_count', value: '5')
+            column(name: 'fiscal_year', value: 2021)
+            column(name: 'initial_usages_count', value: 5)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 1000, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
             column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
@@ -723,7 +899,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -732,8 +908,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '900')
         }
@@ -748,7 +924,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -757,8 +933,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '900')
         }
@@ -773,7 +949,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'UNCLASSIFIED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -782,8 +958,8 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '900')
         }
@@ -797,9 +973,9 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL in progress batch')
             column(name: 'payment_date', value: '2021-06-30')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'fiscal_year', value: '2021')
-            column(name: 'initial_usages_count', value: '7')
-            column(name: 'baseline_years', value: '0')
+            column(name: 'fiscal_year', value: 2021)
+            column(name: 'initial_usages_count', value: 7)
+            column(name: 'baseline_years', value: 0)
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
         }
 
@@ -809,7 +985,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '269040891')
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
@@ -817,7 +993,7 @@ databaseChangeLog {
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
             column(name: 'usage_period', value: '2018')
             column(name: 'usage_source', value: 'Feb 2018 TUR')
-            column(name: 'number_of_pages', value: '341')
+            column(name: 'number_of_pages', value: 341)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -830,15 +1006,15 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '100.00')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '300')
+            column(name: 'number_of_copies', value: 300)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: 'e3e9d0e7-717f-4cdc-8e30-e0ec57badb14')
             column(name: 'institution', value: 'University of Michigan')
-            column(name: 'usage_period', value: '2021')
+            column(name: 'usage_period', value: 2021)
             column(name: 'usage_source', value: 'Feb 2021 TUR')
-            column(name: 'number_of_pages', value: '200')
+            column(name: 'number_of_pages', value: 200)
             column(name: 'right_limitation', value: 'DIGITAL')
         }
 
@@ -852,15 +1028,15 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '100.00')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '300')
+            column(name: 'number_of_copies', value: 300)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '81c8e8da-0888-4f9c-91aa-a94ea18fc1e4')
             column(name: 'institution', value: 'University of Michigan')
-            column(name: 'usage_period', value: '2021')
+            column(name: 'usage_period', value: 2021)
             column(name: 'usage_source', value: 'Feb 2021 TUR')
-            column(name: 'number_of_pages', value: '200')
+            column(name: 'number_of_pages', value: 200)
             column(name: 'right_limitation', value: 'DIGITAL')
         }
 
@@ -875,15 +1051,15 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '100.00')
             column(name: 'status_ind', value: 'RH_FOUND')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '300')
+            column(name: 'number_of_copies', value: 300)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '58b39805-9eb9-48b0-8081-b25ac3dc7335')
             column(name: 'institution', value: 'University of Michigan')
-            column(name: 'usage_period', value: '2021')
+            column(name: 'usage_period', value: 2021)
             column(name: 'usage_source', value: 'Feb 2021 TUR')
-            column(name: 'number_of_pages', value: '200')
+            column(name: 'number_of_pages', value: 200)
             column(name: 'right_limitation', value: 'DIGITAL')
         }
 
@@ -898,15 +1074,15 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '100.00')
             column(name: 'status_ind', value: 'RH_FOUND')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '300')
+            column(name: 'number_of_copies', value: 300)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: 'f9286815-0760-4aa0-a801-f78b362f5e8e')
             column(name: 'institution', value: 'University of Michigan')
-            column(name: 'usage_period', value: '2021')
+            column(name: 'usage_period', value: 2021)
             column(name: 'usage_source', value: 'Feb 2021 TUR')
-            column(name: 'number_of_pages', value: '200')
+            column(name: 'number_of_pages', value: 200)
             column(name: 'right_limitation', value: 'DIGITAL')
         }
 
@@ -921,17 +1097,17 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '7000000002')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '9f14014c-2b72-4c2e-9751-fb8ecb0123f0')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
-            column(name: 'number_of_pages', value: '12')
+            column(name: 'number_of_pages', value: 12)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '113')
+            column(name: 'detail_licensee_class_id', value: 113)
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
         }
 
@@ -940,8 +1116,8 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL completed batch')
             column(name: 'payment_date', value: '2021-06-30')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'fiscal_year', value: '2021')
-            column(name: 'initial_usages_count', value: '8')
+            column(name: 'fiscal_year', value: 2021)
+            column(name: 'initial_usages_count', value: 8)
             column(name: 'baseline_years', value: '0')
             column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
         }
@@ -952,7 +1128,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '269040891')
             column(name: 'status_ind', value: 'WORK_NOT_FOUND')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
@@ -960,7 +1136,7 @@ databaseChangeLog {
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
             column(name: 'usage_period', value: '2018')
             column(name: 'usage_source', value: 'Feb 2018 TUR')
-            column(name: 'number_of_pages', value: '341')
+            column(name: 'number_of_pages', value: 341)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -974,15 +1150,15 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '100.00')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '300')
+            column(name: 'number_of_copies', value: 300)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '8afd52fb-ab50-47fd-8a2f-3b5564a23055')
             column(name: 'institution', value: 'University of Michigan')
-            column(name: 'usage_period', value: '2021')
+            column(name: 'usage_period', value: 2021)
             column(name: 'usage_source', value: 'Feb 2021 TUR')
-            column(name: 'number_of_pages', value: '200')
+            column(name: 'number_of_pages', value: 200)
             column(name: 'right_limitation', value: 'DIGITAL')
         }
 
@@ -997,15 +1173,15 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '100.00')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '300')
+            column(name: 'number_of_copies', value: 300)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '0804536d-d240-480f-9558-c860894cafd1')
             column(name: 'institution', value: 'University of Michigan')
-            column(name: 'usage_period', value: '2021')
+            column(name: 'usage_period', value: 2021)
             column(name: 'usage_source', value: 'Feb 2021 TUR')
-            column(name: 'number_of_pages', value: '200')
+            column(name: 'number_of_pages', value: 200)
             column(name: 'right_limitation', value: 'DIGITAL')
         }
 
@@ -1020,17 +1196,17 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '7000000002')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '13ca08ff-5e52-4154-9654-c51b3ecdb8bf')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
-            column(name: 'number_of_pages', value: '12')
+            column(name: 'number_of_pages', value: 12)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '113')
+            column(name: 'detail_licensee_class_id', value: 113)
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
         }
 
@@ -1045,17 +1221,17 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '7000000002')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '98b0754c-cf62-44c3-8754-e46e8096012c')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
-            column(name: 'number_of_pages', value: '12')
+            column(name: 'number_of_pages', value: 12)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '113')
+            column(name: 'detail_licensee_class_id', value: 113)
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
         }
     }
@@ -1068,9 +1244,9 @@ databaseChangeLog {
             column(name: 'name', value: 'SAL in progress batch')
             column(name: 'payment_date', value: '2021-06-30')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'fiscal_year', value: '2021')
+            column(name: 'fiscal_year', value: 2021)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
-            column(name: 'initial_usages_count', value: '9')
+            column(name: 'initial_usages_count', value: 9)
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
         }
 
@@ -1390,9 +1566,9 @@ databaseChangeLog {
             column(name: 'name', value: 'SAL completed batch')
             column(name: 'payment_date', value: '2021-06-30')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'fiscal_year', value: '2021')
+            column(name: 'fiscal_year', value: 2021)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
-            column(name: 'initial_usages_count', value: '8')
+            column(name: 'initial_usages_count', value: 8)
             column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
         }
 

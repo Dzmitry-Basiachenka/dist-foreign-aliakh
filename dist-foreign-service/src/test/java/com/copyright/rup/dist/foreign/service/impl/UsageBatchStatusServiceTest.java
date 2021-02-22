@@ -48,7 +48,7 @@ public class UsageBatchStatusServiceTest {
 
     @Test
     public void testGetUsageBatchStatusesFas() {
-        expect(usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("FAS",
+        expect(usageBatchStatusRepository.findFasUsageBatchIdsEligibleForStatistic("FAS",
             LocalDate.now().minusDays(NUMBER_OF_DAYS))).andReturn(batchIds).once();
         expect(usageBatchStatusRepository.findUsageBatchStatusesFas(batchIds)).andReturn(batchStatuses).once();
         replay(usageBatchStatusRepository);
@@ -58,7 +58,7 @@ public class UsageBatchStatusServiceTest {
 
     @Test
     public void testGetUsageBatchStatusesNts() {
-        expect(usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("NTS",
+        expect(usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic("NTS",
             LocalDate.now().minusDays(NUMBER_OF_DAYS))).andReturn(batchIds).once();
         expect(usageBatchStatusRepository.findUsageBatchStatusesNts(batchIds)).andReturn(batchStatuses).once();
         replay(usageBatchStatusRepository);
@@ -68,7 +68,7 @@ public class UsageBatchStatusServiceTest {
 
     @Test
     public void testGetUsageBatchStatusesAacl() {
-        expect(usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("AACL",
+        expect(usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic("AACL",
             LocalDate.now().minusDays(NUMBER_OF_DAYS))).andReturn(batchIds).once();
         expect(usageBatchStatusRepository.findUsageBatchStatusesAacl(batchIds)).andReturn(batchStatuses).once();
         replay(usageBatchStatusRepository);
@@ -78,7 +78,7 @@ public class UsageBatchStatusServiceTest {
 
     @Test
     public void testGetUsageBatchStatusesSal() {
-        expect(usageBatchStatusRepository.findUsageBatchIdsByProductFamilyAndStartDateFrom("SAL",
+        expect(usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic("SAL",
             LocalDate.now().minusDays(NUMBER_OF_DAYS))).andReturn(batchIds).once();
         expect(usageBatchStatusRepository.findUsageBatchStatusesSal(batchIds)).andReturn(batchStatuses).once();
         replay(usageBatchStatusRepository);
