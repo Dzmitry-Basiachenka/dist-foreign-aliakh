@@ -21,7 +21,7 @@ public interface IUsageBatchStatusRepository {
      * Finds list of FAS/FAS2 usage batch statuses for specified usage batch ids.
      *
      * @param batchIds set of usage batch ids
-     * @return list of {@link UsageBatchStatus}
+     * @return list of {@link UsageBatchStatus}es
      */
     List<UsageBatchStatus> findUsageBatchStatusesFas(Set<String> batchIds);
 
@@ -29,7 +29,7 @@ public interface IUsageBatchStatusRepository {
      * Finds list of NTS usage batch statuses for specified usage batch ids.
      *
      * @param batchIds set of usage batch ids
-     * @return list of {@link UsageBatchStatus}
+     * @return list of {@link UsageBatchStatus}es
      */
     List<UsageBatchStatus> findUsageBatchStatusesNts(Set<String> batchIds);
 
@@ -37,7 +37,7 @@ public interface IUsageBatchStatusRepository {
      * Finds list of AACL usage batch statuses for specified usage batch ids.
      *
      * @param batchIds set of usage batch ids
-     * @return list of {@link UsageBatchStatus}
+     * @return list of {@link UsageBatchStatus}es
      */
     List<UsageBatchStatus> findUsageBatchStatusesAacl(Set<String> batchIds);
 
@@ -45,7 +45,7 @@ public interface IUsageBatchStatusRepository {
      * Finds list of SAL usage batch statuses for specified usage batch ids.
      *
      * @param batchIds set of usage batch ids
-     * @return list of {@link UsageBatchStatus}
+     * @return list of {@link UsageBatchStatus}es
      */
     List<UsageBatchStatus> findUsageBatchStatusesSal(Set<String> batchIds);
 

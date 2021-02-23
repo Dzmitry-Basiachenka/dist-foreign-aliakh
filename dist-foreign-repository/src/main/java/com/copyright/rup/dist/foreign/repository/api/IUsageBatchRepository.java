@@ -28,7 +28,7 @@ public interface IUsageBatchRepository {
     void insert(UsageBatch usageBatch);
 
     /**
-     * Update initial usages count by batch id.
+     * Updates initial usages count by batch id.
      *
      * @param initialUsagesCount initial usages count
      * @param batchId            batch id
