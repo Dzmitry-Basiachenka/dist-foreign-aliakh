@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchStatusRepository;
 
 import com.google.common.collect.Maps;
@@ -62,5 +63,13 @@ public class UsageBatchStatusRepository extends BaseRepository implements IUsage
         params.put("startDate", startDate);
         return new HashSet<>(
             selectList("IUsageBatchStatusMapper.findUsageBatchIdsEligibleForStatistic", params));
+    }
+
+    @Override
+    public boolean isBatchProcessingCompleted(String batchId, Set<UsageStatusEnum> intermediateStatuses) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("batchId", batchId);
+        params.put("statuses", intermediateStatuses);
+        return selectOne("IUsageBatchStatusMapper.isBatchProcessingCompleted", params);
     }
 }

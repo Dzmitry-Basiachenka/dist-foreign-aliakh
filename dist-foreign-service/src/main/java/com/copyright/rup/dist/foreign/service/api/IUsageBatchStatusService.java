@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for usage batch status service.
@@ -43,4 +45,13 @@ public interface IUsageBatchStatusService {
      * @return list of {@link UsageBatchStatus}
      */
     List<UsageBatchStatus> getUsageBatchStatusesSal();
+
+    /**
+     * Returns batch status for selected batch based on provided product family specific statuses.
+     *
+     * @param batchId              batch identifier
+     * @param intermediateStatuses intermediate statuses
+     * @return true if batch processing is completed, false - otherwise
+     */
+    boolean isBatchProcessingCompleted(String batchId, Set<UsageStatusEnum> intermediateStatuses);
 }

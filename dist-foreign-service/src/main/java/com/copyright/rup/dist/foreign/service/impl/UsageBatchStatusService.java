@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchStatusRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 
@@ -66,5 +67,10 @@ public class UsageBatchStatusService implements IUsageBatchStatusService {
         return !batchIds.isEmpty()
             ? usageBatchStatusRepository.findUsageBatchStatusesSal(batchIds)
             : Collections.emptyList();
+    }
+
+    @Override
+    public boolean isBatchProcessingCompleted(String batchId, Set<UsageStatusEnum> statuses) {
+        return usageBatchStatusRepository.isBatchProcessingCompleted(batchId, statuses);
     }
 }

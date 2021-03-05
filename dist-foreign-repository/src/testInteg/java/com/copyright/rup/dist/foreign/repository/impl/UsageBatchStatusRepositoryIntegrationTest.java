@@ -1,8 +1,11 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchStatusRepository;
 
 import com.google.common.collect.Sets;
@@ -106,6 +109,15 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     public void testFindUsageBatchIdsEligibleForStatistic() {
         assertEquals(Collections.singleton("359de82f-374b-4d53-88ab-0be3982b22aa"),
             usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic("NTS", LocalDate.of(2021, 2, 14)));
+    }
+
+    @Test
+    public void testIsBatchProcessingCompleted() {
+        assertTrue(usageBatchStatusRepository.isBatchProcessingCompleted("515a78e7-2a92-4b15-859a-fd9f70e80982",
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND)));
+        assertFalse(usageBatchStatusRepository.isBatchProcessingCompleted("a34417b5-12c1-48e2-9aed-d3861b49545b",
+            Sets.newHashSet(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY,
+                UsageStatusEnum.RH_FOUND)));
     }
 
     private void assertUsageBatchStatus(UsageBatchStatus expected, UsageBatchStatus actual) {
