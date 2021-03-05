@@ -5,10 +5,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchStatusRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
+
+import com.google.common.collect.Sets;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +36,8 @@ import java.util.Set;
 public class UsageBatchStatusServiceTest {
 
     private static final long NUMBER_OF_DAYS = 7;
-    private final Set<String> batchIds = Collections.singleton("364401b8-18cd-4b1d-baa1-998aaf39a386");
+    private static final String BATCH_ID = "364401b8-18cd-4b1d-baa1-998aaf39a386";
+    private final Set<String> batchIds = Collections.singleton(BATCH_ID);
     private final List<UsageBatchStatus> batchStatuses = new ArrayList<>();
     private IUsageBatchStatusService usageBatchStatusService;
     private IUsageBatchStatusRepository usageBatchStatusRepository;
@@ -83,6 +88,16 @@ public class UsageBatchStatusServiceTest {
         expect(usageBatchStatusRepository.findUsageBatchStatusesSal(batchIds)).andReturn(batchStatuses).once();
         replay(usageBatchStatusRepository);
         assertSame(batchStatuses, usageBatchStatusService.getUsageBatchStatusesSal());
+        verify(usageBatchStatusRepository);
+    }
+
+    @Test
+    public void testIsBatchProcessingCompleted() {
+        Set<UsageStatusEnum> statuses =
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND);
+        expect(usageBatchStatusRepository.isBatchProcessingCompleted(BATCH_ID, statuses)).andReturn(true).once();
+        replay(usageBatchStatusRepository);
+        assertTrue(usageBatchStatusService.isBatchProcessingCompleted(BATCH_ID, statuses));
         verify(usageBatchStatusRepository);
     }
 }

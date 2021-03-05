@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -67,4 +68,13 @@ public interface IUsageBatchStatusRepository {
      * @return set of usage batch ids
      */
     Set<String> findUsageBatchIdsEligibleForStatistic(String productFamily, LocalDate startDate);
+
+    /**
+     * Returns batch status for selected batch based on provided product family specific statuses.
+     *
+     * @param batchId              batch identifier
+     * @param intermediateStatuses intermediate statuses
+     * @return true if batch status is completed, false - otherwise
+     */
+    boolean isBatchProcessingCompleted(String batchId, Set<UsageStatusEnum> intermediateStatuses);
 }
