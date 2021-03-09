@@ -119,6 +119,14 @@ public interface ICommonUsageController extends IController<ICommonUsageWidget> 
     List<String> getScenariosNamesAssociatedWithUsageBatch(String batchId);
 
     /**
+     * Returns true if selected batch is completed based on selected product family intermediate statuses.
+     *
+     * @param batchId batch identifier
+     * @return true if batch processing is completed, false - otherwise
+     */
+    boolean isBatchProcessingCompleted(String batchId);
+
+    /**
      * Creates a {@link Scenario} by entered scenario name and description.
      *
      * @param scenarioName name of scenario

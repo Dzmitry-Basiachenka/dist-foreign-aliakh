@@ -217,7 +217,12 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
         } else {
             List<String> scenariosNames = controller.getScenariosNamesAssociatedWithUsageBatch(usageBatch.getId());
             if (CollectionUtils.isEmpty(scenariosNames)) {
-                Windows.showConfirmDialog(getDeleteMessage(usageBatch.getName()), () -> performDelete(usageBatch));
+                if (controller.isBatchProcessingCompleted(usageBatch.getId())) {
+                    Windows.showConfirmDialog(getDeleteMessage(usageBatch.getName()), () -> performDelete(usageBatch));
+                } else {
+                    Windows.showNotificationWindow(
+                        ForeignUi.getMessage("message.error.delete_in_progress_batch", usageBatch.getName()));
+                }
             } else {
                 Windows.showNotificationWindow(buildNotificationMessage("scenarios", scenariosNames));
             }

@@ -31,6 +31,7 @@ import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
@@ -43,6 +44,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageWidget;
 
+import com.google.common.collect.Sets;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.io.IOUtils;
@@ -51,6 +53,7 @@ import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -161,6 +164,20 @@ public class NtsUsageControllerTest {
         assertNotNull(result);
         assertEquals(0, result.size());
         verify(filterWidgetMock, usageService, fasUsageService, filterController);
+    }
+
+    @Test
+    public void testIsBatchProcessingCompleted() {
+        String batchId = "65f27251-7ad0-4aba-9d4a-bf584edb4177";
+        IUsageBatchStatusService usageBatchStatusService = PowerMock.createMock(IUsageBatchStatusService.class);
+        Whitebox.setInternalState(controller, usageBatchStatusService);
+        expect(usageBatchStatusService.isBatchProcessingCompleted(batchId,
+            Sets.newHashSet(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.NON_STM_RH, UsageStatusEnum.US_TAX_COUNTRY,
+                UsageStatusEnum.RH_FOUND)))
+            .andReturn(true).once();
+        replay(usageBatchStatusService);
+        assertTrue(controller.isBatchProcessingCompleted(batchId));
+        verify(usageBatchStatusService);
     }
 
     @Test

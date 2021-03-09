@@ -40,6 +40,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
@@ -52,7 +53,9 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageWidget;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.vaadin.ui.HorizontalLayout;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -283,6 +286,19 @@ public class AaclUsageControllerTest {
         replay(fundPoolService);
         controller.deleteFundPool(fundPool);
         verify(fundPoolService);
+    }
+
+    @Test
+    public void testIsBatchProcessingCompleted() {
+        String batchId = "b100f405-810f-4e03-a931-d585ac3b286d";
+        IUsageBatchStatusService usageBatchStatusService = createMock(IUsageBatchStatusService.class);
+        Whitebox.setInternalState(controller, usageBatchStatusService);
+        expect(usageBatchStatusService.isBatchProcessingCompleted(batchId,
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND)))
+            .andReturn(true).once();
+        replay(usageBatchStatusService);
+        assertTrue(controller.isBatchProcessingCompleted(batchId));
+        verify(usageBatchStatusService);
     }
 
     @Test
