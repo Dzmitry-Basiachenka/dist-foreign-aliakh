@@ -30,6 +30,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,6 +61,7 @@ public class ViewUsageBatchWindowTest {
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final String UNCHECKED = "unchecked";
 
+    private Grid<UsageBatch> grid;
     private ViewUsageBatchWindow viewUsageBatchWindow;
     private IFasUsageController controller;
 
@@ -67,11 +69,13 @@ public class ViewUsageBatchWindowTest {
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IFasUsageController.class);
+        grid = createMock(Grid.class);
         expect(ForeignSecurityUtils.hasDeleteUsagePermission()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
         expect(controller.getUsageBatches("FAS")).andReturn(Collections.singletonList(new UsageBatch())).once();
         replay(controller, ForeignSecurityUtils.class);
         viewUsageBatchWindow = new ViewUsageBatchWindow(controller);
+        Whitebox.setInternalState(viewUsageBatchWindow, "grid", grid);
         verify(controller, ForeignSecurityUtils.class);
         reset(controller, ForeignSecurityUtils.class);
     }
@@ -99,8 +103,6 @@ public class ViewUsageBatchWindowTest {
     @SuppressWarnings(UNCHECKED)
     public void testDeleteClickListenerAssociatedFunds() {
         mockStatic(Windows.class);
-        Grid<UsageBatch> grid = createMock(Grid.class);
-        Whitebox.setInternalState(viewUsageBatchWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(anyString()))
@@ -117,8 +119,6 @@ public class ViewUsageBatchWindowTest {
     @SuppressWarnings(UNCHECKED)
     public void testDeleteClickListenerWithAssociatedScenarios() {
         mockStatic(Windows.class);
-        Grid<UsageBatch> grid = createMock(Grid.class);
-        Whitebox.setInternalState(viewUsageBatchWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
@@ -135,17 +135,35 @@ public class ViewUsageBatchWindowTest {
 
     @Test
     @SuppressWarnings(UNCHECKED)
-    public void testDeleteClickListenerEmptyAssociatedScenarios() {
+    public void testDeleteClickListenerInProgressBatch() {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
-        Grid<UsageBatch> grid = createMock(Grid.class);
-        Whitebox.setInternalState(viewUsageBatchWindow, "grid", grid);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
         expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
+        expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(false).once();
+        Windows.showNotificationWindow("'FAS batch' batch cannot be deleted because processing is not completed yet");
+        expectLastCall().once();
+        replay(controller, confirmWindowCapture, grid, Windows.class);
+        listener.buttonClick(null);
+        verify(controller, confirmWindowCapture, grid, Windows.class);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testDeleteClickListenerEmptyAssociatedScenarios() {
+        mockStatic(Windows.class);
+        Window confirmWindowCapture = createMock(Window.class);
+        Button.ClickListener listener = getDeleteButtonClickListener();
+        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(true).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'FAS batch'</b></i> usage batch?"),
             anyObject())).andReturn(confirmWindowCapture).once();
         replay(controller, confirmWindowCapture, grid, Windows.class);
@@ -157,9 +175,7 @@ public class ViewUsageBatchWindowTest {
     @SuppressWarnings(UNCHECKED)
     public void testPerformSearch() {
         SearchWidget searchWidget = createMock(SearchWidget.class);
-        Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(viewUsageBatchWindow, searchWidget);
-        Whitebox.setInternalState(viewUsageBatchWindow, grid);
         expect(grid.getDataProvider()).andReturn(new ListDataProvider(Collections.EMPTY_LIST)).once();
         expect(searchWidget.getSearchValue()).andReturn("Search").once();
         grid.recalculateColumnWidths();
@@ -177,9 +193,9 @@ public class ViewUsageBatchWindowTest {
     }
 
     @SuppressWarnings(UNCHECKED)
-    private void verifyGrid(Grid grid) {
-        assertNull(grid.getCaption());
-        List<Grid.Column> columns = grid.getColumns();
+    private void verifyGrid(Grid usagesGrid) {
+        assertNull(usagesGrid.getCaption());
+        List<Grid.Column> columns = usagesGrid.getColumns();
         assertEquals(Arrays.asList("Usage Batch Name", "RRO Account #", "RRO Name", "Payment Date", "Fiscal Year",
             "Batch Amt in USD", "Create User", "Create Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));

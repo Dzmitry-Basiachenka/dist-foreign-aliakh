@@ -37,9 +37,11 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CommonUsageController;
 
+import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -144,6 +146,12 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
     @Override
     public String getScenarioNameAssociatedWithFundPool(String fundPoolId) {
         return aaclScenarioService.getScenarioNameByFundPoolId(fundPoolId);
+    }
+
+    @Override
+    public boolean isBatchProcessingCompleted(String batchId) {
+        return getUsageBatchStatusService().isBatchProcessingCompleted(batchId,
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND));
     }
 
     @Override

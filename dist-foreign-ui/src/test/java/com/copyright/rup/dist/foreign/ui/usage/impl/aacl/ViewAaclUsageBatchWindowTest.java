@@ -107,8 +107,30 @@ public class ViewAaclUsageBatchWindowTest {
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
+        expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(true).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'AACL batch'</b></i> usage batch?"),
             anyObject())).andReturn(confirmWindowCapture).once();
+        replay(controller, confirmWindowCapture, grid, Windows.class);
+        listener.buttonClick(null);
+        verify(controller, confirmWindowCapture, grid, Windows.class);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testDeleteClickListenerInProgressBatch() {
+        mockStatic(Windows.class);
+        Window confirmWindowCapture = createMock(Window.class);
+        Grid<UsageBatch> grid = createMock(Grid.class);
+        Whitebox.setInternalState(viewaAaclUsageBatchWindow, "grid", grid);
+        Button.ClickListener listener = getDeleteButtonClickListener();
+        expect(grid.getSelectedItems()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.isBatchProcessingCompleted(USAGE_BATCH_ID)).andReturn(false).once();
+        Windows.showNotificationWindow("'AACL batch' batch cannot be deleted because processing is not completed yet");
+        expectLastCall().once();
         replay(controller, confirmWindowCapture, grid, Windows.class);
         listener.buttonClick(null);
         verify(controller, confirmWindowCapture, grid, Windows.class);

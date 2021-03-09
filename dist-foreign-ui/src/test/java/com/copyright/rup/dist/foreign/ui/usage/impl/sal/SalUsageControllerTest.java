@@ -31,6 +31,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
@@ -39,6 +40,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageWidget;
 
+import com.google.common.collect.Sets;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.io.IOUtils;
@@ -336,6 +338,19 @@ public class SalUsageControllerTest {
         replay(salScenarioService);
         controller.deleteUsageData(usageBatch);
         verify(salScenarioService);
+    }
+
+    @Test
+    public void testIsBatchProcessingCompleted() {
+        String batchId = "dde634cb-148b-4f1f-bade-6c0b7328b2b9";
+        IUsageBatchStatusService usageBatchStatusService = createMock(IUsageBatchStatusService.class);
+        Whitebox.setInternalState(controller, usageBatchStatusService);
+        expect(usageBatchStatusService.isBatchProcessingCompleted(batchId,
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND)))
+            .andReturn(true).once();
+        replay(usageBatchStatusService);
+        assertTrue(controller.isBatchProcessingCompleted(batchId));
+        verify(usageBatchStatusService);
     }
 
     @Test

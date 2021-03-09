@@ -29,6 +29,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 
 import com.vaadin.data.provider.QuerySortOrder;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -176,6 +177,11 @@ public class CommonUsageControllerTest {
 
         @Override
         public void deleteUsageBatch(UsageBatch usageBatch) {
+        }
+
+        @Override
+        public boolean isBatchProcessingCompleted(String batchId) {
+            return false;
         }
 
         @Override

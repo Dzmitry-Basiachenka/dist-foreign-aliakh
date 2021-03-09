@@ -32,6 +32,7 @@ import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -44,6 +45,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageWidget;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.io.IOUtils;
@@ -152,6 +154,19 @@ public class FasUsageControllerTest {
         assertNotNull(result);
         assertEquals(0, result.size());
         verify(filterWidgetMock, usageService, fasUsageService, filterController);
+    }
+
+    @Test
+    public void testIsBatchProcessingCompleted() {
+        String batchId = "d900119b-f44d-495b-94f5-c13ba4ded983";
+        IUsageBatchStatusService usageBatchStatusService = createMock(IUsageBatchStatusService.class);
+        Whitebox.setInternalState(controller, usageBatchStatusService);
+        expect(usageBatchStatusService.isBatchProcessingCompleted(batchId,
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND)))
+            .andReturn(true).once();
+        replay(usageBatchStatusService);
+        assertTrue(controller.isBatchProcessingCompleted(batchId));
+        verify(usageBatchStatusService);
     }
 
     @Test

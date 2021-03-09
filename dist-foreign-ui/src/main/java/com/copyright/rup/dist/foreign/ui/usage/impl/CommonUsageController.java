@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchStatusService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -44,6 +45,8 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
 
     @Autowired
     private IUsageBatchService usageBatchService;
+    @Autowired
+    private IUsageBatchStatusService usageBatchStatusService;
     @Autowired
     private IUsageService usageService;
     @Autowired
@@ -148,6 +151,13 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
      */
     protected IUsageBatchService getUsageBatchService() {
         return usageBatchService;
+    }
+
+    /**
+     * @return {@link IUsageBatchStatusService} instance.
+     */
+    protected IUsageBatchStatusService getUsageBatchStatusService() {
+        return usageBatchStatusService;
     }
 
     /**

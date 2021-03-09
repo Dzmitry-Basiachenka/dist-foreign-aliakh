@@ -112,9 +112,14 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
         } else {
             List<String> scenariosNames = controller.getScenariosNamesAssociatedWithUsageBatch(usageBatch.getId());
             if (CollectionUtils.isEmpty(scenariosNames)) {
-                Windows.showConfirmDialog(
-                    ForeignUi.getMessage("message.confirm.delete_action", usageBatch.getName(), "usage details"),
-                    () -> performDelete(controller::deleteUsageData, usageBatch));
+                if (controller.isBatchProcessingCompleted(usageBatch.getId())) {
+                    Windows.showConfirmDialog(
+                        ForeignUi.getMessage("message.confirm.delete_action", usageBatch.getName(), "usage details"),
+                        () -> performDelete(controller::deleteUsageData, usageBatch));
+                } else {
+                    Windows.showNotificationWindow(
+                        ForeignUi.getMessage("message.error.delete_in_progress_batch", usageBatch.getName()));
+                }
             } else {
                 Windows.showNotificationWindow(
                     buildNotificationMessage("message.error.delete_usage_details", "Usage details", "scenarios",
@@ -126,9 +131,14 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
     private void deleteUsageBatch(UsageBatch usageBatch) {
         List<String> scenariosNames = controller.getScenariosNamesAssociatedWithUsageBatch(usageBatch.getId());
         if (CollectionUtils.isEmpty(scenariosNames)) {
-            Windows.showConfirmDialog(
-                ForeignUi.getMessage("message.confirm.delete_action", usageBatch.getName(), "usage batch"),
-                () -> performDelete(controller::deleteUsageBatch, usageBatch));
+            if (controller.isBatchProcessingCompleted(usageBatch.getId())) {
+                Windows.showConfirmDialog(
+                    ForeignUi.getMessage("message.confirm.delete_action", usageBatch.getName(), "usage batch"),
+                    () -> performDelete(controller::deleteUsageBatch, usageBatch));
+            } else {
+                Windows.showNotificationWindow(
+                    ForeignUi.getMessage("message.error.delete_in_progress_batch", usageBatch.getName()));
+            }
         } else {
             Windows.showNotificationWindow(
                 buildNotificationMessage("message.error.delete_action", "Usage batch", "scenarios",
