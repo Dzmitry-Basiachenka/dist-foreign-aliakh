@@ -1,3 +1,9 @@
+13.1.15
+-
+* B-64714 FDA: Show user friendly message on batch deletion in processing mode: implement notification window to prevent deleting of in progress batches
+* B-64714 FDA: Show user friendly message on batch deletion in processing mode: implement backend logic to identifying batch completion status
+* B-65718 FDA: Batch Processing View: make changes based on comments in CR-DIST-FOREIGN-225
+
 13.1.14
 -
 * CDP-959 FDA: Batch status tab: Usage batch is displayed on Batch status tab after sending scenario containing this usage batch to LM
