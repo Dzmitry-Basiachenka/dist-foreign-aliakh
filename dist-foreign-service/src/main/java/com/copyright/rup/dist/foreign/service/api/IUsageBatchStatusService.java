@@ -47,7 +47,7 @@ public interface IUsageBatchStatusService {
     List<UsageBatchStatus> getUsageBatchStatusesSal();
 
     /**
-     * Returns batch status for selected batch based on provided product family specific statuses.
+     * Verifies that batch processing is completed for specified product family specific statuses.
      *
      * @param batchId              batch identifier
      * @param intermediateStatuses intermediate statuses
