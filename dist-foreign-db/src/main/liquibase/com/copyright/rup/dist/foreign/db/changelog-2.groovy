@@ -145,12 +145,12 @@ databaseChangeLog {
         dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee', columnDataType: 'DECIMAL(6,5)')
 
         update(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'service_fee', value: null)
+            column(name: 'service_fee', value: 'null')
             where "df_scenario_uid is null"
         }
 
         update(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'service_fee', value: null)
+            column(name: 'service_fee', value: 'null')
             where "df_scenario_uid is null"
         }
 
@@ -1122,33 +1122,33 @@ databaseChangeLog {
             dropTable(tableName: 'df_qrtz_triggers', schemaName: dbAppsSchema)
             dropTable(tableName: 'df_qrtz_job_details', schemaName: dbAppsSchema)
         }
+    }
 
-        changeSet(id: '2018-05-04-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-            comment("B-42928 FDA: Replace user-generated detail ID with system-generated detail ID: " +
-                    "remove detail_id column from df_usage and df_usage_archive tables")
+    changeSet(id: '2018-05-04-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-42928 FDA: Replace user-generated detail ID with system-generated detail ID: " +
+                "remove detail_id column from df_usage and df_usage_archive tables")
 
-            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'detail_id')
-            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'detail_id')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'detail_id')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'detail_id')
 
-            rollback {
-                addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                    column(name: 'detail_id', type: 'NUMERIC(15,0)', remarks: 'The usage identifier in TF')
-                }
-                addUniqueConstraint(constraintName: 'iu_detail_id',
-                        schemaName: dbAppsSchema,
-                        tablespace: dbDataTablespace,
-                        tableName: 'df_usage',
-                        columnNames: 'detail_id')
-
-                addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-                    column(name: 'detail_id', type: 'NUMERIC(15,0)', remarks: 'The usage identifier in TF')
-                }
-                addUniqueConstraint(constraintName: 'iu_archive_detail_id',
-                        schemaName: dbAppsSchema,
-                        tablespace: dbDataTablespace,
-                        tableName: 'df_usage_archive',
-                        columnNames: 'detail_id')
+        rollback {
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'detail_id', type: 'NUMERIC(15,0)', remarks: 'The usage identifier in TF')
             }
+            addUniqueConstraint(constraintName: 'iu_detail_id',
+                    schemaName: dbAppsSchema,
+                    tablespace: dbDataTablespace,
+                    tableName: 'df_usage',
+                    columnNames: 'detail_id')
+
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'detail_id', type: 'NUMERIC(15,0)', remarks: 'The usage identifier in TF')
+            }
+            addUniqueConstraint(constraintName: 'iu_archive_detail_id',
+                    schemaName: dbAppsSchema,
+                    tablespace: dbDataTablespace,
+                    tableName: 'df_usage_archive',
+                    columnNames: 'detail_id')
         }
     }
 
@@ -1463,7 +1463,7 @@ databaseChangeLog {
     changeSet(id: '2018-05-31-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
         comment("B-43639 FDA: Research Status Report: implement view to store data for Research Status Report")
 
-        createView(viewName:'v_research_status_report', schemaName: dbAppsSchema) {
+        createView(viewName: 'v_research_status_report', schemaName: dbAppsSchema) {
             """select
                     nestedReport.batch_name, 
                     nestedReport.rro_account_number,
@@ -1599,7 +1599,7 @@ databaseChangeLog {
     changeSet(id: '2018-06-06-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
         comment("B-43639 FDA: Research Status Report: make changes based on comments in CR-DIST-FOREIGN-62")
 
-        createView(viewName:'v_research_status_report', replaceIfExists: 'true', schemaName: dbAppsSchema) {
+        createView(viewName: 'v_research_status_report', replaceIfExists: 'true', schemaName: dbAppsSchema) {
             """select
                     nestedReport.batch_name, 
                     nestedReport.rro_account_number,
@@ -1638,7 +1638,7 @@ databaseChangeLog {
         }
 
         rollback {
-            createView(viewName:'v_research_status_report', replaceIfExists: 'true', schemaName: dbAppsSchema) {
+            createView(viewName: 'v_research_status_report', replaceIfExists: 'true', schemaName: dbAppsSchema) {
                 """select
                     nestedReport.batch_name, 
                     nestedReport.rro_account_number,
@@ -1700,12 +1700,12 @@ databaseChangeLog {
 
         update(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'status_ind', value: 'NEW')
-            column(name: 'wr_wrk_inst', value: null)
-            column(name: 'rh_account_number', value: null)
-            column(name: 'df_scenario_uid', value: null)
-            column(name: 'payee_account_number', value: null)
+            column(name: 'wr_wrk_inst', value: 'null')
+            column(name: 'rh_account_number', value: 'null')
+            column(name: 'df_scenario_uid', value: 'null')
+            column(name: 'payee_account_number', value: 'null')
             column(name: 'net_amount', value: '0.0000000000')
-            column(name: 'service_fee', value: null)
+            column(name: 'service_fee', value: 'null')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'is_rh_participating_flag', value: 'false')
             where "wr_wrk_inst > 999999999"

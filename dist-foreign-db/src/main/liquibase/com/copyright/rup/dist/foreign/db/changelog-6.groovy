@@ -30,7 +30,7 @@ databaseChangeLog {
         dropDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'gross_amount')
 
         update(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'gross_amount', value: null)
+            column(name: 'gross_amount', value: 'null')
             where "product_family = 'NTS'"
         }
 

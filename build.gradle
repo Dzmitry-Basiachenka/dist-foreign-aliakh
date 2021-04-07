@@ -8,7 +8,7 @@ buildscript {
     }
     dependencies {
         classpath("com.copyright.rup.scm.gradle.plugins:rup-gradle-plugins:${rupGradlePluginsVersion}")
-        classpath("fi.jasoft.plugin:gradle-vaadin-plugin:${gradleVaadinPluginVersion}")
+        classpath("com.devsoap.plugin:gradle-vaadin-plugin:${gradleVaadinPluginVersion}")
     }
 }
 
