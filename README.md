@@ -1,3 +1,9 @@
+13.1.16
+-
+* CDP-981 Please upgrade to Gradle 4, RUP Gradle Plugins 6
+* B-65633 Tech Debt: FDA: fix CVE-2021-25329 vulnerability issue
+* B-64714 FDA: Show user friendly message on batch deletion in processing mode: make changes based on comments in CR-DIST-FOREIGN-226
+
 13.1.15
 -
 * B-64714 FDA: Show user friendly message on batch deletion in processing mode: implement notification window to prevent deleting of in progress batches
