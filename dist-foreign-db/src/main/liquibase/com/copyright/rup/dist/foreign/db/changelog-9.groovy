@@ -100,9 +100,7 @@ databaseChangeLog {
 
         dropUniqueConstraint(constraintName: 'df_fund_pool_name_key',
                 schemaName: dbAppsSchema,
-                tablespace: dbDataTablespace,
-                tableName: 'df_fund_pool',
-                columnNames: 'name')
+                tableName: 'df_fund_pool')
         rollback {
             addUniqueConstraint(constraintName: 'df_fund_pool_name_key',
                     schemaName: dbAppsSchema,
@@ -112,9 +110,7 @@ databaseChangeLog {
 
             dropUniqueConstraint(constraintName: 'uk_df_fund_pool_name_product_family',
                     schemaName: dbAppsSchema,
-                    tablespace: dbDataTablespace,
-                    tableName: 'df_fund_pool',
-                    columnNames: 'name, product_family')
+                    tableName: 'df_fund_pool')
         }
     }
 
@@ -337,9 +333,7 @@ databaseChangeLog {
         rollback {
             dropUniqueConstraint(constraintName: 'uk_df_usage_batch_name_product_family',
                     schemaName: dbAppsSchema,
-                    tablespace: dbDataTablespace,
-                    tableName: 'df_usage_batch',
-                    columnNames: 'name, product_family')
+                    tableName: 'df_usage_batch')
         }
     }
 

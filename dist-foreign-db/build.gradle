@@ -2,7 +2,7 @@ apply plugin: 'rup-postgres'
 
 rupPostgres {
     commonScripts {
-        version = '3.5.3'
+        version = '4.0.0'
     }
     mainChangelog = 'com/copyright/rup/dist/foreign/db/main-changelog.groovy'
     

@@ -1,20 +1,22 @@
-import fi.jasoft.plugin.GradleVaadinPlugin
-import fi.jasoft.plugin.tasks.CompileThemeTask
-import com.copyright.rup.scm.gradle.plugins.PluginUtils
+apply plugin: 'rup-tomcat'
 
-apply plugin: 'rup-war-ui'
-
-if (!project.plugins.findPlugin(GradleVaadinPlugin)) {
-    project.apply(plugin: GradleVaadinPlugin)
+if (!project.plugins.findPlugin(com.devsoap.plugin.GradleVaadinPlugin)) {
+    project.apply(plugin: com.devsoap.plugin.GradleVaadinPlugin)
 }
 
 rupTomcat {
     tomcatVersion = "${embeddedTomcatVersion}"
 }
 
+configurations {
+    'vaadin-theme-compiler' {
+        exclude group: 'com.vaadin', module: 'vaadin-sass-compiler'
+    }
+}
+
 vaadin {
     version = "${vaadinVersion}"
-    manageDependencies = false
+    manageDependencies = true
     manageRepositories = false
 }
 
@@ -49,7 +51,7 @@ dependencies {
     testIntegRuntime("org.skyscreamer:jsonassert:${jsonassertVersion}")
 }
 
-task compileVaadinTheme(type: CompileThemeTask, group: "rupVaadin")
+task compileVaadinTheme(type: com.devsoap.plugin.tasks.CompileThemeTask, group: "rupVaadin")
 
 war {
     dependsOn 'compileVaadinTheme'

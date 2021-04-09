@@ -41,15 +41,13 @@ databaseChangeLog {
         dropPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_rightsholder',
                 constraintName: 'pk_rh_account_number')
 
-        dropUniqueConstraint(schemaName: dbAppsSchema, tableName: 'df_rightsholder',
-                columnNames: 'df_rightsholder_uid', constraintName: 'uk_df_rightsholder')
+        dropUniqueConstraint(schemaName: dbAppsSchema, tableName: 'df_rightsholder', constraintName: 'uk_df_rightsholder')
 
         addPrimaryKey(tablespace: dbIndexTablespace, schemaName: dbAppsSchema, tableName: 'df_rightsholder',
                 columnNames: 'df_rightsholder_uid', constraintName: 'pk_df_rightsholder')
 
         rollback {
-            dropPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_rightsholder',
-                    constraintName: 'pk_df_rightsholder')
+            dropPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_rightsholder', constraintName: 'pk_df_rightsholder')
 
             addUniqueConstraint(schemaName: dbAppsSchema, tableName: 'df_rightsholder',
                     columnNames: 'df_rightsholder_uid', constraintName: 'uk_df_rightsholder')
