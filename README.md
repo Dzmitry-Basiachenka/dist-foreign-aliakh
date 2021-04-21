@@ -1,3 +1,7 @@
+13.1.17
+-
+* B-66932 Tech Debt: FDA: update postgres common scripts version for party db to 4.0.0
+
 13.1.16
 -
 * CDP-981 Please upgrade to Gradle 4, RUP Gradle Plugins 6
