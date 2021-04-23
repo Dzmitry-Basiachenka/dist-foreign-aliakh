@@ -1,3 +1,7 @@
+13.1.18
+-
+* CDP-981 - Fix empty manifest in war file issue
+
 13.1.17
 -
 * B-66932 Tech Debt: FDA: update postgres common scripts version for party db to 4.0.0
