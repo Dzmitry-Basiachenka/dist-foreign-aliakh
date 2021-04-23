@@ -1,4 +1,5 @@
 apply plugin: 'rup-tomcat'
+apply plugin: 'rup-war'
 
 if (!project.plugins.findPlugin(com.devsoap.plugin.GradleVaadinPlugin)) {
     project.apply(plugin: com.devsoap.plugin.GradleVaadinPlugin)
