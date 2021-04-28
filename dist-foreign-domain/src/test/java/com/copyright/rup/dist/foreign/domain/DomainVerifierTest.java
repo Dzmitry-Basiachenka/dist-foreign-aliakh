@@ -96,7 +96,9 @@ public class DomainVerifierTest {
             {SalFundPoolReportDto.class},
             {SalLicensee.class},
             {SalHistoricalItemBankDetailsReportDto.class},
-            {UsageBatchStatus.class}
+            {UsageBatchStatus.class},
+            {UdmBatch.class},
+            {UdmUsage.class}
         };
         return Arrays.asList(testData);
     }
