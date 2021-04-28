@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.widget.api.TabController;
 
 import com.vaadin.ui.TabSheet;
@@ -34,6 +35,9 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     private static final int SCENARIOS_TAB_INDEX = 1;
 
     @Autowired
+    @Qualifier("dist.foreign.udmUsagesControllerProvider")
+    private IControllerProvider<IUdmUsageController> udmUsagesControllerProvider;
+    @Autowired
     @Qualifier("dist.foreign.usagesControllerProvider")
     private IControllerProvider<ICommonUsageController> usagesControllerProvider;
     @Autowired
@@ -45,6 +49,11 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Autowired
     @Qualifier("dist.foreign.batchStatusControllerProvider")
     private IControllerProvider<ICommonBatchStatusController> batchStatusControllerProvider;
+
+    @Override
+    public IControllerProvider<IUdmUsageController> getUdmUsagesControllerProvider() {
+        return udmUsagesControllerProvider;
+    }
 
     @Override
     public IControllerProvider<ICommonUsageController> getUsagesControllerProvider() {
