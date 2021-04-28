@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.ITabChangeController;
 
@@ -28,6 +29,11 @@ public interface IMainWidgetController extends IController<IMainWidget>, ITabCha
      */
     Method ON_SCENARIO_CREATED =
         ReflectTools.findMethod(IMainWidgetController.class, "onScenarioCreated", ScenarioCreateEvent.class);
+
+    /**
+     * @return instance of {@link IControllerProvider} for {@link IUdmUsageController}.
+     */
+    IControllerProvider<IUdmUsageController> getUdmUsagesControllerProvider();
 
     /**
      * @return instance of {@link IControllerProvider} for {@link ICommonUsageController}.

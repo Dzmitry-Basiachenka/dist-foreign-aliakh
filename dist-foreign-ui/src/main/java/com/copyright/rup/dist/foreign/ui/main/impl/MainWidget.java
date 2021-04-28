@@ -12,6 +12,8 @@ import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.ITabChangeController;
@@ -31,11 +33,13 @@ public class MainWidget extends TabSheet implements IMainWidget {
 
     private IMainWidgetController controller;
 
+    private SwitchableWidget<IUdmUsageWidget, IUdmUsageController> udmUsagesWidget;
     private SwitchableWidget<ICommonUsageWidget, ICommonUsageController> usagesWidget;
     private SwitchableWidget<ICommonScenariosWidget, ICommonScenariosController> scenariosWidget;
     private SwitchableWidget<ICommonAuditWidget, ICommonAuditController> auditWidget;
     private SwitchableWidget<ICommonBatchStatusWidget, ICommonBatchStatusController> batchStatusWidget;
 
+    private Tab udmTab;
     private Tab usagesTab;
     private Tab scenarioTab;
     private Tab auditTab;
@@ -45,12 +49,14 @@ public class MainWidget extends TabSheet implements IMainWidget {
     @SuppressWarnings("unchecked")
     public MainWidget init() {
         VaadinUtils.addComponentStyle(this, Cornerstone.MAIN_TABSHEET);
+        udmUsagesWidget = new SwitchableWidget<>(controller.getUdmUsagesControllerProvider(), widget -> {});
         usagesWidget = new SwitchableWidget<>(controller.getUsagesControllerProvider(),
             widget -> widget.addListener(ScenarioCreateEvent.class,
                 controller, IMainWidgetController.ON_SCENARIO_CREATED));
         scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {});
         auditWidget = new SwitchableWidget<>(controller.getAuditControllerProvider(), widget -> {});
         batchStatusWidget = new SwitchableWidget<>(controller.getBatchStatusControllerProvider(), widget -> {});
+        udmTab = addTab(udmUsagesWidget, ForeignUi.getMessage("tab.udm"));
         usagesTab = addTab(usagesWidget, ForeignUi.getMessage("tab.usages"));
         scenarioTab = addTab(scenariosWidget, ForeignUi.getMessage("tab.scenario"));
         auditTab = addTab(auditWidget, ForeignUi.getMessage("tab.audit"));
@@ -62,6 +68,7 @@ public class MainWidget extends TabSheet implements IMainWidget {
 
     @Override
     public void updateProductFamily() {
+        udmTab.setVisible(udmUsagesWidget.updateProductFamily());
         usagesTab.setVisible(usagesWidget.updateProductFamily());
         scenarioTab.setVisible(scenariosWidget.updateProductFamily());
         auditTab.setVisible(auditWidget.updateProductFamily());
