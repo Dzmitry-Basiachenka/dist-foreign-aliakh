@@ -1,0 +1,43 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmBatchMapper">
+
+    <resultMap id="udmBatchResultMap" type="UdmBatch" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_udm_usage_batch_uid"/>
+        <result property="name" column="name"/>
+        <result property="period" column="period"/>
+        <result property="usageOrigin" column="usage_origin"/>
+        <result property="channel" column="channel"/>
+    </resultMap>
+
+    <sql id="udmBatchColumns">
+        df_udm_usage_batch_uid,
+        name,
+        period,
+        usage_origin,
+        channel,
+        <include refid="StoredEntityMapper.additionalColumns"/>
+    </sql>
+
+    <insert id="insert" parameterType="UdmBatch">
+        insert into ${schema}.df_udm_usage_batch(
+            <include refid="udmBatchColumns"/>
+        ) values (
+            #{id},
+            #{name},
+            #{period},
+            #{usageOrigin},
+            #{channel},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findById" resultMap="udmBatchResultMap" parameterType="string">
+        select
+            <include refid="udmBatchColumns"/>
+        from ${schema}.df_udm_usage_batch
+        where df_udm_usage_batch_uid = #{udmBatchId}
+    </select>
+</mapper>

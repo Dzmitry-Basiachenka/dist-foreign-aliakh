@@ -70,6 +70,7 @@
         <typeAlias alias="PayeeAccountAggregateLicenseeClassesPair" type="com.copyright.rup.dist.foreign.domain.PayeeAccountAggregateLicenseeClassesPair"/>
         <typeAlias alias="SalLicensee" type="com.copyright.rup.dist.foreign.domain.report.SalLicensee"/>
         <typeAlias alias="SalHistoricalItemBankDetailsReportDto" type="com.copyright.rup.dist.foreign.domain.report.SalHistoricalItemBankDetailsReportDto"/>
+        <typeAlias alias="UdmBatch" type="com.copyright.rup.dist.foreign.domain.UdmBatch"/>
     </typeAliases>
 
     <typeHandlers>
@@ -105,5 +106,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IPublicationTypeMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/ILicenseeClassMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageBatchStatusMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmBatchMapper.xml"/>
     </mappers>
 </configuration>
