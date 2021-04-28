@@ -17,25 +17,25 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class UdmBatch extends StoredEntity<String> {
 
-    private String period;
-    private String udmBatchName;
+    private Integer period;
+    private String name;
     private UdmUsageOriginEnum usageOrigin;
     private UdmChannelEnum channel;
 
-    public String getPeriod() {
+    public Integer getPeriod() {
         return period;
     }
 
-    public void setPeriod(String period) {
+    public void setPeriod(Integer period) {
         this.period = period;
     }
 
-    public String getUdmBatchName() {
-        return udmBatchName;
+    public String getName() {
+        return name;
     }
 
-    public void setUdmBatchName(String udmBatchName) {
-        this.udmBatchName = udmBatchName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public UdmUsageOriginEnum getUsageOrigin() {
@@ -66,7 +66,7 @@ public class UdmBatch extends StoredEntity<String> {
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(period, udmBatch.period)
-            .append(udmBatchName, udmBatch.udmBatchName)
+            .append(name, udmBatch.name)
             .append(usageOrigin, udmBatch.usageOrigin)
             .append(channel, udmBatch.channel)
             .isEquals();
@@ -77,7 +77,7 @@ public class UdmBatch extends StoredEntity<String> {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(period)
-            .append(udmBatchName)
+            .append(name)
             .append(usageOrigin)
             .append(channel)
             .toHashCode();
@@ -88,7 +88,7 @@ public class UdmBatch extends StoredEntity<String> {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
             .append("period", period)
-            .append("udmBatchName", udmBatchName)
+            .append("name", name)
             .append("usageOrigin", usageOrigin)
             .append("channel", channel)
             .toString();
