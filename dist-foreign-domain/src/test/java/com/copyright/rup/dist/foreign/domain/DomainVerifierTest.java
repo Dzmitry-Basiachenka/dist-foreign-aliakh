@@ -98,7 +98,8 @@ public class DomainVerifierTest {
             {SalHistoricalItemBankDetailsReportDto.class},
             {UsageBatchStatus.class},
             {UdmBatch.class},
-            {UdmUsage.class}
+            {UdmUsage.class},
+            {UdmUsageDto.class}
         };
         return Arrays.asList(testData);
     }

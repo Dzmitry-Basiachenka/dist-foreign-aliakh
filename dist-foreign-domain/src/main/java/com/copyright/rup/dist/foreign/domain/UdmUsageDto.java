@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.domain;
 
-import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -11,22 +10,27 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * Represents UDM usage.
+ * Represents UDM usage dto.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
- * Date: 04/26/21
+ * Date: 04/28/2021
  *
- * @author Anton Azarenka
+ * @author Ihar Suvorau
  */
-public class UdmUsage extends StoredEntity<String> {
+public class UdmUsageDto extends StoredEntity<String> {
 
+    private Integer period;
+    private UdmUsageOriginEnum usageOrigin;
+    private UdmChannelEnum channel;
+    private UsageStatusEnum status;
     private String originId;
     private LocalDate periodEndDate;
     private LocalDate usageDate;
     private String standardNumber;
     private String reportedStandardNumber;
-    private Rightsholder rightsholder = new Rightsholder();
+    private Long rhAccountNumber;
+    private String rhName;
     private Long wrWrkInst;
     private String reportedTitle;
     private String systemTitle;
@@ -34,7 +38,6 @@ public class UdmUsage extends StoredEntity<String> {
     private String reportedPubType;
     private String language;
     private String pubFormat;
-    private String typeOfUse;
     private String reportedTypeOfUse;
     private Integer quantity;
     private String surveyRespondent;
@@ -50,6 +53,39 @@ public class UdmUsage extends StoredEntity<String> {
     private BigDecimal annualMultiplier;
     private BigDecimal statisticalMultiplier;
     private int annualizedCopies;
+
+    public Integer getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Integer period) {
+        this.period = period;
+    }
+
+    public UdmUsageOriginEnum getUsageOrigin() {
+        return usageOrigin;
+    }
+
+    public void setUsageOrigin(UdmUsageOriginEnum usageOrigin) {
+        this.usageOrigin = usageOrigin;
+    }
+
+    public UdmChannelEnum getChannel() {
+        return channel;
+    }
+
+    public void setChannel(UdmChannelEnum channel) {
+        this.channel = channel;
+    }
+
+    public UsageStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(UsageStatusEnum status) {
+        this.status = status;
+    }
+
 
     public String getOriginId() {
         return originId;
@@ -91,12 +127,20 @@ public class UdmUsage extends StoredEntity<String> {
         this.reportedStandardNumber = reportedStandardNumber;
     }
 
-    public Rightsholder getRightsholder() {
-        return rightsholder;
+    public Long getRhAccountNumber() {
+        return rhAccountNumber;
     }
 
-    public void setRightsholder(Rightsholder rightsholder) {
-        this.rightsholder = rightsholder;
+    public void setRhAccountNumber(Long rhAccountNumber) {
+        this.rhAccountNumber = rhAccountNumber;
+    }
+
+    public String getRhName() {
+        return rhName;
+    }
+
+    public void setRhName(String rhName) {
+        this.rhName = rhName;
     }
 
     public Long getWrWrkInst() {
@@ -153,14 +197,6 @@ public class UdmUsage extends StoredEntity<String> {
 
     public void setPubFormat(String pubFormat) {
         this.pubFormat = pubFormat;
-    }
-
-    public String getTypeOfUse() {
-        return typeOfUse;
-    }
-
-    public void setTypeOfUse(String typeOfUse) {
-        this.typeOfUse = typeOfUse;
     }
 
     public String getReportedTypeOfUse() {
@@ -291,15 +327,20 @@ public class UdmUsage extends StoredEntity<String> {
         if (null == o || getClass() != o.getClass()) {
             return false;
         }
-        UdmUsage udmUsage = (UdmUsage) o;
+        UdmUsageDto udmUsage = (UdmUsageDto) o;
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
+            .append(period, udmUsage.period)
+            .append(usageOrigin, udmUsage.usageOrigin)
+            .append(channel, udmUsage.channel)
+            .append(status, udmUsage.status)
             .append(originId, udmUsage.originId)
             .append(periodEndDate, udmUsage.periodEndDate)
             .append(usageDate, udmUsage.usageDate)
             .append(standardNumber, udmUsage.standardNumber)
             .append(reportedStandardNumber, udmUsage.reportedStandardNumber)
-            .append(rightsholder, udmUsage.rightsholder)
+            .append(rhAccountNumber, udmUsage.rhAccountNumber)
+            .append(rhName, udmUsage.rhName)
             .append(wrWrkInst, udmUsage.wrWrkInst)
             .append(reportedTitle, udmUsage.reportedTitle)
             .append(systemTitle, udmUsage.systemTitle)
@@ -307,7 +348,6 @@ public class UdmUsage extends StoredEntity<String> {
             .append(reportedPubType, udmUsage.reportedPubType)
             .append(language, udmUsage.language)
             .append(pubFormat, udmUsage.pubFormat)
-            .append(typeOfUse, udmUsage.typeOfUse)
             .append(reportedTypeOfUse, udmUsage.reportedTypeOfUse)
             .append(quantity, udmUsage.quantity)
             .append(surveyRespondent, udmUsage.surveyRespondent)
@@ -330,12 +370,17 @@ public class UdmUsage extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
+            .append(period)
+            .append(usageOrigin)
+            .append(channel)
+            .append(status)
             .append(originId)
             .append(periodEndDate)
             .append(usageDate)
             .append(standardNumber)
             .append(reportedStandardNumber)
-            .append(rightsholder)
+            .append(rhAccountNumber)
+            .append(rhName)
             .append(wrWrkInst)
             .append(reportedTitle)
             .append(systemTitle)
@@ -343,7 +388,6 @@ public class UdmUsage extends StoredEntity<String> {
             .append(reportedPubType)
             .append(language)
             .append(pubFormat)
-            .append(typeOfUse)
             .append(reportedTypeOfUse)
             .append(quantity)
             .append(surveyRespondent)
@@ -366,13 +410,18 @@ public class UdmUsage extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
+            .append("period", period)
+            .append("usageOrigin", usageOrigin)
+            .append("channel", channel)
+            .append("status", status)
             .append("originId", originId)
             .append("periodEndDate", periodEndDate)
             .append("usageDate", usageDate)
             .append("standardNumber", standardNumber)
             .append("standardNumber", standardNumber)
             .append("reportedStandardNumber", reportedStandardNumber)
-            .append("rightsholder", rightsholder)
+            .append("rhAccountNumber", rhAccountNumber)
+            .append("rhName", rhName)
             .append("wrWrkInst", wrWrkInst)
             .append("reportedTitle", reportedTitle)
             .append("systemTitle", systemTitle)
@@ -380,7 +429,6 @@ public class UdmUsage extends StoredEntity<String> {
             .append("reportedPubType", reportedPubType)
             .append("language", language)
             .append("pubFormat", pubFormat)
-            .append("typeOfUse", typeOfUse)
             .append("reportedTypeOfUse", reportedTypeOfUse)
             .append("quantity", quantity)
             .append("surveyRespondent", surveyRespondent)
