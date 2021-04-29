@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -70,6 +71,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
 
     private HorizontalLayout initButtonsLayout() {
         Button loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
+        loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBathUploadWindow()));
         HorizontalLayout layout = new HorizontalLayout(loadButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-usages-buttons");
