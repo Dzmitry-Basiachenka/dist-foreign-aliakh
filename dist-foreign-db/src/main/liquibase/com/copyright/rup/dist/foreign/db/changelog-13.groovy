@@ -149,9 +149,7 @@ databaseChangeLog {
                 constraints(nullable: false)
             }
             column(name: 'annual_multiplier', type: 'NUMERIC(3)', remarks: 'The annual multiplier')
-            column(name: 'statistical_multiplier', type: 'NUMERIC(4,2)', remarks: 'The statistical multiplier used to weight library data with a value less than 1 to normalize it with survey data') {
-                constraints(nullable: false)
-            }
+            column(name: 'statistical_multiplier', type: 'NUMERIC(4,2)', remarks: 'The statistical multiplier used to weight library data with a value less than 1 to normalize it with survey data')
             column(name: 'type_of_use', type: 'VARCHAR(128)', remarks: 'The type of use')
             column(name: 'reported_type_of_use', type: 'VARCHAR(128)', remarks: 'The reported type of use')
             column(name: 'quantity', type: 'NUMERIC(38)', remarks: 'The quantity') {
