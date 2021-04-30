@@ -135,6 +135,7 @@ databaseChangeLog {
             }
             column(name: 'company_name', type: 'VARCHAR(200)', remarks: 'The company name')
             column(name: 'survey_respondent', type: 'VARCHAR(200)', remarks: 'The survey respondent')
+            column(name: 'survey_email', type: 'VARCHAR(200)', remarks: 'The survey email')
             column(name: 'ip_address', type: 'VARCHAR(20)', remarks: 'The IP address')
             column(name: 'survey_country', type: 'VARCHAR(100)', remarks: 'The survey country') {
                 constraints(nullable: false)
