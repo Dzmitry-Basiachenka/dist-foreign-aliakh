@@ -72,6 +72,7 @@
         <typeAlias alias="SalHistoricalItemBankDetailsReportDto" type="com.copyright.rup.dist.foreign.domain.report.SalHistoricalItemBankDetailsReportDto"/>
         <typeAlias alias="UdmBatch" type="com.copyright.rup.dist.foreign.domain.UdmBatch"/>
         <typeAlias alias="UdmUsage" type="com.copyright.rup.dist.foreign.domain.UdmUsage"/>
+        <typeAlias alias="UdmUsageDto" type="com.copyright.rup.dist.foreign.domain.UdmUsageDto"/>
     </typeAliases>
 
     <typeHandlers>

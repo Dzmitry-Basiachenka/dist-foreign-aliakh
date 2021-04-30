@@ -27,7 +27,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
             column(name: 'df_udm_usage_uid', value: 'cc3269aa-2f56-21c7-b0d1-34dd0edfcf5a')
             column(name: 'df_udm_usage_batch_uid', value: 'bb5751aa-2f56-38c6-b0d9-45ec0edfcf4a')
-            column(name: 'original_detail_id', value: '46754660-b627-46b9-a782-3f703b6853c7')
+            column(name: 'original_detail_id', value: 'efa79eef-07e0-4981-a834-4979de7e5a9c')
             column(name: 'period_end_date', value: '2025-09-10')
             column(name: 'status_ind', value: "NEW")
             column(name: 'wr_wrk_inst', value: '306985867')
@@ -39,7 +39,7 @@ databaseChangeLog {
             column(name: 'language', value: 'German')
             column(name: 'company_id', value: '454984566')
             column(name: 'survey_respondent', value: '56282dbc-2468-48d4-b926-93d3458a656a')
-            column(name: 'ip_address', value: '24.12.119.203')
+            column(name: 'ip_address', value: 'ip24.12.119.203')
             column(name: 'survey_country', value: 'USA')
             column(name: 'usage_date', value: '2020-09-10')
             column(name: 'survey_start_date', value: '2020-09-10')

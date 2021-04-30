@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
@@ -11,5 +12,5 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Ihar Suvorau
  */
-public interface IUdmUsageWidget extends IWidget<IUdmUsageController> {
+public interface IUdmUsageWidget extends IWidget<IUdmUsageController>, IRefreshable {
 }

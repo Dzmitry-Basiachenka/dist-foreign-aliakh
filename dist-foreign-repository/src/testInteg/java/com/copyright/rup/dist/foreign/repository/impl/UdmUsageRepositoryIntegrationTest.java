@@ -3,10 +3,16 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import org.apache.commons.lang3.StringUtils;
@@ -39,7 +45,7 @@ import java.util.List;
 public class UdmUsageRepositoryIntegrationTest {
 
     private static final String UDM_USAGE_ORIGIN_UID = "3fb43e60-3352-4db4-9080-c30b8a6f6600";
-    private static final String UDM_USAGE_UID = "4b5751aa-6258-44c6-b839-a1ec0edfcf4d";
+    private static final String UDM_USAGE_UID = "acd033da-cba1-4e85-adc9-0bcd00687d9d";
     private static final String UDM_BATCH_UID = "aa5751aa-2858-38c6-b0d9-51ec0edfcf4f";
     private static final String SURVEY_RESPONDENT = "fa0276c3-55d6-42cd-8ffe-e9124acae02f";
     private static final String REPORTED_STANDARD_NUMBER = "0927-7765";
@@ -64,7 +70,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private IUdmUsageRepository udmUsageRepository;
 
     @Test
-    public void testInsertUsageBatch() {
+    public void testInsert() {
         udmUsageRepository.insert(buildUdmUsage());
         List<UdmUsage> udmUsages = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID));
         assertEquals(1, udmUsages.size());
@@ -95,9 +101,78 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindDtosByFilter() {
+        List<UdmUsageDto> usages =
+            udmUsageRepository.findDtosByFilter(new UsageFilter(), null, new Sort("detailId", Sort.Direction.ASC));
+        assertEquals(1, usages.size());
+        verifyUsageDto(buildUdmUsageDto("cc3269aa-2f56-21c7-b0d1-34dd0edfcf5a"), usages.get(0));
+    }
+
+    @Test
+    public void testFindCountByFilter() {
+        assertEquals(1, udmUsageRepository.findCountByFilter(new UsageFilter()));
+    }
+
+    @Test
     public void testIsOriginalDetailIdExist() {
-        assertTrue(udmUsageRepository.isOriginalDetailIdExist("46754660-b627-46b9-a782-3f703b6853c7"));
+        assertTrue(udmUsageRepository.isOriginalDetailIdExist("efa79eef-07e0-4981-a834-4979de7e5a9c"));
         assertFalse(udmUsageRepository.isOriginalDetailIdExist("78754660-cc11-46b9-a756-3f708b6853cc"));
+    }
+
+    private void verifyUsageDto(UdmUsageDto expectedUsage, UdmUsageDto actualUsage) {
+        assertEquals(expectedUsage.getId(), actualUsage.getId());
+        assertEquals(expectedUsage.getPeriod(), actualUsage.getPeriod());
+        assertEquals(expectedUsage.getUsageOrigin(), actualUsage.getUsageOrigin());
+        assertEquals(expectedUsage.getChannel(), actualUsage.getChannel());
+        assertEquals(expectedUsage.getOriginId(), actualUsage.getOriginId());
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
+        assertEquals(expectedUsage.getUsageDate(), actualUsage.getUsageDate());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
+        assertEquals(expectedUsage.getReportedTitle(), actualUsage.getReportedTitle());
+        assertEquals(expectedUsage.getReportedPubType(), actualUsage.getReportedPubType());
+        assertEquals(expectedUsage.getPubFormat(), actualUsage.getPubFormat());
+        assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
+        assertEquals(expectedUsage.getLanguage(), actualUsage.getLanguage());
+        assertEquals(expectedUsage.getCompanyId(), actualUsage.getCompanyId());
+        assertEquals(expectedUsage.getSurveyRespondent(), actualUsage.getSurveyRespondent());
+        assertEquals(expectedUsage.getIpAddress(), actualUsage.getIpAddress());
+        assertEquals(expectedUsage.getSurveyCountry(), actualUsage.getSurveyCountry());
+        assertEquals(expectedUsage.getSurveyStartDate(), actualUsage.getSurveyStartDate());
+        assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
+        assertEquals(expectedUsage.getReportedTypeOfUse(), actualUsage.getReportedTypeOfUse());
+        assertEquals(expectedUsage.getQuantity(), actualUsage.getQuantity());
+        assertNull(actualUsage.getIneligibleReason());
+    }
+
+    private UdmUsageDto buildUdmUsageDto(String usageId) {
+        UdmUsageDto udmUsage = new UdmUsageDto();
+        udmUsage.setId(usageId);
+        udmUsage.setPeriod(202106);
+        udmUsage.setUsageOrigin(UdmUsageOriginEnum.SS);
+        udmUsage.setChannel(UdmChannelEnum.CCC);
+        udmUsage.setOriginId("efa79eef-07e0-4981-a834-4979de7e5a9c");
+        udmUsage.setStatus(UsageStatusEnum.NEW);
+        udmUsage.setPeriodEndDate(LocalDate.of(2025, 9, 10));
+        udmUsage.setUsageDate(LocalDate.of(2020, 9, 10));
+        udmUsage.setWrWrkInst(306985867L);
+        udmUsage.setReportedStandardNumber("1873-7773");
+        udmUsage.setReportedTitle("Tenside, surfactants, detergents");
+        udmUsage.setReportedPubType("Book");
+        udmUsage.setPubFormat("format");
+        udmUsage.setArticle("Tenside, surfactants, detergents");
+        udmUsage.setLanguage("German");
+        udmUsage.setCompanyId(454984566L);
+        udmUsage.setSurveyRespondent("56282dbc-2468-48d4-b926-93d3458a656a");
+        udmUsage.setIpAddress(IP_ADDRESS);
+        udmUsage.setSurveyCountry("USA");
+        udmUsage.setSurveyStartDate(LocalDate.of(2020, 9, 10));
+        udmUsage.setSurveyEndDate(LocalDate.of(2021, 9, 10));
+        udmUsage.setReportedTypeOfUse("EMAIL_COPY");
+        udmUsage.setQuantity(10);
+        udmUsage.setIneligibleReason(StringUtils.EMPTY);
+        return udmUsage;
     }
 
     private UdmUsage buildUdmUsage() {

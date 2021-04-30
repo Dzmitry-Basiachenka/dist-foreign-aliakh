@@ -5,11 +5,13 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -30,7 +32,11 @@ import com.vaadin.ui.components.grid.FooterRow;
  */
 public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWidget {
 
+    private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
+    private static final String FOOTER_LABEL = "Usages Count: %s";
+    private IUdmUsageController controller;
     private Grid<UdmUsageDto> udmUsagesGrid;
+    private DataProvider<UdmUsageDto, Void> dataProvider;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -44,7 +50,13 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     @Override
+    public void refresh() {
+        dataProvider.refreshAll();
+    }
+
+    @Override
     public void setController(IUdmUsageController controller) {
+        this.controller = controller;
     }
 
     private VerticalLayout initFiltersLayout() {
@@ -81,7 +93,19 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private void initUsagesGrid() {
-        udmUsagesGrid = new Grid<>();
+        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
+            query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
+            query -> {
+                int size = controller.getBeansCount();
+                if (0 < size) {
+                    udmUsagesGrid.removeStyleName(EMPTY_STYLE_NAME);
+                    udmUsagesGrid.getFooterRow(0).getCell("detailId").setText(String.format(FOOTER_LABEL, size));
+                } else {
+                    udmUsagesGrid.addStyleName(EMPTY_STYLE_NAME);
+                }
+                return size;
+            });
+        udmUsagesGrid = new Grid<>(dataProvider);
         addColumns();
         udmUsagesGrid.setSelectionMode(Grid.SelectionMode.NONE);
         udmUsagesGrid.setSizeFull();
@@ -92,7 +116,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         FooterRow footer = udmUsagesGrid.appendFooterRow();
         udmUsagesGrid.setFooterVisible(true);
         footer.getCell(addColumn(UdmUsageDto::getId, "table.column.detail_id", "detailId", false, 200))
-            .setText("Usages Count: 0");
+            .setText(String.format(FOOTER_LABEL, 0));
         footer.join(
             addColumn(UdmUsageDto::getPeriod, "table.column.period", "period", true, 100),
             addColumn(UdmUsageDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", true, 100),
