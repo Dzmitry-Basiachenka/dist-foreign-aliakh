@@ -1,0 +1,123 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmUsageMapper">
+
+    <resultMap id="udmUsageResultMap" type="UdmUsage" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_udm_usage_uid"/>
+        <result property="batchId" column="df_udm_usage_batch_uid"/>
+        <result property="originId" column="original_detail_id"/>
+        <result property="periodEndDate" column="period_end_date"/>
+        <result property="status" column="status_ind"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="reportedTitle" column="reported_title"/>
+        <result property="reportedStandardNumber" column="reported_standard_number"/>
+        <result property="reportedPubType" column="reported_pub_type"/>
+        <result property="pubFormat" column="publication_format"/>
+        <result property="article" column="article"/>
+        <result property="language" column="language"/>
+        <result property="companyId" column="company_id"/>
+        <result property="surveyRespondent" column="survey_respondent"/>
+        <result property="ipAddress" column="ip_address"/>
+        <result property="surveyCountry" column="survey_country"/>
+        <result property="usageDate" column="usage_date"/>
+        <result property="surveyStartDate" column="survey_start_date"/>
+        <result property="surveyEndDate" column="survey_end_date"/>
+        <result property="reportedTypeOfUse" column="reported_type_of_use"/>
+        <result property="quantity" column="quantity"/>
+        <result property="ineligibleReason" column="ineligible_reason"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="UdmUsage">
+        insert into ${schema}.df_udm_usage (
+            df_udm_usage_uid,
+            df_udm_usage_batch_uid,
+            original_detail_id,
+            period_end_date,
+            status_ind,
+            wr_wrk_inst,
+            reported_title,
+            reported_standard_number,
+            reported_pub_type,
+            publication_format,
+            article,
+            language,
+            company_id,
+            survey_respondent,
+            ip_address,
+            survey_country,
+            usage_date,
+            survey_start_date,
+            survey_end_date,
+            reported_type_of_use,
+            quantity,
+            ineligible_reason,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        ) values (
+            #{id},
+            #{batchId},
+            #{originId},
+            #{periodEndDate},
+            #{status},
+            #{wrWrkInst},
+            #{reportedTitle},
+            #{reportedStandardNumber},
+            #{reportedPubType},
+            #{pubFormat},
+            #{article},
+            #{language},
+            #{companyId},
+            #{surveyRespondent},
+            #{ipAddress},
+            #{surveyCountry},
+            #{usageDate},
+            #{surveyStartDate},
+            #{surveyEndDate},
+            #{reportedTypeOfUse},
+            #{quantity},
+            #{ineligibleReason},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="isOriginalDetailIdExist" parameterType="string" resultType="boolean">
+        select exists (
+            select 1
+            from ${schema}.df_udm_usage
+            where original_detail_id = #{originalDetailId}
+        )
+    </select>
+
+    <select id="findByIds" resultMap="udmUsageResultMap">
+        select
+            df_udm_usage_uid,
+            df_udm_usage_batch_uid,
+            original_detail_id,
+            period_end_date,
+            status_ind,
+            wr_wrk_inst,
+            reported_title,
+            reported_standard_number,
+            reported_pub_type,
+            publication_format,
+            article,
+            language,
+            company_id,
+            survey_respondent,
+            ip_address,
+            survey_country,
+            usage_date,
+            survey_start_date,
+            survey_end_date,
+            reported_type_of_use,
+            quantity,
+            ineligible_reason
+        from ${schema}.df_udm_usage
+        where df_udm_usage_uid in
+            <foreach collection="list" item="usageId" open="(" separator="," close=")">
+                #{usageId}
+            </foreach>
+        order by df_udm_usage_batch_uid
+    </select>
+</mapper>
