@@ -22,6 +22,8 @@ import java.time.LocalDate;
 public class UdmUsage extends StoredEntity<String> {
 
     private String originId;
+    private String batchId;
+    private UsageStatusEnum status;
     private LocalDate periodEndDate;
     private LocalDate usageDate;
     private String standardNumber;
@@ -57,6 +59,22 @@ public class UdmUsage extends StoredEntity<String> {
 
     public void setOriginId(String originId) {
         this.originId = originId;
+    }
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
+    }
+
+    public UsageStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(UsageStatusEnum status) {
+        this.status = status;
     }
 
     public LocalDate getPeriodEndDate() {
@@ -295,6 +313,8 @@ public class UdmUsage extends StoredEntity<String> {
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(originId, udmUsage.originId)
+            .append(batchId, udmUsage.batchId)
+            .append(status, udmUsage.status)
             .append(periodEndDate, udmUsage.periodEndDate)
             .append(usageDate, udmUsage.usageDate)
             .append(standardNumber, udmUsage.standardNumber)
@@ -331,6 +351,8 @@ public class UdmUsage extends StoredEntity<String> {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(originId)
+            .append(batchId)
+            .append(status)
             .append(periodEndDate)
             .append(usageDate)
             .append(standardNumber)
@@ -367,6 +389,8 @@ public class UdmUsage extends StoredEntity<String> {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
             .append("originId", originId)
+            .append("batchId", batchId)
+            .append("status", status)
             .append("periodEndDate", periodEndDate)
             .append("usageDate", usageDate)
             .append("standardNumber", standardNumber)
