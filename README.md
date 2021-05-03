@@ -1,3 +1,19 @@
+13.1.19
+-
+* B-64613 FDA & UDM: Create UDM shell - UI: initial UI implementation for ACL UDM usages
+* B-64613 FDA & UDM: Create UDM shell - UI: introduce UdmUsageDto domain object and apply it for UDM usages grid
+* B-65858 FDA & UDM: Load ACL usage data: implement repository for UDM usage batch
+* B-65858 FDA & UDM: Load ACL usage data: implement repository for UDM usages
+* B-65858 FDA & UDM: Load ACL usage data: implement services for UDM batch and usages
+* B-65858: FDA & UDM: Load ACL usage data: implement domain for UDM usage and UDM usage batch
+* B-65858: FDA & UDM: Load ACL usage data: implement upload window
+* B-66740 FDA: DB changes for UDM: add survey_email column to df_udm_usage table
+* B-66740 FDA: DB changes for UDM: implement Liquibase script to create df_udm_usage_batch, df_udm_usage tables
+* B-66740 FDA: DB changes for UDM: make changes based on comments in CR-DIST-FOREIGN-227
+* B-66740 FDA: DB changes for UDM: remove not null constraint for df_udm_usage.statistical_multiplier column
+* Revert "B-66740 FDA: DB changes for UDM: add survey_email column to df_udm_usage table"
+* Update release notes and Revving up build version for version 13.1.18
+
 13.1.18
 -
 * CDP-981 - Fix empty manifest in war file issue
