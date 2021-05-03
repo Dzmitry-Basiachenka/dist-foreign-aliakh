@@ -68,6 +68,11 @@ public enum UsageStatusEnum {
     UNCLASSIFIED,
 
     /**
+     * Status for ineligible usages.
+     */
+    INELIGIBLE,
+
+    /**
      * Status for eligible usages.
      */
     ELIGIBLE,

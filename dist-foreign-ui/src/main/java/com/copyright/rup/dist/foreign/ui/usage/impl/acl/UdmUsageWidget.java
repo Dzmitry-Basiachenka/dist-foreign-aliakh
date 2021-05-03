@@ -120,7 +120,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         footer.join(
             addColumn(UdmUsageDto::getPeriod, "table.column.period", "period", true, 100),
             addColumn(UdmUsageDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", true, 100),
-            addColumn(UdmUsageDto::getOriginId, "table.column.usage_detail_id", "usageDetailId", true, 130),
+            addColumn(UdmUsageDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", true, 130),
             addColumn(UdmUsageDto::getStatus, "table.column.usage_status", "status", true, 100),
             addColumn(UdmUsageDto::getReportedTitle, "table.column.reported_title", "reportedTitle", true, 120),
             addColumn(UdmUsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 100),

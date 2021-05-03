@@ -24,7 +24,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private UdmUsageOriginEnum usageOrigin;
     private UdmChannelEnum channel;
     private UsageStatusEnum status;
-    private String originId;
+    private String originalDetailId;
     private LocalDate periodEndDate;
     private LocalDate usageDate;
     private String standardNumber;
@@ -87,12 +87,12 @@ public class UdmUsageDto extends StoredEntity<String> {
     }
 
 
-    public String getOriginId() {
-        return originId;
+    public String getOriginalDetailId() {
+        return originalDetailId;
     }
 
-    public void setOriginId(String originId) {
-        this.originId = originId;
+    public void setOriginalDetailId(String originalDetailId) {
+        this.originalDetailId = originalDetailId;
     }
 
     public LocalDate getPeriodEndDate() {
@@ -334,7 +334,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(usageOrigin, udmUsage.usageOrigin)
             .append(channel, udmUsage.channel)
             .append(status, udmUsage.status)
-            .append(originId, udmUsage.originId)
+            .append(originalDetailId, udmUsage.originalDetailId)
             .append(periodEndDate, udmUsage.periodEndDate)
             .append(usageDate, udmUsage.usageDate)
             .append(standardNumber, udmUsage.standardNumber)
@@ -374,7 +374,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(usageOrigin)
             .append(channel)
             .append(status)
-            .append(originId)
+            .append(originalDetailId)
             .append(periodEndDate)
             .append(usageDate)
             .append(standardNumber)
@@ -414,7 +414,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append("usageOrigin", usageOrigin)
             .append("channel", channel)
             .append("status", status)
-            .append("originId", originId)
+            .append("originalDetailId", originalDetailId)
             .append("periodEndDate", periodEndDate)
             .append("usageDate", usageDate)
             .append("standardNumber", standardNumber)
