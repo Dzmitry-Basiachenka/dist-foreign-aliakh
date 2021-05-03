@@ -121,9 +121,9 @@ databaseChangeLog {
             }
             column(name: 'wr_wrk_inst', type: 'NUMERIC(15)', remarks: 'The Wr Wrk Inst')
             column(name: 'rh_account_number', type: 'NUMERIC(22)', remarks: 'The rightsholder account number')
-            column(name: 'system_title', type: 'VARCHAR(2000)', remarks: 'The system title (the work title sent to LM)')
+            column(name: 'system_title', type: 'VARCHAR(2000)', remarks: 'The system title')
             column(name: 'reported_title', type: 'VARCHAR(1000)', remarks: 'The reported title')
-            column(name: 'standard_number', type: 'VARCHAR(1000)', remarks: 'The standard number (the main piece of data used to identify the work)')
+            column(name: 'standard_number', type: 'VARCHAR(1000)', remarks: 'The standard number')
             column(name: 'reported_standard_number', type: 'VARCHAR(100)', remarks: 'The reported standard number')
             column(name: 'reported_pub_type', type: 'VARCHAR(100)', remarks: 'The reported publication type')
             column(name: 'publication_format', type: 'VARCHAR(20)', remarks: 'The publication format')
