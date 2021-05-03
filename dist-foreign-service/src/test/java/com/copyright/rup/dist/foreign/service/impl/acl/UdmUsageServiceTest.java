@@ -1,24 +1,27 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
-import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +32,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -51,12 +55,11 @@ public class UdmUsageServiceTest {
     private static final String UDM_USAGE_ORIGIN_UID_1 = "b7b9293c-f7bf-4cba-b2b9-58db82ccb675";
     private static final String UDM_USAGE_ORIGIN_UID_2 = "d1f699a4-1c83-408e-a499-e6aee6d110ef";
 
-    private IUdmUsageService udmUsageService;
+    private final UdmUsageService udmUsageService = new UdmUsageService();
     private IUdmUsageRepository udmUsageRepository;
 
     @Before
     public void setUp() {
-        udmUsageService = new UdmUsageService();
         udmUsageRepository = createMock(IUdmUsageRepository.class);
         Whitebox.setInternalState(udmUsageService, udmUsageRepository);
     }
@@ -133,5 +136,42 @@ public class UdmUsageServiceTest {
         udmUsage.setReportedTypeOfUse("COPY_FOR_MYSELF");
         udmUsage.setQuantity(7);
         return udmUsage;
+    }
+
+    @Test
+    public void testGetUsageDtos() {
+        List<UdmUsageDto> udmUsages = Collections.singletonList(new UdmUsageDto());
+        Pageable pageable = new Pageable(0, 1);
+        Sort sort = new Sort("detailId", Sort.Direction.ASC);
+        UsageFilter filter = new UsageFilter();
+        filter.setProductFamily("ACL");
+        expect(udmUsageRepository.findDtosByFilter(filter, pageable, sort)).andReturn(udmUsages).once();
+        replay(udmUsageRepository);
+        List<UdmUsageDto> result = udmUsageRepository.findDtosByFilter(filter, pageable, sort);
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(udmUsageRepository);
+    }
+
+    @Test
+    public void testGetUsagesDtosEmptyFilter() {
+        List<UdmUsageDto> result = udmUsageService.getUsageDtos(new UsageFilter(), null, null);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testGetUsagesCount() {
+        UsageFilter filter = new UsageFilter();
+        filter.setProductFamily("ACL");
+        expect(udmUsageRepository.findCountByFilter(filter)).andReturn(1).once();
+        replay(udmUsageRepository);
+        assertEquals(1, udmUsageRepository.findCountByFilter(filter));
+        verify(udmUsageRepository);
+    }
+
+    @Test
+    public void testGetUsageCountEmptyFilter() {
+        assertEquals(0, udmUsageRepository.findCountByFilter(new UsageFilter()));
     }
 }
