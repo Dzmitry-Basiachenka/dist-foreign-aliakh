@@ -46,8 +46,8 @@ public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
         LengthValidator lengthValidator50 = new LengthValidator(50);
         LengthValidator lengthValidator20 = new LengthValidator(20);
         DateFormatValidator dateFormatValidator = new DateFormatValidator();
-        addPlainValidators(UdmCsvProcessor.Header.USAGE_ORIGINAL_DETAIL_ID, requiredValidator, new DuplicateInFileValidator(),
-            lengthValidator50);
+        addPlainValidators(UdmCsvProcessor.Header.USAGE_ORIGINAL_DETAIL_ID, requiredValidator,
+            new DuplicateInFileValidator(), lengthValidator50);
         addPlainValidators(UdmCsvProcessor.Header.USAGE_DATE, requiredValidator, dateFormatValidator);
         addPlainValidators(UdmCsvProcessor.Header.WR_WRK_INST, new LengthValidator(15));
         addPlainValidators(UdmCsvProcessor.Header.REPORTED_STANDARD_NUMBER, lengthValidator100);
