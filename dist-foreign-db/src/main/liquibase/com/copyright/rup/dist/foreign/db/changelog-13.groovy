@@ -203,4 +203,16 @@ databaseChangeLog {
             dropTable(tableName: 'df_udm_usage_batch', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2021-05-04-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-66740 FDA: DB changes for UDM: update statistical_multiplier, annualized_copies fields")
+
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'statistical_multiplier', newDataType: 'DECIMAL(6,5)')
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'annualized_copies', newDataType: 'NUMERIC(38,5)')
+
+        rollback {
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'statistical_multiplier', newDataType: 'NUMERIC(4,2)')
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'annualized_copies', newDataType: 'NUMERIC(38)')
+        }
+    }
 }
