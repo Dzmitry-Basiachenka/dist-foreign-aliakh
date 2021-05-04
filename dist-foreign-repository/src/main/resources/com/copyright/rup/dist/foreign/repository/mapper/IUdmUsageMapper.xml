@@ -37,22 +37,30 @@
         <result property="status" column="status_ind"/>
         <result property="originalDetailId" column="original_detail_id"/>
         <result property="periodEndDate" column="period_end_date"/>
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="rhName" column="rh_name"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="reportedTitle" column="reported_title"/>
+        <result property="systemTitle" column="system_title"/>
         <result property="reportedStandardNumber" column="reported_standard_number"/>
+        <result property="standardNumber" column="standard_number"/>
         <result property="reportedPubType" column="reported_pub_type"/>
         <result property="pubFormat" column="publication_format"/>
         <result property="article" column="article"/>
         <result property="language" column="language"/>
         <result property="companyId" column="company_id"/>
+        <result property="companyName" column="company_name"/>
         <result property="surveyRespondent" column="survey_respondent"/>
         <result property="ipAddress" column="ip_address"/>
         <result property="surveyCountry" column="survey_country"/>
         <result property="usageDate" column="usage_date"/>
         <result property="surveyStartDate" column="survey_start_date"/>
         <result property="surveyEndDate" column="survey_end_date"/>
+        <result property="annualMultiplier" column="annual_multiplier"/>
+        <result property="statisticalMultiplier" column="statistical_multiplier"/>
         <result property="reportedTypeOfUse" column="reported_type_of_use"/>
         <result property="quantity" column="quantity"/>
+        <result property="annualizedCopies" column="annualized_copies"/>
         <result property="ineligibleReason" column="ineligible_reason"/>
     </resultMap>
 
@@ -123,24 +131,31 @@
             ub.usage_origin,
             ub.channel,
             original_detail_id,
-            period_end_date,
             status_ind,
+            u.rh_account_number,
+            r.name rh_name,
             wr_wrk_inst,
             reported_title,
+            system_title,
             reported_standard_number,
+            standard_number,
             reported_pub_type,
             publication_format,
             article,
             language,
             company_id,
+            company_name,
             survey_respondent,
             ip_address,
             survey_country,
             usage_date,
             survey_start_date,
             survey_end_date,
+            annual_multiplier,
+            statistical_multiplier,
             reported_type_of_use,
             quantity,
+            annualized_copies,
             ineligible_reason,
             u.created_datetime,
             u.updated_datetime,
@@ -148,6 +163,7 @@
             u.updated_by_user
         from ${schema}.df_udm_usage u
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
         order by
         <choose>
             <when test="null != sort">
@@ -178,17 +194,29 @@
             <when test="sort.property == 'status'">
                 status_ind <include refid="IUsageMapper.direction"/>
             </when>
-            <when test="sort.property == 'reportedTitle'">
-                reported_title <include refid="IUsageMapper.direction"/>
+            <when test="sort.property == 'rhAccountNumber'">
+                u.rh_account_number <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'rhName'">
+                r.name <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'wrWrkInst'">
                 wr_wrk_inst <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'reportedTitle'">
+                reported_title <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'systemTitle'">
+                system_title <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'reportedStandardNumber'">
                 reported_standard_number <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'standardNumber'">
+                standard_number <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'reportedPubType'">
-                reported_publication_type <include refid="IUsageMapper.direction"/>
+                reported_pub_type <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'publicationFormat'">
                 publication_format <include refid="IUsageMapper.direction"/>
@@ -201,6 +229,9 @@
             </when>
             <when test="sort.property == 'companyId'">
                 company_id <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'companyName'">
+                company_name <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'surveyRespondent'">
                 survey_respondent <include refid="IUsageMapper.direction"/>
@@ -223,11 +254,20 @@
             <when test="sort.property == 'surveyEndDate'">
                 survey_end_date <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'annualMultiplier'">
+                annual_multiplier <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'statisticalMultiplier'">
+                statistical_multiplier <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'reportedTypeOfUse'">
                 reported_type_of_use <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'quantity'">
                 quantity <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'annualizedCopies'">
+                annualized_copies <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'ineligibleReason'">
                 ineligible_reason <include refid="IUsageMapper.direction"/>

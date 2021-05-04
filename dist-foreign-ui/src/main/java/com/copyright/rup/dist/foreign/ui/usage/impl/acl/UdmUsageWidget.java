@@ -69,6 +69,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private HorizontalLayout initButtonsLayout() {
+        //TODO apply permissions for load button
         Button loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
         loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBathUploadWindow()));
         HorizontalLayout layout = new HorizontalLayout(loadButton);
@@ -107,11 +108,11 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(UdmUsageDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", true, 100),
             addColumn(UdmUsageDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", true, 130),
             addColumn(UdmUsageDto::getStatus, "table.column.usage_status", "status", true, 100),
-            addColumn(UdmUsageDto::getReportedTitle, "table.column.reported_title", "reportedTitle", true, 120),
-            addColumn(UdmUsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 100),
             addColumn(UdmUsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", true, 150),
             addColumn(UdmUsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 150),
             addColumn(UdmUsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 100),
+            addColumn(UdmUsageDto::getReportedTitle, "table.column.reported_title", "reportedTitle", true, 120),
+            addColumn(UdmUsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 100),
             addColumn(UdmUsageDto::getReportedStandardNumber, "table.column.reported_standard_number",
                 "reportedStandardNumber", true, 190),
             addColumn(UdmUsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 150),

@@ -26,10 +26,10 @@ public class UdmUsage extends StoredEntity<String> {
     private UsageStatusEnum status;
     private LocalDate periodEndDate;
     private LocalDate usageDate;
-    private String standardNumber;
-    private String reportedStandardNumber;
     private Rightsholder rightsholder = new Rightsholder();
     private Long wrWrkInst;
+    private String standardNumber;
+    private String reportedStandardNumber;
     private String reportedTitle;
     private String systemTitle;
     private String article;
