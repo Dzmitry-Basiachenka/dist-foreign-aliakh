@@ -7,7 +7,7 @@
     <resultMap id="udmUsageResultMap" type="UdmUsage" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_udm_usage_uid"/>
         <result property="batchId" column="df_udm_usage_batch_uid"/>
-        <result property="originId" column="original_detail_id"/>
+        <result property="originalDetailId" column="original_detail_id"/>
         <result property="periodEndDate" column="period_end_date"/>
         <result property="status" column="status_ind"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
@@ -35,7 +35,7 @@
         <result property="usageOrigin" column="usage_origin"/>
         <result property="channel" column="channel"/>
         <result property="status" column="status_ind"/>
-        <result property="originId" column="original_detail_id"/>
+        <result property="originalDetailId" column="original_detail_id"/>
         <result property="periodEndDate" column="period_end_date"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="reportedTitle" column="reported_title"/>
@@ -84,7 +84,7 @@
         ) values (
             #{id},
             #{batchId},
-            #{originId},
+            #{originalDetailId},
             #{periodEndDate},
             #{status},
             #{wrWrkInst},

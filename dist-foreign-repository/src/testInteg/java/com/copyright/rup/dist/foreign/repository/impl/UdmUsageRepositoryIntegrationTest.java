@@ -44,7 +44,7 @@ import java.util.List;
 @Transactional
 public class UdmUsageRepositoryIntegrationTest {
 
-    private static final String UDM_USAGE_ORIGIN_UID = "3fb43e60-3352-4db4-9080-c30b8a6f6600";
+    private static final String UDM_USAGE_ORIGINAL_DETAIL_UID = "3fb43e60-3352-4db4-9080-c30b8a6f6600";
     private static final String UDM_USAGE_UID = "acd033da-cba1-4e85-adc9-0bcd00687d9d";
     private static final String UDM_BATCH_UID = "aa5751aa-2858-38c6-b0d9-51ec0edfcf4f";
     private static final String SURVEY_RESPONDENT = "fa0276c3-55d6-42cd-8ffe-e9124acae02f";
@@ -78,7 +78,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertNotNull(udmUsage);
         assertEquals(UDM_USAGE_UID, udmUsage.getId());
         assertEquals(UDM_BATCH_UID, udmUsage.getBatchId());
-        assertEquals(UDM_USAGE_ORIGIN_UID, udmUsage.getOriginId());
+        assertEquals(UDM_USAGE_ORIGINAL_DETAIL_UID, udmUsage.getOriginalDetailId());
         assertEquals(UsageStatusEnum.NEW, udmUsage.getStatus());
         assertEquals(PERIOD_END_DATE, udmUsage.getPeriodEndDate());
         assertEquals(USAGE_DATE, udmUsage.getUsageDate());
@@ -124,7 +124,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getPeriod(), actualUsage.getPeriod());
         assertEquals(expectedUsage.getUsageOrigin(), actualUsage.getUsageOrigin());
         assertEquals(expectedUsage.getChannel(), actualUsage.getChannel());
-        assertEquals(expectedUsage.getOriginId(), actualUsage.getOriginId());
+        assertEquals(expectedUsage.getOriginalDetailId(), actualUsage.getOriginalDetailId());
         assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
         assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
         assertEquals(expectedUsage.getUsageDate(), actualUsage.getUsageDate());
@@ -152,7 +152,7 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setPeriod(202106);
         udmUsage.setUsageOrigin(UdmUsageOriginEnum.SS);
         udmUsage.setChannel(UdmChannelEnum.CCC);
-        udmUsage.setOriginId("efa79eef-07e0-4981-a834-4979de7e5a9c");
+        udmUsage.setOriginalDetailId("efa79eef-07e0-4981-a834-4979de7e5a9c");
         udmUsage.setStatus(UsageStatusEnum.NEW);
         udmUsage.setPeriodEndDate(LocalDate.of(2025, 9, 10));
         udmUsage.setUsageDate(LocalDate.of(2020, 9, 10));
@@ -179,7 +179,7 @@ public class UdmUsageRepositoryIntegrationTest {
         UdmUsage udmUsage = new UdmUsage();
         udmUsage.setId(UDM_USAGE_UID);
         udmUsage.setBatchId(UDM_BATCH_UID);
-        udmUsage.setOriginId(UDM_USAGE_ORIGIN_UID);
+        udmUsage.setOriginalDetailId(UDM_USAGE_ORIGINAL_DETAIL_UID);
         udmUsage.setStatus(UsageStatusEnum.NEW);
         udmUsage.setPeriodEndDate(PERIOD_END_DATE);
         udmUsage.setUsageDate(USAGE_DATE);

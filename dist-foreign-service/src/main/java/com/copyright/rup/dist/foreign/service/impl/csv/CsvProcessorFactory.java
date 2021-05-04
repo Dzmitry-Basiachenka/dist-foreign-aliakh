@@ -122,4 +122,12 @@ public class CsvProcessorFactory {
             new UsageDataGradeValidator(salUsageService));
         return processor;
     }
+
+    /**
+     * @return instance of {@link UdmCsvProcessor}.
+     */
+    public UdmCsvProcessor getUdmCsvProcessor() {
+        //TODO {aazarenka} add business validators later
+        return new UdmCsvProcessor();
+    }
 }

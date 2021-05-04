@@ -96,7 +96,7 @@ public class UdmBatchServiceTest {
     private UdmUsage buildUdmUsage(String usageId, String originId) {
         UdmUsage udmUsage = new UdmUsage();
         udmUsage.setId(usageId);
-        udmUsage.setOriginId(originId);
+        udmUsage.setOriginalDetailId(originId);
         udmUsage.setBatchId(UDM_BATCH_UID);
         udmUsage.setStatus(UsageStatusEnum.NEW);
         udmUsage.setPeriodEndDate(LocalDate.of(2021, 12, 12));

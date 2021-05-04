@@ -21,7 +21,7 @@ import java.time.LocalDate;
  */
 public class UdmUsage extends StoredEntity<String> {
 
-    private String originId;
+    private String originalDetailId;
     private String batchId;
     private UsageStatusEnum status;
     private LocalDate periodEndDate;
@@ -53,12 +53,12 @@ public class UdmUsage extends StoredEntity<String> {
     private BigDecimal statisticalMultiplier;
     private int annualizedCopies;
 
-    public String getOriginId() {
-        return originId;
+    public String getOriginalDetailId() {
+        return originalDetailId;
     }
 
-    public void setOriginId(String originId) {
-        this.originId = originId;
+    public void setOriginalDetailId(String originalDetailId) {
+        this.originalDetailId = originalDetailId;
     }
 
     public String getBatchId() {
@@ -312,7 +312,7 @@ public class UdmUsage extends StoredEntity<String> {
         UdmUsage udmUsage = (UdmUsage) o;
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
-            .append(originId, udmUsage.originId)
+            .append(originalDetailId, udmUsage.originalDetailId)
             .append(batchId, udmUsage.batchId)
             .append(status, udmUsage.status)
             .append(periodEndDate, udmUsage.periodEndDate)
@@ -350,7 +350,7 @@ public class UdmUsage extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
-            .append(originId)
+            .append(originalDetailId)
             .append(batchId)
             .append(status)
             .append(periodEndDate)
@@ -388,7 +388,7 @@ public class UdmUsage extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
-            .append("originId", originId)
+            .append("originalDetailId", originalDetailId)
             .append("batchId", batchId)
             .append("status", status)
             .append("periodEndDate", periodEndDate)
