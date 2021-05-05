@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 
+import java.util.List;
+
 /**
  * Represents interface of repository for UDM usage batches.
  * <p/>
@@ -27,4 +29,18 @@ public interface IUdmBatchRepository {
      * @return {@link UdmBatch} with the given id or {@code null} if none exists
      */
     UdmBatch findById(String udmBatchId);
+
+    /**
+     * Finds periods.
+     *
+     * @return list of periods
+     */
+    List<Integer> findPeriods();
+
+    /**
+     * Finds list of {@link UdmBatch}s.
+     *
+     * @return list of {@link UdmBatch}s
+     */
+    List<UdmBatch> findAll();
 }
