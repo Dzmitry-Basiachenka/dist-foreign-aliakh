@@ -10,22 +10,29 @@
         <result property="originalDetailId" column="original_detail_id"/>
         <result property="periodEndDate" column="period_end_date"/>
         <result property="status" column="status_ind"/>
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="reportedTitle" column="reported_title"/>
+        <result property="systemTitle" column="system_title"/>
         <result property="reportedStandardNumber" column="reported_standard_number"/>
+        <result property="standardNumber" column="standard_number"/>
         <result property="reportedPubType" column="reported_pub_type"/>
         <result property="pubFormat" column="publication_format"/>
         <result property="article" column="article"/>
         <result property="language" column="language"/>
         <result property="companyId" column="company_id"/>
+        <result property="companyName" column="company_name"/>
         <result property="surveyRespondent" column="survey_respondent"/>
         <result property="ipAddress" column="ip_address"/>
         <result property="surveyCountry" column="survey_country"/>
         <result property="usageDate" column="usage_date"/>
         <result property="surveyStartDate" column="survey_start_date"/>
         <result property="surveyEndDate" column="survey_end_date"/>
+        <result property="annualMultiplier" column="annual_multiplier"/>
+        <result property="statisticalMultiplier" column="statistical_multiplier"/>
         <result property="reportedTypeOfUse" column="reported_type_of_use"/>
         <result property="quantity" column="quantity"/>
+        <result property="annualizedCopies" column="annualized_copies"/>
         <result property="ineligibleReason" column="ineligible_reason"/>
     </resultMap>
 
@@ -296,28 +303,35 @@
             original_detail_id,
             period_end_date,
             status_ind,
+            rh_account_number,
             wr_wrk_inst,
             reported_title,
+            system_title,
             reported_standard_number,
+            standard_number,
             reported_pub_type,
             publication_format,
             article,
             language,
             company_id,
+            company_name,
             survey_respondent,
             ip_address,
             survey_country,
             usage_date,
             survey_start_date,
             survey_end_date,
+            annual_multiplier,
+            statistical_multiplier,
             reported_type_of_use,
             quantity,
-            ineligible_reason
+            ineligible_reason,
+            annualized_copies
         from ${schema}.df_udm_usage
         where df_udm_usage_uid in
             <foreach collection="list" item="usageId" open="(" separator="," close=")">
                 #{usageId}
             </foreach>
-        order by df_udm_usage_batch_uid
+        order by original_detail_id
     </select>
 </mapper>
