@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +32,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -76,7 +76,6 @@ public class LoadUdmUsagesIntegrationTest {
         ProcessingResult<UdmUsage> result = csvProcessor.process(getCsvOutputStream());
         assertTrue(result.isSuccessful());
         List<UdmUsage> usages = result.get();
-        usages.forEach(udmUsage -> udmUsage.setPeriodEndDate(LocalDate.of(2020, 6, 30)));
         udmBatchService.insertUdmBatch(batch, usages);
         return usages.stream().map(BaseEntity::getId).collect(Collectors.toList());
     }

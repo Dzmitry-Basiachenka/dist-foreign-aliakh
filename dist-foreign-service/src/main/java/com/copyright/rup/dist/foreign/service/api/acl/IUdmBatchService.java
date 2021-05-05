@@ -21,8 +21,9 @@ public interface IUdmBatchService {
      *
      * @param udmBatch  {@link UdmBatch} instance
      * @param udmUsages list of {@link UdmUsage}s
+     * @return count of inserted usages
      */
-    void insertUdmBatch(UdmBatch udmBatch, List<UdmUsage> udmUsages);
+    int insertUdmBatch(UdmBatch udmBatch, List<UdmUsage> udmUsages);
 
     /**
      * Gets periods.

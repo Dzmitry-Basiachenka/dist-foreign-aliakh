@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,19 +39,22 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
-    public void insertUdmUsages(UdmBatch udmBatch, List<UdmUsage> udmUsages) {
+    public int insertUdmUsages(UdmBatch udmBatch, List<UdmUsage> udmUsages) {
         String userName = RupContextUtils.getUserName();
         int size = udmUsages.size();
         LOGGER.info("Insert UDM usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", udmBatch.getName(),
             size, userName);
+        LocalDate periodEndDate = createPeriodEndDate(udmBatch);
         udmUsages.forEach(usage -> {
             usage.setBatchId(udmBatch.getId());
+            usage.setPeriodEndDate(periodEndDate);
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             udmUsageRepository.insert(usage);
         });
         LOGGER.info("Insert UDM usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", udmBatch.getName(),
             size, userName);
+        return size;
     }
 
     @Override
@@ -68,5 +72,12 @@ public class UdmUsageService implements IUdmUsageService {
     @Override
     public int getUsagesCount(UdmUsageFilter filter) {
         return !filter.isEmpty() ? udmUsageRepository.findCountByFilter(filter) : 0;
+    }
+
+    private LocalDate createPeriodEndDate(UdmBatch udmBatch) {
+        String stringPeriod = String.valueOf(udmBatch.getPeriod());
+        int year = Integer.parseInt(stringPeriod.substring(0, 4));
+        int month = Integer.parseInt(stringPeriod.substring(4, 6));
+        return month == 6 ? LocalDate.of(year, month, 30) : LocalDate.of(year, month, 31);
     }
 }

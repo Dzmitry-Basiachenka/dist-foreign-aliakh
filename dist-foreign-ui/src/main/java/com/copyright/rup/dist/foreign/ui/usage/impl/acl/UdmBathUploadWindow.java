@@ -1,9 +1,15 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -42,16 +48,20 @@ public class UdmBathUploadWindow extends Window {
     private static final String[] MONTHES = new String[]{"06", "12"};
     private final Binder<UdmBatch> batchBinder = new Binder<>();
     private final Binder<String> binder = new Binder<>();
+    private final IUdmUsageController udmUsageController;
     private TextField periodYearField;
     private UploadField uploadField;
     private ComboBox<UdmChannelEnum> channelField;
     private ComboBox<UdmUsageOriginEnum> usageOriginField;
-    private ComboBox<String> monthfield;
+    private ComboBox<String> monthField;
 
     /**
      * Constructor.
+     *
+     * @param controller instance of {@link IUdmUsageController}
      */
-    public UdmBathUploadWindow() {
+    public UdmBathUploadWindow(IUdmUsageController controller) {
+        this.udmUsageController = controller;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_udm_usage_batch"));
         setResizable(false);
@@ -65,10 +75,25 @@ public class UdmBathUploadWindow extends Window {
      */
     void onUploadClicked() {
         if (isValid()) {
-            return;//TODO {aazarenka} will implemented later
+            try {
+                UdmCsvProcessor processor = udmUsageController.getCsvProcessor();
+                ProcessingResult<UdmUsage> result = processor.process(uploadField.getStreamToUploadedFile());
+                if (result.isSuccessful()) {
+                    int usagesCount = udmUsageController.loadUdmBatch(buildUdmBatch(), result.get());
+                    close();
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
+                } else {
+                    Windows.showModalWindow(
+                        new ErrorUploadWindow(
+                            udmUsageController.getErrorResultStreamSource(uploadField.getValue(), result),
+                            "<br>Press Download button to see detailed list of errors"));
+                }
+            } catch (ValidationException e) {
+                Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
+            }
         } else {
             Windows.showValidationErrorWindow(
-                Arrays.asList(periodYearField, uploadField, channelField, usageOriginField, monthfield));
+                Arrays.asList(periodYearField, uploadField, channelField, usageOriginField, monthField));
         }
     }
 
@@ -84,7 +109,8 @@ public class UdmBathUploadWindow extends Window {
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
-        rootLayout.addComponents(initUploadField(), initPeriodYearAndPeriodMonthFields(), initChannelAndUsageOrigin(),
+        rootLayout.addComponents(initUploadField(), initPeriodYearAndPeriodMonthFields(),
+            initChannelAndUsageOrigin(),
             buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
@@ -117,12 +143,12 @@ public class UdmBathUploadWindow extends Window {
     }
 
     private HorizontalLayout initPeriodYearAndPeriodMonthFields() {
-        HorizontalLayout horizontalLayout = new HorizontalLayout(intiPeriodYearField(), initPeriodMonthField());
+        HorizontalLayout horizontalLayout = new HorizontalLayout(initPeriodYearField(), initPeriodMonthField());
         horizontalLayout.setSizeFull();
         return horizontalLayout;
     }
 
-    private TextField intiPeriodYearField() {
+    private TextField initPeriodYearField() {
         periodYearField = new TextField(ForeignUi.getMessage("label.distribution_udm_period_year"));
         periodYearField.setSizeFull();
         periodYearField.setPlaceholder("YYYY");
@@ -138,19 +164,19 @@ public class UdmBathUploadWindow extends Window {
     }
 
     private ComboBox<String> initPeriodMonthField() {
-        monthfield = new ComboBox<>(ForeignUi.getMessage("label.distribution_udm_period_month"));
-        monthfield.setItems(MONTHES);
-        monthfield.setRequiredIndicatorVisible(true);
-        binder.forField(monthfield)
+        monthField = new ComboBox<>(ForeignUi.getMessage("label.distribution_udm_period_month"));
+        monthField.setItems(MONTHES);
+        monthField.setRequiredIndicatorVisible(true);
+        binder.forField(monthField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .bind(s -> s, (s, v) -> s = v).validate();
-        monthfield.setSizeFull();
-        VaadinUtils.addComponentStyle(monthfield, "usage-origin-filter");
-        return monthfield;
+        monthField.setSizeFull();
+        VaadinUtils.addComponentStyle(monthField, "usage-origin-filter");
+        return monthField;
     }
 
     private HorizontalLayout initChannelAndUsageOrigin() {
-        HorizontalLayout horizontalLayout = new HorizontalLayout(initChannelField(), initUsageOriginField());
+        HorizontalLayout horizontalLayout = new HorizontalLayout(initUsageOriginField(), initChannelField());
         horizontalLayout.setSizeFull();
         return horizontalLayout;
     }
@@ -182,5 +208,15 @@ public class UdmBathUploadWindow extends Window {
     private SerializablePredicate<String> getYearValidator() {
         return value -> Integer.parseInt(StringUtils.trim(value)) >= MIN_YEAR
             && Integer.parseInt(StringUtils.trim(value)) <= MAX_YEAR;
+    }
+
+    private UdmBatch buildUdmBatch() {
+        UdmBatch udmBatch = new UdmBatch();
+        String fileName = uploadField.getValue();
+        udmBatch.setName(fileName.substring(0, fileName.lastIndexOf(".csv")));
+        udmBatch.setPeriod(Integer.parseInt(String.format("%s%s", periodYearField.getValue(), monthField.getValue())));
+        udmBatch.setChannel(channelField.getValue());
+        udmBatch.setUsageOrigin(usageOriginField.getValue());
+        return udmBatch;
     }
 }

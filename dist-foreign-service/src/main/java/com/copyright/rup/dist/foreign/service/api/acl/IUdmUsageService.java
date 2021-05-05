@@ -25,8 +25,9 @@ public interface IUdmUsageService {
      *
      * @param udmBatch  {@link UdmBatch} instance
      * @param udmUsages list of {@link UdmUsage}s
+     * @return count of UDM usages
      */
-    void insertUdmUsages(UdmBatch udmBatch, List<UdmUsage> udmUsages);
+    int insertUdmUsages(UdmBatch udmBatch, List<UdmUsage> udmUsages);
 
     /**
      * Checks whether UDM usage with provided original detail id exists.

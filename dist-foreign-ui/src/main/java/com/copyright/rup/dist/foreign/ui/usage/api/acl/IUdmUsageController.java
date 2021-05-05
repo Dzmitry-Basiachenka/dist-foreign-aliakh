@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -74,4 +76,13 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @param event event
      */
     void onFilterChanged(FilterChangedEvent event);
+
+    /**
+     * Inserts UDM batch and UDM usages.
+     *
+     * @param udmBatch  {@link UdmBatch} instance
+     * @param udmUsages list of {@link UdmUsage}s
+     * @return count of inserted usages
+     */
+    int loadUdmBatch(UdmBatch udmBatch, List<UdmUsage> udmUsages);
 }

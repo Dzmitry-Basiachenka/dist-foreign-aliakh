@@ -21,6 +21,7 @@
     "surveyCountry": "United States",
     "ipAddress": "24.12.119.203",
     "surveyStartDate": "2018-06-15",
+    "ineligibleReason": "No reported use",
     "surveyEndDate": "2020-06-15",
     "periodEndDate": "2020-06-30"
   },
