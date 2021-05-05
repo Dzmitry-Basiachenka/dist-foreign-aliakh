@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.domain;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto;
@@ -99,7 +100,8 @@ public class DomainVerifierTest {
             {UsageBatchStatus.class},
             {UdmBatch.class},
             {UdmUsage.class},
-            {UdmUsageDto.class}
+            {UdmUsageDto.class},
+            {UdmUsageFilter.class}
         };
         return Arrays.asList(testData);
     }

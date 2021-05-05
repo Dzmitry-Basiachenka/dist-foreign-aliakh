@@ -12,7 +12,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import org.apache.commons.lang3.StringUtils;
@@ -102,21 +102,32 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     public void testFindDtosByFilter() {
+        UdmUsageFilter udmUsageFilter = buildUdmUsageFilter(202106, UsageStatusEnum.NEW, UdmUsageOriginEnum.SS);
         List<UdmUsageDto> usages =
-            udmUsageRepository.findDtosByFilter(new UsageFilter(), null, new Sort("detailId", Sort.Direction.ASC));
+            udmUsageRepository.findDtosByFilter(udmUsageFilter, null, new Sort("detailId", Sort.Direction.ASC));
         assertEquals(1, usages.size());
         verifyUsageDto(buildUdmUsageDto("cc3269aa-2f56-21c7-b0d1-34dd0edfcf5a"), usages.get(0));
     }
 
     @Test
     public void testFindCountByFilter() {
-        assertEquals(1, udmUsageRepository.findCountByFilter(new UsageFilter()));
+        UdmUsageFilter udmUsageFilter = buildUdmUsageFilter(202106, UsageStatusEnum.NEW, UdmUsageOriginEnum.SS);
+        assertEquals(1, udmUsageRepository.findCountByFilter(udmUsageFilter));
     }
 
     @Test
     public void testIsOriginalDetailIdExist() {
         assertTrue(udmUsageRepository.isOriginalDetailIdExist("efa79eef-07e0-4981-a834-4979de7e5a9c"));
         assertFalse(udmUsageRepository.isOriginalDetailIdExist("78754660-cc11-46b9-a756-3f708b6853cc"));
+    }
+
+    private UdmUsageFilter buildUdmUsageFilter(Integer period, UsageStatusEnum status,
+                                               UdmUsageOriginEnum udmUsageOrigin) {
+        UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
+        udmUsageFilter.setPeriod(period);
+        udmUsageFilter.setUsageStatus(status);
+        udmUsageFilter.setUdmUsageOrigin(udmUsageOrigin);
+        return udmUsageFilter;
     }
 
     private void verifyUsageDto(UdmUsageDto expectedUsage, UdmUsageDto actualUsage) {

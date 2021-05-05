@@ -7,11 +7,14 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -46,6 +49,8 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
+    @Autowired
+    private IUdmUsageFilterController udmUsageFilterController;
 
     @Override
     protected IUdmUsageWidget instantiateWidget() {
@@ -54,8 +59,8 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
 
     @Override
     public int getBeansCount() {
-        //TODO {dbasiachenka} get applied filter instead of stub
-        return udmUsageService.getUsagesCount(new UsageFilter());
+        UdmUsageFilter udmUsageFilter = udmUsageFilterController.getWidget().getAppliedFilter();
+        return udmUsageService.getUsagesCount(udmUsageFilter);
     }
 
     @Override
@@ -65,8 +70,20 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        //TODO {dbasiachenka} get applied filter instead of stub
-        return udmUsageService.getUsageDtos(new UsageFilter(), new Pageable(startIndex, count), sort);
+        UdmUsageFilter udmUsageFilter = udmUsageFilterController.getWidget().getAppliedFilter();
+        return udmUsageService.getUsageDtos(udmUsageFilter, new Pageable(startIndex, count), sort);
+    }
+
+    @Override
+    public IUdmUsageFilterWidget initUsagesFilterWidget() {
+        IUdmUsageFilterWidget result = udmUsageFilterController.initWidget();
+        result.addListener(FilterChangedEvent.class, this, IUdmUsageController.ON_FILTER_CHANGED);
+        return result;
+    }
+
+    @Override
+    public void onFilterChanged(FilterChangedEvent event) {
+        getWidget().refresh();
     }
 
     @Override
