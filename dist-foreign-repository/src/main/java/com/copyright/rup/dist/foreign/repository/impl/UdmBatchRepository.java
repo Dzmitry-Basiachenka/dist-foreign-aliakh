@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmBatchRepository;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -28,5 +29,15 @@ public class UdmBatchRepository extends BaseRepository implements IUdmBatchRepos
     @Override
     public UdmBatch findById(String udmBatchId) {
         return selectOne("IUdmBatchMapper.findById", Objects.requireNonNull(udmBatchId));
+    }
+
+    @Override
+    public List<Integer> findPeriods() {
+        return selectList("IUdmBatchMapper.findPeriods");
+    }
+
+    @Override
+    public List<UdmBatch> findAll() {
+        return selectList("IUdmBatchMapper.findAll");
     }
 }

@@ -40,4 +40,17 @@
         from ${schema}.df_udm_usage_batch
         where df_udm_usage_batch_uid = #{udmBatchId}
     </select>
+
+    <select id="findPeriods" resultType="int">
+        select distinct period
+        from ${schema}.df_udm_usage_batch
+        order by period
+    </select>
+
+    <select id="findAll" resultMap="udmBatchResultMap">
+        select
+            <include refid="udmBatchColumns"/>
+        from ${schema}.df_udm_usage_batch
+        order by updated_datetime desc
+    </select>
 </mapper>
