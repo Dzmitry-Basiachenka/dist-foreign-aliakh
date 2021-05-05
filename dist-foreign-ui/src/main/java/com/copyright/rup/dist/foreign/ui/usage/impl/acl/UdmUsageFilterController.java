@@ -1,15 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,20 +27,21 @@ import java.util.List;
 public class UdmUsageFilterController extends CommonController<IUdmUsageFilterWidget>
     implements IUdmUsageFilterController {
 
-    @Override
-    protected UdmUsageFilterWidget instantiateWidget() {
-        return new UdmUsageFilterWidget(this);
-    }
+    @Autowired
+    private IUdmBatchService udmBatchService;
 
     @Override
     public List<Integer> getPeriods() {
-        // TODO {dbasiachenka} change after implementing udm batch service
-        return Collections.emptyList();
+        return udmBatchService.getPeriods();
     }
 
     @Override
     public List<UdmBatch> getUdmBatches() {
-        // TODO {dbasiachenka} change after implementing udm batch service
-        return Collections.emptyList();
+        return udmBatchService.getUdmBatches();
+    }
+
+    @Override
+    protected UdmUsageFilterWidget instantiateWidget() {
+        return new UdmUsageFilterWidget(this);
     }
 }

@@ -28,6 +28,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -81,6 +82,24 @@ public class UdmBatchServiceTest {
         assertEquals(USER_NAME, udmBatch.getCreateUser());
         assertEquals(USER_NAME, udmBatch.getUpdateUser());
         assertNotNull(udmBatch.getId());
+    }
+
+    @Test
+    public void testGetPeriods() {
+        List<Integer> periods = Arrays.asList(202006, 202112);
+        expect(udmBatchRepository.findPeriods()).andReturn(periods).once();
+        replay(udmBatchRepository);
+        assertEquals(periods, udmBatchService.getPeriods());
+        verify(udmBatchRepository);
+    }
+
+    @Test
+    public void testGetUdmBathes() {
+        List<UdmBatch> udmBatches = Collections.singletonList(new UdmBatch());
+        expect(udmBatchRepository.findAll()).andReturn(udmBatches).once();
+        replay(udmBatchRepository);
+        assertEquals(udmBatches, udmBatchService.getUdmBatches());
+        verify(udmBatchRepository);
     }
 
     private UdmBatch buildUdmBatch() {
