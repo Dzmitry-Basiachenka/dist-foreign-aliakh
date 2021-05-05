@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AggregateLicenseeClassValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
@@ -11,10 +12,13 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedWrWrk
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DetailLicenseeClassValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ItemBankWorkPortionIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.OriginalDetailIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.PublicationTypeValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.QuantityValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.RightsholderWrWrkInstValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.SurveyDateValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.UsageDataGradeValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.UsageDataWorkPortionIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.WorkTitleStandardNumberValidator;
@@ -47,6 +51,8 @@ public class CsvProcessorFactory {
     private IPublicationTypeService publicationTypeService;
     @Autowired
     private ISalUsageService salUsageService;
+    @Autowired
+    private IUdmUsageService udmUsageService;
 
     /**
      * Initialized UsageCsvProcessor.
@@ -127,7 +133,9 @@ public class CsvProcessorFactory {
      * @return instance of {@link UdmCsvProcessor}.
      */
     public UdmCsvProcessor getUdmCsvProcessor() {
-        //TODO {aazarenka} add business validators later
-        return new UdmCsvProcessor();
+        UdmCsvProcessor processor = new UdmCsvProcessor();
+        processor.addBusinessValidators(new SurveyDateValidator(), new QuantityValidator(),
+            new OriginalDetailIdValidator(udmUsageService));
+        return processor;
     }
 }
