@@ -1,3 +1,12 @@
+13.1.20
+-
+* B-64613 FDA & UDM: Create UDM shell - UI: implement backend logic to retrieve usages to display
+* B-65858 FDA & UDM: Load ACL usage data: implement validators for original detail id, survey dates and quantity
+* B-65858: FDA & UDM: Load ACL usage data: fix checkstyle issue
+* B-65858: FDA & UDM: Load ACL usage data: implement UDM usage CSV processor and  logic related to download error file if upload was failed
+* B-66740 FDA: DB changes for UDM: update statistical_multiplier, annualized_copies fields
+* B-67103: FDA & UDM: Create UDM shell - UI Filtering - Part 1: implement UDM filters widget
+
 13.1.19
 -
 * B-64613 FDA & UDM: Create UDM shell - UI: initial UI implementation for ACL UDM usages
