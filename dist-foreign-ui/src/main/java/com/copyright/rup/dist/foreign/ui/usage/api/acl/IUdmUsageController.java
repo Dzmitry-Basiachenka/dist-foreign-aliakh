@@ -4,10 +4,13 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.util.ReflectTools;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -20,6 +23,12 @@ import java.util.List;
  * @author Ihar Suvorau
  */
 public interface IUdmUsageController extends IController<IUdmUsageWidget> {
+
+    /**
+     * {@link #onFilterChanged(FilterChangedEvent)}.
+     */
+    Method ON_FILTER_CHANGED =
+        ReflectTools.findMethod(IUdmUsageController.class, "onFilterChanged", FilterChangedEvent.class);
 
     /**
      * @return number of items.
@@ -51,4 +60,18 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @return instance of {@link UdmCsvProcessor}
      */
     UdmCsvProcessor getCsvProcessor();
+
+    /**
+     * Initializes {@link IUdmUsageFilterWidget}.
+     *
+     * @return initialized {@link IUdmUsageFilterWidget}
+     */
+    IUdmUsageFilterWidget initUsagesFilterWidget();
+
+    /**
+     * Handles changes of filter.
+     *
+     * @param event event
+     */
+    void onFilterChanged(FilterChangedEvent event);
 }

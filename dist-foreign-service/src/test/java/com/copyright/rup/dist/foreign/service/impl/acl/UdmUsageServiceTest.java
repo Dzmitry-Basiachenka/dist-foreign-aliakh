@@ -20,7 +20,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import org.junit.Before;
@@ -143,8 +143,7 @@ public class UdmUsageServiceTest {
         List<UdmUsageDto> udmUsages = Collections.singletonList(new UdmUsageDto());
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("detailId", Sort.Direction.ASC);
-        UsageFilter filter = new UsageFilter();
-        filter.setProductFamily("ACL");
+        UdmUsageFilter filter = new UdmUsageFilter();
         expect(udmUsageRepository.findDtosByFilter(filter, pageable, sort)).andReturn(udmUsages).once();
         replay(udmUsageRepository);
         List<UdmUsageDto> result = udmUsageRepository.findDtosByFilter(filter, pageable, sort);
@@ -155,15 +154,14 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetUsagesDtosEmptyFilter() {
-        List<UdmUsageDto> result = udmUsageService.getUsageDtos(new UsageFilter(), null, null);
+        List<UdmUsageDto> result = udmUsageService.getUsageDtos(new UdmUsageFilter(), null, null);
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
 
     @Test
     public void testGetUsagesCount() {
-        UsageFilter filter = new UsageFilter();
-        filter.setProductFamily("ACL");
+        UdmUsageFilter filter = new UdmUsageFilter();
         expect(udmUsageRepository.findCountByFilter(filter)).andReturn(1).once();
         replay(udmUsageRepository);
         assertEquals(1, udmUsageRepository.findCountByFilter(filter));
@@ -172,6 +170,6 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetUsageCountEmptyFilter() {
-        assertEquals(0, udmUsageRepository.findCountByFilter(new UsageFilter()));
+        assertEquals(0, udmUsageRepository.findCountByFilter(new UdmUsageFilter()));
     }
 }

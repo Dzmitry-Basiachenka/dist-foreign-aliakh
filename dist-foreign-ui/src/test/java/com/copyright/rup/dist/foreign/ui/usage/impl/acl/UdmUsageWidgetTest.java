@@ -1,7 +1,15 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -34,8 +42,15 @@ public class UdmUsageWidgetTest {
 
     @Before
     public void setUp() {
+        IUdmUsageController controller = createMock(IUdmUsageController.class);
+        UdmUsageFilterWidget filterWidget = new UdmUsageFilterWidget(createMock(IUdmUsageFilterController.class));
+        expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
+        replay(controller);
         usagesWidget = new UdmUsageWidget();
+        usagesWidget.setController(controller);
         usagesWidget.init();
+        verify(controller);
+        reset(controller);
     }
 
     @Test
@@ -43,7 +58,7 @@ public class UdmUsageWidgetTest {
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget);
-        assertTrue(usagesWidget.getFirstComponent() instanceof VerticalLayout);
+        assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;

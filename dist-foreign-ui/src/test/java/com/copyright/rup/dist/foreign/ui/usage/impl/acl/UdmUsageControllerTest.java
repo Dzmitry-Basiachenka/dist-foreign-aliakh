@@ -15,10 +15,12 @@ import static org.junit.Assert.assertSame;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -45,37 +47,47 @@ import java.util.List;
 public class UdmUsageControllerTest {
 
     private final UdmUsageController controller = new UdmUsageController();
-    private final UsageFilter usageFilter = new UsageFilter();
+    private final UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
     private IUdmUsageService udmUsageService;
     private CsvProcessorFactory csvProcessorFactory;
+    private IUdmUsageFilterController udmUsageFilterController;
+    private IUdmUsageFilterWidget udmUsageFilterWidget;
 
     @Before
     public void setUp() {
         udmUsageService = createMock(IUdmUsageService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
+        udmUsageFilterController = createMock(IUdmUsageFilterController.class);
+        udmUsageFilterWidget = createMock(IUdmUsageFilterWidget.class);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, udmUsageService);
+        Whitebox.setInternalState(controller, udmUsageFilterController);
+        Whitebox.setInternalState(controller, udmUsageFilterWidget);
     }
 
     @Test
     public void testLoadBeans() {
         List<UdmUsageDto> udmUsages = Collections.singletonList(new UdmUsageDto());
         Capture<Pageable> pageableCapture = newCapture();
-        expect(udmUsageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
+        expect(udmUsageFilterController.getWidget()).andReturn(udmUsageFilterWidget).once();
+        expect(udmUsageFilterWidget.getAppliedFilter()).andReturn(udmUsageFilter).once();
+        expect(udmUsageService.getUsageDtos(eq(udmUsageFilter), capture(pageableCapture), isNull()))
             .andReturn(udmUsages).once();
-        replay(udmUsageService);
+        replay(udmUsageFilterController, udmUsageFilterWidget, udmUsageService);
         assertSame(udmUsages, controller.loadBeans(0, 10, null));
         assertEquals(10, pageableCapture.getValue().getLimit());
         assertEquals(0, pageableCapture.getValue().getOffset());
-        verify(udmUsageService);
+        verify(udmUsageFilterController, udmUsageFilterWidget, udmUsageService);
     }
 
     @Test
     public void testGetBeansCount() {
-        expect(udmUsageService.getUsagesCount(usageFilter)).andReturn(10).once();
-        replay(udmUsageService);
+        expect(udmUsageFilterController.getWidget()).andReturn(udmUsageFilterWidget).once();
+        expect(udmUsageFilterWidget.getAppliedFilter()).andReturn(udmUsageFilter).once();
+        expect(udmUsageService.getUsagesCount(udmUsageFilter)).andReturn(10).once();
+        replay(udmUsageFilterController, udmUsageFilterWidget, udmUsageService);
         assertEquals(10, controller.getBeansCount());
-        verify(udmUsageService);
+        verify(udmUsageFilterController, udmUsageFilterWidget, udmUsageService);
     }
 
     @Test

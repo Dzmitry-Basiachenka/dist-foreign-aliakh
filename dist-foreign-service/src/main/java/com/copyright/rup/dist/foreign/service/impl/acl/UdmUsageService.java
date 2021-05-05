@@ -7,7 +7,7 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
@@ -59,14 +59,14 @@ public class UdmUsageService implements IUdmUsageService {
     }
 
     @Override
-    public List<UdmUsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
+    public List<UdmUsageDto> getUsageDtos(UdmUsageFilter filter, Pageable pageable, Sort sort) {
         return !filter.isEmpty()
             ? udmUsageRepository.findDtosByFilter(filter, pageable, sort)
             : Collections.emptyList();
     }
 
     @Override
-    public int getUsagesCount(UsageFilter filter) {
+    public int getUsagesCount(UdmUsageFilter filter) {
         return !filter.isEmpty() ? udmUsageRepository.findCountByFilter(filter) : 0;
     }
 }

@@ -4,7 +4,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
 import java.util.List;
 
@@ -37,20 +37,20 @@ public interface IUdmUsageRepository {
     /**
      * Finds list of {@link UdmUsageDto}s by usage filter.
      *
-     * @param filter   instance of {@link UsageFilter}
+     * @param filter   instance of {@link UdmUsageFilter}
      * @param pageable instance of {@link Pageable}
      * @param sort     instance of {@link Sort}
      * @return the list of {@link UdmUsageDto}
      */
-    List<UdmUsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort);
+    List<UdmUsageDto> findDtosByFilter(UdmUsageFilter filter, Pageable pageable, Sort sort);
 
     /**
      * Finds UDM usages count based on applied filter.
      *
-     * @param filter instance of {@link UsageFilter}
+     * @param filter instance of {@link UdmUsageFilter}
      * @return the count of usages
      */
-    int findCountByFilter(UsageFilter filter);
+    int findCountByFilter(UdmUsageFilter filter);
 
     /**
      * Gets {@link UdmUsage}s by their ids.

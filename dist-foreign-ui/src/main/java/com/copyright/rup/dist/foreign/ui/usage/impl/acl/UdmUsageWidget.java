@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
@@ -17,7 +16,6 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
@@ -42,7 +40,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     @SuppressWarnings("unchecked")
     public IUdmUsageWidget init() {
         setSplitPosition(200, Unit.PIXELS);
-        setFirstComponent(initFiltersLayout());
+        setFirstComponent(controller.initUsagesFilterWidget());
         setSecondComponent(initUsagesLayout());
         setLocked(true);
         setSizeFull();
@@ -57,19 +55,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     @Override
     public void setController(IUdmUsageController controller) {
         this.controller = controller;
-    }
-
-    private VerticalLayout initFiltersLayout() {
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel());
-        verticalLayout.setMargin(true);
-        return verticalLayout;
-    }
-
-    //TODO {dbasiachenka} implement filter widget and move this label there
-    private Label buildFiltersHeaderLabel() {
-        Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
-        filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
-        return filterHeaderLabel;
     }
 
     private VerticalLayout initUsagesLayout() {

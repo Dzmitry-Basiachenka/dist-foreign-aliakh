@@ -5,7 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import com.google.common.collect.ImmutableMap;
@@ -44,7 +44,7 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     }
 
     @Override
-    public List<UdmUsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort) {
+    public List<UdmUsageDto> findDtosByFilter(UdmUsageFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
         parameters.put(PAGEABLE_KEY, pageable);
@@ -53,7 +53,7 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     }
 
     @Override
-    public int findCountByFilter(UsageFilter filter) {
+    public int findCountByFilter(UdmUsageFilter filter) {
         return selectOne("IUdmUsageMapper.findCountByFilter",
             ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
     }
