@@ -53,11 +53,6 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     private IUdmUsageFilterController udmUsageFilterController;
 
     @Override
-    protected IUdmUsageWidget instantiateWidget() {
-        return new UdmUsageWidget();
-    }
-
-    @Override
     public int getBeansCount() {
         UdmUsageFilter udmUsageFilter = udmUsageFilterController.getWidget().getAppliedFilter();
         return udmUsageService.getUsagesCount(udmUsageFilter);
@@ -96,5 +91,10 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     public UdmCsvProcessor getCsvProcessor() {
         return csvProcessorFactory.getUdmCsvProcessor();
+    }
+
+    @Override
+    protected IUdmUsageWidget instantiateWidget() {
+        return new UdmUsageWidget();
     }
 }

@@ -22,37 +22,36 @@ public class UdmUsageDto extends StoredEntity<String> {
 
     private Integer period;
     private UdmUsageOriginEnum usageOrigin;
-    private UdmChannelEnum channel;
-    private UsageStatusEnum status;
     private String originalDetailId;
-    private LocalDate periodEndDate;
-    private LocalDate usageDate;
-    private String standardNumber;
-    private String reportedStandardNumber;
+    private UsageStatusEnum status;
     private Long rhAccountNumber;
     private String rhName;
     private Long wrWrkInst;
     private String reportedTitle;
     private String systemTitle;
-    private String article;
+    private String reportedStandardNumber;
+    private String standardNumber;
     private String reportedPubType;
-    private String language;
     private String pubFormat;
-    private String reportedTypeOfUse;
-    private Integer quantity;
-    private String surveyRespondent;
-    private Long companyId;
-    private String surveyCountry;
-    private String ipAddress;
-    private LocalDate surveyStartDate;
-    private LocalDate surveyEndDate;
-    private String ineligibleReason;
+    private String article;
+    private String language;
     private String detailLicenseeClassId;
     private String detailLicenseeClassName;
+    private Long companyId;
     private String companyName;
+    private String surveyRespondent;
+    private String ipAddress;
+    private String surveyCountry;
+    private UdmChannelEnum channel;
+    private LocalDate usageDate;
+    private LocalDate surveyStartDate;
+    private LocalDate surveyEndDate;
     private BigDecimal annualMultiplier;
     private BigDecimal statisticalMultiplier;
+    private String reportedTypeOfUse;
+    private Integer quantity;
     private int annualizedCopies;
+    private String ineligibleReason;
 
     public Integer getPeriod() {
         return period;
@@ -86,21 +85,12 @@ public class UdmUsageDto extends StoredEntity<String> {
         this.status = status;
     }
 
-
     public String getOriginalDetailId() {
         return originalDetailId;
     }
 
     public void setOriginalDetailId(String originalDetailId) {
         this.originalDetailId = originalDetailId;
-    }
-
-    public LocalDate getPeriodEndDate() {
-        return periodEndDate;
-    }
-
-    public void setPeriodEndDate(LocalDate periodEndDate) {
-        this.periodEndDate = periodEndDate;
     }
 
     public LocalDate getUsageDate() {
@@ -335,7 +325,6 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(channel, udmUsage.channel)
             .append(status, udmUsage.status)
             .append(originalDetailId, udmUsage.originalDetailId)
-            .append(periodEndDate, udmUsage.periodEndDate)
             .append(usageDate, udmUsage.usageDate)
             .append(standardNumber, udmUsage.standardNumber)
             .append(reportedStandardNumber, udmUsage.reportedStandardNumber)
@@ -375,7 +364,6 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(channel)
             .append(status)
             .append(originalDetailId)
-            .append(periodEndDate)
             .append(usageDate)
             .append(standardNumber)
             .append(reportedStandardNumber)
@@ -415,7 +403,6 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append("channel", channel)
             .append("status", status)
             .append("originalDetailId", originalDetailId)
-            .append("periodEndDate", periodEndDate)
             .append("usageDate", usageDate)
             .append("standardNumber", standardNumber)
             .append("standardNumber", standardNumber)
