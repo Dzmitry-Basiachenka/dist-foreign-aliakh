@@ -215,4 +215,16 @@ databaseChangeLog {
             modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'annualized_copies', newDataType: 'NUMERIC(38)')
         }
     }
+
+    changeSet(id: '2021-05-06-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-66740 FDA: DB changes for UDM: add assignee column to df_udm_usage table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'assignee', type: 'VARCHAR(320)', remarks: 'The assignee')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'assignee')
+        }
+    }
 }
