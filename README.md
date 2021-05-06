@@ -1,3 +1,16 @@
+13.1.21
+-
+* B-64613 FDA & UDM: Create UDM shell - UI: make changes based on comments in CR-DIST-FOREIGN-228
+* B-64613 FDA & UDM: Create UDM shell - UI: remove sorting from licensee classes columns
+* B-65858 FDA & UDM: Load ACL usage data: implement integration test to cover uploading of UDM usages
+* B-65858: FDA & UDM: Load ACL usage data: implement upload udm usages logic
+* B-67103: FDA & UDM: Create UDM shell - UI Filtering - Part 1: apply udm filter to select udm usages
+* B-67103: FDA & UDM: Create UDM shell - UI Filtering - Part 1: fix failed UdmUsageRepositoryIntegrationTest.testFindDtosByFilter
+* B-67103: FDA & UDM: Create UDM shell - UI Filtering - Part 1: implement repository layer changes for UDM filters
+* B-67103: FDA & UDM: Create UDM shell - UI Filtering - Part 1: implement service layer changes for UDM filters
+* B-67325 Tech Debt: FDA: fix the bug of not changing tabs from Usages to Scenarios after creating a scenario
+* B-67325 Tech Debt: FDA: update commons-io to 2.7 version
+
 13.1.20
 -
 * B-64613 FDA & UDM: Create UDM shell - UI: implement backend logic to retrieve usages to display
