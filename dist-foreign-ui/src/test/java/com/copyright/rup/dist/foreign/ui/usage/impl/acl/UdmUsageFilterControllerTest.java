@@ -1,9 +1,21 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.Ignore;
+import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UdmUsageFilterController}.
@@ -18,20 +30,34 @@ public class UdmUsageFilterControllerTest {
 
     private final UdmUsageFilterController controller = new UdmUsageFilterController();
 
+    private IUdmBatchService udmBatchService;
+
+    @Before
+    public void setUp() {
+        udmBatchService = createMock(IUdmBatchService.class);
+        Whitebox.setInternalState(controller, udmBatchService);
+    }
+
     @Test
     public void testInstantiateWidget() {
         assertNotNull(controller.instantiateWidget());
     }
 
-    @Ignore
-    @Test
-    public void testGetUdmBatchesForFilter() {
-        // TODO {dbasiachenka} complete after implementation of service logic
-    }
-
-    @Ignore
     @Test
     public void testGetPeriods() {
-        // TODO {dbasiachenka} complete after implementation of service logic
+        List<Integer> periods = Collections.singletonList(202006);
+        expect(udmBatchService.getPeriods()).andReturn(periods).once();
+        replay(udmBatchService);
+        assertEquals(periods, controller.getPeriods());
+        verify(udmBatchService);
+    }
+
+    @Test
+    public void testGetUdmBatchesForFilter() {
+        List<UdmBatch> udmBatches = Collections.singletonList(new UdmBatch());
+        expect(udmBatchService.getUdmBatches()).andReturn(udmBatches).once();
+        replay(udmBatchService);
+        assertEquals(udmBatches, controller.getUdmBatches());
+        verify(udmBatchService);
     }
 }

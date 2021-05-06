@@ -47,4 +47,14 @@ public class UdmBatchService implements IUdmBatchService {
         udmUsageService.insertUdmUsages(udmBatch, udmUsages);
         LOGGER.info("Insert UDM batch. Finished. UsageBatchName={}, UserName={}", udmBatch.getName(), userName);
     }
+
+    @Override
+    public List<Integer> getPeriods() {
+        return udmBatchRepository.findPeriods();
+    }
+
+    @Override
+    public List<UdmBatch> getUdmBatches() {
+        return udmBatchRepository.findAll();
+    }
 }
