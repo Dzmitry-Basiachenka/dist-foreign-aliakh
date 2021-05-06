@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MainWidgetController extends TabController<IMainWidget> implements IMainWidgetController {
 
-    private static final int SCENARIOS_TAB_INDEX = 1;
+    private static final int SCENARIOS_TAB_INDEX = 2;
 
     @Autowired
     @Qualifier("dist.foreign.udmUsagesControllerProvider")
