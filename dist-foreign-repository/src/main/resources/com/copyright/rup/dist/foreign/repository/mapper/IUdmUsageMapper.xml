@@ -71,6 +71,26 @@
         <result property="ineligibleReason" column="ineligible_reason"/>
     </resultMap>
 
+    <sql id="udmUsageFilter">
+        <where>
+            <if test="filter.udmBatchesIds.size() > 0">
+                and
+                <foreach collection="filter.udmBatchesIds" item="udmBatchId" open="(" separator=" or " close=")">
+                    u.df_udm_usage_batch_uid = #{udmBatchId}
+                </foreach>
+            </if>
+            <if test="null != filter.period">
+                and <![CDATA[ub.period = #{filter.period}]]>
+            </if>
+            <if test="null != filter.usageStatus">
+                and u.status_ind = #{filter.usageStatus}
+            </if>
+            <if test="null != filter.udmUsageOrigin">
+                and ub.usage_origin = #{filter.udmUsageOrigin}
+            </if>
+        </where>
+    </sql>
+
     <insert id="insert" parameterType="UdmUsage">
         insert into ${schema}.df_udm_usage (
             df_udm_usage_uid,
@@ -171,6 +191,7 @@
         from ${schema}.df_udm_usage u
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        <include refid="IUdmUsageMapper.udmUsageFilter"/>
         order by
         <choose>
             <when test="null != sort">
@@ -294,6 +315,9 @@
     <select id="findCountByFilter" parameterType="map" resultType="int">
         select count(1)
         from ${schema}.df_udm_usage u
+        join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        <include refid="IUdmUsageMapper.udmUsageFilter"/>
     </select>
 
     <select id="findByIds" resultMap="udmUsageResultMap">

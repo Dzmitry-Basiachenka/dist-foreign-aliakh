@@ -111,7 +111,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     public void testFindDtosByFilter() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUsageBatchesIds(Collections.singleton(UDM_BATCH_UID_2));
+        filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_2));
         List<UdmUsageDto> usages =
             udmUsageRepository.findDtosByFilter(filter, null, new Sort("detailId", Sort.Direction.ASC));
         assertEquals(2, usages.size());
@@ -156,21 +156,10 @@ public class UdmUsageRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(DETAIL_ID_2, DETAIL_ID_1, "updateUser");
     }
 
-    private void assertSortingFindDtosByFilter(String detailIdAsc, String detailIdDesc, String sortProperty) {
-        UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUsageBatchesIds(Sets.newHashSet(UDM_BATCH_UID_2, UDM_BATCH_UID_3));
-        List<UdmUsageDto> usageDtos =
-            udmUsageRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Direction.ASC));
-        assertEquals(detailIdAsc, usageDtos.get(0).getId());
-        usageDtos =
-            udmUsageRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Direction.DESC));
-        assertEquals(detailIdDesc, usageDtos.get(0).getId());
-    }
-
     @Test
     public void testFindCountByFilter() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUsageBatchesIds(Sets.newHashSet(UDM_BATCH_UID_2, UDM_BATCH_UID_3));
+        filter.setUdmBatchesIds(Sets.newHashSet(UDM_BATCH_UID_2, UDM_BATCH_UID_3));
         assertEquals(2, udmUsageRepository.findCountByFilter(filter));
     }
 
@@ -178,6 +167,17 @@ public class UdmUsageRepositoryIntegrationTest {
     public void testIsOriginalDetailIdExist() {
         assertTrue(udmUsageRepository.isOriginalDetailIdExist("OGN674GHHSB001"));
         assertFalse(udmUsageRepository.isOriginalDetailIdExist("OGN674GHHSB101"));
+    }
+
+    private void assertSortingFindDtosByFilter(String detailIdAsc, String detailIdDesc, String sortProperty) {
+        UdmUsageFilter filter = new UdmUsageFilter();
+        filter.setUdmBatchesIds(Sets.newHashSet(UDM_BATCH_UID_2, UDM_BATCH_UID_3));
+        List<UdmUsageDto> usageDtos =
+            udmUsageRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Direction.ASC));
+        assertEquals(detailIdAsc, usageDtos.get(0).getId());
+        usageDtos =
+            udmUsageRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Direction.DESC));
+        assertEquals(detailIdDesc, usageDtos.get(0).getId());
     }
 
     private void verifyUsageDto(UdmUsageDto expectedUsage, UdmUsageDto actualUsage) {

@@ -3,14 +3,13 @@ package com.copyright.rup.dist.foreign.domain.filter;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -24,7 +23,7 @@ import java.util.Set;
  */
 public class UdmUsageFilter {
 
-    private Set<String> usageBatchesIds = Sets.newHashSet();
+    private Set<String> udmBatchesIds = new HashSet<>();
     private UsageStatusEnum usageStatus;
     private UdmUsageOriginEnum udmUsageOrigin;
     private Integer period;
@@ -42,19 +41,19 @@ public class UdmUsageFilter {
      */
     public UdmUsageFilter(UdmUsageFilter filter) {
         if (null != filter) {
-            setUsageBatchesIds(filter.getUsageBatchesIds());
+            setUdmBatchesIds(filter.getUdmBatchesIds());
             setUsageStatus(filter.getUsageStatus());
             setUdmUsageOrigin(filter.getUdmUsageOrigin());
             setPeriod(filter.getPeriod());
         }
     }
 
-    public Set<String> getUsageBatchesIds() {
-        return usageBatchesIds;
+    public Set<String> getUdmBatchesIds() {
+        return udmBatchesIds;
     }
 
-    public void setUsageBatchesIds(Set<String> usageBatchesIds) {
-        this.usageBatchesIds = usageBatchesIds;
+    public void setUdmBatchesIds(Set<String> udmBatchesIds) {
+        this.udmBatchesIds = udmBatchesIds;
     }
 
     public UsageStatusEnum getUsageStatus() {
@@ -85,7 +84,7 @@ public class UdmUsageFilter {
      * @return {@code true} if filter does not contain any criteria, otherwise {@code false}.
      */
     public boolean isEmpty() {
-        return CollectionUtils.isEmpty(usageBatchesIds)
+        return CollectionUtils.isEmpty(udmBatchesIds)
             && null == usageStatus
             && null == udmUsageOrigin
             && null == period;
@@ -101,7 +100,7 @@ public class UdmUsageFilter {
         }
         UdmUsageFilter that = (UdmUsageFilter) o;
         return new EqualsBuilder()
-            .append(usageBatchesIds, that.usageBatchesIds)
+            .append(udmBatchesIds, that.udmBatchesIds)
             .append(usageStatus, that.usageStatus)
             .append(udmUsageOrigin, that.udmUsageOrigin)
             .append(period, that.period)
@@ -111,7 +110,7 @@ public class UdmUsageFilter {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(usageBatchesIds)
+            .append(udmBatchesIds)
             .append(usageStatus)
             .append(udmUsageOrigin)
             .append(period)
@@ -121,7 +120,7 @@ public class UdmUsageFilter {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("usageBatchesIds", usageBatchesIds)
+            .append("udmBatchesIds", udmBatchesIds)
             .append("usageStatus", usageStatus)
             .append("udmUsageOrigin", udmUsageOrigin)
             .append("period", period)

@@ -4,14 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
-
-import com.google.common.collect.Sets;
 
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -33,7 +31,7 @@ public class UdmUsageFilterTest {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
         assertTrue(udmUsageFilter.isEmpty());
         assertTrue(udmUsageFilter.isEmpty());
-        udmUsageFilter.setUsageBatchesIds(Sets.newHashSet());
+        udmUsageFilter.setUdmBatchesIds(new HashSet<>());
         assertTrue(udmUsageFilter.isEmpty());
         udmUsageFilter.setUsageStatus(UsageStatusEnum.NEW);
         assertFalse(udmUsageFilter.isEmpty());
@@ -47,19 +45,19 @@ public class UdmUsageFilterTest {
         assertFalse(udmUsageFilter.isEmpty());
         udmUsageFilter.setUdmUsageOrigin(null);
         assertTrue(udmUsageFilter.isEmpty());
-        udmUsageFilter.setUsageBatchesIds(Sets.newHashSet(RupPersistUtils.generateUuid()));
+        udmUsageFilter.setUdmBatchesIds(Collections.singleton("63f3942c-0174-4d91-adf3-c310cb2c5c9f"));
         assertFalse(udmUsageFilter.isEmpty());
     }
 
     @Test
     public void testConstructor() {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
-        udmUsageFilter.setUsageBatchesIds(USAGE_BATCH_IDS);
+        udmUsageFilter.setUdmBatchesIds(USAGE_BATCH_IDS);
         udmUsageFilter.setPeriod(PERIOD);
         udmUsageFilter.setUdmUsageOrigin(UdmUsageOriginEnum.RFA);
         udmUsageFilter.setUsageStatus(UsageStatusEnum.NEW);
         UdmUsageFilter udmUsageFilterCopy = new UdmUsageFilter(udmUsageFilter);
-        assertEquals(USAGE_BATCH_IDS, udmUsageFilterCopy.getUsageBatchesIds());
+        assertEquals(USAGE_BATCH_IDS, udmUsageFilterCopy.getUdmBatchesIds());
         assertEquals(PERIOD, udmUsageFilterCopy.getPeriod());
         assertEquals(UdmUsageOriginEnum.RFA, udmUsageFilterCopy.getUdmUsageOrigin());
         assertEquals(UsageStatusEnum.NEW, udmUsageFilterCopy.getUsageStatus());
