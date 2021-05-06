@@ -114,8 +114,8 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_2));
         List<UdmUsageDto> usages =
             udmUsageRepository.findDtosByFilter(filter, null, new Sort("detailId", Sort.Direction.ASC));
-        assertEquals(2, usages.size());
-        verifyUsageDto(buildUdmUsageDto("cc3269aa-2f56-21c7-b0d1-34dd0edfcf5a"), usages.get(1));
+        assertEquals(1, usages.size());
+        verifyUsageDto(buildUdmUsageDto("cc3269aa-2f56-21c7-b0d1-34dd0edfcf5a"), usages.get(0));
     }
 
     @Test
