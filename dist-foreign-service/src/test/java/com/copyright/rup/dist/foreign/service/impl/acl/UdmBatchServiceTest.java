@@ -50,6 +50,7 @@ public class UdmBatchServiceTest {
     private static final String UDM_USAGE_UID_2 = "f9207059-af0a-440a-abc7-b6e016c64677";
     private static final String UDM_USAGE_ORIGIN_UID_1 = "b7b9293c-f7bf-4cba-b2b9-58db82ccb675";
     private static final String UDM_USAGE_ORIGIN_UID_2 = "d1f699a4-1c83-408e-a499-e6aee6d110ef";
+    private static final int EXPECTED_COUNT = 2;
 
     private IUdmUsageService udmUsageService;
     private IUdmBatchService udmBatchService;
@@ -74,14 +75,14 @@ public class UdmBatchServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         udmBatchRepository.insert(udmBatch);
         expectLastCall().once();
-        udmUsageService.insertUdmUsages(udmBatch, udmUsages);
-        expectLastCall().once();
+        expect(udmUsageService.insertUdmUsages(udmBatch, udmUsages)).andReturn(EXPECTED_COUNT).once();
         replay(udmUsageService, udmBatchRepository, RupContextUtils.class);
-        udmBatchService.insertUdmBatch(udmBatch, udmUsages);
+        int count = udmBatchService.insertUdmBatch(udmBatch, udmUsages);
         verify(udmUsageService, udmBatchRepository, RupContextUtils.class);
         assertEquals(USER_NAME, udmBatch.getCreateUser());
         assertEquals(USER_NAME, udmBatch.getUpdateUser());
         assertNotNull(udmBatch.getId());
+        assertEquals(EXPECTED_COUNT, count);
     }
 
     @Test

@@ -11,6 +11,8 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DateFormatValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateInFileValidator;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -134,21 +136,21 @@ public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
             result.setSurveyRespondent(getString(row, Header.SURVEY_RESPONDED, headers));
             result.setCompanyId(getLong(row, Header.COMPANY_ID, headers));
             result.setSurveyCountry(getString(row, Header.SURVEY_COUNTRY, headers));
-            result.setStatus(getStatus(result));
+            result.setStatus(isTitleNoneAndQuantityZero(result) ? UsageStatusEnum.INELIGIBLE : UsageStatusEnum.NEW);
+            result.setIneligibleReason(isTitleNoneAndQuantityZero(result) ? "No reported use" : null);
             result.setIpAddress(getString(row, Header.IP_ADDRESS, headers));
             result.setSurveyStartDate(getDate(row, Header.SURVEY_START_DATE, headers));
             result.setSurveyEndDate(getDate(row, Header.SURVEY_END_DATE, headers));
             return result;
         }
 
-        private UsageStatusEnum getStatus(UdmUsage udmUsage) {
-            return ("none").equals(udmUsage.getReportedTitle()) && udmUsage.getQuantity() == 0
-                ? UsageStatusEnum.INELIGIBLE
-                : UsageStatusEnum.NEW;
-        }
-
         private String getReportedPubTypeValue(String value) {
             return Objects.isNull(value) ? "Not Shared" : value;
+        }
+
+        private boolean isTitleNoneAndQuantityZero(UdmUsage udmUsage) {
+            return "none".equalsIgnoreCase(udmUsage.getReportedTitle()) && NumberUtils.INTEGER_ZERO.equals(
+                udmUsage.getQuantity());
         }
     }
 }

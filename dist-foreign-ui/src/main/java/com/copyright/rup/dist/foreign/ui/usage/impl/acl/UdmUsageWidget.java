@@ -71,7 +71,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private HorizontalLayout initButtonsLayout() {
         //TODO apply permissions for load button
         Button loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
-        loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBathUploadWindow()));
+        loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBathUploadWindow(controller)));
         HorizontalLayout layout = new HorizontalLayout(loadButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-usages-buttons");

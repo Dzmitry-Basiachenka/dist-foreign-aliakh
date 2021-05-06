@@ -83,6 +83,8 @@ public class UdmUsageServiceTest {
         assertEquals(USER_NAME, udmUsages.get(0).getUpdateUser());
         assertEquals(USER_NAME, udmUsages.get(1).getCreateUser());
         assertEquals(USER_NAME, udmUsages.get(1).getUpdateUser());
+        assertEquals(LocalDate.of(2020,6,30), udmUsages.get(0).getPeriodEndDate());
+        assertEquals(LocalDate.of(2020,6,30), udmUsages.get(1).getPeriodEndDate());
         assertNotNull(udmBatch.getId());
     }
 
@@ -118,7 +120,6 @@ public class UdmUsageServiceTest {
         udmUsage.setOriginalDetailId(originId);
         udmUsage.setBatchId(UDM_BATCH_UID);
         udmUsage.setStatus(UsageStatusEnum.NEW);
-        udmUsage.setPeriodEndDate(LocalDate.of(2021, 12, 12));
         udmUsage.setUsageDate(LocalDate.of(2021, 12, 12));
         udmUsage.setWrWrkInst(122825347L);
         udmUsage.setReportedStandardNumber("0927-7765");

@@ -6,8 +6,11 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
@@ -45,6 +48,8 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
 
     @Autowired
     private IUdmUsageService udmUsageService;
+    @Autowired
+    private IUdmBatchService udmBatchService;
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
@@ -91,6 +96,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     public UdmCsvProcessor getCsvProcessor() {
         return csvProcessorFactory.getUdmCsvProcessor();
+    }
+
+    @Override
+    public int loadUdmBatch(UdmBatch udmBatch, List<UdmUsage> udmUsages) {
+        return udmBatchService.insertUdmBatch(udmBatch, udmUsages);
     }
 
     @Override
