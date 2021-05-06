@@ -110,7 +110,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         initPeriodFilter();
         initStatusFilter();
         initUsageOriginFilter();
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUsageBatchFilter(),
+        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUdmUsageBatchFilter(),
             periodComboBox, statusComboBox, usageOriginComboBox);
         verticalLayout.setMargin(false);
         return verticalLayout;
@@ -152,10 +152,10 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         return filterHeaderLabel;
     }
 
-    private HorizontalLayout buildUsageBatchFilter() {
+    private HorizontalLayout buildUdmUsageBatchFilter() {
         udmBatchFilterWidget = new UdmBatchFilterWidget(() -> controller.getUdmBatches());
         udmBatchFilterWidget.addFilterSaveListener((IFilterSaveListener<UdmBatch>) saveEvent -> {
-            udmUsageFilter.setUsageBatchesIds(
+            udmUsageFilter.setUdmBatchesIds(
                 saveEvent.getSelectedItemsIds().stream().map(UdmBatch::getId).collect(Collectors.toSet()));
             filterChanged();
         });
