@@ -44,6 +44,7 @@
         <result property="status" column="status_ind"/>
         <result property="originalDetailId" column="original_detail_id"/>
         <result property="periodEndDate" column="period_end_date"/>
+        <result property="assignee" column="assignee"/>
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
@@ -159,6 +160,7 @@
             ub.channel,
             original_detail_id,
             status_ind,
+            assignee,
             u.rh_account_number,
             r.name rh_name,
             wr_wrk_inst,
@@ -221,6 +223,9 @@
             </when>
             <when test="sort.property == 'status'">
                 status_ind <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'assignee'">
+                assignee <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'rhAccountNumber'">
                 u.rh_account_number <include refid="IUsageMapper.direction"/>

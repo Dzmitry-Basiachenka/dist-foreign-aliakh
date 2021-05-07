@@ -24,6 +24,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private UdmUsageOriginEnum usageOrigin;
     private String originalDetailId;
     private UsageStatusEnum status;
+    private String assignee;
     private Long rhAccountNumber;
     private String rhName;
     private Long wrWrkInst;
@@ -115,6 +116,14 @@ public class UdmUsageDto extends StoredEntity<String> {
 
     public void setReportedStandardNumber(String reportedStandardNumber) {
         this.reportedStandardNumber = reportedStandardNumber;
+    }
+
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
     }
 
     public Long getRhAccountNumber() {
@@ -328,6 +337,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(usageDate, udmUsage.usageDate)
             .append(standardNumber, udmUsage.standardNumber)
             .append(reportedStandardNumber, udmUsage.reportedStandardNumber)
+            .append(assignee, udmUsage.assignee)
             .append(rhAccountNumber, udmUsage.rhAccountNumber)
             .append(rhName, udmUsage.rhName)
             .append(wrWrkInst, udmUsage.wrWrkInst)
@@ -367,6 +377,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(usageDate)
             .append(standardNumber)
             .append(reportedStandardNumber)
+            .append(assignee)
             .append(rhAccountNumber)
             .append(rhName)
             .append(wrWrkInst)
@@ -407,6 +418,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append("standardNumber", standardNumber)
             .append("standardNumber", standardNumber)
             .append("reportedStandardNumber", reportedStandardNumber)
+            .append("assignee", assignee)
             .append("rhAccountNumber", rhAccountNumber)
             .append("rhName", rhName)
             .append("wrWrkInst", wrWrkInst)
