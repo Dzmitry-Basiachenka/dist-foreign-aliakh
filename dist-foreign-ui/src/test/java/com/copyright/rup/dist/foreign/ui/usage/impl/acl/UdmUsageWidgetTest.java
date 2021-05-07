@@ -79,8 +79,8 @@ public class UdmUsageWidgetTest {
     private void verifyGrid(Grid grid) {
         List<Column> columns = grid.getColumns();
         assertEquals(
-            Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "RH Account #",
-                "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
+            Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "Assignee",
+                "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
                 "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Det LC ID",
                 "Det LC Name", "Company ID", "Company Name", "Survey Respondent", "IP Address", "Survey Country",
                 "Channel", "Usage Date", "Survey Start Date", "Survey End Date", "Annual Multiplier",

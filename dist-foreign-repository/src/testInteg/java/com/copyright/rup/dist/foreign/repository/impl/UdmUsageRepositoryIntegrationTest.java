@@ -125,6 +125,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(DETAIL_ID_2, DETAIL_ID_1, "usageOrigin");
         assertSortingFindDtosByFilter(DETAIL_ID_1, DETAIL_ID_2, "usageDetailId");
         assertSortingFindDtosByFilter(DETAIL_ID_2, DETAIL_ID_1, "status");
+        assertSortingFindDtosByFilter(DETAIL_ID_1, DETAIL_ID_2, "assignee");
         assertSortingFindDtosByFilter(DETAIL_ID_1, DETAIL_ID_2, "rhAccountNumber");
         assertSortingFindDtosByFilter(DETAIL_ID_1, DETAIL_ID_2, "rhName");
         assertSortingFindDtosByFilter(DETAIL_ID_2, DETAIL_ID_1, "wrWrkInst");
@@ -188,6 +189,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getOriginalDetailId(), actualUsage.getOriginalDetailId());
         assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
         assertEquals(expectedUsage.getUsageDate(), actualUsage.getUsageDate());
+        assertEquals(expectedUsage.getAssignee(), actualUsage.getAssignee());
         assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
         assertEquals(expectedUsage.getRhName(), actualUsage.getRhName());
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
@@ -222,6 +224,7 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setOriginalDetailId("OGN674GHHSB001");
         udmUsage.setStatus(UsageStatusEnum.RH_FOUND);
         udmUsage.setUsageDate(LocalDate.of(2020, 9, 10));
+        udmUsage.setAssignee("jjohn@copyright.com");
         udmUsage.setRhAccountNumber(1000002859L);
         udmUsage.setRhName("John Wiley & Sons - Books");
         udmUsage.setWrWrkInst(306985867L);

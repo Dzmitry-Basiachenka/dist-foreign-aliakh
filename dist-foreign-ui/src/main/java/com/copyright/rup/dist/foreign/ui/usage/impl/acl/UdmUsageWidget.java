@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
@@ -18,6 +20,13 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
+
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IUdmUsageWidget}.
@@ -108,6 +117,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(UdmUsageDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", true, 100),
             addColumn(UdmUsageDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", true, 130),
             addColumn(UdmUsageDto::getStatus, "table.column.usage_status", "status", true, 100),
+            addColumn(UdmUsageDto::getAssignee, "table.column.assignee", "assignee", true, 100),
             addColumn(UdmUsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", true, 150),
             addColumn(UdmUsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 150),
             addColumn(UdmUsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 100),
@@ -130,9 +140,11 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(UdmUsageDto::getIpAddress, "table.column.ip_address", "ipAddress", true, 100),
             addColumn(UdmUsageDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", true, 120),
             addColumn(UdmUsageDto::getChannel, "table.column.channel", "channel", true, 100),
-            addColumn(UdmUsageDto::getUsageDate, "table.column.usage_date", "usageDate", true, 100),
-            addColumn(UdmUsageDto::getSurveyStartDate, "table.column.survey_start_date", "surveyStartDate", true, 130),
-            addColumn(UdmUsageDto::getSurveyEndDate, "table.column.survey_end_date", "surveyEndDate", true, 130),
+            addColumn(u -> getStringFromLocalDate(u.getUsageDate()), "table.column.usage_date", "usageDate", true, 100),
+            addColumn(u -> getStringFromLocalDate(u.getSurveyStartDate()), "table.column.survey_start_date",
+                "surveyStartDate", true, 130),
+            addColumn(u -> getStringFromLocalDate(u.getSurveyEndDate()), "table.column.survey_end_date",
+                "surveyEndDate", true, 130),
             addColumn(UdmUsageDto::getAnnualMultiplier, "table.column.annual_multiplier", "annualMultiplier", true,
                 130),
             addColumn(UdmUsageDto::getStatisticalMultiplier, "table.column.statistical_multiplier",
@@ -143,9 +155,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 130),
             addColumn(UdmUsageDto::getIneligibleReason, "table.column.ineligible_reason", "ineligibleReason", true,
                 130),
-            addColumn(UdmUsageDto::getCreateDate, "table.column.load_date", "createDate", true, 100),
+            addColumn(u -> getStringFromDate(u.getCreateDate()), "table.column.load_date", "createDate", true, 100),
             addColumn(UdmUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", true, 100),
-            addColumn(UdmUsageDto::getUsageDate, "table.column.updated_date", "updateDate", true, 110));
+            addColumn(u -> getStringFromDate(u.getUpdateDate()), "table.column.updated_date", "updateDate", true, 110));
     }
 
     //TODO remove after detail licensee class columns will be populated
@@ -169,5 +181,15 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             .setSortProperty(columnId)
             .setHidable(isHidable)
             .setWidth(width);
+    }
+
+    private String getStringFromLocalDate(LocalDate date) {
+        return CommonDateUtils.format(date, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
+    }
+
+    private String getStringFromDate(Date date) {
+        return Objects.nonNull(date)
+            ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
+            : StringUtils.EMPTY;
     }
 }
