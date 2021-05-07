@@ -22,6 +22,7 @@
     "ipAddress": "24.12.119.203",
     "surveyStartDate": "2018-06-15",
     "ineligibleReason": "No reported use",
+    "statisticalMultiplier": 1.00000,
     "surveyEndDate": "2020-06-15",
     "periodEndDate": "2020-06-30"
   },
@@ -47,6 +48,7 @@
     "surveyCountry": "United States",
     "ipAddress": "24.12.119.203",
     "surveyStartDate": "2018-06-15",
+    "statisticalMultiplier": 1.00000,
     "surveyEndDate": "2020-06-15",
     "periodEndDate": "2020-06-30"
   }
