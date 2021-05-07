@@ -3,6 +3,8 @@ out
 .gradle
 *.MF
 *.class
+derby.log
+styles.css.gz
 
 # IntelliJ project files 
 *.iml
