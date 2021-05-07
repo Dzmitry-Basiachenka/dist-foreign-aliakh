@@ -1,3 +1,11 @@
+13.1.22
+-
+* B-66740 FDA: DB changes for UDM: add assignee column to df_udm_usage table
+* B-64613 FDA & UDM: Create UDM shell - UI: introduce Assignee column on UI, apply common pattern for date columns
+* B-65858: FDA & UDM: Load ACL usage data: implement logic related to is batch name exists
+* B-67325 Tech Debt: FDA: add derby.log and styles.css.gz files to gitignore
+* B-65858 FDA & UDM: Load ACL usage data: implement default value for annual multiplier
+
 13.1.21
 -
 * B-64613 FDA & UDM: Create UDM shell - UI: make changes based on comments in CR-DIST-FOREIGN-228
