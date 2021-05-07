@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -100,6 +101,15 @@ public class UdmBatchServiceTest {
         expect(udmBatchRepository.findAll()).andReturn(udmBatches).once();
         replay(udmBatchRepository);
         assertEquals(udmBatches, udmBatchService.getUdmBatches());
+        verify(udmBatchRepository);
+    }
+
+    @Test
+    public void testBatchExists() {
+        String batchName = "Name";
+        expect(udmBatchRepository.udmBatchExists(batchName)).andReturn(true).once();
+        replay(udmBatchRepository);
+        assertTrue(udmBatchService.udmBatchExists(batchName));
         verify(udmBatchRepository);
     }
 

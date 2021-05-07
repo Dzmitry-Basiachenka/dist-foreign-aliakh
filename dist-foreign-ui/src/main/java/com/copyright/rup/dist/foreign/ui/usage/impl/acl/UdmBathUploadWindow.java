@@ -135,6 +135,8 @@ public class UdmBathUploadWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
+            .withValidator(value -> !udmUsageController.udmBatchExists(getBatchName()),
+                ForeignUi.getMessage("message.error.unique_name", "UDM Batch"))
             .bind(s -> s, (s, v) -> s = v).validate();
         uploadField.addSucceededListener(event -> binder.validate());
         VaadinUtils.setMaxComponentsWidth(uploadField);
@@ -159,7 +161,7 @@ public class UdmBathUploadWindow extends Window {
                 "Field value should contain numeric values only")
             .withValidator(getYearValidator(), "Field value should be in range from 1950 to 2099")
             .bind(s -> s, (s, v) -> s = v).validate();
-        VaadinUtils.addComponentStyle(periodYearField, "distribution-udm-period-year-field");
+        VaadinUtils.addComponentStyle(periodYearField, "period-year-field");
         return periodYearField;
     }
 
@@ -171,7 +173,7 @@ public class UdmBathUploadWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .bind(s -> s, (s, v) -> s = v).validate();
         monthField.setSizeFull();
-        VaadinUtils.addComponentStyle(monthField, "usage-origin-filter");
+        VaadinUtils.addComponentStyle(monthField, "period-month-field");
         return monthField;
     }
 
@@ -189,7 +191,7 @@ public class UdmBathUploadWindow extends Window {
             .asRequired(ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .bind(UdmBatch::getUsageOrigin, UdmBatch::setUsageOrigin).validate();
         usageOriginField.setSizeFull();
-        VaadinUtils.addComponentStyle(usageOriginField, "usage-origin-filter");
+        VaadinUtils.addComponentStyle(usageOriginField, "usage-origin-field");
         return usageOriginField;
     }
 
@@ -201,7 +203,7 @@ public class UdmBathUploadWindow extends Window {
             .asRequired(ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .bind(UdmBatch::getChannel, UdmBatch::setChannel).validate();
         channelField.setSizeFull();
-        VaadinUtils.addComponentStyle(channelField, "usage-channel-filter");
+        VaadinUtils.addComponentStyle(channelField, "usage-channel-field");
         return channelField;
     }
 
@@ -212,11 +214,15 @@ public class UdmBathUploadWindow extends Window {
 
     private UdmBatch buildUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
-        String fileName = uploadField.getValue();
-        udmBatch.setName(fileName.substring(0, fileName.lastIndexOf(".csv")));
+        udmBatch.setName(getBatchName());
         udmBatch.setPeriod(Integer.parseInt(String.format("%s%s", periodYearField.getValue(), monthField.getValue())));
         udmBatch.setChannel(channelField.getValue());
         udmBatch.setUsageOrigin(usageOriginField.getValue());
         return udmBatch;
+    }
+
+    private String getBatchName() {
+        String fileName = uploadField.getValue();
+        return fileName.substring(0, fileName.lastIndexOf(".csv"));
     }
 }

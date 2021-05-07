@@ -58,4 +58,9 @@ public class UdmBatchService implements IUdmBatchService {
     public List<UdmBatch> getUdmBatches() {
         return udmBatchRepository.findAll();
     }
+
+    @Override
+    public boolean udmBatchExists(String name) {
+        return udmBatchRepository.udmBatchExists(name);
+    }
 }

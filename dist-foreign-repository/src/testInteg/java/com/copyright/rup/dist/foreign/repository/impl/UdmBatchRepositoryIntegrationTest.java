@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
@@ -72,6 +73,12 @@ public class UdmBatchRepositoryIntegrationTest {
         assertEquals("faaab569-35c1-474e-923d-96f4c062a62a", udmBatches.get(1).getId());
         assertEquals("6a4b192c-8f1b-4887-a75d-67688544eb5f", udmBatches.get(2).getId());
         assertEquals("864911e5-34ac-42a5-a4c8-84dc4c24e7b4", udmBatches.get(3).getId());
+    }
+
+    @Test
+    public void testBatchExists() {
+        assertTrue(udmBatchRepository.udmBatchExists("UDM Batch 2021 1"));
+        assertFalse(udmBatchRepository.udmBatchExists("No name in data base"));
     }
 
     private UdmBatch buildUdmBatch() {

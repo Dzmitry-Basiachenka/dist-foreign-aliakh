@@ -43,4 +43,12 @@ public interface IUdmBatchRepository {
      * @return list of {@link UdmBatch}s
      */
     List<UdmBatch> findAll();
+
+    /**
+     * Checks whether {@link UdmBatch} with the name already exists.
+     *
+     * @param name UDM batch name
+     * @return {@code true} - if batch exists, {@code false} - otherwise
+     */
+    boolean udmBatchExists(String name);
 }

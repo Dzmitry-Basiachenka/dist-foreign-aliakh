@@ -104,6 +104,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
+    public boolean udmBatchExists(String name) {
+        return udmBatchService.udmBatchExists(name);
+    }
+
+    @Override
     protected IUdmUsageWidget instantiateWidget() {
         return new UdmUsageWidget();
     }

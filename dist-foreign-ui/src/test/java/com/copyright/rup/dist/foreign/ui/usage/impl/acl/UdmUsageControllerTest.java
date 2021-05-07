@@ -11,6 +11,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
@@ -30,6 +31,7 @@ import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -131,6 +133,15 @@ public class UdmUsageControllerTest {
         int count = controller.loadUdmBatch(udmBatch, udmUsages);
         verify(udmBatchService);
         assertEquals(EXPECTED_COUNT, count);
+    }
+
+    @Test
+    public void testBatchExists() {
+        String batchName = "Name";
+        expect(udmBatchService.udmBatchExists(batchName)).andReturn(true).once();
+        PowerMock.replay(udmBatchService);
+        assertTrue(udmBatchService.udmBatchExists(batchName));
+        PowerMock.verify(udmBatchService);
     }
 
     private UdmUsage buildUdmUsage(String usageId, String originId) {
