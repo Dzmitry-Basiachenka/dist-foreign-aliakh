@@ -53,4 +53,12 @@
         from ${schema}.df_udm_usage_batch
         order by updated_datetime desc
     </select>
+
+    <select id="batchExists" parameterType="string" resultType="boolean">
+        select exists (
+            select 1
+            from ${schema}.df_udm_usage_batch
+            where name = #{name}
+        )
+    </select>
 </mapper>

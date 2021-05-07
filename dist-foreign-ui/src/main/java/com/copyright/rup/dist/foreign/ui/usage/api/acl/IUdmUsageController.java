@@ -85,4 +85,12 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @return count of inserted usages
      */
     int loadUdmBatch(UdmBatch udmBatch, List<UdmUsage> udmUsages);
+
+    /**
+     * Checks whether {@link UdmBatch} with the name already exists.
+     *
+     * @param name UDM batch name
+     * @return {@code true} - if batch exists, {@code false} - otherwise
+     */
+    boolean udmBatchExists(String name);
 }

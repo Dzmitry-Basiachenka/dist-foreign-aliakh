@@ -40,4 +40,9 @@ public class UdmBatchRepository extends BaseRepository implements IUdmBatchRepos
     public List<UdmBatch> findAll() {
         return selectList("IUdmBatchMapper.findAll");
     }
+
+    @Override
+    public boolean udmBatchExists(String name) {
+        return selectOne("IUdmBatchMapper.batchExists", name);
+    }
 }
