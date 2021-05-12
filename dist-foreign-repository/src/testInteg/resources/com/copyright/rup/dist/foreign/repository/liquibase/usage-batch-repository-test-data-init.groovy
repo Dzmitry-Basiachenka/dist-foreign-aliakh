@@ -457,34 +457,34 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: '1000')
         }
+    }
 
-        changeSet(id: '2019-04-29-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-            comment("Insert test data for testFindProcessingBatchesNames")
+    changeSet(id: '2019-04-29-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("Insert test data for testFindProcessingBatchesNames")
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                column(name: 'df_usage_batch_uid', value: '13027b25-2269-3bec-48ea-5126431eedb0')
-                column(name: 'name', value: 'CADRA_10Dec16')
-                column(name: 'rro_account_number', value: '1000000001')
-                column(name: 'payment_date', value: '2019-01-11')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'fiscal_year', value: '2020')
-                column(name: 'initial_usages_count', value: 1)
-                column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, "fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
-                column(name: 'updated_datetime', value: '2019-01-04 12:45:51.335531+03')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '13027b25-2269-3bec-48ea-5126431eedb0')
+            column(name: 'name', value: 'CADRA_10Dec16')
+            column(name: 'rro_account_number', value: '1000000001')
+            column(name: 'payment_date', value: '2019-01-11')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 1)
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, "fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
+            column(name: 'updated_datetime', value: '2019-01-04 12:45:51.335531+03')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '0d200064-185a-4c48-bbc9-c67554e7db8e')
-                column(name: 'df_usage_batch_uid', value: '13027b25-2269-3bec-48ea-5126431eedb0')
-                column(name: 'wr_wrk_inst', value: '122267671')
-                column(name: 'work_title', value: 'A theory of cognitive dissonance')
-                column(name: 'system_title', value: 'A theory of cognitive dissonance')
-                column(name: 'rh_account_number', value: '1000009997')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '0804709114')
-                column(name: 'gross_amount', value: '0.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '0d200064-185a-4c48-bbc9-c67554e7db8e')
+            column(name: 'df_usage_batch_uid', value: '13027b25-2269-3bec-48ea-5126431eedb0')
+            column(name: 'wr_wrk_inst', value: '122267671')
+            column(name: 'work_title', value: 'A theory of cognitive dissonance')
+            column(name: 'system_title', value: 'A theory of cognitive dissonance')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '0804709114')
+            column(name: 'gross_amount', value: '0.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {

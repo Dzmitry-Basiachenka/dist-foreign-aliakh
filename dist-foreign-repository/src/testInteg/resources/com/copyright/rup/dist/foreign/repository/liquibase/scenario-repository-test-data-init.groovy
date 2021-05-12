@@ -699,52 +699,52 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: '3000')
         }
+    }
 
-        changeSet(id: '2019-04-16-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-            comment("Insert test data for testFindAll")
+    changeSet(id: '2019-04-16-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("Insert test data for testFindAll")
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-                column(name: 'df_scenario_uid', value: '1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b')
-                column(name: 'name', value: 'Test NTS scenario')
-                column(name: 'status_ind', value: 'IN_PROGRESS')
-                column(name: 'description', value: 'Description for test NTS scenario')
-                column(name: 'nts_fields', value: '{"rh_minimum_amount":300.00}')
-                column(name: 'created_by_user', value: 'user@copyright.com')
-                column(name: 'created_datetime', value: '2017-02-14 12:00:00+00')
-                column(name: 'updated_datetime', value: '2011-01-01 17:47:24')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b')
+            column(name: 'name', value: 'Test NTS scenario')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'description', value: 'Description for test NTS scenario')
+            column(name: 'nts_fields', value: '{"rh_minimum_amount":300.00}')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2017-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2011-01-01 17:47:24')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
-                column(name: 'df_scenario_usage_filter_uid', value: '102f2e3b-ed14-48a1-b628-a528d07fc9c5')
-                column(name: 'df_scenario_uid', value: '1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '102f2e3b-ed14-48a1-b628-a528d07fc9c5')
+            column(name: 'df_scenario_uid', value: '1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                column(name: 'df_usage_batch_uid', value: 'f27ebc80-e74e-436d-ba6e-acf3d355b700')
-                column(name: 'name', value: 'NTS batch 1')
-                column(name: 'rro_account_number', value: '2000017010')
-                column(name: 'payment_date', value: '2010-09-10')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'fiscal_year', value: '2011')
-                column(name: 'initial_usages_count', value: 1)
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'f27ebc80-e74e-436d-ba6e-acf3d355b700')
+            column(name: 'name', value: 'NTS batch 1')
+            column(name: 'rro_account_number', value: '2000017010')
+            column(name: 'payment_date', value: '2010-09-10')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'fiscal_year', value: '2011')
+            column(name: 'initial_usages_count', value: 1)
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '95093193-00d9-436b-8fbc-078511b1d336')
-                column(name: 'df_usage_batch_uid', value: 'f27ebc80-e74e-436d-ba6e-acf3d355b700')
-                column(name: 'df_scenario_uid', value: '1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b')
-                column(name: 'wr_wrk_inst', value: '180382914')
-                column(name: 'work_title', value: 'A history of contemporary Italy : society and politics1088.89 1943-1988')
-                column(name: 'system_title', value: 'A history of contemporary Italy : society and politics1088.89 1943-1988')
-                column(name: 'rh_account_number', value: '1000002859')
-                column(name: 'status_ind', value: 'LOCKED')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '1008902112377654XX')
-                column(name: 'number_of_copies', value: '1')
-                column(name: 'gross_amount', value: '500.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '95093193-00d9-436b-8fbc-078511b1d336')
+            column(name: 'df_usage_batch_uid', value: 'f27ebc80-e74e-436d-ba6e-acf3d355b700')
+            column(name: 'df_scenario_uid', value: '1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: 'A history of contemporary Italy : society and politics1088.89 1943-1988')
+            column(name: 'system_title', value: 'A history of contemporary Italy : society and politics1088.89 1943-1988')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'gross_amount', value: '500.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -758,307 +758,307 @@ databaseChangeLog {
             column(name: 'author', value: 'Aarseth1088.89 Espen J.')
             column(name: 'reported_value', value: '500')
         }
+    }
 
-        changeSet(id: '2019-04-18-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-            comment("Insert test data for insertNtsScenarioAndAddUsages")
+    changeSet(id: '2019-04-18-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("Insert test data for insertNtsScenarioAndAddUsages")
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
-                column(name: 'df_work_classification_uid', value: 'fc9ee4ed-519e-41c8-927b-92206b34c8cc')
-                column(name: 'wr_wrk_inst', value: '135632563')
-                column(name: 'classification', value: 'NON-STM')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
+            column(name: 'df_work_classification_uid', value: 'fc9ee4ed-519e-41c8-927b-92206b34c8cc')
+            column(name: 'wr_wrk_inst', value: '135632563')
+            column(name: 'classification', value: 'NON-STM')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
-                column(name: 'df_work_classification_uid', value: '7c04aac5-ccc5-4abc-b84a-4077dd6ca9a8')
-                column(name: 'wr_wrk_inst', value: '145632563')
-                column(name: 'classification', value: 'STM')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
+            column(name: 'df_work_classification_uid', value: '7c04aac5-ccc5-4abc-b84a-4077dd6ca9a8')
+            column(name: 'wr_wrk_inst', value: '145632563')
+            column(name: 'classification', value: 'STM')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
-                column(name: 'name', value: 'NTS batch 2')
-                column(name: 'rro_account_number', value: '2000017001')
-                column(name: 'payment_date', value: '2019-01-11')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'fiscal_year', value: '2020')
-                column(name: 'initial_usages_count', value: 5)
-                column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 10000, "stm_minimum_amount": 50, ' +
-                        '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
+            column(name: 'name', value: 'NTS batch 2')
+            column(name: 'rro_account_number', value: '2000017001')
+            column(name: 'payment_date', value: '2019-01-11')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 5)
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 1000, "non_stm_amount": 10000, "stm_minimum_amount": 50, ' +
+                    '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '87666035-2bdf-49ef-8c80-1d1b281fdc34')
-                column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
-                column(name: 'wr_wrk_inst', value: '135632563')
-                column(name: 'work_title', value: 'Cell Biology')
-                column(name: 'system_title', value: 'Cell Biology')
-                column(name: 'rh_account_number', value: '2000017004')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '1003324112314587XX')
-                column(name: 'standard_number_type', value: 'VALISBN')
-                column(name: 'number_of_copies', value: '2502232')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '87666035-2bdf-49ef-8c80-1d1b281fdc34')
+            column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
+            column(name: 'wr_wrk_inst', value: '135632563')
+            column(name: 'work_title', value: 'Cell Biology')
+            column(name: 'system_title', value: 'Cell Biology')
+            column(name: 'rh_account_number', value: '2000017004')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'standard_number_type', value: 'VALISBN')
+            column(name: 'number_of_copies', value: '2502232')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
-                column(name: 'df_usage_fas_uid', value: '87666035-2bdf-49ef-8c80-1d1b281fdc34')
-                column(name: 'article', value: 'DIN EN 779:2012')
-                column(name: 'publisher', value: 'IEEE')
-                column(name: 'publication_date', value: '2013-09-10')
-                column(name: 'market', value: 'Univ')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2014')
-                column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-                column(name: 'reported_value', value: '2000.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '87666035-2bdf-49ef-8c80-1d1b281fdc34')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2014')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '2000.00')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '3caf371f-f2e6-47cd-af6b-1e02b79f6195')
-                column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
-                column(name: 'wr_wrk_inst', value: '135632563')
-                column(name: 'work_title', value: 'Cell Biology')
-                column(name: 'system_title', value: 'Cell Biology')
-                column(name: 'rh_account_number', value: '1000002797')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '1003324112314587XX')
-                column(name: 'standard_number_type', value: 'VALISBN')
-                column(name: 'number_of_copies', value: '2502232')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3caf371f-f2e6-47cd-af6b-1e02b79f6195')
+            column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
+            column(name: 'wr_wrk_inst', value: '135632563')
+            column(name: 'work_title', value: 'Cell Biology')
+            column(name: 'system_title', value: 'Cell Biology')
+            column(name: 'rh_account_number', value: '1000002797')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'standard_number_type', value: 'VALISBN')
+            column(name: 'number_of_copies', value: '2502232')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
-                column(name: 'df_usage_fas_uid', value: '3caf371f-f2e6-47cd-af6b-1e02b79f6195')
-                column(name: 'article', value: 'DIN EN 779:2012')
-                column(name: 'publisher', value: 'IEEE')
-                column(name: 'publication_date', value: '2013-09-10')
-                column(name: 'market', value: 'Univ')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-                column(name: 'reported_value', value: '2000.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3caf371f-f2e6-47cd-af6b-1e02b79f6195')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '2000.00')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '9bc172f4-edbb-4a62-9ffc-254336e7a56d')
-                column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
-                column(name: 'wr_wrk_inst', value: '145632563')
-                column(name: 'work_title', value: 'Cell Biology')
-                column(name: 'system_title', value: 'Cell Biology')
-                column(name: 'rh_account_number', value: '1000002859')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '1003324112314587XX')
-                column(name: 'standard_number_type', value: 'VALISBN')
-                column(name: 'number_of_copies', value: '2502232')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '9bc172f4-edbb-4a62-9ffc-254336e7a56d')
+            column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
+            column(name: 'wr_wrk_inst', value: '145632563')
+            column(name: 'work_title', value: 'Cell Biology')
+            column(name: 'system_title', value: 'Cell Biology')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'standard_number_type', value: 'VALISBN')
+            column(name: 'number_of_copies', value: '2502232')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
-                column(name: 'df_usage_fas_uid', value: '9bc172f4-edbb-4a62-9ffc-254336e7a56d')
-                column(name: 'article', value: 'DIN EN 779:2012')
-                column(name: 'publisher', value: 'IEEE')
-                column(name: 'publication_date', value: '2013-09-10')
-                column(name: 'market', value: 'Univ')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-                column(name: 'reported_value', value: '10000.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '9bc172f4-edbb-4a62-9ffc-254336e7a56d')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '10000.00')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '244de0db-b50c-45e8-937c-72e033e2a3a9')
-                column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
-                column(name: 'wr_wrk_inst', value: '145632563')
-                column(name: 'work_title', value: 'LIGHT METALS')
-                column(name: 'system_title', value: 'LIGHT METALS')
-                column(name: 'rh_account_number', value: '1000005413')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '1003324112314587XX')
-                column(name: 'standard_number_type', value: 'VALISBN')
-                column(name: 'number_of_copies', value: '2502232')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '244de0db-b50c-45e8-937c-72e033e2a3a9')
+            column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
+            column(name: 'wr_wrk_inst', value: '145632563')
+            column(name: 'work_title', value: 'LIGHT METALS')
+            column(name: 'system_title', value: 'LIGHT METALS')
+            column(name: 'rh_account_number', value: '1000005413')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'standard_number_type', value: 'VALISBN')
+            column(name: 'number_of_copies', value: '2502232')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
-                column(name: 'df_usage_fas_uid', value: '244de0db-b50c-45e8-937c-72e033e2a3a9')
-                column(name: 'article', value: 'DIN EN 779:2012')
-                column(name: 'publisher', value: 'IEEE')
-                column(name: 'publication_date', value: '2013-09-10')
-                column(name: 'market', value: 'Univ')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-                column(name: 'reported_value', value: '20000.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '244de0db-b50c-45e8-937c-72e033e2a3a9')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '20000.00')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '27baef39-8f7b-4182-a055-85ae9556a24f')
-                column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
-                column(name: 'wr_wrk_inst', value: '145632563')
-                column(name: 'work_title', value: 'LIGHT METALS')
-                column(name: 'system_title', value: 'LIGHT METALS')
-                column(name: 'rh_account_number', value: '1000009997')
-                column(name: 'status_ind', value: 'WORK_FOUND')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '1003324112314587XX')
-                column(name: 'standard_number_type', value: 'VALISBN')
-                column(name: 'number_of_copies', value: '2502232')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '27baef39-8f7b-4182-a055-85ae9556a24f')
+            column(name: 'df_usage_batch_uid', value: '7c8f48fe-3429-43fd-9389-d9b77fa9f3a0')
+            column(name: 'wr_wrk_inst', value: '145632563')
+            column(name: 'work_title', value: 'LIGHT METALS')
+            column(name: 'system_title', value: 'LIGHT METALS')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'WORK_FOUND')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'standard_number_type', value: 'VALISBN')
+            column(name: 'number_of_copies', value: '2502232')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
-                column(name: 'df_usage_fas_uid', value: '27baef39-8f7b-4182-a055-85ae9556a24f')
-                column(name: 'article', value: 'DIN EN 779:2012')
-                column(name: 'publisher', value: 'IEEE')
-                column(name: 'publication_date', value: '2013-09-10')
-                column(name: 'market', value: 'Univ')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-                column(name: 'reported_value', value: '2000.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '27baef39-8f7b-4182-a055-85ae9556a24f')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '2000.00')
+        }
 
-            /* zero fund pool amounts */
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                column(name: 'df_usage_batch_uid', value: 'ac9bae73-9bd7-477c-bc95-e73daee455ee')
-                column(name: 'name', value: 'NTS batch 3')
-                column(name: 'rro_account_number', value: '2000017001')
-                column(name: 'payment_date', value: '2019-01-11')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'fiscal_year', value: '2020')
-                column(name: 'initial_usages_count', value: 1)
-                column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 0, "non_stm_amount": 0, "stm_minimum_amount": 50, ' +
-                        '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
-            }
+        /* zero fund pool amounts */
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'ac9bae73-9bd7-477c-bc95-e73daee455ee')
+            column(name: 'name', value: 'NTS batch 3')
+            column(name: 'rro_account_number', value: '2000017001')
+            column(name: 'payment_date', value: '2019-01-11')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 1)
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 0, "non_stm_amount": 0, "stm_minimum_amount": 50, ' +
+                    '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '0d200064-185a-4c48-bbc9-c67554e7db8e')
-                column(name: 'df_usage_batch_uid', value: 'ac9bae73-9bd7-477c-bc95-e73daee455ee')
-                column(name: 'wr_wrk_inst', value: '145632563')
-                column(name: 'work_title', value: 'LIGHT METALS')
-                column(name: 'system_title', value: 'LIGHT METALS')
-                column(name: 'rh_account_number', value: '1000009997')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '1003324112314587XX')
-                column(name: 'standard_number_type', value: 'VALISBN')
-                column(name: 'number_of_copies', value: '2502232')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '0d200064-185a-4c48-bbc9-c67554e7db8e')
+            column(name: 'df_usage_batch_uid', value: 'ac9bae73-9bd7-477c-bc95-e73daee455ee')
+            column(name: 'wr_wrk_inst', value: '145632563')
+            column(name: 'work_title', value: 'LIGHT METALS')
+            column(name: 'system_title', value: 'LIGHT METALS')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'standard_number_type', value: 'VALISBN')
+            column(name: 'number_of_copies', value: '2502232')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
-                column(name: 'df_usage_fas_uid', value: '0d200064-185a-4c48-bbc9-c67554e7db8e')
-                column(name: 'article', value: 'DIN EN 779:2012')
-                column(name: 'publisher', value: 'IEEE')
-                column(name: 'publication_date', value: '2013-09-10')
-                column(name: 'market', value: 'Univ')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-                column(name: 'reported_value', value: '3000.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '0d200064-185a-4c48-bbc9-c67554e7db8e')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '3000.00')
+        }
 
-            /* payment date doesn't meet filter criteria */
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                column(name: 'df_usage_batch_uid', value: '5769e9fe-1b4b-4399-841c-73108893f7d2')
-                column(name: 'name', value: 'NTS batch 4')
-                column(name: 'rro_account_number', value: '2000017001')
-                column(name: 'payment_date', value: '2021-01-11')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'fiscal_year', value: '2020')
-                column(name: 'initial_usages_count', value: 1)
-                column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 2000, "non_stm_amount": 20000, "stm_minimum_amount": 50, ' +
-                        '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
-            }
+        /* payment date doesn't meet filter criteria */
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '5769e9fe-1b4b-4399-841c-73108893f7d2')
+            column(name: 'name', value: 'NTS batch 4')
+            column(name: 'rro_account_number', value: '2000017001')
+            column(name: 'payment_date', value: '2021-01-11')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'fiscal_year', value: '2020')
+            column(name: 'initial_usages_count', value: 1)
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 2000, "non_stm_amount": 20000, "stm_minimum_amount": 50, ' +
+                    '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '5018dc5e-9985-4f15-ab31-3cbdb4aee446')
-                column(name: 'df_usage_batch_uid', value: '5769e9fe-1b4b-4399-841c-73108893f7d2')
-                column(name: 'wr_wrk_inst', value: '145632563')
-                column(name: 'work_title', value: 'LIGHT METALS')
-                column(name: 'system_title', value: 'LIGHT METALS')
-                column(name: 'rh_account_number', value: '1000009997')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '1003324112314587XX')
-                column(name: 'standard_number_type', value: 'VALISBN')
-                column(name: 'number_of_copies', value: '2502232')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '5018dc5e-9985-4f15-ab31-3cbdb4aee446')
+            column(name: 'df_usage_batch_uid', value: '5769e9fe-1b4b-4399-841c-73108893f7d2')
+            column(name: 'wr_wrk_inst', value: '145632563')
+            column(name: 'work_title', value: 'LIGHT METALS')
+            column(name: 'system_title', value: 'LIGHT METALS')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'standard_number_type', value: 'VALISBN')
+            column(name: 'number_of_copies', value: '2502232')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
-                column(name: 'df_usage_fas_uid', value: '5018dc5e-9985-4f15-ab31-3cbdb4aee446')
-                column(name: 'article', value: 'DIN EN 779:2012')
-                column(name: 'publisher', value: 'IEEE')
-                column(name: 'publication_date', value: '2013-09-10')
-                column(name: 'market', value: 'Univ')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-                column(name: 'reported_value', value: '2000.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '5018dc5e-9985-4f15-ab31-3cbdb4aee446')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '2000.00')
+        }
 
-            /* fiscal year doesn't meet filter criteria */
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                column(name: 'df_usage_batch_uid', value: 'd8baa8e6-10fd-4c3c-8851-b1e6883e8cde')
-                column(name: 'name', value: 'NTS batch 5')
-                column(name: 'rro_account_number', value: '2000017001')
-                column(name: 'payment_date', value: '2019-01-11')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'fiscal_year', value: '2021')
-                column(name: 'initial_usages_count', value: 1)
-                column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 2000, "non_stm_amount": 20000, "stm_minimum_amount": 50, ' +
-                        '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
-            }
+        /* fiscal year doesn't meet filter criteria */
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'd8baa8e6-10fd-4c3c-8851-b1e6883e8cde')
+            column(name: 'name', value: 'NTS batch 5')
+            column(name: 'rro_account_number', value: '2000017001')
+            column(name: 'payment_date', value: '2019-01-11')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'fiscal_year', value: '2021')
+            column(name: 'initial_usages_count', value: 1)
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 2000, "non_stm_amount": 20000, "stm_minimum_amount": 50, ' +
+                    '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: 'efadcdfa-fafe-4b23-aef0-92d2e68d15b4')
-                column(name: 'df_usage_batch_uid', value: 'd8baa8e6-10fd-4c3c-8851-b1e6883e8cde')
-                column(name: 'wr_wrk_inst', value: '145632563')
-                column(name: 'work_title', value: 'LIGHT METALS')
-                column(name: 'system_title', value: 'LIGHT METALS')
-                column(name: 'rh_account_number', value: '1000009997')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '1003324112314587XX')
-                column(name: 'standard_number_type', value: 'VALISBN')
-                column(name: 'number_of_copies', value: '2502232')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'efadcdfa-fafe-4b23-aef0-92d2e68d15b4')
+            column(name: 'df_usage_batch_uid', value: 'd8baa8e6-10fd-4c3c-8851-b1e6883e8cde')
+            column(name: 'wr_wrk_inst', value: '145632563')
+            column(name: 'work_title', value: 'LIGHT METALS')
+            column(name: 'system_title', value: 'LIGHT METALS')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'standard_number_type', value: 'VALISBN')
+            column(name: 'number_of_copies', value: '2502232')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
-                column(name: 'df_usage_fas_uid', value: 'efadcdfa-fafe-4b23-aef0-92d2e68d15b4')
-                column(name: 'article', value: 'DIN EN 779:2012')
-                column(name: 'publisher', value: 'IEEE')
-                column(name: 'publication_date', value: '2013-09-10')
-                column(name: 'market', value: 'Univ')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-                column(name: 'reported_value', value: '2000.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: 'efadcdfa-fafe-4b23-aef0-92d2e68d15b4')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'reported_value', value: '2000.00')
+        }
 
-            /* RRO doesn't meet filter criteria */
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                column(name: 'df_usage_batch_uid', value: 'f8f23728-75ac-4114-b910-2d7abc061217')
-                column(name: 'name', value: 'NTS batch 6')
-                column(name: 'rro_account_number', value: '2000017002')
-                column(name: 'payment_date', value: '2019-01-11')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'fiscal_year', value: '2019')
-                column(name: 'initial_usages_count', value: 1)
-                column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 2000, "non_stm_amount": 20000, "stm_minimum_amount": 50, ' +
-                        '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
-            }
+        /* RRO doesn't meet filter criteria */
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'f8f23728-75ac-4114-b910-2d7abc061217')
+            column(name: 'name', value: 'NTS batch 6')
+            column(name: 'rro_account_number', value: '2000017002')
+            column(name: 'payment_date', value: '2019-01-11')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'fiscal_year', value: '2019')
+            column(name: 'initial_usages_count', value: 1)
+            column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 2000, "non_stm_amount": 20000, "stm_minimum_amount": 50, ' +
+                    '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '4c04d896-a63d-43e8-9a18-1e8503c177d0')
-                column(name: 'df_usage_batch_uid', value: 'f8f23728-75ac-4114-b910-2d7abc061217')
-                column(name: 'wr_wrk_inst', value: '145632563')
-                column(name: 'work_title', value: 'LIGHT METALS')
-                column(name: 'system_title', value: 'LIGHT METALS')
-                column(name: 'rh_account_number', value: '1000009997')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '1003324112314587XX')
-                column(name: 'standard_number_type', value: 'VALISBN')
-                column(name: 'number_of_copies', value: '2502232')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '4c04d896-a63d-43e8-9a18-1e8503c177d0')
+            column(name: 'df_usage_batch_uid', value: 'f8f23728-75ac-4114-b910-2d7abc061217')
+            column(name: 'wr_wrk_inst', value: '145632563')
+            column(name: 'work_title', value: 'LIGHT METALS')
+            column(name: 'system_title', value: 'LIGHT METALS')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'standard_number_type', value: 'VALISBN')
+            column(name: 'number_of_copies', value: '2502232')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
