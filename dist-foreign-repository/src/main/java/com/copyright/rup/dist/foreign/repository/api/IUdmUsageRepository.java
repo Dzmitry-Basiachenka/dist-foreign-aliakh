@@ -35,7 +35,7 @@ public interface IUdmUsageRepository {
     boolean isOriginalDetailIdExist(String originalDetailId);
 
     /**
-     * Finds list of {@link UdmUsageDto}s by usage filter.
+     * Finds list of {@link UdmUsageDto}s by UDM usage filter.
      *
      * @param filter   instance of {@link UdmUsageFilter}
      * @param pageable instance of {@link Pageable}

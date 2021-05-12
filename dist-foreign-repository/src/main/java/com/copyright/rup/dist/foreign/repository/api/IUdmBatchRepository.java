@@ -38,9 +38,9 @@ public interface IUdmBatchRepository {
     List<Integer> findPeriods();
 
     /**
-     * Finds list of {@link UdmBatch}s.
+     * Finds list of {@link UdmBatch}es.
      *
-     * @return list of {@link UdmBatch}s
+     * @return list of {@link UdmBatch}es
      */
     List<UdmBatch> findAll();
 

@@ -77,7 +77,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         addComponents(initFiltersLayout(), initButtonsLayout());
         refreshFilter();
         VaadinUtils.setMaxComponentsWidth(this);
-        VaadinUtils.addComponentStyle(this, "usages-filter-widget");
+        VaadinUtils.addComponentStyle(this, "udm-usages-filter-widget");
         return this;
     }
 
