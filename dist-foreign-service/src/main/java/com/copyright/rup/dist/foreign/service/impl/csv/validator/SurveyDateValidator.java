@@ -23,6 +23,6 @@ public class SurveyDateValidator implements DistCsvProcessor.IValidator<UdmUsage
 
     @Override
     public String getErrorMessage() {
-        return "Survey Start Date is later than Survey End Date";
+        return "Survey End Date should be greater than or equal to Survey Start Date";
     }
 }

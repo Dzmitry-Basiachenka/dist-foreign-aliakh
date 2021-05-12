@@ -60,7 +60,6 @@ public class UdmBatchRepositoryIntegrationTest {
         List<Integer> expectedPeriods = Arrays.asList(202006, 202012, 202106, 202112);
         List<Integer> actualPeriods = udmBatchRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
-        assertEquals(4, actualPeriods.size());
         assertEquals(expectedPeriods, actualPeriods);
     }
 
@@ -78,7 +77,7 @@ public class UdmBatchRepositoryIntegrationTest {
     @Test
     public void testBatchExists() {
         assertTrue(udmBatchRepository.udmBatchExists("UDM Batch 2021 1"));
-        assertFalse(udmBatchRepository.udmBatchExists("No name in data base"));
+        assertFalse(udmBatchRepository.udmBatchExists("No name in database"));
     }
 
     private UdmBatch buildUdmBatch() {

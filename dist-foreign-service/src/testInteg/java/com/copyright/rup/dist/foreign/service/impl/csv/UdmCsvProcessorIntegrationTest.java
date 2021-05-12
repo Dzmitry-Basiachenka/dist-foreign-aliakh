@@ -160,16 +160,6 @@ public class UdmCsvProcessorIntegrationTest {
         assertNotNull(actualUsage.getId());
         assertStoredEntity(expectedUsage);
         assertStoredEntity(actualUsage);
-        assertUsageParsedFields(expectedUsage, actualUsage);
-    }
-
-    private void assertStoredEntity(StoredEntity entity) {
-        assertNotNull(entity.getCreateDate());
-        assertNotNull(entity.getUpdateDate());
-        assertEquals("SYSTEM", entity.getCreateUser());
-    }
-
-    private void assertUsageParsedFields(UdmUsage expectedUsage, UdmUsage actualUsage) {
         assertEquals(expectedUsage.getOriginalDetailId(), actualUsage.getOriginalDetailId());
         assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
         assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
@@ -187,5 +177,11 @@ public class UdmCsvProcessorIntegrationTest {
         assertEquals(expectedUsage.getIpAddress(), actualUsage.getIpAddress());
         assertEquals(expectedUsage.getSurveyStartDate(), actualUsage.getSurveyStartDate());
         assertEquals(expectedUsage.getSurveyEndDate(), actualUsage.getSurveyEndDate());
+    }
+
+    private void assertStoredEntity(StoredEntity entity) {
+        assertNotNull(entity.getCreateDate());
+        assertNotNull(entity.getUpdateDate());
+        assertEquals("SYSTEM", entity.getCreateUser());
     }
 }

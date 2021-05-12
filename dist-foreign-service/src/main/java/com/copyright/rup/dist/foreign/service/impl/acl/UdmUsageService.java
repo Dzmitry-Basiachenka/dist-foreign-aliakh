@@ -39,7 +39,7 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
-    public int insertUdmUsages(UdmBatch udmBatch, List<UdmUsage> udmUsages) {
+    public void insertUdmUsages(UdmBatch udmBatch, List<UdmUsage> udmUsages) {
         String userName = RupContextUtils.getUserName();
         int size = udmUsages.size();
         LOGGER.info("Insert UDM usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", udmBatch.getName(),
@@ -54,7 +54,6 @@ public class UdmUsageService implements IUdmUsageService {
         });
         LOGGER.info("Insert UDM usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", udmBatch.getName(),
             size, userName);
-        return size;
     }
 
     @Override

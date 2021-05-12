@@ -20,7 +20,7 @@ import java.util.List;
 public interface IUdmUsageRepository {
 
     /**
-     * Inserts UDM usage batch.
+     * Inserts UDM usage.
      *
      * @param udmUsage instance of {@link UdmUsage}
      */
@@ -53,10 +53,10 @@ public interface IUdmUsageRepository {
     int findCountByFilter(UdmUsageFilter filter);
 
     /**
-     * Gets {@link UdmUsage}s by their ids.
+     * Finds {@link UdmUsage}s by their ids.
      *
-     * @param udmBatchIds list of ids of the {@link UdmUsage}
+     * @param udmUsagesIds list of ids of the {@link UdmUsage}
      * @return list of {@link UdmUsage} with the given id or {@code null} if none exists
      */
-    List<UdmUsage> findByIds(List<String> udmBatchIds);
+    List<UdmUsage> findByIds(List<String> udmUsagesIds);
 }

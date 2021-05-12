@@ -25,7 +25,7 @@ import org.junit.Test;
  */
 public class OriginalDetailIdValidatorTest {
 
-    private static final String ORIGINAL_DETAIL_ID = "32b247dc-999a-48eb-b575-59e97114c553";
+    private static final String ORIGINAL_DETAIL_ID = "OGN674GHHSB251";
 
     private IUdmUsageService udmUsageService;
     private OriginalDetailIdValidator validator;

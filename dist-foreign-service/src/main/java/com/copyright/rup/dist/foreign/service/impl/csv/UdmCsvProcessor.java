@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.DateFormatValid
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateInFileValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.NumberValidator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
@@ -160,8 +161,8 @@ public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
         }
 
         private boolean isTitleNoneAndQuantityZero(UdmUsage udmUsage) {
-            return "none".equalsIgnoreCase(udmUsage.getReportedTitle()) && NumberUtils.INTEGER_ZERO.equals(
-                udmUsage.getQuantity());
+            return "none".equalsIgnoreCase(StringUtils.trim(udmUsage.getReportedTitle()))
+                && NumberUtils.INTEGER_ZERO.equals(udmUsage.getQuantity());
         }
     }
 }
