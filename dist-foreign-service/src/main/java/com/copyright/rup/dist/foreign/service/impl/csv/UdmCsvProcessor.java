@@ -5,11 +5,13 @@ import com.copyright.rup.dist.common.service.api.csv.ICsvConverter;
 import com.copyright.rup.dist.common.service.impl.csv.CommonCsvConverter;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
+import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DateFormatValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateInFileValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.NumberValidator;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -52,19 +54,23 @@ public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
         LengthValidator lengthValidator50 = new LengthValidator(50);
         LengthValidator lengthValidator20 = new LengthValidator(20);
         DateFormatValidator dateFormatValidator = new DateFormatValidator();
+        PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(UdmCsvProcessor.Header.USAGE_ORIGINAL_DETAIL_ID, requiredValidator,
             new DuplicateInFileValidator(), lengthValidator50);
         addPlainValidators(UdmCsvProcessor.Header.USAGE_DATE, requiredValidator, dateFormatValidator);
-        addPlainValidators(UdmCsvProcessor.Header.WR_WRK_INST, new LengthValidator(15));
+        addPlainValidators(UdmCsvProcessor.Header.WR_WRK_INST, positiveNumberValidator, new LengthValidator(15));
         addPlainValidators(UdmCsvProcessor.Header.REPORTED_STANDARD_NUMBER, lengthValidator100);
         addPlainValidators(UdmCsvProcessor.Header.REPORTED_TITLE, lengthValidator1000);
         addPlainValidators(UdmCsvProcessor.Header.ARTICLE_TITLE, new LengthValidator(500));
         addPlainValidators(UdmCsvProcessor.Header.REPORTED_PUB_TYPE, lengthValidator100);
         addPlainValidators(UdmCsvProcessor.Header.LANGUAGE, lengthValidator100);
-        addPlainValidators(UdmCsvProcessor.Header.REPORTED_TYPE_OF_USE, requiredValidator, lengthValidator100);
-        addPlainValidators(UdmCsvProcessor.Header.QUANTITY, requiredValidator, new LengthValidator(38));
+        addPlainValidators(UdmCsvProcessor.Header.PUB_FORMAT, lengthValidator20);
+        addPlainValidators(UdmCsvProcessor.Header.REPORTED_TYPE_OF_USE, lengthValidator100);
+        addPlainValidators(UdmCsvProcessor.Header.QUANTITY, new NumberValidator(), requiredValidator,
+            new LengthValidator(9));
         addPlainValidators(UdmCsvProcessor.Header.SURVEY_RESPONDED, new LengthValidator(200));
-        addPlainValidators(UdmCsvProcessor.Header.COMPANY_ID, requiredValidator, new LengthValidator(10));
+        addPlainValidators(UdmCsvProcessor.Header.COMPANY_ID, requiredValidator, positiveNumberValidator,
+            new LengthValidator(10));
         addPlainValidators(UdmCsvProcessor.Header.SURVEY_COUNTRY, requiredValidator, lengthValidator100);
         addPlainValidators(UdmCsvProcessor.Header.IP_ADDRESS, lengthValidator20);
         addPlainValidators(UdmCsvProcessor.Header.SURVEY_START_DATE, requiredValidator, dateFormatValidator);
