@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
-import com.copyright.rup.vaadin.widget.api.IWidget;
+import com.copyright.rup.vaadin.widget.api.IFilterWidget;
 
 /**
  * Interface for UDM usage filter widget.
@@ -12,7 +12,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IUdmUsageFilterWidget extends IWidget<IUdmUsageFilterController> {
+public interface IUdmUsageFilterWidget extends IFilterWidget<IUdmUsageFilterController> {
 
     /**
      * @return {@link UdmUsageFilter}.

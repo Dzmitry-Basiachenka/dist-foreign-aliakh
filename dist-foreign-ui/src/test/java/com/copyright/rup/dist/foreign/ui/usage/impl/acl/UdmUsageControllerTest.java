@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
@@ -129,9 +130,12 @@ public class UdmUsageControllerTest {
             buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1),
             buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2));
         expect(udmBatchService.insertUdmBatch(udmBatch, udmUsages)).andReturn(EXPECTED_COUNT).once();
-        replay(udmBatchService);
+        expect(udmUsageFilterController.getWidget()).andReturn(udmUsageFilterWidget).once();
+        udmUsageFilterWidget.clearFilter();
+        expectLastCall().once();
+        replay(udmBatchService, udmUsageFilterController, udmUsageFilterWidget);
         int count = controller.loadUdmBatch(udmBatch, udmUsages);
-        verify(udmBatchService);
+        verify(udmBatchService, udmUsageFilterController, udmUsageFilterWidget);
         assertEquals(EXPECTED_COUNT, count);
     }
 
