@@ -44,7 +44,7 @@ import java.util.Set;
 public class UdmBatchFilterWidgetTest {
 
     private static final String UDM_BATCH_NAME = "Udm batch";
-    private static final String UDM_BATCH_ID = "Udm batch id";
+    private static final String UDM_BATCH_UID = "a30c747a-13ee-4e53-bd10-ac6aa988b537";
 
     private UdmBatchFilterWidget udmBatchFilterWidget;
 
@@ -78,8 +78,8 @@ public class UdmBatchFilterWidgetTest {
         FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
         Capture<ValueProvider<UdmBatch, List<String>>> providerCapture = new Capture<>();
-        Windows.showFilterWindow(eq("Batches filter"), same(udmBatchFilterWidget), capture(providerCapture));
-        expectLastCall().andReturn(filterWindow).once();
+        expect(Windows.showFilterWindow(eq("Batches filter"), same(udmBatchFilterWidget),
+            capture(providerCapture))).andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(new HashSet<>());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
@@ -96,7 +96,7 @@ public class UdmBatchFilterWidgetTest {
     private UdmBatch buildUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
         udmBatch.setName(UDM_BATCH_NAME);
-        udmBatch.setId(UDM_BATCH_ID);
+        udmBatch.setId(UDM_BATCH_UID);
         return udmBatch;
     }
 }

@@ -141,10 +141,13 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetUsageDtos() {
-        List<UdmUsageDto> udmUsages = Collections.singletonList(new UdmUsageDto());
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setUsageOrigin(UdmUsageOriginEnum.SS);
+        List<UdmUsageDto> udmUsages = Collections.singletonList(udmUsageDto);
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("detailId", Sort.Direction.ASC);
         UdmUsageFilter filter = new UdmUsageFilter();
+        filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         expect(udmUsageRepository.findDtosByFilter(filter, pageable, sort)).andReturn(udmUsages).once();
         replay(udmUsageRepository);
         List<UdmUsageDto> result = udmUsageRepository.findDtosByFilter(filter, pageable, sort);
@@ -163,6 +166,7 @@ public class UdmUsageServiceTest {
     @Test
     public void testGetUsagesCount() {
         UdmUsageFilter filter = new UdmUsageFilter();
+        filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         expect(udmUsageRepository.findCountByFilter(filter)).andReturn(1).once();
         replay(udmUsageRepository);
         assertEquals(1, udmUsageRepository.findCountByFilter(filter));

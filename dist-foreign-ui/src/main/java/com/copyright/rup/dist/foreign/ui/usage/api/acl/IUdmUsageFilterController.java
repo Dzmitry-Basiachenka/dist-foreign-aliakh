@@ -6,7 +6,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import java.util.List;
 
 /**
- * Interface for controller for udm usage filtering.
+ * Interface for controller for UDM usage filtering.
  * <p/>
  * Copyright (C) 2021 copyright.com
  * <p/>
@@ -17,7 +17,7 @@ import java.util.List;
 public interface IUdmUsageFilterController extends IController<IUdmUsageFilterWidget> {
 
     /**
-     * Gets list of periods.
+     * Gets all available periods.
      *
      * @return list of periods
      */

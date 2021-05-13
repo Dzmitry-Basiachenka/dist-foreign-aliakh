@@ -26,16 +26,16 @@ public interface IUdmBatchService {
     int insertUdmBatch(UdmBatch udmBatch, List<UdmUsage> udmUsages);
 
     /**
-     * Gets periods.
+     * Gets all available periods.
      *
      * @return list of periods
      */
     List<Integer> getPeriods();
 
     /**
-     * Gets list of {@link UdmBatch}s.
+     * Gets list of {@link UdmBatch}es.
      *
-     * @return list of {@link UdmBatch}s
+     * @return list of {@link UdmBatch}es
      */
     List<UdmBatch> getUdmBatches();
 
