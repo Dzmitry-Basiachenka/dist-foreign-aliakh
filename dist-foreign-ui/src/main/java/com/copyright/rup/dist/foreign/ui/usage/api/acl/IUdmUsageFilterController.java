@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
-import com.copyright.rup.vaadin.widget.api.IController;
+import com.copyright.rup.vaadin.widget.api.IFilterController;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IUdmUsageFilterController extends IController<IUdmUsageFilterWidget> {
+public interface IUdmUsageFilterController extends IFilterController<IUdmUsageFilterWidget> {
 
     /**
      * Gets all available periods.

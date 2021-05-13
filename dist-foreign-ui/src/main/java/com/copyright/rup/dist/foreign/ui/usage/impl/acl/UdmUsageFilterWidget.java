@@ -81,29 +81,25 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         return this;
     }
 
-    /**
-     * Handles filter change event.
-     */
-    protected void filterChanged() {
-        applyButton.setEnabled(!udmUsageFilter.equals(appliedUdmUsageFilter));
-    }
-
-    /**
-     * Applies specified filters.
-     */
-    protected void applyFilter() {
+    @Override
+    public void applyFilter() {
         appliedUdmUsageFilter = new UdmUsageFilter(udmUsageFilter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
     }
 
-    /**
-     * Clears current filters.
-     */
-    protected void clearFilter() {
+    @Override
+    public void clearFilter() {
         clearFilterValues();
         refreshFilter();
         applyFilter();
+    }
+
+    /**
+     * Handles filter change event.
+     */
+    protected void filterChanged() {
+        applyButton.setEnabled(!udmUsageFilter.equals(appliedUdmUsageFilter));
     }
 
     private VerticalLayout initFiltersLayout() {
