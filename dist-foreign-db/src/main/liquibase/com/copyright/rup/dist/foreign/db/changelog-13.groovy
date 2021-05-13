@@ -227,4 +227,19 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'assignee')
         }
     }
+
+    changeSet(id: '2021-05-12-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("CDP-981 FDA: Upgrade to Gradle 4 / RUP Gradle Plugins 6: modify BLOB data type for quartz tables to BYTEA")
+
+        modifyDataType(tableName: 'df_qrtz_job_details', schemaName: dbAppsSchema, columnName: 'job_data', newDataType: 'text')
+        modifyDataType(tableName: 'df_qrtz_job_details', schemaName: dbAppsSchema, columnName: 'job_data', newDataType: 'bytea')
+        modifyDataType(tableName: 'df_qrtz_triggers', schemaName: dbAppsSchema, columnName: 'job_data', newDataType: 'text')
+        modifyDataType(tableName: 'df_qrtz_triggers', schemaName: dbAppsSchema, columnName: 'job_data', newDataType: 'bytea')
+        modifyDataType(tableName: 'df_qrtz_blob_triggers', schemaName: dbAppsSchema, columnName: 'blob_data', newDataType: 'text')
+        modifyDataType(tableName: 'df_qrtz_blob_triggers', schemaName: dbAppsSchema, columnName: 'blob_data', newDataType: 'bytea')
+        modifyDataType(tableName: 'df_qrtz_calendars', schemaName: dbAppsSchema, columnName: 'calendar', newDataType: 'text')
+        modifyDataType(tableName: 'df_qrtz_calendars', schemaName: dbAppsSchema, columnName: 'calendar', newDataType: 'bytea')
+
+        rollback ""
+    }
 }
