@@ -100,8 +100,9 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
 
     @Override
     public int loadUdmBatch(UdmBatch udmBatch, List<UdmUsage> udmUsages) {
-         udmBatchService.insertUdmBatch(udmBatch, udmUsages);
-         return udmUsages.size();
+        udmBatchService.insertUdmBatch(udmBatch, udmUsages);
+        udmUsageFilterController.getWidget().clearFilter();
+        return udmUsages.size();
     }
 
     @Override
