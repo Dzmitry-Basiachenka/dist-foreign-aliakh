@@ -77,6 +77,6 @@ public class UdmUsageService implements IUdmUsageService {
         String stringPeriod = String.valueOf(udmBatch.getPeriod());
         int year = Integer.parseInt(stringPeriod.substring(0, 4));
         int month = Integer.parseInt(stringPeriod.substring(4, 6));
-        return month == 6 ? LocalDate.of(year, month, 30) : LocalDate.of(year, month, 31);
+        return 6 == month ? LocalDate.of(year, month, 30) : LocalDate.of(year, month, 31);
     }
 }
