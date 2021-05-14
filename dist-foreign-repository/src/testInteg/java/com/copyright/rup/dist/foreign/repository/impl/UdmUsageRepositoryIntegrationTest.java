@@ -48,7 +48,7 @@ import java.util.List;
 @Transactional
 public class UdmUsageRepositoryIntegrationTest {
 
-    private static final String UDM_USAGE_ORIGINAL_DETAIL_UID = "3fb43e60-3352-4db4-9080-c30b8a6f6600";
+    private static final String UDM_USAGE_ORIGINAL_DETAIL_UID = "OGN674GHHSB0025";
     private static final String DETAIL_ID_1 = "cc3269aa-2f56-21c7-b0d1-34dd0edfcf5a";
     private static final String DETAIL_ID_2 = "847dfefd-3cf8-4853-8b1b-d59b5cd163e9";
     private static final String UDM_USAGE_UID = "acd033da-cba1-4e85-adc9-0bcd00687d9d";
@@ -108,6 +108,15 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(REPORTED_TYPE_OF_USE, udmUsage.getReportedTypeOfUse());
         assertEquals(QUANTITY, udmUsage.getQuantity());
         assertEquals(StringUtils.EMPTY, udmUsage.getIneligibleReason());
+    }
+
+    @Test
+    public void testFindByIds() {
+        UdmUsage udmUsage = buildUdmUsage();
+        List<UdmUsage> expectedUsagesByIds = Collections.singletonList(udmUsage);
+        udmUsageRepository.insert(udmUsage);
+        List<UdmUsage> actualUsagesByIds = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID));
+        assertEquals(expectedUsagesByIds, actualUsagesByIds);
     }
 
     @Test

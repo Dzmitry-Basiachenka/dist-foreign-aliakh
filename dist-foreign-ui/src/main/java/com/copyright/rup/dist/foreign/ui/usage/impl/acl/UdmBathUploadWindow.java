@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Arrays;
 
 /**
- * Window for uploading a usage batch with usages.
+ * Window for uploading a UDM usage batch with usages.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -45,7 +45,7 @@ public class UdmBathUploadWindow extends Window {
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
-    private static final String[] MONTHES = new String[]{"06", "12"};
+    private static final String[] MONTHS = new String[]{"06", "12"};
     private final Binder<UdmBatch> batchBinder = new Binder<>();
     private final Binder<String> binder = new Binder<>();
     private final IUdmUsageController udmUsageController;
@@ -67,7 +67,7 @@ public class UdmBathUploadWindow extends Window {
         setResizable(false);
         setWidth(400, Unit.PIXELS);
         setHeight(211, Unit.PIXELS);
-        VaadinUtils.addComponentStyle(this, "usage-upload-window");
+        VaadinUtils.addComponentStyle(this, "udm-batch-usage-upload-window");
     }
 
     /**
@@ -110,7 +110,7 @@ public class UdmBathUploadWindow extends Window {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initUploadField(), initPeriodYearAndPeriodMonthFields(),
-            initChannelAndUsageOrigin(),
+            initChannelAndUsageOriginFields(),
             buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
@@ -140,7 +140,7 @@ public class UdmBathUploadWindow extends Window {
             .bind(s -> s, (s, v) -> s = v).validate();
         uploadField.addSucceededListener(event -> binder.validate());
         VaadinUtils.setMaxComponentsWidth(uploadField);
-        VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");
+        VaadinUtils.addComponentStyle(uploadField, "udm-usage-upload-component");
         return uploadField;
     }
 
@@ -167,7 +167,7 @@ public class UdmBathUploadWindow extends Window {
 
     private ComboBox<String> initPeriodMonthField() {
         monthField = new ComboBox<>(ForeignUi.getMessage("label.distribution_udm_period_month"));
-        monthField.setItems(MONTHES);
+        monthField.setItems(MONTHS);
         monthField.setRequiredIndicatorVisible(true);
         binder.forField(monthField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
@@ -177,7 +177,7 @@ public class UdmBathUploadWindow extends Window {
         return monthField;
     }
 
-    private HorizontalLayout initChannelAndUsageOrigin() {
+    private HorizontalLayout initChannelAndUsageOriginFields() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(initUsageOriginField(), initChannelField());
         horizontalLayout.setSizeFull();
         return horizontalLayout;

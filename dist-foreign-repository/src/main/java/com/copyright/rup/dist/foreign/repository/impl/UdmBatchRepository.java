@@ -43,6 +43,6 @@ public class UdmBatchRepository extends BaseRepository implements IUdmBatchRepos
 
     @Override
     public boolean udmBatchExists(String name) {
-        return selectOne("IUdmBatchMapper.batchExists", name);
+        return selectOne("IUdmBatchMapper.batchExists", Objects.requireNonNull(name));
     }
 }

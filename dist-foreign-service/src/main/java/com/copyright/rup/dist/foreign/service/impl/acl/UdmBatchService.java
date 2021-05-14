@@ -37,16 +37,15 @@ public class UdmBatchService implements IUdmBatchService {
 
     @Override
     @Transactional
-    public int insertUdmBatch(UdmBatch udmBatch, List<UdmUsage> udmUsages) {
+    public void insertUdmBatch(UdmBatch udmBatch, List<UdmUsage> udmUsages) {
         String userName = RupContextUtils.getUserName();
         udmBatch.setId(RupPersistUtils.generateUuid());
         udmBatch.setCreateUser(userName);
         udmBatch.setUpdateUser(userName);
         LOGGER.info("Insert UDM batch. Started. UsageBatchName={}, UserName={}", udmBatch.getName(), userName);
         udmBatchRepository.insert(udmBatch);
-        int count = udmUsageService.insertUdmUsages(udmBatch, udmUsages);
+        udmUsageService.insertUdmUsages(udmBatch, udmUsages);
         LOGGER.info("Insert UDM batch. Finished. UsageBatchName={}, UserName={}", udmBatch.getName(), userName);
-        return count;
     }
 
     @Override

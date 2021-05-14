@@ -55,7 +55,8 @@ public class SurveyDateValidatorTest {
     public void testIsValid() {
         SurveyDateValidator validator = new SurveyDateValidator();
         assertEquals(expectedResult, validator.isValid(buildUdmUsage(surveyStartDate, surveyEndDate)));
-        assertEquals("Survey Start Date is later than Survey End Date", validator.getErrorMessage());
+        assertEquals("Survey End Date should be greater than or equal to Survey Start Date",
+            validator.getErrorMessage());
     }
 
     private UdmUsage buildUdmUsage(LocalDate startDate, LocalDate endDate) {

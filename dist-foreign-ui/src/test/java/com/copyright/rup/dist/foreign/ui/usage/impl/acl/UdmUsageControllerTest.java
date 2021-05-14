@@ -58,9 +58,8 @@ public class UdmUsageControllerTest {
     private static final String UDM_BATCH_UID = "5acc58a4-49c0-4c20-b96e-39e637a0657f";
     private static final String UDM_USAGE_UID_1 = "35c42bac-c6f6-4559-a788-206c376dc969";
     private static final String UDM_USAGE_UID_2 = "1854c871-3a1b-40e9-84e6-d854dbc77a76";
-    private static final String UDM_USAGE_ORIGIN_UID_1 = "2e8f2ad2-62cb-4f75-9c7b-45c8892aa9ed";
-    private static final String UDM_USAGE_ORIGIN_UID_2 = "d9cc5299-94c7-4e03-bab2-e4ad42efe385";
-    private static final int EXPECTED_COUNT = 2;
+    private static final String UDM_USAGE_ORIGIN_UID_1 = "OGN674GHHSB291";
+    private static final String UDM_USAGE_ORIGIN_UID_2 = "OGN674GHHSB293";
 
     private final UdmUsageController controller = new UdmUsageController();
     private final UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
@@ -129,14 +128,11 @@ public class UdmUsageControllerTest {
         List<UdmUsage> udmUsages = Arrays.asList(
             buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1),
             buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2));
-        expect(udmBatchService.insertUdmBatch(udmBatch, udmUsages)).andReturn(EXPECTED_COUNT).once();
-        expect(udmUsageFilterController.getWidget()).andReturn(udmUsageFilterWidget).once();
-        udmUsageFilterWidget.clearFilter();
-        expectLastCall().once();
-        replay(udmBatchService, udmUsageFilterController, udmUsageFilterWidget);
-        int count = controller.loadUdmBatch(udmBatch, udmUsages);
-        verify(udmBatchService, udmUsageFilterController, udmUsageFilterWidget);
-        assertEquals(EXPECTED_COUNT, count);
+        udmBatchService.insertUdmBatch(udmBatch, udmUsages);
+        expectLastCall();
+        replay(udmBatchService);
+        controller.loadUdmBatch(udmBatch, udmUsages);
+        verify(udmBatchService);
     }
 
     @Test

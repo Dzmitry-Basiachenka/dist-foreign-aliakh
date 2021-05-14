@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 /**
- * Represents detail origin of UDM usage details.
+ * Represents usage origin of UDM usage details.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>

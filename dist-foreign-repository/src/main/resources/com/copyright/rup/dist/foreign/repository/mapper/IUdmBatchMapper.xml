@@ -22,7 +22,7 @@
     </sql>
 
     <insert id="insert" parameterType="UdmBatch">
-        insert into ${schema}.df_udm_usage_batch(
+        insert into ${schema}.df_udm_usage_batch (
             <include refid="udmBatchColumns"/>
         ) values (
             #{id},

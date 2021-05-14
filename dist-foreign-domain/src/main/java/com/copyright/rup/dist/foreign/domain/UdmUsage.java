@@ -40,15 +40,15 @@ public class UdmUsage extends StoredEntity<String> {
     private String reportedTypeOfUse;
     private Integer quantity;
     private String surveyRespondent;
-    private Long companyId;
     private String surveyCountry;
     private String ipAddress;
     private LocalDate surveyStartDate;
     private LocalDate surveyEndDate;
     private String ineligibleReason;
+    private Long companyId;
+    private String companyName;
     private String detailLicenseeClassId;
     private String detailLicenseeClassName;
-    private String companyName;
     private BigDecimal annualMultiplier;
     private BigDecimal statisticalMultiplier;
     private int annualizedCopies;

@@ -52,8 +52,8 @@ public class UdmUsageServiceTest {
     private static final String UDM_BATCH_UID = "aa5751aa-2858-38c6-b0d9-51ec0edfcf4f";
     private static final String UDM_USAGE_UID_1 = "85c8a2a6-1e9d-453b-947c-14dbd92c5e15";
     private static final String UDM_USAGE_UID_2 = "f9207059-af0a-440a-abc7-b6e016c64677";
-    private static final String UDM_USAGE_ORIGIN_UID_1 = "b7b9293c-f7bf-4cba-b2b9-58db82ccb675";
-    private static final String UDM_USAGE_ORIGIN_UID_2 = "d1f699a4-1c83-408e-a499-e6aee6d110ef";
+    private static final String UDM_USAGE_ORIGIN_UID_1 = "OGN674GHHSB321";
+    private static final String UDM_USAGE_ORIGIN_UID_2 = "OGN674GHHSB322";
 
     private final UdmUsageService udmUsageService = new UdmUsageService();
     private IUdmUsageRepository udmUsageRepository;
@@ -114,10 +114,10 @@ public class UdmUsageServiceTest {
         return udmBatch;
     }
 
-    private UdmUsage buildUdmUsage(String usageId, String originId) {
+    private UdmUsage buildUdmUsage(String usageId, String originalDetailId) {
         UdmUsage udmUsage = new UdmUsage();
         udmUsage.setId(usageId);
-        udmUsage.setOriginalDetailId(originId);
+        udmUsage.setOriginalDetailId(originalDetailId);
         udmUsage.setBatchId(UDM_BATCH_UID);
         udmUsage.setStatus(UsageStatusEnum.NEW);
         udmUsage.setUsageDate(LocalDate.of(2021, 12, 12));

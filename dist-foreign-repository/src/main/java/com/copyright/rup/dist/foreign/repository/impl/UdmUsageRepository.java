@@ -59,7 +59,7 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     }
 
     @Override
-    public List<UdmUsage> findByIds(List<String> udmBatchIds) {
-        return selectList("IUdmUsageMapper.findByIds", Objects.requireNonNull(udmBatchIds));
+    public List<UdmUsage> findByIds(List<String> udmUsagesIds) {
+        return selectList("IUdmUsageMapper.findByIds", Objects.requireNonNull(udmUsagesIds));
     }
 }
