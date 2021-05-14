@@ -215,7 +215,8 @@ public class UdmBathUploadWindow extends Window {
     private UdmBatch buildUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
         udmBatch.setName(getBatchName());
-        udmBatch.setPeriod(Integer.parseInt(String.format("%s%s", periodYearField.getValue(), monthField.getValue())));
+        udmBatch.setPeriod(Integer.parseInt(
+            String.format("%s%s", StringUtils.trim(periodYearField.getValue()), monthField.getValue())));
         udmBatch.setChannel(channelField.getValue());
         udmBatch.setUsageOrigin(usageOriginField.getValue());
         return udmBatch;
@@ -223,6 +224,6 @@ public class UdmBathUploadWindow extends Window {
 
     private String getBatchName() {
         String fileName = uploadField.getValue();
-        return fileName.substring(0, fileName.lastIndexOf(".csv"));
+        return StringUtils.trim(fileName.substring(0, fileName.lastIndexOf(".csv")));
     }
 }
