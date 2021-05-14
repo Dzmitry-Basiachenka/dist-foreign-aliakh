@@ -1,3 +1,13 @@
+13.1.23
+-
+* B-65858 FDA & UDM: Load ACL usage data: make changes in comments in CR-DIST-FOREIGN-230
+* B-65858: FDA & UDM: Load ACL usage data: revert removed code
+* B-67103: FDA & UDM: Create UDM shell - UI Filtering - Part 1: make changes based on comments in CR-DIST-FOREIGN-229
+* B-67103: FDA & UDM: Create UDM shell - UI Filtering - Part 1: reset filter after loading udm batch
+* CDP-981 FDA: Upgrade to Gradle 4 / RUP Gradle Plugins 6: apply RUP Common 12 version
+* CDP-990 FDA: Upload UDM usage batch: fix validation errors
+* CDP-990 FDA: Upload UDM usage batch: fix validations
+
 13.1.22
 -
 * B-66740 FDA: DB changes for UDM: add assignee column to df_udm_usage table
