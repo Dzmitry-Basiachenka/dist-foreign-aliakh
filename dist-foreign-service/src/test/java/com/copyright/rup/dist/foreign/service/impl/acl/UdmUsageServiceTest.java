@@ -30,6 +30,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,14 +55,18 @@ public class UdmUsageServiceTest {
     private static final String UDM_USAGE_UID_2 = "f9207059-af0a-440a-abc7-b6e016c64677";
     private static final String UDM_USAGE_ORIGIN_UID_1 = "OGN674GHHSB321";
     private static final String UDM_USAGE_ORIGIN_UID_2 = "OGN674GHHSB322";
+    private static final BigDecimal STATISTICAL_MULTIPLIER = BigDecimal.ONE.setScale(5, BigDecimal.ROUND_HALF_UP);
 
     private final UdmUsageService udmUsageService = new UdmUsageService();
     private IUdmUsageRepository udmUsageRepository;
+    private UdmAnnualMultiplierCalculator udmAnnualMultiplierCalculator;
 
     @Before
     public void setUp() {
         udmUsageRepository = createMock(IUdmUsageRepository.class);
+        udmAnnualMultiplierCalculator = createMock(UdmAnnualMultiplierCalculator.class);
         Whitebox.setInternalState(udmUsageService, udmUsageRepository);
+        Whitebox.setInternalState(udmUsageService, udmAnnualMultiplierCalculator);
     }
 
     @Test
@@ -76,15 +81,13 @@ public class UdmUsageServiceTest {
         expectLastCall().once();
         udmUsageRepository.insert(udmUsages.get(1));
         expectLastCall().once();
-        replay(udmUsageRepository, RupContextUtils.class);
+        expect(udmAnnualMultiplierCalculator.calculate(LocalDate.of(2021, 12, 12), LocalDate.of(2021, 12, 12)))
+            .andReturn(25).times(2);
+        replay(udmUsageRepository, udmAnnualMultiplierCalculator, RupContextUtils.class);
         udmUsageService.insertUdmUsages(udmBatch, udmUsages);
-        verify(udmUsageRepository, RupContextUtils.class);
-        assertEquals(USER_NAME, udmUsages.get(0).getCreateUser());
-        assertEquals(USER_NAME, udmUsages.get(0).getUpdateUser());
-        assertEquals(USER_NAME, udmUsages.get(1).getCreateUser());
-        assertEquals(USER_NAME, udmUsages.get(1).getUpdateUser());
-        assertEquals(LocalDate.of(2020, 6, 30), udmUsages.get(0).getPeriodEndDate());
-        assertEquals(LocalDate.of(2020, 6, 30), udmUsages.get(1).getPeriodEndDate());
+        verify(udmUsageRepository, udmAnnualMultiplierCalculator, RupContextUtils.class);
+        assertUdmUsage(udmUsages.get(0));
+        assertUdmUsage(udmUsages.get(1));
         assertNotNull(udmBatch.getId());
     }
 
@@ -186,5 +189,14 @@ public class UdmUsageServiceTest {
         replay(udmUsageRepository);
         udmUsageService.updateProcessedUsage(udmUsage);
         verify(udmUsageRepository);
+    }
+
+    private void assertUdmUsage(UdmUsage udmUsage) {
+        assertEquals(UDM_BATCH_UID, udmUsage.getBatchId());
+        assertEquals(LocalDate.of(2020, 6, 30), udmUsage.getPeriodEndDate());
+        assertEquals(25, udmUsage.getAnnualMultiplier().intValue());
+        assertEquals(STATISTICAL_MULTIPLIER, udmUsage.getStatisticalMultiplier());
+        assertEquals(USER_NAME, udmUsage.getCreateUser());
+        assertEquals(USER_NAME, udmUsage.getUpdateUser());
     }
 }

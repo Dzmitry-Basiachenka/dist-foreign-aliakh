@@ -73,6 +73,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final Long WR_WRK_INST = 122825347L;
     private static final Long COMPANY_ID = 77000456L;
     private static final Integer QUANTITY = 10;
+    private static final Integer ANNUAL_MULTIPLIER = 1;
     private static final BigDecimal STATISTICAL_MULTIPLIER = new BigDecimal("1.00000");
     // Have to use incorrect ip for testing purposes as PMD disallows hardcoded ips
     private static final String IP_ADDRESS = "ip24.12.119.203";
@@ -108,6 +109,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(SURVEY_COUNTRY, udmUsage.getSurveyCountry());
         assertEquals(SURVEY_START_DATE, udmUsage.getSurveyStartDate());
         assertEquals(SURVEY_END_DATE, udmUsage.getSurveyEndDate());
+        assertEquals(ANNUAL_MULTIPLIER, udmUsage.getAnnualMultiplier());
         assertEquals(STATISTICAL_MULTIPLIER, udmUsage.getStatisticalMultiplier());
         assertEquals(REPORTED_TYPE_OF_USE, udmUsage.getReportedTypeOfUse());
         assertEquals(QUANTITY, udmUsage.getQuantity());
@@ -278,7 +280,7 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setSurveyCountry("USA");
         udmUsage.setSurveyStartDate(LocalDate.of(2020, 9, 10));
         udmUsage.setSurveyEndDate(LocalDate.of(2021, 9, 10));
-        udmUsage.setAnnualMultiplier(new BigDecimal("5"));
+        udmUsage.setAnnualMultiplier(5);
         udmUsage.setStatisticalMultiplier(new BigDecimal("0.10000"));
         udmUsage.setReportedTypeOfUse("EMAIL_COPY");
         udmUsage.setQuantity(10);
@@ -308,6 +310,7 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setSurveyCountry(SURVEY_COUNTRY);
         udmUsage.setSurveyStartDate(SURVEY_START_DATE);
         udmUsage.setSurveyEndDate(SURVEY_END_DATE);
+        udmUsage.setAnnualMultiplier(ANNUAL_MULTIPLIER);
         udmUsage.setStatisticalMultiplier(STATISTICAL_MULTIPLIER);
         udmUsage.setReportedTypeOfUse(REPORTED_TYPE_OF_USE);
         udmUsage.setQuantity(QUANTITY);

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -34,10 +35,14 @@ import java.util.Objects;
 @Service
 public class UdmUsageService implements IUdmUsageService {
 
+    private static final BigDecimal DEFAULT_STATISTICAL_MULTIPLIER =
+        BigDecimal.ONE.setScale(5, BigDecimal.ROUND_HALF_UP);
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     private IUdmUsageRepository udmUsageRepository;
+    @Autowired
+    private UdmAnnualMultiplierCalculator udmAnnualMultiplierCalculator;
 
     @Override
     @Transactional
@@ -50,6 +55,9 @@ public class UdmUsageService implements IUdmUsageService {
         udmUsages.forEach(usage -> {
             usage.setBatchId(udmBatch.getId());
             usage.setPeriodEndDate(periodEndDate);
+            usage.setAnnualMultiplier(udmAnnualMultiplierCalculator.calculate(usage.getSurveyStartDate(),
+                usage.getSurveyEndDate()));
+            usage.setStatisticalMultiplier(DEFAULT_STATISTICAL_MULTIPLIER);
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             udmUsageRepository.insert(usage);

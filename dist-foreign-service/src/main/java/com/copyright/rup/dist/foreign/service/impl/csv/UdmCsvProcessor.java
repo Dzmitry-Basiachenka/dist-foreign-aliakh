@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.NumberValidator
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -32,9 +31,6 @@ import java.util.stream.Stream;
  * @author Anton Azarenka
  */
 public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
-
-    private static final BigDecimal DEFAULT_STATISTICAL_MULTIPLIER =
-        BigDecimal.ONE.setScale(5, BigDecimal.ROUND_HALF_UP);
 
     @Override
     public List<String> getHeadersForValidation() {
@@ -152,7 +148,6 @@ public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
             result.setIpAddress(getString(row, Header.IP_ADDRESS, headers));
             result.setSurveyStartDate(getDate(row, Header.SURVEY_START_DATE, headers));
             result.setSurveyEndDate(getDate(row, Header.SURVEY_END_DATE, headers));
-            result.setStatisticalMultiplier(DEFAULT_STATISTICAL_MULTIPLIER);
             return result;
         }
 

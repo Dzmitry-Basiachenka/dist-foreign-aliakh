@@ -47,7 +47,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private LocalDate usageDate;
     private LocalDate surveyStartDate;
     private LocalDate surveyEndDate;
-    private BigDecimal annualMultiplier;
+    private Integer annualMultiplier;
     private BigDecimal statisticalMultiplier;
     private String reportedTypeOfUse;
     private Integer quantity;
@@ -294,11 +294,11 @@ public class UdmUsageDto extends StoredEntity<String> {
         this.companyName = companyName;
     }
 
-    public BigDecimal getAnnualMultiplier() {
+    public Integer getAnnualMultiplier() {
         return annualMultiplier;
     }
 
-    public void setAnnualMultiplier(BigDecimal annualMultiplier) {
+    public void setAnnualMultiplier(Integer annualMultiplier) {
         this.annualMultiplier = annualMultiplier;
     }
 
