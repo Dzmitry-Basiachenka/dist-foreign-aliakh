@@ -421,7 +421,7 @@ public class AaclUsageService implements IAaclUsageService {
 
     private List<AggregateLicenseeClass> getAggregateClassesByIds(Set<Integer> aggregateClassIds) {
         Map<Integer, AggregateLicenseeClass> aggregateClassIdToClass =
-            licenseeClassService.getAggregateLicenseeClasses().stream()
+            licenseeClassService.getAggregateLicenseeClasses(FdaConstants.AACL_PRODUCT_FAMILY).stream()
                 .collect(Collectors.toMap(AggregateLicenseeClass::getId, aggregateClass -> aggregateClass));
         return aggregateClassIds.stream()
             .map(aggregateClassIdToClass::get)

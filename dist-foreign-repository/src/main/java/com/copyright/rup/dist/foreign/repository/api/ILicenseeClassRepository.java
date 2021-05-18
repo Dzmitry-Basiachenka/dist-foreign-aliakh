@@ -26,14 +26,20 @@ public interface ILicenseeClassRepository {
     boolean detailLicenseeClassExists(String enrollmentProfile, String discipline);
 
     /**
+     * Gets list of {@link AggregateLicenseeClass}es by product family.
+     *
+     * @param productFamily product family
      * @return list of existing {@link AggregateLicenseeClass}es.
      */
-    List<AggregateLicenseeClass> findAggregateLicenseeClasses();
+    List<AggregateLicenseeClass> findAggregateLicenseeClassesByProductFamily(String productFamily);
 
     /**
+     * Gets list of {@link DetailLicenseeClass}es by product family.
+     *
+     * @param productFamily product family
      * @return list of existing {@link DetailLicenseeClass}es.
      */
-    List<DetailLicenseeClass> findDetailLicenseeClasses();
+    List<DetailLicenseeClass> findDetailLicenseeClassesByProductFamily(String productFamily);
 
     /**
      * Finds list of {@link DetailLicenseeClass}es by scenario id.

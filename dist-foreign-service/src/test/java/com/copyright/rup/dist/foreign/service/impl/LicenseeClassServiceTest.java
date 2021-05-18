@@ -34,6 +34,7 @@ public class LicenseeClassServiceTest {
 
     private static final String ENROLLMENT_PROFILE = "EXGP";
     private static final String DISCIPLINE = "Physical Sciences & Mathematics";
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
 
     private ILicenseeClassService licenseeClassService;
     private ILicenseeClassRepository licenseeClassRepository;
@@ -48,18 +49,20 @@ public class LicenseeClassServiceTest {
     @Test
     public void testGetAggregateLicenseeClasses() {
         List<AggregateLicenseeClass> aggregateLicenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
-        expect(licenseeClassRepository.findAggregateLicenseeClasses()).andReturn(aggregateLicenseeClasses).once();
+        expect(licenseeClassRepository.findAggregateLicenseeClassesByProductFamily(AACL_PRODUCT_FAMILY))
+            .andReturn(aggregateLicenseeClasses).once();
         replay(licenseeClassRepository);
-        assertSame(aggregateLicenseeClasses, licenseeClassService.getAggregateLicenseeClasses());
+        assertSame(aggregateLicenseeClasses, licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY));
         verify(licenseeClassRepository);
     }
 
     @Test
     public void testGetDetailLicenseeClasses() {
         List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
-        expect(licenseeClassRepository.findDetailLicenseeClasses()).andReturn(detailLicenseeClasses).once();
+        expect(licenseeClassRepository.findDetailLicenseeClassesByProductFamily(AACL_PRODUCT_FAMILY))
+            .andReturn(detailLicenseeClasses).once();
         replay(licenseeClassRepository);
-        assertSame(detailLicenseeClasses, licenseeClassService.getDetailLicenseeClasses());
+        assertSame(detailLicenseeClasses, licenseeClassService.getDetailLicenseeClasses(AACL_PRODUCT_FAMILY));
         verify(licenseeClassRepository);
     }
 
@@ -75,35 +78,35 @@ public class LicenseeClassServiceTest {
     }
 
     @Test
-    public void testIsDetailLicenceClassExist() {
+    public void testAaclDetailLicenseeClassExist() {
         expect(licenseeClassRepository.detailLicenseeClassExists(ENROLLMENT_PROFILE, DISCIPLINE))
             .andReturn(true).once();
         replay(licenseeClassRepository);
-        assertTrue(licenseeClassService.detailLicenceClassExists(ENROLLMENT_PROFILE, DISCIPLINE));
+        assertTrue(licenseeClassService.aaclDetailLicenseeClassExists(ENROLLMENT_PROFILE, DISCIPLINE));
         verify(licenseeClassRepository);
     }
 
     @Test
-    public void testIsDetailLicenceClassExistWithDisciplineNull() {
+    public void testAaclDetailLicenseeClassExistWithDisciplineNull() {
         expect(licenseeClassRepository.detailLicenseeClassExists(ENROLLMENT_PROFILE, null)).andReturn(false).once();
         replay(licenseeClassRepository);
-        assertFalse(licenseeClassService.detailLicenceClassExists(ENROLLMENT_PROFILE, null));
+        assertFalse(licenseeClassService.aaclDetailLicenseeClassExists(ENROLLMENT_PROFILE, null));
         verify(licenseeClassRepository);
     }
 
     @Test
-    public void testIsDetailLicenceClassExistWithEnrollmentProfileNull() {
+    public void testAaclDetailLicenseeClassExistWithEnrollmentProfileNull() {
         expect(licenseeClassRepository.detailLicenseeClassExists(null, DISCIPLINE)).andReturn(false).once();
         replay(licenseeClassRepository);
-        assertFalse(licenseeClassService.detailLicenceClassExists(null, DISCIPLINE));
+        assertFalse(licenseeClassService.aaclDetailLicenseeClassExists(null, DISCIPLINE));
         verify(licenseeClassRepository);
     }
 
     @Test
-    public void testIsDetailLicenceClassExistWithEnrollmentProfileAndDisciplineNull() {
+    public void testAaclDetailLicenseeClassExistWithEnrollmentProfileAndDisciplineNull() {
         expect(licenseeClassRepository.detailLicenseeClassExists(null, null)).andReturn(false).once();
         replay(licenseeClassRepository);
-        assertFalse(licenseeClassService.detailLicenceClassExists(null, null));
+        assertFalse(licenseeClassService.aaclDetailLicenseeClassExists(null, null));
         verify(licenseeClassRepository);
     }
 }

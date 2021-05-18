@@ -59,19 +59,21 @@ public class LicenseeClassRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindAggregateLicenseeClasses() throws IOException {
+    public void testFindAggregateLicenseeClassesByProductFamily() throws IOException {
         List<AggregateLicenseeClass> expectedClasses =
             loadExpectedAggregateClasses("expected_aggregate_licensee_classes.json");
-        List<AggregateLicenseeClass> actualClasses = licenseeClassRepository.findAggregateLicenseeClasses();
+        List<AggregateLicenseeClass> actualClasses =
+            licenseeClassRepository.findAggregateLicenseeClassesByProductFamily("AACL");
         assertEquals(expectedClasses.size(), actualClasses.size());
         IntStream.range(0, expectedClasses.size())
             .forEach(i -> verifyAggregateLicenseeClass(expectedClasses.get(i), actualClasses.get(i)));
     }
 
     @Test
-    public void testFindDetailLicenseeClasses() throws IOException {
+    public void testFindDetailLicenseeClassesByProductFamily() throws IOException {
         List<DetailLicenseeClass> expectedDetailsMapping = loadExpectedClasses("expected_detail_licensee_classes.json");
-        List<DetailLicenseeClass> actualDetailsMapping = licenseeClassRepository.findDetailLicenseeClasses();
+        List<DetailLicenseeClass> actualDetailsMapping =
+            licenseeClassRepository.findDetailLicenseeClassesByProductFamily("AACL");
         assertEquals(expectedDetailsMapping.size(), actualDetailsMapping.size());
         IntStream.range(0, expectedDetailsMapping.size())
             .forEach(i -> verifyLicenseeClass(expectedDetailsMapping.get(i), actualDetailsMapping.get(i)));

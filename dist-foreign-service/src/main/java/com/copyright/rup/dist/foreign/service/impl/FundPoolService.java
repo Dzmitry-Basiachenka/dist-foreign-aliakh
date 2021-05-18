@@ -176,7 +176,7 @@ public class FundPoolService implements IFundPoolService {
         Map<Integer, FundPoolDetail> classIdToDetail =
             fundPoolRepository.findDetailsByFundPoolId(fundPoolId).stream()
                 .collect(Collectors.toMap(detail -> detail.getAggregateLicenseeClass().getId(), detail -> detail));
-        return licenseeClassService.getAggregateLicenseeClasses().stream()
+        return licenseeClassService.getAggregateLicenseeClasses(FdaConstants.AACL_PRODUCT_FAMILY).stream()
             .map(alc -> classIdToDetail.getOrDefault(alc.getId(), buildZeroFundPoolDetail(alc)))
             .collect(Collectors.toList());
     }

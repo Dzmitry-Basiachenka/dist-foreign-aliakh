@@ -1,15 +1,16 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.AaclDetailLicenseeClassValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AggregateLicenseeClassValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedWrWrkInstValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.DetailLicenseeClassValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ItemBankWorkPortionIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.OriginalDetailIdValidator;
@@ -80,7 +81,8 @@ public class CsvProcessorFactory {
      */
     public AaclFundPoolCsvProcessor getAaclFundPoolCsvProcessor() {
         AaclFundPoolCsvProcessor processor = new AaclFundPoolCsvProcessor();
-        processor.addBusinessValidators(new AggregateLicenseeClassValidator(licenseeClassService));
+        processor.addBusinessValidators(new AggregateLicenseeClassValidator(licenseeClassService,
+            FdaConstants.AACL_PRODUCT_FAMILY));
         return processor;
     }
 
@@ -102,7 +104,7 @@ public class CsvProcessorFactory {
         processor.addBusinessValidators(
             new ClassifiedUsageValidator(usageService),
             new ClassifiedWrWrkInstValidator(piIntegrationService),
-            new DetailLicenseeClassValidator(licenseeClassService),
+            new AaclDetailLicenseeClassValidator(licenseeClassService),
             new PublicationTypeValidator(publicationTypeService));
         return processor;
     }

@@ -23,7 +23,6 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -97,6 +96,7 @@ public class AaclUsageControllerTest {
 
     private static final String FUND_POOL_ID = "76b16c8d-0bea-4135-9611-6c52e53bfbea";
     private static final String FUND_POOL_NAME = "fund pool name";
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final OffsetDateTime DATE = OffsetDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
 
     private AaclUsageController controller;
@@ -246,7 +246,7 @@ public class AaclUsageControllerTest {
     @Test
     public void testGetFundPools() {
         List<FundPool> fundPools = Collections.singletonList(new FundPool());
-        expect(fundPoolService.getFundPools("AACL")).andReturn(fundPools).once();
+        expect(fundPoolService.getFundPools(AACL_PRODUCT_FAMILY)).andReturn(fundPools).once();
         replay(fundPoolService);
         assertEquals(fundPools, controller.getFundPools());
         verify(fundPoolService);
@@ -342,7 +342,7 @@ public class AaclUsageControllerTest {
     @Test
     public void testGetExportUsagesStreamSource() {
         mockStatic(OffsetDateTime.class);
-        usageFilter.setProductFamily("AACL");
+        usageFilter.setProductFamily(AACL_PRODUCT_FAMILY);
         Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
         Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
         String fileName = "export_usage_";
@@ -390,7 +390,7 @@ public class AaclUsageControllerTest {
 
     @Test
     public void testFundPoolExists() {
-        expect(fundPoolService.fundPoolExists(FdaConstants.AACL_PRODUCT_FAMILY, FUND_POOL_NAME)).andReturn(true).once();
+        expect(fundPoolService.fundPoolExists(AACL_PRODUCT_FAMILY, FUND_POOL_NAME)).andReturn(true).once();
         replay(fundPoolService);
         assertTrue(controller.fundPoolExists(FUND_POOL_NAME));
         verify(fundPoolService);
@@ -497,7 +497,8 @@ public class AaclUsageControllerTest {
     @Test
     public void testGetDetailLicenseeClasses() {
         List<DetailLicenseeClass> detailLicenseeClasses = Collections.singletonList(new DetailLicenseeClass());
-        expect(licenseeClassService.getDetailLicenseeClasses()).andReturn(detailLicenseeClasses).once();
+        expect(licenseeClassService.getDetailLicenseeClasses(AACL_PRODUCT_FAMILY))
+            .andReturn(detailLicenseeClasses).once();
         replay(licenseeClassService);
         assertEquals(detailLicenseeClasses, controller.getDetailLicenseeClasses());
         verify(licenseeClassService);

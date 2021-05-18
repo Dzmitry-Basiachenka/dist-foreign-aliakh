@@ -26,18 +26,18 @@ public class LicenseeClassService implements ILicenseeClassService {
     private ILicenseeClassRepository licenseeClassRepository;
 
     @Override
-    public boolean detailLicenceClassExists(String enrollmentProfile, String discipline) {
+    public boolean aaclDetailLicenseeClassExists(String enrollmentProfile, String discipline) {
         return licenseeClassRepository.detailLicenseeClassExists(enrollmentProfile, discipline);
     }
 
     @Override
-    public List<AggregateLicenseeClass> getAggregateLicenseeClasses() {
-        return licenseeClassRepository.findAggregateLicenseeClasses();
+    public List<AggregateLicenseeClass> getAggregateLicenseeClasses(String productFamily) {
+        return licenseeClassRepository.findAggregateLicenseeClassesByProductFamily(productFamily);
     }
 
     @Override
-    public List<DetailLicenseeClass> getDetailLicenseeClasses() {
-        return licenseeClassRepository.findDetailLicenseeClasses();
+    public List<DetailLicenseeClass> getDetailLicenseeClasses(String productFamily) {
+        return licenseeClassRepository.findDetailLicenseeClassesByProductFamily(productFamily);
     }
 
     @Override

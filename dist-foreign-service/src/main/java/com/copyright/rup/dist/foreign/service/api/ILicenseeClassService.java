@@ -17,23 +17,29 @@ import java.util.List;
 public interface ILicenseeClassService {
 
     /**
-     * Checks whether detail licensee class with provided enrollment profile and discipline exists in database.
+     * Checks whether AACL detail licensee class with provided enrollment profile and discipline exists in database.
      *
      * @param enrollmentProfile enrollment profile (case insensitive)
      * @param discipline        discipline (case insensitive)
      * @return {@code true} if detail licensee class is present, {@code false} otherwise
      */
-    boolean detailLicenceClassExists(String enrollmentProfile, String discipline);
+    boolean aaclDetailLicenseeClassExists(String enrollmentProfile, String discipline);
 
     /**
-     * @return list of existing {@link AggregateLicenseeClass}es.
+     * Gets list of {@link AggregateLicenseeClass}es by product family.
+     *
+     * @param productFamily product family
+     * @return list of found {@link AggregateLicenseeClass}es by product family.
      */
-    List<AggregateLicenseeClass> getAggregateLicenseeClasses();
+    List<AggregateLicenseeClass> getAggregateLicenseeClasses(String productFamily);
 
     /**
+     * Gets list of {@link DetailLicenseeClass}es by product family.
+     *
+     * @param productFamily product family
      * @return list of existing {@link DetailLicenseeClass}es.
      */
-    List<DetailLicenseeClass> getDetailLicenseeClasses();
+    List<DetailLicenseeClass> getDetailLicenseeClasses(String productFamily);
 
     /**
      * Gets list of {@link DetailLicenseeClass}es by scenario id.
