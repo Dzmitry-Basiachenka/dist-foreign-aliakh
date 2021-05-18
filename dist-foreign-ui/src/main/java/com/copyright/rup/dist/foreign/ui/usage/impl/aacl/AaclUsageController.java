@@ -237,7 +237,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public List<DetailLicenseeClass> getDetailLicenseeClasses() {
-        return licenseeClassService.getDetailLicenseeClasses();
+        return licenseeClassService.getDetailLicenseeClasses(FdaConstants.AACL_PRODUCT_FAMILY);
     }
 
     @Override

@@ -230,7 +230,7 @@ public class FundPoolServiceTest {
         List<FundPoolDetail> expectedDetails =
             Arrays.asList(detail1, buildZeroDetail(AGG_LICENSEE_CLASS_110), detail2, buildZeroDetail(
                 AGG_LICENSEE_CLASS_113));
-        expect(licenseeClassService.getAggregateLicenseeClasses())
+        expect(licenseeClassService.getAggregateLicenseeClasses("AACL"))
             .andReturn(Arrays.asList(AGG_LICENSEE_CLASS_108, AGG_LICENSEE_CLASS_110,
                 AGG_LICENSEE_CLASS_111, AGG_LICENSEE_CLASS_113)).once();
         expect(fundPoolRepository.findDetailsByFundPoolId(FUND_POOL_ID))

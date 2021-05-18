@@ -27,33 +27,38 @@ import java.util.Collections;
  */
 public class AggregateLicenseeClassValidatorTest {
 
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
+
     @Test
     public void testIsValidTrue() {
         ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
-        expect(licenseeClassService.getAggregateLicenseeClasses())
+        expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(buildAggregateLicenseeClass(108))).once();
         replay(licenseeClassService);
-        assertTrue(new AggregateLicenseeClassValidator(licenseeClassService).isValid(buildFundPoolDetail(108)));
+        assertTrue(new AggregateLicenseeClassValidator(licenseeClassService, AACL_PRODUCT_FAMILY).isValid(
+            buildFundPoolDetail(108)));
         verify(licenseeClassService);
     }
 
     @Test
     public void testIsValidFalse() {
         ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
-        expect(licenseeClassService.getAggregateLicenseeClasses())
+        expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(buildAggregateLicenseeClass(108))).once();
         replay(licenseeClassService);
-        assertFalse(new AggregateLicenseeClassValidator(licenseeClassService).isValid(buildFundPoolDetail(666)));
+        assertFalse(new AggregateLicenseeClassValidator(licenseeClassService, AACL_PRODUCT_FAMILY).isValid(
+            buildFundPoolDetail(666)));
         verify(licenseeClassService);
     }
 
     @Test
     public void testGetErrorMessage() {
         ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
-        expect(licenseeClassService.getAggregateLicenseeClasses()).andReturn(Collections.emptyList()).once();
+        expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
+            .andReturn(Collections.emptyList()).once();
         replay(licenseeClassService);
         assertEquals("Aggregate Licensee Class with such ID doesn't exist in the system",
-            new AggregateLicenseeClassValidator(licenseeClassService).getErrorMessage());
+            new AggregateLicenseeClassValidator(licenseeClassService, AACL_PRODUCT_FAMILY).getErrorMessage());
         verify(licenseeClassService);
     }
 

@@ -25,9 +25,10 @@ public class AggregateLicenseeClassValidator implements DistCsvProcessor.IValida
      * Constructor.
      *
      * @param licenseeClassService instance of {@link ILicenseeClassService}
+     * @param productFamily        product family
      */
-    public AggregateLicenseeClassValidator(ILicenseeClassService licenseeClassService) {
-        this.aggregateLicenseeClassIds = licenseeClassService.getAggregateLicenseeClasses().stream()
+    public AggregateLicenseeClassValidator(ILicenseeClassService licenseeClassService, String productFamily) {
+        this.aggregateLicenseeClassIds = licenseeClassService.getAggregateLicenseeClasses(productFamily).stream()
             .map(AggregateLicenseeClass::getId)
             .collect(Collectors.toSet());
     }

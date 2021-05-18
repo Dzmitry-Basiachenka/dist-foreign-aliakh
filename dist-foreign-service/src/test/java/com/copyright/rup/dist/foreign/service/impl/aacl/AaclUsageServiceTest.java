@@ -89,6 +89,7 @@ public class AaclUsageServiceTest {
     private static final String BATCH_ID = "eef46972-c381-4cb6-ab0a-c3e537ba708a";
     private static final String USAGE_ID = "d7d15c9f-39f5-4d51-b72b-48a80f7f5388";
     private static final String FUND_POOL_ID = "9a71a608-d6a5-4783-b6a2-9665d6ba7d45";
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final AggregateLicenseeClass ALC_1 = buildAggregateLicenseeClass(108);
     private static final AggregateLicenseeClass ALC_2 = buildAggregateLicenseeClass(110);
     private static final AggregateLicenseeClass ALC_3 = buildAggregateLicenseeClass(113);
@@ -488,7 +489,7 @@ public class AaclUsageServiceTest {
             buildFundPoolDetail(ALC_3, BigDecimal.ZERO),
             buildFundPoolDetail(ALC_4, BigDecimal.ZERO));
         UsageFilter usageFilter = new UsageFilter();
-        expect(licenseeClassService.getAggregateLicenseeClasses())
+        expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
             .andReturn(Arrays.asList(ALC_1, ALC_2, ALC_3, ALC_4)).once();
         expect(fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
         expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 141)).andReturn(false).once();
@@ -510,7 +511,7 @@ public class AaclUsageServiceTest {
             buildFundPoolDetail(ALC_3, BigDecimal.ZERO),
             buildFundPoolDetail(ALC_4, BigDecimal.TEN));
         UsageFilter usageFilter = new UsageFilter();
-        expect(licenseeClassService.getAggregateLicenseeClasses())
+        expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
             .andReturn(Arrays.asList(ALC_1, ALC_2, ALC_3, ALC_4)).once();
         expect(fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
         expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 141)).andReturn(false).once();
@@ -532,7 +533,7 @@ public class AaclUsageServiceTest {
             buildFundPoolDetail(ALC_3, BigDecimal.ZERO),
             buildFundPoolDetail(ALC_4, BigDecimal.ZERO));
         UsageFilter usageFilter = new UsageFilter();
-        expect(licenseeClassService.getAggregateLicenseeClasses())
+        expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
             .andReturn(Arrays.asList(ALC_1, ALC_2, ALC_3, ALC_4)).once();
         expect(fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
         expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 141)).andReturn(false).once();
@@ -554,7 +555,7 @@ public class AaclUsageServiceTest {
             buildFundPoolDetail(ALC_3, BigDecimal.ZERO),
             buildFundPoolDetail(ALC_4, BigDecimal.TEN));
         UsageFilter usageFilter = new UsageFilter();
-        expect(licenseeClassService.getAggregateLicenseeClasses())
+        expect(licenseeClassService.getAggregateLicenseeClasses(AACL_PRODUCT_FAMILY))
             .andReturn(Arrays.asList(ALC_1, ALC_2, ALC_3, ALC_4)).once();
         expect(fundPoolService.getDetailsByFundPoolId(FUND_POOL_ID)).andReturn(fundPoolDetails).once();
         expect(aaclUsageRepository.usagesExistByDetailLicenseeClassAndFilter(usageFilter, 141)).andReturn(false).once();

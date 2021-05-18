@@ -34,13 +34,15 @@ public class LicenseeClassRepository extends BaseRepository implements ILicensee
     }
 
     @Override
-    public List<AggregateLicenseeClass> findAggregateLicenseeClasses() {
-        return selectList("ILicenseeClassMapper.findAggregateLicenseeClasses");
+    public List<AggregateLicenseeClass> findAggregateLicenseeClassesByProductFamily(String productFamily) {
+        return selectList("ILicenseeClassMapper.findAggregateLicenseeClassesByProductFamily",
+            Objects.requireNonNull(productFamily));
     }
 
     @Override
-    public List<DetailLicenseeClass> findDetailLicenseeClasses() {
-        return selectList("ILicenseeClassMapper.findDetailLicenseeClasses");
+    public List<DetailLicenseeClass> findDetailLicenseeClassesByProductFamily(String productFamily) {
+        return selectList("ILicenseeClassMapper.findDetailLicenseeClassesByProductFamily",
+            Objects.requireNonNull(productFamily));
     }
 
     @Override

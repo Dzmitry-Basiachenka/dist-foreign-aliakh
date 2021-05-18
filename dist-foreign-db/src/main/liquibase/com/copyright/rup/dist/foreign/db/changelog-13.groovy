@@ -242,4 +242,32 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2021-05-19-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment("B-67378 FDA & UDM: Detail/Aggregate licensee mapping: add description column into df_detail_licensee_class table, " +
+                "add product_family and description columns into df_aggregate_licensee_class table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'description', type: 'VARCHAR(256)', remarks: 'The description')
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'description', type: 'VARCHAR(256)', remarks: 'The description')
+            column(name: 'product_family', type: 'VARCHAR(128)', remarks: 'The product family')
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'product_family', value: 'AACL')
+            where "product_family is null"
+        }
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class', columnName: 'product_family',
+                columnDataType: 'VARCHAR(128)')
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class', columnName: 'description')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class', columnName: 'description')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class', columnName: 'product_family')
+        }
+    }
 }
