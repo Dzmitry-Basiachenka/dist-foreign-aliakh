@@ -35,7 +35,7 @@ public interface IChainExecutor<T> {
     void execute(List<T> items, ChainProcessorTypeEnum type);
 
     /**
-     * Executes the given command in a {@link ExecutorService}.
+     * Executes the given command in a {@link java.util.concurrent.ExecutorService}.
      *
      * @param command the runnable task
      */
