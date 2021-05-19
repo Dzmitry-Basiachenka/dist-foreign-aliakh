@@ -83,8 +83,8 @@ public class UdmUsageServiceTest {
         assertEquals(USER_NAME, udmUsages.get(0).getUpdateUser());
         assertEquals(USER_NAME, udmUsages.get(1).getCreateUser());
         assertEquals(USER_NAME, udmUsages.get(1).getUpdateUser());
-        assertEquals(LocalDate.of(2020,6,30), udmUsages.get(0).getPeriodEndDate());
-        assertEquals(LocalDate.of(2020,6,30), udmUsages.get(1).getPeriodEndDate());
+        assertEquals(LocalDate.of(2020, 6, 30), udmUsages.get(0).getPeriodEndDate());
+        assertEquals(LocalDate.of(2020, 6, 30), udmUsages.get(1).getPeriodEndDate());
         assertNotNull(udmBatch.getId());
     }
 
@@ -176,5 +176,15 @@ public class UdmUsageServiceTest {
     @Test
     public void testGetUsageCountEmptyFilter() {
         assertEquals(0, udmUsageRepository.findCountByFilter(new UdmUsageFilter()));
+    }
+
+    @Test
+    public void testUpdateProcessedUsage() {
+        String usageId = "3d1f1d34-c307-42be-99d2-075dbcdb7838";
+        UdmUsage udmUsage = buildUdmUsage(usageId, UDM_USAGE_ORIGIN_UID_1);
+        expect(udmUsageRepository.updateProcessedUsage(udmUsage)).andReturn(usageId).once();
+        replay(udmUsageRepository);
+        udmUsageService.updateProcessedUsage(udmUsage);
+        verify(udmUsageRepository);
     }
 }
