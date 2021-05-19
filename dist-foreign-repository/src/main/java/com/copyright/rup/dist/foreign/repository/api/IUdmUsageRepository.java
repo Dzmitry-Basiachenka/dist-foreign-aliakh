@@ -59,4 +59,12 @@ public interface IUdmUsageRepository {
      * @return list of {@link UdmUsage} with the given id or {@code null} if none exists
      */
     List<UdmUsage> findByIds(List<String> udmUsagesIds);
+
+    /**
+     * Updates given {@link UdmUsage} in case of its version is the same as in database.
+     *
+     * @param udmUsage {@link UdmUsage} to update
+     * @return id of updated record, otherwise {@code null}
+     */
+    String updateProcessedUsage(UdmUsage udmUsage);
 }

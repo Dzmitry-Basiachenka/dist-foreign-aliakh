@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import com.google.common.collect.Sets;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +52,8 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String UDM_USAGE_ORIGINAL_DETAIL_UID = "OGN674GHHSB0025";
     private static final String DETAIL_ID_1 = "cc3269aa-2f56-21c7-b0d1-34dd0edfcf5a";
     private static final String DETAIL_ID_2 = "847dfefd-3cf8-4853-8b1b-d59b5cd163e9";
-    private static final String UDM_USAGE_UID = "acd033da-cba1-4e85-adc9-0bcd00687d9d";
+    private static final String UDM_USAGE_UID_1 = "acd033da-cba1-4e85-adc9-0bcd00687d9d";
+    private static final String UDM_USAGE_UID_2 = "0dfba00c-6d72-4a0e-8f84-f7c365432f85";
     private static final String UDM_BATCH_UID_1 = "aa5751aa-2858-38c6-b0d9-51ec0edfcf4f";
     private static final String UDM_BATCH_UID_2 = "bb5751aa-2f56-38c6-b0d9-45ec0edfcf4a";
     private static final String UDM_BATCH_UID_3 = "4b6055be-fc4e-4b49-aeab-28563366c9fd";
@@ -74,6 +76,8 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final BigDecimal STATISTICAL_MULTIPLIER = new BigDecimal("1.00000");
     // Have to use incorrect ip for testing purposes as PMD disallows hardcoded ips
     private static final String IP_ADDRESS = "ip24.12.119.203";
+    private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
+    private static final String STANDARD_NUMBER = "2192-3558";
 
     @Autowired
     private IUdmUsageRepository udmUsageRepository;
@@ -81,11 +85,11 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     public void testInsert() {
         udmUsageRepository.insert(buildUdmUsage());
-        List<UdmUsage> udmUsages = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID));
+        List<UdmUsage> udmUsages = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID_1));
         assertEquals(1, udmUsages.size());
         UdmUsage udmUsage = udmUsages.get(0);
         assertNotNull(udmUsage);
-        assertEquals(UDM_USAGE_UID, udmUsage.getId());
+        assertEquals(UDM_USAGE_UID_1, udmUsage.getId());
         assertEquals(UDM_BATCH_UID_1, udmUsage.getBatchId());
         assertEquals(UDM_USAGE_ORIGINAL_DETAIL_UID, udmUsage.getOriginalDetailId());
         assertEquals(UsageStatusEnum.NEW, udmUsage.getStatus());
@@ -115,7 +119,7 @@ public class UdmUsageRepositoryIntegrationTest {
         UdmUsage udmUsage = buildUdmUsage();
         List<UdmUsage> expectedUsagesByIds = Collections.singletonList(udmUsage);
         udmUsageRepository.insert(udmUsage);
-        List<UdmUsage> actualUsagesByIds = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID));
+        List<UdmUsage> actualUsagesByIds = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID_1));
         assertEquals(expectedUsagesByIds, actualUsagesByIds);
     }
 
@@ -179,6 +183,26 @@ public class UdmUsageRepositoryIntegrationTest {
     public void testIsOriginalDetailIdExist() {
         assertTrue(udmUsageRepository.isOriginalDetailIdExist("OGN674GHHSB001"));
         assertFalse(udmUsageRepository.isOriginalDetailIdExist("OGN674GHHSB101"));
+    }
+
+    @Test
+    public void testUpdateProcessedUsage() {
+        List<UdmUsage> udmUsages = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID_2));
+        assertEquals(1, CollectionUtils.size(udmUsages));
+        UdmUsage udmUsage = udmUsages.get(0);
+        udmUsage.setStatus(UsageStatusEnum.RH_FOUND);
+        udmUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
+        udmUsage.setWrWrkInst(5697789789L);
+        udmUsage.setSystemTitle("Wissenschaft & Forschung France");
+        udmUsage.setStandardNumber(STANDARD_NUMBER);
+        assertNotNull(udmUsageRepository.updateProcessedUsage(udmUsage));
+        List<UdmUsage> updatedUdmUsages = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID_2));
+        assertEquals(1, CollectionUtils.size(updatedUdmUsages));
+        UdmUsage updatedUdmUsage = updatedUdmUsages.get(0);
+        assertEquals(RH_ACCOUNT_NUMBER, updatedUdmUsage.getRightsholder().getAccountNumber());
+        assertEquals(UsageStatusEnum.RH_FOUND, updatedUdmUsage.getStatus());
+        assertEquals(STANDARD_NUMBER, updatedUdmUsage.getStandardNumber());
+        assertEquals("Wissenschaft & Forschung France", updatedUdmUsage.getSystemTitle());
     }
 
     private void assertSortingFindDtosByFilter(String detailIdAsc, String detailIdDesc, String sortProperty) {
@@ -265,7 +289,7 @@ public class UdmUsageRepositoryIntegrationTest {
 
     private UdmUsage buildUdmUsage() {
         UdmUsage udmUsage = new UdmUsage();
-        udmUsage.setId(UDM_USAGE_UID);
+        udmUsage.setId(UDM_USAGE_UID_1);
         udmUsage.setBatchId(UDM_BATCH_UID_1);
         udmUsage.setOriginalDetailId(UDM_USAGE_ORIGINAL_DETAIL_UID);
         udmUsage.setStatus(UsageStatusEnum.NEW);

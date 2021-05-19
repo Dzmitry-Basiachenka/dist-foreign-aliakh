@@ -365,4 +365,18 @@
             </foreach>
         order by original_detail_id
     </select>
+
+    <select id="updateProcessedUsage"  resultType="string">
+        update ${schema}.df_udm_usage
+        set
+            rh_account_number = #{rightsholder.accountNumber},
+            wr_wrk_inst = #{wrWrkInst},
+            system_title = #{systemTitle},
+            status_ind = #{status},
+            standard_number = #{standardNumber},
+            <include refid="StoredEntityMapper.update"/>
+        where df_udm_usage_uid = #{id}
+        and record_version = #{version}
+        returning df_udm_usage_uid
+    </select>
 </mapper>

@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
+import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IUdmUsageService}.
@@ -71,6 +73,15 @@ public class UdmUsageService implements IUdmUsageService {
     @Override
     public int getUsagesCount(UdmUsageFilter filter) {
         return !filter.isEmpty() ? udmUsageRepository.findCountByFilter(filter) : 0;
+    }
+
+    @Override
+    public void updateProcessedUsage(UdmUsage udmUsage) {
+        String usageId = udmUsageRepository.updateProcessedUsage(udmUsage);
+        if (Objects.isNull(usageId)) {
+            throw new InconsistentUsageStateException(udmUsage);
+        }
+        udmUsage.setVersion(udmUsage.getVersion() + 1);
     }
 
     private LocalDate createPeriodEndDate(UdmBatch udmBatch) {

@@ -53,4 +53,13 @@ public interface IUdmUsageService {
      * @return count of usages
      */
     int getUsagesCount(UdmUsageFilter filter);
+
+    /**
+     * Updates {@link UdmUsage} and verifies that version of {@link UdmUsage} is the same as in database.
+     * Throws an {@link com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException} in case of
+     * there are {@link UdmUsage} version discrepancies.
+     *
+     * @param usage {@link UdmUsage} to update
+     */
+    void updateProcessedUsage(UdmUsage usage);
 }

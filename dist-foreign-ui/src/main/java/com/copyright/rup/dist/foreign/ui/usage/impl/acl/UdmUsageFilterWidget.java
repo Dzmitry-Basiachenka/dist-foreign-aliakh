@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFilterWidget {
 
     private static final Set<UsageStatusEnum> ACL_STATUSES = ImmutableSet.of(UsageStatusEnum.NEW,
-        UsageStatusEnum.INELIGIBLE);
+        UsageStatusEnum.INELIGIBLE, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND);
 
     private Button applyButton;
     private UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
