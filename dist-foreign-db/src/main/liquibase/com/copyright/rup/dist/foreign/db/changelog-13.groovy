@@ -661,4 +661,146 @@ databaseChangeLog {
                     "or detail_licensee_class_id in (31, 32, 34, 35, 36, 39, 41, 42, 43, 93, 94, 95, 97, 98, 99, 100)")
         }
     }
+
+    changeSet(id: '2021-05-19-03', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
+        comment("B-67105 FDA & UDM: UDM TOU Mapping: create df_udm_tou_mapping table")
+
+        createTable(tableName: 'df_udm_tou_mapping', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing UDM type of uses for mapping') {
+
+            column(name: 'df_udm_tou_mapping_uid', type: 'VARCHAR(255)', remarks: 'The UDM type of use identifier') {
+                constraints(nullable: false)
+            }
+            column(name: 'type_of_use', type: 'VARCHAR(100)', remarks: 'Type of use') {
+                constraints(nullable: false)
+            }
+            column(name: 'description', type: 'VARCHAR(250)', remarks: 'The type of use description') {
+                constraints(nullable: false)
+            }
+            column(name: 'rms_type_of_use', type: 'VARCHAR(128)', remarks: 'RMS type of use') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_udm_tou_mapping',
+                columnNames: 'df_udm_tou_mapping_uid',
+                constraintName: 'pk_df_udm_tou_mapping_uid')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: '659dd6d1-e8ee-40c8-bdc9-bce8f6b48a65')
+            column(name: 'type_of_use', value: 'COPY_FOR_MYSELF')
+            column(name: 'description', value: 'Keep copy for myself')
+            column(name: 'rms_type_of_use', value: 'DIGITAL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: '79157ac9-888a-4482-a1a4-fcce50bd29c2')
+            column(name: 'type_of_use', value: 'EMAIL_COPY')
+            column(name: 'description', value: 'Email a copy to my co-workers')
+            column(name: 'rms_type_of_use', value: 'DIGITAL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: '9f349b46-0c8d-4b67-aa10-9e08098444e4')
+            column(name: 'type_of_use', value: 'PRINT_COPIES')
+            column(name: 'description', value: 'Print copies and share with co-workers')
+            column(name: 'rms_type_of_use', value: 'PRINT')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: '42d8991c-91ef-415b-ab40-ac1eda84ef71')
+            column(name: 'type_of_use', value: 'DISPLAY_IN_POWERPOINT')
+            column(name: 'description', value: 'Display in a PowerPoint presentation to co-workers')
+            column(name: 'rms_type_of_use', value: 'DIGITAL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: 'cfd6a47b-73ab-4b05-a96f-1bdc7ea209b3')
+            column(name: 'type_of_use', value: 'DISTRIBUTE_IN_POWERPOINT')
+            column(name: 'description', value: 'Distribute in a PowerPoint presentation to co-workers')
+            column(name: 'rms_type_of_use', value: 'DIGITAL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: '709bd060-e47f-4f01-b1ea-96ccff03ddb7')
+            column(name: 'type_of_use', value: 'FAX_PHOTOCOPIES')
+            column(name: 'description', value: 'FAX photocopies to co-workers')
+            column(name: 'rms_type_of_use', value: 'PRINT')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: '5e777a3c-bba8-4465-b6e0-f5079eebc6fc')
+            column(name: 'type_of_use', value: 'PHOTOCOPY_SHARING_OTHER')
+            column(name: 'description', value: 'Other')
+            column(name: 'rms_type_of_use', value: 'PRINT')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: 'af2fed07-75eb-4339-be0c-bea9549c7f1f')
+            column(name: 'type_of_use', value: 'SHARE_PHOTOCOPIES')
+            column(name: 'description', value: 'Share photocopies with co-workers')
+            column(name: 'rms_type_of_use', value: 'PRINT')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: '8ca7ff4b-d5e5-4ac0-8150-f070493c6a30')
+            column(name: 'type_of_use', value: 'SHARE_SINGLE_ELECTRONIC_COPY')
+            column(name: 'description', value: 'Share single electronic copies with clients, prospects or customers of my organization, in response to a specific request, for information purposes')
+            column(name: 'rms_type_of_use', value: 'DIGITAL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: 'd81ad8d2-384a-4ad4-bac8-bce1f4949601')
+            column(name: 'type_of_use', value: 'STORE_COPY')
+            column(name: 'description', value: 'Store a copy on an internal shared network')
+            column(name: 'rms_type_of_use', value: 'DIGITAL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: '06a10ea4-5503-4f7a-b31e-5bc5839f8cc0')
+            column(name: 'type_of_use', value: 'SUBMIT_ELECTRONIC_COPY')
+            column(name: 'description', value: 'Submit an electronic copy to regulatory authorities')
+            column(name: 'rms_type_of_use', value: 'DIGITAL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: 'd0191236-75f1-46dc-adc1-4cd08395465b')
+            column(name: 'type_of_use', value: 'SUBMIT_PHOTOCOPY')
+            column(name: 'description', value: 'Submit a photocopy to regulatory authorities')
+            column(name: 'rms_type_of_use', value: 'PRINT')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_tou_mapping') {
+            column(name: 'df_udm_tou_mapping_uid', value: 'bc4d8020-657e-4427-9cda-dbbbfeba0f9d')
+            column(name: 'type_of_use', value: 'DIGITAL_SHARING_OTHER')
+            column(name: 'description', value: 'Other')
+            column(name: 'rms_type_of_use', value: 'DIGITAL')
+        }
+
+        rollback {
+            dropTable(tableName: 'df_udm_tou_mapping', schemaName: dbAppsSchema)
+        }
+    }
 }
