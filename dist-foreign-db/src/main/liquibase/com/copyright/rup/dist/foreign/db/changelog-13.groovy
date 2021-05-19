@@ -270,4 +270,395 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class', columnName: 'product_family')
         }
     }
+
+    changeSet(id: '2021-05-19-01', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment("B-67378 FDA & UDM: Detail/Aggregate licensee mapping: add ACL aggregate licensee classes into df_aggregate_licensee_class table")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 1)
+            column(name: 'description', value: 'Food and Tobacco')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 12)
+            column(name: 'description', value: 'Machinery')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 13)
+            column(name: 'description', value: 'Computers')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 18)
+            column(name: 'description', value: 'Aircraft and Aerospace')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 23)
+            column(name: 'description', value: 'Electric and Gas Utilities')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 25)
+            column(name: 'description', value: 'Business Services')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 26)
+            column(name: 'description', value: 'Law Firms')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 28)
+            column(name: 'description', value: 'Wholesale & Retail Trade')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 29)
+            column(name: 'description', value: 'Consumer Services')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 39)
+            column(name: 'description', value: 'Government')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 51)
+            column(name: 'description', value: 'Materials')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 52)
+            column(name: 'description', value: 'Medical')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 53)
+            column(name: 'description', value: 'Metals')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 54)
+            column(name: 'description', value: 'Electronics')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 55)
+            column(name: 'description', value: 'Transportation')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 56)
+            column(name: 'description', value: 'Financial')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 57)
+            column(name: 'description', value: 'Communications')
+            column(name: 'product_family', value: 'ACL')
+        }
+
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+                where "product_family = 'ACL'"
+            }
+        }
+    }
+
+    changeSet(id: '2021-05-19-02', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment("B-67378 FDA & UDM: Detail/Aggregate licensee mapping: add ACL detail licensee classes into df_detail_licensee_class table")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 1)
+            column(name: 'description', value: 'Food and Tobacco')
+            column(name: 'aggregate_licensee_class_id', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 2)
+            column(name: 'description', value: 'Textiles, Apparel, etc.')
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 3)
+            column(name: 'description', value: 'Lumber, Paper, etc.')
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 4)
+            column(name: 'description', value: 'Publishing')
+            column(name: 'aggregate_licensee_class_id', value: 57)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 5)
+            column(name: 'description', value: 'Chemicals')
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 6)
+            column(name: 'description', value: 'Health Care & Pharm')
+            column(name: 'aggregate_licensee_class_id', value: 52)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 7)
+            column(name: 'description', value: 'Fuels')
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 8)
+            column(name: 'description', value: 'Rubber Products')
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 9)
+            column(name: 'description', value: 'Stone, Clay and Glass')
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 10)
+            column(name: 'description', value: 'Primary Metals')
+            column(name: 'aggregate_licensee_class_id', value: 53)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 11)
+            column(name: 'description', value: 'Fabricated Metal Products')
+            column(name: 'aggregate_licensee_class_id', value: 53)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 12)
+            column(name: 'description', value: 'Machinery')
+            column(name: 'aggregate_licensee_class_id', value: 12)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 13)
+            column(name: 'description', value: 'Computers')
+            column(name: 'aggregate_licensee_class_id', value: 13)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 14)
+            column(name: 'description', value: 'Radio, TV, Commun Equip')
+            column(name: 'aggregate_licensee_class_id', value: 54)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 15)
+            column(name: 'description', value: 'Electronic Components')
+            column(name: 'aggregate_licensee_class_id', value: 54)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 16)
+            column(name: 'description', value: 'Electric/Electronic Equip')
+            column(name: 'aggregate_licensee_class_id', value: 54)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 17)
+            column(name: 'description', value: 'Transportation Equipment')
+            column(name: 'aggregate_licensee_class_id', value: 55)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 18)
+            column(name: 'description', value: 'Aircraft and Aerospace')
+            column(name: 'aggregate_licensee_class_id', value: 18)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 19)
+            column(name: 'description', value: 'Scientific Instruments')
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 20)
+            column(name: 'description', value: 'Misc. Manufacturing NEC')
+            column(name: 'aggregate_licensee_class_id', value: 54)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 21)
+            column(name: 'description', value: 'Telecommunications Services')
+            column(name: 'aggregate_licensee_class_id', value: 57)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 22)
+            column(name: 'description', value: 'Banks/Ins/RE/Holding Cos')
+            column(name: 'aggregate_licensee_class_id', value: 56)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 23)
+            column(name: 'description', value: 'Electric and Gas Utilities')
+            column(name: 'aggregate_licensee_class_id', value: 23)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 24)
+            column(name: 'description', value: 'Doctors Offices/Genl Hosp')
+            column(name: 'aggregate_licensee_class_id', value: 52)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 25)
+            column(name: 'description', value: 'Business Services')
+            column(name: 'aggregate_licensee_class_id', value: 25)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 26)
+            column(name: 'description', value: 'Law Firms')
+            column(name: 'aggregate_licensee_class_id', value: 26)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 27)
+            column(name: 'description', value: 'Transportation Services')
+            column(name: 'aggregate_licensee_class_id', value: 55)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 28)
+            column(name: 'description', value: 'Wholesale & Retail Trade')
+            column(name: 'aggregate_licensee_class_id', value: 28)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 29)
+            column(name: 'description', value: 'Consumer Services')
+            column(name: 'aggregate_licensee_class_id', value: 29)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 31)
+            column(name: 'description', value: 'Fishing/Hunting/Trapping')
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 32)
+            column(name: 'description', value: 'Agriculture/Forestry/Fishing')
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 34)
+            column(name: 'description', value: 'Construction')
+            column(name: 'aggregate_licensee_class_id', value: 56)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 35)
+            column(name: 'description', value: 'Software & Systems Design')
+            column(name: 'aggregate_licensee_class_id', value: 13)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 36)
+            column(name: 'description', value: 'Consulting & Research')
+            column(name: 'aggregate_licensee_class_id', value: 52)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 39)
+            column(name: 'description', value: 'Government')
+            column(name: 'aggregate_licensee_class_id', value: 39)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 41)
+            column(name: 'description', value: 'Govt - Legal & Health')
+            column(name: 'aggregate_licensee_class_id', value: 39)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 42)
+            column(name: 'description', value: 'Govt-Admin,Legislative,Environ')
+            column(name: 'aggregate_licensee_class_id', value: 39)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 43)
+            column(name: 'description', value: 'Other - Govt')
+            column(name: 'aggregate_licensee_class_id', value: 39)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 93)
+            column(name: 'description', value: 'Membership Organizations')
+            column(name: 'aggregate_licensee_class_id', value: 25)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 94)
+            column(name: 'description', value: 'Lumber, Paper, Allied Products')
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 95)
+            column(name: 'description', value: 'Electronic & Electric Equip')
+            column(name: 'aggregate_licensee_class_id', value: 54)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 97)
+            column(name: 'description', value: 'Security and Commodity Brokers')
+            column(name: 'aggregate_licensee_class_id', value: 56)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 98)
+            column(name: 'description', value: 'Other Health Services')
+            column(name: 'aggregate_licensee_class_id', value: 52)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 99)
+            column(name: 'description', value: 'Specialty Hospitals')
+            column(name: 'aggregate_licensee_class_id', value: 52)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 100)
+            column(name: 'description', value: 'Generic Pharmaceuticals')
+            column(name: 'aggregate_licensee_class_id', value: 52)
+        }
+
+        rollback {
+            sql("delete from ${dbAppsSchema}.df_detail_licensee_class where (detail_licensee_class_id >=1 and detail_licensee_class_id <=29) " +
+                    "or detail_licensee_class_id in (31, 32, 34, 35, 36, 39, 41, 42, 43, 93, 94, 95, 97, 98, 99, 100)")
+        }
+    }
 }
