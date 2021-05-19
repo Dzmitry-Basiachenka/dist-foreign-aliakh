@@ -5,6 +5,8 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
@@ -15,12 +17,15 @@ import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
 import com.copyright.rup.dist.foreign.service.impl.chain.processor.AbstractUsageChainChunkProcessor;
 
+import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Verifies {@link UsageChainChunkExecutor}.
@@ -55,7 +60,28 @@ public class UsageChainChunkExecutorTest {
         Whitebox.setInternalState(executor, "aaclProcessor", aaclProcessor);
         Whitebox.setInternalState(executor, "salProcessor", salProcessor);
         Whitebox.setInternalState(executor, "chunkSize", 1);
-        executor.init();
+        executor.postConstruct();
+    }
+
+    @Test
+    public void testGetProductFamilyFunction() {
+        assertEquals("FAS2", executor.getProductFamilyFunction().apply(buildUsage("FAS2")));
+        assertEquals("SAL", executor.getProductFamilyFunction().apply(buildUsage("SAL")));
+        assertEquals("NTS", executor.getProductFamilyFunction().apply(buildUsage("NTS")));
+        assertEquals(StringUtils.EMPTY, executor.getProductFamilyFunction().apply(buildUsage(StringUtils.EMPTY)));
+        assertNull(executor.getProductFamilyFunction().apply(buildUsage(null)));
+    }
+
+    @Test
+    public void testGetProductFamilyToProcessorMap() {
+        Map<String, IChainProcessor<List<Usage>>> expectedProductFamilyToProcessorMap =
+            ImmutableMap.of("FAS", fasProcessor, "FAS2", fasProcessor, "NTS", ntsProcessor, "AACL", aaclProcessor,
+                "SAL", salProcessor);
+        Map<String, IChainProcessor<List<Usage>>> actualProductFamilyToProcessorMap =
+            executor.getProductFamilyToProcessorMap();
+        expectedProductFamilyToProcessorMap.entrySet().forEach((entry) -> {
+            assertTrue(actualProductFamilyToProcessorMap.entrySet().contains(entry));
+        });
     }
 
     @Test
@@ -98,7 +124,7 @@ public class UsageChainChunkExecutorTest {
 
     @Test
     public void testExecuteProcessor() {
-        List<Usage> usages = buildUsages();
+        List<Usage> usages = Collections.singletonList(buildUsage("FAS"));
         expect(fasProcessor.getChainProcessorType())
             .andReturn(ChainProcessorTypeEnum.RIGHTS)
             .once();
@@ -117,11 +143,11 @@ public class UsageChainChunkExecutorTest {
         verify(fasProcessor, ntsProcessor, fasEligibilityProcessor, aaclProcessor);
     }
 
-    private List<Usage> buildUsages() {
+    private Usage buildUsage(String productFamily) {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
-        usage.setProductFamily("FAS");
-        return Collections.singletonList(usage);
+        usage.setProductFamily(productFamily);
+        return usage;
     }
 
     private static class MockProcessor extends AbstractUsageChainChunkProcessor implements IUsageJobProcessor {
