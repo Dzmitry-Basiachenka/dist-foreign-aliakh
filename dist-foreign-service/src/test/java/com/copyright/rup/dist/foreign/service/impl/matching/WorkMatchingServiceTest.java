@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -18,6 +19,7 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,11 +41,13 @@ public class WorkMatchingServiceTest {
     private static final String STANDARD_NUMBER = "000043122-1";
     private static final String TITLE = "The theological roots of Pentecostalism";
     private static final String VALISSN = "VALISSN";
+    private static final String VALISBN10 = "VALISBN10";
     private IPiIntegrationService piIntegrationService;
     private WorkMatchingService workMatchingService;
     private IUsageRepository usageRepository;
     private IUsageAuditService auditService;
     private IUsageService usageService;
+    private IUdmUsageService udmUsageService;
 
     @Before
     public void setUp() {
@@ -51,17 +55,19 @@ public class WorkMatchingServiceTest {
         piIntegrationService = createMock(IPiIntegrationService.class);
         usageRepository = createMock(IUsageRepository.class);
         usageService = createMock(IUsageService.class);
+        udmUsageService = createMock(IUdmUsageService.class);
         auditService = createMock(IUsageAuditService.class);
         Whitebox.setInternalState(workMatchingService, piIntegrationService);
         Whitebox.setInternalState(workMatchingService, usageRepository);
         Whitebox.setInternalState(workMatchingService, auditService);
         Whitebox.setInternalState(workMatchingService, usageService);
+        Whitebox.setInternalState(workMatchingService, udmUsageService);
     }
 
     @Test
     public void testMatchByStandardNumber() {
         Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
-        Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, "valisbn10");
+        Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, VALISBN10);
         expect(piIntegrationService.findWorkByStandardNumber(STANDARD_NUMBER)).andReturn(work).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
@@ -71,7 +77,7 @@ public class WorkMatchingServiceTest {
         replay(piIntegrationService, usageRepository, auditService, usageService);
         workMatchingService.matchByStandardNumber(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
-        assertEquals("VALISBN10", usage.getStandardNumberType());
+        assertEquals(VALISBN10, usage.getStandardNumberType());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         verify(piIntegrationService, usageRepository, auditService, usageService);
@@ -80,7 +86,7 @@ public class WorkMatchingServiceTest {
     @Test
     public void testMatchStandardNumberByHostIdno() {
         Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
-        Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, "valisbn10");
+        Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, VALISBN10);
         work.setHostIdnoFlag(true);
         expect(piIntegrationService.findWorkByStandardNumber(STANDARD_NUMBER)).andReturn(work).once();
         usageService.updateProcessedUsage(usage);
@@ -91,7 +97,7 @@ public class WorkMatchingServiceTest {
         replay(piIntegrationService, usageRepository, auditService, usageService);
         workMatchingService.matchByStandardNumber(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
-        assertEquals("VALISBN10", usage.getStandardNumberType());
+        assertEquals(VALISBN10, usage.getStandardNumberType());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         verify(piIntegrationService, usageRepository, auditService, usageService);
@@ -118,6 +124,21 @@ public class WorkMatchingServiceTest {
         assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
         assertEquals("FAS", usage.getProductFamily());
         verify(piIntegrationService, usageRepository, auditService);
+    }
+
+    @Test
+    public void testMatchByStandardNumberForUdm() {
+        UdmUsage usage = buildUdmUsage(STANDARD_NUMBER, TITLE);
+        Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, VALISBN10);
+        expect(piIntegrationService.findWorkByStandardNumber(STANDARD_NUMBER)).andReturn(work).once();
+        udmUsageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService);
+        workMatchingService.matchByStandardNumber(usage);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        verify(piIntegrationService, udmUsageService);
     }
 
     @Test
@@ -157,6 +178,21 @@ public class WorkMatchingServiceTest {
         assertEquals(VALISSN, usage.getStandardNumberType());
         assertEquals("00485772", usage.getStandardNumber());
         verify(piIntegrationService, usageRepository, auditService);
+    }
+
+    @Test
+    public void testMatchByTitleForUdm() {
+        UdmUsage usage = buildUdmUsage(STANDARD_NUMBER, TITLE);
+        Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, VALISBN10);
+        expect(piIntegrationService.findWorkByTitle(TITLE)).andReturn(work).once();
+        udmUsageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService);
+        workMatchingService.matchByTitle(usage);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        verify(piIntegrationService, udmUsageService);
     }
 
     @Test
@@ -200,6 +236,14 @@ public class WorkMatchingServiceTest {
     private Usage buildUsage(Long wrWrkInst) {
         Usage usage = buildUsage(null, null);
         usage.setWrWrkInst(wrWrkInst);
+        return usage;
+    }
+
+    private UdmUsage buildUdmUsage(String standardNumber, String title) {
+        UdmUsage usage = new UdmUsage();
+        usage.setId(RupPersistUtils.generateUuid());
+        usage.setStandardNumber(standardNumber);
+        usage.setReportedTitle(title);
         return usage;
     }
 

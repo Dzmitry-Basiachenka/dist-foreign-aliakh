@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
 /**
@@ -21,11 +22,25 @@ public interface IWorkMatchingService {
     void matchByStandardNumber(Usage usage);
 
     /**
+     * Finds Wr Wrk Inst for given UDM usage and matches result by standard number.
+     *
+     * @param usage {@link UdmUsage} to be matched
+     */
+    void matchByStandardNumber(UdmUsage usage);
+
+    /**
      * Finds Wr Wrk Inst for given usage and matches result by work title.
      *
      * @param usage {@link Usage} to be matched
      */
     void matchByTitle(Usage usage);
+
+    /**
+     * Finds Wr Wrk Inst for given UDM usage and matches result by reported title.
+     *
+     * @param usage {@link Usage} to be matched
+     */
+    void matchByTitle(UdmUsage usage);
 
     /**
      * Matches usage by Wr Wrk Inst.
