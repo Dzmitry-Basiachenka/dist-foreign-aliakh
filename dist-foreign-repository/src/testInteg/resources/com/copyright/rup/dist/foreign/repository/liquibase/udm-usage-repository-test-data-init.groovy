@@ -139,7 +139,6 @@ databaseChangeLog {
             column(name: 'reported_type_of_use', value: 'PHOTOCOPY')
             column(name: 'annualized_copies', value: '4')
             column(name: 'quantity', value: '3')
-            column(name: 'ineligible_reason', value: 'work not found')
             column(name: 'updated_by_user', value: 'system@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -9,6 +10,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,8 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Autowired
     private IUsageService usageService;
     @Autowired
+    private IUdmUsageService udmUsageService;
+    @Autowired
     private IUsageAuditService auditService;
 
     @Override
@@ -65,6 +69,16 @@ public class WorkMatchingService implements IWorkMatchingService {
 
     @Override
     @Transactional
+    public void matchByStandardNumber(UdmUsage usage) {
+        doMatchByStandardNumber(usage);
+        if (UsageStatusEnum.WORK_FOUND != usage.getStatus()) {
+            usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
+        }
+        udmUsageService.updateProcessedUsage(usage);
+    }
+
+    @Override
+    @Transactional
     public void matchByTitle(Usage usage) {
         Work work = doMatchByTitle(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
@@ -82,6 +96,16 @@ public class WorkMatchingService implements IWorkMatchingService {
             updateUsagesStatusAndWriteAudit(usage, work, UsageGroupEnum.TITLE,
                 usageRepository.getTotalAmountByTitleAndBatchId(usage.getWorkTitle(), usage.getBatchId()));
         }
+    }
+
+    @Override
+    @Transactional
+    public void matchByTitle(UdmUsage usage) {
+        doMatchByTitle(usage);
+        if (UsageStatusEnum.WORK_FOUND != usage.getStatus()) {
+            usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
+        }
+        udmUsageService.updateProcessedUsage(usage);
     }
 
     @Override
@@ -121,6 +145,16 @@ public class WorkMatchingService implements IWorkMatchingService {
         return work;
     }
 
+    private void doMatchByTitle(UdmUsage usage) {
+        Work work = piIntegrationService.findWorkByTitle(usage.getReportedTitle());
+        if (Objects.nonNull(work.getWrWrkInst())) {
+            usage.setWrWrkInst(work.getWrWrkInst());
+            usage.setSystemTitle(work.getMainTitle());
+            usage.setStatus(UsageStatusEnum.WORK_FOUND);
+            usage.setStandardNumber(work.getMainIdno());
+        }
+    }
+
     private Work doMatchByStandardNumber(Usage usage) {
         Work work = piIntegrationService.findWorkByStandardNumber(usage.getStandardNumber());
         if (Objects.nonNull(work.getWrWrkInst())) {
@@ -134,6 +168,19 @@ public class WorkMatchingService implements IWorkMatchingService {
             usage.setStandardNumberType(StringUtils.upperCase(work.getMainIdnoType()));
         }
         return work;
+    }
+
+    private void doMatchByStandardNumber(UdmUsage usage) {
+        Work work = piIntegrationService.findWorkByStandardNumber(usage.getStandardNumber());
+        if (Objects.nonNull(work.getWrWrkInst())) {
+            usage.setWrWrkInst(work.getWrWrkInst());
+            if (Objects.isNull(usage.getReportedTitle())) {
+                usage.setReportedTitle(work.getMainTitle());
+            }
+            usage.setSystemTitle(work.getMainTitle());
+            usage.setStatus(UsageStatusEnum.WORK_FOUND);
+            usage.setStandardNumber(work.getMainIdno());
+        }
     }
 
     private void updateUsagesStatusAndWriteAudit(Usage usage, Work work, UsageGroupEnum usageGroup,
