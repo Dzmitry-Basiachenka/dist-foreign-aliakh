@@ -233,8 +233,29 @@ public class WorkMatchingServiceTest {
         verify(piIntegrationService, usageRepository, auditService);
     }
 
+    @Test
+    public void testMatchByWrWrkInstForUdm() {
+        UdmUsage usage = buildUdmUsage(112930820L);
+        Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, VALISBN10);
+        expect(piIntegrationService.findWorkByWrWrkInst(112930820L)).andReturn(work).once();
+        udmUsageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService);
+        workMatchingService.matchByWrWrkInst(usage);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        verify(piIntegrationService, udmUsageService);
+    }
+
     private Usage buildUsage(Long wrWrkInst) {
         Usage usage = buildUsage(null, null);
+        usage.setWrWrkInst(wrWrkInst);
+        return usage;
+    }
+
+    private UdmUsage buildUdmUsage(Long wrWrkInst) {
+        UdmUsage usage = buildUdmUsage(null, null);
         usage.setWrWrkInst(wrWrkInst);
         return usage;
     }
@@ -242,7 +263,7 @@ public class WorkMatchingServiceTest {
     private UdmUsage buildUdmUsage(String standardNumber, String title) {
         UdmUsage usage = new UdmUsage();
         usage.setId(RupPersistUtils.generateUuid());
-        usage.setStandardNumber(standardNumber);
+        usage.setReportedStandardNumber(standardNumber);
         usage.setReportedTitle(title);
         return usage;
     }

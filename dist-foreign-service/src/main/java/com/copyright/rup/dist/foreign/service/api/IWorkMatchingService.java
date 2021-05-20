@@ -50,6 +50,13 @@ public interface IWorkMatchingService {
     void matchByWrWrkInst(Usage usage);
 
     /**
+     * Matches UDM usage by Wr Wrk Inst.
+     *
+     * @param usage {@link UdmUsage} to be matched
+     */
+    void matchByWrWrkInst(UdmUsage usage);
+
+    /**
      * Updates {@link Usage} status and Wr Wrk Inst.
      *
      * @param usage {@link Usage} to update
