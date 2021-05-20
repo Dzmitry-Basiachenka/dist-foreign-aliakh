@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 
+import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.google.common.collect.ImmutableBiMap;
 
 import org.junit.Before;
@@ -28,7 +29,8 @@ public class TelesalesServiceTest {
 
     private static final String TELESALES_URL =
         "http://localhost:8080/legacy-integration-rest/getSalesInfoByCompanyCode?companycode={licenseeAccountNumber}";
-    private static final long ACCOUNT_NUMBER = 7001413934L;
+    private static final String COMPANY_NAME = "Albany International Corp.";
+    private static final long COMPANY_ID = 1136L;
 
     private TelesalesService telesalesService;
     private RestTemplate restTemplate;
@@ -45,11 +47,30 @@ public class TelesalesServiceTest {
     public void testGetLicenseeName() {
         expect(
             restTemplate.getForObject(
-                TELESALES_URL, String.class, ImmutableBiMap.of("licenseeAccountNumber", ACCOUNT_NUMBER)))
+                TELESALES_URL, String.class, ImmutableBiMap.of("companyCode", COMPANY_ID)))
             .andReturn(TestUtils.fileToString(this.getClass(), "sales_data_response.json"))
             .once();
         replay(restTemplate);
-        assertEquals("Coors Brewing Company", telesalesService.getLicenseeName(ACCOUNT_NUMBER));
+        assertEquals(COMPANY_NAME, telesalesService.getLicenseeName(COMPANY_ID));
+        verify(restTemplate);
+    }
+
+    @Test
+    public void testGetCompanyInformation() {
+        CompanyInformation companyInformation = new CompanyInformation();
+        companyInformation.setId(COMPANY_ID);
+        companyInformation.setName(COMPANY_NAME);
+        companyInformation.setDetailedLicenseeClassId(2);
+        expect(
+            restTemplate.getForObject(
+                TELESALES_URL, String.class, ImmutableBiMap.of("companyCode", COMPANY_ID)))
+            .andReturn(TestUtils.fileToString(this.getClass(), "sales_data_response.json"))
+            .once();
+        replay(restTemplate);
+        CompanyInformation actualCompanyInformation = telesalesService.getCompanyInformation(COMPANY_ID);
+        assertEquals(Long.valueOf(1136), actualCompanyInformation.getId());
+        assertEquals(COMPANY_NAME, actualCompanyInformation.getName());
+        assertEquals(Integer.valueOf(2), actualCompanyInformation.getDetailedLicenseeClassId());
         verify(restTemplate);
     }
 }
