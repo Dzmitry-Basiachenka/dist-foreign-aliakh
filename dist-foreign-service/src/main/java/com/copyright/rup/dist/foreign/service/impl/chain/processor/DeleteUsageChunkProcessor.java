@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
- * Implementation of {@link AbstractUsageChainChunkProcessor} to delete {@link Usage}s.
+ * Implementation of {@link AbstractChainChunkProcessor} to delete {@link Usage}s.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -24,7 +24,7 @@ import java.util.List;
  * @author Pavel Liakh
  * @author Aliaksandr Liakh
  */
-public class DeleteUsageChunkProcessor extends AbstractUsageChainChunkProcessor {
+public class DeleteUsageChunkProcessor extends AbstractChainChunkProcessor<Usage> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 

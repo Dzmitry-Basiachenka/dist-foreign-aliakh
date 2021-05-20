@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
@@ -66,5 +67,10 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     @Override
     public String updateProcessedUsage(UdmUsage udmUsage) {
         return selectOne("IUdmUsageMapper.updateProcessedUsage", Objects.requireNonNull(udmUsage));
+    }
+
+    @Override
+    public List<String> findIdsByStatus(UsageStatusEnum status) {
+        return selectList("IUdmUsageMapper.findIdsByStatus", Objects.requireNonNull(status));
     }
 }

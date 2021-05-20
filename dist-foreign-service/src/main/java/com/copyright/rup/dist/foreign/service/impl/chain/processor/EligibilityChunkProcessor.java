@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Implementation of {@link AbstractUsageChainChunkProcessor} to make {@link Usage} eligible.
+ * Implementation of {@link AbstractChainChunkProcessor} to make {@link Usage} eligible.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * @author Uladzislau Shalamitski
  * @author Aliaksandr Liakh
  */
-public class EligibilityChunkProcessor extends AbstractUsageChainChunkProcessor {
+public class EligibilityChunkProcessor extends AbstractChainChunkProcessor<Usage> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 

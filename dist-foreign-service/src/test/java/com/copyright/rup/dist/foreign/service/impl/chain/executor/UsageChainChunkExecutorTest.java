@@ -15,7 +15,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
-import com.copyright.rup.dist.foreign.service.impl.chain.processor.AbstractUsageChainChunkProcessor;
+import com.copyright.rup.dist.foreign.service.impl.chain.processor.AbstractChainChunkProcessor;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
@@ -150,7 +150,7 @@ public class UsageChainChunkExecutorTest {
         return usage;
     }
 
-    private static class MockProcessor extends AbstractUsageChainChunkProcessor implements IUsageJobProcessor {
+    private static class MockProcessor extends AbstractChainChunkProcessor<Usage> implements IUsageJobProcessor {
 
         private final JobInfo jobInfo;
         private final ChainProcessorTypeEnum chainProcessorType;

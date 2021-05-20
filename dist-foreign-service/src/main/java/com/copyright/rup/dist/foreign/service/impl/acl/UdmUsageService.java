@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
@@ -82,6 +83,16 @@ public class UdmUsageService implements IUdmUsageService {
             throw new InconsistentUsageStateException(udmUsage);
         }
         udmUsage.setVersion(udmUsage.getVersion() + 1);
+    }
+
+    @Override
+    public List<String> getUdmUsageIdsByStatus(UsageStatusEnum status) {
+        return udmUsageRepository.findIdsByStatus(status);
+    }
+
+    @Override
+    public List<UdmUsage> getUdmUsagesByIds(List<String> udmUsageIds) {
+        return udmUsageRepository.findByIds(udmUsageIds);
     }
 
     private LocalDate createPeriodEndDate(UdmBatch udmBatch) {

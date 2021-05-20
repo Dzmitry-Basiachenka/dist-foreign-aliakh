@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
 import java.util.List;
@@ -62,4 +63,20 @@ public interface IUdmUsageService {
      * @param usage {@link UdmUsage} to update
      */
     void updateProcessedUsage(UdmUsage usage);
+
+    /**
+     * Gets list of {@link UdmUsage} ids by specified {@link UsageStatusEnum}.
+     *
+     * @param status {@link UsageStatusEnum} instance
+     * @return the list of found {@link UdmUsage} ids
+     */
+    List<String> getUdmUsageIdsByStatus(UsageStatusEnum status);
+
+    /**
+     * Gets list of {@link UdmUsage}s by specified {@link UdmUsage} ids.
+     *
+     * @param udmUsageIds list of {@link UdmUsage} ids
+     * @return list of {@link UdmUsage}s
+     */
+    List<UdmUsage> getUdmUsagesByIds(List<String> udmUsageIds);
 }

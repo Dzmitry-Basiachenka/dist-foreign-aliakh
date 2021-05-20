@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Implementation of {@link AbstractUsageChainChunkProcessor} to check whether {@link Usage}s' works
+ * Implementation of {@link AbstractChainChunkProcessor} to check whether {@link Usage}s' works
  * have classification.
  * <p>
  * Copyright (C) 2019 copyright.com
@@ -24,7 +24,7 @@ import java.util.Objects;
  * @author Pavel Liakh
  * @author Aliaksandr Liakh
  */
-public class ClassificationChunkProcessor extends AbstractUsageChainChunkProcessor {
+public class ClassificationChunkProcessor extends AbstractChainChunkProcessor<Usage> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
