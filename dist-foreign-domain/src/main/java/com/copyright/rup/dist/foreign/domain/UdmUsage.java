@@ -49,7 +49,7 @@ public class UdmUsage extends StoredEntity<String> {
     private String companyName;
     private String detailLicenseeClassId;
     private String detailLicenseeClassName;
-    private BigDecimal annualMultiplier;
+    private Integer annualMultiplier;
     private BigDecimal statisticalMultiplier;
     private int annualizedCopies;
 
@@ -277,11 +277,11 @@ public class UdmUsage extends StoredEntity<String> {
         this.companyName = companyName;
     }
 
-    public BigDecimal getAnnualMultiplier() {
+    public Integer getAnnualMultiplier() {
         return annualMultiplier;
     }
 
-    public void setAnnualMultiplier(BigDecimal annualMultiplier) {
+    public void setAnnualMultiplier(Integer annualMultiplier) {
         this.annualMultiplier = annualMultiplier;
     }
 
