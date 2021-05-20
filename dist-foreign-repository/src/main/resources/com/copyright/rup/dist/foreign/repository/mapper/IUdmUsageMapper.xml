@@ -381,4 +381,11 @@
             and record_version = #{version}
         returning df_udm_usage_uid
     </select>
+
+    <select id="findIdsByStatus" resultType="string">
+        select df_udm_usage_uid
+        from ${schema}.df_udm_usage
+        where status_ind = #{status}
+        order by df_udm_usage_uid
+    </select>
 </mapper>

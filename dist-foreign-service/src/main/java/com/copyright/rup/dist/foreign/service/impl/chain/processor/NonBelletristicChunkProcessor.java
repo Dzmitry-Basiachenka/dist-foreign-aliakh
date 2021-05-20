@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
- * Implementation of {@link AbstractUsageChainChunkProcessor} to check {@link Usage}s' works classifications
+ * Implementation of {@link AbstractChainChunkProcessor} to check {@link Usage}s' works classifications
  * are non Belletristic.
  * <p>
  * Copyright (C) 2019 copyright.com
@@ -24,7 +24,7 @@ import java.util.List;
  * @author Pavel Liakh
  * @author Aliaksandr Liakh
  */
-public class NonBelletristicChunkProcessor extends AbstractUsageChainChunkProcessor {
+public class NonBelletristicChunkProcessor extends AbstractChainChunkProcessor<Usage> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 

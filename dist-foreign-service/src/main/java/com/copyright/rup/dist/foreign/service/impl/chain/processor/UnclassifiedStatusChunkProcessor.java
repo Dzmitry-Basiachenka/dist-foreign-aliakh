@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Implementation of {@link AbstractUsageChainChunkProcessor} to make {@link Usage}s unclassified.
+ * Implementation of {@link AbstractChainChunkProcessor} to make {@link Usage}s unclassified.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @author Pavel Liakh
  * @author Aliaksandr Liakh
  */
-public class UnclassifiedStatusChunkProcessor extends AbstractUsageChainChunkProcessor {
+public class UnclassifiedStatusChunkProcessor extends AbstractChainChunkProcessor<Usage> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 

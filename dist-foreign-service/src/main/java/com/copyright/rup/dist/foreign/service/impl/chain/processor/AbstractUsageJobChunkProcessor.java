@@ -37,7 +37,8 @@ import javax.annotation.PostConstruct;
  * @author Uladzislau Shalamitski
  * @author Aliaksandr Liakh
  */
-abstract class AbstractUsageJobChunkProcessor extends AbstractUsageChainChunkProcessor implements IUsageJobProcessor {
+abstract class AbstractUsageJobChunkProcessor extends AbstractChainChunkProcessor<Usage>
+    implements IUsageJobProcessor {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 

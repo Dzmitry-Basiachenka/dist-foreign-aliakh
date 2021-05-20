@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
 import java.util.List;
@@ -67,4 +68,12 @@ public interface IUdmUsageRepository {
      * @return id of updated record, otherwise {@code null}
      */
     String updateProcessedUsage(UdmUsage udmUsage);
+
+    /**
+     * Finds list of {@link UdmUsage} ids by specified {@link UsageStatusEnum}.
+     *
+     * @param status {@link UsageStatusEnum} instance
+     * @return the list of found {@link UdmUsage} ids
+     */
+    List<String> findIdsByStatus(UsageStatusEnum status);
 }

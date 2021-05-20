@@ -107,6 +107,27 @@ public class UdmUsageServiceTest {
         verify(udmUsageRepository);
     }
 
+    @Test
+    public void testGetUdmUsageIdsByStatus() {
+        List<String> udmUsageIds = Arrays.asList(UDM_USAGE_UID_1, UDM_USAGE_UID_2);
+        expect(udmUsageRepository.findIdsByStatus(UsageStatusEnum.WORK_FOUND)).andReturn(udmUsageIds).once();
+        replay(udmUsageRepository);
+        assertEquals(udmUsageIds, udmUsageService.getUdmUsageIdsByStatus(UsageStatusEnum.WORK_FOUND));
+        verify(udmUsageRepository);
+    }
+
+    @Test
+    public void testGetUdmUsagesByIds() {
+        List<String> udmUsageIds = Arrays.asList(UDM_USAGE_UID_1, UDM_USAGE_UID_2);
+        UdmUsage udmUsage1 = buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1);
+        UdmUsage udmUsage2 = buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2);
+        List<UdmUsage> udmUsages = Arrays.asList(udmUsage1, udmUsage2);
+        expect(udmUsageRepository.findByIds(udmUsageIds)).andReturn(udmUsages).once();
+        replay(udmUsageRepository);
+        assertEquals(udmUsages, udmUsageRepository.findByIds(udmUsageIds));
+        verify(udmUsageRepository);
+    }
+
     private UdmBatch buildUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
         udmBatch.setId(UDM_BATCH_UID);

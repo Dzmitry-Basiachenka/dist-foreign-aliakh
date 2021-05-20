@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Implementation of {@link AbstractUsageChainChunkProcessor} to make {@link Usage}s eligible
+ * Implementation of {@link AbstractChainChunkProcessor} to make {@link Usage}s eligible
  * if they have not-null baselineId.
  * <p>
  * Copyright (C) 2020 copyright.com
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * @author Anton Azarenka
  * @author Aliaksandr Liakh
  */
-public class BaselineEligibilityChunkProcessor extends AbstractUsageChainChunkProcessor {
+public class BaselineEligibilityChunkProcessor extends AbstractChainChunkProcessor<Usage> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 

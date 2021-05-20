@@ -17,7 +17,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -114,6 +113,14 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(REPORTED_TYPE_OF_USE, udmUsage.getReportedTypeOfUse());
         assertEquals(QUANTITY, udmUsage.getQuantity());
         assertEquals(StringUtils.EMPTY, udmUsage.getIneligibleReason());
+    }
+
+    @Test
+    public void findIdsByStatus() {
+        List<String> udmUsageIds = udmUsageRepository.findIdsByStatus(UsageStatusEnum.WORK_FOUND);
+        assertEquals(2, udmUsageIds.size());
+        assertTrue(udmUsageIds.contains("587dfefd-3cf8-4853-8b1b-d59b5cd163e9"));
+        assertTrue(udmUsageIds.contains("987dfefd-3c24-4853-8b1c-aaab5cd163e1"));
     }
 
     @Test
