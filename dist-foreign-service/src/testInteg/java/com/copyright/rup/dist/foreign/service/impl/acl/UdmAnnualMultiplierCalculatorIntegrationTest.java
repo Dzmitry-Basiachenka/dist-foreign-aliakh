@@ -1,9 +1,8 @@
-package com.copyright.rup.dist.foreign.service.impl;
+package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.foreign.service.impl.acl.UdmAnnualMultiplierCalculator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

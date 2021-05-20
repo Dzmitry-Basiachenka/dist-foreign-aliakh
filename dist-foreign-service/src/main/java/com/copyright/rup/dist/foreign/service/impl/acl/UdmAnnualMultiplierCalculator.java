@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 /**
- * Calculator of annual multiplier UDM usages.
+ * Calculator of annual multiplier for UDM usages.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>

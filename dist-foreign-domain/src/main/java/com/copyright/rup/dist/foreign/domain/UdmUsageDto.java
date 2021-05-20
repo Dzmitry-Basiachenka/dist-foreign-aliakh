@@ -51,7 +51,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private BigDecimal statisticalMultiplier;
     private String reportedTypeOfUse;
     private Integer quantity;
-    private int annualizedCopies;
+    private BigDecimal annualizedCopies;
     private String ineligibleReason;
 
     public Integer getPeriod() {
@@ -310,11 +310,11 @@ public class UdmUsageDto extends StoredEntity<String> {
         this.statisticalMultiplier = statisticalMultiplier;
     }
 
-    public int getAnnualizedCopies() {
+    public BigDecimal getAnnualizedCopies() {
         return annualizedCopies;
     }
 
-    public void setAnnualizedCopies(int annualizedCopies) {
+    public void setAnnualizedCopies(BigDecimal annualizedCopies) {
         this.annualizedCopies = annualizedCopies;
     }
 

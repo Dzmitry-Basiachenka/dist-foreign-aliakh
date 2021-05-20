@@ -51,7 +51,7 @@ public class UdmUsage extends StoredEntity<String> {
     private String detailLicenseeClassName;
     private Integer annualMultiplier;
     private BigDecimal statisticalMultiplier;
-    private int annualizedCopies;
+    private BigDecimal annualizedCopies;
 
     public String getOriginalDetailId() {
         return originalDetailId;
@@ -293,11 +293,11 @@ public class UdmUsage extends StoredEntity<String> {
         this.statisticalMultiplier = statisticalMultiplier;
     }
 
-    public int getAnnualizedCopies() {
+    public BigDecimal getAnnualizedCopies() {
         return annualizedCopies;
     }
 
-    public void setAnnualizedCopies(int annualizedCopies) {
+    public void setAnnualizedCopies(BigDecimal annualizedCopies) {
         this.annualizedCopies = annualizedCopies;
     }
 

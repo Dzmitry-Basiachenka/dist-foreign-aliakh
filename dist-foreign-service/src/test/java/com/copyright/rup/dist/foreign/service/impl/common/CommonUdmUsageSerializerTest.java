@@ -89,7 +89,7 @@ public class CommonUdmUsageSerializerTest {
         udmUsage.setSurveyEndDate(LocalDate.of(2021, 5, 20));
         udmUsage.setStatisticalMultiplier(BigDecimal.ONE);
         udmUsage.setAnnualMultiplier(25);
-        udmUsage.setAnnualizedCopies(300);
+        udmUsage.setAnnualizedCopies(new BigDecimal("300.00000"));
         udmUsage.setQuantity(50);
         udmUsage.setVersion(3);
         return udmUsage;
