@@ -73,6 +73,7 @@
         <typeAlias alias="UdmBatch" type="com.copyright.rup.dist.foreign.domain.UdmBatch"/>
         <typeAlias alias="UdmUsage" type="com.copyright.rup.dist.foreign.domain.UdmUsage"/>
         <typeAlias alias="UdmUsageDto" type="com.copyright.rup.dist.foreign.domain.UdmUsageDto"/>
+        <typeAlias alias="UdmTouRmsTouPair" type="com.copyright.rup.dist.foreign.repository.impl.UdmTouToRmsTouResultHandler$UdmTouRmsTouPair"/>
     </typeAliases>
 
     <typeHandlers>
@@ -110,5 +111,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageBatchStatusMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmBatchMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmUsageMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmTouMapper.xml"/>
     </mappers>
 </configuration>

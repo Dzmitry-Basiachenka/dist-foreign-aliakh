@@ -1,0 +1,25 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmTouMapper">
+
+    <resultMap id="udmTouRmsTouPairResultMap" type="UdmTouRmsTouPair">
+        <result property="udmTypeOfUse" column="type_of_use"/>
+        <result property="rmsTypeOfUse" column="rms_type_of_use"/>
+    </resultMap>
+
+    <select id="findAllUdmTous" resultType="string">
+        select type_of_use
+        from ${schema}.df_udm_tou_mapping
+        order by type_of_use asc
+    </select>
+
+    <select id="findUdmTouToRmsTouMap" resultMap="udmTouRmsTouPairResultMap">
+        select
+            type_of_use,
+            rms_type_of_use
+        from ${schema}.df_udm_tou_mapping
+        order by type_of_use asc
+    </select>
+</mapper>
