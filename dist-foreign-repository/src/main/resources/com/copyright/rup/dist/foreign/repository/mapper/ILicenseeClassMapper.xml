@@ -19,12 +19,20 @@
         <result property="aggregateLicenseeClass.enrollmentProfile" column="agg_enrollment_profile"/>
     </resultMap>
 
-    <select id="detailLicenseeClassExists" parameterType="string" resultType="boolean">
+    <select id="aaclDetailLicenseeClassExists" parameterType="map" resultType="boolean">
         select exists (
             select
             from ${schema}.df_detail_licensee_class
             where enrollment_profile ilike #{enrollmentProfile}
                 and discipline ilike #{discipline}
+        )
+    </select>
+
+    <select id="detailLicenseeClassExists" parameterType="integer" resultType="boolean">
+        select exists (
+            select
+            from ${schema}.df_detail_licensee_class
+            where detail_licensee_class_id = #{detailLicenseeClassId}
         )
     </select>
 

@@ -44,18 +44,24 @@ public class LicenseeClassRepositoryIntegrationTest {
     private ILicenseeClassRepository licenseeClassRepository;
 
     @Test
+    public void testAaclDetailLicenseeClassIdExists() {
+        assertTrue(licenseeClassRepository.aaclDetailLicenseeClassExists("EXU4", "Arts & Humanities"));
+    }
+
+    @Test
+    public void testAaclDetailLicenseeClassIdExistsWithMixedCase() {
+        assertTrue(licenseeClassRepository.aaclDetailLicenseeClassExists("exU4", "ARTS & HUMANITIES"));
+    }
+
+    @Test
+    public void testAaclDetailLicenseeClassIdExistsRecordNotExist() {
+        assertFalse(licenseeClassRepository.aaclDetailLicenseeClassExists("Null", "Arts & Humanities"));
+    }
+
+    @Test
     public void testDetailLicenseeClassIdExists() {
-        assertTrue(licenseeClassRepository.detailLicenseeClassExists("EXU4", "Arts & Humanities"));
-    }
-
-    @Test
-    public void testDetailLicenseeClassIdExistsWithMixedCase() {
-        assertTrue(licenseeClassRepository.detailLicenseeClassExists("exU4", "ARTS & HUMANITIES"));
-    }
-
-    @Test
-    public void testDetailLicenseeClassIdExistsRecordNotExist() {
-        assertFalse(licenseeClassRepository.detailLicenseeClassExists("Null", "Arts & Humanities"));
+        assertTrue(licenseeClassRepository.detailLicenseeClassExists(1));
+        assertFalse(licenseeClassRepository.detailLicenseeClassExists(333));
     }
 
     @Test

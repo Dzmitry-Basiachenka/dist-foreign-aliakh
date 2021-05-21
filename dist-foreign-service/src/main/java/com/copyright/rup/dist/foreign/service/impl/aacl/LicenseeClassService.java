@@ -27,7 +27,12 @@ public class LicenseeClassService implements ILicenseeClassService {
 
     @Override
     public boolean aaclDetailLicenseeClassExists(String enrollmentProfile, String discipline) {
-        return licenseeClassRepository.detailLicenseeClassExists(enrollmentProfile, discipline);
+        return licenseeClassRepository.aaclDetailLicenseeClassExists(enrollmentProfile, discipline);
+    }
+
+    @Override
+    public boolean detailLicenseeClassExists(Integer detailLicenseeClassId) {
+        return licenseeClassRepository.detailLicenseeClassExists(detailLicenseeClassId);
     }
 
     @Override

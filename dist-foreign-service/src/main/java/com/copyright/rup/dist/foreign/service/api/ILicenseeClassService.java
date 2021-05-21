@@ -26,6 +26,14 @@ public interface ILicenseeClassService {
     boolean aaclDetailLicenseeClassExists(String enrollmentProfile, String discipline);
 
     /**
+     * Checks whether detail licensee class with provided id exists in database.
+     *
+     * @param detailLicenseeClassId detail licensee class id
+     * @return {@code true} is detail licensee class exists, {@code false} - otherwise
+     */
+    boolean detailLicenseeClassExists(Integer detailLicenseeClassId);
+
+    /**
      * Gets list of {@link AggregateLicenseeClass}es by product family.
      *
      * @param productFamily product family
