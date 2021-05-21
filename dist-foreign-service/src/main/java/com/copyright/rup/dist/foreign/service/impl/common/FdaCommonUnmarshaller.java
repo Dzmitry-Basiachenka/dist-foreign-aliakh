@@ -4,52 +4,52 @@ import com.copyright.rup.dist.common.integration.camel.CommonMarshaller;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-
 import org.apache.camel.Exchange;
 
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
- * Common JSON marshaller to convert Camel messages from list of {@link Usage}s.
+ * Common JSON unmarshaller to convert Camel messages to list of {@link T}s.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
- * Date: 11/12/2018
+ * Date: 11/13/2018
  *
+ * @param <T> type of item to unmarshall
  * @author Uladzislau Shalamitski
  * @author Aliaksandr Liakh
  */
-public class CommonUsageChunkMarshaller extends CommonMarshaller {
+public class FdaCommonUnmarshaller<T> extends CommonMarshaller {
 
-    private static final TypeReference<List<Usage>> TYPE_REFERENCE = new TypeReference<List<Usage>>() {
+    private final TypeReference<List<T>> typeReference = new TypeReference<List<T>>() {
     };
 
-    private StdSerializer<List<Usage>> serializer;
+    private JsonDeserializer<List<Usage>> deserializer;
 
-    public void setSerializer(StdSerializer<List<Usage>> serializer) {
-        this.serializer = serializer;
+    public void setDeserializer(JsonDeserializer<List<Usage>> deserializer) {
+        this.deserializer = deserializer;
     }
 
     @Override
-    public Object unmarshal(Exchange exchange, InputStream stream) throws UnsupportedOperationException {
+    public void marshal(Exchange exchange, Object graph, OutputStream stream) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
     @Override
     protected ObjectMapper getObjectMapper() {
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(serializer);
+        simpleModule.addDeserializer(List.class, deserializer);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;
     }
 
     @Override
-    protected TypeReference<?> getTypeReference() {
-        return TYPE_REFERENCE;
+    protected TypeReference<List<T>> getTypeReference() {
+        return typeReference;
     }
 }

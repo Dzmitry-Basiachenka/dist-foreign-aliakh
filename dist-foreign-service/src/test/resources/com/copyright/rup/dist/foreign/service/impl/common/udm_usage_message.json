@@ -1,0 +1,21 @@
+{
+  "udmUsages" : [ {
+    "id" : "acd033da-cba1-4e85-adc9-0bcd00687d9d",
+    "wr_wrk_inst" : 122825347,
+    "type_of_use" : "PRINT",
+    "reported_standard_number" : "0927-7765",
+    "reported_title" : "Colloids and surfaces",
+    "period_end_date" : "06/30/2021",
+    "status" : "WORK_FOUND",
+    "record_version" : 3
+  }, {
+    "id" : "955d8192-c80d-4be1-963e-12616f8e9c41",
+    "wr_wrk_inst" : 100002555,
+    "type_of_use" : "PRINT",
+    "reported_standard_number" : "2227-7589",
+    "reported_title" : "Brain surgery",
+    "period_end_date" : "06/30/2021",
+    "status" : "WORK_FOUND",
+    "record_version" : 3
+  } ]
+}
