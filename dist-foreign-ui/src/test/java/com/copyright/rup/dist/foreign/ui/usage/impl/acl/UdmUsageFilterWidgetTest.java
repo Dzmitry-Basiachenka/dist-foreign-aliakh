@@ -62,7 +62,8 @@ import java.util.Set;
 public class UdmUsageFilterWidgetTest {
 
     private static final Set<UsageStatusEnum> ACL_STATUSES = ImmutableSet.of(UsageStatusEnum.NEW,
-        UsageStatusEnum.INELIGIBLE, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND);
+        UsageStatusEnum.INELIGIBLE, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
+        UsageStatusEnum.RH_FOUND, UsageStatusEnum.RH_NOT_FOUND);
 
     private IUdmUsageFilterController udmUsageFilterController;
     private UdmUsageFilterWidget widget;
@@ -226,7 +227,7 @@ public class UdmUsageFilterWidgetTest {
         ListDataProvider<UsageStatusEnum> listDataProvider =
             (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
         Collection<?> actualStatuses = listDataProvider.getItems();
-        assertEquals(4, actualStatuses.size());
+        assertEquals(6, actualStatuses.size());
         assertEquals(ACL_STATUSES, actualStatuses);
     }
 
