@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -24,12 +26,16 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableMap;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -69,14 +75,17 @@ public class UdmUsageServiceTest {
     private IUdmUsageRepository udmUsageRepository;
     private UdmAnnualMultiplierCalculator udmAnnualMultiplierCalculator;
     private IUdmTypeOfUseService udmTypeOfUseService;
+    private IChainExecutor<UdmUsage> chainExecutor;
 
     @Before
     public void setUp() {
         udmUsageRepository = createMock(IUdmUsageRepository.class);
         udmAnnualMultiplierCalculator = createMock(UdmAnnualMultiplierCalculator.class);
         udmTypeOfUseService = createMock(IUdmTypeOfUseService.class);
+        chainExecutor = createMock(IChainExecutor.class);
         Whitebox.setInternalState(udmUsageService, udmUsageRepository);
         Whitebox.setInternalState(udmUsageService, udmAnnualMultiplierCalculator);
+        Whitebox.setInternalState(udmUsageService, chainExecutor);
         Whitebox.setInternalState(udmUsageService, udmTypeOfUseService);
     }
 
@@ -211,13 +220,33 @@ public class UdmUsageServiceTest {
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         expect(udmUsageRepository.findCountByFilter(filter)).andReturn(1).once();
         replay(udmUsageRepository);
-        assertEquals(1, udmUsageRepository.findCountByFilter(filter));
+        assertEquals(1, udmUsageService.getUsagesCount(filter));
         verify(udmUsageRepository);
     }
 
     @Test
     public void testGetUsageCountEmptyFilter() {
-        assertEquals(0, udmUsageRepository.findCountByFilter(new UdmUsageFilter()));
+        assertEquals(0, udmUsageService.getUsagesCount(new UdmUsageFilter()));
+    }
+
+    @Test
+    public void testSendForMatching() {
+        UdmUsage usage1 = new UdmUsage();
+        usage1.setStatus(UsageStatusEnum.NEW);
+        UdmUsage usage2 = new UdmUsage();
+        usage2.setStatus(UsageStatusEnum.INELIGIBLE);
+        Capture<Runnable> captureRunnable = newCapture();
+        chainExecutor.execute(capture(captureRunnable));
+        PowerMock.expectLastCall().once();
+        chainExecutor.execute(Collections.singletonList(usage1), ChainProcessorTypeEnum.MATCHING);
+        PowerMock.expectLastCall().once();
+        replay(chainExecutor);
+        udmUsageService.sendForMatching(Arrays.asList(usage1, usage2));
+        assertNotNull(captureRunnable);
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        runnable.run();
+        verify(chainExecutor);
     }
 
     @Test

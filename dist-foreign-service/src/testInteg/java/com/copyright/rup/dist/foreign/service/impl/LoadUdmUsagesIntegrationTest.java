@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 
@@ -58,6 +59,8 @@ public class LoadUdmUsagesIntegrationTest {
     @Autowired
     private IUdmBatchService udmBatchService;
     @Autowired
+    private IUdmUsageService udmUsageService;
+    @Autowired
     private IUdmUsageRepository udmUsageRepository;
     @Autowired
     private IUdmBatchRepository udmBatchRepository;
@@ -77,6 +80,7 @@ public class LoadUdmUsagesIntegrationTest {
         assertTrue(result.isSuccessful());
         List<UdmUsage> usages = result.get();
         udmBatchService.insertUdmBatch(batch, usages);
+        udmUsageService.sendForMatching(usages);
         return usages.stream().map(BaseEntity::getId).collect(Collectors.toList());
     }
 
@@ -102,7 +106,9 @@ public class LoadUdmUsagesIntegrationTest {
         assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
         assertEquals(expectedUsage.getReportedTitle(), actualUsage.getReportedTitle());
+        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
         assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
+        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
         assertEquals(expectedUsage.getReportedPubType(), actualUsage.getReportedPubType());
         assertEquals(expectedUsage.getPubFormat(), actualUsage.getPubFormat());
         assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());

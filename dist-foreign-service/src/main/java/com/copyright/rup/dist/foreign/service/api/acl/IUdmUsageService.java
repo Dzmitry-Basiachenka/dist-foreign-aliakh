@@ -56,6 +56,13 @@ public interface IUdmUsageService {
     int getUsagesCount(UdmUsageFilter filter);
 
     /**
+     * Sends list of UDM usages on queue for PI matching process.
+     *
+     * @param udmUsages list of {@link UdmUsage} to be sent
+     */
+    void sendForMatching(List<UdmUsage> udmUsages);
+
+    /**
      * Updates {@link UdmUsage} and verifies that version of {@link UdmUsage} is the same as in database.
      * Throws an {@link com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException} in case of
      * there are {@link UdmUsage} version discrepancies.
