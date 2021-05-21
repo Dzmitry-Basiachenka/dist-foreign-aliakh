@@ -48,6 +48,13 @@
         <property name="endPoint" value="direct:df.service.matching"/>
     </bean>
 
+    <bean id="df.service.udmUsageProducer"
+          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUdmUsageProducer"/>
+
+    <bean id="df.service.udmMatchingProducer" parent="df.service.udmUsageProducer">
+        <property name="endPoint" value="direct:df.service.udm.matching"/>
+    </bean>
+
     <bean id="common.jobStatusProducer" class="com.copyright.rup.dist.common.integration.camel.job.JobStatusProducer">
         <property name="producerTemplate" ref="df.service.producerTemplate"/>
         <property name="endPoint" value="direct:df.feeder.job.status"/>
