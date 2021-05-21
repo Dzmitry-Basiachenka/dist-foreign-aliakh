@@ -29,6 +29,7 @@ import java.util.Map;
  * @author Uladzislau Shalamitski
  * @author Aliaksandr Liakh
  */
+//TODO: remove 'chunk' from all the classes
 public class CommonUsageChunkProducer implements IProducer<List<Usage>> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

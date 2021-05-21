@@ -9,50 +9,20 @@
 
     <import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-job-status-context.xml"/>
 
-    <bean id="df.service.usageChunkMarshaller"
-          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageChunkMarshaller"/>
-
-    <bean id="df.service.usageChunkUnmarshaller"
-          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageChunkUnmarshaller"/>
-
-    <bean id="df.service.matchingChunkMarshaller" parent="df.service.usageChunkMarshaller">
+    <bean id="df.service.commonUsageMarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.FdaCommonMarshaller">
         <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
     </bean>
 
-    <bean id="df.service.matchingChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
+    <bean id="df.service.commonUsageUnmarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.FdaCommonUnmarshaller">
         <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
     </bean>
 
-    <bean id="df.service.rightsChunkMarshaller" parent="df.service.usageChunkMarshaller">
-        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
+    <bean id="df.service.commonUdmUsageMarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.FdaCommonMarshaller">
+        <property name="serializer" ref="df.service.commonUdmUsageSerializer"/>
     </bean>
 
-    <bean id="df.service.rightsChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
-    </bean>
-
-    <bean id="df.service.rhTaxChunkMarshaller" parent="df.service.usageChunkMarshaller">
-        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
-    </bean>
-
-    <bean id="df.service.rhTaxChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
-    </bean>
-
-    <bean id="df.service.stmRhChunkMarshaller" parent="df.service.usageChunkMarshaller">
-        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
-    </bean>
-
-    <bean id="df.service.stmRhChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
-    </bean>
-
-    <bean id="df.service.rhEligibilityChunkMarshaller" parent="df.service.usageChunkMarshaller">
-        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
-    </bean>
-
-    <bean id="df.service.rhEligibilityChunkUnmarshaller" parent="df.service.usageChunkUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
+    <bean id="df.service.commonUdmUsageUnmarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.FdaCommonUnmarshaller">
+        <property name="deserializer" ref="df.service.commonUdmUsageDeserializer"/>
     </bean>
 
     <bean id="df.service.usageChunkProducer"
@@ -174,7 +144,7 @@
         <route id="df.service.matchingInternalChunkRoute">
             <from ref="df.service.internal.matching.chunk.endpoint"/>
             <marshal>
-                <custom ref="df.service.matchingChunkMarshaller"/>
+                <custom ref="df.service.commonUsageMarshaller"/>
             </marshal>
             <to ref="df.service.matching.chunk.endpoint"/>
         </route>
@@ -182,7 +152,7 @@
         <route id="df.service.matchingChunkRoute">
             <from ref="df.service.matching.chunk.endpoint"/>
             <unmarshal>
-                <custom ref="df.service.matchingChunkUnmarshaller"/>
+                <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
 
             <choice>
@@ -216,7 +186,7 @@
         <route id="df.service.rightsInternalChunkRoute">
             <from ref="df.service.internal.rights.chunk.endpoint"/>
             <marshal>
-                <custom ref="df.service.rightsChunkMarshaller"/>
+                <custom ref="df.service.commonUsageMarshaller"/>
             </marshal>
             <to ref="df.service.rights.chunk.endpoint"/>
         </route>
@@ -224,7 +194,7 @@
         <route id="df.service.rightsChunkRoute">
             <from ref="df.service.rights.chunk.endpoint"/>
             <unmarshal>
-                <custom ref="df.service.rightsChunkUnmarshaller"/>
+                <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
 
             <choice>
@@ -262,7 +232,7 @@
         <route id="df.service.taxInternalChunkRoute">
             <from ref="df.service.internal.tax.chunk.endpoint"/>
             <marshal>
-                <custom ref="df.service.rhTaxChunkMarshaller"/>
+                <custom ref="df.service.commonUsageMarshaller"/>
             </marshal>
             <to ref="df.service.rh.tax.chunk.endpoint"/>
         </route>
@@ -270,7 +240,7 @@
         <route id="df.service.taxChunkRoute">
             <from ref="df.service.rh.tax.chunk.endpoint"/>
             <unmarshal>
-                <custom ref="df.service.rhTaxChunkUnmarshaller"/>
+                <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
             <bean ref="df.service.rhTaxChunkConsumer"/>
 
@@ -287,7 +257,7 @@
         <route id="df.service.stmRhInternalChunkRoute">
             <from ref="df.service.internal.stm.rh.chunk.endpoint"/>
             <marshal>
-                <custom ref="df.service.stmRhChunkMarshaller"/>
+                <custom ref="df.service.commonUsageMarshaller"/>
             </marshal>
             <to ref="df.service.stm.rh.chunk.endpoint"/>
         </route>
@@ -295,7 +265,7 @@
         <route id="df.service.stmRhChunkRoute">
             <from ref="df.service.stm.rh.chunk.endpoint"/>
             <unmarshal>
-                <custom ref="df.service.stmRhChunkUnmarshaller"/>
+                <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
             <bean ref="df.service.stmRhChunkConsumer"/>
 
@@ -312,7 +282,7 @@
         <route id="df.service.eligibilityInternalChunkRoute">
             <from ref="df.service.internal.eligibility.chunk.endpoint"/>
             <marshal>
-                <custom ref="df.service.rhEligibilityChunkMarshaller"/>
+                <custom ref="df.service.commonUsageMarshaller"/>
             </marshal>
             <to ref="df.service.rh.eligibility.chunk.endpoint"/>
         </route>
@@ -320,7 +290,7 @@
         <route id="df.service.eligibilityChunkRoute">
             <from ref="df.service.rh.eligibility.chunk.endpoint"/>
             <unmarshal>
-                <custom ref="df.service.rhEligibilityChunkUnmarshaller"/>
+                <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
             <bean ref="df.service.rhEligibilityChunkConsumer"/>
 
