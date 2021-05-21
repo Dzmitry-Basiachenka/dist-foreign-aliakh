@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.telesales.api;
 
+import com.copyright.rup.dist.foreign.domain.CompanyInformation;
+
 /**
  * Interface for telesales integration.
  * <p>
@@ -18,4 +20,12 @@ public interface ITelesalesService {
      * @return licensee name
      */
     String getLicenseeName(Long licenseeAccountNumber);
+
+    /**
+     * Gets company information from Telesales by provided company id.
+     *
+     * @param companyId company id
+     * @return {@link CompanyInformation} instance
+     */
+    CompanyInformation getCompanyInformation(Long companyId);
 }
