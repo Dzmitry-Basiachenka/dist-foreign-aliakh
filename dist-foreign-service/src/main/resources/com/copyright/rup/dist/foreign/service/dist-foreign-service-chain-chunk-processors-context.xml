@@ -85,4 +85,10 @@
         <property name="usageStatus" value="WORK_FOUND"/>
         <property name="successProcessor" ref="df.service.commonEligibilityChunkProcessor"/>
     </bean>
+
+    <!-- UDM processors -->
+    <bean id="df.service.udmMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.UdmMatchingProcessor">
+        <property name="usageStatus" value="NEW"/>
+        <!-- TODO add success rights processor -->
+    </bean>
 </beans>

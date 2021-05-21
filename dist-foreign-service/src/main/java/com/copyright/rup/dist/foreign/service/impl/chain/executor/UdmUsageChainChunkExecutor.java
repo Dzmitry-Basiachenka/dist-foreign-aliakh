@@ -5,6 +5,9 @@ import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import com.google.common.collect.ImmutableMap;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,10 +26,13 @@ import java.util.function.Function;
 @Component("udmUsageChainChunkExecutor")
 public class UdmUsageChainChunkExecutor extends AbstractUsageChainChunkExecutor<UdmUsage> {
 
+    @Autowired
+    @Qualifier("df.service.udmMatchingProcessor")
+    private IChainProcessor<List<UdmUsage>> udmProcessor;
+
     @Override
     Map<String, IChainProcessor<List<UdmUsage>>> getProductFamilyToProcessorMap() {
-        //TODO: add first processor in chain for UDM usages
-        return ImmutableMap.of();
+        return ImmutableMap.of(FdaConstants.ACL_PRODUCT_FAMILY, udmProcessor);
     }
 
     @Override
