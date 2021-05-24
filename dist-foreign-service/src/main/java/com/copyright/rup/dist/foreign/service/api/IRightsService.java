@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.common.domain.job.JobInfo;
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
 import java.util.List;
@@ -37,6 +38,15 @@ public interface IRightsService {
      * @param logAction defines whether usage audit should be added or not
      */
     void updateRights(List<Usage> usages, boolean logAction);
+
+    /**
+     * Sends work info to RMS to get grants and updates UDM usage RH and status based on a response.
+     * Sets status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_FOUND} if RH was found,
+     * otherwise {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND}.
+     *
+     * @param udmUsages list of {@link UdmUsage}s to update
+     */
+    void updateUdmRights(List<UdmUsage> udmUsages);
 
     /**
      * Sends Wr Wrk Inst to RMS to get Grants and updates usage status and usage RH based on response. Sets usage status

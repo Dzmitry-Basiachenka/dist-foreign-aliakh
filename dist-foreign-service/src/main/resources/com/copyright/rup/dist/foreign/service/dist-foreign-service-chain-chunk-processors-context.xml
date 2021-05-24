@@ -89,6 +89,10 @@
     <!-- UDM processors -->
     <bean id="df.service.udmMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.UdmMatchingProcessor">
         <property name="usageStatus" value="NEW"/>
-        <!-- TODO add success rights processor -->
+        <property name="successProcessor" ref="df.service.udmRightsProcessor"/>
+    </bean>
+
+    <bean id="df.service.udmRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.UdmRightsProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
     </bean>
 </beans>

@@ -13,6 +13,7 @@ import com.copyright.rup.dist.common.repository.api.IGrantPriorityRepository;
 import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantProcessorService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -200,6 +201,11 @@ public class RightsService implements IRightsService {
                 }
             });
         }
+    }
+
+    @Override
+    public void updateUdmRights(List<UdmUsage> udmUsages) {
+        //TODO: implement logic for getting rights
     }
 
     @Override

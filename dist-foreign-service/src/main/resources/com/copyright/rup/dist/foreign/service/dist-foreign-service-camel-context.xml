@@ -55,6 +55,10 @@
         <property name="endPoint" value="direct:df.service.udm.matching"/>
     </bean>
 
+    <bean id="df.service.udmRightsProducer" parent="df.service.udmUsageProducer">
+        <property name="endPoint" value="direct:df.service.rights.udm"/>
+    </bean>
+
     <bean id="common.jobStatusProducer" class="com.copyright.rup.dist.common.integration.camel.job.JobStatusProducer">
         <property name="producerTemplate" ref="df.service.producerTemplate"/>
         <property name="endPoint" value="direct:df.feeder.job.status"/>
@@ -97,6 +101,9 @@
 
         <endpoint id="df.service.internal.eligibility.chunk.endpoint" uri="direct:df.service.eligibility"/>
         <endpoint id="df.service.rh.eligibility.chunk.endpoint" uri="$RUP{dist.foreign.endpoint.rh_eligibility}"/>
+
+        <endpoint id="df.service.internal.rights.endpoint.udm" uri="direct:df.service.rights.udm"/>
+        <endpoint id="df.service.rights.endpoint.udm" uri="$RUP{dist.foreign.endpoint.rights.udm}"/>
 
         <!--chunk-based endpoints finished -->
 
@@ -232,6 +239,32 @@
                     <constant>false</constant>
                 </handled>
                 <log message="Exception during rights processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
+                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
+            </onException>
+        </route>
+
+        <route id="df.service.udmRightsInternalRoute">
+            <from ref="df.service.internal.rights.endpoint.udm"/>
+            <marshal>
+                <custom ref="df.service.commonUdmUsageMarshaller"/>
+            </marshal>
+            <to ref="df.service.rights.endpoint.udm"/>
+        </route>
+
+        <route id="df.service.udmRightsRoute">
+            <from ref="df.service.rights.endpoint.udm"/>
+            <unmarshal>
+                <custom ref="df.service.commonUdmUsageUnmarshaller"/>
+            </unmarshal>
+
+            <bean ref="df.service.udmRightsConsumer"/>
+
+            <onException useOriginalMessage="true">
+                <exception>java.lang.Exception</exception>
+                <handled>
+                    <constant>false</constant>
+                </handled>
+                <log message="Exception during UDM rights processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
                      loggingLevel="WARN" logName="com.copyright.rup.dist"/>
             </onException>
         </route>
