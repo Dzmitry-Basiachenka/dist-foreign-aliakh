@@ -128,14 +128,16 @@ public class UdmUsageControllerTest {
         List<UdmUsage> udmUsages = Arrays.asList(
             buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1),
             buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2));
-        udmBatchService.insertUdmBatch(udmBatch, udmUsages);
-        expectLastCall().once();
         expect(udmUsageFilterController.getWidget()).andReturn(udmUsageFilterWidget).once();
         udmUsageFilterWidget.clearFilter();
         expectLastCall().once();
-        replay(udmBatchService, udmUsageFilterController, udmUsageFilterWidget);
+        udmBatchService.insertUdmBatch(udmBatch, udmUsages);
+        expectLastCall().once();
+        udmUsageService.sendForMatching(udmUsages);
+        expectLastCall().once();
+        replay(udmBatchService, udmUsageService, udmUsageFilterController, udmUsageFilterWidget);
         controller.loadUdmBatch(udmBatch, udmUsages);
-        verify(udmBatchService, udmUsageFilterController, udmUsageFilterWidget);
+        verify(udmBatchService, udmUsageService, udmUsageFilterController, udmUsageFilterWidget);
     }
 
     @Test

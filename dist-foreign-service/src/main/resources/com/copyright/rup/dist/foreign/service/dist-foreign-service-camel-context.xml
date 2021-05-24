@@ -52,7 +52,7 @@
           class="com.copyright.rup.dist.foreign.service.impl.common.CommonUdmUsageProducer"/>
 
     <bean id="df.service.udmMatchingProducer" parent="df.service.udmUsageProducer">
-        <property name="endPoint" value="direct:df.service.udm.matching"/>
+        <property name="endPoint" value="direct:df.service.matching.udm"/>
     </bean>
 
     <bean id="df.service.udmRightsProducer" parent="df.service.udmUsageProducer">
@@ -89,6 +89,9 @@
 
         <endpoint id="df.service.internal.matching.chunk.endpoint" uri="direct:df.service.matching"/>
         <endpoint id="df.service.matching.chunk.endpoint" uri="$RUP{dist.foreign.endpoint.matching}"/>
+
+        <endpoint id="df.service.internal.matching.endpoint.udm" uri="direct:df.service.matching.udm"/>
+        <endpoint id="df.service.matching.endpoint.udm" uri="$RUP{dist.foreign.endpoint.matching.udm}"/>
 
         <endpoint id="df.service.internal.rights.chunk.endpoint" uri="direct:df.service.rights"/>
         <endpoint id="df.service.rights.chunk.endpoint" uri="$RUP{dist.foreign.endpoint.rights}"/>
@@ -187,6 +190,30 @@
                 </when>
             </choice>
 
+            <onException useOriginalMessage="true">
+                <exception>java.lang.Exception</exception>
+                <handled>
+                    <constant>false</constant>
+                </handled>
+                <log message="Exception during matching processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
+                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
+            </onException>
+        </route>
+
+        <route id="df.service.matchingInternalUdmRoute">
+            <from ref="df.service.internal.matching.endpoint.udm"/>
+            <marshal>
+                <custom ref="df.service.commonUdmUsageMarshaller"/>
+            </marshal>
+            <to ref="df.service.matching.endpoint.udm"/>
+        </route>
+
+        <route id="df.service.matchingUdmRoute">
+            <from ref="df.service.matching.endpoint.udm"/>
+            <unmarshal>
+                <custom ref="df.service.commonUdmUsageUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.udmMatchingConsumer"/>
             <onException useOriginalMessage="true">
                 <exception>java.lang.Exception</exception>
                 <handled>

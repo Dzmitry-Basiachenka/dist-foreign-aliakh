@@ -400,25 +400,23 @@ public class UsageService implements IUsageService {
 
     @Override
     public void sendForMatching(List<Usage> usages) {
-        IChainExecutor<Usage> currentChainExecutor = chainExecutor;
-        currentChainExecutor.execute(() -> {
+        chainExecutor.execute(() -> {
             List<Usage> usagesInNewStatus =
                 usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
-            currentChainExecutor.execute(usagesInNewStatus, ChainProcessorTypeEnum.MATCHING);
+            chainExecutor.execute(usagesInNewStatus, ChainProcessorTypeEnum.MATCHING);
         });
     }
 
     @Override
     public void sendForGettingRights(List<Usage> usages, String batchName) {
-        IChainExecutor<Usage> currentChainExecutor = chainExecutor;
-        currentChainExecutor.execute(() -> {
+        chainExecutor.execute(() -> {
             LOGGER.info("Send usages for getting rights. Started. UsageBatchName={}, UsagesCount={}", batchName,
                 LogUtils.size(usages));
             List<Usage> workFoundUsages =
                 usages.stream()
                     .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                     .collect(Collectors.toList());
-            currentChainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
+            chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
             LOGGER.info(
                 "Send usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}",
                 batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));

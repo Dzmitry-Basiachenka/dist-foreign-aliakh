@@ -12,10 +12,13 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IUdmUsageService}.
@@ -48,6 +52,9 @@ public class UdmUsageService implements IUdmUsageService {
     private UdmAnnualMultiplierCalculator udmAnnualMultiplierCalculator;
     @Autowired
     private IUdmTypeOfUseService udmTypeOfUseService;
+    @Autowired
+    @Qualifier("udmUsageChainChunkExecutor")
+    private IChainExecutor<UdmUsage> chainExecutor;
 
     @Override
     @Transactional
@@ -88,6 +95,16 @@ public class UdmUsageService implements IUdmUsageService {
     @Override
     public int getUsagesCount(UdmUsageFilter filter) {
         return !filter.isEmpty() ? udmUsageRepository.findCountByFilter(filter) : 0;
+    }
+
+    @Override
+    public void sendForMatching(List<UdmUsage> udmUsages) {
+        chainExecutor.execute(() -> {
+            List<UdmUsage> usagesInNewStatus = udmUsages.stream()
+                .filter(usage -> UsageStatusEnum.NEW == usage.getStatus())
+                .collect(Collectors.toList());
+            chainExecutor.execute(usagesInNewStatus, ChainProcessorTypeEnum.MATCHING);
+        });
     }
 
     @Override
