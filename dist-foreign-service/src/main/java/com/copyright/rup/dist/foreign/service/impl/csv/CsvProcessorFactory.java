@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsage
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.RightsholderWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.SurveyDateValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.UdmWorkInfoValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.UsageDataGradeValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.UsageDataWorkPortionIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.WorkTitleStandardNumberValidator;
@@ -141,7 +142,8 @@ public class CsvProcessorFactory {
     public UdmCsvProcessor getUdmCsvProcessor() {
         UdmCsvProcessor processor = new UdmCsvProcessor();
         processor.addBusinessValidators(new SurveyDateValidator(), new QuantityValidator(),
-            new ReportedTypeOfUseValidator(udmTypeOfUseService), new OriginalDetailIdValidator(udmUsageService));
+            new ReportedTypeOfUseValidator(udmTypeOfUseService), new OriginalDetailIdValidator(udmUsageService),
+            new UdmWorkInfoValidator());
         return processor;
     }
 }
