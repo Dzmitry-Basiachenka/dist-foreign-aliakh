@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AaclDetailLicenseeClassValidator;
@@ -55,6 +56,8 @@ public class CsvProcessorFactory {
     private ISalUsageService salUsageService;
     @Autowired
     private IUdmUsageService udmUsageService;
+    @Autowired
+    private IUdmTypeOfUseService udmTypeOfUseService;
 
     /**
      * Initialized UsageCsvProcessor.
@@ -138,7 +141,7 @@ public class CsvProcessorFactory {
     public UdmCsvProcessor getUdmCsvProcessor() {
         UdmCsvProcessor processor = new UdmCsvProcessor();
         processor.addBusinessValidators(new SurveyDateValidator(), new QuantityValidator(),
-            new ReportedTypeOfUseValidator(), new OriginalDetailIdValidator(udmUsageService));
+            new ReportedTypeOfUseValidator(udmTypeOfUseService), new OriginalDetailIdValidator(udmUsageService));
         return processor;
     }
 }

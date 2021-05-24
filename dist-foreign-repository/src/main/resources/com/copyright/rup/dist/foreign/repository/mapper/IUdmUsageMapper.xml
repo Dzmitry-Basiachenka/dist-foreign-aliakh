@@ -30,6 +30,7 @@
         <result property="surveyEndDate" column="survey_end_date"/>
         <result property="annualMultiplier" column="annual_multiplier"/>
         <result property="statisticalMultiplier" column="statistical_multiplier"/>
+        <result property="typeOfUse" column="type_of_use"/>
         <result property="reportedTypeOfUse" column="reported_type_of_use"/>
         <result property="quantity" column="quantity"/>
         <result property="annualizedCopies" column="annualized_copies"/>
@@ -115,6 +116,7 @@
             survey_end_date,
             annual_multiplier,
             statistical_multiplier,
+            type_of_use,
             reported_type_of_use,
             quantity,
             ineligible_reason,
@@ -141,6 +143,7 @@
             #{surveyEndDate},
             #{annualMultiplier},
             #{statisticalMultiplier},
+            #{typeOfUse},
             #{reportedTypeOfUse},
             #{quantity},
             #{ineligibleReason},
@@ -356,6 +359,7 @@
             survey_end_date,
             annual_multiplier,
             statistical_multiplier,
+            type_of_use,
             reported_type_of_use,
             quantity,
             ineligible_reason,
