@@ -79,7 +79,7 @@ public class LicenseeClassServiceTest {
 
     @Test
     public void testAaclDetailLicenseeClassExist() {
-        expect(licenseeClassRepository.detailLicenseeClassExists(ENROLLMENT_PROFILE, DISCIPLINE))
+        expect(licenseeClassRepository.aaclDetailLicenseeClassExists(ENROLLMENT_PROFILE, DISCIPLINE))
             .andReturn(true).once();
         replay(licenseeClassRepository);
         assertTrue(licenseeClassService.aaclDetailLicenseeClassExists(ENROLLMENT_PROFILE, DISCIPLINE));
@@ -88,7 +88,7 @@ public class LicenseeClassServiceTest {
 
     @Test
     public void testAaclDetailLicenseeClassExistWithDisciplineNull() {
-        expect(licenseeClassRepository.detailLicenseeClassExists(ENROLLMENT_PROFILE, null)).andReturn(false).once();
+        expect(licenseeClassRepository.aaclDetailLicenseeClassExists(ENROLLMENT_PROFILE, null)).andReturn(false).once();
         replay(licenseeClassRepository);
         assertFalse(licenseeClassService.aaclDetailLicenseeClassExists(ENROLLMENT_PROFILE, null));
         verify(licenseeClassRepository);
@@ -96,7 +96,7 @@ public class LicenseeClassServiceTest {
 
     @Test
     public void testAaclDetailLicenseeClassExistWithEnrollmentProfileNull() {
-        expect(licenseeClassRepository.detailLicenseeClassExists(null, DISCIPLINE)).andReturn(false).once();
+        expect(licenseeClassRepository.aaclDetailLicenseeClassExists(null, DISCIPLINE)).andReturn(false).once();
         replay(licenseeClassRepository);
         assertFalse(licenseeClassService.aaclDetailLicenseeClassExists(null, DISCIPLINE));
         verify(licenseeClassRepository);
@@ -104,9 +104,17 @@ public class LicenseeClassServiceTest {
 
     @Test
     public void testAaclDetailLicenseeClassExistWithEnrollmentProfileAndDisciplineNull() {
-        expect(licenseeClassRepository.detailLicenseeClassExists(null, null)).andReturn(false).once();
+        expect(licenseeClassRepository.aaclDetailLicenseeClassExists(null, null)).andReturn(false).once();
         replay(licenseeClassRepository);
         assertFalse(licenseeClassService.aaclDetailLicenseeClassExists(null, null));
+        verify(licenseeClassRepository);
+    }
+
+    @Test
+    public void testDetailLicenseeClassExists() {
+        expect(licenseeClassRepository.detailLicenseeClassExists(1)).andReturn(true).once();
+        replay(licenseeClassRepository);
+        assertTrue(licenseeClassService.detailLicenseeClassExists(1));
         verify(licenseeClassRepository);
     }
 }

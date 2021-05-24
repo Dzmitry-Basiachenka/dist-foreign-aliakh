@@ -26,11 +26,17 @@ import java.util.Objects;
 public class LicenseeClassRepository extends BaseRepository implements ILicenseeClassRepository {
 
     @Override
-    public boolean detailLicenseeClassExists(String enrollmentProfile, String discipline) {
+    public boolean aaclDetailLicenseeClassExists(String enrollmentProfile, String discipline) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("enrollmentProfile", escapeSqlLikePattern(Objects.requireNonNull(enrollmentProfile)));
         parameters.put("discipline", escapeSqlLikePattern(Objects.requireNonNull(discipline)));
-        return selectOne("ILicenseeClassMapper.detailLicenseeClassExists", parameters);
+        return selectOne("ILicenseeClassMapper.aaclDetailLicenseeClassExists", parameters);
+    }
+
+    @Override
+    public boolean detailLicenseeClassExists(Integer detailLicenseeClassId) {
+        return selectOne("ILicenseeClassMapper.detailLicenseeClassExists",
+            Objects.requireNonNull(detailLicenseeClassId));
     }
 
     @Override
