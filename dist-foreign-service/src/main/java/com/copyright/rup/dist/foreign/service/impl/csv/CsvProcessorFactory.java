@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
+import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -12,6 +13,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.AaclDetailLicen
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AggregateLicenseeClassValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedWrWrkInstValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.CompanyIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ItemBankWorkPortionIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.OriginalDetailIdValidator;
@@ -59,6 +61,8 @@ public class CsvProcessorFactory {
     private IUdmUsageService udmUsageService;
     @Autowired
     private IUdmTypeOfUseService udmTypeOfUseService;
+    @Autowired
+    private ITelesalesService telesalesService;
 
     /**
      * Initialized UsageCsvProcessor.
@@ -143,7 +147,7 @@ public class CsvProcessorFactory {
         UdmCsvProcessor processor = new UdmCsvProcessor();
         processor.addBusinessValidators(new SurveyDateValidator(), new QuantityValidator(),
             new ReportedTypeOfUseValidator(udmTypeOfUseService), new OriginalDetailIdValidator(udmUsageService),
-            new UdmWorkInfoValidator());
+            new UdmWorkInfoValidator(), new CompanyIdValidator(telesalesService, licenseeClassService));
         return processor;
     }
 }
