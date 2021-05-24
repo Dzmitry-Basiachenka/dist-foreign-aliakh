@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -22,6 +23,9 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
+
+import com.google.common.collect.ImmutableMap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,18 +59,25 @@ public class UdmUsageServiceTest {
     private static final String UDM_USAGE_UID_2 = "f9207059-af0a-440a-abc7-b6e016c64677";
     private static final String UDM_USAGE_ORIGIN_UID_1 = "OGN674GHHSB321";
     private static final String UDM_USAGE_ORIGIN_UID_2 = "OGN674GHHSB322";
+    private static final String FAX_PHOTOCOPIES = "FAX_PHOTOCOPIES";
+    private static final String COPY_FOR_MYSELF = "COPY_FOR_MYSELF";
+    private static final String PRINT = "PRINT";
+    private static final String DIGITAL = "DIGITAL";
     private static final BigDecimal STATISTICAL_MULTIPLIER = BigDecimal.ONE.setScale(5, BigDecimal.ROUND_HALF_UP);
 
     private final UdmUsageService udmUsageService = new UdmUsageService();
     private IUdmUsageRepository udmUsageRepository;
     private UdmAnnualMultiplierCalculator udmAnnualMultiplierCalculator;
+    private IUdmTypeOfUseService udmTypeOfUseService;
 
     @Before
     public void setUp() {
         udmUsageRepository = createMock(IUdmUsageRepository.class);
         udmAnnualMultiplierCalculator = createMock(UdmAnnualMultiplierCalculator.class);
+        udmTypeOfUseService = createMock(IUdmTypeOfUseService.class);
         Whitebox.setInternalState(udmUsageService, udmUsageRepository);
         Whitebox.setInternalState(udmUsageService, udmAnnualMultiplierCalculator);
+        Whitebox.setInternalState(udmUsageService, udmTypeOfUseService);
     }
 
     @Test
@@ -76,6 +87,11 @@ public class UdmUsageServiceTest {
         List<UdmUsage> udmUsages = Arrays.asList(
             buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1),
             buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2));
+        UdmUsage udmUsage = udmUsages.get(1);
+        udmUsage.setReportedTypeOfUse(null);
+        udmUsage.setReportedTitle("None");
+        expect(udmTypeOfUseService.getUdmTouToRmsTouMap())
+            .andReturn(ImmutableMap.of(FAX_PHOTOCOPIES, PRINT, COPY_FOR_MYSELF, DIGITAL)).once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         udmUsageRepository.insert(udmUsages.get(0));
         expectLastCall().once();
@@ -83,11 +99,13 @@ public class UdmUsageServiceTest {
         expectLastCall().once();
         expect(udmAnnualMultiplierCalculator.calculate(LocalDate.of(2021, 12, 12), LocalDate.of(2021, 12, 12)))
             .andReturn(25).times(2);
-        replay(udmUsageRepository, udmAnnualMultiplierCalculator, RupContextUtils.class);
+        replay(udmUsageRepository, udmAnnualMultiplierCalculator, udmTypeOfUseService, RupContextUtils.class);
         udmUsageService.insertUdmUsages(udmBatch, udmUsages);
-        verify(udmUsageRepository, udmAnnualMultiplierCalculator, RupContextUtils.class);
+        verify(udmUsageRepository, udmAnnualMultiplierCalculator, udmTypeOfUseService, RupContextUtils.class);
         assertUdmUsage(udmUsages.get(0));
         assertUdmUsage(udmUsages.get(1));
+        assertEquals(DIGITAL, udmUsages.get(0).getTypeOfUse());
+        assertNull(udmUsages.get(1).getTypeOfUse());
         assertNotNull(udmBatch.getId());
     }
 
@@ -158,7 +176,7 @@ public class UdmUsageServiceTest {
         udmUsage.setSurveyCountry("United States");
         udmUsage.setSurveyStartDate(LocalDate.of(2021, 12, 12));
         udmUsage.setSurveyEndDate(LocalDate.of(2021, 12, 12));
-        udmUsage.setReportedTypeOfUse("COPY_FOR_MYSELF");
+        udmUsage.setReportedTypeOfUse(COPY_FOR_MYSELF);
         udmUsage.setQuantity(7);
         return udmUsage;
     }

@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
@@ -22,6 +23,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -44,6 +46,8 @@ public class UdmUsageService implements IUdmUsageService {
     private IUdmUsageRepository udmUsageRepository;
     @Autowired
     private UdmAnnualMultiplierCalculator udmAnnualMultiplierCalculator;
+    @Autowired
+    private IUdmTypeOfUseService udmTypeOfUseService;
 
     @Override
     @Transactional
@@ -53,7 +57,9 @@ public class UdmUsageService implements IUdmUsageService {
         LOGGER.info("Insert UDM usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", udmBatch.getName(),
             size, userName);
         LocalDate periodEndDate = createPeriodEndDate(udmBatch);
+        Map<String, String> udmTouToRmsTou = udmTypeOfUseService.getUdmTouToRmsTouMap();
         udmUsages.forEach(usage -> {
+            usage.setTypeOfUse(udmTouToRmsTou.get(usage.getReportedTypeOfUse()));
             usage.setBatchId(udmBatch.getId());
             usage.setPeriodEndDate(periodEndDate);
             usage.setAnnualMultiplier(udmAnnualMultiplierCalculator.calculate(usage.getSurveyStartDate(),

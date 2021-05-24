@@ -78,6 +78,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String IP_ADDRESS = "ip24.12.119.203";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final String STANDARD_NUMBER = "2192-3558";
+    private static final String DIGITAL = "DIGITAL";
 
     @Autowired
     private IUdmUsageRepository udmUsageRepository;
@@ -110,6 +111,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(SURVEY_END_DATE, udmUsage.getSurveyEndDate());
         assertEquals(ANNUAL_MULTIPLIER, udmUsage.getAnnualMultiplier());
         assertEquals(STATISTICAL_MULTIPLIER, udmUsage.getStatisticalMultiplier());
+        assertEquals(DIGITAL, udmUsage.getTypeOfUse());
         assertEquals(REPORTED_TYPE_OF_USE, udmUsage.getReportedTypeOfUse());
         assertEquals(QUANTITY, udmUsage.getQuantity());
         assertEquals(StringUtils.EMPTY, udmUsage.getIneligibleReason());
@@ -319,6 +321,7 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setSurveyEndDate(SURVEY_END_DATE);
         udmUsage.setAnnualMultiplier(ANNUAL_MULTIPLIER);
         udmUsage.setStatisticalMultiplier(STATISTICAL_MULTIPLIER);
+        udmUsage.setTypeOfUse(DIGITAL);
         udmUsage.setReportedTypeOfUse(REPORTED_TYPE_OF_USE);
         udmUsage.setQuantity(QUANTITY);
         udmUsage.setIneligibleReason(StringUtils.EMPTY);
