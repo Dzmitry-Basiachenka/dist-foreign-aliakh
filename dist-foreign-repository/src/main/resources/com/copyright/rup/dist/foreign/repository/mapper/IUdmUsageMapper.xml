@@ -22,6 +22,7 @@
         <result property="language" column="language"/>
         <result property="companyId" column="company_id"/>
         <result property="companyName" column="company_name"/>
+        <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
         <result property="surveyRespondent" column="survey_respondent"/>
         <result property="ipAddress" column="ip_address"/>
         <result property="surveyCountry" column="survey_country"/>
@@ -59,6 +60,8 @@
         <result property="language" column="language"/>
         <result property="companyId" column="company_id"/>
         <result property="companyName" column="company_name"/>
+        <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
+        <result property="detailLicenseeClassName" column="detail_licensee_class_name"/>
         <result property="surveyRespondent" column="survey_respondent"/>
         <result property="ipAddress" column="ip_address"/>
         <result property="surveyCountry" column="survey_country"/>
@@ -108,6 +111,8 @@
             article,
             language,
             company_id,
+            company_name,
+            detail_licensee_class_id,
             survey_respondent,
             ip_address,
             survey_country,
@@ -136,6 +141,8 @@
             #{article},
             #{language},
             #{companyId},
+            #{companyName},
+            #{detailLicenseeClassId},
             #{surveyRespondent},
             #{ipAddress},
             #{surveyCountry},
@@ -183,6 +190,8 @@
             language,
             company_id,
             company_name,
+            u.detail_licensee_class_id,
+            dlc.description detail_licensee_class_name,
             survey_respondent,
             ip_address,
             survey_country,
@@ -201,6 +210,7 @@
             u.updated_by_user
         from ${schema}.df_udm_usage u
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
         <include refid="IUdmUsageMapper.udmUsageFilter"/>
         order by
@@ -275,6 +285,12 @@
             <when test="sort.property == 'companyName'">
                 company_name <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'detLcId'">
+                u.detail_licensee_class_id <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'detLcName'">
+                dlc.description <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'surveyRespondent'">
                 survey_respondent <include refid="IUsageMapper.direction"/>
             </when>
@@ -330,6 +346,7 @@
         select count(1)
         from ${schema}.df_udm_usage u
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
         <include refid="IUdmUsageMapper.udmUsageFilter"/>
     </select>
@@ -353,6 +370,7 @@
             language,
             company_id,
             company_name,
+            detail_licensee_class_id,
             survey_respondent,
             ip_address,
             survey_country,

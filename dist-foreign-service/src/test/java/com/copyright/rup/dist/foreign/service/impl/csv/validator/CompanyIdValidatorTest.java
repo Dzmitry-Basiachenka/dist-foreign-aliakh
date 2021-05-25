@@ -62,7 +62,7 @@ public class CompanyIdValidatorTest {
         expect(telesalesService.getCompanyInformation(1136L)).andReturn(null).once();
         replay(telesalesService, licenseeClassService);
         assertFalse(validator.isValid(usage));
-        assertEquals("Company ID is not found in Telesales", validator.getErrorMessage());
+        assertEquals("Company ID or Company Name not found in Telesales", validator.getErrorMessage());
         verify(telesalesService, licenseeClassService);
     }
 

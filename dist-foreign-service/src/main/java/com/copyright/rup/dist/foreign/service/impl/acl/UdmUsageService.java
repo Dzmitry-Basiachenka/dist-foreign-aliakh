@@ -4,11 +4,13 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
@@ -55,6 +57,8 @@ public class UdmUsageService implements IUdmUsageService {
     @Autowired
     private IUdmTypeOfUseService udmTypeOfUseService;
     @Autowired
+    private ITelesalesService telesalesService;
+    @Autowired
     @Qualifier("udmUsageChainChunkExecutor")
     private IChainExecutor<UdmUsage> chainExecutor;
 
@@ -78,6 +82,9 @@ public class UdmUsageService implements IUdmUsageService {
                 usage.setAnnualizedCopies(udmAnnualizedCopiesCalculator.calculate(usage.getReportedTypeOfUse(),
                     usage.getQuantity(), usage.getAnnualMultiplier(), usage.getStatisticalMultiplier()));
             }
+            CompanyInformation companyInformation = telesalesService.getCompanyInformation(usage.getCompanyId());
+            usage.setCompanyName(companyInformation.getName());
+            usage.setDetailLicenseeClassId(companyInformation.getDetailedLicenseeClassId());
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             udmUsageRepository.insert(usage);
