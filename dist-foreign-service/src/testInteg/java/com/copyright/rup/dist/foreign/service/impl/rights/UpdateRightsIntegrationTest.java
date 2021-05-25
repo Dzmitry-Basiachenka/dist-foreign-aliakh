@@ -8,6 +8,7 @@ import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -16,6 +17,7 @@ import com.copyright.rup.dist.foreign.repository.api.ISalUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.RightsholderService;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -75,6 +77,8 @@ public class UpdateRightsIntegrationTest {
     private IRightsService rightsService;
     @Autowired
     private IUsageAuditService usageAuditService;
+    @Autowired
+    private IUdmUsageService udmUsageService;
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
@@ -159,6 +163,22 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
+    public void testUpdateUdmRights() {
+        mockServer = MockRestServiceServer.createServer(restTemplate);
+        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
+        expectRmsCall("rms_grants_udm_122769421_request.json", "rms_grants_udm_122769421_response.json");
+        expectRmsCall("rms_grants_udm_210001899_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        expectPrmCall();
+        rightsService.updateUdmRights(Arrays.asList(
+            buildUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", 122769421, "PRINT"),
+            buildUdmUsage("074749c5-08fa-4f57-8c3b-ecbc334a5c2a", 210001899, "DIGITAL")));
+        assertUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", UsageStatusEnum.RH_FOUND, 1000000322L);
+        assertUdmUsage("074749c5-08fa-4f57-8c3b-ecbc334a5c2a", UsageStatusEnum.RH_NOT_FOUND, null);
+        mockServer.verify();
+        asyncMockServer.verify();
+    }
+
+    @Test
     public void testUpdateSalRights() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
@@ -201,6 +221,21 @@ public class UpdateRightsIntegrationTest {
         usage.setSalUsage(new SalUsage());
         usage.getSalUsage().setBatchPeriodEndDate(LocalDate.of(2020, 6, 30));
         return usage;
+    }
+
+    private UdmUsage buildUdmUsage(String usageId, long wrWrkInst, String typeOfUse) {
+        UdmUsage udmUsage = new UdmUsage();
+        udmUsage.setId(usageId);
+        udmUsage.setWrWrkInst(wrWrkInst);
+        udmUsage.setTypeOfUse(typeOfUse);
+        udmUsage.setPeriodEndDate(LocalDate.of(2020, 6, 30));
+        return udmUsage;
+    }
+
+    private void assertUdmUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber) {
+        UdmUsage udmUsage = udmUsageService.getUdmUsagesByIds(Collections.singletonList(usageId)).get(0);
+        assertEquals(expectedStatus, udmUsage.getStatus());
+        assertEquals(expectedRhAccountNumber, udmUsage.getRightsholder().getAccountNumber());
     }
 
     private void assertAaclUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccountNumber,

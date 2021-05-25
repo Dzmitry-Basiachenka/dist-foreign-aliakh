@@ -1,0 +1,11 @@
+{
+  "works": [
+    {
+      "status": ["GRANT"],
+      "wr_wrk_inst": 122769421,
+      "period_end_date": "06/30/2020",
+      "type_of_use": ["PRINT"],
+      "license_type": ["ACL"]
+    }
+  ]
+}

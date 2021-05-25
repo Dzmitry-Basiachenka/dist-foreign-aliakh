@@ -64,11 +64,19 @@ public class LoadUdmUsagesIntegrationTest {
     private IUdmUsageRepository udmUsageRepository;
     @Autowired
     private IUdmBatchRepository udmBatchRepository;
+    @Autowired
+    private ServiceTestHelper testHelper;
 
     private final UdmBatch batch = buildUdmBatch();
 
     @Test
     public void testLoadUsages() throws Exception {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/rms_grants_udm_123059057_request.json",
+            "rights/rms_grants_udm_123059057_response.json");
+        testHelper.expectGetRmsRights("rights/rms_grants_udm_987654321_request.json",
+            "rights/rms_grants_empty_response.json");
+        testHelper.expectPrmCall("prm/rightsholder_1000024950_response.json", 1000024950L);
         List<String> usageIds = loadUdmBatch();
         verifyUdmBatch();
         verifyUdmUsages(usageIds);
