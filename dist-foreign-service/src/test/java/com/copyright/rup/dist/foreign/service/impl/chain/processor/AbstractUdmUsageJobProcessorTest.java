@@ -71,7 +71,7 @@ public class AbstractUdmUsageJobProcessorTest {
         usageConsumer.accept(Collections.singletonList(usage2));
         expectLastCall().once();
         replay(udmUsageService, usageConsumer, successProcessor, failureProcessor);
-        assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=ACL, UsagesCount=2"),
+        assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=ACL (UDM), UsagesCount=2"),
             processor.jobProcess(ACL_PRODUCT_FAMILY));
         verify(udmUsageService, usageConsumer, successProcessor, failureProcessor);
     }
@@ -81,7 +81,7 @@ public class AbstractUdmUsageJobProcessorTest {
         expect(udmUsageService.getUdmUsageIdsByStatus(UsageStatusEnum.NEW))
             .andReturn(Collections.emptyList()).once();
         replay(udmUsageService, usageConsumer, successProcessor, failureProcessor);
-        assertEquals(new JobInfo(JobStatusEnum.SKIPPED, "ProductFamily=ACL, Reason=There are no usages"),
+        assertEquals(new JobInfo(JobStatusEnum.SKIPPED, "ProductFamily=ACL (UDM), Reason=There are no usages"),
             processor.jobProcess(ACL_PRODUCT_FAMILY));
         verify(udmUsageService, usageConsumer, successProcessor, failureProcessor);
     }

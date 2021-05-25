@@ -1,13 +1,14 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.executor;
 
 import com.copyright.rup.dist.common.domain.job.JobInfo;
-import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
+import com.copyright.rup.dist.foreign.service.impl.chain.JobInfoUtils;
 
 import com.google.common.collect.Iterables;
+
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ abstract class AbstractUsageChainChunkExecutor<T> implements IChainExecutor<T> {
         List<JobInfo> jobInfos = new ArrayList<>();
         productFamilyToProcessorMap.forEach((productFamily, processor) ->
             jobInfos.addAll(execute(productFamily, processor, type)));
-        return mergeJobResults(jobInfos);
+        return JobInfoUtils.mergeJobResults(jobInfos);
     }
 
     @Override
@@ -128,14 +129,5 @@ abstract class AbstractUsageChainChunkExecutor<T> implements IChainExecutor<T> {
                 execute(usages, processor.getFailureProcessor(), type);
             }
         }
-    }
-
-    private JobInfo mergeJobResults(List<JobInfo> jobInfos) {
-        JobStatusEnum status = jobInfos.stream().anyMatch(jobInfo -> JobStatusEnum.FINISHED == jobInfo.getStatus())
-            ? JobStatusEnum.FINISHED : JobStatusEnum.SKIPPED;
-        String result = jobInfos.stream()
-            .map(JobInfo::getResult)
-            .collect(Collectors.joining("; "));
-        return new JobInfo(status, result);
     }
 }
