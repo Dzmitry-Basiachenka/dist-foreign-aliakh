@@ -1,3 +1,29 @@
+13.1.24
+-
+* B-65858 FDA & UDM: Load ACL usage data: make changes in comments in CR-DIST-FOREIGN-230
+* B-67378 FDA & UDM: Detail/Aggregate licensee mapping: implement liquibase script to add description and product_family columns into df_aggregate_licensee_class  and df_detail_licensee_class tables
+* B-66633: FDA & UDM: PI matching for newly uploaded ACL usages: add WORK_FOUND and WORK_NOT_FOUND statuses to filter widget and implement update processed usages logic
+* B-67378 FDA & UDM: Detail/Aggregate licensee mapping: insert ACL licensee classes mapping into df_aggregate_licensee_class and df_detail_licensee_class tables
+* B-66634 FDA & UDM: RMS Rights: refactor chain executor to support UDM usages
+* B-67105 FDA & UDM: UDM TOU Mapping: create df_udm_tou_mapping table
+* B-66754 FDA & UDM: Pull Company Information from Telesales: implement liquibase script to create df_company table
+* B-66633 FDA & UDM: PI matching for newly uploaded ACL usages: refine work matching service to support UDM usages
+* B-65859 FDA: UDM normalize annual multiplier: calculate annual multiplier after uploading UDM usages
+* B-66634 FDA & UDM: RMS Rights: refactor processors to support UDM usages and implement repository and service logic that will be used by UDM processors
+* B-67105 FDA & UDM: UDM TOU Mapping: implement repository layer for UDM TOU mapping
+* B-66633 FDA & UDM: PI matching for newly uploaded ACL usages: implement matching consumer for UDM usages
+* B-67105 FDA & UDM: UDM TOU Mapping: implement service layer for UDM TOU mapping
+* B-66634 FDA & UDM: RMS Rights: implement serializer and deserializer for UDM usages
+* B-66754 FDA & UDM: Pull Company Information from Telesales: add getCompanyInformation method to TelesalesService
+* B-66634 FDA & UDM: RMS Rights: Add RH_FOUND and RH_NOT_FOUND statuses to the filter
+* B-66633 FDA & UDM: PI matching for newly uploaded ACL usages: introduce common UDM usage producer and apply it for matching processor
+* B-66754 FDA & UDM: Pull Company Information from Telesales: implement CompanyIdValidator
+* B-66634 FDA & UDM: RMS Rights: implement processor and consumer for getting rights
+* B-67105 FDA & UDM: UDM TOU Mapping: implement validator for reported type of uses
+* B-66633 FDA & UDM: PI matching for newly uploaded ACL usages: introduce UDM matching queue to get work information
+* B-66633 FDA & UDM: PI matching for newly uploaded ACL usages: implement UDM work information validator
+* B-66754 FDA & UDM: Pull Company Information from Telesales: apply CompanyIdValidator on UDM usages upload step
+
 13.1.23
 -
 * B-65858 FDA & UDM: Load ACL usage data: make changes in comments in CR-DIST-FOREIGN-230
