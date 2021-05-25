@@ -113,6 +113,7 @@
     "surveyStartDate": "2018-06-15",
     "annualMultiplier": 1,
     "statisticalMultiplier": 1.00000,
+    "annualizedCopies": 1.00000,
     "surveyEndDate": "2020-06-15",
     "periodEndDate": "2020-06-30"
   }
