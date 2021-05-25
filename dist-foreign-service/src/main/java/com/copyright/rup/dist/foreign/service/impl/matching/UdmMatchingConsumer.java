@@ -4,12 +4,15 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainChunkProcessor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +40,9 @@ public class UdmMatchingConsumer implements IConsumer<List<UdmUsage>> {
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
+    @Qualifier("df.service.udmMatchingProcessor")
+    private IChainChunkProcessor<List<UdmUsage>, UdmUsage> matchingProcessor;
+    @Autowired
     private IWorkMatchingService workMatchingService;
 
     @Override
@@ -60,6 +66,8 @@ public class UdmMatchingConsumer implements IConsumer<List<UdmUsage>> {
                         usage.getReportedTitle(), usage.getWrWrkInst(), usage.getStatus());
                 }
             });
+            matchingProcessor.executeNextChainProcessor(usages,
+                usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus());
             LOGGER.trace("Consume UDM usages for matching processing. Finished. UsageIds={}", LogUtils.ids(usages));
         }
     }

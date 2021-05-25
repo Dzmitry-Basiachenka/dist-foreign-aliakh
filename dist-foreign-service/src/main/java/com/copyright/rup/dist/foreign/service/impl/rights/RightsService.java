@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
@@ -62,6 +63,7 @@ import java.util.stream.Collectors;
 public class RightsService implements IRightsService {
 
     private static final int PRODUCT_FAMILIES_COUNT = 1;
+    private static final String ACL_LICENSE_TYPE = "ACL";
     private static final String PRINT_TYPE_OF_USE = "PRINT";
     private static final String DIGITAL_TYPE_OF_USE = "DIGITAL";
     private static final String NTS_WITHDRAWN_AUDIT_MESSAGE =
@@ -73,6 +75,8 @@ public class RightsService implements IRightsService {
     private Map<String, Set<String>> productFamilyToRightStatusesMap;
     @Autowired
     private IUsageBatchService usageBatchService;
+    @Autowired
+    private IUdmUsageService udmUsageService;
     @Autowired
     private IUsageService usageService;
     @Autowired
@@ -204,8 +208,41 @@ public class RightsService implements IRightsService {
     }
 
     @Override
+    @Transactional
     public void updateUdmRights(List<UdmUsage> udmUsages) {
-        //TODO: implement logic for getting rights
+        if (CollectionUtils.isNotEmpty(udmUsages)) {
+            Map<LocalDate, Map<String, List<UdmUsage>>> periodEndDatesToTypeOfUseToUdmUsagesMap = udmUsages.stream()
+                .collect(Collectors.groupingBy(UdmUsage::getPeriodEndDate,
+                    Collectors.groupingBy(UdmUsage::getTypeOfUse)));
+            periodEndDatesToTypeOfUseToUdmUsagesMap.forEach((periodEndDate, typeOfUseToUdmUsagesMap) -> {
+                typeOfUseToUdmUsagesMap.forEach((typeOfUse, groupedUdmUsages) -> {
+                    List<Long> wrWrkInsts = groupedUdmUsages.stream()
+                        .map(UdmUsage::getWrWrkInst)
+                        .collect(Collectors.toList());
+                    Map<Long, List<RmsGrant>> wrWrkInstToGrants = rmsRightsService.getGrants(wrWrkInsts, periodEndDate,
+                        productFamilyToRightStatusesMap.get(FdaConstants.ACL_PRODUCT_FAMILY),
+                        ImmutableSet.of(typeOfUse), ImmutableSet.of(ACL_LICENSE_TYPE)).stream()
+                        .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
+                    groupedUdmUsages.forEach(udmUsage -> {
+                        Long wrWrkInst = udmUsage.getWrWrkInst();
+                        Set<RmsGrant> eligibleGrants = wrWrkInstToGrants
+                            .getOrDefault(wrWrkInst, Collections.emptyList())
+                            .stream()
+                            .filter(grant -> FdaConstants.ACL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
+                            .collect(Collectors.toSet());
+                        RmsGrant grant = findGrantByStatus(eligibleGrants, FdaConstants.RIGHT_STATUS_GRANT);
+                        if (Objects.nonNull(grant)) {
+                            Long rhAccountNumber = grant.getWorkGroupOwnerOrgNumber().longValueExact();
+                            udmUsage.setRightsholder(buildRightsholder(rhAccountNumber));
+                            udmUsage.setStatus(UsageStatusEnum.RH_FOUND);
+                        } else {
+                            udmUsage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                        }
+                        udmUsageService.updateProcessedUsage(udmUsage);
+                    });
+                });
+            });
+        }
     }
 
     @Override

@@ -57,7 +57,9 @@ public class CommonUdmUsageSerializer extends StdSerializer<List<UdmUsage>> {
             writeNotNullField(jsonGenerator, "wr_wrk_inst", udmUsage.getWrWrkInst());
             writeNotNullField(jsonGenerator, "type_of_use", udmUsage.getTypeOfUse());
             writeNotNullField(jsonGenerator, "reported_standard_number", udmUsage.getReportedStandardNumber());
+            writeNotNullField(jsonGenerator, "standard_number", udmUsage.getStandardNumber());
             writeNotNullField(jsonGenerator, "reported_title", udmUsage.getReportedTitle());
+            writeNotNullField(jsonGenerator, "system_title", udmUsage.getSystemTitle());
             writeNotNullField(jsonGenerator, "period_end_date", udmUsage.getPeriodEndDate());
             writeNotNullField(jsonGenerator, "status", udmUsage.getStatus().name());
             jsonGenerator.writeNumberField("record_version", udmUsage.getVersion());

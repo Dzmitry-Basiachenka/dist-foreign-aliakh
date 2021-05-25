@@ -55,7 +55,9 @@ public class CommonUdmUsageDeserializer extends JsonDeserializer<List<UdmUsage>>
         udmUsage.setWrWrkInst(JsonUtils.getLongValue(jsonNode.get("wr_wrk_inst")));
         udmUsage.setTypeOfUse(JsonUtils.getStringValue(jsonNode.get("type_of_use")));
         udmUsage.setReportedStandardNumber(JsonUtils.getStringValue(jsonNode.get("reported_standard_number")));
+        udmUsage.setStandardNumber(JsonUtils.getStringValue(jsonNode.get("standard_number")));
         udmUsage.setReportedTitle(JsonUtils.getStringValue(jsonNode.get("reported_title")));
+        udmUsage.setSystemTitle(JsonUtils.getStringValue(jsonNode.get("system_title")));
         udmUsage.setPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get("period_end_date")));
         udmUsage.setStatus(UsageStatusEnum.valueOf(JsonUtils.getStringValue(jsonNode.get("status"))));
         udmUsage.setVersion(JsonUtils.getIntegerValue(jsonNode.get("record_version")));
