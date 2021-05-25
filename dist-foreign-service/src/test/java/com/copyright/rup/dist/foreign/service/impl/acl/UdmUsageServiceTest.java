@@ -69,11 +69,14 @@ public class UdmUsageServiceTest {
     private static final String COPY_FOR_MYSELF = "COPY_FOR_MYSELF";
     private static final String PRINT = "PRINT";
     private static final String DIGITAL = "DIGITAL";
+    private static final int ANNUAL_MULTIPLIER = 25;
     private static final BigDecimal STATISTICAL_MULTIPLIER = BigDecimal.ONE.setScale(5, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal ANNUALIZED_COPIES = new BigDecimal(175).setScale(5, BigDecimal.ROUND_HALF_UP);
 
     private final UdmUsageService udmUsageService = new UdmUsageService();
     private IUdmUsageRepository udmUsageRepository;
     private UdmAnnualMultiplierCalculator udmAnnualMultiplierCalculator;
+    private UdmAnnualizedCopiesCalculator udmAnnualizedCopiesCalculator;
     private IUdmTypeOfUseService udmTypeOfUseService;
     private IChainExecutor<UdmUsage> chainExecutor;
 
@@ -81,10 +84,12 @@ public class UdmUsageServiceTest {
     public void setUp() {
         udmUsageRepository = createMock(IUdmUsageRepository.class);
         udmAnnualMultiplierCalculator = createMock(UdmAnnualMultiplierCalculator.class);
+        udmAnnualizedCopiesCalculator = createMock(UdmAnnualizedCopiesCalculator.class);
         udmTypeOfUseService = createMock(IUdmTypeOfUseService.class);
         chainExecutor = createMock(IChainExecutor.class);
         Whitebox.setInternalState(udmUsageService, udmUsageRepository);
         Whitebox.setInternalState(udmUsageService, udmAnnualMultiplierCalculator);
+        Whitebox.setInternalState(udmUsageService, udmAnnualizedCopiesCalculator);
         Whitebox.setInternalState(udmUsageService, chainExecutor);
         Whitebox.setInternalState(udmUsageService, udmTypeOfUseService);
     }
@@ -93,28 +98,33 @@ public class UdmUsageServiceTest {
     public void testInsertUdmUsages() {
         mockStatic(RupContextUtils.class);
         UdmBatch udmBatch = buildUdmBatch();
-        List<UdmUsage> udmUsages = Arrays.asList(
-            buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1),
-            buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2));
-        UdmUsage udmUsage = udmUsages.get(1);
-        udmUsage.setReportedTypeOfUse(null);
-        udmUsage.setReportedTitle("None");
+        UdmUsage udmUsage1 = buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1);
+        UdmUsage udmUsage2 = buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2);
+        udmUsage2.setReportedTypeOfUse(null);
+        udmUsage2.setReportedTitle("None");
+        List<UdmUsage> udmUsages = Arrays.asList(udmUsage1, udmUsage2);
         expect(udmTypeOfUseService.getUdmTouToRmsTouMap())
             .andReturn(ImmutableMap.of(FAX_PHOTOCOPIES, PRINT, COPY_FOR_MYSELF, DIGITAL)).once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        udmUsageRepository.insert(udmUsages.get(0));
+        udmUsageRepository.insert(udmUsage1);
         expectLastCall().once();
-        udmUsageRepository.insert(udmUsages.get(1));
+        udmUsageRepository.insert(udmUsage2);
         expectLastCall().once();
         expect(udmAnnualMultiplierCalculator.calculate(LocalDate.of(2021, 12, 12), LocalDate.of(2021, 12, 12)))
-            .andReturn(25).times(2);
-        replay(udmUsageRepository, udmAnnualMultiplierCalculator, udmTypeOfUseService, RupContextUtils.class);
+            .andReturn(ANNUAL_MULTIPLIER).times(2);
+        expect(udmAnnualizedCopiesCalculator.calculate(udmUsage1.getReportedTypeOfUse(), udmUsage1.getQuantity(),
+            ANNUAL_MULTIPLIER, STATISTICAL_MULTIPLIER)).andReturn(ANNUALIZED_COPIES).once();
+        replay(udmUsageRepository, udmTypeOfUseService, udmAnnualMultiplierCalculator, udmAnnualizedCopiesCalculator,
+            RupContextUtils.class);
         udmUsageService.insertUdmUsages(udmBatch, udmUsages);
-        verify(udmUsageRepository, udmAnnualMultiplierCalculator, udmTypeOfUseService, RupContextUtils.class);
-        assertUdmUsage(udmUsages.get(0));
-        assertUdmUsage(udmUsages.get(1));
-        assertEquals(DIGITAL, udmUsages.get(0).getTypeOfUse());
-        assertNull(udmUsages.get(1).getTypeOfUse());
+        verify(udmUsageRepository, udmTypeOfUseService, udmAnnualMultiplierCalculator, udmAnnualizedCopiesCalculator,
+            RupContextUtils.class);
+        assertUdmUsage(udmUsage1);
+        assertEquals(DIGITAL, udmUsage1.getTypeOfUse());
+        assertEquals(ANNUALIZED_COPIES, udmUsage1.getAnnualizedCopies());
+        assertUdmUsage(udmUsage2);
+        assertNull(udmUsage2.getTypeOfUse());
+        assertNull(udmUsage2.getAnnualizedCopies());
         assertNotNull(udmBatch.getId());
     }
 
@@ -153,41 +163,6 @@ public class UdmUsageServiceTest {
         replay(udmUsageRepository);
         assertEquals(udmUsages, udmUsageRepository.findByIds(udmUsageIds));
         verify(udmUsageRepository);
-    }
-
-    private UdmBatch buildUdmBatch() {
-        UdmBatch udmBatch = new UdmBatch();
-        udmBatch.setId(UDM_BATCH_UID);
-        udmBatch.setName("UDM Batch 2021 June");
-        udmBatch.setPeriod(202006);
-        udmBatch.setChannel(UdmChannelEnum.CCC);
-        udmBatch.setUsageOrigin(UdmUsageOriginEnum.SS);
-        return udmBatch;
-    }
-
-    private UdmUsage buildUdmUsage(String usageId, String originalDetailId) {
-        UdmUsage udmUsage = new UdmUsage();
-        udmUsage.setId(usageId);
-        udmUsage.setOriginalDetailId(originalDetailId);
-        udmUsage.setBatchId(UDM_BATCH_UID);
-        udmUsage.setStatus(UsageStatusEnum.NEW);
-        udmUsage.setUsageDate(LocalDate.of(2021, 12, 12));
-        udmUsage.setWrWrkInst(122825347L);
-        udmUsage.setReportedStandardNumber("0927-7765");
-        udmUsage.setReportedTitle("Colloids and surfaces. B, Biointerfaces");
-        udmUsage.setReportedPubType("Journal");
-        udmUsage.setPubFormat("format");
-        udmUsage.setArticle("Green chemistry");
-        udmUsage.setLanguage("English");
-        udmUsage.setCompanyId(45489489L);
-        udmUsage.setSurveyRespondent("fa0276c3-55d6-42cd-8ffe-e9124acae02f");
-        udmUsage.setIpAddress("ip24.12.119.203");
-        udmUsage.setSurveyCountry("United States");
-        udmUsage.setSurveyStartDate(LocalDate.of(2021, 12, 12));
-        udmUsage.setSurveyEndDate(LocalDate.of(2021, 12, 12));
-        udmUsage.setReportedTypeOfUse(COPY_FOR_MYSELF);
-        udmUsage.setQuantity(7);
-        return udmUsage;
     }
 
     @Test
@@ -259,10 +234,45 @@ public class UdmUsageServiceTest {
         verify(udmUsageRepository);
     }
 
+    private UdmBatch buildUdmBatch() {
+        UdmBatch udmBatch = new UdmBatch();
+        udmBatch.setId(UDM_BATCH_UID);
+        udmBatch.setName("UDM Batch 2021 June");
+        udmBatch.setPeriod(202006);
+        udmBatch.setChannel(UdmChannelEnum.CCC);
+        udmBatch.setUsageOrigin(UdmUsageOriginEnum.SS);
+        return udmBatch;
+    }
+
+    private UdmUsage buildUdmUsage(String usageId, String originalDetailId) {
+        UdmUsage udmUsage = new UdmUsage();
+        udmUsage.setId(usageId);
+        udmUsage.setOriginalDetailId(originalDetailId);
+        udmUsage.setBatchId(UDM_BATCH_UID);
+        udmUsage.setStatus(UsageStatusEnum.NEW);
+        udmUsage.setUsageDate(LocalDate.of(2021, 12, 12));
+        udmUsage.setWrWrkInst(122825347L);
+        udmUsage.setReportedStandardNumber("0927-7765");
+        udmUsage.setReportedTitle("Colloids and surfaces. B, Biointerfaces");
+        udmUsage.setReportedPubType("Journal");
+        udmUsage.setPubFormat("format");
+        udmUsage.setArticle("Green chemistry");
+        udmUsage.setLanguage("English");
+        udmUsage.setCompanyId(45489489L);
+        udmUsage.setSurveyRespondent("fa0276c3-55d6-42cd-8ffe-e9124acae02f");
+        udmUsage.setIpAddress("ip24.12.119.203");
+        udmUsage.setSurveyCountry("United States");
+        udmUsage.setSurveyStartDate(LocalDate.of(2021, 12, 12));
+        udmUsage.setSurveyEndDate(LocalDate.of(2021, 12, 12));
+        udmUsage.setReportedTypeOfUse("COPY_FOR_MYSELF");
+        udmUsage.setQuantity(7);
+        return udmUsage;
+    }
+
     private void assertUdmUsage(UdmUsage udmUsage) {
         assertEquals(UDM_BATCH_UID, udmUsage.getBatchId());
         assertEquals(LocalDate.of(2020, 6, 30), udmUsage.getPeriodEndDate());
-        assertEquals(25, udmUsage.getAnnualMultiplier().intValue());
+        assertEquals(ANNUAL_MULTIPLIER, udmUsage.getAnnualMultiplier().intValue());
         assertEquals(STATISTICAL_MULTIPLIER, udmUsage.getStatisticalMultiplier());
         assertEquals(USER_NAME, udmUsage.getCreateUser());
         assertEquals(USER_NAME, udmUsage.getUpdateUser());

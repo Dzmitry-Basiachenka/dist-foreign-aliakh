@@ -74,6 +74,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final Integer QUANTITY = 10;
     private static final Integer ANNUAL_MULTIPLIER = 1;
     private static final BigDecimal STATISTICAL_MULTIPLIER = new BigDecimal("1.00000");
+    private static final BigDecimal ANNUALIZED_COPIES = new BigDecimal("10.00000");
     // Have to use incorrect ip for testing purposes as PMD disallows hardcoded ips
     private static final String IP_ADDRESS = "ip24.12.119.203";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
@@ -111,6 +112,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(SURVEY_END_DATE, udmUsage.getSurveyEndDate());
         assertEquals(ANNUAL_MULTIPLIER, udmUsage.getAnnualMultiplier());
         assertEquals(STATISTICAL_MULTIPLIER, udmUsage.getStatisticalMultiplier());
+        assertEquals(ANNUALIZED_COPIES, udmUsage.getAnnualizedCopies());
         assertEquals(DIGITAL, udmUsage.getTypeOfUse());
         assertEquals(REPORTED_TYPE_OF_USE, udmUsage.getReportedTypeOfUse());
         assertEquals(QUANTITY, udmUsage.getQuantity());
@@ -293,7 +295,7 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setStatisticalMultiplier(new BigDecimal("0.10000"));
         udmUsage.setReportedTypeOfUse("EMAIL_COPY");
         udmUsage.setQuantity(10);
-        udmUsage.setAnnualizedCopies(2);
+        udmUsage.setAnnualizedCopies(new BigDecimal("2.00000"));
         udmUsage.setIneligibleReason(StringUtils.EMPTY);
         return udmUsage;
     }
@@ -321,6 +323,7 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setSurveyEndDate(SURVEY_END_DATE);
         udmUsage.setAnnualMultiplier(ANNUAL_MULTIPLIER);
         udmUsage.setStatisticalMultiplier(STATISTICAL_MULTIPLIER);
+        udmUsage.setAnnualizedCopies(ANNUALIZED_COPIES);
         udmUsage.setTypeOfUse(DIGITAL);
         udmUsage.setReportedTypeOfUse(REPORTED_TYPE_OF_USE);
         udmUsage.setQuantity(QUANTITY);

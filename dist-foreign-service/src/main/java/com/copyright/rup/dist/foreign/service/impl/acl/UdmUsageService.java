@@ -51,6 +51,8 @@ public class UdmUsageService implements IUdmUsageService {
     @Autowired
     private UdmAnnualMultiplierCalculator udmAnnualMultiplierCalculator;
     @Autowired
+    private UdmAnnualizedCopiesCalculator udmAnnualizedCopiesCalculator;
+    @Autowired
     private IUdmTypeOfUseService udmTypeOfUseService;
     @Autowired
     @Qualifier("udmUsageChainChunkExecutor")
@@ -72,6 +74,10 @@ public class UdmUsageService implements IUdmUsageService {
             usage.setAnnualMultiplier(udmAnnualMultiplierCalculator.calculate(usage.getSurveyStartDate(),
                 usage.getSurveyEndDate()));
             usage.setStatisticalMultiplier(DEFAULT_STATISTICAL_MULTIPLIER);
+            if (null != usage.getReportedTypeOfUse()) {
+                usage.setAnnualizedCopies(udmAnnualizedCopiesCalculator.calculate(usage.getReportedTypeOfUse(),
+                    usage.getQuantity(), usage.getAnnualMultiplier(), usage.getStatisticalMultiplier()));
+            }
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             udmUsageRepository.insert(usage);
