@@ -42,8 +42,10 @@ public class CompanyIdValidator implements DistCsvProcessor.IValidator<UdmUsage>
         boolean isValid = false;
         if (Objects.nonNull(companyId)) {
             CompanyInformation companyInformation = telesalesService.getCompanyInformation(companyId);
-            if (Objects.isNull(companyInformation) || StringUtils.isBlank(companyInformation.getName())) {
+            if (Objects.isNull(companyInformation)) {
                 errorMessage = "Company ID is not found in Telesales";
+            } else if (StringUtils.isBlank(companyInformation.getName())) {
+                errorMessage = "Company Name for provided Company ID is not found in Telesales";
             } else if (Objects.isNull(companyInformation.getDetailedLicenseeClassId())
                 || !licenseeClassService.detailLicenseeClassExists(companyInformation.getDetailedLicenseeClassId())) {
                 errorMessage = "Detail Licensee Class ID for provided Company ID is invalid or empty";
