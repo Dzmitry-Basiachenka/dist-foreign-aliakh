@@ -130,9 +130,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(UdmUsageDto::getPubFormat, "table.column.publication_format", "publicationFormat", true, 150),
             addColumn(UdmUsageDto::getArticle, "table.column.article", "article", true, 100),
             addColumn(UdmUsageDto::getLanguage, "table.column.language", "language", true, 100),
-            addColumnWithoutSort(UdmUsageDto::getDetailLicenseeClassId, "table.column.det_lc_id", "detLcId", true, 100),
-            addColumnWithoutSort(UdmUsageDto::getDetailLicenseeClassName, "table.column.det_lc_name", "detLcName", true,
-                100),
+            addColumn(UdmUsageDto::getDetailLicenseeClassId, "table.column.det_lc_id", "detLcId", true, 100),
+            addColumn(UdmUsageDto::getDetailLicenseeClassName, "table.column.det_lc_name", "detLcName", true, 100),
             addColumn(UdmUsageDto::getCompanyId, "table.column.company_id", "companyId", true, 100),
             addColumn(UdmUsageDto::getCompanyName, "table.column.company_name", "companyName", true, 120),
             addColumn(UdmUsageDto::getSurveyRespondent, "table.column.survey_respondent", "surveyRespondent", true,
@@ -158,18 +157,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(u -> getStringFromDate(u.getCreateDate()), "table.column.load_date", "createDate", true, 100),
             addColumn(UdmUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", true, 100),
             addColumn(u -> getStringFromDate(u.getUpdateDate()), "table.column.updated_date", "updateDate", true, 110));
-    }
-
-    //TODO remove after detail licensee class columns will be populated
-    private Column<UdmUsageDto, ?> addColumnWithoutSort(ValueProvider<UdmUsageDto, ?> valueProvider,
-                                                        String captionProperty, String columnId, boolean isHidable,
-                                                        double width) {
-        return udmUsagesGrid.addColumn(valueProvider)
-            .setCaption(ForeignUi.getMessage(captionProperty))
-            .setId(columnId)
-            .setSortable(false)
-            .setHidable(isHidable)
-            .setWidth(width);
     }
 
     private Column<UdmUsageDto, ?> addColumn(ValueProvider<UdmUsageDto, ?> valueProvider, String captionProperty,

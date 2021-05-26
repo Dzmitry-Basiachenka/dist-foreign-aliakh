@@ -36,7 +36,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private String pubFormat;
     private String article;
     private String language;
-    private String detailLicenseeClassId;
+    private Integer detailLicenseeClassId;
     private String detailLicenseeClassName;
     private Long companyId;
     private String companyName;
@@ -270,11 +270,11 @@ public class UdmUsageDto extends StoredEntity<String> {
         this.ineligibleReason = ineligibleReason;
     }
 
-    public String getDetailLicenseeClassId() {
+    public Integer getDetailLicenseeClassId() {
         return detailLicenseeClassId;
     }
 
-    public void setDetailLicenseeClassId(String detailLicenseeClassId) {
+    public void setDetailLicenseeClassId(Integer detailLicenseeClassId) {
         this.detailLicenseeClassId = detailLicenseeClassId;
     }
 

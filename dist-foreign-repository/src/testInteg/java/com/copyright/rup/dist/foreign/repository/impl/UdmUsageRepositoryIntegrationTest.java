@@ -70,7 +70,8 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final LocalDate SURVEY_START_DATE = LocalDate.of(2019, 12, 12);
     private static final LocalDate SURVEY_END_DATE = LocalDate.of(2022, 12, 12);
     private static final Long WR_WRK_INST = 122825347L;
-    private static final Long COMPANY_ID = 77000456L;
+    private static final Long COMPANY_ID = 454984566L;
+    private static final String COMPANY_NAME = "Skadden, Arps, Slate, Meagher & Flom LLP";
     private static final Integer QUANTITY = 10;
     private static final Integer ANNUAL_MULTIPLIER = 1;
     private static final BigDecimal STATISTICAL_MULTIPLIER = new BigDecimal("1.00000");
@@ -105,6 +106,8 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(ARTICLE, udmUsage.getArticle());
         assertEquals(LANGUAGE, udmUsage.getLanguage());
         assertEquals(COMPANY_ID, udmUsage.getCompanyId());
+        assertEquals(COMPANY_NAME, udmUsage.getCompanyName());
+        assertEquals(Integer.valueOf(1), udmUsage.getDetailLicenseeClassId());
         assertEquals(SURVEY_RESPONDENT, udmUsage.getSurveyRespondent());
         assertEquals(IP_ADDRESS, udmUsage.getIpAddress());
         assertEquals(SURVEY_COUNTRY, udmUsage.getSurveyCountry());
@@ -167,6 +170,8 @@ public class UdmUsageRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(DETAIL_ID_1, DETAIL_ID_2, "language");
         assertSortingFindDtosByFilter(DETAIL_ID_2, DETAIL_ID_1, "companyId");
         assertSortingFindDtosByFilter(DETAIL_ID_1, DETAIL_ID_2, "companyName");
+        assertSortingFindDtosByFilter(DETAIL_ID_1, DETAIL_ID_2, "detLcId");
+        assertSortingFindDtosByFilter(DETAIL_ID_1, DETAIL_ID_2, "detLcName");
         assertSortingFindDtosByFilter(DETAIL_ID_1, DETAIL_ID_2, "surveyRespondent");
         assertSortingFindDtosByFilter(DETAIL_ID_2, DETAIL_ID_1, "ipAddress");
         assertSortingFindDtosByFilter(DETAIL_ID_2, DETAIL_ID_1, "surveyCountry");
@@ -251,6 +256,8 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getLanguage(), actualUsage.getLanguage());
         assertEquals(expectedUsage.getCompanyId(), actualUsage.getCompanyId());
         assertEquals(expectedUsage.getCompanyName(), actualUsage.getCompanyName());
+        assertEquals(expectedUsage.getDetailLicenseeClassId(), actualUsage.getDetailLicenseeClassId());
+        assertEquals(expectedUsage.getDetailLicenseeClassName(), actualUsage.getDetailLicenseeClassName());
         assertEquals(expectedUsage.getSurveyRespondent(), actualUsage.getSurveyRespondent());
         assertEquals(expectedUsage.getIpAddress(), actualUsage.getIpAddress());
         assertEquals(expectedUsage.getSurveyCountry(), actualUsage.getSurveyCountry());
@@ -286,6 +293,8 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setLanguage("German");
         udmUsage.setCompanyId(454984566L);
         udmUsage.setCompanyName("Skadden, Arps, Slate, Meagher & Flom LLP");
+        udmUsage.setDetailLicenseeClassId(1);
+        udmUsage.setDetailLicenseeClassName("Food and Tobacco");
         udmUsage.setSurveyRespondent("56282dbc-2468-48d4-b926-93d3458a656a");
         udmUsage.setIpAddress(IP_ADDRESS);
         udmUsage.setSurveyCountry("USA");
@@ -316,6 +325,8 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setArticle(ARTICLE);
         udmUsage.setLanguage(LANGUAGE);
         udmUsage.setCompanyId(COMPANY_ID);
+        udmUsage.setCompanyName(COMPANY_NAME);
+        udmUsage.setDetailLicenseeClassId(1);
         udmUsage.setSurveyRespondent(SURVEY_RESPONDENT);
         udmUsage.setIpAddress(IP_ADDRESS);
         udmUsage.setSurveyCountry(SURVEY_COUNTRY);

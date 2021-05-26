@@ -47,7 +47,7 @@ public class UdmUsage extends StoredEntity<String> {
     private String ineligibleReason;
     private Long companyId;
     private String companyName;
-    private String detailLicenseeClassId;
+    private Integer detailLicenseeClassId;
     private String detailLicenseeClassName;
     private Integer annualMultiplier;
     private BigDecimal statisticalMultiplier;
@@ -253,11 +253,11 @@ public class UdmUsage extends StoredEntity<String> {
         this.ineligibleReason = ineligibleReason;
     }
 
-    public String getDetailLicenseeClassId() {
+    public Integer getDetailLicenseeClassId() {
         return detailLicenseeClassId;
     }
 
-    public void setDetailLicenseeClassId(String detailLicenseeClassId) {
+    public void setDetailLicenseeClassId(Integer detailLicenseeClassId) {
         this.detailLicenseeClassId = detailLicenseeClassId;
     }
 
