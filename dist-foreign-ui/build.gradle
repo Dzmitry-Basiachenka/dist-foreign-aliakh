@@ -42,6 +42,9 @@ dependencies {
     runtime("com.copyright.rup.security.auth:rup-auth-consumer:${rupAuthVersion}")
     runtime("org.codehaus.janino:janino:${janinoVersion}")
     runtime("org.springframework.security:spring-security-core:${springSecurityVersion}")
+    runtime("org.springframework.security:spring-security-cas:${springSecurityVersion}")
+    runtime("org.springframework.security:spring-security-config:${springSecurityVersion}")
+    runtime("org.springframework.security:spring-security-web:${springSecurityVersion}")
 
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
     testCompile("org.apache.commons:commons-text:${commonsTextVersion}")
