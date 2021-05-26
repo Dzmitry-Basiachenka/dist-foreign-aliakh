@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
@@ -29,26 +30,33 @@ import org.quartz.JobExecutionContext;
 public class WorksMatchingJobTest {
 
     private WorksMatchingJob worksMatchingJob;
-    private IChainExecutor<Usage> chainExecutor;
+    private IChainExecutor<Usage> usageChainExecutor;
+    private IChainExecutor<UdmUsage> udmChainExecutor;
     private JobExecutionContext jobExecutionContext;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
-        chainExecutor = createMock(IChainExecutor.class);
+        usageChainExecutor = createMock(IChainExecutor.class);
+        udmChainExecutor = createMock(IChainExecutor.class);
         jobExecutionContext = createMock(JobExecutionContext.class);
         worksMatchingJob = new WorksMatchingJob();
-        Whitebox.setInternalState(worksMatchingJob, chainExecutor);
+        Whitebox.setInternalState(worksMatchingJob, "usageChainExecutor", usageChainExecutor);
+        Whitebox.setInternalState(worksMatchingJob, "udmChainExecutor", udmChainExecutor);
     }
 
     @Test
     public void testExecuteInternal() {
-        JobInfo jobInfo = new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=FAS, Reason=There are no usages");
-        expect(chainExecutor.execute(ChainProcessorTypeEnum.MATCHING)).andReturn(jobInfo).once();
-        jobExecutionContext.setResult(jobInfo);
+        JobInfo usageJobInfo = new JobInfo(JobStatusEnum.SKIPPED, "ProductFamily=FAS, Reason=There are no usages");
+        expect(usageChainExecutor.execute(ChainProcessorTypeEnum.MATCHING)).andReturn(usageJobInfo).once();
+        JobInfo udmJobInfo = new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=ACL (UDM), UsagesCount=5");
+        expect(udmChainExecutor.execute(ChainProcessorTypeEnum.MATCHING)).andReturn(udmJobInfo).once();
+        JobInfo result = new JobInfo(JobStatusEnum.FINISHED,
+            "ProductFamily=FAS, Reason=There are no usages; ProductFamily=ACL (UDM), UsagesCount=5");
+        jobExecutionContext.setResult(result);
         expectLastCall().once();
-        replay(chainExecutor, jobExecutionContext);
+        replay(usageChainExecutor, udmChainExecutor, jobExecutionContext);
         worksMatchingJob.executeInternal(jobExecutionContext);
-        verify(chainExecutor, jobExecutionContext);
+        verify(usageChainExecutor, udmChainExecutor, jobExecutionContext);
     }
 }
