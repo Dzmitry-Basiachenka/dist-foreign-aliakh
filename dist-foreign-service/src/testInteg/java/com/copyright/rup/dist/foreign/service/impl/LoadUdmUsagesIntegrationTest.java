@@ -122,6 +122,8 @@ public class LoadUdmUsagesIntegrationTest {
         assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
         assertEquals(expectedUsage.getLanguage(), actualUsage.getLanguage());
         assertEquals(expectedUsage.getCompanyId(), actualUsage.getCompanyId());
+        assertEquals(expectedUsage.getCompanyName(), actualUsage.getCompanyName());
+        assertEquals(expectedUsage.getDetailLicenseeClassId(), actualUsage.getDetailLicenseeClassId());
         assertEquals(expectedUsage.getSurveyRespondent(), actualUsage.getSurveyRespondent());
         assertEquals(expectedUsage.getIpAddress(), actualUsage.getIpAddress());
         assertEquals(expectedUsage.getSurveyCountry(), actualUsage.getSurveyCountry());
