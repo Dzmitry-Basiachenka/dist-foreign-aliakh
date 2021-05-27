@@ -37,6 +37,8 @@ public class ApplicationContextTest {
             assertNotNull(context.getBean("df.integration.piIntegrationCacheService"));
             assertNotNull(context.getBean("df.integration.piIntegrationService"));
             assertNotNull(context.getBean("df.integration.rmsIntegrationService"));
+            assertNotNull(context.getBean("df.integration.telesalesService"));
+            assertNotNull(context.getBean("df.integration.telesalesCacheService"));
             assertNotNull(context.getBean("dist.common.integration.rest.prmCountryService"));
             assertNotNull(context.getBean("dist.common.integration.rest.prmRightsholderAsyncService"));
             assertNotNull(context.getBean("dist.common.integration.rest.prmRightsholderService"));

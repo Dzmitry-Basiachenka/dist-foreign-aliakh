@@ -34,6 +34,7 @@ import com.vaadin.shared.data.sort.SortDirection;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -64,6 +65,7 @@ public class SalUsageController extends CommonUsageController implements ISalUsa
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
     @Autowired
+    @Qualifier("df.integration.telesalesCacheService")
     private ITelesalesService telesalesService;
     @Autowired
     private IFundPoolService fundPoolService;
