@@ -859,4 +859,60 @@ databaseChangeLog {
             //automatic rollback
         }
     }
+
+    changeSet(id: '2021-05-27-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment("B-66754 FDA & UDM: Pull Company Information from Telesales: drop df_company table")
+
+        dropTable(tableName: 'df_company', schemaName: dbAppsSchema)
+
+        rollback {
+            createTable(tableName: 'df_company', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                    remarks: 'Table for storing company information') {
+
+                column(name: 'df_company_id', type: 'NUMERIC(10)', remarks: 'The company id') {
+                    constraints(nullable: false)
+                }
+                column(name: 'name', type: 'VARCHAR(200)', remarks: 'The company name') {
+                    constraints(nullable: false)
+                }
+                column(name: 'detail_licensee_class_id', type: 'INTEGER', remarks: 'The identifier of Detail Licensee Class') {
+                    constraints(nullable: false)
+                }
+                column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                        remarks: 'The latest version of this record, used for optimistic locking') {
+                    constraints(nullable: false)
+                }
+                column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                        remarks: 'The user name who created this record') {
+                    constraints(nullable: false)
+                }
+                column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                        remarks: 'The date and time this record was created') {
+                    constraints(nullable: false)
+                }
+                column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                        remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                    constraints(nullable: false)
+                }
+                column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                        remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                    constraints(nullable: false)
+                }
+            }
+
+            addPrimaryKey(schemaName: dbAppsSchema,
+                    tablespace: dbIndexTablespace,
+                    tableName: 'df_company',
+                    columnNames: 'df_company_id',
+                    constraintName: 'pk_df_company_id')
+
+            addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                    referencedTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_company',
+                    baseColumnNames: 'detail_licensee_class_id',
+                    referencedTableName: 'df_detail_licensee_class',
+                    referencedColumnNames: 'detail_licensee_class_id',
+                    constraintName: 'fk_df_company_2_df_detail_licensee_class')
+        }
+    }
 }
