@@ -1,3 +1,15 @@
+13.1.25
+-
+* B-65859 FDA: UDM normalize annual multiplier: calculate annualized copies after uploading UDM usages
+* B-66633 FDA & UDM: PI matching for newly uploaded ACL usages: implement job configuration for UDM usages
+* B-66634 FDA & UDM: RMS Rights: fix failed build
+* B-66634 FDA & UDM: RMS Rights: implement background job
+* B-66634 FDA & UDM: RMS Rights: implement logic for getting rights
+* B-66754 FDA & UDM: Pull Company Information from Telesales: drop df_company table
+* B-66754 FDA & UDM: Pull Company Information from Telesales: populate company information for UDM usages and display on UI
+* B-67327 Dist - Tech Debt: FDA: fix vulnerability CVE-2021-22112 associated with dependency org.springframework.security
+* FDA & UDM: Pull Company Information from Telesales: fix LoadUdmUsagesIntegrationTest
+
 13.1.24
 -
 * B-65858 FDA & UDM: Load ACL usage data: make changes in comments in CR-DIST-FOREIGN-230
