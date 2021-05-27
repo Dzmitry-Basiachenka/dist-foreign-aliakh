@@ -6,7 +6,7 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
-import com.copyright.rup.dist.foreign.service.api.processor.IChainChunkProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.perf4j.aop.Profiled;
@@ -41,7 +41,7 @@ public class UdmMatchingConsumer implements IConsumer<List<UdmUsage>> {
 
     @Autowired
     @Qualifier("df.service.udmMatchingProcessor")
-    private IChainChunkProcessor<List<UdmUsage>, UdmUsage> matchingProcessor;
+    private IChainProcessor<UdmUsage> matchingProcessor;
     @Autowired
     private IWorkMatchingService workMatchingService;
 

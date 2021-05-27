@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IPrmIntegrationService} for PRM system.
@@ -123,6 +125,13 @@ public class PrmIntegrationService implements IPrmIntegrationService {
             productFamily, FdaConstants.TAX_BENEFICIAL_OWNER_CODE);
     }
 
+    @Override
+    public Map<String, Boolean> getStmRightsholderPreferenceMap(Set<String> rightsholdersIds, String productFamily) {
+        return getBooleanPreferencesMap(
+            prmPreferenceService.getPreferencesMap(rightsholdersIds), rightsholdersIds,
+            productFamily, FdaConstants.IS_RH_STM_IPRO_CODE);
+    }
+
     private boolean getBooleanPreference(Map<String, Table<String, String, Object>> preferencesMap,
                                          String rightsholderId, String productFamily, String preferenceCode) {
         Boolean preferenceValue = (Boolean) ObjectUtils.defaultIfNull(
@@ -134,5 +143,16 @@ public class PrmIntegrationService implements IPrmIntegrationService {
         } else {
             return false;
         }
+    }
+
+    private Map<String, Boolean> getBooleanPreferencesMap(Map<String, Table<String, String, Object>> preferencesMap,
+                                                          Set<String> rightsholdersIds, String productFamily,
+                                                          String preferenceCode) {
+        return rightsholdersIds
+            .stream()
+            .collect(Collectors.toMap(
+                Function.identity(),
+                rightsholdersId -> getBooleanPreference(preferencesMap, rightsholdersId, productFamily, preferenceCode)
+            ));
     }
 }

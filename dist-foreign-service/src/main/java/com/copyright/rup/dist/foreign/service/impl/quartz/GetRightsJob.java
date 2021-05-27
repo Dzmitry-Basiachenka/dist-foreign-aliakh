@@ -30,10 +30,10 @@ import java.util.Arrays;
 public class GetRightsJob extends QuartzJobBean {
 
     @Autowired
-    @Qualifier("usageChainChunkExecutor")
+    @Qualifier("usageChainExecutor")
     private IChainExecutor<Usage> chainExecutor;
     @Autowired
-    @Qualifier("udmUsageChainChunkExecutor")
+    @Qualifier("udmUsageChainExecutor")
     private IChainExecutor<UdmUsage> udmChainExecutor;
 
     @Override

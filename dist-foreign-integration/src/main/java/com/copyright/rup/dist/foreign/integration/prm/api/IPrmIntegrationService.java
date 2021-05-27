@@ -133,4 +133,18 @@ public interface IPrmIntegrationService {
      * @return {@code true} if RH is TBO, otherwise {@code false}
      */
     boolean isRightsholderTaxBeneficialOwner(String rightsholderId, String productFamily);
+
+    /**
+     * Gets map from rightsholder ids to STM rightsholder flag.
+     * Gets STM flag {@link com.copyright.rup.dist.foreign.domain.FdaConstants#IS_RH_STM_IPRO_CODE} by specified
+     * rightsholder id and product family.
+     * </br>
+     * If preferences for NTS product family were not found System finds preferences for the same rightsholder id
+     * and <b>{@code '*'}</b> ('*' is passed as a product family).
+     *
+     * @param rightsholdersIds list of rightsholder ids
+     * @param productFamily    product family
+     * @return map from rightsholder ids to STM rightsholders flag
+     */
+    Map<String, Boolean> getStmRightsholderPreferenceMap(Set<String> rightsholdersIds, String productFamily);
 }

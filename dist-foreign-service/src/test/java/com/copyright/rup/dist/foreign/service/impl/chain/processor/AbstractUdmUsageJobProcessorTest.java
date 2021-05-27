@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Verifies {@link AbstractUdmUsageJobProcessor}.
+ * Verifies {@link AbstractUdmJobProcessor}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -38,16 +38,16 @@ public class AbstractUdmUsageJobProcessorTest {
 
     private static final String ACL_PRODUCT_FAMILY = "ACL";
 
-    private UsageJobChunkProcessorMock processor;
+    private JobProcessorMock processor;
     private Consumer<List<UdmUsage>> usageConsumer;
     private IUdmUsageService udmUsageService;
-    private IChainProcessor<List<UdmUsage>> successProcessor;
-    private IChainProcessor<List<UdmUsage>> failureProcessor;
+    private IChainProcessor<UdmUsage> successProcessor;
+    private IChainProcessor<UdmUsage> failureProcessor;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
-        processor = new UsageJobChunkProcessorMock();
+        processor = new JobProcessorMock();
         usageConsumer = createMock(Consumer.class);
         udmUsageService = createMock(IUdmUsageService.class);
         successProcessor = createMock(IChainProcessor.class);
@@ -93,7 +93,7 @@ public class AbstractUdmUsageJobProcessorTest {
         return usage;
     }
 
-    private class UsageJobChunkProcessorMock extends AbstractUdmUsageJobProcessor {
+    private class JobProcessorMock extends AbstractUdmJobProcessor {
 
         @Override
         public void process(List<UdmUsage> usages) {

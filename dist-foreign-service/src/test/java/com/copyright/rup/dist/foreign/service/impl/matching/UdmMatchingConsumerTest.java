@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.processor.IChainChunkProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -41,12 +41,12 @@ public class UdmMatchingConsumerTest {
     private static final Long WR_WRK_INST = 122853920L;
 
     private UdmMatchingConsumer consumer;
-    private IChainChunkProcessor<List<UdmUsage>, UdmUsage> matchingProcessor;
+    private IChainProcessor<UdmUsage> matchingProcessor;
 
     @Before
     public void setUp() {
         consumer = new UdmMatchingConsumer();
-        matchingProcessor = createMock(IChainChunkProcessor.class);
+        matchingProcessor = createMock(IChainProcessor.class);
         Whitebox.setInternalState(consumer, matchingProcessor);
         Whitebox.setInternalState(consumer, new WorkMatchingServiceMock());
     }

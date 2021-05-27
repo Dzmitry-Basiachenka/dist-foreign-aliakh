@@ -59,7 +59,7 @@ public class UdmUsageService implements IUdmUsageService {
     @Autowired
     private ITelesalesService telesalesService;
     @Autowired
-    @Qualifier("udmUsageChainChunkExecutor")
+    @Qualifier("udmUsageChainExecutor")
     private IChainExecutor<UdmUsage> chainExecutor;
 
     @Override

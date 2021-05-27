@@ -4,21 +4,22 @@ import com.copyright.rup.dist.common.integration.rest.CommonRestHandler;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
  * Handler for processing rightsholders tax country response.
  * <p>
- * Copyright (C) 2018 copyright.com
- * <p>
- * Date: 11/27/2018
+ * Copyright (C) 2020 copyright.com
+ * <p/>
+ * Date: 05/04/2020
  *
- * @author Aliaksandr Liakh
+ * @author Uladzislau Shalamitski
  */
-public class OracleRhTaxCountryRestHandler extends CommonRestHandler<Boolean> {
+public class OracleRhTaxCountryRestHandler extends CommonRestHandler<Map<Long, Boolean>> {
 
     private static final String DOMESTIC_INDICATOR = "D";
 
@@ -37,17 +38,20 @@ public class OracleRhTaxCountryRestHandler extends CommonRestHandler<Boolean> {
     }
 
     @Override
-    protected Boolean doHandleResponse(JsonNode response) {
-        Boolean result = Boolean.FALSE;
-        if (Objects.nonNull(response) && response.elements().hasNext()) {
-            JsonNode node = response.elements().next();
-            result = DOMESTIC_INDICATOR.equals(JsonUtils.getStringValue(node.get("domesticInternationalIndicator")));
+    protected Map<Long, Boolean> doHandleResponse(JsonNode response) {
+        Map<Long, Boolean> resultMap = new HashMap<>();
+        if (Objects.nonNull(response)) {
+            response.elements().forEachRemaining(jsonNode -> {
+                Long accountNumber = JsonUtils.getLongValue(jsonNode.get("rightsholderAccountNumber"));
+                String taxCountryIndicator = JsonUtils.getStringValue(jsonNode.get("domesticInternationalIndicator"));
+                resultMap.put(accountNumber, DOMESTIC_INDICATOR.equals(taxCountryIndicator));
+            });
         }
-        return result;
+        return resultMap;
     }
 
     @Override
-    protected Boolean getDefaultValue() {
-        return Boolean.FALSE;
+    protected Map<Long, Boolean> getDefaultValue() {
+        return new HashMap<>();
     }
 }

@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 public class RhEligibilityJob extends QuartzJobBean {
 
     @Autowired
-    @Qualifier("usageChainChunkExecutor")
+    @Qualifier("usageChainExecutor")
     private IChainExecutor<Usage> chainExecutor;;
 
     /**

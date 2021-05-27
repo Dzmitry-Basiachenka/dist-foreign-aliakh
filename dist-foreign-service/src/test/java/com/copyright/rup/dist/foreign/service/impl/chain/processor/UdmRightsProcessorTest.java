@@ -33,8 +33,8 @@ public class UdmRightsProcessorTest {
 
     private UdmRightsProcessor processor;
     private IProducer<List<UdmUsage>> rightsProducer;
-    private IChainProcessor<List<UdmUsage>> successProcessor;
-    private IChainProcessor<List<UdmUsage>> failureProcessor;
+    private IChainProcessor<UdmUsage> successProcessor;
+    private IChainProcessor<UdmUsage> failureProcessor;
 
     @Before
     @SuppressWarnings("unchecked")

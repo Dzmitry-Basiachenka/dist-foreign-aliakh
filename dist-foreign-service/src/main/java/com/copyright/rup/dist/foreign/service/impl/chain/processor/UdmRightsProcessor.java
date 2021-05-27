@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import java.util.List;
 
 /**
- * Implementation of {@link AbstractUdmUsageJobProcessor} for getting rights.
+ * Implementation of {@link AbstractUdmJobProcessor} for getting rights.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author Uladzislau Shalamitski
  */
-public class UdmRightsProcessor extends AbstractUdmUsageJobProcessor {
+public class UdmRightsProcessor extends AbstractUdmJobProcessor {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 

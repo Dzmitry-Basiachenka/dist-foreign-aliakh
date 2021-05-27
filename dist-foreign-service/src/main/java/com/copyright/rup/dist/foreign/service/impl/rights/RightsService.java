@@ -94,7 +94,7 @@ public class RightsService implements IRightsService {
     @Qualifier("df.service.rmsCacheService")
     private IRmsRightsService rmsRightsService;
     @Autowired
-    @Qualifier("usageChainChunkExecutor")
+    @Qualifier("usageChainExecutor")
     private IChainExecutor<Usage> chainExecutor;
     @Autowired
     private IGrantPriorityRepository grantPriorityRepository;
