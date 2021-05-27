@@ -53,7 +53,7 @@
     <bean id="dist.common.integration.rest.prmRightsholderOrganizationAsyncService"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PrmRightsholderOrganizationServiceMock"/>
 
-    <bean id="df.integration.telesalesService"
+    <bean id="df.integration.telesalesCacheService"
           class="com.copyright.rup.dist.foreign.service.impl.mock.TelesalesServiceMock"/>
 
     <bean id="usageChainChunkExecutor" class="com.copyright.rup.dist.foreign.service.impl.mock.chunk.UsageChainChunkExecutorMock"/>

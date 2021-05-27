@@ -90,6 +90,12 @@
         <constructor-arg value="$RUP{dist.foreign.pi.ttl.minutes}"/>
     </bean>
 
+    <bean id="df.integration.telesalesCacheService"
+          class="com.copyright.rup.dist.foreign.integration.telesales.impl.TelesalesCacheService">
+        <constructor-arg ref="df.integration.telesalesService"/>
+        <constructor-arg value="$RUP{dist.foreign.rest.crm.ttl.days}"/>
+    </bean>
+
     <util:list id="prmPreferenceProcessors"
                value-type="com.copyright.rup.dist.common.integration.rest.prm.PrmPreferenceProcessor">
         <bean class="com.copyright.rup.dist.common.integration.rest.prm.PrmPreferenceProcessorBoolean">

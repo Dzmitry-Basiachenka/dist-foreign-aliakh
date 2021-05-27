@@ -62,6 +62,7 @@ public class CsvProcessorFactory {
     @Autowired
     private IUdmTypeOfUseService udmTypeOfUseService;
     @Autowired
+    @Qualifier("df.integration.telesalesCacheService")
     private ITelesalesService telesalesService;
 
     /**
