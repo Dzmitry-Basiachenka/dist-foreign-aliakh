@@ -6,33 +6,39 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 
+import org.apache.commons.collections4.MapUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Set;
+
 /**
  * Verifies {@link OracleRhTaxCountryService}.
  * <p>
- * Copyright (C) 2018 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 11/27/2018
+ * Date: 05/05/2020
  *
- * @author Aliaksandr Liakh
+ * @author Uladzislau Shalamitski
  */
 public class OracleRhTaxCountryServiceTest {
 
     private static final String RH_TAX_COUNTRY_URL =
         "http://localhost:8080/oracle-ap-rest/getRightsholderDataInfo?rightsholderAccountNumbers={accountNumbers}";
-    private static final long ACCOUNT_NUMBER = 7001413934L;
+    private static final Set<Long> ACCOUNT_NUMBERS = Sets.newHashSet(7001413934L, 1000009522L);
 
     private OracleRhTaxCountryService oracleRhTaxCountryService;
     private RestTemplate restTemplate;
@@ -49,13 +55,13 @@ public class OracleRhTaxCountryServiceTest {
     public void testIsUsTaxCountry() {
         restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
         expectLastCall().once();
-        expect(
-            restTemplate.getForObject(
-                RH_TAX_COUNTRY_URL, String.class, ImmutableBiMap.of("accountNumbers", ACCOUNT_NUMBER)))
-            .andReturn(loadJson("rh_tax_country_response.json"))
+        expect(restTemplate.getForObject(RH_TAX_COUNTRY_URL, String.class,
+            ImmutableBiMap.of("accountNumbers", Joiner.on(",").skipNulls().join(ACCOUNT_NUMBERS))))
+            .andReturn(loadJson("rh_tax_country_response_1.json"))
             .once();
         replay(restTemplate);
-        assertTrue(oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBER));
+        assertEquals(ImmutableMap.of(7001413934L, Boolean.TRUE, 1000009522L, Boolean.FALSE),
+            oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBERS));
         verify(restTemplate);
     }
 
@@ -63,13 +69,12 @@ public class OracleRhTaxCountryServiceTest {
     public void testIsUsTaxCountryNotFoundCode() {
         restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
         expectLastCall().once();
-        expect(
-            restTemplate.getForObject(
-                RH_TAX_COUNTRY_URL, String.class, ImmutableBiMap.of("accountNumbers", ACCOUNT_NUMBER)))
+        expect(restTemplate.getForObject(RH_TAX_COUNTRY_URL, String.class, ImmutableBiMap.of("accountNumbers",
+            Joiner.on(",").skipNulls().join(ACCOUNT_NUMBERS))))
             .andReturn(loadJson("rh_tax_country_not_found_response.json"))
             .once();
         replay(restTemplate);
-        assertFalse(oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBER));
+        assertTrue(MapUtils.isEmpty(oracleRhTaxCountryService.isUsTaxCountry(ACCOUNT_NUMBERS)));
         verify(restTemplate);
     }
 

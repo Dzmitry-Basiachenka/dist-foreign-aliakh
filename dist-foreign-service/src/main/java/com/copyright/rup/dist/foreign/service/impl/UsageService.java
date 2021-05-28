@@ -99,7 +99,7 @@ public class UsageService implements IUsageService {
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
-    @Qualifier("usageChainChunkExecutor")
+    @Qualifier("usageChainExecutor")
     private IChainExecutor<Usage> chainExecutor;
 
     @Override

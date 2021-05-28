@@ -1,21 +1,25 @@
 package com.copyright.rup.dist.foreign.integration.oracle.api;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Interface for working with Oracle AP REST for getting RH tax country.
  * <p>
- * Copyright (C) 2018 copyright.com
+ * Copyright (C) 2020 copyright.com
  * <p/>
- * Date: 11/27/2018
+ * Date: 05/04/2020
  *
- * @author Aliaksandr Liakh
+ * @author Uladzislau Shalamitski
  */
 public interface IOracleRhTaxCountryService {
 
     /**
-     * Checks whether the tax residency country is US or not.
+     * Checks whether the tax residency country is US or not for given account numbers.
      *
-     * @param accountNumber RH account number
-     * @return {@code true} if the tax residency country is US, otherwise {@code false}
+     * @param accountNumbers set of RH account numbers
+     * @return map where key is account number and value is {@code true} if the tax residency country is US,
+     * otherwise {@code false}
      */
-    boolean isUsTaxCountry(Long accountNumber);
+    Map<Long, Boolean> isUsTaxCountry(Set<Long> accountNumbers);
 }

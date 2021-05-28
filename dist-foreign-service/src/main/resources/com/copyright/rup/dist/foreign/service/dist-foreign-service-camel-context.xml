@@ -10,11 +10,11 @@
     <import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-job-status-context.xml"/>
 
     <bean id="df.service.commonUsageMarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.FdaCommonMarshaller">
-        <property name="serializer" ref="df.service.commonUsageChunkSerializer"/>
+        <property name="serializer" ref="df.service.commonUsageSerializer"/>
     </bean>
 
     <bean id="df.service.commonUsageUnmarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.FdaCommonUnmarshaller">
-        <property name="deserializer" ref="df.service.commonUsageChunkDeserializer"/>
+        <property name="deserializer" ref="df.service.commonUsageDeserializer"/>
     </bean>
 
     <bean id="df.service.commonUdmUsageMarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.FdaCommonMarshaller">
@@ -25,26 +25,26 @@
         <property name="deserializer" ref="df.service.commonUdmUsageDeserializer"/>
     </bean>
 
-    <bean id="df.service.usageChunkProducer"
-          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageChunkProducer"/>
+    <bean id="df.service.usageProducer"
+          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageProducer"/>
 
-    <bean id="df.service.rightsChunkProducer" parent="df.service.usageChunkProducer">
+    <bean id="df.service.rightsProducer" parent="df.service.usageProducer">
         <property name="endPoint" value="direct:df.service.rights"/>
     </bean>
 
-    <bean id="df.service.rhTaxChunkProducer" parent="df.service.usageChunkProducer">
+    <bean id="df.service.rhTaxProducer" parent="df.service.usageProducer">
         <property name="endPoint" value="direct:df.service.tax"/>
     </bean>
 
-    <bean id="df.service.stmRhChunkProducer" parent="df.service.usageChunkProducer">
+    <bean id="df.service.stmRhProducer" parent="df.service.usageProducer">
         <property name="endPoint" value="direct:df.service.stm.rh"/>
     </bean>
 
-    <bean id="df.service.rhEligibilityChunkProducer" parent="df.service.usageChunkProducer">
+    <bean id="df.service.rhEligibilityProducer" parent="df.service.usageProducer">
         <property name="endPoint" value="direct:df.service.eligibility"/>
     </bean>
 
-    <bean id="df.service.matchingChunkProducer" parent="df.service.usageChunkProducer">
+    <bean id="df.service.matchingProducer" parent="df.service.usageProducer">
         <property name="endPoint" value="direct:df.service.matching"/>
     </bean>
 
@@ -158,7 +158,7 @@
 
         <!--chunk-based routes started -->
 
-        <route id="df.service.matchingInternalChunkRoute">
+        <route id="df.service.matchingInternalRoute">
             <from ref="df.service.internal.matching.chunk.endpoint"/>
             <marshal>
                 <custom ref="df.service.commonUsageMarshaller"/>
@@ -166,7 +166,7 @@
             <to ref="df.service.matching.chunk.endpoint"/>
         </route>
 
-        <route id="df.service.matchingChunkRoute">
+        <route id="df.service.matchingRoute">
             <from ref="df.service.matching.chunk.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.commonUsageUnmarshaller"/>
@@ -178,15 +178,15 @@
                         ${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.FAS_PRODUCT_FAMILY} ||
                         ${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.CLA_FAS_PRODUCT_FAMILY}
                     </simple>
-                    <bean ref="df.service.fasMatchingChunkConsumer"/>
+                    <bean ref="df.service.fasMatchingConsumer"/>
                 </when>
                 <when>
                     <simple>${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.AACL_PRODUCT_FAMILY}</simple>
-                    <bean ref="df.service.aaclMatchingChunkConsumer"/>
+                    <bean ref="df.service.aaclMatchingConsumer"/>
                 </when>
                 <when>
                     <simple>${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.SAL_PRODUCT_FAMILY}</simple>
-                    <bean ref="df.service.salMatchingChunkConsumer"/>
+                    <bean ref="df.service.salMatchingConsumer"/>
                 </when>
             </choice>
 
@@ -224,7 +224,7 @@
             </onException>
         </route>
 
-        <route id="df.service.rightsInternalChunkRoute">
+        <route id="df.service.rightsInternalRoute">
             <from ref="df.service.internal.rights.chunk.endpoint"/>
             <marshal>
                 <custom ref="df.service.commonUsageMarshaller"/>
@@ -232,7 +232,7 @@
             <to ref="df.service.rights.chunk.endpoint"/>
         </route>
 
-        <route id="df.service.rightsChunkRoute">
+        <route id="df.service.rightsRoute">
             <from ref="df.service.rights.chunk.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.commonUsageUnmarshaller"/>
@@ -244,19 +244,19 @@
                         ${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.FAS_PRODUCT_FAMILY} ||
                         ${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.CLA_FAS_PRODUCT_FAMILY}
                     </simple>
-                    <bean ref="df.service.fasRightsChunkConsumer"/>
+                    <bean ref="df.service.fasRightsConsumer"/>
                 </when>
                 <when>
                     <simple>${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.NTS_PRODUCT_FAMILY}</simple>
-                    <bean ref="df.service.ntsRightsChunkConsumer"/>
+                    <bean ref="df.service.ntsRightsConsumer"/>
                 </when>
                 <when>
                     <simple>${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.AACL_PRODUCT_FAMILY}</simple>
-                    <bean ref="df.service.aaclRightsChunkConsumer"/>
+                    <bean ref="df.service.aaclRightsConsumer"/>
                 </when>
                 <when>
                     <simple>${headers.productFamily} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.SAL_PRODUCT_FAMILY}</simple>
-                    <bean ref="df.service.salRightsChunkConsumer"/>
+                    <bean ref="df.service.salRightsConsumer"/>
                 </when>
             </choice>
 
@@ -296,7 +296,7 @@
             </onException>
         </route>
 
-        <route id="df.service.taxInternalChunkRoute">
+        <route id="df.service.taxInternalRoute">
             <from ref="df.service.internal.tax.chunk.endpoint"/>
             <marshal>
                 <custom ref="df.service.commonUsageMarshaller"/>
@@ -304,12 +304,12 @@
             <to ref="df.service.rh.tax.chunk.endpoint"/>
         </route>
 
-        <route id="df.service.taxChunkRoute">
+        <route id="df.service.taxRoute">
             <from ref="df.service.rh.tax.chunk.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
-            <bean ref="df.service.rhTaxChunkConsumer"/>
+            <bean ref="df.service.rhTaxConsumer"/>
 
             <onException useOriginalMessage="true">
                 <exception>java.lang.Exception</exception>
@@ -321,7 +321,7 @@
             </onException>
         </route>
 
-        <route id="df.service.stmRhInternalChunkRoute">
+        <route id="df.service.stmRhInternalRoute">
             <from ref="df.service.internal.stm.rh.chunk.endpoint"/>
             <marshal>
                 <custom ref="df.service.commonUsageMarshaller"/>
@@ -329,12 +329,12 @@
             <to ref="df.service.stm.rh.chunk.endpoint"/>
         </route>
 
-        <route id="df.service.stmRhChunkRoute">
+        <route id="df.service.stmRhRoute">
             <from ref="df.service.stm.rh.chunk.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
-            <bean ref="df.service.stmRhChunkConsumer"/>
+            <bean ref="df.service.stmRhConsumer"/>
 
             <onException useOriginalMessage="true">
                 <exception>java.lang.Exception</exception>
@@ -346,7 +346,7 @@
             </onException>
         </route>
 
-        <route id="df.service.eligibilityInternalChunkRoute">
+        <route id="df.service.eligibilityInternalRoute">
             <from ref="df.service.internal.eligibility.chunk.endpoint"/>
             <marshal>
                 <custom ref="df.service.commonUsageMarshaller"/>
@@ -354,12 +354,12 @@
             <to ref="df.service.rh.eligibility.chunk.endpoint"/>
         </route>
 
-        <route id="df.service.eligibilityChunkRoute">
+        <route id="df.service.eligibilityRoute">
             <from ref="df.service.rh.eligibility.chunk.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.commonUsageUnmarshaller"/>
             </unmarshal>
-            <bean ref="df.service.rhEligibilityChunkConsumer"/>
+            <bean ref="df.service.rhEligibilityConsumer"/>
 
             <onException useOriginalMessage="true">
                 <exception>java.lang.Exception</exception>

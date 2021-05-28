@@ -6,7 +6,7 @@ import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
-import com.copyright.rup.dist.foreign.service.api.processor.IChainChunkProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.perf4j.aop.Profiled;
@@ -35,7 +35,7 @@ public class UdmRightsConsumer implements IConsumer<List<UdmUsage>> {
     private IRightsService rightsService;
     @Autowired
     @Qualifier("df.service.udmRightsProcessor")
-    private IChainChunkProcessor<List<UdmUsage>, UdmUsage> udmRightsProcessor;
+    private IChainProcessor<UdmUsage> udmRightsProcessor;
 
     @Override
     @Profiled(tag = "UdmRightsConsumer.consume")

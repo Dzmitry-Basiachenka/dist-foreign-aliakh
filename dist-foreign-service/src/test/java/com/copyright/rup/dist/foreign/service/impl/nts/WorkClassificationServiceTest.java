@@ -18,11 +18,10 @@ import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.repository.api.INtsUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IWorkClassificationRepository;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
-import com.copyright.rup.dist.foreign.service.api.processor.IChainChunkProcessor;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,7 +64,7 @@ public class WorkClassificationServiceTest {
     private IWorkClassificationRepository workClassificationRepository;
     private IUsageRepository usageRepository;
     private INtsUsageRepository ntsUsageRepository;
-    private IChainChunkProcessor<List<Usage>, Usage> nonBelletristicProcessorMock;
+    private IChainProcessor<Usage> nonBelletristicProcessorMock;
 
     @Before
     public void setUp() {
@@ -73,7 +72,7 @@ public class WorkClassificationServiceTest {
         workClassificationRepository = createMock(IWorkClassificationRepository.class);
         usageRepository = createMock(IUsageRepository.class);
         ntsUsageRepository = createMock(INtsUsageRepository.class);
-        nonBelletristicProcessorMock = createMock(IChainChunkProcessor.class);
+        nonBelletristicProcessorMock = createMock(IChainProcessor.class);
         workClassificationService.setWorkClassificationRepository(workClassificationRepository);
         workClassificationService.setUsageRepository(usageRepository);
         workClassificationService.setNonBelletristicProcessor(nonBelletristicProcessorMock);

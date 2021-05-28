@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Common processors -->
+
+    <bean id="df.service.commonEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.EligibilityProcessor"/>
+    <bean id="df.service.deleteUsageProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.DeleteUsageProcessor"/>
+
+    <!-- FAS/FAS2 processors -->
+
+    <bean id="df.service.fasRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.commonEligibilityProcessor"/>
+    </bean>
+
+    <bean id="df.service.fasMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingProcessor">
+        <property name="usageStatus" value="NEW"/>
+        <property name="successProcessor" ref="df.service.fasRightsProcessor"/>
+    </bean>
+
+    <!-- NTS processors -->
+
+    <bean id="df.service.ntsRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.ntsRhTaxProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsRhTaxProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhTaxProcessor">
+        <property name="usageStatus" value="RH_FOUND"/>
+        <property name="successProcessor" ref="df.service.ntsStmRhProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsStmRhProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.StmRhProcessor">
+        <property name="usageStatus" value="US_TAX_COUNTRY"/>
+        <property name="successProcessor" ref="df.service.ntsRhEligibilityProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsRhEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhEligibilityProcessorUsage">
+        <property name="usageStatus" value="NON_STM_RH"/>
+        <property name="successProcessor" ref="df.service.ntsClassificationProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsClassificationProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.ClassificationProcessor">
+        <property name="successProcessor" ref="df.service.ntsNonBelletristicProcessor"/>
+        <property name="failureProcessor" ref="df.service.ntsUnclassifiedStatusProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsNonBelletristicProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.NonBelletristicProcessor">
+        <property name="successProcessor" ref="df.service.commonEligibilityProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsUnclassifiedStatusProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.UnclassifiedStatusProcessor" />
+
+    <!-- AACL processors -->
+
+    <bean id="df.service.aaclBaselineEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.BaselineEligibilityProcessor"/>
+
+    <bean id="df.service.aaclMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingProcessor">
+        <property name="usageStatus" value="NEW"/>
+        <property name="successProcessor" ref="df.service.aaclRightsProcessor"/>
+    </bean>
+
+    <bean id="df.service.aaclRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.aaclBaselineEligibilityProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
+    </bean>
+
+    <!-- SAL processor -->
+
+    <bean id="df.service.salMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingProcessor">
+        <property name="usageStatus" value="NEW"/>
+        <property name="successProcessor" ref="df.service.salRightsProcessor"/>
+    </bean>
+
+    <bean id="df.service.salRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.commonEligibilityProcessor"/>
+    </bean>
+</beans>

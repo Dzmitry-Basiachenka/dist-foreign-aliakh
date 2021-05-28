@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import java.util.List;
 
 /**
- * Implementation of {@link AbstractUdmUsageJobProcessor} for searching works.
+ * Implementation of {@link AbstractUdmJobProcessor} for searching works.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author Ihar Suvorau
  */
-public class UdmMatchingProcessor extends AbstractUdmUsageJobProcessor {
+public class UdmMatchingProcessor extends AbstractUdmJobProcessor {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 

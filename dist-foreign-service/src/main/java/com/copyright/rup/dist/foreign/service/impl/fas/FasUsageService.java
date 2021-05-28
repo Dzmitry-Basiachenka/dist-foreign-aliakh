@@ -77,7 +77,7 @@ public class FasUsageService implements IFasUsageService {
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
-    @Qualifier("usageChainChunkExecutor")
+    @Qualifier("usageChainExecutor")
     private IChainExecutor<Usage> chainExecutor;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;

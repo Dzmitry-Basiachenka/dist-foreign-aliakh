@@ -33,8 +33,8 @@ public class UdmMatchingProcessorTest {
 
     private UdmMatchingProcessor processor;
     private IProducer<List<UdmUsage>> matchingProducer;
-    private IChainProcessor<List<UdmUsage>> successProcessor;
-    private IChainProcessor<List<UdmUsage>> failureProcessor;
+    private IChainProcessor<UdmUsage> successProcessor;
+    private IChainProcessor<UdmUsage> failureProcessor;
 
     @Before
     @SuppressWarnings("unchecked")

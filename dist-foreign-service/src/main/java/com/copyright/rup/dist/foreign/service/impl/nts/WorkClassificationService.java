@@ -18,7 +18,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +56,8 @@ public class WorkClassificationService implements IWorkClassificationService {
     @Autowired
     private INtsUsageRepository ntsUsageRepository;
     @Autowired
-    @Qualifier("df.service.ntsNonBelletristicChunkProcessor")
-    private IChainProcessor<List<Usage>> nonBelletristicProcessor;
+    @Qualifier("df.service.ntsNonBelletristicProcessor")
+    private IChainProcessor<Usage> nonBelletristicProcessor;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private int usagesBatchSize;
     @Value("$RUP{dist.foreign.work_classification.threshold}")
@@ -138,7 +137,7 @@ public class WorkClassificationService implements IWorkClassificationService {
         this.usageRepository = usageRepository;
     }
 
-    void setNonBelletristicProcessor(IChainProcessor<List<Usage>> nonBelletristicProcessor) {
+    void setNonBelletristicProcessor(IChainProcessor<Usage> nonBelletristicProcessor) {
         this.nonBelletristicProcessor = nonBelletristicProcessor;
     }
 

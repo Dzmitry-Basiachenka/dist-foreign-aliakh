@@ -39,20 +39,22 @@
     <logger name="com.copyright.rup.dist.foreign.service.impl.tax.RhTaxService" level="${logLevelRhTax}"/>
 
     <!--Loggers for STM RH processing logic-->
-    <logger name="com.copyright.rup.dist.foreign.service.impl.stm.StmRhChunkService" level="${logLevelStmRh}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.stm.StmRhService" level="${logLevelStmRh}"/>
 
     <!--Loggers for usage processing-->
     <logger name="com.copyright.rup.dist.foreign.service.impl.chain.processor" level="${logLevelUsageProcessing}" />
-    <logger name="com.copyright.rup.dist.foreign.service.impl.eligibility.RhEligibilityChunkConsumer" level="${logLevelUsageProcessing}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.FasMatchingChunkConsumer" level="${logLevelUsageProcessing}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.AaclMatchingChunkConsumer" level="${logLevelUsageProcessing}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.SalMatchingChunkConsumer" level="${logLevelUsageProcessing}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.FasRightsChunkConsumer" level="${logLevelUsageProcessing}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.NtsRightsChunkConsumer" level="${logLevelUsageProcessing}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.AaclRightsChunkConsumer" level="${logLevelUsageProcessing}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.SalRightsChunkConsumer" level="${logLevelUsageProcessing}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.stm.StmRhChunkConsumer" level="${logLevelUsageProcessing}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.tax.RhTaxChunkConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.eligibility.RhEligibilityConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.FasMatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.AaclMatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.SalMatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.UdmMatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.FasRightsConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.NtsRightsConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.AaclRightsConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.SalRightsConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.UdmRightsConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.stm.StmRhConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.tax.RhTaxConsumer" level="${logLevelUsageProcessing}"/>
 
     <logger name="org.springframework.security" level="${logLevelSpringSecurity}"/>
 

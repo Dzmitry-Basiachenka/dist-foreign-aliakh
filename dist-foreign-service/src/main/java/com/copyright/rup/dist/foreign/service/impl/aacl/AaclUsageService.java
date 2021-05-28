@@ -105,7 +105,7 @@ public class AaclUsageService implements IAaclUsageService {
     @Autowired
     private IUsageService usageService;
     @Autowired
-    @Qualifier("usageChainChunkExecutor")
+    @Qualifier("usageChainExecutor")
     private IChainExecutor<Usage> chainExecutor;
     @Value("$RUP{dist.foreign.usages.batch_size}")
     private int usagesBatchSize;

@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.processor.IChainChunkProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -37,13 +37,13 @@ import java.util.function.Predicate;
 public class UdmRightsConsumerTest {
 
     private UdmRightsConsumer udmRightsConsumer;
-    private IChainChunkProcessor<List<UdmUsage>, UdmUsage> udmRightsProcessor;
+    private IChainProcessor<UdmUsage> udmRightsProcessor;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
         udmRightsConsumer = new UdmRightsConsumer();
-        udmRightsProcessor = createMock(IChainChunkProcessor.class);
+        udmRightsProcessor = createMock(IChainProcessor.class);
         Whitebox.setInternalState(udmRightsConsumer, udmRightsProcessor);
     }
 

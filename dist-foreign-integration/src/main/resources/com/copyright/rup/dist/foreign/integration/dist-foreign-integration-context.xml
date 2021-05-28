@@ -124,10 +124,6 @@
         <constructor-arg value="$RUP{dist.foreign.rest.oracle.ttl.minutes}"/>
     </bean>
 
-    <bean id="df.integration.oracleRhTaxCountryChunkCacheService" class="com.copyright.rup.dist.foreign.integration.oracle.impl.OracleRhTaxCountryChunkCacheService">
-        <constructor-arg value="$RUP{dist.foreign.rest.oracle.ttl.minutes}"/>
-    </bean>
-
     <camelContext id="df.integration.camelContext" xmlns="http://camel.apache.org/schema/spring">
         <contextScan/>
         <template id="df.integration.producerTemplate"/>

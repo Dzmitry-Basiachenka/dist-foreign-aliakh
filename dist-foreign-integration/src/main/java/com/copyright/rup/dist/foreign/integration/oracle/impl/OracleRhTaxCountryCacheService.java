@@ -1,25 +1,26 @@
 package com.copyright.rup.dist.foreign.integration.oracle.impl;
 
-import com.copyright.rup.common.caching.impl.AbstractCacheService;
+import com.copyright.rup.dist.common.integration.rest.prm.AbstractMultipleCacheService;
 import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxCountryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.Objects;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Implementation of {@link IOracleRhTaxCountryService} with caching.
- * See {@link AbstractCacheService}.
+ * See {@link AbstractMultipleCacheService}.
  * <p>
- * Copyright (C) 2018 copyright.com
- * </p>
- * Date: 11/27/2018
+ * Copyright (C) 2020 copyright.com
+ * <p/>
+ * Date: 05/04/2020
  *
- * @author Aliaksandr Liakh
+ * @author Uladzislau Shalamitski
  */
-public class OracleRhTaxCountryCacheService extends AbstractCacheService<Long, Boolean>
+public class OracleRhTaxCountryCacheService extends AbstractMultipleCacheService<Long, Boolean>
     implements IOracleRhTaxCountryService {
 
     @Autowired
@@ -36,12 +37,18 @@ public class OracleRhTaxCountryCacheService extends AbstractCacheService<Long, B
     }
 
     @Override
-    public boolean isUsTaxCountry(Long accountNumber) {
-        return getFromCache(Objects.requireNonNull(accountNumber));
+    public Map<Long, Boolean> isUsTaxCountry(Set<Long> accountNumbers) {
+        return getDataFromCache(accountNumbers);
     }
 
     @Override
-    protected Boolean loadData(Long accountNumber) {
-        return oracleRhTaxCountryService.isUsTaxCountry(accountNumber);
+    public Map<Long, Boolean> loadData(Set<Long> accountNumbers) {
+        return oracleRhTaxCountryService.isUsTaxCountry(accountNumbers);
+    }
+
+    @Override
+    protected Boolean loadData(Long key) {
+        // Do not use getFromCache method as it will always return false
+        return Boolean.FALSE;
     }
 }

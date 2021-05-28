@@ -75,7 +75,7 @@ public class SalUsageService implements ISalUsageService {
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
-    @Qualifier("usageChainChunkExecutor")
+    @Qualifier("usageChainExecutor")
     private IChainExecutor<Usage> chainExecutor;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;

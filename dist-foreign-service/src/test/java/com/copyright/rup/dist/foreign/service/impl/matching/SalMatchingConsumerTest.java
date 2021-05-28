@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.processor.IChainChunkProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
- * Verifies {@link SalMatchingChunkConsumer}.
+ * Verifies {@link SalMatchingConsumer}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -43,12 +43,12 @@ public class SalMatchingConsumerTest {
     private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
     private static final String USAGE_ID = "49ead60e-97f4-47c8-8ebe-d19d07457cca";
 
-    private final SalMatchingChunkConsumer consumer = new SalMatchingChunkConsumer();
-    private IChainChunkProcessor<List<Usage>, Usage> matchingProcessor;
+    private final SalMatchingConsumer consumer = new SalMatchingConsumer();
+    private IChainProcessor<Usage> matchingProcessor;
 
     @Before
     public void setUp() {
-        matchingProcessor = createMock(IChainChunkProcessor.class);
+        matchingProcessor = createMock(IChainProcessor.class);
         Whitebox.setInternalState(consumer, new WorkMatchingServiceMock());
         Whitebox.setInternalState(consumer, matchingProcessor);
     }

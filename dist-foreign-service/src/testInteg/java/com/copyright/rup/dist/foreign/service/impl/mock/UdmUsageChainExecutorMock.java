@@ -1,13 +1,13 @@
 package com.copyright.rup.dist.foreign.service.impl.mock;
 
-import com.copyright.rup.dist.foreign.service.impl.chain.executor.UdmUsageChainChunkExecutor;
+import com.copyright.rup.dist.foreign.service.impl.chain.executor.UdmUsageChainExecutor;
 
 import org.apache.camel.util.concurrent.SynchronousExecutorService;
 
 import java.util.concurrent.ExecutorService;
 
 /**
- * Mock for {@link UdmUsageChainChunkExecutor} with synchronous executor service.
+ * Mock for {@link UdmUsageChainExecutor} with synchronous executor service.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
  *
  * @author Ihar Suvorau
  */
-public class UdmUsageChainExecutorMock extends UdmUsageChainChunkExecutor {
+public class UdmUsageChainExecutorMock extends UdmUsageChainExecutor {
 
     @Override
     protected ExecutorService getExecutorService() {

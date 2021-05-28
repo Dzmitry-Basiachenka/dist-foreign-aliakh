@@ -60,7 +60,7 @@ public class UdmUsageService implements IUdmUsageService {
     @Qualifier("df.integration.telesalesCacheService")
     private ITelesalesService telesalesService;
     @Autowired
-    @Qualifier("udmUsageChainChunkExecutor")
+    @Qualifier("udmUsageChainExecutor")
     private IChainExecutor<UdmUsage> chainExecutor;
 
     @Override
