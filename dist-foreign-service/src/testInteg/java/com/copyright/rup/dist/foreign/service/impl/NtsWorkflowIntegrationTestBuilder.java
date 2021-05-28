@@ -33,6 +33,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -66,20 +67,16 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private ServiceTestHelper testHelper;
 
+    private Map<List<String>, String> expectedRhIdToPrmResponseMap;
+    private Map<String, String> expectedRmsRequestResponseMap;
+    private Map<Long, String> expectedAccountToPrmResponseMap;
+    private Map<List<Long>, String> expectedAccountToOracleResponseMap;
     private String expectedRollupsJson;
     private String expectedRollupsRightholderId;
-    private String expectedRmsRequest;
-    private String expectedRmsResponse;
-    private String expectedOracleResponse;
-    private Long expectedOracleAccountNumber;
-    private String expectedPrmResponse;
-    private String expectedPreferencesResponse;
-    private String expectedPreferencesRightsholderId;
     private String expectedLmDetailsJsonFile;
     private String expectedPaidUsages;
     private String expectedCrmRequest;
     private String crmResponse;
-    private Long expectedPrmAccountNumber;
     private UsageBatch usageBatch;
     private List<PaidUsage> expectedUsages;
     private Scenario expectedScenario;
@@ -102,27 +99,23 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectRmsRights(String request, String response) {
-        this.expectedRmsRequest = request;
-        this.expectedRmsResponse = response;
+    NtsWorkflowIntegrationTestBuilder expectRmsRights(Map<String, String> rmsRequestResponseMap) {
+        this.expectedRmsRequestResponseMap = rmsRequestResponseMap;
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectOracleCall(Long accountNumber, String response) {
-        this.expectedOracleAccountNumber = accountNumber;
-        this.expectedOracleResponse = response;
+    NtsWorkflowIntegrationTestBuilder expectOracleCall(Map<List<Long>, String> accountToOracleResponseMap) {
+        this.expectedAccountToOracleResponseMap = accountToOracleResponseMap;
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, String rightsholderId) {
-        this.expectedPreferencesResponse = preferencesJson;
-        this.expectedPreferencesRightsholderId = rightsholderId;
+    NtsWorkflowIntegrationTestBuilder expectPreferences(Map<List<String>, String> rhIdToPrmResponseMap) {
+        this.expectedRhIdToPrmResponseMap = rhIdToPrmResponseMap;
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectPrmCall(Long accountNumber, String expectedResponse) {
-        this.expectedPrmAccountNumber = accountNumber;
-        this.expectedPrmResponse = expectedResponse;
+    NtsWorkflowIntegrationTestBuilder expectPrmCall(Map<Long, String> accountToPrmResponseMap) {
+        this.expectedAccountToPrmResponseMap = accountToPrmResponseMap;
         return this;
     }
 
@@ -161,14 +154,10 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     void reset() {
         usageBatch = null;
         expectedUsages = null;
-        expectedPrmAccountNumber = null;
-        expectedOracleAccountNumber = null;
-        expectedPrmResponse = null;
-        expectedRmsRequest = null;
-        expectedRmsResponse = null;
-        expectedOracleResponse = null;
-        expectedPreferencesResponse = null;
-        expectedPreferencesRightsholderId = null;
+        expectedAccountToOracleResponseMap = null;
+        expectedAccountToPrmResponseMap = null;
+        expectedRmsRequestResponseMap = null;
+        expectedRhIdToPrmResponseMap = null;
         expectedLmDetailsJsonFile = null;
         expectedRollupsJson = null;
         expectedRollupsRightholderId = null;
@@ -185,16 +174,14 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         public void run() throws InterruptedException {
             testHelper.createRestServer();
-            testHelper.expectGetRmsRights(expectedRmsRequest, expectedRmsResponse);
             testHelper.expectPrmCall(expectedPrmResponseForUpdateRro, expectedRroAccountNumber);
-            testHelper.expectPrmCall(expectedPrmResponse, expectedPrmAccountNumber);
-
-            if (Objects.nonNull(expectedOracleAccountNumber)) {
-                testHelper.expectOracleCall(expectedOracleResponse, expectedOracleAccountNumber);
-            }
-            if (Objects.nonNull(expectedPreferencesResponse)) {
-                testHelper.expectGetPreferences(expectedPreferencesRightsholderId, expectedPreferencesResponse);
-            }
+            testHelper.expectGetRmsRights(expectedRmsRequestResponseMap);
+            expectedAccountToPrmResponseMap.forEach((accountNumber, response) ->
+                testHelper.expectPrmCall(response, accountNumber));
+            expectedAccountToOracleResponseMap.forEach((accountNumbers, response) ->
+                testHelper.expectOracleCall(response, accountNumbers));
+            expectedRhIdToPrmResponseMap.forEach((rightsholderIds, response) ->
+                testHelper.expectGetPreferences(response, rightsholderIds));
             if (Objects.nonNull(expectedRollupsJson)) {
                 testHelper.expectGetRollups(expectedRollupsJson,
                     Collections.singletonList(expectedRollupsRightholderId));
@@ -241,7 +228,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void assertScenario() {
-            actualScenario = scenarioService.getScenarios("NTS").stream()
+            actualScenario = scenarioService.getScenarios("NTS")
+                .stream()
                 .filter(scenario -> actualScenario.getId().equals(scenario.getId()))
                 .findAny()
                 .orElse(null);

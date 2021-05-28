@@ -1,7 +1,7 @@
 databaseChangeLog {
     property(file: 'database.properties')
 
-    changeSet(id: '2018-12-12-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+    changeSet(id: '2020-05-07-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
         comment('Inserting data for testNtsScenarioWorkflow')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -30,7 +30,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '15000.00')
-            column(name: 'initial_usages_count', value: 3)
+            column(name: 'initial_usages_count', value: 4)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -61,6 +61,44 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: 'bc0fe9bc-9b24-4324-b624-eed0d9773e19')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Bus')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '3000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: '97f8bc8b-8620-41da-9ee6-12d99a82562d')
+            column(name: 'df_usage_batch_uid', value: '63e350c1-b211-485f-bc42-6ebee8acb22d')
+            column(name: 'df_scenario_uid', value: '929b9f19-489a-47a2-a680-4d5ad6ba887a')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'wr_wrk_inst', value: '448824345')
+            column(name: 'work_title', value: 'Technical Journal')
+            column(name: 'system_title', value: 'Technical Journal')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'ARCHIVED')
+            column(name: 'standard_number', value: '1008902112317555XX')
+            column(name: 'standard_number_type', value: 'VALISBN13')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'gross_amount', value: '1176.916')
+            column(name: 'net_amount', value: '80.00')
+            column(name: 'service_fee_amount', value: '420.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'check_number', value: '578945')
+            column(name: 'check_date', value: '2016-11-03')
+            column(name: 'ccc_event_id', value: '53256')
+            column(name: 'distribution_name', value: 'FDA March 17')
+            column(name: 'distribution_date', value: '2016-11-03')
+            column(name: 'lm_detail_id', value: '63b3da58-ac6b-4946-bd67-37a251769467')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '97f8bc8b-8620-41da-9ee6-12d99a82562d')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2016-11-03')
