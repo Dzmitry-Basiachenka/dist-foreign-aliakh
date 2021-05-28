@@ -7,7 +7,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'e26ba092-677f-438c-9ba5-3f1ffff3627f')
             column(name: 'name', value: 'Batch')
-            column(name: 'rro_account_number', value: '2000017001')
+            column(name: 'rro_account_number', value: 2000017001)
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '200.00')

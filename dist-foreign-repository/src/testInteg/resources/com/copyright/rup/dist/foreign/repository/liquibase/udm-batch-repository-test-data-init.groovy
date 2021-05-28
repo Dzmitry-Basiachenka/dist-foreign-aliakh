@@ -6,7 +6,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'ed5610a9-128d-4bf8-b262-7f75a5a9e657')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'name', value: 'John Wiley & Sons - Books')
         }
 
@@ -25,7 +25,7 @@ databaseChangeLog {
             column(name: 'original_detail_id', value: 'OGN674GHHSB011')
             column(name: 'period_end_date', value: '2021-06-30')
             column(name: 'status_ind', value: 'RH_FOUND')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'wr_wrk_inst', value: '306985867')
             column(name: 'reported_title', value: 'Colloids and surfaces. B, Biointerfaces')
             column(name: 'system_title', value: 'Tenside, surfactants, detergents')
@@ -108,7 +108,7 @@ databaseChangeLog {
             column(name: 'original_detail_id', value: 'OGN674GHHSB013')
             column(name: 'period_end_date', value: '2020-06-30')
             column(name: 'status_ind', value: 'RH_FOUND')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'wr_wrk_inst', value: '306985867')
             column(name: 'reported_title', value: 'Colloids and surfaces. B, Biointerfaces')
             column(name: 'system_title', value: 'Tenside, surfactants, detergents')
@@ -152,7 +152,7 @@ databaseChangeLog {
             column(name: 'original_detail_id', value: 'OGN674GHHSB014')
             column(name: 'period_end_date', value: '2020-12-31')
             column(name: 'status_ind', value: 'RH_FOUND')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'wr_wrk_inst', value: '306985867')
             column(name: 'reported_title', value: 'Colloids and surfaces. B, Biointerfaces')
             column(name: 'system_title', value: 'Tenside, surfactants, detergents')

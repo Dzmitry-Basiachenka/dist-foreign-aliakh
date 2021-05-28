@@ -13,7 +13,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
             column(name: 'name', value: 'Test Batch 1')
-            column(name: 'rro_account_number', value: '7000813806')
+            column(name: 'rro_account_number', value: 7000813806)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
@@ -27,8 +27,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: 'be66bae9-fa89-499a-8485-fb9e445bedd9')
             column(name: 'wr_wrk_inst', value: '471137470')
             column(name: 'work_title', value: 'Sunbeams')
-            column(name: 'rh_account_number', value: '1000003821')
-            column(name: 'payee_account_number', value: '1000003821')
+            column(name: 'rh_account_number', value: 1000003821)
+            column(name: 'payee_account_number', value: 1000003821)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
@@ -60,7 +60,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '05dc9217-26d4-46ca-aa6e-18572591f3c8')
-            column(name: 'rh_account_number', value: '1000003821')
+            column(name: 'rh_account_number', value: 1000003821)
             column(name: 'name', value: 'Abbey Publications, Inc. [L]')
         }
     }
@@ -77,7 +77,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '10150cf3-9820-41e0-8ea6-97105b6eaf45')
             column(name: 'name', value: 'Test Batch 2')
-            column(name: 'rro_account_number', value: '7000813806')
+            column(name: 'rro_account_number', value: 7000813806)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
@@ -91,8 +91,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '04263c90-cb54-44f0-b354-a901586e5801')
             column(name: 'wr_wrk_inst', value: '127778305')
             column(name: 'work_title', value: 'Sunbeams')
-            column(name: 'rh_account_number', value: '7000515031')
-            column(name: 'payee_account_number', value: '7000515031')
+            column(name: 'rh_account_number', value: 7000515031)
+            column(name: 'payee_account_number', value: 7000515031)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
@@ -128,8 +128,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '04263c90-cb54-44f0-b354-a901586e5801')
             column(name: 'wr_wrk_inst', value: '122861189')
             column(name: 'work_title', value: 'Sunbeams')
-            column(name: 'rh_account_number', value: '2000152614')
-            column(name: 'payee_account_number', value: '2000152614')
+            column(name: 'rh_account_number', value: 2000152614)
+            column(name: 'payee_account_number', value: 2000152614)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
@@ -165,8 +165,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '04263c90-cb54-44f0-b354-a901586e5801')
             column(name: 'wr_wrk_inst', value: '123647460')
             column(name: 'work_title', value: 'Sunbeams')
-            column(name: 'rh_account_number', value: '2000152614')
-            column(name: 'payee_account_number', value: '2000152614')
+            column(name: 'rh_account_number', value: 2000152614)
+            column(name: 'payee_account_number', value: 2000152614)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
@@ -202,8 +202,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '04263c90-cb54-44f0-b354-a901586e5801')
             column(name: 'wr_wrk_inst', value: '122799407')
             column(name: 'work_title', value: 'Sunbeams')
-            column(name: 'rh_account_number', value: '1000000026')
-            column(name: 'payee_account_number', value: '1000000026')
+            column(name: 'rh_account_number', value: 1000000026)
+            column(name: 'payee_account_number', value: 1000000026)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
@@ -239,8 +239,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '04263c90-cb54-44f0-b354-a901586e5801')
             column(name: 'wr_wrk_inst', value: '123636551')
             column(name: 'work_title', value: 'Sunbeams')
-            column(name: 'rh_account_number', value: '1000000322')
-            column(name: 'payee_account_number', value: '1000000322')
+            column(name: 'rh_account_number', value: 1000000322)
+            column(name: 'payee_account_number', value: 1000000322)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
@@ -276,8 +276,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '04263c90-cb54-44f0-b354-a901586e5801')
             column(name: 'wr_wrk_inst', value: '123642505')
             column(name: 'work_title', value: 'Sunbeams')
-            column(name: 'rh_account_number', value: '1000000322')
-            column(name: 'payee_account_number', value: '1000000322')
+            column(name: 'rh_account_number', value: 1000000322)
+            column(name: 'payee_account_number', value: 1000000322)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
@@ -319,37 +319,37 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '1281cdca-a838-4047-802c-850d46fd51b6')
-            column(name: 'rh_account_number', value: '7000515031')
+            column(name: 'rh_account_number', value: 7000515031)
             column(name: 'name', value: '3media Group')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'cd1d10f8-c625-4634-afee-9b983071e725')
-            column(name: 'rh_account_number', value: '2000152614')
+            column(name: 'rh_account_number', value: 2000152614)
             column(name: 'name', value: '24 Images')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '01ec97ae-8607-4494-b7b5-158aae3ebd5b')
-            column(name: 'rh_account_number', value: '1000000026')
+            column(name: 'rh_account_number', value: 1000000026)
             column(name: 'name', value: 'Georgia State University Business Press [C]')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'e395cf0e-312f-425c-a37d-4a7ab824b8f6')
-            column(name: 'rh_account_number', value: '1000000322')
+            column(name: 'rh_account_number', value: 1000000322)
             column(name: 'name', value: 'American College of Physicians - Journals')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '00d4ae90-5fe7-47bf-ace1-781c8d76d4da')
-            column(name: 'rh_account_number', value: '1000001820')
+            column(name: 'rh_account_number', value: 1000001820)
             column(name: 'name', value: 'Delhi Medical Assn')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '3259b121-8b0e-4b9e-8d7a-88707cf418a4')
-            column(name: 'rh_account_number', value: '2000017000')
+            column(name: 'rh_account_number', value: 2000017000)
             column(name: 'name', value: 'CEDRO, Centro Espanol de Derechos Reprograficos')
         }
     }

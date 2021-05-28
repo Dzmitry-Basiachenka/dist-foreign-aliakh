@@ -7,7 +7,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
             column(name: 'name', value: 'SENT_FOR_RA_TEST')
-            column(name: 'rro_account_number', value: '1000023401')
+            column(name: 'rro_account_number', value: 1000023401)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2018-01-24')
             column(name: 'fiscal_year', value: '2018')
@@ -148,7 +148,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
             column(name: 'wr_wrk_inst', value: '127778305')
             column(name: 'work_title', value: '1984')
-            column(name: 'rh_account_number', value: '1000009522')
+            column(name: 'rh_account_number', value: 1000009522)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')

@@ -7,7 +7,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '034873b3-97fa-475a-9a2a-191e8ec988b3')
             column(name: 'name', value: 'Test Batch 1')
-            column(name: 'rro_account_number', value: '2000017000')
+            column(name: 'rro_account_number', value: 2000017000)
             column(name: 'product_family', value: 'FAS2')
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
@@ -19,7 +19,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '02a09322-5f0f-4cae-888c-73127050dc98')
             column(name: 'name', value: 'Test Batch 2')
-            column(name: 'rro_account_number', value: '2000017001')
+            column(name: 'rro_account_number', value: 2000017001)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
@@ -41,8 +41,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '12ec845f-0e76-4d1c-85cd-bb3fb7ca260e')
             column(name: 'wr_wrk_inst', value: '122235134')
             column(name: 'work_title', value: 'CHICKEN BREAST ON GRILL WITH FLAMES')
-            column(name: 'rh_account_number', value: '1000000001')
-            column(name: 'payee_account_number', value: '1000000001')
+            column(name: 'rh_account_number', value: 1000000001)
+            column(name: 'payee_account_number', value: 1000000001)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '2558902245377325XX')
@@ -72,8 +72,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '12ec845f-0e76-4d1c-85cd-bb3fb7ca260e')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
-            column(name: 'rh_account_number', value: '1000000002')
-            column(name: 'payee_account_number', value: '1000000002')
+            column(name: 'rh_account_number', value: 1000000002)
+            column(name: 'payee_account_number', value: 1000000002)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1003324112314587XX')
@@ -103,8 +103,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '12ec845f-0e76-4d1c-85cd-bb3fb7ca260e')
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'work_title', value: 'Cell Biology')
-            column(name: 'rh_account_number', value: '1000000003')
-            column(name: 'payee_account_number', value: '1000000003')
+            column(name: 'rh_account_number', value: 1000000003)
+            column(name: 'payee_account_number', value: 1000000003)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1003324112314587XX')
@@ -134,8 +134,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '12ec845f-0e76-4d1c-85cd-bb3fb7ca260e')
             column(name: 'wr_wrk_inst', value: '122235139')
             column(name: 'work_title', value: 'BOWL OF BERRIES WITH SUGAR COOKIES')
-            column(name: 'rh_account_number', value: '1000000004')
-            column(name: 'payee_account_number', value: '1000000004')
+            column(name: 'rh_account_number', value: 1000000004)
+            column(name: 'payee_account_number', value: 1000000004)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
@@ -165,8 +165,8 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '12ec845f-0e76-4d1c-85cd-bb3fb7ca260e')
             column(name: 'wr_wrk_inst', value: '471137469')
             column(name: 'work_title', value: 'Solar Cells')
-            column(name: 'rh_account_number', value: '1000000006')
-            column(name: 'payee_account_number', value: '1000000006')
+            column(name: 'rh_account_number', value: 1000000006)
+            column(name: 'payee_account_number', value: 1000000006)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
@@ -192,43 +192,43 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '77b111d3-9eea-49af-b815-100b9716c1b3')
-            column(name: 'rh_account_number', value: '2000017000')
+            column(name: 'rh_account_number', value: 2000017000)
             column(name: 'name', value: 'CLA, The Copyright Licensing Agency Ltd.')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'b2ea68f6-3c15-4ae3-a04a-acdd5a236f0c')
-            column(name: 'rh_account_number', value: '1000000001')
+            column(name: 'rh_account_number', value: 1000000001)
             column(name: 'name', value: 'Rothchild Consultants')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '074c0f1f-2457-49a9-ad72-2a85d07ce90e')
-            column(name: 'rh_account_number', value: '1000000002')
+            column(name: 'rh_account_number', value: 1000000002)
             column(name: 'name', value: 'Royal Society of Victoria')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'd27264c2-eae4-4929-978d-77ba19ea417b')
-            column(name: 'rh_account_number', value: '1000000003')
+            column(name: 'rh_account_number', value: 1000000003)
             column(name: 'name', value: 'South African Institute of Mining and Metallurgy')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'b1c51d03-0c6e-4329-ba81-1060234c6c5e')
-            column(name: 'rh_account_number', value: '1000000004')
+            column(name: 'rh_account_number', value: 1000000004)
             column(name: 'name', value: 'Computers for Design and Construction')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'bb888db8-1cd6-4c7e-a2b8-5486986eee95')
-            column(name: 'rh_account_number', value: '1000000006')
+            column(name: 'rh_account_number', value: 1000000006)
             column(name: 'name', value: 'Januz Marketing Communications')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '1da0461a-92f9-40cc-a3c1-9b972505b9c9')
-            column(name: 'rh_account_number', value: '2000017001')
+            column(name: 'rh_account_number', value: 2000017001)
             column(name: 'name', value: 'CFC/ Center Fran dexploitation du droit de Copie')
         }
 
@@ -247,7 +247,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '0dc1cff9-fc33-47ef-866c-c97de0203f9c')
             column(name: 'name', value: 'Archived batch')
-            column(name: 'rro_account_number', value: '7000813806')
+            column(name: 'rro_account_number', value: 7000813806)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
@@ -263,8 +263,8 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
-            column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'number_of_copies', value: '100')
