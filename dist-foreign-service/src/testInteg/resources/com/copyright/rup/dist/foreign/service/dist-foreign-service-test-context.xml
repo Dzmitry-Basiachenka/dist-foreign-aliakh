@@ -56,7 +56,7 @@
     <bean id="df.integration.telesalesCacheService"
           class="com.copyright.rup.dist.foreign.service.impl.mock.TelesalesServiceMock"/>
 
-    <bean id="usageChainExecutor" class="com.copyright.rup.dist.foreign.service.impl.mock.chunk.UsageChainExecutorMock"/>
+    <bean id="usageChainExecutor" class="com.copyright.rup.dist.foreign.service.impl.mock.UsageChainExecutorMock"/>
     <bean id="udmUsageChainExecutor" class="com.copyright.rup.dist.foreign.service.impl.mock.UdmUsageChainExecutorMock"/>
 
     <bean id="aaclUsageService" class="com.copyright.rup.dist.foreign.service.impl.mock.AaclUsageServiceMock"/>

@@ -21,8 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Builder for {@link CreateNtsBatchIntegrationTest}.
@@ -49,16 +54,10 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private ServiceTestHelper testHelper;
 
-    private String expectedRmsRequest;
-    private String expectedRmsResponse;
-    private String expectedOracleResponse;
-    private Long expectedOracleAccountNumber;
-    private Long expectedRroAccountNumber;
-    private String expectedPrmResponseForUpdateRro;
-    private String expectedPrmResponse;
-    private String expectedPreferencesResponse;
-    private String expectedPreferencesRightsholderId;
-    private Long expectedPrmAccountNumber;
+    private final Map<List<String>, String> expectedRhIdToPrmResponseMap = new LinkedHashMap<>();
+    private final Map<String, String> expectedRmsRequestResponseMap = new LinkedHashMap<>();
+    private final Map<Long, String> expectedAccountToPrmResponseMap = new LinkedHashMap<>();
+    private final Map<List<Long>, String> expectedAccountToOracleResponseMap = new LinkedHashMap<>();
     private UsageBatch usageBatch;
     private int initialUsagesCount;
     private List<Usage> expectedUsages;
@@ -84,33 +83,23 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    CreateNtsBatchIntegrationTestBuilder expectRmsRights(String request, String response) {
-        this.expectedRmsRequest = request;
-        this.expectedRmsResponse = response;
+    CreateNtsBatchIntegrationTestBuilder expectRmsRights(Map<String, String> rmsRequestResponseMap) {
+        this.expectedRmsRequestResponseMap.putAll(rmsRequestResponseMap);
         return this;
     }
 
-    CreateNtsBatchIntegrationTestBuilder expectOracleCall(Long accountNumber, String response) {
-        this.expectedOracleAccountNumber = accountNumber;
-        this.expectedOracleResponse = response;
+    CreateNtsBatchIntegrationTestBuilder expectOracleCall(Map<List<Long>, String> accountToOracleResponseMap) {
+        this.expectedAccountToOracleResponseMap.putAll(accountToOracleResponseMap);
         return this;
     }
 
-    CreateNtsBatchIntegrationTestBuilder expectPreferences(String preferencesJson, String rightsholderId) {
-        this.expectedPreferencesResponse = preferencesJson;
-        this.expectedPreferencesRightsholderId = rightsholderId;
+    CreateNtsBatchIntegrationTestBuilder expectPreferences(Map<List<String>, String> rhIdToPrmResponseMap) {
+        this.expectedRhIdToPrmResponseMap.putAll(rhIdToPrmResponseMap);
         return this;
     }
 
-    CreateNtsBatchIntegrationTestBuilder expectPrmCall(Long accountNumber, String expectedResponse) {
-        this.expectedPrmAccountNumber = accountNumber;
-        this.expectedPrmResponse = expectedResponse;
-        return this;
-    }
-
-    CreateNtsBatchIntegrationTestBuilder expectPrmCallForUpdateRro(Long accountNumber, String expectedResponse) {
-        this.expectedRroAccountNumber = accountNumber;
-        this.expectedPrmResponseForUpdateRro = expectedResponse;
+    CreateNtsBatchIntegrationTestBuilder expectPrmCall(Map<Long, String> accountToPrmResponseMap) {
+        this.expectedAccountToPrmResponseMap.putAll(accountToPrmResponseMap);
         return this;
     }
 
@@ -123,16 +112,10 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
         usageBatch = null;
         expectedAudit = null;
         expectedUsages = null;
-        expectedPrmAccountNumber = null;
-        expectedOracleAccountNumber = null;
-        expectedPrmResponse = null;
-        expectedRmsRequest = null;
-        expectedRmsResponse = null;
-        expectedOracleResponse = null;
-        expectedPreferencesResponse = null;
-        expectedPreferencesRightsholderId = null;
-        expectedRroAccountNumber = null;
-        expectedPrmResponseForUpdateRro = null;
+        expectedAccountToOracleResponseMap.clear();
+        expectedAccountToPrmResponseMap.clear();
+        expectedRmsRequestResponseMap.clear();
+        expectedRhIdToPrmResponseMap.clear();
         testHelper.reset();
     }
 
@@ -141,21 +124,19 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
      */
     public class Runner {
 
+        private static final int ONE = 1;
+
         private List<String> actualUsageIds;
 
         public void run() {
             testHelper.createRestServer();
-            testHelper.expectGetRmsRights(expectedRmsRequest, expectedRmsResponse);
-            testHelper.expectPrmCall(expectedPrmResponseForUpdateRro, expectedRroAccountNumber);
-            if (Objects.nonNull(expectedPrmResponse)) {
-                testHelper.expectPrmCall(expectedPrmResponse, expectedPrmAccountNumber);
-            }
-            if (Objects.nonNull(expectedOracleAccountNumber)) {
-                testHelper.expectOracleCall(expectedOracleResponse, expectedOracleAccountNumber);
-            }
-            if (Objects.nonNull(expectedPreferencesResponse)) {
-                testHelper.expectGetPreferences(expectedPreferencesRightsholderId, expectedPreferencesResponse);
-            }
+            testHelper.expectGetRmsRights(expectedRmsRequestResponseMap);
+            expectedAccountToPrmResponseMap.forEach((accountNumber, response) ->
+                testHelper.expectPrmCall(response, accountNumber));
+            expectedAccountToOracleResponseMap.forEach((accountNumbers, response) ->
+                testHelper.expectOracleCall(response, accountNumbers));
+            expectedRhIdToPrmResponseMap.forEach((rightsholderIds, response) ->
+                testHelper.expectGetPreferences(response, rightsholderIds));
             loadNtsBatch();
             assertBatch();
             assertUsages();
@@ -180,7 +161,7 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(usageBatch.getPaymentDate(), insertedBatch.getPaymentDate());
             assertEquals(usageBatch.getRro().getAccountNumber(), insertedBatch.getRro().getAccountNumber());
             assertEquals(initialUsagesCount, insertedBatch.getInitialUsagesCount());
-            if (Objects.nonNull(expectedPrmResponse)) {
+            if (expectedAccountToPrmResponseMap.size() > ONE) {
                 assertEquals("American College of Physicians - Journals", insertedBatch.getRro().getName());
             }
             usageBatch.setId(insertedBatch.getId());
@@ -190,15 +171,19 @@ public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
             if (Objects.isNull(expectedUsages)) {
                 assertTrue(CollectionUtils.isEmpty(usageRepository.findByIds(actualUsageIds)));
             } else {
-                List<Usage> actualUsages = usageRepository.findByIds(actualUsageIds);
+                List<Usage> actualUsages = usageRepository.findByIds(actualUsageIds)
+                    .stream()
+                    .sorted(Comparator.comparing(Usage::getWrWrkInst))
+                    .collect(Collectors.toList());
                 assertEquals(expectedUsages.size(), actualUsages.size());
-                assertUsage(actualUsages.get(0));
+                IntStream.range(0, expectedUsages.size())
+                    .forEach(index -> {assertUsage(actualUsages.get(0));});
             }
         }
 
         private void assertUsage(Usage actualUsage) {
             Usage expectedUsage = expectedUsages.stream()
-                .filter(expected -> expected.getReportedValue().equals(actualUsage.getReportedValue()))
+                .filter(expected -> expected.getWrWrkInst().equals(actualUsage.getWrWrkInst()))
                 .findFirst()
                 .orElse(null);
             assertNotNull(expectedUsage);

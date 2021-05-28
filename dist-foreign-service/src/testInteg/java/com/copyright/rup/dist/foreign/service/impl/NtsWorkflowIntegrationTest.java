@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import org.junit.Before;
@@ -23,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -38,18 +40,11 @@ import java.util.List;
 @ContextConfiguration("classpath:com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
 @TestPropertySource(properties = {"test.liquibase.changelog=nts-scenario-workflow-data-init.groovy"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-//TODO: remove redundant integration tests and get rid of 'chunk' in names
 public class NtsWorkflowIntegrationTest {
 
     private static final LocalDate DATE = LocalDate.of(2017, 2, 1);
-    private static final String BUS_MARKET = "Bus";
-    private static final String ORACLE_RH_TAX_1000023401_US_RESPONSE = "tax/rh_1000023401_tax_country_us_response.json";
-    private static final String PRM_RH_1000023401_RESPONSE = "prm/rightsholder_1000023401_response.json";
-    private static final String PRM_RH_2000017001_RESPONSE = "prm/rightsholder_2000017001_response.json";
-    private static final String RMS_GRANTS_65882434_REQUEST = "rights/rms_grants_658824345_request.json";
-    private static final String PRM_ELIGIBLE_RH_1000023401_RESPONSE =
-        "preferences/rh_1000023401_eligible_response.json";
-    private static final String RH_ID = "85f864f2-30a5-4215-ac4f-f1f541901218";
+    private static final String RH_ID_1 = "85f864f2-30a5-4215-ac4f-f1f541901218";
+    private static final String RH_ID_2 = "18062f0c-beba-47a4-ae38-faa612688760";
     private static final BigDecimal STM_AMOUNT = new BigDecimal("100");
 
     @Autowired
@@ -67,12 +62,18 @@ public class NtsWorkflowIntegrationTest {
     public void testNtsWorkflow() throws InterruptedException {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields()))
-            .expectRollups("prm/nts_rollups_response.json", RH_ID)
-            .expectRmsRights(RMS_GRANTS_65882434_REQUEST, "rights/rms_grants_658824345_response.json")
-            .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
-            .expectPrmCallForUpdateRro(2000017001L, PRM_RH_2000017001_RESPONSE)
-            .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
-            .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
+            .expectRollups("prm/nts_rollups_response.json", RH_ID_1)
+            .expectRmsRights(ImmutableMap.of(
+                "rights/rms_grants_448824345_request.json", "rights/rms_grants_448824345_response.json",
+                "rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json"))
+            .expectPrmCall(ImmutableMap.of(
+                1000009522L, "prm/rightsholder_1000009522_response.json",
+                1000023401L, "prm/rightsholder_1000023401_response.json"))
+            .expectPrmCallForUpdateRro(2000017001L, "prm/rightsholder_2000017001_response.json")
+            .expectOracleCall(ImmutableMap.of(
+                Arrays.asList(1000009522L, 1000023401L), "tax/rh_tax_country_us_response_1.json"))
+            .expectPreferences(ImmutableMap.of(
+                Arrays.asList(RH_ID_2, RH_ID_1), "preferences/rh_preferences_response_1.json"))
             .expectUsage(buildPaidUsage())
             .expectLmDetails("details/nts_details_to_lm.json")
             .expectPaidInfo("lm/paid_usages_nts.json")
@@ -118,7 +119,8 @@ public class NtsWorkflowIntegrationTest {
         ntsFields.setNonStmAmount(new BigDecimal("400.44"));
         ntsFields.setStmMinimumAmount(new BigDecimal("300.3"));
         ntsFields.setNonStmMinimumAmount(new BigDecimal("200."));
-        ntsFields.setMarkets(ImmutableSet.of(BUS_MARKET));
+        ntsFields.setMarkets(ImmutableSet.of("Bus"));
+        ntsFields.setExcludingStm(true);
         return ntsFields;
     }
 

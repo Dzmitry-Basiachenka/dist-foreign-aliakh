@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.mock.chunk;
+package com.copyright.rup.dist.foreign.service.impl.mock;
 
 import com.copyright.rup.dist.foreign.service.impl.chain.executor.UsageChainExecutor;
 
