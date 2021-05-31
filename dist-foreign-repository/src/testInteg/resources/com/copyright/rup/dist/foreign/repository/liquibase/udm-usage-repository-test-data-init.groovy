@@ -177,8 +177,10 @@ databaseChangeLog {
             column(name: 'reported_pub_type', value: 'Not Shared')
             column(name: 'publication_format', value: 'Digital')
             column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
-            column(name: 'language', value: 'EMAIL_COPY')
-            column(name: 'company_id', value: '214984577')
+            column(name: 'language', value: 'English')
+            column(name: 'company_id', value: 1136)
+            column(name: 'company_name', value: 'Albany International Corp.')
+            column(name: 'detail_licensee_class_id', value: 22)
             column(name: 'survey_respondent', value: 'c6615155-f82b-402c-8f22-77e2722ae448')
             column(name: 'ip_address', value: 'ip192.168.211.211')
             column(name: 'survey_country', value: 'Portugal')
@@ -196,6 +198,7 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
+            column(name: 'record_version', value: '2')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
