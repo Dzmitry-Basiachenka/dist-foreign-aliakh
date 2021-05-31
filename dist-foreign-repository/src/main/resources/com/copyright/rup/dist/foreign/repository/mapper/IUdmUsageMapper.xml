@@ -383,7 +383,8 @@
             reported_type_of_use,
             quantity,
             ineligible_reason,
-            annualized_copies
+            annualized_copies,
+            record_version
         from ${schema}.df_udm_usage
         where df_udm_usage_uid in
             <foreach collection="list" item="usageId" open="(" separator="," close=")">
