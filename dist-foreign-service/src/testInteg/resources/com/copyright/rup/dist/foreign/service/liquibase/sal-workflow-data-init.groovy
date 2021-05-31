@@ -6,13 +6,13 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '85f864f2-30a5-4215-ac4f-f1f541901218')
-            column(name: 'rh_account_number', value: '1000000322')
+            column(name: 'rh_account_number', value: 1000000322)
             column(name: 'name', value: 'American College of Physicians - Journals')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f')
-            column(name: 'rh_account_number', value: '1000024950')
+            column(name: 'rh_account_number', value: 1000024950)
             column(name: 'name', value: '101 Communications, Ltd.')
         }
 
@@ -74,8 +74,8 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'd7a0806f-6088-407d-97eb-5e3661b167c5')
             column(name: 'df_scenario_uid', value: 'f75c3bc8-7dc8-437e-943f-df0868c00ad6')
             column(name: 'wr_wrk_inst', value: '269040891')
-            column(name: 'rh_account_number', value: '2000017010')
-            column(name: 'payee_account_number', value: '2000017010')
+            column(name: 'rh_account_number', value: 2000017010)
+            column(name: 'payee_account_number', value: 2000017010)
             column(name: "system_title", value: 'Castanea')
             column(name: "standard_number", value: '09639292')
             column(name: "standard_number_type", value: 'VALISSN')

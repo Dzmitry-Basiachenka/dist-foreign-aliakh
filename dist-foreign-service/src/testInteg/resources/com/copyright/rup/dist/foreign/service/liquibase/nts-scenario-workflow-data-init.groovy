@@ -6,13 +6,13 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '77b111d3-9eea-49af-b815-100b9716c1b3')
-            column(name: 'rh_account_number', value: '2000017000')
+            column(name: 'rh_account_number', value: 2000017000)
             column(name: 'name', value: 'CLA, The Copyright Licensing Agency Ltd.')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '77b111d3-9eea-49af-b815-100b9716c1b4')
-            column(name: 'rh_account_number', value: '1000010029')
+            column(name: 'rh_account_number', value: 1000010029)
             column(name: 'name', value: 'CLA, The Copyright Licensing Agency Ltd.')
         }
 
@@ -25,7 +25,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '63e350c1-b211-485f-bc42-6ebee8acb22d')
             column(name: 'name', value: 'Archived batch')
-            column(name: 'rro_account_number', value: '7000813806')
+            column(name: 'rro_account_number', value: 7000813806)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
@@ -41,8 +41,8 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '658824345')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
-            column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'standard_number_type', value: 'VALISBN13')
@@ -130,8 +130,8 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '658824345')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
-            column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'number_of_copies', value: '100')
@@ -168,8 +168,8 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '836698198')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
-            column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'number_of_copies', value: '100')

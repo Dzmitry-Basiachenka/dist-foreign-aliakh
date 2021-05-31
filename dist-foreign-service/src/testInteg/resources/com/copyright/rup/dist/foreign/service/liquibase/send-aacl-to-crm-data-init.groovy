@@ -6,13 +6,13 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '0b334c49-ff42-4768-b338-0363519601d9')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'name', value: 'John Wiley & Sons - Books')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'd2e6d7a1-86ac-435b-84bf-e421da550a3b')
-            column(name: 'rh_account_number', value: '1000005413')
+            column(name: 'rh_account_number', value: 1000005413)
             column(name: 'name', value: 'Kluwer Academic Publishers - Dordrecht')
         }
 
@@ -77,8 +77,8 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
-            column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'PAID')
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'gross_amount', value: '500.00')
@@ -115,8 +115,8 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
-            column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'PAID')
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'gross_amount', value: '500.00')

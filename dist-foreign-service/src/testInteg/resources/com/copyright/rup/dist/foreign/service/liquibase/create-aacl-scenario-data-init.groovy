@@ -6,25 +6,25 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '60080587-a225-439c-81af-f016cb33aeac')
-            column(name: 'rh_account_number', value: '2000133267')
+            column(name: 'rh_account_number', value: 2000133267)
             column(name: 'name', value: '101 Communications, Ltd.')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'b0e6b1f6-89e9-4767-b143-db0f49f32769')
-            column(name: 'rh_account_number', value: '2000073957')
+            column(name: 'rh_account_number', value: 2000073957)
             column(name: 'name', value: '1st Contact Publishing')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '9905f006-a3e1-4061-b3d4-e7ece191103f')
-            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'rh_account_number', value: 1000009997)
             column(name: 'name', value: 'IEEE - Inst of Electrical and Electronics Engrs')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '019acfde-91be-43aa-8871-6305642bcb2c')
-            column(name: 'rh_account_number', value: '1000024497')
+            column(name: 'rh_account_number', value: 1000024497)
             column(name: 'name', value: 'White Horse Press')
         }
 
@@ -64,7 +64,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '4aa7d89f-9721-4ad3-a9ab-e267743a2851')
             column(name: 'df_usage_batch_uid', value: 'ea7b6e8d-8454-4052-b639-c0fdb0a3145c')
             column(name: 'wr_wrk_inst', value: '123456789')
-            column(name: 'rh_account_number', value: '2000133267')
+            column(name: 'rh_account_number', value: 2000133267)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '10')
@@ -86,7 +86,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'd5331924-72e9-43e7-9a7b-446ac09cff53')
             column(name: 'df_usage_batch_uid', value: 'ea7b6e8d-8454-4052-b639-c0fdb0a3145c')
             column(name: 'wr_wrk_inst', value: '123456789')
-            column(name: 'rh_account_number', value: '2000073957')
+            column(name: 'rh_account_number', value: 2000073957)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '10')
@@ -108,7 +108,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'a96d23a9-a8e7-48e2-9f0e-c0a1ce3a0eab')
             column(name: 'df_usage_batch_uid', value: 'ea7b6e8d-8454-4052-b639-c0fdb0a3145c')
             column(name: 'wr_wrk_inst', value: '100010768')
-            column(name: 'rh_account_number', value: '1000024497')
+            column(name: 'rh_account_number', value: 1000024497)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '1')
@@ -145,7 +145,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '2b969cb4-4257-4674-b329-f627d60f5c0d')
             column(name: 'df_usage_batch_uid', value: 'ea7b6e8d-8454-4052-b639-c0fdb0a3145c')
             column(name: 'wr_wrk_inst', value: '123456789')
-            column(name: 'rh_account_number', value: '2000073957')
+            column(name: 'rh_account_number', value: 2000073957)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '10')
@@ -169,7 +169,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'c71c0c80-57c0-43d1-9c40-432c7cd112c6')
             column(name: 'df_usage_batch_uid', value: 'ea7b6e8d-8454-4052-b639-c0fdb0a3145c')
             column(name: 'wr_wrk_inst', value: '100010768')
-            column(name: 'rh_account_number', value: '2000073957')
+            column(name: 'rh_account_number', value: 2000073957)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: '1')

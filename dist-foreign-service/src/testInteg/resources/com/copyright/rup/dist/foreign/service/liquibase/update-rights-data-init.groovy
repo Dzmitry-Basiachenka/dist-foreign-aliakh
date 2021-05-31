@@ -6,32 +6,32 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '75e057ac-7c24-4ae7-a0f5-aa75ea0895e6')
-            column(name: 'rh_account_number', value: '1000009522')
+            column(name: 'rh_account_number', value: 1000009522)
             column(name: 'name', value: 'Zoological Society of Pakistan [T]')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'd311340c-60e8-4df1-bbe1-788ba2ed9a15')
-            column(name: 'rh_account_number', value: '1000023401')
+            column(name: 'rh_account_number', value: 1000023401)
             column(name: 'name', value: 'American City Business Journals, Inc.')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'abf348f3-f6d7-4d24-b087-4812b78e140d')
-            column(name: 'rh_account_number', value: '1000010077')
+            column(name: 'rh_account_number', value: 1000010077)
             column(name: 'name', value: 'Cambridge University Press - US - Books')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'a088a427-0739-4fc7-b621-9a77eb83244a')
-            column(name: 'rh_account_number', value: '1000010088')
+            column(name: 'rh_account_number', value: 1000010088)
             column(name: 'name', value: 'Zoological Society of Poland')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
             column(name: 'name', value: 'Test_RMS_get_rights')
-            column(name: 'rro_account_number', value: '1000023401')
+            column(name: 'rro_account_number', value: 1000023401)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2018-01-26')
             column(name: 'fiscal_year', value: '2018')
@@ -44,7 +44,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
             column(name: 'wr_wrk_inst', value: '127778306')
             column(name: 'work_title', value: 'ACP journal club')
-            column(name: 'rh_account_number', value: '1000009522')
+            column(name: 'rh_account_number', value: 1000009522)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
@@ -70,7 +70,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
             column(name: 'wr_wrk_inst', value: '127778305')
             column(name: 'work_title', value: 'ACP journal club')
-            column(name: 'rh_account_number', value: '1000009522')
+            column(name: 'rh_account_number', value: 1000009522)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
@@ -290,7 +290,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'ade32bd9-4c0f-4835-b980-6372b89c9caf')
             column(name: 'name', value: 'NTS getRights')
-            column(name: 'rro_account_number', value: '1000023401')
+            column(name: 'rro_account_number', value: 1000023401)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2018-01-26')
             column(name: 'fiscal_year', value: '2018')

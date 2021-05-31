@@ -18,7 +18,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '14edbc9b-1473-4fc9-95f6-07b3ef45e851')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'name', value: 'John Wiley & Sons - Books')
         }
 
@@ -37,7 +37,7 @@ databaseChangeLog {
             column(name: 'period_end_date', value: '2025-09-10')
             column(name: 'status_ind', value: 'RH_FOUND')
             column(name: 'assignee', value: 'jjohn@copyright.com')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'wr_wrk_inst', value: '306985867')
             column(name: 'reported_title', value: 'Colloids and surfaces. B, Biointerfaces')
             column(name: 'system_title', value: 'Tenside, surfactants, detergents')

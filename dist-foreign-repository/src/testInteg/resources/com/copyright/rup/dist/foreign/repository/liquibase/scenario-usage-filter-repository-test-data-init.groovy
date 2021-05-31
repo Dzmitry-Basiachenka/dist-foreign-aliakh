@@ -7,7 +7,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'e1c64cac-3f2b-4105-8056-6660e1ec461a')
             column(name: 'name', value: 'Usage batch name')
-            column(name: 'rro_account_number', value: '7000813807')
+            column(name: 'rro_account_number', value: 7000813807)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2018-03-05')
             column(name: 'fiscal_year', value: '2018')
@@ -17,7 +17,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '40f97da2-79f6-4917-b683-1cfa0fccd669')
-            column(name: 'rh_account_number', value: '2000017004')
+            column(name: 'rh_account_number', value: 2000017004)
             column(name: 'name', value: 'Access Copyright, The Canadian Copyright Agency')
         }
 

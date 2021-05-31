@@ -6,50 +6,50 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'e9c9f51b-6048-4474-848a-2db1c410e463')
-            column(name: 'rh_account_number', value: '1000002797')
+            column(name: 'rh_account_number', value: 1000002797)
             column(name: 'name', value: 'British Film Institute (BFI)')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '5bcf2c37-2f32-48e9-90fe-c9d75298eeed')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'name', value: 'John Wiley & Sons - Books')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '8a0dbf78-d9c9-49d9-a895-05f55cfc8329')
-            column(name: 'rh_account_number', value: '1000005413')
+            column(name: 'rh_account_number', value: 1000005413)
             column(name: 'name', value: 'Kluwer Academic Publishers - Dordrecht')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '9905f006-a3e1-4061-b3d4-e7ece191103f')
-            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'rh_account_number', value: 1000009997)
             column(name: 'name', value: 'IEEE - Inst of Electrical and Electronics Engrs')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '46754660-b627-46b9-a782-3f703b6853c7')
-            column(name: 'rh_account_number', value: '2000017004')
+            column(name: 'rh_account_number', value: 2000017004)
             column(name: 'name', value: 'Access Copyright, The Canadian Copyright Agency')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '05c4714b-291d-4e38-ba4a-35307434acfb')
-            column(name: 'rh_account_number', value: '7000813806')
+            column(name: 'rh_account_number', value: 7000813806)
             column(name: 'name', value: 'CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'ff8b9ac9-5fca-4d57-b74e-26da209c1040')
-            column(name: 'rh_account_number', value: '2000017010')
+            column(name: 'rh_account_number', value: 2000017010)
             column(name: 'name', value: 'JAC, Japan Academic Association for Copyright Clearance, Inc.')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '56282cac-2468-48d4-b346-93d3458a656a')
             column(name: 'name', value: 'WOW_22Nov87')
-            column(name: 'rro_account_number', value: '7000800832')
+            column(name: 'rro_account_number', value: 7000800832)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
@@ -60,7 +60,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
             column(name: 'name', value: 'CADRA_11Dec16')
-            column(name: 'rro_account_number', value: '7000813806')
+            column(name: 'rro_account_number', value: 7000813806)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
@@ -71,7 +71,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
             column(name: 'name', value: 'AccessCopyright_11Dec16')
-            column(name: 'rro_account_number', value: '2000017004')
+            column(name: 'rro_account_number', value: 2000017004)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2018-08-16')
             column(name: 'fiscal_year', value: '2019')
@@ -82,7 +82,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
             column(name: 'name', value: 'JAACC_11Dec16')
-            column(name: 'rro_account_number', value: '2000017010')
+            column(name: 'rro_account_number', value: 2000017010)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
@@ -104,8 +104,8 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '180382915')
             column(name: 'work_title', value: 'High Performance Switching and Routing')
             column(name: 'system_title', value: 'High Performance Switching and Routing')
-            column(name: 'rh_account_number', value: '1000159997')
-            column(name: 'payee_account_number', value: '7001555529')
+            column(name: 'rh_account_number', value: 1000159997)
+            column(name: 'payee_account_number', value: 7001555529)
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902992377654XX')
@@ -144,7 +144,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
             column(name: 'wr_wrk_inst', value: '180382914')
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
-            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'rh_account_number', value: 1000009997)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
@@ -169,7 +169,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
             column(name: 'wr_wrk_inst', value: '244614835')
             column(name: 'work_title', value: '15th International Conference on Environmental Degradation of Materials in Nuclear Power Systems Water Reactors')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902002377655XX')
@@ -194,7 +194,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
             column(name: 'wr_wrk_inst', value: '345870577')
             column(name: 'work_title', value: '10 Years Plant Molecular Biology')
-            column(name: 'rh_account_number', value: '1000005413')
+            column(name: 'rh_account_number', value: 1000005413)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902002377655XX')
@@ -260,7 +260,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '2167779f-cbae-4b4b-adc6-fb95aeb3c58d')
             column(name: 'name', value: 'NTS Batch')
-            column(name: 'rro_account_number', value: '7000800832')
+            column(name: 'rro_account_number', value: 7000800832)
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
@@ -276,7 +276,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '122267672')
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '0804709114')
@@ -300,7 +300,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '159526527')
             column(name: 'work_title', value: 'Speculum')
             column(name: 'system_title', value: 'Speculum')
-            column(name: 'rh_account_number', value: '1000005413')
+            column(name: 'rh_account_number', value: 1000005413)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '10457143')
@@ -324,7 +324,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '159526527')
             column(name: 'work_title', value: 'Speculum')
             column(name: 'system_title', value: 'Speculum')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '10457143')
@@ -348,7 +348,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '435a1689-8dfd-4a94-8ef5-72e2c4e6f3fa')
             column(name: 'name', value: 'NTS Batch 2')
-            column(name: 'rro_account_number', value: '2000017000')
+            column(name: 'rro_account_number', value: 2000017000)
             column(name: 'payment_date', value: '2019-02-13')
             column(name: 'product_family', value: 'NTS')
             column(name: 'fiscal_year', value: '2020')
@@ -379,8 +379,8 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '88946f05-63d6-492d-8d98-a0d3d66d7a5c')
             column(name: 'df_usage_batch_uid', value: '435a1689-8dfd-4a94-8ef5-72e2c4e6f3fa')
             column(name: "df_scenario_uid", value: "f933e8cb-3795-44bb-bc6a-f59d5c37781d")
-            column(name: 'rh_account_number', value: '7000813806')
-            column(name: 'payee_account_number', value: '7000813806')
+            column(name: 'rh_account_number', value: 7000813806)
+            column(name: 'payee_account_number', value: 7000813806)
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'standard_number', value: '1003324112314587XX')
@@ -411,8 +411,8 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '80898048-649a-47ae-9d16-eff7212a55e4')
             column(name: 'df_usage_batch_uid', value: '435a1689-8dfd-4a94-8ef5-72e2c4e6f3fa')
             column(name: "df_scenario_uid", value: "f933e8cb-3795-44bb-bc6a-f59d5c37781d")
-            column(name: 'rh_account_number', value: '2000017004')
-            column(name: 'payee_account_number', value: '7000813806')
+            column(name: 'rh_account_number', value: 2000017004)
+            column(name: 'payee_account_number', value: 7000813806)
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'standard_number', value: '1003324112314587XX')
@@ -443,8 +443,8 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'c80f782c-8824-4101-93b7-9e786fbf8854')
             column(name: 'df_usage_batch_uid', value: '435a1689-8dfd-4a94-8ef5-72e2c4e6f3fa')
             column(name: "df_scenario_uid", value: "f933e8cb-3795-44bb-bc6a-f59d5c37781d")
-            column(name: 'rh_account_number', value: '2000017010')
-            column(name: 'payee_account_number', value: '7000813806')
+            column(name: 'rh_account_number', value: 2000017010)
+            column(name: 'payee_account_number', value: 7000813806)
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'standard_number', value: '1003324112314587XX')

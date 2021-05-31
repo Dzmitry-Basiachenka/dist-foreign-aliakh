@@ -6,13 +6,13 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '05844db0-e0e4-4423-8966-7f1c6160f000')
-            column(name: 'rh_account_number', value: '1000000026')
+            column(name: 'rh_account_number', value: 1000000026)
             column(name: 'name', value: 'Georgia State University Business Press [C]')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'fd137df2-7308-49a0-b72e-0ea6924249a9')
-            column(name: 'rh_account_number', value: '1000011450')
+            column(name: 'rh_account_number', value: 1000011450)
             column(name: 'name', value: 'Delmar Learning, a division of Cengage Learning')
         }
 
@@ -43,8 +43,8 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'd8daeed3-e4ee-4b09-b6ec-ef12a12bcd3d')
             column(name: 'df_usage_batch_uid', value: '85df79f3-7e3f-4d74-9931-9aa513195815')
             column(name: 'wr_wrk_inst', value: '243204754')
-            column(name: 'rh_account_number', value: '1000000026')
-            column(name: 'payee_account_number', value: '1000011450')
+            column(name: 'rh_account_number', value: 1000000026)
+            column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
             column(name: "standard_number", value: '09639292')
@@ -78,8 +78,8 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '71d1a5d2-ba9f-48b7-9b09-0516840a07ee')
             column(name: 'df_usage_batch_uid', value: '85df79f3-7e3f-4d74-9931-9aa513195815')
             column(name: 'wr_wrk_inst', value: '243204754')
-            column(name: 'rh_account_number', value: '1000000026')
-            column(name: 'payee_account_number', value: '1000011450')
+            column(name: 'rh_account_number', value: 1000000026)
+            column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
             column(name: "standard_number", value: '09639292')
