@@ -1,3 +1,13 @@
+13.1.26
+-
+* CDP-992 FDA: df.service.getRightsQuartzJob: WORK_FOUND UDM usages are not processed by getRights job
+* B-67327 Tech Debt: FDA: remove quotes from integer values for rightsholder related fields
+* B-67327 Tech Debt: FDA: refactor integration tests to remove redundant code and 'chunk' in names
+* B-67327 Tech Debt: FDA: remove quotes from integer values for aacl usage repository integration test
+* B-67327 Tech Debt: FDA: revert fix of vulnerability CVE-2021-22112 associated with dependency org.springframework.security
+* B-67327 Tech Debt: FDA: refactor usage processing to remove redundant code and 'chunk' in names
+* B-66754 FDA & UDM: Pull Company Information from Telesales: implement TelesalesCacheService to get company information
+
 13.1.25
 -
 * B-65859 FDA: UDM normalize annual multiplier: calculate annualized copies after uploading UDM usages
