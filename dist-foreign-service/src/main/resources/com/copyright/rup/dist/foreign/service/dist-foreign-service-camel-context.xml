@@ -219,7 +219,7 @@
                 <handled>
                     <constant>false</constant>
                 </handled>
-                <log message="Exception during matching processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
+                <log message="Exception during UDM matching processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
                      loggingLevel="WARN" logName="com.copyright.rup.dist"/>
             </onException>
         </route>
