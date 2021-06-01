@@ -11,7 +11,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2022-02-12')
             column(name: 'fiscal_year', value: 2022)
-            column(name: 'gross_amount', value: '600.00')
+            column(name: 'gross_amount', value: 600.00)
             column(name: 'initial_usages_count', value: 9)
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
         }
@@ -22,7 +22,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'NEW')
             column(name: 'standard_number', value: '10457143')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'gross_amount', value: '25.00')
+            column(name: 'gross_amount', value: 25.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -44,7 +44,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '0804709114')
-            column(name: 'gross_amount', value: '25.00')
+            column(name: 'gross_amount', value: 25.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -64,7 +64,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '10457143')
-            column(name: 'gross_amount', value: '150.01')
+            column(name: 'gross_amount', value: 150.01)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -84,7 +84,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '10457143')
-            column(name: 'gross_amount', value: '49.99')
+            column(name: 'gross_amount', value: 49.99)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -104,7 +104,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '10457143')
-            column(name: 'gross_amount', value: '50.00')
+            column(name: 'gross_amount', value: 50.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -127,7 +127,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -151,7 +151,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1228902112377655XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -176,7 +176,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -201,7 +201,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -223,7 +223,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2022-02-12')
             column(name: 'fiscal_year', value: 2022)
-            column(name: 'gross_amount', value: '700.00')
+            column(name: 'gross_amount', value: 700.00)
             column(name: 'initial_usages_count', value: 8)
             column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
         }
@@ -235,7 +235,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '10457143')
-            column(name: 'gross_amount', value: '50.00')
+            column(name: 'gross_amount', value: 50.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -255,7 +255,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '10457143')
-            column(name: 'gross_amount', value: '50.00')
+            column(name: 'gross_amount', value: 50.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -277,7 +277,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1228902112377655XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -301,7 +301,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1228902112377655XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -325,7 +325,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1228902112377655XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -350,7 +350,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -375,7 +375,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -400,7 +400,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -427,7 +427,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: 2021)
-            column(name: 'gross_amount', value: '200.00')
+            column(name: 'gross_amount', value: 200.00)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
         }
@@ -447,7 +447,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '10457143')
-            column(name: 'gross_amount', value: '150.01')
+            column(name: 'gross_amount', value: 150.01)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -471,7 +471,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -494,7 +494,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2022-02-12')
             column(name: 'fiscal_year', value: 2022)
-            column(name: 'gross_amount', value: '200.00')
+            column(name: 'gross_amount', value: 200.00)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
         }
@@ -516,7 +516,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -542,7 +542,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -565,7 +565,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2022-02-12')
             column(name: 'fiscal_year', value: 2022)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
         }
@@ -579,7 +579,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1228902112377655XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -612,7 +612,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: 2502232)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -1003,7 +1003,7 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Biological Journal')
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 300)
@@ -1025,7 +1025,7 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Biological Journal')
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 300)
@@ -1048,7 +1048,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
             column(name: 'rh_account_number', value: 2580011451)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
             column(name: 'status_ind', value: 'RH_FOUND')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 300)
@@ -1071,7 +1071,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
             column(name: 'rh_account_number', value: 2580011451)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
             column(name: 'status_ind', value: 'RH_FOUND')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 300)
@@ -1147,7 +1147,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
             column(name: 'rh_account_number', value: 2580011451)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 300)
@@ -1170,7 +1170,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
             column(name: 'rh_account_number', value: 2580011451)
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 300)

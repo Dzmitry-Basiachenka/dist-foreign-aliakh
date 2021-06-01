@@ -10,8 +10,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 7000813807)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2018-03-05')
-            column(name: 'fiscal_year', value: '2018')
-            column(name: 'gross_amount', value: '1000')
+            column(name: 'fiscal_year', value: 2018)
+            column(name: 'gross_amount', value: 1000)
             column(name: 'initial_usages_count', value: 1)
         }
 

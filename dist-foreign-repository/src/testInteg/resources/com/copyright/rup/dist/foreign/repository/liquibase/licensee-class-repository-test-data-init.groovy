@@ -15,7 +15,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_detail_uid', value: '7dc93e89-d1f4-4721-81be-fd32606e4a66')
             column(name: 'df_fund_pool_uid', value: '39548ee4-7929-477e-b9d2-bcb1e76f8037')
             column(name: 'df_aggregate_licensee_class_id', value: '108')
-            column(name: 'gross_amount', value: '10.95')
+            column(name: 'gross_amount', value: 10.95)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -23,7 +23,7 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL Usage Batch')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'fiscal_year', value: '2019')
+            column(name: 'fiscal_year', value: 2019)
             column(name: 'initial_usages_count', value: 1)
         }
 

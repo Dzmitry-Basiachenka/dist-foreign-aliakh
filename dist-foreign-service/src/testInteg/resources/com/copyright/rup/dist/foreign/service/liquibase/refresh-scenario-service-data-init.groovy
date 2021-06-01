@@ -17,8 +17,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 7000813806)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
-            column(name: 'fiscal_year', value: '2017')
-            column(name: 'gross_amount', value: '35000')
+            column(name: 'fiscal_year', value: 2017)
+            column(name: 'gross_amount', value: 35000)
             column(name: 'initial_usages_count', value: 6)
         }
 
@@ -37,7 +37,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '6100.9872')
             column(name: 'service_fee', value: '0.32')
             column(name: 'service_fee_amount', value: '2871.0528')
-            column(name: 'gross_amount', value: '8972.04')
+            column(name: 'gross_amount', value: 8972.04)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -70,7 +70,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '3081.3044')
             column(name: 'service_fee', value: '0.32')
             column(name: 'service_fee_amount', value: '1450.0256')
-            column(name: 'gross_amount', value: '4531.33')
+            column(name: 'gross_amount', value: 4531.33)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -103,7 +103,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '11418.9516')
             column(name: 'service_fee', value: '0.16')
             column(name: 'service_fee_amount', value: '2175.0384')
-            column(name: 'gross_amount', value: '13593.99')
+            column(name: 'gross_amount', value: 13593.99)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -131,7 +131,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '2718.80')
+            column(name: 'gross_amount', value: 2718.80)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -157,7 +157,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '5093.22')
+            column(name: 'gross_amount', value: 5093.22)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -183,7 +183,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '5093.22')
+            column(name: 'gross_amount', value: 5093.22)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -266,8 +266,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 2000017000)
             column(name: 'product_family', value: 'FAS2')
             column(name: 'payment_date', value: '2017-01-11')
-            column(name: 'fiscal_year', value: '2017')
-            column(name: 'gross_amount', value: '35000')
+            column(name: 'fiscal_year', value: 2017)
+            column(name: 'gross_amount', value: 35000)
             column(name: 'initial_usages_count', value: 5)
         }
 
@@ -286,7 +286,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '8074.836')
             column(name: 'service_fee', value: '0.1')
             column(name: 'service_fee_amount', value: '897.204')
-            column(name: 'gross_amount', value: '8972.04')
+            column(name: 'gross_amount', value: 8972.04)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -317,7 +317,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '3081.3044')
             column(name: 'service_fee', value: '0.32')
             column(name: 'service_fee_amount', value: '1450.0256')
-            column(name: 'gross_amount', value: '4531.33')
+            column(name: 'gross_amount', value: 4531.33)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -348,7 +348,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '9243.9132')
             column(name: 'service_fee', value: '0.32')
             column(name: 'service_fee_amount', value: '4350.0768')
-            column(name: 'gross_amount', value: '13593.99')
+            column(name: 'gross_amount', value: 13593.99)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -374,7 +374,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS2')
             column(name: 'standard_number', value: '452365874521235XX')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '2718.80')
+            column(name: 'gross_amount', value: 2718.80)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -400,7 +400,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS2')
             column(name: 'standard_number', value: '452365874521235XX')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '5093.22')
+            column(name: 'gross_amount', value: 5093.22)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 

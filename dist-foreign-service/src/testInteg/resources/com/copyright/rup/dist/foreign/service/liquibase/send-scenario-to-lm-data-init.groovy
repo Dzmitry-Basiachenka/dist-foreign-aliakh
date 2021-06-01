@@ -17,8 +17,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 1000002562)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
-            column(name: 'fiscal_year', value: '2017')
-            column(name: 'gross_amount', value: '30000')
+            column(name: 'fiscal_year', value: 2017)
+            column(name: 'gross_amount', value: 30000)
             column(name: 'initial_usages_count', value: 4)
         }
 
@@ -35,7 +35,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '452365874521235XX')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '90.63')
+            column(name: 'gross_amount', value: 90.63)
             column(name: 'service_fee_amount', value: '29.00')
             column(name: 'net_amount', value: '61.63')
             column(name: 'service_fee', value: '0.32000')
@@ -67,7 +67,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '2558902245377325XX')
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'gross_amount', value: '8972.04')
+            column(name: 'gross_amount', value: 8972.04)
             column(name: 'net_amount', value: '2871.0528')
             column(name: 'service_fee_amount', value: '6100.9872')
             column(name: 'service_fee', value: '0.32000')
@@ -100,7 +100,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'standard_number_type', value: 'VALISBN13')
             column(name: 'number_of_copies', value: '25')
-            column(name: 'gross_amount', value: '4531.33')
+            column(name: 'gross_amount', value: 4531.33)
             column(name: 'net_amount', value: '1450.0256')
             column(name: 'service_fee_amount', value: '3081.3044')
             column(name: 'service_fee', value: '0.32000')
@@ -132,7 +132,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '13593.99')
+            column(name: 'gross_amount', value: 13593.99)
             column(name: 'net_amount', value: '4350.0768')
             column(name: 'service_fee_amount', value: '9243.9132')
             column(name: 'service_fee', value: '0.32000')
@@ -201,8 +201,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 7000800832)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
-            column(name: 'fiscal_year', value: '2017')
-            column(name: 'gross_amount', value: '199.98')
+            column(name: 'fiscal_year', value: 2017)
+            column(name: 'gross_amount', value: 199.98)
             column(name: 'initial_usages_count', value: 2)
         }
 
@@ -221,7 +221,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1008902112317622XX')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '99.99')
+            column(name: 'gross_amount', value: 99.99)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -245,7 +245,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1008902112317623XX')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '99.99')
+            column(name: 'gross_amount', value: 99.99)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -267,7 +267,7 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 1000002562)
             column(name: 'product_family', value: 'NTS')
             column(name: 'payment_date', value: '2017-01-11')
-            column(name: 'fiscal_year', value: '2017')
+            column(name: 'fiscal_year', value: 2017)
             column(name: 'initial_usages_count', value: 3)
         }
 
@@ -284,7 +284,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '452365874521235XX')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '90.63')
+            column(name: 'gross_amount', value: 90.63)
             column(name: 'service_fee_amount', value: '29.00')
             column(name: 'net_amount', value: '61.63')
             column(name: 'service_fee', value: '0.32000')
@@ -315,7 +315,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '2558902245377325XX')
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'gross_amount', value: '8972.04')
+            column(name: 'gross_amount', value: 8972.04)
             column(name: 'net_amount', value: '2871.05')
             column(name: 'service_fee_amount', value: '6100.98')
             column(name: 'service_fee', value: '0.32000')
@@ -347,7 +347,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'standard_number_type', value: 'VALISBN13')
             column(name: 'number_of_copies', value: '25')
-            column(name: 'gross_amount', value: '4531.33')
+            column(name: 'gross_amount', value: 4531.33)
             column(name: 'net_amount', value: '1450.02')
             column(name: 'service_fee_amount', value: '3081.30')
             column(name: 'service_fee', value: '0.32000')
@@ -410,7 +410,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_detail_uid', value: 'a00cafcc-4157-409a-b381-33d5fe08631c')
             column(name: 'df_fund_pool_uid', value: '0ea96c66-72aa-4d59-8128-31c20e7eb9de')
             column(name: 'df_aggregate_licensee_class_id', value: '141')
-            column(name: 'gross_amount', value: '1000.00')
+            column(name: 'gross_amount', value: 1000.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -418,7 +418,7 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL Usage Batch')
             column(name: 'payment_date', value: '2021-06-30')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'fiscal_year', value: '2021')
+            column(name: 'fiscal_year', value: 2021)
             column(name: 'initial_usages_count', value: 4)
         }
 
@@ -441,7 +441,7 @@ databaseChangeLog {
             column(name: 'standard_number_type', value: 'VALISBN13')
             column(name: 'rh_account_number', value: 2580011451)
             column(name: 'payee_account_number', value: 2580011451)
-            column(name: 'gross_amount', value: '500.00')
+            column(name: 'gross_amount', value: 500.00)
             column(name: 'net_amount', value: '375.00')
             column(name: 'service_fee_amount', value: '125.00')
             column(name: 'service_fee', value: '0.25000')
@@ -510,7 +510,7 @@ databaseChangeLog {
             column(name: 'standard_number_type', value: 'VALISBN13')
             column(name: 'rh_account_number', value: 2580011451)
             column(name: 'payee_account_number', value: 2580011451)
-            column(name: 'gross_amount', value: '500.00')
+            column(name: 'gross_amount', value: 500.00)
             column(name: 'net_amount', value: '375.00')
             column(name: 'service_fee_amount', value: '125.00')
             column(name: 'service_fee', value: '0.25000')
@@ -593,7 +593,7 @@ databaseChangeLog {
             column(name: 'name', value: 'SAL Usage Batch 1 for testSendToLmSal')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'fiscal_year', value: '2019')
+            column(name: 'fiscal_year', value: 2019)
             column(name: 'initial_usages_count', value: 4)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
@@ -631,7 +631,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: '10')
-            column(name: 'gross_amount', value: '50.00')
+            column(name: 'gross_amount', value: 50.00)
             column(name: 'net_amount', value: '35.50')
             column(name: 'service_fee_amount', value: '12.50')
             column(name: 'service_fee', value: '0.25000')
@@ -671,7 +671,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: '10')
-            column(name: 'gross_amount', value: '506.25')
+            column(name: 'gross_amount', value: 506.25)
             column(name: 'net_amount', value: '379.6875')
             column(name: 'service_fee_amount', value: '126.5625')
             column(name: 'service_fee', value: '0.25000')
@@ -715,7 +715,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: '10')
-            column(name: 'gross_amount', value: '50.00')
+            column(name: 'gross_amount', value: 50.00)
             column(name: 'net_amount', value: '35.50')
             column(name: 'service_fee_amount', value: '12.50')
             column(name: 'service_fee', value: '0.25000')
@@ -755,7 +755,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: '10')
-            column(name: 'gross_amount', value: '393.75')
+            column(name: 'gross_amount', value: 393.75)
             column(name: 'net_amount', value: '295.3125')
             column(name: 'service_fee_amount', value: '98.4375')
             column(name: 'service_fee', value: '0.25000')

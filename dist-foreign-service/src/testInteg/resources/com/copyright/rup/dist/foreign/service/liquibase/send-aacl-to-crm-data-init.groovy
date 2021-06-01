@@ -35,7 +35,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Paid batch')
             column(name: 'payment_date', value: '2020-05-24')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'gross_amount', value: '1000.00')
+            column(name: 'gross_amount', value: 1000.00)
             column(name: 'initial_usages_count', value: 2)
         }
 
@@ -81,7 +81,7 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'PAID')
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'gross_amount', value: '500.00')
+            column(name: 'gross_amount', value: 500.00)
             column(name: 'net_amount', value: '420.00')
             column(name: 'service_fee_amount', value: '80.00')
             column(name: 'service_fee', value: '0.16000')
@@ -119,7 +119,7 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'PAID')
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'gross_amount', value: '500.00')
+            column(name: 'gross_amount', value: 500.00)
             column(name: 'net_amount', value: '420.00')
             column(name: 'service_fee_amount', value: '80.00')
             column(name: 'service_fee', value: '0.16000')
